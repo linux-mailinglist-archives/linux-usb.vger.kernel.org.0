@@ -2,105 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B520353DEF5
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 01:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617D453DF51
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jun 2022 03:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242272AbiFEXdd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 5 Jun 2022 19:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S1351948AbiFFB2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Jun 2022 21:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351815AbiFEXda (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 19:33:30 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA36C26AF4
-        for <linux-usb@vger.kernel.org>; Sun,  5 Jun 2022 16:33:29 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id h5so17740970wrb.0
-        for <linux-usb@vger.kernel.org>; Sun, 05 Jun 2022 16:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
-        b=kYqyTELNv74MY0+Xtsf1lfj7zVGpOEbEQXrg+C/90Mms9oiDDoR1tAGfsH8wjin1au
-         YgEibdYFsC3ZX5fD3ZTrbFmbUnOpr2QIubv1+FRg642AmsgEU7LFuDOzvCU8SrQo9uVc
-         ANsX9cHR3AzEewxi1sIvXUoaPTeYqv+2Rr+WwQ4SIg93A7YMlS/dL93POpl3GQL8wbq0
-         PYcTfhT2s+YV+U+JG3Ased41N76s52gmJ8jiCBg7Ax2sUve8NNNgMFY+pegOkd1ur6+T
-         LdPia7q6wNFPzAz/tX5zACpBCXsVxa66UTUf4H0pWTFHakZKiEbv0L32pINnRW88WSQ1
-         6gmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
-        b=Y0iSBKuk64U2Hq1YIOD9sK0S+kWmehv/3BJT6olOk7Q3tn4BRecC5uNzS+L2LPz5D5
-         +pX32t9+pkfI+jk90Sr9PDnfDqFkESlj6Aap4MIRhIf+sPOujRGlq0s66LvjHnMeq0wN
-         OwIDs7KtTgXEIy7J+vGvKfFcweFw9QrQ5KWMXvQuLi/GnO23osZqm5Eew8d3Cu4S8AW+
-         dvC7p3rR1UZQgTZinSQm3x/CVXcANisupippmpKkPsM8ogcPBQzyr0WD/uWznEU4sM6R
-         gfks8plD/MHuTz35U7FDbihtNtB8FTjKPQepJpRk9yiy7qHc4ZaBuaqQwo1m3fIgoylq
-         abhw==
-X-Gm-Message-State: AOAM5303taUiAQHgogfGlY2B8kfVcKpkwWyXDVX/gu9fypTbziiX2+L2
-        o0k4UtXYQJ/4lt1LPjZTGCn1bHt7OFMvkg0j5oU=
-X-Google-Smtp-Source: ABdhPJx05vkg/25slKFEQFCOcyfbvjg4JjNZFII0Ku3f/Gnu+Tw5+Fxv0/0emaesTDl49gfm20FsSYTWpw96OZmltzk=
-X-Received: by 2002:adf:dd52:0:b0:213:bb11:2fde with SMTP id
- u18-20020adfdd52000000b00213bb112fdemr14778741wrm.467.1654472008195; Sun, 05
- Jun 2022 16:33:28 -0700 (PDT)
+        with ESMTP id S1348931AbiFFB2p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jun 2022 21:28:45 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94B36562;
+        Sun,  5 Jun 2022 18:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=v2/b5FqxV2iRhS1Ykan9Lwjt+zRuUcpsfnrGF+r1rwo=; b=ahtDNE/A9/2Pzy2ITsWjUxwbex
+        4iUrMeJfGWfXjeG0gSwGcbTtXtdOX4F2c8Nkv9fpscSwVzdT0JJl1Vg9UdaHn5+hXcDItYdoyxiey
+        +QvwzIs4ulACjTMF0Fk+1kJBPDCITFsirVPIQVkeZf/KsgEJIHD8RXT2IOPfkZFxQ5es=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ny1XL-005hL6-Hk; Mon, 06 Jun 2022 03:28:07 +0200
+Date:   Mon, 6 Jun 2022 03:28:07 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
+ to PHY driver to avoid polling
+Message-ID: <Yp1YJ3lHTFFdRb6P@lunn.ch>
+References: <cover.1652343655.git.lukas@wunner.de>
+ <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
+ <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
+ <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
+ <20220519190841.GA30869@wunner.de>
+ <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
+ <20220523094343.GA7237@wunner.de>
+ <Yowv95s7g7Ou5U8J@lunn.ch>
+ <20220524121341.GA10702@wunner.de>
 MIME-Version: 1.0
-Received: by 2002:a05:6020:5b8d:b0:19a:1ddd:b4f with HTTP; Sun, 5 Jun 2022
- 16:33:27 -0700 (PDT)
-Reply-To: mrmichaeldoku@hotmail.com
-From:   mr michael <md22334d@gmail.com>
-Date:   Sun, 5 Jun 2022 23:33:27 +0000
-Message-ID: <CA+6A211ud5NH2G_+uu26KkANKe6w8HCvQ+uyrrd45zBvifEkSA@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:441 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5227]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [md22334d[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524121341.GA10702@wunner.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
+> mdio_bus_phy_resume() does trigger the state machine via
+> phy_start_machine(), so link state changes *are* detected after wakeup.
+> 
+> But you're saying that's not sufficient and you really want the
+> PHY driver's IRQ handler to be called, do I understand that correctly?
 
-With due respect to your person, I need your cooperation in
-transferring the sum of $11.3million to your private account where
-this money can be shared between us. The money has been here in our
-bank lying dormant for years without anybody coming for the claim.
+It is an interrupt, so i would expect the handler to be called. I've
+never looked deeply how the kernel handles this, but maybe there is
+some core support for this. The kernel does know about wake up
+interrupts. The interesting bit is how do you defer the interrupt
+until you have enough of the system running again you can actually
+service the interrupt.
 
-By indicating your interest I will send you the full details on how
-the business will be executed.
+PHY interrupts mostly are level, not edge, because there are multiple
+sources of interrupts within the PHY. So you do need to clear the
+interrupt source, or you are going to get a storm, as you pointed out.
+But being a level might actually help you. It fires once to get you
+out of sleep, and then fires again when the interrupt controller is
+resumed and is enabled.
 
-Best regards,
-Mr. Michael Doku.
+	  Andrew
+ 
