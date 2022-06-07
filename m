@@ -2,85 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9E153F3DC
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 04:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB50853F3F1
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 04:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbiFGCRj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jun 2022 22:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S235955AbiFGCdp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jun 2022 22:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiFGCRi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jun 2022 22:17:38 -0400
-Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4762459F
-        for <linux-usb@vger.kernel.org>; Mon,  6 Jun 2022 19:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1654568255; i=@motorola.com;
-        bh=W8Xut5B2ldLtyMHJnZ+NRrhUWRnktVN3iU33lneyMzA=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=Yiq/goH8gsvp7oHXw4N3eb4eU8Iy2bYVuXOG37BWvn19EXEgmH7CnQOAE6jpes4e+
-         sJ19olJkEQmc7WAVbPFpeMzRA7qHVlQv34pdhXGRxchqpmanzIH4XB2pcnDEQsTULE
-         SBLLSh9Flfpi3UEkYRisSwmMMk5W5CvI9RbYUGYqYPIaXBGKoPgO3/rk0lvUJbB2/q
-         DRqcVApPJAV6dwId154QLKBZKJqsEC+tlwQJWpKMmIMk5eScV3yWan9MhumnwPR9Zh
-         yFcIzHmrlJO6b6p+vLRDOfgHW0JjPl73zX6nI5KJI4tlzB3kjdgmoHZg/23EghIraH
-         vnbVuLa7G/SOg==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDIsWRWlGSWpSXmKPExsWS8eKJqK7d1nl
-  JBo33dS2OtT1ht1g1dSeLxbbTv1ktOicuYbdYtKyV2WJL2xUmi0+ndjJb/PjTx+zA4TG7Yyar
-  x6ZVnWwem190M3v0/zXw+LxJLoA1ijUzLym/IoE1o/HzEuaCuSIVn440sjQw7hboYuTiEBKYz
-  iRx/8AvFghnMZPExs8bgBxODhYBFYn/i3cwg9hsAmoSC16vArNFBIwkJn+cDlbDLHCAUeLXx4
-  AuRg4OYYFUiQsT0kHCvALKEtc+nQUrERIok+jr/cYOEReUODnzCVSrlsSNfy+ZQFqZBaQllv/
-  jAAlzCjhKPH18i3UCI+8sJB2zkHTMQuhYwMi8itEmqSgzPaMkNzEzR9fQwEDX0NAEQhsb6iVW
-  6SbqlRbrlqcWl+ga6SWWF+ulFhfrFVfmJuek6OWllmxiBAZ5SlFK8w7GJf0/9Q4xSnIwKYny3
-  nGblyTEl5SfUpmRWJwRX1Sak1p8iFGGg0NJgrd9M1BOsCg1PbUiLTMHGHEwaQkOHiURXk2QNG
-  9xQWJucWY6ROoUozHH+Z379zJzdO7vOsAsxJKXn5cqJc4btQSoVACkNKM0D24QLBFcYpSVEuZ
-  lZGBgEOIpSC3KzSxBlX/FKM7BqCTMq74FaApPZl4J3L5XQKcwAZ3i82AOyCkliQgpqQam9ID2
-  R6uWJEcrVH0TNPz6Mex4p2PE1cnNPwprZ7pWf8952HnlyP57DPu9yv29jx0XY5p+cWbA799L/
-  npYbGF+IL/gcOi2KgvXdrWUSO6Dnw8yJ/bd2/hzor9CoWdTwobHH09ozLhY8vbswt+R21/OMe
-  Y6eejXTUeX9hbuG0/mFG9QMnfL4PjOf1X6QURU6f2yRe5WK7iFc25P3F95IVl25X6vTXUnJZe
-  riC+SbvN/6BM9Z+fWXo41zxxTTt7b2yUVP2uS9cfXN57VbFqs2LrzrN7iQ3MevHFwERW9wb4m
-  pN3lk8bPZtZax62mVvk7+95VLM2Me5+py7m44+uVZItXZZqpd/6ui9tmHr0w6v75HiWW4oxEQ
-  y3mouJEAJmp2UB/AwAA
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-4.tower-636.messagelabs.com!1654568253!78417!1
-X-Originating-IP: [104.232.228.21]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.86.7; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 31532 invoked from network); 7 Jun 2022 02:17:34 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-4.tower-636.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 7 Jun 2022 02:17:34 -0000
-Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4LHDXF5KbCzhSZf;
-        Tue,  7 Jun 2022 02:17:33 +0000 (UTC)
-Received: from p1g3 (unknown [10.45.5.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4LHDXF2hNHzf6f0;
-        Tue,  7 Jun 2022 02:17:33 +0000 (UTC)
-Date:   Mon, 6 Jun 2022 21:17:21 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
-        paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 1/3] usb: gadget: uvc: calculate the number of request
- depending on framesize
-Message-ID: <Yp61Me25lBbyGsc8@p1g3>
-References: <20220529223848.105914-1-m.grzeschik@pengutronix.de>
- <20220529223848.105914-2-m.grzeschik@pengutronix.de>
+        with ESMTP id S235952AbiFGCdn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jun 2022 22:33:43 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140071.outbound.protection.outlook.com [40.107.14.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25ECB87C
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jun 2022 19:33:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b4rMvepMalJY/C3O7rtH1leZeArWltQh7bHqZ6Tr8Nz4tYoj0LWX9nV7Nmc0kl5qt63aVyVxGAnR23SoTV4Uc7yRe8lrxjNJsrcE2OPDX9IKkgb9rdt683NokYuuxcFv2Dx8y9NjModzGzBA+sv/Cb7CAOEquIhpugQhWhQpacYsP5IZyXyD2SCZjnXE/qC17PEZKRJn+ZrRunmcmPaI85HfA+JoLoiloGgqYqCyUqkg7ok0AVvhm62LzS88NTEkbfyRaRtWYAx3lnqLVGtOFrNmx7cx/0493LcMB9PC6S8E5bKp53lAbs4+wUf2z51+j9kuZZEHB1KiXyVzBOXRzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ziAXGaUHv8Q1cbBAOtn5lbi2MRDbTLZiAjglNPdgfpc=;
+ b=TpTevf2LpUhSopz+zkt7Aicnm1sTSwILKIWtMVDJNiOePdygDjv3LnlpQ1owxr+/KEFTCqvLrtuVz3fAEWXLXE7R0prjT/1HKZXme1NpWorumQHKpp2S/YQR9Ub8DkLDYMOkKxyZuHKv23EZhW278KgcFX86MIp3Tt2zuttcA4bcZoKgcUWg9xVXAY6PaozmfJv6ImxEH1XsDAaMxYP9FNgzGIWVVa1oQLn3IL47m0Er3Fj3UoMCO5GPGFR/n5W0Q+QVd3sUA+I9PpGxaKmTGJyQ6l+qu29rMDAaqEn86TaC4KLNnR7Gp1rr3R6IIOdkAVPwmqMPyHDElbLE/xYm0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ziAXGaUHv8Q1cbBAOtn5lbi2MRDbTLZiAjglNPdgfpc=;
+ b=gXNPqUHFWT5f9UeCTFP5MJlVh9jwcuJss2Pt1YJxcTVM+zpWYlA8+2nC3JALRLZ0ZpSWkyH5RI+/54oxPK0HcZnlKeU+rR0j5VogPq1LGyft86JOpTfh7zNQOUII3L4UCzMDn8ObXoJcrOlGuHhgKGjGKENN2AZTGH3C4osPZi0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
+ by VI1PR0402MB2893.eurprd04.prod.outlook.com (2603:10a6:800:ba::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
+ 2022 02:33:39 +0000
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::10c:56e5:4208:3c4f]) by PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::10c:56e5:4208:3c4f%6]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
+ 02:33:39 +0000
+From:   Li Jun <jun.li@nxp.com>
+To:     gregkh@linuxfoundation.org, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+        jindong.yue@nxp.com
+Subject: [PATCH v3] usb: dwc3: add power down scale setting
+Date:   Tue,  7 Jun 2022 10:20:04 +0800
+Message-Id: <1654568404-3461-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: SG3P274CA0022.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::34)
+ To PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220529223848.105914-2-m.grzeschik@pengutronix.de>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 50f76f09-e59d-43e0-8430-08da482e2125
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB2893:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0402MB28933DE2C601BAB4EAF6E68D89A59@VI1PR0402MB2893.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2/5khHb4vSMn6cpeDWy0J8Q6pcxmJ0I+Ksg6Bb7+TQ51xWyCGcOiB+Jdn4NECphk7uPf2SYmjyz2OFXm+851agOQMBFuXgLCP+zyEYoRwySPA29o8MsQL+OfdFwDFHdKYccg7ojV7U8yDlbXE/PXwlShnTC2Q/uneLKHg5VLVDywmszs0w0FN+Ze2LfNJBhFLAiHJRJMpbMvSjj5kPcs5KgWBwu1Gw+BoTgNQ/ELeTsDxmxcO83Yl/eNAvK/Cek9JT7poRo9WRZKtVdnMNCHDpWEfLAs/LopbGE1VzsgjmUviib7PVPDbrdy+jypwIx20n2HtCRoe8JPSso8P7oHU0znsvF84t9xOYC2hEP1YbL+EvQfZud67WWp+6q8d7q8/6kCyoY5teguSJD2330KcKpavGleJjmcnF2YWHpXHcRYpI4dlBptua9zEFdjFk96kJd2NZ3yRnFZ5PV6B75YrDyrOXyu9mKC42NRcL8FKgihNm1gVB7dd0vUZwSxevjkQ7A+Q1ex0/cE4YyrSb/K9RNAU+VB6bqfC9L5iJFXeMmwkCZQ2ilzOnSlJJUKoQ+AJqznno8lrghUoy+uiQ/OQV1C6no/Lv6JWACCuS6xY+Y0nVSOtcrhWOe3tLsd5kRqv6UtktqF09D1KK8loHo0hX8l4AjqgGcZjaO0z2tCLJc01GlKwJVZcpPOavXwhnKdY9lt2BTJ06NfGGEo7u8n2A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(316002)(6666004)(186003)(83380400001)(52116002)(8936002)(6512007)(2616005)(508600001)(2906002)(36756003)(6486002)(38350700002)(38100700002)(86362001)(6506007)(5660300002)(8676002)(4326008)(66946007)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4S36WCkGFCRPeCbcbhC7mri9FkAZ3kOf0rK4nNIfyqYbl5+hRuydh+rSdPsd?=
+ =?us-ascii?Q?AoQoTxUjj+pWcHvALznoZRhwGsJGZHxx7wC01KwEulK9GCJR0DKfISatFDP4?=
+ =?us-ascii?Q?30E5tDYVmv4Ifg785aCo6I8I1hnRkESffZ7mWtvkAOzzGnd1Rn+R5hW/p+He?=
+ =?us-ascii?Q?YwDCz8IOTixqJJvOyFZCiwUO/YV98eTpJFaPhQHvW8Jl5ioZL/P/AiLtv/2o?=
+ =?us-ascii?Q?0fkWpHl8QFkQBpWyT7GYiVTRUiG++VTqtdTZaQ8NMmMoidrYAbAJ2qZTHk+A?=
+ =?us-ascii?Q?4nQTXbvadq56tE9iyjKlkVx83vmEPkszr09Q2jAL+y2lCW6oGnFERcxGv+2p?=
+ =?us-ascii?Q?0pc3cGd5olXlpEINhkVwUWgNetPnNP9e1iMRK9wMPUR0x95CEFi/MmYqgKqA?=
+ =?us-ascii?Q?LazraNJCkXgAe4FOGiokzZvrIYhv4xgzHa8Qctta6Efahr3HvFG+dKMGFuLn?=
+ =?us-ascii?Q?1utZAQAnl+5dng3kQJb+fZXeGTe++gOuuFNif117A+M4Z43833zd+2PHcakH?=
+ =?us-ascii?Q?KKo+5HZ2hktE/4wqEoSZGL3+FDIFYTB4vZhGvVmaLaLuHxCCaNfl0HN5hNKM?=
+ =?us-ascii?Q?wffkMgEspLv8lQghZqfEic+v7b3Y4G5ediCPA0DKeZ4aLLYLizQSl1Wvi4Nc?=
+ =?us-ascii?Q?Lh3ShUDC7JloQN57q3vP+a9IxHnyvsG5BP7ddhtQYuIz8+DGdoNuDFkxvYCe?=
+ =?us-ascii?Q?JOdmjZSLeA89tE+VUHLtTYQaa8xvgH9wtZr3lzfIvWbq8e4d+U1cJk+bTdkd?=
+ =?us-ascii?Q?Q8D2o9dKRteGRHEuB9dAcikdJkMklS0hOZHegYWHWy4U+OcVQ8EZmFR07A3e?=
+ =?us-ascii?Q?Jc3HBo8DfUZhCORkRx4UCkfqh/F6XUv1bQaLI6ydDsF/r6MaXtCeYj5Yx6IS?=
+ =?us-ascii?Q?VMDBjoqenQINNthF3nVegTmOK9/vgCwTvh2RMgR9HkJMQqzQ4NVZGa7rf7o4?=
+ =?us-ascii?Q?BYAI4jJiXOEA46/uPi8EDvGqsekRTGmKqQSNk8ixERmT5Q7cbZkiqM4J8TZd?=
+ =?us-ascii?Q?mZWAc+InT4zHAed52qJllCJb1we9cxdiTFg2Li1KuhgkpflrKFvd9p83rAWG?=
+ =?us-ascii?Q?3KXe4MgZI7kI91mV8V05G6Z85fvMd2qU7Z+iCEO+RJR2Lng2FjmFuG7NXgyB?=
+ =?us-ascii?Q?1KNnfZPPypE5HbzVzKMcVhruZ2xNWqrjul/mdjscLdAuX/ymTRRkRMCvz0RI?=
+ =?us-ascii?Q?NXK9H84v6h0o62flmSghM5rg53kumWVwpO00Y9EIWl7LLTvYQRXvRwUefV1Z?=
+ =?us-ascii?Q?wkpQuNwoTFYJ+6mawJ8FmmJMzS5HhyOP8OcqbYgTo4gkeMYjtkWGbA1k/ioc?=
+ =?us-ascii?Q?ILZzfPMo+nj0QrdzGrvr8urtbk4NoLOguOYXpsr+3JqcTN6TlJgJj40xbRoq?=
+ =?us-ascii?Q?OdiXjce6HHTOJk23Va+aYaWQx9uXPZ0I4yMMrGik+QPFc71jZeIqFhO+v0Qc?=
+ =?us-ascii?Q?6+24ZHl2ZKA/IZlTYg+Z5mSTSdPZNw/b6bDC8Pl3mo/Hn8wimb6GR4U0MAtv?=
+ =?us-ascii?Q?zs4MXRtjcdqXsHWI0BgVqgyJ18Vqil/eVcnAPuTkIjPqCKRPrVoyC4El8lJB?=
+ =?us-ascii?Q?zTp0JNy/ecrxLcfdVLOxpQfk2tQjW9bxQb+4sLqystZG75efQh7j/QrkL5DV?=
+ =?us-ascii?Q?244gYyDsaJoJZRYj1tU6Lb6ZnXcEc8yE+SV8r4EFCGDiVhQrBpyeXPKg1Aax?=
+ =?us-ascii?Q?7N51rB0ZKe+wAQxKz2q6EcmTx+jA/15selwG9ZepDA4mPaWJcaZ5TudGywul?=
+ =?us-ascii?Q?jRUuv9bpeg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50f76f09-e59d-43e0-8430-08da482e2125
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 02:33:38.9866
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qQ5UHivBeT7sxCssyTn4UmiuZjOsGp0xzn09wP5NHXCCCgtFnjBRuwHWOoORKLYG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2893
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,76 +112,104 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+Some SoC(e.g NXP imx8MQ) may have a wrong default power down scale
+setting so need init it to be the correct value, the power down
+scale setting description in DWC3 databook:
 
-On Mon, May 30, 2022 at 12:38:46AM +0200, Michael Grzeschik wrote:
-> The current limitation of possible number of requests being handled is
-> dependent on the gadget speed. It makes more sense to depend on the
-> typical frame size when calculating the number of requests. This patch
-> is changing this and is using the previous limits as boundaries for
-> reasonable minimum and maximum number of requests.
-> 
-> For a 1080p jpeg encoded video stream with a maximum imagesize of
-> e.g. 800kB with a maxburst of 8 and an multiplier of 1 the resulting
-> number of requests is calculated to 49.
-> 
->         800768         1
-> nreqs = ------ * -------------- ~= 49
->           2      (1024 * 8 * 1)
-> 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Power Down Scale (PwrDnScale)
+The USB3 suspend_clk input replaces pipe3_rx_pclk as a clock source to
+a small part of the USB3 core that operates when the SS PHY is in its
+lowest power (P3) state, and therefore does not provide a clock.
+The Power Down Scale field specifies how many suspend_clk periods fit
+into a 16 kHz clock period. When performing the division, round up the
+remainder.
+For example, when using an 8-bit/16-bit/32-bit PHY and 25-MHz Suspend
+clock,
+Power Down Scale = 25000 kHz/16 kHz = 13'd1563 (rounder up)
 
-Thanks for the patch. This improves the usb2 performance on our
-android 5.10 kernel with dwc3 controller. Any reason to not cc stable
-lines? This does help older releases as well.
+So use the suspend clock rate to calculate it.
 
-Tested-by: Dan Vacura <w36195@motorola.com>
+Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+Changes for v3:
+- Refine the code comments for why we need do this as Thinh suggested.
+- Add Thinh's R-b tag.
 
-> 
-> ---
-> v1 -> v2: - using clamp instead of min/max
->           - added calculation example to description
-> 	  - commented the additional division by two in the code
-> 
->  drivers/usb/gadget/function/uvc_queue.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-> index d25edc3d2174e1..eb9bd9d32cd056 100644
-> --- a/drivers/usb/gadget/function/uvc_queue.c
-> +++ b/drivers/usb/gadget/function/uvc_queue.c
-> @@ -44,7 +44,8 @@ static int uvc_queue_setup(struct vb2_queue *vq,
->  {
->  	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
->  	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
-> -	struct usb_composite_dev *cdev = video->uvc->func.config->cdev;
-> +	unsigned int req_size;
-> +	unsigned int nreq;
->  
->  	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
->  		*nbuffers = UVC_MAX_VIDEO_BUFFERS;
-> @@ -53,10 +54,16 @@ static int uvc_queue_setup(struct vb2_queue *vq,
->  
->  	sizes[0] = video->imagesize;
->  
-> -	if (cdev->gadget->speed < USB_SPEED_SUPER)
-> -		video->uvc_num_requests = 4;
-> -	else
-> -		video->uvc_num_requests = 64;
-> +	req_size = video->ep->maxpacket
-> +		 * max_t(unsigned int, video->ep->maxburst, 1)
-> +		 * (video->ep->mult);
-> +
-> +	/* We divide by two, to increase the chance to run
-> +	 * into fewer requests for smaller framesizes.
-> +	 */
-> +	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
-> +	nreq = clamp(nreq, 4U, 64U);
-> +	video->uvc_num_requests = nreq;
->  
->  	return 0;
->  }
-> -- 
-> 2.30.2
-> 
+Changes for v2:
+- Add PwrDnScale field update condition: less than the calculated
+  value or more than 3x the calculated value.
+- Correct 16k from 16384 to 16000.
+- Delare variables in separate lines.
+
+ drivers/usb/dwc3/core.c | 34 ++++++++++++++++++++++++++++++++++
+ drivers/usb/dwc3/core.h |  1 +
+ 2 files changed, 35 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index e027c0420dc3..b4c47002828c 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1029,6 +1029,37 @@ static void dwc3_set_incr_burst_type(struct dwc3 *dwc)
+ 	dwc3_writel(dwc->regs, DWC3_GSBUSCFG0, cfg);
+ }
+ 
++static void dwc3_set_power_down_clk_scale(struct dwc3 *dwc)
++{
++	u32 scale;
++	u32 reg;
++
++	if (!dwc->susp_clk)
++		return;
++
++	/*
++	 * The power down scale field specifies how many suspend_clk
++	 * periods fit into a 16KHz clock period. When performing
++	 * the division, round up the remainder.
++	 *
++	 * The power down scale value is calculated using the fastest
++	 * frequency of the suspend_clk. If it isn't fixed (but within
++	 * the accuracy requirement), the driver may not know the max
++	 * rate of the suspend_clk, so only update the power down scale
++	 * if the default is less than the calculated value from
++	 * clk_get_rate() or if the default is questionably high
++	 * (3x or more) to be within the requirement.
++	 */
++	scale = DIV_ROUND_UP(clk_get_rate(dwc->susp_clk), 16000);
++	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
++	if ((reg & DWC3_GCTL_PWRDNSCALE_MASK) < DWC3_GCTL_PWRDNSCALE(scale) ||
++	    (reg & DWC3_GCTL_PWRDNSCALE_MASK) > DWC3_GCTL_PWRDNSCALE(scale*3)) {
++		reg &= ~(DWC3_GCTL_PWRDNSCALE_MASK);
++		reg |= DWC3_GCTL_PWRDNSCALE(scale);
++		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
++	}
++}
++
+ /**
+  * dwc3_core_init - Low-level initialization of DWC3 Core
+  * @dwc: Pointer to our controller context structure
+@@ -1105,6 +1136,9 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 	if (ret)
+ 		goto err1;
+ 
++	/* Set power down scale of suspend_clk */
++	dwc3_set_power_down_clk_scale(dwc);
++
+ 	/* Adjust Frame Length */
+ 	dwc3_frame_length_adjustment(dwc);
+ 
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 81c486b3941c..722808d8c0af 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -231,6 +231,7 @@
+ 
+ /* Global Configuration Register */
+ #define DWC3_GCTL_PWRDNSCALE(n)	((n) << 19)
++#define DWC3_GCTL_PWRDNSCALE_MASK	GENMASK(31, 19)
+ #define DWC3_GCTL_U2RSTECN	BIT(16)
+ #define DWC3_GCTL_RAMCLKSEL(x)	(((x) & DWC3_GCTL_CLK_MASK) << 6)
+ #define DWC3_GCTL_CLK_BUS	(0)
+-- 
+2.25.1
 
