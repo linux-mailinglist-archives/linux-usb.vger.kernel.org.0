@@ -2,103 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42A653F6E4
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 09:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10DD53F6FB
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 09:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237500AbiFGHJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jun 2022 03:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S237539AbiFGHP1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jun 2022 03:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237495AbiFGHJJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 03:09:09 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0895A1FA5F
-        for <linux-usb@vger.kernel.org>; Tue,  7 Jun 2022 00:09:07 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 680DB20009;
-        Tue,  7 Jun 2022 07:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654585742;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfGv0OL/piQpxMJzszkHBhvE9ywouf21874u1EEIDs0=;
-        b=WPGHCQ2coYbcJho+/fJ5X+dPXDBV6uoIWxTUlvXLrZWAvxViSe9mRviRBckrd69Yt+r96o
-        JWaW3/u4ivPSMN0bQWmEOaO7v8FcLbKoZjxiADddM60cfc6TTTpY16TrIa1LQ0pmWY//7H
-        CBzUO/GYXylwthtBKH4on/rQ5hVwFA4ogaYNNmeIMInYoger/ivcmf8pgUCofsEoJFhU+I
-        M+U7TOkUTInoO9878BiA0H3eM+HiC7jMtijXIX+nof+QrQFmRnKYoOf820DKfWw0sTL5UO
-        /4vWzbqQsgpSbmTHAjpW0dTyTPcnDcDkuu5GGB3bc+lq0UWriGEKQ+CUSq1YYg==
-Date:   Tue, 7 Jun 2022 09:07:59 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: host: ohci-at91: add support to enter suspend
- using SMC
-Message-ID: <20220607090759.3fc0b003@fixe.home>
-In-Reply-To: <Yp5DpPpW5/3SnuJl@rowland.harvard.edu>
-References: <20220606141802.165252-1-clement.leger@bootlin.com>
-        <Yp5DpPpW5/3SnuJl@rowland.harvard.edu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        with ESMTP id S231504AbiFGHPZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 03:15:25 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BD946668
+        for <linux-usb@vger.kernel.org>; Tue,  7 Jun 2022 00:15:24 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id s6so26830161lfo.13
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jun 2022 00:15:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YtcjALjI2RZjsiofJNrRsd8EXD975AiTacZTv5laD3A=;
+        b=f19PMMaVtX+BpJFFtU0Q2VO6fMGbOuJgz1c/nFXb3jADKHD6RE8bc/7KA/pI+rkX00
+         ybDIVaW11W0wAoniwtNsqCLG/50GCtvMU8/n4twyfDCbZ8cjJRj4a7qRSeyqA1vLLLrZ
+         7GTNTZmnzfob0R++KIEhuymJltw9rPlWjAm7GHHK8n+bICqn7KRgKh1VAvOdmrIH25rL
+         226hoidniZOStstv09tB6xTZVHpwYC795Ig5R1HrELOOmPC6MFGVJ0m0tnle7VE2/4oG
+         ejvQQGfLuvOGSSUrsZPjtQ6CM3cdp7Gfd6V8Cg29vyhLqnFbV6fEUQ7p+YYNkjXCc0Xw
+         eEUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YtcjALjI2RZjsiofJNrRsd8EXD975AiTacZTv5laD3A=;
+        b=xCrJ4moOi3gYsxKKT4/VdJoBx9Rc6v2pwRtaH3n96mZ7md+RxLOFan3zZurkr5CaR9
+         u2dHHT76slibXS1aZfEshv6b6AkswgJGN30rsZl5e6HbG0I7r93rHaQfsTRiurMCTlCJ
+         LTGLOhqWTkHddKBU1ikTwo3mMpuhVu7YE5Sy6eK4OitIwYDmLDjH+OXYICuLiuVI53rT
+         K3lMIz337LP6o8oP4wBe+3wu2n479rIIyq6BUhz5ljZ5EqxPVT3otw+rq9xmiuqxlAof
+         oVNXX2WNP5CfTmMNqBrAPdzRw/VzAhGCu4UzHmnth0Jp3V9RCwWf9ze1rQTjh4UUcLix
+         C7PA==
+X-Gm-Message-State: AOAM532/QfXsRk2FcQ+WYDrE2YGKi1z6B+JqqiF3myuK1aD+5wCdj2+w
+        tC75Icujz7+Z/YPAw9PURHqKVLWFLyiNqUc+r+bBhA==
+X-Google-Smtp-Source: ABdhPJz4O8/a80YWrP8iHg32QGtqg64ZDJWv3CN+Yh1UTo6DQ30IJZeQhx92HsCuaD0TO7q46mPTTeT7H0VNqwLKbBg=
+X-Received: by 2002:a05:6512:1085:b0:479:478b:d2cc with SMTP id
+ j5-20020a056512108500b00479478bd2ccmr5934514lfg.540.1654586122236; Tue, 07
+ Jun 2022 00:15:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <000000000000bb7f1c05da29b601@google.com> <00000000000010b7d305e08837c8@google.com>
+ <YpnqpMYcokTwCB6u@smile.fi.intel.com> <Ypor265BTdnmgwpM@rowland.harvard.edu>
+ <YpouRmanvCQeKA3S@kroah.com> <Ypow1LRZ3Hau36ci@rowland.harvard.edu>
+ <Ypoyy/stICFdHauR@kroah.com> <CACT4Y+bBWrLRwiowaWk8o4+XAtCHxxJiEQfiSkgM3BDut9atAw@mail.gmail.com>
+ <20220606123839.GW2146@kadam>
+In-Reply-To: <20220606123839.GW2146@kadam>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 7 Jun 2022 09:15:09 +0200
+Message-ID: <CACT4Y+Y_kg1J00iBL=sMr5AP7U4RXuBizusvQG52few2NcJ6dg@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in __device_attach
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        syzbot <syzbot+dd3c97de244683533381@syzkaller.appspotmail.com>,
+        hdanton@sina.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rafael.j.wysocki@intel.com,
+        rafael@kernel.org, rjw@rjwysocki.net,
+        syzkaller-bugs@googlegroups.com, linux-usb@vger.kernel.org,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Le Mon, 6 Jun 2022 14:12:52 -0400,
-Alan Stern <stern@rowland.harvard.edu> a =C3=A9crit :
+On Mon, 6 Jun 2022 at 14:39, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Sat, Jun 04, 2022 at 10:32:46AM +0200, 'Dmitry Vyukov' via syzkaller-bugs wrote:
+> > On Fri, 3 Jun 2022 at 18:12, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > But again, is this a "real and able to be triggered from userspace"
+> > > problem, or just fault-injection-induced?
+> >
+> > Then this is something to fix in the fault injection subsystem.
+> > Testing systems shouldn't be reporting false positives.
+> > What allocations cannot fail in real life? Is it <=page_size?
+> >
+>
+> Apparently in 2014, anything less than *EIGHT?!!* pages succeeded!
+>
+> https://lwn.net/Articles/627419/
+>
+> I have been on the look out since that article and never seen anyone
+> mention it changing.  I think we should ignore that and say that
+> anything over PAGE_SIZE can fail.  Possibly we could go smaller than
+> PAGE_SIZE...
 
-> On Mon, Jun 06, 2022 at 04:18:02PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > When Linux is running under OP-TEE, the SFR is set as secured and thus
-> > the AT91_OHCIICR_USB_SUSPEND register isn't accessible. Add a SMC to
-> > do the appropriate call to suspend the controller.
-> > The SMC id is fetched from the device-tree property
-> > "microchip,suspend-smc-id". if present, then the syscon regmap is not
-> > used to enter suspend and a SMC is issued.
-> >=20
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > --- =20
->=20
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
->=20
-> However, this is a little weird...  You've written=20
-> usb_hcd_at91_probe() so that the SMC is detected in preference to the=20
-> regmap, but then you wrote ohci_at91_port_suspend() so that the regmap=20
-> is used in preference to the SMC.  It's not wrong, but it is confusing=20
-> to read.
->=20
-> Do you want to rewrite the patch to make the two routines agree on which=
-=20
-> mechanism to use by default?
->=20
-> Alan Stern
++linux-mm for GFP expertise re what allocations cannot possibly fail
+and should be excluded from fault injection.
 
-Hi Alan,
+Interesting, thanks for the link.
 
-I'll rewrite that ! I did it in this specific order in the probe to
-allow overloading the device-tree with a SMC ID without removing the
-syscon property. This way, the regmap stays the default if no
-"microchip,suspend-smc-id" property is provided.
+PAGE_SIZE looks like a good start. Once we have the predicate in
+place, we can refine it later when/if we have more inputs.
 
-Does it sounds good to you ?
+But I wonder about GFP flags. They definitely have some impact on allocations.
+If GFP_ACCOUNT is set, all allocations can fail, right?
+If GFP_DMA/DMA32 is set, allocations can fail, right? What about other zones?
+If GFP_NORETRY is set, allocations can fail?
+What about GFP_NOMEMALLOC and GFP_ATOMIC?
+What about GFP_IO/GFP_FS/GFP_DIRECT_RECLAIM/GFP_KSWAPD_RECLAIM? At
+least some of these need to be set for allocations to not fail? Which
+ones?
+Any other flags are required to be set/unset for allocations to not fail?
 
-Thanks,
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+FTR here is quick link to flags list:
+https://elixir.bootlin.com/linux/v5.19-rc1/source/include/linux/gfp.h#L32
