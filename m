@@ -2,47 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F405B540D35
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 20:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1675540DF5
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 20:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346961AbiFGSrl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jun 2022 14:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
+        id S1347557AbiFGSvj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jun 2022 14:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353776AbiFGSqF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 14:46:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C2018A852;
-        Tue,  7 Jun 2022 10:59:26 -0700 (PDT)
+        with ESMTP id S1354299AbiFGSqx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 14:46:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A771121CDF;
+        Tue,  7 Jun 2022 11:00:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 26AE5CE243D;
-        Tue,  7 Jun 2022 17:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A0EC36B01;
-        Tue,  7 Jun 2022 17:59:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46B07B82182;
+        Tue,  7 Jun 2022 18:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 499C6C34119;
+        Tue,  7 Jun 2022 18:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624762;
-        bh=h7UYClL8BFxTUfuluO+uWklEN6MlHrRRXDG3XZPPlLc=;
+        s=k20201202; t=1654624836;
+        bh=1Zd8eT+4jXDy64Y37w5XfYXv5UqL+hhmiZJkakBpthI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g8s6aA1uMkDrx0HMcZTJ66Kac3kscKJE5pTZpY0hfu4hXLe8U8UF/NiUDG/5WaZTs
-         QTHF1ab+qhcM5oTIdm10MfSu+JcBLPnbAKL0v4gVI9I6e4iFtkGpFLqZgYyx5P5ocn
-         asAbFv68jIPMv32TVu7Kh8z9cwWfyR8dPBrH5m/TKmH5Lh2+JQ1xlQtZm30vJjMLcq
-         sieOTppOEKvnRXP//4/N92N8fwiPS8r11pstVuYi7adM7oUaOEZCvkbiULaafxQmoj
-         C/1NeL91aR+Q2n9a7iZGD1ImXMYgDBNkSDiohJn1xUBwrt+BVCi9rN1naX9foU0CHZ
-         Ssj0oYWnMJATw==
+        b=BFNlxP7W3m20qLch4UfO5nvXQdSjF6hQbXT8Mnl1SX/XoWUrQA5tP5iJSTpcrXO72
+         Aizu3QkPhYt1ntxEgyGn1npk7UGwA9sAwMN0+0gAGMIEF8zJrRJlWd7fdaxLRmgShO
+         vtyplA6JV7wtc6vcarmtpI7ozC5S+zCtS4SsDcE5pzhixp5cijs+kdnuaoKI6C4ZdC
+         bibnny1A7rX6sVLEnBbar2QifXkgGB14k0k5tfjVlVr+aZg9lksUs2FP3gsnBmN85I
+         u5nWDj1HfUfz0VGyZuUdm84AOnJCINjA/SNmAPCpFvWhkDlo9RQLYHqwgivchK14Da
+         CY+rnByj1ML2A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+Cc:     Zhen Ni <nizhen@uniontech.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, hminas@synopsys.com,
+        Sasha Levin <sashal@kernel.org>, ok@artecdesign.ee,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 14/38] usb: dwc2: gadget: don't reset gadget's driver->bus
-Date:   Tue,  7 Jun 2022 13:58:09 -0400
-Message-Id: <20220607175835.480735-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 08/34] USB: host: isp116x: check return value after calling platform_get_resource()
+Date:   Tue,  7 Jun 2022 13:59:43 -0400
+Message-Id: <20220607180011.481266-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607175835.480735-1-sashal@kernel.org>
-References: <20220607175835.480735-1-sashal@kernel.org>
+In-Reply-To: <20220607180011.481266-1-sashal@kernel.org>
+References: <20220607180011.481266-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,64 +57,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Zhen Ni <nizhen@uniontech.com>
 
-[ Upstream commit 3120aac6d0ecd9accf56894aeac0e265f74d3d5a ]
+[ Upstream commit 134a3408c2d3f7e23eb0e4556e0a2d9f36c2614e ]
 
-UDC driver should not touch gadget's driver internals, especially it
-should not reset driver->bus. This wasn't harmful so far, but since
-commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets") gadget
-subsystem got it's own bus and messing with ->bus triggers the
-following NULL pointer dereference:
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-dwc2 12480000.hsotg: bound driver g_ether
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[00000000] *pgd=00000000
-Internal error: Oops: 5 [#1] SMP ARM
-Modules linked in: ...
-CPU: 0 PID: 620 Comm: modprobe Not tainted 5.18.0-rc5-next-20220504 #11862
-Hardware name: Samsung Exynos (Flattened Device Tree)
-PC is at module_add_driver+0x44/0xe8
-LR is at sysfs_do_create_link_sd+0x84/0xe0
-...
-Process modprobe (pid: 620, stack limit = 0x(ptrval))
-...
- module_add_driver from bus_add_driver+0xf4/0x1e4
- bus_add_driver from driver_register+0x78/0x10c
- driver_register from usb_gadget_register_driver_owner+0x40/0xb4
- usb_gadget_register_driver_owner from do_one_initcall+0x44/0x1e0
- do_one_initcall from do_init_module+0x44/0x1c8
- do_init_module from load_module+0x19b8/0x1b9c
- load_module from sys_finit_module+0xdc/0xfc
- sys_finit_module from ret_fast_syscall+0x0/0x54
-Exception stack(0xf1771fa8 to 0xf1771ff0)
-...
-dwc2 12480000.hsotg: new device is high-speed
----[ end trace 0000000000000000 ]---
-
-Fix this by removing driver->bus entry reset.
-
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/20220505104618.22729-1-m.szyprowski@samsung.com
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Link: https://lore.kernel.org/r/20220302033716.31272-1-nizhen@uniontech.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/usb/host/isp116x-hcd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index ec54971063f8..64485f82dc5b 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4518,7 +4518,6 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+index a87c0b26279e..00a4e12a1f15 100644
+--- a/drivers/usb/host/isp116x-hcd.c
++++ b/drivers/usb/host/isp116x-hcd.c
+@@ -1541,10 +1541,12 @@ static int isp116x_remove(struct platform_device *pdev)
  
- 	WARN_ON(hsotg->driver);
+ 	iounmap(isp116x->data_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 	iounmap(isp116x->addr_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
  
--	driver->driver.bus = NULL;
- 	hsotg->driver = driver;
- 	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
- 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+ 	usb_put_hcd(hcd);
+ 	return 0;
 -- 
 2.35.1
 
