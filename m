@@ -2,53 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CE8540AB2
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 20:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF88540AAB
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 20:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243975AbiFGSXc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jun 2022 14:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S1351406AbiFGSXR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jun 2022 14:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352102AbiFGSQy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 14:16:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB58CE1E;
-        Tue,  7 Jun 2022 10:50:33 -0700 (PDT)
+        with ESMTP id S1352050AbiFGSUt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 14:20:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D4637A31;
+        Tue,  7 Jun 2022 10:53:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFBFA6159C;
-        Tue,  7 Jun 2022 17:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629DCC34115;
-        Tue,  7 Jun 2022 17:50:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C455C6159C;
+        Tue,  7 Jun 2022 17:53:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3779DC3411C;
+        Tue,  7 Jun 2022 17:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624232;
-        bh=tmYGo+rLkHrEmeRi3CAoeeKOGbYIsLcxEIvkpA80+5w=;
+        s=k20201202; t=1654624407;
+        bh=aHCYqNqHW5wOAkzq/rq12NubtRsbz6HRlKeEKiKMaWk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B7sq9soKOmBb9GX3iK3MB6o0uZjFZ5z1gaABX+3gw9lkVSZzaSocVb4tKnADzqxJ/
-         8AeeOIy3T58Ulsb+6TlwNreKePuIweb5EUmmuxRvODc2RjjzwWXARpiCvZAIPlcGjO
-         ils5rh20ELOU1XjaQI/wF26SaOIxvOUhUY/ArfgzC+yM+OciA9xRmCWCBZP+6xLKDC
-         fSkf09ea9RjtDCvJ98FFTgeksKItPNYZoJHEIj8SndE23yvqwUIep/IUIxcK0uzF0H
-         nDtLUQFFHRhrOyyWqUU7c2vAS2PFt14vie9QMVW7+LD68+9bVp/+7eGJoLgJ6azxis
-         Tm4Mk7zUEyXsg==
+        b=eK0PHLD3/sPalWJ9Vn1neZvAmM68hKx2Fe1tP8YtmK6cpw1zd5Kv1yqH5sttm3OHF
+         0FuulQV+6q/WWSOMO0vVb6k300Fajv9YX4rutyGhhBnZaSte4KYPHPpLLIeFn+pgkX
+         yQCFpKA25w5e3yB6Rs/WOGmiPWZnLUEpnJnOtKx2k4t7UAB3dyN8gFOQ+pphaW41bX
+         9nl0OmVU5ZqcV9GX/ORq3ojZAFel5WxH1M99PwwF6eVTGqox0AU2rlgNg474Sqh+6n
+         gOui3ZLYH1K60P2w3Y6B2N1bHoSJwfBI85xBfppStnaSMI8D4I9w2BY9uVmqucUg/6
+         GWh9atwCGB8yw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sasha Levin <sashal@kernel.org>, myungjoo.ham@samsung.com,
-        wens@csie.org, sre@kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 24/68] extcon: Fix extcon_get_extcon_dev() error handling
-Date:   Tue,  7 Jun 2022 13:47:50 -0400
-Message-Id: <20220607174846.477972-24-sashal@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Brad Campbell <lists2009@fnarfbargle.com>,
+        Sasha Levin <sashal@kernel.org>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 09/60] thunderbolt: Use different lane for second DisplayPort tunnel
+Date:   Tue,  7 Jun 2022 13:52:06 -0400
+Message-Id: <20220607175259.478835-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607174846.477972-1-sashal@kernel.org>
-References: <20220607174846.477972-1-sashal@kernel.org>
+In-Reply-To: <20220607175259.478835-1-sashal@kernel.org>
+References: <20220607175259.478835-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,228 +58,216 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-[ Upstream commit 58e4a2d27d3255e4e8c507fdc13734dccc9fc4c7 ]
+[ Upstream commit 9d2d0a5cf0ca063f417681cc33e767ce52615286 ]
 
-The extcon_get_extcon_dev() function returns error pointers on error,
-NULL when it's a -EPROBE_DEFER defer situation, and ERR_PTR(-ENODEV)
-when the CONFIG_EXTCON option is disabled.  This is very complicated for
-the callers to handle and a number of them had bugs that would lead to
-an Oops.
+Brad reported that on Apple hardware with Light Ridge or Falcon Ridge
+controller, plugging in a chain of Thunderbolt displays (Light Ridge
+based controllers) causes all kinds of tearing and flickering. The
+reason for this is that on Thunderbolt 1 hardware there is no lane
+bonding so we have two independent 10 Gb/s lanes, and currently Linux
+tunnels both displays through the lane 1. This makes the displays to
+share the 10 Gb/s bandwidth which may not be enough for higher
+resolutions.
 
-In real life, there are two things which prevented crashes.  First,
-error pointers would only be returned if there was bug in the caller
-where they passed a NULL "extcon_name" and none of them do that.
-Second, only two out of the eight drivers will build when CONFIG_EXTCON
-is disabled.
+For this reason make the second tunnel go through the lane 0 instead.
+This seems to match what the macOS connection manager is also doing.
 
-The normal way to write this would be to return -EPROBE_DEFER directly
-when appropriate and return NULL when CONFIG_EXTCON is disabled.  Then
-the error handling is simple and just looks like:
-
-	dev->edev = extcon_get_extcon_dev(acpi_dev_name(adev));
-	if (IS_ERR(dev->edev))
-		return PTR_ERR(dev->edev);
-
-For the two drivers which can build with CONFIG_EXTCON disabled, then
-extcon_get_extcon_dev() will now return NULL which is not treated as an
-error and the probe will continue successfully.  Those two drivers are
-"typec_fusb302" and "max8997-battery".  In the original code, the
-typec_fusb302 driver had an 800ms hang in tcpm_get_current_limit() but
-now that function is a no-op.  For the max8997-battery driver everything
-should continue working as is.
-
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Tested-by: Brad Campbell <lists2009@fnarfbargle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/extcon/extcon-axp288.c         |  4 ++--
- drivers/extcon/extcon.c                |  4 +++-
- drivers/power/supply/axp288_charger.c  | 17 ++++++++++-------
- drivers/power/supply/charger-manager.c |  7 ++-----
- drivers/power/supply/max8997_charger.c |  8 ++++----
- drivers/usb/dwc3/drd.c                 |  9 ++-------
- drivers/usb/phy/phy-omap-otg.c         |  4 ++--
- drivers/usb/typec/tcpm/fusb302.c       |  4 ++--
- include/linux/extcon.h                 |  2 +-
- 9 files changed, 28 insertions(+), 31 deletions(-)
+ drivers/thunderbolt/tb.c     | 19 +++++++++++++++++--
+ drivers/thunderbolt/test.c   | 16 ++++++++--------
+ drivers/thunderbolt/tunnel.c | 11 ++++++-----
+ drivers/thunderbolt/tunnel.h |  4 ++--
+ 4 files changed, 33 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
-index 7c6d5857ff25..180be768c215 100644
---- a/drivers/extcon/extcon-axp288.c
-+++ b/drivers/extcon/extcon-axp288.c
-@@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
- 		if (adev) {
- 			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
- 			put_device(&adev->dev);
--			if (!info->id_extcon)
--				return -EPROBE_DEFER;
-+			if (IS_ERR(info->id_extcon))
-+				return PTR_ERR(info->id_extcon);
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index cbd0ad85ffb1..a1f5d1842811 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -867,7 +867,7 @@ static struct tb_port *tb_find_dp_out(struct tb *tb, struct tb_port *in)
  
- 			dev_info(dev, "controlling USB role\n");
- 		} else {
-diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index a09e704fd0fa..adb957470c65 100644
---- a/drivers/extcon/extcon.c
-+++ b/drivers/extcon/extcon.c
-@@ -851,6 +851,8 @@ EXPORT_SYMBOL_GPL(extcon_set_property_capability);
-  * @extcon_name:	the extcon name provided with extcon_dev_register()
-  *
-  * Return the pointer of extcon device if success or ERR_PTR(err) if fail.
-+ * NOTE: This function returns -EPROBE_DEFER so it may only be called from
-+ * probe() functions.
-  */
- struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+ static void tb_tunnel_dp(struct tb *tb)
  {
-@@ -864,7 +866,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
- 		if (!strcmp(sd->name, extcon_name))
- 			goto out;
- 	}
--	sd = NULL;
-+	sd = ERR_PTR(-EPROBE_DEFER);
- out:
- 	mutex_unlock(&extcon_dev_list_lock);
- 	return sd;
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index 19746e658a6a..15219ed43ce9 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -865,17 +865,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 	info->regmap_irqc = axp20x->regmap_irqc;
- 
- 	info->cable.edev = extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
--	if (info->cable.edev == NULL) {
--		dev_dbg(dev, "%s is not ready, probe deferred\n",
--			AXP288_EXTCON_DEV_NAME);
--		return -EPROBE_DEFER;
-+	if (IS_ERR(info->cable.edev)) {
-+		dev_err_probe(dev, PTR_ERR(info->cable.edev),
-+			      "extcon_get_extcon_dev(%s) failed\n",
-+			      AXP288_EXTCON_DEV_NAME);
-+		return PTR_ERR(info->cable.edev);
+-	int available_up, available_down, ret;
++	int available_up, available_down, ret, link_nr;
+ 	struct tb_cm *tcm = tb_priv(tb);
+ 	struct tb_port *port, *in, *out;
+ 	struct tb_tunnel *tunnel;
+@@ -912,6 +912,20 @@ static void tb_tunnel_dp(struct tb *tb)
+ 		return;
  	}
  
- 	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
- 		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
--		if (info->otg.cable == NULL) {
--			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
--			return -EPROBE_DEFER;
-+		if (IS_ERR(info->otg.cable)) {
-+			dev_err_probe(dev, PTR_ERR(info->otg.cable),
-+				      "extcon_get_extcon_dev(%s) failed\n",
-+				      USB_HOST_EXTCON_NAME);
-+			return PTR_ERR(info->otg.cable);
- 		}
- 		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
- 	}
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index d67edb760c94..92db79400a6a 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -985,13 +985,10 @@ static int charger_extcon_init(struct charger_manager *cm,
- 	cable->nb.notifier_call = charger_extcon_notifier;
- 
- 	cable->extcon_dev = extcon_get_extcon_dev(cable->extcon_name);
--	if (IS_ERR_OR_NULL(cable->extcon_dev)) {
-+	if (IS_ERR(cable->extcon_dev)) {
- 		pr_err("Cannot find extcon_dev for %s (cable: %s)\n",
- 			cable->extcon_name, cable->name);
--		if (cable->extcon_dev == NULL)
--			return -EPROBE_DEFER;
--		else
--			return PTR_ERR(cable->extcon_dev);
-+		return PTR_ERR(cable->extcon_dev);
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(extcon_mapping); i++) {
-diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
-index 127c73b0b3bd..1ec3535a257d 100644
---- a/drivers/power/supply/max8997_charger.c
-+++ b/drivers/power/supply/max8997_charger.c
-@@ -242,10 +242,10 @@ static int max8997_battery_probe(struct platform_device *pdev)
- 		dev_info(&pdev->dev, "couldn't get charger regulator\n");
- 	}
- 	charger->edev = extcon_get_extcon_dev("max8997-muic");
--	if (IS_ERR_OR_NULL(charger->edev)) {
--		if (!charger->edev)
--			return -EPROBE_DEFER;
--		dev_info(charger->dev, "couldn't get extcon device\n");
-+	if (IS_ERR(charger->edev)) {
-+		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
-+			      "couldn't get extcon device: max8997-muic\n");
-+		return PTR_ERR(charger->edev);
- 	}
- 
- 	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 8cad9e7d3368..4982edd13047 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -455,13 +455,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
- 	 * This device property is for kernel internal use only and
- 	 * is expected to be set by the glue code.
- 	 */
--	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
--		edev = extcon_get_extcon_dev(name);
--		if (!edev)
--			return ERR_PTR(-EPROBE_DEFER);
--
--		return edev;
--	}
-+	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
-+		return extcon_get_extcon_dev(name);
- 
++	/*
++	 * This is only applicable to links that are not bonded (so
++	 * when Thunderbolt 1 hardware is involved somewhere in the
++	 * topology). For these try to share the DP bandwidth between
++	 * the two lanes.
++	 */
++	link_nr = 1;
++	list_for_each_entry(tunnel, &tcm->tunnel_list, list) {
++		if (tb_tunnel_is_dp(tunnel)) {
++			link_nr = 0;
++			break;
++		}
++	}
++
  	/*
- 	 * Try to get an extcon device from the USB PHY controller's "port"
-diff --git a/drivers/usb/phy/phy-omap-otg.c b/drivers/usb/phy/phy-omap-otg.c
-index ee0863c6553e..6e6ef8c0bc7e 100644
---- a/drivers/usb/phy/phy-omap-otg.c
-+++ b/drivers/usb/phy/phy-omap-otg.c
-@@ -95,8 +95,8 @@ static int omap_otg_probe(struct platform_device *pdev)
- 		return -ENODEV;
+ 	 * DP stream needs the domain to be active so runtime resume
+ 	 * both ends of the tunnel.
+@@ -943,7 +957,8 @@ static void tb_tunnel_dp(struct tb *tb)
+ 	tb_dbg(tb, "available bandwidth for new DP tunnel %u/%u Mb/s\n",
+ 	       available_up, available_down);
  
- 	extcon = extcon_get_extcon_dev(config->extcon);
--	if (!extcon)
--		return -EPROBE_DEFER;
-+	if (IS_ERR(extcon))
-+		return PTR_ERR(extcon);
+-	tunnel = tb_tunnel_alloc_dp(tb, in, out, available_up, available_down);
++	tunnel = tb_tunnel_alloc_dp(tb, in, out, link_nr, available_up,
++				    available_down);
+ 	if (!tunnel) {
+ 		tb_port_dbg(out, "could not allocate DP tunnel\n");
+ 		goto err_reclaim;
+diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
+index 1f69bab236ee..66b6e665e96f 100644
+--- a/drivers/thunderbolt/test.c
++++ b/drivers/thunderbolt/test.c
+@@ -1348,7 +1348,7 @@ static void tb_test_tunnel_dp(struct kunit *test)
+ 	in = &host->ports[5];
+ 	out = &dev->ports[13];
  
- 	otg_dev = devm_kzalloc(&pdev->dev, sizeof(*otg_dev), GFP_KERNEL);
- 	if (!otg_dev)
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 72f9001b0792..96c55eaf3f80 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1708,8 +1708,8 @@ static int fusb302_probe(struct i2c_client *client,
- 	 */
- 	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
- 		chip->extcon = extcon_get_extcon_dev(name);
--		if (!chip->extcon)
--			return -EPROBE_DEFER;
-+		if (IS_ERR(chip->extcon))
-+			return PTR_ERR(chip->extcon);
- 	}
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1394,7 +1394,7 @@ static void tb_test_tunnel_dp_chain(struct kunit *test)
+ 	in = &host->ports[5];
+ 	out = &dev4->ports[14];
  
- 	chip->vbus = devm_regulator_get(chip->dev, "vbus");
-diff --git a/include/linux/extcon.h b/include/linux/extcon.h
-index 0c19010da77f..685401d94d39 100644
---- a/include/linux/extcon.h
-+++ b/include/linux/extcon.h
-@@ -296,7 +296,7 @@ static inline void devm_extcon_unregister_notifier_all(struct device *dev,
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1444,7 +1444,7 @@ static void tb_test_tunnel_dp_tree(struct kunit *test)
+ 	in = &dev2->ports[13];
+ 	out = &dev5->ports[13];
  
- static inline struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1509,7 +1509,7 @@ static void tb_test_tunnel_dp_max_length(struct kunit *test)
+ 	in = &dev6->ports[13];
+ 	out = &dev12->ports[13];
+ 
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_EXPECT_EQ(test, tunnel->type, TB_TUNNEL_DP);
+ 	KUNIT_EXPECT_PTR_EQ(test, tunnel->src_port, in);
+@@ -1627,7 +1627,7 @@ static void tb_test_tunnel_port_on_path(struct kunit *test)
+ 	in = &dev2->ports[13];
+ 	out = &dev5->ports[13];
+ 
+-	dp_tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	dp_tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, dp_tunnel != NULL);
+ 
+ 	KUNIT_EXPECT_TRUE(test, tb_tunnel_port_on_path(dp_tunnel, in));
+@@ -2009,7 +2009,7 @@ static void tb_test_credit_alloc_dp(struct kunit *test)
+ 	in = &host->ports[5];
+ 	out = &dev->ports[14];
+ 
+-	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	tunnel = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, tunnel != NULL);
+ 	KUNIT_ASSERT_EQ(test, tunnel->npaths, (size_t)3);
+ 
+@@ -2245,7 +2245,7 @@ static struct tb_tunnel *TB_TEST_DP_TUNNEL1(struct kunit *test,
+ 
+ 	in = &host->ports[5];
+ 	out = &dev->ports[13];
+-	dp_tunnel1 = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	dp_tunnel1 = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, dp_tunnel1 != NULL);
+ 	KUNIT_ASSERT_EQ(test, dp_tunnel1->npaths, (size_t)3);
+ 
+@@ -2282,7 +2282,7 @@ static struct tb_tunnel *TB_TEST_DP_TUNNEL2(struct kunit *test,
+ 
+ 	in = &host->ports[6];
+ 	out = &dev->ports[14];
+-	dp_tunnel2 = tb_tunnel_alloc_dp(NULL, in, out, 0, 0);
++	dp_tunnel2 = tb_tunnel_alloc_dp(NULL, in, out, 1, 0, 0);
+ 	KUNIT_ASSERT_TRUE(test, dp_tunnel2 != NULL);
+ 	KUNIT_ASSERT_EQ(test, dp_tunnel2->npaths, (size_t)3);
+ 
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index a473cc7d9a8d..500a0afe3073 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -848,6 +848,7 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+  * @tb: Pointer to the domain structure
+  * @in: DP in adapter port
+  * @out: DP out adapter port
++ * @link_nr: Preferred lane adapter when the link is not bonded
+  * @max_up: Maximum available upstream bandwidth for the DP tunnel (%0
+  *	    if not limited)
+  * @max_down: Maximum available downstream bandwidth for the DP tunnel
+@@ -859,8 +860,8 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+  * Return: Returns a tb_tunnel on success or NULL on failure.
+  */
+ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+-				     struct tb_port *out, int max_up,
+-				     int max_down)
++				     struct tb_port *out, int link_nr,
++				     int max_up, int max_down)
  {
--	return ERR_PTR(-ENODEV);
-+	return NULL;
- }
+ 	struct tb_tunnel *tunnel;
+ 	struct tb_path **paths;
+@@ -884,21 +885,21 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+ 	paths = tunnel->paths;
  
- static inline struct extcon_dev *extcon_find_edev_by_node(struct device_node *node)
+ 	path = tb_path_alloc(tb, in, TB_DP_VIDEO_HOPID, out, TB_DP_VIDEO_HOPID,
+-			     1, "Video");
++			     link_nr, "Video");
+ 	if (!path)
+ 		goto err_free;
+ 	tb_dp_init_video_path(path);
+ 	paths[TB_DP_VIDEO_PATH_OUT] = path;
+ 
+ 	path = tb_path_alloc(tb, in, TB_DP_AUX_TX_HOPID, out,
+-			     TB_DP_AUX_TX_HOPID, 1, "AUX TX");
++			     TB_DP_AUX_TX_HOPID, link_nr, "AUX TX");
+ 	if (!path)
+ 		goto err_free;
+ 	tb_dp_init_aux_path(path);
+ 	paths[TB_DP_AUX_PATH_OUT] = path;
+ 
+ 	path = tb_path_alloc(tb, out, TB_DP_AUX_RX_HOPID, in,
+-			     TB_DP_AUX_RX_HOPID, 1, "AUX RX");
++			     TB_DP_AUX_RX_HOPID, link_nr, "AUX RX");
+ 	if (!path)
+ 		goto err_free;
+ 	tb_dp_init_aux_path(path);
+diff --git a/drivers/thunderbolt/tunnel.h b/drivers/thunderbolt/tunnel.h
+index 03e56076b5bc..bb4d1f1d6d0b 100644
+--- a/drivers/thunderbolt/tunnel.h
++++ b/drivers/thunderbolt/tunnel.h
+@@ -71,8 +71,8 @@ struct tb_tunnel *tb_tunnel_alloc_pci(struct tb *tb, struct tb_port *up,
+ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+ 					bool alloc_hopid);
+ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+-				     struct tb_port *out, int max_up,
+-				     int max_down);
++				     struct tb_port *out, int link_nr,
++				     int max_up, int max_down);
+ struct tb_tunnel *tb_tunnel_alloc_dma(struct tb *tb, struct tb_port *nhi,
+ 				      struct tb_port *dst, int transmit_path,
+ 				      int transmit_ring, int receive_path,
 -- 
 2.35.1
 
