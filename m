@@ -2,107 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9764553FE77
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 14:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597F553FFEF
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 15:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243482AbiFGMMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jun 2022 08:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S244594AbiFGNZL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jun 2022 09:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiFGMMq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 08:12:46 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D217938199;
-        Tue,  7 Jun 2022 05:12:42 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id s39so3232758ybi.0;
-        Tue, 07 Jun 2022 05:12:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LEwK1vx/2yk7NVaeI2J3y3hC1hEAxTfNuhq4EHfuIWo=;
-        b=x3LN9S0TpXGy5QtW9xdsvKR6bbp1zglrnwdV9RwSPXVEMb6eTj0HDK0Q5UksQz5SyE
-         refFWWQp6v5X+LO+XXRv9IRcAcxask9ZOrd6+NvElyOerBRPYecuxCnXQS5JSok8Ulbt
-         vRgKI33qh7pOMWoZ1hLek0EB96xtlcgXKHmhUrzaEBmgpnilZXz/+mPgiMHsdSS8O1e3
-         1Pm6jwes1ga3qxgonJKYIMp8Nzh5fFACc1tIrD8h9eUYDNA1kS48IXg8m9nYniPur1bp
-         ra/zs9fDB/wVRINMt5E8R9dGLhLJvM/oHa/pqo941aKtMCOQ2Ui+agZS9HeyghC/9wDQ
-         G3sA==
-X-Gm-Message-State: AOAM530bAWR6rQQ5ZHKSrZLSzuekPeQrwrkkGPBkrpNtACizaUAkFlPU
-        k713bnBadqjSIQA4wFtao7Ywp8+CFfIgPpZjGA4=
-X-Google-Smtp-Source: ABdhPJz+7xVTAKU4E2nSG2gZCZspR2k1aXKXEyrsPokqKGyQ/9qqsd1pWIM5coR/qhCHRQrgwcaEigfKv2yk+aVpIrw=
-X-Received: by 2002:a25:3145:0:b0:64e:ac9a:eb27 with SMTP id
- x66-20020a253145000000b0064eac9aeb27mr29000721ybx.630.1654603961914; Tue, 07
- Jun 2022 05:12:41 -0700 (PDT)
+        with ESMTP id S241677AbiFGNZJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 09:25:09 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C1CBDA2E;
+        Tue,  7 Jun 2022 06:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1654608305; x=1686144305;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MOFAIB4idNl1d6FFDW2qmFiKFnGtOntEzXMoocV2Urs=;
+  b=eeD6DozYrczuDSXMDPeBKiUfn0Bds6oE9ZdJJ9hDkyQtQzpwCBR06BiG
+   wAqiDw4WEwtgiTyP7HgdA9RAyxLPV49N62LT+2cz7itHM7TMoqaQJfmfN
+   Kfb41Y85vjNWUlQruNCtUdWbCJBEQof+jnGYn4IhfwKjuCP/2DwwFGWR/
+   imkb07QRR8E7Qxn0IgrdYuetczP7nvbIsdP8KxCgqajsIPL2+9wJXqLBx
+   8j6v15p/W0i3A8Jm4UWIazNqYfwHC2KM6+LyWu+cqw4/vHcot60zRqjop
+   LtT6sbevNOngqT/wEY/IvSqXIarUoBU9d2jB54Y+Tp48yBm0rkKPH4NN8
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="98929239"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jun 2022 06:25:00 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 7 Jun 2022 06:25:00 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 7 Jun 2022 06:24:58 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH 0/3] Add support for PolarFire SoC's musb controller
+Date:   Tue, 7 Jun 2022 14:22:01 +0100
+Message-ID: <20220607132204.746180-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2206041003320.1657582@thelappy>
- <20220604144157.208849-1-mailhol.vincent@wanadoo.fr> <YpuLGkPcXrM+Eiwj@rowland.harvard.edu>
- <a57f4af7-3fbc-0853-dd9c-b80b2425b4f5@suse.com> <CAMZ6Rq+6z-Nz=Nao2u_=LOC5QYF6KBjy-HdK1x41O4zo1c8HHg@mail.gmail.com>
- <66b14321-667a-46a3-27db-cb8682bd5476@suse.com> <CAMZ6Rq+CtOQ7Gn62QQqDd=_0dvCNhh5g_oXB6LmHEd0MfRym1g@mail.gmail.com>
- <409f73a8-8679-61ff-4da6-018833c7a96d@suse.com>
-In-Reply-To: <409f73a8-8679-61ff-4da6-018833c7a96d@suse.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 7 Jun 2022 21:12:30 +0900
-Message-ID: <CAMZ6RqJ8MTQJ=tfK0f7+04skq0ov-WEHSwwe_4CN1Qka38f=Hg@mail.gmail.com>
-Subject: Re: [RFC PATCH] USB: core: urb: add new transfer flag URB_FREE_COHERENT
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-can <linux-can@vger.kernel.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue. 7 Jun 2022 at 20:46, Oliver Neukum <oneukum@suse.com> wrote:
-> On 07.06.22 12:18, Vincent MAILHOL wrote:
-> > Here the proposed solution was to keep a pointer of all the
-> > transfer_buffer in a local array to be able to free them when closing.
-> > I really found that original patch to be unelegant which led me to
-> > propose this RFC.
-> It was.
-> > Comparatively, I still think my patch to be a more elegant solution,
-> > and the original author also seems to share my thoughts.
-> >
-> > If my patch is unelegant, then what would be the elegant/state of the
-> > art way to free all this DMA allocated memory?
-> > (pointing to any reference driver implementation should be enough for
-> > me to understand).
->
-> I have two options to offer.
->
-> 1. Use the existing URB_NO_TRANSFER_D;MA_MAP to decide
-> how to free memory.
+Hey Bin, Greg,
+Short series here adding support for USB on Microchip PolarFire SoC FPGAs.
+The kconfig dependancy for INVENTRA_DMA has become a bit of a mouthful,
+is there a better way of dealing with that?
+Thanks,
+Conor.
 
-If doing so, all drivers using DMA would need to be adjusted (or else
-that would be a double free). Similar to URB_FREE_BUFFER, I think it
-must be a separate flag so that the drivers still have the option to
-release the memory by hand if needed for specific use cases.
+Conor Dooley (3):
+  usb: musb: Add support for PolarFire SoC's musb controller
+  MAINTAINERS: add musb to PolarFire SoC entry
+  riscv: dts: microchip: fix icicle kit's dr_mode
 
-> 2. Provide an explicit API in usbcore among the anchor API
+ MAINTAINERS                                   |   1 +
+ .../boot/dts/microchip/mpfs-icicle-kit.dts    |   2 +-
+ drivers/usb/musb/Kconfig                      |  13 +-
+ drivers/usb/musb/Makefile                     |   1 +
+ drivers/usb/musb/mpfs.c                       | 285 ++++++++++++++++++
+ 5 files changed, 300 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/usb/musb/mpfs.c
 
-Like a usb_kill_anchored_urbs_and_free_coherent()?
+-- 
+2.36.1
 
-Wouldn't it be inconsistent with the URB_FREE_BUFFER flag? It is weird
-to me if a normal kmalloc()ed buffer would have to use a flag and
-DMAed buffers a special API call.
-I mean, yes, it would work but I am not convinced that this approach
-is more elegant.
-
-The other advantage I see in my approach is that by setting the
-URB_FREE_COHERENT flag, all the kill/free functions from the URB API
-would benefit. For example, usb_free_urb() would also benefit. Right
-now, I only see the use case for usb_kill_anchored_urbs() but I am
-worried that we will have to duplicate many of the URB API.
-
-
-Yours sincerely,
-Vincent Mailhol
