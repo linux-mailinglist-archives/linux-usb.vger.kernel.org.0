@@ -2,105 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2C65400E9
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 16:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DB25401B2
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 16:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245174AbiFGOLv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jun 2022 10:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S244641AbiFGOq7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jun 2022 10:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245197AbiFGOLq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 10:11:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18DA501E;
-        Tue,  7 Jun 2022 07:11:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E81C26157B;
-        Tue,  7 Jun 2022 14:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A53C385A5;
-        Tue,  7 Jun 2022 14:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654611104;
-        bh=letTzTlIdmYyCQr3t4i/4sQ++BrVupVi397GE8M9uvI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ZmrXJqh5VhK6LBrkWuZLcZPb6LB/aKqB7VgbxKHQ5EKdRZGn1B/UtUl37J/VZlncM
-         XaKVqUs9/CrLhurHZmfQE4ZHromAzF5QHFhfcePHGAZt6gJN4oXn1Jgu9OhytNBGsZ
-         Dpp8c39jiY4Y6vji5iZNzY0BkjvDT9oCjsHIgHSItTWWl1ZaFW8x1MWtKzh54+Jsmx
-         MgLY2ScRWCz28NxqLMnfdu2v0uWPvoMrX/y8LVhRzTo8e9BmO+8kP0GacNDIRYfLCx
-         +YjXzNg0JjEvKZfsqCZP5oIjyElXDN9wiUZpKQTLYg3m4X5qyHVoxoSHYehWp506BX
-         a+HtETwbE/zkg==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-doc@vger.kernel.org, corbet@lwn.net, mchehab@kernel.org
-Cc:     linux@roeck-us.net, linux-cachefs@redhat.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dave.hansen@linux.intel.com, linux-samsung-soc@vger.kernel.org,
-        geert@linux-m68k.org, ulf.hansson@linaro.org, hpa@zytor.com,
-        alsa-devel@alsa-project.org, linux-m68k@lists.linux-m68k.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
-        mingo@redhat.com, mchehab+huawei@kernel.org, jdelvare@suse.com,
-        robh+dt@kernel.org, linux-gpio@vger.kernel.org, rafael@kernel.org,
-        linux-mmc@vger.kernel.org, federico.vaga@vaga.pv.it, bp@alien8.de,
-        linux-phy@lists.infradead.org, mmayer@broadcom.com,
-        keyrings@vger.kernel.org, x86@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        alim.akhtar@samsung.com, Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        jarkko@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org
-In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
-References: <cover.1654529011.git.mchehab@kernel.org>
-Subject: Re: (subset) [PATCH 00/23] Update Documentation/ cross-references
-Message-Id: <165461109692.1597191.11390741473240531333.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 15:11:36 +0100
+        with ESMTP id S243135AbiFGOq6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 10:46:58 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 45BA511459
+        for <linux-usb@vger.kernel.org>; Tue,  7 Jun 2022 07:46:57 -0700 (PDT)
+Received: (qmail 405801 invoked by uid 1000); 7 Jun 2022 10:46:56 -0400
+Date:   Tue, 7 Jun 2022 10:46:56 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kevin Rowland <kevin.p.rowland@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Control of external VBUS on resume from sleep
+Message-ID: <Yp9k4JRcNMcvVi6l@rowland.harvard.edu>
+References: <CAHK3GzziwVASKgvBQmv_DnhwLJ8Bj2K=42ptyTrtOFCAAPXcnw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHK3GzziwVASKgvBQmv_DnhwLJ8Bj2K=42ptyTrtOFCAAPXcnw@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 6 Jun 2022 16:25:22 +0100, Mauro Carvalho Chehab wrote:
-> There were a number of DT binding conversions and other docs change that
-> were not updated. Address them, in order to keep the cross-references on
-> a sane state.
+On Mon, Jun 06, 2022 at 03:12:58PM -0700, Kevin Rowland wrote:
+> Hello all,
 > 
-> Patch series is against v5.19-rc1 (and applies cleanly on the top of
-> today's -next).
+> I've got a USB 3.0 host (an NXP i.MX8QM running 5.10.72 with Cadence
+> XHCI host controller IP) connected to a USB device on the same PCB,
+> which also happens to run Linux (although I think that's beside the
+> point here). The quirk is that, although D+/D- are routed directly
+> from host to device, VBUS is actually controlled by a separate GPIO on
+> the host. The dedicated VBUS pin on the USB host controller is pulled
+> high. ID is pulled high on the PBC but driven low by a GPIO from the
+> i.MX8, so we can imagine it's tied to ground.
 > 
-> [...]
+> I've made a little schematic drawing [1] to help visualize the connections.
+> 
+> We've run into an issue where, on resume from STR, the following
+> sequence occurs:
+> - the GPIO peripheral on the host is powered back on, VBUS is
+> immediately driven high
 
-Applied to
+Why wasn't the GPIO turned on the whole time the system was suspended?  
+How can remote wakeup work without VBUS power?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> - the device signals attach on DP/DN, but _I believe_ the host
+> controller on the host is not yet powered on
+> - the host controller is then powered on and the {hub, hcd, xhci}
+> drivers all resume, but no port status change is detected; I believe
+> that attach signaling was missed by the host controller
+> 
+> I'd like for the host controller driver (or the root hub driver??) to
+> have explicit control of VBUS, so that it's driven high only when the
+> host controller regains power and is ready to detect attach signaling.
+> I see device-tree documentation about the USB connector node and
+> `vbus-supply`, but I'm having a hard time understanding how to square
+> my use-case with `drivers/usb/common/usb-conn-gpio.c`, which reacts to
+> state changes on VBUS or ID.
+> 
+> Any thoughts on where I should stick the logic that enables VBUS on
+> resume? My current (very hacky) fix is to initialize a global (argh!)
+> gpio_desc to refer to the VBUS GPIO, then to call
+> `gpiod_set_value(<gpio_desc>, 0); gpiod_set_value(<gpio_desc>, 1);` in
+> `usb_port_resume()`, which is where I ended up when tracking the
+> original issue. This toggles VBUS and allows us to catch the new round
+> of attach signaling from the device.
 
-Thanks!
+The hub driver already knows to turn on port power when a hub is 
+initialized or during a reset-resume.  It doesn't do so during a 
+regular resume because it assumes power was on the whole time.  You can 
+change this, if necessary.
 
-[22/23] ASoC: wm8731: update wlf,wm8731.yaml reference
-        commit: 69c8027c5ff43d68449fda4510a8cce70e8578b0
+> I'm happy to use the fixed-regulator framework instead, I'm just not
+> sure which driver should own the gpio_desc / regulator and where it
+> should be disabled / enabled during suspend / resume.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Probably whichever platform-specific driver manages your xHCI controller 
+should be the one to interact with the GPIO.  But it should make changes 
+only when told to do so by a higher layer (such as the hub driver).
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Alan Stern
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> Best,
+> Kevin
+> 
+> [1]
+> 
+>  i.MX8                      device
+> .----------------.         .-------------.
+> |     GPIOX.Y ---|-------->| VBUS (in)   |
+> |                |         |             |
+> |  USB           |    _    |             |
+> | .------------. |    |    |             |
+> | |    VBUS ---|-|----'    |             |
+> | |     DP <---|-|-------->| DP          |
+> | |     DP <---|-|-------->| DN          |
+> | |     ID ----|-|----.    '-------------'
+> | '------------' |    |
+> '----------------'    v
