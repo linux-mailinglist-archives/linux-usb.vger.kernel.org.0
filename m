@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223ED5419E6
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 23:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC185541A91
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jun 2022 23:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377960AbiFGV1K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jun 2022 17:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
+        id S1380199AbiFGVeo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jun 2022 17:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379135AbiFGVZO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 17:25:14 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA76150B45
-        for <linux-usb@vger.kernel.org>; Tue,  7 Jun 2022 12:01:41 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id i1so15584283plg.7
-        for <linux-usb@vger.kernel.org>; Tue, 07 Jun 2022 12:01:41 -0700 (PDT)
+        with ESMTP id S1379560AbiFGVcq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jun 2022 17:32:46 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492F8176D79
+        for <linux-usb@vger.kernel.org>; Tue,  7 Jun 2022 12:04:18 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 184so789711pga.12
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jun 2022 12:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XlC5WhPEtlChZIl+n5BBhBXh04p3vnO18/6gEyRk/7I=;
-        b=aiEoUfInXs6muqWe9eAFyYvM/XQRsycTnGNXLPtV5k6vx6lf9JLcKGqq5Qnluowoaj
-         z4Wl1unEUXEkk8niQrnFc5kvsyfgbdRvPcRZtypHElhb1b+AmCNk3ZVDHDXvgObfm7Uy
-         eKNnzoJvWvkExKgTkl65s6gsf+sxZl7wd9uc4=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UPHySLfOpgOfXsztwA/AoI4liAt+hRYFwSofNUnDeK0=;
+        b=NMRk8qUnzsCyyw2urc38alI23uarraGbB57Y33MpslHFrAZKVuxonD/MN435lJFYZs
+         jvf2LGisHWNkv78vR/azokCTzZxCkKzp+1nQlFH8JOnRQAMElQgYhq6QWNRlBwFumzv1
+         CE9Dheipng0OFhGsDMHPi3dp10SkQAl55SIuw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XlC5WhPEtlChZIl+n5BBhBXh04p3vnO18/6gEyRk/7I=;
-        b=47IEPN2cZ8JM5u06AihQtuZhq+RoVhJruTlxoM+ifPqYVeLT2TrFraYWP3t43wCTQg
-         3VP03ACd0GecvrpZCIFqAdOTfkU316ElMKMMaOOZ5CD2NXH2J6/YhJ7ep1Z7nno/dqIU
-         FEYt65inUTM7wZfxBYQjze9oDUUW5UbJdLutFC6a3Q6cA8BHf+wHNMZ1/77uHZOWzPTw
-         XeaBGqLDXacaon0qyG4Ev2LifzAro6yxdSgYrrPZtuwcf82BonkWw0Db0+gXfSGXaqcJ
-         xVGZkk5XQP09AMqDAqEgJ7qbop0/bgGRYTXEPqGn4kyRpbyeCCARApXu85O9VUDMIMAd
-         oNoQ==
-X-Gm-Message-State: AOAM532cawwtiYsOVNk3kfsjAHzSTBf11Hj0l1xmIlpX/wv9JLk6siZO
-        H7EEKim3kmp2H4QCRoi+sC9SJw==
-X-Google-Smtp-Source: ABdhPJys+qHC9VhA3c9fwXaPhk0EIhEKcRgheZtI7KEsqbNQpujN5/HXjl1x4+YKKseCyyA6hK7pOg==
-X-Received: by 2002:a17:90a:2c0c:b0:1ea:14c0:f0ca with SMTP id m12-20020a17090a2c0c00b001ea14c0f0camr2481026pjd.143.1654628501156;
-        Tue, 07 Jun 2022 12:01:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UPHySLfOpgOfXsztwA/AoI4liAt+hRYFwSofNUnDeK0=;
+        b=euQNx8ktGUo+e2uxcPzaPJicKjZE5rJQ8PI13Iqrw+jHqVveam0ghlTWmlQPEejN6c
+         1DLUyQLBH8r5RTXQc5i2m4McRgrj8tPiIXrkWtdAADmZdzaB1BQ4wW31/EhiVo2xW95f
+         PWeDulHkdPmwhJb+1NILCARu4EaIqAYB1GkYZQ20lts0IYJ/WgQn5TBRxvah+ywbghqn
+         rV0mqq6KYJhmNqA+5wZ/SEbCFIVfX+M5/Db+PODZJHy27KslO3ed+9vsvjnJK0rUAdSB
+         7WSDsJ5pC/iw6xL2IhrIBehtr6rztCwJViW7p2O7dQmN5wLWxOUSdm1tpfZnMTyHbRwW
+         gxfQ==
+X-Gm-Message-State: AOAM531bxfqtmhIxx38lxo+Lk0msT8457a9T40UNvSHO4D6CKlvGFxjN
+        3+67lA6xWRyrX8w3XjMMKp92JA==
+X-Google-Smtp-Source: ABdhPJzUhOSgysTyTRCREBnClkvK0Im2EtwyJP1WVB3p1tRJEXapV3kd1TN/wP/ojvVD63SBsIHboA==
+X-Received: by 2002:a05:6a00:240c:b0:51b:9bfc:90db with SMTP id z12-20020a056a00240c00b0051b9bfc90dbmr31109429pfh.24.1654628657712;
+        Tue, 07 Jun 2022 12:04:17 -0700 (PDT)
 Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g29-20020aa79ddd000000b0050dc762819esm13236084pfq.120.2022.06.07.12.01.40
+        by smtp.gmail.com with ESMTPSA id g29-20020aa79ddd000000b0050dc762819esm13236084pfq.120.2022.06.07.12.04.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 12:01:40 -0700 (PDT)
+        Tue, 07 Jun 2022 12:04:17 -0700 (PDT)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     bleung@chromium.org, swboyd@chromium.org,
@@ -72,16 +72,19 @@ Cc:     bleung@chromium.org, swboyd@chromium.org,
         Rob Herring <robh+dt@kernel.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
         Xin Ji <xji@analogixsemi.com>
-Subject: [PATCH 0/7] usb: typec: Introduce typec-switch binding
-Date:   Tue,  7 Jun 2022 19:00:17 +0000
-Message-Id: <20220607190131.1647511-1-pmalani@chromium.org>
+Subject: [PATCH 1/7] usb: typec: mux: Allow muxes to specify mode-switch
+Date:   Tue,  7 Jun 2022 19:00:19 +0000
+Message-Id: <20220607190131.1647511-2-pmalani@chromium.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+In-Reply-To: <20220607190131.1647511-1-pmalani@chromium.org>
+References: <20220607190131.1647511-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,40 +92,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This series introduces a binding for Type-C data lane switches. These
-control the routing and operating modes of USB Type-C data lanes based
-on the PD messaging from the Type-C port driver regarding connected peripherals.
+Loosen the typec_mux_match() requirements so that searches where an
+alt mode is not specified, but the target mux device lists the
+"mode-switch" property, return a success.
 
-The first patch introduces a change to the Type-C mux class mode-switch
-matching code, while the second adds a config guard to a Type-C header.
-The next couple of patches introduce the new "typec-switch" binding as
-well as one user of it (the ANX7625 drm bridge).
+This is helpful in Type C port drivers which would like to get a pointer
+to the mux switch associated with a Type C port, but don't want to
+specify a particular alt mode.
 
-The remaining patches add functionality to the anx7625 driver to
-register the mode-switches, as well as program its crosspoint
-switch depending on which Type-C port has a DisplayPort (DP) peripheral
-connected to it.
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+ drivers/usb/typec/mux.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Pin-Yen Lin (1):
-  drm/bridge: anx7625: Add typec_mux_set callback function
-
-Prashant Malani (6):
-  usb: typec: mux: Allow muxes to specify mode-switch
-  usb: typec: mux: Add CONFIG guards for functions
-  dt-bindings: usb: Add Type-C switch binding
-  dt-bindings: drm/bridge: anx7625: Add mode-switch support
-  drm/bridge: anx7625: Register number of Type C switches
-  drm/bridge: anx7625: Register Type-C mode switches
-
- .../display/bridge/analogix,anx7625.yaml      |  56 +++++++
- .../devicetree/bindings/usb/typec-switch.yaml |  76 +++++++++
- drivers/gpu/drm/bridge/analogix/anx7625.c     | 151 ++++++++++++++++++
- drivers/gpu/drm/bridge/analogix/anx7625.h     |  20 +++
- drivers/usb/typec/mux.c                       |   8 +-
- include/linux/usb/typec_mux.h                 |  38 +++++
- 6 files changed, 347 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
-
+diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+index fd55c2c516a5..464330776cd6 100644
+--- a/drivers/usb/typec/mux.c
++++ b/drivers/usb/typec/mux.c
+@@ -281,9 +281,13 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
+ 	if (match)
+ 		goto find_mux;
+ 
+-	/* Accessory Mode muxes */
+ 	if (!desc) {
+-		match = fwnode_property_present(fwnode, "accessory");
++		/*
++		 * Accessory Mode muxes & muxes which explicitly specify
++		 * the required identifier can avoid SVID matching.
++		 */
++		match = fwnode_property_present(fwnode, "accessory") ||
++			fwnode_property_present(fwnode, id);
+ 		if (match)
+ 			goto find_mux;
+ 		return NULL;
 -- 
 2.36.1.255.ge46751e96f-goog
 
