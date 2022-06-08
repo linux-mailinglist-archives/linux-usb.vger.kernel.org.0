@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C80D542A37
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5278542AB0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbiFHJCD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 05:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
+        id S232342AbiFHJFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 05:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbiFHJBR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:01:17 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AB9405262
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 01:20:18 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id c30so5291146ljr.9
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 01:20:18 -0700 (PDT)
+        with ESMTP id S234096AbiFHJEZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:04:25 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDA73A3930
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 01:24:21 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id v9so21870689lja.12
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 01:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1JjOcRGJSB2fSgbLiiW6ZWGHzYh7EMGNOWme17+fMEk=;
-        b=hkSTJRJFPhK39Y853A/W3/yTLjh4qALYD0cYwErihhB09XSKkdRcupA/W7zjIIItiI
-         JFG+HqHAqCLpcFkinLvs7pGNHVs8mdlZId8G4E38VWqFR5ZiieJIpVrHrBH+HQ8AqkjB
-         fdpU/cG9omO9T+sQJR/3PbiLseabtmITaUpZhd0XSmQ0dswt8fH6vTmATL62bRizvxpm
-         WlEjD8YGiE8bCRWWmGpbwbmgJ9N+QdZgklReUF2fcCzUrqWtT+3bdobnpEZ4NHUtAs4B
-         viv68KKKktnOGPtsgPcY8iA1mzousNrvyxVG+zyc0GWe087eSvr+ReRSk2R56R/uQCB9
-         qVlQ==
+        bh=qn1e9UAfXz5aNABeJOAzysJEyHPbsjfCU7HdITnS84k=;
+        b=Zf/rY8UPfUil7LCo0AmPL0ktcOejRjNbVkLs6BfbQEG0tklgICY+14UzNT7D2l+FDP
+         kd/C58CeMvLCk8v3OokScSeoWleedGL2pCuZ4fpDA/Jq1KQDZNs4yJvNeRq2uK5ohQfv
+         x4JYv71VyLAWcCv/E2Q2Aj30ajf43xjO6xVU0l7ZmWZuCFV8Mab02uK+G5KxWVWLxWab
+         pz3zN5y+pykDMGv075WbOy8vrLxMM7b81TO1CCsC2Cjxlj6PBZkA0QWRSCsNtnZJpAjf
+         OGONEqGxWA91wAD7DPtau1HbAdjZEXl/4fttRzwneXCGvy6jRrNp4vyt+nqKNTR9wue/
+         xJKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1JjOcRGJSB2fSgbLiiW6ZWGHzYh7EMGNOWme17+fMEk=;
-        b=uffaVRCgEgDCCW+KwRjoCuJ9iuVfN0dlEGHKIzCLs6C/ARf8wr6OKKuYzJspkILDB2
-         PagV8sazS1kqzc5L3OdDvtzW/UU6T9Q6Cy/gS9vUFanClrjc/VguDTTe5EDD6WK2JmIO
-         LW+CGF1Fcx0bd10g1zko/kU3VPslwZKtPT2pW/DKzhfkg1yE7ZpSdICYpe9oHg0CD9H/
-         9JUr942aP4yHfD/ry6Mc6UccOb1TBIdAzM9xqOyNXo7cGwH+7HZNKqLWRtk1Fq7aH7/W
-         5aQQUf+Ioa8dnzRJb5/VNX2cClXHRhW3uf0dNBR4ue0JA8ouWfyxbDRAMhELmZdZEEWJ
-         I8Dw==
-X-Gm-Message-State: AOAM530DQW4jpT2yOJhBoOPfuCwTm+WFZhCa2wXOgbQ6tIXdVAB+nQqP
-        8YAeL0JLgfSkquRShz/sn03Okj0IYveNMthk7wbI9Q==
-X-Google-Smtp-Source: ABdhPJz2/z1uPZQh1zE8SQsjqlcxNLnLSwaKoG+0A//xjS09k6hF+JzANV6JR9AY+rVkDmcx9EX96Aq0URjVtZPSG4A=
-X-Received: by 2002:a2e:8882:0:b0:255:6858:d4c0 with SMTP id
- k2-20020a2e8882000000b002556858d4c0mr21336730lji.268.1654676416727; Wed, 08
- Jun 2022 01:20:16 -0700 (PDT)
+        bh=qn1e9UAfXz5aNABeJOAzysJEyHPbsjfCU7HdITnS84k=;
+        b=Vh84p8SuxSvU/BJ09QmKDvv6N34i53R6u64WKhMx/+ys1ytu1BPS99kcqZvZW6+DZx
+         I9k8A4ApPQ62OsZcbuLGfaEaR2IcV3gSpi3mjRBSYz+PU9/57lDa3LJHqgnY4r9rIbfX
+         B1noWuDpJ3YWc1UWUcvcI+ZwovRyX7Q1PGysfXR3iFzlgVyoRS48ehTs/fYLNDGjHew1
+         iV1/cZ2TxiDdsbsceMf5Lk1tb7gmVwkEagbrrCZBgGRKYAsSiPG2Dm37nV0L50h2ewhe
+         wUgsvBVYP5KAiPriuMGLdP6plD6nY4buVWap9Z4jmyGBCNA2EWSpyXhetKZEcxfqAQNd
+         Jj7Q==
+X-Gm-Message-State: AOAM532SQV/g4h7PVDHZaJo5+i9YmUhFUA16u6ISNLc02I5vbheSE+qH
+        t9zc/JHyzxJgVTSXhQsTxTb05bYgyahqmK+ETFJGjA==
+X-Google-Smtp-Source: ABdhPJwud0+3E/Q29u9oy+kzSCNdY14guBqBmA0Hqpt4c+PmhIEHReOxdmFrIBDqbHdvMdQZbHcRxllXIDLHtj3hagQ=
+X-Received: by 2002:a2e:bf14:0:b0:255:b789:576b with SMTP id
+ c20-20020a2ebf14000000b00255b789576bmr3093006ljr.47.1654676659002; Wed, 08
+ Jun 2022 01:24:19 -0700 (PDT)
 MIME-Version: 1.0
 References: <000000000000bb7f1c05da29b601@google.com> <00000000000010b7d305e08837c8@google.com>
  <YpnqpMYcokTwCB6u@smile.fi.intel.com> <Ypor265BTdnmgwpM@rowland.harvard.edu>
  <YpouRmanvCQeKA3S@kroah.com> <Ypow1LRZ3Hau36ci@rowland.harvard.edu>
  <Ypoyy/stICFdHauR@kroah.com> <CACT4Y+bBWrLRwiowaWk8o4+XAtCHxxJiEQfiSkgM3BDut9atAw@mail.gmail.com>
  <20220606123839.GW2146@kadam> <CACT4Y+Y_kg1J00iBL=sMr5AP7U4RXuBizusvQG52few2NcJ6dg@mail.gmail.com>
- <YqAWpMdi4o1IQslu@casper.infradead.org>
-In-Reply-To: <YqAWpMdi4o1IQslu@casper.infradead.org>
+ <YqAWpMdi4o1IQslu@casper.infradead.org> <CACT4Y+anOkc=-A5=3EBrvmu+AJ+f7CcrOfWp85hEu+CHkS3BGw@mail.gmail.com>
+In-Reply-To: <CACT4Y+anOkc=-A5=3EBrvmu+AJ+f7CcrOfWp85hEu+CHkS3BGw@mail.gmail.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 8 Jun 2022 10:20:04 +0200
-Message-ID: <CACT4Y+anOkc=-A5=3EBrvmu+AJ+f7CcrOfWp85hEu+CHkS3BGw@mail.gmail.com>
+Date:   Wed, 8 Jun 2022 10:24:07 +0200
+Message-ID: <CACT4Y+YM8__WOVAQcpNBNxneHCp5dv2tF7ySDpivRJ-efGNCUQ@mail.gmail.com>
 Subject: Re: [syzbot] general protection fault in __device_attach
 To:     Matthew Wilcox <willy@infradead.org>
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
@@ -79,89 +79,92 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 8 Jun 2022 at 05:25, Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Tue, Jun 07, 2022 at 09:15:09AM +0200, Dmitry Vyukov wrote:
-> > On Mon, 6 Jun 2022 at 14:39, Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> > >
-> > > On Sat, Jun 04, 2022 at 10:32:46AM +0200, 'Dmitry Vyukov' via syzkaller-bugs wrote:
-> > > > On Fri, 3 Jun 2022 at 18:12, Greg KH <gregkh@linuxfoundation.org> wrote:
+On Wed, 8 Jun 2022 at 10:20, Dmitry Vyukov <dvyukov@google.com> wrote:
+> > On Tue, Jun 07, 2022 at 09:15:09AM +0200, Dmitry Vyukov wrote:
+> > > On Mon, 6 Jun 2022 at 14:39, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> > > >
+> > > > On Sat, Jun 04, 2022 at 10:32:46AM +0200, 'Dmitry Vyukov' via syzkaller-bugs wrote:
+> > > > > On Fri, 3 Jun 2022 at 18:12, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > But again, is this a "real and able to be triggered from userspace"
+> > > > > > problem, or just fault-injection-induced?
 > > > > >
-> > > > > But again, is this a "real and able to be triggered from userspace"
-> > > > > problem, or just fault-injection-induced?
+> > > > > Then this is something to fix in the fault injection subsystem.
+> > > > > Testing systems shouldn't be reporting false positives.
+> > > > > What allocations cannot fail in real life? Is it <=page_size?
+> > > > >
 > > > >
-> > > > Then this is something to fix in the fault injection subsystem.
-> > > > Testing systems shouldn't be reporting false positives.
-> > > > What allocations cannot fail in real life? Is it <=page_size?
+> > > > Apparently in 2014, anything less than *EIGHT?!!* pages succeeded!
 > > > >
+> > > > https://lwn.net/Articles/627419/
+> > > >
+> > > > I have been on the look out since that article and never seen anyone
+> > > > mention it changing.  I think we should ignore that and say that
+> > > > anything over PAGE_SIZE can fail.  Possibly we could go smaller than
+> > > > PAGE_SIZE...
 > > >
-> > > Apparently in 2014, anything less than *EIGHT?!!* pages succeeded!
+> > > +linux-mm for GFP expertise re what allocations cannot possibly fail
+> > > and should be excluded from fault injection.
 > > >
-> > > https://lwn.net/Articles/627419/
+> > > Interesting, thanks for the link.
 > > >
-> > > I have been on the look out since that article and never seen anyone
-> > > mention it changing.  I think we should ignore that and say that
-> > > anything over PAGE_SIZE can fail.  Possibly we could go smaller than
-> > > PAGE_SIZE...
+> > > PAGE_SIZE looks like a good start. Once we have the predicate in
+> > > place, we can refine it later when/if we have more inputs.
+> > >
+> > > But I wonder about GFP flags. They definitely have some impact on allocations.
+> > > If GFP_ACCOUNT is set, all allocations can fail, right?
+> > > If GFP_DMA/DMA32 is set, allocations can fail, right? What about other zones?
+> > > If GFP_NORETRY is set, allocations can fail?
+> > > What about GFP_NOMEMALLOC and GFP_ATOMIC?
+> > > What about GFP_IO/GFP_FS/GFP_DIRECT_RECLAIM/GFP_KSWAPD_RECLAIM? At
+> > > least some of these need to be set for allocations to not fail? Which
+> > > ones?
+> > > Any other flags are required to be set/unset for allocations to not fail?
 > >
-> > +linux-mm for GFP expertise re what allocations cannot possibly fail
-> > and should be excluded from fault injection.
+> > I'm not the expert on page allocation, but ...
 > >
-> > Interesting, thanks for the link.
+> > I don't think GFP_ACCOUNT makes allocations fail.  It might make reclaim
+> > happen from within that cgroup, and it might cause an OOM kill for
+> > something in that cgroup.  But I don't think it makes a (low order)
+> > allocation more likely to fail.
+>
+> Interesting.
+> I was thinking of some malicious specifically crafted configurations
+> with very low limit and particular pattern of allocations. Also what
+> if there is just 1 process (current)? Is it possible to kill and
+> reclaim the current process when a thread is stuck in the middle of
+> the kernel on a kmalloc?
+> Also I see e.g.:
+>         Tasks with the OOM protection (oom_score_adj set to -1000)
+>         are treated as an exception and are never killed.
+>
+> I am not an expert on this either, but I think it may be hard to fight
+> with a specifically crafted attack.
+>
+>
+> > There's usually less memory avilable in DMA/DMA32 zones, but we have
+> > so few allocations from those zones, I question the utility of focusing
+> > testing on those allocations.
 > >
-> > PAGE_SIZE looks like a good start. Once we have the predicate in
-> > place, we can refine it later when/if we have more inputs.
+> > GFP_ATOMIC allows access to emergency pools, so I would say _less_ likely
+> > to fail.  KSWAPD_RECLAIM has no effect on whether _this_ allocation
+> > succeeds or fails; it kicks kswapd to do reclaim, rather than doing
+> > reclaim directly.  DIRECT_RECLAIM definitely makes allocations more likely
+> > to succeed.  GFP_FS allows (direct) reclaim to happen from filesystems.
+> > GFP_IO allows IO to start (ie writeback can start) in order to clean
+> > dirty memory.
 > >
-> > But I wonder about GFP flags. They definitely have some impact on allocations.
-> > If GFP_ACCOUNT is set, all allocations can fail, right?
-> > If GFP_DMA/DMA32 is set, allocations can fail, right? What about other zones?
-> > If GFP_NORETRY is set, allocations can fail?
-> > What about GFP_NOMEMALLOC and GFP_ATOMIC?
-> > What about GFP_IO/GFP_FS/GFP_DIRECT_RECLAIM/GFP_KSWAPD_RECLAIM? At
-> > least some of these need to be set for allocations to not fail? Which
-> > ones?
-> > Any other flags are required to be set/unset for allocations to not fail?
+> > Anyway, I hope somebody who knows the page allocator better than I do
+> > can say smarter things than this.  Even better if they can put it into
+> > Documentation/ somewhere ;-)
 >
-> I'm not the expert on page allocation, but ...
->
-> I don't think GFP_ACCOUNT makes allocations fail.  It might make reclaim
-> happen from within that cgroup, and it might cause an OOM kill for
-> something in that cgroup.  But I don't think it makes a (low order)
-> allocation more likely to fail.
+> Even better to put this into code as a predicate function that fault
+> injection will use. It will also serve as precise up-to-date
+> documentation.
 
-Interesting.
-I was thinking of some malicious specifically crafted configurations
-with very low limit and particular pattern of allocations. Also what
-if there is just 1 process (current)? Is it possible to kill and
-reclaim the current process when a thread is stuck in the middle of
-the kernel on a kmalloc?
-Also I see e.g.:
-        Tasks with the OOM protection (oom_score_adj set to -1000)
-        are treated as an exception and are never killed.
+Also at the end of kmalloc as:
+WARN_ON(!ret && !cant_fail(size, gfp));
+!
 
-I am not an expert on this either, but I think it may be hard to fight
-with a specifically crafted attack.
-
-
-> There's usually less memory avilable in DMA/DMA32 zones, but we have
-> so few allocations from those zones, I question the utility of focusing
-> testing on those allocations.
->
-> GFP_ATOMIC allows access to emergency pools, so I would say _less_ likely
-> to fail.  KSWAPD_RECLAIM has no effect on whether _this_ allocation
-> succeeds or fails; it kicks kswapd to do reclaim, rather than doing
-> reclaim directly.  DIRECT_RECLAIM definitely makes allocations more likely
-> to succeed.  GFP_FS allows (direct) reclaim to happen from filesystems.
-> GFP_IO allows IO to start (ie writeback can start) in order to clean
-> dirty memory.
->
-> Anyway, I hope somebody who knows the page allocator better than I do
-> can say smarter things than this.  Even better if they can put it into
-> Documentation/ somewhere ;-)
-
-Even better to put this into code as a predicate function that fault
-injection will use. It will also serve as precise up-to-date
-documentation.
-
-> https://www.kernel.org/doc/html/latest/core-api/memory-allocation.html
-> exists but isn't quite enough to answer this question.
+> > https://www.kernel.org/doc/html/latest/core-api/memory-allocation.html
+> > exists but isn't quite enough to answer this question.
