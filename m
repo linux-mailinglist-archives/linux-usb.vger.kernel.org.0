@@ -2,65 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E125435C8
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 17:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD91543822
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 17:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243349AbiFHO6U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 10:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
+        id S244582AbiFHPyG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 11:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243264AbiFHO5U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 10:57:20 -0400
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ABA49F2C
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 07:54:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1654699986; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=g3XBbcUgcr7RPvjyGEXjx+/RTzPFGWR/DvVUHYZc7LFndYP06sHFzbu3ykLfe2hpTAP5OtOyg72XFa4IHnttmb+oU8sxXUoKaJUh+raTW8OrVLG6P42/l5YRPPR/GwepprEG/F4zrYK/Tp8n6Y81OMca+SZXp+JJJNjMrFDEDHg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1654699986; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=F9JBMBia5rEoXy4yptoHZJknCMfwVffC8pmBgrhBArY=; 
-        b=d3liPRSDOtPjiQPUfbeA2/YJEaxOUWWi/QomjSx9Qp+pZ3K3wZDxyBVOwGjrsL5bpEhbVuzQWV8Jn2eJaistqlk8zYk1ANMaYL2IDpsNo6D8OjgHSegyXrKvPEoQbYSozFAGg1lUr1k9I1BQo21C22EyF18VNCxaQbLwywtEtPI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1654699986;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=F9JBMBia5rEoXy4yptoHZJknCMfwVffC8pmBgrhBArY=;
-        b=W/Gxnvle0kTMRWewMbHueLB3F8j90Ih/+8aa4eajDkYeFvCilKZdp1rQW8Zz9Z+k
-        jFaHiSCCfIWR2obhpGMJbdcLSVByQTH8/O7o0M2PKeWJpe038DUvkegeM5NzXx5zxiS
-        oDEiJuzRYUELr4IOUpRZMX1WhPXyK5F0e1de2EGQ=
-Received: from edelgard.icenowy.me (59.41.163.66 [59.41.163.66]) by mx.zohomail.com
-        with SMTPS id 1654699984521556.1461877734166; Wed, 8 Jun 2022 07:53:04 -0700 (PDT)
-Message-ID: <3628fbc2eb9a8c21dc0742b929ee14da76f9adf5.camel@icenowy.me>
-Subject: Re: [PATCH 2/7] dt-bindings: phy: add binding document for
- Allwinner F1C100s USB PHY
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
+        with ESMTP id S245168AbiFHPxz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 11:53:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD82BDE87;
+        Wed,  8 Jun 2022 08:53:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 485C26169F;
+        Wed,  8 Jun 2022 15:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC017C34116;
+        Wed,  8 Jun 2022 15:53:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654703632;
+        bh=8I9ndSA8ysJ7knYeBSEFb57EYrZdMtUNTBUVavgL6Ps=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iNqS7+kwRIEJTkFaKfhMjyNuUif81BXeSUlY3Bm+JAsumIZ2HOzTGPasB8FI0/LtI
+         6N3cvj0pjeDeELM+xWcvAW3cf/WOl4tuMASrBgk+cNKa8+ir1oLlDcMlYLfA2blNHD
+         jpKxukCE41eG9rXu3LoPMz8zf2ebJmfKFJ+dbeNjNknQQmT9PTZWhi5nstYkhPSCqm
+         Ks3boxM2pa/rJyX3lr4Es30CY/B8k+2L2aV9xM16E3L9MuVvenUY0ptSKUrPXezYaN
+         cr+oeUcVhJ6MnMHh48V93QGLmTNt1qC6iDk/5cd+mjytZotTftD18AF9//nEtcIGcE
+         l2TeD0jCVfARg==
+Date:   Wed, 8 Jun 2022 21:23:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-usb@vger.kernel.org
-Date:   Wed, 08 Jun 2022 22:52:52 +0800
-In-Reply-To: <20220608144939.GA1366879-robh@kernel.org>
-References: <20220608070452.338006-1-uwu@icenowy.me>
-         <20220608070452.338006-3-uwu@icenowy.me>
-         <20220608144939.GA1366879-robh@kernel.org>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v8 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
+ override params bindings
+Message-ID: <YqDGCxWFvxYWWoZh@matsya>
+References: <1654066564-20518-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1654066564-20518-2-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,159 +67,124 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=E5=9C=A8 2022-06-08=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 08:49 -0600=EF=BC=
-=8CRob Herring=E5=86=99=E9=81=93=EF=BC=9A
-> On Wed, Jun 08, 2022 at 03:04:47PM +0800, Icenowy Zheng wrote:
-> > Allwinner F1C100s has the most simple USB PHY among all Allwinner
-> > SoCs,
-> > because it has only one OTG USB controller, no host-only OHCI/EHCI
-> > controllers.
-> >=20
-> > Add a binding document for it.
-> >=20
-> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > ---
-> > =C2=A0.../phy/allwinner,suniv-f1c100s-usb-phy.yaml=C2=A0 | 83
-> > +++++++++++++++++++
-> > =C2=A01 file changed, 83 insertions(+)
-> > =C2=A0create mode 100644
-> > Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-
-> > phy.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/phy/allwinner,suniv-
-> > f1c100s-usb-phy.yaml
-> > b/Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-
-> > usb-phy.yaml
-> > new file mode 100644
-> > index 000000000000..180fa8840bf7
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/phy/allwinner,suniv-
-> > f1c100s-usb-phy.yaml
-> > @@ -0,0 +1,83 @@
-> > +# SPDX-License-Identifier: GPL-2.0
->=20
-> Dual license please.
+On 01-06-22, 12:26, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Add device tree bindings for SNPS phy tuning parameters.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 96 ++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> index 1ce251d..daeeb04 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+> @@ -53,6 +53,102 @@ properties:
+>    vdda33-supply:
+>      description: phandle to the regulator 3.3V supply node.
+>  
+> +  qcom,hs-disconnect-bp:
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect a disconnect event at the host. Possible values are.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -272
+> +    maximum: 2156
+> +
+> +  qcom,squelch-detector-bp:
+> +    description:
+> +      This adjusts the voltage level for the threshold used to
+> +      detect valid high-speed data.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -2090
+> +    maximum: 1590
+> +
+> +  qcom,hs-amplitude-bp:
+> +    description:
+> +      This adjusts the high-speed DC level voltage.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -660
+> +    maximum: 2670
+> +
+> +  qcom,pre-emphasis-duration-bp:
+> +    description:
+> +      This signal controls the duration for which the
+> +      HS pre-emphasis current is sourced onto DP<#> or DM<#>.
+> +      The HS Transmitter pre-emphasis duration is defined in terms of
+> +      unit amounts. One unit of pre-emphasis duration is approximately
+> +      650 ps and is defined as 1X pre-emphasis duration.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: 10000
+> +    maximum: 20000
+> +
+> +  qcom,pre-emphasis-amplitude-bp:
+> +    description:
+> +      This signal controls the amount of current sourced to
+> +      DP<#> and DM<#> after a J-to-K or K-to-J transition.
+> +      The HS Transmitter pre-emphasis current is defined in terms of unit
+> +      amounts. One unit amount is approximately 2 mA and is defined as
+> +      1X pre-emphasis current.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: 10000
+> +    maximum: 40000
+> +
+> +  qcom,hs-rise-fall-time-bp:
+> +    description:
+> +      This adjusts the rise/fall times of the high-speed waveform.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -4100
+> +    maximum: 5430
+> +
+> +  qcom,hs-crossover-voltage-microvolt:
+> +    description:
+> +      This adjusts the voltage at which the DP<#> and DM<#>
+> +      signals cross while transmitting in HS mode.
+> +      The values defined are in milli volts. The hardware accepts only
+> +      discrete values. The value closest to the provided input will be
+> +      chosen as the override value for this param.
+> +    minimum: -31000
+> +    maximum: 28000
+> +
+> +  qcom,hs-output-impedance-micro-ohms:
+> +    description:
+> +      In some applications, there can be significant series resistance
+> +      on the D+ and D- paths between the transceiver and cable. This adjusts
+> +      the driver source impedance to compensate for added series
+> +      resistance on the USB. The values defined are in milli ohms.
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -2300000
+> +    maximum: 6100000
+> +
+> +  qcom,ls-fs-output-impedance-bp:
+> +    description:
+> +      This adjusts the low- and full-speed single-ended source
+> +      impedance while driving high. The following adjustment values are based
+> +      on nominal process, voltage, and temperature.
+> +      The values defined are in multiples of basis points (1bp = 0.01%).
+> +      The hardware accepts only discrete values. The value closest to the
+> +      provided input will be chosen as the override value for this param.
+> +    minimum: -1053
+> +    maximum: 1310
 
-I am based on another Allwinner USB PHY binding file in the same
-directory, and that file is single licensed. I created a new file
-because each variant of the PHY has a single file now.
+do we need all these values in DT, till now we have these in driver..
+what is the reasoning to add these in DT instead?
 
->=20
-> > +%YAML 1.2
-> > +---
-> > +$id:
-> > http://devicetree.org/schemas/phy/allwinner,suniv-f1c100s-usb-phy.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Allwinner F1C100s USB PHY Device Tree Bindings
-> > +
-> > +maintainers:
-> > +=C2=A0 - Chen-Yu Tsai <wens@csie.org>
-> > +=C2=A0 - Maxime Ripard <mripard@kernel.org>
-> > +
-> > +properties:
-> > +=C2=A0 "#phy-cells":
-> > +=C2=A0=C2=A0=C2=A0 const: 1
-> > +
-> > +=C2=A0 compatible:
-> > +=C2=A0=C2=A0=C2=A0 const: allwinner,suniv-f1c100s-usb-phy
-> > +
-> > +=C2=A0 reg:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: PHY Control registers
-> > +
-> > +=C2=A0 reg-names:
-> > +=C2=A0=C2=A0=C2=A0 const: phy_ctrl
-> > +
-> > +=C2=A0 clocks:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: USB OTG PHY bus clock
-> > +
-> > +=C2=A0 clock-names:
-> > +=C2=A0=C2=A0=C2=A0 const: usb0_phy
->=20
-> *-names is not needed with only one entry. Plus, just using the
-> module=20
-> name is not a great choice.
-
-However the driver expects it...
-
-Should I patch the driver to use no name on F1C100s?
-
->=20
-> > +
-> > +=C2=A0 resets:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: USB OTG reset
-> > +
-> > +=C2=A0 reset-names:
-> > +=C2=A0=C2=A0=C2=A0 const: usb0_reset
->=20
-> Same here.
->=20
-> > +=C2=A0 usb0_id_det-gpios:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: GPIO to the USB OTG ID pin
-> > +
-> > +=C2=A0 usb0_vbus_det-gpios:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +=C2=A0=C2=A0=C2=A0 description: GPIO to the USB OTG VBUS detect pin
-> > +
-> > +=C2=A0 usb0_vbus_power-supply:
-> > +=C2=A0=C2=A0=C2=A0 description: Power supply to detect the USB OTG VBU=
-S
-> > +
-> > +=C2=A0 usb0_vbus-supply:
-> > +=C2=A0=C2=A0=C2=A0 description: Regulator controlling USB OTG VBUS
->=20
-> Why the 'usb0_' prefix?
->=20
-> Are these GPIOs and Vbus supply connected to the phy? If not, these
-> all=20
-> belong in a connector node (as that is where they are connected to in
-> h/w).
-
-Well these are historical things of phy-sun4i-usb driver too.
-
->=20
-> > +
-> > +required:
-> > +=C2=A0 - "#phy-cells"
-> > +=C2=A0 - compatible
-> > +=C2=A0 - clocks
-> > +=C2=A0 - clock-names
-> > +=C2=A0 - reg
-> > +=C2=A0 - reg-names
-> > +=C2=A0 - resets
-> > +=C2=A0 - reset-names
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +=C2=A0 - |
-> > +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/gpio/gpio.h>
-> > +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/clock/suniv-f1c100s-ccu.h>
-> > +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/reset/suniv-f1c100s-ccu.h>
-> > +
-> > +=C2=A0=C2=A0=C2=A0 phy@1c13400 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "allwinner,s=
-univ-f1c100s-usb-phy";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x01c13400 0x10>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg-names =3D "phy_ctrl";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks =3D <&ccu CLK_USB_PH=
-Y0>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names =3D "usb0_phy";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 resets =3D <&ccu RST_USB_PH=
-Y0>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reset-names =3D "usb0_reset=
-";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #phy-cells =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 usb0_id_det-gpios =3D <&pio=
- 4 2 GPIO_ACTIVE_HIGH>;
-> > +=C2=A0=C2=A0=C2=A0 };
-> > --=20
-> > 2.36.0
-> >=20
-> >=20
-
-
+-- 
+~Vinod
