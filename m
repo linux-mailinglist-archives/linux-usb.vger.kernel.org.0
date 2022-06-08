@@ -2,67 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F18542BFE
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F127542C05
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbiFHJwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 05:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
+        id S235082AbiFHJye (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 05:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235479AbiFHJvz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:51:55 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66DD3F62CC
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 02:22:05 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bg6so20397199ejb.0
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 02:22:05 -0700 (PDT)
+        with ESMTP id S236187AbiFHJyJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:54:09 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4963A27E46D
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 02:24:44 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id fu3so38730607ejc.7
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 02:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=b6d5Zv3xL/KRcHb8xiVxMyuc8Dp70Lb5vZZ6lK/eQQ8=;
-        b=aWRg82jWnaqTYIJkWdAoYFsulyS+0ED8k9qWSWTafVRswt4QT/KPr/HCidmmrSSJX8
-         tfca1NHPxgMJmxYSHrD/3zNh5EPJ31fwoiCsD1K8O5c/O/8/JWOsSPzC89o6EWXn3pqP
-         gzEWvKriNebG1p7w2dC9QI4gxrEsRsuRmS/c/4Ip2KOQroKlr16Fuy4Jj9vhiJOofPMK
-         K9w0Dz7H1NZzSdze8fZB6cOPgsvaSwWUKasKI8GTMIsVTk2eKLHwG2VFP6qzKTaOHWcw
-         U5xnEL/rRNieyscQYA52PqHA4mHngv/wQInPwTpT5Z/EOOq+AJrSowSntyREp7fNuEPm
-         DzMQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zSLdyx64qSe5gyHdS5UlkceB2srWq2wpIjxpdBXJ6s8=;
+        b=jWCXP7B8PfneXoA78HERkc5WPZXWIGc4PTf3ej4mJ1w5NNxASuN1mTgM5THK3gz5eM
+         vDQdSPs27hgYuMmswEPRhnu7WRi/MWr4V34+WzzC8yg154n3hUTKJcaTHrqNQ6Zpmnj7
+         JbA91n12TX41v9Tw8UT2qKLxraz6N9YYg3Fx/nRqYevY+J91DxuoB0t0c9ZYxpMm5WXf
+         SdmlyWvXMyLlCCNLNd8UUyLreq+xj3nXjZSi6P/QPMeEqFbeHv26PZ0NqP51eEcNC59N
+         OGd59Seqm0KzfoS8cOxoGhh1rug91Lkk4nisNI0c3V5ehiW0iVFWOA3X0rdYeYIc5J09
+         XIvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=b6d5Zv3xL/KRcHb8xiVxMyuc8Dp70Lb5vZZ6lK/eQQ8=;
-        b=3pXucVhXFkvnJ+3N+GR9uNnd2FY4a5WBOyhYFzCixG1X8l0u/KW1SzrtPtgDxGaYZT
-         GCLn8M+DGhmJwbbJvhutbRM94PJFfFSTKcjV0SBWv7xAnWmSd9QDVuErujy2CpENqipS
-         F6TfqMk53EouXkeMFpuFbbsdWXFWNKW9djVf2gLG8mVYZL05JMYig47T6EfvPAATZ3n0
-         Su7GoNq5BXdolhW23liFXePfr42AQOIRk1iPOPfpYS8hNF9SUUzPP2kNS6KAQH9V/Sdj
-         qcbTP+t018RtGo8qCUaGlt1z6WLA1tARXEP6oN/wyqC2bPcweoB4YEplSDU+VfUNXUg7
-         VfOA==
-X-Gm-Message-State: AOAM533q+3wm2RFzqpATmvNTKSmUPQLNPS8GiMVj8TyTkFt1XbSoQgfA
-        /nVBw/ve8XGiy/QWFmp0oLadEQ==
-X-Google-Smtp-Source: ABdhPJxz145Vpj4ktqjR1qJFt+oTGwPOr1TCBpytpxOHAUmGx3AhpWrzgmr1hjNaMOMoO/gmolJmTw==
-X-Received: by 2002:a17:906:180c:b0:6fe:9a3e:3d5b with SMTP id v12-20020a170906180c00b006fe9a3e3d5bmr30464668eje.202.1654680103174;
-        Wed, 08 Jun 2022 02:21:43 -0700 (PDT)
+        bh=zSLdyx64qSe5gyHdS5UlkceB2srWq2wpIjxpdBXJ6s8=;
+        b=BlgEATWN9NqlIGX53omoq2fTnBmtkk4l/3Y2vWqeYF0BwhumLj2wxZyuWWH9qjnwVz
+         BC9Q5Te89LFFeP+GF9GdiQP5g6ttPxOPfdUZlFHfXk2AN6ozGZ8dPjrStmkzu7VyFKFE
+         +aQRBnWO300H2rCM2Z9dlU2QSzAuyBTmhEZEGhG14cuCltK9QZ6k9WWA69klUyLLcm8y
+         656cajy9CC+e7r/pK893K8pvjdJgOlOTBcJLSxf5/Pk5y3SivfUBT4BQQe5TlPMvBJ/E
+         umMGbMrqahVHfY4GWSmqhcKoXDnSY7zxSrp9HkvSP7eTjqPxIU/elhb4Mu5MUZrz3sTi
+         FRPg==
+X-Gm-Message-State: AOAM530BZ5QuxQR6SJowR+dnRo119D1/AP3NnOD8vBf9+KcxcVW20Dnl
+        KIjmgeVNbiUB3erxeWDm2bhl1Q==
+X-Google-Smtp-Source: ABdhPJxYV9tBPj4dwnLBO37vz7PvVAGcb41V0vK9tvKORk36nT5oq7EgD1nyvt40Zy6yk44yCYsFAQ==
+X-Received: by 2002:a17:907:2d0c:b0:711:e835:f80c with SMTP id gs12-20020a1709072d0c00b00711e835f80cmr5450514ejc.257.1654680282700;
+        Wed, 08 Jun 2022 02:24:42 -0700 (PDT)
 Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p9-20020a170906614900b00711c7cca428sm4515540ejl.155.2022.06.08.02.21.41
+        by smtp.gmail.com with ESMTPSA id b6-20020a17090636c600b006feb6dee4absm8887348ejc.137.2022.06.08.02.24.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 02:21:42 -0700 (PDT)
-Message-ID: <0d891f54-4a81-549b-8365-fb40cd077c83@linaro.org>
-Date:   Wed, 8 Jun 2022 11:21:41 +0200
+        Wed, 08 Jun 2022 02:24:42 -0700 (PDT)
+Message-ID: <fbc48d41-b2cc-86f6-5f1c-7cfcbdb41e46@linaro.org>
+Date:   Wed, 8 Jun 2022 11:24:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 3/7] dt-bindings: usb: Add Type-C switch binding
+Subject: Re: [PATCH 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch
+ support
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Prashant Malani <pmalani@chromium.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     bleung@chromium.org, swboyd@chromium.org,
         heikki.krogerus@linux.intel.com,
         Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -83,17 +81,16 @@ Cc:     bleung@chromium.org, swboyd@chromium.org,
         Rob Herring <robh+dt@kernel.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Tzung-Bi Shih <tzungbi@google.com>,
         Xin Ji <xji@analogixsemi.com>
 References: <20220607190131.1647511-1-pmalani@chromium.org>
- <20220607190131.1647511-4-pmalani@chromium.org>
- <ba499783-1794-1c00-348a-d912c9562e1e@linaro.org>
-In-Reply-To: <ba499783-1794-1c00-348a-d912c9562e1e@linaro.org>
+ <20220607190131.1647511-5-pmalani@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607190131.1647511-5-pmalani@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,23 +98,111 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/06/2022 11:18, Krzysztof Kozlowski wrote:
->> +anyOf:
->> +  - required:
->> +      - mode-switch
->> +  - required:
->> +      - orientation-switch
->> +
->> +additionalProperties: true
+On 07/06/2022 21:00, Prashant Malani wrote:
+> Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
+> alternate mode lane traffic between 2 Type-C ports.
 > 
-> Why true? I see usb-connector has it from commit 6a0e321ea735
-> ("dt-bindings: Explicitly allow additional properties in common schemas")
->  but that looks also weird - this is not a common schema, but a
-> complete, generic one.
+> Update the binding to accommodate this usage by introducing a switch
+> property.
 > 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>  .../display/bridge/analogix,anx7625.yaml      | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> index 35a48515836e..7e1f655ddfcc 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> @@ -105,6 +105,26 @@ properties:
+>        - port@0
+>        - port@1
+>  
+> +  switches:
+> +    type: object
+> +    description: Set of switches controlling DisplayPort traffic on
+> +      outgoing RX/TX lanes to Type C ports.
+> +
+> +    properties:
+> +      switch:
 
-Ah, I see now, the parent device uses the additional properties. It's
-ok, skip the comment.
+You allow only one switch with such schema, so no need for "switches"...
+
+> +        $ref: /schemas/usb/typec-switch.yaml#
+> +        maxItems: 2
+
+Are you sure this works? what are you limiting here with maxItems? I
+think you wanted patternProperties...
+
+> +
+> +        properties:
+> +          reg:
+> +            maxItems: 1
+> +
+> +        required:
+> +          - reg
+> +
+> +    required:
+> +      - switch@0
+
+This does not match the property.
+
+You also need unevaluatedProperties:false
+
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -167,5 +187,41 @@ examples:
+>                      };
+>                  };
+>              };
+> +            switches {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                switch@0 {
+> +                    compatible = "typec-switch";
+> +                    reg = <0>;
+> +                    mode-switch;
+> +
+> +                    ports {
+> +                        #address-cells = <1>;
+> +                        #size-cells = <0>;
+> +                        port@0 {
+> +                            reg = <0>;
+> +                            anx_typec0: endpoint {
+> +                              remote-endpoint = <&typec_port0>;
+
+Messed up indentation. Your previous patch should also switch to 4-space
+as recommended by schema coding style.
+
+> +                            };
+> +                        };
+> +                    };
+> +                };
+> +                switch@1 {
+> +                    compatible = "typec-switch";
+> +                    reg = <1>;
+> +                    mode-switch;
+> +
+> +                    ports {
+> +                        #address-cells = <1>;
+> +                        #size-cells = <0>;
+> +                        port@0 {
+> +                            reg = <0>;
+> +                            anx_typec1: endpoint {
+> +                              remote-endpoint = <&typec_port1>;
+
+Ditto.
+
+> +                            };
+> +                        };
+> +                    };
+> +                };
+> +            };
+>          };
+>      };
 
 
 Best regards,
