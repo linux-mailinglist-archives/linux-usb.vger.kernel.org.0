@@ -2,82 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD22542746
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 09:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2745425F7
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 08:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiFHGz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 02:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
+        id S232782AbiFHGzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 02:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiFHGDT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 02:03:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6DA26A084
-        for <linux-usb@vger.kernel.org>; Tue,  7 Jun 2022 21:54:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8B6861964
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 04:52:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 21EABC341C8
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 04:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654663973;
-        bh=LEf5r0E8fR14DbE6FGMLMJl0DZiiOv9T8QIfFxl/hQg=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=DChKVtlLSmtuMnYqZYsVauUgVM12JVC3pKyJlykpRKe0onoHT4Ho7cq7iBdwbD+wn
-         7EeCTV75OL3oZOY5MLDyqODpGQ/9vf116ZrcfQaHct/rHggkW0yyjhPmphhDH6btKk
-         uOgGBwRDpdDqlUtOsPNpQXjjko1nkeyURtcYAQEtm1i9T4in9Xqv3TIpLRfUTr0h4f
-         qim9pSvDfgXOYSqspY+Eh+Hlujo2RpqFzZURUfq+FJFRXS3iYE/mZRJVJSMinlexiN
-         gMloPWMkUQSX8npvoEOIrfH1HvseZGwPDRJGBEEgZb3zNs3UaJlcFHk2LFa7iUdLtC
-         gAaiZn4vOhFjQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 10D74C05FD5; Wed,  8 Jun 2022 04:52:53 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Wed, 08 Jun 2022 04:52:52 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bastian@rieck.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-xDitVSLPzH@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S1349083AbiFHGN4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 02:13:56 -0400
+X-Greylist: delayed 40561 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 22:40:49 PDT
+Received: from yodobashi.com (unknown [117.50.183.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09141F89AE
+        for <linux-usb@vger.kernel.org>; Tue,  7 Jun 2022 22:40:48 -0700 (PDT)
+Sender: info@yodobashi.com
+Date:   Wed, 8 Jun 2022 13:40:43 +0800
+From:   "yodobashi" <admin@yodobashi.com>
+To:     <linux-usb@vger.kernel.org>
+Subject: =?gb2312?B?peilyaXQpbelyaXDpcils6Xgo7qhuKSqv82YlMfpiPOhuaXRpbml7w==?=
+        =?gb2312?B?qWClyYnkuPykzt9CvWo=?=
+Message-ID: <20220608134050065231@yodobashi.com>
+X-mailer: Foxmail 6, 13, 102, 15 [cn]
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="gb2312"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,RDNS_NONE,SPF_FAIL,
+        SPF_HELO_FAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+ofah9qH2obikqr/NmJTH6Yjzobml0aW5pe+pYKXJieS4/KTO30K9aqH2ofah9g0Ko6iks6TOpeGp
+YKXrpM+hosXk0MWMn9PDpM6loqXJpeyluaTHxeTQxaS1pOykxqSkpN6kuaOpDQoNCqSqv82YlKTO
+pKq/zZiUx+mI84nkuPzK1r5BpK2k8qSqpLOkyqSkpN6kt6S/oaMNCsTayN2kzqS0tF/VSqTypKru
+iqSkpKSkv6S3pN6kuaGjDQqjqKXRpbml76lgpcmkz6Gise3KvqS3pMakqqTqpN6ku6Tzo6kNCg0K
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0NCqG+ieS4/Iydz/OkzrvhhlSl0aW5pe+pYKXJob8NCrvhhlRJRKGhOqGhbGludXgtdXNiQHZn
+ZXIua2VybmVsLm9yZw0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0NCg0KofGJ5Lj8pLWk7KS/pKq/zZiUx+mI8yANCi0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQrritSSt6y6
+xQ0KyNXW0KTOpLTfQr1qz8jritSSt6y6xQ0KDQqktLXH5WjH6YjzpM+hos/C05uhuKSqv82YlIyf
+08Ol2qlgpbihuaSrpOmktLRf1Uqkr6TApLWkpKGjDQoNCqiLpKq/zZiUjJ/Tw6XaqWCluA0KaHR0
+cHM6Ly9zLnlhbS5jb20vU1d3cFQNCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCqH5pLOkzqXhqWCl68TayN2ky9DEpKKkv6TqpM6k
+yqSkiPa6z6TPoaKkqsrWyv2kx6S5pKyhoqXopcml0KW3P6XJpcOlyD+ls6XgpKqGlqSkus+k76S7
+t5m/2qTY1sG8saS030K9aqTypKruiqSkpKSkv6S3pN6kuaGjDQoNCqSzpM6l4algpeukz6GixeTQ
+xYyf08OkzqWipcml7KW5pMfF5NDFpLWk7KTGpKSk3qS5oaMNCqSqytbK/aTypKqS7KSxpKSkv6S3
+pN6kuaSsoaKks6TOpeGpYKXrpM7E2sjdpMukxKSkpMakzqSqhpakpLrPpO+ku6TPz8LTm6TO30K9
+as/IpN6kx6Sq7oqkpKSkpL+kt6TepLmhow0KDQql6KXJpdClt6XJpcOlyKWzpeAgpKqGlqSkus+k
+76S7t5m/2g0KRW1haWw6IGluZm9AeW9kb2Jhc2hpLmNvbQ0KDQoNCkNvcHlyaWdodDIwMjIgWW9k
+b2Jhc2hpIENhbWVyYSBDby4sTHRkLg0K
 
---- Comment #14 from Bastian Rieck (bastian@rieck.me) ---
-Does not appear with Arch Linux 5.18.1-arch1-1 any more.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
