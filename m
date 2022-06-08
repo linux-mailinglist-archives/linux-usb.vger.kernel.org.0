@@ -2,84 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E191543EEA
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 23:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E9C543F31
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 00:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbiFHV45 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 17:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S234785AbiFHWcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 18:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiFHV4z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 17:56:55 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D9891562
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 14:56:54 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31336535373so72531427b3.2
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 14:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o/FxEvZvW1gTJxwxNX2DkDyV7vVmddxl0z+6t//DzGw=;
-        b=GfP2IP4Fat3QQOJUQ1zjmZgkYIDYRLt6vRQO45pbcMcGVtU5pBvQcFY5UvJcGk8abd
-         +JSzoHHE0NFLzvXxIbPCxL7Mld79vHYVn5PIdyGBgg0FkKvkhTDeiTe8VNdYvnRPSjGO
-         KRwPsYoXEKfCPsnJrtFV9ohI5YEFExn5kwhkM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o/FxEvZvW1gTJxwxNX2DkDyV7vVmddxl0z+6t//DzGw=;
-        b=eGMs61ZcIqTAfmLUQUF6dYK4wUw0OxcHpovDjMeQtZfE7fwW86tgm2JrUOxOniXgq/
-         x1thEpwLzdeWW1h9b7akuqW8RjY/iyUu3ataRffXrcMHXjD8LO601w9qGrYVmpA1sQVs
-         QItDJ0XCun+JstTMLXfvyfHdct6J70o2tVRI3kySoPteZTSMfS5PxU7WyHiRWis9Xiwm
-         /1mXZqECPKBD4ot8RntEiDPDhlOQ1QHSDqJhUxhTXuC7Z/IYl0oV1xnDAB8qU2CRZe0G
-         1Ut457UP0Mt1MlhCjXQfGvnoSoEY3zSZTZn/nZiuU9tACKjR682WbVvEHd9HnmbwoBVx
-         jdLQ==
-X-Gm-Message-State: AOAM531ZjqUZacze5VoRXiNtkjJ08mqGB/Ie6jJOCmfYP/OZ+JGRA6KB
-        NOJOJrWeiZCVXFvREMwqTpjzawIfqu2gnYO5D+MmFqVXztQ=
-X-Google-Smtp-Source: ABdhPJyNxCPNzrOQbcyyyd4qjPEc47HfGivnM4HCR4GSlQ1K3nk/S/w0ukyRatBku42k6tv5eQ/gkohhiS9vlMCItdg=
-X-Received: by 2002:a81:54c5:0:b0:302:53b8:806b with SMTP id
- i188-20020a8154c5000000b0030253b8806bmr39710077ywb.432.1654725413771; Wed, 08
- Jun 2022 14:56:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220607190131.1647511-1-pmalani@chromium.org>
- <20220607190131.1647511-5-pmalani@chromium.org> <fbc48d41-b2cc-86f6-5f1c-7cfcbdb41e46@linaro.org>
- <YqDXfGa9bugnLFGH@chromium.org>
-In-Reply-To: <YqDXfGa9bugnLFGH@chromium.org>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 8 Jun 2022 14:56:42 -0700
-Message-ID: <CACeCKaeHocnAuY5D-oVt1fhgRGkNT014RcK3JSe6piKoXNtKCQ@mail.gmail.com>
-Subject: Re: [PATCH 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
+        with ESMTP id S232537AbiFHWcN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 18:32:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD895DD4;
+        Wed,  8 Jun 2022 15:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654727531; x=1686263531;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tKBsN7TLvPst4gWPH9NKX5dpH3pR/K/LrPbJPg+2h3s=;
+  b=fZ1i2NOmBl2c+LfznI+/a6PbhjN2EnS3Ba6y9GpBu03e/71jW8kqLjuN
+   bxqkWyC+lTmz3GwyBWVs2dPqaB1AQJv7E0qM8N5TOlsQrVQ4gBUYJcfNL
+   rfeH+Ler+hjHu52NTu2jXmQ9H9g2LwQUHHlaAG6x2ueG0taYJsgta6tUE
+   ZD5XaUdUUWbjj3/oY3rKPafycgtHAqVUJgm4aWKdM12WAwMTZrgEmwV4k
+   URxDuIWvx54BqEqefp0TXfekbhu3ubIuBpn1UBZ+Y+PYgxcwNICHjYfNi
+   8SDrxUZOXEMO1hb0kjfBFUDSbA2lPpcEjqKgeURd9LGJfG+al0u0HRRbC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="363397455"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="363397455"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 15:32:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="555627386"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Jun 2022 15:32:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nz4Dc-000FB4-Do;
+        Wed, 08 Jun 2022 22:32:04 +0000
+Date:   Thu, 9 Jun 2022 06:31:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, heikki.krogerus@linux.intel.com,
         Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
+        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH 6/7] drm/bridge: anx7625: Register Type-C mode switches
+Message-ID: <202206090626.D0er2ez1-lkp@intel.com>
+References: <20220607190131.1647511-7-pmalani@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607190131.1647511-7-pmalani@chromium.org>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,138 +88,122 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 10:08 AM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Hi Krzysztof,
->
-> Thank you for looking at the patch.
->
-> On Jun 08 11:24, Krzysztof Kozlowski wrote:
-> > On 07/06/2022 21:00, Prashant Malani wrote:
-> > > Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
-> > > alternate mode lane traffic between 2 Type-C ports.
-> > >
-> > > Update the binding to accommodate this usage by introducing a switch
-> > > property.
-> > >
-> > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > > ---
-> > >  .../display/bridge/analogix,anx7625.yaml      | 56 +++++++++++++++++++
-> > >  1 file changed, 56 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > index 35a48515836e..7e1f655ddfcc 100644
-> > > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > @@ -105,6 +105,26 @@ properties:
-> > >        - port@0
-> > >        - port@1
-> > >
-> > > +  switches:
-> > > +    type: object
-> > > +    description: Set of switches controlling DisplayPort traffic on
-> > > +      outgoing RX/TX lanes to Type C ports.
-> > > +
-> > > +    properties:
-> > > +      switch:
-> >
-> > You allow only one switch with such schema, so no need for "switches"...
->
-> See below comment (summary: we'd like to allow 1 or 2 switches).
-> >
-> > > +        $ref: /schemas/usb/typec-switch.yaml#
-> > > +        maxItems: 2
-> >
-> > Are you sure this works? what are you limiting here with maxItems? I
-> > think you wanted patternProperties...
->
-> Yeah, I might not have used the DT syntax correctly here.
-> What I'm aiming for is:
-> "switches" should can contain 1 or 2 "switch" nodes.
-> 2 is the maximum (limitation of the hardware).
->
-> >
-> > > +
-> > > +        properties:
-> > > +          reg:
-> > > +            maxItems: 1
-> > > +
-> > > +        required:
-> > > +          - reg
-> > > +
-> > > +    required:
-> > > +      - switch@0
-> >
-> > This does not match the property.
-> >
-> > You also need unevaluatedProperties:false
->
-> Ack, will update this in the next version.
+Hi Prashant,
 
-Actually, could you kindly clarify which of the two needs this?
-"switches" or "switch" ?
-I interpreted "switch" as requiring it, but I thought it better to confirm.
+I love your patch! Yet something to improve:
 
->
-> >
-> >
-> > > +
-> > >  required:
-> > >    - compatible
-> > >    - reg
-> > > @@ -167,5 +187,41 @@ examples:
-> > >                      };
-> > >                  };
-> > >              };
-> > > +            switches {
-> > > +                #address-cells = <1>;
-> > > +                #size-cells = <0>;
-> > > +                switch@0 {
-> > > +                    compatible = "typec-switch";
-> > > +                    reg = <0>;
-> > > +                    mode-switch;
-> > > +
-> > > +                    ports {
-> > > +                        #address-cells = <1>;
-> > > +                        #size-cells = <0>;
-> > > +                        port@0 {
-> > > +                            reg = <0>;
-> > > +                            anx_typec0: endpoint {
-> > > +                              remote-endpoint = <&typec_port0>;
-> >
-> > Messed up indentation. Your previous patch should also switch to 4-space
-> > as recommended by schema coding style.
->
-> Sorry about that, will fix up the indentation in the next version.
->
-> >
-> > > +                            };
-> > > +                        };
-> > > +                    };
-> > > +                };
-> > > +                switch@1 {
-> > > +                    compatible = "typec-switch";
-> > > +                    reg = <1>;
-> > > +                    mode-switch;
-> > > +
-> > > +                    ports {
-> > > +                        #address-cells = <1>;
-> > > +                        #size-cells = <0>;
-> > > +                        port@0 {
-> > > +                            reg = <0>;
-> > > +                            anx_typec1: endpoint {
-> > > +                              remote-endpoint = <&typec_port1>;
-> >
-> > Ditto.
-> >
-> > > +                            };
-> > > +                        };
-> > > +                    };
-> > > +                };
-> > > +            };
-> > >          };
-> > >      };
-> >
-> >
-> > Best regards,
-> > Krzysztof
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on usb/usb-testing v5.19-rc1 next-20220608]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: nios2-buildonly-randconfig-r006-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090626.D0er2ez1-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2ac4609c73d7bb4d1a585dae84559967ced3bad6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
+        git checkout 2ac4609c73d7bb4d1a585dae84559967ced3bad6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:18:
+>> include/linux/usb/typec_mux.h:83:19: warning: no previous prototype for 'fwnode_typec_mux_get' [-Wmissing-prototypes]
+      83 | struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
+         |                   ^~~~~~~~~~~~~~~~~~~~
+>> include/linux/usb/typec_mux.h:89:6: warning: no previous prototype for 'typec_mux_put' [-Wmissing-prototypes]
+      89 | void typec_mux_put(struct typec_mux *mux) {}
+         |      ^~~~~~~~~~~~~
+>> include/linux/usb/typec_mux.h:91:5: warning: no previous prototype for 'typec_mux_set' [-Wmissing-prototypes]
+      91 | int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+         |     ^~~~~~~~~~~~~
+>> include/linux/usb/typec_mux.h:103:1: warning: no previous prototype for 'typec_mux_register' [-Wmissing-prototypes]
+     103 | typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
+         | ^~~~~~~~~~~~~~~~~~
+>> include/linux/usb/typec_mux.h:107:6: warning: no previous prototype for 'typec_mux_unregister' [-Wmissing-prototypes]
+     107 | void typec_mux_unregister(struct typec_mux *mux) {}
+         |      ^~~~~~~~~~~~~~~~~~~~
+>> include/linux/usb/typec_mux.h:109:6: warning: no previous prototype for 'typec_mux_set_drvdata' [-Wmissing-prototypes]
+     109 | void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
+         |      ^~~~~~~~~~~~~~~~~~~~~
+>> include/linux/usb/typec_mux.h:110:7: warning: no previous prototype for 'typec_mux_get_drvdata' [-Wmissing-prototypes]
+     110 | void *typec_mux_get_drvdata(struct typec_mux *mux)
+         |       ^~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_register_mode_switch':
+>> drivers/gpu/drm/bridge/analogix/anx7625.c:2617:30: error: assignment to 'struct typec_mux_dev *' from incompatible pointer type 'struct typec_mux *' [-Werror=incompatible-pointer-types]
+    2617 |         port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+         |                              ^
+   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_unregister_typec_switches':
+>> drivers/gpu/drm/bridge/analogix/anx7625.c:2631:57: error: passing argument 1 of 'typec_mux_unregister' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    2631 |                 typec_mux_unregister(ctx->typec_ports[i].typec_mux);
+         |                                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+         |                                                         |
+         |                                                         struct typec_mux_dev *
+   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:18:
+   include/linux/usb/typec_mux.h:107:45: note: expected 'struct typec_mux *' but argument is of type 'struct typec_mux_dev *'
+     107 | void typec_mux_unregister(struct typec_mux *mux) {}
+         |                           ~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+
+
+vim +2617 drivers/gpu/drm/bridge/analogix/anx7625.c
+
+  2590	
+  2591	static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
+  2592						struct anx7625_data *ctx)
+  2593	{
+  2594		struct anx7625_port_data *port_data;
+  2595		struct typec_mux_desc mux_desc = {};
+  2596		char name[32];
+  2597		u32 port_num;
+  2598		int ret;
+  2599	
+  2600		ret = of_property_read_u32(node, "reg", &port_num);
+  2601		if (ret)
+  2602			return ret;
+  2603	
+  2604		if (port_num >= ctx->num_typec_switches) {
+  2605			dev_err(dev, "Invalid port number specified: %d\n", port_num);
+  2606			return -EINVAL;
+  2607		}
+  2608	
+  2609		port_data = &ctx->typec_ports[port_num];
+  2610		port_data->ctx = ctx;
+  2611		mux_desc.fwnode = &node->fwnode;
+  2612		mux_desc.drvdata = port_data;
+  2613		snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
+  2614		mux_desc.name = name;
+  2615		mux_desc.set = anx7625_typec_mux_set;
+  2616	
+> 2617		port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+  2618		if (IS_ERR(port_data->typec_mux)) {
+  2619			ret = PTR_ERR(port_data->typec_mux);
+  2620			dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
+  2621		}
+  2622	
+  2623		return ret;
+  2624	}
+  2625	
+  2626	static void anx7625_unregister_typec_switches(struct anx7625_data *ctx)
+  2627	{
+  2628		int i;
+  2629	
+  2630		for (i = 0; i < ctx->num_typec_switches; i++)
+> 2631			typec_mux_unregister(ctx->typec_ports[i].typec_mux);
+  2632	}
+  2633	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
