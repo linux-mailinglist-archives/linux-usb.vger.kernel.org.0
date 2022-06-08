@@ -2,233 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81D2543B94
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 20:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF7D543BA0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 20:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiFHSfx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 14:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
+        id S230366AbiFHSlk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 14:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiFHSfw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 14:35:52 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EBDE96F0;
-        Wed,  8 Jun 2022 11:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654713350; x=1686249350;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DqUiRXlTjJeKVR62BqB5dFoUTGYJ9vm4Fy2jswQl65M=;
-  b=cQU8m4oZygBxGQGJpNmSRR9W1xuYTx7H6WrsrfNYY/3oCfb7pvU28ado
-   NBIG0VqsIwZJUdxWISoJT9AufF9nvzVBQcEYPh64xMH5viAaUUuic5rNV
-   JEk3dkOR9rri/lZs/iiPqSI72gvN86jdEjkxFpaB7gpqsHYnqF9x9tVkc
-   ShZjspID/xgnqXucdC56OUznNAUMTWwjFXeDkBtmLE12+mKkcYH5TdP6o
-   S1AP+sOpdePCJJYUQPjzskHzqYAl8gSOGs69EcMy9P56pFbFq8c/ePLHI
-   iXFhJ4DU4iiWFC2aVlm0f8wiZ5vuO3yT4LFYg5Ts/NMfEaqZ0V8AEPKkf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="363330277"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="363330277"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 11:35:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="683490966"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2022 11:35:43 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz0Wt-000Eu1-5U;
-        Wed, 08 Jun 2022 18:35:43 +0000
-Date:   Thu, 9 Jun 2022 02:35:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
-        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH 6/7] drm/bridge: anx7625: Register Type-C mode switches
-Message-ID: <202206090245.ZHrBQ2To-lkp@intel.com>
-References: <20220607190131.1647511-7-pmalani@chromium.org>
+        with ESMTP id S229447AbiFHSli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 14:41:38 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6ED15735;
+        Wed,  8 Jun 2022 11:41:37 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 069D46CF;
+        Wed,  8 Jun 2022 20:41:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1654713695;
+        bh=Quvq/+VUWrTeqaEeXTg/GHPptPCG9G08+Df1UOZuV20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rk/I+P8L7SzlhE4Bx59HBrI+vTGDw4vLTcBJ8wq2LAJIFvk+m9pLj8ZYeONTHecnd
+         /sFFQ1ivwSsNtPDYLrlcSim4DkjX9/LKgEYCdZgYHX2/5+/qdgzvEwpC2MYoi2QMI/
+         f3YPm0yOzwp+ikT6sAhDQ9oAXSuyvEu/gBswfjkc=
+Date:   Wed, 8 Jun 2022 21:41:30 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, paul.elder@ideasonboard.com,
+        kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
+        kernel@pengutronix.de
+Subject: Re: [RESEND v2 2/3] usb: gadget: uvc: increase worker prio to
+ WQ_HIGHPRI
+Message-ID: <YqDtWkUbp4LPBRxS@pendragon.ideasonboard.com>
+References: <20220608110339.141036-1-m.grzeschik@pengutronix.de>
+ <20220608110339.141036-3-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220607190131.1647511-7-pmalani@chromium.org>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220608110339.141036-3-m.grzeschik@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+Hi Michael,
 
-I love your patch! Yet something to improve:
+Thank you for the patch.
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on usb/usb-testing v5.19-rc1 next-20220608]
-[cannot apply to balbi-usb/testing/next peter-chen-usb/for-usb-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Wed, Jun 08, 2022 at 01:03:38PM +0200, Michael Grzeschik wrote:
+> Likewise to the uvcvideo hostside driver, this patch is changing the
+> simple workqueue to an async_wq with higher priority. This ensures that
+> the worker will not be scheduled away while the video stream is handled.
+> 
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> 
+> ---
+> v1 -> v2: - added destroy_workqueue in uvc_function_unbind
+>           - reworded comment above allow_workqueue
+> 
+>  drivers/usb/gadget/function/f_uvc.c     | 4 ++++
+>  drivers/usb/gadget/function/uvc.h       | 1 +
+>  drivers/usb/gadget/function/uvc_v4l2.c  | 2 +-
+>  drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
+>  4 files changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index d3feeeb50841b8..dcc5f057810973 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -891,10 +891,14 @@ static void uvc_function_unbind(struct usb_configuration *c,
+>  {
+>  	struct usb_composite_dev *cdev = c->cdev;
+>  	struct uvc_device *uvc = to_uvc(f);
+> +	struct uvc_video *video = &uvc->video;
+>  	long wait_ret = 1;
+>  
+>  	uvcg_info(f, "%s()\n", __func__);
+>  
+> +	if (video->async_wq)
+> +		destroy_workqueue(video->async_wq);
+> +
+>  	/* If we know we're connected via v4l2, then there should be a cleanup
+>  	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
+>  	 * though the video device removal uevent. Allow some time for the
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> index 58e383afdd4406..1a31e6c6a5ffb8 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -88,6 +88,7 @@ struct uvc_video {
+>  	struct usb_ep *ep;
+>  
+>  	struct work_struct pump;
+> +	struct workqueue_struct *async_wq;
+>  
+>  	/* Frame parameters */
+>  	u8 bpp;
+> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> index fd8f73bb726dd1..fddc392b8ab95d 100644
+> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> @@ -170,7 +170,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+>  		return ret;
+>  
+>  	if (uvc->state == UVC_STATE_STREAMING)
+> -		schedule_work(&video->pump);
+> +		queue_work(video->async_wq, &video->pump);
+>  
+>  	return ret;
+>  }
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index a9bb4553db847e..9a9101851bc1e8 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -277,7 +277,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>  	spin_unlock_irqrestore(&video->req_lock, flags);
+>  
+>  	if (uvc->state == UVC_STATE_STREAMING)
+> -		schedule_work(&video->pump);
+> +		queue_work(video->async_wq, &video->pump);
+>  }
+>  
+>  static int
+> @@ -478,7 +478,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+>  
+>  	video->req_int_count = 0;
+>  
+> -	schedule_work(&video->pump);
+> +	queue_work(video->async_wq, &video->pump);
+>  
+>  	return ret;
+>  }
+> @@ -492,6 +492,11 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+>  	spin_lock_init(&video->req_lock);
+>  	INIT_WORK(&video->pump, uvcg_video_pump);
+>  
+> +	/* Allocate a work queue for asynchronous video pump handler. */
+> +	video->async_wq = alloc_workqueue("uvcvideo", WQ_UNBOUND | WQ_HIGHPRI, 0);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: hexagon-buildonly-randconfig-r012-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090245.ZHrBQ2To-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2ac4609c73d7bb4d1a585dae84559967ced3bad6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-        git checkout 2ac4609c73d7bb4d1a585dae84559967ced3bad6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
+Let's call it "uvcgadget" (or "uvc gadget", "uvc-gadget", ...) as
+"uvcvideo" refers to the host side driver.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I'm still a bit worried about WQ_UNBOUND and the risk of running work
+items in parallel on different CPUs. uvcg_video_pump() looks mostly
+safe, as it protects video->req_free with a spinlock, and the buffer
+queue with another spinlock. The req_int_count increment at the end of
+the loop would be unsafe though.
 
-All error/warnings (new ones prefixed by >>):
+Could we get to the bottom of this and find out whether or not the work
+items can be executed in parallel ?
 
-   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:18:
->> include/linux/usb/typec_mux.h:83:19: warning: no previous prototype for function 'fwnode_typec_mux_get' [-Wmissing-prototypes]
-   struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-                     ^
-   include/linux/usb/typec_mux.h:83:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-   ^
-   static 
->> include/linux/usb/typec_mux.h:89:6: warning: no previous prototype for function 'typec_mux_put' [-Wmissing-prototypes]
-   void typec_mux_put(struct typec_mux *mux) {}
-        ^
-   include/linux/usb/typec_mux.h:89:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void typec_mux_put(struct typec_mux *mux) {}
-   ^
-   static 
->> include/linux/usb/typec_mux.h:91:5: warning: no previous prototype for function 'typec_mux_set' [-Wmissing-prototypes]
-   int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-       ^
-   include/linux/usb/typec_mux.h:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-   ^
-   static 
->> include/linux/usb/typec_mux.h:103:1: warning: no previous prototype for function 'typec_mux_register' [-Wmissing-prototypes]
-   typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-   ^
-   include/linux/usb/typec_mux.h:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct typec_mux *
-   ^
-   static 
->> include/linux/usb/typec_mux.h:107:6: warning: no previous prototype for function 'typec_mux_unregister' [-Wmissing-prototypes]
-   void typec_mux_unregister(struct typec_mux *mux) {}
-        ^
-   include/linux/usb/typec_mux.h:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void typec_mux_unregister(struct typec_mux *mux) {}
-   ^
-   static 
->> include/linux/usb/typec_mux.h:109:6: warning: no previous prototype for function 'typec_mux_set_drvdata' [-Wmissing-prototypes]
-   void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-        ^
-   include/linux/usb/typec_mux.h:109:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-   ^
-   static 
->> include/linux/usb/typec_mux.h:110:7: warning: no previous prototype for function 'typec_mux_get_drvdata' [-Wmissing-prototypes]
-   void *typec_mux_get_drvdata(struct typec_mux *mux)
-         ^
-   include/linux/usb/typec_mux.h:110:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *typec_mux_get_drvdata(struct typec_mux *mux)
-   ^
-   static 
->> drivers/gpu/drm/bridge/analogix/anx7625.c:2617:23: error: incompatible pointer types assigning to 'struct typec_mux_dev *' from 'struct typec_mux *' [-Werror,-Wincompatible-pointer-types]
-           port_data->typec_mux = typec_mux_register(dev, &mux_desc);
-                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/bridge/analogix/anx7625.c:2631:24: error: incompatible pointer types passing 'struct typec_mux_dev *' to parameter of type 'struct typec_mux *' [-Werror,-Wincompatible-pointer-types]
-                   typec_mux_unregister(ctx->typec_ports[i].typec_mux);
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:107:45: note: passing argument to parameter 'mux' here
-   void typec_mux_unregister(struct typec_mux *mux) {}
-                                               ^
-   7 warnings and 2 errors generated.
-
-
-vim +2617 drivers/gpu/drm/bridge/analogix/anx7625.c
-
-  2590	
-  2591	static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
-  2592						struct anx7625_data *ctx)
-  2593	{
-  2594		struct anx7625_port_data *port_data;
-  2595		struct typec_mux_desc mux_desc = {};
-  2596		char name[32];
-  2597		u32 port_num;
-  2598		int ret;
-  2599	
-  2600		ret = of_property_read_u32(node, "reg", &port_num);
-  2601		if (ret)
-  2602			return ret;
-  2603	
-  2604		if (port_num >= ctx->num_typec_switches) {
-  2605			dev_err(dev, "Invalid port number specified: %d\n", port_num);
-  2606			return -EINVAL;
-  2607		}
-  2608	
-  2609		port_data = &ctx->typec_ports[port_num];
-  2610		port_data->ctx = ctx;
-  2611		mux_desc.fwnode = &node->fwnode;
-  2612		mux_desc.drvdata = port_data;
-  2613		snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
-  2614		mux_desc.name = name;
-  2615		mux_desc.set = anx7625_typec_mux_set;
-  2616	
-> 2617		port_data->typec_mux = typec_mux_register(dev, &mux_desc);
-  2618		if (IS_ERR(port_data->typec_mux)) {
-  2619			ret = PTR_ERR(port_data->typec_mux);
-  2620			dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
-  2621		}
-  2622	
-  2623		return ret;
-  2624	}
-  2625	
-  2626	static void anx7625_unregister_typec_switches(struct anx7625_data *ctx)
-  2627	{
-  2628		int i;
-  2629	
-  2630		for (i = 0; i < ctx->num_typec_switches; i++)
-> 2631			typec_mux_unregister(ctx->typec_ports[i].typec_mux);
-  2632	}
-  2633	
+> +	if (!video->async_wq)
+> +		return -EINVAL;
+> +
+>  	video->uvc = uvc;
+>  	video->fcc = V4L2_PIX_FMT_YUYV;
+>  	video->bpp = 16;
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+
+Laurent Pinchart
