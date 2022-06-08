@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B58542BF3
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F18542BFE
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235022AbiFHJue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 05:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S235321AbiFHJwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 05:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbiFHJuU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:50:20 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BF8392A24
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 02:18:38 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id b8so9532870edj.11
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 02:18:38 -0700 (PDT)
+        with ESMTP id S235479AbiFHJvz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:51:55 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66DD3F62CC
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 02:22:05 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bg6so20397199ejb.0
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 02:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uslo1ay+/qxoDJknXX4jPIC6SbHTLg2hMT/co1gVHAM=;
-        b=Pqt7muh1OBZiOFSiS3jyVF1QSLKEUn1uSY8nr2V3ACJvzmkgVnQHkAfGVZauD+0c1v
-         +hbhGHn5MnERl91/CB0MMUI9XDTrcXhx0xM3sYOanaEnHzpdQmnI3TNih+WK9C1iHNkT
-         xYWWuW3xA5Ocf/tmlVbVefF7Jso7rh5Jh4AGyQ0BuqDFP19TMjU4BRRmRMAqtP+wrr2c
-         1hK3Qb1ssTEMomdCVyzMefEjWQ98Tl0LZxhibkrlEE8aFG/MV2Mv36nNxUfUbo2ChLCz
-         iEzuVGRJ22qzlV6VKnZGcI7LF9aLW+tFAh1BdCSbZAEdRsoACcYubLtMyucU9tKAXSi5
-         /1aQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=b6d5Zv3xL/KRcHb8xiVxMyuc8Dp70Lb5vZZ6lK/eQQ8=;
+        b=aWRg82jWnaqTYIJkWdAoYFsulyS+0ED8k9qWSWTafVRswt4QT/KPr/HCidmmrSSJX8
+         tfca1NHPxgMJmxYSHrD/3zNh5EPJ31fwoiCsD1K8O5c/O/8/JWOsSPzC89o6EWXn3pqP
+         gzEWvKriNebG1p7w2dC9QI4gxrEsRsuRmS/c/4Ip2KOQroKlr16Fuy4Jj9vhiJOofPMK
+         K9w0Dz7H1NZzSdze8fZB6cOPgsvaSwWUKasKI8GTMIsVTk2eKLHwG2VFP6qzKTaOHWcw
+         U5xnEL/rRNieyscQYA52PqHA4mHngv/wQInPwTpT5Z/EOOq+AJrSowSntyREp7fNuEPm
+         DzMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=uslo1ay+/qxoDJknXX4jPIC6SbHTLg2hMT/co1gVHAM=;
-        b=4iY/OUCxNmtJaGl+xs38TSD9kPD2j0U1LxcwzivsfADoeYq6oCcpkZarWKzhMUtHH4
-         5rff0pEqO8JGZIfJ3zl1AXZ1LmoonsIVRQ3iRMeaqA4THcyr5QPdjUmwPI8ypw84a2hk
-         rka8FqBUJDHHYEojD3axNYIxFYjKL/cOZaQiA3M322w4KH7caQWQWLfCMin7lBftbjX2
-         c7Gy77Vsr2plkP45Fgvi38qrTsh/vwjOUdQ6siq6/EpkOFGip4X+V3g6ihVayy00TUdL
-         l4gKIJtkU1RwtXkiA0bZEEuSQ3rRDkxewC5Fr/flgKczFeTNccVWVrmqLRV3azdVNZyQ
-         m50g==
-X-Gm-Message-State: AOAM532LoTpHhBtN6Dfxs8uOdLRXLO/2UBTKjl7vqzbBE4pco+R2L8vD
-        lke5BxQQgDZ21SpgBvT4BAVb4g==
-X-Google-Smtp-Source: ABdhPJxhwRETD56REVG88NNrnjg9TIUTndzhZYmh/uo+HYu0/kJkj0sbCqXQDYyYFhdRJ09ufgeBng==
-X-Received: by 2002:aa7:d9d9:0:b0:42d:f9e4:49e0 with SMTP id v25-20020aa7d9d9000000b0042df9e449e0mr37661598eds.299.1654679916702;
-        Wed, 08 Jun 2022 02:18:36 -0700 (PDT)
-Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e1-20020a1709062c0100b0070bdc059ab2sm7432535ejh.138.2022.06.08.02.18.35
+        bh=b6d5Zv3xL/KRcHb8xiVxMyuc8Dp70Lb5vZZ6lK/eQQ8=;
+        b=3pXucVhXFkvnJ+3N+GR9uNnd2FY4a5WBOyhYFzCixG1X8l0u/KW1SzrtPtgDxGaYZT
+         GCLn8M+DGhmJwbbJvhutbRM94PJFfFSTKcjV0SBWv7xAnWmSd9QDVuErujy2CpENqipS
+         F6TfqMk53EouXkeMFpuFbbsdWXFWNKW9djVf2gLG8mVYZL05JMYig47T6EfvPAATZ3n0
+         Su7GoNq5BXdolhW23liFXePfr42AQOIRk1iPOPfpYS8hNF9SUUzPP2kNS6KAQH9V/Sdj
+         qcbTP+t018RtGo8qCUaGlt1z6WLA1tARXEP6oN/wyqC2bPcweoB4YEplSDU+VfUNXUg7
+         VfOA==
+X-Gm-Message-State: AOAM533q+3wm2RFzqpATmvNTKSmUPQLNPS8GiMVj8TyTkFt1XbSoQgfA
+        /nVBw/ve8XGiy/QWFmp0oLadEQ==
+X-Google-Smtp-Source: ABdhPJxz145Vpj4ktqjR1qJFt+oTGwPOr1TCBpytpxOHAUmGx3AhpWrzgmr1hjNaMOMoO/gmolJmTw==
+X-Received: by 2002:a17:906:180c:b0:6fe:9a3e:3d5b with SMTP id v12-20020a170906180c00b006fe9a3e3d5bmr30464668eje.202.1654680103174;
+        Wed, 08 Jun 2022 02:21:43 -0700 (PDT)
+Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p9-20020a170906614900b00711c7cca428sm4515540ejl.155.2022.06.08.02.21.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 02:18:36 -0700 (PDT)
-Message-ID: <ba499783-1794-1c00-348a-d912c9562e1e@linaro.org>
-Date:   Wed, 8 Jun 2022 11:18:31 +0200
+        Wed, 08 Jun 2022 02:21:42 -0700 (PDT)
+Message-ID: <0d891f54-4a81-549b-8365-fb40cd077c83@linaro.org>
+Date:   Wed, 8 Jun 2022 11:21:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
 Subject: Re: [PATCH 3/7] dt-bindings: usb: Add Type-C switch binding
 Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Prashant Malani <pmalani@chromium.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     bleung@chromium.org, swboyd@chromium.org,
@@ -86,8 +87,8 @@ Cc:     bleung@chromium.org, swboyd@chromium.org,
         Xin Ji <xji@analogixsemi.com>
 References: <20220607190131.1647511-1-pmalani@chromium.org>
  <20220607190131.1647511-4-pmalani@chromium.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220607190131.1647511-4-pmalani@chromium.org>
+ <ba499783-1794-1c00-348a-d912c9562e1e@linaro.org>
+In-Reply-To: <ba499783-1794-1c00-348a-d912c9562e1e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -100,114 +101,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/06/2022 21:00, Prashant Malani wrote:
-> Introduce a binding which represents a component that can control the
-> routing of USB Type-C data lines as well as address data line
-> orientation (based on CC lines' orientation).
+On 08/06/2022 11:18, Krzysztof Kozlowski wrote:
+>> +anyOf:
+>> +  - required:
+>> +      - mode-switch
+>> +  - required:
+>> +      - orientation-switch
+>> +
+>> +additionalProperties: true
 > 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
->  .../devicetree/bindings/usb/typec-switch.yaml | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+> Why true? I see usb-connector has it from commit 6a0e321ea735
+> ("dt-bindings: Explicitly allow additional properties in common schemas")
+>  but that looks also weird - this is not a common schema, but a
+> complete, generic one.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> new file mode 100644
-> index 000000000000..60a600a63fef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: USB Type-C Switch
-> +
-> +maintainers:
-> +  - Prashant Malani <pmalani@chromium.org>
-> +
-> +description:
-> +  A USB Type-C switch represents a component which routes USB Type-C data
-> +  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
-> +  Thunderbolt etc.) depending on which mode the Type-C port, port partner
-> +  and cable are operating in. It can also modify lane routing based on
-> +  the orientation of a connected Type-C peripheral.
-> +
-> +properties:
-> +  compatible:
-> +    items:
 
-Single item, so no need for items.
-
-> +      - enum:
-> +          - typec-switch
-> +
-> +  mode-switch:
-> +    type: boolean
-> +    description: Specify that this switch can handle alternate mode switching.
-> +
-> +  orientation-switch:
-> +    type: boolean
-> +    description: Specify that this switch can handle orientation switching.
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description: OF graph binding modelling data lines to the Type-C switch.
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Link between the switch and a Type-C connector.
-> +
-> +    required:
-> +      - port@0
-> +
-> +required:
-> +  - compatible
-> +  - ports
-> +
-> +anyOf:
-> +  - required:
-> +      - mode-switch
-> +  - required:
-> +      - orientation-switch
-> +
-> +additionalProperties: true
-
-Why true? I see usb-connector has it from commit 6a0e321ea735
-("dt-bindings: Explicitly allow additional properties in common schemas")
- but that looks also weird - this is not a common schema, but a
-complete, generic one.
-
-> +
-> +examples:
-> +  - |
-> +    anx7625 {
-
-Generic node name.
-
-> +      typecswitch {
-
-I guess here as well, so "usb-switch"?
-
-> +        compatible = "typec-switch";
-> +        mode-switch;
-> +        orientation-switch;
-> +        ports {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          port@0 {
-> +            reg = <0>;
-> +            anx_ep: endpoint {
-> +              remote-endpoint = <&typec_controller>;
-> +            };
-> +          };
-> +        };
-> +      };
-> +    };
+Ah, I see now, the parent device uses the additional properties. It's
+ok, skip the comment.
 
 
 Best regards,
