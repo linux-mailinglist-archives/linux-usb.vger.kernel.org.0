@@ -2,169 +2,213 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5278542AB0
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B58542BF3
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jun 2022 11:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiFHJFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 05:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S235022AbiFHJue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 05:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbiFHJEZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:04:25 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDA73A3930
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 01:24:21 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id v9so21870689lja.12
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 01:24:20 -0700 (PDT)
+        with ESMTP id S235293AbiFHJuU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 05:50:20 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BF8392A24
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 02:18:38 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b8so9532870edj.11
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 02:18:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qn1e9UAfXz5aNABeJOAzysJEyHPbsjfCU7HdITnS84k=;
-        b=Zf/rY8UPfUil7LCo0AmPL0ktcOejRjNbVkLs6BfbQEG0tklgICY+14UzNT7D2l+FDP
-         kd/C58CeMvLCk8v3OokScSeoWleedGL2pCuZ4fpDA/Jq1KQDZNs4yJvNeRq2uK5ohQfv
-         x4JYv71VyLAWcCv/E2Q2Aj30ajf43xjO6xVU0l7ZmWZuCFV8Mab02uK+G5KxWVWLxWab
-         pz3zN5y+pykDMGv075WbOy8vrLxMM7b81TO1CCsC2Cjxlj6PBZkA0QWRSCsNtnZJpAjf
-         OGONEqGxWA91wAD7DPtau1HbAdjZEXl/4fttRzwneXCGvy6jRrNp4vyt+nqKNTR9wue/
-         xJKA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uslo1ay+/qxoDJknXX4jPIC6SbHTLg2hMT/co1gVHAM=;
+        b=Pqt7muh1OBZiOFSiS3jyVF1QSLKEUn1uSY8nr2V3ACJvzmkgVnQHkAfGVZauD+0c1v
+         +hbhGHn5MnERl91/CB0MMUI9XDTrcXhx0xM3sYOanaEnHzpdQmnI3TNih+WK9C1iHNkT
+         xYWWuW3xA5Ocf/tmlVbVefF7Jso7rh5Jh4AGyQ0BuqDFP19TMjU4BRRmRMAqtP+wrr2c
+         1hK3Qb1ssTEMomdCVyzMefEjWQ98Tl0LZxhibkrlEE8aFG/MV2Mv36nNxUfUbo2ChLCz
+         iEzuVGRJ22qzlV6VKnZGcI7LF9aLW+tFAh1BdCSbZAEdRsoACcYubLtMyucU9tKAXSi5
+         /1aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qn1e9UAfXz5aNABeJOAzysJEyHPbsjfCU7HdITnS84k=;
-        b=Vh84p8SuxSvU/BJ09QmKDvv6N34i53R6u64WKhMx/+ys1ytu1BPS99kcqZvZW6+DZx
-         I9k8A4ApPQ62OsZcbuLGfaEaR2IcV3gSpi3mjRBSYz+PU9/57lDa3LJHqgnY4r9rIbfX
-         B1noWuDpJ3YWc1UWUcvcI+ZwovRyX7Q1PGysfXR3iFzlgVyoRS48ehTs/fYLNDGjHew1
-         iV1/cZ2TxiDdsbsceMf5Lk1tb7gmVwkEagbrrCZBgGRKYAsSiPG2Dm37nV0L50h2ewhe
-         wUgsvBVYP5KAiPriuMGLdP6plD6nY4buVWap9Z4jmyGBCNA2EWSpyXhetKZEcxfqAQNd
-         Jj7Q==
-X-Gm-Message-State: AOAM532SQV/g4h7PVDHZaJo5+i9YmUhFUA16u6ISNLc02I5vbheSE+qH
-        t9zc/JHyzxJgVTSXhQsTxTb05bYgyahqmK+ETFJGjA==
-X-Google-Smtp-Source: ABdhPJwud0+3E/Q29u9oy+kzSCNdY14guBqBmA0Hqpt4c+PmhIEHReOxdmFrIBDqbHdvMdQZbHcRxllXIDLHtj3hagQ=
-X-Received: by 2002:a2e:bf14:0:b0:255:b789:576b with SMTP id
- c20-20020a2ebf14000000b00255b789576bmr3093006ljr.47.1654676659002; Wed, 08
- Jun 2022 01:24:19 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uslo1ay+/qxoDJknXX4jPIC6SbHTLg2hMT/co1gVHAM=;
+        b=4iY/OUCxNmtJaGl+xs38TSD9kPD2j0U1LxcwzivsfADoeYq6oCcpkZarWKzhMUtHH4
+         5rff0pEqO8JGZIfJ3zl1AXZ1LmoonsIVRQ3iRMeaqA4THcyr5QPdjUmwPI8ypw84a2hk
+         rka8FqBUJDHHYEojD3axNYIxFYjKL/cOZaQiA3M322w4KH7caQWQWLfCMin7lBftbjX2
+         c7Gy77Vsr2plkP45Fgvi38qrTsh/vwjOUdQ6siq6/EpkOFGip4X+V3g6ihVayy00TUdL
+         l4gKIJtkU1RwtXkiA0bZEEuSQ3rRDkxewC5Fr/flgKczFeTNccVWVrmqLRV3azdVNZyQ
+         m50g==
+X-Gm-Message-State: AOAM532LoTpHhBtN6Dfxs8uOdLRXLO/2UBTKjl7vqzbBE4pco+R2L8vD
+        lke5BxQQgDZ21SpgBvT4BAVb4g==
+X-Google-Smtp-Source: ABdhPJxhwRETD56REVG88NNrnjg9TIUTndzhZYmh/uo+HYu0/kJkj0sbCqXQDYyYFhdRJ09ufgeBng==
+X-Received: by 2002:aa7:d9d9:0:b0:42d:f9e4:49e0 with SMTP id v25-20020aa7d9d9000000b0042df9e449e0mr37661598eds.299.1654679916702;
+        Wed, 08 Jun 2022 02:18:36 -0700 (PDT)
+Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e1-20020a1709062c0100b0070bdc059ab2sm7432535ejh.138.2022.06.08.02.18.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 02:18:36 -0700 (PDT)
+Message-ID: <ba499783-1794-1c00-348a-d912c9562e1e@linaro.org>
+Date:   Wed, 8 Jun 2022 11:18:31 +0200
 MIME-Version: 1.0
-References: <000000000000bb7f1c05da29b601@google.com> <00000000000010b7d305e08837c8@google.com>
- <YpnqpMYcokTwCB6u@smile.fi.intel.com> <Ypor265BTdnmgwpM@rowland.harvard.edu>
- <YpouRmanvCQeKA3S@kroah.com> <Ypow1LRZ3Hau36ci@rowland.harvard.edu>
- <Ypoyy/stICFdHauR@kroah.com> <CACT4Y+bBWrLRwiowaWk8o4+XAtCHxxJiEQfiSkgM3BDut9atAw@mail.gmail.com>
- <20220606123839.GW2146@kadam> <CACT4Y+Y_kg1J00iBL=sMr5AP7U4RXuBizusvQG52few2NcJ6dg@mail.gmail.com>
- <YqAWpMdi4o1IQslu@casper.infradead.org> <CACT4Y+anOkc=-A5=3EBrvmu+AJ+f7CcrOfWp85hEu+CHkS3BGw@mail.gmail.com>
-In-Reply-To: <CACT4Y+anOkc=-A5=3EBrvmu+AJ+f7CcrOfWp85hEu+CHkS3BGw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 8 Jun 2022 10:24:07 +0200
-Message-ID: <CACT4Y+YM8__WOVAQcpNBNxneHCp5dv2tF7ySDpivRJ-efGNCUQ@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in __device_attach
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        syzbot <syzbot+dd3c97de244683533381@syzkaller.appspotmail.com>,
-        hdanton@sina.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael.j.wysocki@intel.com,
-        rafael@kernel.org, rjw@rjwysocki.net,
-        syzkaller-bugs@googlegroups.com, linux-usb@vger.kernel.org,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/7] dt-bindings: usb: Add Type-C switch binding
+Content-Language: en-US
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>
+References: <20220607190131.1647511-1-pmalani@chromium.org>
+ <20220607190131.1647511-4-pmalani@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607190131.1647511-4-pmalani@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 8 Jun 2022 at 10:20, Dmitry Vyukov <dvyukov@google.com> wrote:
-> > On Tue, Jun 07, 2022 at 09:15:09AM +0200, Dmitry Vyukov wrote:
-> > > On Mon, 6 Jun 2022 at 14:39, Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> > > >
-> > > > On Sat, Jun 04, 2022 at 10:32:46AM +0200, 'Dmitry Vyukov' via syzkaller-bugs wrote:
-> > > > > On Fri, 3 Jun 2022 at 18:12, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > But again, is this a "real and able to be triggered from userspace"
-> > > > > > problem, or just fault-injection-induced?
-> > > > >
-> > > > > Then this is something to fix in the fault injection subsystem.
-> > > > > Testing systems shouldn't be reporting false positives.
-> > > > > What allocations cannot fail in real life? Is it <=page_size?
-> > > > >
-> > > >
-> > > > Apparently in 2014, anything less than *EIGHT?!!* pages succeeded!
-> > > >
-> > > > https://lwn.net/Articles/627419/
-> > > >
-> > > > I have been on the look out since that article and never seen anyone
-> > > > mention it changing.  I think we should ignore that and say that
-> > > > anything over PAGE_SIZE can fail.  Possibly we could go smaller than
-> > > > PAGE_SIZE...
-> > >
-> > > +linux-mm for GFP expertise re what allocations cannot possibly fail
-> > > and should be excluded from fault injection.
-> > >
-> > > Interesting, thanks for the link.
-> > >
-> > > PAGE_SIZE looks like a good start. Once we have the predicate in
-> > > place, we can refine it later when/if we have more inputs.
-> > >
-> > > But I wonder about GFP flags. They definitely have some impact on allocations.
-> > > If GFP_ACCOUNT is set, all allocations can fail, right?
-> > > If GFP_DMA/DMA32 is set, allocations can fail, right? What about other zones?
-> > > If GFP_NORETRY is set, allocations can fail?
-> > > What about GFP_NOMEMALLOC and GFP_ATOMIC?
-> > > What about GFP_IO/GFP_FS/GFP_DIRECT_RECLAIM/GFP_KSWAPD_RECLAIM? At
-> > > least some of these need to be set for allocations to not fail? Which
-> > > ones?
-> > > Any other flags are required to be set/unset for allocations to not fail?
-> >
-> > I'm not the expert on page allocation, but ...
-> >
-> > I don't think GFP_ACCOUNT makes allocations fail.  It might make reclaim
-> > happen from within that cgroup, and it might cause an OOM kill for
-> > something in that cgroup.  But I don't think it makes a (low order)
-> > allocation more likely to fail.
->
-> Interesting.
-> I was thinking of some malicious specifically crafted configurations
-> with very low limit and particular pattern of allocations. Also what
-> if there is just 1 process (current)? Is it possible to kill and
-> reclaim the current process when a thread is stuck in the middle of
-> the kernel on a kmalloc?
-> Also I see e.g.:
->         Tasks with the OOM protection (oom_score_adj set to -1000)
->         are treated as an exception and are never killed.
->
-> I am not an expert on this either, but I think it may be hard to fight
-> with a specifically crafted attack.
->
->
-> > There's usually less memory avilable in DMA/DMA32 zones, but we have
-> > so few allocations from those zones, I question the utility of focusing
-> > testing on those allocations.
-> >
-> > GFP_ATOMIC allows access to emergency pools, so I would say _less_ likely
-> > to fail.  KSWAPD_RECLAIM has no effect on whether _this_ allocation
-> > succeeds or fails; it kicks kswapd to do reclaim, rather than doing
-> > reclaim directly.  DIRECT_RECLAIM definitely makes allocations more likely
-> > to succeed.  GFP_FS allows (direct) reclaim to happen from filesystems.
-> > GFP_IO allows IO to start (ie writeback can start) in order to clean
-> > dirty memory.
-> >
-> > Anyway, I hope somebody who knows the page allocator better than I do
-> > can say smarter things than this.  Even better if they can put it into
-> > Documentation/ somewhere ;-)
->
-> Even better to put this into code as a predicate function that fault
-> injection will use. It will also serve as precise up-to-date
-> documentation.
+On 07/06/2022 21:00, Prashant Malani wrote:
+> Introduce a binding which represents a component that can control the
+> routing of USB Type-C data lines as well as address data line
+> orientation (based on CC lines' orientation).
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>  .../devicetree/bindings/usb/typec-switch.yaml | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> new file mode 100644
+> index 000000000000..60a600a63fef
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> @@ -0,0 +1,76 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: USB Type-C Switch
+> +
+> +maintainers:
+> +  - Prashant Malani <pmalani@chromium.org>
+> +
+> +description:
+> +  A USB Type-C switch represents a component which routes USB Type-C data
+> +  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
+> +  Thunderbolt etc.) depending on which mode the Type-C port, port partner
+> +  and cable are operating in. It can also modify lane routing based on
+> +  the orientation of a connected Type-C peripheral.
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-Also at the end of kmalloc as:
-WARN_ON(!ret && !cant_fail(size, gfp));
-!
+Single item, so no need for items.
 
-> > https://www.kernel.org/doc/html/latest/core-api/memory-allocation.html
-> > exists but isn't quite enough to answer this question.
+> +      - enum:
+> +          - typec-switch
+> +
+> +  mode-switch:
+> +    type: boolean
+> +    description: Specify that this switch can handle alternate mode switching.
+> +
+> +  orientation-switch:
+> +    type: boolean
+> +    description: Specify that this switch can handle orientation switching.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    description: OF graph binding modelling data lines to the Type-C switch.
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Link between the switch and a Type-C connector.
+> +
+> +    required:
+> +      - port@0
+> +
+> +required:
+> +  - compatible
+> +  - ports
+> +
+> +anyOf:
+> +  - required:
+> +      - mode-switch
+> +  - required:
+> +      - orientation-switch
+> +
+> +additionalProperties: true
+
+Why true? I see usb-connector has it from commit 6a0e321ea735
+("dt-bindings: Explicitly allow additional properties in common schemas")
+ but that looks also weird - this is not a common schema, but a
+complete, generic one.
+
+> +
+> +examples:
+> +  - |
+> +    anx7625 {
+
+Generic node name.
+
+> +      typecswitch {
+
+I guess here as well, so "usb-switch"?
+
+> +        compatible = "typec-switch";
+> +        mode-switch;
+> +        orientation-switch;
+> +        ports {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          port@0 {
+> +            reg = <0>;
+> +            anx_ep: endpoint {
+> +              remote-endpoint = <&typec_controller>;
+> +            };
+> +          };
+> +        };
+> +      };
+> +    };
+
+
+Best regards,
+Krzysztof
