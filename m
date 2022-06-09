@@ -2,95 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B714544C5A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 14:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC0C544E06
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 15:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242375AbiFIMoG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jun 2022 08:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S239892AbiFINs6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jun 2022 09:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343969AbiFIMn7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 08:43:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAEB40902;
-        Thu,  9 Jun 2022 05:43:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 575B3B82D3F;
-        Thu,  9 Jun 2022 12:43:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E689FC3411D;
-        Thu,  9 Jun 2022 12:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654778635;
-        bh=DNUj55i+tBAtllU92vXeXrrYBcW7ydlaZIiUaPiMcDU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qr/9hCvA9/RXFgWTOOsYBWeT8rpRvItuiBrVVEUrLtqsnsUIJUp6BWMbc8KDK59Kb
-         1/bDaRKhaElMuPoHuYR+HtP9JHSNEHukPpfjfeP30UrCuMPNOkdJ8a4QtCFMv6dQzS
-         TX/TpsIgOX7mYRvzlX5CkABrBd0m/akNXJAqamLbnTpYBL9BCODvX/CrIzQLh1hsA0
-         XGLlE/ysaYDaeZdNKwfvIrqY6NV8vfzpPF7TpomEILCASMJKgWOtwKOuMeBqW6m/Fq
-         6Y7mopYnV467KWmnCjys0ZgNgINGqD6ScroZA7L4D6LgW6fEBvecFZnmH9+dv3+rhR
-         lg/6pWcWPvOaw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nzHVu-0005Qw-Il; Thu, 09 Jun 2022 14:43:50 +0200
-Date:   Thu, 9 Jun 2022 14:43:50 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] USB: serial: Remove redundant NULL check before
- release_firmware() call
-Message-ID: <YqHrBq1BZ+6DWcGl@hovoldconsulting.com>
-References: <20220606014315.290533-1-chi.minghao@zte.com.cn>
+        with ESMTP id S234919AbiFINs5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 09:48:57 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 19C02F0
+        for <linux-usb@vger.kernel.org>; Thu,  9 Jun 2022 06:48:55 -0700 (PDT)
+Received: (qmail 476285 invoked by uid 1000); 9 Jun 2022 09:48:54 -0400
+Date:   Thu, 9 Jun 2022 09:48:54 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        evgreen@google.com, shobhit.srivastava@intel.com
+Subject: Re: [RFC PATCH 0/1] hibernate and roothub port power
+Message-ID: <YqH6Rsc59Bj8tspu@rowland.harvard.edu>
+References: <20220607135836.627711-1-mathias.nyman@linux.intel.com>
+ <400be833-468c-be0d-c80a-f3617800750d@suse.com>
+ <36fdbf28-47fa-522e-8789-23bb1afa9176@linux.intel.com>
+ <YqCnkNMqBRCy3fdd@rowland.harvard.edu>
+ <7293f560-645d-387c-75c4-4be517cfd925@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220606014315.290533-1-chi.minghao@zte.com.cn>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7293f560-645d-387c-75c4-4be517cfd925@linux.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 01:43:15AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Thu, Jun 09, 2022 at 10:59:37AM +0300, Mathias Nyman wrote:
+> On 8.6.2022 16.43, Alan Stern wrote:
+> > On Wed, Jun 08, 2022 at 02:47:22PM +0300, Mathias Nyman wrote:
+> > > On 8.6.2022 11.19, Oliver Neukum wrote:
+> > > > 
+> > > > 
+> > > > On 07.06.22 15:58, Mathias Nyman wrote:
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > > In shutdown (S5), with xHCI as host, this can be solved fairly easily
+> > > > > by turning off roothub port power in the .shutdown path.
+> > > > 
+> > > > That would suck for the people who charge their phone from their
+> > > > computer.
+> > > 
+> > > Good point.
+> > > My guess is that xHC port power bits won't actually turn off VBus for those
+> > > Sleep-and-charge, or Always-on ports.
+> > > VBus is allowed to be on even if port is in power-off state, but usb link state
+> > > should be forced to ss.Disabled from other states, like U3.
+> > > 
+> > > Need to try it out, it's possible this turns off VBus for some usb-A ports
+> > > on some older systems that earlier (accidentally?) supplied VBus on
+> > > "normal" ports after shutdown.
+> > 
+> > How about turning off port power _only_ in the shutdown or unbind path,
+> > and setting the port link states to ss.Disabled in the poweroff or
+> > poweroff_noirq stage of hibernation (if wakeup is disabled)?  Would that
+> > solve the problem of the firmware needing to time out on reboot?
+> > 
 > 
-> release_firmware() checks for NULL pointers internally so checking
-> before calling it is redundant.
+> That would be optimal, but unfortunately xHCI doesn't support setting link
+> state directly to ss.Disabled. Only way is to clear port power (PP) bit.
+
+What would happen if you clear the PP bit, wait for the link state to 
+become ss.Disabled, and then turn PP back on?
+
+> To avoid turning off VBus in hibernate we could limit port power bit clearing
+> to xHC hosts that don't have the Port Power Control (PPC) capability flag.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-
-Cleanups do not deserve a Reported-by tag, and neither do reports that
-are never posted to the mailing lists.
-
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  drivers/usb/serial/mxuport.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> We know these xHC hosts don't control power switches, and clearing PP won't turn
+> off VBus (xhci 5.4.8, PORTRSC)
 > 
-> diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
-> index eb45a9b0005c..eb9090ab900f 100644
-> --- a/drivers/usb/serial/mxuport.c
-> +++ b/drivers/usb/serial/mxuport.c
-> @@ -1109,8 +1109,7 @@ static int mxuport_probe(struct usb_serial *serial,
->  	 */
->  	usb_set_serial_data(serial, (void *)id->driver_info);
->  out:
-> -	if (fw_p)
-> -		release_firmware(fw_p);
-> +	release_firmware(fw_p);
+> This could be a solution for some hosts, but probably not cover all.
+> Not sure if the hardware this was reported on has PPC flag set.
 
-I think keeping this check is preferred here as it makes the intent of
-code more clear (and you don't have to check the definition of
-release_firmware() to make sure it's safe to pass in NULL).
+In theory the problem could affect systems having any kind of xHCI 
+hardware, since it's really a defect in the system firmware.
 
->  	return err;
->  }
+Doesn't Windows have a hibernation mode?  Do you know what state it 
+leaves the xHCI ports in during hibernation?
 
-Johan
+Alan Stern
