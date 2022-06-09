@@ -2,121 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A637D54535A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 19:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054015453C2
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 20:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345120AbiFIRuL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jun 2022 13:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S1343696AbiFISLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jun 2022 14:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345104AbiFIRuF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 13:50:05 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD082A3075
-        for <linux-usb@vger.kernel.org>; Thu,  9 Jun 2022 10:50:04 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 63so2594784qva.10
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jun 2022 10:50:04 -0700 (PDT)
+        with ESMTP id S239112AbiFISLj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 14:11:39 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BE63AD89B
+        for <linux-usb@vger.kernel.org>; Thu,  9 Jun 2022 11:11:38 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so1825224pjb.1
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jun 2022 11:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
-        b=VmKJJeFJ/KpF94CjEx2z9QMo8W5JAOrBhtUecqJOMf9RpCQXqOgyLBmK+0MGMtvKgG
-         d383zpVuUCLAtexvVAQp6Dw5M/5BJ2Bh2dYFnfeV+vZ+fORy+klYMeCc/+rQvLh+Mezh
-         4USK9Md/f77a7IXs/q+ICXKUeCPt6UlZELPsq8/aLoun08cbrWV6qKg9TauEWfP3bICV
-         vl05I+cvjEaXNPK4Y4xArpbGFqsKiuRKii8UK6XjKxX7dorcHkd73qFlEK1TFvGEj3Xb
-         UwZroqOGGE+AsWCjx91SQiws3Q6VVgFyNLeKFK1wvcr6sFcgSP/whXFj2e3AL02wvoFw
-         0NoA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B5EoYi45ZBUgcYzH5QmcJabRI+K9dAvb3lNExbNzDTc=;
+        b=IRBv/Csm/7toLZfIoXEPX0E45ay4Enl4+enzXX7DKTkX5nUg1cRxZOi2qv4NePVtAg
+         VoHy+EUE1WpiNMTX9FhRf/mrnjfYQPaESFmpZVcbJGR4OGpEFAlKDDengyMyRxJYaCqe
+         7Zb9IVzTdblW1xpdWU5oA4UNZms7szwAcKGXQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
-        b=6RHIWWt43HHeVUW0cVucBZYULhmiZBxptufHAZHb0X9ATYXMfhkkmf0dSRRrar9Dd3
-         Km8gB8uXHqUe0dZb0HXtYR5zzUGtBnCfUdfxlR/JotkWBict3QiShgGgskBtsWTz9XO8
-         e0x8lPaCkFRaenX/oCFnR/21fXSn9MHCUXseoDp+4L+d1evHVKz7DYO17UFoHOJvmTz0
-         e+1uWqIIGd9xZxsTiEVszovJnTS3loVqnm/+EifG0+pPzziS3ymDki95ee5rxMoU6fJO
-         t6fy9lRI6sWZJcklcDQgGBWN0eTDWo9bKwhzK0G9DjI0OuqPy/2wz7z16vgtMzXNkvRN
-         lwuQ==
-X-Gm-Message-State: AOAM533VjPuOlNXfn0dYvNnSxavx8GGsaitdm5PNgXmwgGLC2OHKxOUS
-        H1UTndB2P1LhFGUSaH9GYpfWhfjxCSc2p1MHtco=
-X-Google-Smtp-Source: ABdhPJy00pd3ZYGHsJSDqW9XsYBDB1hWGyWJ8WvXwUJCZUS3xCW4nAYhM7ez+pRufSm71ks8L6GoTQd+pzdP2m5H0tM=
-X-Received: by 2002:a05:6214:5296:b0:464:4d6d:afe2 with SMTP id
- kj22-20020a056214529600b004644d6dafe2mr44588326qvb.70.1654797003980; Thu, 09
- Jun 2022 10:50:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B5EoYi45ZBUgcYzH5QmcJabRI+K9dAvb3lNExbNzDTc=;
+        b=EHN1XS8lLHxohl1fsJL0yYOFwX2TjRMsnoOS8l2jZIQ4bxmEUoMtCCpO+WVbWffNg/
+         Q+Jqai2TUdXx6q45V+BAV7uaOg5zEOEXerP0GWPakEShfE+7Xfbvw40824nE3k8BnqBj
+         cZ/lMNWLBdjTuD6kgkbeT1fpdUKP7DAvB2eKlycVwQ5QKmvGgNx8bs3M61xe/j48w1hF
+         wusl9L+yHAEnOSBXG9umCKlDsv4uyVQBJP4FuDgvzH1T3/bG6/r+3x//4aDKpG8/yFZt
+         w64mb+F3u5aFSwIY6VMS7W8StdzqSZJ7e8nM8IKJtRs6ebjNDjEh/m4HvMHIxfGnGH3L
+         elFw==
+X-Gm-Message-State: AOAM533LEAHpiGzAn8uwtF8k61bu+77exiszimAkt4fIA5SObezvXQh9
+        yZVuZ+jHMGBCEe5YPdWkJsfosw==
+X-Google-Smtp-Source: ABdhPJxbvQFA24STYjSmsFQeh34YR6aLuV8nQK5wlXXW3CPcVjhZjHvmK6qgZXTrZwPj8dZKeSjFjQ==
+X-Received: by 2002:a17:902:7248:b0:167:95e2:f83c with SMTP id c8-20020a170902724800b0016795e2f83cmr14304302pll.74.1654798297569;
+        Thu, 09 Jun 2022 11:11:37 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id r14-20020a63ec4e000000b003fb0354c43asm17728049pgj.32.2022.06.09.11.11.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 11:11:36 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: [PATCH v2 0/7] usb: typec: Introduce typec-switch binding
+Date:   Thu,  9 Jun 2022 18:09:39 +0000
+Message-Id: <20220609181106.3695103-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-Reply-To: mihirpat56@gmail.com
-Sender: charlesjuntikka2204@gmail.com
-Received: by 2002:a05:6214:234a:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:50:03
- -0700 (PDT)
-From:   "Mr. Mihir Patel" <ij261347@gmail.com>
-Date:   Thu, 9 Jun 2022 10:50:03 -0700
-X-Google-Sender-Auth: lrm3pJEjGuhz9CMPhyphcr2Uatg
-Message-ID: <CAEOqroo4fPUsT_30zD2YjHDYXk-5HmVWmHQx0pAnY_o3eBGGXg@mail.gmail.com>
-Subject: Greetings to you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f35 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5022]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [charlesjuntikka2204[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ij261347[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mihirpat56[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.4 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
+This series introduces a binding for Type-C data lane switches. These
+control the routing and operating modes of USB Type-C data lanes based
+on the PD messaging from the Type-C port driver regarding connected
+peripherals.
 
+The first patch introduces a change to the Type-C mux class mode-switch
+matching code, while the second adds a config guard to a Type-C header.
+The next couple of patches introduce the new "typec-switch" binding as
+well as one user of it (the ANX7625 drm bridge).
 
-I am contacting you for us to work together on a profitable business
-because you bear the same last name with a late client of our bank. I
-want to present you as his true next of kin to inherit his fund in our
-bank. As his account officer I have some necessary documents in my
-disposal to achieve this.
+The remaining patches add functionality to the anx7625 driver to
+register the mode-switches, as well as program its crosspoint
+switch depending on which Type-C port has a DisplayPort (DP) peripheral
+connected to it.
 
+v1: https://lore.kernel.org/linux-usb/20220607190131.1647511-1-pmalani@chromium.org/
 
-I therefore reckoned that you could receive this fund as you are
-qualified by your last name. All the legal papers will be processed in
-your name as the deceased's true next of kin.
+Changes since v1:
+- Fixed function signature error in "else case" of typec_mux.h
+- typec-switch.yaml: Fixed indentation, compatible, and node names in examples.
+- anx7625.yaml:
+    + Introduced patternProperties for "switch" children (suggested by Krzysztof Kozlowski).
+    + Added unevaluatedProperties descriptor (suggested by Krzysztof Kozlowski).
+    + Added "address-cells" and "size-cells" properties to "switches".
 
-Please revert back to me for further details if you can handle this with me.
+Pin-Yen Lin (1):
+  drm/bridge: anx7625: Add typec_mux_set callback function
 
+Prashant Malani (6):
+  usb: typec: mux: Allow muxes to specify mode-switch
+  usb: typec: mux: Add CONFIG guards for functions
+  dt-bindings: usb: Add Type-C switch binding
+  dt-bindings: drm/bridge: anx7625: Add mode-switch support
+  drm/bridge: anx7625: Register number of Type C switches
+  drm/bridge: anx7625: Register Type-C mode switches
 
-Mr. Mihir Patel
-Customer relation officer
+ .../display/bridge/analogix,anx7625.yaml      |  63 ++++++++
+ .../devicetree/bindings/usb/typec-switch.yaml |  74 +++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.c     | 151 ++++++++++++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.h     |  20 +++
+ drivers/usb/typec/mux.c                       |   8 +-
+ include/linux/usb/typec_mux.h                 |  38 +++++
+ 6 files changed, 352 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+
+-- 
+2.36.1.476.g0c4daa206d-goog
+
