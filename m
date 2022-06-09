@@ -2,130 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABA4545103
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 17:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B81545116
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 17:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243798AbiFIPid (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jun 2022 11:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S245733AbiFIPlm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jun 2022 11:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237587AbiFIPib (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 11:38:31 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F240F261B21;
-        Thu,  9 Jun 2022 08:38:29 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id a10so22488486ioe.9;
-        Thu, 09 Jun 2022 08:38:29 -0700 (PDT)
+        with ESMTP id S240677AbiFIPlk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 11:41:40 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B4415FE3C
+        for <linux-usb@vger.kernel.org>; Thu,  9 Jun 2022 08:41:38 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i15so3781024plr.1
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jun 2022 08:41:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bFs2IUbelOqYg14a8I3dhoLqs2Bgqc5B+E7uIXvQdIw=;
+        b=CsDpq3niF7HVVJkr2AGXZrRBA27sHBwYtoUgYA3YAttQ8E4C1MRoKp477ea9D6Iudm
+         dv8JPRzH+Yrxiss4TGU/7Pqq8JSqw++QgQFiPE/Ny5BUA8pvXEXgS7uIYK8eqtMTAboI
+         Dc0qVEVDOFiyQfydstRFp1r2ZjK265vqAielA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=aciXCtRvsxNKm3QmZmc3M0v0OBWtOSC2RTKujD1oQSI=;
-        b=3qxSM+DXLw3wOXAQp2xZcWHbC1LFjUdtWc9JUVnc/FMI1pcMcr1iQvNyPYVKP9+bE+
-         3bqTEXpq8/eCBjMqa8bxUryP4RZPQ50M8cZ5CRaj2taqn+4EYdVbGYt3p/t1RAGw3Lcp
-         X3ufvLJed9x/GMZSCH+/yqgU5anBvFv+G4PtF9SXLt/TRvA9A+wxyqWzjAAZFRKCDkY6
-         9Aev88iHWSJ9b/HBu67GDJtKVxgHq3iJPd+QuLWqc7TqWEEv8UqSp8fta1Hu0w+AhLlf
-         vdwqWpMxDcpd9YpkABxQ6P7LhIaG/HPWj2FnNBIcMAIMWHC5S1XoK9+0hcJJvCQOt+Tl
-         ncNw==
-X-Gm-Message-State: AOAM531PxKWXwBRUC8ghcmsXplzVHRKFQSEmLjpOIdiRf15LlewkeJcC
-        EIzQYyxBI1RBjIgdyrqfSw==
-X-Google-Smtp-Source: ABdhPJw+fKj2cdpkgrJfuThrcRw2G3NRMDlKW2cVvanp6oQx+IZghhceQJwGMUbp3UQ57biVIVIyAg==
-X-Received: by 2002:a05:6638:1607:b0:331:bcef:784d with SMTP id x7-20020a056638160700b00331bcef784dmr9883034jas.208.1654789109229;
-        Thu, 09 Jun 2022 08:38:29 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id m12-20020a02c88c000000b0032e40f3e40dsm8678909jao.124.2022.06.09.08.38.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 08:38:28 -0700 (PDT)
-Received: (nullmailer pid 3840834 invoked by uid 1000);
-        Thu, 09 Jun 2022 15:38:26 -0000
-Date:   Thu, 9 Jun 2022 09:38:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v3 1/3] dt-bindings: usb: dwc3: Add support for multiport
- related properties
-Message-ID: <20220609153826.GA3828657-robh@kernel.org>
-References: <1654709787-23686-1-git-send-email-quic_harshq@quicinc.com>
- <1654709787-23686-2-git-send-email-quic_harshq@quicinc.com>
+        bh=bFs2IUbelOqYg14a8I3dhoLqs2Bgqc5B+E7uIXvQdIw=;
+        b=zAdSDmos0ElHQ3DfUFAuGD7EOLSgljBW/o6OPcDL0uwEFE0I+oPwjDQ8MuEHa8xR/o
+         mfKO98N2DXP7mplu63a4DSjazf/jxZFeT9Fk0LHN49Zwgu8jskDfHik0II1lCznAWayQ
+         N9aA2mu9npFnmP8qcW4pqvNqBDpwHt9glF7jsiw/g7mm6K7gNvDwpgh6zp/JNwCyBdpQ
+         aUDN00nFuFT8Fxvrl0pKPHya90qmqvlmB0OQSFuSV6v2fs7KMOETYxE2RvW0XdYi95K7
+         PjGtxtmqADV3snsJBO4wUyAgIppIgnrNrDNmI6g4uv//Rxk4oqE8jYQWf39F2In5ry0j
+         m5wA==
+X-Gm-Message-State: AOAM53244twBgtbommVB7Am7FtFXLQckrzoMNgKZlstIIDvrBaBFPA9k
+        lv/hgTTp0SSVFn5DDMxP+UUjyhlErFpdUA==
+X-Google-Smtp-Source: ABdhPJz7l2shBD5wm9aHvwcmcGQmYOa3+pR/Q8WoVPHOsEwwyl8ikvu0HNhUNYVg6RRh05dpi20QQg==
+X-Received: by 2002:a17:90b:4d81:b0:1e3:33e9:6677 with SMTP id oj1-20020a17090b4d8100b001e333e96677mr3948846pjb.116.1654789297913;
+        Thu, 09 Jun 2022 08:41:37 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:c543:2c9:1206:951b])
+        by smtp.gmail.com with UTF8SMTPSA id b1-20020a63d301000000b003fbfd5e4ddcsm9314592pgg.75.2022.06.09.08.41.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 08:41:37 -0700 (PDT)
+Date:   Thu, 9 Jun 2022 08:41:36 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     hkallweit1@gmail.com, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        quic_jackp@quicinc.com, tunguyen@apm.com,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [RFT PATCH] xhci: Fix null pointer dereference in resume if xhci
+ has only one roothub
+Message-ID: <YqIUsP437G8g75YS@google.com>
+References: <c4e9f0d8-c736-1153-3f32-b85e7024b3fe@linux.intel.com>
+ <20220609120336.831533-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1654709787-23686-2-git-send-email-quic_harshq@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220609120336.831533-1-mathias.nyman@linux.intel.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 11:06:25PM +0530, Harsh Agarwal wrote:
-> Added support for multiport, mport, num_usb2_phy and num_usb3_phy
-> properties. These properties are used to support devices having
-> a multiport controller.
+On Thu, Jun 09, 2022 at 03:03:36PM +0300, Mathias Nyman wrote:
+> In the re-init path xhci_resume() passes 'hcd->primary_hcd' to hci_init(),
+> however this field isn't initialized by __usb_create_hcd() for a HCD
+> without secondary controller.
 > 
-> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> xhci_resume() is called once per xHC device, not per hcd, so the extra
+> checking for primary hcd can be removed.
+> 
+> Fixes: e0fe986972f5 ("usb: host: xhci-plat: prepare operation w/o shared hcd")
+> Reported-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml         | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
+>  drivers/usb/host/xhci.c | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index d41265b..9332fa2 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -343,6 +343,32 @@ properties:
->        This port is used with the 'usb-role-switch' property  to connect the
->        dwc3 to type C connector.
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index f0ab63138016..9ac56e9ffc64 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1107,7 +1107,6 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>  {
+>  	u32			command, temp = 0;
+>  	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
+> -	struct usb_hcd		*secondary_hcd;
+>  	int			retval = 0;
+>  	bool			comp_timer_running = false;
+>  	bool			pending_portevent = false;
+> @@ -1214,23 +1213,19 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>  		 * first with the primary HCD, and then with the secondary HCD.
+>  		 * If we don't do the same, the host will never be started.
+>  		 */
+> -		if (!usb_hcd_is_primary_hcd(hcd))
+> -			secondary_hcd = hcd;
+> -		else
+> -			secondary_hcd = xhci->shared_hcd;
+> -
+>  		xhci_dbg(xhci, "Initialize the xhci_hcd\n");
+> -		retval = xhci_init(hcd->primary_hcd);
+> +		retval = xhci_init(hcd);
+>  		if (retval)
+>  			return retval;
+>  		comp_timer_running = true;
 >  
-> +  multiport:
+>  		xhci_dbg(xhci, "Start the primary HCD\n");
 
-Again, I don't think this is going to play well if you need to describe 
-USB devices in your DT. For example, a USB hub with additional DT 
-properties.
+Is the log still correct? IIUC this now isn't necessarily the primary HCD.
 
-> +    description:
-> +      If a single USB controller supports multiple ports, then it's referred to as
-> +      a multiport controller. Each port of the multiport controller can support
-> +      either High Speed or Super Speed or both and have their own PHY phandles. Each
-> +      port is represented by "mport" node and all the "mport" nodes are grouped
-> +      together inside the "multiport" node where individual "mport" node defines the
-> +      PHYs supported by that port.
+> -		retval = xhci_run(hcd->primary_hcd);
+> -		if (!retval && secondary_hcd) {
+> +		retval = xhci_run(hcd);
+> +		if (!retval && xhci->shared_hcd) {
+>  			xhci_dbg(xhci, "Start the secondary HCD\n");
+
+ditto
+
+> -			retval = xhci_run(secondary_hcd);
+> +			retval = xhci_run(xhci->shared_hcd);
+>  		}
 > +
-> +  num_usb2_phy:
-> +    description: Total number of HS-PHYs defined by the multiport controller.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  num_usb3_phy:
-> +    description: Total number of SS-PHYs defined by the multiport controller.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  mport:
-> +    description: Each mport node represents one port of the multiport controller.
-> +    oneOf:
-> +      - required:
-> +        - usb-phy
+>  		hcd->state = HC_STATE_SUSPENDED;
+>  		if (xhci->shared_hcd)
+>  			xhci->shared_hcd->state = HC_STATE_SUSPENDED;
 
-This is deprecated. Why are you adding it?
-
-> +      - required:
-> +        - phys
-> +        - phy-names
-
-Other multi port USB hosts just have a list of phys. Why can't you just 
-use phy-names to identify each phy:
-
-phy-names = "port0-hs", "port0-ss", "port1-hs", "port1-ss", "port2-hs", 
-  "port3-hs";
-
-Rob
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
