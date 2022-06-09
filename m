@@ -2,211 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5AD54406F
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 02:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE9654414A
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 04:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiFIAPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 20:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S234405AbiFICMg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 22:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235953AbiFIAPP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 20:15:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FBD24090;
-        Wed,  8 Jun 2022 17:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654733714; x=1686269714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VJaoEcVsxQq1bvI/6bf3ZD+VGSdcsRuFeFp57nRDdjc=;
-  b=mFXFR3ajhmTAghtq8gMvdRabflgzq2sexcREy1yXf1hN4ZEbvu8BrLCB
-   26i9vTHgUop5je5xzUEVMosbaPr6C/NyUhJY7pjNpzneQW+TQRQM1/sIR
-   jwY22F2vOc8cJarB95MbXiSHcz8pS4urnW1bO9Og8/opRUo63yLtomUNN
-   a3QqtnPp90vw+ecNxZ9DO+df3MeIjLPcALK5iUsdOlyPBvq1hlDPy/njN
-   9EB+BKaY9nl301IamnKlsXAfpg0T9l2IRrIFgjEAc48shvtT8mS/PtiaM
-   BYAzavk5nRyuoXY/wtFfyizATMV3ppTqdqOdVqilk8oMYMDFyTS0OP8CA
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="260229851"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="260229851"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 17:15:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="609915376"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Jun 2022 17:15:08 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nz5pL-000FG8-Nb;
-        Thu, 09 Jun 2022 00:15:07 +0000
-Date:   Thu, 9 Jun 2022 08:14:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
-        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH 7/7] drm/bridge: anx7625: Add typec_mux_set callback
- function
-Message-ID: <202206090842.UVDwwfxx-lkp@intel.com>
-References: <20220607190131.1647511-8-pmalani@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607190131.1647511-8-pmalani@chromium.org>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229752AbiFICM3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 22:12:29 -0400
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 30079233EA3
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 19:12:27 -0700 (PDT)
+Received: from jleng.ambarella.net (unknown [116.246.37.178])
+        by mail-app2 (Coremail) with SMTP id by_KCgAnzUHjVqFi40WJAQ--.61551S2;
+        Thu, 09 Jun 2022 10:11:55 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     pawell@cadence.com, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH] usb: cdnsp: Fixed setting last_trb incorrectly
+Date:   Thu,  9 Jun 2022 10:11:34 +0800
+Message-Id: <20220609021134.1606-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgAnzUHjVqFi40WJAQ--.61551S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AryUtF4DXF4kuFWxJw1DZFb_yoW8Ar1xpF
+        47JFWqkr1fArW3Awn7KFn8X3W5GrnakFy7KFZ7Z3sakr13Aas7uFn8Kr10qrZxCryrZr4q
+        9FsIqas7Zanag3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCEVcI2
+        5VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJV
+        W8JbIYCTnIWIevJa73UjIFyTuYvjxU4038UUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQPBVNG3GzSjQACs1
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+From: Jing Leng <jleng@ambarella.com>
 
-Thank you for the patch! Yet something to improve:
+When ZLP occurs in bulk transmission, currently cdnsp will set last_trb
+for the last two TRBs, it will trigger an error "ERROR Transfer event TRB
+DMA ptr not part of current TD ...".
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on usb/usb-testing v5.19-rc1 next-20220608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Fixes: e913aada0683 ("usb: cdnsp: Fixed issue with ZLP")
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ drivers/usb/cdns3/cdnsp-ring.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: nios2-buildonly-randconfig-r006-20220608 (https://download.01.org/0day-ci/archive/20220609/202206090842.UVDwwfxx-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/49c4c89ed5b50cbd623e611c8f4eba4b5ca9dd02
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Prashant-Malani/usb-typec-Introduce-typec-switch-binding/20220608-042545
-        git checkout 49c4c89ed5b50cbd623e611c8f4eba4b5ca9dd02
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:19:
-   include/linux/usb/typec_mux.h:83:19: warning: no previous prototype for 'fwnode_typec_mux_get' [-Wmissing-prototypes]
-      83 | struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-         |                   ^~~~~~~~~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:89:6: warning: no previous prototype for 'typec_mux_put' [-Wmissing-prototypes]
-      89 | void typec_mux_put(struct typec_mux *mux) {}
-         |      ^~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:91:5: warning: no previous prototype for 'typec_mux_set' [-Wmissing-prototypes]
-      91 | int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-         |     ^~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:103:1: warning: no previous prototype for 'typec_mux_register' [-Wmissing-prototypes]
-     103 | typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-         | ^~~~~~~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:107:6: warning: no previous prototype for 'typec_mux_unregister' [-Wmissing-prototypes]
-     107 | void typec_mux_unregister(struct typec_mux *mux) {}
-         |      ^~~~~~~~~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:109:6: warning: no previous prototype for 'typec_mux_set_drvdata' [-Wmissing-prototypes]
-     109 | void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/usb/typec_mux.h:110:7: warning: no previous prototype for 'typec_mux_get_drvdata' [-Wmissing-prototypes]
-     110 | void *typec_mux_get_drvdata(struct typec_mux *mux)
-         |       ^~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_typec_mux_set':
->> drivers/gpu/drm/bridge/analogix/anx7625.c:2616:64: error: passing argument 1 of 'typec_mux_get_drvdata' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    2616 |         struct anx7625_port_data *data = typec_mux_get_drvdata(mux);
-         |                                                                ^~~
-         |                                                                |
-         |                                                                struct typec_mux_dev *
-   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:19:
-   include/linux/usb/typec_mux.h:110:47: note: expected 'struct typec_mux *' but argument is of type 'struct typec_mux_dev *'
-     110 | void *typec_mux_get_drvdata(struct typec_mux *mux)
-         |                             ~~~~~~~~~~~~~~~~~~^~~
-   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_register_mode_switch':
-   drivers/gpu/drm/bridge/analogix/anx7625.c:2675:30: error: assignment to 'struct typec_mux_dev *' from incompatible pointer type 'struct typec_mux *' [-Werror=incompatible-pointer-types]
-    2675 |         port_data->typec_mux = typec_mux_register(dev, &mux_desc);
-         |                              ^
-   drivers/gpu/drm/bridge/analogix/anx7625.c: In function 'anx7625_unregister_typec_switches':
-   drivers/gpu/drm/bridge/analogix/anx7625.c:2689:57: error: passing argument 1 of 'typec_mux_unregister' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    2689 |                 typec_mux_unregister(ctx->typec_ports[i].typec_mux);
-         |                                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
-         |                                                         |
-         |                                                         struct typec_mux_dev *
-   In file included from drivers/gpu/drm/bridge/analogix/anx7625.c:19:
-   include/linux/usb/typec_mux.h:107:45: note: expected 'struct typec_mux *' but argument is of type 'struct typec_mux_dev *'
-     107 | void typec_mux_unregister(struct typec_mux *mux) {}
-         |                           ~~~~~~~~~~~~~~~~~~^~~
-   cc1: some warnings being treated as errors
-
-
-vim +/typec_mux_get_drvdata +2616 drivers/gpu/drm/bridge/analogix/anx7625.c
-
-  2612	
-  2613	static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
-  2614					 struct typec_mux_state *state)
-  2615	{
-> 2616		struct anx7625_port_data *data = typec_mux_get_drvdata(mux);
-  2617		struct anx7625_data *ctx = data->ctx;
-  2618		struct device *dev = &ctx->client->dev;
-  2619	
-  2620		bool old_dp_connected = (ctx->typec_ports[0].dp_connected ||
-  2621					 ctx->typec_ports[1].dp_connected);
-  2622		bool new_dp_connected;
-  2623	
-  2624		if (ctx->num_typec_switches == 1)
-  2625			return 0;
-  2626	
-  2627		dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
-  2628			ctx->typec_ports[0].dp_connected, ctx->typec_ports[1].dp_connected);
-  2629	
-  2630		data->dp_connected = (state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
-  2631				      state->alt->mode == USB_TYPEC_DP_MODE);
-  2632	
-  2633		new_dp_connected = (ctx->typec_ports[0].dp_connected ||
-  2634				    ctx->typec_ports[1].dp_connected);
-  2635	
-  2636		/* dp on, power on first */
-  2637		if (!old_dp_connected && new_dp_connected)
-  2638			pm_runtime_get_sync(dev);
-  2639	
-  2640		anx7625_typec_two_ports_update(ctx);
-  2641	
-  2642		/* dp off, power off last */
-  2643		if (old_dp_connected && !new_dp_connected)
-  2644			pm_runtime_put_sync(dev);
-  2645	
-  2646		return 0;
-  2647	}
-  2648	
-
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index e45c3d6e1536..794e413800ae 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -1941,13 +1941,16 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+ 		}
+ 
+ 		if (enqd_len + trb_buff_len >= full_len) {
+-			if (need_zero_pkt)
+-				zero_len_trb = !zero_len_trb;
+-
+-			field &= ~TRB_CHAIN;
+-			field |= TRB_IOC;
+-			more_trbs_coming = false;
+-			preq->td.last_trb = ring->enqueue;
++			if (need_zero_pkt && !zero_len_trb) {
++				zero_len_trb = true;
++			} else {
++				zero_len_trb = false;
++				field &= ~TRB_CHAIN;
++				field |= TRB_IOC;
++				more_trbs_coming = false;
++				need_zero_pkt = false;
++				preq->td.last_trb = ring->enqueue;
++			}
+ 		}
+ 
+ 		/* Only set interrupt on short packet for OUT endpoints. */
+@@ -1962,7 +1965,7 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
+ 		length_field = TRB_LEN(trb_buff_len) | TRB_TD_SIZE(remainder) |
+ 			TRB_INTR_TARGET(0);
+ 
+-		cdnsp_queue_trb(pdev, ring, more_trbs_coming | zero_len_trb,
++		cdnsp_queue_trb(pdev, ring, more_trbs_coming,
+ 				lower_32_bits(send_addr),
+ 				upper_32_bits(send_addr),
+ 				length_field,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
