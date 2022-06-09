@@ -2,58 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4451544B2B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 14:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE7E544B85
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 14:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237581AbiFIMCw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jun 2022 08:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S237958AbiFIMQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jun 2022 08:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236504AbiFIMCu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 08:02:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4579D6D39A
-        for <linux-usb@vger.kernel.org>; Thu,  9 Jun 2022 05:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654776168; x=1686312168;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cTic0mTIKuxHFwLGK2iox4ar6809DO3DQ2zz48eDte4=;
-  b=JqffStp3bbvh07YYfl/xX3VpUr7kRkfuyLDuSWgazOWVmXbo272cxTUR
-   xZwF584z95SIKLLlrCcFb8t6Ae6T6oGVgk2TGwIQ9yNQ90BbPCIjckUbL
-   0D8nGF4IklxrhzazDnNGWct16XbduMQA/DNM9nUgomGY2dVdhecrjFiJM
-   +Q1MHB3nJ7R8KfRxuyJdoT2SSZJJN0kTmzTgDn6bq8NiN2RC7aJABmWH4
-   5FDoSilX+35San1upQsigCW8ljNJC6t+o+MOzH7gyxU3VuoBpXbg8FBf1
-   P7DSszjlvUpFuokRL5YuSJx8yC1xvDljTqSVK/Ouu1hU5OXZ4njOXacMy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="278406683"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="278406683"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 05:02:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="637484776"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Jun 2022 05:02:36 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     mka@chromium.org, hkallweit1@gmail.com
-Cc:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <linux-usb@vger.kernel.org>, quic_jackp@quicinc.com,
-        tunguyen@apm.com, linux-amlogic@lists.infradead.org
-Subject: [RFT PATCH] xhci: Fix null pointer dereference in resume if xhci has only one roothub
-Date:   Thu,  9 Jun 2022 15:03:36 +0300
-Message-Id: <20220609120336.831533-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <c4e9f0d8-c736-1153-3f32-b85e7024b3fe@linux.intel.com>
-References: <c4e9f0d8-c736-1153-3f32-b85e7024b3fe@linux.intel.com>
+        with ESMTP id S236400AbiFIMQY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 08:16:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22502B12EA;
+        Thu,  9 Jun 2022 05:16:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5257A61635;
+        Thu,  9 Jun 2022 12:16:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34DDC3411D;
+        Thu,  9 Jun 2022 12:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654776981;
+        bh=PkBfDMVj8MxOh4iD///tuj1560VB+8BsCN38UErI+oQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ITJSdHIyo+Q9S9YJbacbQTe5Fn32DU4x0g1G+biWVcf3+UMYR4zzg2TLnHpvDk/JQ
+         rYh3GYI0FBLw0/fvuCfDQBS9VqwQI7K0Y9nmLWgfZDPqe3Lk6bwfdNDDzbK/oE7ke2
+         uQTSKOzdfxtZpjq9DJVVX4jhH/GuLNm3OT2BqdCjbBR6o7oZ3dzK85MjmWfXYOy+z0
+         jxytSoQ0+Rn9a105wciws0sFQKIj8eV05JMJFFBYv9TDy2MB6Mz8jZ8AKc/vGUnthw
+         JSE5rljjYwNnQB3udPfVLIJasqu/4mBv/N8EXDbm6CdZdCKN0c2iMHh2fZGPNbXoPs
+         gLHJGgIqqEBrQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nzH5F-0002BX-64; Thu, 09 Jun 2022 14:16:17 +0200
+Date:   Thu, 9 Jun 2022 14:16:17 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Robert Eckelmann <longnoserob@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: serial: io_ti: Adding Agilent E5805A support
+Message-ID: <YqHkkYcwNhJJJgqT@hovoldconsulting.com>
+References: <20220521230808.30931eca@octoberrain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521230808.30931eca@octoberrain>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,61 +56,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the re-init path xhci_resume() passes 'hcd->primary_hcd' to hci_init(),
-however this field isn't initialized by __usb_create_hcd() for a HCD
-without secondary controller.
+On Sat, May 21, 2022 at 11:08:08PM +0900, Robert Eckelmann wrote:
+> 
+> This patch adds support for Agilent E5805A (rebranded ION Edgeport/4) to
+> io_ti.
+> 
+> Signed-off-by: Robert Eckelmann <longnoserob@gmail.com>
+> ---
+> output of lsusb -v (with Serial-Number of the device anonymized):
 
-xhci_resume() is called once per xHC device, not per hcd, so the extra
-checking for primary hcd can be removed.
+[...]
 
-Fixes: e0fe986972f5 ("usb: host: xhci-plat: prepare operation w/o shared hcd")
-Reported-by: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+> Changes in v2:
+>   - removed documentation change
+>   - improvements to spaceing in io_usbvend.h
+>   - rephrasing comment in io_usbvend.h
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index f0ab63138016..9ac56e9ffc64 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1107,7 +1107,6 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- {
- 	u32			command, temp = 0;
- 	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
--	struct usb_hcd		*secondary_hcd;
- 	int			retval = 0;
- 	bool			comp_timer_running = false;
- 	bool			pending_portevent = false;
-@@ -1214,23 +1213,19 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 		 * first with the primary HCD, and then with the secondary HCD.
- 		 * If we don't do the same, the host will never be started.
- 		 */
--		if (!usb_hcd_is_primary_hcd(hcd))
--			secondary_hcd = hcd;
--		else
--			secondary_hcd = xhci->shared_hcd;
--
- 		xhci_dbg(xhci, "Initialize the xhci_hcd\n");
--		retval = xhci_init(hcd->primary_hcd);
-+		retval = xhci_init(hcd);
- 		if (retval)
- 			return retval;
- 		comp_timer_running = true;
- 
- 		xhci_dbg(xhci, "Start the primary HCD\n");
--		retval = xhci_run(hcd->primary_hcd);
--		if (!retval && secondary_hcd) {
-+		retval = xhci_run(hcd);
-+		if (!retval && xhci->shared_hcd) {
- 			xhci_dbg(xhci, "Start the secondary HCD\n");
--			retval = xhci_run(secondary_hcd);
-+			retval = xhci_run(xhci->shared_hcd);
- 		}
-+
- 		hcd->state = HC_STATE_SUSPENDED;
- 		if (xhci->shared_hcd)
- 			xhci->shared_hcd->state = HC_STATE_SUSPENDED;
--- 
-2.25.1
+Thanks for the v2. Now applied with minor tweaks to the commit message,
+keeping the double newline separator after the new define, and adding
+the missing spaces after the USB_DEVICE macros.
 
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=908e698f2149c3d6a67d9ae15c75545a3f392559
+
+> diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
+> index a7b3c15957ba..ff0d05f45fce 100644
+> --- a/drivers/usb/serial/io_ti.c
+> +++ b/drivers/usb/serial/io_ti.c
+> @@ -166,6 +166,7 @@ static const struct usb_device_id edgeport_2port_id_table[] = {
+>  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
+>  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
+>  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
+> +	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
+>  	{ }
+>  };
+>  
+> @@ -204,6 +205,7 @@ static const struct usb_device_id id_table_combined[] = {
+>  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
+>  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
+>  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
+> +	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
+>  	{ }
+>  };
+>  
+> diff --git a/drivers/usb/serial/io_usbvend.h b/drivers/usb/serial/io_usbvend.h
+> index 52cbc353051f..879ef755898f 100644
+> --- a/drivers/usb/serial/io_usbvend.h
+> +++ b/drivers/usb/serial/io_usbvend.h
+> @@ -213,6 +213,7 @@
+>  // Definitions for other product IDs
+>  #define ION_DEVICE_ID_MT4X56USB			0x1403	// OEM device
+>  
+> +#define ION_DEVICE_ID_E5805A			0x1A01  // OEM device (rebranded Edgeport/4)
+>  
+>  #define	GENERATION_ID_FROM_USB_PRODUCT_ID(ProductId)				\
+>  			((__u16) ((ProductId >> 8) & (ION_GENERATION_MASK)))
+
+Johan
