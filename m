@@ -2,65 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2D35443F0
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 08:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830EB5443F8
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 08:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239089AbiFIGlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jun 2022 02:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S239222AbiFIGni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jun 2022 02:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiFIGlt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 02:41:49 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF9627A933
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 23:41:48 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y19so45519093ejq.6
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 23:41:48 -0700 (PDT)
+        with ESMTP id S239170AbiFIGnh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 02:43:37 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFAF36B54
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 23:43:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id s12so38311641ejx.3
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jun 2022 23:43:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iJ0Au4lK3xvz24v1XJgT8TGa/DQOsCP09lUe7uwWGo0=;
-        b=tedgup7BYTuP5EMom3EMey8Xc9+oGM4GBVcJiPlAvJvT/VEXhE2RMxqJkJRQq+skF/
-         +C63y971KpBDWt8Bi4ccojLUHI7jhORhBgvl1b3tf0uT4BpEvwVupSX8Kz9DWPuvAYF/
-         TU9p4GgPyq3k/wbLblagaRfenF8jULw2gj23mR8s5DGvFWmFPvMNKE3XfRKGfps5AdLG
-         OR0+N03gqxKtVxub+/VzM6xLFuxpdc0OSMOPXhFQd7rjZh+Dxm3V6OMoLeWF9oSWfuD2
-         ZEFvXCwMR4bAZaWCZ/IEXxohOXNQcqv4UFCrB9kNyXoGRPTrHAkb9jzNx6eiDKVJiSW7
-         K15g==
+        bh=8QxMUDgvSlc7MUaIxRAHcd04jAxG/DT7Rwu9fAfBQ2c=;
+        b=tlcMlE51v4xXs8km5CottKT0fJVznE2H+iY/m3DayYlsjEHHaGKQ6cjhtRtjkfGSQA
+         8DMG9b+iBnoChMP8N9+sK86V/N9e0gwqUcY6gVZCJoYhV+98tdqkhkkqwK4jBrZG8kF9
+         vXKweiVw3OReAfnWV7rEsbaUarzibEW20U6HX1CnDofiHwb1HrFH4duFmqCrIhwYOABK
+         KKGGUuvo8D3bGXnBp5h/Pox0ZYWcTyGtEU2boRpiNlRJ+6XNdxE7vu4RbCecrm+qXGsJ
+         rt5fj+LZ1ruM54v1bNLRTod7yi2KFO1u/m5oHkPOJHzmRlbxJNQift5D5c3rDYckKmpT
+         zq2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iJ0Au4lK3xvz24v1XJgT8TGa/DQOsCP09lUe7uwWGo0=;
-        b=yDh4jOasphFeMHQ3QxeWlz62qdZorF7YXiAQDZEYSI6efJFzsHzDWvtOFNaSEhiKqz
-         Y3mcJJgPITgKtpBFoCW64dhb27Fz4/2//h0FlXGkIAJ+qvNFlrKAVX3KJoQ2j4RC3gzN
-         anRE2gbrkEphYySwr/zLy+SaRBW+NtdnYqFgjbePNzhunGzxnjpCCawDs4LdaX5Yw/Ll
-         0jty65l78VegTc0yUGZ1CtPoI9aOSqk+nNb2TmSWi/0bfqMPhLzlggqz7iiRTDusI5//
-         lwWEV3dRE7XW6N5sezXsbgXi9E79O0iBsAIgPJoROnIShyJCqIhQ23YNby3gLlvaUsHG
-         TVBg==
-X-Gm-Message-State: AOAM533YEnuU4fZsp8qdcttiRWw7DSMOnb79eq/d37PfM+bYbJ8eCpNo
-        UZGnmFsaoZ+kZ6QokMr3KJ1ovg==
-X-Google-Smtp-Source: ABdhPJyiHWjFlxGf54EJ5A0RRB1OPqqAmO8BOkzYneeDW4fRfqy8cJEm/VKYM6PzX31F4Wj/5hxzzA==
-X-Received: by 2002:a17:907:97d0:b0:6ff:e43:2145 with SMTP id js16-20020a17090797d000b006ff0e432145mr34551552ejc.273.1654756906877;
-        Wed, 08 Jun 2022 23:41:46 -0700 (PDT)
+        bh=8QxMUDgvSlc7MUaIxRAHcd04jAxG/DT7Rwu9fAfBQ2c=;
+        b=jJWbI2as8vagDnsyyd6wfED+O3Q4O3wNwmQTbYPiffHBwpMb+om81wS08nS88tzmBu
+         2uBeDALeamZmqQHrm9ApCVMpE5I7CVKhpiDCTaLlFJpivs+YIzFeKudYQY7uADRtCvkQ
+         dNqHbmq4OCZ2PrzOS/YvXMmaza5Jc7/YHIebOMqccnb2Djs6MdDRLnUIe7p3P2HQWwWD
+         rA87KgMfnSdRw66m9wBNwyT2qVaq2QwPZvA15sS49IhnxGsrwqCG2RbKbAUlDh8qwkGE
+         UWIfllkjbm/CV2EnSzh57mgMBpCVgM4dyDglZIj1M4yhDETx36kI2n1cb+mT3w3FNIO2
+         vzWw==
+X-Gm-Message-State: AOAM53363eovE/B3ADUaF6ulGlDa0+sfrRZjM9tr/SY+KRBDntE6NGQd
+        hqOelm6/kxyAhwe2vL4btjEIFw==
+X-Google-Smtp-Source: ABdhPJyJWDZbpai3zzWk6O960xQFGdojO/DcT8ZiVIX77Fy5DCaULLfavPwnpkEVE+ZJXaVfJLwdog==
+X-Received: by 2002:a17:906:7944:b0:6da:b834:2f3e with SMTP id l4-20020a170906794400b006dab8342f3emr35639464ejo.353.1654757013799;
+        Wed, 08 Jun 2022 23:43:33 -0700 (PDT)
 Received: from [192.168.0.194] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f14-20020a170906824e00b006f3ef214debsm10203708ejx.81.2022.06.08.23.41.45
+        by smtp.gmail.com with ESMTPSA id a23-20020aa7cf17000000b0042dc882c823sm13752112edy.70.2022.06.08.23.43.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 23:41:46 -0700 (PDT)
-Message-ID: <fac58827-5b82-81a2-e782-99056180c0ed@linaro.org>
-Date:   Thu, 9 Jun 2022 08:41:44 +0200
+        Wed, 08 Jun 2022 23:43:32 -0700 (PDT)
+Message-ID: <efdecc1e-223a-0fe0-37e4-24b2ae39e368@linaro.org>
+Date:   Thu, 9 Jun 2022 08:43:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch
- support
+Subject: Re: [PATCH 3/7] dt-bindings: usb: Add Type-C switch binding
 Content-Language: en-US
 To:     Prashant Malani <pmalani@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         bleung@chromium.org, swboyd@chromium.org,
         heikki.krogerus@linux.intel.com,
         Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -81,14 +82,14 @@ Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
         Xin Ji <xji@analogixsemi.com>
 References: <20220607190131.1647511-1-pmalani@chromium.org>
- <20220607190131.1647511-5-pmalani@chromium.org>
- <fbc48d41-b2cc-86f6-5f1c-7cfcbdb41e46@linaro.org>
- <YqDXfGa9bugnLFGH@chromium.org>
- <CACeCKaeHocnAuY5D-oVt1fhgRGkNT014RcK3JSe6piKoXNtKCQ@mail.gmail.com>
+ <20220607190131.1647511-4-pmalani@chromium.org>
+ <ba499783-1794-1c00-348a-d912c9562e1e@linaro.org>
+ <YqDZJFTji5nRs3bk@chromium.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACeCKaeHocnAuY5D-oVt1fhgRGkNT014RcK3JSe6piKoXNtKCQ@mail.gmail.com>
+In-Reply-To: <YqDZJFTji5nRs3bk@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -101,86 +102,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/06/2022 23:56, Prashant Malani wrote:
-> On Wed, Jun 8, 2022 at 10:08 AM Prashant Malani <pmalani@chromium.org> wrote:
->>
->> Hi Krzysztof,
->>
->> Thank you for looking at the patch.
->>
->> On Jun 08 11:24, Krzysztof Kozlowski wrote:
->>> On 07/06/2022 21:00, Prashant Malani wrote:
->>>> Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
->>>> alternate mode lane traffic between 2 Type-C ports.
->>>>
->>>> Update the binding to accommodate this usage by introducing a switch
->>>> property.
->>>>
->>>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
->>>> ---
->>>>  .../display/bridge/analogix,anx7625.yaml      | 56 +++++++++++++++++++
->>>>  1 file changed, 56 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
->>>> index 35a48515836e..7e1f655ddfcc 100644
->>>> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
->>>> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
->>>> @@ -105,6 +105,26 @@ properties:
->>>>        - port@0
->>>>        - port@1
->>>>
->>>> +  switches:
->>>> +    type: object
->>>> +    description: Set of switches controlling DisplayPort traffic on
->>>> +      outgoing RX/TX lanes to Type C ports.
->>>> +
->>>> +    properties:
->>>> +      switch:
->>>
->>> You allow only one switch with such schema, so no need for "switches"...
->>
->> See below comment (summary: we'd like to allow 1 or 2 switches).
->>>
->>>> +        $ref: /schemas/usb/typec-switch.yaml#
->>>> +        maxItems: 2
->>>
->>> Are you sure this works? what are you limiting here with maxItems? I
->>> think you wanted patternProperties...
->>
->> Yeah, I might not have used the DT syntax correctly here.
->> What I'm aiming for is:
->> "switches" should can contain 1 or 2 "switch" nodes.
->> 2 is the maximum (limitation of the hardware).
->>
->>>
->>>> +
->>>> +        properties:
->>>> +          reg:
->>>> +            maxItems: 1
->>>> +
->>>> +        required:
->>>> +          - reg
->>>> +
->>>> +    required:
->>>> +      - switch@0
->>>
->>> This does not match the property.
->>>
->>> You also need unevaluatedProperties:false
->>
->> Ack, will update this in the next version.
+On 08/06/2022 19:15, Prashant Malani wrote:
+> Hi Krzysztof,
 > 
-> Actually, could you kindly clarify which of the two needs this?
-> "switches" or "switch" ?
-> I interpreted "switch" as requiring it, but I thought it better to confirm.
+> On Jun 08 11:18, Krzysztof Kozlowski wrote:
+>> On 07/06/2022 21:00, Prashant Malani wrote:
+>>> Introduce a binding which represents a component that can control the
+>>> routing of USB Type-C data lines as well as address data line
+>>> orientation (based on CC lines' orientation).
+>>>
+>>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+>>> ---
+>>>  .../devicetree/bindings/usb/typec-switch.yaml | 76 +++++++++++++++++++
+>>>  1 file changed, 76 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+>>> new file mode 100644
+>>> index 000000000000..60a600a63fef
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+>>> @@ -0,0 +1,76 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: USB Type-C Switch
+>>> +
+>>> +maintainers:
+>>> +  - Prashant Malani <pmalani@chromium.org>
+>>> +
+>>> +description:
+>>> +  A USB Type-C switch represents a component which routes USB Type-C data
+>>> +  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
+>>> +  Thunderbolt etc.) depending on which mode the Type-C port, port partner
+>>> +  and cable are operating in. It can also modify lane routing based on
+>>> +  the orientation of a connected Type-C peripheral.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>
+>> Single item, so no need for items.
+> 
+> I tried this initially, but dt_binding_check throws the following
+> error:
+> $ make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/typec-switch.yaml
+> 
+> LINT    Documentation/devicetree/bindings
+> CHKDT   Documentation/devicetree/bindings/processed-schema.json
+> /foo/linux/Documentation/devicetree/bindings/usb/typec-switch.yaml: properties:compatible: [{'enum': ['typec-switch']}] is not of type 'object', 'boolean'
+> from schema $id: http://json-schema.org/draft-07/schema#
+> SCHEMA Documentation/devicetree/bindings/processed-schema.json
+> /foo/linux/Documentation/devicetree/bindings/usb/typec-switch.yaml: ignoring, error in schema: properties: compatible
 
-Depends what do you want to have there. If two properties called
-"switch", then "switches" is ok. However old code had only one property
-thus switches with maximum one switch is a bit weird.
+Probably you messed up the syntax in the enum. Just open some examples:
 
-Looking at example you wanted to switch@[01], so you need to use
-patternProperties.
+git grep -C 3 'properties:' -- Documentation/devicetree/bindings/*/*yaml
 
+Documentation/devicetree/bindings/ata/intel,ixp4xx-compact-flash.yaml
 
 Best regards,
 Krzysztof
