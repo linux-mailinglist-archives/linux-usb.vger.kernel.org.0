@@ -2,106 +2,296 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE9654414A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 04:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37995441DD
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 05:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234405AbiFICMg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jun 2022 22:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
+        id S237403AbiFIDY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jun 2022 23:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiFICM3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 22:12:29 -0400
-Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 30079233EA3
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 19:12:27 -0700 (PDT)
-Received: from jleng.ambarella.net (unknown [116.246.37.178])
-        by mail-app2 (Coremail) with SMTP id by_KCgAnzUHjVqFi40WJAQ--.61551S2;
-        Thu, 09 Jun 2022 10:11:55 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     pawell@cadence.com, gregkh@linuxfoundation.org,
-        peter.chen@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH] usb: cdnsp: Fixed setting last_trb incorrectly
-Date:   Thu,  9 Jun 2022 10:11:34 +0800
-Message-Id: <20220609021134.1606-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgAnzUHjVqFi40WJAQ--.61551S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AryUtF4DXF4kuFWxJw1DZFb_yoW8Ar1xpF
-        47JFWqkr1fArW3Awn7KFn8X3W5GrnakFy7KFZ7Z3sakr13Aas7uFn8Kr10qrZxCryrZr4q
-        9FsIqas7Zanag3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCEVcI2
-        5VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJV
-        W8JbIYCTnIWIevJa73UjIFyTuYvjxU4038UUUUU
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQPBVNG3GzSjQACs1
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S237400AbiFIDY6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jun 2022 23:24:58 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB67FD0E
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jun 2022 20:24:55 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E20F4501;
+        Thu,  9 Jun 2022 05:24:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1654745093;
+        bh=32Vf6MK4/E1CmkgAOg2b3jk2ZdjBF256Js1BS1gvghc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Xo2EYI2sFvRd0H6ovqj2JnJa7GlIyOrZbAv0xL0AiRw9IuKY+RJZlYUJ/r28nUuxb
+         cUdTIw+1Q2cXZUXCn9LYBtZEFQuq1HyjMPxrUHEY4cTNb73h+mUmM7svw6GX9z1fjg
+         lXumI4erEqrxSS0RR+4gVAdSwEauYf8Bw2Tq7JdA=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220608174918.14656-1-laurent.pinchart@ideasonboard.com>
+References: <20220608174918.14656-1-laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH] usb: gadget: uvc: Fix comment blocks style
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org
+Date:   Thu, 09 Jun 2022 04:24:50 +0100
+Message-ID: <165474509014.316514.7871390070421597284@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+Hi Laurent,
 
-When ZLP occurs in bulk transmission, currently cdnsp will set last_trb
-for the last two TRBs, it will trigger an error "ERROR Transfer event TRB
-DMA ptr not part of current TD ...".
+Quoting Laurent Pinchart (2022-06-08 18:49:18)
+> The UVC gadget driver historically uses the
+>=20
+> /* Comment
+>  * style
+>  */
+>=20
+> for multi-line block comments, which is frowned upon. Patches for the
+> driver are required to use the more standard
+>=20
+> /*
+>  * Comment
+>  * style
+>  */
+>=20
+> style. This result in inconsistencies. Fix it by converting all
+> remaining instances of the old style.
 
-Fixes: e913aada0683 ("usb: cdnsp: Fixed issue with ZLP")
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
- drivers/usb/cdns3/cdnsp-ring.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+This seems quite clear.
 
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index e45c3d6e1536..794e413800ae 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -1941,13 +1941,16 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
- 		}
- 
- 		if (enqd_len + trb_buff_len >= full_len) {
--			if (need_zero_pkt)
--				zero_len_trb = !zero_len_trb;
--
--			field &= ~TRB_CHAIN;
--			field |= TRB_IOC;
--			more_trbs_coming = false;
--			preq->td.last_trb = ring->enqueue;
-+			if (need_zero_pkt && !zero_len_trb) {
-+				zero_len_trb = true;
-+			} else {
-+				zero_len_trb = false;
-+				field &= ~TRB_CHAIN;
-+				field |= TRB_IOC;
-+				more_trbs_coming = false;
-+				need_zero_pkt = false;
-+				preq->td.last_trb = ring->enqueue;
-+			}
- 		}
- 
- 		/* Only set interrupt on short packet for OUT endpoints. */
-@@ -1962,7 +1965,7 @@ int cdnsp_queue_bulk_tx(struct cdnsp_device *pdev, struct cdnsp_request *preq)
- 		length_field = TRB_LEN(trb_buff_len) | TRB_TD_SIZE(remainder) |
- 			TRB_INTR_TARGET(0);
- 
--		cdnsp_queue_trb(pdev, ring, more_trbs_coming | zero_len_trb,
-+		cdnsp_queue_trb(pdev, ring, more_trbs_coming,
- 				lower_32_bits(send_addr),
- 				upper_32_bits(send_addr),
- 				length_field,
--- 
-2.17.1
 
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+>=20
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>  drivers/usb/gadget/function/f_uvc.c     | 30 ++++++++++++++++---------
+>  drivers/usb/gadget/function/uvc_queue.c |  6 +++--
+>  drivers/usb/gadget/function/uvc_video.c | 12 ++++++----
+>  3 files changed, 31 insertions(+), 17 deletions(-)
+>=20
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/fun=
+ction/f_uvc.c
+> index d3feeeb50841..71669e0e4d00 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -141,7 +141,8 @@ static struct usb_endpoint_descriptor uvc_fs_streamin=
+g_ep =3D {
+>         .bEndpointAddress       =3D USB_DIR_IN,
+>         .bmAttributes           =3D USB_ENDPOINT_SYNC_ASYNC
+>                                 | USB_ENDPOINT_XFER_ISOC,
+> -       /* The wMaxPacketSize and bInterval values will be initialized fr=
+om
+> +       /*
+> +        * The wMaxPacketSize and bInterval values will be initialized fr=
+om
+>          * module parameters.
+>          */
+>  };
+> @@ -152,7 +153,8 @@ static struct usb_endpoint_descriptor uvc_hs_streamin=
+g_ep =3D {
+>         .bEndpointAddress       =3D USB_DIR_IN,
+>         .bmAttributes           =3D USB_ENDPOINT_SYNC_ASYNC
+>                                 | USB_ENDPOINT_XFER_ISOC,
+> -       /* The wMaxPacketSize and bInterval values will be initialized fr=
+om
+> +       /*
+> +        * The wMaxPacketSize and bInterval values will be initialized fr=
+om
+>          * module parameters.
+>          */
+>  };
+> @@ -164,7 +166,8 @@ static struct usb_endpoint_descriptor uvc_ss_streamin=
+g_ep =3D {
+>         .bEndpointAddress       =3D USB_DIR_IN,
+>         .bmAttributes           =3D USB_ENDPOINT_SYNC_ASYNC
+>                                 | USB_ENDPOINT_XFER_ISOC,
+> -       /* The wMaxPacketSize and bInterval values will be initialized fr=
+om
+> +       /*
+> +        * The wMaxPacketSize and bInterval values will be initialized fr=
+om
+>          * module parameters.
+>          */
+>  };
+> @@ -172,7 +175,8 @@ static struct usb_endpoint_descriptor uvc_ss_streamin=
+g_ep =3D {
+>  static struct usb_ss_ep_comp_descriptor uvc_ss_streaming_comp =3D {
+>         .bLength                =3D sizeof(uvc_ss_streaming_comp),
+>         .bDescriptorType        =3D USB_DT_SS_ENDPOINT_COMP,
+> -       /* The bMaxBurst, bmAttributes and wBytesPerInterval values will =
+be
+> +       /*
+> +        * The bMaxBurst, bmAttributes and wBytesPerInterval values will =
+be
+>          * initialized from module parameters.
+>          */
+>  };
+> @@ -234,7 +238,8 @@ uvc_function_setup(struct usb_function *f, const stru=
+ct usb_ctrlrequest *ctrl)
+>         if (le16_to_cpu(ctrl->wLength) > UVC_MAX_REQUEST_SIZE)
+>                 return -EINVAL;
+> =20
+> -       /* Tell the complete callback to generate an event for the next r=
+equest
+> +       /*
+> +        * Tell the complete callback to generate an event for the next r=
+equest
+>          * that will be enqueued by UVCIOC_SEND_RESPONSE.
+>          */
+>         uvc->event_setup_out =3D !(ctrl->bRequestType & USB_DIR_IN);
+> @@ -500,7 +505,8 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb=
+_device_speed speed)
+>         if (!uvc_control_desc || !uvc_streaming_cls)
+>                 return ERR_PTR(-ENODEV);
+> =20
+> -       /* Descriptors layout
+> +       /*
+> +        * Descriptors layout
+>          *
+>          * uvc_iad
+>          * uvc_control_intf
+> @@ -597,8 +603,7 @@ uvc_function_bind(struct usb_configuration *c, struct=
+ usb_function *f)
+>         uvcg_info(f, "%s()\n", __func__);
+> =20
+>         opts =3D fi_to_f_uvc_opts(f->fi);
+> -       /* Sanity check the streaming endpoint module parameters.
+> -        */
+> +       /* Sanity check the streaming endpoint module parameters. */
+>         opts->streaming_interval =3D clamp(opts->streaming_interval, 1U, =
+16U);
+>         opts->streaming_maxpacket =3D clamp(opts->streaming_maxpacket, 1U=
+, 3072U);
+>         opts->streaming_maxburst =3D min(opts->streaming_maxburst, 15U);
+> @@ -611,7 +616,8 @@ uvc_function_bind(struct usb_configuration *c, struct=
+ usb_function *f)
+>                           opts->streaming_maxpacket);
+>         }
+> =20
+> -       /* Fill in the FS/HS/SS Video Streaming specific descriptors from=
+ the
+> +       /*
+> +        * Fill in the FS/HS/SS Video Streaming specific descriptors from=
+ the
+>          * module parameters.
+>          *
+>          * NOTE: We assume that the user knows what they are doing and wo=
+n't
+> @@ -895,7 +901,8 @@ static void uvc_function_unbind(struct usb_configurat=
+ion *c,
+> =20
+>         uvcg_info(f, "%s()\n", __func__);
+> =20
+> -       /* If we know we're connected via v4l2, then there should be a cl=
+eanup
+> +       /*
+> +        * If we know we're connected via v4l2, then there should be a cl=
+eanup
+>          * of the device from userspace either via UVC_EVENT_DISCONNECT or
+>          * though the video device removal uevent. Allow some time for the
+>          * application to close out before things get deleted.
+> @@ -912,7 +919,8 @@ static void uvc_function_unbind(struct usb_configurat=
+ion *c,
+>         v4l2_device_unregister(&uvc->v4l2_dev);
+> =20
+>         if (uvc->func_connected) {
+> -               /* Wait for the release to occur to ensure there are no l=
+onger any
+> +               /*
+> +                * Wait for the release to occur to ensure there are no l=
+onger any
+>                  * pending operations that may cause panics when resource=
+s are cleaned
+>                  * up.
+>                  */
+> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget=
+/function/uvc_queue.c
+> index d25edc3d2174..951934aa4454 100644
+> --- a/drivers/usb/gadget/function/uvc_queue.c
+> +++ b/drivers/usb/gadget/function/uvc_queue.c
+> @@ -104,7 +104,8 @@ static void uvc_buffer_queue(struct vb2_buffer *vb)
+>         if (likely(!(queue->flags & UVC_QUEUE_DISCONNECTED))) {
+>                 list_add_tail(&buf->queue, &queue->irqqueue);
+>         } else {
+> -               /* If the device is disconnected return the buffer to use=
+rspace
+> +               /*
+> +                * If the device is disconnected return the buffer to use=
+rspace
+>                  * directly. The next QBUF call will fail with -ENODEV.
+>                  */
+>                 buf->state =3D UVC_BUF_STATE_ERROR;
+> @@ -255,7 +256,8 @@ void uvcg_queue_cancel(struct uvc_video_queue *queue,=
+ int disconnect)
+>         }
+>         queue->buf_used =3D 0;
+> =20
+> -       /* This must be protected by the irqlock spinlock to avoid race
+> +       /*
+> +        * This must be protected by the irqlock spinlock to avoid race
+>          * conditions between uvc_queue_buffer and the disconnection even=
+t that
+>          * could result in an interruptible wait in uvc_dequeue_buffer. D=
+o not
+>          * blindly replace this logic by checking for the UVC_DEV_DISCONN=
+ECTED
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget=
+/function/uvc_video.c
+> index a9bb4553db84..5876bc73f929 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -378,7 +378,8 @@ static void uvcg_video_pump(struct work_struct *work)
+>         int ret;
+> =20
+>         while (video->ep->enabled) {
+> -               /* Retrieve the first available USB request, protected by=
+ the
+> +               /*
+> +                * Retrieve the first available USB request, protected by=
+ the
+>                  * request lock.
+>                  */
+>                 spin_lock_irqsave(&video->req_lock, flags);
+> @@ -391,7 +392,8 @@ static void uvcg_video_pump(struct work_struct *work)
+>                 list_del(&req->list);
+>                 spin_unlock_irqrestore(&video->req_lock, flags);
+> =20
+> -               /* Retrieve the first available video buffer and fill the
+> +               /*
+> +                * Retrieve the first available video buffer and fill the
+>                  * request, protected by the video queue irqlock.
+>                  */
+>                 spin_lock_irqsave(&queue->irqlock, flags);
+> @@ -403,9 +405,11 @@ static void uvcg_video_pump(struct work_struct *work)
+> =20
+>                 video->encode(req, video, buf);
+> =20
+> -               /* With usb3 we have more requests. This will decrease the
+> +               /*
+> +                * With usb3 we have more requests. This will decrease the
+>                  * interrupt load to a quarter but also catches the corner
+> -                * cases, which needs to be handled */
+> +                * cases, which needs to be handled.
+> +                */
+>                 if (list_empty(&video->req_free) ||
+>                     buf->state =3D=3D UVC_BUF_STATE_DONE ||
+>                     !(video->req_int_count %
+>=20
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+> --=20
+> Regards,
+>=20
+> Laurent Pinchart
+>
