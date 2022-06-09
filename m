@@ -2,94 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF59754472B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 11:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4B4544A54
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 13:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbiFIJSk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jun 2022 05:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
+        id S237371AbiFILhX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jun 2022 07:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbiFIJSk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 05:18:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ACC1AF0E;
-        Thu,  9 Jun 2022 02:18:37 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D622E6CF;
-        Thu,  9 Jun 2022 11:18:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1654766316;
-        bh=XqbV2uJBHM4471KRakRKgntn/CTn4mUBsoshtAeVQLs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OYrYCVWJWjrDLZ6ycZDOMJq3GQi//h/AXg7U7ktS0/Dg3pYV8K3vjsdNjnkfbhXxC
-         X8YWj4Yv9jR8ur4jIdcwV0QO2ak4QbKCIgPKtYj/glFLtEuQVETJZ8v0l3ttCrTZJc
-         dL8DyLcPQa0jVJHwrPvACi3kAdwFgb3qUEUa3X7Q=
-Date:   Thu, 9 Jun 2022 12:18:30 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: Fix spurious DMA max segment size
- warnings
-Message-ID: <YqG65hU4SLUrxMI7@pendragon.ideasonboard.com>
-References: <20220609082246.13182-1-tiwai@suse.de>
+        with ESMTP id S234360AbiFILhW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 07:37:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFE2255
+        for <linux-usb@vger.kernel.org>; Thu,  9 Jun 2022 04:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654774641; x=1686310641;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TMr75W9JKZO+t3mT/EgyHSDLEJvzD8yw2MY1iSHkBQI=;
+  b=XwzlzdyuEU1YlFjCO76A1Pl5ztd/yAkrPHsD+IPmOB6C+VXjtM5DLKw+
+   cuqn1Pp33PgJXXkef9s9uh5qcvH7aKR1P3uvG37jOjbarwyw7mNCZDu3i
+   geQRsQh0I5CKaz2vPYT8jtpR5K/dj3zlNuDo84BVj0F4bpsD15axV/sCP
+   tFLtJGf9XZB59jBuD1IfI5mMsuFhIT1TyowyneooMT5odStCgOIIIcBQ5
+   Fh9qIlg+tQ2v0wPdtbjnwayDPdEk1As3OPyOEfUs5L9AreVD+WdNt0E/3
+   JB9RZwiW/iMG/AL9ZbaSOwuzGVw8HmGar85MJOEJTtORhqNGVd0vc8wyR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="341329003"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="341329003"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 04:37:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="724377873"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Jun 2022 04:37:18 -0700
+Message-ID: <c4e9f0d8-c736-1153-3f32-b85e7024b3fe@linux.intel.com>
+Date:   Thu, 9 Jun 2022 14:38:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220609082246.13182-1-tiwai@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH v2 4/5] usb: host: xhci-plat: prepare operation w/o shared
+ hcd
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Tung Nguyen <tunguyen@apm.com>
+References: <0684616b-5cc0-e9f6-7015-ce709c6d4386@gmail.com>
+ <506113fe-5bd9-bdd0-7858-2b702ca32d53@gmail.com>
+ <YqEMzQgqG16gwFUq@google.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <YqEMzQgqG16gwFUq@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Takashi,
-
-(CC'ing Greg and the linux-usb mailing list)
-
-Thank you for the patch.
-
-On Thu, Jun 09, 2022 at 10:22:46AM +0200, Takashi Iwai wrote:
-> As default, the DMA max segment size is set to 64k, and uvcvideo may
-> overflow that size easily, resulting in a warning like:
+On 8.6.2022 23.55, Matthias Kaehlcke wrote:
+> Hi,
 > 
->   DMA-API: xhci_hcd 0000:00:14.0: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+> with v5.19-rc1 (which includes this patch) I encounter a NULL pointer
+> exception during system resume on a SC7280 board, which has an
+> USB2-only HCD:
 > 
-> Explicitly set up the DMA max segment size for avoiding spurious kernel
-> warnings.
+...
 > 
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index 1b4cc934109e..25aa6e6a6906 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -2160,6 +2160,8 @@ int uvc_video_init(struct uvc_streaming *stream)
->  	for_each_uvc_urb(uvc_urb, stream)
->  		INIT_WORK(&uvc_urb->work, uvc_video_copy_data_work);
->  
-> +	dma_set_max_seg_size(uvc_stream_to_dmadev(stream), UINT_MAX);
-> +
+> In the re-init path xhci_resume() passes 'hcd->primary_hcd' to hci_init(),
+> however this field isn't initialized by __usb_create_hcd() for a HCD
+> without secondary controller.
 
-uvc_stream_to_dmadev() returns the pointer to the HCD's struct device,
-which is shared between all drivers on the bus. Is it really fine for a
-USB device driver to change the maximum segment size of the HCD device
-directly ?
+Thanks for debugging this, I'll write a patch for it.
+Can you try it out?
 
->  	return 0;
->  }
->  
-
--- 
-Regards,
-
-Laurent Pinchart
+-Mathias
