@@ -2,113 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE7E544B85
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 14:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6AA544BA4
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jun 2022 14:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237958AbiFIMQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jun 2022 08:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
+        id S235883AbiFIMXe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jun 2022 08:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbiFIMQY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 08:16:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22502B12EA;
-        Thu,  9 Jun 2022 05:16:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5257A61635;
-        Thu,  9 Jun 2022 12:16:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34DDC3411D;
-        Thu,  9 Jun 2022 12:16:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654776981;
-        bh=PkBfDMVj8MxOh4iD///tuj1560VB+8BsCN38UErI+oQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ITJSdHIyo+Q9S9YJbacbQTe5Fn32DU4x0g1G+biWVcf3+UMYR4zzg2TLnHpvDk/JQ
-         rYh3GYI0FBLw0/fvuCfDQBS9VqwQI7K0Y9nmLWgfZDPqe3Lk6bwfdNDDzbK/oE7ke2
-         uQTSKOzdfxtZpjq9DJVVX4jhH/GuLNm3OT2BqdCjbBR6o7oZ3dzK85MjmWfXYOy+z0
-         jxytSoQ0+Rn9a105wciws0sFQKIj8eV05JMJFFBYv9TDy2MB6Mz8jZ8AKc/vGUnthw
-         JSE5rljjYwNnQB3udPfVLIJasqu/4mBv/N8EXDbm6CdZdCKN0c2iMHh2fZGPNbXoPs
-         gLHJGgIqqEBrQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nzH5F-0002BX-64; Thu, 09 Jun 2022 14:16:17 +0200
-Date:   Thu, 9 Jun 2022 14:16:17 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Robert Eckelmann <longnoserob@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: serial: io_ti: Adding Agilent E5805A support
-Message-ID: <YqHkkYcwNhJJJgqT@hovoldconsulting.com>
-References: <20220521230808.30931eca@octoberrain>
+        with ESMTP id S234554AbiFIMXO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jun 2022 08:23:14 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B318B393D7
+        for <linux-usb@vger.kernel.org>; Thu,  9 Jun 2022 05:23:13 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id w7-20020a056e021c8700b002d3bc8e95cbso17593128ill.3
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jun 2022 05:23:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Cqa5lqsjEiB4OaqqzUaqVfFFKeV1C32L8SOc23gcEU0=;
+        b=zapDN1XKoE3/fHkwVmjk8K5ZgJwTr7p4GcBdHTnrkr4Yq51tmglsiK99Yq2S4Xropr
+         NC2N2dL3Tns4CKN65OeAVDx42K5csQZdsoZERnGvC/07RMRu15uV9rBwmN+GpVzhH01c
+         sdx8/+g0XUo35en5qkoRrmqwV87xCyGI9UcMuS1s8dCK2VydJ5zGtW5LhNUWFvVJXQnN
+         b3m1lkNtU9Osuew1Fwa4uSUo/By2C6W7k5OoYBYnRN0QYanFr7MlgCsWTuaW2h2s9OB+
+         40Z6h2dR5ED0smee1IitWaPiCrlZ7f19SvLpaBaS+KfDQfZFFL5ImG4p/qsJh0av8nf2
+         H5pQ==
+X-Gm-Message-State: AOAM532YOsO/QS+8D/7Ni8crNvwGnB2NN1OENCCuM/S4rOEPom5gyzNK
+        SBFZNzp6v2WkDfCHui8fIBbqoqq4FhcPrLTJauZcw1Ujuch6
+X-Google-Smtp-Source: ABdhPJz7RQMxGYxkvxvtTJnOwb+mbJVrz7KfGsAUKFYfMNGMIc+OzaGjjCWW4tV0z15ZFOJkXGhBvFgkmizSa3m4viNqmuCnCzPn
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521230808.30931eca@octoberrain>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:1646:b0:669:89a6:32c6 with SMTP id
+ y6-20020a056602164600b0066989a632c6mr4898872iow.203.1654777393073; Thu, 09
+ Jun 2022 05:23:13 -0700 (PDT)
+Date:   Thu, 09 Jun 2022 05:23:13 -0700
+In-Reply-To: <000000000000e2fc6405d3061843@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b252fe05e102e228@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in cdc_ncm_tx_fixup
+From:   syzbot <syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, fgheet255t@gmail.com, hdanton@sina.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, lukas@wunner.de, netdev@vger.kernel.org,
+        oliver@neukum.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 21, 2022 at 11:08:08PM +0900, Robert Eckelmann wrote:
-> 
-> This patch adds support for Agilent E5805A (rebranded ION Edgeport/4) to
-> io_ti.
-> 
-> Signed-off-by: Robert Eckelmann <longnoserob@gmail.com>
-> ---
-> output of lsusb -v (with Serial-Number of the device anonymized):
+syzbot suspects this issue was fixed by commit:
 
-[...]
+commit d1408f6b4dd78fb1b9e26bcf64477984e5f85409
+Author: Lukas Wunner <lukas@wunner.de>
+Date:   Thu May 12 08:42:01 2022 +0000
 
-> Changes in v2:
->   - removed documentation change
->   - improvements to spaceing in io_usbvend.h
->   - rephrasing comment in io_usbvend.h
+    usbnet: Run unregister_netdev() before unbind() again
 
-Thanks for the v2. Now applied with minor tweaks to the commit message,
-keeping the double newline separator after the new define, and adding
-the missing spaces after the USB_DEVICE macros.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=122a4b57f00000
+start commit:   330f4c53d3c2 ARM: fix build error when BPF_SYSCALL is disa..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ec3d1378e31c88d87f4
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=135ca155700000
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-linus&id=908e698f2149c3d6a67d9ae15c75545a3f392559
+If the result looks correct, please mark the issue as fixed by replying with:
 
-> diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
-> index a7b3c15957ba..ff0d05f45fce 100644
-> --- a/drivers/usb/serial/io_ti.c
-> +++ b/drivers/usb/serial/io_ti.c
-> @@ -166,6 +166,7 @@ static const struct usb_device_id edgeport_2port_id_table[] = {
->  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
->  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
->  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
-> +	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
->  	{ }
->  };
->  
-> @@ -204,6 +205,7 @@ static const struct usb_device_id id_table_combined[] = {
->  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_8S) },
->  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416) },
->  	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_TI_EDGEPORT_416B) },
-> +	{ USB_DEVICE(USB_VENDOR_ID_ION, ION_DEVICE_ID_E5805A)},
->  	{ }
->  };
->  
-> diff --git a/drivers/usb/serial/io_usbvend.h b/drivers/usb/serial/io_usbvend.h
-> index 52cbc353051f..879ef755898f 100644
-> --- a/drivers/usb/serial/io_usbvend.h
-> +++ b/drivers/usb/serial/io_usbvend.h
-> @@ -213,6 +213,7 @@
->  // Definitions for other product IDs
->  #define ION_DEVICE_ID_MT4X56USB			0x1403	// OEM device
->  
-> +#define ION_DEVICE_ID_E5805A			0x1A01  // OEM device (rebranded Edgeport/4)
->  
->  #define	GENERATION_ID_FROM_USB_PRODUCT_ID(ProductId)				\
->  			((__u16) ((ProductId >> 8) & (ION_GENERATION_MASK)))
+#syz fix: usbnet: Run unregister_netdev() before unbind() again
 
-Johan
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
