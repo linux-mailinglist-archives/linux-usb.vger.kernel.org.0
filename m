@@ -2,44 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F0E5460B3
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 11:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730505460FD
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 11:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348298AbiFJJBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jun 2022 05:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
+        id S1348549AbiFJJHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jun 2022 05:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244939AbiFJJBK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 05:01:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5094B212C82;
-        Fri, 10 Jun 2022 02:01:10 -0700 (PDT)
+        with ESMTP id S1348469AbiFJJGV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 05:06:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44D0279E74;
+        Fri, 10 Jun 2022 02:06:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 099ECB832CB;
-        Fri, 10 Jun 2022 09:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A87EC34114;
-        Fri, 10 Jun 2022 09:01:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED4E561D06;
+        Fri, 10 Jun 2022 09:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3747C34114;
+        Fri, 10 Jun 2022 09:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654851667;
-        bh=fUOL3Ydks9k3rSvCoOT8c0eo7uVClb98PR2l6eqO//Q=;
+        s=korg; t=1654851975;
+        bh=qnjskA552I2coALjaymQCmvodpBLR9FnaHH38d9QCew=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XUo6m7IX2j1atBpivpFUxxlH0gU7Vk40IJRi70t8waR74t+UZwLZzWAgVXmGZPdYm
-         o4Z0NYludwDEMHb3jbyVJNepvjOcLzRnQsijisTo+YA1r2asAWkxoBJ53HhEXLUCrr
-         OaTDsbq0rNyt4becwKDzWgG+evOcrGXil4BOjlvM=
-Date:   Fri, 10 Jun 2022 11:01:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yihao Han <hanyihao@vivo.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: phy: tahvo: Check before clk_disable() not needed
-Message-ID: <YqMIUOTU/k5XpW3I@kroah.com>
-References: <20220610074525.69453-1-hanyihao@vivo.com>
+        b=ZdcQNgIKZYKLb6iw0PxYrvfn1VNI7knQb/FCZUCtk02XjQWbbHR+rM/ECO3J18hsD
+         sPB641MiighRTq3SXYoKJqq328rdhKuSadpKSBJFKwNdqxES0FO93i26vs8G3SDY+p
+         3lwH0md5NS5WTolN7qpu5t2akiFDFlcyOklOLK0M=
+Date:   Fri, 10 Jun 2022 11:06:12 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     cgel.zte@gmail.com
+Cc:     oneukum@suse.com, olebowle@gmx.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] usb: core: Remove redundant NULL checks before kfree
+Message-ID: <YqMJhNr1noPX92Yz@kroah.com>
+References: <20220606014352.290600-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610074525.69453-1-hanyihao@vivo.com>
+In-Reply-To: <20220606014352.290600-1-chi.minghao@zte.com.cn>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -50,15 +51,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:45:25AM -0700, Yihao Han wrote:
-> clk_disable() already checks the clk ptr using IS_ERR_OR_NULL(clk)
+On Mon, Jun 06, 2022 at 01:43:52AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Checking a pointer for NULL before calling kfree() on it is redundant,
+> kfree() deals with NULL pointers just fine.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/usb/core/quirks.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> index f99a65a64588..7e918e4a95f2 100644
+> --- a/drivers/usb/core/quirks.c
+> +++ b/drivers/usb/core/quirks.c
+> @@ -56,10 +56,8 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+>  		if (val[i] == ',')
+>  			quirk_count++;
+>  
+> -	if (quirk_list) {
+> -		kfree(quirk_list);
+> -		quirk_list = NULL;
+> -	}
+> +	kfree(quirk_list);
+> +	quirk_list = NULL;
 
-It does?  Are you sure?  It will check for NULL, that's it.
+Why are you setting this to NULL right before you assign it again:
 
-> so there is no need to check it again before calling it.
+>  	quirk_list = kcalloc(quirk_count, sizeof(struct quirk_entry),
+>  			     GFP_KERNEL);
 
-This will break on some platforms, please always test your patches
-before sending them out.
+Please just free and move on.
 
 thanks,
 
