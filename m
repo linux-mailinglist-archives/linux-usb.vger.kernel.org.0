@@ -2,125 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B7A546498
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 12:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E9654653D
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 13:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349258AbiFJKue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jun 2022 06:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
+        id S1348387AbiFJLN3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jun 2022 07:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348857AbiFJKuI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 06:50:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AEB2F449D
-        for <linux-usb@vger.kernel.org>; Fri, 10 Jun 2022 03:46:42 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nzc9y-0007z0-AF; Fri, 10 Jun 2022 12:46:34 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        with ESMTP id S1344921AbiFJLNX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 07:13:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7BF6A072;
+        Fri, 10 Jun 2022 04:13:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BEE9190FEB;
-        Fri, 10 Jun 2022 10:46:28 +0000 (UTC)
-Date:   Fri, 10 Jun 2022 12:46:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.org>,
-        Alan Stern <stern@roland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 1/3] drivers: usb/core/urb: Add URB_FREE_COHERENT
-Message-ID: <20220610104628.t35pzsosgh7yjevf@pengutronix.de>
-References: <alpine.DEB.2.22.394.2206031547001.1630869@thelappy>
- <20220609204714.2715188-1-rhett.aultman@samsara.com>
- <20220609204714.2715188-2-rhett.aultman@samsara.com>
- <CAMZ6Rq+rEoOmy5PQ=oiaohcc=H5GFbZMfECACwe_qjEQXwuxuQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ogqhqzug3e5znu2r"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+rEoOmy5PQ=oiaohcc=H5GFbZMfECACwe_qjEQXwuxuQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 981211F90C;
+        Fri, 10 Jun 2022 11:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654859600; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/vV5Xf0ef+WyjXiLyhxJA2he6Uf47qY/Qj0qVvZZMgk=;
+        b=wlyOj3oX3QjDyNmXGs7r429SwLfKZ75TKAvUaK225+3JrOaVktk7+o0CxCFu4NL+SpHupV
+        f1+7dXbNuBdQYgO0a8X7ZHqu0ayDgAuT/BgXzjbj4Yy+1xvQGRakQp6rzJ04wVQssv7dzt
+        nSN24K52PT69jhdHWSa23ump7mnrBPs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654859600;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/vV5Xf0ef+WyjXiLyhxJA2he6Uf47qY/Qj0qVvZZMgk=;
+        b=9JuLsgYQGkCfSIKIC8yWEWYu6JrZgNRJsMZPB8QuX6y0FWjuxQmRkSt6V9Qf9T0nk/VM6C
+        UpAKbj+bEyU5bNBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3832113941;
+        Fri, 10 Jun 2022 11:13:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QjrxDFAno2IYEAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 10 Jun 2022 11:13:20 +0000
+Date:   Fri, 10 Jun 2022 13:13:19 +0200
+Message-ID: <87h74sn54g.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: Fix spurious DMA max segment size warnings
+In-Reply-To: <YqMHhPXPGkTcXICd@kroah.com>
+References: <20220609082246.13182-1-tiwai@suse.de>
+        <YqG65hU4SLUrxMI7@pendragon.ideasonboard.com>
+        <YqMHhPXPGkTcXICd@kroah.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, 10 Jun 2022 10:57:40 +0200,
+Greg Kroah-Hartman wrote:
+> 
+> On Thu, Jun 09, 2022 at 12:18:30PM +0300, Laurent Pinchart wrote:
+> > Hi Takashi,
+> > 
+> > (CC'ing Greg and the linux-usb mailing list)
+> > 
+> > Thank you for the patch.
+> > 
+> > On Thu, Jun 09, 2022 at 10:22:46AM +0200, Takashi Iwai wrote:
+> > > As default, the DMA max segment size is set to 64k, and uvcvideo may
+> > > overflow that size easily, resulting in a warning like:
+> > > 
+> > >   DMA-API: xhci_hcd 0000:00:14.0: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+> > > 
+> > > Explicitly set up the DMA max segment size for avoiding spurious kernel
+> > > warnings.
+> > > 
+> > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > > ---
+> > >  drivers/media/usb/uvc/uvc_video.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> > > index 1b4cc934109e..25aa6e6a6906 100644
+> > > --- a/drivers/media/usb/uvc/uvc_video.c
+> > > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > > @@ -2160,6 +2160,8 @@ int uvc_video_init(struct uvc_streaming *stream)
+> > >  	for_each_uvc_urb(uvc_urb, stream)
+> > >  		INIT_WORK(&uvc_urb->work, uvc_video_copy_data_work);
+> > >  
+> > > +	dma_set_max_seg_size(uvc_stream_to_dmadev(stream), UINT_MAX);
+> > > +
+> > 
+> > uvc_stream_to_dmadev() returns the pointer to the HCD's struct device,
+> > which is shared between all drivers on the bus. Is it really fine for a
+> > USB device driver to change the maximum segment size of the HCD device
+> > directly ?
+> 
+> Ick, no!  That feels wrong, it should only change things for that one
+> specific device, not all devices on that bus.
 
---ogqhqzug3e5znu2r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hrm, indeed, that points to the HCD.  This made me wonder, though,
+whether the current usage of dma_*sgtable() with that device is OK or
+not.  The warning came from that code path, after all...
 
-On 10.06.2022 09:18:51, Vincent MAILHOL wrote:
-> On Fri. 10 juin 2022 =C3=A0 06:11, Rhett Aultman <rhett.aultman@samsara.c=
-om> wrote:
->=20
-> The From tag goes at the beginning of the patch.
->=20
-> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->=20
-> > When allocating URB memory with kmalloc(), drivers can simply set the
-> > URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
-> > will be freed in the background when killing the URB (for example with
-> > usb_kill_anchored_urbs()).
-> >
-> > However, there are no equivalent mechanism when allocating DMA memory
-> > (with usb_alloc_coherent()).
-> >
-> > This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
-> > cause the kernel to automatically call usb_free_coherent() on the
-> > transfer buffer when the URB is killed, similarly to how
-> > URB_FREE_BUFFER triggers a call to kfree().
-> >
-> > In order to have all the flags in numerical order, URB_DIR_IN is
-> > renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
-> > value 0x0200.
-> >
-> > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->=20
-> Move the From tag from here to the first line.
 
-Usually git send-email places the "From:" automatically at the beginning.
-
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-Rhett, please add your S-o-b here, too, as the patch went though your
-hands.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ogqhqzug3e5znu2r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKjIQEACgkQrX5LkNig
-010tkQf+L/bCdKOkfzwKI0nckgM7Z2g3BKS9YOe0wFs2gYJnmkYUIH2b2/QtGSci
-933t2bhOXV+yKmolzrsbKZ4YNo5nq0W8QDjSI1uZepH0du1AO56urogVC1sxC+kw
-nUy3MwUHDZxJtsALFgYtNlhuPG7YqJFMXJJ6JK6Kd826DldsT7Hgh2+X7RQi6pea
-l3l5Gp/msi5p7oowp9+zmO8nqlvpitbCAN2DvYeEzWVvL0S2vmzhA4qTBnlwIKvC
-13DIOhoMp/Hmvh+N/YtrFCiI9KAVsXV2LXPkuS+CsjfzlYISEoXK0kSTfC/Awgub
-bGJYZPPMGqWlkrOCGAPP+y/XMaRFfw==
-=KxgR
------END PGP SIGNATURE-----
-
---ogqhqzug3e5znu2r--
+Takashi
