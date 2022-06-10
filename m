@@ -2,70 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C7E546401
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 12:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B7A546498
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 12:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348215AbiFJKlU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jun 2022 06:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S1349258AbiFJKue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jun 2022 06:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245341AbiFJKks (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 06:40:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A001EA045;
-        Fri, 10 Jun 2022 03:36:21 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C57C660173C;
-        Fri, 10 Jun 2022 11:36:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654857373;
-        bh=Sl4XTI9fTeLYEGMYtkmUrZfpXPFc4NtB7yxUPzBz5P0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l3ooxUPnGPn7Wg1eAjlIfW0TigLrxkwaU37Ktz7fJpNpqghDtPC5QhreI3Y7iqTQ2
-         MQPMroHxVHkXOjRidl5LfRlIQzKyEM0XDKJON1ntm5FwoBIilEzans4bR3Exy8MQ+y
-         +2tpmDDVI7y+gBECo6irvnSAsmYvzMAlmiuJIlYQi+p6bAX6YBLmKDg1PDEM/M63Fu
-         ETynncpDInuWfW/lQqrW1AmR/Kqt4XLKUx0T4+OMk3zGEnSqaSZ/ZdeHJIQo2L4KJh
-         mMiyg5wqy3ZCrL4xZo3TpTPHxGgJnBmCWu8F28UOnlhH6tvyPzkH+zfnclsLfiohbh
-         ORITjCwV0iR7A==
-Message-ID: <63e171dc-e1f6-3487-66c4-a5cf36d2471b@collabora.com>
-Date:   Fri, 10 Jun 2022 12:36:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/3] usb: mtu3: sync interrupt before unbind the udc
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        with ESMTP id S1348857AbiFJKuI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 06:50:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AEB2F449D
+        for <linux-usb@vger.kernel.org>; Fri, 10 Jun 2022 03:46:42 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nzc9y-0007z0-AF; Fri, 10 Jun 2022 12:46:34 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id BEE9190FEB;
+        Fri, 10 Jun 2022 10:46:28 +0000 (UTC)
+Date:   Fri, 10 Jun 2022 12:46:28 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Rhett Aultman <rhett.aultman@samsara.com>,
+        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.org>,
+        Alan Stern <stern@roland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>
-References: <20220609074233.15532-1-chunfeng.yun@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220609074233.15532-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/3] drivers: usb/core/urb: Add URB_FREE_COHERENT
+Message-ID: <20220610104628.t35pzsosgh7yjevf@pengutronix.de>
+References: <alpine.DEB.2.22.394.2206031547001.1630869@thelappy>
+ <20220609204714.2715188-1-rhett.aultman@samsara.com>
+ <20220609204714.2715188-2-rhett.aultman@samsara.com>
+ <CAMZ6Rq+rEoOmy5PQ=oiaohcc=H5GFbZMfECACwe_qjEQXwuxuQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ogqhqzug3e5znu2r"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+rEoOmy5PQ=oiaohcc=H5GFbZMfECACwe_qjEQXwuxuQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 09/06/22 09:42, Chunfeng Yun ha scritto:
-> Register gadget irq to avoid the interrupt handler is occurred
-> or scheduled during the unbind flow, may happen when do android
-> function switch stress test.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+--ogqhqzug3e5znu2r
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 10.06.2022 09:18:51, Vincent MAILHOL wrote:
+> On Fri. 10 juin 2022 =C3=A0 06:11, Rhett Aultman <rhett.aultman@samsara.c=
+om> wrote:
+>=20
+> The From tag goes at the beginning of the patch.
+>=20
+> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>=20
+> > When allocating URB memory with kmalloc(), drivers can simply set the
+> > URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
+> > will be freed in the background when killing the URB (for example with
+> > usb_kill_anchored_urbs()).
+> >
+> > However, there are no equivalent mechanism when allocating DMA memory
+> > (with usb_alloc_coherent()).
+> >
+> > This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
+> > cause the kernel to automatically call usb_free_coherent() on the
+> > transfer buffer when the URB is killed, similarly to how
+> > URB_FREE_BUFFER triggers a call to kfree().
+> >
+> > In order to have all the flags in numerical order, URB_DIR_IN is
+> > renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
+> > value 0x0200.
+> >
+> > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>=20
+> Move the From tag from here to the first line.
+
+Usually git send-email places the "From:" automatically at the beginning.
+
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
+Rhett, please add your S-o-b here, too, as the patch went though your
+hands.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ogqhqzug3e5znu2r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKjIQEACgkQrX5LkNig
+010tkQf+L/bCdKOkfzwKI0nckgM7Z2g3BKS9YOe0wFs2gYJnmkYUIH2b2/QtGSci
+933t2bhOXV+yKmolzrsbKZ4YNo5nq0W8QDjSI1uZepH0du1AO56urogVC1sxC+kw
+nUy3MwUHDZxJtsALFgYtNlhuPG7YqJFMXJJ6JK6Kd826DldsT7Hgh2+X7RQi6pea
+l3l5Gp/msi5p7oowp9+zmO8nqlvpitbCAN2DvYeEzWVvL0S2vmzhA4qTBnlwIKvC
+13DIOhoMp/Hmvh+N/YtrFCiI9KAVsXV2LXPkuS+CsjfzlYISEoXK0kSTfC/Awgub
+bGJYZPPMGqWlkrOCGAPP+y/XMaRFfw==
+=KxgR
+-----END PGP SIGNATURE-----
+
+--ogqhqzug3e5znu2r--
