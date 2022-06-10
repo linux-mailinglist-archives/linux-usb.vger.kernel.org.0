@@ -2,48 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BC3546099
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 10:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F0E5460B3
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 11:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348067AbiFJI5w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jun 2022 04:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
+        id S1348298AbiFJJBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jun 2022 05:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344120AbiFJI5s (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 04:57:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99E38DAC;
-        Fri, 10 Jun 2022 01:57:46 -0700 (PDT)
+        with ESMTP id S244939AbiFJJBK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 05:01:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5094B212C82;
+        Fri, 10 Jun 2022 02:01:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEF6DB832D3;
-        Fri, 10 Jun 2022 08:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245ECC34114;
-        Fri, 10 Jun 2022 08:57:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 099ECB832CB;
+        Fri, 10 Jun 2022 09:01:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A87EC34114;
+        Fri, 10 Jun 2022 09:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654851463;
-        bh=+DbG4J5RrUMtVEi9AxUcUS78TNMbPCQywLlX1IR8dtw=;
+        s=korg; t=1654851667;
+        bh=fUOL3Ydks9k3rSvCoOT8c0eo7uVClb98PR2l6eqO//Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fLmej4HjsqWLJJw2NJUAzX7vdlpMknWZ22uQkotWp2YIwCuvzsvZjjwYjV+OWvQSq
-         uySBXbIuRhTH0clxGaOFLt0yvqMkswhmUMB8/SGUFZ94gmF1xnHJWbsx5AD4sUR312
-         WU6j/ajshavy0UX50BrdEqmsAnTHwvO7WtoIrgIg=
-Date:   Fri, 10 Jun 2022 10:57:40 +0200
+        b=XUo6m7IX2j1atBpivpFUxxlH0gU7Vk40IJRi70t8waR74t+UZwLZzWAgVXmGZPdYm
+         o4Z0NYludwDEMHb3jbyVJNepvjOcLzRnQsijisTo+YA1r2asAWkxoBJ53HhEXLUCrr
+         OaTDsbq0rNyt4becwKDzWgG+evOcrGXil4BOjlvM=
+Date:   Fri, 10 Jun 2022 11:01:04 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: Fix spurious DMA max segment size
- warnings
-Message-ID: <YqMHhPXPGkTcXICd@kroah.com>
-References: <20220609082246.13182-1-tiwai@suse.de>
- <YqG65hU4SLUrxMI7@pendragon.ideasonboard.com>
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: phy: tahvo: Check before clk_disable() not needed
+Message-ID: <YqMIUOTU/k5XpW3I@kroah.com>
+References: <20220610074525.69453-1-hanyihao@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqG65hU4SLUrxMI7@pendragon.ideasonboard.com>
+In-Reply-To: <20220610074525.69453-1-hanyihao@vivo.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -54,45 +50,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 12:18:30PM +0300, Laurent Pinchart wrote:
-> Hi Takashi,
-> 
-> (CC'ing Greg and the linux-usb mailing list)
-> 
-> Thank you for the patch.
-> 
-> On Thu, Jun 09, 2022 at 10:22:46AM +0200, Takashi Iwai wrote:
-> > As default, the DMA max segment size is set to 64k, and uvcvideo may
-> > overflow that size easily, resulting in a warning like:
-> > 
-> >   DMA-API: xhci_hcd 0000:00:14.0: mapping sg segment longer than device claims to support [len=98304] [max=65536]
-> > 
-> > Explicitly set up the DMA max segment size for avoiding spurious kernel
-> > warnings.
-> > 
-> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> > ---
-> >  drivers/media/usb/uvc/uvc_video.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> > index 1b4cc934109e..25aa6e6a6906 100644
-> > --- a/drivers/media/usb/uvc/uvc_video.c
-> > +++ b/drivers/media/usb/uvc/uvc_video.c
-> > @@ -2160,6 +2160,8 @@ int uvc_video_init(struct uvc_streaming *stream)
-> >  	for_each_uvc_urb(uvc_urb, stream)
-> >  		INIT_WORK(&uvc_urb->work, uvc_video_copy_data_work);
-> >  
-> > +	dma_set_max_seg_size(uvc_stream_to_dmadev(stream), UINT_MAX);
-> > +
-> 
-> uvc_stream_to_dmadev() returns the pointer to the HCD's struct device,
-> which is shared between all drivers on the bus. Is it really fine for a
-> USB device driver to change the maximum segment size of the HCD device
-> directly ?
+On Fri, Jun 10, 2022 at 12:45:25AM -0700, Yihao Han wrote:
+> clk_disable() already checks the clk ptr using IS_ERR_OR_NULL(clk)
 
-Ick, no!  That feels wrong, it should only change things for that one
-specific device, not all devices on that bus.
+It does?  Are you sure?  It will check for NULL, that's it.
+
+> so there is no need to check it again before calling it.
+
+This will break on some platforms, please always test your patches
+before sending them out.
 
 thanks,
 
