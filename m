@@ -2,63 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93B654662B
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 14:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8284254667A
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 14:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245663AbiFJMCT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jun 2022 08:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S1345148AbiFJMSJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jun 2022 08:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiFJMCS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 08:02:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C6D3E0E7;
-        Fri, 10 Jun 2022 05:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654862537; x=1686398537;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CF4rL1niuSX8BlxbQ2DWT+o2UndchjX+l6DFPinEiIM=;
-  b=FFbuVGK1iQEhJaI0Up6X3jhd/YVi5dE6A5UfPi1/FVPA3JIjH/sIt9vz
-   zjUbKv+o5zPRX0u+8+5D/6g0XldiEmAWu68MLWtTiQbO2Qyey2jnWmbno
-   tf62KkTosq6PduBtToaGxm9zvG7P3VzTTBg2+fmBtXJ/8wuN/YRkmar0T
-   mO9KNEyZEHzOwbYTUEAwLMf8YkwMUoMYniB0t9bu4Ah8KB3n9VCgiOtCl
-   dpc9I94uF3JX8A6/r3/JcvYe52atBL3+X0tJ4rHmqHFgzpWG+GJDB6B14
-   EcqADrNHiHmn8yVoOUUJ4T2ct/F9p2Z+Sy46XIxJA4LwRQagoS51fcgPm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="257441262"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="257441262"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:02:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="724937990"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 10 Jun 2022 05:02:13 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 10 Jun 2022 15:02:13 +0300
-Date:   Fri, 10 Jun 2022 15:02:13 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Xin Ji <xji@analogixsemi.com>, Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v9 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/
-Message-ID: <YqMyxQGzPSs/HwVi@kuha.fi.intel.com>
-References: <20220309023404.1221453-1-xji@analogixsemi.com>
- <YqMaUroS87rjnCny@kroah.com>
+        with ESMTP id S1345027AbiFJMSI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 08:18:08 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D3C271794;
+        Fri, 10 Jun 2022 05:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654863487; x=1686399487;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u59Cpfp368apZ6/oDT7JvsIsr3pTPoqIvK2Q2h7iVq4=;
+  b=YIcANXNH2TqmNfLJ+RL/TfepfK6ui5E8GpZdJsUq7Ujz0ilE4FIUvLgQ
+   MsK0uak5n1jgMzXdOlb/enK1SKOFQ8ulK4PxNSnBZzRzm02u5S0mNtM9f
+   6A8Qr6uri8Zxv7Dv0iG0gD4G3lvx+tC4pjIMgPJcfA1r5ONjJ1isXT1Df
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 Jun 2022 05:18:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:18:06 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 10 Jun 2022 05:18:05 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 10 Jun 2022 05:18:03 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Michael Wu <michael@allwinnertech.com>,
+        "John Keeping" <john@metanate.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v5 0/2] usb: f_fs: safe operation in ffs_epfile_io()
+Date:   Fri, 10 Jun 2022 20:17:56 +0800
+Message-ID: <1654863478-26228-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqMaUroS87rjnCny@kroah.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,38 +65,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 12:17:54PM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Mar 09, 2022 at 10:34:01AM +0800, Xin Ji wrote:
-> > USB PD controllers which consisting of a microcontroller (acting as the TCPM)
-> > and a port controller (TCPC) - may require that the driver for the PD
-> > controller accesses directly also the on-chip port controller in some cases.
-> > 
-> > Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
-> > 
-> > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > 
-> > ---
-> > V8 -> V9: Add more commit message
-> > V7 -> V8: Fix Guanter's comment, remove unnecessary explain
-> > 
-> > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
-> >  drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
-> >  drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
-> >  drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
-> >  {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
-> >  5 files changed, 5 insertions(+), 7 deletions(-)
-> >  rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
-> 
-> I need an ack by the typec maintainers/developers before I can take this
-> (hint...)
+Fix two possible issue in ffs_epfile_io() when operation at blocking mode.
 
-I'm sorry for the delayed response.
+v1: https://lore.kernel.org/linux-usb/1653989775-14267-1-git-send-email-quic_linyyuan@quicinc.com/
+v2: correct interrupted variable according comment from John Keeping
+v3: (v2: https://lore.kernel.org/linux-usb/1654006119-23869-1-git-send-email-quic_linyyuan@quicinc.com/)
+    add Revived-by from John keeping,
+    after offline discussion, add Reported-by from Michael Wu
+v4: (v3: https://lore.kernel.org/linux-usb/1654056916-2062-1-git-send-email-quic_linyyuan@quicinc.com/)
+    add Cc: <stable@vger.kernel.org> # 5.15  (seem other branch can't aplly cleanly),
+    add Tested-by: Michael Wu <michael@allwinnertech.com>,
+    remove one empty line to keep original code format.
+v5: (v4: https://lore.kernel.org/linux-usb/1654311295-9700-1-git-send-email-quic_linyyuan@quicinc.com/)
+    fix a review comment from Greg Kroah-Hartman
 
-Xin, you need to rebase this. It does not apply cleanly anymore.
+Linyu Yuan (2):
+  usb: gadget: f_fs: change ep->status safe in ffs_epfile_io()
+  usb: gadget: f_fs: change ep->ep safe in ffs_epfile_io()
 
-thanks,
+ drivers/usb/gadget/function/f_fs.c | 40 ++++++++++++++++++++++++--------------
+ 1 file changed, 25 insertions(+), 15 deletions(-)
 
 -- 
-heikki
+2.7.4
+
