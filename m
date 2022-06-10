@@ -2,48 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892C5546143
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 11:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFB45462CA
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jun 2022 11:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347505AbiFJJPT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jun 2022 05:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S1347046AbiFJJvd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jun 2022 05:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348301AbiFJJO6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 05:14:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FB11E453A;
-        Fri, 10 Jun 2022 02:14:38 -0700 (PDT)
+        with ESMTP id S1344417AbiFJJvb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jun 2022 05:51:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E11AE468
+        for <linux-usb@vger.kernel.org>; Fri, 10 Jun 2022 02:51:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12C6561DB0;
-        Fri, 10 Jun 2022 09:14:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3784C34114;
-        Fri, 10 Jun 2022 09:14:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D55A6B8330A
+        for <linux-usb@vger.kernel.org>; Fri, 10 Jun 2022 09:51:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB236C34114;
+        Fri, 10 Jun 2022 09:51:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654852477;
-        bh=Z7sJ4lfH5jzBl3NmwNE0JCRIvhUvBJGBRUXOTcKx7bE=;
+        s=korg; t=1654854686;
+        bh=87qPzc1yipccUPMyhKmYzkEhBK/E7rZg3AQl/TiFFk8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DcDy5NwM6eHMxZL+x0GBmcQJfruGy9nTMfO/Rp1948pmixF5yWCO6Ms5JxaTqWFOE
-         DKELTZcD16kUcS/VCd68jbGMcSXinBetcP/wc5P+pnIcXSPNdXKtyRO0O1J1fGmgAZ
-         ImWzI9667Fgs6PGNV2bdni/Tp3jaL/DtwF16rN2c=
-Date:   Fri, 10 Jun 2022 11:14:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org, Jack Pham <quic_jackp@quicinc.com>,
-        Michael Wu <michael@allwinnertech.com>,
-        John Keeping <john@metanate.com>
-Subject: Re: [PATCH v4 1/2] usb: gadget: f_fs: change ep->status safe in
- ffs_epfile_io()
-Message-ID: <YqMLeipEA4eEUD/3@kroah.com>
-References: <1654311295-9700-1-git-send-email-quic_linyyuan@quicinc.com>
- <1654311295-9700-2-git-send-email-quic_linyyuan@quicinc.com>
+        b=Qzzc+leUoGzYrlLcbKkjK811DO1/JI31T1Qwn9LYBfldlQZeEeVi9A7bP6PGuQLDN
+         aCOY9+Qqqdp6hlGI9F5hKMo33to9oLhrJqhgn/dOlZ7zeDCYbCeOTAiXqkwg311NOM
+         lJS/IpXwdcD5uluKkfbU30l3Fi/O4zLvKHAh8WBE=
+Date:   Fri, 10 Jun 2022 11:51:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
+        nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2 0/3] usb: gadget: uvc: fixes and improvements
+Message-ID: <YqMUG0u1V7FEVwXO@kroah.com>
+References: <20220529223848.105914-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1654311295-9700-2-git-send-email-quic_linyyuan@quicinc.com>
+In-Reply-To: <20220529223848.105914-1-m.grzeschik@pengutronix.de>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -54,69 +52,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jun 04, 2022 at 10:54:54AM +0800, Linyu Yuan wrote:
-> If a task read/write data in blocking mode, it will wait the completion
-> in ffs_epfile_io(), if function unbind occurs, ffs_func_unbind() will
-> kfree ffs ep, once the task wake up, it still dereference the ffs ep to
-> obtain the request status.
+On Mon, May 30, 2022 at 12:38:45AM +0200, Michael Grzeschik wrote:
+> This series includes several patches to improve the overall usb uvc
+> gadget code. It includes some style changes and some serious fixes.
 > 
-> Fix it by moving the request status to io_data which is stack-safe.
+> Michael Grzeschik (3):
+>   usb: gadget: uvc: calculate the number of request depending on
+>     framesize
+>   usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
+>   usb: gadget: uvc: call uvc uvcg_warn on completed status instead of
+>     uvcg_info
 > 
-> Cc: <stable@vger.kernel.org> # 5.15
-> Reported-by: Michael Wu <michael@allwinnertech.com>
-> Tested-by: Michael Wu <michael@allwinnertech.com>
-> Reviewed-by: John Keeping <john@metanate.com>
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> ---
-> v2: correct interrupted assignment
-> v3: add Reviewed-by and Reported-by
-> v4: add Tetsed-by from Michael Wu,
->     remove one empty line
->     cc stable kernel
-> 
->  drivers/usb/gadget/function/f_fs.c | 31 ++++++++++++++++---------------
->  1 file changed, 16 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 4585ee3..3958c60 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -122,8 +122,6 @@ struct ffs_ep {
->  	struct usb_endpoint_descriptor	*descs[3];
->  
->  	u8				num;
-> -
-> -	int				status;	/* P: epfile->mutex */
->  };
->  
->  struct ffs_epfile {
-> @@ -227,6 +225,9 @@ struct ffs_io_data {
->  	bool use_sg;
->  
->  	struct ffs_data *ffs;
-> +
-> +	int status;
-> +	struct completion done;
->  };
->  
->  struct ffs_desc_helper {
-> @@ -707,12 +708,12 @@ static const struct file_operations ffs_ep0_operations = {
->  
->  static void ffs_epfile_io_complete(struct usb_ep *_ep, struct usb_request *req)
->  {
-> +	struct ffs_io_data *io_data = req->context;
-> +
->  	ENTER();
-> -	if (req->context) {
-> -		struct ffs_ep *ep = _ep->driver_data;
-> -		ep->status = req->status ? req->status : req->actual;
-> -		complete(req->context);
-> -	}
-> +
-> +	io_data->status = req->status ? req->status : req->actual;
+>  drivers/usb/gadget/function/f_uvc.c     |  4 ++++
+>  drivers/usb/gadget/function/uvc.h       |  1 +
+>  drivers/usb/gadget/function/uvc_queue.c | 17 ++++++++++++-----
+>  drivers/usb/gadget/function/uvc_v4l2.c  |  2 +-
+>  drivers/usb/gadget/function/uvc_video.c | 11 ++++++++---
+>  5 files changed, 26 insertions(+), 9 deletions(-)
 
-Please do not use ? : lines unless you have to.  Please write this as
-normal if () lines.
+This patch series fails to apply to my tree, can you please rebase and
+resend?
 
 thanks,
 
