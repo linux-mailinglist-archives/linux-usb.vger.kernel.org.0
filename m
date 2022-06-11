@@ -2,119 +2,267 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F1F547675
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jun 2022 18:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291185477DF
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jun 2022 01:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiFKQ3i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Jun 2022 12:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S229975AbiFKXOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Jun 2022 19:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbiFKQ3g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Jun 2022 12:29:36 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A684F47B
-        for <linux-usb@vger.kernel.org>; Sat, 11 Jun 2022 09:29:33 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id l18so2052713lje.13
-        for <linux-usb@vger.kernel.org>; Sat, 11 Jun 2022 09:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=X1nDz0NffzQJOCQZW1tF8EhKqJz6ggp/Xyqs7aWNBlc=;
-        b=NvM77AsQW8matgf0LTMDXu9/46wijoq/BAfost7cjwmgTl2QgySxu38WoHMAuRJBG7
-         dZlkAzVEZPvX4fWdyLgKzkzA/A5Hbw29XZRuskAyVW9JguMuo/3GK020ipfdZDQbyrMh
-         4wgXdrIPOQ0j3awVSfjVbfZboQ9CVP7bqFj55t4bSy2gJt+PYy3EYJBAKbXyRBS1CaDY
-         W1HFEvgOG50VjHt9yu4FUYJygEK7UDComnzUUTiCsxK/3d3ZDiPhGB05FLtaSv4H8ox4
-         B+Q/l7igTYpcjGDH/yPM640q5RalB1v5XqjE5HWO0/FpuJTSebpwVqo3R+OmwUgSc1Vn
-         CZzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=X1nDz0NffzQJOCQZW1tF8EhKqJz6ggp/Xyqs7aWNBlc=;
-        b=6o9oUD7pkmE355S2aCs/LIiy7Fsu03Wy1NLI8z204pBaSaEgssU2EbzpoSN1LtYuMd
-         IkkMX443FJvXCfWcLeuV55Fko4iS8KLxjmq4JTvM5svzSi6ntXVpyz8ecgYSol9LP3Xg
-         ckOR68TFAIdbT+EEVNMzq74MuSzku3ib4IZZpCF5jfJrt99ryCJlmF2XLxVs/2R7yW2J
-         OeWag/Dztoyie40cjpLdMAlnC1yANEl7DiJt87K1lrnKnaKYiYcyfjNMId9Z/cJpfZgt
-         fmG4MuhizSxEoyBzY3FdMrVzpaPYnV17I9fB6+rHBBaqcUuuDjoT/0fmEUdRQKLRyT3F
-         kD9Q==
-X-Gm-Message-State: AOAM532pzX0KNubmwNgpdw3B2oqtplF0rJlWTk4yw7VvyeqRv8M4J3hN
-        jDeGNn5s6Wroff32t0p2rlfF0rdWoJ/6SA==
-X-Google-Smtp-Source: ABdhPJzWDP7B/p4xGpsR9mEouM+YH2T9TotJ+yVFq/J1djQCVrecRkpvkgEPvDAIt+LrVoppqQHgLQ==
-X-Received: by 2002:a05:651c:4c9:b0:255:aeac:91e0 with SMTP id e9-20020a05651c04c900b00255aeac91e0mr12480663lji.449.1654964971805;
-        Sat, 11 Jun 2022 09:29:31 -0700 (PDT)
-Received: from [192.168.1.168] (078088109026.wroclaw.vectranet.pl. [78.88.109.26])
-        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b00478e9b28fe4sm310348lfg.80.2022.06.11.09.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 09:29:30 -0700 (PDT)
-Message-ID: <494c3280c58455b2439559f1b48858caf22b8c8f.camel@gmail.com>
-Subject: Re: Thunderbolt: One missing DisplayPort?
-From:   Tomasz =?UTF-8?Q?Mo=C5=84?= <desowin@gmail.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Stefan Hoffmeister <stefan.hoffmeister@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Date:   Sat, 11 Jun 2022 18:29:28 +0200
-In-Reply-To: <cf0dbecff8e70d15c7121bfdee16d945ba52b55c.camel@gmail.com>
-References: <CALhB_QNhzHkf4Yw6TqZAbCisMK6TBy8ecw0M_Sq=EQXPN728fg@mail.gmail.com>
-         <Yoy5m3Aa6QwVcFhf@kuha.fi.intel.com> <Yoy7oXpMugFFmfBP@lahna>
-         <CALhB_QM9SHJt+15pEVHEH_kourb-1Xbd68O1p_XLxOmWB4HAfw@mail.gmail.com>
-         <YpCVc6eYkpmjP9AF@lahna>
-         <CALhB_QP8SPqubq-eBNa1BTMuy3kCA65OuajOeJGt5DB9jDRKKg@mail.gmail.com>
-         <ce969e3b4a6ed04584fdecd3234578bd87d52594.camel@gmail.com>
-         <YpSUSk9u5z3ueufa@lahna>
-         <92ab08fe65c12d6159966bdd7d2c4215044a00ff.camel@gmail.com>
-         <YpmWXl5Y/VToYFvJ@lahna>
-         <cf0dbecff8e70d15c7121bfdee16d945ba52b55c.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 
+        with ESMTP id S229558AbiFKXOv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Jun 2022 19:14:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087483FDAF
+        for <linux-usb@vger.kernel.org>; Sat, 11 Jun 2022 16:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654989290; x=1686525290;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TuAuV5rLoQVDlWDphdJYae3ITpWAiubq97mt+tNejVs=;
+  b=lT0qSWb3e/qt5nxR1QLMIAMFcVXT4YkAFggJ5YeXw7+atm3LgJ1rTDp8
+   p2g8XvSoOBxtkq4FQp+ahIkkv0BaS+BaUF58HgNMbQkaGrUk77YWlSNsR
+   pCOhETYHVbD+3wanFL9zMskdDrxraAJb5Mz470j6PSk01/xpYIY0KnIQB
+   fVFA1mykPmsB5eOyPeVUV+UmcGzdMA9TleFmL6SVLZraNe+E4M0OoZWfE
+   iE8H3Ih10YlQ0lVLpX9RzsAb4SNm+SMd2pjjeA1uQfafy3uNYIO+B5aXf
+   FloGuFCM6ynUumxU5+RarobaX596y9GXSAQoDpG2zw3lqCREBG8LEAUiS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="278714525"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="278714525"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2022 16:14:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="586960150"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Jun 2022 16:14:48 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0AJb-000JP5-J0;
+        Sat, 11 Jun 2022 23:14:47 +0000
+Date:   Sun, 12 Jun 2022 07:14:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
+ 477122a1eec325621cefd62da8bd8ac20a66fb8e
+Message-ID: <62a521d1.7pa6peuEv+x2ortF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2022-06-08 at 16:27 +0200, Tomasz Mo=C5=84 wrote:
-> On Fri, 2022-06-03 at 08:04 +0300, Mika Westerberg wrote:
-> > On Thu, Jun 02, 2022 at 09:34:27PM +0200, Tomasz Mo=C5=84 wrote:
-> > > How do I determine that the cable is non-Thunderbolt Type-C?
-> >=20
-> > It does not have that "lightning" logo on the connector.
->=20
-> I got two more (to a total of 4) cables without lightning logo and all
-> seem to enter Thunderbolt mode.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 477122a1eec325621cefd62da8bd8ac20a66fb8e  usb: typec: tcpm: Register USB Power Delivery Capabilities
 
-I managed to get an active 3 meters long USB Type-C cable. It is both a
-directional cable (meaning the host end has to be plugged into laptop
-and sink into dock) and appear to have working display port only when
-connected with correct plug orientation. That is, rotating USB-C plug
-180 degrees switches between working DP altmode and non-working.
+Warning reports:
 
-The active cable I have features retimer in the middle of the cable.
-The retimer is definitely noticeable (it is bulky) and does get warm
-when in use.
+https://lore.kernel.org/linux-usb/202206110832.2zOQ2T8f-lkp@intel.com
+https://lore.kernel.org/llvm/202206111907.EvH06x2T-lkp@intel.com
 
-This cable indeed does inhibit Thunderbolt operation and dock status in
-boltctl is disconnected.
+Warning: (recently discovered and may have been fixed)
 
-The EMCA information for the active cable is below. Even though the
-cable is 3 meters long it claims to be 2 meters.
+drivers/usb/dwc3/dwc3-qcom.c:301:23: warning: no previous prototype for 'dwc3_qcom_read_usb2_speed' [-Wmissing-prototypes]
+drivers/usb/dwc3/dwc3-qcom.c:301:23: warning: no previous prototype for function 'dwc3_qcom_read_usb2_speed' [-Wmissing-prototypes]
+drivers/usb/dwc3/dwc3-qcom.c:302:23: warning: no previous prototype for 'dwc3_qcom_read_usb2_speed' [-Wmissing-prototypes]
+drivers/usb/dwc3/dwc3-qcom.c:302:23: warning: no previous prototype for function 'dwc3_qcom_read_usb2_speed' [-Wmissing-prototypes]
 
+Warning ids grouped by kconfigs:
 
-Type     Active Cable
-Vendor   Unknown (0x0bda)
-Specs    [ <20ns (~2m) ] [ 20V ] [ 3A ] [ USB3 10Gbps ]
-VER      HW:0001 FW:0002 VDO:0 v:2
-Vdo object hex
-IdHeader 0x24000bda
-CertStat 0x00000000
-Product  0x00000209
-Cable    0x120851b2
-SVISD    0x0bdaff01
-TBT3/4   0x00000000
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- alpha-randconfig-r006-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- alpha-randconfig-r032-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arc-randconfig-r005-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arc-randconfig-r032-20220612
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arc-randconfig-r036-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm-defconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm-randconfig-r001-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm64-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm64-defconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm64-randconfig-r001-20220612
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- arm64-randconfig-r014-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- csky-randconfig-r001-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- ia64-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- ia64-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- ia64-randconfig-r004-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- ia64-randconfig-r022-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- ia64-randconfig-r023-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- ia64-randconfig-r035-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- m68k-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- m68k-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- m68k-randconfig-r031-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- microblaze-randconfig-r033-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- mips-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- mips-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- mips-randconfig-r031-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- nios2-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- nios2-randconfig-r036-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- openrisc-randconfig-r005-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- openrisc-randconfig-r005-20220612
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- openrisc-randconfig-r022-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- openrisc-randconfig-r024-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- openrisc-randconfig-r036-20220612
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- parisc-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- parisc-randconfig-r006-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- powerpc-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- riscv-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- riscv-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- s390-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- sparc-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- sparc-randconfig-r004-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- sparc-randconfig-r016-20220612
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- sparc64-randconfig-r021-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- sparc64-randconfig-r034-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+|-- xtensa-allyesconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+`-- xtensa-randconfig-r035-20220611
+    `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-dwc3_qcom_read_usb2_speed
+
+clang_recent_errors
+|-- arm-randconfig-r023-20220611
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-function-dwc3_qcom_read_usb2_speed
+`-- mips-randconfig-r024-20220611
+    `-- drivers-usb-dwc3-dwc3-qcom.c:warning:no-previous-prototype-for-function-dwc3_qcom_read_usb2_speed
+
+elapsed time: 2171m
+
+configs tested: 71
+configs skipped: 3
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+ia64                                defconfig
+ia64                             allmodconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+parisc64                            defconfig
+s390                                defconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220611
+arc                  randconfig-r043-20220611
+s390                 randconfig-r044-20220611
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220611
+hexagon              randconfig-r045-20220611
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
