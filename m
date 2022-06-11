@@ -2,76 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9601E547595
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jun 2022 16:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C959B547621
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jun 2022 17:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234761AbiFKOSR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Jun 2022 10:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S235097AbiFKPbR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Jun 2022 11:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiFKOSQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Jun 2022 10:18:16 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF99910572;
-        Sat, 11 Jun 2022 07:18:14 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id m24so1884326wrb.10;
-        Sat, 11 Jun 2022 07:18:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ITBoLYA2N5MuLO3gqnXnaF4OTMmFSVYBYZ7MPGfv98c=;
-        b=CosyK9y8uyI6z7UiVBwQHZ7V3roQMVGBnGiDI6XrD6rMEuNsI+GrkViig8YkorsqzZ
-         QxDTaPI+4iI+RkhZn2rzNMOhkCOGKOlHkYj9FAs1e69xXRdX4ygHFGY9w5CenwRMj/hR
-         sDAkPzYyyC6bYt3JnAxdhMvSIWqpR1us/VzYgDiC1HFp8ktKRGxhELxaEMrU16bJHsoW
-         vgL73GIquT3Jhq7gRhkLPNSVxD93f+/NVGrnHOCaotdU5wyBAYX4PR9MKzd70JrBIw0t
-         PowbThrSchM5vvtRRdFQCNlX3muycViiIM7199UbU/wJtNn2S+rwA27nqh3UncKHJ6Be
-         HHdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ITBoLYA2N5MuLO3gqnXnaF4OTMmFSVYBYZ7MPGfv98c=;
-        b=6PZaI4uBT5iUz8U6hV1J1DevCExW6Yt4IaAvWmI2WBmI/UsQB3z/kfp/CYd2/StapY
-         QDRexTXLs3hIPGPA8fqQDkeWlRbIcMvcL92up1Pm51xp+doyG13TH72OycgqLqSn3sjU
-         GgM0Q5IS7Jz6aNhQbqDUSY+sL+6wf7ggB/nyLURjSxH0691wE9K5Lu3OtSEodnw2KHoe
-         MmyPcOJslXyiksH9EGbZO9HhPkCq+DD2gZaXusdzkvVVSrOPMR65xQPlb7j+d2qwffh7
-         MiaWdmnkESnY9TBimEgMK49lIX4Ps5NzQMwjlhiNK7sBxNpR/ihtodN4gGqEgsL/WgwR
-         K1VA==
-X-Gm-Message-State: AOAM5321//9tT9H5GhKcIyEf4UxmmfnrDFyyZWbqXVYhWraVjSRVTvL3
-        sW9tNTnX3FwKKBqLO88DnBpa5TBUPIi9GQ==
-X-Google-Smtp-Source: ABdhPJzhksldhSpuMrQXGmaC+i4KujXhjL1ZD15ZkzgePaXPsBUiLjWfbR0ZYRlvgT7qv3JhL0MNrQ==
-X-Received: by 2002:a5d:4c49:0:b0:210:353c:1c91 with SMTP id n9-20020a5d4c49000000b00210353c1c91mr49318338wrt.159.1654957093371;
-        Sat, 11 Jun 2022 07:18:13 -0700 (PDT)
-Received: from smtpclient.apple ([167.99.200.149])
-        by smtp.gmail.com with ESMTPSA id i7-20020a1c3b07000000b0039744bd664esm6950127wma.13.2022.06.11.07.18.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 11 Jun 2022 07:18:12 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: Regression in 5.18.3 from "xhci: Set HCD flag to defer primary
- roothub registration"
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <YqRFH2i3s/jL28ZG@kroah.com>
-Date:   Sat, 11 Jun 2022 18:18:08 +0400
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AF1EDC5C-7304-48F4-A981-CD8DDBFAB5EE@gmail.com>
-References: <743F7369-2794-4189-8891-5DA62E4B62DA@gmail.com>
- <YqRFH2i3s/jL28ZG@kroah.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232552AbiFKPbQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Jun 2022 11:31:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD52E2708
+        for <linux-usb@vger.kernel.org>; Sat, 11 Jun 2022 08:31:15 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o034w-0000wg-48; Sat, 11 Jun 2022 17:31:10 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8CE0492ED2;
+        Sat, 11 Jun 2022 15:31:05 +0000 (UTC)
+Date:   Sat, 11 Jun 2022 17:31:04 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Rhett Aultman <rhett.aultman@samsara.com>
+Cc:     linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+Message-ID: <20220611153104.sksoxn4dmo5rgnk3@pengutronix.de>
+References: <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="47q7ykpf7lf2owpj"
+Content-Disposition: inline
+In-Reply-To: <20220610213335.3077375-2-rhett.aultman@samsara.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,40 +57,65 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-> On 11 Jun 2022, at 11:32 am, Greg Kroah-Hartman =
-<gregkh@linuxfoundation.org> wrote:
->=20
-> On Sat, Jun 11, 2022 at 10:49:23AM +0400, Christian Hewitt wrote:
->> Commit 6c64a664e1cff339ec698d803fa8cbb9af5d95ce =E2=80=9Cxhci: Set =
-HCD flag to defer
->> primary roothub registration=E2=80=9D added for Linux 5.18.3 caused a =
-regression on
->> some Amlogic S912 devices (original user forum report with an Android =
-TV box
->> and confirmed with a Khadas VIM2 board). I do not see issues with =
-older S905
->> (WeTeK Play2) or newer S922X (Odroid N2+) devices running the same =
-kernel.
->> There are no kernel splats or error messages but lsusb shows no =
-output and
->> nothing works. Simple revert restores the previous good working =
-behaviour.
->>=20
->> dmesg with commit http://ix.io/3ZTv
->> dmesg with revert http://ix.io/3ZTw
->>=20
->> I=E2=80=99m not a coder so will need to be fed instructions to assist =
-with debugging
->> the issue further if you don't have access to an Amlogic S912 device. =
-I can
->> share devices online for remote poking around if needed.
->=20
-> Does 5.19-rc1 also have this problem?
+--47q7ykpf7lf2owpj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No, and in the process of fixing up my normal patchset to test 5.19-rc1 =
-I=E2=80=99ve
-spotted some other USB patches picked from lists. Once dropped from =
-5.18.3 usb
-works again. So my bad, sorry for the noise!
+On 10.06.2022 17:33:35, Rhett Aultman wrote:
+> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>=20
+> When allocating URB memory with kmalloc(), drivers can simply set the
+> URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
+> will be freed in the background when killing the URB (for example with
+> usb_kill_anchored_urbs()).
+>=20
+> However, there are no equivalent mechanism when allocating DMA memory
+> (with usb_alloc_coherent()).
+>=20
+> This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
+> cause the kernel to automatically call usb_free_coherent() on the
+> transfer buffer when the URB is killed, similarly to how
+> URB_FREE_BUFFER triggers a call to kfree().
+>=20
+> In order to have all the flags in numerical order, URB_DIR_IN is
+> renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
+> value 0x0200.
+>=20
+> Co-developed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Co-developed-by: Rhett Aultman <rhett.aultman@samsara.com>
+> Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Christian=
+FWIW:
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+This patch probably goes upstream via USB. Once this is in net I'll take
+the 2nd patch.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--47q7ykpf7lf2owpj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKktTYACgkQrX5LkNig
+012xWggAud/IQrjk7m3IIff9REYjAT1DfUkcRSdhO3kR5Ug78OFzcpstO2hNv2xe
+lDCIrHfggYTo2rJW2AvU2ZuY7r5AnDUwChDhlOuzvGmbS5ETWN9jilzORzmxN5FY
+xLY4arAionrxDzUEZ1aCRIBBkVbMLPuSSbKbGn6w8tjb1bYMNRbMyQXN0d0JQk6p
+9n53nH1j5PxmtkqotYtCyKF9H+Lsm6wbVp1r3ae+RWQrpSVRAJcZwLXaLpyAwRpf
+QwaccDMPhhcukFvSWm/Kyvrqlu+dRiAHKJ36dK4pGhMzcx2jIkzGGYg6+Tdxaalf
+Krm1wF9sJhvQtqoYQ1TYrO86vU/ohw==
+=ZrrQ
+-----END PGP SIGNATURE-----
+
+--47q7ykpf7lf2owpj--
