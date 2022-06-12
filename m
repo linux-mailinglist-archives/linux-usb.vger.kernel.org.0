@@ -2,229 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743625479C5
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jun 2022 12:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB265479D6
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jun 2022 12:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236057AbiFLKd2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jun 2022 06:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S236238AbiFLKzV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jun 2022 06:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiFLKd1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 06:33:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233E213E19
-        for <linux-usb@vger.kernel.org>; Sun, 12 Jun 2022 03:33:26 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1o0KuI-0006c7-2g; Sun, 12 Jun 2022 12:33:22 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1o0KuH-0008D6-Pp; Sun, 12 Jun 2022 12:33:21 +0200
-Date:   Sun, 12 Jun 2022 12:33:21 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     balbi@kernel.org, paul.elder@ideasonboard.com,
-        linux-usb@vger.kernel.org, kieran.bingham@ideasonboard.com,
-        nicolas@ndufresne.ca, kernel@pengutronix.de,
-        linux-media@vger.kernel.org
-Subject: Re: [RESEND v2 2/3] usb: gadget: uvc: increase worker prio to
- WQ_HIGHPRI
-Message-ID: <20220612103321.GD29935@pengutronix.de>
-References: <20220608110339.141036-1-m.grzeschik@pengutronix.de>
- <20220608110339.141036-3-m.grzeschik@pengutronix.de>
- <YqDtWkUbp4LPBRxS@pendragon.ideasonboard.com>
+        with ESMTP id S236240AbiFLKzR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 06:55:17 -0400
+Received: from mail-oa1-x43.google.com (mail-oa1-x43.google.com [IPv6:2001:4860:4864:20::43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6730531DD8
+        for <linux-usb@vger.kernel.org>; Sun, 12 Jun 2022 03:55:14 -0700 (PDT)
+Received: by mail-oa1-x43.google.com with SMTP id 586e51a60fabf-fe023ab520so4959057fac.10
+        for <linux-usb@vger.kernel.org>; Sun, 12 Jun 2022 03:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=vsoZkcYm3jCCjpX9R4JNfB/t4Y2EE574Kr+1kQkq8IE=;
+        b=Tao2+7Usxo3tdYAsK52a0+GqlHcMdiKvPfhvz4y8UlOIY8r0UGP8uuHJOlCh8F6SUv
+         dvn5mIYkih69fE4zmH/nL9UtStCyhXSAUFF+zA7GjTPh5VzHqTSrnEL67Qjn9BrFke+R
+         UqrEGtRwxjYf5c+wxomtYFc80zE0jM1cevbfAjbaKcnUn1iK+rDM47C4CgWof4WsPFgy
+         9K9QHCMu9WWVKKRNU4OWw1S4g73sBHHFYZS+OsjIw5USzNuHGYHUueTTZpte35LWu3VY
+         iHr3fglbhfKs69wuugpzQ3RvVv8TB7rrJkXJb2P+qB6s7P0wP40odrY/2no8VMojuyvr
+         rIPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=vsoZkcYm3jCCjpX9R4JNfB/t4Y2EE574Kr+1kQkq8IE=;
+        b=D0bMYGR3FWnLfGpdCzvmj1mS0SGsyBgC+oxbmwD/ohk0hqE0yF5xzd9vCuNxlcjapu
+         EgSikpMfifyQ0W4FZhwlD9KYep3LM0xUrs3tk/OfDtURbJXjZQ3XdhGnTQwP3+gasvJS
+         2FX75uZAjfdyAkjO7wzxAW+THwK7XLYJuRMMeDOuW7MKzMY+lG4JMnZWsZPol/Pkby6h
+         2jMFo5G3dgT68cR7GhYrU/9dOYeTvdPe4B5weuWAl54kEzxTTbpUwkhzuRpdnZMaqz/2
+         0s7QPZmiw77+tWEcMP8cOIoCpnaiM8L5ZEpPDGI0j8K3N5hQBYPGrKxT/3Ya12U3SVYi
+         J5lQ==
+X-Gm-Message-State: AOAM530Xiooq5DxRkUVuHhLBZXwTdanUCkaXvHYnpmbPKEVjA3eeEdM8
+        wS+JawmEDdPVss3R56j6gTGhJPdgTsyn+XtNznc=
+X-Google-Smtp-Source: ABdhPJxk3hYI+UShP1Zs7/q/gOW6xEaA4PYH2i6yjnBq6HaV8FjcIZj8VBfkE2MbhYzTZmz5Cm5bBs6q1mmhneVb01o=
+X-Received: by 2002:a05:6870:40c7:b0:fb:13a9:d731 with SMTP id
+ l7-20020a05687040c700b000fb13a9d731mr4649632oal.27.1655031313101; Sun, 12 Jun
+ 2022 03:55:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="veXX9dWIonWZEC6h"
-Content-Disposition: inline
-In-Reply-To: <YqDtWkUbp4LPBRxS@pendragon.ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: meizhen100@gmail.com
+Received: by 2002:a05:6358:18e:b0:a3:449a:620d with HTTP; Sun, 12 Jun 2022
+ 03:55:12 -0700 (PDT)
+From:   Miss Qing Yu <qing9560yu@gmail.com>
+Date:   Sun, 12 Jun 2022 10:55:12 +0000
+X-Google-Sender-Auth: dub-CaLxuhhYM9wwznvRDA9hJSs
+Message-ID: <CADYjMSRvGeyd-__gjhd9e3XFSt3jv6cP9xxSSnnXhVBDoBW--g@mail.gmail.com>
+Subject: Hello!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MILLION_USD,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---veXX9dWIonWZEC6h
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 08, 2022 at 09:41:30PM +0300, Laurent Pinchart wrote:
->Hi Michael,
->
->Thank you for the patch.
->
->On Wed, Jun 08, 2022 at 01:03:38PM +0200, Michael Grzeschik wrote:
->> Likewise to the uvcvideo hostside driver, this patch is changing the
->> simple workqueue to an async_wq with higher priority. This ensures that
->> the worker will not be scheduled away while the video stream is handled.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>
->> ---
->> v1 -> v2: - added destroy_workqueue in uvc_function_unbind
->>           - reworded comment above allow_workqueue
->>
->>  drivers/usb/gadget/function/f_uvc.c     | 4 ++++
->>  drivers/usb/gadget/function/uvc.h       | 1 +
->>  drivers/usb/gadget/function/uvc_v4l2.c  | 2 +-
->>  drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
->>  4 files changed, 13 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/fu=
-nction/f_uvc.c
->> index d3feeeb50841b8..dcc5f057810973 100644
->> --- a/drivers/usb/gadget/function/f_uvc.c
->> +++ b/drivers/usb/gadget/function/f_uvc.c
->> @@ -891,10 +891,14 @@ static void uvc_function_unbind(struct usb_configu=
-ration *c,
->>  {
->>  	struct usb_composite_dev *cdev =3D c->cdev;
->>  	struct uvc_device *uvc =3D to_uvc(f);
->> +	struct uvc_video *video =3D &uvc->video;
->>  	long wait_ret =3D 1;
->>
->>  	uvcg_info(f, "%s()\n", __func__);
->>
->> +	if (video->async_wq)
->> +		destroy_workqueue(video->async_wq);
->> +
->>  	/* If we know we're connected via v4l2, then there should be a cleanup
->>  	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
->>  	 * though the video device removal uevent. Allow some time for the
->> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/func=
-tion/uvc.h
->> index 58e383afdd4406..1a31e6c6a5ffb8 100644
->> --- a/drivers/usb/gadget/function/uvc.h
->> +++ b/drivers/usb/gadget/function/uvc.h
->> @@ -88,6 +88,7 @@ struct uvc_video {
->>  	struct usb_ep *ep;
->>
->>  	struct work_struct pump;
->> +	struct workqueue_struct *async_wq;
->>
->>  	/* Frame parameters */
->>  	u8 bpp;
->> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
-/function/uvc_v4l2.c
->> index fd8f73bb726dd1..fddc392b8ab95d 100644
->> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->> @@ -170,7 +170,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4=
-l2_buffer *b)
->>  		return ret;
->>
->>  	if (uvc->state =3D=3D UVC_STATE_STREAMING)
->> -		schedule_work(&video->pump);
->> +		queue_work(video->async_wq, &video->pump);
->>
->>  	return ret;
->>  }
->> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadge=
-t/function/uvc_video.c
->> index a9bb4553db847e..9a9101851bc1e8 100644
->> --- a/drivers/usb/gadget/function/uvc_video.c
->> +++ b/drivers/usb/gadget/function/uvc_video.c
->> @@ -277,7 +277,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_req=
-uest *req)
->>  	spin_unlock_irqrestore(&video->req_lock, flags);
->>
->>  	if (uvc->state =3D=3D UVC_STATE_STREAMING)
->> -		schedule_work(&video->pump);
->> +		queue_work(video->async_wq, &video->pump);
->>  }
->>
->>  static int
->> @@ -478,7 +478,7 @@ int uvcg_video_enable(struct uvc_video *video, int e=
-nable)
->>
->>  	video->req_int_count =3D 0;
->>
->> -	schedule_work(&video->pump);
->> +	queue_work(video->async_wq, &video->pump);
->>
->>  	return ret;
->>  }
->> @@ -492,6 +492,11 @@ int uvcg_video_init(struct uvc_video *video, struct=
- uvc_device *uvc)
->>  	spin_lock_init(&video->req_lock);
->>  	INIT_WORK(&video->pump, uvcg_video_pump);
->>
->> +	/* Allocate a work queue for asynchronous video pump handler. */
->> +	video->async_wq =3D alloc_workqueue("uvcvideo", WQ_UNBOUND | WQ_HIGHPR=
-I, 0);
->
->Let's call it "uvcgadget" (or "uvc gadget", "uvc-gadget", ...) as
->"uvcvideo" refers to the host side driver.
-
-Good Idea. I will fix this.
-
->I'm still a bit worried about WQ_UNBOUND and the risk of running work
->items in parallel on different CPUs. uvcg_video_pump() looks mostly
->safe, as it protects video->req_free with a spinlock, and the buffer
->queue with another spinlock. The req_int_count increment at the end of
->the loop would be unsafe though.
-
-I didn't think about that. I will have to check for that.
-
->Could we get to the bottom of this and find out whether or not the work
->items can be executed in parallel ?
-
-Do you have an Idea to check for that?
-
->> +	if (!video->async_wq)
->> +		return -EINVAL;
->> +
->>  	video->uvc =3D uvc;
->>  	video->fcc =3D V4L2_PIX_FMT_YUYV;
->>  	video->bpp =3D 16;
->
->--=20
->Regards,
->
->Laurent Pinchart
->
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---veXX9dWIonWZEC6h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmKlwPEACgkQC+njFXoe
-LGT/sg//XI+zbJNYyEnypxXofkpak3fU9COwNpProk2OFKt2zbABubR3zlkM1A6I
-vDtL3WMU/cKDsU9n0s7kirqmHJ7yXA+QBgq9/L9iPJ+QSJwwdkniWdd9YEuYt/Gh
-TcOIFzTNBHRQGKdMvYIwCraBpTmpTXX4sJZk1OqZxgI+T1I2occf3A1eWHID/cYJ
-S7CR+rh1fHQYhA5btpDUzx4RTbrNbjAkYO5+lA5/YyoAIbIM2HnTPAfayKnRMDEM
-RT7FySnUeMJxcGRbux1YAUgdDuCAdPK10ZCF9Z2cSAmVo4JUnADom8aiHHLlXnGI
-t7kdijYpRa6sEN/GKVmrfj8fcJTsRNZ1jxT9mVoAjT7NNIN2aPqapl9RRqNlNEMj
-5KvE6a5YC8aQhA7TbSbVkLdgdPJwRKbgtQU7io74L+T4VUP7OQ3zoRukp2bBzXce
-AF05c8MDx7n2VdMyaVFlj/ShWzO1LRs3qVNVO02LjLYF7wCpAwvcKXVOf17nCZkD
-Q0ohSBvhdG5PR7zorOlxW07Sl35sSEQF2rFq/7YNHl1gtumbQKtfI3YynemTBZSq
-e8Yzxd2MHaA0KMICP10VZkEO5/dc+XmGDKRir72/G0zDsddcbM4iqbvayD2Z3JLj
-x3RVY74f3amu/gNQil6YOiC33t6TPHexXFcWzbX0ONieBTfXoKc=
-=VYxZ
------END PGP SIGNATURE-----
-
---veXX9dWIonWZEC6h--
+       I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor
+said I will not survive it with the critical condition am in because
+all vaccines has been given to me but to no avian, am a China woman
+but I base here in France because am married here and I have no child
+for my late husband and now am a widow. My reason of communicating you
+is that i have $9.2million USD which was deposited in BNP Paribas Bank
+here in France by my late husband which am the next of kin to and I
+want you to stand as the replacement beneficiary beneficiary. Can you
+handle the process?
+                                Mrs Yu. Ging Yunnan.
