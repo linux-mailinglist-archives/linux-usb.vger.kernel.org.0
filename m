@@ -2,86 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8059F5478ED
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jun 2022 06:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9C254797F
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jun 2022 11:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiFLExB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jun 2022 00:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S235589AbiFLJIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jun 2022 05:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFLExA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 00:53:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0520AEAD
-        for <linux-usb@vger.kernel.org>; Sat, 11 Jun 2022 21:52:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229563AbiFLJIx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 05:08:53 -0400
+Received: from mailout2.hostsharing.net (mailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ee9:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9559129340;
+        Sun, 12 Jun 2022 02:08:51 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id 5A0FB1036E627;
+        Sun, 12 Jun 2022 11:08:49 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BB8360917
-        for <linux-usb@vger.kernel.org>; Sun, 12 Jun 2022 04:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA8AC3411C;
-        Sun, 12 Jun 2022 04:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655009577;
-        bh=zKn4jUGmdPWmr6mFSkwvU1cgEXYVkyrRTV7qxdeiFgI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ThJ7zT7w00MXDclZrjDZG2L7Ukvy4Z4VilsZC4JbbOwADhEO1llpNhA9h/NcnNpOO
-         z+MmbO6SLUabadsAW7RLLeKlv6R8QBvnfB4ZDcZ90d9QgwqDoGg1UGi9XHMhYgSr+X
-         LNxdIKuVXN63TrhL3+ccZkJ4AVSXsfWE38V/k0Xg=
-Date:   Sun, 12 Jun 2022 06:52:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-usb@vger.kernel.org,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: Re: [usb:usb-testing 39/44] drivers/usb/dwc3/dwc3-qcom.c:301:23:
- warning: no previous prototype for 'dwc3_qcom_read_usb2_speed'
-Message-ID: <YqVxJwdbeK01qljC@kroah.com>
-References: <202206110832.2zOQ2T8f-lkp@intel.com>
- <YqVv/PYkpm0Y9cBM@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqVv/PYkpm0Y9cBM@kroah.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 34C8161A0C1B;
+        Sun, 12 Jun 2022 11:08:49 +0200 (CEST)
+X-Mailbox-Line: From ecd2ab4160b700b99820ae91c35c30ffda3864e7 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1655024266.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Sun, 12 Jun 2022 11:07:46 +0200
+Subject: [PATCH net-next v2 0/1] linkwatch use-after-free fix
+To:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jann Horn <jannh@google.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 06:47:56AM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Jun 11, 2022 at 08:55:47AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > head:   477122a1eec325621cefd62da8bd8ac20a66fb8e
-> > commit: 4387ea43e3a9dac058adfe5fc68e0e82750201e5 [39/44] usb: dwc3: qcom: Configure wakeup interrupts during suspend
-> > config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220611/202206110832.2zOQ2T8f-lkp@intel.com/config)
-> > compiler: riscv64-linux-gcc (GCC) 11.3.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=4387ea43e3a9dac058adfe5fc68e0e82750201e5
-> >         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> >         git fetch --no-tags usb usb-testing
-> >         git checkout 4387ea43e3a9dac058adfe5fc68e0e82750201e5
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/dwc3/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/usb/dwc3/dwc3-qcom.c:301:23: warning: no previous prototype for 'dwc3_qcom_read_usb2_speed' [-Wmissing-prototypes]
-> >      301 | enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> >          |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> I will go drop this commit now, please send a fixed up version if you
-> still want it accepted.
+Discussion on v1 of this patch fizzled out in April without it being applied:
 
-I've dropped the whole 5 patch series now.
+https://lore.kernel.org/netdev/18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de/#r
+
+This is a vulnerability, we can't just ignore it.  Paolo Abeni asked
+me to explore whether the issue can be fixed in USB Ethernet drivers
+instead of core networking code.  I've done that and presented a patch,
+but consider it an inferior approach.
+
+I'm explaining why in the updated commit message of this patch and
+I'm rebasing it on net-next.  Otherwise it's the same as v1,  I still
+believe that this is the best solution to the problem.
+
+Thanks!
+
+Lukas Wunner (1):
+  net: linkwatch: ignore events for unregistered netdevs
+
+ net/core/dev.c        | 17 -----------------
+ net/core/dev.h        |  1 -
+ net/core/link_watch.c | 10 ++--------
+ 3 files changed, 2 insertions(+), 26 deletions(-)
+
+-- 
+2.35.2
+
