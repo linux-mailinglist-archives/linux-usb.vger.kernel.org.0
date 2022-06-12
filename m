@@ -2,104 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDCB547B19
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jun 2022 18:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F973547C75
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jun 2022 23:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiFLQ5m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jun 2022 12:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S236285AbiFLV2Q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 12 Jun 2022 17:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiFLQ5l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 12:57:41 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F095FB5
-        for <linux-usb@vger.kernel.org>; Sun, 12 Jun 2022 09:57:40 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id v22so6476910ybd.5
-        for <linux-usb@vger.kernel.org>; Sun, 12 Jun 2022 09:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=qcNcKm5ssADtdjjBUet1aHzke4+v8usdKVzv1gusB/I=;
-        b=B2mNH7ibIflpBLQCxda79F904nJAKTKZbwY8BmxSaHvyfOr5BbiH70l9djLPceFYRf
-         W+24fW/TTtxwR2V/CrI+xJxXxgQJ9QFLUJgng2rvUrtJtsX1KyixSy0Ec8Dtdcox68CU
-         CkVefojtGpZINkTvXgV1qB7fiO8aFaeo8v4SpQi1hBGZnQbweXLqV4SwfACLjhzdrIVd
-         UmuqHidZVUj2N30MWlGtR4heiyoPNOzHYH1oQO3OVjNJWD7Pi9E5lmJuMPpPtIl6mpWg
-         95xvJkpj7txBS37BGk8c16mMuYuqZzVnrHlMJ5EDUpf3nV95/PTDXBU65bQlji8E8zIs
-         RyIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=qcNcKm5ssADtdjjBUet1aHzke4+v8usdKVzv1gusB/I=;
-        b=AszDWWm2LlvRHIujoktydW9NJtlLN4Vprt6gU/cnYnXmv+HfSkQV2qPL4m1RdfrPF+
-         DSHt4YwGEbibL2ziwP1WbqIc55BvbXngK+vcvKtUKfsHRTc/kvssxS0KuemDBp52kRV6
-         WPa3nlpysrJ9RFbvRB8kUZCDW65AjFiIbv7QMk3mLOMrzIXIF3oRoZ0JZ1OoiG2KO17z
-         gQ1++F/rprHsQCy9pgTCJ1swP+U+Z1YlHF8pSIHlKUe300s9+qJtWW57eCAwGbaE70ZL
-         PqxA1ew069nX0DI+VcO67m+Xkm2Donomfv/x49eHBZfbPoCv4Z43zfIhvYHjt9px7QoL
-         k5uQ==
-X-Gm-Message-State: AOAM530OcFIe8ev4zrVON3EI6ZvtnJmufP3Sl+MEez7zu/uozje7ITFr
-        RPIP8EBnHr3ikJFKn0nO/08F1WSZR4uq9C3Dmfk=
-X-Google-Smtp-Source: ABdhPJzCLSfiDrN6HgFYN6NHEY/V65VE3i2hT5yvI8xkHNIbf3ZKxH2ducyV9ZhTBQo9J7+4Vb2qkFbB7BfnkMKM7Zo=
-X-Received: by 2002:a05:6902:705:b0:664:b994:8bec with SMTP id
- k5-20020a056902070500b00664b9948becmr3286018ybt.282.1655053059489; Sun, 12
- Jun 2022 09:57:39 -0700 (PDT)
+        with ESMTP id S236111AbiFLV2N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 17:28:13 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6AAB24BEE
+        for <linux-usb@vger.kernel.org>; Sun, 12 Jun 2022 14:28:11 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-23-xpV4lFl0PfStBSylmoAXEA-1; Sun, 12 Jun 2022 22:28:08 +0100
+X-MC-Unique: xpV4lFl0PfStBSylmoAXEA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Sun, 12 Jun 2022 22:28:06 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Sun, 12 Jun 2022 22:28:06 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Rhett Aultman' <rhett.aultman@samsara.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        linux-can <linux-can@vger.kernel.org>
+CC:     --cc=Oliver Neukum <oneukum@suse.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: RE: [PATCH v3 2/2] can: gs_usb: fix DMA memory leak on close
+Thread-Topic: [PATCH v3 2/2] can: gs_usb: fix DMA memory leak on close
+Thread-Index: AQHYfRHs6SXKDKJ+HESTVsEc7tmfzq1MTE/A
+Date:   Sun, 12 Jun 2022 21:28:06 +0000
+Message-ID: <0b792b543f5f4b70ab9e102825329474@AcuMS.aculab.com>
+References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-3-rhett.aultman@samsara.com>
+In-Reply-To: <20220610213335.3077375-3-rhett.aultman@samsara.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Received: by 2002:a05:7010:6a0e:b0:2d6:ff6c:531b with HTTP; Sun, 12 Jun 2022
- 09:57:39 -0700 (PDT)
-Reply-To: filodavid817@gmail.com
-From:   "R.Chantal" <chantalmadin@gmail.com>
-Date:   Mon, 13 Jun 2022 02:57:39 +1000
-Message-ID: <CABdsQ=GEFiXFxEX94VXyaF-LbiBC3SyY3Sf2+oLcsJ5Bmfk9sg@mail.gmail.com>
-Subject: SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b30 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6813]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [chantalmadin[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [filodavid817[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
-Your compensation fund of 6 million dollars is ready for payment
-contact me for more details.
+From: Rhett Aultman
+> Sent: 10 June 2022 22:34
+> 
+> The gs_usb driver allocates DMA memory with usb_alloc_coherent() in
+> gs_can_open() and then keeps this memory in an URB, with the expectation
+> that the memory will be freed when the URB is killed in gs_can_close().
+> Memory allocated with usb_alloc_coherent() cannot be freed in this way
+> and must be freed using usb_free_coherent() instead.  This means that
+> repeated cycles of calling gs_can_open() and gs_can_close() will lead to
+> a memory leak.
+> 
+> Historically, drivers have handled this by keeping an array of pointers
+> to their DMA rx buffers and explicitly freeing them.  For an example of
+> this technique used in the esd_usb2 driver, see here:
+> https://www.spinics.net/lists/linux-can/msg08203.html
+> 
+> While the above method works, the conditions that cause this leak are
+> not apparent to driver writers and the method for solving it at the
+> driver level has been piecemeal.  This patch makes use of a new
+> URB_FREE_COHERENT flag on the URB, reducing the solution of this memory
+> leak down to a single line of code.
+> 
+> Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  drivers/net/can/usb/gs_usb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+> index b29ba9138866..4e7e6a7b961a 100644
+> --- a/drivers/net/can/usb/gs_usb.c
+> +++ b/drivers/net/can/usb/gs_usb.c
+> @@ -768,7 +768,7 @@ static int gs_can_open(struct net_device *netdev)
+>  					  buf,
+>  					  dev->parent->hf_size_rx,
+>  					  gs_usb_receive_bulk_callback, parent);
+> -			urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+> +			urb->transfer_flags = URB_NO_TRANSFER_DMA_MAP | URB_FREE_COHERENT;
 
-Thanks
+Should that be clearing any other flags?
+
+	David
+
+> 
+>  			usb_anchor_urb(urb, &parent->rx_submitted);
+> 
+> --
+> 2.30.2
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
