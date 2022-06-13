@@ -2,73 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BB7548AE1
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 18:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7AD54890A
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 18:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356508AbiFMM4q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jun 2022 08:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S1377326AbiFMN0B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jun 2022 09:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358000AbiFMMyz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 08:54:55 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B087635857;
-        Mon, 13 Jun 2022 04:13:52 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so8522764pjm.2;
-        Mon, 13 Jun 2022 04:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WyrmKsYSTK52+yXgs1VGgiXSRnWks4qyg2oye3t5qyc=;
-        b=i2QqvHYCHyukFpJBLjG0rU00YjN7H5Tsw1q9ioVPHeIOF9lgtnBR4shoML0ukpYAn4
-         hqwzFPS4K2C8cTstgfKBGOuVcFLA0J/rV6I2o2/dT8//c6mur65DCUieLPoks/M0VHvC
-         N0gDf6Ca/RPH2b7lCK+x4TEaaNwDw/P5FZEfvNHgxUfXYlwpD3fxAWAyh19UGwa4Y31d
-         YB3yWCqWj8fOXpEejxMUflf3zkV04Std6UaMQaN/dnIMIl5REioUGzVGNshBTnZbWFva
-         MjE4pI1xgsHg4H7BwHKGgxLBneT/ZJ4zT6JSBCm/PzIrSkEApX6pIoHrCvkrcELGDFJy
-         5S2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WyrmKsYSTK52+yXgs1VGgiXSRnWks4qyg2oye3t5qyc=;
-        b=0LPNTJ/2KSDD7p8uqgPE3lmySu5v+5doOix0mZxRlWzBOXQH0EiH/FL3+/Vi3IVYOr
-         nj8hWvNP6JBhjhV7ANTsPImOD9lqxmWAQf6eNSiLydEeCLcvzPrSBrXrj46iBNYb/Chb
-         jFghcZw1qj8qrZw0Ok6rMp6/pfFDIoiLYtit0nej5zscfy81tkXF1BYQJ8Np5HyhNv8e
-         NSA0InzP4PD5Qyc+9Rc08Wb3sfVhri2hgsCs6OwYDzf9gO6NKe2w6ZUa8Q+42MNKOZ/E
-         92064z4tndxPtinluqO88rnjLcVFV5ZTyoamnaNx7M1qtY+Ml1lT7pjmfrimRDtvgAOR
-         I6Hw==
-X-Gm-Message-State: AOAM5314jj2vOpFX1TY3ashTqpe5+2nSO+2qRJqoqxX/5sStVa4wO6y6
-        N2BWpOIhan3b1JVLbwWceRY=
-X-Google-Smtp-Source: ABdhPJyYCI9XgxVM1FtHKJngxG40BxuJFmwFN2aaDbA62KL/KVDkRpjD1zYl9v7sBO9Xn20BGeUuKA==
-X-Received: by 2002:a17:903:4045:b0:168:b7ca:19b0 with SMTP id n5-20020a170903404500b00168b7ca19b0mr17042967pla.66.1655118832186;
-        Mon, 13 Jun 2022 04:13:52 -0700 (PDT)
-Received: from RD-3580-24288.rt.l (42-72-115-109.emome-ip.hinet.net. [42.72.115.109])
-        by smtp.gmail.com with ESMTPSA id g17-20020a056a000b9100b0051b4e53c487sm5199989pfj.45.2022.06.13.04.13.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 04:13:51 -0700 (PDT)
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-To:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
-        lee.jones@linaro.org, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: [PATCH v2 15/15] video: backlight: mt6370: Add Mediatek MT6370 support
-Date:   Mon, 13 Jun 2022 19:11:46 +0800
-Message-Id: <20220613111146.25221-16-peterwu.pub@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220613111146.25221-1-peterwu.pub@gmail.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+        with ESMTP id S1377280AbiFMNYu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 09:24:50 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70044.outbound.protection.outlook.com [40.107.7.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008F16BFD8
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 04:24:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MEuWLRkVWCk5aJ2VslVsGnOZWjqQ70RXcczxqUgB0XnlQyfnX16uSP/iGOoJaochmFK5guHymvQQRQIZ1X3S5WG3MiffPsrgke/4knsI/MRPklhRIg0k4ggxYdj3yZ5iku9XUVzKSP1Oe19mLIz4oL9ENzThS4rKHGS7AFvMvlY0wgt02I2QBblmJGL+G4Aw/y/0F8gotKeTfZ2s8smDKSWXph9PYL/YsPm5NOHJO2HWYeQVonLX5ytQ4L6inej8tqYgOUA+y5m+QL6rsbRkxFOtwc5JPn+0SLvKrMaa/eB1+1ZeUUdUkMfb+AG9/DfT1xUEaUok/0VjP542tL/qdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zFnaO492++ufhBMy4LCPdYtW+h5DiDYkw1Hbwng1oKo=;
+ b=aQrqYBRckTWsuf+qXEcGnKf3hWvoVNbMb5KlCs6M5MjgA3LFMdYe4AkMdf+1r2HiAXYc7x+nC8Udmmm0PslHGGetzdDUPV138sqUYzsxl025F7+e5wJniHskgGoEK+ClbPSF7eR9p0ZAfW9QUghPszKxjxpH9AGXQkViEKb6er2TcmOQHc/EpaFJAS2pEMXaf2gmAuvYGjUPcaJ8/zvDvLG4HTpvGbTZ3qp/oaUQVbGfFNZWUU3CR/ZJKm7d1xdWMgyouQiaQk8tXjz2uDlLvW5ZM2tyR4ClLq5IE0378nhj/7dHH6vASVfj1VwoR5NjK/nPwB8D6bgmQJbDIYDg0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zFnaO492++ufhBMy4LCPdYtW+h5DiDYkw1Hbwng1oKo=;
+ b=yGgMK73lZCUOgibKpkcPZHYPEST5AEi7KNViGOJwK/QWBGiH/NSifWB4kiswa0tq3TeQ8f74wbkXBdOqfSv/kKHiP9218dmbpU93u2ugSJhYU+lvBhwG+wwlwisKIgFVo9zGDAeT6zLM0dV439WqXiOznAhnsODk2QyFUK94BmDJ0JqmnYM2O+o049/gV3suZa6JrnMdo8k65ETRCGVLgYA38KHZRQJIkhpPyleDq+6u6gIPWMFHaWdS4h7z+p9/b/RQ49gan535C0ontz5hXIdcG+72qpOXVa5GJmXN5yAUUAhc2nvSu4i8GYdgFbnQCAdAEbM1mI9z/+BEiWRIsw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16) by DB7PR04MB5995.eurprd04.prod.outlook.com
+ (2603:10a6:10:8e::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.20; Mon, 13 Jun
+ 2022 11:23:55 +0000
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::19e2:fafb:553f:d8c]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::19e2:fafb:553f:d8c%11]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 11:23:54 +0000
+Message-ID: <554b2f98-7fec-3b45-cf60-ce95cf82c88a@suse.com>
+Date:   Mon, 13 Jun 2022 13:23:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: pps-ldisc support for cdc-acm
+Content-Language: en-US
+To:     Sylvain Munaut <246tnt@gmail.com>, linux-usb@vger.kernel.org
+References: <CAHL+j08f4PJd64d5OQY730QH7AvJkf97HaCrJBF_vVR5-DmSjQ@mail.gmail.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CAHL+j08f4PJd64d5OQY730QH7AvJkf97HaCrJBF_vVR5-DmSjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6PR02CA0027.eurprd02.prod.outlook.com
+ (2603:10a6:20b:6e::40) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9459bd62-dd13-4f77-b066-08da4d2f330b
+X-MS-TrafficTypeDiagnostic: DB7PR04MB5995:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR04MB599587BEFD7B5AEB7BD40014C7AB9@DB7PR04MB5995.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: osV558E01Vw6BN0j8MaFGi2JmD3WrIZQR0R06Vr6vRj2wPY/zfjuPorkmoqCkh8uiogiUjR8NJzD4g5TVSB1jATHQuxxAeAy+2Hn+vUiic3IxpEMGdEZqbxObBrGHtHADA64u1ZqwHKJ6IgjBoRizfKiU8EM26K4sNpRLadEzVzufgtPFwGQG/DjOfcDEOoui62YABgw+HnLCul0XsT9pWgSX/eXV9/V8sXTCoqJmpjrJEaJQ6MBv6eobazXwYH+we78+Jlc0sqQJDJ3dRg0fQNUjD0R9aVr55Suoplo0xhkxdzYAyvqtDUhnuoamgpOFOBTGyDigec83kRo4DriOiQqo+geeMLI/ENz9WElv7Mf13Hdzv01pd7RBDQAOOlC4/M6QNJ1GCBSeXVZPKLbPv8zzJo3umj1DfuzHkrTWh4rAPPQwcyHHfER0VwVJ9izV0CyTI+NknJV23nlr9ZqUS5f5Vcf7jNM56Gz2RiiFVJp0R9MK9ccXrGVoBelAOlGsbecF2kgOINyHtZEwi60ddoKNRZ6cbVlxotbS8A9IXVIBO3EpZmC9acujAh3h857K+Qbn4IIAlvE780NiSUVickuJ4dYCWBWFWk/a4FHlsMmEMPV4i3t3MuxC9uVSgoN9Zdl5Q6LTtMyL0jvsatSgdCiUIBE88gzP9E3+M5wiGAjJxWGo2hTe64rrK8Vi2onQMOhHwHTG/Jr74XAPtWBHXMt/asOhoTYRA0LJLEZLHg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(31696002)(6512007)(6506007)(53546011)(66946007)(316002)(66476007)(2616005)(66556008)(6486002)(86362001)(508600001)(186003)(83380400001)(31686004)(8936002)(5660300002)(2906002)(8676002)(38100700002)(36756003)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NHlURXZtcWJwSnZra2QzdDUyKzVkRHFyd2ZkaWhNYTJzdHR1anI0cWlEUlRZ?=
+ =?utf-8?B?V1d4VThjemFiUFJiRVMzT3hPbjNETUFqN2JoYkJUTnVFZk1RNWtCbThjSU1m?=
+ =?utf-8?B?WTRERmJYeGsxMDZZTjR6N3p4NE9NSzBsV1hRR29IU2hwTjZ2cHFNWkN3TnJh?=
+ =?utf-8?B?aDB2SEExQmt1c3YwYVpQVlZyeWg2T2REZ0lnUE15aDhVdEdPSFpVcFB1bzg5?=
+ =?utf-8?B?NzNtYmd4ZVZiWGdVeklma1JKZTJjYUJacGxOUVVjVUVkelVqVmxCaTdDOHIr?=
+ =?utf-8?B?T2kxZzIwdXFPd1F2UUg5ckkvRjg0Q3Z1a3ZxQnJYMjYveXpYenh2UlRzb1JB?=
+ =?utf-8?B?bzhqa0hwVkJyWURINVJTR055aU5JMXZTTFhRMHVwNnVERmZYMUZPNSs2Q1hJ?=
+ =?utf-8?B?SWdhWFFWQ3MzTHBOUXVlZWd1MlNGd3dsUnI5U3lLUjlQYjBiV2xrNUxEL0I2?=
+ =?utf-8?B?Tm9xdEw1SzBOR29tRmx6TFliTXVRQkVvN0xNKzVtUU5FN1g5RWNXdnRNeWI1?=
+ =?utf-8?B?eWdSQ0s5VCt4M1J2dFVvdThEb2Fyam5ZRXpCa000b291dnY4N1hzRUJ2eFVJ?=
+ =?utf-8?B?MTlkaWVnNDZGMFBCTFRETzhGVW1iaW9FeUpZN2EyMU9BanJuQzgxYWtRbk5Q?=
+ =?utf-8?B?MlhGc3ZyOEpzZ0plTXQ1aU0vWFZPa3B0OWRHRU5Wazc2blk1OE5SZ0dyZmYy?=
+ =?utf-8?B?NURBQlVpN1NTN0JmZ2tpcDJVOGtLeGNUU3Rpa3VnOXZMZUpIRFRXTk5GTEpD?=
+ =?utf-8?B?dWd6UFpYTnZ0VlQ1ZWY5TVE4dDlLbFRTT21YU3FLK2JZSEJ3THJRWXVOWDU5?=
+ =?utf-8?B?bVpCc3duRE9XL2orL2V0K2NtUUhwMzhzMXJzRHhBclp2K2FQaVV5RHFBRWdr?=
+ =?utf-8?B?TXZCQ2RCYkZveE10M3Z1amtHSWJsUjlWZlkxZ2ExbUxYN3VVZ1A3bkFhVWIw?=
+ =?utf-8?B?dG4rTzVjSnFYZlVjcFBzaER0dWNiVE9MdkVhTGcvR2lQNHBYR3RydlpIeFcz?=
+ =?utf-8?B?Q3lYWmcwQk9qS2pXaEI0UUR6T0RmSjVISG1HT01XTXJ1WGNpRU82amEwaUo3?=
+ =?utf-8?B?NGZlZ0E2ZUhHNUJ5QmNlNkN2RGRKYUMybHlmcVdvbU5qTGZKa0ZyMTdPOVlm?=
+ =?utf-8?B?bUNKSGhZa3VpblJSZ1NLSVpWYmF2c2JFZklwcnlVdkFwZjBQRlFqODI3TDZK?=
+ =?utf-8?B?OFlqSUwxdDF3V3o2QklmdjNaOGNhWklJT1BRd0JING5sYUowTnhzbTlQQVg3?=
+ =?utf-8?B?dkh5Q2ZMejJsN3JzbVd4OUVBdHVWZkpHdThibUxsU3B2U2ttWVRIaG1maFlm?=
+ =?utf-8?B?TWdtTFZGd1EyNHBlaFdrK2I1SnN6TGZVd0dES08vdkVBVDFYU1lkclUxQ01B?=
+ =?utf-8?B?V2w0QmtjUm5KNW9nUVRmOU85eEVNNk5INU1udG1EdGtKRHBVSktKa0JXRXZw?=
+ =?utf-8?B?NHBZQ1ZWN1NMV2hNVVpOV2xVSUlsMTFWZmFCTE1GM2JhUzhHaEVsS2NaK2hh?=
+ =?utf-8?B?T1hYRnhCM2RQZFozL3k1czZ3RkNJTkR2L0tZRVdDUVB4NjRyUk42TVgyZTlI?=
+ =?utf-8?B?Q2o2TTNIVk9GU1NxOGc2MGwxVzBRcTlFa256NG5ncEtmVjBCK2Q1N3FaQXYv?=
+ =?utf-8?B?U0hGUmJ3aVZWV1pyUlYrcFI4dGxPYXUycURGelo5SVVqSnRsM29WU0RYM2VN?=
+ =?utf-8?B?cUM3T3l4TlNoUmxOOFpZWnNVdnNRNXl5dU9VQ3RYRFhRVkdvampDcEhianpy?=
+ =?utf-8?B?c3JNZWdrYUlKOEc1c1ViMXJtQzkyRGNrdGtGaGpvaUdXT2tqWGZ2VkdocDFj?=
+ =?utf-8?B?UTBiS0VSVFZqWTVVR243NkRwMTQrcnk3STYxMWpocDVmbkRjclJIR3luTWNm?=
+ =?utf-8?B?Y01SQWJhT2NXSzM0cTd2VUttNW10UGZpRm85WEJIZmM2RElIekRhSnVGVVhR?=
+ =?utf-8?B?cUUrOUxNbVR2YzVxeFJLVjFZclV3cXhpMFpqdlYwSGdiWXRUdDZvNFRreHJu?=
+ =?utf-8?B?QUwrMUVMUEp4TktlSHBnZjhQaGRKdjhZR1U4K2tudEhpZU1RMjVnd3QvV1RY?=
+ =?utf-8?B?aVJSQnJMNlR4S2xHUWU0Y1hsRlo1cFJaRzZOVnFLYkZTQVJ0QTV0eTNqMTdT?=
+ =?utf-8?B?WUVRVXhqdTNkaG90NmF0Mm9LTHF3eVFiaHZYVWgxNXR1a3NoM3hiQzZaSTE4?=
+ =?utf-8?B?VDhBVTY0UThuNGFLZUNDbXdBU2NSNGx2ZlRYY3NiWG1ubThPczBPb0lqZ29a?=
+ =?utf-8?B?WkVHdW8rRkpnN21OcUREdEErVm92VEtQc09aZTFTdjFEdlBObzJkZnEwalVX?=
+ =?utf-8?B?dU5sUVVqODQwUE1qdXNoTzVZZGVZQzAvTG1OQWl3UTQrMEtpQzVWMDFFUzQw?=
+ =?utf-8?Q?ss3sRuKcvoyl6n+1s94b0eyPJ84pQ2EyGxdYUNI5vx6Ig?=
+X-MS-Exchange-AntiSpam-MessageData-1: iWJLRCFHvczKMg==
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9459bd62-dd13-4f77-b066-08da4d2f330b
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 11:23:54.3427
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7RP3IR4Arjff73wEslXn9X1rxcUqYYWoF7YwwFdpD//h/zkyan7tGMFObnnHkRTIg0wVaKQI/0TcYTvEGU8Hjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5995
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,395 +127,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: ChiaEn Wu <chiaen_wu@richtek.com>
 
-Add Mediatek MT6370 Backlight support.
 
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
- drivers/video/backlight/Kconfig            |   9 +
- drivers/video/backlight/Makefile           |   1 +
- drivers/video/backlight/mt6370-backlight.c | 339 +++++++++++++++++++++
- 3 files changed, 349 insertions(+)
- create mode 100644 drivers/video/backlight/mt6370-backlight.c
+On 10.06.22 21:32, Sylvain Munaut wrote:
+> Hi,
+> 
+> AFAICT the pps-ldisc support is done for proprietary USB serial
+> adapters (ch341/ftdi/pl2023/...) but is not supported for class
 
-diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-index a003e02e13ce..ec1589ad88bb 100644
---- a/drivers/video/backlight/Kconfig
-+++ b/drivers/video/backlight/Kconfig
-@@ -268,6 +268,15 @@ config BACKLIGHT_MAX8925
- 	  If you have a LCD backlight connected to the WLED output of MAX8925
- 	  WLED output, say Y here to enable this driver.
- 
-+config BACKLIGHT_MT6370
-+	tristate "Mediatek MT6370 Backlight Driver"
-+	depends on MFD_MT6370
-+	help
-+	  This enables support for Mediatek MT6370 Backlight driver.
-+	  It's commonly used to drive the display WLED. There're 4 channels
-+	  inisde, and each channel supports up to 30mA of current capability
-+	  with 2048 current steps in exponential or linear mapping curves.
-+
- config BACKLIGHT_APPLE
- 	tristate "Apple Backlight Driver"
- 	depends on X86 && ACPI
-diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
-index cae2c83422ae..e815f3f1deff 100644
---- a/drivers/video/backlight/Makefile
-+++ b/drivers/video/backlight/Makefile
-@@ -44,6 +44,7 @@ obj-$(CONFIG_BACKLIGHT_LP855X)		+= lp855x_bl.o
- obj-$(CONFIG_BACKLIGHT_LP8788)		+= lp8788_bl.o
- obj-$(CONFIG_BACKLIGHT_LV5207LP)	+= lv5207lp.o
- obj-$(CONFIG_BACKLIGHT_MAX8925)		+= max8925_bl.o
-+obj-$(CONFIG_BACKLIGHT_MT6370)		+= mt6370-backlight.o
- obj-$(CONFIG_BACKLIGHT_OMAP1)		+= omap1_bl.o
- obj-$(CONFIG_BACKLIGHT_PANDORA)		+= pandora_bl.o
- obj-$(CONFIG_BACKLIGHT_PCF50633)	+= pcf50633-backlight.o
-diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
-new file mode 100644
-index 000000000000..a443c677cb7e
---- /dev/null
-+++ b/drivers/video/backlight/mt6370-backlight.c
-@@ -0,0 +1,339 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/backlight.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#define MT6370_REG_DEV_INFO		0x100
-+#define MT6370_REG_BL_EN		0x1A0
-+#define MT6370_REG_BL_BSTCTRL		0x1A1
-+#define MT6370_REG_BL_PWM		0x1A2
-+#define MT6370_REG_BL_DIM2		0x1A4
-+
-+#define MT6370_VENID_MASK		GENMASK(7, 4)
-+#define MT6370_BL_EXT_EN_MASK		BIT(7)
-+#define MT6370_BL_EN_MASK		BIT(6)
-+#define MT6370_BL_CONFIG_MASK		BIT(0)
-+#define MT6370_BL_CH_MASK		GENMASK(5, 2)
-+#define MT6370_BL_DIM2_MASK		GENMASK(2, 0)
-+#define MT6370_BL_DUMMY_6372_MASK	GENMASK(2, 0)
-+#define MT6370_BL_DIM2_6372_SHIFT	3
-+#define MT6370_BL_PWM_EN_MASK		BIT(7)
-+#define MT6370_BL_PWM_HYS_EN_MASK	BIT(2)
-+#define MT6370_BL_PWM_HYS_SEL_MASK	GENMASK(1, 0)
-+#define MT6370_BL_OVP_EN_MASK		BIT(7)
-+#define MT6370_BL_OVP_SEL_MASK		GENMASK(6, 5)
-+#define MT6370_BL_OC_EN_MASK		BIT(3)
-+#define MT6370_BL_OC_SEL_MASK		GENMASK(2, 1)
-+
-+#define MT6370_BL_MAX_BRIGHTNESS	2048
-+#define MT6370_BL_MAX_CH		15
-+
-+enum {
-+	MT6370_VID_COMMON = 0,
-+	MT6370_VID_6372,
-+};
-+
-+struct mt6370_priv {
-+	int vid_type;
-+	struct backlight_device *bl;
-+	struct device *dev;
-+	struct gpio_desc *enable_gpio;
-+	struct regmap *regmap;
-+};
-+
-+static int mt6370_bl_update_status(struct backlight_device *bl_dev)
-+{
-+	struct mt6370_priv *priv = bl_get_data(bl_dev);
-+	int brightness = backlight_get_brightness(bl_dev);
-+	unsigned int enable_val;
-+	u8 brightness_val[2];
-+	int ret;
-+
-+	if (brightness) {
-+		brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
-+		brightness_val[1] = (brightness - 1)
-+				    >> fls(MT6370_BL_DIM2_MASK);
-+
-+		/*
-+		 * To make MT6372 using 14 bits to control the brightness
-+		 * backward compatible with 11 bits brightness control
-+		 * (like MT6370 and MT6371 do), we left shift the value
-+		 * and pad with 1 to remaining bits. Hence, the MT6372's
-+		 * backlight brightness will be almost the same as MT6370's
-+		 * and MT6371's.
-+		 */
-+		if (priv->vid_type == MT6370_VID_6372) {
-+			brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
-+			brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
-+		}
-+
-+		ret = regmap_raw_write(priv->regmap, MT6370_REG_BL_DIM2,
-+				       brightness_val, sizeof(brightness_val));
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (priv->enable_gpio)
-+		gpiod_set_value(priv->enable_gpio, brightness ? 1 : 0);
-+
-+	enable_val = brightness ? MT6370_BL_EN_MASK : 0;
-+	return regmap_update_bits(priv->regmap, MT6370_REG_BL_EN,
-+				  MT6370_BL_EN_MASK, enable_val);
-+}
-+
-+static int mt6370_bl_get_brightness(struct backlight_device *bl_dev)
-+{
-+	struct mt6370_priv *priv = bl_get_data(bl_dev);
-+	unsigned int enable;
-+	u8 brightness_val[2];
-+	int brightness, ret;
-+
-+	ret = regmap_read(priv->regmap, MT6370_REG_BL_EN, &enable);
-+	if (ret)
-+		return ret;
-+
-+	if (!(enable & MT6370_BL_EN_MASK))
-+		return 0;
-+
-+	ret = regmap_raw_read(priv->regmap, MT6370_REG_BL_DIM2,
-+			      brightness_val, sizeof(brightness_val));
-+	if (ret)
-+		return ret;
-+
-+	if (priv->vid_type == MT6370_VID_6372)
-+		brightness_val[0] >>= MT6370_BL_DIM2_6372_SHIFT;
-+
-+	brightness = brightness_val[1] << fls(MT6370_BL_DIM2_MASK);
-+	brightness += (brightness_val[0] & MT6370_BL_DIM2_MASK);
-+
-+	return brightness + 1;
-+}
-+
-+static const struct backlight_ops mt6370_bl_ops = {
-+	.options = BL_CORE_SUSPENDRESUME,
-+	.update_status = mt6370_bl_update_status,
-+	.get_brightness = mt6370_bl_get_brightness,
-+};
-+
-+static int mt6370_init_backlight_properties(struct mt6370_priv *priv,
-+					    struct backlight_properties *props)
-+{
-+	struct device *dev = priv->dev;
-+	u8 prop_val;
-+	u32 brightness;
-+	unsigned int mask, val;
-+	int ret;
-+
-+	/* Vendor optional properties
-+	 * if property not exist, keep value in default.
-+	 */
-+	if (device_property_read_bool(dev, "mediatek,bled-pwm-enable")) {
-+		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-+					 MT6370_BL_PWM_EN_MASK,
-+					 MT6370_BL_PWM_EN_MASK);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (device_property_read_bool(dev, "mediatek,bled-pwm-hys-enable")) {
-+		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-+					 MT6370_BL_PWM_HYS_EN_MASK,
-+					 MT6370_BL_PWM_HYS_EN_MASK);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = device_property_read_u8(dev, "mediatek,bled-pwm-hys-input-bit",
-+				      &prop_val);
-+	if (!ret) {
-+		val = min_t(u8, prop_val, 3)
-+		      << (ffs(MT6370_BL_PWM_HYS_SEL_MASK) - 1);
-+		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-+					 MT6370_BL_PWM_HYS_SEL_MASK, val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = device_property_read_u8(dev, "mediatek,bled-ovp-microvolt",
-+				      &prop_val);
-+	if (!ret) {
-+		val = min_t(u8, prop_val, 3)
-+		      << (ffs(MT6370_BL_OVP_SEL_MASK) - 1);
-+		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-+					 MT6370_BL_OVP_SEL_MASK, val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (device_property_read_bool(dev, "mediatek,bled-ovp-shutdown")) {
-+		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-+					 MT6370_BL_OVP_EN_MASK,
-+					 MT6370_BL_OVP_EN_MASK);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = device_property_read_u8(dev, "mediatek,bled-ocp-microamp",
-+				      &prop_val);
-+	if (!ret) {
-+		val = min_t(u8, prop_val, 3)
-+		      << (ffs(MT6370_BL_OC_SEL_MASK) - 1);
-+		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-+					 MT6370_BL_OC_SEL_MASK, val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (device_property_read_bool(dev, "mediatek,bled-ocp-shutdown")) {
-+		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-+					 MT6370_BL_OC_EN_MASK,
-+					 MT6370_BL_OC_EN_MASK);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Common properties */
-+	ret = device_property_read_u32(dev, "max-brightness", &brightness);
-+	if (ret)
-+		brightness = MT6370_BL_MAX_BRIGHTNESS;
-+
-+	props->max_brightness = min_t(u32, brightness,
-+				      MT6370_BL_MAX_BRIGHTNESS);
-+
-+	ret = device_property_read_u32(dev, "default-brightness", &brightness);
-+	if (ret)
-+		brightness = props->max_brightness;
-+
-+	props->brightness = min_t(u32, brightness, props->max_brightness);
-+
-+
-+	ret = device_property_read_u8(dev, "mediatek,bled-channel-use",
-+				      &prop_val);
-+	if (ret) {
-+		dev_err(dev, "mediatek,bled-channel-use DT property missing\n");
-+		return ret;
-+	}
-+
-+	if (!prop_val || prop_val > MT6370_BL_MAX_CH) {
-+		dev_err(dev, "No channel specified (ch_val:%d)\n", prop_val);
-+		return -EINVAL;
-+	}
-+
-+	mask = MT6370_BL_EXT_EN_MASK | MT6370_BL_CH_MASK;
-+	val = prop_val << (ffs(MT6370_BL_CH_MASK) - 1);
-+
-+	if (priv->enable_gpio)
-+		val |= MT6370_BL_EXT_EN_MASK;
-+
-+	return regmap_update_bits(priv->regmap, MT6370_REG_BL_EN, mask, val);
-+}
-+
-+static int mt6370_check_vendor_info(struct mt6370_priv *priv)
-+{
-+	/*
-+	 * MT6372 uses 14 bits to control the brightness but MT6370 and MT6371
-+	 * use 11 bits. They are different so we have to use this function to
-+	 * check the vendor ID and use different methods to calculate the
-+	 * brightness.
-+	 */
-+	unsigned int dev_info, vid;
-+	int ret;
-+
-+	ret = regmap_read(priv->regmap, MT6370_REG_DEV_INFO, &dev_info);
-+	if (ret)
-+		return ret;
-+
-+	vid = FIELD_GET(MT6370_VENID_MASK, dev_info);
-+	if (vid == 0x9 || vid == 0xb)
-+		priv->vid_type = MT6370_VID_6372;
-+	else
-+		priv->vid_type = MT6370_VID_COMMON;
-+
-+	return 0;
-+}
-+
-+static int mt6370_bl_probe(struct platform_device *pdev)
-+{
-+	struct mt6370_priv *priv;
-+	struct backlight_properties props = {
-+		.type = BACKLIGHT_RAW,
-+		.scale = BACKLIGHT_SCALE_LINEAR,
-+	};
-+	int ret;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = &pdev->dev;
-+
-+	priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	if (!priv->regmap)
-+		dev_err_probe(&pdev->dev, -ENODEV, "Failed to get regmap\n");
-+
-+	ret = mt6370_check_vendor_info(priv);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret, "Failed to check vendor info\n");
-+
-+	priv->enable_gpio = devm_gpiod_get_optional(&pdev->dev, "enable",
-+						    GPIOD_OUT_HIGH);
-+	if (IS_ERR(priv->enable_gpio))
-+		dev_err_probe(&pdev->dev, PTR_ERR(priv->enable_gpio),
-+			      "Failed to get 'enable' gpio\n");
-+
-+	ret = mt6370_init_backlight_properties(priv, &props);
-+	if (ret)
-+		dev_err_probe(&pdev->dev, ret,
-+			      "Failed to init backlight properties\n");
-+
-+	priv->bl = devm_backlight_device_register(&pdev->dev, pdev->name,
-+						  &pdev->dev, priv,
-+						  &mt6370_bl_ops, &props);
-+	if (IS_ERR(priv->bl))
-+		dev_err_probe(&pdev->dev, PTR_ERR(priv->bl),
-+			      "Failed to register backlight\n");
-+
-+	backlight_update_status(priv->bl);
-+	platform_set_drvdata(pdev, priv);
-+
-+	return 0;
-+}
-+
-+static int mt6370_bl_remove(struct platform_device *pdev)
-+{
-+	struct mt6370_priv *priv = platform_get_drvdata(pdev);
-+	struct backlight_device *bl_dev = priv->bl;
-+
-+	bl_dev->props.brightness = 0;
-+	backlight_update_status(priv->bl);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id __maybe_unused mt6370_bl_of_match[] = {
-+	{ .compatible = "mediatek,mt6370-backlight", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mt6370_bl_of_match);
-+
-+static struct platform_driver mt6370_bl_driver = {
-+	.driver = {
-+		.name = "mt6370-backlight",
-+		.of_match_table = mt6370_bl_of_match,
-+	},
-+	.probe = mt6370_bl_probe,
-+	.remove = mt6370_bl_remove,
-+};
-+module_platform_driver(mt6370_bl_driver);
-+
-+MODULE_AUTHOR("ChiaEn Wu <chiaen_wu@richtek.com>");
-+MODULE_DESCRIPTION("Mediatek MT6370 Backlight Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.25.1
+The standard disclaimer would be that there is no such thing
+as a class for serial devices, so they are all proprietary.
+CDC-ACM uses the serial layer because that is how modems are
+traditionally attached to hosts, but basically it is a class
+for modems not for serial devices. The support for DCD is optional.
 
+> standard CDC-ACM devices ?
+
+Yes, currently cdc-acm does not call usb_serial_handle_dcd_change()
+if a DCD change message arrives.
+
+> Is that correct ? Did I miss something ?
+
+Well, technically you could attach the line disciplibe, but it would
+do nothing. Do you have a CDC-ACm device that can be used for PPS
+or is that a theoretical question?
+The necessary change is not large.
+
+	Regards
+		Oliver
