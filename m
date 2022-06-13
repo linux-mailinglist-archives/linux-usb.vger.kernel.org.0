@@ -2,103 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8656C547D70
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 03:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36604547DA2
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 04:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiFMBbp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jun 2022 21:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S236205AbiFMCg5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jun 2022 22:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbiFMBbZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 21:31:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D262F10FFD;
-        Sun, 12 Jun 2022 18:31:22 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id e9so4302330pju.5;
-        Sun, 12 Jun 2022 18:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B/tXSka1WN37Dsk7yd+7cqxFlK5QPU6UEZJReaGSWJg=;
-        b=OUsHOmGhX8vvwvZCdkcj65eCPKECMo6pROFKQ0ec1bcNFSWCd1UnbqMACAd0kgWPWT
-         0F1jeYwLOVAfRvNOZQWzWSxRUqTM/ZEJD3kt5msfYEKTkkniU3iC2++x+cD+VaFC1gL/
-         DpoWIahwHcBT0sAver63ndgcEoyDx1GIqGsr5WP+tLib7+G1HJqwhiwpLJ63hhmzO5Lt
-         7Ek8Mt8M27JKjRz0uWrwBe33PAFdyCl/1xsF7RPVJv1AdXRdljZIa4j3T2k12g0eB0pm
-         Qh2T+OCfBgncAAzUKGIX22TcgzCFoxC0VgpY8FZnwc08DC9Cw91oSTTX6E2BRio8utSY
-         teXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B/tXSka1WN37Dsk7yd+7cqxFlK5QPU6UEZJReaGSWJg=;
-        b=OiKT2N9bICLoE3z4wu+HqaRG0bdrJ7sEQLtINhiPZsIEVZZJFUGbVQyEBz6FZ57PFY
-         wChDIQUQm9DgqDkTQdqD8krDddygo7o5ex4QQgqnfcBNY30iN+bgmOsOCVpK8msygrpq
-         hWX474l25sv6mjC2ekWMEuJnqmSApXIhBMiVgqRUC4cXj4U0ptiAy6jG70s7I4mb6w5Q
-         eel+u/flGz49nkNyc0iIHI5qTlb2MUWKBXdXeq2Ou1az0WWIm+SkFm4TnR+vTeQJBfb0
-         5UCkkxHQevfkxi0swlrkDbDgbaTvJEJOlOnzdPo6TYshuUKLL0V+5x6GW0h0RNEPO37E
-         w6hg==
-X-Gm-Message-State: AOAM533XFTOwzwOfKl5fq7UyybJmxVPLRkndq1rahwz9Dm1FCV5t9v0G
-        V+J45CKVC2DI/Dx0t2k6CNFn8mJTxpY=
-X-Google-Smtp-Source: ABdhPJxdFcKpYemPoANAFGgzGDgwyCVgJlJvWhDv5N3f+o8H7h5ZxbIq4WYXg7ygYLWEDxS54XjNUw==
-X-Received: by 2002:a17:90b:1a8d:b0:1e8:a809:af4b with SMTP id ng13-20020a17090b1a8d00b001e8a809af4bmr13093766pjb.76.1655083882346;
-        Sun, 12 Jun 2022 18:31:22 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id jg21-20020a17090326d500b001679a4711d9sm3669050plb.162.2022.06.12.18.31.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 18:31:21 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     gregkh@linuxfoundation.org
-Cc:     olebowle@gmx.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH V2] usb: core: Remove redundant NULL checks before kfree
-Date:   Mon, 13 Jun 2022 01:31:16 +0000
-Message-Id: <20220613013116.900591-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S234610AbiFMCgx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jun 2022 22:36:53 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D83C13193A;
+        Sun, 12 Jun 2022 19:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tPJq6
+        gucZx+Wp1lUC5ETt48nGtlt3Xy3NEt/XUEDBHI=; b=QmFJDv4PPFAL1b4vdRuRg
+        ubprrklRX44kwkPMTJHmgvFJ5GX5OgHEyfScb//kEUWkY+emcK9gLGKxMYQRY6qS
+        yfQXtWtKV+xuBf7WIiGwtqpneQMdfHlxN1alCF56jDnSMDOvUbjYR52dAapNJG+j
+        9mEXJuNhQKxqJLksThTe98=
+Received: from carlis-virtual-machine (unknown [218.17.89.92])
+        by smtp9 (Coremail) with SMTP id DcCowABn0SOWoqZifKK3Ig--.39550S2;
+        Mon, 13 Jun 2022 10:36:06 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     gregkh@linuxfoundation.org, zhangxuezhi1@coolpad.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: core: sysfs: convert sysfs snprintf to sysfs_emit
+Date:   Mon, 13 Jun 2022 10:35:53 +0800
+Message-Id: <20220613023553.103441-1-zhangxuezhi1@coolpad.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-CM-TRANSID: DcCowABn0SOWoqZifKK3Ig--.39550S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrZrWxCrWrWw43JF48XFW8Zwb_yoW8Jr1xpF
+        4rGayUArWUGw1xu3W5CFsFva4Fgas2ya47W3yxJw15u3srA3yDKFyDAFW5Gr18XrWxCFyS
+        yF17KFW5WayxKFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jv89NUUUUU=
+X-Originating-IP: [218.17.89.92]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/1tbiFRkfhV5mLNpnpgAAsZ
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Fix the following coccicheck warnings:
+drivers/usb/core/sysfs.c:921:8-16:
+WARNING: use scnprintf or sprintf
+drivers/usb/core/sysfs.c:730:8-16:
+WARNING: use scnprintf or sprintf
 
-Checking a pointer for NULL before calling kfree() on it is redundant,
-kfree() deals with NULL pointers just fine.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 ---
-v1->v2:
-	remove "quirk_list = NULL"
- drivers/usb/core/quirks.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+v2: add correct public mailing list
+---
+ drivers/usb/core/sysfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index f99a65a64588..9ec12c42db30 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -56,10 +56,7 @@ static int quirks_param_set(const char *value, const
-struct kernel_param *kp)
- 		if (val[i] == ',')
- 			quirk_count++;
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index fa2e49d432ff..6387c0dfe30e 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -727,7 +727,7 @@ static ssize_t authorized_show(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
+ {
+ 	struct usb_device *usb_dev = to_usb_device(dev);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", usb_dev->authorized);
++	return sysfs_emit(buf, "%u\n", usb_dev->authorized);
+ }
  
--	if (quirk_list) {
--		kfree(quirk_list);
--		quirk_list = NULL;
--	}
-+	kfree(quirk_list);
+ /*
+@@ -918,7 +918,7 @@ static ssize_t authorized_default_show(struct device *dev,
+ 	struct usb_hcd *hcd;
  
- 	quirk_list = kcalloc(quirk_count, sizeof(struct quirk_entry),
- 			     GFP_KERNEL);
+ 	hcd = bus_to_hcd(usb_bus);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", hcd->dev_policy);
++	return sysfs_emit(buf, "%u\n", hcd->dev_policy);
+ }
+ 
+ static ssize_t authorized_default_store(struct device *dev,
 -- 
-2.25.1
+2.34.1
 
