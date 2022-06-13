@@ -2,55 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E6E54A0D5
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 23:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6365854A0E1
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 23:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351641AbiFMVHZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jun 2022 17:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S1351854AbiFMVJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jun 2022 17:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351659AbiFMVHC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 17:07:02 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A308BD125
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 13:45:06 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id t1so11859438ybd.2
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 13:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=m5JCegGAYMi5Q9W2JQGuLDIcqo00Awy4QAwQXlwcWcE=;
-        b=Y8PgXmY2/nGutxvyX2dVqsPiD/5+ONTAVCrb5dCOijLp6hOh6guiH0qrM/AiFzGG+L
-         2zF2AhQ2OrJIp07OjeQZkImtrzevfAiZn6aQPFYk7tefYh8Atc6pUh3dMEF2rocc9zmP
-         Dg3xzw03JF6KBjd+jSOcSvmgwkw8LZeAS0/XQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=m5JCegGAYMi5Q9W2JQGuLDIcqo00Awy4QAwQXlwcWcE=;
-        b=4ahwlTV3rRGhmQB021MhvWFUWlAo4JO0yuaXyKUHZpZyl2OAisA3OCW2z+5Vvzbudt
-         5Y+98ZlaV27HMdIpuM1MWgk7qj8Jcgoks/3I8QGpWphGZikjsmgyFB2yaohl6u1BVMxZ
-         wrNs+mvaxuGtrPjypFr+kVBKkARRx45QX3bK7UJJxzTlhuXhbBbM2tM36Mfx+ofaYBn4
-         cJDfe7S5Pe06fJE5r/CwgfTv6c7dIh6g9ZzDA4j1O9goL+JoHKs92z2u87nhDDSRoHn4
-         N6S8VMUTHkOJCe1eLk8yX6NAYXfBjnL6Gg2fUjvz4T0e3rLZr576PJP9GzNuUnT984uX
-         MFrQ==
-X-Gm-Message-State: AJIora82HTuhJ6GtuTN1rwFvgWCmWcRVjgn1Qd+QyiqbERdpBdRudV2E
-        6QPjTnbFeZLzPmrTj63tHci+1FHYIgW2Y8pGulbXTQ==
-X-Google-Smtp-Source: AGRyM1t6Ihkfl/eHvd+ILi0J6eEA0HkYOgT9briyKqKgLuf0D40FSPRp8M7otpMGiIZHBU56xkDHGbRCug93NReu0Yk=
-X-Received: by 2002:a25:ce83:0:b0:664:6360:41ae with SMTP id
- x125-20020a25ce83000000b00664636041aemr1514280ybe.336.1655153105879; Mon, 13
- Jun 2022 13:45:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220609181106.3695103-1-pmalani@chromium.org>
- <20220609181106.3695103-4-pmalani@chromium.org> <20220613203804.3d23gxidkw657ggq@notapiano>
-In-Reply-To: <20220613203804.3d23gxidkw657ggq@notapiano>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Mon, 13 Jun 2022 13:44:54 -0700
-Message-ID: <CACeCKafwT2HbYqG=u+NwXtvD4R+EK_f7DCWn88WoHriP4iOMdw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] dt-bindings: usb: Add Type-C switch binding
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        with ESMTP id S1352209AbiFMVIz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 17:08:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911C763EA;
+        Mon, 13 Jun 2022 13:45:53 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AFDF26601687;
+        Mon, 13 Jun 2022 21:45:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655153151;
+        bh=76l2K+RJmkAuO2v5NyKzYT+03z3iePDevHfvs6kxmQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DcAGmXiVIvfR1sb6fH0ApTBH/2EDbc1qlwYo7fFe/ScWAWddiZOHu+nJ0iP9DhgWb
+         lo4bfdOXKOpXmyg5UL+p0FkRvYRgpvkk8u03ypVw0YaA4MjJjsNwdxD+DF6N8cWhbU
+         ARken95M84md1y30O6794PnEoyG9VMMQVjFqy6WzT8d+vcWg1aX0TBDHBHcjtj3j0G
+         QFB+8AaqfCEE++kUGPoURJHTMTjAGxyYeq/c/whkqXwzHHN19w4+Z4Dn8+56JG5EfU
+         2Un4wKv+rnBUy0g0q2TYoSukw35/S1Dh8yUEw1HvCSj1vMKwzCcUZ+7w0MMxJJsom7
+         S0zGaOI3UQuLw==
+Date:   Mon, 13 Jun 2022 16:45:44 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
         <nfraprado@collabora.com>
+To:     Prashant Malani <pmalani@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         bleung@chromium.org, swboyd@chromium.org,
         heikki.krogerus@linux.intel.com,
@@ -66,7 +50,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <maxime@cerno.tech>,
@@ -78,154 +62,102 @@ Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Tzung-Bi Shih <tzungbi@google.com>,
         Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 5/7] drm/bridge: anx7625: Register number of Type C
+ switches
+Message-ID: <20220613204544.onfazkv4ciphddm3@notapiano>
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-6-pmalani@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220609181106.3695103-6-pmalani@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi N=C3=ADcolas,
+Hi Prashant,
 
-On Mon, Jun 13, 2022 at 1:38 PM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> Hi Prashant,
->
-> thanks for the patch. Please see sugestions below.
->
-> On Thu, Jun 09, 2022 at 06:09:42PM +0000, Prashant Malani wrote:
-> > Introduce a binding which represents a component that can control the
-> > routing of USB Type-C data lines as well as address data line
-> > orientation (based on CC lines' orientation).
-> >
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > ---
-> >
-> > Changes since v1:
-> > - Removed "items" from compatible.
-> > - Fixed indentation in example.
-> >
-> >  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++++++++
-> >  1 file changed, 74 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.=
-yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/=
-Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > new file mode 100644
-> > index 000000000000..78b0190c8543
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > @@ -0,0 +1,74 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: USB Type-C Switch
-> > +
-> > +maintainers:
-> > +  - Prashant Malani <pmalani@chromium.org>
-> > +
-> > +description:
-> > +  A USB Type-C switch represents a component which routes USB Type-C d=
-ata
-> > +  lines to various protocol host controllers (e.g USB, VESA DisplayPor=
-t,
-> > +  Thunderbolt etc.) depending on which mode the Type-C port, port part=
-ner
-> > +  and cable are operating in. It can also modify lane routing based on
-> > +  the orientation of a connected Type-C peripheral.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: typec-switch
-> > +
-> > +  mode-switch:
-> > +    type: boolean
-> > +    description: Specify that this switch can handle alternate mode sw=
-itching.
-> > +
-> > +  orientation-switch:
-> > +    type: boolean
-> > +    description: Specify that this switch can handle orientation switc=
-hing.
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +    description: OF graph binding modelling data lines to the Type-C s=
-witch.
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Link between the switch and a Type-C connector.
->
-> Since you have a single port, you can omit the ports node.
+On Thu, Jun 09, 2022 at 06:09:44PM +0000, Prashant Malani wrote:
+> Parse the "switches" node, if available, and count and store the number
+> of Type-C switches within it. Since we currently don't do anything with
+> this info, no functional changes are expected from this change.
+> 
+> This patch sets a foundation for the actual registering of Type-C
+> switches with the Type-C connector class framework.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+> 
+> Changes since v1:
+> - No changes.
+> 
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 20 ++++++++++++++++++++
+>  drivers/gpu/drm/bridge/analogix/anx7625.h |  1 +
+>  2 files changed, 21 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 53a5da6c49dd..07ed44c6b839 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -2581,6 +2581,22 @@ static void anx7625_runtime_disable(void *data)
+>  	pm_runtime_disable(data);
+>  }
+>  
+> +static int anx7625_register_typec_switches(struct device *device, struct anx7625_data *ctx)
+> +{
+> +	struct device_node *of = NULL;
+> +	int ret = 0;
+> +
+> +	of = of_get_child_by_name(device->of_node, "switches");
+> +	if (!of)
+> +		return -ENODEV;
+> +
+> +	ctx->num_typec_switches = of_get_child_count(of);
+> +	if (ctx->num_typec_switches <= 0)
+> +		return -ENODEV;
 
-I've kept "ports", since it should be possible to add additional ports
-which connect the switch to some other entity (and kept separate from
-port@0), if the individual driver desires this.
-port@0 should only contain the end-point from the Type-C connector.
+Since the hardware only allows at most 2 switches (based on the dt-bindings),
+you should have a define for that limit and check that it isn't exceeded here.
 
->
-> > +
-> > +    required:
-> > +      - port@0
-> > +
-> > +required:
-> > +  - compatible
-> > +  - ports
-> > +
-> > +anyOf:
-> > +  - required:
-> > +      - mode-switch
-> > +  - required:
-> > +      - orientation-switch
-> > +
-> > +additionalProperties: true
-> > +
-> > +examples:
-> > +  - |
-> > +    drm-bridge {
-> > +        usb-switch {
-> > +            compatible =3D "typec-switch";
-> > +            mode-switch;
-> > +            orientation-switch;
-> > +            ports {
-> > +                #address-cells =3D <1>;
-> > +                #size-cells =3D <0>;
-> > +
-> > +                port@0 {
-> > +                    reg =3D <0>;
-> > +                    anx_ep: endpoint {
-> > +                        remote-endpoint =3D <&typec_controller>;
-> > +                    };
-> > +                };
-> > +            };
->
-> So instead of ports you would have just
->
->                port {
->                    anx_ep: endpoint {
->                        remote-endpoint =3D <&typec_controller>;
->                    };
->                };
->
-> And the same simplification on patch 4, for the anx7625 dt-binding.
->
-> Thanks,
-> N=C3=ADcolas
->
-> > +        };
-> > +    };
-> > --
-> > 2.36.1.476.g0c4daa206d-goog
-> >
+Thanks,
+Nícolas
+
+> +
+> +	return ret;
+> +}
+> +
+>  static int anx7625_i2c_probe(struct i2c_client *client,
+>  			     const struct i2c_device_id *id)
+>  {
+> @@ -2686,6 +2702,10 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+>  	if (platform->pdata.intp_irq)
+>  		queue_work(platform->workqueue, &platform->work);
+>  
+> +	ret = anx7625_register_typec_switches(dev, platform);
+> +	if (ret)
+> +		dev_info(dev, "Didn't register Type C switches, err: %d\n", ret);
+> +
+>  	platform->bridge.funcs = &anx7625_bridge_funcs;
+>  	platform->bridge.of_node = client->dev.of_node;
+>  	if (!anx7625_of_panel_on_aux_bus(&client->dev))
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> index e257a84db962..d5cbca708842 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> @@ -473,6 +473,7 @@ struct anx7625_data {
+>  	struct drm_connector *connector;
+>  	struct mipi_dsi_device *dsi;
+>  	struct drm_dp_aux aux;
+> +	int num_typec_switches;
+>  };
+>  
+>  #endif  /* __ANX7625_H__ */
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
+> 
