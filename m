@@ -2,78 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164F3549704
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 18:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32472548D37
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 18:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380871AbiFMOHF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jun 2022 10:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S1384350AbiFMOf7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jun 2022 10:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382250AbiFMOFg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 10:05:36 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF8A939F1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 04:40:33 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id p13so9408289ybm.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 04:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cQAgf0oTUjxvMteG8WaQe8aas6eUXFHbWIocwnGX9Vg=;
-        b=pcHB0UBCQGioOSo9aQ673Pv1+apQcCU4ystsoNymJ2vrHXf0gk0qCUkRRBPI2RsP54
-         c/14vWpQMPYYrRQkfJZqkhPxiQxgS/WMFeo1sbQElyaAN5nCUdThh8Gx4i6dqMmvYbzw
-         oWHpD2FHbyGzgSVfiaUFMgIhPuBMU2tFn+dGqt/lOsWfPE0sBjBDbYgaJxWjo5yb42ne
-         cDsizPwSxuqZGbT1Q9cfYWLSKXngzviNBL2X7V9BPeEPyZTY0mxhHPtBlYRoQ/jUSt3x
-         dOvrk5N00svgdFDqoIW1ZbTVsz54COq8prku+GILvRHlnvgMBdWM6tEJSGR1zP9wc/jo
-         UsRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cQAgf0oTUjxvMteG8WaQe8aas6eUXFHbWIocwnGX9Vg=;
-        b=PqQXoxOabqbl4z2Rz8zV7nEZhR358+7I51whItlx0rYwKzOBPWHC/qsys4cz1+6CN+
-         FVNzwhuw2xzRBCSnzqLIQaNQNk50+CKTRHKvznXOGM+2w+Gwgvy1UGpnd7FycovsIDnV
-         BxMwYNaIHQK1zKzFZgKbTbHQqH27rmB7MA3LiPR5H7sQKAdQ7Tyr1MyihHQZ4vZfGg9O
-         cG+WLt49btIjFdOn1xd1XGAu6n9C98a6TtJhEMqdo8BOBJmbVKuxM27QwcI+5pKm5LVq
-         i8qHctUoq1Q9Fn9CdN6BrYD8FgZ1BzOjxSkDJ1Vf/90T7r0Iwc4nDf9A757CAZvfFP45
-         OrZQ==
-X-Gm-Message-State: AOAM532w55ePUwTkGouTgXjBwOAuRmvqRNk7Lndqo5YU6ESRL0DhJLUm
-        JRNpKXXYAY8mlM2NgHcbAGQXHkgLsqZPjbgHm79Pd4NJZNo=
-X-Google-Smtp-Source: ABdhPJxoMO71guPL/vm1Jkxy/JCNmb1EkCl3GRHli3+Ukbs7TG3GKNrF3eWkqflG+xAkaoCbtW+dyNJII6mmLAV4xws=
-X-Received: by 2002:a25:b3ca:0:b0:664:37b3:f3c with SMTP id
- x10-20020a25b3ca000000b0066437b30f3cmr22219606ybf.175.1655120431593; Mon, 13
- Jun 2022 04:40:31 -0700 (PDT)
+        with ESMTP id S1384396AbiFMOeB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 10:34:01 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDB4ADBCF;
+        Mon, 13 Jun 2022 04:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655120957; x=1686656957;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ip7LDyLvG35PweXXiZXDcl0rYNLBHjbyNoPhnAv4A5k=;
+  b=jTEqqbovheovyfWDNgt2SKwbdHEAYvD6WjS84ok6mYYs0hyZ5UmeMipW
+   5bAD2a6QphiyQoYwrn+1GAMYumCt3B0JmMYZG+BxJ++x2Ufhg4Xo6MDSS
+   MMdb2op62uc76nO0p+OMJj9fPXyAn2lcTMtKBoAfrsAzrtcgeNQR4YFYH
+   35PwVG2fxlJ4brs9LdC/yfEqMhggjO9yH4OPKIz6ryb35ZtF9rSEaJI5k
+   QUY9YGWJscfDFN6ehWlRTLzTU+pVGZDOMDiuO6FB9c9CTU5PIgkTPeANU
+   emtis43FWMQPpHOjfoICtOFViDKA7KVgzJ1Y7n/hIQzefpLIguYAv+sBP
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="177684159"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2022 04:48:29 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 13 Jun 2022 04:48:29 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 13 Jun 2022 04:48:26 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 0/2] Add support for PolarFire SoC's musb controller
+Date:   Mon, 13 Jun 2022 12:46:41 +0100
+Message-ID: <20220613114642.1615292-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <CAHL+j08f4PJd64d5OQY730QH7AvJkf97HaCrJBF_vVR5-DmSjQ@mail.gmail.com>
- <554b2f98-7fec-3b45-cf60-ce95cf82c88a@suse.com>
-In-Reply-To: <554b2f98-7fec-3b45-cf60-ce95cf82c88a@suse.com>
-From:   Sylvain Munaut <246tnt@gmail.com>
-Date:   Mon, 13 Jun 2022 13:40:22 +0200
-Message-ID: <CAHL+j08x-GUzaAyRSR1FxjdrhuO5rg=v41i4+d2tinDrAsCiHw@mail.gmail.com>
-Subject: Re: pps-ldisc support for cdc-acm
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Well, technically you could attach the line disciplibe, but it would
-> do nothing. Do you have a CDC-ACm device that can be used for PPS
-> or is that a theoretical question?
+Hey Bin, Greg,
+Short series here adding support for USB on Microchip PolarFire SoC FPGAs.
+The kconfig dependency for INVENTRA_DMA has become a bit of a mouthful,
+is there a better way of dealing with that?
+Thanks,
+Conor.
 
-I have one.
-Or rather I made one hoping it would work out-of-the-box.
+Changes since v1:
+- Drop unneeded resource copying as per Rob's changes to the other drivers
+- Drop the dts patch
 
-( It's a OSHW device https://osmocom.org/projects/e1-t1-adapter/wiki/IcE1usb )
+Conor Dooley (2):
+  usb: musb: Add support for PolarFire SoC's musb controller
+  MAINTAINERS: add musb to PolarFire SoC entry
 
-Cheers,
+ MAINTAINERS               |   1 +
+ drivers/usb/musb/Kconfig  |  13 +-
+ drivers/usb/musb/Makefile |   1 +
+ drivers/usb/musb/mpfs.c   | 265 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 279 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/usb/musb/mpfs.c
 
-    Sylvain
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.36.1
+
