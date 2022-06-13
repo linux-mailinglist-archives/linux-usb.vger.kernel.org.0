@@ -2,121 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CA3549A65
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 19:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47914549B44
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jun 2022 20:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242342AbiFMRuf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jun 2022 13:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
+        id S245046AbiFMSQm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jun 2022 14:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiFMRuM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 13:50:12 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728CB3CFE7;
-        Mon, 13 Jun 2022 06:33:27 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id q11so6047703iod.8;
-        Mon, 13 Jun 2022 06:33:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=vdZfN90YQu4hf8Uqw177MbmjixkJ2AAcNrLx6oY9MCU=;
-        b=0vEUpAa5zAKQ89i46hqzZ+3hHeTnn+DY1/X0kJqYTFueZ/FwBOmrWDjFsa9Z9odXwA
-         XIjIzf/6hM5JcDlSSzkHeMObN075lc2pXL6MO4JLhob4Y18jDKdvfTMrMv1IxFRWemqi
-         IekeaKiCXsLUYOKPMWwtBHZjYPlOQvFTiyS51PcrCX7Y2C+stDxntVkUIN7XsOBy43dA
-         u0xReuMw2mjoYysPsGqAcxIds4wIewSkd74UcCePomD/b6c7wQVujeaosljM/+6Uqey0
-         Vz3gXVjv0A4PGzhbEY+B87oYpb5ay9ATjp/elrD4yzI4Z4jFyKQQZLIpI8E7aucJg0pz
-         Ii2w==
-X-Gm-Message-State: AOAM532oZpiFlDl4z/q02iRfmE4Sw1UP9tpECriUzZLcRbTTDmksN14b
-        oYoyJUfpE5+LEyTXxGcKpg==
-X-Google-Smtp-Source: ABdhPJwxl/8h496O951i+ofEnsI3E+yQOwKm/ujxZmtouDcCZ56WJ1Frq7wX9lahXWnDMzS3ZoRpNQ==
-X-Received: by 2002:a6b:bf46:0:b0:669:c998:6b48 with SMTP id p67-20020a6bbf46000000b00669c9986b48mr6141923iof.67.1655127206555;
-        Mon, 13 Jun 2022 06:33:26 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id l16-20020a056e020e5000b002d1a16ef24dsm3870641ilk.82.2022.06.13.06.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 06:33:26 -0700 (PDT)
-Received: (nullmailer pid 3564137 invoked by uid 1000);
-        Mon, 13 Jun 2022 13:33:17 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     pavel@ucw.cz, robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, szunichen@gmail.com,
-        lars@metafoo.de, matthias.bgg@gmail.com,
-        daniel.thompson@linaro.org, lee.jones@linaro.org,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        linux-leds@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        jingoohan1@gmail.com, devicetree@vger.kernel.org, jic23@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
-In-Reply-To: <20220613111146.25221-7-peterwu.pub@gmail.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-7-peterwu.pub@gmail.com>
-Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
-Date:   Mon, 13 Jun 2022 07:33:17 -0600
-Message-Id: <1655127197.567546.3564136.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S245052AbiFMSQV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 14:16:21 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 494451C4B2F
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 07:17:10 -0700 (PDT)
+Received: (qmail 599913 invoked by uid 1000); 13 Jun 2022 10:17:03 -0400
+Date:   Mon, 13 Jun 2022 10:17:03 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzkaller-bugs@googlegroups.com,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] usb: gadget: Fix non-unique driver names in raw-gadget driver
+Message-ID: <YqdG32w+3h8c1s7z@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 13 Jun 2022 19:11:37 +0800, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add Mediatek MT6370 binding documentation.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
->  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
->  2 files changed, 297 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
->  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> 
+In a report for a separate bug (which has already been fixed by commit
+5f0b5f4d50fa "usb: gadget: fix race when gadget driver register via
+ioctl") in the raw-gadget driver, the syzbot console log included
+error messages caused by attempted registration of a new driver with
+the same name as an existing driver:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> kobject_add_internal failed for raw-gadget with -EEXIST, don't try to register things with the same name in the same directory.
+> UDC core: USB Raw Gadget: driver registration failed: -17
+> misc raw-gadget: fail, usb_gadget_register_driver returned -17
 
-yamllint warnings/errors:
+These errors arise because raw_gadget.c registers a separate UDC
+driver for each of the UDC instances it creates, but these drivers all
+have the same name: "raw-gadget".  Until recently this wasn't a
+problem, but when the "gadget" bus was added and UDC drivers were
+registered on this bus, it became possible for name conflicts to cause
+the registrations to fail.  The reason is simply that the bus code in
+the driver core uses the driver name as a sysfs directory name (e.g.,
+/sys/bus/gadget/drivers/raw-gadget/), and you can't create two
+directories with the same pathname.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: backlight: False schema does not allow {'compatible': ['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use': b'\x0f'}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: charger: False schema does not allow {'compatible': ['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]], 'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels': [[1, 5]], 'usb-otg-vbus-regulator': {'regulator-name': ['mt6370-usb-otg-vbus'], 'regulator-min-microvolt': [[4350000]], 'regulator-max-microvolt': [[5800000]], 'regulator-min-microamp': [[500000]], 'regulator-max-microamp': [[3000000]], 'phandle': [[2]]}}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: tcpc: False schema does not allow {'compatible': ['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, 4, 8]], 'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C'], 'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'], 'try-power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos': [[570527944]], 'op-sink-microwatt': [[10000000]], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@1': {'reg': [[1]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@2': {'reg': [[2]], 'endpoint': {'remote-endpoint': [[4294967295]]}}}}}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator: False schema does not allow {'compatible': ['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#size-cells': [[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator'], 'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]}, 'led@1': {'reg': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]], 'color': [[3]]}}, 'led@3': {'reg': [[3]], 'function': ['indicator'], 'color': [[0]], 'led-max-microamp': [[6000]]}}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: flashlight: False schema does not allow {'compatible': ['mediatek,mt6370-flashlight'], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[1]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}, 'led@1': {'reg': [[1]], 'led-sources': [[1]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[2]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: backlight: mediatek,bled-channel-use: b'\x0f' is not of type 'object', 'array', 'boolean', 'null'
-	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
-Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/backlight: failed to match any schema with compatible: ['mediatek,mt6370-backlight']
-Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/charger: failed to match any schema with compatible: ['mediatek,mt6370-charger']
-Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/indicator: failed to match any schema with compatible: ['mediatek,mt6370-indicator']
-Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/flashlight: failed to match any schema with compatible: ['mediatek,mt6370-flashlight']
-Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/tcpc: failed to match any schema with compatible: ['mediatek,mt6370-tcpc']
+To fix this problem, the driver names used by raw-gadget are made
+distinct by appending a unique ID number: "raw-gadget.N", with a
+different value of N for each driver instance.  And to avoid the
+proliferation of error handling code in the raw_ioctl_init() routine,
+the error return paths are refactored into the common pattern (goto
+statements leading to cleanup code at the end of the routine).
 
-doc reference errors (make refcheckdocs):
+Reported-and-tested-by: syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Acked-by: Hillf Danton <hdanton@sina.com>
+CC: Andrey Konovalov <andreyknvl@gmail.com>
+CC: <stable@vger.kernel.org>
+Fixes: fc274c1e9973 "USB: gadget: Add a new bus for gadgets"
+Link: https://lore.kernel.org/all/0000000000008c664105dffae2eb@google.com/
 
-See https://patchwork.ozlabs.org/patch/
+---
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+[as1981]
 
-pip3 install dtschema --upgrade
 
-Please check and re-submit.
+ drivers/usb/gadget/legacy/raw_gadget.c |   62 ++++++++++++++++++++++++---------
+ 1 file changed, 46 insertions(+), 16 deletions(-)
 
+Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
++++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -11,6 +11,7 @@
+ #include <linux/ctype.h>
+ #include <linux/debugfs.h>
+ #include <linux/delay.h>
++#include <linux/idr.h>
+ #include <linux/kref.h>
+ #include <linux/miscdevice.h>
+ #include <linux/module.h>
+@@ -36,6 +37,9 @@ MODULE_LICENSE("GPL");
+ 
+ /*----------------------------------------------------------------------*/
+ 
++static DEFINE_IDA(driver_id_numbers);
++#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
++
+ #define RAW_EVENT_QUEUE_SIZE	16
+ 
+ struct raw_event_queue {
+@@ -161,6 +165,9 @@ struct raw_dev {
+ 	/* Reference to misc device: */
+ 	struct device			*dev;
+ 
++	/* Make driver names unique */
++	int				driver_id_number;
++
+ 	/* Protected by lock: */
+ 	enum dev_state			state;
+ 	bool				gadget_registered;
+@@ -189,6 +196,7 @@ static struct raw_dev *dev_new(void)
+ 	spin_lock_init(&dev->lock);
+ 	init_completion(&dev->ep0_done);
+ 	raw_event_queue_init(&dev->queue);
++	dev->driver_id_number = -1;
+ 	return dev;
+ }
+ 
+@@ -199,6 +207,9 @@ static void dev_free(struct kref *kref)
+ 
+ 	kfree(dev->udc_name);
+ 	kfree(dev->driver.udc_name);
++	kfree(dev->driver.driver.name);
++	if (dev->driver_id_number >= 0)
++		ida_free(&driver_id_numbers, dev->driver_id_number);
+ 	if (dev->req) {
+ 		if (dev->ep0_urb_queued)
+ 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
+@@ -422,6 +433,7 @@ static int raw_ioctl_init(struct raw_dev
+ 	struct usb_raw_init arg;
+ 	char *udc_driver_name;
+ 	char *udc_device_name;
++	char *driver_driver_name;
+ 	unsigned long flags;
+ 
+ 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
+@@ -440,36 +452,44 @@ static int raw_ioctl_init(struct raw_dev
+ 		return -EINVAL;
+ 	}
+ 
++	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
++	if (ret < 0)
++		return ret;
++	dev->driver_id_number = ret;
++
++	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
++	if (!driver_driver_name) {
++		ret = -ENOMEM;
++		goto out_free_driver_id_number;
++	}
++	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
++				DRIVER_NAME ".%d", dev->driver_id_number);
++
+ 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
+-	if (!udc_driver_name)
+-		return -ENOMEM;
++	if (!udc_driver_name) {
++		ret = -ENOMEM;
++		goto out_free_driver_driver_name;
++	}
+ 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
+ 				UDC_NAME_LENGTH_MAX);
+-	if (ret < 0) {
+-		kfree(udc_driver_name);
+-		return ret;
+-	}
++	if (ret < 0)
++		goto out_free_udc_driver_name;
+ 	ret = 0;
+ 
+ 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
+ 	if (!udc_device_name) {
+-		kfree(udc_driver_name);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto out_free_udc_driver_name;
+ 	}
+ 	ret = strscpy(udc_device_name, &arg.device_name[0],
+ 				UDC_NAME_LENGTH_MAX);
+-	if (ret < 0) {
+-		kfree(udc_driver_name);
+-		kfree(udc_device_name);
+-		return ret;
+-	}
++	if (ret < 0)
++		goto out_free_udc_device_name;
+ 	ret = 0;
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 	if (dev->state != STATE_DEV_OPENED) {
+ 		dev_dbg(dev->dev, "fail, device is not opened\n");
+-		kfree(udc_driver_name);
+-		kfree(udc_device_name);
+ 		ret = -EINVAL;
+ 		goto out_unlock;
+ 	}
+@@ -484,14 +504,24 @@ static int raw_ioctl_init(struct raw_dev
+ 	dev->driver.suspend = gadget_suspend;
+ 	dev->driver.resume = gadget_resume;
+ 	dev->driver.reset = gadget_reset;
+-	dev->driver.driver.name = DRIVER_NAME;
++	dev->driver.driver.name = driver_driver_name;
+ 	dev->driver.udc_name = udc_device_name;
+ 	dev->driver.match_existing_only = 1;
+ 
+ 	dev->state = STATE_DEV_INITIALIZED;
++	spin_unlock_irqrestore(&dev->lock, flags);
++	return ret;
+ 
+ out_unlock:
+ 	spin_unlock_irqrestore(&dev->lock, flags);
++out_free_udc_device_name:
++	kfree(udc_device_name);
++out_free_udc_driver_name:
++	kfree(udc_driver_name);
++out_free_driver_driver_name:
++	kfree(driver_driver_name);
++out_free_driver_id_number:
++	ida_free(&driver_id_numbers, dev->driver_id_number);
+ 	return ret;
+ }
+ 
