@@ -2,160 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F66254A347
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 02:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B80D54A937
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 08:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237541AbiFNAuf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jun 2022 20:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S244416AbiFNGHW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jun 2022 02:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236353AbiFNAua (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jun 2022 20:50:30 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8A730546
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 17:50:28 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id c196so7233866pfb.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jun 2022 17:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ACPm1ucMTOfi6ue/vXhWlbqaubMdDkKHxItbdVtdzEE=;
-        b=iYC0JOhxEj9AINp/vrpMdikzU0oJrpyR1YAiazkp6nK8NrpW3f0uAlfOrYHcimtc35
-         jiBw/PzazQUFDPZ32OuGe1CmP66JTJhZtSKcyXfAQfCez7PoDjHOkozPQPpDZH7ip/6A
-         IH4Nh/Ru2fAg85Aan/uHiiT0PwXc1LstPcudo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ACPm1ucMTOfi6ue/vXhWlbqaubMdDkKHxItbdVtdzEE=;
-        b=QBGjn3iob9nvZ/TiVUBYqT2BZKPH1eh/FFo0mBg0Pl8dhxAOZjRxF3tJRWnoFCO48R
-         ZUXuOlhpbehyXgxv/pN/Xzbf7cko7tZfdwgM4Bw0MVvqZhghvdhvVBDdNF2jXTTQXrgB
-         7d6dd6j4sQdalB4u4r75yiLNR93/f2NxQ0sct0+KUmOv8s00wwZ4WqoLUoyDJB2UykjD
-         5BserVXCn5otLSVIGF+SmsO4wZEGgG24G/IMlm57DfRg+e3VVO4Soxa0pKNgFHwxvzCC
-         yBPKY8cxZBkRD/Yuj4VxphLPrrJ/fWQXYZvZyZgk8EgpPkKVUaNZgTHt7TUuJIvX9hGs
-         B2+w==
-X-Gm-Message-State: AOAM5302HwesM2sA/o8Vul3M6/qUj6uJM5Eg/1X1C+CXiHHmUEvKqEso
-        TuLVSwlt6jTEY1vbcCzTD7q9wA==
-X-Google-Smtp-Source: ABdhPJz1vRzxCw2py7mXm3l4Hx3ORSS7vhcYns5Vnoc1vi1vDPLfl40RxweDgBEXhirb4w8MXGVOjA==
-X-Received: by 2002:a63:c046:0:b0:401:abda:a537 with SMTP id z6-20020a63c046000000b00401abdaa537mr2140270pgi.150.1655167827954;
-        Mon, 13 Jun 2022 17:50:27 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:c4fb:a1d8:47ef:f10c])
-        by smtp.gmail.com with UTF8SMTPSA id f4-20020a62db04000000b005184fe6cc99sm6028282pfg.29.2022.06.13.17.50.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 17:50:27 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 17:50:26 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v21 4/5] usb: dwc3: qcom: Configure wakeup interrupts during
- suspend
-Message-ID: <YqfbUu/X1joc1rUJ@google.com>
-References: <1655094654-24052-1-git-send-email-quic_kriskura@quicinc.com>
- <1655094654-24052-5-git-send-email-quic_kriskura@quicinc.com>
+        with ESMTP id S231501AbiFNGHW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 02:07:22 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F01E289A6;
+        Mon, 13 Jun 2022 23:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655186840; x=1686722840;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2NWYmtMEaCkUXhMiKQjXaIsRAgALzNDrpI2EiI+D+g0=;
+  b=LD982nblU/vX5fu0pO9U200jSAeNxcDNPDwa9bJBCkpOaLZCNZ4ZY+EW
+   iorb13L4XoJfbnXm6IPnLdsr8bdYwBg9y32CG9bSquOI5MX5FKCr/w/Y3
+   j/RfaWCZMzpudPQ8VqNHvm1GCILsOxlgCuQddlUUvGmKB1ZWpfctaNdh0
+   jsVlHg+9n05CxkOzbWgLnft6v/Kn/TFUpGFh0s40xu2QDVp+6IpK2bgrf
+   CAYwTu0AVythN9sPmq+sp9XSAtmKaI66DW9zrzny6tgNrPZiZTfXt55ON
+   /ZXmVfl+3tJ4FXaFVS7DeHBsPmU+rluwW5Rgm/qdpYyRFrGLZRiIiyB6G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="261550457"
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="261550457"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 23:07:19 -0700
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="588242200"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 23:07:15 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 14 Jun 2022 09:07:13 +0300
+Date:   Tue, 14 Jun 2022 09:07:13 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v2 04/16] thunderbolt: ACPI: Replace tb_acpi_find_port()
+ with acpi_find_child_by_adr()
+Message-ID: <YqglkQZxAagb8ln/@lahna>
+References: <1843211.tdWV9SEqCh@kreacher>
+ <2653857.mvXUDI8C0e@kreacher>
+ <2851774.e9J7NaK4W3@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1655094654-24052-5-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2851774.e9J7NaK4W3@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:00:53AM +0530, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Hi Rafael,
+
+On Mon, Jun 13, 2022 at 08:11:36PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Configure DP/DM line interrupts based on the USB2 device attached to
-> the root hub port. When HS/FS device is connected, configure the DP line
-> as falling edge to detect both disconnect and remote wakeup scenarios. When
-> LS device is connected, configure DM line as falling edge to detect both
-> disconnect and remote wakeup. When no device is connected, configure both
-> DP and DM lines as rising edge to detect HS/HS/LS device connect scenario.
+> Use acpi_find_child_by_adr() to find the child matching a given bus
+> address instead of tb_acpi_find_port() that walks the list of children
+> of an ACPI device directly for this purpose and drop the latter.
 > 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> Apart from simplifying the code, this will help to eliminate the
+> children list head from struct acpi_device as it is redundant and it
+> is used in questionable ways in some places (in particular, locking is
+> needed for walking the list pointed to it safely, but it is often
+> missing).
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  drivers/usb/dwc3/dwc3-qcom.c | 72 ++++++++++++++++++++++++++++++++++++++------
->  1 file changed, 62 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 7352124..1046ea8 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -20,7 +20,8 @@
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
->  #include <linux/iopoll.h>
-> -
-> +#include <linux/usb/hcd.h>
-> +#include <linux/usb.h>
->  #include "core.h"
->  
->  /* USB QSCRATCH Hardware registers */
-> @@ -76,6 +77,7 @@ struct dwc3_qcom {
->  	int			dp_hs_phy_irq;
->  	int			dm_hs_phy_irq;
->  	int			ss_phy_irq;
-> +	enum usb_device_speed	usb2_speed;
->  
->  	struct extcon_dev	*edev;
->  	struct extcon_dev	*host_edev;
-> @@ -296,11 +298,34 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
->  	icc_put(qcom->icc_path_apps);
+> v1 -> v2:
+>    * Drop tb_acpi_find_port() (Heikki, Andy).
+>    * Change the subject accordingly
+> 
+> ---
+>  drivers/thunderbolt/acpi.c |   27 ++++-----------------------
+>  1 file changed, 4 insertions(+), 23 deletions(-)
+> 
+> Index: linux-pm/drivers/thunderbolt/acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thunderbolt/acpi.c
+> +++ linux-pm/drivers/thunderbolt/acpi.c
+> @@ -301,26 +301,6 @@ static bool tb_acpi_bus_match(struct dev
+>  	return tb_is_switch(dev) || tb_is_usb4_port_device(dev);
 >  }
 >  
-> -static void dwc3_qcom_enable_wakeup_irq(int irq)
-> +static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> +{
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> +	struct usb_hcd *hcd = platform_get_drvdata(dwc->xhci);
-> +	struct usb_device *udev;
-> +
-> +	/*
-> +	 * It is possible to query the speed of all children of
-> +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
-> +	 * currently supports only 1 port per controller. So
-> +	 * this is sufficient.
-> +	 */
+> -static struct acpi_device *tb_acpi_find_port(struct acpi_device *adev,
+> -					     const struct tb_port *port)
+> -{
+> -	struct acpi_device *port_adev;
+> -
+> -	if (!adev)
+> -		return NULL;
+> -
+> -	/*
+> -	 * Device routers exists under the downstream facing USB4 port
+> -	 * of the parent router. Their _ADR is always 0.
+> -	 */
+> -	list_for_each_entry(port_adev, &adev->children, node) {
+> -		if (acpi_device_adr(port_adev) == port->port)
+> -			return port_adev;
+> -	}
+> -
+> -	return NULL;
+> -}
+> -
+>  static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
+>  {
+>  	struct acpi_device *adev = NULL;
+> @@ -331,7 +311,8 @@ static struct acpi_device *tb_acpi_switc
+>  		struct tb_port *port = tb_port_at(tb_route(sw), parent_sw);
+>  		struct acpi_device *port_adev;
+>  
+> -		port_adev = tb_acpi_find_port(ACPI_COMPANION(&parent_sw->dev), port);
+> +		port_adev = acpi_find_child_by_adr(ACPI_COMPANION(&parent_sw->dev),
+> +						   port->port);
+>  		if (port_adev)
+>  			adev = acpi_find_child_device(port_adev, 0, false);
+>  	} else {
+> @@ -364,8 +345,8 @@ static struct acpi_device *tb_acpi_find_
+>  	if (tb_is_switch(dev))
+>  		return tb_acpi_switch_find_companion(tb_to_switch(dev));
+>  	else if (tb_is_usb4_port_device(dev))
+> -		return tb_acpi_find_port(ACPI_COMPANION(dev->parent),
+> -					 tb_to_usb4_port_device(dev)->port);
 
-nit: not sure it's really valuable to mention what could be done
-theoretically. Saying that the dwc3 driver currently only
-supports one port per controller should be enough.
+Can you move the above comment here too?
 
-No need to respin for this,
+Otherwise looks good to me,
 
-> +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-> +
-> +	if (!udev)
-> +		return USB_SPEED_UNKNOWN;
-> +
-> +	return udev->speed;
-> +}
-> +
-> +static void dwc3_qcom_enable_wakeup_irq(int irq, unsigned int polarity)
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-'polarity' isn't really accurate, the parameter also encodes whether the IRQ
-is edge or level triggered. 'irq_type' would be clearer.
-
-Also no need to respin just for this.
-
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> +		return acpi_find_child_by_adr(ACPI_COMPANION(dev->parent),
+> +					      tb_to_usb4_port_device(dev)->port->port);
+>  	return NULL;
+>  }
+>  
+> 
+> 
