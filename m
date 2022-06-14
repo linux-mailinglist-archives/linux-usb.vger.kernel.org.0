@@ -2,77 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E0554BA9F
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 21:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EA654BC53
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 22:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239402AbiFNThS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jun 2022 15:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S1345164AbiFNUxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jun 2022 16:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234362AbiFNThP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 15:37:15 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABB01AD9C;
-        Tue, 14 Jun 2022 12:37:14 -0700 (PDT)
+        with ESMTP id S1358452AbiFNUxY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 16:53:24 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4172FE66
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so149977pjm.2
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655235435; x=1686771435;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ry/MW3cGwWBXJo5LFJEWkEv0wSGZc+G+X/VY17t5peg=;
-  b=PjVpzy4ii1sO+Qcgo7VS3vnSE6g0z3LunX42RtB6IZPu9VfOFBG1cI5m
-   41dp9diZ36CDK90t54GdF2tx7ubFxYD8gs7eYUekcU9meZYvMYQws7d25
-   mGuwDnIzGOBOdscPmIAxROxyoaVcXi9Ntm11OroU+vFVBotcmnc8iuYlv
-   E=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 14 Jun 2022 12:37:14 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 12:37:13 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 12:37:13 -0700
-Received: from [10.216.52.176] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
- 2022 12:37:07 -0700
-Message-ID: <4b22f283-0897-6729-e54f-a8bb47b5c368@quicinc.com>
-Date:   Wed, 15 Jun 2022 01:07:01 +0530
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
+        b=rlANcywAf4bR7fadVFA2+G43rRwb6bnCOg+XpmZaE08Y1ATmf4iXfkpOG29AXJ27fu
+         nBPgAan/++luP9MBfjVPAOtUAnUddFJWgFTpt8KC3RYS6VGpCD6sbGm13MaOL9Z44jGD
+         4fFF01bfFROZXzw7HdaT2etm+xFtUlvK5HkkHAmN83wi0aZnVzmCVnSiJsVkMQK4SMai
+         HUNWTGtntrPCxetOSOJqi/coDpghVaIdNMMDH5QrLKyN7jfKz3CoBwz29149riGdWEdQ
+         O+GwP/qqzi5qErljLWsZ13oFVlZdEnn/YqvCC8+n2DYlnwaN/fpW2/wLi0q6xxs0bF6l
+         drEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
+        b=zrm/ShJ1TcR652uWl7ouwSie1PLASBWqoGEsFzic8ZJ/KtUTuF8bvRwS4yAtqQZWie
+         PwLKISPD/rC0rrpMgYbZYOVzoIqyvygdnsvC5Yd9EwyHVum2qwwsrXbWyT5FCdXxpAS9
+         y7baBp73hv8GSg7dAwAMOIfidwJcVkyawAK+qwjw7JQX0i8ba7r8C7t7JahcfYivSvz3
+         LqJUYObhnj3+WqR4xuFR8DtL9dacdHV9v48htJd/tuqhXElK7hHIS6frTnJdpH9Ckt3i
+         NCWFmApPN2EnWvqYVhC5U7hWbKV3qvfogMbSoX9X8c6oIDSRk3+8oR2cMRzUNvhMwDoG
+         5kNw==
+X-Gm-Message-State: AJIora8Fs5hRsFJlBc62bVdiMXi2zjwfwiRdqcLWmu9Y2/YmaLDjzgP6
+        pDrS115gUOnL0TBd4WmlVtsnBw==
+X-Google-Smtp-Source: AGRyM1sGORuHOsrudJ2NzMuucMCoEUS7FrDUAZJlvhB95QU1/ijkVKGqDtIwU3c/jV+ULDfXuIS/fA==
+X-Received: by 2002:a17:903:248:b0:168:cf03:eefe with SMTP id j8-20020a170903024800b00168cf03eefemr6038425plh.124.1655240002425;
+        Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id m12-20020a1709026bcc00b00162037fbacdsm7638321plt.187.2022.06.14.13.53.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 13:53:21 -0700 (PDT)
+Message-ID: <3dbb38af-4813-3c5d-8a12-cdd63bdbe3c2@linaro.org>
+Date:   Tue, 14 Jun 2022 13:53:19 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system
- suspend
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch
+ support
 Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <YqjLHyUVEjf7I3MI@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+References: <20220614193558.1163205-1-pmalani@chromium.org>
+ <20220614193558.1163205-5-pmalani@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220614193558.1163205-5-pmalani@chromium.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,86 +98,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 14/06/2022 12:34, Prashant Malani wrote:
+> Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
+> alternate mode lane traffic between 2 Type-C ports.
+> 
+> Update the binding to accommodate this usage by introducing a switch
+> property.
+> 
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+> 
+> Changes since v2:
+> - Added Reviewed-by and Tested-by tags.
+> 
+> Changes since v1:
+> - Introduced patternProperties for "switch" children (suggested by Krzysztof Kozlowski).
+> - Added unevaluatedProperties descriptor (suggested by Krzysztof Kozlowski).
+> - Added "address-cells" and "size-cells" properties to "switches".
+> 
+>  .../display/bridge/analogix,anx7625.yaml      | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> index 35a48515836e..cb4a23391244 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> @@ -105,6 +105,33 @@ properties:
+>        - port@0
+>        - port@1
+>  
+> +  switches:
+> +    type: object
+> +    description: Set of switches controlling DisplayPort traffic on
+> +      outgoing RX/TX lanes to Type C ports.
+> +    unevaluatedProperties: false
 
-On 6/14/2022 11:23 PM, Matthias Kaehlcke wrote:
-> On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
->> On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
->>> On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
->>>> Hi Krishna,
->>>>
->>>> with this version I see xHCI errors on my SC7180 based system, like
->>>> these:
->>>>
->>>> [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
->>>>
->>>> [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
->>>>
->>>> After resume a downstream hub isn't enumerated again.
->>>>
->>>> So far I didn't see those with v13, but I aso saw the first error with
->>>> v16.
->>> It also happens with v13, but only when a wakeup capable vUSB <= 2
->>> device is plugged in. Initially I used a wakeup capable USB3 to
->>> Ethernet adapter to trigger the wakeup case, however older versions
->>> of this series that use usb_wakeup_enabled_descendants() to check
->>> for wakeup capable devices didn't actually check for vUSB > 2
->>> devices.
->>>
->>> So the case were the controller/PHYs is powered down works, but
->>> the controller is unhappy when the runtime PM path is used during
->>> system suspend.
->> The issue isn't seen on all systems using dwc3-qcom and the problem starts
->> during probe(). The expected probe sequence is something like this:
->>
->> dwc3_qcom_probe
->>    dwc3_qcom_of_register_core
->>      dwc3_probe
->>
->>    if (device_can_wakeup(&qcom->dwc3->dev))
->>      ...
->>
->> The important part is that device_can_wakeup() is called after dwc3_probe()
->> has completed. That's what I see on a QC SC7280 system, where wakeup is
->> generally working with these patches.
->>
->> However on a QC SC7180 system dwc3_probe() is deferred and only executed after
->> dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
->> With that the controller/driver ends up in an unhappy state after system
->> suspend.
->>
->> Probing is deferred on SC7180 because device_links_check_suppliers() finds
->> that '88e3000.phy' isn't ready yet.
-> It seems device links could be used to make sure the dwc3 core is present:
->
->    Another example for an inconsistent state would be a device link that
->    represents a driver presence dependency, yet is added from the consumer’s
->    ->probe callback while the supplier hasn’t probed yet: Had the driver core
->    known about the device link earlier, it wouldn’t have probed the consumer
->    in the first place. The onus is thus on the consumer to check presence of
->    the supplier after adding the link, and defer probing on non-presence.
->
->    https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
->
->
-> You could add something like this to dwc3_qcom_of_register_core():
->
->
->    device_link_add(dev, &qcom->dwc3->dev,
->    		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
->
->    if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
->        ret = -EPROBE_DEFER;
->
->
->  From the doc it isn't clear how the consumer is supposed to check presence
-> of the supplier, the above check of the link status is also used in
-> drivers/cpufreq/mediatek-cpufreq.c , but not elsewhere outside of the
-> driver framework.
-Hi Mathias,
+This should be additionalProperties:false.
 
-     Thanks for the input. I will try the above snippet and confirm if 
-probe call happens in sync with of_platform_populate in 
-dwc3_qcom_of_register_core
+> +
+> +    properties:
+> +      "#address-cells":
+> +        const: 1
+> +
+> +      "#size-cells":
+> +        const: 0
+> +
+> +    patternProperties:
+> +      'switch@[01]':
 
-Regards,
-Krishna,
+You also need ^ and $. Please use the same quotes as in other places
+(here is ' but few lines above ")
+
+> +        $ref: /schemas/usb/typec-switch.yaml#
+
+You need unevaluatedProperties:false on this level.
+
+> +
+> +        properties:
+> +          reg:
+> +            maxItems: 1
+> +
+> +        required:
+> +          - reg
+> +
+> +    required:
+> +      - switch@0
+> +
+
+
+Best regards,
+Krzysztof
