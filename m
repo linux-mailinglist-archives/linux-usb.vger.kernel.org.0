@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA44254BAAE
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 21:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C2554BACC
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 21:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241360AbiFNTla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jun 2022 15:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        id S1344442AbiFNTml (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jun 2022 15:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235668AbiFNTl3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 15:41:29 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9918028705
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 12:41:28 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso10004297pjh.4
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 12:41:28 -0700 (PDT)
+        with ESMTP id S1344359AbiFNTmj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 15:42:39 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EF9205D2
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 12:42:38 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id o17so8590730pla.6
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 12:42:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=X0VVqdmHL6sS9hEqk6salRHIgi0YGLQxnZ3+rG1ANk0=;
-        b=nWvs21EphSCvJZOrZKihN3yIH1Birw2aDoHBG17SftfbdWSlG8i+Ek7XhIF6Z4+bkO
-         IuBt9wrkp0N84N7aXXsMKPs8AWLHS9UgaEAN6YaFNfSZAPEIoMY1JOfgpRKK6bVJnXFe
-         VpX6SzCaV/H0RWMmkQMz1DpC954cW6QRXNJIY=
+        bh=9ZJFZpaUYvLKyNF9q+LY72zbgzs/nGyR/EwoxYaYQ1M=;
+        b=NmuP2Skdd5n3bGLCNoER1Bcoij3SJxX/7ftaF2q12rYMoal3MZgBSsHGVLdGjuEQAk
+         /TXsLNHVehRshc+JIy8NXlnK8wctd8uYo7/eup1XrczVTQbbRb6QVPbYOX1Gp+TIZrp7
+         U5GlS7NtpdzLWTESA9UQ/RiHnsYC9gCeJiXis=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X0VVqdmHL6sS9hEqk6salRHIgi0YGLQxnZ3+rG1ANk0=;
-        b=fHhZjo0eX9oFrwhTUQ6pPbn77yZ3wQemaxwqBc9oCeXoKqts1f8dgMNMGqQU45+p7o
-         zzLRVti2pYVQOSKfylqyG+VeD5IOuAqz78uVUXPf8UMyKE4LIVvsGhCgjzY53VsfreyJ
-         lP1UUNIH5QnQYhYYxRXTsk1SNu9OBIvPfEEmcC2GdfRO8NoS1EtFOfh55XIFBtgi02A5
-         HYT0T53yj+qvStuxTbaP8alvQ77kOtleAxaGNkJe9V7PLuDjbpIyDtNDYZbq33uxGoEr
-         BhxLS+sPKgbR4j32Cwz4vzzG3WvlQNSnx6+HY6XQ0UJjIjbrkZLOGv6JV0C6Hedsd0UG
-         +j8w==
-X-Gm-Message-State: AJIora9SP+dhHDIY5zOlUHOndwbl8644a+Ogpe93IKKM0TrFHhpx906I
-        Zlzf+yv3cLT1vAmBFV4ofuRmJA==
-X-Google-Smtp-Source: AGRyM1sILvbJfekXXX+bOMA/hCbniu/iduZwkEL1i2ctqOpv9rsRWYufgJZNg98KMjpMuzCPCB4FkQ==
-X-Received: by 2002:a17:902:ed82:b0:158:fef8:b501 with SMTP id e2-20020a170902ed8200b00158fef8b501mr5575175plj.47.1655235688085;
-        Tue, 14 Jun 2022 12:41:28 -0700 (PDT)
+        bh=9ZJFZpaUYvLKyNF9q+LY72zbgzs/nGyR/EwoxYaYQ1M=;
+        b=61ZjE7Yg7HHv8E4q5BynuC9yuJlJ3+eIn0ObPYTEhCema7oKGYbVDPYdhzQktDtio4
+         pWkWUfqo1/0xrW/dibH/Bc46zaKdJKTguyOz73lWWJGI4gXaD79J1h0xFr0Hp1wC1tSa
+         rZFPGpD/KNzsfozhQoCe5okMsBN3/v45pQoL933zte5rPxApbLhxyq+Fg8tfTzV8R7TD
+         ZBBw1CPNeT+WUrkXUR3CTosxIScmNjClL0vESQffo+huoG+k5PjhdW4PfcVp9IGV/K/N
+         a4Ld3CJjYP1FM5NrOO+ZT0VE3fe2oc+eRsBZvpQIIAXEIpeFlCWlDJz9cJfkfGJw5ybo
+         bMyA==
+X-Gm-Message-State: AJIora+tN5TbQ4U/D1RyBOd704tw0Lj+wUJ+axSbWTklZQW5nbzztpAx
+        YiS2SFna8FDlSMG6QMHSCFmZhQ==
+X-Google-Smtp-Source: AGRyM1t/o/wb2VbxM3MoZhym1+ZRjJ5p6nx1fVnXuS2wmx6yNAHsevoLdCilrD9eNpTSPGjijydqVA==
+X-Received: by 2002:a17:90b:4a92:b0:1e8:2ba1:64bf with SMTP id lp18-20020a17090b4a9200b001e82ba164bfmr6118811pjb.41.1655235758368;
+        Tue, 14 Jun 2022 12:42:38 -0700 (PDT)
 Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l21-20020a17090a409500b001df3a251cc2sm10014426pjg.4.2022.06.14.12.41.27
+        by smtp.gmail.com with ESMTPSA id l21-20020a17090a409500b001df3a251cc2sm10014426pjg.4.2022.06.14.12.42.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 12:41:27 -0700 (PDT)
+        Tue, 14 Jun 2022 12:42:37 -0700 (PDT)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     bleung@chromium.org, swboyd@chromium.org,
@@ -71,9 +71,9 @@ Cc:     bleung@chromium.org, swboyd@chromium.org,
         Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Xin Ji <xji@analogixsemi.com>
-Subject: [PATCH v3 3/7] dt-bindings: usb: Add Type-C switch binding
-Date:   Tue, 14 Jun 2022 19:34:37 +0000
-Message-Id: <20220614193558.1163205-4-pmalani@chromium.org>
+Subject: [PATCH v3 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
+Date:   Tue, 14 Jun 2022 19:34:38 +0000
+Message-Id: <20220614193558.1163205-5-pmalani@chromium.org>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 In-Reply-To: <20220614193558.1163205-1-pmalani@chromium.org>
 References: <20220614193558.1163205-1-pmalani@chromium.org>
@@ -90,9 +90,11 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Introduce a binding which represents a component that can control the
-routing of USB Type-C data lines as well as address data line
-orientation (based on CC lines' orientation).
+Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
+alternate mode lane traffic between 2 Type-C ports.
+
+Update the binding to accommodate this usage by introducing a switch
+property.
 
 Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
@@ -103,93 +105,93 @@ Changes since v2:
 - Added Reviewed-by and Tested-by tags.
 
 Changes since v1:
-- Removed "items" from compatible.
-- Fixed indentation in example.
+- Introduced patternProperties for "switch" children (suggested by Krzysztof Kozlowski).
+- Added unevaluatedProperties descriptor (suggested by Krzysztof Kozlowski).
+- Added "address-cells" and "size-cells" properties to "switches".
 
- .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+ .../display/bridge/analogix,anx7625.yaml      | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-new file mode 100644
-index 000000000000..78b0190c8543
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: USB Type-C Switch
-+
-+maintainers:
-+  - Prashant Malani <pmalani@chromium.org>
-+
-+description:
-+  A USB Type-C switch represents a component which routes USB Type-C data
-+  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
-+  Thunderbolt etc.) depending on which mode the Type-C port, port partner
-+  and cable are operating in. It can also modify lane routing based on
-+  the orientation of a connected Type-C peripheral.
-+
-+properties:
-+  compatible:
-+    const: typec-switch
-+
-+  mode-switch:
-+    type: boolean
-+    description: Specify that this switch can handle alternate mode switching.
-+
-+  orientation-switch:
-+    type: boolean
-+    description: Specify that this switch can handle orientation switching.
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+    description: OF graph binding modelling data lines to the Type-C switch.
+diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+index 35a48515836e..cb4a23391244 100644
+--- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+@@ -105,6 +105,33 @@ properties:
+       - port@0
+       - port@1
+ 
++  switches:
++    type: object
++    description: Set of switches controlling DisplayPort traffic on
++      outgoing RX/TX lanes to Type C ports.
++    unevaluatedProperties: false
 +
 +    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: Link between the switch and a Type-C connector.
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 0
++
++    patternProperties:
++      'switch@[01]':
++        $ref: /schemas/usb/typec-switch.yaml#
++
++        properties:
++          reg:
++            maxItems: 1
++
++        required:
++          - reg
 +
 +    required:
-+      - port@0
++      - switch@0
 +
-+required:
-+  - compatible
-+  - ports
-+
-+anyOf:
-+  - required:
-+      - mode-switch
-+  - required:
-+      - orientation-switch
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    drm-bridge {
-+        usb-switch {
-+            compatible = "typec-switch";
-+            mode-switch;
-+            orientation-switch;
-+            ports {
+ required:
+   - compatible
+   - reg
+@@ -167,5 +194,41 @@ examples:
+                     };
+                 };
+             };
++            switches {
 +                #address-cells = <1>;
 +                #size-cells = <0>;
-+
-+                port@0 {
++                switch@0 {
++                    compatible = "typec-switch";
 +                    reg = <0>;
-+                    anx_ep: endpoint {
-+                        remote-endpoint = <&typec_controller>;
++                    mode-switch;
++
++                    ports {
++                        #address-cells = <1>;
++                        #size-cells = <0>;
++                        port@0 {
++                            reg = <0>;
++                            anx_typec0: endpoint {
++                                remote-endpoint = <&typec_port0>;
++                            };
++                        };
++                    };
++                };
++                switch@1 {
++                    compatible = "typec-switch";
++                    reg = <1>;
++                    mode-switch;
++
++                    ports {
++                        #address-cells = <1>;
++                        #size-cells = <0>;
++                        port@0 {
++                            reg = <0>;
++                            anx_typec1: endpoint {
++                                remote-endpoint = <&typec_port1>;
++                            };
++                        };
 +                    };
 +                };
 +            };
-+        };
-+    };
+         };
+     };
 -- 
 2.36.1.476.g0c4daa206d-goog
 
