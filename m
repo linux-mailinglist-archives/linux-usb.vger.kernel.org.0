@@ -2,164 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B579254B85A
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 20:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DBC54B888
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 20:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbiFNSN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jun 2022 14:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
+        id S1344250AbiFNS0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jun 2022 14:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiFNSN6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 14:13:58 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427FA19C3B
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 11:13:57 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-30fa61b1a83so38955707b3.0
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 11:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZsjTA9iJIzTxX4ygR8FdKM9wnHJIUgreAx1BZ2osk+k=;
-        b=elkEMMAy3wPQwGf1ROmnn/4Isu60xOrk5kwhUf9POtxNbXra9m+VOIyaYdDcP+3CU3
-         2JT5ARrP4xwLtPX0Ds74mSJUDU0WpEwRhBDquEnA4hNv+/G/6Q6UFzYcWShmefjq8AjX
-         gz+FlbByjs1p+vyfBLAp58Tc0jFjVzOn1TINg=
+        with ESMTP id S238089AbiFNS0G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 14:26:06 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B80721E0B;
+        Tue, 14 Jun 2022 11:26:05 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id l204so16526149ybf.10;
+        Tue, 14 Jun 2022 11:26:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZsjTA9iJIzTxX4ygR8FdKM9wnHJIUgreAx1BZ2osk+k=;
-        b=0yf0bxWPTnHXJUo0CILHo/Mvt7xirsjlCI9eXnrF7aMFPX1hEotSmLe2fpoMk0tpqe
-         1u0/PYAYKMKNYSO00lg/yMsndPu6W3GNLdkHrGQhHMPGE2gHcXikFqV2RYop5BnfX7Ql
-         lIP6uWUuqwE0Geyxrlg2LnzFxXcCKHL95gL1MTfY44TPUwP45Zfa2IYKoMdfsgIwfd7K
-         Ntpr23+t4FjWMIjPWfLjV0thdghN9d50fTiP3dhNALcO+20fdUhWeSCOPX+pf1Z6kgNR
-         vdsTNba5PdXEVKztOYngY5L2uFUa/j8qqhNm90kv6bZaFxbDeR0fdVUMV9wZNJpMhpMr
-         gwBA==
-X-Gm-Message-State: AJIora84RVAZ0lJ3VqiwPgoHMd8TM1Qa6TKvb4WlszofNt0/jtDHPiyF
-        oPH4G3IMIVNIM8FD6Ub8T1ZSO26hietqvQ0IDmzApQ==
-X-Google-Smtp-Source: AGRyM1uE67Atomlar3nLQdgT+jy4zLDSFTPt4ERa1X/kLBHMBihOauBraRP729dfHSV8ag/nSgM1IEdsAe/aMtNwTF8=
-X-Received: by 2002:a81:fd1:0:b0:30f:f98b:4957 with SMTP id
- 200-20020a810fd1000000b0030ff98b4957mr7329858ywp.350.1655230436484; Tue, 14
- Jun 2022 11:13:56 -0700 (PDT)
+        bh=3bUjyxSap3y6lIPj9ytySkmOS1GpalI5tmWzPEsu9ag=;
+        b=DC+4dKe5gI9EkJhgNJJUNXh6F9DVO2diJYjjSh6mVHDKMJ0qudiHa8o/HvW7+b3y0k
+         Zc0jS2Izz2TrqvctyZqWSzk2DKZf6VB38HeeZKMoKNV9w2g5vIc0KX6aSHECMSlWZMFI
+         W2/cw3dStrNr5ZknvHtFSet6xKyq2MjECFJpahdhvc1TI3V+iMFuYoVMm2JZG/IbXC08
+         lhhuzI3lxR0z1UAjoC0ejFjnVVdrZrA4BjMYDkqCIKHMFtpD/3RaTs/lrCAkDUfT/Qk2
+         l6cHWEbFvV8ufmYWaTFJOlz96fc/gjYKS/sSr2mCZ/DINY9Ij8qPn+WQcplpLBXQJCjB
+         bGsA==
+X-Gm-Message-State: AJIora82wYXbZJQTKUSALzsTQQyoiyqqxK7UiGTHrJSrgE1dEILauZRJ
+        ddo85ZuFs0Ii3VIe6YePcF2kiG631xT6N/7inxQ=
+X-Google-Smtp-Source: AGRyM1skDC2r1shocFSg9+8XCc79NMLVJ5hHDYJ5RYwUStWzrU14+fty188+BvjEa4OrJ+GxDzIP3W7Z5JdrhfQszMg=
+X-Received: by 2002:a25:84ca:0:b0:65c:b5a4:3d0a with SMTP id
+ x10-20020a2584ca000000b0065cb5a43d0amr6399679ybm.137.1655231164485; Tue, 14
+ Jun 2022 11:26:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220609181106.3695103-1-pmalani@chromium.org>
- <20220609181106.3695103-6-pmalani@chromium.org> <ef3933a8-88c2-f19f-97df-3498f54b9a4f@collabora.com>
-In-Reply-To: <ef3933a8-88c2-f19f-97df-3498f54b9a4f@collabora.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 14 Jun 2022 11:13:45 -0700
-Message-ID: <CACeCKaegCzKZdnbZFkE0WWb=99jCfQDA60kTVhOS1TGvdHgpDg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] drm/bridge: anx7625: Register number of Type C switches
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
-        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
+ <2851774.e9J7NaK4W3@kreacher> <YqglkQZxAagb8ln/@lahna>
+In-Reply-To: <YqglkQZxAagb8ln/@lahna>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Jun 2022 20:25:53 +0200
+Message-ID: <CAJZ5v0jBLNpXpVn=WBm1rLxDkPFNo=UqsfDnuWS9hD=CRDPbsQ@mail.gmail.com>
+Subject: Re: [PATCH v2 04/16] thunderbolt: ACPI: Replace tb_acpi_find_port()
+ with acpi_find_child_by_adr()
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 1:22 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+Hi Mika,
+
+On Tue, Jun 14, 2022 at 8:07 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
 >
-> Il 09/06/22 20:09, Prashant Malani ha scritto:
-> > Parse the "switches" node, if available, and count and store the number
-> > of Type-C switches within it. Since we currently don't do anything with
-> > this info, no functional changes are expected from this change.
+> Hi Rafael,
+>
+> On Mon, Jun 13, 2022 at 08:11:36PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > This patch sets a foundation for the actual registering of Type-C
-> > switches with the Type-C connector class framework.
+> > Use acpi_find_child_by_adr() to find the child matching a given bus
+> > address instead of tb_acpi_find_port() that walks the list of children
+> > of an ACPI device directly for this purpose and drop the latter.
 > >
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > Apart from simplifying the code, this will help to eliminate the
+> > children list head from struct acpi_device as it is redundant and it
+> > is used in questionable ways in some places (in particular, locking is
+> > needed for walking the list pointed to it safely, but it is often
+> > missing).
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > ---
 > >
-> > Changes since v1:
-> > - No changes.
+> > v1 -> v2:
+> >    * Drop tb_acpi_find_port() (Heikki, Andy).
+> >    * Change the subject accordingly
 > >
-> >   drivers/gpu/drm/bridge/analogix/anx7625.c | 20 ++++++++++++++++++++
-> >   drivers/gpu/drm/bridge/analogix/anx7625.h |  1 +
-> >   2 files changed, 21 insertions(+)
+> > ---
+> >  drivers/thunderbolt/acpi.c |   27 ++++-----------------------
+> >  1 file changed, 4 insertions(+), 23 deletions(-)
 > >
-> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > index 53a5da6c49dd..07ed44c6b839 100644
-> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > @@ -2581,6 +2581,22 @@ static void anx7625_runtime_disable(void *data)
-> >       pm_runtime_disable(data);
-> >   }
+> > Index: linux-pm/drivers/thunderbolt/acpi.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/thunderbolt/acpi.c
+> > +++ linux-pm/drivers/thunderbolt/acpi.c
+> > @@ -301,26 +301,6 @@ static bool tb_acpi_bus_match(struct dev
+> >       return tb_is_switch(dev) || tb_is_usb4_port_device(dev);
+> >  }
 > >
-> > +static int anx7625_register_typec_switches(struct device *device, struct anx7625_data *ctx)
-> > +{
-> > +     struct device_node *of = NULL;
-> > +     int ret = 0;
-> > +
-> > +     of = of_get_child_by_name(device->of_node, "switches");
-> > +     if (!of)
-> > +             return -ENODEV;
-> > +
-> > +     ctx->num_typec_switches = of_get_child_count(of);
-> > +     if (ctx->num_typec_switches <= 0)
-> > +             return -ENODEV;
-> > +
-> > +     return ret;
->
-> You aren't using the `ret` variable for anything other than returning zero:
-> remove it and simply return 0 here.
-The very next patch does use it, but sure I'll remove it from here and
-introduce it in v6.
->
-> > +}
-> > +
-> >   static int anx7625_i2c_probe(struct i2c_client *client,
-> >                            const struct i2c_device_id *id)
-> >   {
-> > @@ -2686,6 +2702,10 @@ static int anx7625_i2c_probe(struct i2c_client *client,
-> >       if (platform->pdata.intp_irq)
-> >               queue_work(platform->workqueue, &platform->work);
+> > -static struct acpi_device *tb_acpi_find_port(struct acpi_device *adev,
+> > -                                          const struct tb_port *port)
+> > -{
+> > -     struct acpi_device *port_adev;
+> > -
+> > -     if (!adev)
+> > -             return NULL;
+> > -
+> > -     /*
+> > -      * Device routers exists under the downstream facing USB4 port
+> > -      * of the parent router. Their _ADR is always 0.
+> > -      */
+> > -     list_for_each_entry(port_adev, &adev->children, node) {
+> > -             if (acpi_device_adr(port_adev) == port->port)
+> > -                     return port_adev;
+> > -     }
+> > -
+> > -     return NULL;
+> > -}
+> > -
+> >  static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
+> >  {
+> >       struct acpi_device *adev = NULL;
+> > @@ -331,7 +311,8 @@ static struct acpi_device *tb_acpi_switc
+> >               struct tb_port *port = tb_port_at(tb_route(sw), parent_sw);
+> >               struct acpi_device *port_adev;
 > >
-> > +     ret = anx7625_register_typec_switches(dev, platform);
-> > +     if (ret)
-> > +             dev_info(dev, "Didn't register Type C switches, err: %d\n", ret);
+> > -             port_adev = tb_acpi_find_port(ACPI_COMPANION(&parent_sw->dev), port);
+> > +             port_adev = acpi_find_child_by_adr(ACPI_COMPANION(&parent_sw->dev),
+> > +                                                port->port);
+> >               if (port_adev)
+> >                       adev = acpi_find_child_device(port_adev, 0, false);
+> >       } else {
+> > @@ -364,8 +345,8 @@ static struct acpi_device *tb_acpi_find_
+> >       if (tb_is_switch(dev))
+> >               return tb_acpi_switch_find_companion(tb_to_switch(dev));
+> >       else if (tb_is_usb4_port_device(dev))
+> > -             return tb_acpi_find_port(ACPI_COMPANION(dev->parent),
+> > -                                      tb_to_usb4_port_device(dev)->port);
 >
-> Type-C switches are optional for this driver and this will print a sort of error
-> on boards that are *not* declaring any switches on purpose (because perhaps they
-> don't have any, or for any other reason).
->
-> Even though this is a dev_info and not a dev_err, it's still printing an alarming
-> (and useless, in the aforementioned case) message.
-I'll go ahead and convert this to dev_warn, but only trigger if there
-is an error other than ENODEV.
+> Can you move the above comment here too?
 
+Do you mean to move the comment from tb_acpi_find_port() right here or
+before the if (tb_is_switch(dev)) line above?
+
+I think that tb_acpi_switch_find_companion() would be a better place
+for that comment.  At least it would match the code passing 0 to
+acpi_find_child_device() in there.
+
+> Otherwise looks good to me,
 >
-> Please fix this.
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 >
-> Regards,
-> Angelo
->
+> > +             return acpi_find_child_by_adr(ACPI_COMPANION(dev->parent),
+> > +                                           tb_to_usb4_port_device(dev)->port->port);
+> >       return NULL;
+> >  }
+
+Thanks!
