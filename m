@@ -2,90 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E9254AC75
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 10:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913A054ACED
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 11:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355854AbiFNIu6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jun 2022 04:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S242825AbiFNJIP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jun 2022 05:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355486AbiFNIuj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 04:50:39 -0400
-Received: from mailout1.hostsharing.net (mailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5fcc:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D0041F9C;
-        Tue, 14 Jun 2022 01:50:29 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id C3498101920DA;
-        Tue, 14 Jun 2022 10:50:25 +0200 (CEST)
-Received: from localhost (unknown [89.246.108.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 9F4926283BEF;
-        Tue, 14 Jun 2022 10:50:25 +0200 (CEST)
-X-Mailbox-Line: From 80e88f61ca68c36ebce5d17dfcaa8e956e19fb2f Mon Sep 17 00:00:00 2001
-Message-Id: <80e88f61ca68c36ebce5d17dfcaa8e956e19fb2f.1655196227.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Tue, 14 Jun 2022 10:50:24 +0200
-Subject: [PATCH net] sierra_net: Fix use-after-free on unbind
-To:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S239455AbiFNJIO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 05:08:14 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AC13D4AC
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 02:08:13 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m125-20020a1ca383000000b0039c63fe5f64so4432605wme.0
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 02:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QhvvxqBDc4O6cqtxNWaREqrfN92rGnha8HhGfNJEYIY=;
+        b=douVYUlsdf+Xh3MuzIfeY0X8Ce+uwGOB4VX1fszrw5WlSXQfxYVaK7H0LCFX+l06al
+         G5Pt7vxmjI/oNJX86GkWkmt9jVl9oIs5040FZFsPravjzgf3NF8nQgvJXGT86lajFlGA
+         a5M9bPfdwTcVtYWDnAAyvWPcyA0DlWZOO4P5g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QhvvxqBDc4O6cqtxNWaREqrfN92rGnha8HhGfNJEYIY=;
+        b=Q+DxA8feHtHrlJlwba+YuF2OuFkDpks1dws9e4nUTHtfuhc27OTptAU0t4k26IUqBn
+         B20VXTpa3ifAiiVqlEm2DJ7KhCHipjPNEfHYIKdjlXmNuAUfyea/r9JQIaaQG4yPZcRn
+         tfoYPBjq3v1621/q8w8QqRSvRcqJg8Xh3pXzvOrcIHKZtrSZSipdcqwK9uhGKXkpOgwD
+         KfwuF0BGbTyxXzy0K4VCZT5bph6Rks7HNTSOC2uZSzuSTK30qat7yXYKv66miMO9zP0x
+         93aokX9/WAWvo7NqKbc8mzxT3NKniP9ng2PaU5p6ZAu3PIU/APKzHCOi2xvtArNcZ0rd
+         TK7A==
+X-Gm-Message-State: AOAM533owLCbm037hhz52WLCPiPTsRcFcW2zY1oeaa0P/5LhPAKMeY61
+        fpfS1+k8K25hrun2MDi8q7SXzfSzdTqHposVKIGq+A==
+X-Google-Smtp-Source: ABdhPJzczygOemileGdbX/PhVogBffmdzEt2dLPD4YNk/wLgn4+GD2v0/Oo2U5JXPZWuJzgBaJNoBRQP9hjSU6+IahI=
+X-Received: by 2002:a05:600c:3cd:b0:39c:880e:dc7b with SMTP id
+ z13-20020a05600c03cd00b0039c880edc7bmr2968699wmd.168.1655197691993; Tue, 14
+ Jun 2022 02:08:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-8-pmalani@chromium.org> <1191703c-efa5-7fe6-7dd0-e3e786b58411@collabora.com>
+In-Reply-To: <1191703c-efa5-7fe6-7dd0-e3e786b58411@collabora.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Tue, 14 Jun 2022 17:08:00 +0800
+Message-ID: <CAEXTbpfh3aKS8DZ9T0KPNLfWJ4EsLxcJpP8aLYU-iQYC1N4sRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] drm/bridge: anx7625: Add typec_mux_set callback function
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
+        swboyd@chromium.org, Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On unbind, the Sierra USB WWAN driver cancels the sierra_net_kevent()
-work, then stops polling for interrupts by calling usbnet_status_stop().
+Hi AngeloGioacchino,
 
-However the interrupt handler sierra_net_status() may re-schedule the
-work after it's been canceled and thus cause a use-after-free.
 
-Fix by inverting the teardown order.
+On Tue, Jun 14, 2022 at 4:15 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 09/06/22 20:09, Prashant Malani ha scritto:
+> > From: Pin-Yen Lin <treapking@chromium.org>
+> >
+> > Add the callback function when the driver receives state
+> > changes of the Type-C port. The callback function configures the
+> > crosspoint switch of the anx7625 bridge chip, which can change the
+> > output pins of the signals according to the port state.
+> >
+> > Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
+> >
+> > Changes since v2:
+> > - No changes.
+> >
+> >   drivers/gpu/drm/bridge/analogix/anx7625.c | 58 +++++++++++++++++++++++
+> >   drivers/gpu/drm/bridge/analogix/anx7625.h | 13 +++++
+> >   2 files changed, 71 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index d41a21103bd3..2c308d12fab2 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -15,6 +15,7 @@
+> >   #include <linux/regulator/consumer.h>
+> >   #include <linux/slab.h>
+> >   #include <linux/types.h>
+> > +#include <linux/usb/typec_dp.h>
+> >   #include <linux/usb/typec_mux.h>
+> >   #include <linux/workqueue.h>
+> >
+> > @@ -2582,9 +2583,66 @@ static void anx7625_runtime_disable(void *data)
+> >       pm_runtime_disable(data);
+> >   }
+> >
+> > +static void anx7625_set_crosspoint_switch(struct anx7625_data *ctx,
+> > +                                       enum typec_orientation orientation)
+> > +{
+> > +     if (orientation == TYPEC_ORIENTATION_NORMAL) {
+> > +             anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> > +                               SW_SEL1_SSRX_RX1 | SW_SEL1_DPTX0_RX2);
+> > +             anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> > +                               SW_SEL2_SSTX_TX1 | SW_SEL2_DPTX1_TX2);
+> > +     } else if (orientation == TYPEC_ORIENTATION_REVERSE) {
+> > +             anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> > +                               SW_SEL1_SSRX_RX2 | SW_SEL1_DPTX0_RX1);
+> > +             anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> > +                               SW_SEL2_SSTX_TX2 | SW_SEL2_DPTX1_TX1);
+> > +     }
+> > +}
+> > +
+> > +static void anx7625_typec_two_ports_update(struct anx7625_data *ctx)
+> > +{
+> > +     if (ctx->typec_ports[0].dp_connected && ctx->typec_ports[1].dp_connected)
+> > +             /* Both ports available, do nothing to retain the current one. */
+> > +             return;
+> > +     else if (ctx->typec_ports[0].dp_connected)
+> > +             anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_NORMAL);
+> > +     else if (ctx->typec_ports[1].dp_connected)
+> > +             anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_REVERSE);
+> > +}
+> > +
+> >   static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+> >                                struct typec_mux_state *state)
+> >   {
+> > +     struct anx7625_port_data *data = typec_mux_get_drvdata(mux);
+> > +     struct anx7625_data *ctx = data->ctx;
+> > +     struct device *dev = &ctx->client->dev;
+> > +
+> > +     bool old_dp_connected = (ctx->typec_ports[0].dp_connected ||
+> > +                              ctx->typec_ports[1].dp_connected);
+>
+> So the old connection state is "either port0 or port1 are currently connected"...
+>
+> > +     bool new_dp_connected;
+> > +
+> > +     if (ctx->num_typec_switches == 1)
+> > +             return 0;
+> > +
+> > +     dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
+> > +             ctx->typec_ports[0].dp_connected, ctx->typec_ports[1].dp_connected);
+> > +
+> > +     data->dp_connected = (state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
+> > +                           state->alt->mode == USB_TYPEC_DP_MODE);
+> > + > + new_dp_connected = (ctx->typec_ports[0].dp_connected ||
+> > +                         ctx->typec_ports[1].dp_connected);
+>
+> ...and the new connection state is the same as the old one, because I don't see
+> anything that could ever modify it in this function's flow, until reaching this
+> assignment.
 
-Fixes: 7b0c5f21f348 ("sierra_net: keep status interrupt URB active")
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: stable@vger.kernel.org # v3.10+
-Cc: Dan Williams <dan.j.williams@intel.com>
----
- drivers/net/usb/sierra_net.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The typec mux driver data (`struct anx7625_port_data *data =
+typec_mux_get_drvdata(mux)`) is set to one of the
+`ctx->typec_ports[*]` in `anx7625_register_mode_switch` (see patch 6
+of this series).
 
-diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
-index bb4cbe8fc846..197e1356ae98 100644
---- a/drivers/net/usb/sierra_net.c
-+++ b/drivers/net/usb/sierra_net.c
-@@ -758,6 +758,8 @@ static void sierra_net_unbind(struct usbnet *dev, struct usb_interface *intf)
- 
- 	dev_dbg(&dev->udev->dev, "%s", __func__);
- 
-+	usbnet_status_stop(dev);
-+
- 	/* kill the timer and work */
- 	del_timer_sync(&priv->sync_timer);
- 	cancel_work_sync(&priv->sierra_net_kevent);
-@@ -769,8 +771,6 @@ static void sierra_net_unbind(struct usbnet *dev, struct usb_interface *intf)
- 		netdev_err(dev->net,
- 			"usb_control_msg failed, status %d\n", status);
- 
--	usbnet_status_stop(dev);
--
- 	sierra_net_set_private(dev, NULL);
- 	kfree(priv);
- }
--- 
-2.35.2
+So, the `data->dp_connected = ...` assignment may change the new
+connection state.
 
+Best regards,
+Pin-yen
+
+>
+> > +
+> > +     /* dp on, power on first */
+> > +     if (!old_dp_connected && new_dp_connected)
+> > +             pm_runtime_get_sync(dev);
+>
+> ...so that will never happen...
+>
+> > +
+> > +     anx7625_typec_two_ports_update(ctx);
+> > +
+> > +     /* dp off, power off last */
+> > +     if (old_dp_connected && !new_dp_connected)
+> > +             pm_runtime_put_sync(dev);
+>
+> ...and same here.
+>
+> Regards,
+> Angelo
