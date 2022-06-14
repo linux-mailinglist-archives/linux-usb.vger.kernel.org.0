@@ -2,133 +2,257 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000CD54B32F
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 16:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EEA54B6F9
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 18:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245755AbiFNO3u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jun 2022 10:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S237013AbiFNQ6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jun 2022 12:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244280AbiFNO3r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 10:29:47 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140058.outbound.protection.outlook.com [40.107.14.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4467437A95
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 07:29:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QB/IqArYGuC/Et8V/q8VVHYvJYijaE72sTuxrNL1BN2O3V22JOg6x2/LD4X8kHe3YoxKozfNHZPsDIPloigh4lfANyNgb0+nbWV3D62Ece2c6PvbA1hZTJVt84Svec4Qdc/rHZ4SvUBuXLvVRvQ6RPRXotowHJmXaebwnKN7jh2MApQmsdGxb1QzafxY7/z1TlN1x093Fur3254dg2yUbJNK3JJPKQ5hkYipM1m4olAQ5bUqRr3/W/EdmhEvvUV1Wf99XwEksvpqJFdj0tEw8XA1+lxtXKUVnmIq5+QF4UwXhqQM2fbYXENGFXO3OmN0Fx0tqAcKELrZbJAGuAC/Mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pF+7aia9xzEiD4E6vYRAAOmZYb6kotn4I3Wz60m7DcM=;
- b=Q1BjpuWH6LTEtFmA8tTcADzOAwab/+M5SLHuyDQ07meiyoAMZeU5ukS6Va0uy7fECpBDH0QxXIcnhICVKuGQ4NAfD/AF4deYpLClNq4hw0+5fZULsqX2wqYLtLUvvDW4q9UmeSrRsnHvi+u6EeZJxfZJSyr5hiy4YBtV+RZRITgp9V3doeiPHC2NhRo0nNsum4OpiJNPH8hIQShhNKnm3x6tUHIWJpTdJvJC6wktJWLEu2ir2F+3Q6kcgsDUvE9cqbVgbIo73yIuPqzmf2XRBRx4TZ+iQsWqo3BjFnEdIv/K6/fmjoUJ87MHK22OrXDlQYarqJ9+J1Zn5Y5+JRjc9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pF+7aia9xzEiD4E6vYRAAOmZYb6kotn4I3Wz60m7DcM=;
- b=TNUO2HIhEbas7S6fg1nE7hGSmweVXCFLF42nkE1KtJFZwLFICGM1Me0jUa++2ElC951QwQAoqWAeiCQVj7rly7T/Z1sJkem2LYfWMRcF04xJHptNehOADCzYBLIY+DdXMKyNtr7l5iPjYBQx3UX4WHZJkRqqpaYHSi45jHxo66XmbFjHsZpeQ6ADNCDWkJbBBGWCkmQ+eEebtF2VmBIzkSTbuGAOiRsiHkyBAZV4CEvAltYD53DBqPpu/aQCXaGcTyebXOY+gtkbx9gS4ICdzUesNIGF63hj67mvMSaXnOWKDONmPimYRBwbmESTOTuxYDBumitMtB6eP/cgYfS3Tw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM5PR0401MB2515.eurprd04.prod.outlook.com
- (2603:10a6:203:36::19) by AM5PR0402MB2818.eurprd04.prod.outlook.com
- (2603:10a6:203:98::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.21; Tue, 14 Jun
- 2022 14:29:41 +0000
-Received: from AM5PR0401MB2515.eurprd04.prod.outlook.com
- ([fe80::1dcc:ddb9:5198:5891]) by AM5PR0401MB2515.eurprd04.prod.outlook.com
- ([fe80::1dcc:ddb9:5198:5891%6]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
- 14:29:41 +0000
-Message-ID: <34305c4b-5973-f690-d3b3-e1b09ce1ce95@suse.com>
-Date:   Tue, 14 Jun 2022 16:29:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-To:     Johan Hovold <johan@kernel.org>
-Content-Language: en-US
-Cc:     USB list <linux-usb@vger.kernel.org>
-From:   Oliver Neukum <oneukum@suse.com>
-Subject: question on when to call usb_serial_handle_dcd_change()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM5P194CA0020.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:203:8f::30) To AM5PR0401MB2515.eurprd04.prod.outlook.com
- (2603:10a6:203:36::19)
+        with ESMTP id S1351578AbiFNQ5u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 12:57:50 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321805596
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 09:57:42 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id t32so16114504ybt.12
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 09:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F6g97R91sjtVG6ei6JULqw4mFypOAKmb8KKUSEZQlEM=;
+        b=OhorWc2mjBDno2pDG8ZqawT9/vJ1MCCttW7q1lpoz7gdDgLYrJO6STISprKObl3IED
+         V3HLrokuHjWh5byp4w9ZoEsXDb/AF69KJt0nEdSktT7jcbnUUmVYFVjf4E92yn15pJLR
+         bncnJl6LfB4Py3RYJgpdu03zYHSoBIp1zBwT0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F6g97R91sjtVG6ei6JULqw4mFypOAKmb8KKUSEZQlEM=;
+        b=JiPc9OzCQ+UJaePWopGgNbFL7gYVJVsEx8r5bHaB8zcF+4TNjqc2FQGJF9OqQ1amlv
+         3XoWKWqjaFliaLlAArIQ8bkEA3gRA6XkWbebT/nxbaNGSc7f06XW4GbWbHN9eYaL+lVg
+         E4t/X7Hn/+CH4yQXJJTTegu7MrXVHZUANyHulbMejpvc0H1Esvr+oT5aKOVsK6Wi1VTC
+         lHTtLPcc5ewlBYtjiUQilHL4IxZKiNzE5T+46CcxNJIKmpEFuu3VxmSJSO9YF2UQapF1
+         V/XMm8IirZL9AH/eccvXWdlvxiKqZuOrUSTi5d3oAN7w3JkZhRNVy/4fyHGtMY1ayoh2
+         gHuw==
+X-Gm-Message-State: AJIora8evBsYZ8uP8Tdmtzs7OplgRcIR+FVq6JzHVvovbiGhnJmv9xyJ
+        8iTDKY7FoUaTrpsak87BbhTUpdkSr1yXWrQY2RKrlQ==
+X-Google-Smtp-Source: AGRyM1tBFSQKwmiU3taZuWEgZ831zxUtkuGEWQfjxumQkpHwHDXWgjfEd+gTnhSaXwdtdDj3Em9Aee5szsA1eFQ4c8U=
+X-Received: by 2002:a25:67c2:0:b0:65d:555b:8f59 with SMTP id
+ b185-20020a2567c2000000b0065d555b8f59mr5855580ybc.240.1655225860885; Tue, 14
+ Jun 2022 09:57:40 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f891a25c-09d7-430f-b8b2-08da4e1251eb
-X-MS-TrafficTypeDiagnostic: AM5PR0402MB2818:EE_
-X-Microsoft-Antispam-PRVS: <AM5PR0402MB28181B9A6CCFE5790C75E598C7AA9@AM5PR0402MB2818.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tfA5t6g0+90Kgr3X/M8qVJNQpOBEc5lec18dJz1mdltVq5MjqAt2onta8o2JTALoZlox4xZvYv0bSf6L3p+U5IWpmnLRXGfBSxYBl/aBIXBacEwMGl3A2VTfodOsuJrNLZYIdaHIhXYlFk7MT38CYMHmPUsO3QY5E9DzYy1sgleiHTmbFs2o2kXWxyuUxuIxIOy79j4TcgKO/HhAsjEGOfkC7NsVXyoWLVMNO2yxoLi0Df/hTxFIARaGIsOpIt7F7UdNkwYLXP66ltBGC6W/V/EsDDujHL4H+xC45mG/Xw4bjkR65NVJzjHMfKTlSR3TxPmCPVHGgIg4B6BvPP9jSYs4IhRtGwucEvVf7EsBrHjDjmkdkqLgnL11+a8l7Re0WYhPU4Av2Z452sJgQrGmRP3+AiCmps583dHSg6Gg8I8nRoM3SqNT0b0cYapYq4fCvAwCYgRZq66M9gkDs8swE4wDWB2P3Q5w/3VTgcFFgwRJXcNC3orMGEkuYd7m2sxFde8XI1+2gwigO1WIhmR6/z/900KdyO2MdzAMNtVAwbQIbLikrgvx5l+6UZCZObwPhxpGfHR58UntyoRUNcrp60ANm1zT307DQJ6fzZZvKPCYfREJ59fbnbh5VVtB8GbDd5DXGHfynZNVwNZQnpK3hUdoFGdgc3+sES/vH71x6NaQWGvMmB3LXukJMI9//T7DXJpWnHr/yFeIRXQtKYGRCWrmNGgzHeL8bFLlcS0y+Y0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR0401MB2515.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(558084003)(38100700002)(31696002)(31686004)(316002)(36756003)(2616005)(6916009)(6512007)(186003)(86362001)(6506007)(8676002)(2906002)(8936002)(6486002)(66476007)(66556008)(4326008)(83380400001)(5660300002)(508600001)(4270600006)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0xCQTBzTHhWcXA0bDBjaXJaS3ZpKzBiUWJ1aHFWbEt2WnJkNlI1Z2RSSUVl?=
- =?utf-8?B?a0EycTZEUzN6Z1FWZUNMSXdoTVNSbDg1YUV6MEl0cVZpaGtjbnFVVlNraklK?=
- =?utf-8?B?ak05WmFnVTVEYU5Mdm5hYWNqUXhWcUxUaXplSVM4UUtoV29sSXpWV2FGQWZ3?=
- =?utf-8?B?V3JPMzZwblJYNnNHcGFEMExMV1ErVXFPWThRNVBMTlJaNkFyNWRDS2VwUDVV?=
- =?utf-8?B?Vko2MmtyTGNSWDZBS3cwMW92WWphVVkvbytSdVZrZUN0WFRPUVFiUVNNZUVZ?=
- =?utf-8?B?K0s0M1JQTTdqb3VHdU1ucExqQzNDbjV1OW9hMjdpOG5UcUF6bkp2QUV5ODh5?=
- =?utf-8?B?TzB5ZFRVR2JIa2dnMHBnRFIxVVpHaTV2a1FSVHFpVThQWkZtWVV4SlpnbTJV?=
- =?utf-8?B?MHRJTjVpVHRkMThWMTZPVzdpNHlUK0hjbUFpWU13YU1VSStyRndwTWFlaTd3?=
- =?utf-8?B?VHlESnNkRldwUkZaZjFsS1pMUDl5Sy8xajBMUjJSUkFvajg0K2lTVkdxL3ha?=
- =?utf-8?B?OXNvSGlnNGltblVQd0ZOS3FvY2xpUXVWc1Q2WS9WR2pGYVZsY3BkUTg5UEhE?=
- =?utf-8?B?OGtjclYzR3hEaDRudTc0cEZVQzExNmlaWmgxWG1SVjRPajFvVVozZ0h2RTNQ?=
- =?utf-8?B?c0lqbkZ0eWV4T3RQdTBHSlMxOXJRc2hWTDBOL3JpWlhKc3V5bEFxczRuNTV2?=
- =?utf-8?B?ai9rRlp1OVduQnA3blVCcUtkOGluek5jMnZmTUMvWEEzeWFQVUdPOWtxNzNn?=
- =?utf-8?B?bWsyUHRHL1psS01DQVZIZ2M3elpjWGJ5Zi9DMlRCNGlKNUhBWUNUemtmb3Ji?=
- =?utf-8?B?YVRyQk5XeGxicWhmaUlKYWd4YlA5ZUlkNy8zaDdkaXVFNFZYUXpyWDdqcFZY?=
- =?utf-8?B?NnBwT1NuQWVGL3FsL2lSSktHa2lLaXBLYXF2ZCtkSXJnUWpEelVhNExuZ1dQ?=
- =?utf-8?B?bEtBSVRwaE9SZmVZd0RCWHp0c1Iva2RvRmxNRUtnMzBNUXFNaEFEMklrRDJp?=
- =?utf-8?B?Y2pGM0lYR3B5UkVkbW9hSlYzMklRQ2tzR0cwcHk1bXM0TmJkNktEQjJwd3RV?=
- =?utf-8?B?dm5hVS9mcjlIR3RrZ285dG5XT0pnUE1CaGRva3p5NUZ2alRtcnlyZ0NPMVdJ?=
- =?utf-8?B?MHVCRlJTVlBjdE52YVZtNkZtV21neE5XTUg2OVl2VjVNR3g3SlVGWkhXN00z?=
- =?utf-8?B?MXFNVy9PTlBodnlNRkk1V2MrNEYrOE1OYWpjTnUveDBqKy83YVQ5a01GRW15?=
- =?utf-8?B?dm5DaTFuVXpCMWlZZFl2Z1hnY0JYTkg1MGJ0aHdiMStIWW5MWE1IYzdkMUxX?=
- =?utf-8?B?WDhlSWQwcXFwQ21ESkw1MEdDSDBLOHo5WnJaNFBZcWdSVjlqWDdWdjVLKzdl?=
- =?utf-8?B?cFBtQUlpU2RHNjd3R2pMQXlack1pVzF6UkJLYnoyZnR6K1R3dVE0cTBUY3J1?=
- =?utf-8?B?Mm85Sk0vRVF5R2FNNG5ieWE4STJtSUNpdlI2aE5HQ3p2N2REYm8yckI2QVNW?=
- =?utf-8?B?Y0hvMFBNbjR6NytlbDJpMFY4T1Q1aEZOMTNLVk5tQmY1cW1iVno3N1lVRmZq?=
- =?utf-8?B?UFNwRWRBbURodWsvTVNuWlQ5RHpzNUlEeFJPeWZZTmhYdXdPeE9YaGpYaC9G?=
- =?utf-8?B?MEMzQVEvNGM2SGswQUN1RmdIejNEdXBZUUphQitGcG8raGRJZ0lrNWF0MUsr?=
- =?utf-8?B?NEN0OGt6OS94VlBPUFl2dEYxRlp5R3BkMnpMekZmN1ROUkRpeXl2cjJiY1RR?=
- =?utf-8?B?ZkVDWk5UK2tmb3dRYkQ0UEpwRm81bUJ4MUJHZ3ZUVDdRRmxGK0tIb3hTU2V1?=
- =?utf-8?B?d1FZSnpyOTNOZHVueU9mdUsxamxkeDJuWHIzZXdNWnVQV0xIRXorU283cXJ0?=
- =?utf-8?B?UkU2b0NtZHdJQVM4OGRKRlJRYTh2bTJrOFE0Ni81cEtXV0FrQUxEVTZWQWVp?=
- =?utf-8?B?MWY4dXlTNVhBWmc0RmZaR1c0Z2lpeE9RRXhVZTFKaVhtcjg5WEEwNWg3emwy?=
- =?utf-8?B?dytkSXpTY1lBYUtEL1VITFhCbnhaditQSVNFb3NDTEJXMnJEa1lZZURRcHhH?=
- =?utf-8?B?cmJjSG9SK1pNczhJZHRsMS82b01OZW0rWWttVkNaaUNKR21wTStBT0pJcjBo?=
- =?utf-8?B?VXR5WkgyZkJvNlhUTnFqT3BnUDJCNGRIOUpFUCtRbWRjMUhyTjVzZFdqMzlT?=
- =?utf-8?B?VEYvYVBPVWdaNEdkZ1l5cXNHaSswdTJyRXFmazVNTzJwSXhwcnNhcjVlUWNj?=
- =?utf-8?B?azFBQmxiRjhXbTg5YkxQNTV6aFJxc3RZb3IxRnRxeWtnb2JwSTVNVlhGTXpa?=
- =?utf-8?B?Mm8yTGdUdDNXZFpCdm9yRFlYWUxxa2FKZnl3UG5ZNzlTMnRGSmRYQ3hKdUph?=
- =?utf-8?Q?CCKNTg2XV1lpV1n5Q/xNlnTkUMkRV/55kYpOjkiqp4YMj?=
-X-MS-Exchange-AntiSpam-MessageData-1: Lf5SvkX25Mcf3g==
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f891a25c-09d7-430f-b8b2-08da4e1251eb
-X-MS-Exchange-CrossTenant-AuthSource: AM5PR0401MB2515.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 14:29:41.8377
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l04eop/6rh6aT+EUmckSCaUUp1P9GRl57ivEdJ0zSjWzqGXsAv909WNQ4fJ8G/VcOCbXHfpIBkJPRvsAYsz7Bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2818
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-7-pmalani@chromium.org> <b3b9768d-e0d0-7132-5f50-dd6aa53a68ee@collabora.com>
+In-Reply-To: <b3b9768d-e0d0-7132-5f50-dd6aa53a68ee@collabora.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 14 Jun 2022 09:57:29 -0700
+Message-ID: <CACeCKaexczFCja_ndndb_A58yZYQ98rTtgY4vHMknENTLxBPPA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] drm/bridge: anx7625: Register Type-C mode switches
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
+        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Tue, Jun 14, 2022 at 1:18 AM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 09/06/22 20:09, Prashant Malani ha scritto:
+> > When the DT node has "switches" available, register a Type-C mode-switch
+> > for each listed "switch". This allows the driver to receive state
+> > information about what operating mode a Type-C port and its connected
+> > peripherals are in, as well as status information (like VDOs) related to
+> > that state.
+> >
+> > The callback function is currently a stub, but subsequent patches will
+> > implement the required functionality.
+> >
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
+> >
+> > Changes since v2:
+> > - No changes.
+> >
+> >   drivers/gpu/drm/bridge/analogix/anx7625.c | 73 +++++++++++++++++++++++
+> >   drivers/gpu/drm/bridge/analogix/anx7625.h |  6 ++
+> >   2 files changed, 79 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index 07ed44c6b839..d41a21103bd3 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -15,6 +15,7 @@
+> >   #include <linux/regulator/consumer.h>
+> >   #include <linux/slab.h>
+> >   #include <linux/types.h>
+> > +#include <linux/usb/typec_mux.h>
+> >   #include <linux/workqueue.h>
+> >
+> >   #include <linux/of_gpio.h>
+> > @@ -2581,9 +2582,59 @@ static void anx7625_runtime_disable(void *data)
+> >       pm_runtime_disable(data);
+> >   }
+> >
+> > +static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+> > +                              struct typec_mux_state *state)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
+> > +                                     struct anx7625_data *ctx)
+> > +{
+> > +     struct anx7625_port_data *port_data;
+> > +     struct typec_mux_desc mux_desc = {};
+> > +     char name[32];
+> > +     u32 port_num;
+> > +     int ret;
+> > +
+> > +     ret = of_property_read_u32(node, "reg", &port_num);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     if (port_num >= ctx->num_typec_switches) {
+> > +             dev_err(dev, "Invalid port number specified: %d\n", port_num);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     port_data = &ctx->typec_ports[port_num];
+> > +     port_data->ctx = ctx;
+> > +     mux_desc.fwnode = &node->fwnode;
+> > +     mux_desc.drvdata = port_data;
+> > +     snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
+> > +     mux_desc.name = name;
+> > +     mux_desc.set = anx7625_typec_mux_set;
+> > +
+> > +     port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+> > +     if (IS_ERR(port_data->typec_mux)) {
+> > +             ret = PTR_ERR(port_data->typec_mux);
+> > +             dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
+> > +     }
+>
+> Please return 0 at the end of this function.
+>
+>         if (IS_ERR(....)) {
+>                 ......code......
+>                 return ret;
+>         }
+>
+>         return 0;
+> }
 
-can this be called unconditionally, that is even for a closed tty?
+May I ask why? We're not missing any return paths. I would rather we
+keep it as is (which has the valid return value).
 
-	Regards
-		Oliver
+>
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static void anx7625_unregister_typec_switches(struct anx7625_data *ctx)
+> > +{
+> > +     int i;
+> > +
+> > +     for (i = 0; i < ctx->num_typec_switches; i++)
+> > +             typec_mux_unregister(ctx->typec_ports[i].typec_mux);
+> > +}
+> > +
+> >   static int anx7625_register_typec_switches(struct device *device, struct anx7625_data *ctx)
+> >   {
+> >       struct device_node *of = NULL;
+> > +     struct device_node *sw;
+> >       int ret = 0;
+> >
+> >       of = of_get_child_by_name(device->of_node, "switches");
+> > @@ -2594,6 +2645,26 @@ static int anx7625_register_typec_switches(struct device *device, struct anx7625
+> >       if (ctx->num_typec_switches <= 0)
+> >               return -ENODEV;
+> >
+> > +     ctx->typec_ports = devm_kzalloc(device,
+> > +                                     ctx->num_typec_switches * sizeof(struct anx7625_port_data),
+> > +                                     GFP_KERNEL);
+> > +     if (!ctx->typec_ports)
+> > +             return -ENOMEM;
+> > +
+> > +     /* Register switches for each connector. */
+> > +     for_each_available_child_of_node(of, sw) {
+> > +             if (!of_property_read_bool(sw, "mode-switch"))
+> > +                     continue;
+> > +             ret = anx7625_register_mode_switch(device, sw, ctx);
+> > +             if (ret) {
+> > +                     dev_err(device, "Failed to register mode switch: %d\n", ret);
+> > +                     break;
+> > +             }
+> > +     }
+> > +
+> > +     if (ret)
+> > +             anx7625_unregister_typec_switches(ctx);
+> > +
+> >       return ret;
+> >   }
+> >
+> > @@ -2759,6 +2830,8 @@ static int anx7625_i2c_remove(struct i2c_client *client)
+> >
+> >       drm_bridge_remove(&platform->bridge);
+> >
+> > +     anx7625_unregister_typec_switches(platform);
+> > +
+> >       if (platform->pdata.intp_irq)
+> >               destroy_workqueue(platform->workqueue);
+> >
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > index d5cbca708842..76cfc64f7574 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > @@ -443,6 +443,11 @@ struct anx7625_i2c_client {
+> >       struct i2c_client *tcpc_client;
+> >   };
+> >
+> > +struct anx7625_port_data {
+> > +     struct typec_mux_dev *typec_mux;
+> > +     struct anx7625_data *ctx;
+> > +};
+> > +
+> >   struct anx7625_data {
+> >       struct anx7625_platform_data pdata;
+> >       struct platform_device *audio_pdev;
+> > @@ -474,6 +479,7 @@ struct anx7625_data {
+> >       struct mipi_dsi_device *dsi;
+> >       struct drm_dp_aux aux;
+> >       int num_typec_switches;
+> > +     struct anx7625_port_data *typec_ports;
+> >   };
+> >
+> >   #endif  /* __ANX7625_H__ */
+>
