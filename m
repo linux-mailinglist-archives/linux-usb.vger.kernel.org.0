@@ -2,100 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB8854D1DF
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jun 2022 21:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA4B54D206
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jun 2022 21:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350286AbiFOTou (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jun 2022 15:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
+        id S1350206AbiFOTwi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jun 2022 15:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244636AbiFOTos (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 15:44:48 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874773CFF2;
-        Wed, 15 Jun 2022 12:44:46 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id y19so25255434ejq.6;
-        Wed, 15 Jun 2022 12:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=767OJrCK8HUadii808hVEy3GxcnvixklGPCO6V3YD5M=;
-        b=jFT/VeSc63iFgMPMb2xRcBbUCqXUnEZl1E1MVx1Yd2xAmk3ax4Uy65On/y29eZkoe2
-         EPvPLMkZIFEBJbO/DrmTsslXpsOfH14CWV/xGigqff7/K3B/BKmC5+61MIvtfT+WZpjS
-         RMqvC0cMMqe3uUD7OFBaas6cXGWaO+EzMk6KMymXcRzGsE2Ww5xjysjW4+PrZDjsV9tO
-         FyodoLXWhR4ioUoNG6krEdVinHpphmZO+IZVKrD8eX7Le1gfbzgMifUy58g6drBSSZ2S
-         x61qQcs/hRho1FhiO1lqm+d0Zm+1hEgLk1/ro/pRLJUSHwdfNL+b8dGXulEQO0kLlMeF
-         JTgg==
+        with ESMTP id S1343917AbiFOTwd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 15:52:33 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529A7D81;
+        Wed, 15 Jun 2022 12:52:31 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id v22so22372101ybd.5;
+        Wed, 15 Jun 2022 12:52:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=767OJrCK8HUadii808hVEy3GxcnvixklGPCO6V3YD5M=;
-        b=JTmCa6eiGmslLdPSH13yTsPqBSFxejnZGs3LDQDP3lvNlwQRvKZD8JoqpjIUKIyJ8J
-         TWjP/KiVMvIg6At1lFJqBaUDf5p20iIOL7X9Dk0j0V/YIuZfLP+fDz8s0WBg1SN//UQ4
-         RoHYxwUkbSEu+1WM/ofEtW+sbYvm9cUspjsYPhQ0k6RwcLWRwFnP8Luo1HEKyu+JhKwD
-         fCelDcnl91ljatE7WsSJqTgjeDIImEp8sa92eONoriTRBXfXFuDvTpJVE/8ZfeIdNhpu
-         sdEo+xgchPj8CcYoj3sCBzkmi660gxESY7boB6n6PjhMomHWorrI5jn86Hfm8MFVhauJ
-         D3zQ==
-X-Gm-Message-State: AJIora/XOIE4tDxeWB68p3NvAKJRl4H7Ug64vRw9SP6rcvKMx6TAX2pf
-        gwk5FlB+xIOWQCNMgF4lmzomSot8muE=
-X-Google-Smtp-Source: AGRyM1sgGqJHUeVw3u3W7rE3sqf5Kp8zpWdfvFHOMgDNOhP8CojDYKciFvgC5O7XXJFBkGcWqg0OLw==
-X-Received: by 2002:a17:907:c71b:b0:718:d0a2:a447 with SMTP id ty27-20020a170907c71b00b00718d0a2a447mr1266043ejc.157.1655322284933;
-        Wed, 15 Jun 2022 12:44:44 -0700 (PDT)
-Received: from felia.fritz.box (200116b826878200b4eabc3163d51ca4.dip.versatel-1u1.de. [2001:16b8:2687:8200:b4ea:bc31:63d5:1ca4])
-        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042dcac2afc6sm29565edu.72.2022.06.15.12.44.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 12:44:44 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Neal Liu <neal_liu@aspeedtech.com>, linux-aspeed@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: Repair file entry in ASPEED USB UDC DRIVER
-Date:   Wed, 15 Jun 2022 21:44:09 +0200
-Message-Id: <20220615194409.11875-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mL9akpVVZ4tEzNekwbjZgLIJgiBmLezCfn7/cgOspMQ=;
+        b=WTt/+ZRr+Mm+q7tKoJiaPW2HT4+9IFUK0PZFU1rbiY2QdpZwke6Ek9VilKanhUhVVs
+         1MUV+ALCpnC0Mp9202mcsVOSDetHm+bTKA40ZNi91AgARWHiTpHMGUOHT8/FnIN31SIV
+         OAq5B3kpi9HDf+5DCzQ7KkLQ5sVV3jEEu1rcRpHQ5mmVSvEWlEFhUlDgtedEY9SgyJmQ
+         rbq+XolDRdo5fRmRJFQEZ64NEYK28kMpaFC6kFWka9N+VUpJohwINIdc3wnfOeZxhAx+
+         TZAv2gRDB3iKVbXCwrFIHpmPJHTskok6R1qAdqvz6hi8Zf2M2l27VkOutYgUVqMWCfES
+         1y4g==
+X-Gm-Message-State: AJIora/JsnsH/s6kVF7bTKq/tGOJxTbm8r9t4yMIj1D+JYG0HHcxFkTl
+        DT+zHf4sQlVpShtGH7QQNzeqhOQx5byE5nDbFOA=
+X-Google-Smtp-Source: AGRyM1sF+FBhgh0k43sS5ry6Ox06fy9vYOfaKhwdj6kn6fPKiE+CPeLL04/IuPY068Cde/SdzOSdQg3fFpFDF6iy/GU=
+X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
+ o69-20020a25d748000000b0065c6b0055afmr1534149ybg.365.1655322750507; Wed, 15
+ Jun 2022 12:52:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
+ <2851774.e9J7NaK4W3@kreacher> <YqglkQZxAagb8ln/@lahna> <CAJZ5v0jBLNpXpVn=WBm1rLxDkPFNo=UqsfDnuWS9hD=CRDPbsQ@mail.gmail.com>
+ <Yql74qs6nYwRaQYf@lahna>
+In-Reply-To: <Yql74qs6nYwRaQYf@lahna>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 15 Jun 2022 21:52:19 +0200
+Message-ID: <CAJZ5v0jM=cUEmABWeV2=v8etXRWLT=GE_FhV1CYRfNrv72CkkA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/16] thunderbolt: ACPI: Replace tb_acpi_find_port()
+ with acpi_find_child_by_adr()
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver") adds
-the section ASPEED USB UDC DRIVER with a file entry to aspeed,udc.yaml,
-but then, commit 0dde9a46a2cf ("dt-bindings: usb: add documentation for
-aspeed udc") actually adds a device tree binding aspeed,ast2600-udc.yaml.
+On Wed, Jun 15, 2022 at 8:27 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Tue, Jun 14, 2022 at 08:25:53PM +0200, Rafael J. Wysocki wrote:
+> > Hi Mika,
+> >
+> > On Tue, Jun 14, 2022 at 8:07 AM Mika Westerberg
+> > <mika.westerberg@linux.intel.com> wrote:
+> > >
+> > > Hi Rafael,
+> > >
+> > > On Mon, Jun 13, 2022 at 08:11:36PM +0200, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > Use acpi_find_child_by_adr() to find the child matching a given bus
+> > > > address instead of tb_acpi_find_port() that walks the list of children
+> > > > of an ACPI device directly for this purpose and drop the latter.
+> > > >
+> > > > Apart from simplifying the code, this will help to eliminate the
+> > > > children list head from struct acpi_device as it is redundant and it
+> > > > is used in questionable ways in some places (in particular, locking is
+> > > > needed for walking the list pointed to it safely, but it is often
+> > > > missing).
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >
+> > > > v1 -> v2:
+> > > >    * Drop tb_acpi_find_port() (Heikki, Andy).
+> > > >    * Change the subject accordingly
+> > > >
+> > > > ---
+> > > >  drivers/thunderbolt/acpi.c |   27 ++++-----------------------
+> > > >  1 file changed, 4 insertions(+), 23 deletions(-)
+> > > >
+> > > > Index: linux-pm/drivers/thunderbolt/acpi.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/drivers/thunderbolt/acpi.c
+> > > > +++ linux-pm/drivers/thunderbolt/acpi.c
+> > > > @@ -301,26 +301,6 @@ static bool tb_acpi_bus_match(struct dev
+> > > >       return tb_is_switch(dev) || tb_is_usb4_port_device(dev);
+> > > >  }
+> > > >
+> > > > -static struct acpi_device *tb_acpi_find_port(struct acpi_device *adev,
+> > > > -                                          const struct tb_port *port)
+> > > > -{
+> > > > -     struct acpi_device *port_adev;
+> > > > -
+> > > > -     if (!adev)
+> > > > -             return NULL;
+> > > > -
+> > > > -     /*
+> > > > -      * Device routers exists under the downstream facing USB4 port
+> > > > -      * of the parent router. Their _ADR is always 0.
+> > > > -      */
+> > > > -     list_for_each_entry(port_adev, &adev->children, node) {
+> > > > -             if (acpi_device_adr(port_adev) == port->port)
+> > > > -                     return port_adev;
+> > > > -     }
+> > > > -
+> > > > -     return NULL;
+> > > > -}
+> > > > -
+> > > >  static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
+> > > >  {
+> > > >       struct acpi_device *adev = NULL;
+> > > > @@ -331,7 +311,8 @@ static struct acpi_device *tb_acpi_switc
+> > > >               struct tb_port *port = tb_port_at(tb_route(sw), parent_sw);
+> > > >               struct acpi_device *port_adev;
+> > > >
+> > > > -             port_adev = tb_acpi_find_port(ACPI_COMPANION(&parent_sw->dev), port);
+> > > > +             port_adev = acpi_find_child_by_adr(ACPI_COMPANION(&parent_sw->dev),
+> > > > +                                                port->port);
+> > > >               if (port_adev)
+> > > >                       adev = acpi_find_child_device(port_adev, 0, false);
+> > > >       } else {
+> > > > @@ -364,8 +345,8 @@ static struct acpi_device *tb_acpi_find_
+> > > >       if (tb_is_switch(dev))
+> > > >               return tb_acpi_switch_find_companion(tb_to_switch(dev));
+> > > >       else if (tb_is_usb4_port_device(dev))
+> > > > -             return tb_acpi_find_port(ACPI_COMPANION(dev->parent),
+> > > > -                                      tb_to_usb4_port_device(dev)->port);
+> > >
+> > > Can you move the above comment here too?
+> >
+> > Do you mean to move the comment from tb_acpi_find_port() right here or
+> > before the if (tb_is_switch(dev)) line above?
+> >
+> > I think that tb_acpi_switch_find_companion() would be a better place
+> > for that comment.  At least it would match the code passing 0 to
+> > acpi_find_child_device() in there.
+>
+> Yes, I agree (as long as the comment stays somewhere close ;-))
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+OK, I'll move it to tb_acpi_switch_find_companion() then.
 
-Repair the reference to the actually added file in ASPEED USB UDC DRIVER.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Neal, please ack.
-Greg, please pick this minor non-urgent clean-up patch in your usb-next tree.
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d9c3576b082f..8830d1adb23b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3144,7 +3144,7 @@ ASPEED USB UDC DRIVER
- M:	Neal Liu <neal_liu@aspeedtech.com>
- L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
- S:	Maintained
--F:	Documentation/devicetree/bindings/usb/aspeed,udc.yaml
-+F:	Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
- F:	drivers/usb/gadget/udc/aspeed_udc.c
- 
- ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
--- 
-2.17.1
-
+Thanks!
