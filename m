@@ -2,167 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E4054C1D1
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jun 2022 08:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB72C54C2B3
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jun 2022 09:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243583AbiFOG14 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jun 2022 02:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S245385AbiFOHfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jun 2022 03:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbiFOG1z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 02:27:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08E212A96;
-        Tue, 14 Jun 2022 23:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655274473; x=1686810473;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=paje04xnVGTi1OtyRY/hN0RZlL5eV183Z88/BdFFA5k=;
-  b=GTCAFplGadcDK6uC0zovKEJz9L0sGMDZ4A1WvEBmxL2OhQ4drtubA3YJ
-   auglswJ76BO6g0HO2/nF/ZgPnrYl0gFMTR+3y2+kmGLSRIpUeFt9U19++
-   jwGLMIfbq0EW4dbsknQul0bzLYcZ0JMoPwFS3iW8gXkUDXBaM/poz3H0A
-   Pij8UnHvaPgFG9Tjswc/xnOAY5BlCmVJpD4QMULgnCxsMq4ueZj+Dfpzk
-   Naj4bobtDEjNyMIN8G85rNS/Co0x9VSQ4sLifduG+rk0Za1aasKHxw2Uq
-   +Kep9JMh7CiaO3I2kcOiGEmT87PrYgyKGpn1InQy/i6WmdxVLEdOjU97m
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="342815606"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="342815606"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 23:27:53 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="762317135"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 23:27:49 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 15 Jun 2022 09:27:46 +0300
-Date:   Wed, 15 Jun 2022 09:27:46 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH v2 04/16] thunderbolt: ACPI: Replace tb_acpi_find_port()
- with acpi_find_child_by_adr()
-Message-ID: <Yql74qs6nYwRaQYf@lahna>
-References: <1843211.tdWV9SEqCh@kreacher>
- <2653857.mvXUDI8C0e@kreacher>
- <2851774.e9J7NaK4W3@kreacher>
- <YqglkQZxAagb8ln/@lahna>
- <CAJZ5v0jBLNpXpVn=WBm1rLxDkPFNo=UqsfDnuWS9hD=CRDPbsQ@mail.gmail.com>
+        with ESMTP id S245205AbiFOHfW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 03:35:22 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2433F4756E;
+        Wed, 15 Jun 2022 00:35:21 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so611343wms.5;
+        Wed, 15 Jun 2022 00:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6231YElwpY0EMQw/jVrtaouMPdsWUXcvBmdiLPb1PQ4=;
+        b=YQiPihd7vfYxTOea4eaxk6vyRopNf5N4OX8VEVZW9Fw7eCPaaCqHGtFLvvCJBB9xiW
+         +EPPQbDSQ/wjQjzo3tpHCC88vX0TwD7lYgbIL4PHfR3Lq+wl6lR7mx/HwhXhJ0jOkI+G
+         ancgT5HSvQ3NXGBNOS/EmXaOafJWmxgaruoOmCXsGeXJNrNuPdSI5UfSwXKiDvEmf41b
+         qqRBRXynxr9t3F2RCvq1z5QBX8AiTtbacCj/H4f/NRIfZ4jHabwBbmyHvE108rmMM2wz
+         XmE+PSUZo+8oOXmM+veBs66DFSyrtenU5aWWCNKbkYzcB6wB0HiNJXYcs6/VWZN4cI8q
+         vfaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6231YElwpY0EMQw/jVrtaouMPdsWUXcvBmdiLPb1PQ4=;
+        b=1Z48Api1k7kb+FV482jj0d46sqcfV8OtAfjcrZCBhgKJuytMEpKC1p2F9kB8uamgC4
+         x6dkMSMMO3bcoNsmR0QcRaIWbMfXr2tIvtr0d1X9npUrFODhkXvEjq25UMU/tv4DrTl0
+         vxdk97s6fauoU7CdiIuwSrSZIsERRbPdPQfFgqsxy6ZfNJQmdJnvxmvcto5TR40/c2hi
+         pMuenYJ9MtYL9OdIxuSs6dqaeyYJk0xIdCdpsDBmPC8iv/zO0cMDXkkHY/vkfLUiHmIj
+         cKaefpnnAzJfi5T9XsnnILHEnvRyX2uir4ls1aViIHm0SBLvzyzoargLIMrnVRJ2dsWO
+         U+kg==
+X-Gm-Message-State: AOAM531uAfT2roFh7DttIcWAStukLCRZJrZWhBQYaF8EodSKg37b7xIJ
+        mh9unOZWn95PSGpXV0RYjOCesmUBNGIQCfPG
+X-Google-Smtp-Source: ABdhPJxh39A5lnBvRYI/2TeMwxhzEyOmO3E10gV5vCOnbG6aQ091rRCB9B4vaiuLlJlnkIUtCS6w+w==
+X-Received: by 2002:a05:600c:1d1f:b0:39c:5350:c5a3 with SMTP id l31-20020a05600c1d1f00b0039c5350c5a3mr8084676wms.136.1655278519588;
+        Wed, 15 Jun 2022 00:35:19 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m17-20020adfc591000000b0020fff0ea0a3sm14224612wrg.116.2022.06.15.00.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 00:35:18 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: gadget: ast2600: Fix a couple of spelling mistakes
+Date:   Wed, 15 Jun 2022 08:35:18 +0100
+Message-Id: <20220615073518.192827-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jBLNpXpVn=WBm1rLxDkPFNo=UqsfDnuWS9hD=CRDPbsQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 08:25:53PM +0200, Rafael J. Wysocki wrote:
-> Hi Mika,
-> 
-> On Tue, Jun 14, 2022 at 8:07 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On Mon, Jun 13, 2022 at 08:11:36PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Use acpi_find_child_by_adr() to find the child matching a given bus
-> > > address instead of tb_acpi_find_port() that walks the list of children
-> > > of an ACPI device directly for this purpose and drop the latter.
-> > >
-> > > Apart from simplifying the code, this will help to eliminate the
-> > > children list head from struct acpi_device as it is redundant and it
-> > > is used in questionable ways in some places (in particular, locking is
-> > > needed for walking the list pointed to it safely, but it is often
-> > > missing).
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > v1 -> v2:
-> > >    * Drop tb_acpi_find_port() (Heikki, Andy).
-> > >    * Change the subject accordingly
-> > >
-> > > ---
-> > >  drivers/thunderbolt/acpi.c |   27 ++++-----------------------
-> > >  1 file changed, 4 insertions(+), 23 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/thunderbolt/acpi.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/thunderbolt/acpi.c
-> > > +++ linux-pm/drivers/thunderbolt/acpi.c
-> > > @@ -301,26 +301,6 @@ static bool tb_acpi_bus_match(struct dev
-> > >       return tb_is_switch(dev) || tb_is_usb4_port_device(dev);
-> > >  }
-> > >
-> > > -static struct acpi_device *tb_acpi_find_port(struct acpi_device *adev,
-> > > -                                          const struct tb_port *port)
-> > > -{
-> > > -     struct acpi_device *port_adev;
-> > > -
-> > > -     if (!adev)
-> > > -             return NULL;
-> > > -
-> > > -     /*
-> > > -      * Device routers exists under the downstream facing USB4 port
-> > > -      * of the parent router. Their _ADR is always 0.
-> > > -      */
-> > > -     list_for_each_entry(port_adev, &adev->children, node) {
-> > > -             if (acpi_device_adr(port_adev) == port->port)
-> > > -                     return port_adev;
-> > > -     }
-> > > -
-> > > -     return NULL;
-> > > -}
-> > > -
-> > >  static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
-> > >  {
-> > >       struct acpi_device *adev = NULL;
-> > > @@ -331,7 +311,8 @@ static struct acpi_device *tb_acpi_switc
-> > >               struct tb_port *port = tb_port_at(tb_route(sw), parent_sw);
-> > >               struct acpi_device *port_adev;
-> > >
-> > > -             port_adev = tb_acpi_find_port(ACPI_COMPANION(&parent_sw->dev), port);
-> > > +             port_adev = acpi_find_child_by_adr(ACPI_COMPANION(&parent_sw->dev),
-> > > +                                                port->port);
-> > >               if (port_adev)
-> > >                       adev = acpi_find_child_device(port_adev, 0, false);
-> > >       } else {
-> > > @@ -364,8 +345,8 @@ static struct acpi_device *tb_acpi_find_
-> > >       if (tb_is_switch(dev))
-> > >               return tb_acpi_switch_find_companion(tb_to_switch(dev));
-> > >       else if (tb_is_usb4_port_device(dev))
-> > > -             return tb_acpi_find_port(ACPI_COMPANION(dev->parent),
-> > > -                                      tb_to_usb4_port_device(dev)->port);
-> >
-> > Can you move the above comment here too?
-> 
-> Do you mean to move the comment from tb_acpi_find_port() right here or
-> before the if (tb_is_switch(dev)) line above?
-> 
-> I think that tb_acpi_switch_find_companion() would be a better place
-> for that comment.  At least it would match the code passing 0 to
-> acpi_find_child_device() in there.
+There are a couple of spelling mistakes, one in a dev_warn message
+and another in a SETUP_DBG message. Fix these and remove an extraneous
+white space too.
 
-Yes, I agree (as long as the comment stays somewhere close ;-))
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 1fc15228ff15..05cfcc4812b8 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -904,7 +904,7 @@ static void ast_udc_epn_handle_desc(struct ast_udc_dev *udc, u16 ep_num)
+ 	int i;
+ 
+ 	if (list_empty(&ep->queue)) {
+-		dev_warn(dev, "%s reqest queue empty !\n", ep->ep.name);
++		dev_warn(dev, "%s request queue empty!\n", ep->ep.name);
+ 		return;
+ 	}
+ 
+@@ -1036,7 +1036,7 @@ static void ast_udc_ep0_handle_setup(struct ast_udc_dev *udc)
+ 
+ 	memcpy_fromio(&crq, udc->creq, sizeof(crq));
+ 
+-	SETUP_DBG(udc, "SETEUP packet: %02x/%02x/%04x/%04x/%04x\n",
++	SETUP_DBG(udc, "SETUP packet: %02x/%02x/%04x/%04x/%04x\n",
+ 		  crq.bRequestType, crq.bRequest, le16_to_cpu(crq.wValue),
+ 		  le16_to_cpu(crq.wIndex), le16_to_cpu(crq.wLength));
+ 
+-- 
+2.35.3
+
