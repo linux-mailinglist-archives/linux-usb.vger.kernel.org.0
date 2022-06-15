@@ -2,171 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EA654BC53
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jun 2022 22:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2A754BF12
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jun 2022 03:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345164AbiFNUxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jun 2022 16:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S234789AbiFOBHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jun 2022 21:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358452AbiFNUxY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 16:53:24 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4172FE66
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so149977pjm.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
-        b=rlANcywAf4bR7fadVFA2+G43rRwb6bnCOg+XpmZaE08Y1ATmf4iXfkpOG29AXJ27fu
-         nBPgAan/++luP9MBfjVPAOtUAnUddFJWgFTpt8KC3RYS6VGpCD6sbGm13MaOL9Z44jGD
-         4fFF01bfFROZXzw7HdaT2etm+xFtUlvK5HkkHAmN83wi0aZnVzmCVnSiJsVkMQK4SMai
-         HUNWTGtntrPCxetOSOJqi/coDpghVaIdNMMDH5QrLKyN7jfKz3CoBwz29149riGdWEdQ
-         O+GwP/qqzi5qErljLWsZ13oFVlZdEnn/YqvCC8+n2DYlnwaN/fpW2/wLi0q6xxs0bF6l
-         drEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
-        b=zrm/ShJ1TcR652uWl7ouwSie1PLASBWqoGEsFzic8ZJ/KtUTuF8bvRwS4yAtqQZWie
-         PwLKISPD/rC0rrpMgYbZYOVzoIqyvygdnsvC5Yd9EwyHVum2qwwsrXbWyT5FCdXxpAS9
-         y7baBp73hv8GSg7dAwAMOIfidwJcVkyawAK+qwjw7JQX0i8ba7r8C7t7JahcfYivSvz3
-         LqJUYObhnj3+WqR4xuFR8DtL9dacdHV9v48htJd/tuqhXElK7hHIS6frTnJdpH9Ckt3i
-         NCWFmApPN2EnWvqYVhC5U7hWbKV3qvfogMbSoX9X8c6oIDSRk3+8oR2cMRzUNvhMwDoG
-         5kNw==
-X-Gm-Message-State: AJIora8Fs5hRsFJlBc62bVdiMXi2zjwfwiRdqcLWmu9Y2/YmaLDjzgP6
-        pDrS115gUOnL0TBd4WmlVtsnBw==
-X-Google-Smtp-Source: AGRyM1sGORuHOsrudJ2NzMuucMCoEUS7FrDUAZJlvhB95QU1/ijkVKGqDtIwU3c/jV+ULDfXuIS/fA==
-X-Received: by 2002:a17:903:248:b0:168:cf03:eefe with SMTP id j8-20020a170903024800b00168cf03eefemr6038425plh.124.1655240002425;
-        Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id m12-20020a1709026bcc00b00162037fbacdsm7638321plt.187.2022.06.14.13.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 13:53:21 -0700 (PDT)
-Message-ID: <3dbb38af-4813-3c5d-8a12-cdd63bdbe3c2@linaro.org>
-Date:   Tue, 14 Jun 2022 13:53:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch
- support
-Content-Language: en-US
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        with ESMTP id S231489AbiFOBHd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jun 2022 21:07:33 -0400
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DE1B74
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jun 2022 18:07:29 -0700 (PDT)
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3CB6CC0C91;
+        Wed, 15 Jun 2022 01:07:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1655255248; bh=yCqhcatvyY2BgD4xMO8FRNplailMIXhWJRCZ/p2lFRM=;
+        h=Date:From:Subject:To:Cc:From;
+        b=M+uvGAOFL9hKUTW5E8VLjzlwBcTPUB7eiuQwJjNJH6y9MKrH2q5Fpyuklb8oZGJ7D
+         qidh0x2Ia2xkPdnf4UKQNz8CO8Lsp/ij32COMSkqY/M+DqgURqVsl8W3kkItLjI3Il
+         6E4JfGBwPnZ9ivRjyaoL3eWgW9+Ri6X+p6has4y971HC28Jjke35QjZfVseOS9q8JX
+         eBshjRZZD1I3W6H5vCz0KBWak7nE3RHC6v90MbV/XGQuLJQsdPMSiwjqioKn5T/3rx
+         gTy9fX3W4LA8Ev/pgOwKu5QFeChgN9Kc14mB/cbxeM0ZwZfqqR/7PDAoupt8q/A5mf
+         ys5W5AxjbC9kw==
+Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 24EA9A00A3;
+        Wed, 15 Jun 2022 01:07:25 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Tue, 14 Jun 2022 18:07:25 -0700
+Date:   Tue, 14 Jun 2022 18:07:25 -0700
+Message-Id: <eb1df7ef954b5af093c0528982db52a41df18615.1655255152.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] Revert "usb: dwc3: Remove the checks of -ENOSYS"
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-References: <20220614193558.1163205-1-pmalani@chromium.org>
- <20220614193558.1163205-5-pmalani@chromium.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220614193558.1163205-5-pmalani@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Kushagra Verma <kushagra765@outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/06/2022 12:34, Prashant Malani wrote:
-> Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
-> alternate mode lane traffic between 2 Type-C ports.
-> 
-> Update the binding to accommodate this usage by introducing a switch
-> property.
-> 
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
-> 
-> Changes since v2:
-> - Added Reviewed-by and Tested-by tags.
-> 
-> Changes since v1:
-> - Introduced patternProperties for "switch" children (suggested by Krzysztof Kozlowski).
-> - Added unevaluatedProperties descriptor (suggested by Krzysztof Kozlowski).
-> - Added "address-cells" and "size-cells" properties to "switches".
-> 
->  .../display/bridge/analogix,anx7625.yaml      | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> index 35a48515836e..cb4a23391244 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> @@ -105,6 +105,33 @@ properties:
->        - port@0
->        - port@1
->  
-> +  switches:
-> +    type: object
-> +    description: Set of switches controlling DisplayPort traffic on
-> +      outgoing RX/TX lanes to Type C ports.
-> +    unevaluatedProperties: false
+This reverts commit df22ecc41b54def624735b83784857e708bd1502.
 
-This should be additionalProperties:false.
+If CONFIG_GENERIC_PHY is not enabled, then the devm_phy_get() returns
+-ENOSYS. Don't remove this check.
 
-> +
-> +    properties:
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 0
-> +
-> +    patternProperties:
-> +      'switch@[01]':
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ drivers/usb/dwc3/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You also need ^ and $. Please use the same quotes as in other places
-(here is ' but few lines above ")
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 2c12bbbcd55c..00548712db00 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1318,7 +1318,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+ 	dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
+ 	if (IS_ERR(dwc->usb2_generic_phy)) {
+ 		ret = PTR_ERR(dwc->usb2_generic_phy);
+-		if (ret == -ENODEV)
++		if (ret == -ENOSYS || ret == -ENODEV)
+ 			dwc->usb2_generic_phy = NULL;
+ 		else
+ 			return dev_err_probe(dev, ret, "no usb2 phy configured\n");
+@@ -1327,7 +1327,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+ 	dwc->usb3_generic_phy = devm_phy_get(dev, "usb3-phy");
+ 	if (IS_ERR(dwc->usb3_generic_phy)) {
+ 		ret = PTR_ERR(dwc->usb3_generic_phy);
+-		if (ret == -ENODEV)
++		if (ret == -ENOSYS || ret == -ENODEV)
+ 			dwc->usb3_generic_phy = NULL;
+ 		else
+ 			return dev_err_probe(dev, ret, "no usb3 phy configured\n");
 
-> +        $ref: /schemas/usb/typec-switch.yaml#
+base-commit: 235a6d80f021d9c3bb5652fb6b19d092a7339248
+-- 
+2.28.0
 
-You need unevaluatedProperties:false on this level.
-
-> +
-> +        properties:
-> +          reg:
-> +            maxItems: 1
-> +
-> +        required:
-> +          - reg
-> +
-> +    required:
-> +      - switch@0
-> +
-
-
-Best regards,
-Krzysztof
