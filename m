@@ -2,182 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1A954C3E1
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jun 2022 10:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7422554C44B
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jun 2022 11:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343756AbiFOIpy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jun 2022 04:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S1346443AbiFOJHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jun 2022 05:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345598AbiFOIpi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 04:45:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7958F4F1C9;
-        Wed, 15 Jun 2022 01:45:37 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5FFF966016CE;
-        Wed, 15 Jun 2022 09:45:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655282735;
-        bh=ig8964Pis3U0xmrv25bzOpvQC450sNHC3GS2vgea2vE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NSbZ9O2mvG+kvEwG/FE6u4dUr1wC35qYVWum6oK8RGl+oxZr81kxh2GENXiCCbPPa
-         rYIozjo+Edc8uLzJV6bg1PgSSezGBeBbjxMdlH4Q4zUAHE/U2ifUKrx0rXwpBGnjDL
-         UuK05auuOUhn+ZHUvRoySp/oBkYlt26K4g5W/vt3BUuZTIkwW2h1eHi2bhPSBRZHRE
-         Wo8gFy3YQIKAgsfecFk5dPHM7y5ii6iVMwaU1ARBcLAcBu8kgw2h9NWlSKm5En8kSo
-         FfIiq6UPzpDNiu6PKfRKrqy5npwwAk053WfXFyB7K47/r28yCFZ2tMI5I5D13dviod
-         K69g7f+e/HXvw==
-Message-ID: <28135a2f-bf02-fd0b-e881-0ce9d68bd764@collabora.com>
-Date:   Wed, 15 Jun 2022 10:45:31 +0200
+        with ESMTP id S244746AbiFOJHZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 05:07:25 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70AB3EA82;
+        Wed, 15 Jun 2022 02:07:07 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso1471358pjk.0;
+        Wed, 15 Jun 2022 02:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4JtPRyjbP8QuT3v17GJxg9BNek2Y86FBp+fdy2by9ME=;
+        b=jOotHS64BY6M39fk6R8uENDwG2gcmiTJ3g0/qnWke0JrBrPJeJrJTZkm16oK9MTdZE
+         mcAUhKwnm4NiLzC5+cSEZNnqES1bwBIcgmD4b2TaqaxzNEZ0vlzwBMVr/sOdfdajSz5j
+         P3Omged3y6HVr1qT1kjfd+aaWOQcOMq3H6hRJ6E9VAKvsUHojVF/AbR7/p3G4WwmWJii
+         4tNw23te90tgXOwGH7FICq2gWFsPUCot6Z2JeP0LRAm6gz4hCmP7gtFIW/gvDdIS7kuk
+         88cfLw09hy4Ob2A4dxfu7QadKKmwYBvd336S6C4Q2fzuO9lSTdS01LrjkobxAij85s+D
+         MfhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4JtPRyjbP8QuT3v17GJxg9BNek2Y86FBp+fdy2by9ME=;
+        b=xcehnxHApk6umL/+JLqscV4irex268iySdmDHmiJdGQj+70RcVIo++1n58rMsIHBnQ
+         w3qU9gOroFWT0sJzll/LISKsqPmYABYID++iWAsP0Hrx7iDE4dPrLI11dOqjW048LMrD
+         eZN2vMC0G5zAtfpMTShfTWOFmzsSPjF+RU2v8Zi4a1rN4pl84SS4sX9JlZpgVTsEteIj
+         nmHS1UnlRCQhBohMNOXXIPnzje+OKI8uW4fobC2akuG+kYk/RJq8c2YyzsJSaKTS21zP
+         41xxUTXbVAeM7Tw55S/uE1uCuSgcKOaeReNHT/Ati99lGztx1Ou/LMuNDlYLGwZBvHf4
+         M6+w==
+X-Gm-Message-State: AJIora/fUqNFm2unzsSNzo8Y6QM4t1E87irPhOmc0c2Rggu/CrVCrK47
+        HYbuFnMt/6VFoQuuIzU/HBnDvSpnzOTO+iD6ync=
+X-Google-Smtp-Source: ABdhPJySN52jEKSf82uTHdGB9FMkjyPTuQAeoOTbelMrzYhTURhqOj0vKUkkUK1xFfKum1H14ZBk7w==
+X-Received: by 2002:a17:902:7105:b0:168:dfe3:66e0 with SMTP id a5-20020a170902710500b00168dfe366e0mr8209334pll.88.1655284027260;
+        Wed, 15 Jun 2022 02:07:07 -0700 (PDT)
+Received: from localhost ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id w2-20020a62c702000000b0051c03229a2bsm9208920pfg.21.2022.06.15.02.07.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 02:07:06 -0700 (PDT)
+From:   Hongyu Xie <xy521521@gmail.com>
+X-Google-Original-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        125707942@qq.com, wangqi@kylinos.cn, xiongxin@kylinos.cn,
+        Hongyu Xie <xiehongyu1@kylinos.cn>
+Subject: [PATCH v2 -next] usb: xhci: disable irq during initialization
+Date:   Wed, 15 Jun 2022 17:07:03 +0800
+Message-Id: <20220615090703.1812560-1-xiehongyu1@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 6/7] drm/bridge: anx7625: Register Type-C mode switches
-Content-Language: en-US
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
-        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-References: <20220609181106.3695103-1-pmalani@chromium.org>
- <20220609181106.3695103-7-pmalani@chromium.org>
- <b3b9768d-e0d0-7132-5f50-dd6aa53a68ee@collabora.com>
- <CACeCKaexczFCja_ndndb_A58yZYQ98rTtgY4vHMknENTLxBPPA@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CACeCKaexczFCja_ndndb_A58yZYQ98rTtgY4vHMknENTLxBPPA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 14/06/22 18:57, Prashant Malani ha scritto:
-> On Tue, Jun 14, 2022 at 1:18 AM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 09/06/22 20:09, Prashant Malani ha scritto:
->>> When the DT node has "switches" available, register a Type-C mode-switch
->>> for each listed "switch". This allows the driver to receive state
->>> information about what operating mode a Type-C port and its connected
->>> peripherals are in, as well as status information (like VDOs) related to
->>> that state.
->>>
->>> The callback function is currently a stub, but subsequent patches will
->>> implement the required functionality.
->>>
->>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
->>> ---
->>>
->>> Changes since v2:
->>> - No changes.
->>>
->>>    drivers/gpu/drm/bridge/analogix/anx7625.c | 73 +++++++++++++++++++++++
->>>    drivers/gpu/drm/bridge/analogix/anx7625.h |  6 ++
->>>    2 files changed, 79 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
->>> index 07ed44c6b839..d41a21103bd3 100644
->>> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
->>> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
->>> @@ -15,6 +15,7 @@
->>>    #include <linux/regulator/consumer.h>
->>>    #include <linux/slab.h>
->>>    #include <linux/types.h>
->>> +#include <linux/usb/typec_mux.h>
->>>    #include <linux/workqueue.h>
->>>
->>>    #include <linux/of_gpio.h>
->>> @@ -2581,9 +2582,59 @@ static void anx7625_runtime_disable(void *data)
->>>        pm_runtime_disable(data);
->>>    }
->>>
->>> +static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
->>> +                              struct typec_mux_state *state)
->>> +{
->>> +     return 0;
->>> +}
->>> +
->>> +static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
->>> +                                     struct anx7625_data *ctx)
->>> +{
->>> +     struct anx7625_port_data *port_data;
->>> +     struct typec_mux_desc mux_desc = {};
->>> +     char name[32];
->>> +     u32 port_num;
->>> +     int ret;
->>> +
->>> +     ret = of_property_read_u32(node, "reg", &port_num);
->>> +     if (ret)
->>> +             return ret;
->>> +
->>> +     if (port_num >= ctx->num_typec_switches) {
->>> +             dev_err(dev, "Invalid port number specified: %d\n", port_num);
->>> +             return -EINVAL;
->>> +     }
->>> +
->>> +     port_data = &ctx->typec_ports[port_num];
->>> +     port_data->ctx = ctx;
->>> +     mux_desc.fwnode = &node->fwnode;
->>> +     mux_desc.drvdata = port_data;
->>> +     snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
->>> +     mux_desc.name = name;
->>> +     mux_desc.set = anx7625_typec_mux_set;
->>> +
->>> +     port_data->typec_mux = typec_mux_register(dev, &mux_desc);
->>> +     if (IS_ERR(port_data->typec_mux)) {
->>> +             ret = PTR_ERR(port_data->typec_mux);
->>> +             dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
->>> +     }
->>
->> Please return 0 at the end of this function.
->>
->>          if (IS_ERR(....)) {
->>                  ......code......
->>                  return ret;
->>          }
->>
->>          return 0;
->> }
-> 
-> May I ask why? We're not missing any return paths. I would rather we
-> keep it as is (which has the valid return value).
-> 
+irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
+in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
+It's possible that you will receive thousands of interrupt requests
+after initialization for 2.0 roothub. And you will get a lot of
+warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
+disabled?". This amount of interrupt requests will cause the entire
+system to freeze.
+This problem was first found on a device with ASM2142 host controller
+on it.
 
-I know that you're not missing any return paths.
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+---
 
-That's only because the proposed one is a common pattern in the kernel
-and it's only for consistency.
+v2: fix compile error
 
-Regards,
-Angelo
+ drivers/usb/host/xhci.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 9ac56e9ffc64..513bcd346886 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -611,6 +611,7 @@ static int xhci_init(struct usb_hcd *hcd)
+ 
+ static int xhci_run_finished(struct xhci_hcd *xhci)
+ {
++	u32 temp;
+ 	if (xhci_start(xhci)) {
+ 		xhci_halt(xhci);
+ 		return -ENODEV;
+@@ -620,6 +621,19 @@ static int xhci_run_finished(struct xhci_hcd *xhci)
+ 	if (xhci->quirks & XHCI_NEC_HOST)
+ 		xhci_ring_cmd_db(xhci);
+ 
++	/* Set the HCD state before we enable the irqs */
++	temp = readl(&xhci->op_regs->command);
++	temp |= (CMD_EIE);
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
++			"// Enable interrupts, cmd = 0x%x.", temp);
++	writel(temp, &xhci->op_regs->command);
++
++	temp = readl(&xhci->ir_set->irq_pending);
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
++			"// Enabling event ring interrupter %p by writing 0x%x"
++			"to irq_pending", xhci->ir_set,
++			(unsigned int) ER_IRQ_ENABLE(temp));
++	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+ 	return 0;
+ }
+ 
+@@ -668,19 +682,6 @@ int xhci_run(struct usb_hcd *hcd)
+ 	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
+ 	writel(temp, &xhci->ir_set->irq_control);
+ 
+-	/* Set the HCD state before we enable the irqs */
+-	temp = readl(&xhci->op_regs->command);
+-	temp |= (CMD_EIE);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Enable interrupts, cmd = 0x%x.", temp);
+-	writel(temp, &xhci->op_regs->command);
+-
+-	temp = readl(&xhci->ir_set->irq_pending);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
+-			xhci->ir_set, (unsigned int) ER_IRQ_ENABLE(temp));
+-	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+-
+ 	if (xhci->quirks & XHCI_NEC_HOST) {
+ 		struct xhci_command *command;
+ 
+-- 
+2.25.1
 
