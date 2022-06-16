@@ -2,161 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8D654D8AC
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 04:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F46254D8CC
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 05:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353703AbiFPC4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jun 2022 22:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S1357782AbiFPDMB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jun 2022 23:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354229AbiFPC4l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 22:56:41 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73985A091;
-        Wed, 15 Jun 2022 19:56:39 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y196so302969pfb.6;
-        Wed, 15 Jun 2022 19:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C39oS/JXA4kYL1oQFrI4MpJXg8RAY2fTyeKeofIGePs=;
-        b=js4aGzhoQvKvnrZgeaqVUFgEQGPqBRmsFAAG5y+bCfxg9L9x4qlAoZmCCq95jnjnnV
-         QBMH3RihttvUH/x4Q3KWvLfDar0dSZNx3HI7Mo5bSvacmgcCUAEarJ73KWY5AlY5I6zM
-         jpBm1+VS1YwnpGaZShD6bKM1G5amGUoYlCZefpK/qvtQDEYgYgKe/cyVX8KsCUDqJ3zH
-         I1uZHeRZhWGzONFnh98D4tygpZrU3yuoWZqw4e4voQKyJLWWO0E8uLeLg9IKzGIOjCF6
-         hSyCZl2Bb/BK5alMyiZZ0y3VJ2ejsOMLkFaz6O9eOjnUo4jZO1C87stMRb33D9Wfoqrx
-         xMXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=C39oS/JXA4kYL1oQFrI4MpJXg8RAY2fTyeKeofIGePs=;
-        b=5vuMbrfPeMyeM+qRfvkM8C03T3V/vrP+aaUGiq/3smcXbfGMoWeefnK5XFyZUklkgD
-         6Qg4jSmgdUsFZf0uYIWDvLC1pDe07Y7QOXv2A6O3ynr0n5xnhtshLHtVPaXk3Br2i9Jf
-         pvm+oMcAd50rcCCDc/3W8NAh3loBRtJRWBytfXWgDQz2V9bgbEErWOeuhAdQ21kbgqXU
-         lbzz2DU74hd2kIRhWNnyVEZfR2GfcOShuRO7vlIvX4BKg4XaN0uHJ7MLvXEyg9INsbDw
-         HlJmgnb8Y7naakzU1j2QhwxKbJwJfDRG6nrl4YQMye260ly66FN+Gr/SIcXsEFEqpulF
-         Xlqg==
-X-Gm-Message-State: AJIora9FZh5lto+swAE+w6JLeet9FVuIvS/8KadjmaF6VNakzB0UfNUs
-        tCw8g7f0Eu1hLxB19K8pZdNr14dZUGiieHCFxVk=
-X-Google-Smtp-Source: AGRyM1uUH7g7SHIf6vpotFH0NzOFWQRBrbtwP6vksHLLniC+ePrY1uAGvhT5qC6ug1qqxjeEbhUekQ==
-X-Received: by 2002:aa7:9f84:0:b0:51b:b64d:fc69 with SMTP id z4-20020aa79f84000000b0051bb64dfc69mr2590049pfr.7.1655348199123;
-        Wed, 15 Jun 2022 19:56:39 -0700 (PDT)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id w1-20020a63a741000000b00404fd2138afsm349057pgo.40.2022.06.15.19.56.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 19:56:38 -0700 (PDT)
-From:   Hongyu Xie <xy521521@gmail.com>
-X-Google-Original-From: Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        125707942@qq.com, wangqi@kylinos.cn, xiongxin@kylinos.cn,
-        Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: [PATCH v3 -next] usb: xhci: disable irq during initialization
-Date:   Thu, 16 Jun 2022 10:56:34 +0800
-Message-Id: <20220616025634.3693260-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1348243AbiFPDMA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 23:12:00 -0400
+Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8EB5A16B;
+        Wed, 15 Jun 2022 20:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1655349117; i=@motorola.com;
+        bh=xeAothptBJEhe76/WHzGYVzyKqvRIjL5oS+hZFSa6SI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
+         Content-Transfer-Encoding;
+        b=kXaSpJmuu4KDe9MfdThrboiacqy1OLCbaiEiBs5bZhezqzc4zJdEpZcIDN5ZBXRC+
+         RzUCaLmQrmfw31g9bYiKpXsCesJkt6NAr2ZsCxj74/RQbneNMTmSfEN/zvm17+YyYR
+         5EIoeE2wGf79oNtJSn3WYNb4v06DjzoLAv6gc320gZLyt4WurT6/JvpZqvGTnbXDOI
+         taug7TSeUel84YSNglq10UcMCZSYguuCLUZ0ypVMkAA8AS8//W9qEC8b41rI7X1MW8
+         ciebX23t/ebzSKCRO5+l1SXq4xTOtLcJ1UhUHzEk3odqXbPqBppO4UG9sA03ZcYWNk
+         4o5NHc6SCeNow==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGIsWRWlGSWpSXmKPExsWS8eKJqG7N/FV
+  JBqcmS1sca3vCbtG8eD2bRefEJewWl3fNYbNYtKyV2WJL2xUmix9/+pgtFmx8xOjA4TG7Yyar
+  x6ZVnWwe++euYffo/2vg8XmTXABrFGtmXlJ+RQJrxo9vvxgLNvFU7Jsyh7mB8ShXFyMXh5DAd
+  CaJ/be3sUM4S5gkWnqPAjmcHGwCahILXq9iBrFFBGQlDl/5zQxSxCxwmEni3efzYEXCAp4S8z
+  ffZgSxWQRUJW71zmEFsXkFLCU2bNkIViMhIC+x/+BZZoi4oMTJmU9YQGxmoHjz1tnMExi5ZyF
+  JzUKSWsDItIrRJqkoMz2jJDcxM0fX0MBA19DQBEIbG+olVukm6pUW65anFpfoGukllhfrpRYX
+  6xVX5ibnpOjlpZZsYgQGaUpRSvMOxiX9P/UOMUpyMCmJ8v7iWZUkxJeUn1KZkVicEV9UmpNaf
+  IhRhoNDSYJXrR8oJ1iUmp5akZaZA4wYmLQEB4+SCG/zPKA0b3FBYm5xZjpE6hSjLkfn/q4DzE
+  Isefl5qVLivJ4gRQIgRRmleXAjYNF7iVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5Iw7765QFN
+  4MvNK4Da9AjqCCeiIxn0rQI4oSURISTUw5Z92+dX64lhp5kEZnXCjK1+67Iz53X65Xd8lJrSk
+  mOP5Czmno2dKTq6UXLzOd/NayV9bWa+8fPswc6mCk4PQwhO8/PLaT2+lJavtc746fQXDK7mZO
+  nXOs+SMjPueTgh1uXtB6tIV0UfXGE9cffGHXeG2xnxDexHBP8e/fGvP9n6waw3n3k8Lb9e7M0
+  rHvXOZvjzkBJfypLPTZK+lXnl6z+GItf7XdJ/++Ws+ztwuy3D0oGrAUrvjfwMm6f/hOCutedZ
+  3T866+BnLLomznQj+Ubu+cIbm6RyL4PDEbGu/htj0WXJ+sdJqucW5PBZpHptffzPgVdn3baNr
+  OsfvIraqk2lXj7tfMJdbH7zQST9WT4mlOCPRUIu5qDgRAIWNyedZAwAA
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-18.tower-636.messagelabs.com!1655349115!41653!1
+X-Originating-IP: [104.232.228.21]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.7; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 4690 invoked from network); 16 Jun 2022 03:11:56 -0000
+Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
+  by server-18.tower-636.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 16 Jun 2022 03:11:56 -0000
+Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4LNnJq38TKzf6mg;
+        Thu, 16 Jun 2022 03:11:55 +0000 (UTC)
+Received: from p1g3.. (unknown [10.45.7.31])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4LNnJq0WgZzf6f0;
+        Thu, 16 Jun 2022 03:11:55 +0000 (UTC)
+From:   Dan Vacura <w36195@motorola.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Dan Vacura <w36195@motorola.com>, stable@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: uvc: fix list double add in uvcg_video_pump
+Date:   Wed, 15 Jun 2022 22:09:15 -0500
+Message-Id: <20220616030915.149238-1-w36195@motorola.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
-in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
-It's possible that you will receive thousands of interrupt requests
-after initialization for 2.0 roothub. And you will get a lot of
-warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
-disabled?". This amount of interrupt requests will cause the entire
-system to freeze.
-This problem was first found on a device with ASM2142 host controller
-on it.
+A panic can occur if the endpoint becomes disabled and the
+uvcg_video_pump adds the request back to the req_free list after it has
+already been queued to the endpoint. The endpoint complete will add the
+request back to the req_free list. Invalidate the local request handle
+once it's been queued.
 
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+<6>[  246.796704][T13726] configfs-gadget gadget: uvc: uvc_function_set_alt(1, 0)
+<3>[  246.797078][   T26] list_add double add: new=ffffff878bee5c40, prev=ffffff878bee5c40, next=ffffff878b0f0a90.
+<6>[  246.797213][   T26] ------------[ cut here ]------------
+<2>[  246.797224][   T26] kernel BUG at lib/list_debug.c:31!
+<6>[  246.807073][   T26] Call trace:
+<6>[  246.807180][   T26]  uvcg_video_pump+0x364/0x38c
+<6>[  246.807366][   T26]  process_one_work+0x2a4/0x544
+<6>[  246.807394][   T26]  worker_thread+0x350/0x784
+<6>[  246.807442][   T26]  kthread+0x2ac/0x320
+
+Fixes: f9897ec0f6d3 ("usb: gadget: uvc: only pump video data if necessary")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dan Vacura <w36195@motorola.com>
 ---
+ drivers/usb/gadget/function/uvc_video.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-v3:
-- enabling interrupt right before setting Run/Stop bit
-- spin_lock_irqsave to prevent receiving irqs in the small window
-according to Mathias's suggestion
-v2: fix compile error
-
- drivers/usb/host/xhci.c | 40 ++++++++++++++++++++++++++--------------
- 1 file changed, 26 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 9ac56e9ffc64..5cf8baa4f6f3 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -611,15 +611,40 @@ static int xhci_init(struct usb_hcd *hcd)
- 
- static int xhci_run_finished(struct xhci_hcd *xhci)
- {
-+	u32 temp;
-+
-+	/* Prevent receiving irqs in the small window between enabling interrupt
-+	 * and setting Run/Stop bit
-+	 */
-+	spin_lock_irqsave(&xhci->lock, flags);
-+
-+	/* Enable interrupt right before setting Run/Stop bit according to spec
-+	 * 4.2
-+	 */
-+	/* Set the HCD state before we enable the irqs */
-+	temp = readl(&xhci->op_regs->command);
-+	temp |= (CMD_EIE);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"// Enable interrupts, cmd = 0x%x.", temp);
-+	writel(temp, &xhci->op_regs->command);
-+
-+	temp = readl(&xhci->ir_set->irq_pending);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"// %s %p by writing 0x%x %s",
-+			"Enabling event ring interrupter",
-+			"to irq_pending", xhci->ir_set,
-+			(unsigned int) ER_IRQ_ENABLE(temp));
-+	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
- 	if (xhci_start(xhci)) {
- 		xhci_halt(xhci);
-+		spin_unlock_irqrestore(&xhci->lock, flags);
- 		return -ENODEV;
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 93f42c7f800d..59e2f51b53a5 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -427,6 +427,9 @@ static void uvcg_video_pump(struct work_struct *work)
+ 		if (ret < 0) {
+ 			uvcg_queue_cancel(queue, 0);
+ 			break;
++		} else {
++			/* Endpoint now owns the request */
++			req = NULL;
+ 		}
+ 		video->req_int_count++;
  	}
- 	xhci->cmd_ring_state = CMD_RING_STATE_RUNNING;
- 
- 	if (xhci->quirks & XHCI_NEC_HOST)
- 		xhci_ring_cmd_db(xhci);
--
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- 	return 0;
- }
- 
-@@ -668,19 +693,6 @@ int xhci_run(struct usb_hcd *hcd)
- 	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
- 	writel(temp, &xhci->ir_set->irq_control);
- 
--	/* Set the HCD state before we enable the irqs */
--	temp = readl(&xhci->op_regs->command);
--	temp |= (CMD_EIE);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Enable interrupts, cmd = 0x%x.", temp);
--	writel(temp, &xhci->op_regs->command);
--
--	temp = readl(&xhci->ir_set->irq_pending);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
--			xhci->ir_set, (unsigned int) ER_IRQ_ENABLE(temp));
--	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
--
- 	if (xhci->quirks & XHCI_NEC_HOST) {
- 		struct xhci_command *command;
- 
 -- 
-2.25.1
+2.34.1
 
