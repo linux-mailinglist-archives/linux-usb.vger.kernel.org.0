@@ -2,165 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B3954D99B
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 07:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5A154DA7A
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 08:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350941AbiFPFPy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 01:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S1358783AbiFPGXJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 02:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350832AbiFPFPw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 01:15:52 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F352590AA;
-        Wed, 15 Jun 2022 22:15:51 -0700 (PDT)
+        with ESMTP id S237285AbiFPGXH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 02:23:07 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2026E0DF;
+        Wed, 15 Jun 2022 23:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655356551; x=1686892551;
+  t=1655360586; x=1686896586;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YT2kgex7dphQ7S9ilSj4A2Ap156islQSNJsnpcZvwqo=;
-  b=UT3r6k4DrUH53mj+SVulIK/AqDFuOfcneskSXbHrhzYYyT+LnIQzrsGQ
-   /8F/hNvFVG3l1DO0f8EvFOs16ewgSWgx51f6aJzcM8bO0q5bPylrgMxm8
-   XxARUxYl1fi7OQWkiefS+FyjaqPK/kewUmndeYcLK92RAYEbuoCprO8SU
-   7HFYjmJ1YvpKr/TyCy73sP6pCmllRs2KQayrWkwnWftZERuaYlZlWKoG+
-   nRWfefvElsRwNE79GwDG7Jw3DOFOJH+8TDHzLRGrn2zrEr2nkUSyP2a2P
-   RMayVOGkcsO02reoi74mssVD8xxQxCGBBe6BPZv+RskJ1nHyYO41RRRWq
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280201531"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=C64wXT8o8e3dnYRSkDU43FZmaurq/w0MSIoJ52kgk9M=;
+  b=SGPkQkX3XTI83cig+G/BLE16BN9DkkIDI/e5eKBHXcR3Vmt/Uku34EmC
+   Jd8Pt7FuioYAucBcjjSB6jLuVKxa5T/+O7g93GUz1WYSn5hez9mwEazmi
+   nUZrAMzwlrupG6/EelP2kgEUOj/0MAA/7FKpIygjvUva+DQj9HT5NwPsY
+   QGKJe7PJtC2JrsgET/AJOgypoobyqwmS99qyBvbjW5JC2rHvBosHj2mtn
+   TsEjdvEcUbJPOvRFyWb4Z09lpNWuhjbfCKsiE3R72IkDkCVZMx/4KR1uA
+   xrmHvyxgAEgC7PKwmHLt6+vXHKxJBoTLANM1CxLjVJ55mdT3VYjhkAQeb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="267866655"
 X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="280201531"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 22:15:50 -0700
+   d="scan'208";a="267866655"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 23:23:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="674863752"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2022 22:15:48 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1hr9-000O57-Ib;
-        Thu, 16 Jun 2022 05:15:47 +0000
-Date:   Thu, 16 Jun 2022 13:15:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 125707942@qq.com, wangqi@kylinos.cn,
-        xiongxin@kylinos.cn, Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: Re: [PATCH v3 -next] usb: xhci: disable irq during initialization
-Message-ID: <202206161315.DjaJzxlY-lkp@intel.com>
-References: <20220616025634.3693260-1-xiehongyu1@kylinos.cn>
+   d="scan'208";a="727759979"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 15 Jun 2022 23:22:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 Jun 2022 09:22:58 +0300
+Date:   Thu, 16 Jun 2022 09:22:58 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        kernel test robot <lkp@intel.com>,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: Re: [PATCH v4 2/7] usb: typec: mux: Add CONFIG guards for functions
+Message-ID: <YqrMQhb2BKtSCIdx@kuha.fi.intel.com>
+References: <20220615172129.1314056-1-pmalani@chromium.org>
+ <20220615172129.1314056-3-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220616025634.3693260-1-xiehongyu1@kylinos.cn>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220615172129.1314056-3-pmalani@chromium.org>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hongyu,
+On Wed, Jun 15, 2022 at 05:20:18PM +0000, Prashant Malani wrote:
+> There are some drivers that can use the Type C mux API, but don't have
+> to. Introduce CONFIG guards for the mux functions so that drivers can
+> include the header file and not run into compilation errors on systems
+> which don't have CONFIG_TYPEC enabled. When CONFIG_TYPEC is not enabled,
+> the Type C mux functions will be stub versions of the original calls.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-Thank you for the patch! Perhaps something to improve:
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-[auto build test WARNING on next-20220615]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hongyu-Xie/usb-xhci-disable-irq-during-initialization/20220616-110418
-base:    6012273897fefb12566580efedee10bb06e5e6ed
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220616/202206161315.DjaJzxlY-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b8e08f7da837bf7aff0a032d4dbd6633c5a76f7d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hongyu-Xie/usb-xhci-disable-irq-during-initialization/20220616-110418
-        git checkout b8e08f7da837bf7aff0a032d4dbd6633c5a76f7d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/usb/host/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/bitops.h:7,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from ./arch/xtensa/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:6,
-                    from include/linux/math64.h:6,
-                    from include/linux/time64.h:5,
-                    from include/linux/restart_block.h:10,
-                    from include/linux/thread_info.h:14,
-                    from arch/xtensa/include/asm/current.h:18,
-                    from include/linux/mutex.h:14,
-                    from include/linux/kernfs.h:11,
-                    from include/linux/sysfs.h:16,
-                    from include/linux/kobject.h:20,
-                    from include/linux/pci.h:35,
-                    from drivers/usb/host/xhci.c:11:
-   drivers/usb/host/xhci.c: In function 'xhci_run_finished':
-   drivers/usb/host/xhci.c:619:40: error: 'flags' undeclared (first use in this function)
-     619 |         spin_lock_irqsave(&xhci->lock, flags);
-         |                                        ^~~~~
-   include/linux/typecheck.h:11:16: note: in definition of macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                ^
-   include/linux/spinlock.h:390:9: note: in expansion of macro 'raw_spin_lock_irqsave'
-     390 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci.c:619:9: note: in expansion of macro 'spin_lock_irqsave'
-     619 |         spin_lock_irqsave(&xhci->lock, flags);
-         |         ^~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci.c:619:40: note: each undeclared identifier is reported only once for each function it appears in
-     619 |         spin_lock_irqsave(&xhci->lock, flags);
-         |                                        ^~~~~
-   include/linux/typecheck.h:11:16: note: in definition of macro 'typecheck'
-      11 |         typeof(x) __dummy2; \
-         |                ^
-   include/linux/spinlock.h:390:9: note: in expansion of macro 'raw_spin_lock_irqsave'
-     390 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci.c:619:9: note: in expansion of macro 'spin_lock_irqsave'
-     619 |         spin_lock_irqsave(&xhci->lock, flags);
-         |         ^~~~~~~~~~~~~~~~~
->> include/linux/typecheck.h:12:25: warning: comparison of distinct pointer types lacks a cast
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                         ^~
-   include/linux/spinlock.h:247:17: note: in expansion of macro 'typecheck'
-     247 |                 typecheck(unsigned long, flags);        \
-         |                 ^~~~~~~~~
-   include/linux/spinlock.h:390:9: note: in expansion of macro 'raw_spin_lock_irqsave'
-     390 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci.c:619:9: note: in expansion of macro 'spin_lock_irqsave'
-     619 |         spin_lock_irqsave(&xhci->lock, flags);
-         |         ^~~~~~~~~~~~~~~~~
-
-
-vim +12 include/linux/typecheck.h
-
-e0deaff470900a Andrew Morton 2008-07-25   4  
-e0deaff470900a Andrew Morton 2008-07-25   5  /*
-e0deaff470900a Andrew Morton 2008-07-25   6   * Check at compile time that something is of a particular type.
-e0deaff470900a Andrew Morton 2008-07-25   7   * Always evaluates to 1 so you may use it easily in comparisons.
-e0deaff470900a Andrew Morton 2008-07-25   8   */
-e0deaff470900a Andrew Morton 2008-07-25   9  #define typecheck(type,x) \
-e0deaff470900a Andrew Morton 2008-07-25  10  ({	type __dummy; \
-e0deaff470900a Andrew Morton 2008-07-25  11  	typeof(x) __dummy2; \
-e0deaff470900a Andrew Morton 2008-07-25 @12  	(void)(&__dummy == &__dummy2); \
-e0deaff470900a Andrew Morton 2008-07-25  13  	1; \
-e0deaff470900a Andrew Morton 2008-07-25  14  })
-e0deaff470900a Andrew Morton 2008-07-25  15  
+> ---
+> 
+> Changes since v3:
+> - No changes.
+> 
+> Changes since v2:
+> - Fix up return types for some of the stubs. Remove 1 unnecessary stub
+>   in the else condition.
+> - Remove unnecessary IS_MODULE config guard.
+> - Added Reviewed-by and Tested-by tags.
+> 
+> Changes since v1:
+> - Added static inline to stub functions.
+> - Updated function signature of stub functions from "struct typec_mux"
+>   to "struct typec_mux_dev" in accordance with updates from commit
+>   713fd49b430c ("usb: typec: mux: Introduce indirection")
+> 
+>  include/linux/usb/typec_mux.h | 44 ++++++++++++++++++++++++++++++-----
+>  1 file changed, 38 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
+> index ee57781dcf28..9292f0e07846 100644
+> --- a/include/linux/usb/typec_mux.h
+> +++ b/include/linux/usb/typec_mux.h
+> @@ -58,17 +58,13 @@ struct typec_mux_desc {
+>  	void *drvdata;
+>  };
+>  
+> +#if IS_ENABLED(CONFIG_TYPEC)
+> +
+>  struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
+>  				       const struct typec_altmode_desc *desc);
+>  void typec_mux_put(struct typec_mux *mux);
+>  int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state);
+>  
+> -static inline struct typec_mux *
+> -typec_mux_get(struct device *dev, const struct typec_altmode_desc *desc)
+> -{
+> -	return fwnode_typec_mux_get(dev_fwnode(dev), desc);
+> -}
+> -
+>  struct typec_mux_dev *
+>  typec_mux_register(struct device *parent, const struct typec_mux_desc *desc);
+>  void typec_mux_unregister(struct typec_mux_dev *mux);
+> @@ -76,4 +72,40 @@ void typec_mux_unregister(struct typec_mux_dev *mux);
+>  void typec_mux_set_drvdata(struct typec_mux_dev *mux, void *data);
+>  void *typec_mux_get_drvdata(struct typec_mux_dev *mux);
+>  
+> +#else
+> +
+> +static inline struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
+> +				       const struct typec_altmode_desc *desc)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline void typec_mux_put(struct typec_mux *mux) {}
+> +
+> +static inline int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline struct typec_mux_dev *
+> +typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +static inline void typec_mux_unregister(struct typec_mux_dev *mux) {}
+> +
+> +static inline void typec_mux_set_drvdata(struct typec_mux_dev *mux, void *data) {}
+> +static inline void *typec_mux_get_drvdata(struct typec_mux_dev *mux)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +#endif /* CONFIG_TYPEC */
+> +
+> +static inline struct typec_mux *
+> +typec_mux_get(struct device *dev, const struct typec_altmode_desc *desc)
+> +{
+> +	return fwnode_typec_mux_get(dev_fwnode(dev), desc);
+> +}
+> +
+>  #endif /* __USB_TYPEC_MUX */
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+heikki
