@@ -2,115 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC6954DC2A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 09:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EE854DC76
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 10:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359319AbiFPHxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 03:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S1359575AbiFPIJp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 04:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiFPHxK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 03:53:10 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4AC15812;
-        Thu, 16 Jun 2022 00:53:06 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id g15so472357qke.4;
-        Thu, 16 Jun 2022 00:53:06 -0700 (PDT)
+        with ESMTP id S1359243AbiFPIJp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 04:09:45 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45A85A5A6;
+        Thu, 16 Jun 2022 01:09:43 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id x138so817178pfc.12;
+        Thu, 16 Jun 2022 01:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dF+FiY5h3wouB9f0tCwxYbSd00JgHDWKLOSIO3vQJDs=;
+        b=fMnIE6XMuy/mi5+plbtPUkHoZslY1IwsfG61DD97ZGy3MrnGf+fMrEwuMAW5vWdW/n
+         SJ2DkVTlkIQLA+0HVKoXXxCib9NXAowfmdWWCWV/IZgsLelwyYrjVMSTW45A0VpJUrvo
+         DR0hvikJSqIE3/AlJhOaQMhdV4I1lBbrzT/OD77FJ6FkZqcoHf6dhfaS8pJE6WMkn5Be
+         p26EwaOGs9cz0x4R+DTsx0wJduu0Vc5W+W5+B1pfQ4bqCMsPQ3MCO6izyt1pwZaX29+6
+         fib3yE74R3uCt6Pb9tDWcSoRFOR0WxIOFGxg4SHHSJeap0OwRGq8ktTf6+DGHKPvsgYC
+         kBQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qoDONOlMnc9LStw1JRWOE6LutyWOeAc3QbYws5EB78g=;
-        b=53p04d+shJmdQcNI+REjU03Dg/W9kT7KcHCHiRQ+o0xU6IdY6rdEbR/SVwqFdUxxrA
-         H2sv/77Nk+OP9xmd3JRIe57JmL+l19UJggMkEj33/yZKNxWWLw/v7A0GOkY95Nx1m+a4
-         Ex6wvKOHODBc+rwCjrw1lK3gDMTHhanZUr9rIJbr+IhPXjPud0g6Yz3CxSDHuwk8IeIl
-         Kd4ZkXHa/p2iKmUVnNkWIfXChFQmlWvjzyOUZ5TD+wXgNY9Bkx+Mj0XJtW41OcZwlyRx
-         jfNt63gb/ryHPjmrJ99FtIywLk0LHyRvLAGj4Fx3TIOZSBrG8YUAP3qEg78p/hSiPdoV
-         eRjw==
-X-Gm-Message-State: AJIora9jwQC3bALRGV8V0c3F9/cFY2+TYj4Di9kDyTsXgqyqlGyi9zPL
-        3XMKkKnIE90jmW80RzeHMIkscDJpP8ZLuw==
-X-Google-Smtp-Source: AGRyM1u1CHz+y3fX6LvDSDVaJqgaEwOBOOlQpVHvzVZZvpkxa0NUHC+fvTOQ/Yt477nQxfjIVgFb3A==
-X-Received: by 2002:a37:ab02:0:b0:6a6:b111:61a8 with SMTP id u2-20020a37ab02000000b006a6b11161a8mr2629851qke.260.1655365985748;
-        Thu, 16 Jun 2022 00:53:05 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05622a01c300b003026a08257fsm1483260qtw.21.2022.06.16.00.53.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 00:53:05 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id w2so839787ybi.7;
-        Thu, 16 Jun 2022 00:53:05 -0700 (PDT)
-X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
- l10-20020a056902000a00b0065cb38e6d9fmr3997226ybh.36.1655365985159; Thu, 16
- Jun 2022 00:53:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dF+FiY5h3wouB9f0tCwxYbSd00JgHDWKLOSIO3vQJDs=;
+        b=3u4tTjErY2KM7j/XCeJo7xpvdstGVZmCrPws0ssDMiCnkU++mP96ZAztjkIoUIPCm9
+         3op/vcYjDOy/rvbZSXaa5Zi5fngNI/lx8PEIhKJgmWz7E/vTsNvWhk9u+ifd2VD5KBqw
+         zOx8JCZ/tCfwsy4eoiOx1X2npteG4AajJS8elDTxF8P6JkPlqO0b2gz7r/cGb9bMj+pR
+         jQkMPqH0WC/ZwwctYC0uQ+jBKlg5S6vPn062a9Rqc+oExeRbNwvs0EpDBN6fyDW1cGJn
+         RjJHfuziPpE1mQh7HU2KCdfwpQLgpJQdFLLgbDywZTsOKvDghM1dA/27Jy2o18WL4+HD
+         dMBA==
+X-Gm-Message-State: AJIora95m7y2ZoInYi7hVpi7uw7shrhleYoWhgy5WKGSSdC6TR1TjVmD
+        xlS6GFYSqfRfoIuVwRlLieI=
+X-Google-Smtp-Source: AGRyM1vK8BMU+3szTuwEYO0HargDw4rk4y0Eq5yXQxHIQO1DeMUv3bzg5YwmwLT1JeaISqjDaGiRaA==
+X-Received: by 2002:a63:9142:0:b0:3fc:c021:e237 with SMTP id l63-20020a639142000000b003fcc021e237mr3430332pge.279.1655366983401;
+        Thu, 16 Jun 2022 01:09:43 -0700 (PDT)
+Received: from localhost ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id nk10-20020a17090b194a00b001e2f53e1042sm3211009pjb.7.2022.06.16.01.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 01:09:42 -0700 (PDT)
+From:   Hongyu Xie <xy521521@gmail.com>
+X-Google-Original-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        125707942@qq.com, wangqi@kylinos.cn, xiongxin@kylinos.cn,
+        Hongyu Xie <xiehongyu1@kylinos.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v4 -next] usb: xhci: disable irq during initialization
+Date:   Thu, 16 Jun 2022 16:09:33 +0800
+Message-Id: <20220616080933.1238309-1-xiehongyu1@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <c5d19e2f9714f43effd90208798fc1936098078f.1655301043.git.geert+renesas@glider.be>
- <CAL_JsqJbmdJd6+D9zog6NwF_LPO5QC_HsODg4FHLJOnMmPP-mg@mail.gmail.com>
-In-Reply-To: <CAL_JsqJbmdJd6+D9zog6NwF_LPO5QC_HsODg4FHLJOnMmPP-mg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 Jun 2022 09:52:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU3PnY6yZf70kB9wme7_WTjcPJwmzo--Ua3vJ45w7mD8w@mail.gmail.com>
-Message-ID: <CAMuHMdU3PnY6yZf70kB9wme7_WTjcPJwmzo--Ua3vJ45w7mD8w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: ehci: Increase the number of PHYs
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
+in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
+It's possible that you will receive thousands of interrupt requests
+after initialization for 2.0 roothub. And you will get a lot of
+warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
+disabled?". This amount of interrupt requests will cause the entire
+system to freeze.
+This problem was first found on a device with ASM2142 host controller
+on it.
 
-On Wed, Jun 15, 2022 at 7:24 PM Rob Herring <robh+dt@kernel.org> wrote:
-> On Wed, Jun 15, 2022 at 7:53 AM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> >
-> > "make dtbs_check":
-> >
-> >     arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee080100: phys: [[17, 0], [31]] is too long
-> >             From schema: Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> >     arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee0c0100: phys: [[17, 1], [33], [21, 0]] is too long
-> >             From schema: Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> >
-> > Some USB EHCI controllers (e.g. on the Renesas RZ/G1C SoC) have multiple
-> > PHYs.  Increase the maximum number of PHYs to 3, which is sufficient for
-> > now.
->
-> Maybe not so 'generic'. Why are there 3? I understand USB3 HCI having
-> 2 for SS and HS. Is it for multiple ports? There's a thread about that
-> currently (Mediatek IIRC) and how to handle multiple phys.
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+Reported-by: kernel test robot <lkp@intel.com>
+---
 
-TBH, I don't know for sure. I've never been much into USB, and the
-RZ/G1C USB architecture differs from other Renesas SoCs in the
-same family.
+v4: add definition for flags
+v3:
+- enabling interrupt right before setting Run/Stop bit
+- spin_lock_irqsave to prevent receiving irqs in the small window
+according to Mathias's suggestion
+v2: fix compile error
 
-This is USB2, not USB3.  There are two channels of OHCI/EHCI, and
-two channels of USB OTG, all with corresponding PHYs (4 in total).
-The first OHCI/EHCI combo is linked to one of the host PHYs, and one
-of the OTG PHYs, so that makes 2 PHYs.
-The second OHCI/EHCI combo is linked to the other host PHY, and to
-both OTG PHYs, so that makes 3 PHYs. IIRC the third link was due to
-some dependency between the 2 OTG PHYs.
+ drivers/usb/host/xhci.c | 41 +++++++++++++++++++++++++++--------------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
 
-Gr{oetje,eeting}s,
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 9ac56e9ffc64..1344cc566338 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -611,15 +611,41 @@ static int xhci_init(struct usb_hcd *hcd)
+ 
+ static int xhci_run_finished(struct xhci_hcd *xhci)
+ {
++	unsigned long flags;
++	u32 temp;
++
++	/* Prevent receiving irqs in the small window between enabling interrupt
++	 * and setting Run/Stop bit
++	 */
++	spin_lock_irqsave(&xhci->lock, flags);
++
++	/* Enable interrupt right before setting Run/Stop bit according to spec
++	 * 4.2
++	 */
++	/* Set the HCD state before we enable the irqs */
++	temp = readl(&xhci->op_regs->command);
++	temp |= (CMD_EIE);
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
++			"// Enable interrupts, cmd = 0x%x.", temp);
++	writel(temp, &xhci->op_regs->command);
++
++	temp = readl(&xhci->ir_set->irq_pending);
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
++			"// %s %p by writing 0x%x %s",
++			"Enabling event ring interrupter",
++			"to irq_pending", xhci->ir_set,
++			(unsigned int) ER_IRQ_ENABLE(temp));
++	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+ 	if (xhci_start(xhci)) {
+ 		xhci_halt(xhci);
++		spin_unlock_irqrestore(&xhci->lock, flags);
+ 		return -ENODEV;
+ 	}
+ 	xhci->cmd_ring_state = CMD_RING_STATE_RUNNING;
+ 
+ 	if (xhci->quirks & XHCI_NEC_HOST)
+ 		xhci_ring_cmd_db(xhci);
+-
++	spin_unlock_irqrestore(&xhci->lock, flags);
+ 	return 0;
+ }
+ 
+@@ -668,19 +694,6 @@ int xhci_run(struct usb_hcd *hcd)
+ 	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
+ 	writel(temp, &xhci->ir_set->irq_control);
+ 
+-	/* Set the HCD state before we enable the irqs */
+-	temp = readl(&xhci->op_regs->command);
+-	temp |= (CMD_EIE);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Enable interrupts, cmd = 0x%x.", temp);
+-	writel(temp, &xhci->op_regs->command);
+-
+-	temp = readl(&xhci->ir_set->irq_pending);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
+-			xhci->ir_set, (unsigned int) ER_IRQ_ENABLE(temp));
+-	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+-
+ 	if (xhci->quirks & XHCI_NEC_HOST) {
+ 		struct xhci_command *command;
+ 
+-- 
+2.25.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
