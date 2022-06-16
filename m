@@ -2,194 +2,262 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02ED554E968
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 20:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0475B54EA2F
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 21:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbiFPSb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 14:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
+        id S1378407AbiFPTe3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 15:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiFPSbz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 14:31:55 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2073.outbound.protection.outlook.com [40.107.244.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836955370D;
-        Thu, 16 Jun 2022 11:31:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CpA2z9H8djXysMNxV04CcVfGzj+7wktf5F9g3uoj7dNQ7/FCxr5OOE3MvlM0jFUC4Jo0zG0YkrzGDEUtBaHwgO9W4mtZn7dR62EnvBkCB/bGZQML6GlRVQ60guLn/m90shIHDwKg4J3nHqNgYzwP14P9c3QqhTDyX4A2a0QWbZngBA5U5+MeWRAY+h6qXKBJ87pzf51DmL8pS2RCzYO5xlDzo1+WnYh6GsiAoKfXr2OqzPtWWHbUTYrdNpwlgL6Ikp649u9BIYHUP5Sa/z0hVwNlchVZpDjK6l5gSc3Sa1clAy49l/ApoTUfy2WzngbZAU88s2cy7f8yLCi2IjwWNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kiAC+ZIOYD1ZY1p5pwDOEMOZlCtsktue3feDinp0/fE=;
- b=irEqWYg7UyvpCQ0HP3Q4WwaJ1OswWDf7srQHG17RPRuQ6CtZGO59ZEgRfhpr4p3trkn8y6D08eUEEaWEqX2kubZXhtehHJT7vYjLVkPQBkJ5HWMoT1NnBoG8YKytEAbGP5UcM2YYos5AKjNuNCST4f2MUWyWsnLbzMOjJTSbeZDkCelbvhvcgieBA7fFsqpjh5vssPbRqxqZlKqnyb7eJHzEeUFiNr0xlGpRnzznJ3Fa5HuE0tV7h6+Qf/6w0c/ZYWAEq06azaeuT4xE0GcKPAMywhWOqJGChOi0T5BwSof3br6oaFRWuXiEm3Vscx0upmkByP5CqvYTbFw+xdy9PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kiAC+ZIOYD1ZY1p5pwDOEMOZlCtsktue3feDinp0/fE=;
- b=tZrJqN84pMMCjGQ95JvvFfNG9z2dJLLq7B5TNyjlAAgEUEdhS5agk0gCs79kx1XglfdhVXm/zfTRSJ1itqq0QBJsYhDgSTDek0TQUZrxiYJ/4Mph/G5LUyg/+DIM+G84inw24Bhg5eSqw7fbPL6dqZvsM39AvvmR44JrIIEZ2OM=
-Received: from MW4PR04CA0314.namprd04.prod.outlook.com (2603:10b6:303:82::19)
- by DM4PR12MB5309.namprd12.prod.outlook.com (2603:10b6:5:390::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Thu, 16 Jun
- 2022 18:31:52 +0000
-Received: from CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::cd) by MW4PR04CA0314.outlook.office365.com
- (2603:10b6:303:82::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14 via Frontend
- Transport; Thu, 16 Jun 2022 18:31:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT052.mail.protection.outlook.com (10.13.174.225) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5353.14 via Frontend Transport; Thu, 16 Jun 2022 18:31:51 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 16 Jun
- 2022 13:31:50 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>, Jiri Kosina <jikos@kernel.org>,
-        "Benjamin Tissoires" <benjamin.tissoires@redhat.com>,
-        "open list:USB HID/HIDBP DRIVERS [USB KEYBOARDS, MICE, REM..." 
-        <linux-usb@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     Richard Gong <richard.gong@amd.com>
-Subject: [PATCH v2] HID: usbhid: set mouse as a wakeup resource
-Date:   Thu, 16 Jun 2022 13:31:42 -0500
-Message-ID: <20220616183142.14472-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1378000AbiFPTe3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 15:34:29 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CE720BE7;
+        Thu, 16 Jun 2022 12:34:28 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id y12so2485887ior.7;
+        Thu, 16 Jun 2022 12:34:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S25L3CWj8vlpCKxhB9Xc3nOC1i/DIzMtuE6udLAVvAw=;
+        b=UhEqWLtq3KDyovkfe6Rf1SzZu3tBvz4GDP36+Ue0XKPN7bq9ViYZS8dwDhwPTYyYJt
+         6LVVPcK1NZ++bFlvT7lluIUOwdTeFHyZSR/pDhWl59q93h0BZIqgMdB2r8vFgQKDkOX/
+         71aEWQ74Xq/fTPT2LXHHvXjswk68PGlePXesLBXXiykdMVneJKG4r/eJjPjB6T5qAKbt
+         2tfWZgvuG54gnSTrfOsCRyuQsOMoxTvPPbYjF+4om2kFswGkuoBXeGFD4Ts96Nka7Uos
+         cEaY5AXkFlbVDYlAwoWS61tnlWw+9aDUll2rDYVkSYoJLoa+cuuKlSzzWNklkN6C4pWi
+         Y+1g==
+X-Gm-Message-State: AJIora80ZRZt6mJ25sBx4yS/WN2v+m+G1Mk7vtXA6IcD/j+HWhtwB1Bx
+        /dqpmj8IhhLoXoo4dYxGPEI5spWvGg==
+X-Google-Smtp-Source: AGRyM1va6r6iyrhQi4eq1CrI+Yui4VKcqrJgOWcZsH0/31J0I9HiVCiaDneHZ+Hl/LPro4MUZoKSyA==
+X-Received: by 2002:a05:6638:4705:b0:331:7c49:7048 with SMTP id cs5-20020a056638470500b003317c497048mr3614855jab.182.1655408067485;
+        Thu, 16 Jun 2022 12:34:27 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05660229c500b0065a47e16f4esm1584402ioq.32.2022.06.16.12.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 12:34:26 -0700 (PDT)
+Received: (nullmailer pid 3867979 invoked by uid 1000);
+        Thu, 16 Jun 2022 19:34:24 -0000
+Date:   Thu, 16 Jun 2022 13:34:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, bleung@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: Re: [PATCH v4 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch
+ support
+Message-ID: <20220616193424.GA3844759-robh@kernel.org>
+References: <20220615172129.1314056-1-pmalani@chromium.org>
+ <20220615172129.1314056-5-pmalani@chromium.org>
+ <CAE-0n53ub30HXB325wPoMB4C3n4j_9FWnNu5AmtYgU3PBvs8mQ@mail.gmail.com>
+ <CACeCKadSCXZo3E4JZiwxFn_4CH3KDfQkk=xRrxSqCEWAgYhV6Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2858dd09-1cc9-475a-8bcc-08da4fc67b70
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5309:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB53099617617FACC6CF28D258E2AC9@DM4PR12MB5309.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: P5NXrCcXjQuSUGCNLmWnIRHiPfTgEB8qHLiA37YEmFGvURRMBxq8uhkRENbIJF4/TGPxMZgnsVHVBVymVBO4qsYyjixbxkOqeeHAH4HplJEJnlXXCM2yfF9ylI73pp+Pm2TOI1NoicbdkJuQp7GKwSCCWW//MAzjnSB+Z51+iQit3bkerQC9oFG34axPbHUE6sFaWjkVw+I1tAcpUrPAlcNBSNXZGa02GjqU4IjzhSYQ/Cn0txzq876urJHg6Bl0wkvMZUAZhLS/13sNhR3mr5Fo9GzwW4yPJYjst3Rb8CoaiOCchEb9Ua8AwQcXhFHy4aReeyiw0sNn25RqQYQgRcZy3l4FP4Vw1mzn4k89yAEyO2r0A3O1hrZyQmXQ2uUwoPJpGj/zXIS1MLuYyDEtvfL//7XSVTXruPFHlCNT8bLBL+ju7QeSZ+X4veTfB99DXt/Cis8XWobXg319cjJvJYKLx06TXrPvihyv1wueuh3mfpsky9l5rkWZwMgOp8d0lAha/PbfJQl0GxEqut+fG9XQi5yd3nBFZmlg5NK2Vsq+GsZwirbb/Od5mJvnQPFmHPkKe0Qx4UG5tv85o4tHkL/ZvNaxXc0lKkOyZmyvhZQUVx7qpPoQklHDykT+HRt6uVTuPCSOQV98VmIsY8kjSukB8RQD1CuUFjFbApkLbIYhF89fh+1ZTTfHnlKXGDdbQ7F5F35cd6l49u63hWDSGO2ZHpXIA7ZO7A75H678dI4SsjVXeahsLvVfY1XkZqu34nHeB2hbiLUpueZT5SaWuAOwUZY5Jn9oA1N4wFNgTyuTx8f6ODmjEAvdh99WJ+EWIgL9iNF5rLM1+NmbNUVi8Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(46966006)(40470700004)(36840700001)(356005)(2616005)(81166007)(1076003)(16526019)(36860700001)(36756003)(110136005)(186003)(83380400001)(316002)(336012)(47076005)(8676002)(8936002)(5660300002)(70206006)(2906002)(82310400005)(6666004)(44832011)(45080400002)(7696005)(4326008)(40460700003)(26005)(508600001)(86362001)(70586007)(966005)(426003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 18:31:51.7563
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2858dd09-1cc9-475a-8bcc-08da4fc67b70
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5309
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKadSCXZo3E4JZiwxFn_4CH3KDfQkk=xRrxSqCEWAgYhV6Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB HID transport layer doesn't set mice for wakeup by default so users
-can not wake system from s2idle using wired USB mouse. However, users can
-wake the same system from Modern Standby on Windows with the same wired
-USB mouse.
+On Thu, Jun 16, 2022 at 01:54:36AM -0700, Prashant Malani wrote:
+> On Thu, Jun 16, 2022 at 12:42 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Prashant Malani (2022-06-15 10:20:20)
+> > >
+> > >  .../display/bridge/analogix,anx7625.yaml      | 64 +++++++++++++++++++
+> > >  1 file changed, 64 insertions(+)
+> >
+> > Can this file get a link to the product brief[1]? It helps to quickly
+> > find the block diagram.
+> 
+> Sure, but I don't really think that should be included in this patch
+> (or series).
+> I'd be happy to submit a separate patch once this series is resolved.
+> 
+> >
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > > index 35a48515836e..bc6f7644db31 100644
+> > > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > > @@ -105,6 +105,34 @@ properties:
+> > >        - port@0
+> > >        - port@1
+> > >
+> > > +  switches:
+> > > +    type: object
+> > > +    description: Set of switches controlling DisplayPort traffic on
+> > > +      outgoing RX/TX lanes to Type C ports.
+> > > +    additionalProperties: false
+> > > +
+> > > +    properties:
+> > > +      '#address-cells':
+> > > +        const: 1
+> > > +
+> > > +      '#size-cells':
+> > > +        const: 0
+> > > +
+> > > +    patternProperties:
+> > > +      '^switch@[01]$':
+> > > +        $ref: /schemas/usb/typec-switch.yaml#
+> > > +        unevaluatedProperties: false
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            maxItems: 1
+> > > +
+> > > +        required:
+> > > +          - reg
+> > > +
+> > > +    required:
+> > > +      - switch@0
+> > > +
+> > >  required:
+> > >    - compatible
+> > >    - reg
+> > > @@ -167,5 +195,41 @@ examples:
+> > >                      };
+> > >                  };
+> > >              };
+> > > +            switches {
+> >
+> > Is "switches" a bus?
+> 
+> No.
+> 
+> >
+> > > +                #address-cells = <1>;
+> > > +                #size-cells = <0>;
+> > > +                switch@0 {
+> > > +                    compatible = "typec-switch";
+> >
+> > Is this compatible matched against a driver that's populated on this
+> > "switches" bus?
+> 
+> No. Patch 6/7 has the implementation details on how the anx driver
+> performs the enumeration of switches.
+> 
+> >
+> > > +                    reg = <0>;
+> > > +                    mode-switch;
+> > > +
+> > > +                    ports {
+> > > +                        #address-cells = <1>;
+> > > +                        #size-cells = <0>;
+> > > +                        port@0 {
+> > > +                            reg = <0>;
+> > > +                            anx_typec0: endpoint {
+> > > +                                remote-endpoint = <&typec_port0>;
+> > > +                            };
+> > > +                        };
+> > > +                    };
+> >
+> > I was expecting to see these simply be more ports in the existing graph
+> > binding of this device, and then have the 'mode-switch' or
+> > 'orientation-switch' properties be at the same level as the compatible
+> > string "analogix,anx7625". Here's the reasoning, based on looking at the
+> > product brief and the existing binding/implementation.
+> >
+> > Looking at the only existing implementation of this binding upstream in
+> > mt8183-kukui-jacuzzi.dtsi it looks like one of these typec ports is
+> > actually the same physically as the 'anx7625_out' endpoint (reg address
+> > of 1) that is already defined in the binding. It seems that MIPI DSI/DPI
+> > comes in and is output through 2 lanes, SSRX2 and SSTX2 according to the
+> > product brief[1], and that is connected to some eDP panel
+> > ("auo,b116xw03"). Presumably that is the same as anx_typec1 in this
+> > patch? I suspect the USB3.1 input is not connected on this board, and
+> > thus the crosspoint switch is never used, nor the SSRX1/SSTX1 pins.
+> >
+> > The existing binding defines the MIPI DSI/DPI input as port0 and two of
+> > the four lanes of output that is probably by default connected to the
+> > "DisplayPort Transmitter" as port1 because that's how the crosspoint
+> > switch comes out of reset. That leaves the USB3.1 input possibly needing
+> > a port in the ports binding, and the other two lanes of output needing a
+> > port in the ports binding to describe their connection to the downstream
+> > device. And finally information about if the crosspoint switch needs to
+> > be registered with the typec framework to do typec things, which can be
+> > achieved by the presence of the 'mode-switch' property.
+> >
+> > On a board like kukui-jacuzzi these new properties and ports wouldn't be
+> > specified, because what is there is already sufficient. If this chip is
+> > connected to a usb-c-connector then I'd expect to see a connection from
+> > the output ports in the graph binding to the connector node's ports.
+> > There aren't any ports in the usb-c-connector binding though from what I
+> > see.
+> >
+> > I believe there's also one more use case here where USB3.1 or MIPI
+> > DSI/DPI is connected on the input side and this device is used to steer
+> > USB3.1 or DP through the crosspoint switch to either of the two output
+> > pairs. This last scenario means that we have to describe both output
+> > pairs, SSRX1/SSTX1 and SSRX2/SSTX2, as different ports in the binding so
+> > they can be connected to different usb-c-connectors if the hardware
+> > engineer wired the output pins that way.
+> >
+> > TL;DR: Can we add 'mode-switch' as an optional property and two more
+> > ports at address 2 and 3 for the USB3.1 input and the SSRX1/SSTX1 pair
+> > respectively to the existing graph part of this binding?
+> 
+> Sorry, but I got lost midway through the preceding explanation. 
 
-Microsoft documentation indicates that all USB mice and touchpads should
-be waking the system from Modern Standby. To align expectations from users
-make this behavior the same when the system is configured by the OEM and
-the user to use s2idle in Linux.
+Made sense to me.
 
-Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#input-devices-1
-Link: https://lore.kernel.org/linux-usb/20220404214557.3329796-1-richard.gong@amd.com/
-Suggested-by: Richard Gong <richard.gong@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-More people keep coming to us confused that they couldn't wake a Linux system
-up from sleep using a mouse, so this patch is being revived.
+> The binding
+> can always add additional ports to each "switch" to accomplish the
+> graph connections
+> you are alluding to (if the driver needs/uses it, which I don't think
+> this one does at present).
 
-Microsoft documentation doesn't indicate any allowlist for this behavior, and
-they actually prescribe it for all USB mice and touchpads.
-v1->v2:
- * Resubmit by Mario
- * Update commit message
- * Only activate on systems configured by user and OEM for using s2idle
+Why is the switch special? If I just look at this from a block diagram 
+perspective, I just see a list of interfaces that need to be described 
+in the graph.
 
- drivers/hid/usbhid/hid-core.c | 36 ++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+> Adding extra ports to existing ports gets tricky from a mode-switch
+> enumeration perspective (which
+> ports should have the modes switches, which shouldn't? Do you follow
+> the remote end points for each port
+> and see which one is a Type C connector? 
 
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 4490e2f7252a..3a1214ecec49 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -12,6 +12,7 @@
- /*
-  */
- 
-+#include <linux/acpi.h>
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/init.h>
-@@ -26,6 +27,7 @@
- #include <linux/wait.h>
- #include <linux/workqueue.h>
- #include <linux/string.h>
-+#include <linux/suspend.h>
- 
- #include <linux/usb.h>
- 
-@@ -1176,17 +1178,29 @@ static int usbhid_start(struct hid_device *hid)
- 		usb_autopm_put_interface(usbhid->intf);
- 	}
- 
--	/* Some keyboards don't work until their LEDs have been set.
--	 * Since BIOSes do set the LEDs, it must be safe for any device
--	 * that supports the keyboard boot protocol.
--	 * In addition, enable remote wakeup by default for all keyboard
--	 * devices supporting the boot protocol.
--	 */
--	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
--			interface->desc.bInterfaceProtocol ==
--				USB_INTERFACE_PROTOCOL_KEYBOARD) {
--		usbhid_set_leds(hid);
--		device_set_wakeup_enable(&dev->dev, 1);
-+	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
-+		switch (interface->desc.bInterfaceProtocol) {
-+		/* Some keyboards don't work until their LEDs have been set.
-+		 * Since BIOSes do set the LEDs, it must be safe for any device
-+		 * that supports the keyboard boot protocol.
-+		 * In addition, enable remote wakeup by default for all keyboard
-+		 * devices supporting the boot protocol.
-+		 */
-+		case USB_INTERFACE_PROTOCOL_KEYBOARD:
-+			usbhid_set_leds(hid);
-+			device_set_wakeup_enable(&dev->dev, 1);
-+			break;
-+#ifdef CONFIG_ACPI
-+		/* Setup remote wakeup by default for mice supporting boot
-+		 * protocol if the system supports s2idle
-+		 */
-+		case USB_INTERFACE_PROTOCOL_MOUSE:
-+			if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0 &&
-+			    pm_suspend_default_s2idle())
-+				device_set_wakeup_enable(&dev->dev, 1);
-+			break;
-+#endif
-+		}
- 	}
- 
- 	mutex_unlock(&usbhid->mutex);
--- 
-2.34.1
+The driver knows which port is which because the binding has to define 
+it. So you have to check 2 of them (SSRX1/SSTX1 and SSRX2/SSTX2) to find 
+usb C connectors.
 
+> What if we add an
+> intermediate switch device in the future?)
+> Having a dedicated "switch" binding makes this consistent and easy
+> (port0 will always have the end-point for the switch).
+> 
+> While there may be more than 1 valid approach here, I believe the
+> current one is appropriate.
+
+To put it simply, if you want to define a generic binding, I want to see 
+at least 2 users of it. What I really want to see is someone looking at 
+all the Type-C related bindings and h/w possibilities, not just 1 
+problem or their own h/w. IOW, a Type-C binding czar.
+
+Rob
