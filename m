@@ -2,71 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A1954E76F
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 18:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989C054E882
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 19:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234980AbiFPQk1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 12:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
+        id S1378102AbiFPRPz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 13:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiFPQk0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 12:40:26 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E00D2F66C;
-        Thu, 16 Jun 2022 09:40:20 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1655397551t0v34m0x
-Received: from localhost.localdomain ( [153.0.96.157])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 17 Jun 2022 00:38:47 +0800 (CST)
-X-QQ-SSF: 01000000003000D0I000B00A0000000
-X-QQ-FEAT: BmbiRuHoQqGA87VCQKSX77hbt6qDnRcebrnfPkrUy22NU9clSYzYvf9mmw+Ex
-        1MtYFBbk8DHh/ivj6opPJEQdOQmQSyWss8VExI61ZJZSPArKf6hhLWJLBkUOeqmeCXZ8VZa
-        /rBz+D3tiHPOWVnufyuRCBSq2VFLlh6J+9aExE27KyBcNNmYsPuGPgqRYjB2Peqq/ib9QGS
-        +qKrnrfDOgELrwccDGNpL0sR1XAyudXhMeGtO0ot+iSY7snlm3PR5yXQvAjssiUUyXM6CgD
-        2desSJCMWiBAM9xMUaEV2LP6NjkAFvGuy6E63v+A/HUO3Woa1d5BOHHY8=
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     andreas.noever@gmail.com
-Cc:     michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH] thunderbolt: Fix typo in comment
-Date:   Fri, 17 Jun 2022 00:38:30 +0800
-Message-Id: <20220616163830.11366-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S1378091AbiFPRPx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 13:15:53 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A3A49CB8
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 10:15:52 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 187so2040003pfu.9
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 10:15:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=8iz7ZOP2b0Lu2YomGWoPhULSTDfxHvkkUN5CEYP8CaU=;
+        b=ApbDEiT1anUGxolRWQpnvh/eWWi46u0atckjEWb4RvkiaIAvr5aZnD+S+CE8pBh9Ue
+         Rdpxdb8HpapM2i4wnBLme8kKJb6sQYtoE4BEIjrGkPuWRCm9/6eujrfB5IdbFD4FbxFh
+         vlk2TjuD/1Sg2MIO0AkpoHPXrnb4FsWtTK2vc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=8iz7ZOP2b0Lu2YomGWoPhULSTDfxHvkkUN5CEYP8CaU=;
+        b=lXqrrDpqYE7XNQpJZVrQ9mxJuGe8witx8mkgWZISinEvGWPDZcWRXEkSaRUoFNagwy
+         +szXUilDxTx9ZUWP2r/Fr8LE4Qrd2egk2sAz0Eim+zDy07z+7o/91XVBGWfqbrdZ6MP7
+         kIHclP7lpdVQfD3ejr3cKOjyYkLVhU2BA77nnL9E140usd3okJhrT8QTgyWezTRaN4Js
+         AvirzMcdTrhT6L+MK0fW4ODIGiolJdDnKGjJoNnZZB1FCpf+NpNccYCPqijRZtdH519G
+         y54QHg9qf7W1s5uTd92slTtkVxDjqK8a3DiEa74vBEsbT2Adcchm8wOIPwdvPT5ajZ8b
+         8Rpg==
+X-Gm-Message-State: AJIora/QP6NWfg84L2quG683a/mspNhjQrhskQOsdA914ujJFsJRfmzi
+        caXb51ijfwEbvCX5/MsIcUj+KoKJf0cFZA==
+X-Google-Smtp-Source: AGRyM1v1gOcNbulVWr4yT4FU7oeqvsT8pT39TN0Lj/5MQsCXzknBAbpphcjXQ9hhBxZQMW11jlfYIw==
+X-Received: by 2002:a65:588b:0:b0:3fe:4237:2ee5 with SMTP id d11-20020a65588b000000b003fe42372ee5mr5334297pgu.442.1655399751849;
+        Thu, 16 Jun 2022 10:15:51 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:4ef5:7e3b:63ba:fc4])
+        by smtp.gmail.com with UTF8SMTPSA id j1-20020a170903028100b00164097a779fsm1891067plr.147.2022.06.16.10.15.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 10:15:51 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 10:15:49 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YqtlRQOwb3t6Xtd0@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com>
+ <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Delete the redundant word 'the'.
+On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
+> Hi Matthias/Krishna,
+> 
+> On Tue, Jun 14, 2022 at 10:53:35AM -0700, Matthias Kaehlcke wrote:
+> > On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
+> > > On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
+> > > > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+> > > > > Hi Krishna,
+> > > > > 
+> > > > > with this version I see xHCI errors on my SC7180 based system, like
+> > > > > these:
+> > > > > 
+> > > > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+> > > > > 
+> > > > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+> > > > > 
+> > > > > After resume a downstream hub isn't enumerated again.
+> > > > > 
+> > > > > So far I didn't see those with v13, but I aso saw the first error with
+> > > > > v16.
+> > > > 
+> > > > It also happens with v13, but only when a wakeup capable vUSB <= 2
+> > > > device is plugged in. Initially I used a wakeup capable USB3 to
+> > > > Ethernet adapter to trigger the wakeup case, however older versions
+> > > > of this series that use usb_wakeup_enabled_descendants() to check
+> > > > for wakeup capable devices didn't actually check for vUSB > 2
+> > > > devices.
+> > > > 
+> > > > So the case were the controller/PHYs is powered down works, but
+> > > > the controller is unhappy when the runtime PM path is used during
+> > > > system suspend.
+> > > 
+> > > The issue isn't seen on all systems using dwc3-qcom and the problem starts
+> > > during probe(). The expected probe sequence is something like this:
+> > > 
+> > > dwc3_qcom_probe
+> > >   dwc3_qcom_of_register_core
+> > >     dwc3_probe
+> > > 
+> > >   if (device_can_wakeup(&qcom->dwc3->dev))
+> > >     ...
+> > > 
+> > > The important part is that device_can_wakeup() is called after dwc3_probe()
+> > > has completed. That's what I see on a QC SC7280 system, where wakeup is
+> > > generally working with these patches.
+> > > 
+> > > However on a QC SC7180 system dwc3_probe() is deferred and only executed after
+> > > dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
+> > > With that the controller/driver ends up in an unhappy state after system
+> > > suspend.
+> > > 
+> > > Probing is deferred on SC7180 because device_links_check_suppliers() finds
+> > > that '88e3000.phy' isn't ready yet.
+> > 
+> > It seems device links could be used to make sure the dwc3 core is present:
+> > 
+> >   Another example for an inconsistent state would be a device link that
+> >   represents a driver presence dependency, yet is added from the consumer’s
+> >   ->probe callback while the supplier hasn’t probed yet: Had the driver core
+> >   known about the device link earlier, it wouldn’t have probed the consumer
+> >   in the first place. The onus is thus on the consumer to check presence of
+> >   the supplier after adding the link, and defer probing on non-presence.
+> > 
+> >   https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
+> > 
+> > 
+> > You could add something like this to dwc3_qcom_of_register_core():
+> > 
+> > 
+> >   device_link_add(dev, &qcom->dwc3->dev,
+> >   		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
+> > 
+> >   if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
+> >       ret = -EPROBE_DEFER;
+> > 
+> > 
+> I am not very sure how the device_link_add() API works. we are the parent and
+> creating a depdency on child probe. That does not sound correct to me.
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
- drivers/thunderbolt/ctl.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The functional dependency is effectively there, the driver already assumes that
+the dwc3 core was probed when of_platform_populate() returns.
 
-diff --git a/drivers/thunderbolt/ctl.h b/drivers/thunderbolt/ctl.h
-index e8c64898dfce..7c7d80f96c0c 100644
---- a/drivers/thunderbolt/ctl.h
-+++ b/drivers/thunderbolt/ctl.h
-@@ -35,7 +35,7 @@ struct tb_cfg_result {
- 			    * If err = 1 then this is the port that send the
- 			    * error.
- 			    * If err = 0 and if this was a cfg_read/write then
--			    * this is the the upstream port of the responding
-+			    * this is the upstream port of the responding
- 			    * switch.
- 			    * Otherwise the field is set to zero.
- 			    */
--- 
-2.36.1
+The device link itself doesn't create the dependency on the probe(), the check
+of the link status below does.
 
+Another option would be to add a link to the PHYs to the dwc3-qcom node in
+the device tree, but I don't think that would be a better solution (and I
+expect Rob would oppose this).
+
+I'm open to other solutions, so far the device link is the cleanest that came
+to my mind.
+
+I think the root issue is the driver architecture, with two interdependent
+drivers for the same IP block, instead of a single framework driver with a
+common part (dwc3 core) and vendor specific hooks/data.
+
+> Any ways, I have another question.
+> 
+> When dwc3_qcom_of_register_core() returns error back to dwc3_qcom_probe(), we
+> goto depopulate label which calls of_platform_depopulate() which destroy the
+> child devices that are populated. how does that ensure that child probe is
+> completed by the time, our probe is called again. The child device it self is
+> gone. Is this working because when our probe is called next time, the child
+> probe depenencies are resolved?
+
+Good point! It doesn't really ensure that the child is probed (actually it
+won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
+could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
+the PHYs should be ready and dwc3_probe() be invoked through
+of_platform_populate().
