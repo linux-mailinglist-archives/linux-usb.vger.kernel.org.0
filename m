@@ -2,195 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E3254DE07
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 11:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C34754DEC0
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 12:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359505AbiFPJTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 05:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
+        id S230004AbiFPKQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 06:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359311AbiFPJS7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 05:18:59 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE71856F90;
-        Thu, 16 Jun 2022 02:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655371137; x=1686907137;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uhuD9564WbiMR6YEyqZCv/cGg7ljX8YyLbuqxfhjXNo=;
-  b=GSQEHAJFsXX96htgyQNZa2Sadhwem9qB0wfg7pQhCbccMvpJ9d/eGQJG
-   hfEozg/ILlo1xE89q+Lv13Qu2k8d5vIgss8lfsAP1iBdY5OcJJcx+wxJu
-   Ec5G+A4gPcK54iAVuF9vGCZdJWoXKLKoAMFma/VWFfflZHYnBINAdQIxb
-   r+IqghNARErsD9iN5OlJ9oWGLb7eZf8uembTVoBnN1l2qkxDk/A/Lqvg1
-   2ucLFz9tT7fBS6pdeVbRIIAMhl2KIEuw/U80iIUTJbxNY8lh5PZf2jLDK
-   qHD2cQn4RCKTzGD4vSd8K5ou4BL/KlIUuQwrRFYVNGXZRl4CRuWpt5pHx
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="304647613"
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="304647613"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 02:18:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
-   d="scan'208";a="618816728"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2022 02:18:54 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1leP-000OEv-OU;
-        Thu, 16 Jun 2022 09:18:53 +0000
-Date:   Thu, 16 Jun 2022 17:18:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     frank zago <frank@zago.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v6 3/4] i2c: ch341: add I2C MFD cell driver for the CH341
-Message-ID: <202206161751.5icAiwNf-lkp@intel.com>
-References: <20220616013747.126051-4-frank@zago.net>
+        with ESMTP id S229557AbiFPKQL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 06:16:11 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2108.outbound.protection.outlook.com [40.107.255.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E865D5F0;
+        Thu, 16 Jun 2022 03:16:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UUYV04sTr+hfEZWT/P8r41nuCRaR7WbdxygoJa/B0ujBKP81SDS5cqa3yfDwGA3XB4o9+Y0brBqH9S37epwwSoW7hpyodZeu3Ecg3Al2WyTglPVd5nK1xZinYN6gf+rvSdUQGhur38evweeylYD83Tvz7NLuvxEpc6iAUTWPuEG6Be+pEIAYJeu5zjnUi81k+KgSSzWHTT+9OJX+QoEcu5RiT8UHRKqC6iA02nVEM7rDI2W98kym8FiFsA/2bG6DorGiMYUOrugXR+sQS+JVbZ9/9g0WHMSDycrusSlbKtF5qJ1XAKjo5ScS+asGSZ0Y1a7+Ek0/tojjzLuvIuEMIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SWtoDcUCX5zzVwG/ipCoPQOc323RqHXTrsUn62oILt8=;
+ b=XxL4dtghhw7pxv5jUZQ4KgB1ie1Mr8kVmtGVT52qWXGIrELAdGphbzS9FDFUGwKs3LOz3s1oFcAvMTjgdDDHw/Qm0GAQXzTgpqiyOOQkRDu+yRfo73eqKEQClvbP7mUIl+UgkrejPQgRjtLoe9cALgbLoyENzvf4ql89JwAFyFJPkihM/cr3bgjkP0VGJyXKY5CcQG482ZBNinkWhpG10g7uU21oyzKRAbW0yyo90FkFGK6X95+tJ/pl0vlZ43DpUN/Y9WJIVXdreIJC8Yx4zGXX78ZeqAleXKnudyO3MyEAUfq02mMQwzIK0FGdfz4IT7DDcBKGzFz+saCrSm+SPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SWtoDcUCX5zzVwG/ipCoPQOc323RqHXTrsUn62oILt8=;
+ b=p8BH0ylXvxVSb5miotC27SB04HBR2pDx6YJ66McfxyY+BCUHdai67VjrIiu91JQTclOXSye3O39/5GQadVU3IN6PFtiasc8eUw7ldGtHXwRThNidr0lvptAoFpg84X+LCz3K7QBalm9YR6+8dfnSgBXcTOxxDQKRERwbHeek9MTUG2arrrurL9BostzizlNAntweAaM5ChGnTi8TbNXLeB+RQDh6/TbLJi7gqhOix0c/mmcwpwetw8AHEBoK//rQdI6nBRl1A5AwRMJuQTp9/VNcWrrvObCqB/B1/ZrXGX/kFzGoDOKVj3fG07mrT8xezmyUW+XVjj8bKFSaYiD2pw==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by SG2PR06MB2764.apcprd06.prod.outlook.com (2603:1096:4:23::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Thu, 16 Jun
+ 2022 10:16:06 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237%7]) with mapi id 15.20.5332.022; Thu, 16 Jun 2022
+ 10:16:06 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
+Subject: RE: [PATCH] usb: gadget: Remove unnecessary print function dev_err()
+Thread-Topic: [PATCH] usb: gadget: Remove unnecessary print function dev_err()
+Thread-Index: AQHYgWATtppy2IZglE2yH02xMWGTe61R0ViQ
+Date:   Thu, 16 Jun 2022 10:16:05 +0000
+Message-ID: <HK0PR06MB320275CCAE8E424810C8907F80AC9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220616090410.128483-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220616090410.128483-1-jiapeng.chong@linux.alibaba.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e2e87e38-09bf-4375-9397-08da4f81397c
+x-ms-traffictypediagnostic: SG2PR06MB2764:EE_
+x-microsoft-antispam-prvs: <SG2PR06MB276475A37EE9ADE8EA8CCFB280AC9@SG2PR06MB2764.apcprd06.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wEG0D9mb2ByLwYRQS++geUu3JulF13vKfAPkmP5tSuZgyKJ/7L/KF0dT9c7ztZqyProP10fLIN3v9pdtpWI4VNHq+7zN8KFhKNUEBFP3O+X0UiPmZSlsG/3ZMrPZrwunwHPAzjzAFFpabuRSkeMnwfEFguzy88vZXkdg1By5bQQq0S3kEl3Fxtx+wvSRYgWRRiIIRbQaNm/klvVvhuEB/I34/x+Va7RO15hmx471ljefVv+AhAauIqcf+sVrNivPIEkzBZ1bXXRsjeJ+Iza4Ur0sfGvHjuBDdFLnONIfG3bgR+uvpX+jgJJq71nWYYxyO/LK4duXyFQghZZe5ba6Ng2ruUNn2s9Xt2iEVB77yyUsLfXkKsRARLtQDV0wKFE3EMCratfZVng0Bl+6YwrdlR66cPcd8iTH7+ri05hPBqWscq0qgSzXsw6XdLxSmoAuCNgAjQTgwdFGmILqvqICYiidrpSN0f4LIXlFH++z3CKOhu608WXzHexBz/n0i2UXTxWFSAqhprMZqNyLm8o+3ZypDC5AtqUF0E+0jxyf2lG+shwV2SEW1C8F5/NQrWqsTCpvIjdd0TXRvl3N+FEZRQTSAHUwjtkPAB+Gpy4T3eB31yZT1znqgybUUlnjjLJF2LUZzBH5AZid+ID+egfAwMhFPi1hSQ3epUQdR0iwyTdPlLiKgdmYNi694Mo8xo8Nz1LL9lD3+L1JklyfQxkJ4g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39850400004)(366004)(136003)(396003)(186003)(41300700001)(9686003)(83380400001)(316002)(26005)(54906003)(6916009)(33656002)(7696005)(86362001)(55016003)(6506007)(66556008)(66446008)(76116006)(64756008)(66476007)(8676002)(4326008)(66946007)(71200400001)(7416002)(38100700002)(8936002)(5660300002)(2906002)(122000001)(52536014)(508600001)(38070700005)(4744005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hRoow4H3k7kMuIKUf3yIpFUSQVN51K+JKiUDbXoaQsa8zOREUeeKF/nSPVIf?=
+ =?us-ascii?Q?25jJtUNUJMYPzkGAEdTAZfNz4URv/s6APABcxClopOA91se7rS4j3G+ESU8Y?=
+ =?us-ascii?Q?+rCdg+kGyXQ4nq8WIJcJTIMXQoZQY+Hi+VeUIibc1rmFWrcbGSc+mGzMcAxi?=
+ =?us-ascii?Q?EkQV0ygt2JnyOlullhaGNwHJL+1z7+QBOW2ZpAwp4pd/6zjajt9gjK5vo9FM?=
+ =?us-ascii?Q?UB4feRsBdxRMpSrpbrEf2yuAJ91SNIQEGUmSVRn5fqq82kTn38/xe1KlwF9i?=
+ =?us-ascii?Q?E+7XUq9LQuK8PD4yg+kLEAFO7uFCcJ2gpADZ3ZbngBL+88VJpR1cUbrHxZ9S?=
+ =?us-ascii?Q?AJl0h1zkceirv5QNP8DG5qZy7HORXfXQbJTJxDFlHYmK/SdGyqjN+t+FV3uM?=
+ =?us-ascii?Q?+6CC5y8ZhJa5I2m+I5FVqm78lTj42nTMDydStoonvBXcsuuz2IcRiJawSyaF?=
+ =?us-ascii?Q?ZIsMaP9NBvOnK2gwphpNc6JkS/tPdG4+DbCzbNUKE0KDehnxMXicWxQyO4Tp?=
+ =?us-ascii?Q?3S2SzBrbZj5U0/SMV0kQrwco/PUc9jOMPSAgUznerGYXE1xJSvKT4ZOTJn6y?=
+ =?us-ascii?Q?8spTn0MSimg0i/E68J4mUZ3reWcpx4bV5LqbWfr4prQV9FilSwNfcKBJF4An?=
+ =?us-ascii?Q?d/0IXdkPByG1/j51DakICYHqXf+1SniK9kifK9s8B2EnIVBckVNVusZdbfm/?=
+ =?us-ascii?Q?fykTMxA/rPWaoxT7quXlIXZVHe7L2wHEhOHJNJpgnY86vKJ8vkjh9AHi3wvs?=
+ =?us-ascii?Q?pnOmKzVuw/IaV+9B3aamtVdoXFd7/5QY7SneT0oLD/6qSHuV5pbSQff8N4Co?=
+ =?us-ascii?Q?Mrcm3KfU5baOIaTUANeGE6yF47Jg21cZ6iDBaVXAdXBPXbKTHVmffvlcyxTL?=
+ =?us-ascii?Q?M3FFjPzwR8aoBakgpur5PaPHG28UVbWvsSJPYQRDxNtr5PBDMg1Agk4DTqGB?=
+ =?us-ascii?Q?7l4w3K5kzR6djGqmkEO2obCUWEkFJqTCq8Kv2qr3JA6cErSAchktPzt7pN//?=
+ =?us-ascii?Q?24+AtmQg+T2fnOUclClJfsXdNU3Zj6InDDzKH2wZ7BPkX2gU/3fofTIHpiGi?=
+ =?us-ascii?Q?7L7cXRJnZxkB1J/mlez6TQiaURIXVxELySFxIvPRjNEs98lTFuFifO/Oshz/?=
+ =?us-ascii?Q?6q58t/7C8Q/yzVb216zDD7j85Nf1zcGy+uWzSFnqTCYD4bYMFpyBfCJIspqk?=
+ =?us-ascii?Q?JAIljlmmmOrO4ro1hM/V+1hx2bAOOXr3QLNylsApQEzSfPRr90hjhKJxBiF1?=
+ =?us-ascii?Q?oBXb72XP+yEK3RvUMeXiY2V+qG4d0WyZgwIDtcMyP86Sw3Pjh0eXdnve76FF?=
+ =?us-ascii?Q?DatZmlydGGPDiGzNYJWw2h7rCJkgLxEmJULnlNA5Gc7Z7WU4rpI6hZJdGjXN?=
+ =?us-ascii?Q?fkTXEx3NxRh10A8BZgI5Fjc/OdE42me1Sba0p3CJzVcvaxXjtxjG2Ov2qUcb?=
+ =?us-ascii?Q?0f+3HnMnz4SIVEBlwuMZsl3OCntGXAM8XYKGS+p35L83EwJ1LY5M5y8rh7Bg?=
+ =?us-ascii?Q?uEgeumLO55Xetk84cB3g3UPsRqJi3g84rFLuAhYmrjonYYj9CfRZo3GRoRO2?=
+ =?us-ascii?Q?XXOB5fEXoA5XXkHsDjd+SSOBejQNrf3jMHMKgJGwSG3ejPuHKkP9VicQgjFb?=
+ =?us-ascii?Q?64XOVqULPSVndHzs2JTE94waornqaKrsHJEbBBDg5YoM9N/YsRziYJFRonco?=
+ =?us-ascii?Q?qjDbChoocL4Gom7Qs+TUB/URTw6gbjYf/vEkZ3/l1bkMUrl19J7UOzr93inm?=
+ =?us-ascii?Q?j3Sz6z+clw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616013747.126051-4-frank@zago.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2e87e38-09bf-4375-9397-08da4f81397c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2022 10:16:06.0031
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: udPFDQJgl1IULP9pVKz2uQDHjlp7uFavP9NUZ8dHHwhQTtPs3zm2ZFM2BBe31pCObHltjYu1SHzmT61PLKwnjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2764
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi frank,
+> The print function dev_err() is redundant because platform_get_irq() alre=
+ady
+> prints an error.
+>=20
+> This was found by coccicheck:
+>=20
+> ./drivers/usb/gadget/udc/aspeed_udc.c:1546:2-9: line 1546 is redundant
+> because platform_get_irq() already prints an error.
+>=20
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Thank you for the patch! Yet something to improve:
+Acked-by: Neal Liu <neal_liu@aspeedtech.com>
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on brgl/gpio/for-next wsa/i2c/for-next linus/master v5.19-rc2 next-20220615]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> ---
+>  drivers/usb/gadget/udc/aspeed_udc.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c
+> b/drivers/usb/gadget/udc/aspeed_udc.c
+> index 1fc15228ff15..2c3dc80d6b8c 100644
+> --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> @@ -1543,7 +1543,6 @@ static int ast_udc_probe(struct platform_device
+> *pdev)
+>  	/* Find interrupt and install handler */
+>  	udc->irq =3D platform_get_irq(pdev, 0);
+>  	if (udc->irq < 0) {
+> -		dev_err(&pdev->dev, "Failed to get interrupt\n");
+>  		rc =3D udc->irq;
+>  		goto err;
+>  	}
+> --
+> 2.20.1.7.g153144c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/frank-zago/add-driver-for-the-WCH-CH341-in-I2C-GPIO-mode/20220616-094113
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-config: nios2-randconfig-r026-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161751.5icAiwNf-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/46c68aee86d34ee630272146a73ad7c3147bb094
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review frank-zago/add-driver-for-the-WCH-CH341-in-I2C-GPIO-mode/20220616-094113
-        git checkout 46c68aee86d34ee630272146a73ad7c3147bb094
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   nios2-linux-ld: drivers/mfd/ch341-core.o: in function `ch341_usb_probe':
->> drivers/mfd/ch341-core.c:46: undefined reference to `usb_find_common_endpoints'
-   drivers/mfd/ch341-core.c:46:(.text+0x8c): relocation truncated to fit: R_NIOS2_CALL26 against `usb_find_common_endpoints'
-   nios2-linux-ld: drivers/mfd/ch341-core.o: in function `ch341_usb_driver_init':
->> drivers/mfd/ch341-core.c:86: undefined reference to `usb_register_driver'
-   drivers/mfd/ch341-core.c:86:(.init.text+0x1c): relocation truncated to fit: R_NIOS2_CALL26 against `usb_register_driver'
-   nios2-linux-ld: drivers/i2c/busses/i2c-ch341.o: in function `no_data_xfer':
->> drivers/i2c/busses/i2c-ch341.c:81: undefined reference to `usb_bulk_msg'
-   drivers/i2c/busses/i2c-ch341.c:81:(.text+0xe0): relocation truncated to fit: R_NIOS2_CALL26 against `usb_bulk_msg'
->> nios2-linux-ld: drivers/i2c/busses/i2c-ch341.c:89: undefined reference to `usb_bulk_msg'
-   drivers/i2c/busses/i2c-ch341.c:89:(.text+0x134): relocation truncated to fit: R_NIOS2_CALL26 against `usb_bulk_msg'
-   nios2-linux-ld: drivers/i2c/busses/i2c-ch341.o: in function `ch341_i2c_xfer':
-   drivers/i2c/busses/i2c-ch341.c:278: undefined reference to `usb_bulk_msg'
-   drivers/i2c/busses/i2c-ch341.c:278:(.text+0x4e0): relocation truncated to fit: R_NIOS2_CALL26 against `usb_bulk_msg'
-   nios2-linux-ld: drivers/i2c/busses/i2c-ch341.c:290: undefined reference to `usb_bulk_msg'
-   drivers/i2c/busses/i2c-ch341.c:290:(.text+0x558): relocation truncated to fit: R_NIOS2_CALL26 against `usb_bulk_msg'
-   nios2-linux-ld: drivers/i2c/busses/i2c-ch341.o: in function `ch341_i2c_probe':
-   drivers/i2c/busses/i2c-ch341.c:357: undefined reference to `usb_bulk_msg'
-   drivers/i2c/busses/i2c-ch341.c:357:(.text+0x778): relocation truncated to fit: R_NIOS2_CALL26 against `usb_bulk_msg'
-   pahole: .tmp_vmlinux.btf: No such file or directory
-   .btf.vmlinux.bin.o: file not recognized: file format not recognized
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_CH341
-   Depends on HAS_IOMEM && USB
-   Selected by
-   - I2C_CH341 && I2C && HAS_IOMEM
-
-
-vim +46 drivers/mfd/ch341-core.c
-
-f33ee28d4d85a8 frank zago 2022-06-15  29  
-f33ee28d4d85a8 frank zago 2022-06-15  30  static int ch341_usb_probe(struct usb_interface *iface,
-f33ee28d4d85a8 frank zago 2022-06-15  31  			   const struct usb_device_id *usb_id)
-f33ee28d4d85a8 frank zago 2022-06-15  32  {
-f33ee28d4d85a8 frank zago 2022-06-15  33  	struct usb_endpoint_descriptor *bulk_out;
-f33ee28d4d85a8 frank zago 2022-06-15  34  	struct usb_endpoint_descriptor *bulk_in;
-f33ee28d4d85a8 frank zago 2022-06-15  35  	struct usb_endpoint_descriptor *intr_in;
-f33ee28d4d85a8 frank zago 2022-06-15  36  	struct ch341_ddata *ddata;
-f33ee28d4d85a8 frank zago 2022-06-15  37  	int ret;
-f33ee28d4d85a8 frank zago 2022-06-15  38  
-f33ee28d4d85a8 frank zago 2022-06-15  39  	ddata = devm_kzalloc(&iface->dev, sizeof(*ddata), GFP_KERNEL);
-f33ee28d4d85a8 frank zago 2022-06-15  40  	if (!ddata)
-f33ee28d4d85a8 frank zago 2022-06-15  41  		return -ENOMEM;
-f33ee28d4d85a8 frank zago 2022-06-15  42  
-f33ee28d4d85a8 frank zago 2022-06-15  43  	ddata->usb_dev = interface_to_usbdev(iface);
-f33ee28d4d85a8 frank zago 2022-06-15  44  	mutex_init(&ddata->usb_lock);
-f33ee28d4d85a8 frank zago 2022-06-15  45  
-f33ee28d4d85a8 frank zago 2022-06-15 @46  	ret = usb_find_common_endpoints(iface->cur_altsetting, &bulk_in,
-f33ee28d4d85a8 frank zago 2022-06-15  47  					&bulk_out, &intr_in, NULL);
-f33ee28d4d85a8 frank zago 2022-06-15  48  	if (ret) {
-f33ee28d4d85a8 frank zago 2022-06-15  49  		dev_err(&iface->dev, "Could not find all endpoints\n");
-f33ee28d4d85a8 frank zago 2022-06-15  50  		return -ENODEV;
-f33ee28d4d85a8 frank zago 2022-06-15  51  	}
-f33ee28d4d85a8 frank zago 2022-06-15  52  
-f33ee28d4d85a8 frank zago 2022-06-15  53  	ddata->ep_in = bulk_in->bEndpointAddress;
-f33ee28d4d85a8 frank zago 2022-06-15  54  	ddata->ep_out = bulk_out->bEndpointAddress;
-f33ee28d4d85a8 frank zago 2022-06-15  55  	ddata->ep_intr = intr_in->bEndpointAddress;
-f33ee28d4d85a8 frank zago 2022-06-15  56  	ddata->ep_intr_interval = intr_in->bInterval;
-f33ee28d4d85a8 frank zago 2022-06-15  57  
-f33ee28d4d85a8 frank zago 2022-06-15  58  	usb_set_intfdata(iface, ddata);
-f33ee28d4d85a8 frank zago 2022-06-15  59  
-f33ee28d4d85a8 frank zago 2022-06-15  60  	ret = mfd_add_devices(&iface->dev, PLATFORM_DEVID_AUTO, ch341_devs,
-f33ee28d4d85a8 frank zago 2022-06-15  61  			      ARRAY_SIZE(ch341_devs), NULL, 0, NULL);
-f33ee28d4d85a8 frank zago 2022-06-15  62  	if (ret)
-f33ee28d4d85a8 frank zago 2022-06-15  63  		return dev_err_probe(&iface->dev, ret,
-f33ee28d4d85a8 frank zago 2022-06-15  64  				     "Failed to register child devices\n");
-f33ee28d4d85a8 frank zago 2022-06-15  65  
-f33ee28d4d85a8 frank zago 2022-06-15  66  	return 0;
-f33ee28d4d85a8 frank zago 2022-06-15  67  }
-f33ee28d4d85a8 frank zago 2022-06-15  68  
-f33ee28d4d85a8 frank zago 2022-06-15  69  static void ch341_usb_disconnect(struct usb_interface *usb_if)
-f33ee28d4d85a8 frank zago 2022-06-15  70  {
-f33ee28d4d85a8 frank zago 2022-06-15  71  	mfd_remove_devices(&usb_if->dev);
-f33ee28d4d85a8 frank zago 2022-06-15  72  }
-f33ee28d4d85a8 frank zago 2022-06-15  73  
-f33ee28d4d85a8 frank zago 2022-06-15  74  static const struct usb_device_id ch341_usb_table[] = {
-f33ee28d4d85a8 frank zago 2022-06-15  75  	{ USB_DEVICE(0x1a86, 0x5512) },
-f33ee28d4d85a8 frank zago 2022-06-15  76  	{ }
-f33ee28d4d85a8 frank zago 2022-06-15  77  };
-f33ee28d4d85a8 frank zago 2022-06-15  78  MODULE_DEVICE_TABLE(usb, ch341_usb_table);
-f33ee28d4d85a8 frank zago 2022-06-15  79  
-f33ee28d4d85a8 frank zago 2022-06-15  80  static struct usb_driver ch341_usb_driver = {
-f33ee28d4d85a8 frank zago 2022-06-15  81  	.name       = "ch341-mfd",
-f33ee28d4d85a8 frank zago 2022-06-15  82  	.id_table   = ch341_usb_table,
-f33ee28d4d85a8 frank zago 2022-06-15  83  	.probe      = ch341_usb_probe,
-f33ee28d4d85a8 frank zago 2022-06-15  84  	.disconnect = ch341_usb_disconnect,
-f33ee28d4d85a8 frank zago 2022-06-15  85  };
-f33ee28d4d85a8 frank zago 2022-06-15 @86  module_usb_driver(ch341_usb_driver);
-f33ee28d4d85a8 frank zago 2022-06-15  87  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
