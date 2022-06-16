@@ -2,85 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A8F54EA92
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 22:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BC154EBE5
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 23:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245332AbiFPUMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 16:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S1378761AbiFPVFk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 17:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238989AbiFPUMv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 16:12:51 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6BA15FE8
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 13:12:50 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id v1so4750265ejg.13
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 13:12:50 -0700 (PDT)
+        with ESMTP id S1378919AbiFPVFi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 17:05:38 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3600E606F7
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 14:05:37 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id k7so2224408plg.7
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 14:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G6PSnNxxx/PVW8FFXrR6HE/lLr9drhWcqvfOWIWAGxU=;
-        b=jkqKxupetiO6TfhfVzDnfyZck/aeWFqIWWHZHa/O+g+D8eOtl5NiTQ4sNMvsO5Cm4q
-         +kB+x3InFzatm0matPIaUp5KcUChFkYaXXFdD33Uc5eBovHuiKvlTsxHAQMxE/jYc2sf
-         hgN7lONX7pqWG/hohLhSXTGMjLrEXx2l3PwQM=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qWeAN6wBOdgTg8JbowHd+2FzjeCfu8a+6968a4QI8WI=;
+        b=N5ZFoL+aFoUS6hB954SKMlb7yCUNVwnEz5QTGbIWpo81EwQ1sMXtUJNQgQWUFXyaqj
+         B3EKyPgnhgeP6Zxqc0o0AXWyPWgb2jZKHij8R6bu7VXYG/qL6Jeu3Pus4aTVrIH5N/up
+         1mVgnWLjqxO/IM/TYAske9+86aHB4TE/sPT2q6jKDvKrVbIRbqCUop88VsbKe70HL/Xn
+         WD13w1gMuXTC77dfwj7AUO0e7PAT47hYpwj/3hqPUXU+ijawuZQFwT1JvD33vRGoqe5d
+         JySTlKChot+aWilu0E/PsGcDvuRxR9SgKE0cOeMTOx1RDYK8f3vG2bi+O+s59MTFKM8U
+         9Wlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G6PSnNxxx/PVW8FFXrR6HE/lLr9drhWcqvfOWIWAGxU=;
-        b=a9NaUKT2Nj5awNmvuAZKtjGky9qhd7TH2Hv1BFRXMI+AGoC18pDc/lh2gkvTE2Q6S6
-         v+BC/um0iXWyK0m2UBvfgArQtBBVZlXuS43aikX240FF5gJVwv2w2oxLEXi5D5qXK2jN
-         Ky6hZlbLT+seA9uOTUAyYYt/Y6Yparq9iDldNdhZSblZ8cyv9WfvkRmCHwqiw/0mCe/l
-         cvmciaAwI9VPcxyrt1tu9UYpXLdGVo4wZNQYo5Rr7y1g+84CFB1Lwx4Abk/Yuzp8lM8k
-         s4mRhFvtkW8U+rF661xZMDswoHTiOH2op/vMwvxRLTbJrTCSIGoAvqFcGWi3Jd95cN71
-         83Zw==
-X-Gm-Message-State: AJIora+VCgLXao7RFjf0W49KpqhYFgqWVdW8JcmtbmTQt3ZsPfR3ouMd
-        56UMHANFXEDg8KUxd6UIXIVErnD/VVT/AjvLkeM=
-X-Google-Smtp-Source: AGRyM1tSqRCXoQ9YIdJLBu1tDv4OWnnppZkJ57W8XiKnp6LzEwCm8P9ZPana/2FgxdfcECmwgNSPMQ==
-X-Received: by 2002:a17:907:86ac:b0:708:9c4a:c6e9 with SMTP id qa44-20020a17090786ac00b007089c4ac6e9mr6053515ejc.297.1655410368607;
-        Thu, 16 Jun 2022 13:12:48 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id rh17-20020a17090720f100b006fef5088792sm1149469ejb.108.2022.06.16.13.12.46
-        for <linux-usb@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qWeAN6wBOdgTg8JbowHd+2FzjeCfu8a+6968a4QI8WI=;
+        b=Vzbc+NadE9P5BnuzYfoZ/rniQqyCA0xZLEddjhaSt3/DurgL5+eEC1sTGd5ynOBQt2
+         HIei0/grzGkgUqTjn2mPt6vpCRu8gEI7kCOuT2STEIKOGn5QYcOxb3HJ7k3C+rXXfjk/
+         GltcQSPcUFFXLkHqylICGROugajVbj5NJD1zbDSsmrNKqHGq1bqUiSiZXSlmTTZbj6rj
+         /KqnEgExTS+4Jx+LoY3u+i9RctUgHpU0eAUX6gE/LSoIPpHlVa/+olIe8V2uLLDN3G3X
+         UhIec1aCR8eCEdemCoBzG+HaOdVbyObF4Ga1FP7qtxPfhMhulLfaZfr+JrwmrGBgl60r
+         E/uA==
+X-Gm-Message-State: AJIora+A2TSRM4Kf+vtPiVLfGIzpujbVAKiCxI1fMkl9PLKHUmIQQjRw
+        Mn8VMnX56QWNryQV2S87kqviiA==
+X-Google-Smtp-Source: AGRyM1unXZ92n4cSgCY+nW05HkVgMJnrvjv1CRQe+KwLgKR+A0HSLHUM2FUPV+vxq7K020P5WmFE0w==
+X-Received: by 2002:a17:90b:4d8a:b0:1e6:87ad:bfd3 with SMTP id oj10-20020a17090b4d8a00b001e687adbfd3mr7000104pjb.138.1655413536660;
+        Thu, 16 Jun 2022 14:05:36 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id y5-20020a17090ad70500b001dd16b86fc0sm4249403pju.19.2022.06.16.14.05.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 13:12:47 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id c21so3228141wrb.1
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 13:12:46 -0700 (PDT)
-X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
- p18-20020a5d68d2000000b0021031cc64a6mr6144685wrw.679.1655410366015; Thu, 16
- Jun 2022 13:12:46 -0700 (PDT)
+        Thu, 16 Jun 2022 14:05:36 -0700 (PDT)
+Message-ID: <dd9b9be2-7bdf-6cb6-b8ad-d7c0a0d5b98a@linaro.org>
+Date:   Thu, 16 Jun 2022 14:05:34 -0700
 MIME-Version: 1.0
-References: <20220609192000.990763-1-mka@chromium.org> <20220609121838.v22.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <CAD=FV=W6erE8ByabmYSL_OWJPKYGqysDMGYQX6j7_PSEYGZ4YQ@mail.gmail.com> <YqpprpUHmlD62YzI@google.com>
-In-Reply-To: <YqpprpUHmlD62YzI@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 16 Jun 2022 13:12:32 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
-Message-ID: <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 02/15] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, jic23@kernel.org,
+        lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-3-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220613111146.25221-3-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,83 +82,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 13/06/2022 04:11, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> Add Mediatek MT6370 Charger binding documentation.
+> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../power/supply/mediatek,mt6370-charger.yaml | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> new file mode 100644
+> index 000000000000..b63553ebb15b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT6370 Battery Charger
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-charger
+> +
+> +  interrupts:
+> +    description: |
+> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
+> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
+> +      are required.
+> +    items:
+> +      - description: BC1.2 done irq
+> +      - description: usb plug in irq
+> +      - description: mivr irq
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: attach_i
+> +      - const: uvp_d_evt
+> +      - const: mivr
+> +
+> +  io-channels:
+> +    description: |
+> +      Use ADC channel to read vbus, ibus, ibat, etc., info. Ibus ADC channel
+> +      is required.
 
-On Wed, Jun 15, 2022 at 4:22 PM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> > > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
-> > > +{
-> > > +       int i;
-> > > +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
-> > > +       struct device_node *np, *npc;
-> > > +       struct platform_device *pdev = NULL;
-> > > +       struct pdev_list_entry *pdle;
-> > > +
-> > > +       if (!parent_hub->dev.of_node)
-> > > +               return;
-> > > +
-> > > +       for (i = 1; i <= parent_hub->maxchild; i++) {
-> > > +               np = usb_of_get_device_node(parent_hub, i);
-> > > +               if (!np)
-> > > +                       continue;
-> > > +
-> > > +               if (!of_is_onboard_usb_hub(np))
-> > > +                       goto node_put;
-> > > +
-> > > +               npc = of_parse_phandle(np, "companion-hub", 0);
-> > > +               if (npc) {
-> > > +                       /*
-> > > +                        * Hubs with companions share the same platform device.
-> > > +                        * Create the plaform device only for the hub that is
-> > > +                        * connected to the primary HCD (directly or through
-> > > +                        * other hubs).
-> > > +                        */
-> > > +                       if (!usb_hcd_is_primary_hcd(hcd)) {
-> > > +                               of_node_put(npc);
-> > > +                               goto node_put;
-> > > +                       }
-> > > +
-> > > +                       pdev = of_find_device_by_node(npc);
-> > > +                       of_node_put(npc);
-> > > +               } else {
-> > > +                       /*
-> > > +                        * For root hubs this function can be called multiple times
-> > > +                        * for the same root hub node (the HCD node). Make sure only
-> > > +                        * one platform device is created for this hub.
-> > > +                        */
-> > > +                       if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
-> > > +                               goto node_put;
-> >
-> > I don't understand the "else" case above. What case exactly are we
-> > handling again? This is when:
-> > * the hub is presumably just a 2.0 hub since there is no companion.
-> > * our parent is the root hub and the USB 2.0 hub we're looking at is
-> > not the primary
->
-> The 'else' case can be entered for hubs connected to a root hub or to another
-> hub further down in the tree, but we bail out only for first level hubs.
->
-> > ...but that doesn't make a lot of sense to me? I must have missed something...
->
-> It's not super-obvious, this bit is important: "this function can be called
-> multiple times for the same root hub node". For any first level hub we only
-> create a pdev if this function is called on behalf of the primary HCD. That
-> is also true of a hub connected to the secondary HCD. We only want to create
-> one pdev and there is supposedly always a primary HCD.
->
-> Maybe it would be slightly clearer if the function returned before the loop
-> if this condition is met.
+Add io-channel-names and describe each item - what type of ADC it is
+expected to be.
 
-I guess I'm still pretty confused. You say "For root hubs this
-function can be called multiple times for the same root hub node".
-Does that mean that the function will be called multiple times with
-the same "parent_hub", or something else.
+> +    minItems: 1
+> +    maxItems: 9
+> +
+> +  usb-otg-vbus-regulator:
+> +    type: object
+> +    description: OTG boost regulator.
+> +    $ref: /schemas/regulator/regulator.yaml#
 
-Unless it's called with the same "parent_hub" then it seems like if
-the USB device has a device tree node and that device tree node is for
-a onboard_usb_hub and there's no companion node then we _always_ want
-to create the platform device, don't we? If it is called with the same
-"parent_hub" then I'm confused how your test does something different
-the first time the function is called vs. the 2nd.
+unevaluatedProperties: false
 
--Doug
+> +
+> +    properties:
+> +      enable-gpio:
+
+"gpios", so:
+enable-gpios
+
+> +        maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - interrupt-names
+> +  - io-channels
+> +
+> +additionalProperties: false
+> +
+> +...
+
+
+Best regards,
+Krzysztof
