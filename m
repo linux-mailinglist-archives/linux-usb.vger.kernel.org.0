@@ -2,92 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3F054DF9A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 12:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F225654DFCA
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 13:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376719AbiFPK73 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 06:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
+        id S1376707AbiFPLLD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 07:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376716AbiFPK72 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 06:59:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B754EA37
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 03:59:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B071B82234
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 10:59:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CF0A2C341C0
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 10:59:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655377164;
-        bh=4xnETlptaEfdfuh7a3r6wWewLuZdUQNIjV9S7sXnK4o=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jp2o5NKcsrgsJ3CAHArzZGiGN/1DA7tyK0iIvXCRugasvdxjwnSd4SRQH0jSYCZRG
-         U4aEx/pjbW2vl5Syt2JcO2cnUgFceH90I0V//j4kgE64a8WL+iJ3Lc0ZMB7iHioN1V
-         t17vuBa6iSjp2FR7ox+N4jZQQQVds104ror1nTFG42DoDthhu2KKI/I1JVeCRFjTAc
-         fF0oMWmx+APhjl7jNA9sOlsfUz80FVIA6FyMI4PFXTiK/64kdhLdq2jeQ04Uh9kxHi
-         vT0CDo7mWiJ/8aKIbQRQEZ9hcAlX9JraoD6aU0LnU8S2Bv/XMTDbnLdDQi3eyOWvuX
-         jNtHJX06ca5Hg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id B875CC05FD6; Thu, 16 Jun 2022 10:59:24 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
- xhci_hcd rejecting DMA map of vmalloc memory
-Date:   Thu, 16 Jun 2022 10:59:24 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: regressions@leemhuis.info
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215890-208809-xAbjNmZeYa@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
-References: <bug-215890-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229748AbiFPLLB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 07:11:01 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3425C86F;
+        Thu, 16 Jun 2022 04:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655377860; x=1686913860;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8+NH6Ri5lpQfIS3/RPQfvg5J7ybyzEhikh7up91AaKE=;
+  b=Hc9/BbKXdZTqs7KjqSKu+cGHAYnNeqRGmAC/WxCuLkOEtn1yWfNg5nWZ
+   AF7AY2U73sjHiXx+9/BjdrkgnknAMGqOjNh4DiMMh/iazysoVXB6dwQ3M
+   xQhAn2Ka0zlG+3HVWwX4N6uIRvTQ+wR91FymO4E0jvGJ+lae+NRC/ZMqo
+   lf8cQzkmmjvYAftscTs5Q5DUfprbkFZeiCZSlFZOthoGv2j7byfc03jpZ
+   62tdIvONp72exz+wC+0TPn7dHsiGGCtR5zdDH3/iCvMidUg91IXqRa6cl
+   eLDAieAuNVSAQzZWSUA3WjinqYdfeaQTZiKelhd2HESOfZEQdZYPytEQx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262244491"
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="262244491"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 04:11:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="536413410"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 16 Jun 2022 04:10:57 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1nOq-000OJd-Mv;
+        Thu, 16 Jun 2022 11:10:56 +0000
+Date:   Thu, 16 Jun 2022 19:10:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     frank zago <frank@zago.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH v6 3/4] i2c: ch341: add I2C MFD cell driver for the CH341
+Message-ID: <202206161938.BiOHSAOi-lkp@intel.com>
+References: <20220616013747.126051-4-frank@zago.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616013747.126051-4-frank@zago.net>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+Hi frank,
 
---- Comment #26 from The Linux kernel's regression tracker (Thorsten Leemhu=
-is) (regressions@leemhuis.info) ---
-(In reply to Dimitar Kosev from comment #25)
-> I believe this is not fixed yet. I have the same issue with 5.18.x on
-> Gentoo, the difference is that the Realtek card reader is involved:
+Thank you for the patch! Yet something to improve:
 
-Not my area of expertise, but I guess the driver for the realtek card reader
-likely has the same underlying issue like the input driver this bug was abo=
-ut.
-Unless Mathias speaks up here to provide further info (or maybe even comes
-around with a fix) I suggest you report it separately (please drop a link to
-the report afterwards here).
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on brgl/gpio/for-next wsa/i2c/for-next linus/master v5.19-rc2 next-20220616]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
---=20
-You may reply to this email to add a comment.
+url:    https://github.com/intel-lab-lkp/linux/commits/frank-zago/add-driver-for-the-WCH-CH341-in-I2C-GPIO-mode/20220616-094113
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: arc-buildonly-randconfig-r004-20220616 (https://download.01.org/0day-ci/archive/20220616/202206161938.BiOHSAOi-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/46c68aee86d34ee630272146a73ad7c3147bb094
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review frank-zago/add-driver-for-the-WCH-CH341-in-I2C-GPIO-mode/20220616-094113
+        git checkout 46c68aee86d34ee630272146a73ad7c3147bb094
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "usb_bulk_msg" [drivers/i2c/busses/i2c-ch341.ko] undefined!
+>> ERROR: modpost: "usb_deregister" [drivers/mfd/ch341-core.ko] undefined!
+>> ERROR: modpost: "usb_register_driver" [drivers/mfd/ch341-core.ko] undefined!
+>> ERROR: modpost: "usb_find_common_endpoints" [drivers/mfd/ch341-core.ko] undefined!
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_CH341
+   Depends on HAS_IOMEM && USB
+   Selected by
+   - I2C_CH341 && I2C && HAS_IOMEM
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
