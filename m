@@ -2,198 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989C054E882
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 19:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02ED554E968
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 20:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378102AbiFPRPz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 13:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S234114AbiFPSb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 14:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378091AbiFPRPx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 13:15:53 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A3A49CB8
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 10:15:52 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 187so2040003pfu.9
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 10:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=8iz7ZOP2b0Lu2YomGWoPhULSTDfxHvkkUN5CEYP8CaU=;
-        b=ApbDEiT1anUGxolRWQpnvh/eWWi46u0atckjEWb4RvkiaIAvr5aZnD+S+CE8pBh9Ue
-         Rdpxdb8HpapM2i4wnBLme8kKJb6sQYtoE4BEIjrGkPuWRCm9/6eujrfB5IdbFD4FbxFh
-         vlk2TjuD/1Sg2MIO0AkpoHPXrnb4FsWtTK2vc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=8iz7ZOP2b0Lu2YomGWoPhULSTDfxHvkkUN5CEYP8CaU=;
-        b=lXqrrDpqYE7XNQpJZVrQ9mxJuGe8witx8mkgWZISinEvGWPDZcWRXEkSaRUoFNagwy
-         +szXUilDxTx9ZUWP2r/Fr8LE4Qrd2egk2sAz0Eim+zDy07z+7o/91XVBGWfqbrdZ6MP7
-         kIHclP7lpdVQfD3ejr3cKOjyYkLVhU2BA77nnL9E140usd3okJhrT8QTgyWezTRaN4Js
-         AvirzMcdTrhT6L+MK0fW4ODIGiolJdDnKGjJoNnZZB1FCpf+NpNccYCPqijRZtdH519G
-         y54QHg9qf7W1s5uTd92slTtkVxDjqK8a3DiEa74vBEsbT2Adcchm8wOIPwdvPT5ajZ8b
-         8Rpg==
-X-Gm-Message-State: AJIora/QP6NWfg84L2quG683a/mspNhjQrhskQOsdA914ujJFsJRfmzi
-        caXb51ijfwEbvCX5/MsIcUj+KoKJf0cFZA==
-X-Google-Smtp-Source: AGRyM1v1gOcNbulVWr4yT4FU7oeqvsT8pT39TN0Lj/5MQsCXzknBAbpphcjXQ9hhBxZQMW11jlfYIw==
-X-Received: by 2002:a65:588b:0:b0:3fe:4237:2ee5 with SMTP id d11-20020a65588b000000b003fe42372ee5mr5334297pgu.442.1655399751849;
-        Thu, 16 Jun 2022 10:15:51 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:4ef5:7e3b:63ba:fc4])
-        by smtp.gmail.com with UTF8SMTPSA id j1-20020a170903028100b00164097a779fsm1891067plr.147.2022.06.16.10.15.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 10:15:51 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 10:15:49 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <YqtlRQOwb3t6Xtd0@google.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com>
- <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com>
- <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S233786AbiFPSbz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 14:31:55 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2073.outbound.protection.outlook.com [40.107.244.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836955370D;
+        Thu, 16 Jun 2022 11:31:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CpA2z9H8djXysMNxV04CcVfGzj+7wktf5F9g3uoj7dNQ7/FCxr5OOE3MvlM0jFUC4Jo0zG0YkrzGDEUtBaHwgO9W4mtZn7dR62EnvBkCB/bGZQML6GlRVQ60guLn/m90shIHDwKg4J3nHqNgYzwP14P9c3QqhTDyX4A2a0QWbZngBA5U5+MeWRAY+h6qXKBJ87pzf51DmL8pS2RCzYO5xlDzo1+WnYh6GsiAoKfXr2OqzPtWWHbUTYrdNpwlgL6Ikp649u9BIYHUP5Sa/z0hVwNlchVZpDjK6l5gSc3Sa1clAy49l/ApoTUfy2WzngbZAU88s2cy7f8yLCi2IjwWNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kiAC+ZIOYD1ZY1p5pwDOEMOZlCtsktue3feDinp0/fE=;
+ b=irEqWYg7UyvpCQ0HP3Q4WwaJ1OswWDf7srQHG17RPRuQ6CtZGO59ZEgRfhpr4p3trkn8y6D08eUEEaWEqX2kubZXhtehHJT7vYjLVkPQBkJ5HWMoT1NnBoG8YKytEAbGP5UcM2YYos5AKjNuNCST4f2MUWyWsnLbzMOjJTSbeZDkCelbvhvcgieBA7fFsqpjh5vssPbRqxqZlKqnyb7eJHzEeUFiNr0xlGpRnzznJ3Fa5HuE0tV7h6+Qf/6w0c/ZYWAEq06azaeuT4xE0GcKPAMywhWOqJGChOi0T5BwSof3br6oaFRWuXiEm3Vscx0upmkByP5CqvYTbFw+xdy9PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kiAC+ZIOYD1ZY1p5pwDOEMOZlCtsktue3feDinp0/fE=;
+ b=tZrJqN84pMMCjGQ95JvvFfNG9z2dJLLq7B5TNyjlAAgEUEdhS5agk0gCs79kx1XglfdhVXm/zfTRSJ1itqq0QBJsYhDgSTDek0TQUZrxiYJ/4Mph/G5LUyg/+DIM+G84inw24Bhg5eSqw7fbPL6dqZvsM39AvvmR44JrIIEZ2OM=
+Received: from MW4PR04CA0314.namprd04.prod.outlook.com (2603:10b6:303:82::19)
+ by DM4PR12MB5309.namprd12.prod.outlook.com (2603:10b6:5:390::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Thu, 16 Jun
+ 2022 18:31:52 +0000
+Received: from CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::cd) by MW4PR04CA0314.outlook.office365.com
+ (2603:10b6:303:82::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14 via Frontend
+ Transport; Thu, 16 Jun 2022 18:31:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT052.mail.protection.outlook.com (10.13.174.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Thu, 16 Jun 2022 18:31:51 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 16 Jun
+ 2022 13:31:50 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>, Jiri Kosina <jikos@kernel.org>,
+        "Benjamin Tissoires" <benjamin.tissoires@redhat.com>,
+        "open list:USB HID/HIDBP DRIVERS [USB KEYBOARDS, MICE, REM..." 
+        <linux-usb@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     Richard Gong <richard.gong@amd.com>
+Subject: [PATCH v2] HID: usbhid: set mouse as a wakeup resource
+Date:   Thu, 16 Jun 2022 13:31:42 -0500
+Message-ID: <20220616183142.14472-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2858dd09-1cc9-475a-8bcc-08da4fc67b70
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5309:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB53099617617FACC6CF28D258E2AC9@DM4PR12MB5309.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P5NXrCcXjQuSUGCNLmWnIRHiPfTgEB8qHLiA37YEmFGvURRMBxq8uhkRENbIJF4/TGPxMZgnsVHVBVymVBO4qsYyjixbxkOqeeHAH4HplJEJnlXXCM2yfF9ylI73pp+Pm2TOI1NoicbdkJuQp7GKwSCCWW//MAzjnSB+Z51+iQit3bkerQC9oFG34axPbHUE6sFaWjkVw+I1tAcpUrPAlcNBSNXZGa02GjqU4IjzhSYQ/Cn0txzq876urJHg6Bl0wkvMZUAZhLS/13sNhR3mr5Fo9GzwW4yPJYjst3Rb8CoaiOCchEb9Ua8AwQcXhFHy4aReeyiw0sNn25RqQYQgRcZy3l4FP4Vw1mzn4k89yAEyO2r0A3O1hrZyQmXQ2uUwoPJpGj/zXIS1MLuYyDEtvfL//7XSVTXruPFHlCNT8bLBL+ju7QeSZ+X4veTfB99DXt/Cis8XWobXg319cjJvJYKLx06TXrPvihyv1wueuh3mfpsky9l5rkWZwMgOp8d0lAha/PbfJQl0GxEqut+fG9XQi5yd3nBFZmlg5NK2Vsq+GsZwirbb/Od5mJvnQPFmHPkKe0Qx4UG5tv85o4tHkL/ZvNaxXc0lKkOyZmyvhZQUVx7qpPoQklHDykT+HRt6uVTuPCSOQV98VmIsY8kjSukB8RQD1CuUFjFbApkLbIYhF89fh+1ZTTfHnlKXGDdbQ7F5F35cd6l49u63hWDSGO2ZHpXIA7ZO7A75H678dI4SsjVXeahsLvVfY1XkZqu34nHeB2hbiLUpueZT5SaWuAOwUZY5Jn9oA1N4wFNgTyuTx8f6ODmjEAvdh99WJ+EWIgL9iNF5rLM1+NmbNUVi8Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(46966006)(40470700004)(36840700001)(356005)(2616005)(81166007)(1076003)(16526019)(36860700001)(36756003)(110136005)(186003)(83380400001)(316002)(336012)(47076005)(8676002)(8936002)(5660300002)(70206006)(2906002)(82310400005)(6666004)(44832011)(45080400002)(7696005)(4326008)(40460700003)(26005)(508600001)(86362001)(70586007)(966005)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 18:31:51.7563
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2858dd09-1cc9-475a-8bcc-08da4fc67b70
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5309
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
-> Hi Matthias/Krishna,
-> 
-> On Tue, Jun 14, 2022 at 10:53:35AM -0700, Matthias Kaehlcke wrote:
-> > On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
-> > > On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
-> > > > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
-> > > > > Hi Krishna,
-> > > > > 
-> > > > > with this version I see xHCI errors on my SC7180 based system, like
-> > > > > these:
-> > > > > 
-> > > > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
-> > > > > 
-> > > > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
-> > > > > 
-> > > > > After resume a downstream hub isn't enumerated again.
-> > > > > 
-> > > > > So far I didn't see those with v13, but I aso saw the first error with
-> > > > > v16.
-> > > > 
-> > > > It also happens with v13, but only when a wakeup capable vUSB <= 2
-> > > > device is plugged in. Initially I used a wakeup capable USB3 to
-> > > > Ethernet adapter to trigger the wakeup case, however older versions
-> > > > of this series that use usb_wakeup_enabled_descendants() to check
-> > > > for wakeup capable devices didn't actually check for vUSB > 2
-> > > > devices.
-> > > > 
-> > > > So the case were the controller/PHYs is powered down works, but
-> > > > the controller is unhappy when the runtime PM path is used during
-> > > > system suspend.
-> > > 
-> > > The issue isn't seen on all systems using dwc3-qcom and the problem starts
-> > > during probe(). The expected probe sequence is something like this:
-> > > 
-> > > dwc3_qcom_probe
-> > >   dwc3_qcom_of_register_core
-> > >     dwc3_probe
-> > > 
-> > >   if (device_can_wakeup(&qcom->dwc3->dev))
-> > >     ...
-> > > 
-> > > The important part is that device_can_wakeup() is called after dwc3_probe()
-> > > has completed. That's what I see on a QC SC7280 system, where wakeup is
-> > > generally working with these patches.
-> > > 
-> > > However on a QC SC7180 system dwc3_probe() is deferred and only executed after
-> > > dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
-> > > With that the controller/driver ends up in an unhappy state after system
-> > > suspend.
-> > > 
-> > > Probing is deferred on SC7180 because device_links_check_suppliers() finds
-> > > that '88e3000.phy' isn't ready yet.
-> > 
-> > It seems device links could be used to make sure the dwc3 core is present:
-> > 
-> >   Another example for an inconsistent state would be a device link that
-> >   represents a driver presence dependency, yet is added from the consumer’s
-> >   ->probe callback while the supplier hasn’t probed yet: Had the driver core
-> >   known about the device link earlier, it wouldn’t have probed the consumer
-> >   in the first place. The onus is thus on the consumer to check presence of
-> >   the supplier after adding the link, and defer probing on non-presence.
-> > 
-> >   https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
-> > 
-> > 
-> > You could add something like this to dwc3_qcom_of_register_core():
-> > 
-> > 
-> >   device_link_add(dev, &qcom->dwc3->dev,
-> >   		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
-> > 
-> >   if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
-> >       ret = -EPROBE_DEFER;
-> > 
-> > 
-> I am not very sure how the device_link_add() API works. we are the parent and
-> creating a depdency on child probe. That does not sound correct to me.
+The USB HID transport layer doesn't set mice for wakeup by default so users
+can not wake system from s2idle using wired USB mouse. However, users can
+wake the same system from Modern Standby on Windows with the same wired
+USB mouse.
 
-The functional dependency is effectively there, the driver already assumes that
-the dwc3 core was probed when of_platform_populate() returns.
+Microsoft documentation indicates that all USB mice and touchpads should
+be waking the system from Modern Standby. To align expectations from users
+make this behavior the same when the system is configured by the OEM and
+the user to use s2idle in Linux.
 
-The device link itself doesn't create the dependency on the probe(), the check
-of the link status below does.
+Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#input-devices-1
+Link: https://lore.kernel.org/linux-usb/20220404214557.3329796-1-richard.gong@amd.com/
+Suggested-by: Richard Gong <richard.gong@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+More people keep coming to us confused that they couldn't wake a Linux system
+up from sleep using a mouse, so this patch is being revived.
 
-Another option would be to add a link to the PHYs to the dwc3-qcom node in
-the device tree, but I don't think that would be a better solution (and I
-expect Rob would oppose this).
+Microsoft documentation doesn't indicate any allowlist for this behavior, and
+they actually prescribe it for all USB mice and touchpads.
+v1->v2:
+ * Resubmit by Mario
+ * Update commit message
+ * Only activate on systems configured by user and OEM for using s2idle
 
-I'm open to other solutions, so far the device link is the cleanest that came
-to my mind.
+ drivers/hid/usbhid/hid-core.c | 36 ++++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 11 deletions(-)
 
-I think the root issue is the driver architecture, with two interdependent
-drivers for the same IP block, instead of a single framework driver with a
-common part (dwc3 core) and vendor specific hooks/data.
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index 4490e2f7252a..3a1214ecec49 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -12,6 +12,7 @@
+ /*
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/init.h>
+@@ -26,6 +27,7 @@
+ #include <linux/wait.h>
+ #include <linux/workqueue.h>
+ #include <linux/string.h>
++#include <linux/suspend.h>
+ 
+ #include <linux/usb.h>
+ 
+@@ -1176,17 +1178,29 @@ static int usbhid_start(struct hid_device *hid)
+ 		usb_autopm_put_interface(usbhid->intf);
+ 	}
+ 
+-	/* Some keyboards don't work until their LEDs have been set.
+-	 * Since BIOSes do set the LEDs, it must be safe for any device
+-	 * that supports the keyboard boot protocol.
+-	 * In addition, enable remote wakeup by default for all keyboard
+-	 * devices supporting the boot protocol.
+-	 */
+-	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
+-			interface->desc.bInterfaceProtocol ==
+-				USB_INTERFACE_PROTOCOL_KEYBOARD) {
+-		usbhid_set_leds(hid);
+-		device_set_wakeup_enable(&dev->dev, 1);
++	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
++		switch (interface->desc.bInterfaceProtocol) {
++		/* Some keyboards don't work until their LEDs have been set.
++		 * Since BIOSes do set the LEDs, it must be safe for any device
++		 * that supports the keyboard boot protocol.
++		 * In addition, enable remote wakeup by default for all keyboard
++		 * devices supporting the boot protocol.
++		 */
++		case USB_INTERFACE_PROTOCOL_KEYBOARD:
++			usbhid_set_leds(hid);
++			device_set_wakeup_enable(&dev->dev, 1);
++			break;
++#ifdef CONFIG_ACPI
++		/* Setup remote wakeup by default for mice supporting boot
++		 * protocol if the system supports s2idle
++		 */
++		case USB_INTERFACE_PROTOCOL_MOUSE:
++			if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0 &&
++			    pm_suspend_default_s2idle())
++				device_set_wakeup_enable(&dev->dev, 1);
++			break;
++#endif
++		}
+ 	}
+ 
+ 	mutex_unlock(&usbhid->mutex);
+-- 
+2.34.1
 
-> Any ways, I have another question.
-> 
-> When dwc3_qcom_of_register_core() returns error back to dwc3_qcom_probe(), we
-> goto depopulate label which calls of_platform_depopulate() which destroy the
-> child devices that are populated. how does that ensure that child probe is
-> completed by the time, our probe is called again. The child device it self is
-> gone. Is this working because when our probe is called next time, the child
-> probe depenencies are resolved?
-
-Good point! It doesn't really ensure that the child is probed (actually it
-won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
-could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
-the PHYs should be ready and dwc3_probe() be invoked through
-of_platform_populate().
