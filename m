@@ -2,67 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E097454DFE8
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 13:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA75654E1CD
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 15:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376756AbiFPLVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 07:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S233013AbiFPNWK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 09:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376720AbiFPLVb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 07:21:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E00E5E74B
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 04:21:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E764EB8235E
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 11:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80C1AC341C0
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 11:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655378487;
-        bh=J0LJVg9qca+roEvO480YV2ehT+k8lP/i1h4ACe7cRBE=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jHZrRAg69DQrL69qqosGhD9W/FEXY4Jej3wfGpytaFTvyVTQWWGOsJsI2pmYT78KN
-         obDU6g/CW1pXzD0ou/67wZxyBW+BySvZkNJUmqDtTu3gVM9mc1uRaoP0PT6G3IV0LG
-         MGiysxgT5rQk8qsAV7VsOsHVv7DoW7fiCr8+030S1HSVFya9UsAT2vjbkUxxAHF/py
-         WlCZb587uWnZPsYg4IW4L1LZxSNLVp2r+qVclHmALWKQReLrsqHbjy7+qaemTqSslr
-         QBgBay2wEJOM7OURgmppV1wHtbIbQ/VNGhwcQ/0yjBxiLrdC8Sq5W2QfeEAgnU5iMG
-         26ImXl3e3+eGg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6BE08C05FD2; Thu, 16 Jun 2022 11:21:27 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 215890] Regression in 5.18: bcm5974 trackpad causes error:
- xhci_hcd rejecting DMA map of vmalloc memory
-Date:   Thu, 16 Jun 2022 11:21:27 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: buboleck@abv.bg
-X-Bugzilla-Status: REOPENED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215890-208809-8WNeiRaG9B@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215890-208809@https.bugzilla.kernel.org/>
-References: <bug-215890-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230063AbiFPNWJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 09:22:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8EC43490;
+        Thu, 16 Jun 2022 06:22:07 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LP2pY36XlzhXZK;
+        Thu, 16 Jun 2022 21:20:05 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 16 Jun
+ 2022 21:22:04 +0800
+From:   Zheng Bin <zhengbin13@huawei.com>
+To:     <neal_liu@aspeedtech.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <zhengbin13@huawei.com>, <gaochao49@huawei.com>
+Subject: [PATCH -next] usb: gadget: aspeed_udc: fix missing spin_unlock_irqrestore in ast_udc_ep_queue
+Date:   Thu, 16 Jun 2022 21:35:08 +0800
+Message-ID: <20220616133508.3655864-1-zhengbin13@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,27 +48,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215890
+ast_udc_ep_queue misses spin_unlock_irqrestore in an error path,
+this patch fixes that.
 
---- Comment #27 from Dimitar Kosev (buboleck@abv.bg) ---
-(In reply to The Linux kernel's regression tracker (Thorsten Leemhuis) from
-comment #26)
-> (In reply to Dimitar Kosev from comment #25)
-> > I believe this is not fixed yet. I have the same issue with 5.18.x on
-> > Gentoo, the difference is that the Realtek card reader is involved:
->=20
-> Not my area of expertise, but I guess the driver for the realtek card rea=
-der
-> likely has the same underlying issue like the input driver this bug was
-> about. Unless Mathias speaks up here to provide further info (or maybe ev=
-en
-> comes around with a fix) I suggest you report it separately (please drop a
-> link to the report afterwards here).
+Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
+Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks, new bug logged https://bugzilla.kernel.org/show_bug.cgi?id=3D216140
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 1fc15228ff15..6c91f7f288a2 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -665,7 +665,8 @@ static int ast_udc_ep_queue(struct usb_ep *_ep, struct usb_request *_req,
+ 	if (ep->ep.desc == NULL) {
+ 		if ((req->req.dma % 4) != 0) {
+ 			dev_warn(dev, "EP0 req dma alignment error\n");
+-			return -ESHUTDOWN;
++			rc = -ESHUTDOWN;
++			goto end;
+ 		}
 
---=20
-You may reply to this email to add a comment.
+ 		ast_udc_ep0_queue(ep, req);
+--
+2.31.1
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
