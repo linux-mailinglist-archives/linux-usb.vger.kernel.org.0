@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66E54EC2A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 23:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373CE54EC36
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 23:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378803AbiFPVJ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 17:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
+        id S1379048AbiFPVKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 17:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378976AbiFPVJZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 17:09:25 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3442D60B90
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 14:09:24 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 31so2294960pgv.11
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 14:09:24 -0700 (PDT)
+        with ESMTP id S1379068AbiFPVKS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 17:10:18 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65F460BA1
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 14:10:14 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id a10so2386219pju.3
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 14:10:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zhpZ+GjXampjNpe+tQocPabcYpHKe+t5MxtxSoAd/gk=;
-        b=c/mnodrbMqdEEZtK4ydiC51al8PB7S6Cw/2mpPGAnndPSmu2+WM1Ll5DPr4l2TlOQS
-         nqxcxIqTkzcsEO3ksP2QW/htFKuizhTMRc2FmleMjdWDxtyteBBiNyVAp83VADdUQn3X
-         G/hCcE8fhF8THykoNLr9837Zpz64pICy6pXDGznnY2WIMG93RYJ0Cm2F5tQqmGHz/ew2
-         yqiJMi3apylM6BgwpGCG/sfJ83FiC5EaO/9MBOx8Ti2RX8TKdRByxdJEyDRw3bdyXr/x
-         BWCtUHy2R46F/HtRQqol9dJaSnsHI9AI05hVUXfj35TZbFtNdUodT4OBz0pviOs5GdPx
-         gbLQ==
+        bh=1NvKVp9EY1lQLLZ0Uj/3ziHPWB5PBfQnDPktmmL6XEk=;
+        b=Q6kggNEwsYy473XSBdvlOd5aXGi14mWaUXKCRel2oNoa9ukMQEm6VLZ36BSmEzjUw8
+         xVjg+yj2Cf7WYniqQWa061j05YQBrlt3J8sWSdxuzyoIGAnHdsSZK0OPY2rgLYkZCGdz
+         RGHvnW9PyQpZtnrKN3TNt9/AMOmKe76T+/caN0MOE3lbxICjjK5bFR+Qhp/bDFV7LEnZ
+         ygPkdnsJl4x4bJeL8fdqMJEOMIyvVNtRqEeXO2BdN/B+P+LbfjtD4WyGc67vqWXugVv3
+         iNbUjj0Z+ZhCSCUDlVRSwcvWTlaYCTp/0ixXT9BwdhOZGpaNiy9JJrytROI9rct/lCCR
+         7ykQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=zhpZ+GjXampjNpe+tQocPabcYpHKe+t5MxtxSoAd/gk=;
-        b=nnJcizXhCaGS6E3RfhA3opQ2hkAQ6K3M5VeF14vGTJLdTYg+GwQPIyMX2yiQeITfUv
-         O3g/pGBUlkwwB1fC++DsHXk3Dg6D1XEdygFbVibeUypI2ARzC33AtX44wXnqAdiIo5o3
-         zIxqHlZmrDG/vXahxZhvEpCsuTdZsmLBwSSZ3W56+xuToMfrRVuPbYCq9mMBMrZjWZ37
-         Tf9G7SbrDhNk1Q63Bm0EcbvJBx+ImbxV7/AV0CeqFHcp16rpGa9FgYEOXNE9yyAeo0wa
-         UVYzosL3eLxkF9d32dUbKIfzNtv5pQ35iFMEeAfIK208XFW3qDJUWhf4smuS75ODT9Q9
-         9KYg==
-X-Gm-Message-State: AJIora90ZVReF4eGLNOI2o71VXzvDzUWjI4JQHJ1mvk3Q3yuKXMoP+nl
-        qTawLpYXlRud1/fpVGg3uTtsGg==
-X-Google-Smtp-Source: AGRyM1tDcKhZpWC6x4Z99cOnzfLaqqe5JLXzIahj3Uu4wTqFJmQBE7GebAoPUSjcUlojxk8MyILZ2Q==
-X-Received: by 2002:a63:3c3:0:b0:3fc:5864:7412 with SMTP id 186-20020a6303c3000000b003fc58647412mr6068104pgd.138.1655413763706;
-        Thu, 16 Jun 2022 14:09:23 -0700 (PDT)
+        bh=1NvKVp9EY1lQLLZ0Uj/3ziHPWB5PBfQnDPktmmL6XEk=;
+        b=BOkBQbNQLAWxEUBw9sANR4hkV0A+0CYks3UEnIoqfHM+CZzLGvIFYXbkWDLqWzAveg
+         gTqfwdhjW2TSF5Cl5fxtdkiMp0gm+So/YQA8O43FPtayzBp7lXQXYlP1hg45WKSZwvM5
+         QWS+qYRmebku35QPYZCquK9/fDpydW7HGyYCOx+LHaquMuofuurxiGsG7lXj8CdmNhXU
+         wfw5NH4S0hC8vqEKMUr4YTMrAjccKHQcZw7sfuyVsdochcsjjb1ELELF+l0vzMVSWWu6
+         Vn/C58Zkfuj5P3Db1SLxSy00b+k7x3F500pj1aiBDgweNu5aBVFh5A3Ni2arvEyCaWEW
+         Or3Q==
+X-Gm-Message-State: AJIora/p2z+DwnWpoPqcAIlQQDhHbalW0q0gTlmGYGVbxixusS7ucxfo
+        Nw61Jryl1JEk5haTyTe0efecgg==
+X-Google-Smtp-Source: AGRyM1tx14RVi2zqlwVdwcg3qpvX916m1pZt9IXn7u8YC0Z2HVZLOyuzbvgSYCSqY81bOJn+l9i+nw==
+X-Received: by 2002:a17:90b:4c8f:b0:1e6:9bf9:1ab8 with SMTP id my15-20020a17090b4c8f00b001e69bf91ab8mr6904606pjb.215.1655413814235;
+        Thu, 16 Jun 2022 14:10:14 -0700 (PDT)
 Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id u2-20020a17090a4bc200b001e2ebcce5d5sm1929001pjl.37.2022.06.16.14.09.22
+        by smtp.gmail.com with ESMTPSA id n46-20020a056a000d6e00b0051868418b06sm2167316pfv.35.2022.06.16.14.10.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 14:09:23 -0700 (PDT)
-Message-ID: <91e9e3af-8208-7535-1864-08744f934593@linaro.org>
-Date:   Thu, 16 Jun 2022 14:09:21 -0700
+        Thu, 16 Jun 2022 14:10:13 -0700 (PDT)
+Message-ID: <f230c9b0-6e23-7409-62e8-58f849925e2e@linaro.org>
+Date:   Thu, 16 Jun 2022 14:10:11 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 03/15] dt-bindings: leds: mt6370: Add Mediatek mt6370
- current sink type LED indicator
+Subject: Re: [PATCH v2 04/15] dt-bindings: leds: Add Mediatek MT6370
+ flashlight
 Content-Language: en-US
 To:     ChiaEn Wu <peterwu.pub@gmail.com>, jic23@kernel.org,
         lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
@@ -65,11 +65,11 @@ Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
+        szunichen@gmail.com, Alice Chen <alice_chen@richtek.com>
 References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-4-peterwu.pub@gmail.com>
+ <20220613111146.25221-5-peterwu.pub@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220613111146.25221-4-peterwu.pub@gmail.com>
+In-Reply-To: <20220613111146.25221-5-peterwu.pub@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,40 +83,40 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 13/06/2022 04:11, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+> From: Alice Chen <alice_chen@richtek.com>
 > 
-> Add Mediatek mt6370 current sink type LED indicator binding documentation.
+> Add Mediatek MT6370 flashlight binding documentation.
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: Alice Chen <alice_chen@richtek.com>
 > ---
->  .../leds/mediatek,mt6370-indicator.yaml       | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
+>  .../leds/mediatek,mt6370-flashlight.yaml      | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
+> diff --git a/Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml b/Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml
 > new file mode 100644
-> index 000000000000..42b96c8047a3
+> index 000000000000..13610bc23d0e
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
-> @@ -0,0 +1,48 @@
+> +++ b/Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml
+> @@ -0,0 +1,44 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/leds/mediatek,mt6370-indicator.yaml#
+> +$id: http://devicetree.org/schemas/leds/mediatek,mt6370-flashlight.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: LED driver for MT6370 PMIC from MediaTek Integrated.
+> +title: Flash LED driver for MT6370 PMIC from MediaTek Integrated.
 > +
 > +maintainers:
 > +  - Alice Chen <alice_chen@richtek.com>
 > +
 > +description: |
 > +  This module is part of the MT6370 MFD device.
-> +  Add MT6370 LED driver include 4-channel RGB LED support Register/PWM/Breath Mode
+> +  Add MT6370 flash LED driver include 2-channel flash LED support Torch/Strobe Mode.
 > +
 > +properties:
 > +  compatible:
-> +    const: mediatek,mt6370-indicator
+> +    const: mediatek,mt6370-flashlight
 > +
 > +  "#address-cells":
 > +    const: 1
@@ -125,13 +125,29 @@ On 13/06/2022 04:11, ChiaEn Wu wrote:
 > +    const: 0
 > +
 > +patternProperties:
-> +  "^(multi-)?led@[0-3]$":
+> +  "^led@[0-1]$":
+> +    type: object
+> +    $ref: common.yaml#
+> +
+> +    properties:
+> +      reg:
+> +        enum:
+> +          - 0 # Address of LED1
+> +          - 1 # Address of LED2
 
-If this is multi-led, then you should reference
-/schemas/leds/leds-pwm-multicolor.yaml
+Just: enum: [0, 1]
+No need for description.
 
-See other examples using it.
 
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +additionalProperties: false
 
 
 Best regards,
