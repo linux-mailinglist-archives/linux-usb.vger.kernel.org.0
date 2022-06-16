@@ -2,81 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155DA54EA6F
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 21:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A8F54EA92
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 22:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349656AbiFPT6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 15:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S245332AbiFPUMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 16:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232752AbiFPT6J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 15:58:09 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764EA286FD
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 12:58:01 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id x38so3900556ybd.9
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 12:58:01 -0700 (PDT)
+        with ESMTP id S238989AbiFPUMv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 16:12:51 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6BA15FE8
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 13:12:50 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id v1so4750265ejg.13
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 13:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=K5Iia3KQ3GthJU/9UXq1fy46wYkvnbGu6bM6iwpwZ/w=;
-        b=byQ6Jg3IG2wY8AJZ37MYWEiqoW5fQTlcQAXgCm+ic8DxR3EiNke3g1HmSrhoMWO6pQ
-         ylU8JKkSoX3Zjp65CWHpEZKSK/s5kn5MnD4mybxnwwpPGSRU55K6DiQAyuXKgsnZHbds
-         H47rT0kBHuABLBXJe8OrBfgRyPGSkvyygqhrw=
+        bh=G6PSnNxxx/PVW8FFXrR6HE/lLr9drhWcqvfOWIWAGxU=;
+        b=jkqKxupetiO6TfhfVzDnfyZck/aeWFqIWWHZHa/O+g+D8eOtl5NiTQ4sNMvsO5Cm4q
+         +kB+x3InFzatm0matPIaUp5KcUChFkYaXXFdD33Uc5eBovHuiKvlTsxHAQMxE/jYc2sf
+         hgN7lONX7pqWG/hohLhSXTGMjLrEXx2l3PwQM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=K5Iia3KQ3GthJU/9UXq1fy46wYkvnbGu6bM6iwpwZ/w=;
-        b=yUYKtb6Q7CJ/JwXqolipuk20IyjLLqOg4zlt8HfETx4TP8wWm/he/kNlJ//vX8l6ah
-         FqO5m2P90vn/Prwe8P1zOA7KD35OIokEl8147pQ7eNm9mNfdLeAFUPrpXgSpenWoM9nK
-         TFI/rGuZgCfzpUHbdfZ7vPivS8OPJmBm81NPoxWUdGGh5+SvYm2IqUK1tRxXqsi3ycYX
-         WQ8UT6MXDHo4KEE+6eBRMQeivEjHHBWAdVI7T68nOEkyrhC747FD7gKgCapj3cv8m69r
-         0npAaz7yA7oWthmjTs8OuR6odI/oUW17F3lRpqVImiptwEtUnzxjh+vUcGZvSnFzeyCM
-         UzPg==
-X-Gm-Message-State: AJIora8hqykDkWbWfb+PLnmpMGXuXYORjScG3sCByPZbOe3zcoQ6yad+
-        fpr6ABdW1Dclvhp5kr2K3cgVP675EanfqgpligU76g==
-X-Google-Smtp-Source: AGRyM1u2G+7uuqQPl3CPuJTbWlY1cxze2DXthubUyJ6jsETYiTPwNY3gyzKzFK4Jpb7RKV1we9iMMiiLMPviipnrS50=
-X-Received: by 2002:a25:bd4c:0:b0:65d:3dca:9638 with SMTP id
- p12-20020a25bd4c000000b0065d3dca9638mr5192725ybm.196.1655409480538; Thu, 16
- Jun 2022 12:58:00 -0700 (PDT)
+        bh=G6PSnNxxx/PVW8FFXrR6HE/lLr9drhWcqvfOWIWAGxU=;
+        b=a9NaUKT2Nj5awNmvuAZKtjGky9qhd7TH2Hv1BFRXMI+AGoC18pDc/lh2gkvTE2Q6S6
+         v+BC/um0iXWyK0m2UBvfgArQtBBVZlXuS43aikX240FF5gJVwv2w2oxLEXi5D5qXK2jN
+         Ky6hZlbLT+seA9uOTUAyYYt/Y6Yparq9iDldNdhZSblZ8cyv9WfvkRmCHwqiw/0mCe/l
+         cvmciaAwI9VPcxyrt1tu9UYpXLdGVo4wZNQYo5Rr7y1g+84CFB1Lwx4Abk/Yuzp8lM8k
+         s4mRhFvtkW8U+rF661xZMDswoHTiOH2op/vMwvxRLTbJrTCSIGoAvqFcGWi3Jd95cN71
+         83Zw==
+X-Gm-Message-State: AJIora+VCgLXao7RFjf0W49KpqhYFgqWVdW8JcmtbmTQt3ZsPfR3ouMd
+        56UMHANFXEDg8KUxd6UIXIVErnD/VVT/AjvLkeM=
+X-Google-Smtp-Source: AGRyM1tSqRCXoQ9YIdJLBu1tDv4OWnnppZkJ57W8XiKnp6LzEwCm8P9ZPana/2FgxdfcECmwgNSPMQ==
+X-Received: by 2002:a17:907:86ac:b0:708:9c4a:c6e9 with SMTP id qa44-20020a17090786ac00b007089c4ac6e9mr6053515ejc.297.1655410368607;
+        Thu, 16 Jun 2022 13:12:48 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id rh17-20020a17090720f100b006fef5088792sm1149469ejb.108.2022.06.16.13.12.46
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 13:12:47 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id c21so3228141wrb.1
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 13:12:46 -0700 (PDT)
+X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
+ p18-20020a5d68d2000000b0021031cc64a6mr6144685wrw.679.1655410366015; Thu, 16
+ Jun 2022 13:12:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220615172129.1314056-1-pmalani@chromium.org>
- <20220615172129.1314056-5-pmalani@chromium.org> <CAE-0n53ub30HXB325wPoMB4C3n4j_9FWnNu5AmtYgU3PBvs8mQ@mail.gmail.com>
- <CACeCKadSCXZo3E4JZiwxFn_4CH3KDfQkk=xRrxSqCEWAgYhV6Q@mail.gmail.com> <20220616193424.GA3844759-robh@kernel.org>
-In-Reply-To: <20220616193424.GA3844759-robh@kernel.org>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 16 Jun 2022 12:57:49 -0700
-Message-ID: <CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
-To:     Rob Herring <robh@kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
+References: <20220609192000.990763-1-mka@chromium.org> <20220609121838.v22.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <CAD=FV=W6erE8ByabmYSL_OWJPKYGqysDMGYQX6j7_PSEYGZ4YQ@mail.gmail.com> <YqpprpUHmlD62YzI@google.com>
+In-Reply-To: <YqpprpUHmlD62YzI@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 16 Jun 2022 13:12:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
+Message-ID: <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
+Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
+        Peter Chen <peter.chen@kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,213 +89,83 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 12:34 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Jun 16, 2022 at 01:54:36AM -0700, Prashant Malani wrote:
-> > On Thu, Jun 16, 2022 at 12:42 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> > >
-> > > Quoting Prashant Malani (2022-06-15 10:20:20)
-> > > >
-> > > >  .../display/bridge/analogix,anx7625.yaml      | 64 +++++++++++++++++++
-> > > >  1 file changed, 64 insertions(+)
-> > >
-> > > Can this file get a link to the product brief[1]? It helps to quickly
-> > > find the block diagram.
-> >
-> > Sure, but I don't really think that should be included in this patch
-> > (or series).
-> > I'd be happy to submit a separate patch once this series is resolved.
-> >
-> > >
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > index 35a48515836e..bc6f7644db31 100644
-> > > > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > @@ -105,6 +105,34 @@ properties:
-> > > >        - port@0
-> > > >        - port@1
-> > > >
-> > > > +  switches:
-> > > > +    type: object
-> > > > +    description: Set of switches controlling DisplayPort traffic on
-> > > > +      outgoing RX/TX lanes to Type C ports.
-> > > > +    additionalProperties: false
-> > > > +
-> > > > +    properties:
-> > > > +      '#address-cells':
-> > > > +        const: 1
-> > > > +
-> > > > +      '#size-cells':
-> > > > +        const: 0
-> > > > +
-> > > > +    patternProperties:
-> > > > +      '^switch@[01]$':
-> > > > +        $ref: /schemas/usb/typec-switch.yaml#
-> > > > +        unevaluatedProperties: false
-> > > > +
-> > > > +        properties:
-> > > > +          reg:
-> > > > +            maxItems: 1
-> > > > +
-> > > > +        required:
-> > > > +          - reg
-> > > > +
-> > > > +    required:
-> > > > +      - switch@0
-> > > > +
-> > > >  required:
-> > > >    - compatible
-> > > >    - reg
-> > > > @@ -167,5 +195,41 @@ examples:
-> > > >                      };
-> > > >                  };
-> > > >              };
-> > > > +            switches {
-> > >
-> > > Is "switches" a bus?
-> >
-> > No.
-> >
-> > >
-> > > > +                #address-cells = <1>;
-> > > > +                #size-cells = <0>;
-> > > > +                switch@0 {
-> > > > +                    compatible = "typec-switch";
-> > >
-> > > Is this compatible matched against a driver that's populated on this
-> > > "switches" bus?
-> >
-> > No. Patch 6/7 has the implementation details on how the anx driver
-> > performs the enumeration of switches.
-> >
-> > >
-> > > > +                    reg = <0>;
-> > > > +                    mode-switch;
-> > > > +
-> > > > +                    ports {
-> > > > +                        #address-cells = <1>;
-> > > > +                        #size-cells = <0>;
-> > > > +                        port@0 {
-> > > > +                            reg = <0>;
-> > > > +                            anx_typec0: endpoint {
-> > > > +                                remote-endpoint = <&typec_port0>;
-> > > > +                            };
-> > > > +                        };
-> > > > +                    };
-> > >
-> > > I was expecting to see these simply be more ports in the existing graph
-> > > binding of this device, and then have the 'mode-switch' or
-> > > 'orientation-switch' properties be at the same level as the compatible
-> > > string "analogix,anx7625". Here's the reasoning, based on looking at the
-> > > product brief and the existing binding/implementation.
-> > >
-> > > Looking at the only existing implementation of this binding upstream in
-> > > mt8183-kukui-jacuzzi.dtsi it looks like one of these typec ports is
-> > > actually the same physically as the 'anx7625_out' endpoint (reg address
-> > > of 1) that is already defined in the binding. It seems that MIPI DSI/DPI
-> > > comes in and is output through 2 lanes, SSRX2 and SSTX2 according to the
-> > > product brief[1], and that is connected to some eDP panel
-> > > ("auo,b116xw03"). Presumably that is the same as anx_typec1 in this
-> > > patch? I suspect the USB3.1 input is not connected on this board, and
-> > > thus the crosspoint switch is never used, nor the SSRX1/SSTX1 pins.
-> > >
-> > > The existing binding defines the MIPI DSI/DPI input as port0 and two of
-> > > the four lanes of output that is probably by default connected to the
-> > > "DisplayPort Transmitter" as port1 because that's how the crosspoint
-> > > switch comes out of reset. That leaves the USB3.1 input possibly needing
-> > > a port in the ports binding, and the other two lanes of output needing a
-> > > port in the ports binding to describe their connection to the downstream
-> > > device. And finally information about if the crosspoint switch needs to
-> > > be registered with the typec framework to do typec things, which can be
-> > > achieved by the presence of the 'mode-switch' property.
-> > >
-> > > On a board like kukui-jacuzzi these new properties and ports wouldn't be
-> > > specified, because what is there is already sufficient. If this chip is
-> > > connected to a usb-c-connector then I'd expect to see a connection from
-> > > the output ports in the graph binding to the connector node's ports.
-> > > There aren't any ports in the usb-c-connector binding though from what I
-> > > see.
-> > >
-> > > I believe there's also one more use case here where USB3.1 or MIPI
-> > > DSI/DPI is connected on the input side and this device is used to steer
-> > > USB3.1 or DP through the crosspoint switch to either of the two output
-> > > pairs. This last scenario means that we have to describe both output
-> > > pairs, SSRX1/SSTX1 and SSRX2/SSTX2, as different ports in the binding so
-> > > they can be connected to different usb-c-connectors if the hardware
-> > > engineer wired the output pins that way.
-> > >
-> > > TL;DR: Can we add 'mode-switch' as an optional property and two more
-> > > ports at address 2 and 3 for the USB3.1 input and the SSRX1/SSTX1 pair
-> > > respectively to the existing graph part of this binding?
-> >
-> > Sorry, but I got lost midway through the preceding explanation.
->
-> Made sense to me.
->
-> > The binding
-> > can always add additional ports to each "switch" to accomplish the
-> > graph connections
-> > you are alluding to (if the driver needs/uses it, which I don't think
-> > this one does at present).
->
-> Why is the switch special? If I just look at this from a block diagram
-> perspective, I just see a list of interfaces that need to be described
-> in the graph.
+Hi,
 
-Because it is specific to Type-C connectors. The anx7625.h does
-contain a cross-point
-switch which controls data lines coming from 1 (or more) Type-C
-connectors, so it seems reasonable
-to have a dedicated binding for such types of hardware sub-components,
-which helps define the graph connections
-in a more uniform manner. That's not to say:
-- this can only be used by this hardware. The typec-switch binding is
-generic enough to accommodate other hardware.
-- there is only 1 way to do this. The interfaces could be described
-using existing port OF graph bindings, but I don't
-see that as reason enough to not include a dedicated switch binding if
-it makes the overall binding more logically organized (IMO) and
-makes driver registration code mode clean.
-
+On Wed, Jun 15, 2022 at 4:22 PM Matthias Kaehlcke <mka@chromium.org> wrote:
 >
-> > Adding extra ports to existing ports gets tricky from a mode-switch
-> > enumeration perspective (which
-> > ports should have the modes switches, which shouldn't? Do you follow
-> > the remote end points for each port
-> > and see which one is a Type C connector?
->
-> The driver knows which port is which because the binding has to define
-> it. So you have to check 2 of them (SSRX1/SSTX1 and SSRX2/SSTX2) to find
-> usb C connectors.
-
-Right, but with the switch binding you no longer need to check. If
-there is a typec-switch, you know
-it is coming from a Type-C connector, so you can just register the
-switches with the Type-C framework.
-
->
-> > What if we add an
-> > intermediate switch device in the future?)
-> > Having a dedicated "switch" binding makes this consistent and easy
-> > (port0 will always have the end-point for the switch).
+> > > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+> > > +{
+> > > +       int i;
+> > > +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
+> > > +       struct device_node *np, *npc;
+> > > +       struct platform_device *pdev = NULL;
+> > > +       struct pdev_list_entry *pdle;
+> > > +
+> > > +       if (!parent_hub->dev.of_node)
+> > > +               return;
+> > > +
+> > > +       for (i = 1; i <= parent_hub->maxchild; i++) {
+> > > +               np = usb_of_get_device_node(parent_hub, i);
+> > > +               if (!np)
+> > > +                       continue;
+> > > +
+> > > +               if (!of_is_onboard_usb_hub(np))
+> > > +                       goto node_put;
+> > > +
+> > > +               npc = of_parse_phandle(np, "companion-hub", 0);
+> > > +               if (npc) {
+> > > +                       /*
+> > > +                        * Hubs with companions share the same platform device.
+> > > +                        * Create the plaform device only for the hub that is
+> > > +                        * connected to the primary HCD (directly or through
+> > > +                        * other hubs).
+> > > +                        */
+> > > +                       if (!usb_hcd_is_primary_hcd(hcd)) {
+> > > +                               of_node_put(npc);
+> > > +                               goto node_put;
+> > > +                       }
+> > > +
+> > > +                       pdev = of_find_device_by_node(npc);
+> > > +                       of_node_put(npc);
+> > > +               } else {
+> > > +                       /*
+> > > +                        * For root hubs this function can be called multiple times
+> > > +                        * for the same root hub node (the HCD node). Make sure only
+> > > +                        * one platform device is created for this hub.
+> > > +                        */
+> > > +                       if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
+> > > +                               goto node_put;
 > >
-> > While there may be more than 1 valid approach here, I believe the
-> > current one is appropriate.
+> > I don't understand the "else" case above. What case exactly are we
+> > handling again? This is when:
+> > * the hub is presumably just a 2.0 hub since there is no companion.
+> > * our parent is the root hub and the USB 2.0 hub we're looking at is
+> > not the primary
 >
-> To put it simply, if you want to define a generic binding, I want to see
-> at least 2 users of it. What I really want to see is someone looking at
-> all the Type-C related bindings and h/w possibilities, not just 1
-> problem or their own h/w. IOW, a Type-C binding czar.
-
-As I mentioned above, the typec-switch binding is generic enough to allow usage
-by other hardware. I can think of at least 1 example which could
-utilize this switch-binding [1], but I'd defer to the maintainer
-of that binding to adopt the changes or not.
-
-[1] https://elixir.bootlin.com/linux/v5.19-rc2/source/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-
-Thanks,
-
+> The 'else' case can be entered for hubs connected to a root hub or to another
+> hub further down in the tree, but we bail out only for first level hubs.
 >
-> Rob
+> > ...but that doesn't make a lot of sense to me? I must have missed something...
+>
+> It's not super-obvious, this bit is important: "this function can be called
+> multiple times for the same root hub node". For any first level hub we only
+> create a pdev if this function is called on behalf of the primary HCD. That
+> is also true of a hub connected to the secondary HCD. We only want to create
+> one pdev and there is supposedly always a primary HCD.
+>
+> Maybe it would be slightly clearer if the function returned before the loop
+> if this condition is met.
+
+I guess I'm still pretty confused. You say "For root hubs this
+function can be called multiple times for the same root hub node".
+Does that mean that the function will be called multiple times with
+the same "parent_hub", or something else.
+
+Unless it's called with the same "parent_hub" then it seems like if
+the USB device has a device tree node and that device tree node is for
+a onboard_usb_hub and there's no companion node then we _always_ want
+to create the platform device, don't we? If it is called with the same
+"parent_hub" then I'm confused how your test does something different
+the first time the function is called vs. the 2nd.
+
+-Doug
