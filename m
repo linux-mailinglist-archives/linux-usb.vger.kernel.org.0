@@ -2,171 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD7A54DDF5
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 11:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E21154DDFC
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 11:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376598AbiFPJLZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 05:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S1358507AbiFPJNq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 05:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358507AbiFPJLY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 05:11:24 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC725537E;
-        Thu, 16 Jun 2022 02:11:22 -0700 (PDT)
+        with ESMTP id S1359661AbiFPJNp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 05:13:45 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299605643B
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 02:13:45 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so1235706pjl.4
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 02:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655370682; x=1686906682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=RAIhqL2xeDknD95cNLZqPbz62ihnEMqznkDfqUykBmo=;
-  b=nXxCyTE8/3lbaqdCmB8/BhVuvZNTnA1d533K8fHP60oPPKEvW2cxm5lj
-   JrQnA99JFBXzrISSCVj362kN+qGXVqnIC/x2pOZTfQWlKTlOwaTgShHKx
-   tskdjFerqty+Ue94ivZsBW/VAuiLzcdH7DNyGGbwHMUzJ9H5QI6BRcgGT
-   4=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Jun 2022 02:11:21 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 02:11:21 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 16 Jun 2022 02:11:21 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 16 Jun 2022 02:11:14 -0700
-Date:   Thu, 16 Jun 2022 14:41:10 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com>
- <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com>
- <YqjLHyUVEjf7I3MI@google.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=FzyLVwzVPz8cS5Ma8kiHNsmifm8mNlCNezMarmScPzg=;
+        b=LhU6DDtWtfEVWezHfrbjBDpo2w7OAwy+yasngKU8LUhImRqguoUDRNro3xx8F88BaR
+         xJSqN9Jkc3pb/acN+N5P8PMRJJ+dwvGxES+Die0ES1TUexaQKpdK7/I0C/qsr5iJ2YHR
+         UIb6NkWh0tOrIrwbQzmDDzN1sQ8/oG8F3bixdW/Lj9H5lt1BJpkpjDsulTrle4P+olgO
+         5XgyeWj+h/UFcSc3S2GHqPnbDeCOV6YwlaFVNTuwElIEU+ARSHsTcn/wSrkOB2T5g7vu
+         wZUo0dKXeZGnYNC6bVKsLxuMe6re1g+hXB0es8jZF/sTuejjZCK3qxZHkbvqD4CYeReE
+         1gDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=FzyLVwzVPz8cS5Ma8kiHNsmifm8mNlCNezMarmScPzg=;
+        b=q4tnWAYkIg23pkUWy7Z9xarrsmLR7b7ADgdboxYVYMIWbD9eUJ5BP4NXMY0r59Ni3J
+         wntauAVtCSlq1RyxKlZ3xKogk957rBXW610++JXwWoifR6z+c4iixQ29C/e8ScZoHfIH
+         oo/E7HEavgrENyeVoQTgcIL7ZPqmxFCra11eq95mbuVwmbz/WqBnFVLuout+eQ0SjZjU
+         nxDdhgdchhHzBCLVHF52myJKo3vymrCTRw++jXsXTs2BDQNvTWHAaKb05/uudv3aUzMY
+         15o/0qZ2jDyL68aCgLAHPc+VVDF0AEyMJVjIarSdcZldcDgsvBHub1FQB+TcyI3V1rAM
+         TfOQ==
+X-Gm-Message-State: AJIora/Uwvn3oqNjcrI32Tk6SQ9SH2UgsgYZp8IiLHdJeqDr1j3yz4om
+        +gxYPFdPals0U9HUMH/AHbesvXnDaAy4wZw4Q0g=
+X-Google-Smtp-Source: AGRyM1tqk5QXBK/w2Lc1C571AQBVybIOHFkDW8ZNkMisvved4+bbHYr2VD3G7QSZsd//fI68Dzat7ecxGpXXq3S95Gk=
+X-Received: by 2002:a17:902:f1cc:b0:167:cfa7:e047 with SMTP id
+ e12-20020a170902f1cc00b00167cfa7e047mr3561096plc.168.1655370824536; Thu, 16
+ Jun 2022 02:13:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YqjLHyUVEjf7I3MI@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a17:522:1843:b0:44c:7d25:c510 with HTTP; Thu, 16 Jun 2022
+ 02:13:43 -0700 (PDT)
+Reply-To: erlingperson605@gmail.com
+From:   Erling Persson <customabu9@gmail.com>
+Date:   Thu, 16 Jun 2022 10:13:43 +0100
+Message-ID: <CAP=owVNkfndhgqGQhnrbG24HNOYAddDV6LmtvJvrojboQGyOBQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1035 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [customabu9[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [customabu9[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [erlingperson605[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matthias/Krishna,
-
-On Tue, Jun 14, 2022 at 10:53:35AM -0700, Matthias Kaehlcke wrote:
-> On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
-> > On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
-> > > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
-> > > > Hi Krishna,
-> > > > 
-> > > > with this version I see xHCI errors on my SC7180 based system, like
-> > > > these:
-> > > > 
-> > > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
-> > > > 
-> > > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
-> > > > 
-> > > > After resume a downstream hub isn't enumerated again.
-> > > > 
-> > > > So far I didn't see those with v13, but I aso saw the first error with
-> > > > v16.
-> > > 
-> > > It also happens with v13, but only when a wakeup capable vUSB <= 2
-> > > device is plugged in. Initially I used a wakeup capable USB3 to
-> > > Ethernet adapter to trigger the wakeup case, however older versions
-> > > of this series that use usb_wakeup_enabled_descendants() to check
-> > > for wakeup capable devices didn't actually check for vUSB > 2
-> > > devices.
-> > > 
-> > > So the case were the controller/PHYs is powered down works, but
-> > > the controller is unhappy when the runtime PM path is used during
-> > > system suspend.
-> > 
-> > The issue isn't seen on all systems using dwc3-qcom and the problem starts
-> > during probe(). The expected probe sequence is something like this:
-> > 
-> > dwc3_qcom_probe
-> >   dwc3_qcom_of_register_core
-> >     dwc3_probe
-> > 
-> >   if (device_can_wakeup(&qcom->dwc3->dev))
-> >     ...
-> > 
-> > The important part is that device_can_wakeup() is called after dwc3_probe()
-> > has completed. That's what I see on a QC SC7280 system, where wakeup is
-> > generally working with these patches.
-> > 
-> > However on a QC SC7180 system dwc3_probe() is deferred and only executed after
-> > dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
-> > With that the controller/driver ends up in an unhappy state after system
-> > suspend.
-> > 
-> > Probing is deferred on SC7180 because device_links_check_suppliers() finds
-> > that '88e3000.phy' isn't ready yet.
-> 
-> It seems device links could be used to make sure the dwc3 core is present:
-> 
->   Another example for an inconsistent state would be a device link that
->   represents a driver presence dependency, yet is added from the consumer’s
->   ->probe callback while the supplier hasn’t probed yet: Had the driver core
->   known about the device link earlier, it wouldn’t have probed the consumer
->   in the first place. The onus is thus on the consumer to check presence of
->   the supplier after adding the link, and defer probing on non-presence.
-> 
->   https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
-> 
-> 
-> You could add something like this to dwc3_qcom_of_register_core():
-> 
-> 
->   device_link_add(dev, &qcom->dwc3->dev,
->   		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
-> 
->   if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
->       ret = -EPROBE_DEFER;
-> 
-> 
-I am not very sure how the device_link_add() API works. we are the parent and
-creating a depdency on child probe. That does not sound correct to me. Any
-ways, I have another question.
-
-When dwc3_qcom_of_register_core() returns error back to dwc3_qcom_probe(), we
-goto depopulate label which calls of_platform_depopulate() which destroy the
-child devices that are populated. how does that ensure that child probe is
-completed by the time, our probe is called again. The child device it self is
-gone. Is this working because when our probe is called next time, the child
-probe depenencies are resolved?
-
-Thanks,
-Pavan
+-- 
+Message from Stefan Erling Persson, owner of Erling-Persson family
+philanthropic foundation  and you have been selected as benefactor of
+3.5 Million Euro from our personal donation in the year 2022. REPLY TO
+CLAIM YOUR DONATION.
