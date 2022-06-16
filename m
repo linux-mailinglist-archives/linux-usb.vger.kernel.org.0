@@ -2,168 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA00954D74E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 03:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8D654D8AC
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 04:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349199AbiFPBrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jun 2022 21:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S1353703AbiFPC4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jun 2022 22:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347776AbiFPBrj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 21:47:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A413D12639
-        for <linux-usb@vger.kernel.org>; Wed, 15 Jun 2022 18:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655344058; x=1686880058;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BHLrXxd+OkjxHnOAU6USq6ucfHyxemQFLNYJEanZaNs=;
-  b=HIAzg38vHxGggIpZJPv/WPjRla8tDb9c51A6o35Jia7gx3tWypYLIjqq
-   f/slKQVBbbBI46EZ88lt/nCWAcATh2BI0vjY/XGGRDPFxzEvKRAIMXztG
-   k2LBm0qsXZQK60h297hQnKtJlqEscE91KAXIfbu3P2dN4MSeaEVhp7C6s
-   f+NG+YjmRtanYHBsXm+66ycag5+Ap1Thp7SLNn2KRb6WKSBar20V5qs2F
-   NlK23EuSks+KtrnBWqs3OqG7tCWLkJc+FvHwOoTO1IcWG8Ad3Au+FDfJ6
-   jkl6pJlHHuXJ1KPZ/Rxo1q+/ErIFaGy2WCKPITA3EnDBFUz0XXEtWztbo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="262162720"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="262162720"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 18:47:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="536274822"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Jun 2022 18:47:37 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1ebg-000NpR-HE;
-        Thu, 16 Jun 2022 01:47:36 +0000
-Date:   Thu, 16 Jun 2022 09:47:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 235a6d80f021d9c3bb5652fb6b19d092a7339248
-Message-ID: <62aa8baf.zbzxxS3rrkUMjBrj%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S1354229AbiFPC4l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jun 2022 22:56:41 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73985A091;
+        Wed, 15 Jun 2022 19:56:39 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id y196so302969pfb.6;
+        Wed, 15 Jun 2022 19:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C39oS/JXA4kYL1oQFrI4MpJXg8RAY2fTyeKeofIGePs=;
+        b=js4aGzhoQvKvnrZgeaqVUFgEQGPqBRmsFAAG5y+bCfxg9L9x4qlAoZmCCq95jnjnnV
+         QBMH3RihttvUH/x4Q3KWvLfDar0dSZNx3HI7Mo5bSvacmgcCUAEarJ73KWY5AlY5I6zM
+         jpBm1+VS1YwnpGaZShD6bKM1G5amGUoYlCZefpK/qvtQDEYgYgKe/cyVX8KsCUDqJ3zH
+         I1uZHeRZhWGzONFnh98D4tygpZrU3yuoWZqw4e4voQKyJLWWO0E8uLeLg9IKzGIOjCF6
+         hSyCZl2Bb/BK5alMyiZZ0y3VJ2ejsOMLkFaz6O9eOjnUo4jZO1C87stMRb33D9Wfoqrx
+         xMXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C39oS/JXA4kYL1oQFrI4MpJXg8RAY2fTyeKeofIGePs=;
+        b=5vuMbrfPeMyeM+qRfvkM8C03T3V/vrP+aaUGiq/3smcXbfGMoWeefnK5XFyZUklkgD
+         6Qg4jSmgdUsFZf0uYIWDvLC1pDe07Y7QOXv2A6O3ynr0n5xnhtshLHtVPaXk3Br2i9Jf
+         pvm+oMcAd50rcCCDc/3W8NAh3loBRtJRWBytfXWgDQz2V9bgbEErWOeuhAdQ21kbgqXU
+         lbzz2DU74hd2kIRhWNnyVEZfR2GfcOShuRO7vlIvX4BKg4XaN0uHJ7MLvXEyg9INsbDw
+         HlJmgnb8Y7naakzU1j2QhwxKbJwJfDRG6nrl4YQMye260ly66FN+Gr/SIcXsEFEqpulF
+         Xlqg==
+X-Gm-Message-State: AJIora9FZh5lto+swAE+w6JLeet9FVuIvS/8KadjmaF6VNakzB0UfNUs
+        tCw8g7f0Eu1hLxB19K8pZdNr14dZUGiieHCFxVk=
+X-Google-Smtp-Source: AGRyM1uUH7g7SHIf6vpotFH0NzOFWQRBrbtwP6vksHLLniC+ePrY1uAGvhT5qC6ug1qqxjeEbhUekQ==
+X-Received: by 2002:aa7:9f84:0:b0:51b:b64d:fc69 with SMTP id z4-20020aa79f84000000b0051bb64dfc69mr2590049pfr.7.1655348199123;
+        Wed, 15 Jun 2022 19:56:39 -0700 (PDT)
+Received: from localhost ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id w1-20020a63a741000000b00404fd2138afsm349057pgo.40.2022.06.15.19.56.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 19:56:38 -0700 (PDT)
+From:   Hongyu Xie <xy521521@gmail.com>
+X-Google-Original-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        125707942@qq.com, wangqi@kylinos.cn, xiongxin@kylinos.cn,
+        Hongyu Xie <xiehongyu1@kylinos.cn>
+Subject: [PATCH v3 -next] usb: xhci: disable irq during initialization
+Date:   Thu, 16 Jun 2022 10:56:34 +0800
+Message-Id: <20220616025634.3693260-1-xiehongyu1@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 235a6d80f021d9c3bb5652fb6b19d092a7339248  Revert "ARM: dts: aspeed: Add USB2.0 device controller node"
+irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
+in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
+It's possible that you will receive thousands of interrupt requests
+after initialization for 2.0 roothub. And you will get a lot of
+warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
+disabled?". This amount of interrupt requests will cause the entire
+system to freeze.
+This problem was first found on a device with ASM2142 host controller
+on it.
 
-elapsed time: 2394m
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+---
 
-configs tested: 87
-configs skipped: 3
+v3:
+- enabling interrupt right before setting Run/Stop bit
+- spin_lock_irqsave to prevent receiving irqs in the small window
+according to Mathias's suggestion
+v2: fix compile error
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ drivers/usb/host/xhci.c | 40 ++++++++++++++++++++++++++--------------
+ 1 file changed, 26 insertions(+), 14 deletions(-)
 
-gcc tested configs:
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a012-20220613
-x86_64               randconfig-a011-20220613
-x86_64               randconfig-a015-20220613
-x86_64               randconfig-a013-20220613
-x86_64               randconfig-a014-20220613
-x86_64               randconfig-a016-20220613
-i386                 randconfig-a011-20220613
-i386                 randconfig-a012-20220613
-i386                 randconfig-a013-20220613
-i386                 randconfig-a014-20220613
-i386                 randconfig-a016-20220613
-i386                 randconfig-a015-20220613
-arc                  randconfig-r043-20220613
-riscv                randconfig-r042-20220613
-s390                 randconfig-r044-20220613
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allmodconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-
-clang tested configs:
-x86_64               randconfig-a002-20220613
-x86_64               randconfig-a001-20220613
-x86_64               randconfig-a003-20220613
-x86_64               randconfig-a004-20220613
-i386                 randconfig-a002-20220613
-i386                 randconfig-a003-20220613
-i386                 randconfig-a001-20220613
-i386                 randconfig-a005-20220613
-i386                 randconfig-a004-20220613
-i386                 randconfig-a006-20220613
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a005-20220613
-x86_64               randconfig-a006-20220613
-hexagon              randconfig-r041-20220613
-hexagon              randconfig-r045-20220613
-
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 9ac56e9ffc64..5cf8baa4f6f3 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -611,15 +611,40 @@ static int xhci_init(struct usb_hcd *hcd)
+ 
+ static int xhci_run_finished(struct xhci_hcd *xhci)
+ {
++	u32 temp;
++
++	/* Prevent receiving irqs in the small window between enabling interrupt
++	 * and setting Run/Stop bit
++	 */
++	spin_lock_irqsave(&xhci->lock, flags);
++
++	/* Enable interrupt right before setting Run/Stop bit according to spec
++	 * 4.2
++	 */
++	/* Set the HCD state before we enable the irqs */
++	temp = readl(&xhci->op_regs->command);
++	temp |= (CMD_EIE);
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
++			"// Enable interrupts, cmd = 0x%x.", temp);
++	writel(temp, &xhci->op_regs->command);
++
++	temp = readl(&xhci->ir_set->irq_pending);
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
++			"// %s %p by writing 0x%x %s",
++			"Enabling event ring interrupter",
++			"to irq_pending", xhci->ir_set,
++			(unsigned int) ER_IRQ_ENABLE(temp));
++	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+ 	if (xhci_start(xhci)) {
+ 		xhci_halt(xhci);
++		spin_unlock_irqrestore(&xhci->lock, flags);
+ 		return -ENODEV;
+ 	}
+ 	xhci->cmd_ring_state = CMD_RING_STATE_RUNNING;
+ 
+ 	if (xhci->quirks & XHCI_NEC_HOST)
+ 		xhci_ring_cmd_db(xhci);
+-
++	spin_unlock_irqrestore(&xhci->lock, flags);
+ 	return 0;
+ }
+ 
+@@ -668,19 +693,6 @@ int xhci_run(struct usb_hcd *hcd)
+ 	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
+ 	writel(temp, &xhci->ir_set->irq_control);
+ 
+-	/* Set the HCD state before we enable the irqs */
+-	temp = readl(&xhci->op_regs->command);
+-	temp |= (CMD_EIE);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Enable interrupts, cmd = 0x%x.", temp);
+-	writel(temp, &xhci->op_regs->command);
+-
+-	temp = readl(&xhci->ir_set->irq_pending);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
+-			xhci->ir_set, (unsigned int) ER_IRQ_ENABLE(temp));
+-	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+-
+ 	if (xhci->quirks & XHCI_NEC_HOST) {
+ 		struct xhci_command *command;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
