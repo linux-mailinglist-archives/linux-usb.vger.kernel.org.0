@@ -2,230 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107E954DC0B
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 09:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC6954DC2A
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 09:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359379AbiFPHmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 03:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S1359319AbiFPHxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 03:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiFPHmE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 03:42:04 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B4B5D19A
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 00:42:02 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id v143so933610oie.13
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 00:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=K1qaur0XpbMxeFbDS5W87YOBUiUaAflQIADLDQn7Ujs=;
-        b=m8Gps9LsbxAYdtCBGKNo2enla/9DKTViETZQMmsW8myE1vng5QgQ/gHEUDoqu8pINF
-         j2znEdpDVeJjQTBmg7n+22gbjzHnPGB1tBxwont1Np8/Kmk1GuKWEEa3Af/ha8PXADZm
-         iz95PcviZ/d4/dOo3iDtd3YbIXumoCuMr4XFI=
+        with ESMTP id S229751AbiFPHxK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 03:53:10 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4AC15812;
+        Thu, 16 Jun 2022 00:53:06 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id g15so472357qke.4;
+        Thu, 16 Jun 2022 00:53:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=K1qaur0XpbMxeFbDS5W87YOBUiUaAflQIADLDQn7Ujs=;
-        b=s6jK5kA/n/4Qt8dyriIZV5jNbZwiGqiQyvYNBQMXkOiGu02dWKFAZZDEaEXOG5ysML
-         pG8S25T0rrVPqWUMQgCSEkGqRxDc5QQIIfDdnoFW60Avr9Iuaj2sM4+vUt35wjaCpTm8
-         6s34bfwHpf4+y2pTY6RJyXJvyCkxcItuT6gY9TvDlnK79HMehBOlJay+17L5w3xsf6H+
-         qaIpRpmEP9eNbqZWG9DA0OPx1qYH+BHa/8imkRmG+bjm8Hi6ZmJFomWX+V4qVTl/8FMB
-         oq5X/jWo6IOaltRw5n0UxPCa0KvQ/H2DZJdgcjSjnzut+76XxqNw+aUPPAL1JcZjlDz+
-         h/XA==
-X-Gm-Message-State: AJIora9fT+hh1+Ylv/YVybWGwTXWNAw/7gMU0DiQ12oFgnzkOmgw8bAB
-        15yDpOzyLxa0FiQC3ULuSav9laX9+Z82VTsixwbvDg==
-X-Google-Smtp-Source: AGRyM1s9MtjEOO5rLMeoWiFwOBdRlYnoeT78XqlzfIUIJenUnulANnCxO4vINozshjIORVaM6OXEEOonvijl0t9yjF8=
-X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id
- k7-20020a0568080e8700b0032e47890d2cmr1789833oil.193.1655365322078; Thu, 16
- Jun 2022 00:42:02 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 16 Jun 2022 00:42:01 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qoDONOlMnc9LStw1JRWOE6LutyWOeAc3QbYws5EB78g=;
+        b=53p04d+shJmdQcNI+REjU03Dg/W9kT7KcHCHiRQ+o0xU6IdY6rdEbR/SVwqFdUxxrA
+         H2sv/77Nk+OP9xmd3JRIe57JmL+l19UJggMkEj33/yZKNxWWLw/v7A0GOkY95Nx1m+a4
+         Ex6wvKOHODBc+rwCjrw1lK3gDMTHhanZUr9rIJbr+IhPXjPud0g6Yz3CxSDHuwk8IeIl
+         Kd4ZkXHa/p2iKmUVnNkWIfXChFQmlWvjzyOUZ5TD+wXgNY9Bkx+Mj0XJtW41OcZwlyRx
+         jfNt63gb/ryHPjmrJ99FtIywLk0LHyRvLAGj4Fx3TIOZSBrG8YUAP3qEg78p/hSiPdoV
+         eRjw==
+X-Gm-Message-State: AJIora9jwQC3bALRGV8V0c3F9/cFY2+TYj4Di9kDyTsXgqyqlGyi9zPL
+        3XMKkKnIE90jmW80RzeHMIkscDJpP8ZLuw==
+X-Google-Smtp-Source: AGRyM1u1CHz+y3fX6LvDSDVaJqgaEwOBOOlQpVHvzVZZvpkxa0NUHC+fvTOQ/Yt477nQxfjIVgFb3A==
+X-Received: by 2002:a37:ab02:0:b0:6a6:b111:61a8 with SMTP id u2-20020a37ab02000000b006a6b11161a8mr2629851qke.260.1655365985748;
+        Thu, 16 Jun 2022 00:53:05 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05622a01c300b003026a08257fsm1483260qtw.21.2022.06.16.00.53.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 00:53:05 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id w2so839787ybi.7;
+        Thu, 16 Jun 2022 00:53:05 -0700 (PDT)
+X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
+ l10-20020a056902000a00b0065cb38e6d9fmr3997226ybh.36.1655365985159; Thu, 16
+ Jun 2022 00:53:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220615172129.1314056-5-pmalani@chromium.org>
-References: <20220615172129.1314056-1-pmalani@chromium.org> <20220615172129.1314056-5-pmalani@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 16 Jun 2022 00:42:01 -0700
-Message-ID: <CAE-0n53ub30HXB325wPoMB4C3n4j_9FWnNu5AmtYgU3PBvs8mQ@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+References: <c5d19e2f9714f43effd90208798fc1936098078f.1655301043.git.geert+renesas@glider.be>
+ <CAL_JsqJbmdJd6+D9zog6NwF_LPO5QC_HsODg4FHLJOnMmPP-mg@mail.gmail.com>
+In-Reply-To: <CAL_JsqJbmdJd6+D9zog6NwF_LPO5QC_HsODg4FHLJOnMmPP-mg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 16 Jun 2022 09:52:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU3PnY6yZf70kB9wme7_WTjcPJwmzo--Ua3vJ45w7mD8w@mail.gmail.com>
+Message-ID: <CAMuHMdU3PnY6yZf70kB9wme7_WTjcPJwmzo--Ua3vJ45w7mD8w@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: ehci: Increase the number of PHYs
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
+        <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prashant Malani (2022-06-15 10:20:20)
+Hi Rob,
+
+On Wed, Jun 15, 2022 at 7:24 PM Rob Herring <robh+dt@kernel.org> wrote:
+> On Wed, Jun 15, 2022 at 7:53 AM Geert Uytterhoeven
+> <geert+renesas@glider.be> wrote:
+> >
+> > "make dtbs_check":
+> >
+> >     arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee080100: phys: [[17, 0], [31]] is too long
+> >             From schema: Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> >     arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee0c0100: phys: [[17, 1], [33], [21, 0]] is too long
+> >             From schema: Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> >
+> > Some USB EHCI controllers (e.g. on the Renesas RZ/G1C SoC) have multiple
+> > PHYs.  Increase the maximum number of PHYs to 3, which is sufficient for
+> > now.
 >
->  .../display/bridge/analogix,anx7625.yaml      | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
+> Maybe not so 'generic'. Why are there 3? I understand USB3 HCI having
+> 2 for SS and HS. Is it for multiple ports? There's a thread about that
+> currently (Mediatek IIRC) and how to handle multiple phys.
 
-Can this file get a link to the product brief[1]? It helps to quickly
-find the block diagram.
+TBH, I don't know for sure. I've never been much into USB, and the
+RZ/G1C USB architecture differs from other Renesas SoCs in the
+same family.
 
->
-> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> index 35a48515836e..bc6f7644db31 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> @@ -105,6 +105,34 @@ properties:
->        - port@0
->        - port@1
->
-> +  switches:
-> +    type: object
-> +    description: Set of switches controlling DisplayPort traffic on
-> +      outgoing RX/TX lanes to Type C ports.
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
-> +    patternProperties:
-> +      '^switch@[01]$':
-> +        $ref: /schemas/usb/typec-switch.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          reg:
-> +            maxItems: 1
-> +
-> +        required:
-> +          - reg
-> +
-> +    required:
-> +      - switch@0
-> +
->  required:
->    - compatible
->    - reg
-> @@ -167,5 +195,41 @@ examples:
->                      };
->                  };
->              };
-> +            switches {
+This is USB2, not USB3.  There are two channels of OHCI/EHCI, and
+two channels of USB OTG, all with corresponding PHYs (4 in total).
+The first OHCI/EHCI combo is linked to one of the host PHYs, and one
+of the OTG PHYs, so that makes 2 PHYs.
+The second OHCI/EHCI combo is linked to the other host PHY, and to
+both OTG PHYs, so that makes 3 PHYs. IIRC the third link was due to
+some dependency between the 2 OTG PHYs.
 
-Is "switches" a bus?
+Gr{oetje,eeting}s,
 
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                switch@0 {
-> +                    compatible = "typec-switch";
+                        Geert
 
-Is this compatible matched against a driver that's populated on this
-"switches" bus?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> +                    reg = <0>;
-> +                    mode-switch;
-> +
-> +                    ports {
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +                        port@0 {
-> +                            reg = <0>;
-> +                            anx_typec0: endpoint {
-> +                                remote-endpoint = <&typec_port0>;
-> +                            };
-> +                        };
-> +                    };
-
-I was expecting to see these simply be more ports in the existing graph
-binding of this device, and then have the 'mode-switch' or
-'orientation-switch' properties be at the same level as the compatible
-string "analogix,anx7625". Here's the reasoning, based on looking at the
-product brief and the existing binding/implementation.
-
-Looking at the only existing implementation of this binding upstream in
-mt8183-kukui-jacuzzi.dtsi it looks like one of these typec ports is
-actually the same physically as the 'anx7625_out' endpoint (reg address
-of 1) that is already defined in the binding. It seems that MIPI DSI/DPI
-comes in and is output through 2 lanes, SSRX2 and SSTX2 according to the
-product brief[1], and that is connected to some eDP panel
-("auo,b116xw03"). Presumably that is the same as anx_typec1 in this
-patch? I suspect the USB3.1 input is not connected on this board, and
-thus the crosspoint switch is never used, nor the SSRX1/SSTX1 pins.
-
-The existing binding defines the MIPI DSI/DPI input as port0 and two of
-the four lanes of output that is probably by default connected to the
-"DisplayPort Transmitter" as port1 because that's how the crosspoint
-switch comes out of reset. That leaves the USB3.1 input possibly needing
-a port in the ports binding, and the other two lanes of output needing a
-port in the ports binding to describe their connection to the downstream
-device. And finally information about if the crosspoint switch needs to
-be registered with the typec framework to do typec things, which can be
-achieved by the presence of the 'mode-switch' property.
-
-On a board like kukui-jacuzzi these new properties and ports wouldn't be
-specified, because what is there is already sufficient. If this chip is
-connected to a usb-c-connector then I'd expect to see a connection from
-the output ports in the graph binding to the connector node's ports.
-There aren't any ports in the usb-c-connector binding though from what I
-see.
-
-I believe there's also one more use case here where USB3.1 or MIPI
-DSI/DPI is connected on the input side and this device is used to steer
-USB3.1 or DP through the crosspoint switch to either of the two output
-pairs. This last scenario means that we have to describe both output
-pairs, SSRX1/SSTX1 and SSRX2/SSTX2, as different ports in the binding so
-they can be connected to different usb-c-connectors if the hardware
-engineer wired the output pins that way.
-
-TL;DR: Can we add 'mode-switch' as an optional property and two more
-ports at address 2 and 3 for the USB3.1 input and the SSRX1/SSTX1 pair
-respectively to the existing graph part of this binding?
-
-> +                };
-> +                switch@1 {
-> +                    compatible = "typec-switch";
-> +                    reg = <1>;
-> +                    mode-switch;
-> +
-> +                    ports {
-> +                        #address-cells = <1>;
-> +                        #size-cells = <0>;
-> +                        port@0 {
-> +                            reg = <0>;
-> +                            anx_typec1: endpoint {
-> +                                remote-endpoint = <&typec_port1>;
-> +                            };
-> +                        };
-> +                    };
-> +                };
-> +            };
->          };
-
-[1] https://www.analogix.com/en/system/files/AA-002291-PB-6-ANX7625_ProductBrief.pdf
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
