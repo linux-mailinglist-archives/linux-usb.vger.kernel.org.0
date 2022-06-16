@@ -2,164 +2,261 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD1854DD07
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 10:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5B354DDAF
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jun 2022 10:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359689AbiFPIjA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 04:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S1376516AbiFPIzy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 04:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiFPIi6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 04:38:58 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05935D64F;
-        Thu, 16 Jun 2022 01:38:57 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id w29so631746pgl.8;
-        Thu, 16 Jun 2022 01:38:57 -0700 (PDT)
+        with ESMTP id S1376513AbiFPIzf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 04:55:35 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0777B5DD3B
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 01:54:48 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-100eb6f7782so1146939fac.2
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 01:54:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X3rs3EZNUK5eXVTg1TQXkjmyGPn0t+3fhRIQGIQTt/M=;
-        b=FbvS3MCf0rAKnwl/9sCw7pwSbwYCdNVDEjfFetPrk9VhwkklDjNZJ0ir6f1wsVv2eW
-         GICSBSI34Ooo7/RNmxEqX1Fv+c/JqQunH7kZJ85le2iHjbmbQLKY41SXx/azHJebANQF
-         unrUHunbyw7Cgt4RW46OFZxjK66ENjsxzTf/AJTJ9MLB6OokjDWf5NnPxGLFXIziGU3+
-         XwyHKoqIvxgDHikLHBnIBLPY5wZmf2CfnWCcK5WkE7BbE/i0YeGHHQLgG6sBExcS21rZ
-         PwRZQeuWDnA8HK5enYY8lfZ64coV8HBrhwTqo0f15JwnSmzOHszp/3UccT3J5dLxfkwt
-         3iGA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izy7G0Q7eyiWE4CXZRSUEvvAZl4UlL5s+oh9NOxs2Sw=;
+        b=kw2JCD+9bg7YOxTxat/3v8ub8VvvKqI0njMJGF+ad+eadhs27fzl9BFeQv7mXrnXFj
+         5F0UD7pL4owCnSDf+B/MGtppwdgoOUwI32SrXC9Jnn4hesFB7IpEutH8sv8tadlPdfmz
+         /DTD75UVSaR5k7QhtB/F0kiZBN78lRUe7nShw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X3rs3EZNUK5eXVTg1TQXkjmyGPn0t+3fhRIQGIQTt/M=;
-        b=6RjC+WjUtEMdYcCYpuEzE0JT1saa10QElWfH/6Yn7Kx58XH1dL/5xKp2JAPcoEwgqu
-         SetN66Xs+JvrErpPxbJNO3B92pcvtpaLL98WkUPXaOEcE8HgdCW2JL2Ok/CwdN1vZEep
-         +9zLXTMudzR48fK+VRcmWVKCEJEe7Rl1i4XS1kBJGJnWxYzaGk9Uibhz4pe6/fVpurHT
-         V7Qj2KL83tFGLP6A31z0SjBlXjlO7FNiX0HgxGa8FBYDC2YTLJGVNiujjtSnN99si9Tz
-         YQRYHQI4y0zf9E7r7OT0jxTxxwpU46/F4EJD94LTRyC49i+dI9yuApfGtE9YfV3TVy30
-         aLvw==
-X-Gm-Message-State: AJIora+RwjQ8XQzi6bEj3QGv8WPNuesTMnq4EyzdUqbmNAKTYrhKR96W
-        JYOefpKEpQYIJMeUDByMFr+RSMK5G//0Q1TLOYw=
-X-Google-Smtp-Source: AGRyM1sBmk5Q28SwAF/4hpfVX9rC42L68jrBMrgK95HRcImHgqHz8VS5YJ3nIJHsW62Z/M5IeM+yHA==
-X-Received: by 2002:a05:6a00:4406:b0:51c:244f:85d8 with SMTP id br6-20020a056a00440600b0051c244f85d8mr3742673pfb.36.1655368737148;
-        Thu, 16 Jun 2022 01:38:57 -0700 (PDT)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id e15-20020a63370f000000b003fdc16f5de2sm1067536pga.15.2022.06.16.01.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 01:38:56 -0700 (PDT)
-From:   Hongyu Xie <xy521521@gmail.com>
-X-Google-Original-From: Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        125707942@qq.com, wangqi@kylinos.cn, xiongxin@kylinos.cn,
-        Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: [PATCH v5 -next] usb: xhci: disable irq during initialization
-Date:   Thu, 16 Jun 2022 16:38:52 +0800
-Message-Id: <20220616083852.1264261-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izy7G0Q7eyiWE4CXZRSUEvvAZl4UlL5s+oh9NOxs2Sw=;
+        b=O70yUCldzorpLhTYJdcJkGA5ebGenwlKNc1WI58Cn617WZ/qs1uDNgN44gTZ3SWH26
+         h7h07WRmS3MAb68Ll64b2EsB/zB8o6oKoqnxSfvqLrgC7kRRoJuQ0wpuw2BNLA4y36lb
+         hNSYKZlGTRjdC0nRUbZH9+mNyFWcz6NVnzJjEIhfi8pTmaZ8e+gzquVFlpgmrfP3h/3o
+         5F81fQSUqNr0Be/pTCNtafaGhNoue5EAZAVrZTCoQI5qBU/+vzMXYVDIlS+M37BV4IIy
+         51omCH1/IMGVDlX6heVCLTSbPdOa3t3lSOF6Llq35dEDpaaS3jtPT34PjAJHjypwjjPL
+         jJMA==
+X-Gm-Message-State: AJIora/q6Dbh7JaDR0S6A61BL4dNTd9e5r66/NBR4AN/WKBXrRmlzIcR
+        dWsTN2C2WT04qjssSniA8DvspmQaUy8WEZ7mCbKV0Q==
+X-Google-Smtp-Source: AGRyM1uhUYcMtitQM4jJdfNJolzBnGTLonEqSwWIHXrtDX+cR8z8UZIQ6lZPZgUYmrTcIOcE9GdejlAEnbggRsGmtDk=
+X-Received: by 2002:a05:6870:891f:b0:e1:ec98:3c59 with SMTP id
+ i31-20020a056870891f00b000e1ec983c59mr2102642oao.295.1655369687319; Thu, 16
+ Jun 2022 01:54:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220615172129.1314056-1-pmalani@chromium.org>
+ <20220615172129.1314056-5-pmalani@chromium.org> <CAE-0n53ub30HXB325wPoMB4C3n4j_9FWnNu5AmtYgU3PBvs8mQ@mail.gmail.com>
+In-Reply-To: <CAE-0n53ub30HXB325wPoMB4C3n4j_9FWnNu5AmtYgU3PBvs8mQ@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 16 Jun 2022 01:54:36 -0700
+Message-ID: <CACeCKadSCXZo3E4JZiwxFn_4CH3KDfQkk=xRrxSqCEWAgYhV6Q@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
-in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
-It's possible that you will receive thousands of interrupt requests
-after initialization for 2.0 roothub. And you will get a lot of
-warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
-disabled?". This amount of interrupt requests will cause the entire
-system to freeze.
-This problem was first found on a device with ASM2142 host controller
-on it.
+On Thu, Jun 16, 2022 at 12:42 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Prashant Malani (2022-06-15 10:20:20)
+> >
+> >  .../display/bridge/analogix,anx7625.yaml      | 64 +++++++++++++++++++
+> >  1 file changed, 64 insertions(+)
+>
+> Can this file get a link to the product brief[1]? It helps to quickly
+> find the block diagram.
 
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
+Sure, but I don't really think that should be included in this patch
+(or series).
+I'd be happy to submit a separate patch once this series is resolved.
 
-v5: remove reported by test robot
-v4: fix compile err reported by test robot
-v3:
-- enabling interrupt right before setting Run/Stop bit
-- spin_lock_irqsave to prevent receiving irqs in the small window
-according to Mathias's suggestion
-v2: fix compile error
+>
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > index 35a48515836e..bc6f7644db31 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > @@ -105,6 +105,34 @@ properties:
+> >        - port@0
+> >        - port@1
+> >
+> > +  switches:
+> > +    type: object
+> > +    description: Set of switches controlling DisplayPort traffic on
+> > +      outgoing RX/TX lanes to Type C ports.
+> > +    additionalProperties: false
+> > +
+> > +    properties:
+> > +      '#address-cells':
+> > +        const: 1
+> > +
+> > +      '#size-cells':
+> > +        const: 0
+> > +
+> > +    patternProperties:
+> > +      '^switch@[01]$':
+> > +        $ref: /schemas/usb/typec-switch.yaml#
+> > +        unevaluatedProperties: false
+> > +
+> > +        properties:
+> > +          reg:
+> > +            maxItems: 1
+> > +
+> > +        required:
+> > +          - reg
+> > +
+> > +    required:
+> > +      - switch@0
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -167,5 +195,41 @@ examples:
+> >                      };
+> >                  };
+> >              };
+> > +            switches {
+>
+> Is "switches" a bus?
 
- drivers/usb/host/xhci.c | 41 +++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+No.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 9ac56e9ffc64..1344cc566338 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -611,15 +611,41 @@ static int xhci_init(struct usb_hcd *hcd)
- 
- static int xhci_run_finished(struct xhci_hcd *xhci)
- {
-+	unsigned long flags;
-+	u32 temp;
-+
-+	/* Prevent receiving irqs in the small window between enabling interrupt
-+	 * and setting Run/Stop bit
-+	 */
-+	spin_lock_irqsave(&xhci->lock, flags);
-+
-+	/* Enable interrupt right before setting Run/Stop bit according to spec
-+	 * 4.2
-+	 */
-+	/* Set the HCD state before we enable the irqs */
-+	temp = readl(&xhci->op_regs->command);
-+	temp |= (CMD_EIE);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"// Enable interrupts, cmd = 0x%x.", temp);
-+	writel(temp, &xhci->op_regs->command);
-+
-+	temp = readl(&xhci->ir_set->irq_pending);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"// %s %p by writing 0x%x %s",
-+			"Enabling event ring interrupter",
-+			"to irq_pending", xhci->ir_set,
-+			(unsigned int) ER_IRQ_ENABLE(temp));
-+	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
- 	if (xhci_start(xhci)) {
- 		xhci_halt(xhci);
-+		spin_unlock_irqrestore(&xhci->lock, flags);
- 		return -ENODEV;
- 	}
- 	xhci->cmd_ring_state = CMD_RING_STATE_RUNNING;
- 
- 	if (xhci->quirks & XHCI_NEC_HOST)
- 		xhci_ring_cmd_db(xhci);
--
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- 	return 0;
- }
- 
-@@ -668,19 +694,6 @@ int xhci_run(struct usb_hcd *hcd)
- 	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
- 	writel(temp, &xhci->ir_set->irq_control);
- 
--	/* Set the HCD state before we enable the irqs */
--	temp = readl(&xhci->op_regs->command);
--	temp |= (CMD_EIE);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Enable interrupts, cmd = 0x%x.", temp);
--	writel(temp, &xhci->op_regs->command);
--
--	temp = readl(&xhci->ir_set->irq_pending);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
--			xhci->ir_set, (unsigned int) ER_IRQ_ENABLE(temp));
--	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
--
- 	if (xhci->quirks & XHCI_NEC_HOST) {
- 		struct xhci_command *command;
- 
--- 
-2.25.1
+>
+> > +                #address-cells = <1>;
+> > +                #size-cells = <0>;
+> > +                switch@0 {
+> > +                    compatible = "typec-switch";
+>
+> Is this compatible matched against a driver that's populated on this
+> "switches" bus?
 
+No. Patch 6/7 has the implementation details on how the anx driver
+performs the enumeration of switches.
+
+>
+> > +                    reg = <0>;
+> > +                    mode-switch;
+> > +
+> > +                    ports {
+> > +                        #address-cells = <1>;
+> > +                        #size-cells = <0>;
+> > +                        port@0 {
+> > +                            reg = <0>;
+> > +                            anx_typec0: endpoint {
+> > +                                remote-endpoint = <&typec_port0>;
+> > +                            };
+> > +                        };
+> > +                    };
+>
+> I was expecting to see these simply be more ports in the existing graph
+> binding of this device, and then have the 'mode-switch' or
+> 'orientation-switch' properties be at the same level as the compatible
+> string "analogix,anx7625". Here's the reasoning, based on looking at the
+> product brief and the existing binding/implementation.
+>
+> Looking at the only existing implementation of this binding upstream in
+> mt8183-kukui-jacuzzi.dtsi it looks like one of these typec ports is
+> actually the same physically as the 'anx7625_out' endpoint (reg address
+> of 1) that is already defined in the binding. It seems that MIPI DSI/DPI
+> comes in and is output through 2 lanes, SSRX2 and SSTX2 according to the
+> product brief[1], and that is connected to some eDP panel
+> ("auo,b116xw03"). Presumably that is the same as anx_typec1 in this
+> patch? I suspect the USB3.1 input is not connected on this board, and
+> thus the crosspoint switch is never used, nor the SSRX1/SSTX1 pins.
+>
+> The existing binding defines the MIPI DSI/DPI input as port0 and two of
+> the four lanes of output that is probably by default connected to the
+> "DisplayPort Transmitter" as port1 because that's how the crosspoint
+> switch comes out of reset. That leaves the USB3.1 input possibly needing
+> a port in the ports binding, and the other two lanes of output needing a
+> port in the ports binding to describe their connection to the downstream
+> device. And finally information about if the crosspoint switch needs to
+> be registered with the typec framework to do typec things, which can be
+> achieved by the presence of the 'mode-switch' property.
+>
+> On a board like kukui-jacuzzi these new properties and ports wouldn't be
+> specified, because what is there is already sufficient. If this chip is
+> connected to a usb-c-connector then I'd expect to see a connection from
+> the output ports in the graph binding to the connector node's ports.
+> There aren't any ports in the usb-c-connector binding though from what I
+> see.
+>
+> I believe there's also one more use case here where USB3.1 or MIPI
+> DSI/DPI is connected on the input side and this device is used to steer
+> USB3.1 or DP through the crosspoint switch to either of the two output
+> pairs. This last scenario means that we have to describe both output
+> pairs, SSRX1/SSTX1 and SSRX2/SSTX2, as different ports in the binding so
+> they can be connected to different usb-c-connectors if the hardware
+> engineer wired the output pins that way.
+>
+> TL;DR: Can we add 'mode-switch' as an optional property and two more
+> ports at address 2 and 3 for the USB3.1 input and the SSRX1/SSTX1 pair
+> respectively to the existing graph part of this binding?
+
+Sorry, but I got lost midway through the preceding explanation. The binding
+can always add additional ports to each "switch" to accomplish the
+graph connections
+you are alluding to (if the driver needs/uses it, which I don't think
+this one does at present).
+
+Adding extra ports to existing ports gets tricky from a mode-switch
+enumeration perspective (which
+ports should have the modes switches, which shouldn't? Do you follow
+the remote end points for each port
+and see which one is a Type C connector? What if we add an
+intermediate switch device in the future?)
+Having a dedicated "switch" binding makes this consistent and easy
+(port0 will always have the end-point for the switch).
+
+While there may be more than 1 valid approach here, I believe the
+current one is appropriate.
+
+>
+> > +                };
+> > +                switch@1 {
+> > +                    compatible = "typec-switch";
+> > +                    reg = <1>;
+> > +                    mode-switch;
+> > +
+> > +                    ports {
+> > +                        #address-cells = <1>;
+> > +                        #size-cells = <0>;
+> > +                        port@0 {
+> > +                            reg = <0>;
+> > +                            anx_typec1: endpoint {
+> > +                                remote-endpoint = <&typec_port1>;
+> > +                            };
+> > +                        };
+> > +                    };
+> > +                };
+> > +            };
+> >          };
+>
+> [1] https://www.analogix.com/en/system/files/AA-002291-PB-6-ANX7625_ProductBrief.pdf
