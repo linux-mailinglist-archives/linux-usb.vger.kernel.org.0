@@ -2,67 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31D855001A
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 00:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0017255002B
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 00:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353011AbiFQWni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 18:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S1378881AbiFQWsN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 18:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiFQWng (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 18:43:36 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08943BBC8;
-        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id q11so5890961iod.8;
-        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
+        with ESMTP id S1358121AbiFQWsM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 18:48:12 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69745275C1;
+        Fri, 17 Jun 2022 15:48:11 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id m16so2367942ilf.6;
+        Fri, 17 Jun 2022 15:48:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Zh/0Zx5VR9OkdNl9GEaMHnSoW3UuL0RxbuRlgNOyx3U=;
-        b=Hgil84+ELMVRzRXMKAfqAuU6mR3YljnBX0unOibFt6Act3TAaf96ovJZ4VvLIODbE9
-         Bh7/iPioI2soLxUkXk2ZAnggIYwROfH/3dMFghApTa6WIgwgHuYcJmpYKHBzjng4ma9H
-         TyrlMz51vOj6g4mJq5hg5OWaAGxtmwCrQu4wzx7BnlMEngd2KjP9VQIlCsfEJqguKwRg
-         opmiDyVWeKpcZGtkq1OIk7pSuYaQKqM86ugnGmwFzYvXS/7TucCu9ciQMWtqI8Pjgk8q
-         o8fcmTfShYHQQxL3O+ewacUihemAiO63qGoq5OgKeRUOxp8pH6rvYYBeX8A+ZG+jX0xe
-         nvjg==
-X-Gm-Message-State: AJIora/9GAMo/VuBIxH/7sS2TIqk2FheBgDP1NG9tMLMYVXT87ULcP+n
-        SJRHBXgrkfRjAcHolat9Pq8hi4s15w==
-X-Google-Smtp-Source: AGRyM1tvyT1XZEsULmIOGU/hr9lRpu/t3yqYEU1/GhEsnQese2mFTYGyCi7NOLnTQaaRUC8jarJyVw==
-X-Received: by 2002:a05:6638:d8c:b0:332:15ef:657f with SMTP id l12-20020a0566380d8c00b0033215ef657fmr6523987jaj.146.1655505814198;
-        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=QWqgJ+BNBlicstTxKNm6zsmC+wdLqiLODgZbKAeFkuM=;
+        b=QSgLDXjSUXB/Z+fD21M1Ym0qzAQ4VWN0JqEdp0yS9IoHuEusYolvuuK5coXYfRTJYt
+         cAHV/2fej7ZDmg331gYj+hskjFCVRSGjvjQsIdnURUFv7+P4HRBEizU70S/Xjvzqkxlk
+         iohm35jo5O98hGVyyoNgV2tF4IlAdJPTAKMPVUbpRbwy1n+dIsK6cUEIWwHIX+ENC9Fg
+         Y4JYq6QaHmu8MZUaanPe3tRv2KgJbUEZPr5w40xXp3otDiHjZ+jOO/xD1ysOif7MjxpP
+         l0nnAl0brI1eyXCGcUHzfj1IFAFgv6GM1TX1N48xG8jEkN3J1bWHZnwmlG9cfqjBLPJY
+         2QfQ==
+X-Gm-Message-State: AJIora/Rz0b/9lZb1KrMezmsBmDYLBIrPjkYTkWmE26+6gxhBkw4MxTL
+        PmocnmLprihknA3w1jdGfRFZ+c+BDg==
+X-Google-Smtp-Source: AGRyM1tF1TFgKSd3rEFaD6pBxylnAQ7yDR97H315fy0ANiBFFFLxcOCCc9qGBhQwWAv/RErvaCyrxA==
+X-Received: by 2002:a05:6e02:1be5:b0:2d3:ea49:fe47 with SMTP id y5-20020a056e021be500b002d3ea49fe47mr6908114ilv.289.1655506090157;
+        Fri, 17 Jun 2022 15:48:10 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id i26-20020a023b5a000000b0032b3a781781sm2734205jaf.69.2022.06.17.15.43.32
+        by smtp.gmail.com with ESMTPSA id g9-20020a02cd09000000b0033192b7fd35sm2775207jaq.128.2022.06.17.15.48.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 15:43:33 -0700 (PDT)
-Received: (nullmailer pid 2574515 invoked by uid 1000);
-        Fri, 17 Jun 2022 22:43:32 -0000
-Date:   Fri, 17 Jun 2022 16:43:32 -0600
+        Fri, 17 Jun 2022 15:48:09 -0700 (PDT)
+Received: (nullmailer pid 2580984 invoked by uid 1000);
+        Fri, 17 Jun 2022 22:48:08 -0000
+Date:   Fri, 17 Jun 2022 16:48:08 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     pavel@ucw.cz, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, szunichen@gmail.com,
-        lars@metafoo.de, matthias.bgg@gmail.com,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        lee.jones@linaro.org, ChiYuan Huang <cy_huang@richtek.com>,
-        linux-leds@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        jingoohan1@gmail.com, devicetree@vger.kernel.org, jic23@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
-Message-ID: <20220617224332.GA2570673-robh@kernel.org>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-7-peterwu.pub@gmail.com>
- <1655127197.567546.3564136.nullmailer@robh.at.kernel.org>
- <CABtFH5JPu5tOg4wGJf5ay1-NJHLcPTK4XxADGTksHW1-6wjMRQ@mail.gmail.com>
+To:     Piyush Mehta <piyush.mehta@xilinx.com>
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, git@xilinx.com, sivadur@xilinx.com
+Subject: Re: [PATCH 2/2] usb: dwc3: core: Enable GUCTL1 bit 10 for fixing crc
+ error after resume bug
+Message-ID: <20220617224808.GA2576564-robh@kernel.org>
+References: <20220613124703.4493-1-piyush.mehta@xilinx.com>
+ <20220613124703.4493-3-piyush.mehta@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABtFH5JPu5tOg4wGJf5ay1-NJHLcPTK4XxADGTksHW1-6wjMRQ@mail.gmail.com>
+In-Reply-To: <20220613124703.4493-3-piyush.mehta@xilinx.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -74,62 +65,92 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 07:15:49PM +0800, ChiaEn Wu wrote:
-> Hi Rob,
+On Mon, Jun 13, 2022 at 06:17:03PM +0530, Piyush Mehta wrote:
+> When configured in HOST mode, after issuing U3/L2 exit controller fails
+> to send proper CRC checksum in CRC5 field. Because of this behavior
+> Transaction Error is generated, resulting in reset and re-enumeration of
+> usb device attached. Enabling chicken bit 10 of GUCTL1 will correct this
+> problem.
 > 
-> Rob Herring <robh@kernel.org> 於 2022年6月13日 週一 晚上9:33寫道：
-> >
-> > On Mon, 13 Jun 2022 19:11:37 +0800, ChiaEn Wu wrote:
-> > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > >
-> > > Add Mediatek MT6370 binding documentation.
-> > >
-> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > > ---
-> > >  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
-> > >  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
-> > >  2 files changed, 297 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> > >
-> >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >
-> > yamllint warnings/errors:
-> >
-> > dtschema/dtc warnings/errors:
-> > ./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: backlight: False schema does not allow {'compatible': ['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use': b'\x0f'}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: charger: False schema does not allow {'compatible': ['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]], 'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels': [[1, 5]], 'usb-otg-vbus-regulator': {'regulator-name': ['mt6370-usb-otg-vbus'], 'regulator-min-microvolt': [[4350000]], 'regulator-max-microvolt': [[5800000]], 'regulator-min-microamp': [[500000]], 'regulator-max-microamp': [[3000000]], 'phandle': [[2]]}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: tcpc: False schema does not allow {'compatible': ['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, 4, 8]], 'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C'], 'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'], 'try-power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos': [[570527944]], 'op-sink-microwatt': [[10000000]], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@1': {'reg': [[1]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@2': {'reg': [[2]], 'endpoint': {'remote-endpoint': [[4294967295]]}}}}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator: False schema does not allow {'compatible': ['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#size-cells': [[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator'], 'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]}, 'led@1': {'reg': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]], 'color': [[3]]}}, 'led@3': {'reg': [[3]], 'function': ['indicator'], 'color': [[0]], 'led-max-microamp': [[6000]]}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: flashlight: False schema does not allow {'compatible': ['mediatek,mt6370-flashlight'], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[1]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}, 'led@1': {'reg': [[1]], 'led-sources': [[1]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[2]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}}
-> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: backlight: mediatek,bled-channel-use: b'\x0f' is not of type 'object', 'array', 'boolean', 'null'
-> >         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/backlight: failed to match any schema with compatible: ['mediatek,mt6370-backlight']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/charger: failed to match any schema with compatible: ['mediatek,mt6370-charger']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/indicator: failed to match any schema with compatible: ['mediatek,mt6370-indicator']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/flashlight: failed to match any schema with compatible: ['mediatek,mt6370-flashlight']
-> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/tcpc: failed to match any schema with compatible: ['mediatek,mt6370-tcpc']
-> >
+> When this bit is set to '1', the UTMI/ULPI opmode will be changed to
+> "normal" along with HS terminations after EOR. This option is to support
+> certain legacy UTMI/ULPI PHYs.
 > 
-> Before we submitted these patches, we had already checked by running
-> this command below,
-> "make DT_CHECKER_FLAGS=-m dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml".
-> But we could not find any errors like your error msg after the checking process.
+> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> ---
+>  drivers/usb/dwc3/core.c | 16 ++++++++++++++++
+>  drivers/usb/dwc3/core.h |  6 ++++++
+>  2 files changed, 22 insertions(+)
 > 
-> Our mfd dt-binding patch is dependent on "backlight dt-binding",
-> "charger dt-binding", "tcpc dt-binding", "indicator dt-binding" and
-> "flashlight dt-binding" patches.
-> Would you please apply them before you check mfd dt-binding patch?
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index e027c0420dc3..8afc025390d2 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1140,6 +1140,20 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>  		dwc3_writel(dwc->regs, DWC3_GUCTL2, reg);
+>  	}
+>  
+> +	/*
+> +	 * When configured in HOST mode, after issuing U3/L2 exit controller
+> +	 * fails to send proper CRC checksum in CRC5 feild. Because of this
+> +	 * behaviour Transaction Error is generated, resulting in reset and
+> +	 * re-enumeration of usb device attached. Enabling bit 10 of GUCTL1
+> +	 * will correct this problem. This option is to support certain
+> +	 * legacy ULPI PHYs.
+> +	 */
+> +	if (dwc->enable_guctl1_resume_quirk) {
 
-That is what is done. Not sure what happened here though.
+What's the downside to just always doing this?
 
-Rob
+> +		reg = dwc3_readl(dwc->regs, DWC3_GUCTL1);
+> +		reg |= DWC3_GUCTL1_RESUME_QUIRK;
+> +		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+> +	}
+> +
+>  	if (!DWC3_VER_IS_PRIOR(DWC3, 250A)) {
+>  		reg = dwc3_readl(dwc->regs, DWC3_GUCTL1);
+>  
+> @@ -1483,6 +1497,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>  				"snps,dis-del-phy-power-chg-quirk");
+>  	dwc->dis_tx_ipgap_linecheck_quirk = device_property_read_bool(dev,
+>  				"snps,dis-tx-ipgap-linecheck-quirk");
+> +	dwc->enable_guctl1_resume_quirk = device_property_read_bool(dev,
+> +				"snps,enable_guctl1_resume_quirk");
+>  	dwc->parkmode_disable_ss_quirk = device_property_read_bool(dev,
+>  				"snps,parkmode-disable-ss-quirk");
+>  
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 81c486b3941c..e386209f0e1b 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -397,6 +397,9 @@
+>  #define DWC3_GUCTL_REFCLKPER_MASK		0xffc00000
+>  #define DWC3_GUCTL_REFCLKPER_SEL		22
+>  
+> +/* Global User Control Register 1 */
+> +#define DWC3_GUCTL1_RESUME_QUIRK		BIT(10)
+> +
+>  /* Global User Control Register 2 */
+>  #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
+>  
+> @@ -1093,6 +1096,8 @@ struct dwc3_scratchpad_array {
+>   *			change quirk.
+>   * @dis_tx_ipgap_linecheck_quirk: set if we disable u2mac linestate
+>   *			check during HS transmit.
+> + * @enable_guctl1_resume_quirk: Set if we enable quirk for fixing improper crc
+> + *			generation after resume from suspend.
+>   * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
+>   *			instances in park mode.
+>   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
+> @@ -1308,6 +1313,7 @@ struct dwc3 {
+>  	unsigned		dis_u2_freeclk_exists_quirk:1;
+>  	unsigned		dis_del_phy_power_chg_quirk:1;
+>  	unsigned		dis_tx_ipgap_linecheck_quirk:1;
+> +	unsigned		enable_guctl1_resume_quirk:1;
+>  	unsigned		parkmode_disable_ss_quirk:1;
+>  
+>  	unsigned		tx_de_emphasis_quirk:1;
+> -- 
+> 2.17.1
+> 
+> 
