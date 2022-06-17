@@ -2,82 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA63550076
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 01:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC127550106
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 01:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237213AbiFQXP2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 19:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S1382658AbiFQX44 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 19:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383531AbiFQXNu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 19:13:50 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC305D5C1
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 16:13:47 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gd1so5048530pjb.2
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 16:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=10mVd//XJbMVb3Cy5Pks+pC6niMtAwguM0D0PFkeb/0=;
-        b=ftsgA9iCXVg14SM3UhGJNZroNcKteQOV8fhn/TQ4qmubLGEYc9goTyY9cqxWv/Vujz
-         vvqm9Hc1xj1CilJkuFjGUkxiPQmxIGRA6ZWY937f+DBGH4jZKoO1kMpGaa8atsr2iy+c
-         jInXea+ezAu5ezkR5e9DqoDPRxhK80c23I0Rxem6Hv76djU0l3rMSkohW6NtZA/wT8Xq
-         kkbN94pT99l5RfQhhgeyyK0XqowM7S3hyzY9US2HlPGSSPmBn1VE+8RMyrvOvwk/qSQO
-         VuNIIi8ERnbIixzMX8MQ/LZDa52WzzLDJSlri5vEF8FF0NVgt/kmQO5wufOCoypheUaN
-         mQ7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=10mVd//XJbMVb3Cy5Pks+pC6niMtAwguM0D0PFkeb/0=;
-        b=ll1kLITIy/KjsLpXWV3p/8pclpJK90f54nqNPsGeWBRTQhAdeg9XNCRNzCjaLZ2scd
-         bPcb4jlR/j8lwZQownJfjH/LZthdtrxjIuiNes9XmZFK+Eh84TkRzrp6kv2TzFvnz/uW
-         lI77peMnykKbnBegmil+feCMdTcK1q4LYE7VEFVoDEVlDNA8SiI8Cekzt61Uwg22t1k6
-         v9kQEwPyvyacpoPLK8yZJv+LjiUiBE9hzlYRXTpTm0Ieh482MJHYQy8sbwcm7McakLa7
-         FKIj/mrKaaP9XZp2CLRpzLZoHUimAkSTFQj6WcHKsZyCnCulCsgfTwY9cRxlS2IqW28N
-         RN2Q==
-X-Gm-Message-State: AJIora//AmOHPuBj5ocrn3w8hJCZ4mcoUC6r0K0vxgvJ3bGqQsEVvJxt
-        1zDy2kwBypO9dlw+BfagBc8J0Q==
-X-Google-Smtp-Source: AGRyM1t/dM7EAh0Y7mmMWaeiTHeXaEw5ea7tY/IXesEX0mn/1dH62oUOXAC46KuZhDOj2XfNQPbrog==
-X-Received: by 2002:a17:90b:3701:b0:1ea:9f82:59ef with SMTP id mg1-20020a17090b370100b001ea9f8259efmr13153806pjb.239.1655507627413;
-        Fri, 17 Jun 2022 16:13:47 -0700 (PDT)
-Received: from [172.31.235.92] ([216.9.110.6])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170903028100b0016784c93f23sm4054315plr.197.2022.06.17.16.13.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 16:13:46 -0700 (PDT)
-Message-ID: <9b567f78-e12b-d665-2f11-96436fe9ed08@linaro.org>
-Date:   Fri, 17 Jun 2022 16:13:42 -0700
+        with ESMTP id S1383613AbiFQX4h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 19:56:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407EE64D30
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 16:56:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C629361DFB
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 23:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 30BD6C341CA
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 23:56:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655510195;
+        bh=iD6AvW7iqVlHnEuQK7CSGVtOyxZHqOC/W30DdGY/AEU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=nWXDQiFus9T6rYEhqQnR60vhg/b8SqROTD9UbUFa/i6M1rx/8wueL93LXiHsagTKB
+         6cn3SdV/ymaNGblV3djpVya/s/MRaQjOUF+/wlF+QmZAz3m+tGa8wIy285Yyr4QQX6
+         VGB7VQ/2VC3A/OmMupnojm3Ncp9Zqy4sqmaY9rhOnuaBiIN0WHQXnxb1Xi1TsEPUwb
+         TiIRKQo0Enunwy5uUinvE9hvkCCGh0y4pVLw2gdHcAZ+Xcl3M2u3WPRYRt1OZClY7F
+         N90f/VSl6W0z0L5qL0ejJD4ftq7K3lXKLJKI0RurnUoNZAwIoEGGKkBgN8SCcprAu9
+         JxvDtayODLP8w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 1EB75CC13B3; Fri, 17 Jun 2022 23:56:35 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Fri, 17 Jun 2022 23:56:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jorge.cep.mart@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-210425-208809-5f6QpgaxdI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 05/15] dt-bindings: backlight: Add Mediatek MT6370
- backlight
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
-        lee.jones@linaro.org, Daniel Thompson <daniel.thompson@linaro.org>,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-6-peterwu.pub@gmail.com>
- <9c38f708-1376-aa89-2c56-c08d320bcf2b@linaro.org>
- <CABtFH5KhijZDRA+K=stpOV0t8K3cqCMoLXpLShcdm9F8emrKCA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABtFH5KhijZDRA+K=stpOV0t8K3cqCMoLXpLShcdm9F8emrKCA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,33 +71,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17/06/2022 03:35, ChiaEn Wu wrote:
-> +        - 3: 6
->>
->> Nope, I said last time:
->> "In any case you cannot have values mapping"
->>
->> Please use proper real world value, not some register bits. The property
->> name also needs fixing.
-> 
-> I so apologized for misunderstanding your meaning...
-> I try to modify it like below.
-> --------
-> mediatek,bled-pwm-hys-input-threshold-steps:
->   $ref: /schemas/types.yaml#/definitions/uint8
->   enum: [1, 4, 16, 64]
->   description: |
->     The selection of the upper and lower bounds threshold of backlight
->     PWM resolution. If we choose selection 64, the variation of PWM
->     resolution needs over 64 steps.
-> --------
-> If these changes meet your expectations, I will try to modify
-> "bled-ovp-microvolt" and "bled-ocp-microamp" in the same way.
-> Thank you so much.
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-This looks good. Thank you.
+Jorge Cepeda (jorge.cep.mart@gmail.com) changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jorge.cep.mart@gmail.com
 
-Best regards,
-Krzysztof
+--- Comment #17 from Jorge Cepeda (jorge.cep.mart@gmail.com) ---
+Can confirm it happens using Feren OS and kernel 5.13.0-51-generic
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
