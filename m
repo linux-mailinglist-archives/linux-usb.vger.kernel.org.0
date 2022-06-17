@@ -2,45 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323C354F295
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 10:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6559554F2F0
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 10:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380258AbiFQIOl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 04:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S1381020AbiFQI3R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 04:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380002AbiFQIOk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 04:14:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C145060A83;
-        Fri, 17 Jun 2022 01:14:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54E3A61FA8;
-        Fri, 17 Jun 2022 08:14:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D76C3411B;
-        Fri, 17 Jun 2022 08:14:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655453678;
-        bh=oXIanLHIRcl8toSGd0XD80ERDEnuuIhwGerWOBVeryU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FwN0+4ItjCIoDAkk/QdF+7PY3lkt66mV/c0PFayIuWC8kPVcMOI5Cl8ArkkdEc2Bm
-         GkwMlewGIVfLFuel6WO8a0K7sWv+HGmpqcBy768BwWn/kOwI9TLbQObZZkRdeUrGbK
-         EFvGNz0gpl9kGxId8/bBxpCoSM0YC4ilMKJk0ER8=
-Date:   Fri, 17 Jun 2022 10:14:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 5.19-rc3
-Message-ID: <Yqw361X4Szdht3HF@kroah.com>
+        with ESMTP id S1380941AbiFQI3Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 04:29:16 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EBD2DA9D
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 01:29:15 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3137316bb69so35595977b3.10
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 01:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NvDM6ePOB9255+QdACBJ4Cuqc1YOqX9BqNlnS6cgqOM=;
+        b=drT2VwI/KZewVo8KT9/kXdTMbfdvv+NSGSELVGv4eiapATLknTm+j85k43io+ibKTF
+         JEmJIcVb/sQlJiPCNzOJ9mVT9mlCp60slBUKsP5Efp1s0GHuqXq2V+9Jsr75NZuEtU68
+         Wp23cWN398Y+eUq5UTdvu1FVjoeGZNF1qd5hnW/zhP+AI4HqG4wMED1j3CA5hTRdwfqY
+         ozrKK4bKivojAC7rBcvH20NaRrHiljUkGUiHEBspGkYSbRHfJYDgQ70/aVXO4uE/OrMF
+         2OY5lkXETqjvhi3wMs208J7cpdqp3mJfUSJ8Ga6/5PIltL3Xnhx4KI6xxpmV2Odk6W4c
+         qubA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NvDM6ePOB9255+QdACBJ4Cuqc1YOqX9BqNlnS6cgqOM=;
+        b=I3XHuiXbfVVYuanhTJ5MX7LctYhfCMByteJKxJnXWIy6+OqF/lObtm7ZuIgveLYlUl
+         meBwraBTAEZdzilTR4x2bl4pJokBubbR5JSC91t/pvMsyRSoFYGCGUuhQnncoVtEDIyd
+         IlR9pbfqKPFLgtBw9P4poO1mDVXACpckGLbBbbYwKjJiXIKGNmD2mpJGdP6+wCuPWQ//
+         SBMVfpgrDr1SbWqWK4yelbLWFjRZufhfkB37oeJdJVh4FbxzFEe07TxfPThASKS3sfPJ
+         8GZZ3S1+K4GSdczr5W+u8P7KvM3yIcQH2Pzx130bv7K/JG1uyj8zKPd+FIJjq2ZUFV3y
+         /6fA==
+X-Gm-Message-State: AJIora9lfU7DX85m2bIqOFdkYvJTQ38IB15xlkPAhRSVGEeq3AKEp+y/
+        F5Xex1mZagFu/eN4mmmX7gsPyckScIXLOUjHUOf9Lw==
+X-Google-Smtp-Source: AGRyM1sXLogUpwJPjF1dzAojDC/KQZrNZsdk08Hdr7n8V4gMaf4+MazYkz+tgTepMChNzJTrpNtYtPlHQWaBnkTF1Ac=
+X-Received: by 2002:a0d:e8c8:0:b0:317:6df2:304e with SMTP id
+ r191-20020a0de8c8000000b003176df2304emr7783879ywe.118.1655454555028; Fri, 17
+ Jun 2022 01:29:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220616013747.126051-1-frank@zago.net> <20220616013747.126051-3-frank@zago.net>
+In-Reply-To: <20220616013747.126051-3-frank@zago.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 17 Jun 2022 10:29:03 +0200
+Message-ID: <CACRpkdZ-X_3vqcyRUH5-KM=mkGF3C87fMMPGxVWmVyYHtCCS0g@mail.gmail.com>
+Subject: Re: [PATCH v6 2/4] gpio: ch341: add GPIO MFD cell driver for the CH341
+To:     frank zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,83 +69,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+On Thu, Jun 16, 2022 at 3:38 AM frank zago <frank@zago.net> wrote:
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
+> read-only.
+>
+> Signed-off-by: frank zago <frank@zago.net>
 
-are available in the Git repository at:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc3
+Please preserve my ACK on subsequent postings, USB changes does
+not concern me, I trust Johan to review those for you.
 
-for you to fetch changes up to 0698f0209d8032e8869525aeb68f65ee7fde12ad:
-
-  usb: gadget: f_fs: change ep->ep safe in ffs_epfile_io() (2022-06-10 14:45:38 +0200)
-
-----------------------------------------------------------------
-USB driver fixes for 5.19-rc3
-
-Here are some small USB driver fixes and new device ids for 5.19-rc3
-
-They include:
-	- new usb-serial driver device ids
-	- usb gadget driver fixes for reported problems
-	- cdnsp driver fix
-	- dwc3 driver fixes for reported problems
-	- dwc3 driver fix for merge problem that I caused in 5.18
-	- xhci driver fixes
-	- dwc2 memory leak fix
-
-All of these have been in linux-next for a while with no reported
-issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-5.19-rc2' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-
-Jing Leng (1):
-      usb: cdnsp: Fixed setting last_trb incorrectly
-
-Linyu Yuan (2):
-      usb: gadget: f_fs: change ep->status safe in ffs_epfile_io()
-      usb: gadget: f_fs: change ep->ep safe in ffs_epfile_io()
-
-Marian Postevca (1):
-      usb: gadget: u_ether: fix regression in setting fixed MAC address
-
-Mathias Nyman (1):
-      xhci: Fix null pointer dereference in resume if xhci has only one roothub
-
-Miaoqian Lin (2):
-      usb: dwc2: Fix memory leak in dwc2_hcd_init
-      usb: gadget: lpc32xx_udc: Fix refcount leak in lpc32xx_udc_probe
-
-Robert Eckelmann (1):
-      USB: serial: io_ti: add Agilent E5805A support
-
-Slark Xiao (1):
-      USB: serial: option: add support for Cinterion MV31 with new baseline
-
-Stephan Gerhold (1):
-      usb: dwc3: pci: Restore line lost in merge conflict resolution
-
-Stephen Rothwell (1):
-      USB: fixup for merge issue with "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"
-
-Wesley Cheng (1):
-      usb: dwc3: gadget: Fix IN endpoint max packet size allocation
-
- drivers/usb/cdns3/cdnsp-ring.c        | 19 ++++++++++-------
- drivers/usb/dwc2/hcd.c                |  2 +-
- drivers/usb/dwc3/core.c               |  9 ++------
- drivers/usb/dwc3/dwc3-pci.c           |  1 +
- drivers/usb/dwc3/gadget.c             | 26 +++++++++++++----------
- drivers/usb/gadget/function/f_fs.c    | 40 ++++++++++++++++++++++-------------
- drivers/usb/gadget/function/u_ether.c | 12 +++++++++--
- drivers/usb/gadget/udc/lpc32xx_udc.c  |  1 +
- drivers/usb/host/xhci.c               | 15 +++++--------
- drivers/usb/serial/io_ti.c            |  2 ++
- drivers/usb/serial/io_usbvend.h       |  1 +
- drivers/usb/serial/option.c           |  6 ++++++
- 12 files changed, 80 insertions(+), 54 deletions(-)
+Yours,
+Linus Walleij
