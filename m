@@ -2,61 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCE854F54C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 12:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF1E54F57A
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 12:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381741AbiFQKXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 06:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S1381274AbiFQKft (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 06:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380775AbiFQKXC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 06:23:02 -0400
-Received: from mail-ot1-x349.google.com (mail-ot1-x349.google.com [IPv6:2607:f8b0:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A017638F
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 03:23:01 -0700 (PDT)
-Received: by mail-ot1-x349.google.com with SMTP id r21-20020a9d7cd5000000b0060c14855483so2150649otn.5
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 03:23:01 -0700 (PDT)
+        with ESMTP id S1380066AbiFQKfr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 06:35:47 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB7A6AA70;
+        Fri, 17 Jun 2022 03:35:46 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id b138so4100723iof.13;
+        Fri, 17 Jun 2022 03:35:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=EsH5s3CS34XE5oP6QCxM35cFRjzs1KhxS15xVOEKEwc=;
-        b=L/WIU6oYbbMN3DfxNX3yLjdfcnw1q3mR78ShoqkrAZEXfC81SSPrDykP++Xpn7vLe3
-         P2Pt99SCK4NjbXwYUxn61ybTyzZPcMlj3t8VLsq4MOk7WGXAcWoO0r39BbNWsnWAa/0t
-         LwAHYboPIN4LGU3waIThLV7EoXZTimXkaU8MqVdIWPlDCJOc8XeV6g9Mur+tS+Hb3eRn
-         Vt4/JchDMdyVUAf4LNXBjM64oP5E2cJEl/ScaaHJAWi8eT9JiNmSHAHu/mFV1VMLCL7o
-         K3g4yWumIFI5n4eR1s4YegZ7xDJjW63BQ71cg7lXWxr1jx1YNxG0KVUL95WJrw8v/p4F
-         9ycw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rOxytpr3JE53RNJSPRdeBWhwwL5aBsV68OtuK0gPSKc=;
+        b=VXLvhpaQU0zgeMjKkkqDHD1I+K0rIshiGzQkNBPk2HQGNqDDUZT5LxEKFLtoSchSaZ
+         fKpgnNsU0HTiilSwtx0LgLcenSKqGXiW3QiesMvmIoG8bZYBxjvxIm4ZMCMJssMi06O7
+         DmqBTjSMvAsNPKw0iZwY8THSaeWRxbZvzA5XCoxwOMwh8aFihG4t0lDRFgRD8H/l72fJ
+         4WO9j/DcS912xHkAAyWAdl+uQmxw6JQHU9ZhlfeMjFsP+HiYKJpSZDjCjXLCjJ4UMtG5
+         sj63siSb6Jqs6FXFchQDLzzEq6UOf/Duny841OrK6jdAGRvH8toYDeFHZA1bsbuZ+Yvc
+         ewGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=EsH5s3CS34XE5oP6QCxM35cFRjzs1KhxS15xVOEKEwc=;
-        b=NlxF+sn2Zolp52J2XDY3eajGyt/aLMePfAseKbFCliSEtJkZEoFJqAdsoDgX4Wpj1y
-         03DsfkmgQot7J5DhBpD6vhNqzUcoTcMeXy47wgCaozN1WxoZuXlEdy67rOgh/xNqtRIB
-         +hRUQaNYgoI+tL8YbQAnUB/qm+1FJN7guLSVqTc91lFGmqT3M0luciFBpY9VZHzAN35g
-         zmakfpbQaCdWBv5nBF+2LdXFfV/E88bWLKFlJf9B9N4cQftaWzQLveatQD2be5u6RDL6
-         zNmFD4Z7w3zP9X7lSTcThZmHc+XWlGwtg+ebC7ZybwYbwMzzLM1SaTbwC5V/N1DS08Tq
-         1eRw==
-X-Gm-Message-State: AJIora9JRdMGwufce1pam9gM+8b7plmcAnH5iWRmDn/+nKTwWI5k0jVY
-        5uzVIWPr1FZQqAn2tv6+P7SOz5PRLT8=
-X-Google-Smtp-Source: AGRyM1u11LIckyI8NDwiOPdTSBks8QN8MaZ9Swf0fkAg06uTiDoCimZ4qRnP2q+HOch+KOYi9an3pisF1vI=
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:1098:7d3f:d5d9:3c96])
- (user=raychi job=sendgmr) by 2002:a05:6870:b254:b0:ec:6ca4:c89f with SMTP id
- b20-20020a056870b25400b000ec6ca4c89fmr10908444oam.272.1655461380900; Fri, 17
- Jun 2022 03:23:00 -0700 (PDT)
-Date:   Fri, 17 Jun 2022 18:22:56 +0800
-Message-Id: <20220617102256.3253019-1-raychi@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] USB: hub: add module parameters to usbcore for port init retries
-From:   Ray Chi <raychi@google.com>
-To:     corbet@lwn.net, gregkh@linuxfoundation.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, albertccwang@google.com,
-        Ray Chi <raychi@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rOxytpr3JE53RNJSPRdeBWhwwL5aBsV68OtuK0gPSKc=;
+        b=UUU13xS7uvl9HledfE/X7S4w/Mro+2VwQ1vxTNT6HAsMbCGoTxhFo+DnWLOyhJxV9Y
+         +oF2iT76MlV79lzKIKePDUUbzWbb+Fum6otvQ3904J6bN/OWdOQ+tAEX/y0uYgyT4Hm0
+         w6/0x+/5GROCe8NLHtnh/NCv0lcATOUQdDvburz5dBlqEM7iqQDdXq4YHaYVX08MRhRm
+         5QGBvaTR7c+zbSAWW6u8Yat1tX6NctPMA63bROGtDmh9/rr1uVvLQeZlU9Iyq6rZXORc
+         97o+c1KlFAmGJ9Z4GKcKNUCyXjjimocuCGs/p8+SrkHrreyABHu0pdyiMD+zq8Hx0nQI
+         bTbA==
+X-Gm-Message-State: AJIora9fTUrTBrts99yncrscDoSRRbFdBlpriXzo8y45Q1C1FQVJVSxX
+        4iNA3RokeNIMp7S3NlLZM3N10atafc5HGt0FbDo=
+X-Google-Smtp-Source: AGRyM1udgMHgKDiQMYRnn7E3oN5h0pbJ2A1MrxTn2OBrvOJsKft+xj/e2gq23SyVxC5kFN9WD040jXi32G7pqDTUjpk=
+X-Received: by 2002:a05:6638:2113:b0:331:feae:af81 with SMTP id
+ n19-20020a056638211300b00331feaeaf81mr4897345jaj.196.1655462146064; Fri, 17
+ Jun 2022 03:35:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220613111146.25221-1-peterwu.pub@gmail.com> <20220613111146.25221-6-peterwu.pub@gmail.com>
+ <9c38f708-1376-aa89-2c56-c08d320bcf2b@linaro.org>
+In-Reply-To: <9c38f708-1376-aa89-2c56-c08d320bcf2b@linaro.org>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Fri, 17 Jun 2022 18:35:34 +0800
+Message-ID: <CABtFH5KhijZDRA+K=stpOV0t8K3cqCMoLXpLShcdm9F8emrKCA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/15] dt-bindings: backlight: Add Mediatek MT6370 backlight
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
+        lee.jones@linaro.org, Daniel Thompson <daniel.thompson@linaro.org>,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,126 +75,184 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently, there is a Kconfig (CONFIG_USB_FEW_INIT_RETRIES) to
-reduce retries when the port initialization is failed. The retry
-times are fixed and assigned in compile time. To improve the
-flexibility, this patch add four module parameters:
-port_reset_tries, set_address_tries, get_descriptor_tries,
-and get_maxpacket0_tries, to replace the original default values.
+Hi Krzysztof,
 
-The default value of module parameters is the same as before
-to preserve the existing behavior.
+Thanks for your helpful feedback, I have some questions want to
+confirm with you below.
 
-Signed-off-by: Ray Chi <raychi@google.com>
----
- .../admin-guide/kernel-parameters.txt         | 16 ++++++++++
- drivers/usb/core/hub.c                        | 31 ++++++++++++++++---
- 2 files changed, 42 insertions(+), 5 deletions(-)
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B46=E6=9C=8817=E6=97=A5 =E9=80=B1=E4=BA=94 =E6=B8=85=E6=99=A85:13=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 13/06/2022 04:11, ChiaEn Wu wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add mt6370 backlight binding documentation.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  .../backlight/mediatek,mt6370-backlight.yaml  | 107 ++++++++++++++++++
+> >  1 file changed, 107 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/leds/backlight/me=
+diatek,mt6370-backlight.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/leds/backlight/mediatek,=
+mt6370-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/me=
+diatek,mt6370-backlight.yaml
+> > new file mode 100644
+> > index 000000000000..25a05e607e83
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-=
+backlight.yaml
+> > @@ -0,0 +1,107 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-back=
+light.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Mediatek MT6370 Backlight
+> > +
+> > +maintainers:
+> > +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> > +
+> > +description: |
+> > +  This module is part of the MT6370 MFD device.
+> > +  The MT6370 Backlight WLED driver supports up to a 29V output voltage=
+ for
+> > +  4 channels of 8 series WLEDs. Each channel supports up to 30mA of cu=
+rrent
+> > +  capability with 2048 current steps (11 bits) in exponential or linea=
+r
+> > +  mapping curves.
+> > +
+> > +allOf:
+> > +  - $ref: common.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: mediatek,mt6370-backlight
+> > +
+> > +  default-brightness:
+> > +    minimum: 0
+> > +    maximum: 2048
+> > +
+> > +  max-brightness:
+> > +    minimum: 0
+> > +    maximum: 2048
+> > +
+> > +  enable-gpios:
+> > +    description: External backlight 'enable' pin
+> > +    maxItems: 1
+> > +
+> > +  mediatek,bled-pwm-enable:
+> > +    description: |
+> > +      Enable external PWM input for backlight dimming
+> > +    type: boolean
+> > +
+> > +  mediatek,bled-pwm-hys-enable:
+> > +    description: |
+> > +      Enable the backlight input-hysteresis for PWM mode
+> > +    type: boolean
+> > +
+> > +  mediatek,bled-pwm-hys-input-bit:
+> > +    $ref: /schemas/types.yaml#/definitions/uint8
+> > +    enum: [0, 1, 2, 3]
+> > +    description: |
+> > +      The selection of the upper and lower bounds threshold of backlig=
+ht
+> > +      PWM resolution. If we choose selection 3 (6 bits), the variation=
+ of PWM
+> > +      resolution needs over than 64 steps (2^6).
+> > +      value mapping:
+> > +        - 0: 1
+> > +        - 1: 2
+> > +        - 2: 4
+> > +        - 3: 6
+>
+> Nope, I said last time:
+> "In any case you cannot have values mapping"
+>
+> Please use proper real world value, not some register bits. The property
+> name also needs fixing.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 8090130b544b..c467b2778128 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6277,6 +6277,22 @@
- 			USB_REQ_GET_DESCRIPTOR request in milliseconds
- 			(default 5000 = 5.0 seconds).
- 
-+	usbcore.port_reset_tries=
-+			[USB] Set the retry time of port reset for each
-+			port initialization (default PORT_RESET_TRIES = 5).
-+
-+	usbcore.set_address_tries=
-+			[USB] set the retry time of set address for each
-+			port initialization (default SET_ADDRESS_TRIES = 2).
-+
-+	usbcore.get_descriptor_tries=
-+			[USB] set the retry time of set address for each
-+			port initialization (default GET_DESCRIPTOR_TRIES = 2).
-+
-+	usbcore.get_maxpacket0_tries=
-+			[USB] set the retry time of get maxpacket0 for each
-+			port initialization (default GET_MAXPACKET0_TRIES = 3).
-+
- 	usbcore.nousb	[USB] Disable the USB subsystem
- 
- 	usbcore.quirks=
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index b7f66dcd1fe0..c5c695886424 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2788,6 +2788,27 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
- #define HUB_LONG_RESET_TIME	200
- #define HUB_RESET_TIMEOUT	800
- 
-+/* define retry time for port reset */
-+static int port_reset_tries = PORT_RESET_TRIES;
-+module_param(port_reset_tries, int, S_IRUGO|S_IWUSR);
-+MODULE_PARM_DESC(port_reset_tries, "retry times of port reset for each port initialization");
-+
-+/* define retry time of set address */
-+static int set_address_tries = SET_ADDRESS_TRIES;
-+module_param(set_address_tries, int, S_IRUGO|S_IWUSR);
-+MODULE_PARM_DESC(set_address_tries, "retry times of set address for each port initialization");
-+
-+/* define retry time of get descriptor */
-+static int get_descriptor_tries = GET_DESCRIPTOR_TRIES;
-+module_param(get_descriptor_tries, int, S_IRUGO|S_IWUSR);
-+MODULE_PARM_DESC(get_descriptor_tries, "retry times of set address for each port initialization");
-+
-+/* define retry time of get maxpacket0 */
-+static int get_maxpacket0_tries = GET_MAXPACKET0_TRIES;
-+module_param(get_maxpacket0_tries, int, S_IRUGO|S_IWUSR);
-+MODULE_PARM_DESC(get_maxpacket0_tries,
-+		 "retry times of get maxpacket0 for each port initialization");
-+
- static bool use_new_scheme(struct usb_device *udev, int retry,
- 			   struct usb_port *port_dev)
- {
-@@ -2965,7 +2986,7 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
- 	clear_bit(port1, hub->warm_reset_bits);
- 
- 	/* Reset the port */
--	for (i = 0; i < PORT_RESET_TRIES; i++) {
-+	for (i = 0; i < port_reset_tries; i++) {
- 		status = set_port_feature(hub->hdev, port1, (warm ?
- 					USB_PORT_FEAT_BH_PORT_RESET :
- 					USB_PORT_FEAT_RESET));
-@@ -2989,7 +3010,7 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
- 		 * reset attempts to avoid warm reset loop.
- 		 */
- 		if (status == 0 || status == -ENOTCONN || status == -ENODEV ||
--		    (status == -EBUSY && i == PORT_RESET_TRIES - 1)) {
-+		    (status == -EBUSY && i == port_reset_tries - 1)) {
- 			usb_clear_port_feature(hub->hdev, port1,
- 					USB_PORT_FEAT_C_RESET);
- 
-@@ -4788,7 +4809,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 	 */
- 	do_new_scheme = use_new_scheme(udev, retry_counter, port_dev);
- 
--	for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
-+	for (retries = 0; retries < get_descriptor_tries; (++retries, msleep(100))) {
- 		if (do_new_scheme) {
- 			struct usb_device_descriptor *buf;
- 			int r = 0;
-@@ -4812,7 +4833,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 			 * 255 is for WUSB devices, we actually need to use
- 			 * 512 (WUSB1.0[4.8.1]).
- 			 */
--			for (operations = 0; operations < GET_MAXPACKET0_TRIES;
-+			for (operations = 0; operations < get_maxpacket0_tries;
- 					++operations) {
- 				buf->bMaxPacketSize0 = 0;
- 				r = usb_control_msg(udev, usb_rcvaddr0pipe(),
-@@ -4873,7 +4894,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 		 * authorization will assign the final address.
- 		 */
- 		if (udev->wusb == 0) {
--			for (operations = 0; operations < SET_ADDRESS_TRIES; ++operations) {
-+			for (operations = 0; operations < set_address_tries; ++operations) {
- 				retval = hub_set_address(udev, devnum);
- 				if (retval >= 0)
- 					break;
--- 
-2.36.1.476.g0c4daa206d-goog
+I so apologized for misunderstanding your meaning...
+I try to modify it like below.
+--------
+mediatek,bled-pwm-hys-input-threshold-steps:
+  $ref: /schemas/types.yaml#/definitions/uint8
+  enum: [1, 4, 16, 64]
+  description: |
+    The selection of the upper and lower bounds threshold of backlight
+    PWM resolution. If we choose selection 64, the variation of PWM
+    resolution needs over 64 steps.
+--------
+If these changes meet your expectations, I will try to modify
+"bled-ovp-microvolt" and "bled-ocp-microamp" in the same way.
+Thank you so much.
 
+>
+> > +
+> > +  mediatek,bled-ovp-shutdown:
+> > +    description: |
+> > +      Enable the backlight shutdown when OVP level triggered
+> > +    type: boolean
+> > +
+> > +  mediatek,bled-ovp-microvolt:
+> > +    enum: [0, 1, 2, 3]
+> > +    description: |
+> > +      Backlight OVP level selection.
+> > +      value mapping:
+> > +        - 0: 17000000
+> > +        - 1: 21000000
+> > +        - 2: 25000000
+> > +        - 3: 29000000
+>
+> No. Please test your bindings.
+>
+> microvolt cannot be 1 mV. It's 21000000, not 1. No value mappings.
+>
+> > +
+> > +  mediatek,bled-ocp-shutdown:
+> > +    description: |
+> > +      Enable the backlight shutdown when OCP level triggerred.
+> > +    type: boolean
+> > +
+> > +  mediatek,bled-ocp-microamp:
+> > +    enum: [0, 1, 2, 3]
+> > +    description: |
+> > +      Backlight OC level selection.
+> > +      value mapping:
+> > +        - 0: 900000
+> > +        - 1: 1200000
+> > +        - 2: 1500000
+> > +        - 3: 1800000
+>
+> Nope.
+>
+> > +
+> > +  mediatek,bled-channel-use:
+> > +    $ref: /schemas/types.yaml#/definitions/uint8
+> > +    description: |
+> > +      Backlight LED channel to be used.
+> > +      Each bit mapping to:
+> > +        - 0: CH4
+> > +        - 1: CH3
+> > +        - 2: CH2
+> > +        - 3: CH1
+> > +    minimum: 1
+> > +    maximum: 15
+> > +
+> > +required:
+> > +  - compatible
+> > +  - mediatek,bled-channel-use
+> > +
+> > +additionalProperties: false
+>
+>
+> Best regards,
+> Krzysztof
+
+Best regards,
+ChiaEn Wu
