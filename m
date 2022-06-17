@@ -2,46 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F1254F7DC
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 14:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F92754F85F
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 15:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236407AbiFQMvY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 08:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S232686AbiFQNfi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 09:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232477AbiFQMvY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 08:51:24 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DC137A84;
-        Fri, 17 Jun 2022 05:51:23 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 192342A5;
-        Fri, 17 Jun 2022 14:51:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655470281;
-        bh=6044Ae7YHS8XgtS8M1tFoHpK4NiU+wwOXC2x7BQ7Z78=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=COaincPjdXKl1B+/5mkNRMn6kFQ0raht3IJWuZ1+RxMFAYBQ1Fpk+blOKhy2VPFIP
-         wcMEOHgGxalCoUiO33fS7JrK9xfBVY2VQ2CEnYmVR+kF992v+Me3UWHrEg4f8KQpii
-         DMLmJ7laRYi2GnE74q7+Cz+j87s8nCqnvFczrMCE=
-Date:   Fri, 17 Jun 2022 15:51:08 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: fix list double add in uvcg_video_pump
-Message-ID: <Yqx4vPp78Sl2I3nU@pendragon.ideasonboard.com>
-References: <20220616030915.149238-1-w36195@motorola.com>
+        with ESMTP id S230232AbiFQNfh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 09:35:37 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7AD2C65A
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 06:35:37 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id k7so3902930plg.7
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 06:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GjQEnVfqWm7ZgA55LwJ6GGK0gfdSHhmp3bzTtWBEVhk=;
+        b=BNunKsthV4LsVEJpnuhGh3HAttS/lGsnLUhKjtA1k8EiWohtbeN6MCp8EuoYuUPZxM
+         T3aA3bmm06A0JW83f3LfWVLvbHa9pxUJiVHHv9ADSR3eP3tQh+lFilEEBgAegwUjqrNw
+         ApOlAW8UBZeeAKLMPWKhz08tpYgI14U9LBF4FS8+JTf/oi3D9kZsXNLxb4D/1fhWjs0t
+         0MLX4203TYsSOPSF+PCJ+GrWEksimnx5475iTFOw8+2fS4BH2Bmq825CVrITalsb6F5L
+         ++gwOrk1x/VpFPOlZF7sckDakxObu7EiraDbcbeau1FeYSQysDC13EPrfcJX7CUlPNOx
+         xnXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GjQEnVfqWm7ZgA55LwJ6GGK0gfdSHhmp3bzTtWBEVhk=;
+        b=norQNJ4DiV3ZgwK9rSr9N9jtNo8PX80wSYt6DtfqXG4lXPGs+2yJsPQchNsCQia0Yv
+         Mm/6NXtPRtuYXDNhTTgwiF/8exan5RR4UXm5Fez8B0uwjpjCo5GxMjjX/tug4it4hLpq
+         iQ7gyifKxQsIDc2xl+IYPmYep9selY3UTUSmvg85Ja+uLRUpDlUYETRqy2aupgww/qjR
+         +xhqCd+w0avAPB2VCv/+yXKvW9pmekFO3pOAdw7K1OK8+UxJstElGcTQ1/vHuMqqh9IM
+         AR6XutnnzQzl9wumy512ZF7v6QDyMkhYXMi810f6sRVGzfmv3yhNgI/z9f4cOXqJxUdH
+         CjOA==
+X-Gm-Message-State: AJIora+/7Qp9XSkIZqFMuTYHlPtx+HS5aSkA9Ht3IGU4fwbQFblSvzlo
+        YoUcmF11gTEFjkHELzYrn4m8x7UqtKY=
+X-Google-Smtp-Source: AGRyM1sJmkzfiR7qa6TjoLa1XNWYCmcXyKkrZCRfLBTAWctqzF9NWUUv/XxsJHsQpZZbyOZf1nTqJw==
+X-Received: by 2002:a17:90a:cb84:b0:1ea:ffd2:3075 with SMTP id a4-20020a17090acb8400b001eaffd23075mr6967882pju.106.1655472936562;
+        Fri, 17 Jun 2022 06:35:36 -0700 (PDT)
+Received: from localhost.localdomain (2001-b011-381b-9f7d-d1f2-0ec7-cc88-1351.dynamic-ip6.hinet.net. [2001:b011:381b:9f7d:d1f2:ec7:cc88:1351])
+        by smtp.gmail.com with ESMTPSA id l3-20020a17090aaa8300b001e08461ceaesm5545166pjq.37.2022.06.17.06.35.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Jun 2022 06:35:35 -0700 (PDT)
+From:   Charles Yeh <charlesyeh522@gmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     charles-yeh@prolific.com.tw, Charles Yeh <charlesyeh522@gmail.com>
+Subject: [PATCH] USB: serial: pl2303: Modify the detection method of PL2303HXN (TYPE_HXN)
+Date:   Fri, 17 Jun 2022 21:35:14 +0800
+Message-Id: <20220617133514.357-1-charlesyeh522@gmail.com>
+X-Mailer: git-send-email 2.24.1.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220616030915.149238-1-w36195@motorola.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,68 +67,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
+The setting value of bcdUSB & bcdDevice of PL2303TA is the same as the
+setting value of bcdUSB & bcdDevice of a certain chip of PL2303HXN
 
-Thank you for the patch.
+The setting value of bcdUSB & bcdDevice of PL2303TB is the same as the
+setting value of bcdUSB & bcdDevice of a certain chip of PL2303HXN
 
-On Wed, Jun 15, 2022 at 10:09:15PM -0500, Dan Vacura wrote:
-> A panic can occur if the endpoint becomes disabled and the
-> uvcg_video_pump adds the request back to the req_free list after it has
-> already been queued to the endpoint. The endpoint complete will add the
-> request back to the req_free list. Invalidate the local request handle
-> once it's been queued.
+The PL2303HXN series currently has several chips on sale, and several chips
+are about to be sold.
+The PL2303HXN cannot use bcdDevice to determine the type one by one.
 
-Good catch !
+Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
+---
+ drivers/usb/serial/pl2303.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-> <6>[  246.796704][T13726] configfs-gadget gadget: uvc: uvc_function_set_alt(1, 0)
-> <3>[  246.797078][   T26] list_add double add: new=ffffff878bee5c40, prev=ffffff878bee5c40, next=ffffff878b0f0a90.
-> <6>[  246.797213][   T26] ------------[ cut here ]------------
-> <2>[  246.797224][   T26] kernel BUG at lib/list_debug.c:31!
-> <6>[  246.807073][   T26] Call trace:
-> <6>[  246.807180][   T26]  uvcg_video_pump+0x364/0x38c
-> <6>[  246.807366][   T26]  process_one_work+0x2a4/0x544
-> <6>[  246.807394][   T26]  worker_thread+0x350/0x784
-> <6>[  246.807442][   T26]  kthread+0x2ac/0x320
-> 
-> Fixes: f9897ec0f6d3 ("usb: gadget: uvc: only pump video data if necessary")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Dan Vacura <w36195@motorola.com>
-> ---
->  drivers/usb/gadget/function/uvc_video.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index 93f42c7f800d..59e2f51b53a5 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -427,6 +427,9 @@ static void uvcg_video_pump(struct work_struct *work)
->  		if (ret < 0) {
->  			uvcg_queue_cancel(queue, 0);
->  			break;
-> +		} else {
-> +			/* Endpoint now owns the request */
-> +			req = NULL;
->  		}
->  		video->req_int_count++;
-
-I'd write it as
-
-		if (ret < 0) {
-			uvcg_queue_cancel(queue, 0);
-			break;
-		}
-
-		/* Endpoint now owns the request. */
-		req = NULL;
-		video->req_int_count++;
-
-Apart from that,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  	}
-
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 3506c47e1eef..95e5fdf3b80a 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -436,22 +436,23 @@ static int pl2303_detect_type(struct usb_serial *serial)
+ 		break;
+ 	case 0x200:
+ 		switch (bcdDevice) {
+-		case 0x100:
+-		case 0x105:
+-		case 0x305:
+-		case 0x405:
+-		case 0x605:
++		case 0x300:
++			if (!pl2303_supports_hx_status(serial))
++				return TYPE_HXN;
++			else
++				return TYPE_TA;
++		case 0x500:
++			if (!pl2303_supports_hx_status(serial))
++				return TYPE_HXN;
++			else
++				return TYPE_TB;
++		default:
+ 			/*
+ 			 * Assume it's an HXN-type if the device doesn't
+ 			 * support the old read request value.
+ 			 */
+ 			if (!pl2303_supports_hx_status(serial))
+ 				return TYPE_HXN;
+-			break;
+-		case 0x300:
+-			return TYPE_TA;
+-		case 0x500:
+-			return TYPE_TB;
+ 		}
+ 		break;
+ 	}
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
