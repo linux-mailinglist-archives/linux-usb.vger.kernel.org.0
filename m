@@ -2,102 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44A554FFED
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 00:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31D855001A
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 00:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbiFQW3e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 18:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S1353011AbiFQWni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 18:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245202AbiFQW33 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 18:29:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79F26163E;
-        Fri, 17 Jun 2022 15:29:28 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1307766017C8;
-        Fri, 17 Jun 2022 23:29:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655504967;
-        bh=oVlNccAWXofCU1rOW8Wgk44NVgnvXfyJSycx5cQ756M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L2L0Z+39SRcUlLM8Q14KmtnBdkik0nW0Xwl/uqTRuD/oODMJYjJKW/aN0+vbwH+At
-         MJFqWrpxklyeNec+W4YpaPJ3pr1+iQHLR+/QsTWniE8s9GimUvlzJx+16I9S2BEBVH
-         Qy/zRTjf8DqVrWp8aZ8r/DGwwXmbZPZaqoBRhDLrGyzkwANIwf8RymB7wJipZhcAsP
-         xasmWbZiOX/ADwadbDmbfRgQWNIGmc+B4O+ZFUs7uza3YtLQ1GHcC9mMaBZ9tDrAbF
-         aASUpk76bW6CDoerCKvewSf3E4VZgHmZLNPF9ipFi7824O9Ztr9aBzXLjrO7mzibri
-         IbbLLf9cJnuwg==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional clocks to be missing
-Date:   Fri, 17 Jun 2022 18:29:15 -0400
-Message-Id: <20220617222916.2435618-3-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220617222916.2435618-1-nfraprado@collabora.com>
-References: <20220617222916.2435618-1-nfraprado@collabora.com>
+        with ESMTP id S232007AbiFQWng (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 18:43:36 -0400
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08943BBC8;
+        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id q11so5890961iod.8;
+        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Zh/0Zx5VR9OkdNl9GEaMHnSoW3UuL0RxbuRlgNOyx3U=;
+        b=Hgil84+ELMVRzRXMKAfqAuU6mR3YljnBX0unOibFt6Act3TAaf96ovJZ4VvLIODbE9
+         Bh7/iPioI2soLxUkXk2ZAnggIYwROfH/3dMFghApTa6WIgwgHuYcJmpYKHBzjng4ma9H
+         TyrlMz51vOj6g4mJq5hg5OWaAGxtmwCrQu4wzx7BnlMEngd2KjP9VQIlCsfEJqguKwRg
+         opmiDyVWeKpcZGtkq1OIk7pSuYaQKqM86ugnGmwFzYvXS/7TucCu9ciQMWtqI8Pjgk8q
+         o8fcmTfShYHQQxL3O+ewacUihemAiO63qGoq5OgKeRUOxp8pH6rvYYBeX8A+ZG+jX0xe
+         nvjg==
+X-Gm-Message-State: AJIora/9GAMo/VuBIxH/7sS2TIqk2FheBgDP1NG9tMLMYVXT87ULcP+n
+        SJRHBXgrkfRjAcHolat9Pq8hi4s15w==
+X-Google-Smtp-Source: AGRyM1tvyT1XZEsULmIOGU/hr9lRpu/t3yqYEU1/GhEsnQese2mFTYGyCi7NOLnTQaaRUC8jarJyVw==
+X-Received: by 2002:a05:6638:d8c:b0:332:15ef:657f with SMTP id l12-20020a0566380d8c00b0033215ef657fmr6523987jaj.146.1655505814198;
+        Fri, 17 Jun 2022 15:43:34 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id i26-20020a023b5a000000b0032b3a781781sm2734205jaf.69.2022.06.17.15.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 15:43:33 -0700 (PDT)
+Received: (nullmailer pid 2574515 invoked by uid 1000);
+        Fri, 17 Jun 2022 22:43:32 -0000
+Date:   Fri, 17 Jun 2022 16:43:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     pavel@ucw.cz, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, szunichen@gmail.com,
+        lars@metafoo.de, matthias.bgg@gmail.com,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        lee.jones@linaro.org, ChiYuan Huang <cy_huang@richtek.com>,
+        linux-leds@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        jingoohan1@gmail.com, devicetree@vger.kernel.org, jic23@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 06/15] dt-bindings: mfd: Add Mediatek MT6370
+Message-ID: <20220617224332.GA2570673-robh@kernel.org>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-7-peterwu.pub@gmail.com>
+ <1655127197.567546.3564136.nullmailer@robh.at.kernel.org>
+ <CABtFH5JPu5tOg4wGJf5ay1-NJHLcPTK4XxADGTksHW1-6wjMRQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CABtFH5JPu5tOg4wGJf5ay1-NJHLcPTK4XxADGTksHW1-6wjMRQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current clock list in the binding doesn't allow for one of the
-optional clocks to be missing and a subsequent clock to be present. An
-example where this is an issue is in mt8192.dtsi, which has "sys_ck",
-"ref_ck", "xhci_ck" and would cause dtbs_check warnings.
+On Fri, Jun 17, 2022 at 07:15:49PM +0800, ChiaEn Wu wrote:
+> Hi Rob,
+> 
+> Rob Herring <robh@kernel.org> 於 2022年6月13日 週一 晚上9:33寫道：
+> >
+> > On Mon, 13 Jun 2022 19:11:37 +0800, ChiaEn Wu wrote:
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > Add Mediatek MT6370 binding documentation.
+> > >
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > ---
+> > >  .../bindings/mfd/mediatek,mt6370.yaml         | 279 ++++++++++++++++++
+> > >  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
+> > >  2 files changed, 297 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> > >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
+> > >
+> >
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >
+> > yamllint warnings/errors:
+> >
+> > dtschema/dtc warnings/errors:
+> > ./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: backlight: False schema does not allow {'compatible': ['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use': b'\x0f'}
+> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: charger: False schema does not allow {'compatible': ['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]], 'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels': [[1, 5]], 'usb-otg-vbus-regulator': {'regulator-name': ['mt6370-usb-otg-vbus'], 'regulator-min-microvolt': [[4350000]], 'regulator-max-microvolt': [[5800000]], 'regulator-min-microamp': [[500000]], 'regulator-max-microamp': [[3000000]], 'phandle': [[2]]}}
+> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: tcpc: False schema does not allow {'compatible': ['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, 4, 8]], 'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C'], 'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'], 'try-power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos': [[570527944]], 'op-sink-microwatt': [[10000000]], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@1': {'reg': [[1]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@2': {'reg': [[2]], 'endpoint': {'remote-endpoint': [[4294967295]]}}}}}
+> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: indicator: False schema does not allow {'compatible': ['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#size-cells': [[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator'], 'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]}, 'led@1': {'reg': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]], 'color': [[3]]}}, 'led@3': {'reg': [[3]], 'function': ['indicator'], 'color': [[0]], 'led-max-microamp': [[6000]]}}
+> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: pmic@34: flashlight: False schema does not allow {'compatible': ['mediatek,mt6370-flashlight'], '#address-cells': [[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[1]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}, 'led@1': {'reg': [[1]], 'led-sources': [[1]], 'function': ['flash'], 'color': [[0]], 'function-enumerator': [[2]], 'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]], 'flash-max-timeout-us': [[1248000]]}}
+> >         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb: backlight: mediatek,bled-channel-use: b'\x0f' is not of type 'object', 'array', 'boolean', 'null'
+> >         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
+> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/backlight: failed to match any schema with compatible: ['mediatek,mt6370-backlight']
+> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/charger: failed to match any schema with compatible: ['mediatek,mt6370-charger']
+> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/indicator: failed to match any schema with compatible: ['mediatek,mt6370-indicator']
+> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/flashlight: failed to match any schema with compatible: ['mediatek,mt6370-flashlight']
+> > Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:0:0: /example-0/i2c/pmic@34/tcpc: failed to match any schema with compatible: ['mediatek,mt6370-tcpc']
+> >
+> 
+> Before we submitted these patches, we had already checked by running
+> this command below,
+> "make DT_CHECKER_FLAGS=-m dt_binding_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml".
+> But we could not find any errors like your error msg after the checking process.
+> 
+> Our mfd dt-binding patch is dependent on "backlight dt-binding",
+> "charger dt-binding", "tcpc dt-binding", "indicator dt-binding" and
+> "flashlight dt-binding" patches.
+> Would you please apply them before you check mfd dt-binding patch?
 
-Change the clock list in a way that allows the middle optional clocks to
-be missing, while still guaranteeing a fixed order. The "ref_ck" is kept
-as a const even though it is optional for simplicity, since it is
-present in all current dts files.
+That is what is done. Not sure what happened here though.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-
- .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml       | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-index 63cbc2b62d18..99a1b233ec90 100644
---- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-+++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-@@ -80,8 +80,13 @@ properties:
-     items:
-       - const: sys_ck  # required, the following ones are optional
-       - const: ref_ck
--      - const: mcu_ck
--      - const: dma_ck
-+      - enum:
-+          - mcu_ck
-+          - dma_ck
-+          - xhci_ck
-+      - enum:
-+          - dma_ck
-+          - xhci_ck
-       - const: xhci_ck
- 
-   assigned-clocks:
--- 
-2.36.1
-
+Rob
