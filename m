@@ -2,74 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D6754F9C9
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 17:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5CF54F9D4
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 17:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382995AbiFQPAM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 11:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S1382587AbiFQPFL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 11:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382969AbiFQPAL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 11:00:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAC0393F0;
-        Fri, 17 Jun 2022 08:00:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BCAD61ACA;
-        Fri, 17 Jun 2022 15:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1003BC3411B;
-        Fri, 17 Jun 2022 15:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655478010;
-        bh=FzUIGxt79Fk2ddWDeOMMHRXgIZUq8KVOHqj6cKF2pAQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LMctRbce21P8PktfJss01bc/w4Bw9RjUgY9CGoxss9iB8yIuyWwiybiGXb6jp3e6v
-         JEz2nh545VL9VlrFvw3sH5taHZE4OJMErs8XpxqDsOayYsr6X5F44rUL4EW2DC0D8/
-         vB78AzCcFLD26P9Bt927+4KKmTxChcL73zuESliMjwetewanL3Mxfa42eP0JVoD7Da
-         2EajWBHxw1xXnKBihWMFfcZqoLNzPUVbFestagpc3WJFAy4KP9ZHgp5Zl4rXd1segY
-         m/b56wIB8aekqRa+ZK3Xnx26UdxK75dHv1H9USefVyjw64RVY8NiJvOOhrUKr4rV18
-         97seizP4D4uaA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EEEA1FD99FF;
-        Fri, 17 Jun 2022 15:00:09 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 5.19-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yqw361X4Szdht3HF@kroah.com>
-References: <Yqw361X4Szdht3HF@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yqw361X4Szdht3HF@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc3
-X-PR-Tracked-Commit-Id: 0698f0209d8032e8869525aeb68f65ee7fde12ad
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9057a646446c7ff3f1e7a97d0039bde7e7936279
-Message-Id: <165547800997.17120.11558122990521165550.pr-tracker-bot@kernel.org>
-Date:   Fri, 17 Jun 2022 15:00:09 +0000
+        with ESMTP id S1382080AbiFQPFK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 11:05:10 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8C0DE13E89
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 08:05:08 -0700 (PDT)
+Received: (qmail 768756 invoked by uid 1000); 17 Jun 2022 11:05:06 -0400
+Date:   Fri, 17 Jun 2022 11:05:06 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "open list:USB HID/HIDBP DRIVERS \[USB KEYBOARDS, MICE, REM..." 
+        <linux-usb@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Richard Gong <richard.gong@amd.com>
+Subject: Re: [PATCH v2] HID: usbhid: set mouse as a wakeup resource
+Message-ID: <YqyYIt2MLmoCRSA9@rowland.harvard.edu>
+References: <20220616183142.14472-1-mario.limonciello@amd.com>
+ <YqugZQiDu35Y8lTu@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqugZQiDu35Y8lTu@kroah.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Fri, 17 Jun 2022 10:14:35 +0200:
+On Thu, Jun 16, 2022 at 11:28:05PM +0200, Greg KH wrote:
+> On Thu, Jun 16, 2022 at 01:31:42PM -0500, Mario Limonciello wrote:
+> > The USB HID transport layer doesn't set mice for wakeup by default so users
+> > can not wake system from s2idle using wired USB mouse. However, users can
+> > wake the same system from Modern Standby on Windows with the same wired
+> > USB mouse.
+> > 
+> > Microsoft documentation indicates that all USB mice and touchpads should
+> > be waking the system from Modern Standby. To align expectations from users
+> > make this behavior the same when the system is configured by the OEM and
+> > the user to use s2idle in Linux.
+> > 
+> > Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#input-devices-1
+> > Link: https://lore.kernel.org/linux-usb/20220404214557.3329796-1-richard.gong@amd.com/
+> > Suggested-by: Richard Gong <richard.gong@amd.com>
+> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > ---
+> > More people keep coming to us confused that they couldn't wake a Linux system
+> > up from sleep using a mouse, so this patch is being revived.
+> 
+> How many different devices did you test this on?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc3
+Another issue is whether wakeup for a mouse means pressing a button or 
+just moving the mouse.  For a mouse that uses LEDs to sense motion, 
+moving it won't generate a wakeup request -- USB suspend does not allow 
+the mouse to use enough current to keep the LEDs illuminated.  On the 
+other hand, there's no reason why wakeup by pressing a button shouldn't 
+always work.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9057a646446c7ff3f1e7a97d0039bde7e7936279
+Also, the patch description doesn't seem to appreciate the difference 
+between the default value for the wakeup setting and actually supporting 
+wakeup.  As long as the hardware supports it, the default wakeup setting 
+doesn't matter all that much, because the user can change the setting 
+during system startup or whenever he wants.  But if the hardware doesn't 
+support wakeup then the default setting makes no difference at all.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Alan Stern
