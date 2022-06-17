@@ -2,81 +2,273 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5CF54F9D4
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 17:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B0654F9E1
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 17:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382587AbiFQPFL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jun 2022 11:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S1382989AbiFQPJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jun 2022 11:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382080AbiFQPFK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 11:05:10 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8C0DE13E89
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 08:05:08 -0700 (PDT)
-Received: (qmail 768756 invoked by uid 1000); 17 Jun 2022 11:05:06 -0400
-Date:   Fri, 17 Jun 2022 11:05:06 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "open list:USB HID/HIDBP DRIVERS \[USB KEYBOARDS, MICE, REM..." 
-        <linux-usb@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Richard Gong <richard.gong@amd.com>
-Subject: Re: [PATCH v2] HID: usbhid: set mouse as a wakeup resource
-Message-ID: <YqyYIt2MLmoCRSA9@rowland.harvard.edu>
-References: <20220616183142.14472-1-mario.limonciello@amd.com>
- <YqugZQiDu35Y8lTu@kroah.com>
+        with ESMTP id S236634AbiFQPJY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jun 2022 11:09:24 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D55435868
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 08:09:22 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id d14so6546116eda.12
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 08:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wVlgAsZcjgEndPSaTBGgG2UpQMPJXQeZ+RRRV+uGzds=;
+        b=eujYXJWTngTW+P7GEEq8gLwxqE0e+vnigGGrMjJZJvpCqIao7qMv7+EO86HXeV7QfB
+         5Jhv/itc+gbfzvX3R9/FfkpCGX7bVunQwaNy2BdD6ExtuAmUtk3+6xvvV96i4cBHVXam
+         frXbIwEU+qslRqkCOQo8jGqLDfGK8MaWDO23U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wVlgAsZcjgEndPSaTBGgG2UpQMPJXQeZ+RRRV+uGzds=;
+        b=AOLig8gxpLL4CsLEodcxjhPOTOAb8a01vappqFXneY62Qp60dTZj9pO5koz3lbrOUw
+         cdyYuIUBNJn47pdYrF1T4X1BhqA70ydZaLlGwzMXaBKqL0dzce/aSSA5YEMqR5ReBDJh
+         2FLgFaw3Zaj7LRoZSDGIwlAoghamL3J/VNaeVgQtyrp1n/8D2yDrBoPap+/uaVz/GSAj
+         Ap88JXz+KPFa4PUOy6dul2ka5G65zp4aTPnwRRk5OLB0/oDYysme6tkWM2eZw8+f/zeo
+         tVET6cTDjA7hli+OfcvweegYHsTrzMjlcIF0sQo+AXvnnXO8Ptwi/qHLS8y1k+0SnyfR
+         PfwQ==
+X-Gm-Message-State: AJIora/M3SxP6ITp2kmMhi5+ePN+LxrpYS82+wDXhrI+EM0ETSFgv/qs
+        Z7nP/52A2JD1h9PwAUw16o3POPyl52+BQ6mSd8w=
+X-Google-Smtp-Source: AGRyM1s5FRcfwaCN1K6GFuCG+belTEGcj9zPzdgmttSmtoKaL/7gyHbfksqQAZAZNDzlINW50ftCLQ==
+X-Received: by 2002:a05:6402:4001:b0:435:b20:d7ae with SMTP id d1-20020a056402400100b004350b20d7aemr12858100eda.90.1655478560873;
+        Fri, 17 Jun 2022 08:09:20 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id c4-20020a056402120400b004356112a8a2sm1273557edw.15.2022.06.17.08.09.19
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 08:09:19 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id n1so5895219wrg.12
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jun 2022 08:09:19 -0700 (PDT)
+X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
+ p18-20020a5d68d2000000b0021031cc64a6mr9739954wrw.679.1655478558608; Fri, 17
+ Jun 2022 08:09:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqugZQiDu35Y8lTu@kroah.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220609192000.990763-1-mka@chromium.org> <20220609121838.v22.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <CAD=FV=W6erE8ByabmYSL_OWJPKYGqysDMGYQX6j7_PSEYGZ4YQ@mail.gmail.com>
+ <YqpprpUHmlD62YzI@google.com> <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
+ <Yqub17iT4O7aqFMi@google.com> <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
+ <YquoSMiQS+RG8rOM@google.com> <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
+ <YqvMffveCPiKQEUk@google.com>
+In-Reply-To: <YqvMffveCPiKQEUk@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 17 Jun 2022 08:09:06 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
+Message-ID: <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
+Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
+        Peter Chen <peter.chen@kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 11:28:05PM +0200, Greg KH wrote:
-> On Thu, Jun 16, 2022 at 01:31:42PM -0500, Mario Limonciello wrote:
-> > The USB HID transport layer doesn't set mice for wakeup by default so users
-> > can not wake system from s2idle using wired USB mouse. However, users can
-> > wake the same system from Modern Standby on Windows with the same wired
-> > USB mouse.
-> > 
-> > Microsoft documentation indicates that all USB mice and touchpads should
-> > be waking the system from Modern Standby. To align expectations from users
-> > make this behavior the same when the system is configured by the OEM and
-> > the user to use s2idle in Linux.
-> > 
-> > Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#input-devices-1
-> > Link: https://lore.kernel.org/linux-usb/20220404214557.3329796-1-richard.gong@amd.com/
-> > Suggested-by: Richard Gong <richard.gong@amd.com>
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> > More people keep coming to us confused that they couldn't wake a Linux system
-> > up from sleep using a mouse, so this patch is being revived.
-> 
-> How many different devices did you test this on?
+Hi,
 
-Another issue is whether wakeup for a mouse means pressing a button or 
-just moving the mouse.  For a mouse that uses LEDs to sense motion, 
-moving it won't generate a wakeup request -- USB suspend does not allow 
-the mouse to use enough current to keep the LEDs illuminated.  On the 
-other hand, there's no reason why wakeup by pressing a button shouldn't 
-always work.
+On Thu, Jun 16, 2022 at 5:36 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> On Thu, Jun 16, 2022 at 03:46:15PM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Thu, Jun 16, 2022 at 3:01 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> > >
+> > > On Thu, Jun 16, 2022 at 02:28:38PM -0700, Doug Anderson wrote:
+> > > > Hi,
+> > > >
+> > > > On Thu, Jun 16, 2022 at 2:08 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> > > > >
+> > > > > On Thu, Jun 16, 2022 at 01:12:32PM -0700, Doug Anderson wrote:
+> > > > > > Hi,
+> > > > > >
+> > > > > > On Wed, Jun 15, 2022 at 4:22 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> > > > > > >
+> > > > > > > > > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+> > > > > > > > > +{
+> > > > > > > > > +       int i;
+> > > > > > > > > +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
+> > > > > > > > > +       struct device_node *np, *npc;
+> > > > > > > > > +       struct platform_device *pdev = NULL;
+> > > > > > > > > +       struct pdev_list_entry *pdle;
+> > > > > > > > > +
+> > > > > > > > > +       if (!parent_hub->dev.of_node)
+> > > > > > > > > +               return;
+> > > > > > > > > +
+> > > > > > > > > +       for (i = 1; i <= parent_hub->maxchild; i++) {
+> > > > > > > > > +               np = usb_of_get_device_node(parent_hub, i);
+> > > > > > > > > +               if (!np)
+> > > > > > > > > +                       continue;
+> > > > > > > > > +
+> > > > > > > > > +               if (!of_is_onboard_usb_hub(np))
+> > > > > > > > > +                       goto node_put;
+> > > > > > > > > +
+> > > > > > > > > +               npc = of_parse_phandle(np, "companion-hub", 0);
+> > > > > > > > > +               if (npc) {
+> > > > > > > > > +                       /*
+> > > > > > > > > +                        * Hubs with companions share the same platform device.
+> > > > > > > > > +                        * Create the plaform device only for the hub that is
+> > > > > > > > > +                        * connected to the primary HCD (directly or through
+> > > > > > > > > +                        * other hubs).
+> > > > > > > > > +                        */
+> > > > > > > > > +                       if (!usb_hcd_is_primary_hcd(hcd)) {
+> > > > > > > > > +                               of_node_put(npc);
+> > > > > > > > > +                               goto node_put;
+> > > > > > > > > +                       }
+> > > > > > > > > +
+> > > > > > > > > +                       pdev = of_find_device_by_node(npc);
+> > > > > > > > > +                       of_node_put(npc);
+> > > > > > > > > +               } else {
+> > > > > > > > > +                       /*
+> > > > > > > > > +                        * For root hubs this function can be called multiple times
+> > > > > > > > > +                        * for the same root hub node (the HCD node). Make sure only
+> > > > > > > > > +                        * one platform device is created for this hub.
+> > > > > > > > > +                        */
+> > > > > > > > > +                       if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
+> > > > > > > > > +                               goto node_put;
+> > > > > > > >
+> > > > > > > > I don't understand the "else" case above. What case exactly are we
+> > > > > > > > handling again? This is when:
+> > > > > > > > * the hub is presumably just a 2.0 hub since there is no companion.
+> > > > > > > > * our parent is the root hub and the USB 2.0 hub we're looking at is
+> > > > > > > > not the primary
+> > > > > > >
+> > > > > > > The 'else' case can be entered for hubs connected to a root hub or to another
+> > > > > > > hub further down in the tree, but we bail out only for first level hubs.
+> > > > > > >
+> > > > > > > > ...but that doesn't make a lot of sense to me? I must have missed something...
+> > > > > > >
+> > > > > > > It's not super-obvious, this bit is important: "this function can be called
+> > > > > > > multiple times for the same root hub node". For any first level hub we only
+> > > > > > > create a pdev if this function is called on behalf of the primary HCD. That
+> > > > > > > is also true of a hub connected to the secondary HCD. We only want to create
+> > > > > > > one pdev and there is supposedly always a primary HCD.
+> > > > > > >
+> > > > > > > Maybe it would be slightly clearer if the function returned before the loop
+> > > > > > > if this condition is met.
+> > > > > >
+> > > > > > I guess I'm still pretty confused. You say "For root hubs this
+> > > > > > function can be called multiple times for the same root hub node".
+> > > > > > Does that mean that the function will be called multiple times with
+> > > > > > the same "parent_hub", or something else.
+> > > > >
+> > > > > It is called with a different "parent_hub", however for root hubs the
+> > > > > DT node is the same for both root hubs (it's the DT node of the
+> > > > > controller since there are no dedicated nodes for the root hubs).
+> > > > >
+> > > > > Just to make sure this isn't the source of the confusion: the root hubs
+> > > > > are part of the USB controller, not 'external' hubs which are directly
+> > > > > connected to the controller. I call the latter 'first level hubs'.
+> > > > >
+> > > > > > Unless it's called with the same "parent_hub" then it seems like if
+> > > > > > the USB device has a device tree node and that device tree node is for
+> > > > > > a onboard_usb_hub and there's no companion node then we _always_ want
+> > > > > > to create the platform device, don't we? If it is called with the same
+> > > > > > "parent_hub" then I'm confused how your test does something different
+> > > > > > the first time the function is called vs. the 2nd.
+> > > > >
+> > > > > Let's use an adapted trogdor DT with only a USB 2.x hub as an example:
+> > > > >
+> > > > > usb_1_dwc3 {
+> > > > >          dr_mode = "host";
+> > > > >          #address-cells = <1>;
+> > > > >          #size-cells = <0>;
+> > > > >
+> > > > >          /* 2.x hub on port 1 */
+> > > > >          usb_hub_2_x: hub@1 {
+> > > > >                  compatible = "usbbda,5411";
+> > > > >                  reg = <1>;
+> > > > >                  vdd-supply = <&pp3300_hub>;
+> > > > >          };
+> > > > > };
+> > > > >
+> > > > > 1st call: the 'parent_hub' corresponds to the USB 3.x root hub of
+> > > > > usb_1_dwc3, the DT node of the hub is 'usb_1_dwc3'. The function
+> > > > > iterates over the ports, finds usb_hub_2_x, enters the else branch
+> > > > > (no companion hub), checks that the function was called on behalf
+> > > > > of the primary controller and creates the pdev.
+> > > > >
+> > > > > 2nd call: the 'parent_hub' corresponds to the USB 2.x root hub of
+> > > > > usb_1_dwc3, the DT node of the hub is also 'usb_1_dwc3'. The function
+> > > > > iterates over the ports, finds usb_hub_2_x, enters the else branch
+> > > > > (no companion hub), sees that it is not called on behalf of the
+> > > > > primary controller and does not create a second (unnecessary) pdev.
+> > > > >
+> > > > > Is it clearer now?
+> > > >
+> > > > Ah, I get it now! Sorry for being so dense...
+> > >
+> > > No worries, it's certainly not obvious and probably my commentary could
+> > > have been clearer.
+> > >
+> > > > So like this:
+> > > >
+> > > > Root hubs (those hubs with no parent) are all created with the same
+> > > > device_node, the one for the controller itself. We don't want to
+> > > > iterate through the same children multiple times, so we bail right
+> > > > away if we're detect that `parent_hub` is a root hub and we're not on
+> > > > the primary HCD.
+> > >
+> > > yep
+> > >
+> > > > For all other cases the primary and secondary controllers have distinct
+> > > > device_nodes.
+> > >
+> > > You probably mean that all non-root hubs have distinct nodes, so for these
+> > > the function is only called once.
+> > >
+> > > > I guess in theory that test could go before the "companion-hub" test,
+> > > > though I don't see any case where it truly matters...
+> > >
+> > > Yeah, I'm still wondering whether it would be slightly less confusing to
+> > > bail before the loop (besides saving a few cycles), it would eliminate
+> > > the conflation with the 'companion-hub' check.
+> >
+> > I'm not sure how that would work, though? You'd essentially need two loops then?
+>
+> Maybe I got myself confused, but I think the behavior would be the same as
+> now, without a second loop:
+>
+> We never create a pdev if the parent is a root hub and the controller is the
+> secondary. Even for a hub with companion the pdev is only created when the call
+> comes from the primary controller.
+>
+> Does that make sense?
 
-Also, the patch description doesn't seem to appreciate the difference 
-between the default value for the wakeup setting and actually supporting 
-wakeup.  As long as the hardware supports it, the default wakeup setting 
-doesn't matter all that much, because the user can change the setting 
-during system startup or whenever he wants.  But if the hardware doesn't 
-support wakeup then the default setting makes no difference at all.
+Yes, looking at it with fresh eyes I think you're right.
 
-Alan Stern
+Looking at the "companion-hub" case with fresh eyes, too, I wonder if
+that can be simpler. If we find a companion hub, do we need both the
+check for usb_hcd_is_primary_hcd() and the check to see whether the
+pdev was already created?
+
+
+-Doug
