@@ -2,257 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B695454EE82
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 02:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0A254EF36
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jun 2022 04:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379436AbiFQAgU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jun 2022 20:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S1379722AbiFQCUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jun 2022 22:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379410AbiFQAgT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 20:36:19 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF673F89D
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 17:36:16 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so2835959pjg.5
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jun 2022 17:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KLXwwaez+w1CBq2L3RdXisE4PbvCnwjz3NistiIESxw=;
-        b=b7HhvtORwCIAMgUHPSO07xPy9BsWtqJXn+2BVo8Zu5ZJrukA8dUOGbPmKDrw5kMHcx
-         sgATkFTLs/wwF/4w2HPuZm+bVKEcXFb2mDCDLj5eLlvNPBLCXfP/b5PHle3q7mgYjDrW
-         cVtcE5S1aGPNm+bQmf1OrF27z49UhlAV4eF0Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KLXwwaez+w1CBq2L3RdXisE4PbvCnwjz3NistiIESxw=;
-        b=a0t3jJZayQGKLeTj9ZiyDQfesiLjhLXA/M7oE3ml4HzrKzlf0ZouEcsVZmSSBX5Zix
-         rzCULENnfzJAMVEbry9TvKdQLRlJFIdiMAC2jmXzXgpNzHr7hmm/ZSeJVd0ytit1K6iP
-         gadRne4K2/2+C8Z7RaldpYogxqZDNhmreTe5knlX1lLzqS7tWWMoTUA0UmQAXYKbY21N
-         iWVJfnT9EKv08n7FRVr6io+ysksMJRbQIfXwpNyj7I/EKQy8coqJ5aWFRRWS2C7U2kPU
-         Ibrht+6z384OTDhu7Mzhov34raUPBtqADFT2hA72lE+dYZlgIWI6xRUejtmKCveMqc6W
-         v1hQ==
-X-Gm-Message-State: AJIora+99R+eFaivdngwlwGizMSsidF5ZnCGycGwPLtK9TnHj5+pjBTG
-        7i6o2V9SDn/lj0VcGi79gvqR9w==
-X-Google-Smtp-Source: AGRyM1s7tf4v/toOUUNI5FljFpHp1LWzRnHlifkrkr+jYvaMeJMyAwsQLEvEV8CMX+R6hmNCCK2OpQ==
-X-Received: by 2002:a17:903:244a:b0:167:74f3:7463 with SMTP id l10-20020a170903244a00b0016774f37463mr7103839pls.44.1655426175854;
-        Thu, 16 Jun 2022 17:36:15 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:4ef5:7e3b:63ba:fc4])
-        by smtp.gmail.com with UTF8SMTPSA id y11-20020a170902d64b00b00161955fe0d5sm2176252plh.274.2022.06.16.17.36.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 17:36:15 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 17:36:13 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YqvMffveCPiKQEUk@google.com>
-References: <20220609192000.990763-1-mka@chromium.org>
- <20220609121838.v22.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <CAD=FV=W6erE8ByabmYSL_OWJPKYGqysDMGYQX6j7_PSEYGZ4YQ@mail.gmail.com>
- <YqpprpUHmlD62YzI@google.com>
- <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
- <Yqub17iT4O7aqFMi@google.com>
- <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
- <YquoSMiQS+RG8rOM@google.com>
- <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
+        with ESMTP id S1379662AbiFQCUy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jun 2022 22:20:54 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2091.outbound.protection.outlook.com [40.107.255.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EB064BC3;
+        Thu, 16 Jun 2022 19:20:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lCOGe50n1MC+wo35QwadVZXvYFiET+xqkp2Ba/AY+tzYAM8arpKTBRrLNNE3cV2vlC4ZJjqZ8Kn1gr0M4m4UASaDTucUgoMPig7Xt74z/CU23Oz2HL9urMwVJCyLULJOGtB9kTt77E58GE7ppZ/sWlFEh94stePnia4q3i185Q7JJl4Ob7dVLQkiQtJ2OFN0QAvKytkXgetN5b/eWWRDcCBSJG/M/BV8C8NZweFX2YXCOruh9Duquclb2VT4tSLt9f4lHafTgY/SNbUJ9W5BR67EAuAcaSgMQwiLeJODsSo7xzfVNYTVZBU5nIZQfDz/9Goth0MvFU7v8Jv+3HC+GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=foNXHRy/Q+mMhXtE+2H3C8vpLthVM8mmLJKBgfz6pAk=;
+ b=JQVFprHnrqzfFPGDhOuqaISr2vNXQK6ECFgfuCj9ZgV/JMNMOo9LzLoyGqZ72KG1AjW6RT/VPjTkuVc7aqVC5wSIATZVHcUyuEOtTbJcoB7UxaBBqikee5eLi+8gcUA9ggYHAWUEsOKVl/6zDZ9vXl4ifvn+ZUwM2N4H82x7hUiGoKH484gVKtWq10lXfQTlTEg4Uahi5vptx6vBEPGqTcaVZIBvERWcFhbddx1z/4wtDGGIHB5EZgSlRIYKIw73c8GlxsjvOXKk2PgCZv3Ddd3HjgIfcvDfSlA7Jh8VBLvC3R65tR47biKWQHY86lxLpkYZrqcPfaYVPbsCpqyK9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=foNXHRy/Q+mMhXtE+2H3C8vpLthVM8mmLJKBgfz6pAk=;
+ b=rvYDBQb31BbxZ0Mpbt6HH7XQpnJrScmwyUpxHf7hvv31efVepODFZLnlMmtpi644YCtucWgGi8VOvMOVsZPjUskL+PeZ6I2DzoD5Zqh8tGolSphzXd0kZasnlDp0RF2jbZDFrgL7Hm1yTJursLjwnYL5POMuRj9AMLt9yxgBQ9EYkFOPU4bvepAmWeL+kk9wEXEN0x9Nxhfqeti7Jpdhaq7PBgD49ey3w8nsAOe8DN6BQ5uaWFC4veXYQx5quUG5FPGBEkXXRc+IHKuqo396QGMfFdw46v3ZupyZlLqOBjtVQzb7kvth/1LokHvw8+pmeX/pDEV0TCQ1RsDSdMEVYg==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by HK0PR06MB3764.apcprd06.prod.outlook.com (2603:1096:203:ae::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 17 Jun
+ 2022 02:20:44 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::7c42:9783:92c9:f237%7]) with mapi id 15.20.5332.022; Fri, 17 Jun 2022
+ 02:20:44 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Zheng Bin <zhengbin13@huawei.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "gaochao49@huawei.com" <gaochao49@huawei.com>
+Subject: RE: [PATCH -next] usb: gadget: aspeed_udc: fix missing
+ spin_unlock_irqrestore in ast_udc_ep_queue
+Thread-Topic: [PATCH -next] usb: gadget: aspeed_udc: fix missing
+ spin_unlock_irqrestore in ast_udc_ep_queue
+Thread-Index: AQHYgYQVw74ia/ux5UGHL+s/JxFveq1S3kQg
+Date:   Fri, 17 Jun 2022 02:20:44 +0000
+Message-ID: <HK0PR06MB3202958ED74CD706458B85CE80AF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220616133508.3655864-1-zhengbin13@huawei.com>
+In-Reply-To: <20220616133508.3655864-1-zhengbin13@huawei.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 09d90649-6636-42e8-3162-08da5007fb8e
+x-ms-traffictypediagnostic: HK0PR06MB3764:EE_
+x-microsoft-antispam-prvs: <HK0PR06MB3764FD4ECE0855A91F784E5C80AF9@HK0PR06MB3764.apcprd06.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rl3IBuL+QfWQ4IQPOTkOrWbNN9YpkLT6Kp1i4BpDwR9aQFThkVVJUIQ/LNOnQ6Z+i4SVt0jTxBZDB1k0Dc9pWrfVylURnQQ5ZADM9DqX/V+YePsJ/29rthwZIK18XIgDV6JcmHCz1vZnyTdqlyNBhZiLvsvR4Dl1qEAztDMdiO4hRJQ6zJypOFq0IvDBXjo08A4gPDOT9eqhw1M5QdY7N2PZh6033nTuwc2E/5/HoVi4UjlJ+FlJABcldKEBl6D2OBhzgusSD2d5q8a+kgNyTqp9iEb53GrsKc1gJcxx1H5gkpTCWYda221evlONsqpR/h139QlT8iLON+Wuh8mhxussRDhS40wfLLBO8I94vvXOBcHMIt+Lia797O0vwLNBr+4nsPbHtMd7atHfwR1R0gW1toGfzTZkv3zQdzBzxPZsSaqm3U8yYEPymelHCIOYji62fNyICBLBDVJ3LHkx2KR6356fS0sl0bdW1s2e4QlKp64IUsW+kdW0O8vl1UDz1WeVjQZRq6of2zjYfLv6m1flpquTOGI7QWFxMeUqDq5G9UjZ6CEiqlhH9ShPhNKllCcm1D3OUrtJZUiMMqhzEL6rcO7nMNjwfcy+cnl4Hfv91oIhvpgEW2Lkp7DkyWiI1tOwd465VjpF89B4xzP5QwFbTEVE7KnkC0UiKIeuIs7hQpGxXoyBmq8/WuFPKcCdIABvtM5lExdmNr1iAx9stg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(396003)(39850400004)(366004)(38100700002)(316002)(186003)(110136005)(5660300002)(55016003)(33656002)(122000001)(41300700001)(2906002)(6506007)(7696005)(66446008)(66946007)(66476007)(64756008)(66556008)(8676002)(4326008)(38070700005)(4744005)(76116006)(71200400001)(26005)(9686003)(7416002)(83380400001)(508600001)(86362001)(52536014)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jhZZ0BplSBMuGDl1ApCXPyaAMiBaGLWZFyvis6Jzf3D3JbeD0UDAtDh2QDDM?=
+ =?us-ascii?Q?XTyCV6P4oeIbpp35JeKgpVFy/jBUDxxTs1eNDWrqkei8HGAHn5X/fQU1p2K2?=
+ =?us-ascii?Q?Wy12P9NQIiWBaVkal6x6wLwi2wLMXFr5Kya1+Ikj8rus6iEL12kWeIhOnoyu?=
+ =?us-ascii?Q?UbdiB9V7IgLs9moXWDjhD9krkGcT6wCVZoOFf0Ln1jAX+Q5naVf0asAvO95s?=
+ =?us-ascii?Q?jh+wjUF05k0oZkOZKqZctq6/9ZnuM3zmC44VkOXmHjCOkNNOp+bDhOu00kdM?=
+ =?us-ascii?Q?JYi+8Gh9AkfZNkznmeBz1KN73Wlm65xzWlXAqwH+IUGJHGLmNvnNd3lqQH69?=
+ =?us-ascii?Q?hveuRxZd46zNeeD3UPoEt9foySPTGhwsn/4pWPDN6OFAAvzoZYqLolhwEnQ6?=
+ =?us-ascii?Q?rCOc5U7Vs4FuUHhA2O2ZuySmzoRiYGENioHNuQcF1ujeMhpirAMaldlNQAR3?=
+ =?us-ascii?Q?33A2zo3Dm14uA9uLDiMZlVksDn5+Stf+8GlpuTT3nUrA9+AJvACyLvUOC7cC?=
+ =?us-ascii?Q?VbvEjwBL2aqJuHc7UtM0xRiA9V6q0hVKjEr2p21b9RKrl4oicfd/xnuoiQbm?=
+ =?us-ascii?Q?21xZG9edAEjcKw7d7yJ/D1vLJpW47Hw+aQbgHvxgavYFKDeqgsgxjPTayAG5?=
+ =?us-ascii?Q?ywKr9qGJIw/ULXA2/RVnJRImswqKKIae2X8LjTXThCRwSHxf6DbPNi47LjSC?=
+ =?us-ascii?Q?7P951tXnuBHwzjbZhzbcasCD00B0do1I3ISDyHKdKMrIMJryIe5/4pfu4Jti?=
+ =?us-ascii?Q?9YNtCYPxH/tBMFkpzW0jUn+DqTqx2FsXPzn6vp0erN3PYrX/CssiMmzuRR56?=
+ =?us-ascii?Q?ssQlE04x1QxBqDoLJOloJcJ01cqbJpfKB/kCDM0zD6cHWLvadRJnYCvVOXkp?=
+ =?us-ascii?Q?17jWK1o+xO62un3gKx4pwA4urWhDUvilmJYgyYB6MgPsZTVlzJwBv3jRgwi3?=
+ =?us-ascii?Q?NADwbq5KUEpdczgdbN6QlCPUBgjtMF73uzH93q6mKYKan1Ecyx3VsZ0YoMca?=
+ =?us-ascii?Q?JkPsNYXGZQcCNf2uk64bG7CrfS70wcR0LnsnNmb2Vz6kobrv8A5zIkwdrjIl?=
+ =?us-ascii?Q?QodD5idHMvzeZfG9Anc3uioQe2iCC+rc1tu90Ws1Cb2pm8x17dAt9jmdFxwX?=
+ =?us-ascii?Q?KIlh8dOJqXjyWQObLz7SiqM3rodSh+Ms8SJUONkIWXKkiKYqz4Jt5IQLX9La?=
+ =?us-ascii?Q?rw0pMq3hTPbL4SPtQtVv8gSxcU5tep1jEnJi4aiowX/2EVOyuAH/PCFB2oYD?=
+ =?us-ascii?Q?yVSaSwR6W6RqjwPP0S2CtXM2OtIDZ1T2MtamqNuynehXwgFkDQJoo5fev1jx?=
+ =?us-ascii?Q?uNm1SlDbZI2lfVuoeOQ4L3J5fkO+nYBoQ8ow+MXaqR11VHf3tDhrTTiBDnbd?=
+ =?us-ascii?Q?p+n/mrtjG3Xk42zjVLFYO/eG7KUF0iU5n+8C3FhUKenQ+FLe7TOIqFMkxdH4?=
+ =?us-ascii?Q?ICNGIt/8VX2Tx9a0fNgCVyWbX21f6Vf2yvrMEw5LEfp3YuYXU+5AsnqcAKgE?=
+ =?us-ascii?Q?LsNI6Gw2Tja0Gh/ur/VbxUcV7lf0gwuZX1csThClRrXeMv5jJa1zaBJLeuM5?=
+ =?us-ascii?Q?RXoWOML3ipuUS6imx15gA47u/98+Jyw1Jf+wTKD6JoGuZhUYG10TG0etgRcu?=
+ =?us-ascii?Q?yzyIJ1IZG6VSyPWs4VSKL2BRKM8JLnIPbQStr3uwGq0WATns4g2t5K9TJDRn?=
+ =?us-ascii?Q?qBqg7ueevEbmM67IXg7WGCdz+myZPbFQnUpSvGAeotNAM0R6iY4DHz1i9PgW?=
+ =?us-ascii?Q?5HxzuItQjA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09d90649-6636-42e8-3162-08da5007fb8e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2022 02:20:44.1427
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GLs6E/yG9QxAIOYMjayPAKd4WXH0q+AbGeTJqZyc29xTPVgDh+xCWgIXc3tj9YlRd8XGRqpocaMPJUdPeoyzCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3764
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 03:46:15PM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Jun 16, 2022 at 3:01 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > On Thu, Jun 16, 2022 at 02:28:38PM -0700, Doug Anderson wrote:
-> > > Hi,
-> > >
-> > > On Thu, Jun 16, 2022 at 2:08 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> > > >
-> > > > On Thu, Jun 16, 2022 at 01:12:32PM -0700, Doug Anderson wrote:
-> > > > > Hi,
-> > > > >
-> > > > > On Wed, Jun 15, 2022 at 4:22 PM Matthias Kaehlcke <mka@chromium.org> wrote:
-> > > > > >
-> > > > > > > > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
-> > > > > > > > +{
-> > > > > > > > +       int i;
-> > > > > > > > +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
-> > > > > > > > +       struct device_node *np, *npc;
-> > > > > > > > +       struct platform_device *pdev = NULL;
-> > > > > > > > +       struct pdev_list_entry *pdle;
-> > > > > > > > +
-> > > > > > > > +       if (!parent_hub->dev.of_node)
-> > > > > > > > +               return;
-> > > > > > > > +
-> > > > > > > > +       for (i = 1; i <= parent_hub->maxchild; i++) {
-> > > > > > > > +               np = usb_of_get_device_node(parent_hub, i);
-> > > > > > > > +               if (!np)
-> > > > > > > > +                       continue;
-> > > > > > > > +
-> > > > > > > > +               if (!of_is_onboard_usb_hub(np))
-> > > > > > > > +                       goto node_put;
-> > > > > > > > +
-> > > > > > > > +               npc = of_parse_phandle(np, "companion-hub", 0);
-> > > > > > > > +               if (npc) {
-> > > > > > > > +                       /*
-> > > > > > > > +                        * Hubs with companions share the same platform device.
-> > > > > > > > +                        * Create the plaform device only for the hub that is
-> > > > > > > > +                        * connected to the primary HCD (directly or through
-> > > > > > > > +                        * other hubs).
-> > > > > > > > +                        */
-> > > > > > > > +                       if (!usb_hcd_is_primary_hcd(hcd)) {
-> > > > > > > > +                               of_node_put(npc);
-> > > > > > > > +                               goto node_put;
-> > > > > > > > +                       }
-> > > > > > > > +
-> > > > > > > > +                       pdev = of_find_device_by_node(npc);
-> > > > > > > > +                       of_node_put(npc);
-> > > > > > > > +               } else {
-> > > > > > > > +                       /*
-> > > > > > > > +                        * For root hubs this function can be called multiple times
-> > > > > > > > +                        * for the same root hub node (the HCD node). Make sure only
-> > > > > > > > +                        * one platform device is created for this hub.
-> > > > > > > > +                        */
-> > > > > > > > +                       if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
-> > > > > > > > +                               goto node_put;
-> > > > > > >
-> > > > > > > I don't understand the "else" case above. What case exactly are we
-> > > > > > > handling again? This is when:
-> > > > > > > * the hub is presumably just a 2.0 hub since there is no companion.
-> > > > > > > * our parent is the root hub and the USB 2.0 hub we're looking at is
-> > > > > > > not the primary
-> > > > > >
-> > > > > > The 'else' case can be entered for hubs connected to a root hub or to another
-> > > > > > hub further down in the tree, but we bail out only for first level hubs.
-> > > > > >
-> > > > > > > ...but that doesn't make a lot of sense to me? I must have missed something...
-> > > > > >
-> > > > > > It's not super-obvious, this bit is important: "this function can be called
-> > > > > > multiple times for the same root hub node". For any first level hub we only
-> > > > > > create a pdev if this function is called on behalf of the primary HCD. That
-> > > > > > is also true of a hub connected to the secondary HCD. We only want to create
-> > > > > > one pdev and there is supposedly always a primary HCD.
-> > > > > >
-> > > > > > Maybe it would be slightly clearer if the function returned before the loop
-> > > > > > if this condition is met.
-> > > > >
-> > > > > I guess I'm still pretty confused. You say "For root hubs this
-> > > > > function can be called multiple times for the same root hub node".
-> > > > > Does that mean that the function will be called multiple times with
-> > > > > the same "parent_hub", or something else.
-> > > >
-> > > > It is called with a different "parent_hub", however for root hubs the
-> > > > DT node is the same for both root hubs (it's the DT node of the
-> > > > controller since there are no dedicated nodes for the root hubs).
-> > > >
-> > > > Just to make sure this isn't the source of the confusion: the root hubs
-> > > > are part of the USB controller, not 'external' hubs which are directly
-> > > > connected to the controller. I call the latter 'first level hubs'.
-> > > >
-> > > > > Unless it's called with the same "parent_hub" then it seems like if
-> > > > > the USB device has a device tree node and that device tree node is for
-> > > > > a onboard_usb_hub and there's no companion node then we _always_ want
-> > > > > to create the platform device, don't we? If it is called with the same
-> > > > > "parent_hub" then I'm confused how your test does something different
-> > > > > the first time the function is called vs. the 2nd.
-> > > >
-> > > > Let's use an adapted trogdor DT with only a USB 2.x hub as an example:
-> > > >
-> > > > usb_1_dwc3 {
-> > > >          dr_mode = "host";
-> > > >          #address-cells = <1>;
-> > > >          #size-cells = <0>;
-> > > >
-> > > >          /* 2.x hub on port 1 */
-> > > >          usb_hub_2_x: hub@1 {
-> > > >                  compatible = "usbbda,5411";
-> > > >                  reg = <1>;
-> > > >                  vdd-supply = <&pp3300_hub>;
-> > > >          };
-> > > > };
-> > > >
-> > > > 1st call: the 'parent_hub' corresponds to the USB 3.x root hub of
-> > > > usb_1_dwc3, the DT node of the hub is 'usb_1_dwc3'. The function
-> > > > iterates over the ports, finds usb_hub_2_x, enters the else branch
-> > > > (no companion hub), checks that the function was called on behalf
-> > > > of the primary controller and creates the pdev.
-> > > >
-> > > > 2nd call: the 'parent_hub' corresponds to the USB 2.x root hub of
-> > > > usb_1_dwc3, the DT node of the hub is also 'usb_1_dwc3'. The function
-> > > > iterates over the ports, finds usb_hub_2_x, enters the else branch
-> > > > (no companion hub), sees that it is not called on behalf of the
-> > > > primary controller and does not create a second (unnecessary) pdev.
-> > > >
-> > > > Is it clearer now?
-> > >
-> > > Ah, I get it now! Sorry for being so dense...
-> >
-> > No worries, it's certainly not obvious and probably my commentary could
-> > have been clearer.
-> >
-> > > So like this:
-> > >
-> > > Root hubs (those hubs with no parent) are all created with the same
-> > > device_node, the one for the controller itself. We don't want to
-> > > iterate through the same children multiple times, so we bail right
-> > > away if we're detect that `parent_hub` is a root hub and we're not on
-> > > the primary HCD.
-> >
-> > yep
-> >
-> > > For all other cases the primary and secondary controllers have distinct
-> > > device_nodes.
-> >
-> > You probably mean that all non-root hubs have distinct nodes, so for these
-> > the function is only called once.
-> >
-> > > I guess in theory that test could go before the "companion-hub" test,
-> > > though I don't see any case where it truly matters...
-> >
-> > Yeah, I'm still wondering whether it would be slightly less confusing to
-> > bail before the loop (besides saving a few cycles), it would eliminate
-> > the conflation with the 'companion-hub' check.
-> 
-> I'm not sure how that would work, though? You'd essentially need two loops then?
+> ast_udc_ep_queue misses spin_unlock_irqrestore in an error path, this pat=
+ch
+> fixes that.
+>=20
+> Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
+> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+> ---
+>  drivers/usb/gadget/udc/aspeed_udc.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c
+> b/drivers/usb/gadget/udc/aspeed_udc.c
+> index 1fc15228ff15..6c91f7f288a2 100644
+> --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> @@ -665,7 +665,8 @@ static int ast_udc_ep_queue(struct usb_ep *_ep, struc=
+t
+> usb_request *_req,
+>  	if (ep->ep.desc =3D=3D NULL) {
+>  		if ((req->req.dma % 4) !=3D 0) {
+>  			dev_warn(dev, "EP0 req dma alignment error\n");
+> -			return -ESHUTDOWN;
+> +			rc =3D -ESHUTDOWN;
+> +			goto end;
+>  		}
+>=20
+>  		ast_udc_ep0_queue(ep, req);
+> --
+> 2.31.1
 
-Maybe I got myself confused, but I think the behavior would be the same as
-now, without a second loop:
+Thanks for the fix.
 
-We never create a pdev if the parent is a root hub and the controller is the
-secondary. Even for a hub with companion the pdev is only created when the call
-comes from the primary controller.
-
-Does that make sense?
+Reviewed-by: Neal Liu <neal_liu@aspeedtech.com>
 
