@@ -2,82 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740C855064A
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 19:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F48550665
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 19:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237370AbiFRRLo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Jun 2022 13:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S236943AbiFRRlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Jun 2022 13:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236173AbiFRRLm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jun 2022 13:11:42 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999B113D78
-        for <linux-usb@vger.kernel.org>; Sat, 18 Jun 2022 10:11:36 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-fe4ac3b87fso9164964fac.3
-        for <linux-usb@vger.kernel.org>; Sat, 18 Jun 2022 10:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B8CXs8G7SKCeidkQWd9kAuICsm7Sw1h76v8hv8CR6wQ=;
-        b=cuXb7N4G9pIbYvpYCa6o9PQHUD2DfcKP/+gFugpXKusIPZ8udyvtuH7DJPmo+JUAOL
-         8eagpNlDgynjnq8Gd81Y/eopVQYnjECp8OsqpfuRnKA9HNyn++ZH7HNNZ9TIjsRXeSeG
-         BvdjwgCJNtORrqw8bW9YNyv+ik/h87ruk6IhWF/Ulomb3roDpockEzXUsaUcJnWsLKey
-         JlqmKq38sV0x3yb+kEcSWDJ7IjC7ODgIlcJzGQ3llXc0MXXhANbar/PuhU229R0QH9qT
-         lz3fsVlqpE6nT/3L7c8FVrsr8AgyflhOszSQr4SlJOROtqKz5LZwEe2tkhcIJNa2UAy5
-         H5YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B8CXs8G7SKCeidkQWd9kAuICsm7Sw1h76v8hv8CR6wQ=;
-        b=EQrsRbbVFM5jtVv+vGVxZGepYvLyhQzYvupjtSnq8hZscjW5mFoxn4o+nljcZNypZ0
-         U3zLPFQL8qe0QJm2UOG6PcyaLrC0QZkmLheE/JwSqMrIivEUAb8SjkT31oC7gGhMeJMZ
-         Ied69gGe7OyIG0B2vwZsTSfn93m9PUQJNOxBtQF9Clp1A+79vtff2/X3LiT+zjwkRKV2
-         KeGsNO9YeoONRTFqqs4sQnn97+fwCZoES8GzXx9nwy7vRn0HKuFscc8bIuhzKq0h0MkE
-         aMXH/gXTwVQ6lcBq+d9x5Q+ZvS+RFVHuc0u+0gnqehpy9xDBHChGXo0RNNl/vMRnAgJk
-         gTzA==
-X-Gm-Message-State: AJIora/VhqnXFXwkYrC1vrAUqyc2AhBAfboQSejwTx4MqVL56n1VyAfY
-        2l0tSC8HlL+u36AAyD77zdUgoQ==
-X-Google-Smtp-Source: AGRyM1tDVmXtipYu/LaRH32Cww8VlWl/7+4pR6EaOfqHWjwGaKiJnIATqU0fJ7tQTyGNrbOvR86wqw==
-X-Received: by 2002:a05:6870:538b:b0:101:17f2:d6e with SMTP id h11-20020a056870538b00b0010117f20d6emr13782917oan.200.1655572295844;
-        Sat, 18 Jun 2022 10:11:35 -0700 (PDT)
-Received: from ?IPV6:2804:14d:8084:84c6:fe26:c42d:aab9:fa8a? ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
-        by smtp.gmail.com with ESMTPSA id o5-20020a4a2c05000000b0035eb4e5a6b3sm4677268ooo.9.2022.06.18.10.11.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Jun 2022 10:11:35 -0700 (PDT)
-Message-ID: <3358b97e-021a-82b7-9ae2-2113aea2c2d9@usp.br>
-Date:   Sat, 18 Jun 2022 14:11:29 -0300
+        with ESMTP id S229449AbiFRRlu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jun 2022 13:41:50 -0400
+X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Jun 2022 10:41:49 PDT
+Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38E5712740;
+        Sat, 18 Jun 2022 10:41:49 -0700 (PDT)
+Received: from [192.168.0.2] (chello089173232159.chello.sk [89.173.232.159])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 909537A021E;
+        Sat, 18 Jun 2022 19:35:04 +0200 (CEST)
+From:   Ondrej Zary <linux@zary.sk>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Getting Backpack USB drives to work - looking for lost firmware
+Date:   Sat, 18 Jun 2022 19:35:01 +0200
+User-Agent: KMail/1.9.10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/5] Rework KUnit test execution in modules
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-References: <20220618090310.1174932-1-davidgow@google.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
-In-Reply-To: <20220618090310.1174932-1-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: Text/Plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202206181935.01392.linux@zary.sk>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USB_DRIVES autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,51 +40,94 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/18/22 06:03, David Gow wrote:
-> This patch series makes two changes to how KUnit test suites are stored
-> and executed:
-> - The .kunit_test_suites section is now used for tests in modules (in
->   lieu of a module_init funciton), as well as for built-in tests. The
->   module loader will now trigger test execution. This frees up the
->   module_init function for other uses.
-> - Instead of storing an array of arrays of suites, have the
->   kunit_test_suite() and kunit_test_suites() macros append to one global
->   (or per-module) list of test suites. This removes a needless layer of
->   indirection.
-> 
-> The upshot of this is that it should now be possible to use the
-> kunit_test_suite() and kunit_test_suites() macros to register test
-> suites even from within modules which otherwise had module_init
-> functions. This was proving to be quite a common issue, resulting in
-> several modules calling into KUnit's private suite execution functions
-> to run their tests (often introducing incompatibilities with the KUnit
-> tooling).
-> 
-> This series also fixes the thunderbolt, nitro_enclaves, and
-> sdhci-of-aspeed tests to use kunit_test_suite() now that it works.
-> 
-> Huge thanks to Jeremy Kerr, who designed and implemented the module
-> loader changes, and to Daniel Latypov for pushing the simplification of
-> the nested arrays in .kunit_test_suites.
-> 
-> I've tested this series both with builtin tests, and with modules on
-> x86_64, but there's always the possibility that there's something subtle
-> and nasty on another architecture, so please test!
-> 
-> Cheers,
-> -- David
-> 
+Hello,
+I'm trying to get Micro Solutions Backpack USB CD-RW to work and maybe write a simple firmware loader module. It's based on Cypress EZ-USB FX2 so it should be easy (the loading code is already present in the kernel for other devices).
 
-I've tested the modules on x86_64 machines, and everything looks fine.
-Also, I applied the AMDGPU KUnit tests [1] on top of these patches,
-tried out compiling as a module, and it runs pretty well!
+Micro Solutions released firmware and load scrips for Linux - it used to be called bpck-usb-firmware-1.1.tgz but seems to have vanished from the web, even archive.org does not have it. Frugalware distro used to include a package bpck-usb-firmware-1.1-1-i686.fpm until version 1.7 (it was removed in 1.8) but I was not able to find it anywhere (even tried Frugalware developers).
 
-Great to see this feature on KUnit!
+At least the load script can be found here:
+https://www.linuxquestions.org/questions/linux-hardware-18/external-usb-backpack-cd-rewriter-problem-212360/
+Firmware filenames extracted from the script:
+BP1SCAN.HEX, BP2SCAN.HEX (scan firmwares)
+BP1CD5.HEX, BP1CD6.HEX, BP1HD5.HEX, BP1HD6.HEX (for USB 1 chips)
+BP2CD5.HEX, BP2CD6.HEX, BP2HD5.HEX, BP2HD6.HEX (for USB 2 chips)
+BPINTCD.HEX, BPINTHD.HEX (for internal USB 2 chips)
 
-Tested-by: Maíra Canal <maira.canal@usp.br>
+So there seems to be two kinds of external USB adapters/cables - with FX (USB 1) and FX2 (USB 2) chips. First, a "scan" firmware is loaded that identifies the drive type and changes the ID appropriately. Then a final firmware is loaded, depending on the chip type, drive version (5 or 6) and drive type (CD or HDD).
+The latest devices have integrated USB support - no scanning is needed, just a CD or HDD firmware is loaded, depending on the ID.
 
-[1] https://lore.kernel.org/dri-devel/20220608010709.272962-1
-maira.canal@usp.br/
+My device (model 222011 with integrated USB) identifies as 0ac9:0010. Once the firmware is loaded, the identification changes to 0ac9:1234. I've tested it in Windows and extracted the firmware from usbsnoop dump. After loading using fxload, the ID changed but the device still reports vendor specific class. Probably the firmware for Windows is not the same as for Linux and is not fully USB mass storage compatible :( 
 
-Best Regards,
-- Maíra Canal
+lsusb output (before loading firmware):
+Bus 002 Device 002: ID 0ac9:0010 Micro Solutions, Inc. BACKPACK
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x0ac9 Micro Solutions, Inc.
+  idProduct          0x0010 BACKPACK
+  bcdDevice            1.82
+  iManufacturer           1 Micro Solutions
+  iProduct                3 Micro Solutions BACKPACK
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0020
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+Device Status:     0x0000
+  (Bus Powered)
+
+After loading firmware, only idProduct changes to 0x1234. Everything else remains.
+
+-- 
+Ondrej Zary
