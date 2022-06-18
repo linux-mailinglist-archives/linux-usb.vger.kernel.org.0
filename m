@@ -2,76 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4D6550593
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 16:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99F15505D1
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 17:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbiFROtf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Jun 2022 10:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S235750AbiFRPjO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Jun 2022 11:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiFROte (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jun 2022 10:49:34 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E900D17AA5;
-        Sat, 18 Jun 2022 07:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655563774; x=1687099774;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w5tzZ7RrqHkJr3FpjfrwlqfOP6Ec32jd0b8PId2bAqg=;
-  b=fsbrNLt0H+zjiBlcIhoypCJQYu2Pt1QEdgXVxDk11ZihhHWxwAQZSFig
-   BSfgRdMHhuE2kAZJT37KRHNY21C9Rej0bG6gMEqr/aY0Q3MUj5d2At8ae
-   naIuAf9so67I5paw2h75iq1F0etN35jqiYm2XpS0sH5uRzLTsdFsW1nDD
-   qiRZ62RzxKBH1q/ZvyZgvt9CgbfGgUMykxpvaLz5CR45Lz3iRZQ/WZl+R
-   wuytPK94fnDuVMzXM0QU/cvdqVk885AVmcIEm9gPep4NRocpHCbsT6dQ7
-   Mj/cFESYpL4pvIp2Y1aumXcRHTqAIccuU8YnxfFLe7nfuOMwXlYCwSHWD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365985672"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="365985672"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 07:49:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="688737041"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2022 07:49:20 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2ZlG-000QNA-KA;
-        Sat, 18 Jun 2022 14:49:18 +0000
-Date:   Sat, 18 Jun 2022 22:49:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>
-Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        David Gow <davidgow@google.com>
-Subject: Re: [PATCH 2/5] kunit: flatten kunit_suite*** to kunit_suite** in
- .kunit_test_suites
-Message-ID: <202206182258.EahbTrAv-lkp@intel.com>
-References: <20220618090310.1174932-3-davidgow@google.com>
+        with ESMTP id S230133AbiFRPjL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jun 2022 11:39:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95FFDEAD;
+        Sat, 18 Jun 2022 08:39:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7543060B1E;
+        Sat, 18 Jun 2022 15:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC6AC3411A;
+        Sat, 18 Jun 2022 15:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655566746;
+        bh=McuYUPbcTogh0Yrn7FSYihqEAcvdIVNBBIDilpwKOpE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dSnD0FK661SnooSn7Z/CDSOX3C3M6TplRlQ+BdTAy3J5UoTF1ZJhfy0liHIx9LLKJ
+         MmOBy6sUSheDILDX/FclyJ2ODmVSkJuDFnMF9EcDwWOK0MMT7rSQl26Krt7XqdvqGH
+         1ULRRVdc6QRCMSLjBZYYrmNqffXtEeuxOm9uPjF2u1F1Vqa3EQc2N58FHFgSv/NvSE
+         0gBc87cgiNXnUcjPnNOILCd+NQ1oVQDTlP3VULDcsL6ZpPWAwY2t8+39JcivJuquhJ
+         vVRYNmRbCwYBRuOwqx3C78E8ZqVCAyRz5L7XP3svJYw32ZsjUiJbfJih8B78n6II/1
+         HYiaISZCY5RRQ==
+Date:   Sat, 18 Jun 2022 16:48:20 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+Subject: Re: [PATCH v2 07/15] Documentation: ABI: testing: mt6370: Add ADC
+ sysfs guideline
+Message-ID: <20220618164820.2eeb8ae8@jic23-huawei>
+In-Reply-To: <20220613111146.25221-8-peterwu.pub@gmail.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+        <20220613111146.25221-8-peterwu.pub@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220618090310.1174932-3-davidgow@google.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,81 +63,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi David,
+On Mon, 13 Jun 2022 19:11:38 +0800
+ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 
-Thank you for the patch! Yet something to improve:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> Add ABI documentation for mt6370 non-standard ADC sysfs interfaces.
+> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../ABI/testing/sysfs-bus-iio-adc-mt6370      | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370 b/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> new file mode 100644
+> index 000000000000..039b3381176a
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
+> @@ -0,0 +1,36 @@
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage0_raw
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc2 next-20220617]
-[cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220618/202206182258.EahbTrAv-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c2386c54cc9fd471e5353f375ff71734214ed3c6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
-        git checkout c2386c54cc9fd471e5353f375ff71734214ed3c6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the linux-review/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653 HEAD fddb3ea0ed5627098eabc542fdba5a8b4b769066 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   drivers/thunderbolt/test.c: In function 'tb_test_init':
->> drivers/thunderbolt/test.c:2824:16: error: too few arguments to function '__kunit_test_suites_init'
-    2824 |         return __kunit_test_suites_init(tb_test_suites);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/thunderbolt/test.c:9:
-   include/kunit/test.h:240:5: note: declared here
-     240 | int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/test.c: In function 'tb_test_exit':
->> drivers/thunderbolt/test.c:2829:16: error: too few arguments to function '__kunit_test_suites_exit'
-    2829 |         return __kunit_test_suites_exit(tb_test_suites);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/thunderbolt/test.c:9:
-   include/kunit/test.h:242:6: note: declared here
-     242 | void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/test.c:2829:16: error: 'return' with a value, in function returning void [-Werror=return-type]
-    2829 |         return __kunit_test_suites_exit(tb_test_suites);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/test.c:2827:6: note: declared here
-    2827 | void tb_test_exit(void)
-         |      ^~~~~~~~~~~~
-   drivers/thunderbolt/test.c: In function 'tb_test_init':
-   drivers/thunderbolt/test.c:2825:1: error: control reaches end of non-void function [-Werror=return-type]
-    2825 | }
-         | ^
-   cc1: some warnings being treated as errors
+Unfortunately the kernel documentation build scripts do no support duplicating
+standard ABI for particular devices so as to provide more information.
+Hence you can't have anything in this file.
 
 
-vim +/__kunit_test_suites_init +2824 drivers/thunderbolt/test.c
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 VBUS ADC with lower accuracy(+-75mA)
+Curious though, voltage with a mA accuracy range?
+This scale should be presented directly to userspace anyway so no need
+for this doc.
 
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2821  
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2822  int tb_test_init(void)
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2823  {
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2824  	return __kunit_test_suites_init(tb_test_suites);
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2825  }
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2826  
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2827  void tb_test_exit(void)
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2828  {
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2829  	return __kunit_test_suites_exit(tb_test_suites);
+> +		higher measure range(1~22V)
+> +		Calculating with scale returns voltage in uV
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+No. All channels return in mV. That's the ABI requirement as
+in sysfs-bus-iio and we cannot vary if for particular drivers.  If we did
+no generic tooling would work.
+
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage1_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 VBUS ADC with higher accuracy(+-30mA)
+> +		lower measure range(1~9.76V)
+> +		Calculating with scale offset returns voltage in uV
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage4_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 TS_BAT ADC
+> +		Calculating with scale returns voltage in uV
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage7_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 CHG_VDDP ADC
+> +		Calculating with scale returns voltage in mV
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_temp8_raw
+> +KernelVersion:	5.18
+> +Contact:	chiaen_wu@richtek.com
+> +Description:
+> +		Indicated MT6370 IC junction temperature
+> +		Calculating with scale and offset returns temperature in degree
+
