@@ -2,106 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BB65506BE
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jun 2022 23:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A563055092C
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jun 2022 09:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiFRVAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Jun 2022 17:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
+        id S234454AbiFSHkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Jun 2022 03:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiFRVAW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jun 2022 17:00:22 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72238AE4E
-        for <linux-usb@vger.kernel.org>; Sat, 18 Jun 2022 14:00:20 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o6so6602109plg.2
-        for <linux-usb@vger.kernel.org>; Sat, 18 Jun 2022 14:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=xHkP1OXpqTGpMnl3S8KzBKz/x+0DBa4e/hpnPNs2B4Y=;
-        b=REVvzCGiKIEVvk4+cZWRokvy1sp2PWlN2ceSL4fnA3ARgMAMjDk6YIFO5NlstDRBWs
-         93+KsCOc3HNZHvcokJRwYgmixXWVczCgSDkGDK/5I+i9hZhcJh09hslFPx+6/tcH9Byy
-         WWIVI2LkOxpDyWA+4p7Qsd1vMbr+SsuKvl64sxu1eUvVROggUN5Ge1UzzJhIulPT6MQq
-         tX94sswVUlU1bhNZPjxEH76qwN+QJV4d7wWV+jHH9X3WGRLlZkA/uCdyMBue83hwR7EQ
-         Zdc6jCfx9nJEVqMB3kuqVrP9kbYSpyQj0wm/c4YcxZFjFYHyjLVfYDmS3uCBeeNSPY2X
-         wPxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=xHkP1OXpqTGpMnl3S8KzBKz/x+0DBa4e/hpnPNs2B4Y=;
-        b=ONlgfbmbfBN7O4iz0Sj+DpIVCEh88GNjlz1h6Y9o0i/E+fledJjWPyfugSSWYwxoNi
-         65yBp4kvemVeHlhVpVvvao2dj8UXWhVqZX0aT95NzmfBe6DyYbX7/uKhO9hWT0YC/czc
-         7Go/1kUs6PPApjr+oy4qPQNQidmKpXJ5U9hHjze7ofvhKhVY30yHhOA2C14Q7uBsklKr
-         G/WXLohnM1clAgypERVBR00nO83+kIflXY8qPULjcJRnhXyqzSvryDRA3FQHigAYWrc9
-         Hg5603jnXo6Fr0LpG6d9hHRirIN3K93AYP3nBa2RkKTeCqb/bG9T9v9SonNArA9M7aAk
-         jW6Q==
-X-Gm-Message-State: AJIora8tGtxiQSViw3q4TYiLM0m75CRq9TiuDB1ZL26kRBSk1WsHOFP1
-        uosMnwsppDS8K/q/Zx7kZYHqylaSN46QjAv6q0c=
-X-Google-Smtp-Source: AGRyM1tGbsQAXCraSzNVrQ6U98rmnEHJGLyV+AeusIPpFG51xoKVeIPSPbxng+79YZx3Mj0gdIQqMHwZiK23Hi6R8+I=
-X-Received: by 2002:a17:902:c2d5:b0:16a:1263:9313 with SMTP id
- c21-20020a170902c2d500b0016a12639313mr3541501pla.138.1655586019882; Sat, 18
- Jun 2022 14:00:19 -0700 (PDT)
-MIME-Version: 1.0
-Sender: zaring.kkipkalya@gmail.com
-Received: by 2002:a05:7300:80c8:b0:66:6a95:2d24 with HTTP; Sat, 18 Jun 2022
- 14:00:19 -0700 (PDT)
-From:   Jackie Grayson <jackiegrayson08@gmail.com>
-Date:   Sat, 18 Jun 2022 09:00:19 -1200
-X-Google-Sender-Auth: VXphVZ8y9pESXdodmwDx5hG2xhE
-Message-ID: <CANmOZ0wGzM2K=FdkrmnEpY9w9PgJh-FLez7OjsEH1=CTTjNa9Q@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+        with ESMTP id S234274AbiFSHkI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jun 2022 03:40:08 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0412EE028;
+        Sun, 19 Jun 2022 00:40:05 -0700 (PDT)
+X-UUID: 6c2507ca54b3497c8c3e8ceb1ed55296-20220619
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:b2b009e2-bac3-4a6d-9bea-3db8c1ec8af2,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:b2b009e2-bac3-4a6d-9bea-3db8c1ec8af2,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:6bcfcaf6-e099-41ba-a32c-13b8bfe63214,C
+        OID:83ca1b803afe,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 6c2507ca54b3497c8c3e8ceb1ed55296-20220619
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1347035379; Sun, 19 Jun 2022 15:40:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sun, 19 Jun 2022 15:40:01 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 19 Jun 2022 15:40:00 +0800
+Message-ID: <d95e046262751a7f746fabc5f1d9a39e675730b3.camel@mediatek.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional
+ clocks to be missing
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
+Date:   Sun, 19 Jun 2022 15:40:00 +0800
+In-Reply-To: <20220617222916.2435618-3-nfraprado@collabora.com>
+References: <20220617222916.2435618-1-nfraprado@collabora.com>
+         <20220617222916.2435618-3-nfraprado@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Day Beloved
+On Fri, 2022-06-17 at 18:29 -0400, Nícolas F. R. A. Prado wrote:
+> The current clock list in the binding doesn't allow for one of the
+> optional clocks to be missing and a subsequent clock to be present.
+> An
+> example where this is an issue is in mt8192.dtsi, which has "sys_ck",
+> "ref_ck", "xhci_ck" and would cause dtbs_check warnings.
+How about using fixed clock instead to fix the check warning?
+Using enum way seems make it more complex.
 
-   This letter might be a surprise to you, But I believe that you will
-be honest to fulfill my final wish. I bring peace and love to you. It
-is by the grace of god, I had no choice than to do what is lawful and
-right in the sight of God for eternal life and in the sight of man for
-witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
-mail praying it will find you in a good condition, since I myself am
-in a very critical health condition in which I sleep every night
-without knowing if I may be alive to see the next day. I am Mrs,Jackie
-Grayson, a widow suffering from a long time illness. I have some funds
-I inherited from my late husband, the sum of ($11,500,000.00,)my
-Doctor told me recently that I have serious sickness which is a cancer
-problem. What disturbs me most is my stroke sickness. Having known my
-condition, I decided to donate this fund to a good person that will
-utilize it the way I am going to instruct herein.
+> 
+> Change the clock list in a way that allows the middle optional clocks
+> to
+> be missing, while still guaranteeing a fixed order. The "ref_ck" is
+> kept
+> as a const even though it is optional for simplicity, since it is
+> present in all current dts files.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+> 
+>  .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml       | 9
+> +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> xhci.yaml
+> index 63cbc2b62d18..99a1b233ec90 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> @@ -80,8 +80,13 @@ properties:
+>      items:
+>        - const: sys_ck  # required, the following ones are optional
+>        - const: ref_ck
+> -      - const: mcu_ck
+> -      - const: dma_ck
+> +      - enum:
+> +          - mcu_ck
+> +          - dma_ck
+> +          - xhci_ck
+> +      - enum:
+> +          - dma_ck
+> +          - xhci_ck
+>        - const: xhci_ck
+>  
+>    assigned-clocks:
 
-I need a very honest and God fearing person who can claim this money
-and use it for Charity works, for orphanages and gives justice and
-help to the poor, needy and widows says The Lord." Jeremiah 22:15-16.=E2=80=
-=9C
-and also build schools for less privilege that will be named after my
-late husband if possible and to promote the word of god and the effort
-that the house of god is maintained. I do not want a situation where
-this money will be used in an ungodly manner. That's why I'm making
-this decision. I'm not afraid of death,so I know where I'm going. I
-accept this decision because I do not have any child who will inherit
-this money after I die. Please I want your sincere and urgent answer
-to know if you will be able to execute this project, and I will give
-you more information on how the fund will be transferred to your bank
-account. May the grace, peace, love and the truth in the Word of god
-be with you and all those that you love and  care for.
-
-I am waiting for your reply.
-May God Bless you,
-Mrs.Jackie Grayson,
-Written from the Hospital,
