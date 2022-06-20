@@ -2,52 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A638F55115D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 09:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3550A551305
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 10:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239230AbiFTHTU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 03:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S239884AbiFTIkI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 04:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239288AbiFTHTT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 03:19:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AC8E0CB
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 00:19:18 -0700 (PDT)
+        with ESMTP id S238955AbiFTIkG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 04:40:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630AA12ACB
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 01:40:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E773A61185
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 07:19:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 591B1C3411B;
-        Mon, 20 Jun 2022 07:19:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FD2BB80F2B
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 08:40:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7360C3411B
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 08:40:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655709557;
-        bh=a5SdNlSeU/YL1MKfIpDJROfIKZNWOuUqtQEnonI1v5A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=opXHM4/ErYO3+lx18FZbBTLMnD8PUxjiq2Kr1GvY71mpB1j2Gk339jL21ZXIQRs9h
-         Naj13ASblvhNrQt7kboTmAvMDkWtuyUUwi/9tHcd4hOkuU5TCEhQ/T5Pfy7c+1n2m4
-         zJUN9nfs1rghi+EOzFIe+3GEdzbRc6eDBGjmvQIeQAQF51xtHtnBvhVTCI9bl/Q56A
-         1y9P1r2v6weU88EgvguFsysCkxBY0fv9T6/juMa6MBdmTl/gmmIQUwdaifYfJmdFuN
-         RIF1VLdV7VcjeoMDRjPgYDdW3cE72b07R7K7FOAC7tLl+SfWp46mrTBADoMV0mBb9B
-         wtw4Hv1x44TFw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3Bgn-0003L2-HN; Mon, 20 Jun 2022 09:19:13 +0200
-Date:   Mon, 20 Jun 2022 09:19:13 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Giles Roadnight <giles.roadnight@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Prolific Technology pl2303: unknown device type
-Message-ID: <YrAfcXUORApvdAxU@hovoldconsulting.com>
-References: <CAA0uCUZV0Jdc5HJnPg=Rqv06+UVYAudbx5qUNOatE9ZZsP6vsA@mail.gmail.com>
- <CAA0uCUYnMjJxdsxjue3zD2-LZkJbg3imckTrV=4VakPMchdLWg@mail.gmail.com>
- <YrAcTDCnEiipWEM3@hovoldconsulting.com>
- <CAA0uCUZ10rCXctv0nnYD60ugK9WDFbmnvVSVwJ5Zc9hzfPVeGg@mail.gmail.com>
+        s=k20201202; t=1655714402;
+        bh=icpOoCUf51ZjSuzVzTfV0gzorCnopXC1GW8s/hHurCA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=hCdooqlmcf2emH5HM8NLCdRZoK6g0xS2NyecoG9u0AVcda87D2VQ6MgRyA1ZzZK/f
+         pJjkPUwHwo5TeSMPu7GxXISMQZt4FSuOI3dE0whB0/gS08yuTW6y42IyFDfjw4D4ce
+         XoDBzMWvC+HFRUCLx7qojDkBguehMAEuJBzjYnY9sx3g2fpJaFvsr24cB94AY3ESL1
+         1ZRe/DecQRyt7xwY6WWZoAgsQ69guU5MvcaeEKSLa/W3HNIPPK8fMyW9Q9yG61OUlw
+         /AOQIBHqye+QihDjFNs11kO1g3/m+rtK48cVNKYa5BhNYGR8Vqu5oc6fXFn+4YTCqF
+         WQ/8KLk8PnYag==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 98696C05FD5; Mon, 20 Jun 2022 08:40:02 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
+Date:   Mon, 20 Jun 2022 08:40:02 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215906-208809-J6iCgQGNCB@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
+References: <bug-215906-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA0uCUZ10rCXctv0nnYD60ugK9WDFbmnvVSVwJ5Zc9hzfPVeGg@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,12 +70,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 08:10:22AM +0100, Giles Roadnight wrote:
-> Yes thanks. The new kernel has not made it to the default raspberry pi
-> repos yet so doing apt upgrade does not fix it. I did find a tool that
-> does update the kernel in an "unsafe" way and that has fixed it for
-> me.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
 
-Good to hear you found a way to resolve this.
+--- Comment #8 from The Linux kernel's regression tracker (Thorsten Leemhui=
+s) (regressions@leemhuis.info) ---
+(In reply to Piotr Pi=C3=B3rkowski from comment #7)
+>
+> > Any chance you could bisect this on upstream kernel?
+> I'll try to do it this week
 
-Johan
+And news? Was the issue maybe fixed meanwhile?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
