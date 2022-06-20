@@ -2,49 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FE5551130
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 09:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A638F55115D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 09:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239105AbiFTHPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 03:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S239230AbiFTHTU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 03:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238339AbiFTHPd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 03:15:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0589FE09F
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 00:15:32 -0700 (PDT)
+        with ESMTP id S239288AbiFTHTT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 03:19:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AC8E0CB
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 00:19:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F0236112B
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 07:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00BDC3411B;
-        Mon, 20 Jun 2022 07:15:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E773A61185
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 07:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 591B1C3411B;
+        Mon, 20 Jun 2022 07:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655709332;
-        bh=DvXckEIO0TOpl+gDFMrw9jTB05X6DR2HXm0uugKNZ9Q=;
+        s=k20201202; t=1655709557;
+        bh=a5SdNlSeU/YL1MKfIpDJROfIKZNWOuUqtQEnonI1v5A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kY8k8A4HQDyXkit7vCPZEMPY518lyHGSPm8N9CtQZBEnfVq+UVF4h19RvztkmzSkQ
-         8m9+l2FfiDYuvAgUCirkT0Iy2LvatUvo3zzK5sk9dkvamD97WppNF/GbLEG3I4j89a
-         IcZoSqaWuVpz2Nlsxta9tIRhHiYsdZgtL6ZeI6mGG38a5jgLg5O0JVgzhCdgYoHFDS
-         egoqSxhGUiy38mSL8jecpUD6S1dkgqgJEVQIhiOGpY/I4FrXWvNn0AnNY3UXPsoqx+
-         S2W5gxAVv9RejyQu4c+cPycRsrYpHUvQkwomOPhAHba6bpl8o5Z2Zhv64KLOGYKaGg
-         lp2tP+u3LFMjQ==
+        b=opXHM4/ErYO3+lx18FZbBTLMnD8PUxjiq2Kr1GvY71mpB1j2Gk339jL21ZXIQRs9h
+         Naj13ASblvhNrQt7kboTmAvMDkWtuyUUwi/9tHcd4hOkuU5TCEhQ/T5Pfy7c+1n2m4
+         zJUN9nfs1rghi+EOzFIe+3GEdzbRc6eDBGjmvQIeQAQF51xtHtnBvhVTCI9bl/Q56A
+         1y9P1r2v6weU88EgvguFsysCkxBY0fv9T6/juMa6MBdmTl/gmmIQUwdaifYfJmdFuN
+         RIF1VLdV7VcjeoMDRjPgYDdW3cE72b07R7K7FOAC7tLl+SfWp46mrTBADoMV0mBb9B
+         wtw4Hv1x44TFw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1o3Bd9-0003Ji-Bh; Mon, 20 Jun 2022 09:15:28 +0200
-Date:   Mon, 20 Jun 2022 09:15:27 +0200
+        id 1o3Bgn-0003L2-HN; Mon, 20 Jun 2022 09:19:13 +0200
+Date:   Mon, 20 Jun 2022 09:19:13 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Giles Roadnight <giles.roadnight@gmail.com>
-Cc:     glance@acc.umu.se, linux-usb@vger.kernel.org
-Subject: Re: pl2303 converter detected, unknown device type
-Message-ID: <YrAej8OuOC2lvmb6@hovoldconsulting.com>
-References: <CAA0uCUZSVmAijR8VkkCbW4nEVo=v__U_sjB0UVSbNQsgPKTxrA@mail.gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Prolific Technology pl2303: unknown device type
+Message-ID: <YrAfcXUORApvdAxU@hovoldconsulting.com>
+References: <CAA0uCUZV0Jdc5HJnPg=Rqv06+UVYAudbx5qUNOatE9ZZsP6vsA@mail.gmail.com>
+ <CAA0uCUYnMjJxdsxjue3zD2-LZkJbg3imckTrV=4VakPMchdLWg@mail.gmail.com>
+ <YrAcTDCnEiipWEM3@hovoldconsulting.com>
+ <CAA0uCUZ10rCXctv0nnYD60ugK9WDFbmnvVSVwJ5Zc9hzfPVeGg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA0uCUZSVmAijR8VkkCbW4nEVo=v__U_sjB0UVSbNQsgPKTxrA@mail.gmail.com>
+In-Reply-To: <CAA0uCUZ10rCXctv0nnYD60ugK9WDFbmnvVSVwJ5Zc9hzfPVeGg@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,30 +58,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 10:10:37AM +0100, Giles Roadnight wrote:
-> Was there ever any resolution to this? I am having the same issue and
-> have tried multiple combinations of different Raspberry pi os and pi
-> and get the same issue.
-> 
-> Johan - did you add support for this model? If so how to update to the
-> latest version so that I can use this usb device?
+On Mon, Jun 20, 2022 at 08:10:22AM +0100, Giles Roadnight wrote:
+> Yes thanks. The new kernel has not made it to the default raspberry pi
+> repos yet so doing apt upgrade does not fix it. I did find a tool that
+> does update the kernel in an "unsafe" way and that has fixed it for
+> me.
 
-You appear to have a different device than the one Anton reported (e.g.
-PL2303GS instead of PL2303GC), but the fix is similar and was
-merged in March as I just mentioned in my other mail.
-
-> (forgive the basic questions, I am not very experienced with linux so
-> don't know what bit I need to update to get the latest usb drivers -
-> or whatever it is you updated)
-
-Just make sure you update to a recent mainline or stable kernel (e.g.
-5.17.2, 5.16.19, 5.15.33 or newer) or wait until your distro kernel
-catches up.
-
-The commit you need is
-
-	5b6ab28d0678 ("USB: serial: pl2303: fix GS type detection")
-
-if you want to report it to the distro.
+Good to hear you found a way to resolve this.
 
 Johan
