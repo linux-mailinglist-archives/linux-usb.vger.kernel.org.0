@@ -2,49 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E63551A50
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 15:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3F3551C41
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 15:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243942AbiFTNCQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 09:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S1344726AbiFTN3z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 09:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243914AbiFTNB3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 09:01:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622171A3A3;
-        Mon, 20 Jun 2022 05:57:19 -0700 (PDT)
+        with ESMTP id S1346757AbiFTN3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 09:29:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079D3248F3;
+        Mon, 20 Jun 2022 06:11:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E74161532;
-        Mon, 20 Jun 2022 12:57:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3921C3411B;
-        Mon, 20 Jun 2022 12:57:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C0EF5CE139F;
+        Mon, 20 Jun 2022 13:10:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC825C3411C;
+        Mon, 20 Jun 2022 13:10:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655729837;
-        bh=sJ5+Jcxwc7SiAwuU77kJgyMCbVcppibpF6wc4udVHtE=;
+        s=k20201202; t=1655730653;
+        bh=SHVwJLEk2tnmicNGaRD3YPQJdxFUin99Ol3gEng/YzA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LsnjkRRPzxd2GVdXDEfgdjFL4LoqrN2LUXLE62wNw1BbXBx2RKQgLEJWJhF0NX0/b
-         Dm37wso8lNIwZpOQrcShG7CnsDA4sTmFoL60ZpePXKho4ffLgCJBrF9XeIUN2Dck17
-         VPHb8MKeq9ZJ9HIxoZINcqeOT7IF0JbYocaSu0z2zqzmBMPITTzHgK3iTTwRxekpL8
-         p+z6aA4R0xigVUJC4BH8bgUuWgky+vFRfIgkSia7g6SmNVbvkv7zKNjLJpS5kGegO+
-         lCiGBQGMQOgiL/O1xmyBk3wHpG9HC1qW5z7cTkPO8luTlqHTWqAZga+qEe1ukbfDDV
-         JSKjrCzZeBFVg==
+        b=DzBJYmasWqnspP8jyZlLQwdZh+WpKwfIQaHEJQohLSkOnCxyJTrIni3XGZkn2x7Yl
+         zRqmC7/woIw1ThSGqggImr1d7rRVupXKZAe/RnXH5lbzMkGQtVPE/bsNoGL6DwZ4t2
+         okIXjHqB3novCwABI2il9fXgs1Ks7ai4feFwpW80Buumn0nkFY0vKXoBSaLAgno6PD
+         NhnAsvAZPb8XJd3km+w/ZY7YJFo9pRk9A4dIzQdjfQbX9DN9ypUoAokdEG72ENz0PX
+         XAxd0W/qEtTJoI1+zr+Do3FQARkLuecRexLZJjn522xf575e3CmZFTz7KBuyBpqDId
+         lL1j9CENZP/jw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1o3Gxt-0000tD-O1; Mon, 20 Jun 2022 14:57:14 +0200
-Date:   Mon, 20 Jun 2022 14:57:13 +0200
+        id 1o3HB3-0000z6-3O; Mon, 20 Jun 2022 15:10:49 +0200
+Date:   Mon, 20 Jun 2022 15:10:49 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Yonglin Tan <yonglin.tan@outlook.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel EM05-G modem
-Message-ID: <YrBuqTQObu7/vAf0@hovoldconsulting.com>
-References: <MEYP282MB23740858061FFA19E97E5C0FFDB09@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: use kmemdup instead of kmalloc + memcpy
+Message-ID: <YrBx2eQYwiGcDC8m@hovoldconsulting.com>
+References: <20220620105939.5128-1-slark_xiao@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MEYP282MB23740858061FFA19E97E5C0FFDB09@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+In-Reply-To: <20220620105939.5128-1-slark_xiao@163.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,75 +56,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 08:16:53PM +0800, Yonglin Tan wrote:
-> Add a device-id entry for the Quectel EM05-G module.
+On Mon, Jun 20, 2022 at 06:59:39PM +0800, Slark Xiao wrote:
+> For code neat purpose, we can use kmemdup to replace
+> kmalloc + memcpy.
 > 
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=030a Rev= 3.18
-> S:  Manufacturer=Quectel
-> S:  Product=Quectel EM05-G
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-Are there any further configurations for this device that you need to
-consider?
-
-You reserve interface 6 below which doesn't even exist in the above
-configuration.
-
-Can you say something more about what the individual interfaces are used
-for, for example, as was done here:
-
-	https://lore.kernel.org/all/TYZPR06MB4270D3394B8E3E0301738F6B86D09@TYZPR06MB4270.apcprd06.prod.outlook.com/
-
-> Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 > ---
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
->  mode change 100644 => 100755 drivers/usb/serial/option.c
+>  drivers/usb/serial/opticon.c | 4 +---
+>  drivers/usb/serial/sierra.c  | 4 +---
+>  2 files changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> old mode 100644
-> new mode 100755
-> index ed1e50d..05fc322
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1147,6 +1147,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = ZLP },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x030a, 0xff),
-> +	  .driver_info = RSVD(6) | ZLP }, /* EM05-G */
+> diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
+> index aed28c35caff..bca6766a63e6 100644
+> --- a/drivers/usb/serial/opticon.c
+> +++ b/drivers/usb/serial/opticon.c
+> @@ -208,7 +208,7 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
+>  	priv->outstanding_bytes += count;
+>  	spin_unlock_irqrestore(&priv->lock, flags);
+>  
+> -	buffer = kmalloc(count, GFP_ATOMIC);
+> +	buffer = kmemdup(buf, count, GFP_ATOMIC);
+>  	if (!buffer)
+>  		goto error_no_buffer;
+>  
+> @@ -216,8 +216,6 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
+>  	if (!urb)
+>  		goto error_no_urb;
+>  
+> -	memcpy(buffer, buf, count);
+> -
+>  	usb_serial_debug_data(&port->dev, __func__, count, buffer);
+>  
+>  	/* The connected devices do not have a bulk write endpoint,
 
-As mentioned above RSVD(6) looks wrong here.
-
-Please move the comment to the first line of the entry, and move the
-entry to the other Quectel entries using numerical PIDs (i.e. before
-EM160R-GL).
-  
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+Looks like we have the same pattern also in garmin_write_bulk(). Care to
+include that one as well?
 
 Johan
