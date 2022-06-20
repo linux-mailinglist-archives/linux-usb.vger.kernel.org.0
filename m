@@ -2,79 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE7D551566
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 12:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FDB551593
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 12:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240947AbiFTKIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 06:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S239999AbiFTKRa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 06:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241058AbiFTKIj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 06:08:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3C8E58;
-        Mon, 20 Jun 2022 03:08:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D18B8B80E35;
-        Mon, 20 Jun 2022 10:08:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80CE0C3411B;
-        Mon, 20 Jun 2022 10:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655719716;
-        bh=eNZvHO7yKnCScUahO1uTGiL1HxXPdv+6WOm/54TN7SQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SjTSvdQIc6ZEHBrb4ScsHNZguKRYTsq65soWlcVBeq3dPA0+TctoKOvzCczsq6a67
-         XWpVguOOuztFlP7kT8yfw8m4kmmLdc5CwqNnr6m9JgDdfPbW0fYWOBGKrJFePQvXo3
-         0JWrEgCJgxb4p7+QrzNccV6HOVA/0esRAw3MQD0ZqkeJxIGc/LWw6LO7rAdwHPSc5P
-         z62hKxTTATm17AxDXmKMp7RQkluD9TW11bKV5g4MFSfz9sLO5CkGJcFmTg6cfvJcA4
-         jdijNnULEJQLhlmK6xEQqquYJSGSJHwZa9CJ6mlJgirdg9vxjIvBngZ7dhCOlsY5yF
-         +hK5qAv4KmVtQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3EKe-0008Gs-Vf; Mon, 20 Jun 2022 12:08:33 +0200
-Date:   Mon, 20 Jun 2022 12:08:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v6 0/4] add driver for the WCH CH341 in I2C/GPIO mode
-Message-ID: <YrBHIDWX5EPmnpl5@hovoldconsulting.com>
-References: <20220616013747.126051-1-frank@zago.net>
+        with ESMTP id S239361AbiFTKR3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 06:17:29 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59B813DEC;
+        Mon, 20 Jun 2022 03:17:24 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1655720174tv43877p
+Received: from localhost.localdomain ( [106.117.82.33])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 20 Jun 2022 18:16:00 +0800 (CST)
+X-QQ-SSF: 01000000004000D0I000B00A0000000
+X-QQ-FEAT: l2baldexF9nZoqlU6/S0CNKLWXb7r/rN55hX7h8Tu27mCbOk+KikIRgJNMjyM
+        cUPcr3kl6ss85cE0PY2QZLfAskRBAvPIh62uckkAGV3xw8Pu4S3ODRuWmK+pjpwpx0WtwBf
+        V/JArAUiNMD2Gl9be/1O4oH3aesljvoP2OKlzIi/5ZcV4qRrOdZbHR4FfODb7Nt+XhT+9v1
+        zig9TwnF2YThnfUJKi5RYWUkc5NY9feTv4x78t8mLVgddnQ+kec6/8wfnFSyAyO0c6veavi
+        +EbSGmUvmuHJwPrZD2K/7Aq/D5m3FPdrZ2vOy5/OisHnRu3Dgn0PP6sqU=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] USB: ohci-sm501: Fix typo in comment
+Date:   Mon, 20 Jun 2022 18:15:56 +0800
+Message-Id: <20220620101556.2290-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616013747.126051-1-frank@zago.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 08:37:43PM -0500, frank zago wrote:
-> The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> manage I2C and GPIO.
-> 
-> Changes from v5:
-> Addressed reviewers' comments.
+Delete the redundant word 'the'.
 
-Please be more specific in your changelogs. This essentially just says
-"changed stuff".
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
+ drivers/usb/host/ohci-sm501.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Better handling of 0-bytes i2c commands
-> Use of better USB API.
+diff --git a/drivers/usb/host/ohci-sm501.c b/drivers/usb/host/ohci-sm501.c
+index b91d50da6127..f5de586454e3 100644
+--- a/drivers/usb/host/ohci-sm501.c
++++ b/drivers/usb/host/ohci-sm501.c
+@@ -153,7 +153,7 @@ static int ohci_hcd_sm501_drv_probe(struct platform_device *pdev)
+ 	 * fine. This is however not always the case - buffers may be allocated
+ 	 * using kmalloc() - so the usb core needs to be told that it must copy
+ 	 * data into our local memory if the buffers happen to be placed in
+-	 * regular memory. A non-null hcd->localmem_pool initialized by the
++	 * regular memory. A non-null hcd->localmem_pool initialized by
+ 	 * the call to usb_hcd_setup_local_mem() below does just that.
+ 	 */
+ 
+-- 
+2.36.1
 
-What does this even mean?
 
-Johan
