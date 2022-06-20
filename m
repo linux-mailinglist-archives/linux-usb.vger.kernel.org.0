@@ -2,107 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC178551678
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 13:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60BB551702
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 13:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241030AbiFTK76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 06:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S241786AbiFTLOd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 07:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240411AbiFTK76 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 06:59:58 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52722273F;
-        Mon, 20 Jun 2022 03:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=s/DqW
-        3JifVc3jI4z9atXF9bTKKNtQPalK25TvRQSEOc=; b=GfO7bK1ypzGSVHbX3BE/u
-        FAB6h4hC8I7D+4oAxmCiNTpHZY2VAEFKeu5Jww2m001zbjfzPrWSnqXyONcCrV0b
-        OHKH9mj0HfCqYfvC11XTBT0Ibp8XPBxp2PWoT/SmnIM/BF06dGkwv1U/5kZAw8+e
-        70cl/2NafDJMnxnbcvVPp4=
-Received: from localhost.localdomain (unknown [112.97.57.116])
-        by smtp5 (Coremail) with SMTP id HdxpCgAHAi4cU7BiaJhjKA--.6065S2;
-        Mon, 20 Jun 2022 18:59:42 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] USB: serial: use kmemdup instead of kmalloc + memcpy
-Date:   Mon, 20 Jun 2022 18:59:39 +0800
-Message-Id: <20220620105939.5128-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgAHAi4cU7BiaJhjKA--.6065S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KFyUKrW8WF45Zw4kWrWxZwb_yoW8CryDpF
-        4Yg3yqqr10qr1fXr1DCws8Za45WanrKFy2k347C3yavr13tw1Sg3WIqFWYqr1UCF97Jw1a
-        qw4v9rWvkr47tw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRHlkhUUUUU=
-X-Originating-IP: [112.97.57.116]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivx4mZFWB0C2ffQAAso
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S241785AbiFTLOT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 07:14:19 -0400
+X-Greylist: delayed 479 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Jun 2022 04:13:05 PDT
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D340915FDA
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 04:13:05 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 6E4AD10029E11;
+        Mon, 20 Jun 2022 13:05:01 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 2CD1861975D7;
+        Mon, 20 Jun 2022 13:05:01 +0200 (CEST)
+X-Mailbox-Line: From 439a3f3168c2f9d44b5fd9bb8d2b551711316be6 Mon Sep 17 00:00:00 2001
+Message-Id: <439a3f3168c2f9d44b5fd9bb8d2b551711316be6.1655714438.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Mon, 20 Jun 2022 13:04:50 +0200
+Subject: [PATCH net] net: phy: smsc: Disable Energy Detect Power-Down in
+ interrupt mode
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Simon Han <z.han@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For code neat purpose, we can use kmemdup to replace
-kmalloc + memcpy.
+Simon reports that if two LAN9514 USB adapters are directly connected
+without an intermediate switch, the link fails to come up and link LEDs
+remain dark.  The issue was introduced by commit 1ce8b37241ed ("usbnet:
+smsc95xx: Forward PHY interrupts to PHY driver to avoid polling").
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+The PHY suffers from a known erratum wherein link detection becomes
+unreliable if Energy Detect Power-Down is used.  In poll mode, the
+driver works around the erratum by briefly disabling EDPD for 640 msec
+to detect a neighbor, then re-enabling it to save power.
+
+In interrupt mode, no interrupt is signaled if EDPD is used by both link
+partners, so it must not be enabled at all.
+
+We'll recoup the power savings by enabling SUSPEND1 mode on affected
+LAN95xx chips in a forthcoming commit.
+
+Fixes: 1ce8b37241ed ("usbnet: smsc95xx: Forward PHY interrupts to PHY driver to avoid polling")
+Reported-by: Simon Han <z.han@kunbus.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
 ---
- drivers/usb/serial/opticon.c | 4 +---
- drivers/usb/serial/sierra.c  | 4 +---
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ drivers/net/phy/smsc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
-index aed28c35caff..bca6766a63e6 100644
---- a/drivers/usb/serial/opticon.c
-+++ b/drivers/usb/serial/opticon.c
-@@ -208,7 +208,7 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
- 	priv->outstanding_bytes += count;
- 	spin_unlock_irqrestore(&priv->lock, flags);
+diff --git a/drivers/net/phy/smsc.c b/drivers/net/phy/smsc.c
+index 1b54684b68a0..96d3c40932d8 100644
+--- a/drivers/net/phy/smsc.c
++++ b/drivers/net/phy/smsc.c
+@@ -110,7 +110,7 @@ static int smsc_phy_config_init(struct phy_device *phydev)
+ 	struct smsc_phy_priv *priv = phydev->priv;
+ 	int rc;
  
--	buffer = kmalloc(count, GFP_ATOMIC);
-+	buffer = kmemdup(buf, count, GFP_ATOMIC);
- 	if (!buffer)
- 		goto error_no_buffer;
+-	if (!priv->energy_enable)
++	if (!priv->energy_enable || phydev->irq != PHY_POLL)
+ 		return 0;
  
-@@ -216,8 +216,6 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
- 	if (!urb)
- 		goto error_no_urb;
+ 	rc = phy_read(phydev, MII_LAN83C185_CTRL_STATUS);
+@@ -210,6 +210,8 @@ static int lan95xx_config_aneg_ext(struct phy_device *phydev)
+  * response on link pulses to detect presence of plugged Ethernet cable.
+  * The Energy Detect Power-Down mode is enabled again in the end of procedure to
+  * save approximately 220 mW of power if cable is unplugged.
++ * The workaround is only applicable to poll mode. Energy Detect Power-Down may
++ * not be used in interrupt mode lest link change detection becomes unreliable.
+  */
+ static int lan87xx_read_status(struct phy_device *phydev)
+ {
+@@ -217,7 +219,7 @@ static int lan87xx_read_status(struct phy_device *phydev)
  
--	memcpy(buffer, buf, count);
--
- 	usb_serial_debug_data(&port->dev, __func__, count, buffer);
+ 	int err = genphy_read_status(phydev);
  
- 	/* The connected devices do not have a bulk write endpoint,
-diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
-index 9d56138133a9..865d1237d611 100644
---- a/drivers/usb/serial/sierra.c
-+++ b/drivers/usb/serial/sierra.c
-@@ -453,7 +453,7 @@ static int sierra_write(struct tty_struct *tty, struct usb_serial_port *port,
- 		goto error_simple;
- 	}
- 
--	buffer = kmalloc(writesize, GFP_ATOMIC);
-+	buffer = kmemdup(buf, writesize, GFP_ATOMIC);
- 	if (!buffer) {
- 		retval = -ENOMEM;
- 		goto error_no_buffer;
-@@ -465,8 +465,6 @@ static int sierra_write(struct tty_struct *tty, struct usb_serial_port *port,
- 		goto error_no_urb;
- 	}
- 
--	memcpy(buffer, buf, writesize);
--
- 	usb_serial_debug_data(&port->dev, __func__, writesize, buffer);
- 
- 	usb_fill_bulk_urb(urb, serial->dev,
+-	if (!phydev->link && priv->energy_enable) {
++	if (!phydev->link && priv->energy_enable && phydev->irq == PHY_POLL) {
+ 		/* Disable EDPD to wake up PHY */
+ 		int rc = phy_read(phydev, MII_LAN83C185_CTRL_STATUS);
+ 		if (rc < 0)
 -- 
-2.25.1
+2.35.2
 
