@@ -2,125 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11093551F0D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 16:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF895551FA3
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 17:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241213AbiFTOjP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 10:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S242326AbiFTPE1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 11:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348423AbiFTOim (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 10:38:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466B32621
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 06:55:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E343AB811A9
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 13:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A235BC3411B;
-        Mon, 20 Jun 2022 13:55:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655733321;
-        bh=3qrZRHH7IYedHqWHSfk6xUu/yk+xsR9N78kQjdASRHw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lj06i6CWpaMhlPfLtKSZT+GPlYhuLs+ECW41z2Wu49HqxZrj2d5Bn8USI1JNZisKZ
-         bhD2sWN8cFvgrr8fzwnib+p+7wnlowNzD7oFBGbdwjxvkJw+by5pvSq+4BIrxxDmcv
-         7pVY6u3YXALarvx8L+Y3aVzW5JoX5t5dSfgr6HI7pFoYkYu/jAD6mXuJ6Gfvx+DUr7
-         eTbefFYi2M/5R1obZJvqDOZJRev5OtqCH2XUh93yIN265drt4+WTAFD0lkS0Yozskb
-         y4n9pLko1nJqXuwpjXin7t5BqeNER06roPoUs7hoLP/fXG9/oNcU6VAworfDhB9mbV
-         V2xv64bOiBp/A==
-Date:   Mon, 20 Jun 2022 21:55:15 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/1] usb: chipidea: ci_hdrc_imx: use dev_err_probe()
-Message-ID: <20220620135515.GB1227419@Peter>
-References: <20220614120522.1469957-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S242987AbiFTPDh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 11:03:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC5E520BC6
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 07:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655735767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sB5vA/PYt/B++hSiLWtw5RtdOSfa5Qtze5kAXPaq3gM=;
+        b=UZeDKq5HlGoMaqgBe96TlN7+vANoX9WipiznFYwD3z5GgZtlLLTMDhuTzg/cKoVKUuxtTG
+        P41wEN3J4pYReuanQ/Kh4G9Z2nnWwhUYujAA0iIp8ZFieAjycxbhfJ7HNjN5akstyxxjEv
+        LF+7hKWbWilo2Ysi74YFBaqcgeL0/MY=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-nlJ8E1NnP9ejhFwwwviQAQ-1; Mon, 20 Jun 2022 10:35:54 -0400
+X-MC-Unique: nlJ8E1NnP9ejhFwwwviQAQ-1
+Received: by mail-ej1-f69.google.com with SMTP id gn39-20020a1709070d2700b00722abe40a31so874945ejc.7
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 07:35:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sB5vA/PYt/B++hSiLWtw5RtdOSfa5Qtze5kAXPaq3gM=;
+        b=0qoMcMCM2hiXGxi3EECfmY3VbP70WCeLlXcGugh1e/mkSI9Q99AqE7atmm5AfkHZA8
+         xLXRlFdFGLVdLers/kvUH1JYD68/rglm0sPUR39NzuY5dDaB6AOqfCu8dikeqtfJua4v
+         a1bCQhmNWGT1zd8rdOKitszSzII0145pNvqpBCfvnm5TFyBhI0dE//9KIA9VwD0dZ8yt
+         lAz4ZkUvZL4BHo7lEsjZg4VNWJtg0uyFr3u2ivnzWf4/RWCxr2d6VHboBpTIgQbBbhUu
+         /xEB1aqLghh8OFnjFcy7mPqbbryuQd1s5dCmYqbfLxIB34AQjHW8C2bLMkVXfFe0t/px
+         7JDA==
+X-Gm-Message-State: AJIora/xNO6ZQG+5kSIX0O0QIWNmyjgQtEGEWy0TO4yCFPGWQHkYlu8B
+        f31lsGyacuaAsSuLddaSagdYB3NEjCblGae2y1tsAG7EMea9i8q3FBJQUUCbk7i3J00YHKKe31C
+        sp55ww0Qbh8n/jE5VPzJN
+X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id eh13-20020a0564020f8d00b004356df2068amr15504694edb.209.1655735753656;
+        Mon, 20 Jun 2022 07:35:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vd1G5IDERU5ls3ZLMFPONjt/JzOY8kxQyAIF3O5ehuje2w68JMZlruTfRe1V2x9eaZ6rKddQ==
+X-Received: by 2002:a05:6402:f8d:b0:435:6df2:68a with SMTP id eh13-20020a0564020f8d00b004356df2068amr15504675edb.209.1655735753508;
+        Mon, 20 Jun 2022 07:35:53 -0700 (PDT)
+Received: from [10.0.0.147] (D57D5A4B.static.ziggozakelijk.nl. [213.125.90.75])
+        by smtp.gmail.com with ESMTPSA id rh17-20020a17090720f100b006fef5088792sm6001911ejb.108.2022.06.20.07.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 07:35:53 -0700 (PDT)
+Message-ID: <738d00dd-f05b-9b31-5260-0158ee89e399@redhat.com>
+Date:   Mon, 20 Jun 2022 16:35:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614120522.1469957-1-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Drop wrong dependency to
+ INTEL_SOC_PMIC
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-06-14 14:05:22, Alexander Stein wrote:
-> Use dev_err_probe() to simplify handling errors in ci_hdrc_imx_probe()
+Hi,
+
+On 6/20/22 12:43, Andy Shevchenko wrote:
+> Intel SoC PMIC is a generic name for all PMICs that are used
+> on Intel platforms. In particular, INTEL_SOC_PMIC kernel configuration
+> option refers to Crystal Cove PMIC, which has never been a part
+> of any Intel Broxton hardware. Drop wrong dependency from Kconfig.
 > 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Note, the correct dependency is satisfied via ACPI PMIC OpRegion driver,
+> which the Type-C depends on.
+> 
+> Fixes: d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
+> Reported-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Thanks, patch looks good to me:
 
-Peter
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
 > ---
->  drivers/usb/chipidea/ci_hdrc_imx.c | 23 +++++++----------------
->  1 file changed, 7 insertions(+), 16 deletions(-)
+>  drivers/usb/typec/tcpm/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-> index 097142ffb184..9ffcecd3058c 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-> @@ -348,25 +348,18 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  		data->pinctrl = devm_pinctrl_get(dev);
->  		if (PTR_ERR(data->pinctrl) == -ENODEV)
->  			data->pinctrl = NULL;
-> -		else if (IS_ERR(data->pinctrl)) {
-> -			if (PTR_ERR(data->pinctrl) != -EPROBE_DEFER)
-> -				dev_err(dev, "pinctrl get failed, err=%ld\n",
-> -					PTR_ERR(data->pinctrl));
-> -			return PTR_ERR(data->pinctrl);
-> -		}
-> +		else if (IS_ERR(data->pinctrl))
-> +			return dev_err_probe(dev, PTR_ERR(data->pinctrl),
-> +					     "pinctrl get failed\n");
->  
->  		data->hsic_pad_regulator =
->  				devm_regulator_get_optional(dev, "hsic");
->  		if (PTR_ERR(data->hsic_pad_regulator) == -ENODEV) {
->  			/* no pad regualator is needed */
->  			data->hsic_pad_regulator = NULL;
-> -		} else if (IS_ERR(data->hsic_pad_regulator)) {
-> -			if (PTR_ERR(data->hsic_pad_regulator) != -EPROBE_DEFER)
-> -				dev_err(dev,
-> -					"Get HSIC pad regulator error: %ld\n",
-> -					PTR_ERR(data->hsic_pad_regulator));
-> -			return PTR_ERR(data->hsic_pad_regulator);
-> -		}
-> +		} else if (IS_ERR(data->hsic_pad_regulator))
-> +			return dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
-> +					     "Get HSIC pad regulator error\n");
->  
->  		if (data->hsic_pad_regulator) {
->  			ret = regulator_enable(data->hsic_pad_regulator);
-> @@ -458,9 +451,7 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  				&pdata);
->  	if (IS_ERR(data->ci_pdev)) {
->  		ret = PTR_ERR(data->ci_pdev);
-> -		if (ret != -EPROBE_DEFER)
-> -			dev_err(dev, "ci_hdrc_add_device failed, err=%d\n",
-> -					ret);
-> +		dev_err_probe(dev, ret, "ci_hdrc_add_device failed\n");
->  		goto err_clk;
->  	}
->  
-> -- 
-> 2.25.1
-> 
-
--- 
-
-Thanks,
-Peter Chen
+> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> index 557f392fe24d..073fd2ea5e0b 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -56,7 +56,6 @@ config TYPEC_WCOVE
+>  	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
+>  	depends on ACPI
+>  	depends on MFD_INTEL_PMC_BXT
+> -	depends on INTEL_SOC_PMIC
+>  	depends on BXT_WC_PMIC_OPREGION
+>  	help
+>  	  This driver adds support for USB Type-C on Intel Broxton platforms
 
