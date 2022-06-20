@@ -2,111 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B03551103
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 09:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FE5551130
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 09:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238829AbiFTHKi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 03:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S239105AbiFTHPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 03:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238339AbiFTHKh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 03:10:37 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBDADF1F
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 00:10:36 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id hj18so18628690ejb.0
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 00:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8JWfdCIri9996188DMDfXnK/jA+xBciHXLU/t2EsnbE=;
-        b=qMs9FO+Wojo0f1A3HEl/wa2KKoFlFee6SBLagowXPTIOcoVNN5tZ0xgG05YWnk7hwn
-         NNZkuAMeGxPhLxBUf+NN35Che0DrUhlANUFwSEjGRo7144752lb2/UBhXHvjJeCuHQ1+
-         vKT9fFUjTaGklvGhmf7IUSKeza5r9nSkqgoxwDYcYBXiq9P7HAinKhzFa8Tj1qGil/wl
-         nE5lKzId7tn2QL+Oqj1oo0dJorl0IP76RHIVXy+DYXWVaFPraCN2BKSF2TaKR91STdFs
-         g+hz/LX8xllRx1Tsfx1I+Uw34O7zXHEKQDib5HoqATKgu44K5SeeytXPJRve+j/uwGxv
-         yqdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8JWfdCIri9996188DMDfXnK/jA+xBciHXLU/t2EsnbE=;
-        b=ivLVwz0y/LnwgGGU6PCEAUoKip+SJ8SPxFw/2LNLPBo4EY+PNM0kDzsMtYeCs1YBI5
-         NkvsPt+vq7nBN2QXewEd6PG+cFw+SPEoSTonLa6k8ZkIY3EBKaJ9n62Jr3I8uEzNDRH6
-         btefZrP6NSt/0bEvi12BYXuxmHMMWv3p3A7/7SMBenPPjkXyNIoSYYCgHjatUF9ThxIf
-         IdZZwScCjz1Uha7mGUWPdAofa/nY6OKdV2j6m5eGnr8mXMoPc3h69Xz1hHPC5bSa5K3f
-         ZVdAhs3xSdgM7W3N3MAs2z8ko3+KoMmoM8GUQm5hqWbEHh2njKaP15QUJkGGRorO2Qvg
-         vtlQ==
-X-Gm-Message-State: AJIora8eCB87k4qNNRpe/iGWdcORZ/J5mkILgkNzVcqccy7IdiPfpYHC
-        BTalSGGwY+4rH/QWcN89Pn+rfz9d07xf9AlfLNvyNCM=
-X-Google-Smtp-Source: AGRyM1tkrAxFpfoMIxH0PbJoiLUINjCqjWEivZ+q6Sn1sRh5xGF3bNEed2rYfblgzJo6PSX+0+52r7vG2n2RseTE6HY=
-X-Received: by 2002:a17:906:51c5:b0:711:f4ee:6574 with SMTP id
- v5-20020a17090651c500b00711f4ee6574mr19131637ejk.509.1655709034927; Mon, 20
- Jun 2022 00:10:34 -0700 (PDT)
+        with ESMTP id S238339AbiFTHPd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 03:15:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0589FE09F
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 00:15:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F0236112B
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 07:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00BDC3411B;
+        Mon, 20 Jun 2022 07:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655709332;
+        bh=DvXckEIO0TOpl+gDFMrw9jTB05X6DR2HXm0uugKNZ9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kY8k8A4HQDyXkit7vCPZEMPY518lyHGSPm8N9CtQZBEnfVq+UVF4h19RvztkmzSkQ
+         8m9+l2FfiDYuvAgUCirkT0Iy2LvatUvo3zzK5sk9dkvamD97WppNF/GbLEG3I4j89a
+         IcZoSqaWuVpz2Nlsxta9tIRhHiYsdZgtL6ZeI6mGG38a5jgLg5O0JVgzhCdgYoHFDS
+         egoqSxhGUiy38mSL8jecpUD6S1dkgqgJEVQIhiOGpY/I4FrXWvNn0AnNY3UXPsoqx+
+         S2W5gxAVv9RejyQu4c+cPycRsrYpHUvQkwomOPhAHba6bpl8o5Z2Zhv64KLOGYKaGg
+         lp2tP+u3LFMjQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3Bd9-0003Ji-Bh; Mon, 20 Jun 2022 09:15:28 +0200
+Date:   Mon, 20 Jun 2022 09:15:27 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Giles Roadnight <giles.roadnight@gmail.com>
+Cc:     glance@acc.umu.se, linux-usb@vger.kernel.org
+Subject: Re: pl2303 converter detected, unknown device type
+Message-ID: <YrAej8OuOC2lvmb6@hovoldconsulting.com>
+References: <CAA0uCUZSVmAijR8VkkCbW4nEVo=v__U_sjB0UVSbNQsgPKTxrA@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAA0uCUZV0Jdc5HJnPg=Rqv06+UVYAudbx5qUNOatE9ZZsP6vsA@mail.gmail.com>
- <CAA0uCUYnMjJxdsxjue3zD2-LZkJbg3imckTrV=4VakPMchdLWg@mail.gmail.com> <YrAcTDCnEiipWEM3@hovoldconsulting.com>
-In-Reply-To: <YrAcTDCnEiipWEM3@hovoldconsulting.com>
-From:   Giles Roadnight <giles.roadnight@gmail.com>
-Date:   Mon, 20 Jun 2022 08:10:22 +0100
-Message-ID: <CAA0uCUZ10rCXctv0nnYD60ugK9WDFbmnvVSVwJ5Zc9hzfPVeGg@mail.gmail.com>
-Subject: Re: Prolific Technology pl2303: unknown device type
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA0uCUZSVmAijR8VkkCbW4nEVo=v__U_sjB0UVSbNQsgPKTxrA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Yes thanks. The new kernel has not made it to the default raspberry pi
-repos yet so doing apt upgrade does not fix it. I did find a tool that
-does update the kernel in an "unsafe" way and that has fixed it for
-me.
-I know that raspberry pi OS and its versions and repositories are not
-your concern as you work on the kernel but as a linux simpleton these
-were the issues preventing me from getting the update!
-Thanks for your response.
+On Sun, Jun 19, 2022 at 10:10:37AM +0100, Giles Roadnight wrote:
+> Was there ever any resolution to this? I am having the same issue and
+> have tried multiple combinations of different Raspberry pi os and pi
+> and get the same issue.
+> 
+> Johan - did you add support for this model? If so how to update to the
+> latest version so that I can use this usb device?
 
-Giles Roadnight
-http://giles.roadnight.name
+You appear to have a different device than the one Anton reported (e.g.
+PL2303GS instead of PL2303GC), but the fix is similar and was
+merged in March as I just mentioned in my other mail.
 
-On Mon, 20 Jun 2022 at 08:05, Johan Hovold <johan@kernel.org> wrote:
->
-> On Sat, Jun 18, 2022 at 07:42:43AM +0100, Giles Roadnight wrote:
-> > Hi
-> >
-> > I am trying to connect a Prolific pl2303 to my raspberry pi 4 running
-> > raspberry pi os 64 bit. When I look at dmesg I get the following
-> > output:
-> >
-> > [ 31.714397] cam-dummy-reg: disabling
-> > [ 44.046197] usb 1-1.1: USB disconnect, device number 3
-> > [ 47.254348] usb 1-1.1: new full-speed USB device number 4 using xhci_hcd
-> > [ 47.361386] usb 1-1.1: New USB device found, idVendor=067b,
-> > idProduct=23a3, bcdDevice= 6.05
-> > [ 47.361402] usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> > [ 47.361407] usb 1-1.1: Product: USB-Serial Controller
-> > [ 47.361412] usb 1-1.1: Manufacturer: Prolific Technology Inc.
-> > [ 47.361417] usb 1-1.1: SerialNumber: ALBAb115819
-> > [ 47.364081] pl2303 1-1.1:1.0: pl2303 converter detected
-> > [ 47.364106] pl2303 1-1.1:1.0: unknown device type, please report to
-> > linux-usb@vger.kernel.org
-> >
-> > so I followed the example and emailed this address!
-> >
-> > and with lsusb:
->
-> This has been fixed in mainline and backported to the relevant stable
-> trees (5.17.2, 5.16.19, 5.15.33) at the beginning of April.
->
-> You didn't mention which kernel you use, but updating to a more recent
-> one should fix this.
->
-> Johan
+> (forgive the basic questions, I am not very experienced with linux so
+> don't know what bit I need to update to get the latest usb drivers -
+> or whatever it is you updated)
+
+Just make sure you update to a recent mainline or stable kernel (e.g.
+5.17.2, 5.16.19, 5.15.33 or newer) or wait until your distro kernel
+catches up.
+
+The commit you need is
+
+	5b6ab28d0678 ("USB: serial: pl2303: fix GS type detection")
+
+if you want to report it to the distro.
+
+Johan
