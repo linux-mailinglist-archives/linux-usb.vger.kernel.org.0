@@ -2,95 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DD755269A
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 23:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73EB5526B1
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 23:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbiFTVg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 17:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        id S242073AbiFTVsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 17:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiFTVg0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 17:36:26 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0572C1A07E
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 14:36:26 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id i15so10830205plr.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 14:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=USSZEUENZlM8SPwVYhAoMDzqLslbBkVwNjrmCGu2V/E=;
-        b=Nn6yWv3VVHDV4xPy7zOxTnonkEvrAC4Pgd7D1pluWvy+mRT6oWg8IrCQH7IA+zzNIv
-         TrJzIfN5uX6o5Zpt7K+isgX2BJx/2+CJ0tabTPNoO1b39QRzFwcdJA/j+3KCSmhqJ2nb
-         +U6MPzyCxNDBwXpk9vK32Y+i9PtanKPgNHJvrWnoysJvz0QnnDDEhyLPR6kwKHiAR3Y9
-         XWIo1/+HE9aBhs+36UB5ndvJFN1sYFZo3H25mKvdMh3Pi1rapmWTHMrfbrEifWA9OHd7
-         uDxO9qUEPNfjrOsGjEUrfAouy9J9TDxC1cqN0gnZBYOJzRHyK7INBaQ/5x5D+12P71e0
-         2Jxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=USSZEUENZlM8SPwVYhAoMDzqLslbBkVwNjrmCGu2V/E=;
-        b=JyQwZ7eoJRuYycGHLLViLlGU7VkeioxKrbvyPY0CQV6jwazdDKnh5xiOLziXsNmcfE
-         QM2K82ivzxXhkWEzm/2pe8zzgdqi/nSic9l3UHLot7HiUH02ldkdkdDLHIs7yqLztA/i
-         1axsv2Rnu/je4wMBH1DXdS7NdzGUg/XeIdErD3sXfFClRA7vIM5a9s+4BiJNy/FPsfX1
-         drx45r4iCsCjJK1BEpvOQ7FCoCcSd2ZqogvzmfSLUZOKfaPrzLlU4KWWu6BfZTMrVgR3
-         5b3lerQ/LmyofUGWK+APHqK8VnHVuPLMj7aNy4TVA1cUtT6vO+Y43WK0pwUFB1q7lM+e
-         tV8w==
-X-Gm-Message-State: AJIora8wNN4kSzQsH/JPHqNjn+SQtUfCcRnD3MU8EGkpnjrDp+v4iCf7
-        LC+PRDYMya4Fk1LDDBje9MWf/TeDX8suew==
-X-Google-Smtp-Source: AGRyM1u3vscmYpzkYja1ajCNdDlu/I4HbhOhR/yaBRPO04mVCN5EqR4wkcF+5HZ56KEM3zKVej0tAA==
-X-Received: by 2002:a17:90b:4c06:b0:1e3:17fa:e387 with SMTP id na6-20020a17090b4c0600b001e317fae387mr39781856pjb.53.1655760985502;
-        Mon, 20 Jun 2022 14:36:25 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id x6-20020a1709029a4600b0015e8d4eb1d1sm9182110plv.27.2022.06.20.14.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 14:36:25 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 14:36:21 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     stern@rowland.harvard.edu
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH] usb: host: ehci-q: Fix ehci_submit_single_step_set_feature
- annotation typo
-Message-ID: <20220620213621.GA694104@ubuntu>
+        with ESMTP id S235804AbiFTVr7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 17:47:59 -0400
+X-Greylist: delayed 102 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Jun 2022 14:47:58 PDT
+Received: from sa-prd-fep-042.btinternet.com (mailomta21-sa.btinternet.com [213.120.69.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36424271E
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 14:47:56 -0700 (PDT)
+Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
+          by sa-prd-fep-049.btinternet.com with ESMTP
+          id <20220620214614.OCSJ3227.sa-prd-fep-049.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>
+          for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 22:46:14 +0100
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=flitspace1@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 613943C62AFBC1C6
+X-Originating-IP: [86.128.12.114]
+X-OWM-Source-IP: 86.128.12.114 (GB)
+X-OWM-Env-Sender: flitspace1@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvfedrudefuddgudeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefkffggfgfvhffutgfgsehtjeertddtfeejnecuhfhrohhmpeftohgsucfrvggrrhgtvgcuoehrohgssehflhhithhsphgrtggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfffhleekkeefheduieevudfggefhheeffffhleekjefgueettdeiteeileetleeinecukfhppeekiedruddvkedruddvrdduudegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghlohepfhhlihhtshhprggtvgdrohhrghdruhhkpdhinhgvthepkeeirdduvdekrdduvddruddugedpmhgrihhlfhhrohhmpehrohgssehflhhithhsphgrtggvrdhorhhgrdhukhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from flitspace.org.uk (86.128.12.114) by sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as flitspace1@btinternet.com)
+        id 613943C62AFBC1C6 for linux-usb@vger.kernel.org; Mon, 20 Jun 2022 22:46:14 +0100
+Received: from [192.168.0.21] (unknown [192.168.0.21])
+        by flitspace.org.uk (Postfix) with ESMTP id 0AB1A9FF3F
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 22:46:14 +0100 (BST)
+Message-ID: <2bb3208e-e7d0-9516-4dbf-16b3fa47a72a@flitspace.org.uk>
+Date:   Mon, 20 Jun 2022 22:46:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+To:     linux-usb@vger.kernel.org
+Content-Language: en-GB
+From:   Rob Pearce <rob@flitspace.org.uk>
+Subject: Devices not detected on reinsertion
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear all,
-this is Hyunwoo Kim.
+Hi all,
 
-I found the "argument" typo.
+I hope this isn't the wrong place to ask this. I have a weird problem 
+and I'm hoping somebody can point me in the right direction.
 
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
----
- drivers/usb/host/ehci-q.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The problem is that, if I remove a USB device and then plug it back in, 
+the PC often (usually?) doesn't see it.
 
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index 1163af6fad77..807e64991e3e 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -1162,7 +1162,7 @@ submit_async (
-  * This is done in two parts: first SETUP req for GetDesc is sent then
-  * 15 seconds later, the IN stage for GetDesc starts to req data from dev
-  *
-- * is_setup : i/p arguement decides which of the two stage needs to be
-+ * is_setup : i/p argument decides which of the two stage needs to be
-  * performed; TRUE - SETUP and FALSE - IN+STATUS
-  * Returns 0 if success
-  */
--- 
-2.25.1
+This affects a custom Gentoo install that I build for minimalist Intel 
+Atom systems. The image is built on a fairly old D410PT unit then tested 
+on the subsequent D425KT, Mitac and finally Jetway N2930 versions. The 
+problem only affects the N2930 and only with kernel 5.17
 
-Regards,
-Hyunwoo Kim.
+We (that is, my brother) first noticed with memory sticks on a newly 
+built unit.
+
+I tried to recreate the problem on my build box, where it doesn't 
+happen. Then I tried combinations and found it happens only on the 
+Jetway MoBo (of the four).
+
+I tried a different memory stick and that worked fine, but after a bit 
+more testing I am beginning to suspect the problem only occurs if the 
+device being plugged in is the last one removed, although I can't be 
+sure on that.
+
+My brother has tried unplugging and re-plugging a USB serial device and 
+had the same problem with it.
+
+I've checked the system logs and when it fails there is no evidence of 
+the kernel seeing the device insertion.
+
+During my testing I tried running lsusb when the device was physically 
+plugged in but not seen. This took a surprisingly long time (well over a 
+second) to produce any output, during which time the device suddenly 
+appeared on the bus (and was recognised and the file system mounted).
+
+I've tested with (vanilla apart from two custom VID/PID pairs in USB 
+serial) kernel versions 5.17.5 and 5.17.15, both of which have the 
+problem, and with 5.15.12, which doesn't.
+
+The MoBo that exhibits the issue has (from lspci):
+
+00:14.0 USB controller: Intel Corporation Atom Processor Z36xxx/Z37xxx, 
+Celeron N2000 Series USB xHCI (rev 11)
+
+The ones which don't are older:
+
+00:1d.0 USB controller: Intel Corporation NM10/ICH7 Family USB UHCI 
+Controller #1 (rev 01)
+00:1d.1 USB controller: Intel Corporation NM10/ICH7 Family USB UHCI 
+Controller #2 (rev 01)
+00:1d.2 USB controller: Intel Corporation NM10/ICH7 Family USB UHCI 
+Controller #3 (rev 01)
+00:1d.3 USB controller: Intel Corporation NM10/ICH7 Family USB UHCI 
+Controller #4 (rev 01)
+00:1d.7 USB controller: Intel Corporation NM10/ICH7 Family USB2 EHCI 
+Controller (rev 01)
+
+(The newer one does also suffer a known silicon bug in the CPU which 
+causes it to lock up if power management is enabled but that's probably 
+not relevant?)
+
+Does this raise any flags for anyone?
+
+Thanks very much in anticipation.
+
+Rob
+
