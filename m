@@ -2,94 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3F3551C41
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 15:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C00E551EAF
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 16:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344726AbiFTN3z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 09:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S237953AbiFTOBj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 10:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346757AbiFTN3R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 09:29:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079D3248F3;
-        Mon, 20 Jun 2022 06:11:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C0EF5CE139F;
-        Mon, 20 Jun 2022 13:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC825C3411C;
-        Mon, 20 Jun 2022 13:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655730653;
-        bh=SHVwJLEk2tnmicNGaRD3YPQJdxFUin99Ol3gEng/YzA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DzBJYmasWqnspP8jyZlLQwdZh+WpKwfIQaHEJQohLSkOnCxyJTrIni3XGZkn2x7Yl
-         zRqmC7/woIw1ThSGqggImr1d7rRVupXKZAe/RnXH5lbzMkGQtVPE/bsNoGL6DwZ4t2
-         okIXjHqB3novCwABI2il9fXgs1Ks7ai4feFwpW80Buumn0nkFY0vKXoBSaLAgno6PD
-         NhnAsvAZPb8XJd3km+w/ZY7YJFo9pRk9A4dIzQdjfQbX9DN9ypUoAokdEG72ENz0PX
-         XAxd0W/qEtTJoI1+zr+Do3FQARkLuecRexLZJjn522xf575e3CmZFTz7KBuyBpqDId
-         lL1j9CENZP/jw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o3HB3-0000z6-3O; Mon, 20 Jun 2022 15:10:49 +0200
-Date:   Mon, 20 Jun 2022 15:10:49 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: use kmemdup instead of kmalloc + memcpy
-Message-ID: <YrBx2eQYwiGcDC8m@hovoldconsulting.com>
-References: <20220620105939.5128-1-slark_xiao@163.com>
+        with ESMTP id S1354643AbiFTN7o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 09:59:44 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D0A3A729;
+        Mon, 20 Jun 2022 06:25:35 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so10304996pjz.1;
+        Mon, 20 Jun 2022 06:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1SRZahO4w5J/q1AxamwHmWbo+QN6jL4DplQ3GJck67Q=;
+        b=Yfz4kPN4Epxgld8RHdqX+DgMerLlPdZE2q1himsiKuhf+pOrqaCXF8BhF9LkVvWOnp
+         9aXDpNUMjqDP+82FNjGLrCpz8XBIMlgUIZw2WdbxWL48Sz7rts4aspIOwQkX/wqVFqPf
+         1J7wxlGwBSpxXBF4KejzRbs6XS/AkIeWCESXqSTQ8od47R9NnNgkxObeM+ef65Cw4L/q
+         kMUTu32cmMNnlmV2j9suedht7lBl3hqCkNmCOAMTt8lVcqqgRKI9Rg4gacWUxgnzxf0I
+         685KjzIxFwQuWdGBYc+wHHr6gV2zI8MQ/jhb8nevWRqiiInmgJjnHsmihePlazOzcsxz
+         cLRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1SRZahO4w5J/q1AxamwHmWbo+QN6jL4DplQ3GJck67Q=;
+        b=DMmspJqnRLn0ajafL6qe5KJiN8AKBl3YCz1kynwnk2jZrP6IyMkZMe0lK2PMjG0kEt
+         NAhQoRU2uuh4D9OU4JssM9+0g6aV1/2yICDzfeWS9GNChfwwS1NsLMV06z7fyq542fdE
+         MroRUQDiAfAFeISouoTxe+9aBdcFNQgFLi4RA+8oolmwH8dgaKrzeZ7m8ae76fObvXjp
+         KZIs+4ivKGwcjwUZyCJc9pWuSG7zykz0qoqUO7MhCHu8JwAXGukPd6JxenH8zy9ediDI
+         Z38sJSooNpH5lbEx3RTQN/s4yRFcZrspeebW4rDqacI64a3NW0q5+MpWHdReTiTvZSIn
+         MtWg==
+X-Gm-Message-State: AJIora+RFshZHVa4qWdnRgUu96LapxCED+BAQPOlYXBpD7mMxHDPx4T/
+        v/KqV2w+f1WMbw/1bVW4HXw=
+X-Google-Smtp-Source: AGRyM1sriAMqD/tVrcUsQCeNd2USxuUFdiLg7orv2BCCs0tunNFnqevMKSGN2qUHWs8/wkImAEhsJQ==
+X-Received: by 2002:a17:90b:1bc7:b0:1e8:317d:6b3b with SMTP id oa7-20020a17090b1bc700b001e8317d6b3bmr26630225pjb.136.1655731534551;
+        Mon, 20 Jun 2022 06:25:34 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090a694600b001ec839fff50sm4829562pjm.34.2022.06.20.06.25.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 06:25:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f8520fac-28b3-0d8d-4d27-25463978b2ec@roeck-us.net>
+Date:   Mon, 20 Jun 2022 06:25:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620105939.5128-1-slark_xiao@163.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Drop wrong dependency to
+ INTEL_SOC_PMIC
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 06:59:39PM +0800, Slark Xiao wrote:
-> For code neat purpose, we can use kmemdup to replace
-> kmalloc + memcpy.
+On 6/20/22 03:43, Andy Shevchenko wrote:
+> Intel SoC PMIC is a generic name for all PMICs that are used
+> on Intel platforms. In particular, INTEL_SOC_PMIC kernel configuration
+> option refers to Crystal Cove PMIC, which has never been a part
+> of any Intel Broxton hardware. Drop wrong dependency from Kconfig.
 > 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> Note, the correct dependency is satisfied via ACPI PMIC OpRegion driver,
+> which the Type-C depends on.
+> 
+> Fixes: d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
+> Reported-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/usb/serial/opticon.c | 4 +---
->  drivers/usb/serial/sierra.c  | 4 +---
->  2 files changed, 2 insertions(+), 6 deletions(-)
+>   drivers/usb/typec/tcpm/Kconfig | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
-> index aed28c35caff..bca6766a63e6 100644
-> --- a/drivers/usb/serial/opticon.c
-> +++ b/drivers/usb/serial/opticon.c
-> @@ -208,7 +208,7 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
->  	priv->outstanding_bytes += count;
->  	spin_unlock_irqrestore(&priv->lock, flags);
->  
-> -	buffer = kmalloc(count, GFP_ATOMIC);
-> +	buffer = kmemdup(buf, count, GFP_ATOMIC);
->  	if (!buffer)
->  		goto error_no_buffer;
->  
-> @@ -216,8 +216,6 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
->  	if (!urb)
->  		goto error_no_urb;
->  
-> -	memcpy(buffer, buf, count);
-> -
->  	usb_serial_debug_data(&port->dev, __func__, count, buffer);
->  
->  	/* The connected devices do not have a bulk write endpoint,
+> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> index 557f392fe24d..073fd2ea5e0b 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -56,7 +56,6 @@ config TYPEC_WCOVE
+>   	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
+>   	depends on ACPI
+>   	depends on MFD_INTEL_PMC_BXT
+> -	depends on INTEL_SOC_PMIC
+>   	depends on BXT_WC_PMIC_OPREGION
+>   	help
+>   	  This driver adds support for USB Type-C on Intel Broxton platforms
 
-Looks like we have the same pattern also in garmin_write_bulk(). Care to
-include that one as well?
-
-Johan
