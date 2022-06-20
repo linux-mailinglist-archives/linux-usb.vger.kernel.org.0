@@ -2,112 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C00E551EAF
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 16:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5D7551EFB
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 16:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbiFTOBj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 10:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S243140AbiFTOhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 10:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354643AbiFTN7o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 09:59:44 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D0A3A729;
-        Mon, 20 Jun 2022 06:25:35 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so10304996pjz.1;
-        Mon, 20 Jun 2022 06:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1SRZahO4w5J/q1AxamwHmWbo+QN6jL4DplQ3GJck67Q=;
-        b=Yfz4kPN4Epxgld8RHdqX+DgMerLlPdZE2q1himsiKuhf+pOrqaCXF8BhF9LkVvWOnp
-         9aXDpNUMjqDP+82FNjGLrCpz8XBIMlgUIZw2WdbxWL48Sz7rts4aspIOwQkX/wqVFqPf
-         1J7wxlGwBSpxXBF4KejzRbs6XS/AkIeWCESXqSTQ8od47R9NnNgkxObeM+ef65Cw4L/q
-         kMUTu32cmMNnlmV2j9suedht7lBl3hqCkNmCOAMTt8lVcqqgRKI9Rg4gacWUxgnzxf0I
-         685KjzIxFwQuWdGBYc+wHHr6gV2zI8MQ/jhb8nevWRqiiInmgJjnHsmihePlazOzcsxz
-         cLRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1SRZahO4w5J/q1AxamwHmWbo+QN6jL4DplQ3GJck67Q=;
-        b=DMmspJqnRLn0ajafL6qe5KJiN8AKBl3YCz1kynwnk2jZrP6IyMkZMe0lK2PMjG0kEt
-         NAhQoRU2uuh4D9OU4JssM9+0g6aV1/2yICDzfeWS9GNChfwwS1NsLMV06z7fyq542fdE
-         MroRUQDiAfAFeISouoTxe+9aBdcFNQgFLi4RA+8oolmwH8dgaKrzeZ7m8ae76fObvXjp
-         KZIs+4ivKGwcjwUZyCJc9pWuSG7zykz0qoqUO7MhCHu8JwAXGukPd6JxenH8zy9ediDI
-         Z38sJSooNpH5lbEx3RTQN/s4yRFcZrspeebW4rDqacI64a3NW0q5+MpWHdReTiTvZSIn
-         MtWg==
-X-Gm-Message-State: AJIora+RFshZHVa4qWdnRgUu96LapxCED+BAQPOlYXBpD7mMxHDPx4T/
-        v/KqV2w+f1WMbw/1bVW4HXw=
-X-Google-Smtp-Source: AGRyM1sriAMqD/tVrcUsQCeNd2USxuUFdiLg7orv2BCCs0tunNFnqevMKSGN2qUHWs8/wkImAEhsJQ==
-X-Received: by 2002:a17:90b:1bc7:b0:1e8:317d:6b3b with SMTP id oa7-20020a17090b1bc700b001e8317d6b3bmr26630225pjb.136.1655731534551;
-        Mon, 20 Jun 2022 06:25:34 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6-20020a17090a694600b001ec839fff50sm4829562pjm.34.2022.06.20.06.25.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 06:25:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f8520fac-28b3-0d8d-4d27-25463978b2ec@roeck-us.net>
-Date:   Mon, 20 Jun 2022 06:25:31 -0700
+        with ESMTP id S242678AbiFTOgq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 10:36:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F35550B1F
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 06:51:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01DF161529
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 13:51:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA80DC3411B;
+        Mon, 20 Jun 2022 13:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655733102;
+        bh=DRJU9x4aURkSCKx6/lYu3FzV7IlSvnq7XuNCJ83Xnb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=clw1kUHWsnaw5j1eAtToSOGmJLnaXfhawCvPNqAYW6yBLvYEXwnFuqOl67hbyRInW
+         ldIKarS/e0wk4AqhX5ecfn9eDWvZjDgQ7NqMQn8fHnlVmOvXG4QKG2OLaDujIeEXtP
+         s4+LFNBsQj4XVsUZxPuFUKexDZlcd0K0IKKHzpgD1w+T3izEq9lrDCJO3ratd/Fovb
+         iPx62+B4epAT17Xhtw8BNBvPuKP0QWgBkFbE2i0+z/X4RZFcCec+5N7DOGuIiHIw64
+         zkZgJ/7rA1WesqhzM7Lr+nJRZiGjPWNpXklqCc+l6d4o3jFPmfw4KUzQ0Xlmlka8+6
+         jzB20zwYqa36Q==
+Date:   Mon, 20 Jun 2022 21:51:36 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] usb: chipidea: udc: implement get_frame
+Message-ID: <20220620135136.GA1227419@Peter>
+References: <20220616194459.2981519-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Drop wrong dependency to
- INTEL_SOC_PMIC
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220620104316.57592-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616194459.2981519-1-m.grzeschik@pengutronix.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/20/22 03:43, Andy Shevchenko wrote:
-> Intel SoC PMIC is a generic name for all PMICs that are used
-> on Intel platforms. In particular, INTEL_SOC_PMIC kernel configuration
-> option refers to Crystal Cove PMIC, which has never been a part
-> of any Intel Broxton hardware. Drop wrong dependency from Kconfig.
+On 22-06-16 21:44:59, Michael Grzeschik wrote:
+> The chipidea udc core is capable of reading the current frame index from
+> hardware. This patch adds the get_frame callback to the driver.
 > 
-> Note, the correct dependency is satisfied via ACPI PMIC OpRegion driver,
-> which the Type-C depends on.
-> 
-> Fixes: d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
-> Reported-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
+Peter
 > ---
->   drivers/usb/typec/tcpm/Kconfig | 1 -
->   1 file changed, 1 deletion(-)
+>  drivers/usb/chipidea/ci.h   |  1 +
+>  drivers/usb/chipidea/core.c |  2 ++
+>  drivers/usb/chipidea/udc.c  | 14 ++++++++++++++
+>  3 files changed, 17 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 557f392fe24d..073fd2ea5e0b 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -56,7 +56,6 @@ config TYPEC_WCOVE
->   	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
->   	depends on ACPI
->   	depends on MFD_INTEL_PMC_BXT
-> -	depends on INTEL_SOC_PMIC
->   	depends on BXT_WC_PMIC_OPREGION
->   	help
->   	  This driver adds support for USB Type-C on Intel Broxton platforms
+> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+> index 99440baa6458ab..a4a3be04991099 100644
+> --- a/drivers/usb/chipidea/ci.h
+> +++ b/drivers/usb/chipidea/ci.h
+> @@ -49,6 +49,7 @@ enum ci_hw_regs {
+>  	OP_USBCMD,
+>  	OP_USBSTS,
+>  	OP_USBINTR,
+> +	OP_FRINDEX,
+>  	OP_DEVICEADDR,
+>  	OP_ENDPTLISTADDR,
+>  	OP_TTCTRL,
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 5359b2a2e4d243..6330fa9117926a 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -53,6 +53,7 @@ static const u8 ci_regs_nolpm[] = {
+>  	[OP_USBCMD]		= 0x00U,
+>  	[OP_USBSTS]		= 0x04U,
+>  	[OP_USBINTR]		= 0x08U,
+> +	[OP_FRINDEX]		= 0x0CU,
+>  	[OP_DEVICEADDR]		= 0x14U,
+>  	[OP_ENDPTLISTADDR]	= 0x18U,
+>  	[OP_TTCTRL]		= 0x1CU,
+> @@ -78,6 +79,7 @@ static const u8 ci_regs_lpm[] = {
+>  	[OP_USBCMD]		= 0x00U,
+>  	[OP_USBSTS]		= 0x04U,
+>  	[OP_USBINTR]		= 0x08U,
+> +	[OP_FRINDEX]		= 0x0CU,
+>  	[OP_DEVICEADDR]		= 0x14U,
+>  	[OP_ENDPTLISTADDR]	= 0x18U,
+>  	[OP_TTCTRL]		= 0x1CU,
+> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> index 15d211a8b3ac54..054e5077b39834 100644
+> --- a/drivers/usb/chipidea/udc.c
+> +++ b/drivers/usb/chipidea/udc.c
+> @@ -1651,6 +1651,19 @@ static const struct usb_ep_ops usb_ep_ops = {
+>  /******************************************************************************
+>   * GADGET block
+>   *****************************************************************************/
+> +
+> +static int ci_udc_get_frame(struct usb_gadget *_gadget)
+> +{
+> +	struct ci_hdrc *ci = container_of(_gadget, struct ci_hdrc, gadget);
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	spin_lock_irqsave(&ci->lock, flags);
+> +	ret = hw_read(ci, OP_FRINDEX, 0x3fff);
+> +	spin_unlock_irqrestore(&ci->lock, flags);
+> +	return ret >> 3;
+> +}
+> +
+>  /*
+>   * ci_hdrc_gadget_connect: caller makes sure gadget driver is binded
+>   */
+> @@ -1807,6 +1820,7 @@ static struct usb_ep *ci_udc_match_ep(struct usb_gadget *gadget,
+>   * Check  "usb_gadget.h" for details
+>   */
+>  static const struct usb_gadget_ops usb_gadget_ops = {
+> +	.get_frame	= ci_udc_get_frame,
+>  	.vbus_session	= ci_udc_vbus_session,
+>  	.wakeup		= ci_udc_wakeup,
+>  	.set_selfpowered	= ci_udc_selfpowered,
+> -- 
+> 2.30.2
+> 
+
+-- 
+
+Thanks,
+Peter Chen
 
