@@ -2,51 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C02F55148F
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 11:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502FE551532
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 12:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238852AbiFTJjc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 05:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S240922AbiFTKFU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 06:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241231AbiFTJjX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 05:39:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB4821AD
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 02:39:22 -0700 (PDT)
+        with ESMTP id S240933AbiFTKFE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 06:05:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BC213F78;
+        Mon, 20 Jun 2022 03:04:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6742461382
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 09:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC0D5C3411B;
-        Mon, 20 Jun 2022 09:39:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46652B8100B;
+        Mon, 20 Jun 2022 10:04:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4FAEC3411B;
+        Mon, 20 Jun 2022 10:04:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655717961;
-        bh=jc7FVa9EzUwjhDNDYn8ZHxzuVDckc11DP//IKIiLFAs=;
+        s=k20201202; t=1655719449;
+        bh=nuyOjq3kbA0oH9KqhQl7VyXBnSZxp250qorZIvLiOlY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hD7OnKGny9r6pMNR+BCN9ExakemUmJctj30hrvRVKF2juM/0DB8MzHelIEaTpCMKy
-         C0CeYMLQ/c+HtaiqE6W10tV+FZGrENvzXBiCjgl3WMSzWT63jrJNZZyvn8DmOI9HWh
-         hxErlVzEbI3oDx/U9OCVHIRxB+aZ2tRXWZy/v876C0Dmk7hnd9f8NbJKFh+lnrbYzh
-         jlmJnEUva0gjNdpIy5xg5GG3LoJvPNHQhqouEzYWGqFiruxWM3M7dOuEOAdywPCIz5
-         HvbDYgJxG1+OGaKH+7FXU3c3jgQg+Tgj2OY1EvOhskRjpcjrXBirWXSkMS9q0VaEIU
-         vH5EV6aIx63Kw==
+        b=H15poN1qc4ilJQOU84gJjgdy+DdVZRlnKeazbyRvGKYb5NF+kRIUD07Fxm+dXcTVd
+         dr5BDbo2X1dbuseZ58Fic+fVMLmArmb/vvD/8CE1bMJlmWo0Rdtg6mzkHTAt2f8MpG
+         ZnL/LXJlS+oM2zBRWl0zn9ixQc3ANQXBzKNyyepP9Ht72HHps41tsrXb7kC8Sq9z2T
+         eFU8bHGn34LIqawEVtWsLqGig9D6V6EriOjcxkCsjoT83soo0c3TwDytt028O9TLFm
+         6dYad40PrejJJRLAS/2M4562WIUJ+lv4NRnIlybVvl2CuhUqDu0qkO/nhhneXtFLjL
+         QiiQoQVxUTb4Q==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1o3DsM-00081A-C0; Mon, 20 Jun 2022 11:39:18 +0200
-Date:   Mon, 20 Jun 2022 11:39:18 +0200
+        id 1o3EGL-0008Eu-31; Mon, 20 Jun 2022 12:04:05 +0200
+Date:   Mon, 20 Jun 2022 12:04:05 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Charles Yeh <charlesyeh522@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        charles-yeh@prolific.com.tw
-Subject: Re: [PATCH] USB: serial: pl2303: Modify the detection method of
- PL2303HXN (TYPE_HXN)
-Message-ID: <YrBARs5dfARHW9Rl@hovoldconsulting.com>
-References: <20220617133514.357-1-charlesyeh522@gmail.com>
+To:     Frank Zago <frank@zago.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] gpio: ch341: add GPIO MFD cell driver for the
+ CH341
+Message-ID: <YrBGFZwLENLigWMV@hovoldconsulting.com>
+References: <20220401023306.79532-1-frank@zago.net>
+ <20220401023306.79532-3-frank@zago.net>
+ <YouzaO6ogxYj40Bp@hovoldconsulting.com>
+ <9b5b8cb4-7c05-b3cf-ca68-85d334a7f0b0@zago.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617133514.357-1-charlesyeh522@gmail.com>
+In-Reply-To: <9b5b8cb4-7c05-b3cf-ca68-85d334a7f0b0@zago.net>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,74 +65,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 09:35:14PM +0800, Charles Yeh wrote:
-> The setting value of bcdUSB & bcdDevice of PL2303TA is the same as the
-> setting value of bcdUSB & bcdDevice of a certain chip of PL2303HXN
+On Wed, Jun 15, 2022 at 08:29:31PM -0500, Frank Zago wrote:
+> On 5/23/22 11:16, Johan Hovold wrote:
 
-Which ones would that be?
-
-> The setting value of bcdUSB & bcdDevice of PL2303TB is the same as the
-> setting value of bcdUSB & bcdDevice of a certain chip of PL2303HXN
-
-Same question here.
-
-> The PL2303HXN series currently has several chips on sale, and several chips
-> are about to be sold.
-> The PL2303HXN cannot use bcdDevice to determine the type one by one.
-
-Even if we've found out that the hard way that the documented bdcDevice
-for these chips does not match your datasheets, it still seems we're
-able to determine the HXN types (GC, GS, etc) based on bcdDevice and
-this is something we'll likely need sooner or later.
-
-Could you provide a list of the bcdDevice you use for the various HXN
-types instead?
-
-Then we can use the hx_status check for TA and TB whose bcdDevice have
-been reused.
-
-> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
-> ---
->  drivers/usb/serial/pl2303.c | 21 +++++++++++----------
->  1 file changed, 11 insertions(+), 10 deletions(-)
+> >> +static void ch341_gpio_irq_enable(struct irq_data *data)
+> >> +{
+> >> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
+> >> +	int rc;
+> >> +
+> >> +	/*
+> >> +	 * The URB might have just been unlinked in
+> >> +	 * ch341_gpio_irq_disable, but the completion handler hasn't
+> >> +	 * been called yet.
+> >> +	 */
+> >> +	if (!usb_wait_anchor_empty_timeout(&dev->irq_urb_out, 5000))
+> >> +		usb_kill_anchored_urbs(&dev->irq_urb_out);
+> >> +
+> >> +	usb_anchor_urb(dev->irq_urb, &dev->irq_urb_out);
+> >> +	rc = usb_submit_urb(dev->irq_urb, GFP_ATOMIC);
+> >> +	if (rc)
+> >> +		usb_unanchor_urb(dev->irq_urb);
+> > 
+> > This looks confused and broken.
+> > 
+> > usb_kill_anchored_urbs() can sleep so either calling it is broken or
+> > using GFP_ATOMIC is unnecessary.
 > 
-> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-> index 3506c47e1eef..95e5fdf3b80a 100644
-> --- a/drivers/usb/serial/pl2303.c
-> +++ b/drivers/usb/serial/pl2303.c
-> @@ -436,22 +436,23 @@ static int pl2303_detect_type(struct usb_serial *serial)
->  		break;
->  	case 0x200:
->  		switch (bcdDevice) {
-> -		case 0x100:
-> -		case 0x105:
-> -		case 0x305:
-> -		case 0x405:
-> -		case 0x605:
-> +		case 0x300:
-> +			if (!pl2303_supports_hx_status(serial))
-> +				return TYPE_HXN;
-> +			else
-> +				return TYPE_TA;
-> +		case 0x500:
-> +			if (!pl2303_supports_hx_status(serial))
-> +				return TYPE_HXN;
-> +			else
-> +				return TYPE_TB;
-> +		default:
->  			/*
->  			 * Assume it's an HXN-type if the device doesn't
->  			 * support the old read request value.
->  			 */
->  			if (!pl2303_supports_hx_status(serial))
->  				return TYPE_HXN;
-> -			break;
-> -		case 0x300:
-> -			return TYPE_TA;
-> -		case 0x500:
-> -			return TYPE_TB;
->  		}
->  		break;
->  	}
+> Right, that function can sleep. I changed GFP_ATOMIC to GFP_KERNEL.
+
+These callbacks can be called in atomic context so that's not an option,
+I'm afraid.
+
+> > And isn't this function called multiple times when enabling more than
+> > one irq?!
+> 
+> There's only one IRQ, so only one URB will be posted at a time. It
+> is reposted as soon as it comes back unless the IRQ is disabled or
+> the device stops.
+
+AFAICT you have up to 16 (CH341_GPIO_NUM_PINS) interrupts, not one. So I
+still say this is broken.
+
+> >> +}
+> >> +
+> >> +static void ch341_gpio_irq_disable(struct irq_data *data)
+> >> +{
+> >> +	struct ch341_gpio *dev = irq_data_get_irq_chip_data(data);
+> >> +
+> >> +	usb_unlink_urb(dev->irq_urb);
+> > 
+> > Same here...
+
+> >> +}
+> >> +
+> >> +static int ch341_gpio_remove(struct platform_device *pdev)
+> >> +{
+> >> +	struct ch341_gpio *dev = platform_get_drvdata(pdev);
+> >> +
+> >> +	usb_kill_anchored_urbs(&dev->irq_urb_out);
+> > 
+> > You only have one URB...
+> > 
+> > And what prevents it from being resubmitted here?
+> 
+> I don't see what would resubmit it here. The gpio is being released.
+
+Your implementation needs to handle racing requests. The gpio chip is
+still registered here.
 
 Johan
