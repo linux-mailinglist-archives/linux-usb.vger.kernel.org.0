@@ -2,191 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96C05523F1
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 20:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDDA55249C
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jun 2022 21:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245587AbiFTSfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jun 2022 14:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S240882AbiFTTd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jun 2022 15:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245555AbiFTSfM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 14:35:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274FD1EC6C;
-        Mon, 20 Jun 2022 11:35:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA4B8B812AB;
-        Mon, 20 Jun 2022 18:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C0EC3411B;
-        Mon, 20 Jun 2022 18:35:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655750108;
-        bh=3mSgNT10b4IjzPgWigmKhCRzl+Ti+EYL/1+uQFwMp0Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YvLC0E9QtvNI2VOwXPiBN5gXjqLr5rXxoHEMOQ5sUWXijZHmHqlZZoWVN+2mGVmI5
-         EP/BOzf3vOI83Nawe3EQM58nzxZAe6m0FgdZ/DpWODRGH6Cl5/dPjtx+o4oAnzLIe+
-         vLUBc4kyvZpN9kK3lF4+sU0CqlKEfutvlSARgTIOtq+LXAz47jazByohylHteahUL9
-         GvRGmi+FKujuIbhBWASw1vLw0pkSfwU5G6iFYlht1leiC50pXx4jiMfj9TBX8+yLXS
-         aAQGL6ZkuYyzt59Xj0R0hgJ8s3YfDEkKxYFZGovzaJGKdKQKHWXfeSG+Uq/2fOKYAW
-         v/wxDubWF0gSA==
-Date:   Mon, 20 Jun 2022 19:35:00 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: Re: [PATCH v2 07/15] Documentation: ABI: testing: mt6370: Add ADC
- sysfs guideline
-Message-ID: <20220620193500.145f05b9@jic23-huawei>
-In-Reply-To: <CABtFH5+R761Tyd4yaWg-foSC4K=_aeYiVaTf37KvVH1Z4z9Jhw@mail.gmail.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
-        <20220613111146.25221-8-peterwu.pub@gmail.com>
-        <20220618164820.2eeb8ae8@jic23-huawei>
-        <CABtFH5+R761Tyd4yaWg-foSC4K=_aeYiVaTf37KvVH1Z4z9Jhw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        with ESMTP id S233184AbiFTTdW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jun 2022 15:33:22 -0400
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07BA1C128;
+        Mon, 20 Jun 2022 12:33:20 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id DAFE3100D9414;
+        Mon, 20 Jun 2022 21:33:18 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id B0E9D8943BB; Mon, 20 Jun 2022 21:33:18 +0200 (CEST)
+Date:   Mon, 20 Jun 2022 21:33:18 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Simon Han <z.han@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH net] net: phy: smsc: Disable Energy Detect Power-Down in
+ interrupt mode
+Message-ID: <20220620193318.GA15322@wunner.de>
+References: <439a3f3168c2f9d44b5fd9bb8d2b551711316be6.1655714438.git.lukas@wunner.de>
+ <c40cc5fb-a84d-23f2-a400-c01b5b419bc9@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c40cc5fb-a84d-23f2-a400-c01b5b419bc9@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 20 Jun 2022 14:00:43 +0800
-ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+On Mon, Jun 20, 2022 at 10:03:26AM -0700, Florian Fainelli wrote:
+> On 6/20/22 04:04, Lukas Wunner wrote:
+> > --- a/drivers/net/phy/smsc.c
+> > +++ b/drivers/net/phy/smsc.c
+> > @@ -110,7 +110,7 @@ static int smsc_phy_config_init(struct phy_device *phydev)
+> >   	struct smsc_phy_priv *priv = phydev->priv;
+> >   	int rc;
+> > -	if (!priv->energy_enable)
+> > +	if (!priv->energy_enable || phydev->irq != PHY_POLL)
+> 
+> phy_interrupt_is_valid() may be more appropriate, since you are assuming
+> that you either have PHY_POLL or valid "external" PHY interrupt but there is
+> also the special case of PHY_MAC_INTERRUPT that is not dealt with.
 
-> Hi Jonathan,
->=20
-> Thanks for your helpful comments, and I have some questions want to
-> ask you below.
->=20
-> Jonathan Cameron <jic23@kernel.org> =E6=96=BC 2022=E5=B9=B46=E6=9C=8818=
-=E6=97=A5 =E9=80=B1=E5=85=AD =E6=99=9A=E4=B8=8A11:39=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >
-> > On Mon, 13 Jun 2022 19:11:38 +0800
-> > ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> > =20
-> > > From: ChiaEn Wu <chiaen_wu@richtek.com>
-> > >
-> > > Add ABI documentation for mt6370 non-standard ADC sysfs interfaces.
-> > >
-> > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > > ---
-> > >  .../ABI/testing/sysfs-bus-iio-adc-mt6370      | 36 +++++++++++++++++=
-++
-> > >  1 file changed, 36 insertions(+)
-> > >  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370 b/Doc=
-umentation/ABI/testing/sysfs-bus-iio-adc-mt6370
-> > > new file mode 100644
-> > > index 000000000000..039b3381176a
-> > > --- /dev/null
-> > > +++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-mt6370
-> > > @@ -0,0 +1,36 @@
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage0_ra=
-w =20
-> >
-> > Unfortunately the kernel documentation build scripts do no support dupl=
-icating
-> > standard ABI for particular devices so as to provide more information.
-> > Hence you can't have anything in this file.
-> > =20
->=20
-> I want to confirm with you again,
-> because my ABI file duplicates with standard sysfs-bus-iio (voltage,
-> current, and temperature channels),
-> Should I just remove this ABI file and modify the code of mt6370-adc
-> to meet your expectations??
+I deliberately disable EDPD for PHY_MAC_INTERRUPT as well.
 
-yes.
+That's a proper interrupt, i.e. the PHY signals interrupts
+to the MAC (e.g. through an interrupt pin on the MAC),
+which forwards the interrupts to phylib.  EDPD cannot
+be used in that situation either.
 
->=20
-> > =20
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 VBUS ADC with lower accuracy(+-75mA) =
-=20
-> > Curious though, voltage with a mA accuracy range? =20
->=20
-> Yes, this description is based on the data sheet.
 
-Weird :)=20
+> > @@ -217,7 +219,7 @@ static int lan87xx_read_status(struct phy_device *phydev)
+> >   	int err = genphy_read_status(phydev);
+> > -	if (!phydev->link && priv->energy_enable) {
+> > +	if (!phydev->link && priv->energy_enable && phydev->irq == PHY_POLL) {
+> 
+> phy_polling_mode()?
 
->=20
-> > This scale should be presented directly to userspace anyway so no need
-> > for this doc.
-> > =20
-> > > +             higher measure range(1~22V)
-> > > +             Calculating with scale returns voltage in uV =20
-> >
-> > No. All channels return in mV. That's the ABI requirement as
-> > in sysfs-bus-iio and we cannot vary if for particular drivers.  If we d=
-id
-> > no generic tooling would work. =20
->=20
-> Ok, I got it!
->=20
-> > =20
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage1_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 VBUS ADC with higher accuracy(+-30mA)
-> > > +             lower measure range(1~9.76V)
-> > > +             Calculating with scale offset returns voltage in uV
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage4_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 TS_BAT ADC
-> > > +             Calculating with scale returns voltage in uV
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltage7_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 CHG_VDDP ADC
-> > > +             Calculating with scale returns voltage in mV
-> > > +
-> > > +What:                /sys/bus/iio/devices/iio:deviceX/in_temp8_raw
-> > > +KernelVersion:       5.18
-> > > +Contact:     chiaen_wu@richtek.com
-> > > +Description:
-> > > +             Indicated MT6370 IC junction temperature
-> > > +             Calculating with scale and offset returns temperature i=
-n degree =20
->=20
-> Shall I modify the scale of temperature to milli degrees in
-> mt6370-adc.c and remove this item??
-
-yes.
+Personally I think checking for PHY_POLL is succinct,
+but if you or anyone else feels strongly about it
+I'll be happy to add such a static inline to
+include/linux/phy.h.
 
 Thanks,
 
-Jonathan
-
->=20
-> > =20
->=20
-> Best regards,
-> ChiaEn Wu
-
+Lukas
