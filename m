@@ -2,117 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F43553402
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 15:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86B2553458
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 16:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349442AbiFUNvz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 09:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
+        id S233485AbiFUOT2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 10:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiFUNvx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 09:51:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D12E0BF;
-        Tue, 21 Jun 2022 06:51:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 019286160D;
-        Tue, 21 Jun 2022 13:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3431AC3411C;
-        Tue, 21 Jun 2022 13:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655819511;
-        bh=4IevcmVifiYxJwwWuX2Wh2QeaRSnAhsRk0vlmdpTTBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DOpKHbGF0He1d+bfu/6FO2fxoH7NXzM5bK/nXg7AZt5TJin8ZqxDroupfziD8qV5N
-         ONrpCb3Sst6fu7/mmxs5IBj3ODZViZ95q+iwMWiO9wGwjcc1/CO8Elwi3RLeMvsFK1
-         63Fe43tnGZKOL7vlRP99dLm6fJLQ51rq7JQvEbQ4=
-Date:   Tue, 21 Jun 2022 15:51:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-Message-ID: <YrHM8mqG3WVVesk4@kroah.com>
-References: <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com>
- <20220611153104.sksoxn4dmo5rgnk3@pengutronix.de>
- <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
+        with ESMTP id S1348625AbiFUOT1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 10:19:27 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4505AF598
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 07:19:26 -0700 (PDT)
+Received: (qmail 876385 invoked by uid 1000); 21 Jun 2022 10:19:25 -0400
+Date:   Tue, 21 Jun 2022 10:19:25 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     hminas@synopsys.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        amelie.delaunay@foss.st.com
+Subject: Re: [PATCH 1/3] usb: host: ohci-platform: add TPL support
+Message-ID: <YrHTba9s2NhBfQT2@rowland.harvard.edu>
+References: <20220621130506.85424-1-fabrice.gasnier@foss.st.com>
+ <20220621130506.85424-2-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220621130506.85424-2-fabrice.gasnier@foss.st.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 01:06:37AM +0900, Vincent MAILHOL wrote:
-> On Sun. 12 juin 2022 at 00:31, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > On 10.06.2022 17:33:35, Rhett Aultman wrote:
-> > > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > >
-> > > When allocating URB memory with kmalloc(), drivers can simply set the
-> > > URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
-> > > will be freed in the background when killing the URB (for example with
-> > > usb_kill_anchored_urbs()).
-> > >
-> > > However, there are no equivalent mechanism when allocating DMA memory
-> > > (with usb_alloc_coherent()).
-> > >
-> > > This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
-> > > cause the kernel to automatically call usb_free_coherent() on the
-> > > transfer buffer when the URB is killed, similarly to how
-> > > URB_FREE_BUFFER triggers a call to kfree().
-> > >
-> > > In order to have all the flags in numerical order, URB_DIR_IN is
-> > > renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
-> > > value 0x0200.
-> > >
-> > > Co-developed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > Co-developed-by: Rhett Aultman <rhett.aultman@samsara.com>
-> > > Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
-> > > Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >
-> > FWIW:
-> > Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> > This patch probably goes upstream via USB. Once this is in net I'll take
-> > the 2nd patch.
+On Tue, Jun 21, 2022 at 03:05:04PM +0200, Fabrice Gasnier wrote:
+> From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 > 
-> Question to Greg: can this first patch also be applied to the stable
-> branches? Technically, this is a new feature but it will be used to
-> solve several memory leaks on existing drivers (the gs_usb is only one
-> example).
+> The TPL support is used to identify targeted devices during EH compliance
+> test. The user can add "tpl-support" in the device tree to enable it.
+> 
+> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
 
-We take in dependent patches into the stable trees all the time when
-needed, that's not an issue here.
+For this patch and the 2/3 ehci-platform patch:
 
-What is an issue here is that this feels odd as other USB developers
-said previously.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-My big objection here is what validates that the size of the transfer
-buffer here is really the size of the buffer to be freed?  Is that
-always set properly to be the length that was allocated?  That might
-just be the size of the last transfer using this buffer, but there is no
-guarantee that I can see of that says this really is the length of the
-allocated buffer, which is why usb_free_coherent() requires a size
-parameter.
-
-If that guarantee is always right, then we should be able to drop the
-size option in usb_free_coherent(), and I don't think that's really
-possible.
-
-thanks,
-
-greg k-h
+>  drivers/usb/host/ohci-platform.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> index 47dfbfe9e5190..0adae62651276 100644
+> --- a/drivers/usb/host/ohci-platform.c
+> +++ b/drivers/usb/host/ohci-platform.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/usb/ohci_pdriver.h>
+>  #include <linux/usb.h>
+>  #include <linux/usb/hcd.h>
+> +#include <linux/usb/of.h>
+>  
+>  #include "ohci.h"
+>  
+> @@ -210,6 +211,8 @@ static int ohci_platform_probe(struct platform_device *dev)
+>  	hcd->rsrc_start = res_mem->start;
+>  	hcd->rsrc_len = resource_size(res_mem);
+>  
+> +	hcd->tpl_support = of_usb_host_tpl_support(dev->dev.of_node);
+> +
+>  	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
+>  	if (err)
+>  		goto err_power;
+> -- 
+> 2.25.1
+> 
