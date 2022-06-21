@@ -2,126 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F12552BAA
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 09:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20F0552BD3
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 09:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346862AbiFUHUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 03:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S1346190AbiFUHXy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 03:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346031AbiFUHUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 03:20:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D01C1F2E8;
-        Tue, 21 Jun 2022 00:20:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF59C60F56;
-        Tue, 21 Jun 2022 07:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBA2C3411D;
-        Tue, 21 Jun 2022 07:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655796017;
-        bh=6W0c7s4KkH+S/zdUiGrAMs/0jMjBrVdLfs+zroSmWF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g1p6Ippw5y6KSOOg7wb0i774Ka1xszMqIOW9nuXJLpb/8twkTNJEEhhRwnHSKmov0
-         gCj62pnmgvcV17OsttAU6q0/WkuCEASKm2osM1ZbEb0kgIefuicLGBvagTSWSWAdqR
-         9+wzwwTqw0sxr2EN7V3AdI80Za1SJalKHS8U7hn8=
-Date:   Tue, 21 Jun 2022 09:20:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ray Chi <raychi@google.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        albertccwang@google.com
-Subject: Re: [PATCH] USB: hub: add module parameters to usbcore for port init
- retries
-Message-ID: <YrFxLYibDtyuxSO6@kroah.com>
-References: <20220617102256.3253019-1-raychi@google.com>
+        with ESMTP id S1344735AbiFUHXs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 03:23:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211651A3A8
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 00:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655796225; x=1687332225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WCgsWuLBx/XaU2GfBWVvnON/H2Vi5/L174LDuQcTn0k=;
+  b=e2Jf5MYNdxXlgdk0jhYpJPHxcCF8qJns2t9DAYz5q+bSd3A64bnRMiMw
+   sRDjDO3ZiN4zVin3FIhMTcdG5NZUdJLhbSl//ZLfEk8MR/UFDPnS4mqp0
+   9eQ0euvkCSuI4sEflG4hXZkYtKlqxeFJCC6uvMeZG6pawdm8qj2rhzLos
+   51Zd0DrRcT5WZImnknyTgPDeAyw9L0UC9TaNqXYrDeLKqmDcMKXEYN6Ke
+   9k6MWe7x9icnb/z+R1kINas7Lj34Oew8G4m9nODsi9DdxggkdUPNhcCAm
+   RdVK6mLa+Z82Ic2eIDosF92jMT641B0gUlsZuRim0PJMUNvKjXS4kjV7R
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="277599046"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="277599046"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 00:23:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="729718209"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 21 Jun 2022 00:23:30 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 21 Jun 2022 10:23:29 +0300
+Date:   Tue, 21 Jun 2022 10:23:29 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Phil Edworthy <phil.edworthy@renesas.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: usb: typec: driver for TI HD3SS3220 USB Type-C DRP port
+ controller question
+Message-ID: <YrFx8RFYgF6RWckE@kuha.fi.intel.com>
+References: <TYYPR01MB70867A4B8CEBD6450A239D45F5B09@TYYPR01MB7086.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220617102256.3253019-1-raychi@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <TYYPR01MB70867A4B8CEBD6450A239D45F5B09@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 06:22:56PM +0800, Ray Chi wrote:
-> Currently, there is a Kconfig (CONFIG_USB_FEW_INIT_RETRIES) to
-> reduce retries when the port initialization is failed. The retry
-> times are fixed and assigned in compile time. To improve the
-> flexibility, this patch add four module parameters:
-> port_reset_tries, set_address_tries, get_descriptor_tries,
-> and get_maxpacket0_tries, to replace the original default values.
-> 
-> The default value of module parameters is the same as before
-> to preserve the existing behavior.
-> 
-> Signed-off-by: Ray Chi <raychi@google.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         | 16 ++++++++++
->  drivers/usb/core/hub.c                        | 31 ++++++++++++++++---
->  2 files changed, 42 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 8090130b544b..c467b2778128 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6277,6 +6277,22 @@
->  			USB_REQ_GET_DESCRIPTOR request in milliseconds
->  			(default 5000 = 5.0 seconds).
->  
-> +	usbcore.port_reset_tries=
-> +			[USB] Set the retry time of port reset for each
-> +			port initialization (default PORT_RESET_TRIES = 5).
-> +
-> +	usbcore.set_address_tries=
-> +			[USB] set the retry time of set address for each
-> +			port initialization (default SET_ADDRESS_TRIES = 2).
-> +
-> +	usbcore.get_descriptor_tries=
-> +			[USB] set the retry time of set address for each
-> +			port initialization (default GET_DESCRIPTOR_TRIES = 2).
-> +
-> +	usbcore.get_maxpacket0_tries=
-> +			[USB] set the retry time of get maxpacket0 for each
-> +			port initialization (default GET_MAXPACKET0_TRIES = 3).
-> +
->  	usbcore.nousb	[USB] Disable the USB subsystem
->  
->  	usbcore.quirks=
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index b7f66dcd1fe0..c5c695886424 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2788,6 +2788,27 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
->  #define HUB_LONG_RESET_TIME	200
->  #define HUB_RESET_TIMEOUT	800
->  
-> +/* define retry time for port reset */
-> +static int port_reset_tries = PORT_RESET_TRIES;
-> +module_param(port_reset_tries, int, S_IRUGO|S_IWUSR);
-> +MODULE_PARM_DESC(port_reset_tries, "retry times of port reset for each port initialization");
+Hi Phil,
 
-Please no.  Module parameters are from the 1990's, let us never add new
-ones if at all possible.
+On Mon, Jun 20, 2022 at 09:04:10AM +0000, Phil Edworthy wrote:
+> Hi Heikki,
+> 
+> I have a board that uses the TI HD3SS3220 USB Type-C DRP port
+> controller [1], however it doesn't have the interrupt line
+> connected. How would you recommend I handle this? Should I get
+> the driver to poll the i2c registers?
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/hd3ss3220.c?h=v5.19-rc3
 
-These are global options, for all devices in the system.  Instead, use
-per-device settings if you really need to change these values.
+If you have some other way of detecting connections on your system,
+then we probable could consider some kind of notifier, but as a
+general solution for the lack of interrupt, I think polling is the
+only way.
 
-But I would even push back on that and ask why these values need to be
-changed at all.  What hardware is broken so badly that our timeout
-settings do not work properly?  Can we modify them gracefully to "just
-work" without any need for tweaking or requiring any modification by a
-user at all?  That would be the better solution instead of requiring
-users to do this on their own when confronted by misbehaving hardware.
+I'll add the list, and Aswath and Roger. Aswath and Roger were looking
+at the same problem with the tps6598x (tipd) driver.
+
 
 thanks,
 
-greg k-h
+-- 
+heikki
