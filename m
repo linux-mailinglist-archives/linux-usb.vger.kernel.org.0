@@ -2,125 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBCC553E25
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 23:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BB4553E56
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 00:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354499AbiFUVsr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 17:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        id S231592AbiFUWM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 18:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356625AbiFUVsb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 17:48:31 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1427213D23;
-        Tue, 21 Jun 2022 14:48:29 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 9D2CD16C007C;
-        Wed, 22 Jun 2022 00:48:27 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CfYR0rrq5XjV; Wed, 22 Jun 2022 00:48:27 +0300 (EEST)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1655848107; bh=fp7Z7WX6CY4w4rd8Kqz3s9RH04oII+EqtX0RxQIS/ow=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KKhS+TmXZ8xtY0mMdR4ApcpUu3yWcGhHtPJ5CKc5ljUmdp3S86H/SrjbAJYIOI7jf
-         +eR4V9rtUHFGCBNKgkThVvxmxvI4EGo8vekWGHS2noCn0MCNpws9nbCB+rxzFWHv8C
-         TIZgOBrxisbzzNMj1QtqNvPj5neM29WvStsbHNTw=
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Marian Postevca <posteuca@mutex.one>,
-        Maximilian Senftleben <kernel@mail.msdigital.de>,
-        stable@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5.4] usb: gadget: u_ether: fix regression in setting fixed MAC address
-Date:   Wed, 22 Jun 2022 00:47:49 +0300
-Message-Id: <20220621214749.3059-1-posteuca@mutex.one>
+        with ESMTP id S1354580AbiFUWJ7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 18:09:59 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7082ED5B
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 15:09:57 -0700 (PDT)
+Received: from Cyrus.lan ([86.151.31.128]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.163]) with ESMTPA (Nemesis) id
+ 1MjPYI-1nNbob2D6I-00kywU; Wed, 22 Jun 2022 00:09:43 +0200
+Date:   Tue, 21 Jun 2022 23:09:41 +0100
+From:   Darren Stevens <darren@stevens-zone.net>
+To:     linuxppc-dev@lists.ozlabs.org, oss@buserror.net,
+        chzigotzky@xenosoft.de, robh@kernel.org, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org
+Subject: [PATCH RFC] drivers/usb/ehci-fsl: Fix interrupt setup in host mode.
+Message-ID: <20220621230941.381f9791@Cyrus.lan>
+X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.30; powerpc-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Ayh/DqLZxuxcGgHIen4KcjIrEaWKLYpKbbcFNXeXDHKnIN4LIhE
+ LoPxWSqYHIBM+lXCwQnMGYrG9Cl2yX59H3BM0D3LNC26aEVlBB3y28DK/dYIwLgSdOYhBlf
+ hARpHRQBBR4M9Vn6h0fJA8fZnK5FeGAm/aQONu9m1qtBGzA5SZK+kD65RZFqEgpAcycKPl8
+ UOxfJCfE4DwFM5JaiscoA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YODaKTTHoII=:G4NJ0iuBhkkTmrrugFCR4o
+ s+4+7nbTpKAfjRstI5jgSwY5B1kMGmGN2bbXazwcjqBf6K4UqvZfQZzQPodsXSUzbQp7nF/wb
+ YY0NR/S9n62enDkJHvnmJqMi5Dj3oTZfs3DHeINNlN+1hD0318oHR5Wpz1xEoMETkfQjpRMiL
+ 5ZDUVoCJntQcmU+lPOHJl5IslVB0IN/zFD2Y3riIpzSCDIcL+QKr5TUphdhdlOAT1/dfUok5J
+ vWY/yLFqNy0kzLX7OgjQdFecxppH0TDup9bfuqJvIWMns5PhH09wZsHL7zIoeZqpOeizifGZR
+ Z1KGCCP6wGiISIrS8C0b+fPl8QEjxX1eLk/vRoL7AuWaEg5Ur6vdGcKFIpEDp2vaqmBIQCaHa
+ CfnKRaZze1rSqA2+7+5A+ntjVQvKFmUj+5xX6aG4vdEwwpbyEbqYZG+kwhinImsOlhskxgazc
+ dqjT9pQ4jV7WiGlNEeeoBwd3lLC4h19l8Z4VevjBMsfnENfIHSCKvc7Itan7oX/6N+hx/9TN6
+ D2EYBPnxhJZg/Yz95BeqUHS+eXrj8XR7R7vxmiVU78YhTyJyQZIs1fvREtadG99v0FQ1Tan4e
+ L8hEvGTlGzlIvg74Kpz466N7zuc/gCNaAD1p7N5iYOGFzirWe0UTGNZT/3R1v0YizysnBtA8v
+ QNch9lr0w7OoxsIFlHHlbf5aKbrHMLRhxTCOT93o4Or5orVXTJAeCN62b/grwYVbRkzuroLMj
+ BGNbUJynY4gCrkxbwmJsKsqoz/epeFJ9KFJ668npHbdkuWcXchh4fthrnys=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-commit b337af3a4d6147000b7ca6b3438bf5c820849b37 upstream.
+In patch a1a2b7125e1079 (Drop static setup of IRQ resource from DT
+core) we stopped platform_get_resource() from returning the IRQ, as all
+drivers were supposed to have switched to platform_get_irq()
+Unfortunately the Freescale EHCI driver in host mode got missed. Fix
+it. Also fix allocation of resources to work with current kernel.
 
-In systemd systems setting a fixed MAC address through
-the "dev_addr" module argument fails systematically.
-When checking the MAC address after the interface is created
-it always has the same but different MAC address to the one
-supplied as argument.
-
-This is partially caused by systemd which by default will
-set an internally generated permanent MAC address for interfaces
-that are marked as having a randomly generated address.
-
-Commit 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in
-setting MAC address in setup phase") didn't take into account
-the fact that the interface must be marked as having a set
-MAC address when it's set as module argument.
-
-Fixed by marking the interface with NET_ADDR_SET when
-the "dev_addr" module argument is supplied.
-
-Reported-by: Maximilian Senftleben <kernel@mail.msdigital.de>
-Cc: stable@vger.kernel.org
-Fixes: 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in setting MAC address in setup phase")
-Signed-off-by: Marian Postevca <posteuca@mutex.one>
+Fixes:a1a2b7125e1079 (Drop static setup of IRQ resource from DT core)
+Reported-by Christian Zigotzky <chzigotzky@xenosoft.de>
+Signed-off-by Darren Stevens <darren@stevens-zone.net>
 ---
- drivers/usb/gadget/function/u_ether.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Tested on AmigaOne X5000/20 and X5000/40 not sure if this is entirely
+correct fix though. Contains code by Rob Herring (in fsl-mph-dr-of.c)
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 271bd08f4a255..3f053b11e2cee 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -772,9 +772,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
- 	dev->qmult = qmult;
- 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
+diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+index 385be30..d0bf7fb 100644
+--- a/drivers/usb/host/ehci-fsl.c
++++ b/drivers/usb/host/ehci-fsl.c
+@@ -23,6 +23,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/fsl_devices.h>
+ #include <linux/of_platform.h>
++#include <linux/of_address.h>
+ #include <linux/io.h>
  
--	if (get_ether_addr(dev_addr, net->dev_addr))
-+	if (get_ether_addr(dev_addr, net->dev_addr)) {
-+		net->addr_assign_type = NET_ADDR_RANDOM;
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "self");
-+	} else {
-+		net->addr_assign_type = NET_ADDR_SET;
-+	}
- 	if (get_ether_addr(host_addr, dev->host_mac))
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "host");
-@@ -831,6 +835,9 @@ struct net_device *gether_setup_name_default(const char *netname)
- 	INIT_LIST_HEAD(&dev->tx_reqs);
- 	INIT_LIST_HEAD(&dev->rx_reqs);
+ #include "ehci.h"
+@@ -46,9 +47,10 @@ static struct hc_driver __read_mostly
+fsl_ehci_hc_driver; */
+ static int fsl_ehci_drv_probe(struct platform_device *pdev)
+ {
++	struct device_node *dn = pdev->dev.of_node;
+ 	struct fsl_usb2_platform_data *pdata;
+ 	struct usb_hcd *hcd;
+-	struct resource *res;
++	struct resource res;
+ 	int irq;
+ 	int retval;
+ 	u32 tmp;
+@@ -76,14 +78,10 @@ static int fsl_ehci_drv_probe(struct
+platform_device *pdev) return -ENODEV;
+ 	}
  
-+	/* by default we always have a random MAC address */
-+	net->addr_assign_type = NET_ADDR_RANDOM;
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev,
+-			"Found HC with no IRQ. Check %s setup!\n",
+-			dev_name(&pdev->dev));
+-		return -ENODEV;
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		return irq;
+ 	}
+-	irq = res->start;
+ 
+ 	hcd = __usb_create_hcd(&fsl_ehci_hc_driver, pdev->dev.parent,
+ 			       &pdev->dev, dev_name(&pdev->dev), NULL);
+@@ -92,15 +90,21 @@ static int fsl_ehci_drv_probe(struct
+platform_device *pdev) goto err1;
+ 	}
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	hcd->regs = devm_ioremap_resource(&pdev->dev, res);
++	platform_set_drvdata(pdev, hcd);
++	pdev->dev.platform_data = pdata;
 +
- 	skb_queue_head_init(&dev->rx_frames);
++	tmp = of_address_to_resource(dn, 0, &res);
++	if (tmp)
++		return tmp;
++
++	hcd->regs = devm_ioremap_resource(&pdev->dev, &res);
+ 	if (IS_ERR(hcd->regs)) {
+ 		retval = PTR_ERR(hcd->regs);
+ 		goto err2;
+ 	}
  
- 	/* network device setup */
-@@ -868,7 +875,6 @@ int gether_register_netdev(struct net_device *net)
- 	g = dev->gadget;
+-	hcd->rsrc_start = res->start;
+-	hcd->rsrc_len = resource_size(res);
++	hcd->rsrc_start = res.start;
++	hcd->rsrc_len = resource_size(&res);
  
- 	memcpy(net->dev_addr, dev->dev_mac, ETH_ALEN);
--	net->addr_assign_type = NET_ADDR_RANDOM;
+ 	pdata->regs = hcd->regs;
  
- 	status = register_netdev(net);
- 	if (status < 0) {
-@@ -908,6 +914,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
- 	if (get_ether_addr(dev_addr, new_addr))
- 		return -EINVAL;
- 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
-+	net->addr_assign_type = NET_ADDR_SET;
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(gether_set_dev_addr);
--- 
-2.35.1
-
+diff --git a/drivers/usb/host/fsl-mph-dr-of.c
+b/drivers/usb/host/fsl-mph-dr-of.c index 44a7e58..766e4ab 100644
+--- a/drivers/usb/host/fsl-mph-dr-of.c
++++ b/drivers/usb/host/fsl-mph-dr-of.c
+@@ -80,8 +80,6 @@ static struct platform_device
+*fsl_usb2_device_register( const char *name, int id)
+ {
+ 	struct platform_device *pdev;
+-	const struct resource *res = ofdev->resource;
+-	unsigned int num = ofdev->num_resources;
+ 	int retval;
+ 
+ 	pdev = platform_device_alloc(name, id);
+@@ -106,11 +104,8 @@ static struct platform_device
+*fsl_usb2_device_register( if (retval)
+ 		goto error;
+ 
+-	if (num) {
+-		retval = platform_device_add_resources(pdev, res, num);
+-		if (retval)
+-			goto error;
+-	}
++	pdev->dev.of_node = ofdev->dev.of_node;
++	pdev->dev.of_node_reused = true;
+ 
+ 	retval = platform_device_add(pdev);
+ 	if (retval)
