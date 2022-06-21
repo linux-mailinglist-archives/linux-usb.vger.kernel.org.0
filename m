@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC2B553D98
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 23:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBCC553E25
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 23:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356408AbiFUVZF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 17:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S1354499AbiFUVsr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 17:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356268AbiFUVYp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 17:24:45 -0400
+        with ESMTP id S1356625AbiFUVsb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 17:48:31 -0400
 Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B923B18E0E;
-        Tue, 21 Jun 2022 14:18:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1427213D23;
+        Tue, 21 Jun 2022 14:48:29 -0700 (PDT)
 Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id E5E4C16C007C;
-        Wed, 22 Jun 2022 00:18:26 +0300 (EEST)
+        by mail.mutex.one (Postfix) with ESMTP id 9D2CD16C007C;
+        Wed, 22 Jun 2022 00:48:27 +0300 (EEST)
 X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
 Received: from mail.mutex.one ([127.0.0.1])
         by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zQoGK-iPBWcY; Wed, 22 Jun 2022 00:18:26 +0300 (EEST)
+        with ESMTP id CfYR0rrq5XjV; Wed, 22 Jun 2022 00:48:27 +0300 (EEST)
 From:   Marian Postevca <posteuca@mutex.one>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1655846306; bh=SZv4GmVYSWyJ0KWMqNxRyKQ/A9DysKbi7PuZ+/S+Bqg=;
+        t=1655848107; bh=fp7Z7WX6CY4w4rd8Kqz3s9RH04oII+EqtX0RxQIS/ow=;
         h=From:To:Cc:Subject:Date:From;
-        b=inJWNUVE4J5xReNj+7doC1XjK65aw9Z9horZfbUslh+5HPZBByaDldsMkKS+iuaC3
-         3R5Qs2RMEBQQsfody48Raw6eNQP94opuiJ3ZGvSRKg77QXj6tVolLcr1L3e77Q/X4h
-         kuEzzVTdT0Sx7I5bhKWvDQf3hypwDAv4FMKbudHU=
+        b=KKhS+TmXZ8xtY0mMdR4ApcpUu3yWcGhHtPJ5CKc5ljUmdp3S86H/SrjbAJYIOI7jf
+         +eR4V9rtUHFGCBNKgkThVvxmxvI4EGo8vekWGHS2noCn0MCNpws9nbCB+rxzFWHv8C
+         TIZgOBrxisbzzNMj1QtqNvPj5neM29WvStsbHNTw=
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Marian Postevca <posteuca@mutex.one>,
         Maximilian Senftleben <kernel@mail.msdigital.de>,
         stable@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4.19] usb: gadget: u_ether: fix regression in setting fixed MAC address
-Date:   Wed, 22 Jun 2022 00:18:00 +0300
-Message-Id: <20220621211800.18457-1-posteuca@mutex.one>
+Subject: [PATCH 5.4] usb: gadget: u_ether: fix regression in setting fixed MAC address
+Date:   Wed, 22 Jun 2022 00:47:49 +0300
+Message-Id: <20220621214749.3059-1-posteuca@mutex.one>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,7 +77,7 @@ Signed-off-by: Marian Postevca <posteuca@mutex.one>
  1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 1b3e674e6330d..2fe91f120bb1d 100644
+index 271bd08f4a255..3f053b11e2cee 100644
 --- a/drivers/usb/gadget/function/u_ether.c
 +++ b/drivers/usb/gadget/function/u_ether.c
 @@ -772,9 +772,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
