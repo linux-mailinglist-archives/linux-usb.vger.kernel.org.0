@@ -2,43 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4FE553490
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 16:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87D05534A2
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 16:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351773AbiFUOdl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 10:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S1351807AbiFUOg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 10:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237343AbiFUOd2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 10:33:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48D717585;
-        Tue, 21 Jun 2022 07:33:27 -0700 (PDT)
+        with ESMTP id S1351476AbiFUOgZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 10:36:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E766920BEA;
+        Tue, 21 Jun 2022 07:36:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6948CB81817;
-        Tue, 21 Jun 2022 14:33:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57C1C3411D;
-        Tue, 21 Jun 2022 14:33:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8319F6168D;
+        Tue, 21 Jun 2022 14:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7A8C3411C;
+        Tue, 21 Jun 2022 14:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655822005;
-        bh=JYrLpERtN5LzOmO2YH5CtQSk8rM2T/YTYKNbWl0hAtI=;
+        s=korg; t=1655822183;
+        bh=9hzVJBmXejWxqKoWbTYAA5mBykUEAvY+19xhKlfx+aM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JZpc974jigr8blzNaQR+GCYzCfAXB7D7nnVJ+txJ66DPrFx2kyPs0XuTbblsRM8hG
-         vXQk0i+yMcycm2xmFJUH2tFNxx/WRld5aAKGycVRYTHI9ePzW+tbDP+z3NwRXPsBVX
-         MkpNlOd+H1wNqn7T47nDMfENWBg1v+1ShQZCwGIQ=
-Date:   Tue, 21 Jun 2022 16:33:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: core: sysfs: convert sysfs snprintf to sysfs_emit
-Message-ID: <YrHWsiwEh3YouRWo@kroah.com>
-References: <20220613023553.103441-1-zhangxuezhi1@coolpad.com>
+        b=h9XH0EAkI74XOBgpK92u1iqaQqlF0Y5PaZFC9rX4RJWOuJSVJ6268ltKh196Uo5Do
+         geb/cdM+8qvDgcfiue/PulRRVnhw2W3dZY5G1/hdVBDtVESzt5DuTuguC5gtAaJ4Z1
+         hfwKwY5OmnlhzASl4GhLJFBvltZK70nVMaEJ/qQU=
+Date:   Tue, 21 Jun 2022 16:36:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Subject: Re: [PATCH v2 0/2] Add support for PolarFire SoC's musb controller
+Message-ID: <YrHXZYe4e4vlCHh3@kroah.com>
+References: <20220613114642.1615292-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220613023553.103441-1-zhangxuezhi1@coolpad.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220613114642.1615292-1-conor.dooley@microchip.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -49,47 +56,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:35:53AM +0800, Xuezhi Zhang wrote:
-> Fix the following coccicheck warnings:
-> drivers/usb/core/sysfs.c:921:8-16:
-> WARNING: use scnprintf or sprintf
-> drivers/usb/core/sysfs.c:730:8-16:
-> WARNING: use scnprintf or sprintf
-
-Please do not wrap error or warning messages.
-
+On Mon, Jun 13, 2022 at 12:46:41PM +0100, Conor Dooley wrote:
+> Hey Bin, Greg,
+> Short series here adding support for USB on Microchip PolarFire SoC FPGAs.
+> The kconfig dependency for INVENTRA_DMA has become a bit of a mouthful,
+> is there a better way of dealing with that?
+> Thanks,
+> Conor.
 > 
-> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> ---
-> v2: add correct public mailing list
-> ---
->  drivers/usb/core/sysfs.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Changes since v1:
+> - Drop unneeded resource copying as per Rob's changes to the other drivers
+> - Drop the dts patch
 > 
-> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
-> index fa2e49d432ff..6387c0dfe30e 100644
-> --- a/drivers/usb/core/sysfs.c
-> +++ b/drivers/usb/core/sysfs.c
-> @@ -727,7 +727,7 @@ static ssize_t authorized_show(struct device *dev,
->  			       struct device_attribute *attr, char *buf)
->  {
->  	struct usb_device *usb_dev = to_usb_device(dev);
-> -	return snprintf(buf, PAGE_SIZE, "%u\n", usb_dev->authorized);
-> +	return sysfs_emit(buf, "%u\n", usb_dev->authorized);
->  }
->  
->  /*
-> @@ -918,7 +918,7 @@ static ssize_t authorized_default_show(struct device *dev,
->  	struct usb_hcd *hcd;
->  
->  	hcd = bus_to_hcd(usb_bus);
-> -	return snprintf(buf, PAGE_SIZE, "%u\n", hcd->dev_policy);
-> +	return sysfs_emit(buf, "%u\n", hcd->dev_policy);
->  }
+> Conor Dooley (2):
+>   usb: musb: Add support for PolarFire SoC's musb controller
+>   MAINTAINERS: add musb to PolarFire SoC entry
+> 
+>  MAINTAINERS               |   1 +
+>  drivers/usb/musb/Kconfig  |  13 +-
+>  drivers/usb/musb/Makefile |   1 +
+>  drivers/usb/musb/mpfs.c   | 265 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 279 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/usb/musb/mpfs.c
+> 
+> 
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+> -- 
+> 2.36.1
+> 
 
-Any specific reason you are not fixing up all sysfs show entries in this
-file?  Only doing a few feels odd and wrong, please do the whole file at
-once.
+Any chance you can get your company to fix up their email settings:
+
+Grabbing thread from lore.kernel.org/all/20220613114642.1615292-1-conor.dooley%40microchip.com/t.mbox.gz
+Analyzing 4 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+  ✗ [PATCH v2 1/2] usb: musb: Add support for PolarFire SoC's musb controller
+  ✗ [PATCH v2 2/2] MAINTAINERS: add musb to PolarFire SoC entry
+  ---
+  ✗ BADSIG: DKIM/microchip.com
+---
+Total patches: 2
+
+If I didn't know better, I would think you were spoofing the address...
 
 thanks,
 
