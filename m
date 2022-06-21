@@ -2,102 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7CA552B37
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 08:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5284552B5E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 08:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346086AbiFUGmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 02:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S1346302AbiFUG5q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 02:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346052AbiFUGmr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 02:42:47 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3226C1A813
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 23:42:47 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso773377pjz.0
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jun 2022 23:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Brv0A33+OmHjorNQMxUqaD7c2sxIUHjXjQVCZiQWEVc=;
-        b=CKViii4njBXytnctH1RCE0GVYfNRUG60FhAXsuFVF8t6bdShZV+1rOO/PCxb3bJsoo
-         +rg1q8+5ZujMsa9oGR6l3ddN0B7iyI9Ru7/jEJ0h5iJixbaRjiH4pr2qHg5eroydnukf
-         r+5vLVfoVvn9l1gSg9TPKzu8Uo90pIy6IcOhsSKepzk8JyuRe/XVpMAc/ZpAZ95KIUIu
-         9GcgbWO7j2sNfxFmnaGUznc/QVK31KPjWw8p8ZGBaRlC3IpZHYwGzNuVEZL+4hqIDroA
-         Q0hLuP5I+6OXyqkNVj8SbO7IELcr8T0SdTmuKOxLY9NJUiJEkrs7Q8V6FSEtyw9oUoru
-         XVLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Brv0A33+OmHjorNQMxUqaD7c2sxIUHjXjQVCZiQWEVc=;
-        b=zo2PkMAL6A3Qk15ACARC9IEOHEooPwwbVjRZFmJTweMXVb5vOnjzImaX642i1ge7VK
-         0X4T+aCWxy1BceUKnCw6b7iQA6qdaIMm03l5bbfiERji1lNXFetyS0JhovkhCn/RPMsJ
-         lNgY9Ha6kjMwoa1LVB7bDaqWW7Aj+J7PWgglLygXxg5CBA2PSDgFSrsqH4YcKDaLdQXZ
-         9miz70nxBZzw4yJBNEiMMqcBc73aVfi1qkJa4KNHfvrIdru8HW4O/CTmPfts3WigOus/
-         n0U5T7phgJlbnTQg7aRWkR28zoW2vZF9VXxTeYw70uhzy1bcb2u+tnijekpKAvHpj3AA
-         h66A==
-X-Gm-Message-State: AJIora+RhbJoaV7zQILpOfYMbuxvHXolxaE9HplcJsLtS5riR994FG/w
-        2VqoTTs7LAy/jwDzRCnm5Hzpb2Et3xDyAQ==
-X-Google-Smtp-Source: AGRyM1ufL/dCME5fwjYyoFxEWGtD1uViiylA7Vl+Blg8QVrpLFyINA8gjRlVED3RcQMohNyHy+psyA==
-X-Received: by 2002:a17:90a:5509:b0:1ec:caf4:b327 with SMTP id b9-20020a17090a550900b001eccaf4b327mr1917773pji.129.1655793766610;
-        Mon, 20 Jun 2022 23:42:46 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0015e8d4eb2c0sm9754260plk.266.2022.06.20.23.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 23:42:46 -0700 (PDT)
-Date:   Mon, 20 Jun 2022 23:42:42 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: host: ehci-q: Fix
- ehci_submit_single_step_set_feature annotation typo
-Message-ID: <20220621064242.GA698757@ubuntu>
-References: <20220620213621.GA694104@ubuntu>
- <YrFfmEeaxbbhxK0p@kroah.com>
- <20220621062925.GA698414@ubuntu>
- <YrFmoyW3q2CPLpok@kroah.com>
+        with ESMTP id S231830AbiFUG5p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 02:57:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF8B1CFE4;
+        Mon, 20 Jun 2022 23:57:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D705B81699;
+        Tue, 21 Jun 2022 06:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE58C341C0;
+        Tue, 21 Jun 2022 06:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655794661;
+        bh=+kaDe/Oc1bAbXeDpkUaPaEqe5MkYjktUVSkOvw2ENsA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NL/Cr1TLFu3AZMGTVjKIQwKYHYVCEyrdjwzWY2iZTV9roW4HiOSgspUkaKbDUEg6i
+         0owWKTefExYoOqnTNKpDIsrmn6nz8Cglc/h1ag6r4+ubpDmjrIorxv0TNmb+Tyr6RM
+         pf8rwjCz/wqwqCmHdEigjZkM9TDFLzOFPN889sJnXbtOEVy4aWwS/oM840gTr4CDOd
+         6O9j7Ry+ZbF1Xua5ybSoMEgzqy/uX90WUa2QQ9iSTsYLXTJ2KDEqjElm2aTY7VV4V1
+         rWoMFxXQ0AkyqO/6khHEeAKJ2yidCyp9GioqezwVzaZxbnA38TAs1koHgmoaUtIoKI
+         IR9n2DSGh7ITA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o3XpO-0002OK-JE; Tue, 21 Jun 2022 08:57:35 +0200
+Date:   Tue, 21 Jun 2022 08:57:34 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     frank zago <frank@zago.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, USB <linux-usb@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v6 2/4] gpio: ch341: add GPIO MFD cell driver for the
+ CH341
+Message-ID: <YrFr3s50ZMD1Et9W@hovoldconsulting.com>
+References: <20220616013747.126051-1-frank@zago.net>
+ <20220616013747.126051-3-frank@zago.net>
+ <YrBLGMD/Gzfv0W6F@hovoldconsulting.com>
+ <CAHp75VfWbC2fbKenuzx6LXjUTApcUKyX6gXd-3Pe31cvrbT7kQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YrFmoyW3q2CPLpok@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHp75VfWbC2fbKenuzx6LXjUTApcUKyX6gXd-3Pe31cvrbT7kQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I found the "argument" typo. 
-It seems that "argument" is more correct than "arguement".
+On Mon, Jun 20, 2022 at 06:08:19PM +0200, Andy Shevchenko wrote:
+> On Mon, Jun 20, 2022 at 12:26 PM Johan Hovold <johan@kernel.org> wrote:
+> > On Wed, Jun 15, 2022 at 08:37:45PM -0500, frank zago wrote:
+> 
+> ...
+> 
+> > > +     /* Create an URB for handling interrupt */
+> > > +     dev->irq_urb = usb_alloc_urb(0, GFP_KERNEL);
+> > > +     if (!dev->irq_urb)
+> > > +             return dev_err_probe(&pdev->dev, -ENOMEM, "Cannot allocate the int URB\n");
+> >
+> > This isn't how dev_err_probe() is used.
+> 
+> While I agree on the below comment, what does this imply?
 
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
----
- drivers/usb/host/ehci-q.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That you should only use dev_err_probe() to handle -EPROBE_DEFER. That's
+what it is was added for, documented as, and it is what the
+implementation still tells you.
 
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index 1163af6fad77..807e64991e3e 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -1162,7 +1162,7 @@ submit_async (
-  * This is done in two parts: first SETUP req for GetDesc is sent then
-  * 15 seconds later, the IN stage for GetDesc starts to req data from dev
-  *
-- * is_setup : i/p arguement decides which of the two stage needs to be
-+ * is_setup : i/p argument decides which of the two stage needs to be
-  * performed; TRUE - SETUP and FALSE - IN+STATUS
-  * Returns 0 if success
-  */
---
-2.25.1
+I see now that there has recently been some mission creep:
 
-Send it back without headers.
-Sorry to bother you.
+	7065f92255bb ("driver core: Clarify that dev_err_probe() is OK even w/out -EPROBE_DEFER")
 
-Regards,
-Hyunwoo Kim.
+I'm not sure I agree with that, but fortunately we don't need to have
+that debate in this case due to the below.
+ 
+> > And allocation failures are already logged so just return -ENOMEM here.
+
+Johan
