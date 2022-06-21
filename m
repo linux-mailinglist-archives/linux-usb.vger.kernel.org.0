@@ -2,226 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9166553C7F
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 23:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B39553D5B
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 23:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355243AbiFUU5q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 16:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S1355668AbiFUVMu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 17:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355098AbiFUU4v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 16:56:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9EC31DC4;
-        Tue, 21 Jun 2022 13:50:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3667161884;
-        Tue, 21 Jun 2022 20:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68430C385A2;
-        Tue, 21 Jun 2022 20:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655844600;
-        bh=MtY0OiCevKPj0KTEsS6EnYkWh648FVxKD8BWPOXR24Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xez1phldbyK5UG0TqSlse1SrUlBFcX+a3ZLAKgGFM+gM6BKe5inQYbYqazh7sN3vC
-         CI5TO3h8mONHMIPl25oH9f9Ppzg3kEuGPi6T5uFWPq4r2DvhSKRNO9h4ZvCy/UroE4
-         hP0qEQZ2yxiRiSzY6VOJSOKRqj3YGNJuyckZIQqjBqx3canPndZjJruKunlipq8AH4
-         OfMzVNeeeH25zsD4V740CYjSMEtPqsE6GGOlBI2URn0EeYXRBT2h1+EwliRyMm3aoY
-         4V8TyyqhJo6CbjvaRGlaguXucZWZIhcgOrwYcEaaN3m//pHU6jDR+at9vELsthoJx3
-         h8heVu5lv9xXg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jose Alonso <joalonsof@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jesionowskigreg@gmail.com,
-        jgg@ziepe.ca, jannh@google.com, jackychou@asix.com.tw,
-        arnd@arndb.de, linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 14/22] net: usb: ax88179_178a needs FLAG_SEND_ZLP
-Date:   Tue, 21 Jun 2022 16:49:20 -0400
-Message-Id: <20220621204928.249907-14-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220621204928.249907-1-sashal@kernel.org>
-References: <20220621204928.249907-1-sashal@kernel.org>
+        with ESMTP id S1355354AbiFUVMj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 17:12:39 -0400
+Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524FE3AA4D;
+        Tue, 21 Jun 2022 13:58:35 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.mutex.one (Postfix) with ESMTP id 4E46C16C00A0;
+        Tue, 21 Jun 2022 23:58:18 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
+Received: from mail.mutex.one ([127.0.0.1])
+        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Jk9ZoUcCUrVN; Tue, 21 Jun 2022 23:58:17 +0300 (EEST)
+From:   Marian Postevca <posteuca@mutex.one>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
+        t=1655845097; bh=vpNthc+lldxuvJbZ7zxIciUxabh3k038ETcMBiLjAOs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RxSc0hQi5h2gzEr2CUj6KMIEzlaUYhp21qBaf+RtgAXfqkJ9cjyOgSzNyiOl7hfz1
+         jrWPr20+WF+PD7DyfR2y8p+7OOx1hgBKGzOJgShlDIA2Lx8n+c/zeKVHs64XV9PXt2
+         1sNpTadLLnTVdvwo2yT7Kq5RM2z5Syq1dTKePbVs=
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Marian Postevca <posteuca@mutex.one>,
+        Maximilian Senftleben <kernel@mail.msdigital.de>,
+        stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 4.14] usb: gadget: u_ether: fix regression in setting fixed MAC address
+Date:   Tue, 21 Jun 2022 23:54:07 +0300
+Message-Id: <20220621205406.22599-1-posteuca@mutex.one>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jose Alonso <joalonsof@gmail.com>
+commit b337af3a4d6147000b7ca6b3438bf5c820849b37 upstream.
 
-[ Upstream commit 36a15e1cb134c0395261ba1940762703f778438c ]
+In systemd systems setting a fixed MAC address through
+the "dev_addr" module argument fails systematically.
+When checking the MAC address after the interface is created
+it always has the same but different MAC address to the one
+supplied as argument.
 
-The extra byte inserted by usbnet.c when
- (length % dev->maxpacket == 0) is causing problems to device.
+This is partially caused by systemd which by default will
+set an internally generated permanent MAC address for interfaces
+that are marked as having a randomly generated address.
 
-This patch sets FLAG_SEND_ZLP to avoid this.
+Commit 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in
+setting MAC address in setup phase") didn't take into account
+the fact that the interface must be marked as having a set
+MAC address when it's set as module argument.
 
-Tested with: 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+Fixed by marking the interface with NET_ADDR_SET when
+the "dev_addr" module argument is supplied.
 
-Problems observed:
-======================================================================
-1) Using ssh/sshfs. The remote sshd daemon can abort with the message:
-   "message authentication code incorrect"
-   This happens because the tcp message sent is corrupted during the
-   USB "Bulk out". The device calculate the tcp checksum and send a
-   valid tcp message to the remote sshd. Then the encryption detects
-   the error and aborts.
-2) NETDEV WATCHDOG: ... (ax88179_178a): transmit queue 0 timed out
-3) Stop normal work without any log message.
-   The "Bulk in" continue receiving packets normally.
-   The host sends "Bulk out" and the device responds with -ECONNRESET.
-   (The netusb.c code tx_complete ignore -ECONNRESET)
-Under normal conditions these errors take days to happen and in
-intense usage take hours.
-
-A test with ping gives packet loss, showing that something is wrong:
-ping -4 -s 462 {destination}	# 462 = 512 - 42 - 8
-Not all packets fail.
-My guess is that the device tries to find another packet starting
-at the extra byte and will fail or not depending on the next
-bytes (old buffer content).
-======================================================================
-
-Signed-off-by: Jose Alonso <joalonsof@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Maximilian Senftleben <kernel@mail.msdigital.de>
+Cc: stable@vger.kernel.org
+Fixes: 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in setting MAC address in setup phase")
+Signed-off-by: Marian Postevca <posteuca@mutex.one>
 ---
- drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/usb/gadget/function/u_ether.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index e2fa56b92685..c829ad3b304f 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1750,7 +1750,7 @@ static const struct driver_info ax88179_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1763,7 +1763,7 @@ static const struct driver_info ax88178a_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1776,7 +1776,7 @@ static const struct driver_info cypress_GX3_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1789,7 +1789,7 @@ static const struct driver_info dlink_dub1312_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1802,7 +1802,7 @@ static const struct driver_info sitecom_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1815,7 +1815,7 @@ static const struct driver_info samsung_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1828,7 +1828,7 @@ static const struct driver_info lenovo_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1841,7 +1841,7 @@ static const struct driver_info belkin_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset	= ax88179_reset,
- 	.stop	= ax88179_stop,
--	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1854,7 +1854,7 @@ static const struct driver_info toshiba_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset	= ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1867,7 +1867,7 @@ static const struct driver_info mct_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset	= ax88179_reset,
- 	.stop	= ax88179_stop,
--	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1880,7 +1880,7 @@ static const struct driver_info at_umc2000_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset  = ax88179_reset,
- 	.stop   = ax88179_stop,
--	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1893,7 +1893,7 @@ static const struct driver_info at_umc200_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset  = ax88179_reset,
- 	.stop   = ax88179_stop,
--	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1906,7 +1906,7 @@ static const struct driver_info at_umc2000sp_info = {
- 	.link_reset = ax88179_link_reset,
- 	.reset  = ax88179_reset,
- 	.stop   = ax88179_stop,
--	.flags  = FLAG_ETHER | FLAG_FRAMING_AX,
-+	.flags  = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index f59c20457e658..2d45233ba027e 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -776,9 +776,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
+ 	dev->qmult = qmult;
+ 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
+ 
+-	if (get_ether_addr(dev_addr, net->dev_addr))
++	if (get_ether_addr(dev_addr, net->dev_addr)) {
++		net->addr_assign_type = NET_ADDR_RANDOM;
+ 		dev_warn(&g->dev,
+ 			"using random %s ethernet address\n", "self");
++	} else {
++		net->addr_assign_type = NET_ADDR_SET;
++	}
+ 	if (get_ether_addr(host_addr, dev->host_mac))
+ 		dev_warn(&g->dev,
+ 			"using random %s ethernet address\n", "host");
+@@ -835,6 +839,9 @@ struct net_device *gether_setup_name_default(const char *netname)
+ 	INIT_LIST_HEAD(&dev->tx_reqs);
+ 	INIT_LIST_HEAD(&dev->rx_reqs);
+ 
++	/* by default we always have a random MAC address */
++	net->addr_assign_type = NET_ADDR_RANDOM;
++
+ 	skb_queue_head_init(&dev->rx_frames);
+ 
+ 	/* network device setup */
+@@ -872,7 +879,6 @@ int gether_register_netdev(struct net_device *net)
+ 	g = dev->gadget;
+ 
+ 	memcpy(net->dev_addr, dev->dev_mac, ETH_ALEN);
+-	net->addr_assign_type = NET_ADDR_RANDOM;
+ 
+ 	status = register_netdev(net);
+ 	if (status < 0) {
+@@ -912,6 +918,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
+ 	if (get_ether_addr(dev_addr, new_addr))
+ 		return -EINVAL;
+ 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
++	net->addr_assign_type = NET_ADDR_SET;
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(gether_set_dev_addr);
 -- 
 2.35.1
 
