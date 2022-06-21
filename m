@@ -2,50 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BB4553E56
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 00:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2994A553E6A
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 00:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbiFUWM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 18:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47806 "EHLO
+        id S232279AbiFUWT0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 18:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354580AbiFUWJ7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 18:09:59 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7082ED5B
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 15:09:57 -0700 (PDT)
-Received: from Cyrus.lan ([86.151.31.128]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.163]) with ESMTPA (Nemesis) id
- 1MjPYI-1nNbob2D6I-00kywU; Wed, 22 Jun 2022 00:09:43 +0200
-Date:   Tue, 21 Jun 2022 23:09:41 +0100
-From:   Darren Stevens <darren@stevens-zone.net>
-To:     linuxppc-dev@lists.ozlabs.org, oss@buserror.net,
-        chzigotzky@xenosoft.de, robh@kernel.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org
-Subject: [PATCH RFC] drivers/usb/ehci-fsl: Fix interrupt setup in host mode.
-Message-ID: <20220621230941.381f9791@Cyrus.lan>
-X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.30; powerpc-unknown-linux-gnu)
+        with ESMTP id S229458AbiFUWTZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 18:19:25 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B330C31354
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id lw20so8025991ejb.4
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
+        b=D4OeYr5DObfkZ5SxU78+21kychVQSbaYxc23HIiBZL/HdobOEgoPwRKlVkqu1qxzwz
+         OMerWfBiqhPqNfus9CMllIQSBRuu8B0VSmqLAsRaVcsaJrJJuGEgFuQc3DonJ/KE+aLR
+         iLQdIyL/eb6AaFyiD53AvNC7yxOApi+ZRt5U2foiWaMwt0nuJZ+L81yHFaWh5xPh5n/0
+         aiU025tdZv1lG2fC0/5QfmsBWN+BZ2R4Q2xd7tyXdDCxKX4vUnvB8uLqyFudoI0U0u6C
+         25Mz9INEgtxhNkLP8DYKCeIzC0BrjXWVVeo3stEgIF35rQhqOLf6uwKpnMAvnoEaMeQs
+         h+JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
+        b=iis7GelTaJh6k392uMPI8RDDPCKqAp77LkOPN7opd4B3tyrjmj5v79msOGnOqUdlAS
+         hSLt7xwQHX15LQAmdRE0Isp653OLAzWhtpY0WCPJ2T6JDNC38b0dj4RolJ7sijZP+0q7
+         svJW6QTylvaVonAV+jwz6wu5BzRy22UgCGLwCj2Z2EBnfQ1nUdow4sWgaDx9S0Dqufy0
+         vhz/P0nl1Sv9VQPUBKlermF5wuxEmp/2Djqv02ehjA8dCExkjAcYQlPcX31JEpstiN2I
+         YZMTbTNeAafS+ll6yfwTk+Rva4NFt3KggfTDiGmNeSrbeX+q98bX5j020QJXasw9QEX2
+         //Tg==
+X-Gm-Message-State: AJIora+I9CSuBG+f9xWv4hLQLc99an40N17zdOj6vb+gQHKSvOhXIEvZ
+        qnzznF8jm1XC95dcct5C9MbCqoROPjMdZGRq/jZdYg==
+X-Google-Smtp-Source: AGRyM1vVeJpl5YmahMIBRWKENGAY/5q7qFCUrgPBVWAl++5JmH2yrju9aDpjPk6EPGCreQdfMELmoUi+rubgGYVlS7Q=
+X-Received: by 2002:a17:906:728a:b0:715:2fb5:19f9 with SMTP id
+ b10-20020a170906728a00b007152fb519f9mr270868ejl.170.1655849962024; Tue, 21
+ Jun 2022 15:19:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Ayh/DqLZxuxcGgHIen4KcjIrEaWKLYpKbbcFNXeXDHKnIN4LIhE
- LoPxWSqYHIBM+lXCwQnMGYrG9Cl2yX59H3BM0D3LNC26aEVlBB3y28DK/dYIwLgSdOYhBlf
- hARpHRQBBR4M9Vn6h0fJA8fZnK5FeGAm/aQONu9m1qtBGzA5SZK+kD65RZFqEgpAcycKPl8
- UOxfJCfE4DwFM5JaiscoA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YODaKTTHoII=:G4NJ0iuBhkkTmrrugFCR4o
- s+4+7nbTpKAfjRstI5jgSwY5B1kMGmGN2bbXazwcjqBf6K4UqvZfQZzQPodsXSUzbQp7nF/wb
- YY0NR/S9n62enDkJHvnmJqMi5Dj3oTZfs3DHeINNlN+1hD0318oHR5Wpz1xEoMETkfQjpRMiL
- 5ZDUVoCJntQcmU+lPOHJl5IslVB0IN/zFD2Y3riIpzSCDIcL+QKr5TUphdhdlOAT1/dfUok5J
- vWY/yLFqNy0kzLX7OgjQdFecxppH0TDup9bfuqJvIWMns5PhH09wZsHL7zIoeZqpOeizifGZR
- Z1KGCCP6wGiISIrS8C0b+fPl8QEjxX1eLk/vRoL7AuWaEg5Ur6vdGcKFIpEDp2vaqmBIQCaHa
- CfnKRaZze1rSqA2+7+5A+ntjVQvKFmUj+5xX6aG4vdEwwpbyEbqYZG+kwhinImsOlhskxgazc
- dqjT9pQ4jV7WiGlNEeeoBwd3lLC4h19l8Z4VevjBMsfnENfIHSCKvc7Itan7oX/6N+hx/9TN6
- D2EYBPnxhJZg/Yz95BeqUHS+eXrj8XR7R7vxmiVU78YhTyJyQZIs1fvREtadG99v0FQ1Tan4e
- L8hEvGTlGzlIvg74Kpz466N7zuc/gCNaAD1p7N5iYOGFzirWe0UTGNZT/3R1v0YizysnBtA8v
- QNch9lr0w7OoxsIFlHHlbf5aKbrHMLRhxTCOT93o4Or5orVXTJAeCN62b/grwYVbRkzuroLMj
- BGNbUJynY4gCrkxbwmJsKsqoz/epeFJ9KFJ668npHbdkuWcXchh4fthrnys=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
+In-Reply-To: <20220621085345.603820-6-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 21 Jun 2022 15:19:10 -0700
+Message-ID: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,111 +80,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In patch a1a2b7125e1079 (Drop static setup of IRQ resource from DT
-core) we stopped platform_get_resource() from returning the IRQ, as all
-drivers were supposed to have switched to platform_get_irq()
-Unfortunately the Freescale EHCI driver in host mode got missed. Fix
-it. Also fix allocation of resources to work with current kernel.
+ On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
+>
+> The kunit_test_suite() macro is no-longer incompatible with module_add,
+> so its use can be reinstated.
+>
+> Since this fixes parsing with builtins and kunit_tool, also enable the
+> test by default when KUNIT_ALL_TESTS is enabled.
+>
+> The test can now be run via kunit_tool with:
+>         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+>         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
+>         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
+>         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
+>         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
+>         'sdhci-of-aspeed'
+>
+> (It may be worth adding a .kunitconfig at some point, as there are
+> enough dependencies to make that command scarily long.)
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Fixes:a1a2b7125e1079 (Drop static setup of IRQ resource from DT core)
-Reported-by Christian Zigotzky <chzigotzky@xenosoft.de>
-Signed-off-by Darren Stevens <darren@stevens-zone.net>
----
-Tested on AmigaOne X5000/20 and X5000/40 not sure if this is entirely
-correct fix though. Contains code by Rob Herring (in fsl-mph-dr-of.c)
+Acked-by: Daniel Latypov <dlatypov@google.com>
 
-diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-index 385be30..d0bf7fb 100644
---- a/drivers/usb/host/ehci-fsl.c
-+++ b/drivers/usb/host/ehci-fsl.c
-@@ -23,6 +23,7 @@
- #include <linux/platform_device.h>
- #include <linux/fsl_devices.h>
- #include <linux/of_platform.h>
-+#include <linux/of_address.h>
- #include <linux/io.h>
- 
- #include "ehci.h"
-@@ -46,9 +47,10 @@ static struct hc_driver __read_mostly
-fsl_ehci_hc_driver; */
- static int fsl_ehci_drv_probe(struct platform_device *pdev)
- {
-+	struct device_node *dn = pdev->dev.of_node;
- 	struct fsl_usb2_platform_data *pdata;
- 	struct usb_hcd *hcd;
--	struct resource *res;
-+	struct resource res;
- 	int irq;
- 	int retval;
- 	u32 tmp;
-@@ -76,14 +78,10 @@ static int fsl_ehci_drv_probe(struct
-platform_device *pdev) return -ENODEV;
- 	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev,
--			"Found HC with no IRQ. Check %s setup!\n",
--			dev_name(&pdev->dev));
--		return -ENODEV;
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		return irq;
- 	}
--	irq = res->start;
- 
- 	hcd = __usb_create_hcd(&fsl_ehci_hc_driver, pdev->dev.parent,
- 			       &pdev->dev, dev_name(&pdev->dev), NULL);
-@@ -92,15 +90,21 @@ static int fsl_ehci_drv_probe(struct
-platform_device *pdev) goto err1;
- 	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	hcd->regs = devm_ioremap_resource(&pdev->dev, res);
-+	platform_set_drvdata(pdev, hcd);
-+	pdev->dev.platform_data = pdata;
-+
-+	tmp = of_address_to_resource(dn, 0, &res);
-+	if (tmp)
-+		return tmp;
-+
-+	hcd->regs = devm_ioremap_resource(&pdev->dev, &res);
- 	if (IS_ERR(hcd->regs)) {
- 		retval = PTR_ERR(hcd->regs);
- 		goto err2;
- 	}
- 
--	hcd->rsrc_start = res->start;
--	hcd->rsrc_len = resource_size(res);
-+	hcd->rsrc_start = res.start;
-+	hcd->rsrc_len = resource_size(&res);
- 
- 	pdata->regs = hcd->regs;
- 
-diff --git a/drivers/usb/host/fsl-mph-dr-of.c
-b/drivers/usb/host/fsl-mph-dr-of.c index 44a7e58..766e4ab 100644
---- a/drivers/usb/host/fsl-mph-dr-of.c
-+++ b/drivers/usb/host/fsl-mph-dr-of.c
-@@ -80,8 +80,6 @@ static struct platform_device
-*fsl_usb2_device_register( const char *name, int id)
- {
- 	struct platform_device *pdev;
--	const struct resource *res = ofdev->resource;
--	unsigned int num = ofdev->num_resources;
- 	int retval;
- 
- 	pdev = platform_device_alloc(name, id);
-@@ -106,11 +104,8 @@ static struct platform_device
-*fsl_usb2_device_register( if (retval)
- 		goto error;
- 
--	if (num) {
--		retval = platform_device_add_resources(pdev, res, num);
--		if (retval)
--			goto error;
--	}
-+	pdev->dev.of_node = ofdev->dev.of_node;
-+	pdev->dev.of_node_reused = true;
- 
- 	retval = platform_device_add(pdev);
- 	if (retval)
+Minor, optional suggestion below.
+
+>  static int __init aspeed_sdc_init(void)
+> @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
+>         if (rc < 0)
+>                 goto cleanup_sdhci;
+>
+> -       rc = aspeed_sdc_tests_init();
+> -       if (rc < 0) {
+> -               platform_driver_unregister(&aspeed_sdc_driver);
+> -               goto cleanup_sdhci;
+> -       }
+> -
+>         return 0;
+>
+>  cleanup_sdhci:
+
+This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
+kunit-related build error") to allow for this extra call to
+aspeed_sdc_tests_init().
+
+This could now be reverted back to what is
+        rc = platform_driver_register(&aspeed_sdc_driver);
+        if (rc < 0)
+               platform_driver_unregister(&aspeed_sdhci_driver);
+
+        return rc;
+
+but let's see what the maintainers think.
