@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93504552D8C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 10:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910DE552D7D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 10:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347563AbiFUIyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 04:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S1347336AbiFUIyf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 04:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348096AbiFUIyP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 04:54:15 -0400
+        with ESMTP id S1346000AbiFUIyR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 04:54:17 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5BB26109
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 01:54:11 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-317ae1236feso53349787b3.11
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 01:54:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D057252B5
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 01:54:15 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-30ffc75d920so113837537b3.2
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 01:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=DchQK2viXsxkr0f/jfzsYvXYlWuEWS/lEXqIapl6jbA=;
-        b=iH+jyDe4Vr+y3lYEAw/bnOLR1n9VHEu7hiai9Lvj4kPCzaIXgG2dPc/z+Z78lsUzZt
-         TzEr/nP8IS+qJ9DdfFNgy0PX0oYFvIrN5x96ek3RLzaw0ogBKctxJ/5t0xretkIwTCUZ
-         GZokqzWjGel0mkIxQsPbMZXBS3Wn05igJREZrp/A3jg2uFB13A0oNmRyyJkPeWnwjUIo
-         +XsNT+MwlHV4Ms/ntLIl3vkE9IPMikNCyfjtlyWM4XfitIDbXIRPdPG28IDShtU6v4Vz
-         OCl1ZYSSFKfUR2XmtFHi0zp8O6OiMuOvW045qtw6r2CSxQjdrnptMG9ws91nSxp7951A
-         j38Q==
+        bh=sMhw4RZ/mWWPPEUWkgHgKXiigOXLUScNjtTFmn2v0ww=;
+        b=WYhhSDqtQLk2QwIQ9Mr+OfByWeTNLN8sNc4QhSP14iedILM5LNdrlTY82CM6VPKQCE
+         By6Ua1qc4cn6zsrHKakHGav00eshow0V3SRetAmA0xPNxDAyQihPZF7xBJ0KTM/lOqVD
+         yAhIvn2GX/NfazxHfKC654SnUE7VoOHGZr3pWPPebIBxIOX2UvpIL4VDNO0I6QH/j5Gz
+         YqGIfw9M0roZ/xk2YYqZrsC8UH2LzF0G9fjmQredjggrZW8PNMWTCbL06TbFWUJ7e2/x
+         7HjOI5S5pt2/z0kYY9bCfy6eQ49h/EoCWOj36bKQ3He5JQvrn3N7cPPpRMn1UzZH9WZI
+         RVCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=DchQK2viXsxkr0f/jfzsYvXYlWuEWS/lEXqIapl6jbA=;
-        b=yJZH/EE8BpOMP2Y3a1jt/UYQI8HRjv4yHOwmwVzEughmL7WrRksZOrg7CtFDcJcdjz
-         obYHIPlC92VPRUjD8tyvxzxSb9NuupPcO2S/5RyU2da/UdETS/h13CHZbt2h6vgUJIRU
-         82E/GvP5id2pLR/c7BHwPnRr1f2GrTZ9WlF7d39pXPphcgpTGuoUhiwUFbd2hwbwh0kz
-         z6rE3erdPAj1YgvvCFdg5giqSDUghOH/HCL/m/4o4auKYKmgE5BeVtX1tCKCxW67Mb8M
-         wVVj5ZEQ+IXyBOCBCo7lP+jVziHPMhbo3CFE3267PRd20iScwXeiPhqVKBO5+6HdTOyE
-         oiww==
-X-Gm-Message-State: AJIora+E1cwWoM72ytTeB7SYC6C72+SC5eMhHqE9vG642+Lf3EwiDcA1
-        0jfRjNq108tQi50RDoci6xwspOUcJ81Diw==
-X-Google-Smtp-Source: AGRyM1vclyw2UviD+6BJjiqGiH89PLnaDXTc8R06OQqZCeV6zUeCfyzzWCLPXdM4WJOQPfEytzN5Med0lEp1BQ==
+        bh=sMhw4RZ/mWWPPEUWkgHgKXiigOXLUScNjtTFmn2v0ww=;
+        b=F/vYAusXCC7HYhTGsjW88ukjhxihe/x/AOjHbOFf/rbuEQa4nG8V4//rg1sptKiPK1
+         /LXutZmXGuZUX534KmhLuAFsjP8xcpUSjM8EWqK7f+ItCSwKY7lpf3D+5dXjdPfDgRsl
+         NwMtzaziP0VHkPB89yxMAqQYRK6SXKCHAXBzkbOw6GAEfHVvgpiIjhCHTmzyJRat6j/6
+         L61aBsqntWkLwTkkp2u0chzuOmH6EOGhvHVKBOcpTJrB1Zdko8PjIWu7ZRVbsdSTWb1A
+         mWmq4I0nrcTSuF0bpaOX6c+EmD/12FoTNQ4MMgK5YL4bbSzj27nIF/znmErfChkLvzHs
+         +jfw==
+X-Gm-Message-State: AJIora9zJgwoZbvWz5YZ0qLr4QOrdLVSEfVlgs0+X/2mynNpKadNAsf0
+        GPyfqpTeEB0WYZzpbt/SzZc4zOiuWQJ1qg==
+X-Google-Smtp-Source: AGRyM1vieUr2pRKhrhNOp1dFpCWfaNn7lwjXBL4J8TaauocML9PYRPmYH8ZaoDHS6H8PaqQG31H3ZdL9MJQ6hg==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:246:0:b0:668:ccd9:6087 with SMTP id
- 67-20020a250246000000b00668ccd96087mr18417314ybc.290.1655801650476; Tue, 21
- Jun 2022 01:54:10 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 16:53:44 +0800
+ (user=davidgow job=sendgmr) by 2002:a0d:f045:0:b0:317:e6b2:2c64 with SMTP id
+ z66-20020a0df045000000b00317e6b22c64mr7404945ywe.350.1655801655027; Tue, 21
+ Jun 2022 01:54:15 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 16:53:45 +0800
 In-Reply-To: <20220621085345.603820-1-davidgow@google.com>
-Message-Id: <20220621085345.603820-5-davidgow@google.com>
+Message-Id: <20220621085345.603820-6-davidgow@google.com>
 Mime-Version: 1.0
 References: <20220621085345.603820-1-davidgow@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH v2 4/5] nitro_enclaves: test: Use kunit_test_suite() macro
+Subject: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
@@ -75,127 +75,126 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The kunit_test_suite() macro previously conflicted with module_init,
-making it unsuitable for use in the nitro_enclaves test. Now that it's
-fixed, we can use it instead of a custom call into internal KUnit
-functions to run the test.
+The kunit_test_suite() macro is no-longer incompatible with module_add,
+so its use can be reinstated.
 
-As a side-effect, this means that the test results are properly included
-with other suites when built-in. To celebrate, enable the test by
-default when KUNIT_ALL_TESTS is set (and NITRO_ENCLAVES enabled).
+Since this fixes parsing with builtins and kunit_tool, also enable the
+test by default when KUNIT_ALL_TESTS is enabled.
 
-The nitro_enclave tests can now be run via kunit_tool with:
+The test can now be run via kunit_tool with:
 	./tools/testing/kunit/kunit.py run --arch=x86_64 \
-	--kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_SMP=y \
-	--kconfig_add CONFIG_HOTPLUG_CPU=y \
-	--kconfig_add CONFIG_VIRT_DRIVERS=y \
-	--kconfig_add CONFIG_NITRO_ENCLAVES=y \
-	'ne_misc_dev_test'
+	--kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
+	--kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
+	--kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
+	--kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
+	'sdhci-of-aspeed'
 
-(This is a pretty long command, so it may be worth adding a .kunitconfig
-file at some point, instead.)
+(It may be worth adding a .kunitconfig at some point, as there are
+enough dependencies to make that command scarily long.)
 
-Acked-by: Paraschiv, Andra-Irina <andraprs@amazon.com>
 Signed-off-by: David Gow <davidgow@google.com>
 ---
 
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20220618090310.1174932-5-davidgow@google.com/
-- Move the mistakenly-added thunderbolt Kconfig to the previous patch
-  (Thanks Andra)
-- Add Andra's Acked-by tag.
+No changes since v1:
+https://lore.kernel.org/linux-kselftest/20220618090310.1174932-6-davidgow@google.com/
 
 ---
- drivers/virt/nitro_enclaves/Kconfig           |  5 ++--
- drivers/virt/nitro_enclaves/ne_misc_dev.c     | 27 -------------------
- .../virt/nitro_enclaves/ne_misc_dev_test.c    |  5 +---
- 3 files changed, 4 insertions(+), 33 deletions(-)
+ drivers/mmc/host/Kconfig                |  5 +++--
+ drivers/mmc/host/sdhci-of-aspeed-test.c |  8 +-------
+ drivers/mmc/host/sdhci-of-aspeed.c      | 27 -------------------------
+ 3 files changed, 4 insertions(+), 36 deletions(-)
 
-diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
-index 2d3d98158121..ce91add81401 100644
---- a/drivers/virt/nitro_enclaves/Kconfig
-+++ b/drivers/virt/nitro_enclaves/Kconfig
-@@ -16,8 +16,9 @@ config NITRO_ENCLAVES
- 	  The module will be called nitro_enclaves.
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index d6144978e32d..10c563999d3d 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -169,8 +169,9 @@ config MMC_SDHCI_OF_ASPEED
+ 	  If unsure, say N.
  
- config NITRO_ENCLAVES_MISC_DEV_TEST
--	bool "Tests for the misc device functionality of the Nitro Enclaves"
--	depends on NITRO_ENCLAVES && KUNIT=y
-+	bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
-+	depends on NITRO_ENCLAVES && KUNIT
+ config MMC_SDHCI_OF_ASPEED_TEST
+-	bool "Tests for the ASPEED SDHCI driver"
+-	depends on MMC_SDHCI_OF_ASPEED && KUNIT=y
++	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
++	depends on MMC_SDHCI_OF_ASPEED && KUNIT
 +	default KUNIT_ALL_TESTS
  	help
- 	  Enable KUnit tests for the misc device functionality of the Nitro
- 	  Enclaves. Select this option only if you will boot the kernel for
-diff --git a/drivers/virt/nitro_enclaves/ne_misc_dev.c b/drivers/virt/nitro_enclaves/ne_misc_dev.c
-index 20c881b6a4b6..241b94f62e56 100644
---- a/drivers/virt/nitro_enclaves/ne_misc_dev.c
-+++ b/drivers/virt/nitro_enclaves/ne_misc_dev.c
-@@ -1759,35 +1759,10 @@ static long ne_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
+ 	  option only if you will boot the kernel for the purpose of running
+diff --git a/drivers/mmc/host/sdhci-of-aspeed-test.c b/drivers/mmc/host/sdhci-of-aspeed-test.c
+index 1ed4f86291f2..ecb502606c53 100644
+--- a/drivers/mmc/host/sdhci-of-aspeed-test.c
++++ b/drivers/mmc/host/sdhci-of-aspeed-test.c
+@@ -96,10 +96,4 @@ static struct kunit_suite aspeed_sdhci_test_suite = {
+ 	.test_cases = aspeed_sdhci_test_cases,
+ };
  
- #if defined(CONFIG_NITRO_ENCLAVES_MISC_DEV_TEST)
- #include "ne_misc_dev_test.c"
+-static struct kunit_suite *aspeed_sdc_test_suite_array[] = {
+-	&aspeed_sdhci_test_suite,
+-	NULL,
+-};
 -
--static inline int ne_misc_dev_test_init(void)
+-static struct kunit_suite **aspeed_sdc_test_suites
+-	__used __section(".kunit_test_suites") = aspeed_sdc_test_suite_array;
++kunit_test_suite(aspeed_sdhci_test_suite);
+diff --git a/drivers/mmc/host/sdhci-of-aspeed.c b/drivers/mmc/host/sdhci-of-aspeed.c
+index 6e4e132903a6..c10367946bc7 100644
+--- a/drivers/mmc/host/sdhci-of-aspeed.c
++++ b/drivers/mmc/host/sdhci-of-aspeed.c
+@@ -606,25 +606,6 @@ static struct platform_driver aspeed_sdc_driver = {
+ 
+ #if defined(CONFIG_MMC_SDHCI_OF_ASPEED_TEST)
+ #include "sdhci-of-aspeed-test.c"
+-
+-static inline int aspeed_sdc_tests_init(void)
 -{
--	return __kunit_test_suites_init(ne_misc_dev_test_suites);
+-	return __kunit_test_suites_init(aspeed_sdc_test_suites);
 -}
 -
--static inline void ne_misc_dev_test_exit(void)
+-static inline void aspeed_sdc_tests_exit(void)
 -{
--	__kunit_test_suites_exit(ne_misc_dev_test_suites);
+-	__kunit_test_suites_exit(aspeed_sdc_test_suites);
 -}
 -#else
--static inline int ne_misc_dev_test_init(void)
+-static inline int aspeed_sdc_tests_init(void)
 -{
 -	return 0;
 -}
 -
--static inline void ne_misc_dev_test_exit(void)
+-static inline void aspeed_sdc_tests_exit(void)
 -{
 -}
  #endif
  
- static int __init ne_init(void)
+ static int __init aspeed_sdc_init(void)
+@@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
+ 	if (rc < 0)
+ 		goto cleanup_sdhci;
+ 
+-	rc = aspeed_sdc_tests_init();
+-	if (rc < 0) {
+-		platform_driver_unregister(&aspeed_sdc_driver);
+-		goto cleanup_sdhci;
+-	}
+-
+ 	return 0;
+ 
+ cleanup_sdhci:
+@@ -656,8 +631,6 @@ module_init(aspeed_sdc_init);
+ 
+ static void __exit aspeed_sdc_exit(void)
  {
--	int rc = 0;
+-	aspeed_sdc_tests_exit();
 -
--	rc = ne_misc_dev_test_init();
--	if (rc < 0)
--		return rc;
--
- 	mutex_init(&ne_cpu_pool.mutex);
- 
- 	return pci_register_driver(&ne_pci_driver);
-@@ -1798,8 +1773,6 @@ static void __exit ne_exit(void)
- 	pci_unregister_driver(&ne_pci_driver);
- 
- 	ne_teardown_cpu_pool();
--
--	ne_misc_dev_test_exit();
+ 	platform_driver_unregister(&aspeed_sdc_driver);
+ 	platform_driver_unregister(&aspeed_sdhci_driver);
  }
- 
- module_init(ne_init);
-diff --git a/drivers/virt/nitro_enclaves/ne_misc_dev_test.c b/drivers/virt/nitro_enclaves/ne_misc_dev_test.c
-index 265797bed0ea..74df43b925be 100644
---- a/drivers/virt/nitro_enclaves/ne_misc_dev_test.c
-+++ b/drivers/virt/nitro_enclaves/ne_misc_dev_test.c
-@@ -151,7 +151,4 @@ static struct kunit_suite ne_misc_dev_test_suite = {
- 	.test_cases = ne_misc_dev_test_cases,
- };
- 
--static struct kunit_suite *ne_misc_dev_test_suites[] = {
--	&ne_misc_dev_test_suite,
--	NULL
--};
-+kunit_test_suite(ne_misc_dev_test_suite);
 -- 
 2.37.0.rc0.104.g0611611a94-goog
 
