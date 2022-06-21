@@ -2,49 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F6B552C3F
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 09:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C753B552C9A
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 10:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347627AbiFUHl5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 03:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S1346584AbiFUIGO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 04:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347919AbiFUHlo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 03:41:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A852E140AE;
-        Tue, 21 Jun 2022 00:41:43 -0700 (PDT)
+        with ESMTP id S1348005AbiFUIGN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 04:06:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252212495E
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 01:06:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 478676144D;
-        Tue, 21 Jun 2022 07:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A953DC3411D;
-        Tue, 21 Jun 2022 07:41:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2A76614C9
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 08:06:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B8F2C3411D;
+        Tue, 21 Jun 2022 08:06:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655797302;
-        bh=xHrJEBMzMAaB/yf3L0nRdLkzzYcCFC+/oWPA8LkrBrc=;
+        s=k20201202; t=1655798771;
+        bh=KH7ZrN8bC1eUsw5JFazm2S+rUsJRETeKPi5YNlc8wr4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MPg6lskTYBxqWfZR+Rmf32dlWTI6IXzpNKe8pqs0dZeQas50a3nfc+PA2FwPGQNtx
-         zX86Uk3+S29hLX0MwN6gQnM8MgLaDFiQsJefNd7b+LWJFJZw9TK1Ou6hUpKNOqEaH6
-         Tf7gzvq9oNlnWO5wkbTm20qpxtGUcD69IZiyMLhuEdNEi+BKVV3O3aq62QoCxe6zYM
-         g2iOfdvlR/cY9uHNtyjfCNuYB5o7Zm53KLektfBbnY1qrmiXtB466FTXBZ2Dg976K6
-         2uFHEpKn/KeVQZv+3oLegTZlsYSOn5w/2/+iLK1BGgJX+0Uw7f0nO93Mf4nM7fNB0a
-         G0rPTfai6hTTA==
+        b=IEFD5TwDDEpScmWFb99oW40rxC/YaQHsllASQtba2EsDV0iziLbD0XlBoE0DHl/TS
+         6i0nTPPckcZewIh8vGytRU61t7sDWPQ4vc3l+x/7WQkraTmVgW3fXWDsiPfJeg9G34
+         d3c+wWC1mkojhf6sCd7FuB10J6hXKsf+C1v32of8nA7jeMiFGplhkg2082zZ8BN12Y
+         5NikCThLt+jc8ANo73JoRu2JhZh+ZjgPHXX9Q9+dd9BbmjukdOEJG1mA5DXLin62v9
+         v4sON+gH2gwYju0y6Lbbzd/0xxLlh1jTWMUW9mBuihIvXlRxE/Y/bOSh0OW0GRq+Dd
+         /+Eyg+6DcuJ3A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1o3YVz-0005ab-SL; Tue, 21 Jun 2022 09:41:36 +0200
-Date:   Tue, 21 Jun 2022 09:41:35 +0200
+        id 1o3Yth-0005jl-2M; Tue, 21 Jun 2022 10:06:05 +0200
+Date:   Tue, 21 Jun 2022 10:06:05 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Yonglin Tan <yonglin.tan@outlook.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: option: add Quectel EM05-G modem
-Message-ID: <YrF2LxpeUR5Sk1tR@hovoldconsulting.com>
-References: <MEYP282MB237401279FB031848505EFB2FDB39@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+To:     Charles Yeh <charlesyeh522@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Subject: Re: [PATCH] USB: serial: pl2303: Modify the detection method of
+ PL2303HXN (TYPE_HXN)
+Message-ID: <YrF77b9DdeumUAee@hovoldconsulting.com>
+References: <20220617133514.357-1-charlesyeh522@gmail.com>
+ <YrBARs5dfARHW9Rl@hovoldconsulting.com>
+ <CAAZvQQ4iHB44=Ug7o+=ZqzTCYSM3igSwfi1xBUGqJS1ChzcbUw@mail.gmail.com>
+ <YrBq3+Q4geN0bF5x@hovoldconsulting.com>
+ <CAAZvQQ4xy+YSuEipRX=bLXJVKtS2qExOBER3QH3BJw_ATYdXuw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MEYP282MB237401279FB031848505EFB2FDB39@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+In-Reply-To: <CAAZvQQ4xy+YSuEipRX=bLXJVKtS2qExOBER3QH3BJw_ATYdXuw@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,110 +62,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 10:31:52AM +0800, Yonglin Tan wrote:
-> The EM05-G modem has 2 USB configurations that are configurable via the AT
-> command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
-> the following interfaces, respectively:
+On Tue, Jun 21, 2022 at 12:41:39PM +0800, Charles Yeh wrote:
+> > Ok, but the above could be handled with two entries or if needed we can
+> > just check the major number (i.e. the MSB, 0x03)?
 > 
-> "RMNET"	: AT + DIAG + NMEA + Modem + QMI
-> "MBIM"	: MBIM + AT + DIAG + NMEA + Modem
+> No , MSB:0x03 represents the HXN_GT (PL2303GT) version,
+> but the current HXN version has multiple IC types,
+> for example, the bcdDevice_MSB of HXN_GS uses 0x60.
+
+That's precisely what I was referring to.
+ 
+> HXN_GS: PL2303GS_R4 : idProduct : 0x23F3, bcdDevice: 0x0600
+> HXN_GS: PL2303GS_R5 : idProduct : 0x23F3, bcdDevice: 0x0605
+> HXN_GS: PL2303GS_R5+ : idProduct : 0x23A3, bcdDevice: 0x0605
 > 
-> The detailed description of the USB configuration for each mode as follows:
+> The difference between R4 and R5 is that bcdDevice is a different set value.
+> The difference between R5 and R5+ is that idProduct is a different set value.
+> But PL2303GS_R4 / PL2303GS_R5 / PL2303GS_R5+ all represent HXN_GS chip.
+
+Right.
+
+> > So far I've gathered that
+> >
+> >         0x100   GC
+> >         0x105   GC
+> >         0x300   GT / TA
+> >         0x305   GT
+> >         0x405   GL
+> >         0x500   GE / TB
+> >         0x605   GS
+> >
+> > So it look like we could use the major version number.
+> >
+> > Anything more we need to add to the above list?
 > 
-> RMNET Mode
-> --------------
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 21 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=030a Rev= 3.18
-> S:  Manufacturer=Quectel
-> S:  Product=Quectel EM05-G
-> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> Currently there are HXN ICs on the market:
+> PL2303GC : 0x0100 / 0x0105
+> PL2303GT : 0x0300 / 0x0305
+> PL2303GL : 0x0400 / 0x0405
+> PL2303GE : 0x0500 / 0x0505
+> PL2303GS : 0x0600 / 0x0605
+> PL2303GR : 0x0700 / 0x0705
+
+Thanks for filling in the blanks.
+
+> I think it is not very good to add the above bcdDevice to the list.
 > 
-> MBIM Mode
-> --------------
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=030a Rev= 3.18
-> S:  Manufacturer=Quectel
-> S:  Product=Quectel EM05-G
-> C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> Because the company's PM/Sales are still planning some HXN ICs
+> (these ICs will be sold according to market behavior in the future,
+> and there will be different bcdDevices: 0x0800 / 0x0805/ 0x0900 / 0x0905.....).
+> so in the future Time, it will become to add different bcdDevice values
+> from time to time, which will become the patch file is always updated.
+
+That's no problem. We'd be happy to add support for any new types as
+well.
+
+It's much easier to get this right from the start than to try to
+retrofit it when you realise that you need it (e.g. as we had to do with
+the older types).
+
+> In the current newest Linux driver program design,
+> using bcdUSB (0x0100 / 0x0200) as a judgment.
+> I hope that when bcdUSB==0x0200 is encountered,
+> I only need to judge whether it is PL2303TA/PL2303TB chip,
+> and the rest is to use HX_Status to judge whether it is HXN_TYPE chip.
+
+I understand, and that would be enough to detect HXN, but not the
+individual HXN types which is what I want to do.
+
+> There is no need to use bcdDevice one by one to determine which HXN_TYPE
+> (PL2303GC, PL2303GT....)
 > 
-> Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
-> ---
-> V2:
->  1. Add the description of the usb interface configurations.
->  2. Add QMI Interface description.
+> At present, if our customers need special functions or
+> chip version control in HXN_TYPE IC ,
+> we will provide special customized files or patch files
 
-Thanks for the update.
+That's not a practice I would recommend, it's better that you add proper
+support to the mainline driver so that all users can benefit.
 
-It looks like you missed my comment about moving the entry to where the
-other Quectel entries with numerical PIDs are (sorted by PID) and moving
-the comment to the first line of the entry.
+I'm sure your customers would prefer to use a mainline driver as well.
 
-> 
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
->  mode change 100644 => 100755 drivers/usb/serial/option.c
+> General customers only need to identify as HXN_TYPE on Linux OS.
 
-You also should not change the execute permission bits on this file.
+I'm afraid I don't agree with that.
 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> old mode 100644
-> new mode 100755
-> index ed1e50d..05fc322
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1147,6 +1147,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = ZLP },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, 0x030a, 0xff),
-> +	  .driver_info = RSVD(6) | ZLP }, /* EM05-G */
->  
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
-
-Could you fix that up in a v3?
+I'll prepare a patch that adds support for the missing HXN types.
 
 Johan
