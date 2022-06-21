@@ -2,155 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E13552FA3
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 12:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E840B552FF8
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 12:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346757AbiFUKWO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 06:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S242697AbiFUKor (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 06:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiFUKWL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 06:22:11 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE26F28720;
-        Tue, 21 Jun 2022 03:22:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 2E632419C2;
-        Tue, 21 Jun 2022 10:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1655806926; bh=pafEXRxpxS9FRvzCx01u+dGd5pnrVKa0D5+ebH8kZzo=;
-        h=From:To:Cc:Subject:Date;
-        b=JrFJGsd3j2Nf1OJEpB8OHGAWfJUUxhFV7TMD8md4C97koAS9rDShp9YO9dPj1IicB
-         dmiL5adAhcHxqtE8txC1E8Pbt3XZW+/mF0F52oD2XMelDPnvdQENCibQldiY/khRfi
-         z1gEFXteqAoGlOzPG22wlyLh+HkcZmCQFdbdXcnMfBP5+i1Mi270nsD1iZ1TqzG7dt
-         XXtMRoyoRPhWy235cuFcC/IilLQ5b/axImPiVxNJ5VJs5RhWYFenYG0wxLBU08FSHl
-         wiqNxkpY6Jzu1PTLZLn4sNXuPoY1ToU4JtaMZYnIiN1PVgzJ2BleZ9nBl7N9SQRN8a
-         +8aJYzMa0hbOA==
-From:   Hector Martin <marcan@marcan.st>
-To:     Jacky Chou <jackychou@asix.com.tw>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [PATCH v3] net: usb: ax88179_178a: Bind only to vendor-specific interface
-Date:   Tue, 21 Jun 2022 19:21:50 +0900
-Message-Id: <20220621102150.202475-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S233059AbiFUKoq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 06:44:46 -0400
+Received: from mail.gtsys.com.hk (tunnel316222-pt.tunnel.tserv25.sin1.ipv6.he.net [IPv6:2001:470:35:5f1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F33167F9
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 03:44:44 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 5F72F22A031F;
+        Tue, 21 Jun 2022 18:44:42 +0800 (HKT)
+X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
+Received: from mail.gtsys.com.hk ([127.0.0.1])
+        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ByjaDvIWOk5n; Tue, 21 Jun 2022 18:44:42 +0800 (HKT)
+Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 404ED229C1B1;
+        Tue, 21 Jun 2022 18:44:42 +0800 (HKT)
+Received: from [10.128.1.32] (unknown [124.217.189.234])
+        by s01.gtsys.com.hk (Postfix) with ESMTPSA id E2075C01B49;
+        Tue, 21 Jun 2022 18:44:41 +0800 (HKT)
+Subject: Re: serial: usb: cdc-acm: OMRON B5L ToF, device probe failed
+To:     Oliver Neukum <oneukum@suse.com>,
+        "michael.lee@omron.com" <michael.lee@omron.com>,
+        Lars Melin <larsm17@gmail.com>,
+        USB list <linux-usb@vger.kernel.org>
+References: <85ebf554-effd-c89e-6eb8-c149442b931c@gtsys.com.hk>
+ <fc9986a6-0b11-d949-2196-1ad35d3f4d98@gtsys.com.hk>
+ <1af7ff05-8558-9162-a0cd-ac140ddaf2e1@gmail.com>
+ <cbcc2071-5b56-025e-cae6-5af0210e2363@gtsys.com.hk>
+ <OSZP286MB1776CCBCBFE38B25C7DB9978E1B39@OSZP286MB1776.JPNP286.PROD.OUTLOOK.COM>
+ <40395457-0927-c169-7d9f-47d1912e2c39@suse.com>
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Message-ID: <dcd72fdd-2280-b876-053e-887429ad82e8@gtsys.com.hk>
+Date:   Tue, 21 Jun 2022 18:44:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <40395457-0927-c169-7d9f-47d1912e2c39@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
-chipset, but exposes CDC Ethernet configurations as well as the
-vendor specific one. This driver ends up binding first to both CDC
-interfaces, tries to instantiate two Ethernet interfaces talking to
-the same device, and the result is a nice fireworks show.
+Oliver,
 
-Change all the ID matches to specifically match the vendor-specific
-interface. By default the device comes up in CDC mode and is bound by
-that driver (which works fine); users may switch it to the vendor
-interface using sysfs to set bConfigurationValue, at which point the
-device actually goes through a reconnect cycle and comes back as a
-vendor specific only device, and then this driver binds and works too.
+Thanks for the patch, I will apply it and give a feedback.
 
-The affected device uses VID/PID 0b95:1790, but we might as well change
-all of them for good measure, since there is no good reason for this
-driver to bind to standard CDC Ethernet interfaces.
+-chris
 
-v3: Added VID/PID info to commit message
+On 21/6/2022 6:09 pm, Oliver Neukum wrote:
+>
+> On 21.06.22 02:38, michael.lee@omron.com wrote:
+>> Dear Chris,
+>>
+>> The below is the reply from Japan.
+>>
+>> Dose they do the below commnad after connect B5L to USB?
+>>
+>> sudo modprobe usbserial vendor=0x0590 product=0x00ca
+>> sudo chmod o+wr /dev/ttyUSB0
+>>
+>> For linux environment ,this commnad is needed to connect B5L to USB.
+>> We preapre the below sh file with c++ sample codes.
+>> connect_tof.sh
+>> https://github.com/omron-devhub/b5l_TOFsensor_Sample_cpp
+>>
+> Hi,
+>
+> this is not nice. But in any case this thing is not an ACM
+> device. This patch should remove it from the driver it is
+> abusing to where it belongs. Could you please test it?
+>
+> 	Regards
+> 		Oliver
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index e2fa56b92685..7c7c2f31d9f1 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1914,55 +1914,55 @@ static const struct driver_info at_umc2000sp_info = {
- static const struct usb_device_id products[] = {
- {
- 	/* ASIX AX88179 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x1790),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88179_info,
- }, {
- 	/* ASIX AX88178A 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x178a),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x178a, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88178a_info,
- }, {
- 	/* Cypress GX3 SuperSpeed to Gigabit Ethernet Bridge Controller */
--	USB_DEVICE(0x04b4, 0x3610),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04b4, 0x3610, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&cypress_GX3_info,
- }, {
- 	/* D-Link DUB-1312 USB 3.0 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x2001, 0x4a00),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x2001, 0x4a00, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&dlink_dub1312_info,
- }, {
- 	/* Sitecom USB 3.0 to Gigabit Adapter */
--	USB_DEVICE(0x0df6, 0x0072),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0df6, 0x0072, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&sitecom_info,
- }, {
- 	/* Samsung USB Ethernet Adapter */
--	USB_DEVICE(0x04e8, 0xa100),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04e8, 0xa100, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&samsung_info,
- }, {
- 	/* Lenovo OneLinkDock Gigabit LAN */
--	USB_DEVICE(0x17ef, 0x304b),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x17ef, 0x304b, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&lenovo_info,
- }, {
- 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
--	USB_DEVICE(0x050d, 0x0128),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x050d, 0x0128, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&belkin_info,
- }, {
- 	/* Toshiba USB 3.0 GBit Ethernet Adapter */
--	USB_DEVICE(0x0930, 0x0a13),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0930, 0x0a13, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&toshiba_info,
- }, {
- 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
--	USB_DEVICE(0x0711, 0x0179),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0711, 0x0179, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&mct_info,
- }, {
- 	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000e),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000e, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000_info,
- }, {
- 	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000f),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000f, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc200_info,
- }, {
- 	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x0010),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x0010, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000sp_info,
- },
- 	{ },
 -- 
-2.35.1
+GTSYS Limited RFID Technology
+9/F, Unit E, R07, Kwai Shing Industrial Building Phase 2,
+42-46 Tai Lin Pai Road, Kwai Chung, N.T., Hong Kong
+Tel (852) 9079 9521
+
+Disclaimer: https://www.gtsys.com.hk/email/classified.html
 
