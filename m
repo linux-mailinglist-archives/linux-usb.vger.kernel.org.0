@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE7055346C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 16:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE1A553471
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jun 2022 16:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351445AbiFUOXm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 10:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S1351484AbiFUOYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 10:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351375AbiFUOX0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 10:23:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EB312AC5;
-        Tue, 21 Jun 2022 07:23:25 -0700 (PDT)
+        with ESMTP id S1349421AbiFUOYb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 10:24:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932A18E25;
+        Tue, 21 Jun 2022 07:24:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 18AF9CE1985;
-        Tue, 21 Jun 2022 14:23:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0FBFC3411C;
-        Tue, 21 Jun 2022 14:23:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB49EB81821;
+        Tue, 21 Jun 2022 14:24:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22398C341C7;
+        Tue, 21 Jun 2022 14:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655821402;
-        bh=/7FHu/l1P2AIpjzv1z9rW00tsNnYYhYf7Z3/9CtVBlQ=;
+        s=korg; t=1655821467;
+        bh=350SJzImgIdaQO22/bjHSMxrvFtKkYmGp2AdM9fujMU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r77Y8UbJMdEM3NMc6q4lW0erRfnRQ+oZlU55aji2tP5hf/74PGWUSvRUhveaAoZMM
-         dT4kymsdwPSXz723uWyKJThFv4YEi07+N+OW5JGT2oV436sPZRhAN/obp2A+vT9k6R
-         7PuzlLTk7/pa+yFHPfevNuY/HCA1Gtm9pdIddA6c=
-Date:   Tue, 21 Jun 2022 16:23:19 +0200
+        b=xxCobeWV9PFpl1ZnS9rM84etHQCLfr61o3fPRFUyc8MvOdlikTDRjxIEwitXu/AHr
+         T87HxR5UfXRfbZWidBvNqqDt8LFrpzy+PwrGo8QBshRqBVanJ+ykcqKtUkTQCjGRcI
+         EaC8VOHo78caHZARBfV27O9sJNshdS1vPjQ1XMTM=
+Date:   Tue, 21 Jun 2022 16:24:24 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 Cc:     hminas@synopsys.com, stern@rowland.harvard.edu,
@@ -36,14 +36,14 @@ Cc:     hminas@synopsys.com, stern@rowland.harvard.edu,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com,
         amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 1/3] usb: host: ohci-platform: add TPL support
-Message-ID: <YrHUV2MeCQ0vAnfd@kroah.com>
+Subject: Re: [PATCH 3/3] usb: dwc2: host: add TPL support
+Message-ID: <YrHUmIpydvNYeRou@kroah.com>
 References: <20220621130506.85424-1-fabrice.gasnier@foss.st.com>
- <20220621130506.85424-2-fabrice.gasnier@foss.st.com>
+ <20220621130506.85424-4-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621130506.85424-2-fabrice.gasnier@foss.st.com>
+In-Reply-To: <20220621130506.85424-4-fabrice.gasnier@foss.st.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,15 +54,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 03:05:04PM +0200, Fabrice Gasnier wrote:
+On Tue, Jun 21, 2022 at 03:05:06PM +0200, Fabrice Gasnier wrote:
 > From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 > 
 > The TPL support is used to identify targeted devices during EH compliance
 > test. The user can add "tpl-support" in the device tree to enable it.
 
-What is "TPL" support?  What is "EH"?
-
-Please spell things out.
+Is that already documented in the proper bindings somewhere?
 
 thanks,
 
