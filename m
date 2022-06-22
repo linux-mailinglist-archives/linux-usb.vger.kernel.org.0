@@ -2,102 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B3A5550DA
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 18:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1176555281
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 19:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353476AbiFVQH7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 12:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S230268AbiFVRgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 13:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236963AbiFVQH6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 12:07:58 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41C6202;
-        Wed, 22 Jun 2022 09:07:51 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25MFunGD006624;
-        Wed, 22 Jun 2022 18:07:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=RAY93IwuRebxvVNpTUKMgt368RsmG9FCdTJ6aOrH0Rs=;
- b=YZ4rNkKOO6XCFfqSPDi/QQmbFJjAppAgpW7WVhOBLIXiY+KbPuzG8mtlrbZQbs8T1vFq
- ACYDpc4nTXzbpmZU2eJNxy9YsbQMq8/TJKM0sDymdG0ChSFk8Z1+zheZUoke6knW8MLI
- yOBUvsR01mrQ/0zsHEtj+7cGbc+ufsM4wvsAG5zd6GiTVPP9P/pdwmgOgJ0C4qg9Tah8
- bn+GlSNwLOjLRthpsxt/CQ5NfRGmsy8EdIqMhxYa0IAeBdQ2GG2jVkfGPDHdIBWAOLBN
- gO2kws1D5f1QfCtfRByt34Loh8HYB84vyUa3d3I4+BdNSMYbjSijlQnub/GPUjM8FMDV Cg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gua1n9f1u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Jun 2022 18:07:36 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C1AD410002A;
-        Wed, 22 Jun 2022 18:07:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2D34522ECC1;
-        Wed, 22 Jun 2022 18:07:34 +0200 (CEST)
-Received: from localhost (10.75.127.117) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 22 Jun
- 2022 18:07:33 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH] usb: dwc2: gadget: remove D+ pull-up while no vbus with usb-role-switch
-Date:   Wed, 22 Jun 2022 18:07:17 +0200
-Message-ID: <20220622160717.314580-1-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229828AbiFVRgV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 13:36:21 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C744C31DC3
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 10:36:20 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id a14so7097369pgh.11
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 10:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EGSWfwuV6kDT1fwM+T4JAkD27EMrpSWAszwgosFVQVw=;
+        b=grWObt6Okfs3RafY2b0NVKjFrBhkE6C1/0vcWncE04tJrdoQojz3GOVtF8Mi2x1HRW
+         QkTbr6Qt7h5qJ8e/vypQSZl7HMB3jQbVCaxyGsro8g9N18Ao7HQs3SZy4ndhrH5S8Xx1
+         mP0WgDsVLIt/JclEEcE6snj1DLR5W92U6w6Qg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EGSWfwuV6kDT1fwM+T4JAkD27EMrpSWAszwgosFVQVw=;
+        b=4/PfE8mqwjv9lW8ekWipM+kBPRK3M40js5+w6bt4dNpEsByqkY62AgIKofqmgD9pqI
+         lvple7TjHwGwKcLnL7sxTiO/9rdPR2aaMbWjXA0GCZ4VEOfAfOfndE1xTjNJmZrG3Rv4
+         fa+q3+mOozyIhHA7CUlJopoKB3qaPA/xsKGUe3ExgK+ZKxaRqn47EYp7IO0XOey3iAsG
+         E4GoBQ96o3z3qt73lljlyVTtOarpC570VbPBXm96McuLlOMuEjnBud2mFoAaabVP53f4
+         b1lpN2UNTSHNjx+OzWLy/oDxebkxU/XVqmXjtQaiXmT9Fn52EQVrzd/HHvRehmUrJ9zG
+         eYxw==
+X-Gm-Message-State: AJIora94Fcal+WVoE6WGTKjuUcMB/OMv08Ohrdi8E2dyBrZS+HNZHZMh
+        qb4dHRziK767L73bGPNfO2cBzA==
+X-Google-Smtp-Source: AGRyM1sB1+bTIxsIF22HqeLedT3vzGfH5CbBlkgMvEj61XWLvZw7HZSjL+m1aKkDdcE5g72JbC97/A==
+X-Received: by 2002:a63:4a4e:0:b0:401:baa6:d695 with SMTP id j14-20020a634a4e000000b00401baa6d695mr3975223pgl.259.1655919380268;
+        Wed, 22 Jun 2022 10:36:20 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l17-20020a17090b079100b001ece55aec38sm35470pjz.30.2022.06.22.10.36.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 10:36:19 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: [PATCH v5 0/9] usb: typec: Introduce typec-switch binding
+Date:   Wed, 22 Jun 2022 17:34:29 +0000
+Message-Id: <20220622173605.1168416-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.117]
-X-ClientProxiedBy: GPXDAG2NODE5.st.com (10.75.127.69) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-22_04,2022-06-22_03,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+This series introduces a binding for Type-C data lane switches. These
+control the routing and operating modes of USB Type-C data lanes based
+on the PD messaging from the Type-C port driver regarding connected
+peripherals.
 
-When using usb-role-switch, D+ pull-up is set as soon as DTCL_SFTDISCON is
-cleared, whatever the vbus valid signal state is. The pull-up should not
-be set when vbus isn't present (this is determined by the drd controller).
+The first 2 patches introduce the new "typec-switch" binding as
+well as one user of it (the ANX7625 drm bridge).
 
-This patch ensures that B-Session (so Peripheral role + vbus valid signal)
-is valid before clearing the DCTL_SFTDISCON bit when role switch is used.
-Keep original behavior when usb-role-switch isn't used.
+Patches 3-5 add functionality to the anx7625 driver to
+register the mode-switches, as well as program its crosspoint
+switch depending on which Type-C port has a DisplayPort (DP) peripheral
+connected to it.
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- drivers/usb/dwc2/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Patch 6-9 add similar bindings update and Type-C switch support to the
+it6505 driver.
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index fe2a58c758610..8b15742d9e8aa 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3594,7 +3594,8 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
- void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
- {
- 	/* remove the soft-disconnect and let's go */
--	dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
-+	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD))
-+		dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
- }
- 
- /**
+v4:
+https://lore.kernel.org/linux-usb/20220615172129.1314056-8-pmalani@chromium.org/
+
+Changes in v5:
+- Rebased on usb-next, so removed Patch v4 1/7 and Patch v4 2/7 from
+  this version (v5) since they are already in usb-next.
+- Added newer Reviewed-by tags.
+- Added new patches (6-9) in this version for a 2nd example (it6505)
+  of a binding of the user.
+
+Patch submission suggestions:
+Option 1:
+- Bindings patches 1/9 and 2/9 can go through the USB repo (since they are
+  already reviewed from v4 [1]).
+- Bindings patch 6/9 can go through the USB repo, and the remaining patches
+  (3-5,7-9) can go through the DRM repo.
+  <or>
+- Patches 3-9 can all go through the DRM repo.
+
+Option 2:
+- All patches (1-9) go through the USB repo.
+
+(My apologies if I've made this confusing, and I appreciate any
+suggestions for better submission strategy).
+
+[1]: https://lore.kernel.org/linux-usb/YrMxFeMc0tk%2FK1qL@kroah.com/
+
+Pin-Yen Lin (5):
+  drm/bridge: anx7625: Add typec_mux_set callback function
+  dt/bindings: drm/bridge: it6505: Add mode-switch support
+  drm/bridge: it6505: Register number of Type C switches
+  drm/bridge: it6505: Register Type-C mode switches
+  drm/bridge: it6505: Add typec_mux_set callback function
+
+Prashant Malani (4):
+  dt-bindings: usb: Add Type-C switch binding
+  dt-bindings: drm/bridge: anx7625: Add mode-switch support
+  drm/bridge: anx7625: Register number of Type C switches
+  drm/bridge: anx7625: Register Type-C mode switches
+
+ .../display/bridge/analogix,anx7625.yaml      |  64 +++++++
+ .../bindings/display/bridge/ite,it6505.yaml   |  97 +++++++++-
+ .../devicetree/bindings/usb/typec-switch.yaml |  74 ++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.c     | 148 +++++++++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.h     |  20 ++
+ drivers/gpu/drm/bridge/ite-it6505.c           | 171 +++++++++++++++++-
+ 6 files changed, 569 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+
 -- 
-2.25.1
+2.37.0.rc0.104.g0611611a94-goog
 
