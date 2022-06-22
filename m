@@ -2,119 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C355542A0
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 08:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F2C5542C9
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 08:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233994AbiFVGLd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 02:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S233220AbiFVGVm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 02:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbiFVGLb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 02:11:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B35620F4B
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 23:11:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 539A5B81C4B
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 06:11:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7824AC34114;
-        Wed, 22 Jun 2022 06:11:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655878288;
-        bh=xKZFvn44TVCKBwbFNgbclrJugXr5d6NQghY3H/Z6M90=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N/VKWhAfpB4HS5DCPNsa3m+mwPsGZN0Rxv+1euVDptLMDhUZwICPdAZUzf9InwmNf
-         uyrDCt5timcgCUHhRsq7mA1ccVTa8GhrEuGIO9yI9h4OYbTSVzrmR7YPox0YM+6R6B
-         ew+R1TBb74XVapvArx3TD7ckSVQEDg248ZdLC8Mo=
-Date:   Wed, 22 Jun 2022 08:11:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Darren Stevens <darren@stevens-zone.net>
-Cc:     linuxppc-dev@lists.ozlabs.org, oss@buserror.net,
-        chzigotzky@xenosoft.de, robh@kernel.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH RFC] drivers/usb/ehci-fsl: Fix interrupt setup in host
- mode.
-Message-ID: <YrKyjITQbhiHiCcq@kroah.com>
-References: <20220621230941.381f9791@Cyrus.lan>
+        with ESMTP id S1346528AbiFVGVg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 02:21:36 -0400
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A5B02F380;
+        Tue, 21 Jun 2022 23:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=UD322
+        BUk78+thKcSE3P4/OwKjkRfw/qsc7uMSsGIU4M=; b=Jc8j3JlttaHNFZdijmVL+
+        Ag1wnn5iPSIoQxuTjAWr1BE9hxM2c5v7bDZ4+EzHi/wbolAMV9FiOEFE+yK3rpcr
+        vPDnwLuIvXM8UZpCNqJrPM39h25ZKe/c+xpFoURYHUDIUM8FgM/7CyRVs8NeXIYX
+        J1sPh9PtcRjVznPi+dbUHo=
+Received: from localhost.localdomain (unknown [112.97.63.176])
+        by smtp5 (Coremail) with SMTP id HdxpCgDHWhLctLJiJI2+KQ--.3868S2;
+        Wed, 22 Jun 2022 14:21:18 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH v2] USB: serial: use kmemdup instead of kmalloc + memcpy
+Date:   Wed, 22 Jun 2022 14:21:13 +0800
+Message-Id: <20220622062113.8762-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621230941.381f9791@Cyrus.lan>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgDHWhLctLJiJI2+KQ--.3868S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWFyrWw15Xry8Kw17XrWxCrg_yoW5XrykpF
+        4Fgayjqr18tr13Xr1DCrs8Z3W5WanFgry2k347C3yavr43twnag3WxtF90gr10yr97Jr1S
+        qw4v9rW0kF1xKw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRJ5r3UUUUU=
+X-Originating-IP: [112.97.63.176]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQYoZGBbD9PNagAAs-
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 11:09:41PM +0100, Darren Stevens wrote:
-> In patch a1a2b7125e1079 (Drop static setup of IRQ resource from DT
-> core) we stopped platform_get_resource() from returning the IRQ, as all
-> drivers were supposed to have switched to platform_get_irq()
-> Unfortunately the Freescale EHCI driver in host mode got missed. Fix
-> it. Also fix allocation of resources to work with current kernel.
-> 
-> Fixes:a1a2b7125e1079 (Drop static setup of IRQ resource from DT core)
+For code neat purpose, we can use kmemdup to replace
+kmalloc + memcpy.
 
-Nit, please put a space after the :.
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+v2: Add garmin_gps.c
+---
+ drivers/usb/serial/garmin_gps.c | 4 +---
+ drivers/usb/serial/opticon.c    | 4 +---
+ drivers/usb/serial/sierra.c     | 4 +---
+ 3 files changed, 3 insertions(+), 9 deletions(-)
 
-Also not that many characters are needed, as you can see in our
-documentation, this is the proper format:
+diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
+index e5c75944ebb7..f1a8d8343623 100644
+--- a/drivers/usb/serial/garmin_gps.c
++++ b/drivers/usb/serial/garmin_gps.c
+@@ -988,7 +988,7 @@ static int garmin_write_bulk(struct usb_serial_port *port,
+ 	garmin_data_p->flags &= ~FLAGS_DROP_DATA;
+ 	spin_unlock_irqrestore(&garmin_data_p->lock, flags);
+ 
+-	buffer = kmalloc(count, GFP_ATOMIC);
++	buffer = kmemdup(buf, count, GFP_ATOMIC);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -998,8 +998,6 @@ static int garmin_write_bulk(struct usb_serial_port *port,
+ 		return -ENOMEM;
+ 	}
+ 
+-	memcpy(buffer, buf, count);
+-
+ 	usb_serial_debug_data(&port->dev, __func__, count, buffer);
+ 
+ 	usb_fill_bulk_urb(urb, serial->dev,
+diff --git a/drivers/usb/serial/opticon.c b/drivers/usb/serial/opticon.c
+index aed28c35caff..bca6766a63e6 100644
+--- a/drivers/usb/serial/opticon.c
++++ b/drivers/usb/serial/opticon.c
+@@ -208,7 +208,7 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
+ 	priv->outstanding_bytes += count;
+ 	spin_unlock_irqrestore(&priv->lock, flags);
+ 
+-	buffer = kmalloc(count, GFP_ATOMIC);
++	buffer = kmemdup(buf, count, GFP_ATOMIC);
+ 	if (!buffer)
+ 		goto error_no_buffer;
+ 
+@@ -216,8 +216,6 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
+ 	if (!urb)
+ 		goto error_no_urb;
+ 
+-	memcpy(buffer, buf, count);
+-
+ 	usb_serial_debug_data(&port->dev, __func__, count, buffer);
+ 
+ 	/* The connected devices do not have a bulk write endpoint,
+diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
+index 9d56138133a9..865d1237d611 100644
+--- a/drivers/usb/serial/sierra.c
++++ b/drivers/usb/serial/sierra.c
+@@ -453,7 +453,7 @@ static int sierra_write(struct tty_struct *tty, struct usb_serial_port *port,
+ 		goto error_simple;
+ 	}
+ 
+-	buffer = kmalloc(writesize, GFP_ATOMIC);
++	buffer = kmemdup(buf, writesize, GFP_ATOMIC);
+ 	if (!buffer) {
+ 		retval = -ENOMEM;
+ 		goto error_no_buffer;
+@@ -465,8 +465,6 @@ static int sierra_write(struct tty_struct *tty, struct usb_serial_port *port,
+ 		goto error_no_urb;
+ 	}
+ 
+-	memcpy(buffer, buf, writesize);
+-
+ 	usb_serial_debug_data(&port->dev, __func__, writesize, buffer);
+ 
+ 	usb_fill_bulk_urb(urb, serial->dev,
+-- 
+2.25.1
 
-Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
-
-> Reported-by Christian Zigotzky <chzigotzky@xenosoft.de>
-> Signed-off-by Darren Stevens <darren@stevens-zone.net>
-> ---
-> Tested on AmigaOne X5000/20 and X5000/40 not sure if this is entirely
-> correct fix though. Contains code by Rob Herring (in fsl-mph-dr-of.c)
-> 
-> diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-> index 385be30..d0bf7fb 100644
-> --- a/drivers/usb/host/ehci-fsl.c
-> +++ b/drivers/usb/host/ehci-fsl.c
-> @@ -23,6 +23,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/fsl_devices.h>
->  #include <linux/of_platform.h>
-> +#include <linux/of_address.h>
->  #include <linux/io.h>
->  
->  #include "ehci.h"
-> @@ -46,9 +47,10 @@ static struct hc_driver __read_mostly
-> fsl_ehci_hc_driver; */
->  static int fsl_ehci_drv_probe(struct platform_device *pdev)
->  {
-> +	struct device_node *dn = pdev->dev.of_node;
->  	struct fsl_usb2_platform_data *pdata;
->  	struct usb_hcd *hcd;
-> -	struct resource *res;
-> +	struct resource res;
->  	int irq;
->  	int retval;
->  	u32 tmp;
-> @@ -76,14 +78,10 @@ static int fsl_ehci_drv_probe(struct
-> platform_device *pdev) return -ENODEV;
->  	}
->  
-> -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> -	if (!res) {
-> -		dev_err(&pdev->dev,
-> -			"Found HC with no IRQ. Check %s setup!\n",
-> -			dev_name(&pdev->dev));
-> -		return -ENODEV;
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0) {
-> +		return irq;
->  	}
-
-Did you run checkpatch on this?  Coding style is not correct :(
-
-thanks,
-
-greg k-h
