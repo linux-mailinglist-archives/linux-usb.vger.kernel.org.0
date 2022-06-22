@@ -2,105 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE77F554974
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 14:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0BD5549B3
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 14:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352557AbiFVJWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 05:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S1351796AbiFVJbj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 05:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352467AbiFVJWS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 05:22:18 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B08934BBF
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 02:22:17 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-99-ZMj6y0FbM960kuDBi-9YiQ-1; Wed, 22 Jun 2022 10:22:14 +0100
-X-MC-Unique: ZMj6y0FbM960kuDBi-9YiQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 22 Jun 2022 10:22:12 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 22 Jun 2022 10:22:12 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Vincent MAILHOL' <mailhol.vincent@wanadoo.fr>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: RE: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-Thread-Topic: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-Thread-Index: AQHYhYfqVaqlcIuK10S0028j1oZk3K1bJ6wg
-Date:   Wed, 22 Jun 2022 09:22:12 +0000
-Message-ID: <48caa879b0064ced97623bf1dad5b2d9@AcuMS.aculab.com>
-References: <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com>
- <20220611153104.sksoxn4dmo5rgnk3@pengutronix.de>
- <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
- <YrHM8mqG3WVVesk4@kroah.com>
- <CAMZ6RqLVu-kPy-EAy52a5VvRmv=9RUTC2nw0gwQUgg_rTgiB5A@mail.gmail.com>
- <YrHfuVF4bPXzihEZ@rowland.harvard.edu>
- <CAMZ6RqL42DKD3evR4skswaJnAwOAO_qrZgXoLax7O95xVKUomQ@mail.gmail.com>
-In-Reply-To: <CAMZ6RqL42DKD3evR4skswaJnAwOAO_qrZgXoLax7O95xVKUomQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S235087AbiFVJbj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 05:31:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFDE3818C;
+        Wed, 22 Jun 2022 02:31:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4ED0B81D0D;
+        Wed, 22 Jun 2022 09:31:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C68C34114;
+        Wed, 22 Jun 2022 09:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655890295;
+        bh=gJbuu5vGqf2XP7XCLsrycKuNkuUFjX1GzTZr69JaEoQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SFdMtxT5pZTfDp986/Ykn52jVqW0sZEsqs8kDbbNmUrjdFAygHBrfSPh2TuPgD1AT
+         AU+6o3Ym5R6wBEVafFGzv9gjJ+/g0seDNUEVBuWQ3+dbsy5PWloCUqTOGLfGDyZtky
+         XUTpBb8Rsh6UEHiqgvr3nFLREtXkEFe9p8pLF/Vw=
+Date:   Wed, 22 Jun 2022 11:31:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Artur Bujdoso <artur.bujdoso@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: octeon-usb: move driver out of staging
+Message-ID: <YrLhdFdHssZg+Va5@kroah.com>
+References: <Yo0HBIlSXOBM+//9@crux>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yo0HBIlSXOBM+//9@crux>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogVmluY2VudCBNQUlMSE9MDQo+IFNlbnQ6IDIxIEp1bmUgMjAyMiAxNjo1Ng0KPiANCj4g
-T24gV2VkLiAyMiBKdW4gMjAyMiBhdCAwMDoxMywgQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFuZC5o
-YXJ2YXJkLmVkdT4gd3JvdGU6DQo+ID4gT24gVHVlLCBKdW4gMjEsIDIwMjIgYXQgMTE6NTk6MTZQ
-TSArMDkwMCwgVmluY2VudCBNQUlMSE9MIHdyb3RlOg0KPiA+ID4gSSAocHJvYmFibHkgd3Jvbmds
-eSkgYXNzdW1lZCB0aGF0IHVyYjo6dHJhbnNmZXJfYnVmZmVyX2xlbmd0aCB3YXMgdGhlDQo+ID4g
-PiBhbGxvY2F0ZWQgbGVuZ3RoIGFuZCB1cmI6OmFjdHVhbF9sZW5ndGggd2FzIHdoYXQgd2FzIGFj
-dHVhbGx5IGJlaW5nDQo+ID4gPiB0cmFuc2ZlcnJlZC4gUmlnaHQgbm93LCBJIGFtIGp1c3QgY29u
-ZnVzZWQuIFNlZW1zIHRoYXQgSSBuZWVkIHRvIHN0dWR5DQo+ID4gPiBhIGJpdCBtb3JlIGFuZCB1
-bmRlcnN0YW5kIHRoZSByZWFsIHB1cnBvc2Ugb2YNCj4gPiA+IHVyYjo6dHJhbnNmZXJfYnVmZmVy
-X2xlbmd0aCBiZWNhdXNlIEkgc3RpbGwgZmFpbCB0byB1bmRlcnN0YW5kIGluDQo+ID4gPiB3aGlj
-aCBzaXR1YXRpb24gdGhpcyBjYW4gYmUgZGlmZmVyZW50IGZyb20gdGhlIGFsbG9jYXRlZCBsZW5n
-dGguDQo+ID4NCj4gPiB1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGggaXMgdGhlIGFtb3VudCBv
-ZiBkYXRhIHRoYXQgdGhlIGRyaXZlciB3YW50cw0KPiA+IHRvIHNlbmQgb3IgZXhwZWN0cyB0byBy
-ZWNlaXZlLiAgdXJiLT5hY3R1YWxfbGVuZ3RoIGlzIHRoZSBhbW91bnQgb2YgZGF0YQ0KPiA+IHRo
-YXQgd2FzIGFjdHVhbGx5IHNlbnQgb3IgYWN0dWFsbHkgcmVjZWl2ZWQuDQo+ID4NCj4gPiBOZWl0
-aGVyIG9mIHRoZXNlIHZhbHVlcyBoYXMgdG8gYmUgdGhlIHNhbWUgYXMgdGhlIHNpemUgb2YgdGhl
-IGJ1ZmZlciAtLQ0KPiA+IGJ1dCB0aGV5IGJldHRlciBub3QgYmUgYmlnZ2VyIQ0KPiANCj4gVGhh
-bmtzLiBOb3cgdGhpbmdzIGFyZSBhIGJpdCBjbGVhcmVyLg0KPiBJIGd1ZXNzIHRoYXQgZm9yIHRo
-ZSBvdXRjb21pbmcgVVJCIHdoYXQgSSBwcm9wb3NlZCBtYWRlIG5vIHNlbnNlLiBGb3INCj4gaW5j
-b21pbmcgVVJCLCBJIGd1ZXNzIHRoYXQgbW9zdCBvZiB0aGUgZHJpdmVycyB3YW50IHRvIHNldA0K
-PiB1cmI6OnRyYW5zZmVyX2J1ZmZlciBvbmNlIGZvciBhbGwgd2l0aCB0aGUgYWxsb2NhdGVkIHNp
-emUgYW5kIG5ldmVyDQo+IHRvdWNoIGl0IGFnYWluLg0KPiANCj4gTWF5YmUgdGhlIHBhdGNoIG9u
-bHkgbWFrZXMgc2Vuc2Ugb2YgdGhlIGluY29taW5nIFVSQi4gV291bGQgaXQgbWFrZQ0KPiBzZW5z
-ZSB0byBrZWVwIGl0IGJ1dCB3aXRoIGFuIGFkZGl0aW9uYWwgY2hlY2sgdG8gdHJpZ2dlciBhIGRt
-ZXNnDQo+IHdhcm5pbmcgaWYgdGhpcyBpcyB1c2VkIG9uIGFuIG91dGNvbWluZyBlbmRwb2ludCBh
-bmQgd2l0aCBhZGRpdGlvbmFsDQo+IGNvbW1lbnQgdGhhdCB0aGUgVVJCX0ZSRUVfQ09IRVJFTlQg
-cmVxdWlyZXMgdXJiOjp0cmFuc2Zlcl9idWZmZXIgdG8gYmUNCj4gdGhlIGFsbG9jYXRlZCBzaXpl
-Pw0KDQpJSVJDIHVyYiBhcmUgcHJldHR5IGJpZy4NCllvdSdkIGJlIHVubHVja3kgaWYgYWRkaW5n
-IGFuIGV4dHJhIGZpZWxkIHRvIGhvbGQgdGhlIGFsbG9jYXRlZA0Kc2l6ZSB3b3VsZCBldmVyIG5l
-ZWQgbW9yZSBtZW1vcnkuDQpTbyBpdCBtaWdodCBqdXN0IGJlIHdvcnRoIHNhdmluZyB0aGUgYWxs
-b2NhdGVkIHNpemUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUs
-IEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJl
-Z2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Tue, May 24, 2022 at 06:25:40PM +0200, Artur Bujdoso wrote:
+> The Octeon usb driver has been in staging for a long time and used in
+> Ubiquiti routers for a while now.
+> It's been built and then tested on real hardware with several usb devices
+> and it is proven to be stable and ready to be moved to its proper place
+> in the kernel tree.
+> 
+> Move it to drivers/usb/host and adjust its Makefile, Kconfig and defconfig
+> dependencies.
+> 
+> Many thanks to the developers who made it happen.
+> 
+> Signed-off-by: Artur Bujdoso <artur.bujdoso@gmail.com>
+> ---
+> Changes in v2:
+>   - Write a better changelog.
 
+I added this to a branch and then pulled it into both the staging.git
+and usb.git trees so that we have a common place to work off of.  I'll
+take changes going forward in the usb.git tree only to the driver.
+
+thanks,
+
+greg k-h
