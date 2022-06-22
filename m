@@ -2,78 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31FE5540C3
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 05:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726745541D9
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 06:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356447AbiFVDJ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 23:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
+        id S1356969AbiFVEpi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 00:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356433AbiFVDJ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 23:09:27 -0400
-Received: from m13110.mail.163.com (m13110.mail.163.com [220.181.13.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6F532E9C5;
-        Tue, 21 Jun 2022 20:09:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=iXs7L
-        R1EaZubeCgF4V20nqsxFMsXH0+Zl3GUrT9ynxU=; b=m3uZFftzlKmU8xyLuEcSU
-        4WUeYiQ833y2KHgn2IdBjDucVTxTFvblZ5MDcRe1geHRVoTN8yInjZE6UpM1ZoaK
-        6Ts7pPN0q55gO/M/NoOy6tbW0fC2VySzqUYIht6ozmn2lYm9Fs4dEGX1qDvaeZIl
-        dMf0q9vy9LB1pomu8d1sxc=
-Received: from slark_xiao$163.com ( [112.97.63.176] ) by
- ajax-webmail-wmsvr110 (Coremail) ; Wed, 22 Jun 2022 11:08:49 +0800 (CST)
-X-Originating-IP: [112.97.63.176]
-Date:   Wed, 22 Jun 2022 11:08:49 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Johan Hovold" <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] USB: serial: use kmemdup instead of kmalloc + memcpy
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <YrBx2eQYwiGcDC8m@hovoldconsulting.com>
-References: <20220620105939.5128-1-slark_xiao@163.com>
- <YrBx2eQYwiGcDC8m@hovoldconsulting.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        with ESMTP id S1356968AbiFVEpg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 00:45:36 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E480F33E17
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 21:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655873133; x=1687409133;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wRZQMn2eiojGPJir/qgBv+wFAZsr6Pj5NKXPVKdTlyk=;
+  b=lM8sytAhLmFRZL8KgEq7YQTggICfW5uUGWKIjlMV13q18GTWWa+P0UZm
+   EvBxgzPDHrmjScAL+uXqtOTO2EMTDMKbaW1lmeRClJi5PAsniyhPXFRFk
+   5s10I7PZwmAFRmV+fheymYskU7+0sXV9X9DZUBN0rN3uM6+guo1g4Gy0z
+   RJ7tKTafy0LNbypxe1HIGtpkrrpPA9yuz2/HPrY2IvbmNOVHjZ8aMvQw1
+   LjXFXTZVUKdRYXuhFyHVr2Tioplk0GLT17aPParcJv3ohg6UWohCoZgjP
+   /uyT3294zDxhaGVFF+AJtCS0ubKqy0WOUubLpV3zD7WE6d3o06woANQxP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="279080464"
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="279080464"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 21:45:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="677333949"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2022 21:45:32 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3sF9-0000qj-Vn;
+        Wed, 22 Jun 2022 04:45:31 +0000
+Date:   Wed, 22 Jun 2022 12:44:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 52a83facde141544daf35d16e57d9b158e6aa0cb
+Message-ID: <62b29e4b.PC+KFHOzwoMXwRXF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Message-ID: <10bf330.1519.18189624c34.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: bsGowADXQwfCh7JisOoRAA--.7103W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQEoZGBbD9CRLgAAsj
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CgpBdCAyMDIyLTA2LTIwIDIxOjEwOjQ5LCAiSm9oYW4gSG92b2xkIiA8am9oYW5Aa2VybmVsLm9y
-Zz4gd3JvdGU6Cj5PbiBNb24sIEp1biAyMCwgMjAyMiBhdCAwNjo1OTozOVBNICswODAwLCBTbGFy
-ayBYaWFvIHdyb3RlOgo+PiBGb3IgY29kZSBuZWF0IHB1cnBvc2UsIHdlIGNhbiB1c2Uga21lbWR1
-cCB0byByZXBsYWNlCj4+IGttYWxsb2MgKyBtZW1jcHkuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBT
-bGFyayBYaWFvIDxzbGFya194aWFvQDE2My5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy91c2Ivc2Vy
-aWFsL29wdGljb24uYyB8IDQgKy0tLQo+PiAgZHJpdmVycy91c2Ivc2VyaWFsL3NpZXJyYS5jICB8
-IDQgKy0tLQo+PiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25z
-KC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2Ivc2VyaWFsL29wdGljb24uYyBiL2Ry
-aXZlcnMvdXNiL3NlcmlhbC9vcHRpY29uLmMKPj4gaW5kZXggYWVkMjhjMzVjYWZmLi5iY2E2NzY2
-YTYzZTYgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpY29uLmMKPj4gKysr
-IGIvZHJpdmVycy91c2Ivc2VyaWFsL29wdGljb24uYwo+PiBAQCAtMjA4LDcgKzIwOCw3IEBAIHN0
-YXRpYyBpbnQgb3B0aWNvbl93cml0ZShzdHJ1Y3QgdHR5X3N0cnVjdCAqdHR5LCBzdHJ1Y3QgdXNi
-X3NlcmlhbF9wb3J0ICpwb3J0LAo+PiAgCXByaXYtPm91dHN0YW5kaW5nX2J5dGVzICs9IGNvdW50
-Owo+PiAgCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnByaXYtPmxvY2ssIGZsYWdzKTsKPj4gIAo+
-PiAtCWJ1ZmZlciA9IGttYWxsb2MoY291bnQsIEdGUF9BVE9NSUMpOwo+PiArCWJ1ZmZlciA9IGtt
-ZW1kdXAoYnVmLCBjb3VudCwgR0ZQX0FUT01JQyk7Cj4+ICAJaWYgKCFidWZmZXIpCj4+ICAJCWdv
-dG8gZXJyb3Jfbm9fYnVmZmVyOwo+PiAgCj4+IEBAIC0yMTYsOCArMjE2LDYgQEAgc3RhdGljIGlu
-dCBvcHRpY29uX3dyaXRlKHN0cnVjdCB0dHlfc3RydWN0ICp0dHksIHN0cnVjdCB1c2Jfc2VyaWFs
-X3BvcnQgKnBvcnQsCj4+ICAJaWYgKCF1cmIpCj4+ICAJCWdvdG8gZXJyb3Jfbm9fdXJiOwo+PiAg
-Cj4+IC0JbWVtY3B5KGJ1ZmZlciwgYnVmLCBjb3VudCk7Cj4+IC0KPj4gIAl1c2Jfc2VyaWFsX2Rl
-YnVnX2RhdGEoJnBvcnQtPmRldiwgX19mdW5jX18sIGNvdW50LCBidWZmZXIpOwo+PiAgCj4+ICAJ
-LyogVGhlIGNvbm5lY3RlZCBkZXZpY2VzIGRvIG5vdCBoYXZlIGEgYnVsayB3cml0ZSBlbmRwb2lu
-dCwKPgo+TG9va3MgbGlrZSB3ZSBoYXZlIHRoZSBzYW1lIHBhdHRlcm4gYWxzbyBpbiBnYXJtaW5f
-d3JpdGVfYnVsaygpLiBDYXJlIHRvCj5pbmNsdWRlIHRoYXQgb25lIGFzIHdlbGw/Cj4KPkpvaGFu
-Ck9rLCBJIHdpbGwgYWRkIGl0IGludG8gdGhlIHBhdGNoIGFzIHdlbGwgaW4gVjIuCg==
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 52a83facde141544daf35d16e57d9b158e6aa0cb  usb: dwc2: host: add TPL support
+
+elapsed time: 724m
+
+configs tested: 71
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+riscv                               defconfig
+alpha                               defconfig
+arc                                 defconfig
+s390                             allmodconfig
+s390                                defconfig
+s390                             allyesconfig
+arm64                               defconfig
+ia64                                defconfig
+parisc                              defconfig
+nios2                               defconfig
+parisc64                            defconfig
+nios2                            allyesconfig
+parisc                           allyesconfig
+ia64                             allmodconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                              debian-10.3
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                             allyesconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220622
+riscv                             allnoconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220622
+s390                 randconfig-r044-20220622
+hexagon              randconfig-r045-20220622
+riscv                randconfig-r042-20220622
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
