@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660FE55409B
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 04:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CFB5540A1
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 04:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355997AbiFVCkp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 22:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S1356085AbiFVClb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 22:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbiFVCkp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 22:40:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64541248C9
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 19:40:44 -0700 (PDT)
+        with ESMTP id S232424AbiFVCl3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 22:41:29 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96552AC42
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 19:41:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655865644; x=1687401644;
+  t=1655865688; x=1687401688;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=2hvi7Hkg9s9XX3ZD2w0eaZuWc+veY9eyttLUbKZA6Qg=;
-  b=LiX4qKHEL+RrvYZY6JTB+YToP01ESPpxlf7jxeXULjtXwd8StBENeW2A
-   mPXjcfpCEJq0BYVrvcGH0SaKK75sm6huc76Lx0E92KBpgVPpAG71LEpJb
-   z33s3/KcKhV1ylHcujbcvwpkztMp3nVl53fvCYIyGQTV1GJvF0iYdhdXa
-   k+DxvajZq111MRpBTLxxKcPxqJrAr5hRah/s8ajciPodbjMlTcni5aGVz
-   NR8tNE75XdrNA5HTxdHMVVnequdI0yCe/yClhGqLpWHQGPMBoqc1xBSKm
-   wZszvpdehJVzJp5tC/4Hjbhks/gONUpa1Pfp/yKhZQtb4tmBRbk1RXm5v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="366617739"
+  bh=suzyjArqCQvtiE0y+DjR4Mnj6D1KnKBnoeT6ZjTgRsk=;
+  b=lM2yNZyv0YMsI0yp8TB3ZWMJ6gCVshsq3OyuyBwfcD5jyX8B0rAHLbDF
+   QT30oKNMBksox1/jQkNJHFFSLiC1tx+qdxgbK527EN9TS3orT/caRTkSZ
+   9abWnH9FPE9GID1TJeaDS3JHTaotnPRrTo0aF4oVJyKsgEpvKw7dBCqpH
+   QIUfNIz2LBNZaaZ7bLKMTZlq31yn1GxKhKO8TMnk1F8oOtArMhJ8L+Xj2
+   qCCG+wxxktULgVDfqOc9GRkGgr519zdyOBa1EyOA+TZ2j4pwcJ3p2012e
+   4uPk/H0GIpaBF4kq1JBsmxTq0umIU67yNKsq6mBSELSrlYN8/V4U+hZj0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="341978464"
 X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="366617739"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 19:40:28 -0700
+   d="scan'208";a="341978464"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 19:41:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
-   d="scan'208";a="690247353"
+   d="scan'208";a="620720486"
 Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2022 19:40:27 -0700
+  by orsmga001.jf.intel.com with ESMTP; 21 Jun 2022 19:41:27 -0700
 Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o3qI6-0000k1-Ev;
-        Wed, 22 Jun 2022 02:40:26 +0000
-Date:   Wed, 22 Jun 2022 10:40:15 +0800
+        id 1o3qJ4-0000k7-IO;
+        Wed, 22 Jun 2022 02:41:26 +0000
+Date:   Wed, 22 Jun 2022 10:41:01 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 485394c63f47df18eb7498608d5fc9041c19ec13
-Message-ID: <62b2810f.XIRUzotqpL/1lM9s%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 9ef165406308515dcf2e3f6e97b39a1c56d86db5
+Message-ID: <62b2813d.BIrgx1Vv9+uWkmIi%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -62,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 485394c63f47df18eb7498608d5fc9041c19ec13  MAINTAINERS: Repair file entry in ASPEED USB UDC DRIVER
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 9ef165406308515dcf2e3f6e97b39a1c56d86db5  usb: typec: wcove: Drop wrong dependency to INTEL_SOC_PMIC
 
-elapsed time: 720m
+elapsed time: 721m
 
-configs tested: 103
+configs tested: 92
 configs skipped: 4
 
 The following configs have been built successfully.
@@ -119,29 +119,18 @@ m68k                             allyesconfig
 m68k                             allmodconfig
 arc                              allyesconfig
 alpha                            allyesconfig
-nios2                               defconfig
 powerpc                           allnoconfig
 mips                             allyesconfig
 powerpc                          allmodconfig
 sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-parisc64                            defconfig
-s390                                defconfig
-s390                             allyesconfig
 i386                             allyesconfig
 i386                                defconfig
 i386                   debian-10.3-kselftests
 i386                              debian-10.3
-sparc                            allyesconfig
-sparc                               defconfig
+nios2                               defconfig
 x86_64                        randconfig-a006
 x86_64                        randconfig-a004
 x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
 i386                          randconfig-a012
 i386                          randconfig-a014
 i386                          randconfig-a016
