@@ -2,70 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D04C55480C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 14:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D61B5546EC
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 14:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354191AbiFVIgB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 04:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S234181AbiFVI6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 04:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354157AbiFVIfs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 04:35:48 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FF438BD0
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 01:35:46 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id v1so32552750ejg.13
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 01:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=ibSeTeoGrJU9Aqagmc754YJgfL9Rjsjx962UCMljOXo=;
-        b=Pv4rFnY614dxv6rhYl+a5MDZYYOkFrklTB1DqB56UO7YtAUEo3mZd0uvQ1Q0eJVru/
-         qVIZI7IzKvUsiWg77KaNzq0vS2aWRj6NLWkNSbLv5YyXNZo1hLEcIDRmCeL+eKd1bP1Q
-         A69a3aCK1pYjHy/D7CSiNab1TtnSv3tSIAs5lpc721ETXr1nkYoQgBbOEa9p8rjsZf0p
-         OrBipnYrC2GcnXITndwrdayoWqv16ywaXQzyW6MI1Fji+Qx+UefAhGEqWHdacju2tvSI
-         GgZbZsh/O9Vv0PEQDR7nUyBs1nUVkNWZiZBvosq4kMqlhRmCAEMg74l7oncgglf9Wwr9
-         TAtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ibSeTeoGrJU9Aqagmc754YJgfL9Rjsjx962UCMljOXo=;
-        b=YSl2m7X4je3tHPmoOyHdikf1sEH42nPrdwNmQh9I6rrg+t1py8An2nuJJnzWbm8Jcy
-         Uppk4t3XgGGsfu+4K3jajfwDBn53P+SOzwTgsTmRKDe3tqseYlw+NlQrbHaTquKWyIcC
-         wtMM4aEXC668sN8mbtGBUBLYg5HNoRI/on75wwgC1ifZnWkb9bfprr4ui8sBHa1TRpqe
-         lKRBVauWRK5F4hgVtINBT2Vdq8Sz/HRtGvxxj2Yl//wNJVDXArp15fP0ocMOH2UqwCXB
-         OZhsyYBA/2I4wAcMWmJ21s+tGcVOkfFzZrTslancW9HSFUY07Y+7TAt6EnWOqvDjkyo3
-         Jikw==
-X-Gm-Message-State: AJIora9efWUQqYQzCHTzmODwWEmp5//dzu9FP99r+DQBHAR5W1nWEGdZ
-        SAmZQmUojPIkYfagizIbIKO0fw==
-X-Google-Smtp-Source: AGRyM1ttLbxNCfJfZjrL1pM7VtFS0jyMlykBozG6xZbRJN3ZAHMlEmgKZip7Yto4hapdf8V/ANRK4Q==
-X-Received: by 2002:a17:907:9605:b0:6f5:c66:7c13 with SMTP id gb5-20020a170907960500b006f50c667c13mr2011528ejc.66.1655886944973;
-        Wed, 22 Jun 2022 01:35:44 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ku10-20020a170907788a00b00722e603c39asm1979733ejc.31.2022.06.22.01.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 01:35:44 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, gregkh@linuxfoundation.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        mgautam@codeaurora.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, linux-usb@vger.kernel.org,
-        agross@kernel.org
-Subject: Re: (subset) [PATCH 05/13] arm64: dts: qcom: add missing AOSS QMP compatible fallback
-Date:   Wed, 22 Jun 2022 10:35:31 +0200
-Message-Id: <165588692597.15720.9610794575339246261.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220504131923.214367-6-krzysztof.kozlowski@linaro.org>
-References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org> <20220504131923.214367-6-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S230053AbiFVI6Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 04:58:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEB8E34;
+        Wed, 22 Jun 2022 01:58:07 -0700 (PDT)
+X-UUID: b768fae71ca547b7b5dd424f82c0d88c-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:c7be37e6-56a1-4dcb-953c-d51da3c76ffd,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:100
+X-CID-INFO: VERSION:1.1.6,REQID:c7be37e6-56a1-4dcb-953c-d51da3c76ffd,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
+        ION:quarantine,TS:100
+X-CID-META: VersionHash:b14ad71,CLOUDID:190135ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:47c063911d5b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: b768fae71ca547b7b5dd424f82c0d88c-20220622
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1474948226; Wed, 22 Jun 2022 16:58:01 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 16:58:00 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 16:57:59 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        Julian Scheel <julian@jusst.de>,
+        xin lin <xin.lin@mediatek.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH] usb: gadget: f_uac1: add IAD descriptor
+Date:   Wed, 22 Jun 2022 16:57:57 +0800
+Message-ID: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,21 +68,108 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 May 2022 15:19:15 +0200, Krzysztof Kozlowski wrote:
-> The AOSS QMP bindings expect all compatibles to be followed by fallback
-> "qcom,aoss-qmp" because all of these are actually compatible with each
-> other.  This fixes dtbs_check warnings like:
-> 
->   sm8250-hdk.dtb: power-controller@c300000: compatible: ['qcom,sm8250-aoss-qmp'] is too short
-> 
-> 
-> [...]
+From: xin lin <xin.lin@mediatek.com>
 
-Applied, thanks!
+Win10 can not enumerate composite device of UVC+UAC1+ADB without IAD descriptor
+in uac1.0, so add it.
 
-[05/13] arm64: dts: qcom: add missing AOSS QMP compatible fallback
-        https://git.kernel.org/krzk/linux/c/9a2f272b5f665ac945bc06f7b2e7cdf1cd974cce
+Signed-off-by: xin lin <xin.lin@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Best regards,
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 6f0e1d803dc2..8390207bc513 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
+  * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
+  */
+ 
++static struct usb_interface_assoc_descriptor iad_desc = {
++	.bLength = sizeof(iad_desc),
++	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
++
++	.bFirstInterface = 0,
++	.bInterfaceCount = 3,
++	.bFunctionClass = USB_CLASS_AUDIO,
++	.bFunctionSubClass = 0,
++	.bFunctionProtocol = UAC_VERSION_1,
++};
++
+ /* B.3.1  Standard AC Interface Descriptor */
+ static struct usb_interface_descriptor ac_interface_desc = {
+ 	.bLength =		USB_DT_INTERFACE_SIZE,
+@@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ };
+ 
+ static struct usb_descriptor_header *f_audio_desc[] = {
++	(struct usb_descriptor_header *)&iad_desc,
+ 	(struct usb_descriptor_header *)&ac_interface_desc,
+ 	(struct usb_descriptor_header *)&ac_header_desc,
+ 
+@@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ };
+ 
+ enum {
++	STR_ASSOC,
+ 	STR_AC_IF,
+ 	STR_USB_OUT_IT,
+ 	STR_USB_OUT_IT_CH_NAMES,
+@@ -310,6 +323,7 @@ enum {
+ 
+ static struct usb_string strings_uac1[] = {
+ 	/* [STR_AC_IF].s = DYNAMIC, */
++	[STR_ASSOC].s = "Source/Sink",
+ 	[STR_USB_OUT_IT].s = "Playback Input terminal",
+ 	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
+ 	[STR_IO_OUT_OT].s = "Playback Output terminal",
+@@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
+ 	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
+ 
++	iad_desc.bInterfaceCount = 1;
+ 	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
+ 
+ 	if (EPIN_EN(opts)) {
+@@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUIN_EN(opts))
+ 			len += in_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 	if (EPOUT_EN(opts)) {
+ 		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
+@@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUOUT_EN(opts))
+ 			len += out_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 
+ 	i = 0;
++	f_audio_desc[i++] = USBDHDR(&iad_desc);
+ 	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+ 	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+ 
+@@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 	}
+ 
++	iad_desc.iFunction = us[STR_ASSOC].id;
+ 	ac_interface_desc.iInterface = us[STR_AC_IF].id;
+ 	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
+ 	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
+@@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 	status = usb_interface_id(c, f);
+ 	if (status < 0)
+ 		goto err_free_fu;
++
++	iad_desc.bFirstInterface = status;
+ 	ac_interface_desc.bInterfaceNumber = status;
+ 	uac1->ac_intf = status;
+ 	uac1->ac_alt = 0;
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2.18.0
+
