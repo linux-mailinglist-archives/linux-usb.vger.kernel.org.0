@@ -2,86 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D265552CD
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 19:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8AAE5552E1
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 19:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377439AbiFVRse (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 13:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S1377276AbiFVRwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 13:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiFVRsc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 13:48:32 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1A0FD04
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 10:48:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso157685pjg.1
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 10:48:30 -0700 (PDT)
+        with ESMTP id S1359181AbiFVRwk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 13:52:40 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D9135DEC
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 10:52:38 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id t1so31485185ybd.2
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 10:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=INtMn1T8YiMhzQt2Th4wtcU0KbijPUKMnT6GFbUU1es=;
-        b=iMepv6cEm1kKrueKz6F8JmBrKe29Bg85av9Djx9b2MBTrbDc+JfTwOd23NQ0BJeQQq
-         37fpA2gDzLO8DXBdJ7A/uB8Xuvc4+KcZ7fS8DOsSgvAElBeVOGA5tMu6YLkOQDWz3BpQ
-         kizqT+2a2uqLFbJqLLOcqRR8PeNirsLEMS434=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fUSmK7RJ4lRM7Yk3nFFgboloKX+Bx0NQLAzjfaTQ4dE=;
+        b=STXFwg1mfBWfKxKHCbKBpyd0eW/G6gEkq9668fjCDL/iGMPvKtfKvYJyqyEhEwixak
+         kYRwtypdaZYxHUnduLk9aIAL9Vj0jJPwUTAiMBtvHQx0rp9UpqU5/dHF6qyaQByehRIV
+         PdtFoiFiWq32cVeHJ4A7EO6VsPgKncenjRIII=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=INtMn1T8YiMhzQt2Th4wtcU0KbijPUKMnT6GFbUU1es=;
-        b=JiuKrKPrzd87K4+D3pGghn39vja486uLBJ5eqvIDyeP2GwdIpjK5qm4AM7/ipDJv4C
-         hpbvMM6faCaBHQPoUj2meB7lVvpPzYoYr+zCagXKeswTZty8QVPuog8BoIoy8dCmjoSC
-         nZ7Md5mGRmvI9qYC/zNHnCSeATkrWA0rh7s9tuIzGCamazf8QGbPuT9v0fJxaIZYbhNe
-         J6C5QN2tMPUIvuaX6Dim/EqDp04NmK4EBA4f+/ZMqDfDHGD70I3OYJvKzq3qJgHLNoT+
-         1cJxJtkvwdFJfyDCILEvCz8o9W/fw4aR4tRJkfpud0d6wc+r83sxTe2vD0liW0mVvllS
-         7WXw==
-X-Gm-Message-State: AJIora8FSvWv8HUPOiu9xo3iKQcORLrTZELCtyGbzmWMxHTZAUm5NNTB
-        aqF/KOgjzsFnFz4Humdv4ZI+GA==
-X-Google-Smtp-Source: AGRyM1uOMxnpSmvwdwqtw/1opcMtIJbxFZWf2fsabN2cbcr6zK0lX2+IO4vplGkVs7xRBGrXcbNLOA==
-X-Received: by 2002:a17:903:41c7:b0:16a:2dcf:c4a0 with SMTP id u7-20020a17090341c700b0016a2dcfc4a0mr13200643ple.83.1655920110049;
-        Wed, 22 Jun 2022 10:48:30 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l17-20020a17090b079100b001ece55aec38sm35470pjz.30.2022.06.22.10.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 10:48:29 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fUSmK7RJ4lRM7Yk3nFFgboloKX+Bx0NQLAzjfaTQ4dE=;
+        b=jdtwhYTqQg1qGF90a/JUsnPN2DenXL2GczfdxcCROz0hmM1G+Db2tgJb6ln6Wa4ipF
+         +kucckPqqlIooPt+aKbQuvKQMjxSJxwZ380fVbLZXTGJYCYATC0dWRYSBtBic70FIzMx
+         VTAuvGZ476hvvO8AIE4ueKJVAc9k8ZxELeqktUMO78ct8Kzh5MjLFw/z/IK2JKSp7xGw
+         QqtXeYa8RyeDCRl39tq9eTMIiVs2G17xm7fze+R/FGVNElYX4udbS5GQQZRbVfYemWEI
+         7SLq/8zv/X4Bf3dv5T8zsQwqHbEEmAAtrWYHsyXsE5vV8UEBy2sLr2PAP1yzcJ6gt34+
+         CEcg==
+X-Gm-Message-State: AJIora9NT8R13GTFrIyWPLbj759A0sEBOACDIQAxc6Y/d+CtSP3vlBeg
+        e6wA+/e9KxHLCK7qBb+7R2bv3ScSFIbULECA/OUQVw==
+X-Google-Smtp-Source: AGRyM1uyljzuoQBj9S63poZWW7UCRBrOVn0dHy9ufWgOBUKqN0s1gOhcOj48rq/eqEA/zMp2QRFHFs2auD5Rhi+jzn4=
+X-Received: by 2002:a5b:8d1:0:b0:668:c6ca:7571 with SMTP id
+ w17-20020a5b08d1000000b00668c6ca7571mr4869130ybq.445.1655920358190; Wed, 22
+ Jun 2022 10:52:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220615172129.1314056-1-pmalani@chromium.org>
+ <CACeCKaetgayTS+yX0cuNiK7j6Yqd4o2ziX6nCoGTt64A3jFT=g@mail.gmail.com>
+ <YrHE9KrF0HG9rVi/@kroah.com> <8f0501c5-84f2-10f1-ae06-4b3936c50b12@linaro.org>
+ <YrMxFeMc0tk/K1qL@kroah.com>
+In-Reply-To: <YrMxFeMc0tk/K1qL@kroah.com>
 From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, swboyd@chromium.org,
+Date:   Wed, 22 Jun 2022 10:52:27 -0700
+Message-ID: <CACeCKac0missZ84EzgHK0QJpmYUSqRaOtEJLdRs+dejybrp0cw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] usb: typec: Introduce typec-switch binding
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
         heikki.krogerus@linux.intel.com,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Allen Chen <allen.chen@ite.com.tw>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Robert Foss <robert.foss@linaro.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Xin Ji <xji@analogixsemi.com>
-Subject: [PATCH v5 9/9] drm/bridge: it6505: Add typec_mux_set callback function
-Date:   Wed, 22 Jun 2022 17:34:38 +0000
-Message-Id: <20220622173605.1168416-10-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-In-Reply-To: <20220622173605.1168416-1-pmalani@chromium.org>
-References: <20220622173605.1168416-1-pmalani@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -92,107 +88,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pin-Yen Lin <treapking@chromium.org>
+On Wed, Jun 22, 2022 at 8:11 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jun 22, 2022 at 04:53:40PM +0200, Krzysztof Kozlowski wrote:
+> > On 21/06/2022 15:17, Greg Kroah-Hartman wrote:
+> > > On Wed, Jun 15, 2022 at 11:13:33AM -0700, Prashant Malani wrote:
+> > >> I should add:
+> > >>
+> > >> Series submission suggestions (of course, open to better suggestions too):
+> > >> - Patches 1-3 can go through the USB repo.
+> > >
+> > > I will take patches 1 and 2 now.
+> > >
+> > > seems the others need reworks or acks from the DT people.
+> >
+> > I just gave for patch 3 and before for 4, so you can grab these as well.
+>
+> They are gone from my queue, a resend with that ack would be good so
+> that I can pick it up easier.
 
-Add the callback function when the driver receives state changes of the
-Type-C ports. The callback function configures the lane_swap state and
-ends up updating the lane swap registers of it6505 bridge chip.
+Thanks Greg. I've sent out v5 [1] which has the Reviewed-by tags from
+Krzysztof.
 
-Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+[1] https://lore.kernel.org/linux-usb/20220622173605.1168416-1-pmalani@chromium.org/
 
-v5 is the first version for this patch.
+Best regards,
 
- drivers/gpu/drm/bridge/ite-it6505.c | 58 +++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index cb1dd4cbd33b..87b9bd742b52 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -17,6 +17,7 @@
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/types.h>
-+#include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
- #include <linux/wait.h>
- 
-@@ -404,6 +405,7 @@ struct debugfs_entries {
- };
- 
- struct it6505_port_data {
-+	bool dp_connected;
- 	struct typec_mux_dev *typec_mux;
- 	struct it6505 *it6505;
- };
-@@ -3237,9 +3239,65 @@ static void it6505_shutdown(struct i2c_client *client)
- 		it6505_lane_off(it6505);
- }
- 
-+static void it6505_typec_ports_update(struct it6505 *it6505)
-+{
-+	usleep_range(3000, 4000);
-+
-+	if (it6505->typec_ports[0].dp_connected && it6505->typec_ports[1].dp_connected)
-+		/* Both ports available, do nothing to retain the current one. */
-+		return;
-+	else if (it6505->typec_ports[0].dp_connected)
-+		it6505->lane_swap = false;
-+	else if (it6505->typec_ports[1].dp_connected)
-+		it6505->lane_swap = true;
-+
-+	usleep_range(3000, 4000);
-+}
-+
- static int it6505_typec_mux_set(struct typec_mux_dev *mux,
- 				struct typec_mux_state *state)
- {
-+	struct it6505_port_data *data = typec_mux_get_drvdata(mux);
-+	struct it6505 *it6505 = data->it6505;
-+	struct device *dev = &it6505->client->dev;
-+	bool old_dp_connected, new_dp_connected;
-+
-+	if (it6505->num_typec_switches == 1)
-+		return 0;
-+
-+	mutex_lock(&it6505->extcon_lock);
-+
-+	old_dp_connected = it6505->typec_ports[0].dp_connected ||
-+			   it6505->typec_ports[1].dp_connected;
-+
-+	dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
-+		it6505->typec_ports[0].dp_connected, it6505->typec_ports[1].dp_connected);
-+
-+	data->dp_connected = (state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
-+			      state->alt->mode == USB_TYPEC_DP_MODE);
-+
-+	new_dp_connected = it6505->typec_ports[0].dp_connected ||
-+			   it6505->typec_ports[1].dp_connected;
-+
-+	if (it6505->enable_drv_hold) {
-+		dev_dbg(dev, "enable driver hold");
-+		goto unlock;
-+	}
-+
-+	it6505_typec_ports_update(it6505);
-+
-+	if (!old_dp_connected && new_dp_connected)
-+		pm_runtime_get_sync(dev);
-+
-+	if (old_dp_connected && !new_dp_connected) {
-+		pm_runtime_put_sync(dev);
-+		if (it6505->bridge.dev)
-+			drm_helper_hpd_irq_event(it6505->bridge.dev);
-+		memset(it6505->dpcd, 0, sizeof(it6505->dpcd));
-+	}
-+
-+unlock:
-+	mutex_unlock(&it6505->extcon_lock);
- 	return 0;
- }
- 
--- 
-2.37.0.rc0.104.g0611611a94-goog
-
+-Prashant
