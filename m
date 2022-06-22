@@ -2,133 +2,230 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2994A553E6A
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 00:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8126D55404C
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 03:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbiFUWT0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 18:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S1354146AbiFVB5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 21:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiFUWTZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 18:19:25 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B330C31354
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id lw20so8025991ejb.4
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
-        b=D4OeYr5DObfkZ5SxU78+21kychVQSbaYxc23HIiBZL/HdobOEgoPwRKlVkqu1qxzwz
-         OMerWfBiqhPqNfus9CMllIQSBRuu8B0VSmqLAsRaVcsaJrJJuGEgFuQc3DonJ/KE+aLR
-         iLQdIyL/eb6AaFyiD53AvNC7yxOApi+ZRt5U2foiWaMwt0nuJZ+L81yHFaWh5xPh5n/0
-         aiU025tdZv1lG2fC0/5QfmsBWN+BZ2R4Q2xd7tyXdDCxKX4vUnvB8uLqyFudoI0U0u6C
-         25Mz9INEgtxhNkLP8DYKCeIzC0BrjXWVVeo3stEgIF35rQhqOLf6uwKpnMAvnoEaMeQs
-         h+JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
-        b=iis7GelTaJh6k392uMPI8RDDPCKqAp77LkOPN7opd4B3tyrjmj5v79msOGnOqUdlAS
-         hSLt7xwQHX15LQAmdRE0Isp653OLAzWhtpY0WCPJ2T6JDNC38b0dj4RolJ7sijZP+0q7
-         svJW6QTylvaVonAV+jwz6wu5BzRy22UgCGLwCj2Z2EBnfQ1nUdow4sWgaDx9S0Dqufy0
-         vhz/P0nl1Sv9VQPUBKlermF5wuxEmp/2Djqv02ehjA8dCExkjAcYQlPcX31JEpstiN2I
-         YZMTbTNeAafS+ll6yfwTk+Rva4NFt3KggfTDiGmNeSrbeX+q98bX5j020QJXasw9QEX2
-         //Tg==
-X-Gm-Message-State: AJIora+I9CSuBG+f9xWv4hLQLc99an40N17zdOj6vb+gQHKSvOhXIEvZ
-        qnzznF8jm1XC95dcct5C9MbCqoROPjMdZGRq/jZdYg==
-X-Google-Smtp-Source: AGRyM1vVeJpl5YmahMIBRWKENGAY/5q7qFCUrgPBVWAl++5JmH2yrju9aDpjPk6EPGCreQdfMELmoUi+rubgGYVlS7Q=
-X-Received: by 2002:a17:906:728a:b0:715:2fb5:19f9 with SMTP id
- b10-20020a170906728a00b007152fb519f9mr270868ejl.170.1655849962024; Tue, 21
- Jun 2022 15:19:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
-In-Reply-To: <20220621085345.603820-6-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 21 Jun 2022 15:19:10 -0700
-Message-ID: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
+        with ESMTP id S231720AbiFVB5X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 21:57:23 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32B431201;
+        Tue, 21 Jun 2022 18:57:21 -0700 (PDT)
+X-UUID: a6098956ce0e4987891d618e8fd9e30e-20220622
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:660ed2cd-09ad-4643-b901-452f7f5f3b84,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:e65b28ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: a6098956ce0e4987891d618e8fd9e30e-20220622
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1683346429; Wed, 22 Jun 2022 09:57:17 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 22 Jun 2022 09:57:16 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 22 Jun 2022 09:57:13 +0800
+Message-ID: <ba6cccfa05aed087d14f5adc6db06496547a5094.camel@mediatek.com>
+Subject: Re: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional
+ clocks to be missing
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
+Date:   Wed, 22 Jun 2022 09:57:12 +0800
+In-Reply-To: <afae6179-3681-f5c6-4615-3228f16f1271@linaro.org>
+References: <20220617222916.2435618-1-nfraprado@collabora.com>
+         <20220617222916.2435618-3-nfraprado@collabora.com>
+         <8639e64d-c659-7090-2d0a-078fd96cfbd4@linaro.org>
+         <bb460aa483cc888ffa36709d9e9c1f2e3be0e000.camel@mediatek.com>
+         <bc5458fe-083c-d679-9fcb-95810a290da8@linaro.org>
+         <af50210b95d0cd8b2e3103b3d4a9702aeeba9452.camel@mediatek.com>
+         <a24c24e6-fdee-df79-fd2f-6a71540bd9b3@linaro.org>
+         <20220620155057.a6qilnhm7snzhapa@notapiano>
+         <afae6179-3681-f5c6-4615-3228f16f1271@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
->
-> The kunit_test_suite() macro is no-longer incompatible with module_add,
-> so its use can be reinstated.
->
-> Since this fixes parsing with builtins and kunit_tool, also enable the
-> test by default when KUNIT_ALL_TESTS is enabled.
->
-> The test can now be run via kunit_tool with:
->         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
->         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
->         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
->         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
->         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
->         'sdhci-of-aspeed'
->
-> (It may be worth adding a .kunitconfig at some point, as there are
-> enough dependencies to make that command scarily long.)
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Tue, 2022-06-21 at 09:14 +0200, Krzysztof Kozlowski wrote:
+> On 20/06/2022 17:50, Nícolas F. R. A. Prado wrote:
+> > On Mon, Jun 20, 2022 at 10:50:57AM +0200, Krzysztof Kozlowski
+> > wrote:
+> > > On 20/06/2022 08:59, Chunfeng Yun wrote:
+> > > > On Sun, 2022-06-19 at 14:05 +0200, Krzysztof Kozlowski wrote:
+> > > > > On 19/06/2022 09:46, Chunfeng Yun wrote:
+> > > > > > On Fri, 2022-06-17 at 18:25 -0700, Krzysztof Kozlowski
+> > > > > > wrote:
+> > > > > > > On 17/06/2022 15:29, Nícolas F. R. A. Prado wrote:
+> > > > > > > > The current clock list in the binding doesn't allow for
+> > > > > > > > one of
+> > > > > > > > the
+> > > > > > > > optional clocks to be missing and a subsequent clock to
+> > > > > > > > be
+> > > > > > > > present.
+> > > > > > > > An
+> > > > > > > > example where this is an issue is in mt8192.dtsi, which
+> > > > > > > > has
+> > > > > > > > "sys_ck",
+> > > > > > > > "ref_ck", "xhci_ck" and would cause dtbs_check
+> > > > > > > > warnings.
+> > > > > > > > 
+> > > > > > > > Change the clock list in a way that allows the middle
+> > > > > > > > optional
+> > > > > > > > clocks to
+> > > > > > > > be missing, while still guaranteeing a fixed order. The
+> > > > > > > > "ref_ck" is
+> > > > > > > > kept
+> > > > > > > > as a const even though it is optional for simplicity,
+> > > > > > > > since it
+> > > > > > > > is
+> > > > > > > > present in all current dts files.
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Nícolas F. R. A. Prado <
+> > > > > > > > nfraprado@collabora.com>
+> > > > > > > > ---
+> > > > > > > > 
+> > > > > > > >  .../devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml       | 9
+> > > > > > > > +++++++--
+> > > > > > > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > > > > > > > 
+> > > > > > > > diff --git
+> > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > index 63cbc2b62d18..99a1b233ec90 100644
+> > > > > > > > ---
+> > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > +++
+> > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > > > xhci.yaml
+> > > > > > > > @@ -80,8 +80,13 @@ properties:
+> > > > > > > >      items:
+> > > > > > > >        - const: sys_ck  # required, the following ones
+> > > > > > > > are
+> > > > > > > > optional
+> > > > > > > >        - const: ref_ck
+> > > > > > > > -      - const: mcu_ck
+> > > > > > > > -      - const: dma_ck
+> > > > > > > > +      - enum:
+> > > > > > > > +          - mcu_ck
+> > > > > > > > +          - dma_ck
+> > > > > > > > +          - xhci_ck
+> > > > > > > > +      - enum:
+> > > > > > > > +          - dma_ck
+> > > > > > > > +          - xhci_ck
+> > > > > > > >        - const: xhci_ck
+> > > > > > > 
+> > > > > > > You allow now almost any order here, including incorrect
+> > > > > > > like
+> > > > > > > sys,ref,xhci,xhci,xhci.
+> > > > > > > 
+> > > > > > > The order of clocks has to be fixed and we cannot allow
+> > > > > > > flexibility.
+> > > > > > > Are
+> > > > > > > you sure that these clocks are actually optional (not
+> > > > > > > wired to
+> > > > > > > the
+> > > > > > > device)?
+> > > > > > 
+> > > > > > In fact, these optional clocks are fixed, due to no gates
+> > > > > > are
+> > > > > > provided,
+> > > > > > SW can't control them by CCF;
+> > > > > > In this case, I usually use a fixed clock, or ignore it.
+> > > > > 
+> > > > > But in some versions these clocks are controllable or not?
+> > > > 
+> > > > Some SoCs are controllable, some ones are not (fixed clock).
+> > > 
+> > > Thanks for confirming. Then I would prefer to make these clocks
+> > > required
+> > > (not optional) and always provide them - via common clock
+> > > framework or
+> > > fixed-clock.
+> > 
+> > Hi Krzysztof and Chunfeng,
+> > 
+> > thank you both for the feedback.
+> > 
+> > Since the solution I proposed in this patch is not acceptable I see
+> > two options:
+> > 1. Split the clocks in several if blocks matched by compatibles
+> > 2. Make the clocks required and use fixed-clock nodes for the
+> > missing clocks in
+> >    the DT
+> > 
+> > My understanding is that 1 is the desirable solution if the clock
+> > is really
+> > missing in some hardware variants, while 2 is desirable if all
+> > hardware variants
+> > really receive all the clocks, only that on some variants they're
+> > fixed and not
+> > controlable by SW.
+> > 
+> > From what I'm reading of this discussion it seems that the latter
+> > is the case
+> > here and thus we should go for 2. Is this correct?
+> 
+> This is how I understood it as well, so correct from my side.
+Also right for me.
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
+> 
+> > 
+> > Also Chunfeng, do you have information on whether the same is true
+> > for the MMC
+> > HW block? I recently submitted some changes to that binding [1] but
+> > I followed
+> > approach 1 there instead. However if all the clocks are present in
+> > the HW level
+> > there as well it would make more sense for me to change it to
+> > follow approach 2.
 
-Minor, optional suggestion below.
+I discussed it with Wenbin, MMC seems a little different with USB,
 
->  static int __init aspeed_sdc_init(void)
-> @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
->         if (rc < 0)
->                 goto cleanup_sdhci;
->
-> -       rc = aspeed_sdc_tests_init();
-> -       if (rc < 0) {
-> -               platform_driver_unregister(&aspeed_sdc_driver);
-> -               goto cleanup_sdhci;
-> -       }
-> -
->         return 0;
->
->  cleanup_sdhci:
+Hi Wenbin,
 
-This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
-kunit-related build error") to allow for this extra call to
-aspeed_sdc_tests_init().
+   Please give some comments about MMC, thanks
 
-This could now be reverted back to what is
-        rc = platform_driver_register(&aspeed_sdc_driver);
-        if (rc < 0)
-               platform_driver_unregister(&aspeed_sdhci_driver);
+> > 
+> > Thanks,
+> > Nícolas
+> > 
+> > [1] 
+> > https://lore.kernel.org/all/20220617230114.2438875-1-nfraprado@collabora.com
+> 
+> 
+> Best regards,
+> Krzysztof
 
-        return rc;
-
-but let's see what the maintainers think.
