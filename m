@@ -2,72 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8126D55404C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 03:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660FE55409B
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 04:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354146AbiFVB5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jun 2022 21:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
+        id S1355997AbiFVCkp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jun 2022 22:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbiFVB5X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 21:57:23 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32B431201;
-        Tue, 21 Jun 2022 18:57:21 -0700 (PDT)
-X-UUID: a6098956ce0e4987891d618e8fd9e30e-20220622
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:660ed2cd-09ad-4643-b901-452f7f5f3b84,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:e65b28ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: a6098956ce0e4987891d618e8fd9e30e-20220622
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1683346429; Wed, 22 Jun 2022 09:57:17 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 22 Jun 2022 09:57:16 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 22 Jun 2022 09:57:13 +0800
-Message-ID: <ba6cccfa05aed087d14f5adc6db06496547a5094.camel@mediatek.com>
-Subject: Re: [PATCH 2/3] dt-bindings: usb: mtk-xhci: Allow middle optional
- clocks to be missing
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
-        Wenbin Mei <wenbin.mei@mediatek.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Date:   Wed, 22 Jun 2022 09:57:12 +0800
-In-Reply-To: <afae6179-3681-f5c6-4615-3228f16f1271@linaro.org>
-References: <20220617222916.2435618-1-nfraprado@collabora.com>
-         <20220617222916.2435618-3-nfraprado@collabora.com>
-         <8639e64d-c659-7090-2d0a-078fd96cfbd4@linaro.org>
-         <bb460aa483cc888ffa36709d9e9c1f2e3be0e000.camel@mediatek.com>
-         <bc5458fe-083c-d679-9fcb-95810a290da8@linaro.org>
-         <af50210b95d0cd8b2e3103b3d4a9702aeeba9452.camel@mediatek.com>
-         <a24c24e6-fdee-df79-fd2f-6a71540bd9b3@linaro.org>
-         <20220620155057.a6qilnhm7snzhapa@notapiano>
-         <afae6179-3681-f5c6-4615-3228f16f1271@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S232424AbiFVCkp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jun 2022 22:40:45 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64541248C9
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jun 2022 19:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655865644; x=1687401644;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2hvi7Hkg9s9XX3ZD2w0eaZuWc+veY9eyttLUbKZA6Qg=;
+  b=LiX4qKHEL+RrvYZY6JTB+YToP01ESPpxlf7jxeXULjtXwd8StBENeW2A
+   mPXjcfpCEJq0BYVrvcGH0SaKK75sm6huc76Lx0E92KBpgVPpAG71LEpJb
+   z33s3/KcKhV1ylHcujbcvwpkztMp3nVl53fvCYIyGQTV1GJvF0iYdhdXa
+   k+DxvajZq111MRpBTLxxKcPxqJrAr5hRah/s8ajciPodbjMlTcni5aGVz
+   NR8tNE75XdrNA5HTxdHMVVnequdI0yCe/yClhGqLpWHQGPMBoqc1xBSKm
+   wZszvpdehJVzJp5tC/4Hjbhks/gONUpa1Pfp/yKhZQtb4tmBRbk1RXm5v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="366617739"
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="366617739"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 19:40:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,211,1650956400"; 
+   d="scan'208";a="690247353"
+Received: from lkp-server02.sh.intel.com (HELO a67cc04a5eeb) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2022 19:40:27 -0700
+Received: from kbuild by a67cc04a5eeb with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o3qI6-0000k1-Ev;
+        Wed, 22 Jun 2022 02:40:26 +0000
+Date:   Wed, 22 Jun 2022 10:40:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ 485394c63f47df18eb7498608d5fc9041c19ec13
+Message-ID: <62b2810f.XIRUzotqpL/1lM9s%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,157 +62,124 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-06-21 at 09:14 +0200, Krzysztof Kozlowski wrote:
-> On 20/06/2022 17:50, Nícolas F. R. A. Prado wrote:
-> > On Mon, Jun 20, 2022 at 10:50:57AM +0200, Krzysztof Kozlowski
-> > wrote:
-> > > On 20/06/2022 08:59, Chunfeng Yun wrote:
-> > > > On Sun, 2022-06-19 at 14:05 +0200, Krzysztof Kozlowski wrote:
-> > > > > On 19/06/2022 09:46, Chunfeng Yun wrote:
-> > > > > > On Fri, 2022-06-17 at 18:25 -0700, Krzysztof Kozlowski
-> > > > > > wrote:
-> > > > > > > On 17/06/2022 15:29, Nícolas F. R. A. Prado wrote:
-> > > > > > > > The current clock list in the binding doesn't allow for
-> > > > > > > > one of
-> > > > > > > > the
-> > > > > > > > optional clocks to be missing and a subsequent clock to
-> > > > > > > > be
-> > > > > > > > present.
-> > > > > > > > An
-> > > > > > > > example where this is an issue is in mt8192.dtsi, which
-> > > > > > > > has
-> > > > > > > > "sys_ck",
-> > > > > > > > "ref_ck", "xhci_ck" and would cause dtbs_check
-> > > > > > > > warnings.
-> > > > > > > > 
-> > > > > > > > Change the clock list in a way that allows the middle
-> > > > > > > > optional
-> > > > > > > > clocks to
-> > > > > > > > be missing, while still guaranteeing a fixed order. The
-> > > > > > > > "ref_ck" is
-> > > > > > > > kept
-> > > > > > > > as a const even though it is optional for simplicity,
-> > > > > > > > since it
-> > > > > > > > is
-> > > > > > > > present in all current dts files.
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Nícolas F. R. A. Prado <
-> > > > > > > > nfraprado@collabora.com>
-> > > > > > > > ---
-> > > > > > > > 
-> > > > > > > >  .../devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > xhci.yaml       | 9
-> > > > > > > > +++++++--
-> > > > > > > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > > > > > > > 
-> > > > > > > > diff --git
-> > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > xhci.yaml
-> > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > xhci.yaml
-> > > > > > > > index 63cbc2b62d18..99a1b233ec90 100644
-> > > > > > > > ---
-> > > > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > xhci.yaml
-> > > > > > > > +++
-> > > > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > > > > > > xhci.yaml
-> > > > > > > > @@ -80,8 +80,13 @@ properties:
-> > > > > > > >      items:
-> > > > > > > >        - const: sys_ck  # required, the following ones
-> > > > > > > > are
-> > > > > > > > optional
-> > > > > > > >        - const: ref_ck
-> > > > > > > > -      - const: mcu_ck
-> > > > > > > > -      - const: dma_ck
-> > > > > > > > +      - enum:
-> > > > > > > > +          - mcu_ck
-> > > > > > > > +          - dma_ck
-> > > > > > > > +          - xhci_ck
-> > > > > > > > +      - enum:
-> > > > > > > > +          - dma_ck
-> > > > > > > > +          - xhci_ck
-> > > > > > > >        - const: xhci_ck
-> > > > > > > 
-> > > > > > > You allow now almost any order here, including incorrect
-> > > > > > > like
-> > > > > > > sys,ref,xhci,xhci,xhci.
-> > > > > > > 
-> > > > > > > The order of clocks has to be fixed and we cannot allow
-> > > > > > > flexibility.
-> > > > > > > Are
-> > > > > > > you sure that these clocks are actually optional (not
-> > > > > > > wired to
-> > > > > > > the
-> > > > > > > device)?
-> > > > > > 
-> > > > > > In fact, these optional clocks are fixed, due to no gates
-> > > > > > are
-> > > > > > provided,
-> > > > > > SW can't control them by CCF;
-> > > > > > In this case, I usually use a fixed clock, or ignore it.
-> > > > > 
-> > > > > But in some versions these clocks are controllable or not?
-> > > > 
-> > > > Some SoCs are controllable, some ones are not (fixed clock).
-> > > 
-> > > Thanks for confirming. Then I would prefer to make these clocks
-> > > required
-> > > (not optional) and always provide them - via common clock
-> > > framework or
-> > > fixed-clock.
-> > 
-> > Hi Krzysztof and Chunfeng,
-> > 
-> > thank you both for the feedback.
-> > 
-> > Since the solution I proposed in this patch is not acceptable I see
-> > two options:
-> > 1. Split the clocks in several if blocks matched by compatibles
-> > 2. Make the clocks required and use fixed-clock nodes for the
-> > missing clocks in
-> >    the DT
-> > 
-> > My understanding is that 1 is the desirable solution if the clock
-> > is really
-> > missing in some hardware variants, while 2 is desirable if all
-> > hardware variants
-> > really receive all the clocks, only that on some variants they're
-> > fixed and not
-> > controlable by SW.
-> > 
-> > From what I'm reading of this discussion it seems that the latter
-> > is the case
-> > here and thus we should go for 2. Is this correct?
-> 
-> This is how I understood it as well, so correct from my side.
-Also right for me.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 485394c63f47df18eb7498608d5fc9041c19ec13  MAINTAINERS: Repair file entry in ASPEED USB UDC DRIVER
 
-> 
-> > 
-> > Also Chunfeng, do you have information on whether the same is true
-> > for the MMC
-> > HW block? I recently submitted some changes to that binding [1] but
-> > I followed
-> > approach 1 there instead. However if all the clocks are present in
-> > the HW level
-> > there as well it would make more sense for me to change it to
-> > follow approach 2.
+elapsed time: 720m
 
-I discussed it with Wenbin, MMC seems a little different with USB,
+configs tested: 103
+configs skipped: 4
 
-Hi Wenbin,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-   Please give some comments about MMC, thanks
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+mips                 randconfig-c004-20220622
+sh                           se7780_defconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                     mpc83xx_defconfig
+sh                          urquell_defconfig
+sparc                       sparc64_defconfig
+m68k                          multi_defconfig
+alpha                            alldefconfig
+mips                       bmips_be_defconfig
+ia64                             alldefconfig
+sh                                  defconfig
+ia64                      gensparse_defconfig
+mips                           ci20_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                           se7724_defconfig
+arm                        realview_defconfig
+powerpc                     redwood_defconfig
+powerpc                 mpc837x_rdb_defconfig
+powerpc                         wii_defconfig
+sh                          sdk7786_defconfig
+arm                         axm55xx_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                   sh7770_generic_defconfig
+m68k                            q40_defconfig
+arm                           stm32_defconfig
+sh                          kfr2r09_defconfig
+arm                      integrator_defconfig
+riscv                               defconfig
+arm                         lubbock_defconfig
+m68k                        mvme147_defconfig
+sh                          rsk7201_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                     tqm8541_defconfig
+arm                             rpc_defconfig
+openrisc                            defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220622
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+nios2                               defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+parisc64                            defconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+sparc                               defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-> > 
-> > Thanks,
-> > Nícolas
-> > 
-> > [1] 
-> > https://lore.kernel.org/all/20220617230114.2438875-1-nfraprado@collabora.com
-> 
-> 
-> Best regards,
-> Krzysztof
+clang tested configs:
+s390                             alldefconfig
+mips                        qi_lb60_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220622
+s390                 randconfig-r044-20220622
+hexagon              randconfig-r045-20220622
+riscv                randconfig-r042-20220622
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
