@@ -2,174 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D61B5546EC
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 14:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE77F554974
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 14:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbiFVI6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 04:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
+        id S1352557AbiFVJWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 05:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiFVI6Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 04:58:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEB8E34;
-        Wed, 22 Jun 2022 01:58:07 -0700 (PDT)
-X-UUID: b768fae71ca547b7b5dd424f82c0d88c-20220622
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:c7be37e6-56a1-4dcb-953c-d51da3c76ffd,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:100
-X-CID-INFO: VERSION:1.1.6,REQID:c7be37e6-56a1-4dcb-953c-d51da3c76ffd,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:100
-X-CID-META: VersionHash:b14ad71,CLOUDID:190135ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:47c063911d5b,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: b768fae71ca547b7b5dd424f82c0d88c-20220622
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1474948226; Wed, 22 Jun 2022 16:58:01 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 22 Jun 2022 16:58:00 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 22 Jun 2022 16:57:59 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>
+        with ESMTP id S1352467AbiFVJWS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 05:22:18 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B08934BBF
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 02:22:17 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-99-ZMj6y0FbM960kuDBi-9YiQ-1; Wed, 22 Jun 2022 10:22:14 +0100
+X-MC-Unique: ZMj6y0FbM960kuDBi-9YiQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Wed, 22 Jun 2022 10:22:12 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Wed, 22 Jun 2022 10:22:12 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Vincent MAILHOL' <mailhol.vincent@wanadoo.fr>,
+        Alan Stern <stern@rowland.harvard.edu>
 CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Julian Scheel <julian@jusst.de>,
-        xin lin <xin.lin@mediatek.com>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH] usb: gadget: f_uac1: add IAD descriptor
-Date:   Wed, 22 Jun 2022 16:57:57 +0800
-Message-ID: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: RE: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+Thread-Topic: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+Thread-Index: AQHYhYfqVaqlcIuK10S0028j1oZk3K1bJ6wg
+Date:   Wed, 22 Jun 2022 09:22:12 +0000
+Message-ID: <48caa879b0064ced97623bf1dad5b2d9@AcuMS.aculab.com>
+References: <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com>
+ <20220611153104.sksoxn4dmo5rgnk3@pengutronix.de>
+ <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
+ <YrHM8mqG3WVVesk4@kroah.com>
+ <CAMZ6RqLVu-kPy-EAy52a5VvRmv=9RUTC2nw0gwQUgg_rTgiB5A@mail.gmail.com>
+ <YrHfuVF4bPXzihEZ@rowland.harvard.edu>
+ <CAMZ6RqL42DKD3evR4skswaJnAwOAO_qrZgXoLax7O95xVKUomQ@mail.gmail.com>
+In-Reply-To: <CAMZ6RqL42DKD3evR4skswaJnAwOAO_qrZgXoLax7O95xVKUomQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: xin lin <xin.lin@mediatek.com>
-
-Win10 can not enumerate composite device of UVC+UAC1+ADB without IAD descriptor
-in uac1.0, so add it.
-
-Signed-off-by: xin lin <xin.lin@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 6f0e1d803dc2..8390207bc513 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
-  * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
-  */
- 
-+static struct usb_interface_assoc_descriptor iad_desc = {
-+	.bLength = sizeof(iad_desc),
-+	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
-+
-+	.bFirstInterface = 0,
-+	.bInterfaceCount = 3,
-+	.bFunctionClass = USB_CLASS_AUDIO,
-+	.bFunctionSubClass = 0,
-+	.bFunctionProtocol = UAC_VERSION_1,
-+};
-+
- /* B.3.1  Standard AC Interface Descriptor */
- static struct usb_interface_descriptor ac_interface_desc = {
- 	.bLength =		USB_DT_INTERFACE_SIZE,
-@@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
- };
- 
- static struct usb_descriptor_header *f_audio_desc[] = {
-+	(struct usb_descriptor_header *)&iad_desc,
- 	(struct usb_descriptor_header *)&ac_interface_desc,
- 	(struct usb_descriptor_header *)&ac_header_desc,
- 
-@@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
- };
- 
- enum {
-+	STR_ASSOC,
- 	STR_AC_IF,
- 	STR_USB_OUT_IT,
- 	STR_USB_OUT_IT_CH_NAMES,
-@@ -310,6 +323,7 @@ enum {
- 
- static struct usb_string strings_uac1[] = {
- 	/* [STR_AC_IF].s = DYNAMIC, */
-+	[STR_ASSOC].s = "Source/Sink",
- 	[STR_USB_OUT_IT].s = "Playback Input terminal",
- 	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
- 	[STR_IO_OUT_OT].s = "Playback Output terminal",
-@@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
- 	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
- 
-+	iad_desc.bInterfaceCount = 1;
- 	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
- 
- 	if (EPIN_EN(opts)) {
-@@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 		if (FUIN_EN(opts))
- 			len += in_feature_unit_desc->bLength;
- 		ac_header_desc->wTotalLength = cpu_to_le16(len);
-+		iad_desc.bInterfaceCount++;
- 	}
- 	if (EPOUT_EN(opts)) {
- 		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-@@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 		if (FUOUT_EN(opts))
- 			len += out_feature_unit_desc->bLength;
- 		ac_header_desc->wTotalLength = cpu_to_le16(len);
-+		iad_desc.bInterfaceCount++;
- 	}
- 
- 	i = 0;
-+	f_audio_desc[i++] = USBDHDR(&iad_desc);
- 	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
- 	f_audio_desc[i++] = USBDHDR(ac_header_desc);
- 
-@@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		}
- 	}
- 
-+	iad_desc.iFunction = us[STR_ASSOC].id;
- 	ac_interface_desc.iInterface = us[STR_AC_IF].id;
- 	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
- 	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
-@@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 	status = usb_interface_id(c, f);
- 	if (status < 0)
- 		goto err_free_fu;
-+
-+	iad_desc.bFirstInterface = status;
- 	ac_interface_desc.bInterfaceNumber = status;
- 	uac1->ac_intf = status;
- 	uac1->ac_alt = 0;
--- 
-2.18.0
+RnJvbTogVmluY2VudCBNQUlMSE9MDQo+IFNlbnQ6IDIxIEp1bmUgMjAyMiAxNjo1Ng0KPiANCj4g
+T24gV2VkLiAyMiBKdW4gMjAyMiBhdCAwMDoxMywgQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFuZC5o
+YXJ2YXJkLmVkdT4gd3JvdGU6DQo+ID4gT24gVHVlLCBKdW4gMjEsIDIwMjIgYXQgMTE6NTk6MTZQ
+TSArMDkwMCwgVmluY2VudCBNQUlMSE9MIHdyb3RlOg0KPiA+ID4gSSAocHJvYmFibHkgd3Jvbmds
+eSkgYXNzdW1lZCB0aGF0IHVyYjo6dHJhbnNmZXJfYnVmZmVyX2xlbmd0aCB3YXMgdGhlDQo+ID4g
+PiBhbGxvY2F0ZWQgbGVuZ3RoIGFuZCB1cmI6OmFjdHVhbF9sZW5ndGggd2FzIHdoYXQgd2FzIGFj
+dHVhbGx5IGJlaW5nDQo+ID4gPiB0cmFuc2ZlcnJlZC4gUmlnaHQgbm93LCBJIGFtIGp1c3QgY29u
+ZnVzZWQuIFNlZW1zIHRoYXQgSSBuZWVkIHRvIHN0dWR5DQo+ID4gPiBhIGJpdCBtb3JlIGFuZCB1
+bmRlcnN0YW5kIHRoZSByZWFsIHB1cnBvc2Ugb2YNCj4gPiA+IHVyYjo6dHJhbnNmZXJfYnVmZmVy
+X2xlbmd0aCBiZWNhdXNlIEkgc3RpbGwgZmFpbCB0byB1bmRlcnN0YW5kIGluDQo+ID4gPiB3aGlj
+aCBzaXR1YXRpb24gdGhpcyBjYW4gYmUgZGlmZmVyZW50IGZyb20gdGhlIGFsbG9jYXRlZCBsZW5n
+dGguDQo+ID4NCj4gPiB1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGggaXMgdGhlIGFtb3VudCBv
+ZiBkYXRhIHRoYXQgdGhlIGRyaXZlciB3YW50cw0KPiA+IHRvIHNlbmQgb3IgZXhwZWN0cyB0byBy
+ZWNlaXZlLiAgdXJiLT5hY3R1YWxfbGVuZ3RoIGlzIHRoZSBhbW91bnQgb2YgZGF0YQ0KPiA+IHRo
+YXQgd2FzIGFjdHVhbGx5IHNlbnQgb3IgYWN0dWFsbHkgcmVjZWl2ZWQuDQo+ID4NCj4gPiBOZWl0
+aGVyIG9mIHRoZXNlIHZhbHVlcyBoYXMgdG8gYmUgdGhlIHNhbWUgYXMgdGhlIHNpemUgb2YgdGhl
+IGJ1ZmZlciAtLQ0KPiA+IGJ1dCB0aGV5IGJldHRlciBub3QgYmUgYmlnZ2VyIQ0KPiANCj4gVGhh
+bmtzLiBOb3cgdGhpbmdzIGFyZSBhIGJpdCBjbGVhcmVyLg0KPiBJIGd1ZXNzIHRoYXQgZm9yIHRo
+ZSBvdXRjb21pbmcgVVJCIHdoYXQgSSBwcm9wb3NlZCBtYWRlIG5vIHNlbnNlLiBGb3INCj4gaW5j
+b21pbmcgVVJCLCBJIGd1ZXNzIHRoYXQgbW9zdCBvZiB0aGUgZHJpdmVycyB3YW50IHRvIHNldA0K
+PiB1cmI6OnRyYW5zZmVyX2J1ZmZlciBvbmNlIGZvciBhbGwgd2l0aCB0aGUgYWxsb2NhdGVkIHNp
+emUgYW5kIG5ldmVyDQo+IHRvdWNoIGl0IGFnYWluLg0KPiANCj4gTWF5YmUgdGhlIHBhdGNoIG9u
+bHkgbWFrZXMgc2Vuc2Ugb2YgdGhlIGluY29taW5nIFVSQi4gV291bGQgaXQgbWFrZQ0KPiBzZW5z
+ZSB0byBrZWVwIGl0IGJ1dCB3aXRoIGFuIGFkZGl0aW9uYWwgY2hlY2sgdG8gdHJpZ2dlciBhIGRt
+ZXNnDQo+IHdhcm5pbmcgaWYgdGhpcyBpcyB1c2VkIG9uIGFuIG91dGNvbWluZyBlbmRwb2ludCBh
+bmQgd2l0aCBhZGRpdGlvbmFsDQo+IGNvbW1lbnQgdGhhdCB0aGUgVVJCX0ZSRUVfQ09IRVJFTlQg
+cmVxdWlyZXMgdXJiOjp0cmFuc2Zlcl9idWZmZXIgdG8gYmUNCj4gdGhlIGFsbG9jYXRlZCBzaXpl
+Pw0KDQpJSVJDIHVyYiBhcmUgcHJldHR5IGJpZy4NCllvdSdkIGJlIHVubHVja3kgaWYgYWRkaW5n
+IGFuIGV4dHJhIGZpZWxkIHRvIGhvbGQgdGhlIGFsbG9jYXRlZA0Kc2l6ZSB3b3VsZCBldmVyIG5l
+ZWQgbW9yZSBtZW1vcnkuDQpTbyBpdCBtaWdodCBqdXN0IGJlIHdvcnRoIHNhdmluZyB0aGUgYWxs
+b2NhdGVkIHNpemUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUs
+IEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJl
+Z2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
