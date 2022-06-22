@@ -2,147 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4B35549F9
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 14:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3499554A6A
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jun 2022 15:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbiFVMX7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 08:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S1349994AbiFVNEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 09:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353361AbiFVMXv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 08:23:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A204E2A259;
-        Wed, 22 Jun 2022 05:23:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229578AbiFVNEv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 09:04:51 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2067EE0B3
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 06:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1655903089; x=1687439089;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cD6loB9Vms5aqUj8mQhHVmslSoLHNbSElmDSCr9sutQ=;
+  b=C14ZGRY2nyeph3PikWO2y848yF7busbszglnaCb4lBsixba9Djm/zbxE
+   L6BjoUN+VzKelQIRzKA2kfixkpn/9X4/yi3EDnzoDWLfjdT5+7abjPOgq
+   PytYVQa9K/A1sgDjA/xe6KyZpkgREy8cVXbojb0TzWk2v05RtrejiUP0X
+   I4XFd3k3MdMZstG9Is2zBfX/iDK/aOsYmwRh6/ptw0X8+1DM5qJ5ZCRRo
+   NlrzNrECgUC1VO2CFxqPx9n9WYtzBcTUhDJZYFRbRSt3X2w7z7vv75gF3
+   8JMZF9GY8n1eGUp4vfOsZO60X+jmrOoNTMWJSWQAjHVeOB7xL7KQnI28m
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,212,1650924000"; 
+   d="scan'208";a="24605516"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 22 Jun 2022 15:04:47 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 22 Jun 2022 15:04:47 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 22 Jun 2022 15:04:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1655903087; x=1687439087;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cD6loB9Vms5aqUj8mQhHVmslSoLHNbSElmDSCr9sutQ=;
+  b=P4vqNL7Of/XK6UOV51rEoDKR0CLNJnmsmoAmsyASCqaTOygwBWq9z4ic
+   VZ5SwJKXy6lYEGnj5d7VQ4G2ssi4qk91P39K0eJqbn4ILBYarfjXE7gpX
+   deHwjiDlTS4zeb1f7RlBUhosZ+W9BJZkIIAVXIw5m87Lzdxcs/p+QhQIv
+   xPa12GK3u6qOJIEP3Pk+GTTbdVCHV+pjt2mzfMmOt8hV1N4smBaVDpUAx
+   b3+xc4AXaA5IkCE0CsKlcqGH/ZCeiDDuu4GpJZEUcbG3xF2YF1SJvJ6m1
+   Z0O7zo+HFwvvTcu70pL1U0+wvVnyxKbCNUvJ7xMegYR68qZ2D1WGswZGX
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,212,1650924000"; 
+   d="scan'208";a="24605515"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 22 Jun 2022 15:04:47 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FD1D6190E;
-        Wed, 22 Jun 2022 12:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B68AC34114;
-        Wed, 22 Jun 2022 12:23:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655900629;
-        bh=3Kg9nFlakGr/PSRaWbQsMv5Lns/PbxON5UeoyDZ+s+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MByGwcZp8/4rCN1qV1ZbQZQAVwFWJpbhkq7VLT7OxDnbGGZN6S4FLKbzSLLvtIr8v
-         FB6a+73GixwU4IxkKxxr67Zz4Mi3Rgx7YG0Ivfk9Yx/87dBme5DTXNA8ZMNWG1GZw0
-         c5by9zZuE78tsRWRmoUuzR5lbzbNbevRF602UeXY=
-Date:   Wed, 22 Jun 2022 14:23:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-Message-ID: <YrMJ0vXR84cISTse@kroah.com>
-References: <20220610213335.3077375-2-rhett.aultman@samsara.com>
- <20220611153104.sksoxn4dmo5rgnk3@pengutronix.de>
- <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
- <YrHM8mqG3WVVesk4@kroah.com>
- <CAMZ6RqLVu-kPy-EAy52a5VvRmv=9RUTC2nw0gwQUgg_rTgiB5A@mail.gmail.com>
- <YrHfuVF4bPXzihEZ@rowland.harvard.edu>
- <CAMZ6RqL42DKD3evR4skswaJnAwOAO_qrZgXoLax7O95xVKUomQ@mail.gmail.com>
- <48caa879b0064ced97623bf1dad5b2d9@AcuMS.aculab.com>
- <YrLjsAOlsizMc/1c@kroah.com>
- <CAMZ6Rq+e+i0xGuWeMaGyTVyLJy=q2vQZqXjYoACws=T_B-FOGQ@mail.gmail.com>
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 23132280056;
+        Wed, 22 Jun 2022 15:04:47 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [RFC PATCH 0/4] USB support for TQMa8MPxL + MBa8MPxL
+Date:   Wed, 22 Jun 2022 15:04:36 +0200
+Message-Id: <20220622130440.955465-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+e+i0xGuWeMaGyTVyLJy=q2vQZqXjYoACws=T_B-FOGQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 07:34:57PM +0900, Vincent MAILHOL wrote:
-> On Wed. 22 Jun 2022 at 18:44, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> > On Wed, Jun 22, 2022 at 09:22:12AM +0000, David Laight wrote:
-> > > From: Vincent MAILHOL
-> > > > Sent: 21 June 2022 16:56
-> > > >
-> > > > On Wed. 22 Jun 2022 at 00:13, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > > > On Tue, Jun 21, 2022 at 11:59:16PM +0900, Vincent MAILHOL wrote:
-> > > > > > I (probably wrongly) assumed that urb::transfer_buffer_length was the
-> > > > > > allocated length and urb::actual_length was what was actually being
-> > > > > > transferred. Right now, I am just confused. Seems that I need to study
-> > > > > > a bit more and understand the real purpose of
-> > > > > > urb::transfer_buffer_length because I still fail to understand in
-> > > > > > which situation this can be different from the allocated length.
-> > > > >
-> > > > > urb->transfer_buffer_length is the amount of data that the driver wants
-> > > > > to send or expects to receive.  urb->actual_length is the amount of data
-> > > > > that was actually sent or actually received.
-> > > > >
-> > > > > Neither of these values has to be the same as the size of the buffer --
-> > > > > but they better not be bigger!
-> > > >
-> > > > Thanks. Now things are a bit clearer.
-> > > > I guess that for the outcoming URB what I proposed made no sense. For
-> > > > incoming URB, I guess that most of the drivers want to set
-> > > > urb::transfer_buffer once for all with the allocated size and never
-> > > > touch it again.
-> > > >
-> > > > Maybe the patch only makes sense of the incoming URB. Would it make
-> > > > sense to keep it but with an additional check to trigger a dmesg
-> > > > warning if this is used on an outcoming endpoint and with additional
-> > > > comment that the URB_FREE_COHERENT requires urb::transfer_buffer to be
-> > > > the allocated size?
-> > >
-> > > IIRC urb are pretty big.
-> >
-> > What exactly do you mean by "pretty big" here?  And what is wrong with
-> > that, I have never seen any issues with the current size of that
-> > structure in any benchmark or performance results.  All USB bottlenecks
-> > that I know of are either in the hardware layer, or in the protocol
-> > layer itself (i.e. usb-storage protocol).
-> >
-> > > You'd be unlucky if adding an extra field to hold the allocated
-> > > size would ever need more memory.
-> > > So it might just be worth saving the allocated size.
-> >
-> > Maybe, yes, then we could transition to allocating the urb and buffer at
-> > the same time like we do partially for iso streams in an urb.  But that
-> > still might be overkill for just this one driver.
-> 
-> Well, I wouldn't have proposed the patch if it only applied to a
-> single driver. If we add a urb::allocated_transfer_size as suggested
-> by David, I believe that the majority of the drivers using DMA memory
-> will be able to rely on that URB_FREE_COHERENT flag for the garbage
-> collection.
-> 
-> The caveat, as you pointed before, is that the developper still needs
-> to be aware of the limitations of DMA and that it should not be freed
-> in an IRQ context. e.g. no call to usb_kill_anchored_urbs() or other
-> functions that would lead to urb_destroy().
-> 
-> > I'm curious as to why
-> > a slow and tiny protocol like CAN needs to use usb_alloc_coherent() for
-> > its buffers in the first place.
-> 
-> The CAN protocol, in its latest revision, allows for transfer speed up
-> to ~5Mbits. For low performance CPUs, this starts to be a significant
-> load. Also, the CAN PDU being small (0 to 64 bytes), many small
-> transfers occur.
+Hi everybody,
 
-And is the memcpy the actual issue here?  Even tiny cpus can do large
-and small memcopy very very very fast.
+this is an RFC for USB support on TQMa8MPxL + MBa8MPxL. DT support is currently
+in progress at [1]. This series is on top of that.
+The DT configuration itself (patch 4) is rather straight forward, but leads to
+the following dmesg errors regarding superspeed ports:
+> [    8.549243] hub 2-1:1.0: hub_ext_port_status failed (err = -110)
+> [   22.885263] usb 2-1: Failed to suspend device, error -110
 
-> Unfortunately I did not do any benchmark myself so I won't be able to
-> back my explanation with numbers.
+This hardware works fine using the downstream kernel, because for imx8mp this
+ITP sync feature is enabled conditionally [2] & [3].
+Hacking this into mainline resulted in a working superspeed setup as well. I
+also noticed that on some android kernel [4] depending in IP core version either
+GCTL.SOFTITPSYNC or GFLADJ.GFLADJ_REFCLK_LPM_SEL is enabled unconditionally.
+So I opted for the latter one using some quirk (patch 1-3).
 
-That might be the simplest solution here :)
+I have to admit I do not know what this is actually about, nor why my setup
+does not work without this change or why this fixed my problem. So maybe
+someone with more knowledge can say if this is the way to go or what this is
+about.
 
-thanks,
+Note: I excluded the DT guys (for now) as this is more about usb internals, the
+DT patches are for completeness.
 
-greg k-h
+Thanks and best regards,
+Alexander
+
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220622114949.889274-1-alexander.stein@ew.tq-group.com/
+[2] https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/usb/dwc3/dwc3-imx8mp.c?h=lf-5.10.y#n134
+[3] https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/usb/dwc3/core.c?h=lf-5.10.y#n333
+[4] https://android.googlesource.com/kernel/msm/+/87a6b154766907020cc74c7726e8a68aaa9d7f6b%5E%21/#F0
+
+Alexander Stein (4):
+  dt-bindings: usb: dwc3: Add gfladj-refclk-lpm-sel-quirk
+  usb: dwc3: core: add gfladj_refclk_lpm_sel quirk
+  arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel quirk to USB nodes
+  arm64: dts: tqma8mpql: add USB support
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |  5 ++
+ .../freescale/imx8mp-tqma8mpql-mba8mpxl.dts   | 68 ++++++++++++++++++-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  2 +
+ drivers/usb/dwc3/core.c                       |  8 ++-
+ drivers/usb/dwc3/core.h                       |  2 +
+ 5 files changed, 83 insertions(+), 2 deletions(-)
+
+-- 
+2.25.1
+
