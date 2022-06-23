@@ -2,208 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2655558894
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 21:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB815588A3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 21:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiFWTWC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 15:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S230217AbiFWTYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 15:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiFWTVr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 15:21:47 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B258B6F7AA;
-        Thu, 23 Jun 2022 11:26:26 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id y32so411183lfa.6;
-        Thu, 23 Jun 2022 11:26:26 -0700 (PDT)
+        with ESMTP id S229948AbiFWTXq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 15:23:46 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939A07E007
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 11:30:54 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-101d2e81bceso633025fac.0
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 11:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WFXpnCRvpVBhsuNFE1ahfBGJsqNDQt8dQxVvfN6MrL0=;
-        b=DalKGI6li9osCh4k7iO37g3v5OUCWoMlA9lcg8wxp3/qi5HIMenhTTdp7lkfmkxaFO
-         5i56DaW7feuRINiq2kOC05AY8brpkmge87NEOdDGkcHQCABHBrM/lR06xLa/uYNXD2JN
-         HByhcVabc+qx2jAze76QRQrmHqJQ43fznNb6YOxVQdupQu3sbTr5FFXwdhK74fJl0jvb
-         eciLddbEjTkpfnvpSmNtkeUy899xl8kuFlza0mCjMLlY6mqMYFafWfL0HXdzY9mmrBbl
-         tiYMDiQrKJpSB3DVDSB21zZOwwu+OGmacE6r0lbpRpEmfZUo1aV2LD7kFZYuIORe47QB
-         7iCg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=Cu7lUOJoF8MsEjjhUXAlemBJalFdNx5NoIAp/Yb+L0Q=;
+        b=nQ2MU2YT94Izi+5I8Ke/MStU+26iA3FQ3xvEONgZPTjFfFYPAoizbLAA0uG5U81vpE
+         NshxXiXosueJ/uRGjjobd3cG3l1+B6lUmVHBpc3V0PLikCz9a1VG3fhPuwbx3c4KB3sw
+         Za5hbikmA8b00LbJhlzEAp8zTbksKTtI3lDHA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WFXpnCRvpVBhsuNFE1ahfBGJsqNDQt8dQxVvfN6MrL0=;
-        b=Pk4aFqbqHFxJM4s7fjWgDh/2A56Pbgd7uqPafsCkYc+YREYX+rofmacP899CZnHNpw
-         tCavvCU03cURBjJ7shDSXIzbfVsY0L15A2kLBR8okQd141s8/Xyja+x3KgT2YAhOXC38
-         q+6gjpJxRPL0DLxrBvwYufDhbGHapX/zcZ2lX9SCtFK1LvGxizGNaIGQ7N/Rvn52wCha
-         417ZlrOfUKgDzsr7ZDOdh1eILtCGAevLaOyIK5t20z7k4lh0w4d44TcCJRbR8yXIno8R
-         KUsfJCpd5ldiB13AGH1e/krhZcsmAIdjg9KDlr3DDTzke+djVtLIlXQSdDDs1ZxlZ39M
-         a2Lg==
-X-Gm-Message-State: AJIora+diopr+Nkvc+HhJFbovcYlqqVGen9hytmQZGqtbGeRdC8IqGpF
-        yTIORdhemwgh7T2aCDG83IoaonO45W0rjyx5I4I=
-X-Google-Smtp-Source: AGRyM1v7QBH+pV6lYrEVLjv5TY6/p8FX2jSroN/uPAnqjFf8QnXVnznfAY6JW5aADd3D+pMmLcYkM8NpE0OLf3DC0nc=
-X-Received: by 2002:a05:6512:348f:b0:47f:8b25:e9f9 with SMTP id
- v15-20020a056512348f00b0047f8b25e9f9mr6543451lfr.512.1656008785046; Thu, 23
- Jun 2022 11:26:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=Cu7lUOJoF8MsEjjhUXAlemBJalFdNx5NoIAp/Yb+L0Q=;
+        b=jJksDC/x802zXHRU8WGOrhylWEWkoeHc4oMS+DkjoDQACqLmWfWVbv+QGaf1SBDcMd
+         xCvy/x3tbuj/bqPmo1fg3ysivxRFx+sGvnqqHZFTawvWnO2Xre1NVfJe523SlxaLnV0z
+         PvhS3xUxUISsQ1wJAcZ1ib3fFOaMFkDs7D1z0CwjN98OChvAStXkpEOlclcQvY8X6Umg
+         iuaCAvCAvi1qpdgh5YJ/xOhb656uHtCtbDAY9OYZH3/tC7EZWXtzwXSbPTf0l8B5DGgW
+         qtrT6txQwR+3SuMdVhT+4qKBiumePqpED15uIjnJ8S3NbKFmuzXbq6+MxCIiXpFFvRC/
+         EBuA==
+X-Gm-Message-State: AJIora99WoYrTlJdIaizk+AMSakx7s0uAzOiikg6PxoOZHekcYeHUX6w
+        ZyJA5ZJDKKzB0maN9H0uG+K9FzsNqqDnNJrfqUXw2A==
+X-Google-Smtp-Source: AGRyM1saP/3AppAsDEde7X7gr4a6wLFmXqfljFPOVADgh3UBV9SWu3eefISwFStbs1Rv04lvbJFDkeSrzdI0yAqIkb4=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr3345847oap.63.1656009053852; Thu, 23 Jun
+ 2022 11:30:53 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 23 Jun 2022 14:30:53 -0400
 MIME-Version: 1.0
-References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-11-peterwu.pub@gmail.com>
-In-Reply-To: <20220623115631.22209-11-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 23 Jun 2022 20:25:48 +0200
-Message-ID: <CAHp75VexwvAVeY4MtwKfpNY96eJ1C9eqadd-L+20O2sg2+gYNg@mail.gmail.com>
-Subject: Re: [PATCH v3 10/14] iio: adc: mt6370: Add Mediatek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+In-Reply-To: <20220622173605.1168416-2-pmalani@chromium.org>
+References: <20220622173605.1168416-1-pmalani@chromium.org> <20220622173605.1168416-2-pmalani@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 23 Jun 2022 14:30:53 -0400
+Message-ID: <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 2:00 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
->
-> Add Mediatek MT6370 ADC support.
-
-...
-
-> +config MEDIATEK_MT6370_ADC
-> +       tristate "Mediatek MT6370 ADC driver"
-> +       depends on MFD_MT6370
-> +       help
-> +         Say yes here to enable Mediatek MT6370 ADC support.
+Quoting Prashant Malani (2022-06-22 10:34:30)
+> diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> new file mode 100644
+> index 000000000000..78b0190c8543
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +         This ADC driver provides 9 channels for system monitoring (charger
-> +         current, voltage, and temperature).
+> +title: USB Type-C Switch
+> +
+> +maintainers:
+> +  - Prashant Malani <pmalani@chromium.org>
+> +
+> +description:
+> +  A USB Type-C switch represents a component which routes USB Type-C data
+> +  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
+> +  Thunderbolt etc.) depending on which mode the Type-C port, port partner
+> +  and cable are operating in. It can also modify lane routing based on
+> +  the orientation of a connected Type-C peripheral.
+> +
+> +properties:
+> +  compatible:
+> +    const: typec-switch
+> +
+> +  mode-switch:
+> +    type: boolean
+> +    description: Specify that this switch can handle alternate mode switching.
+> +
+> +  orientation-switch:
+> +    type: boolean
+> +    description: Specify that this switch can handle orientation switching.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    description: OF graph binding modelling data lines to the Type-C switch.
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Link between the switch and a Type-C connector.
 
-What will be the module name?
+Is there an update to the usb-c-connector binding to accept this port
+connection?
 
-...
+> +
+> +    required:
+> +      - port@0
+> +
+> +required:
+> +  - compatible
+> +  - ports
+> +
+> +anyOf:
+> +  - required:
+> +      - mode-switch
+> +  - required:
+> +      - orientation-switch
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    drm-bridge {
+> +        usb-switch {
+> +            compatible = "typec-switch";
 
-> +#include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
+I still don't understand the subnode design here. usb-switch as a
+container node indicates to me that this is a bus, but in earlier rounds
+of this series it was stated this isn't a bus. Why doesn't it work to
+merge everything inside usb-switch directly into the drm-bridge node?
 
-Usually this goes after linux/* asm/* as it's not so generic.
-
-> +#include <linux/bits.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-
-> +#include <linux/mod_devicetable.h>
-
-I believe the order should be otherwise, this is first followed by module.h.
-
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-
-...
-
-> +#define ADC_CONV_POLLING_TIME          1000
-
-If it's time, add a unit suffix, if it's a counter, make it clear.
-
-...
-
-> +       msleep(ADC_CONV_TIME_US / 1000);
-
-Why define microseconds if milliseconds are in use?
-
-...
-
-> +       ret = regmap_read_poll_timeout(priv->regmap,
-> +                                      MT6370_REG_CHG_ADC, reg_val,
-> +                                      !(reg_val & MT6370_ADC_START_MASK),
-> +                                      ADC_CONV_POLLING_TIME,
-> +                                      ADC_CONV_TIME_US * 3);
-> +       if (ret) {
-> +               if (ret == -ETIMEDOUT)
-> +                       dev_err(priv->dev, "Failed to wait ADC conversion\n");
-
-wait for
-
-> +               else
-> +                       dev_err(priv->dev,
-> +                               "Failed to read ADC register (%d)\n", ret);
-
-Do you really need to differentiate the errors here? I believe the
-latter one covers all cases.
-
-> +               goto adc_unlock;
-> +       }
-
-...
-
-> +#define MT6370_ADC_CHAN(_idx, _type, _addr, _extra_info) {     \
-> +       .type = _type,                                          \
-> +       .channel = MT6370_CHAN_##_idx,                          \
-> +       .address = _addr,                                       \
-> +       .scan_index = MT6370_CHAN_##_idx,                       \
-> +       .indexed = 1,                                           \
-> +       .info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |          \
-> +                             BIT(IIO_CHAN_INFO_SCALE) |        \
-> +                             _extra_info                       \
-
-Leave a comma after the last member as well.
-
-> +}
-
-...
-
-> +       regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +       if (!regmap) {
-
-> +               dev_err(&pdev->dev, "Failed to get regmap\n");
-> +               return -ENODEV;
-
-return dev_err_probe(...);
-
-> +       }
-
-...
-
-> +       ret = regmap_write(priv->regmap, MT6370_REG_CHG_ADC, 0);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "Failed to reset ADC\n");
-> +               return ret;
-> +       }
-
-Ditto.
-
--- 
-With Best Regards,
-Andy Shevchenko
+> +            mode-switch;
+> +            orientation-switch;
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                    reg = <0>;
+> +                    anx_ep: endpoint {
+> +                        remote-endpoint = <&typec_controller>;
+> +                    };
+> +                };
+> +            };
+> +        };
