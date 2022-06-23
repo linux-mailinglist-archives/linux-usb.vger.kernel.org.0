@@ -2,80 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A001557E1D
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 16:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE40557EB2
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 17:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbiFWOsj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 10:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        id S229863AbiFWPgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 11:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiFWOse (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 10:48:34 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3394446640
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 07:48:31 -0700 (PDT)
-Received: (qmail 943500 invoked by uid 1000); 23 Jun 2022 10:48:30 -0400
-Date:   Thu, 23 Jun 2022 10:48:30 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <roger.quadros@nokia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
-Subject: Re: [PATCH RESEND] usb: gadget: f_mass_storage: Make CD-ROM
- emulation works with Windows OS
-Message-ID: <YrR9PrjBXGV5O6bq@rowland.harvard.edu>
-References: <20220623030405.1922980-1-neal_liu@aspeedtech.com>
+        with ESMTP id S231477AbiFWPgI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 11:36:08 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6202F035
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 08:36:07 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id q9so28505245wrd.8
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 08:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=huGUmFfLPum0FCsmxsz1YgbazVouSWQtaf5OKwQFlVA=;
+        b=FQ/9vJ7VCXpyPKWhkgLaC/Q2KbwOBQI3McOLi8sIPlTXaqC6M11OZRR8bSrBZsStQm
+         OGZR0txO8rpiUM+kMUWqslPPjRQ8pdlFBlqBSdp2ugOQLeKrALcmpZeCiMCarpWxzYp3
+         kolGO2Qo4plGkNJvaP8bBIf+mXBzZIOPGDM9CM7/LAMQApVRJs5/sW80ebCers6hbf7/
+         Z1F9CXfMW/LF01PGoPTdVfC8bAXaMCY3L2fegpAA8UUzK4Y2LyIeIb/QboMr7t/1BWzg
+         09A4AFjxw95oSDWZGTczJdDBuyKh3cCw9t9y1yT6x58fqS5gRTdfz+hYihtACU7EgwIc
+         rXJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:from:to:subject
+         :content-transfer-encoding;
+        bh=huGUmFfLPum0FCsmxsz1YgbazVouSWQtaf5OKwQFlVA=;
+        b=39aF8TGy5sKonA5Nl9mtPOlaM5FQlGjvkK4jkl09J+vNyk14P2xw8tiEsOl8sttGgB
+         V5FFbvr+8QBIKEpuBFLKW2Czqq+TwlrYtAz0ZLOS/ehvAdpiE9SjzZe5915UiEQBiSJk
+         s3Fjeqcze3I0ozQ1BDxG5ci4BN5KHFTylIS+D0pyuCL2TwY7YSXO9znIEAJxKQitPgkp
+         vOsL2f8M2eT0dLXqqMbjXZYDK81YUM/QDzuH/ZwCit8YCJDL47C3UEcCTL6n9hDSEDoL
+         ta40BkkwT78sOmAevZgHPZ2/OhwpyXQc83GCqjvPIKv4Cg3bhV7FwRTcjiGXhM/brpVo
+         myig==
+X-Gm-Message-State: AJIora+PuJOWL8C8BoEtp0NqRy9wYO3BejrBk2Tvj5Hh8C4QmzbsWDQ+
+        ieC3vntqxzD0ZdldgGM6ifQ2zAfl2Ww=
+X-Google-Smtp-Source: AGRyM1ulUCrkSM1tWtSiU8kL5x2KcOiAIqbOJTTb2q1mHSrFUjbnhJmg+XLU9AZvwOGcN+oe06/aXA==
+X-Received: by 2002:a05:6000:1ac8:b0:21b:923a:1c44 with SMTP id i8-20020a0560001ac800b0021b923a1c44mr8823958wry.31.1655998565982;
+        Thu, 23 Jun 2022 08:36:05 -0700 (PDT)
+Received: from DESKTOP-DLIJ48C ([39.42.130.216])
+        by smtp.gmail.com with ESMTPSA id j10-20020adfd20a000000b0021b9cc87aa9sm5889465wrh.111.2022.06.23.08.36.05
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 23 Jun 2022 08:36:05 -0700 (PDT)
+Message-ID: <62b48865.1c69fb81.e9519.b410@mx.google.com>
+Date:   Thu, 23 Jun 2022 08:36:05 -0700 (PDT)
+X-Google-Original-Date: 23 Jun 2022 11:36:07 -0400
 MIME-Version: 1.0
+From:   kermit.crosslandestimation@gmail.com
+To:     linux-usb@vger.kernel.org
+Subject: Quote To Bid
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623030405.1922980-1-neal_liu@aspeedtech.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 11:04:05AM +0800, Neal Liu wrote:
-> Add read TOC with format 2 to support CD-ROM emulation with
-> Windows OS.
-> This patch is tested on Windows OS Server 2019.
+Hi,=0D=0A=0D=0AWe provide estimation & quantities takeoff service=
+s. We are providing 98-100 accuracy in our estimates and take-off=
+s. Please tell us if you need any estimating services regarding y=
+our projects.=0D=0A=0D=0ASend over the plans and mention the exac=
+t scope of work and shortly we will get back with a proposal on w=
+hich our charges and turnaround time will be mentioned=0D=0A=0D=0A=
+You may ask for sample estimates and take-offs. Thanks.=0D=0A=0D=0A=
+Kind Regards=0D=0AKermit Dooley=0D=0ACrossland Estimating, INC=20
 
-This description says "format 2", but the patch actually adds code for 
-the case where format is 1.  This sort of mistake is not acceptable.
-
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-> index 3a77bca0ebe1..3c2a5f1e8b66 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -1209,6 +1209,7 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
->  
->  	switch (format) {
->  	case 0:
-> +	case 1:
->  		/* Formatted TOC */
->  		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
->  		memset(buf, 0, len);
-
-When format is 1, the driver is supposed to ignore the start_track 
-value.  Your patch does not do this.
-
-The default case in this switch statement has a comment saying that 
-Mutil-session is not supported.  As a result of this change, it now _is_ 
-supported.  The patch needs to update that comment.
-
-Alan Stern
