@@ -2,179 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F6055728F
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 07:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F22155732E
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 08:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiFWF0Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 01:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S229680AbiFWGg7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 02:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiFWFZt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 01:25:49 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F8E39177
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 22:25:48 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id p69so22209937ybc.5
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 22:25:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4HCbTmBoKxeGRCwHnS+t3tgkJ4Ac3lNIToRxpu9oR4c=;
-        b=dukYNb8WvrCQWxO8z7FMWBNcF49V4rdFGap5R51SKkfmhDK6VYERT0NDA0r4AJea0S
-         B+6ZeoMfZTfuhVGk1a7z0HmV2ja8DYp5WfpJG+T3YUAuLqaO/OU6QWJEUgqlV5SBxU+r
-         0vVUP864nBkQsk41cePudMrJNqq627c0EHqv1ZGXqmNhLM/cJKBXtPy/OUzzb8IWv8uj
-         fHuyrnbtGoTOYYlRXgN1n4KCGGu2MZZs87nfWA4Uc55Ke1wE2bSvU6zaT2cxIAhph3qH
-         8xV3CVEPmd9m4R/5s6IInrgNuwVfgXUh39I9nNsWDEXhHYFIMuTqSgtWjbB4oqTJZFiZ
-         RcyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4HCbTmBoKxeGRCwHnS+t3tgkJ4Ac3lNIToRxpu9oR4c=;
-        b=ooHBE+eygF0aObMy0w5L1r+vlbFNxLBXZr5KZvPyMlS2vNzW9msWAyjTCUT5s4ahD0
-         sNEGwPaYKpth/xfUsYLCOkUFnYRfkw2PnP8SaE6UUMbYYx/vFXkzgusVq5MVnlXJgACZ
-         1vnaork6Tn5ZbMCUK/zNKvFQSvF+zOcq7kChJ58mMz8S4JAdYkKquuIMpBfrgRd4Mutb
-         Rat6pn7Jt5JK133KrrFSNLcvetgTiNOzkbZYH5uTzlXXGTPICEc3xpG6+IcMTmUVH4xQ
-         1kbbN/0lgdjCkMgFGeQWmBhryoYhXvCr38vjkP7c0/OoV0F4/eo5O8zVloyeoWh91wT7
-         3HNQ==
-X-Gm-Message-State: AJIora/iSD+OYinAC8FhljR3RzAgiM0cjGDJ0fmTwGpEz3pUTWlUAjkV
-        9n/hG2YutvVltJ82mf9IK/lpTS4WP1JK3Frxr9V2EQ==
-X-Google-Smtp-Source: AGRyM1vDPunn8MVh0wxLeLFQUHslZWTtOsoe2zawtvHKiOOKl+IkPmfqgYruQgM2loAC366SxhDLLEO/4B9nQZrRsjk=
-X-Received: by 2002:a25:5b44:0:b0:669:504c:e49f with SMTP id
- p65-20020a255b44000000b00669504ce49fmr7755403ybb.530.1655961947558; Wed, 22
- Jun 2022 22:25:47 -0700 (PDT)
+        with ESMTP id S229451AbiFWGg6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 02:36:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3283BBC8
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 23:36:57 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4GSR-0000gO-1n; Thu, 23 Jun 2022 08:36:51 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4GSP-0002tJ-Sd; Thu, 23 Jun 2022 08:36:49 +0200
+Date:   Thu, 23 Jun 2022 08:36:49 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Anton Lundin <glance@acc.umu.se>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [REGRESSION] AX88772 card booted without cable can't receive
+Message-ID: <20220623063649.GD23685@pengutronix.de>
+References: <20220622141638.GE930160@montezuma.acc.umu.se>
 MIME-Version: 1.0
-References: <20130116164832.GP2668@htj.dyndns.org> <50F6DD4D.3070808@linux.intel.com>
- <CA+55aFyjrXzKMqmOuMo9z24OZj3kD4O4M4y_O-h=r6udCz2MyA@mail.gmail.com>
- <20130116213032.GS2668@htj.dyndns.org> <CA+55aFzdf44QOZn4KS6tT09COFsmCg80sTah1XpeoErJxAzbRQ@mail.gmail.com>
- <20130118012503.GH16568@mtj.dyndns.org> <CA+55aFyCihvZqOo=83UwWq3AgJEfVqpNjsY2iCFOEm8o6Un-YA@mail.gmail.com>
- <20130118025936.GJ16568@mtj.dyndns.org> <20130118030407.GK16568@mtj.dyndns.org>
- <CA+55aFwAwX_o6ocGhd1WwUwxfOnh+S6aKeZdEpeeHVAnBm4uVQ@mail.gmail.com> <20130118221227.GG24579@htj.dyndns.org>
-In-Reply-To: <20130118221227.GG24579@htj.dyndns.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 22 Jun 2022 22:25:11 -0700
-Message-ID: <CAGETcx8Hss0ddF5A1qBtrZ1zUtt_=YehAhmj5JpxUSdo2WrCbg@mail.gmail.com>
-Subject: Re: [PATCH 5/5] async, kmod: warn on synchronous request_module()
- from async workers
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Ming Lei <ming.lei@canonical.com>,
-        Alex Riesen <raa.lkml@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rusty Russell <rusty@rustcorp.com.au>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220622141638.GE930160@montezuma.acc.umu.se>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 18, 2013 at 2:12 PM Tejun Heo <tj@kernel.org> wrote:
->
-> >>From 4983f3b51e18d008956dd113e0ea2f252774cefc Mon Sep 17 00:00:00 2001
-> From: Tejun Heo <tj@kernel.org>
-> Date: Fri, 18 Jan 2013 14:05:57 -0800
->
-> Synchronous requet_module() from an async worker can lead to deadlock
-> because module init path may invoke async_synchronize_full().  The
-> async worker waits for request_module() to complete and the module
-> loading waits for the async task to finish.  This bug happened in the
-> block layer because of default elevator auto-loading.
->
-> Block layer has been updated not to do default elevator auto-loading
-> and it has been decided to disallow synchronous request_module() from
-> async workers.
->
-> Trigger WARN_ON_ONCE() on synchronous request_module() from async
-> workers.
->
-> For more details, please refer to the following thread.
->
->   http://thread.gmane.org/gmane.linux.kernel/1420814
->
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Reported-by: Alex Riesen <raa.lkml@gmail.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Arjan van de Ven <arjan@linux.intel.com>
-> ---
->  kernel/kmod.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/kernel/kmod.c b/kernel/kmod.c
-> index 1c317e3..ecd42b4 100644
-> --- a/kernel/kmod.c
-> +++ b/kernel/kmod.c
-> @@ -38,6 +38,7 @@
->  #include <linux/suspend.h>
->  #include <linux/rwsem.h>
->  #include <linux/ptrace.h>
-> +#include <linux/async.h>
->  #include <asm/uaccess.h>
->
->  #include <trace/events/module.h>
-> @@ -130,6 +131,14 @@ int __request_module(bool wait, const char *fmt, ...)
->  #define MAX_KMOD_CONCURRENT 50 /* Completely arbitrary value - KAO */
->         static int kmod_loop_msg;
->
-> +       /*
-> +        * We don't allow synchronous module loading from async.  Module
-> +        * init may invoke async_synchronize_full() which will end up
-> +        * waiting for this task which already is waiting for the module
-> +        * loading to complete, leading to a deadlock.
-> +        */
-> +       WARN_ON_ONCE(wait && current_is_async());
-> +
+Hi Anton,
 
-If a builtin driver does async probing even before we get to being
-able to load modules, this causes a spurious warning splat.
+Thank you for your report! I'll take a look on it ASAP.
 
-Here's a report by Marek [1]. I tried taking a stab at not warning at
-least for drivers that do async probing before the initcalls are done,
-but then I got confused [2] trying to understand when is the earliest
-point in the bootup that request_module() can succeed. If someone can
-clarify my confusion, I can try avoiding this warning for calls to
-request_module() before we can load any modules. Any other ideas for
-either making this warning way less trigger happy about false
-positives?
+Regards,
+Oleksij
 
-[1] - https://lore.kernel.org/lkml/d5796286-ec24-511a-5910-5673f8ea8b10@samsung.com/
-[2] - https://lore.kernel.org/lkml/CAGETcx-MHwex8tHLB1d71MAP01-3OPDZSNCUBb3iT+BtrugJmQ@mail.gmail.com/
+On Wed, Jun 22, 2022 at 04:16:38PM +0200, Anton Lundin wrote:
+> Hi.
+> 
+> I've found a issue with a Dlink usb ether adapter, that can't receive
+> anything until it self transmits if it's plugged in while booting, and
+> doesn't have link.
+> 
+> Later when a cable is attached, link is detected but nothing is received
+> either by daemons listening to ip address on that interface, or seen
+> with tcpdump.
+> 
+> The dongle is a:
+> D-Link Corp. DUB-E100 Fast Ethernet Adapter(rev.C1) [ASIX AX88772]
+> 
+> And it's detected at boot as:
+> libphy: Asix MDIO Bus: probed
+> Asix Electronics AX88772C usb-003:004:10: attached PHY driver (mii_bus:phy_addr=usb-003:004:10, irq=POLL)
+> asix 3-10.4:1.0 eth1: register 'asix' at usb-0000:00:14.0-10.4, ASIX AX88772 USB 2.0 Ethernet, <masked-mac>
+> usbcore: registered new interface driver asix
+> 
+> 
+> While in this state, the hardware starts sending pause frames to the
+> network when it has recived a couple of frames, and they look like:
+> 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> 0010   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> 
+> 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> 0010   ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> 
+> And these two frames are repeated every couple of seconds.
+> 
+> The card wakes up when something triggers a transmit on that card, and
+> then starts receiving traffic as normal.
+> 
+> I've bisected this issue down to:
+> "net: usb: asix: ax88772: add phylib support" (e532a096be0e)
+> 
+> 
+> Reverting that makes the interface work as normal, even if the machine
+> boots without a cable plugged in.
+> 
+> Another issue found with exactly the same patch is that if it's loaded
+> as a module, then unloaded and loaded again, it fails to initialize the
+> card with:
+> 
+> sysfs: cannot create duplicate filename '/devices/virtual/mdio_bus/usb-003:004'
+> CPU: 0 PID: 3733 Comm: modprobe Tainted: G           O      5.15.10-core_64_preempt #3
+> Hardware name:  <masked-hardware-name>
+> Call Trace:
+>  <TASK>
+>  ? dump_stack_lvl+0x34/0x44
+>  ? sysfs_warn_dup.cold+0x17/0x24
+>  ? sysfs_create_dir_ns+0xbc/0xd0
+>  ? kobject_add_internal+0xa6/0x260
+>  ? kobject_add+0x7e/0xb0
+>  ? preempt_count_add+0x68/0xa0
+>  ? device_add+0x10f/0x8d0
+>  ? dev_set_name+0x53/0x70
+>  ? __mdiobus_register+0xc2/0x350
+>  ? __devm_mdiobus_register+0x64/0xb0
+>  ? ax88772_bind+0x22a/0x340 [asix]
+>  ? usbnet_probe+0x346/0x870
+>  ? usb_match_dynamic_id+0x8f/0xa0
+>  ? usb_probe_interface+0x9b/0x150
+>  ? really_probe.part.0+0x237/0x280
+>  ? __driver_probe_device+0x8c/0xd0
+>  ? driver_probe_device+0x1e/0xe0
+>  ? __driver_attach+0xa8/0x170
+>  ? __device_attach_driver+0xe0/0xe0
+>  ? bus_for_each_dev+0x77/0xc0
+>  ? bus_add_driver+0x10b/0x1c0
+>  ? driver_register+0x8b/0xe0
+>  ? usb_register_driver+0x84/0x120
+>  ? 0xffffffffc06e4000
+>  ? do_one_initcall+0x41/0x1f0
+>  ? kmem_cache_alloc_trace+0x3f/0x1b0
+>  ? do_init_module+0x5c/0x260
+>  ? __do_sys_finit_module+0xa0/0xe0
+>  ? do_syscall_64+0x35/0x80
+>  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+>  </TASK>
+> kobject_add_internal failed for usb-003:004 with -EEXIST, don't try to register things with the same name in the same directory.
+> libphy: mii_bus usb-003:004 failed to register
+> asix: probe of 3-10.4:1.0 failed with error -22 
+> usbcore: registered new interface driver asix
+> 
+> 
+> Both these issues with "net: usb: asix: ax88772: add phylib support"
+> (e532a096be0e) can be reproduced all the way from when it was introduced
+> to linus current tree.
+> 
+> 
+> I'm sorry to say that I don't know enough about either libphy or asix to
+> figure out what cause the issues can be.
+> 
+> 
+> 
+> //Anton
+> 
 
-Another question (pardon my ignorance) is whether we need to
-async_synchronize_full() at the end of do_init_module() or if we can
-limit it to a smaller domain? Looking at this history, I see that this
-call was added by Linus in this commit d6de2c80e9d7 ("async: Fix
-module loading async-work regression"). Are we doing the blanket
-async_synchronize_full() only because we are not keeping proper track
-of the async domains? And if so, then what if we have a sync domain
-per module and any uses of async_schedule*() triggered by that module
-is tied to the module's async domain? Then we'd only need to sync that
-module's domain and we won't hit any deadlock issues.
-
-Grepping for async_schedule*() calls, I see only about 30 instances.
-At a glance, it looks like most cases are:
-1. Have a device/driver from which we can find the related module and
-tie the async_scheduler() to that domain.
-2. Just direct async_schedule*() calls from module_init() -- we can
-just directly tie it to the module's domain.
-3. Other?
-
-Is this idea worth pursuing? Or am I going in a completely wrong direction?
-
-Btw, I did see Linus's suggestion in one of the emails in this thread
-(?) about just doing a synchronize full on device open. That'd seem
-like it would work too, but I'm afraid to touch any file open code
-path because I expect that to be a hot path.
-
--Saravana
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
