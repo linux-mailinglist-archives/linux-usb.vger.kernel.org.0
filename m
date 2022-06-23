@@ -2,143 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526D7557A3A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 14:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB9E557AB3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 14:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiFWMYf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 08:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        id S231436AbiFWMvy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 08:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiFWMYf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 08:24:35 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099913057A
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-101ec2d6087so15949046fac.3
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
-        b=ZGAwRzzE8VL85qRDYfMIvCrIHJkVRiIYei98dO36+lgVyF3FWJUe7hqqUrsTwy639Y
-         fc+W8/1hfo7JZohSBn0BmrXgCAuBJ5vCaJB2sAWPRSGsx6O74BR4aBhFhTsdrI8SVpw6
-         yHYggGBjd/sq0CYiDjkFfZkeqRUmrn4J7Dg4e7iicPa2yWiHeuY+8e+bLsDAiI4i8pyr
-         EV80OclS5ilc1yqKp6AG1B401ALvhV3exYBeb2IeV0OW8rpAFVov8Ge0ATahc3RcmxRF
-         4FFQUAnzOwhEN6/m8cyLiVsmXun+S618Er5jfz5mSVTteervSKejh8lx4MtRyhHmQCtR
-         ZssA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
-        b=eaKvJwnB8r0pV1YqkZiwYhCWiXdQxxh251eb8y+/RLChjSRfj3PT8/T5GcoXznTffW
-         02ghRZx2SnbPZSS7QjUnEfoRwqXLplLhHl+Qia6nHvIVuolnArmVNR3/BFVzXjrmYhUt
-         b8RP26QjYLz7nozdPNerqVwGmhPo9+Vojh2Lv3tM0d1k/VK8jdn9G1PyGkMSL8Qr7GZE
-         WFRYHOyf6NUXw9vMmUopkptri6NtrTcJjOQjZ0kE5LLqRSkfypbMV3QzwqNlZnkrjcOq
-         7l9GXWxvqb2/otZbGpRILVTmpMAy0xY5UlAHWhlk9G10ZDnJI2BMKDwNnorrsT291zVg
-         ZaLw==
-X-Gm-Message-State: AJIora+QA91tcWN/YQ1imH4TN2gvLlFl++kwWmkfs5mKS8dN4c8wMEax
-        ZcKvYddAZq5r3HhJ2nhWYgobJoQDoeNFY3KfZJ2L3A==
-X-Google-Smtp-Source: AGRyM1tolYit2qOF13LQll2M1apYzVAPtBssHfNXvX79yFs+qX/QdnWSuZSn9LvvuTfowIJzogE5Gto6i2wMUvkyN5I=
-X-Received: by 2002:a05:6870:33a9:b0:f2:c44c:d054 with SMTP id
- w41-20020a05687033a900b000f2c44cd054mr2317236oae.70.1655987073368; Thu, 23
- Jun 2022 05:24:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
- <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Jun 2022 14:23:57 +0200
-Message-ID: <CAPDyKFq0cTX5pfTLxTa9SEUBiiEcMuiEeDi3OPfMjFuBWca_jw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-To:     David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229765AbiFWMvw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 08:51:52 -0400
+Received: from mailout2.hostsharing.net (mailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ee9:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDFA46CB1;
+        Thu, 23 Jun 2022 05:51:51 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id 22EA4103B3F0B;
+        Thu, 23 Jun 2022 14:51:49 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id E8B8E6021256;
+        Thu, 23 Jun 2022 14:51:48 +0200 (CEST)
+X-Mailbox-Line: From d1c87ebe9fc502bffcd1576e238d685ad08321e4 Mon Sep 17 00:00:00 2001
+Message-Id: <d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Thu, 23 Jun 2022 14:50:59 +0200
+Subject: [PATCH net-next v2] usbnet: Fix linkwatch use-after-free on
+ disconnect
+To:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jann Horn <jannh@google.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 22 Jun 2022 at 00:19, Daniel Latypov <dlatypov@google.com> wrote:
->
->  On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
-> >
-> > The kunit_test_suite() macro is no-longer incompatible with module_add,
-> > so its use can be reinstated.
-> >
-> > Since this fixes parsing with builtins and kunit_tool, also enable the
-> > test by default when KUNIT_ALL_TESTS is enabled.
-> >
-> > The test can now be run via kunit_tool with:
-> >         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
-> >         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-> >         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-> >         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-> >         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-> >         'sdhci-of-aspeed'
-> >
-> > (It may be worth adding a .kunitconfig at some point, as there are
-> > enough dependencies to make that command scarily long.)
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Acked-by: Daniel Latypov <dlatypov@google.com>
->
-> Minor, optional suggestion below.
->
-> >  static int __init aspeed_sdc_init(void)
-> > @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
-> >         if (rc < 0)
-> >                 goto cleanup_sdhci;
-> >
-> > -       rc = aspeed_sdc_tests_init();
-> > -       if (rc < 0) {
-> > -               platform_driver_unregister(&aspeed_sdc_driver);
-> > -               goto cleanup_sdhci;
-> > -       }
-> > -
-> >         return 0;
-> >
-> >  cleanup_sdhci:
->
-> This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
-> kunit-related build error") to allow for this extra call to
-> aspeed_sdc_tests_init().
->
-> This could now be reverted back to what is
->         rc = platform_driver_register(&aspeed_sdc_driver);
->         if (rc < 0)
->                platform_driver_unregister(&aspeed_sdhci_driver);
->
->         return rc;
->
-> but let's see what the maintainers think.
+usbnet uses the work usbnet_deferred_kevent() to perform tasks which may
+sleep.  On disconnect, completion of the work was originally awaited in
+->ndo_stop().  But in 2003, that was moved to ->disconnect() by historic
+commit "[PATCH] USB: usbnet, prevent exotic rtnl deadlock":
 
-I don't have a strong opinion on this, feel free to pick any of the options.
+  https://git.kernel.org/tglx/history/c/0f138bbfd83c
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+The change was made because back then, the kernel's workqueue
+implementation did not allow waiting for a single work.  One had to wait
+for completion of *all* work by calling flush_scheduled_work(), and that
+could deadlock when waiting for usbnet_deferred_kevent() with rtnl_mutex
+held in ->ndo_stop().
 
-Kind regards
-Uffe
+The commit solved one problem but created another:  It causes a
+use-after-free in USB Ethernet drivers aqc111.c, asix_devices.c,
+ax88179_178a.c, ch9200.c and smsc75xx.c:
+
+* If the drivers receive a link change interrupt immediately before
+  disconnect, they raise EVENT_LINK_RESET in their (non-sleepable)
+  ->status() callback and schedule usbnet_deferred_kevent().
+* usbnet_deferred_kevent() invokes the driver's ->link_reset() callback,
+  which calls netif_carrier_{on,off}().
+* That in turn schedules the work linkwatch_event().
+
+Because usbnet_deferred_kevent() is awaited after unregister_netdev(),
+netif_carrier_{on,off}() may operate on an unregistered netdev and
+linkwatch_event() may run after free_netdev(), causing a use-after-free.
+
+In 2010, usbnet was changed to only wait for a single instance of
+usbnet_deferred_kevent() instead of *all* work by commit 23f333a2bfaf
+("drivers/net: don't use flush_scheduled_work()").
+
+Unfortunately the commit neglected to move the wait back to
+->ndo_stop().  Rectify that omission at long last.
+
+Reported-by: Jann Horn <jannh@google.com>
+Link: https://lore.kernel.org/netdev/CAG48ez0MHBbENX5gCdHAUXZ7h7s20LnepBF-pa5M=7Bi-jZrEA@mail.gmail.com/
+Reported-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Link: https://lore.kernel.org/netdev/20220315113841.GA22337@pengutronix.de/
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org
+Cc: Oliver Neukum <oneukum@suse.com>
+---
+ This seems to be Jakub's preferred way to solve the use-after-free.
+ I've tagged the patch for net-next so that it can bake in linux-next
+ for a few weeks, but it alternatively applies cleanly to net (in case
+ maintainers are eager to get it into mainline).
+ 
+ The patch supersedes the following prior attempts:
+ 
+ usbnet: Fix use-after-free on disconnect
+ https://lore.kernel.org/netdev/127121d9d933ebe3fc13f9f91cc33363d6a8a8ac.1649859147.git.lukas@wunner.de/
+
+ net: linkwatch: ignore events for unregistered netdevs
+ https://lore.kernel.org/netdev/18b3541e5372bc9b9fc733d422f4e698c089077c.1650177997.git.lukas@wunner.de/
+
+ net: linkwatch: ignore events for unregistered netdevs (v2)
+ https://lore.kernel.org/netdev/cover.1655024266.git.lukas@wunner.de/
+
+ drivers/net/usb/usbnet.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index dc79811535c2..63868c1fbea4 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -849,13 +849,11 @@ int usbnet_stop (struct net_device *net)
+ 
+ 	mpn = !test_and_clear_bit(EVENT_NO_RUNTIME_PM, &dev->flags);
+ 
+-	/* deferred work (task, timer, softirq) must also stop.
+-	 * can't flush_scheduled_work() until we drop rtnl (later),
+-	 * else workers could deadlock; so make workers a NOP.
+-	 */
++	/* deferred work (timer, softirq, task) must also stop */
+ 	dev->flags = 0;
+ 	del_timer_sync (&dev->delay);
+ 	tasklet_kill (&dev->bh);
++	cancel_work_sync(&dev->kevent);
+ 	if (!pm)
+ 		usb_autopm_put_interface(dev->intf);
+ 
+@@ -1619,8 +1617,6 @@ void usbnet_disconnect (struct usb_interface *intf)
+ 	net = dev->net;
+ 	unregister_netdev (net);
+ 
+-	cancel_work_sync(&dev->kevent);
+-
+ 	usb_scuttle_anchored_urbs(&dev->deferred);
+ 
+ 	if (dev->driver_info->unbind)
+-- 
+2.35.2
+
