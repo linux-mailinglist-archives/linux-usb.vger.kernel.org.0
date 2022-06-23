@@ -2,105 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306C055710B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 04:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F39D557123
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jun 2022 04:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377583AbiFWC0n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jun 2022 22:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S234311AbiFWCli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jun 2022 22:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377856AbiFWC0e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 22:26:34 -0400
-Received: from mail.gtsys.com.hk (tunnel316222-pt.tunnel.tserv25.sin1.ipv6.he.net [IPv6:2001:470:35:5f1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC0C40E6D
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 19:26:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 8C7EE22A1D8C;
-        Thu, 23 Jun 2022 10:26:26 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3XSJlw5CChLa; Thu, 23 Jun 2022 10:26:26 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 6A4D522A1D88;
-        Thu, 23 Jun 2022 10:26:26 +0800 (HKT)
-Received: from [10.128.1.32] (unknown [124.217.189.234])
-        by s01.gtsys.com.hk (Postfix) with ESMTPSA id 335A7C01B49;
-        Thu, 23 Jun 2022 10:26:26 +0800 (HKT)
-Subject: Re: serial: usb: cdc-acm: OMRON B5L ToF, device probe failed
-To:     Oliver Neukum <oneukum@suse.com>,
-        "michael.lee@omron.com" <michael.lee@omron.com>,
-        Lars Melin <larsm17@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>
-References: <85ebf554-effd-c89e-6eb8-c149442b931c@gtsys.com.hk>
- <fc9986a6-0b11-d949-2196-1ad35d3f4d98@gtsys.com.hk>
- <1af7ff05-8558-9162-a0cd-ac140ddaf2e1@gmail.com>
- <cbcc2071-5b56-025e-cae6-5af0210e2363@gtsys.com.hk>
- <OSZP286MB1776CCBCBFE38B25C7DB9978E1B39@OSZP286MB1776.JPNP286.PROD.OUTLOOK.COM>
- <40395457-0927-c169-7d9f-47d1912e2c39@suse.com>
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Message-ID: <f3aaf9e8-07c7-2c50-48c3-723c51f9445a@gtsys.com.hk>
-Date:   Thu, 23 Jun 2022 10:26:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        with ESMTP id S232509AbiFWClh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jun 2022 22:41:37 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03CE42A0D
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jun 2022 19:41:33 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 25N2N2Zq099539;
+        Thu, 23 Jun 2022 10:23:02 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 23 Jun
+ 2022 10:38:42 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Roger Quadros <roger.quadros@nokia.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        <linux-usb@vger.kernel.org>, <--cc=linux-kernel@vger.kernel.org>,
+        <BMC-SW@aspeedtech.com>
+Subject: [PATCH] usb: gadget: f_mass_storage: Make CD-ROM emulation works with Windows OS
+Date:   Thu, 23 Jun 2022 10:38:39 +0800
+Message-ID: <20220623023839.1893954-1-neal_liu@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <40395457-0927-c169-7d9f-47d1912e2c39@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.10]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 25N2N2Zq099539
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Add read TOC with format 2 to support CD-ROM emulation with
+Windows OS.
+This patch is tested on Windows OS Server 2019.
 
-On 21/6/2022 6:09 pm, Oliver Neukum wrote:
->
-> On 21.06.22 02:38, michael.lee@omron.com wrote:
->> Dear Chris,
->>
->> The below is the reply from Japan.
->>
->> Dose they do the below commnad after connect B5L to USB?
->>
->> sudo modprobe usbserial vendor=0x0590 product=0x00ca
->> sudo chmod o+wr /dev/ttyUSB0
->>
->> For linux environment ,this commnad is needed to connect B5L to USB.
->> We preapre the below sh file with c++ sample codes.
->> connect_tof.sh
->> https://github.com/omron-devhub/b5l_TOFsensor_Sample_cpp
->>
-> Hi,
->
-> this is not nice. But in any case this thing is not an ACM
-> device. This patch should remove it from the driver it is
-> abusing to where it belongs. Could you please test it?
->
-> 	Regards
-> 		Oliver
-Hi Oliver,
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-thanks for that patch, I can confirm it works for me. I have the ToF up
-and running at B921600 8N1.
-But I would wait, not apply to the kernel, because I noticed that the team from 
-OMRON is working
-on the CDC implantation.
-So this patch is only a workaround for the moment.
-
-Thank you for your help!
-Chris
-
-
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 3a77bca0ebe1..3c2a5f1e8b66 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -1209,6 +1209,7 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
+ 
+ 	switch (format) {
+ 	case 0:
++	case 1:
+ 		/* Formatted TOC */
+ 		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
+ 		memset(buf, 0, len);
 -- 
-GTSYS Limited RFID Technology
-9/F, Unit E, R07, Kwai Shing Industrial Building Phase 2,
-42-46 Tai Lin Pai Road, Kwai Chung, N.T., Hong Kong
-Tel (852) 9079 9521
-
-Disclaimer: https://www.gtsys.com.hk/email/classified.html
+2.25.1
 
