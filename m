@@ -2,220 +2,585 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8C5558B9B
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 01:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4992558BA5
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 01:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiFWXOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 19:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
+        id S230013AbiFWXVp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 19:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiFWXOt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 19:14:49 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B555D129
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 16:14:48 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso1488360fac.4
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 16:14:48 -0700 (PDT)
+        with ESMTP id S229541AbiFWXVo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 19:21:44 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FCE4B1C5
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 16:21:42 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id c30so864241ljr.9
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 16:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=u2JKqHVyLSRZBXOkaIltewzMrD4pEO849tuySbHDpwc=;
-        b=ThCoMRZVlzD3JZVM5bQQPX5vhiupuoW4v/3wdvco6scQqVAZitzrddJfdkyplTyehS
-         JZ9k9G7cKpXJ/MFoQT6dYLK4JpoYjT15t00LJpVSVZybSphePavVdLh80M5BW8KApsg2
-         IFawMA9OkxkM3dk/SZcOeeDwiYToFJUww13y4=
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=HX1oXxGd35O7b0Mx9WucklJeNs4yrJgMG/WDEY27GRI=;
+        b=NEuJW84xuOl1xm2n5RsXsDTMGPlt4ixOjFxJ1Ach03frNEaGqRUiHOa6KsY4oSGVjd
+         kHeSoZFjevsIfsec8ajuxxhupW4JBzkMYAMwAaPLqvIcSRKrDZHlpXBz7hs7jG/nknXp
+         3yKo2icrR3k3IgGU1+esHlaYHx+PbF01mCNNG+TkpvO7QHkSDSixm8k9tUmylvM5BnbU
+         oAFuSxW19khU3cO0UcPfsbaUBALTXbo4+CCQV9ObPVKwA3zgT5GmVUhJx3ir4+o5+IhY
+         QuCitKj6pKScAP4p9re/ZY1RePqL46igaXnyJPRgMCxZeI9ko4SH9ekKFI42xS2sJkYX
+         CjIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=u2JKqHVyLSRZBXOkaIltewzMrD4pEO849tuySbHDpwc=;
-        b=6C0UHklRi7WRlahEefCMYfcg3rHR8giJhI574l9k+ZatzLMVV4G3m2GHjsBXBNlghq
-         6ZAWOF8wffN6r9DB1q4cRvZK0CB+BzhAOW9RGCAQjsR7tDlZnPoMOhFsoM1dfj+LxLf8
-         wlI9zOqwX1gBAm81aa9ucYDCd6UYiKWZARbhc6WYrx7rRseneEG/adeVLjGHGahpOxhG
-         m/XjAzLPUXGSI4tj7f60zhNowG9S2o3ssMQLFds2OJMEda3lM4MSXmeMSg3Sn270fXvc
-         Pap4YjgbW0AFwtxSHyx19r+rD43nyLIxXDCZEF9TQSKg2+JCJFQNw8KS02kd8KBIp5rw
-         j0nQ==
-X-Gm-Message-State: AJIora+jUxhGOjEJW2fkP30Js/z/rLr5i4rJyFHX6JJVHxlM6jiJIHJ/
-        8lQ2lOl9kBYs+bcbStjXFDqQuZhUu/5hZp4GDi7ieg==
-X-Google-Smtp-Source: AGRyM1vGcj9wdhnXfYcW15SE2elwZofl+K6gam8C4ktPrjNMjEUlSOW18Z8GsUBiy0N2iC9aY8GH6El/ZS/RoeZfOmI=
-X-Received: by 2002:a05:6870:b627:b0:102:f25:a460 with SMTP id
- cm39-20020a056870b62700b001020f25a460mr227480oab.193.1656026086919; Thu, 23
- Jun 2022 16:14:46 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 23 Jun 2022 16:14:46 -0700
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=HX1oXxGd35O7b0Mx9WucklJeNs4yrJgMG/WDEY27GRI=;
+        b=Ji0iI5prxafzOugZTmIrz+ncKFl4FgBpokHWFGXdzk6xCkPg4x2yIFB3enbdej2lw+
+         JX5HZ0YIx8euWd4sB/7Rws88WgBnGJ3smTZ7boCgtlf5SrhSryYSjcrZgNlCLnrndt2r
+         qvLpVM4s/mZMC2wo9GXuzIvus3VfFcKXkiueEHZLYX2AOUcLlQpEEj8iT4MBPCIkLzk6
+         4ugbU2+eAzH/KQtoA5QalrA2xR2kRweCSx2cuu2ewENrfxjgzCGSHRAZFI35bbk0AcMZ
+         GUyAZWDIhKmNtUNyVHEulRpQj2Y9mDI+MRINZGcBthbL3MdH/xZoNfky8jbsGuxcfPRG
+         gHgg==
+X-Gm-Message-State: AJIora9cIQGPzEvEfD3gpJKStpNQzyUQF+4U1rSkg+bUd+i+8NFc6mdb
+        IPy+2/qUPT6gAjE/ubeNqRKhig4R2XGk4foSnOkJM8MXlcQ=
+X-Google-Smtp-Source: AGRyM1tiVDEMogpx0R0ROCVv8lJZqskv7mxG4RnF65ANMKqnfwqzkmTBh8JGHF5CJ0DqANAAyU+cm+NcAT5WujogC2Q=
+X-Received: by 2002:a2e:bb88:0:b0:25a:6ec7:a1a0 with SMTP id
+ y8-20020a2ebb88000000b0025a6ec7a1a0mr6148855lje.360.1656026499637; Thu, 23
+ Jun 2022 16:21:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
- <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 23 Jun 2022 16:14:46 -0700
-Message-ID: <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
+From:   jharrop@gmail.com
+Date:   Fri, 24 Jun 2022 09:21:27 +1000
+Message-ID: <CAM-hvXeAad4d4KDrL=evC1dXr2fqqkQd0BpqHtmB4K4xxqPKJQ@mail.gmail.com>
+Subject: SilverStone/Asmedia errors on SuperSpeed Plus Gen 2x2 USB (xhci_hcd)
+To:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prashant Malani (2022-06-23 12:08:21)
-> On Thu, Jun 23, 2022 at 11:30 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Prashant Malani (2022-06-22 10:34:30)
-> > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > new file mode 100644
-> > > index 000000000000..78b0190c8543
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > @@ -0,0 +1,74 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-[...]
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +    description: OF graph binding modelling data lines to the Type-C switch.
-> > > +
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: Link between the switch and a Type-C connector.
-> >
-> > Is there an update to the usb-c-connector binding to accept this port
-> > connection?
->
-> Not at this time. I don't think we should enforce that either.
-> (Type-C data-lines could theoretically be routed through intermediate
-> hardware like retimers/repeaters)
+Hi,  I've tried SST-MS12 on a Gen2x2 (20 Gbps) port in a Dell
+Precision 3660 tower.
 
-I'm mostly wondering if having such a connection to the usb-c-connector,
-or even through some retimer/repeater, would be sufficient to detect how
-many type-c ports are connected to the device. If the type-c pin
-assignments only support two or four lanes for DP then it seems like we
-should describe the two lanes or four lanes as one graph endpoint
-"output" and then have some 'data-lanes' property in case the DP lanes
-are flipped while being sent to the retimer or usb-c-connector. This
-would of course depend on the capability of the device, i.e. if it can
-remap DP lanes or only has 2 lanes of DP, etc.
+It gives kernel errors; this happens booting from it, or attaching it
+at run time.
 
-> > > +  - |
-> > > +    drm-bridge {
-> > > +        usb-switch {
-> > > +            compatible = "typec-switch";
-> >
-> > I still don't understand the subnode design here. usb-switch as a
-> > container node indicates to me that this is a bus, but in earlier rounds
-> > of this series it was stated this isn't a bus.
->
-> I am not aware of this as a requirement. Can you please point me to the
-> documentation that states this needs to be the case?
+On a Gen 2 (10 Gbps) port, the device works fine.
 
-I'm not aware of any documentation for the dos and don'ts here. Are
-there any examples in the bindings directory that split up a device into
-subnodes that isn't in bindings/mfd? I just know from experience that
-any time I try to make a child node of an existing node that I'm
-supposed to be describing a bus, unless I'm adding some sort of
-exception node like a graph binding or an opp table. Typically a node
-corresponds 1:1 with a device in the kernel. I'll defer to Rob for any
-citations.
+I'm using Linux version 5.15.48-1-MANJARO;  is it likely to work
+better with more recent patches?
 
->
-> > Why doesn't it work to
-> > merge everything inside usb-switch directly into the drm-bridge node?
->
-> I attempted to explain the rationale in the previous version [1], but
-> using a dedicated sub-node means the driver doesn't haven't to
-> inspect individual ports to determine which of them need switches
-> registered for them. If it sees a `typec-switch`, it registers a
-> mode-switch and/or orientation-switch. IMO it simplifies the hardware
-> device binding too.
+thanks .. Jason
 
-How is that any harder than hard-coding that detail into the driver
-about which port and endpoint is possibly connected to the
-usb-c-connector (or retimer)? All of that logic could be behind some API
-that registers a typec-switch based on a graph port number that's passed
-in, ala drm_of_find_panel_or_bridge()'s design.
+--------------
 
-Coming from a DT writer's perspective, I just want to go through the
-list of output pins in the datasheet and match them up to the ports
-binding for this device. If it's a pure DP bridge, where USB hardware
-isn't an input or an output like the ITE chip, then I don't want to have
-to describe a port graph binding for the case when it's connected to a
-dp-connector (see dp-connector.yaml) in the top-level node and then have
-to make an entirely different subnode for the usb-c-connector case with
-a whole other set of graph ports.
+Jun 22 23:57:43 jason-precision3660 kernel: Linux version
+5.15.48-1-MANJARO (builduser@fv-az504-703) (gcc (GCC) 12.1.0, GNU ld
+(GNU Binutils) 2.38) #1 SMP PREEMPT Thu Jun 16 12:33:56>
 
-How would I even know which two differential pairs correspond to port0
-or port1 in this binding in the ITE case? Ideally we make the graph
-binding more strict for devices by enforcing that their graph ports
-exist. Otherwise we're not fully describing the connections between
-devices and our dtb checkers are going to let things through where the
-driver most likely will fail because it can't figure out what to do,
-e.g. display DP on 4 lanes or play some DP lane rerouting games to act
-as a mux.
+Jun 22 23:57:43 jason-precision3660 kernel: DMI: Dell Inc. Precision
+3660/0N0992, BIOS 1.2.48 05/13/2022
 
->
-> It also maps with the internal block diagram for these hardware
-> components (for ex. the anx7625 crosspoint switch is a separate
-> sub-block within anx7625).
+Jun 22 23:58:46 jason-precision3660 kernel: usb 2-9: new SuperSpeed
+Plus Gen 2x2 USB device number 2 using xhci_hcd
+Jun 22 23:58:46 jason-precision3660 kernel: usb 2-9: New USB device
+found, idVendor=174c, idProduct=2362, bcdDevice= 1.00
+Jun 22 23:58:46 jason-precision3660 kernel: usb 2-9: New USB device
+strings: Mfr=2, Product=3, SerialNumber=1
+Jun 22 23:58:46 jason-precision3660 kernel: usb 2-9: Product: SilverStone MS12
+Jun 22 23:58:46 jason-precision3660 kernel: usb 2-9: Manufacturer: Asmedia
+Jun 22 23:58:46 jason-precision3660 kernel: usb 2-9: SerialNumber: 000000000DA1
+Jun 22 23:58:46 jason-precision3660 mtp-probe[1497]: checking bus 2,
+device 2: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-9"
+Jun 22 23:58:46 jason-precision3660 mtp-probe[1497]: bus: 2, device: 2
+was not an MTP device
+Jun 22 23:58:46 jason-precision3660 kernel: usbcore: registered new
+interface driver usb-storage
+Jun 22 23:58:46 jason-precision3660 kernel: scsi host8: uas
+Jun 22 23:58:46 jason-precision3660 kernel: usbcore: registered new
+interface driver uas
+Jun 22 23:58:47 jason-precision3660 kernel: scsi 8:0:0:0:
+Direct-Access     SST-     MS12 MVMe        0    PQ: 0 ANSI: 6
+Jun 22 23:58:47 jason-precision3660 kernel: sd 8:0:0:0: Attached scsi
+generic sg1 type 0
+Jun 22 23:58:47 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+Jun 22 23:58:47 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+Protect is off
+Jun 22 23:58:47 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Mode
+Sense: 43 00 00 00
+Jun 22 23:58:47 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jun 22 23:58:47 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Optimal
+transfer size 2097152 bytes
+Jun 22 23:58:47 jason-precision3660 kernel:  sdb: sdb1 sdb2
+Jun 22 23:58:47 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Attached SCSI disk
+Jun 22 23:58:47 jason-precision3660 mtp-probe[1503]: checking bus 2,
+device 2: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-9"
+Jun 22 23:58:47 jason-precision3660 mtp-probe[1503]: bus: 2, device: 2
+was not an MTP device
+Jun 22 23:58:51 jason-precision3660 kernel: usb 2-9: USB disconnect,
+device number 2
+Jun 22 23:58:51 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#24
+uas_zap_pending 0 uas-tag 1 inflight: CMD
+Jun 22 23:58:51 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#24
+CDB: Read(10) 28 00 00 00 01 08 00 00 f8 00
+Jun 22 23:58:51 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#24
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=4s
+Jun 22 23:58:51 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#24
+CDB: Read(10) 28 00 00 00 01 08 00 00 f8 00
+Jun 22 23:58:51 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 264 op 0x0:(READ) flags 0x80700 phys_seg 31
+prio class 0
+Jun 22 23:58:51 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 264 op 0x0:(READ) flags 0x0 phys_seg 1 prio
+class 0
+Jun 22 23:58:51 jason-precision3660 kernel: Buffer I/O error on dev
+sdb, logical block 33, async page read
+Jun 22 23:58:51 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 264 op 0x0:(READ) flags 0x0 phys_seg 1 prio
+class 0
+Jun 22 23:58:51 jason-precision3660 kernel: Buffer I/O error on dev
+sdb, logical block 33, async page read
+Jun 22 23:58:51 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 264 op 0x0:(READ) flags 0x0 phys_seg 1 prio
+class 0
+Jun 22 23:58:51 jason-precision3660 kernel: Buffer I/O error on dev
+sdb, logical block 33, async page read
+Jun 22 23:58:51 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+Synchronizing SCSI cache
+Jun 22 23:58:52 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+Synchronize Cache(10) failed: Result: hostbyte=DID_ERROR
+driverbyte=DRIVER_OK
 
-We don't make DT bindings for sub-components like this very often. It
-would make more sense to me to have a subnode if a typec switch was some
-sort of off the shelf hard macro that the hardware engineer placed down
-inside the IC that they delivered. Then we could have a completely
-generic driver that binds to the generic binding that knows how to drive
-the hardware, because it's an unchangeable hard macro with a well
-defined programming interface.
 
->
-> [1] https://lore.kernel.org/linux-usb/CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com/
+Jun 23 00:17:21 jason-precision3660 udisksd[956]: Mounted /dev/sdb2 at
+/run/media/jharrop/93adcd90-e911-4f78-82b0-b3c1f45284d2 on behalf of
+uid 1000
+Jun 23 00:17:21 jason-precision3660 kernel: EXT4-fs (sdb2): mounted
+filesystem with ordered data mode. Opts: errors=remount-ro. Quota
+mode: none.
+Jun 23 00:17:21 jason-precision3660 systemd[978]: Started kde-open5.
+Jun 23 00:17:21 jason-precision3660 kde-open5[3252]:
+kf.service.services: KApplicationTrader: mimeType
+"x-scheme-handler/file" not found
+Jun 23 00:17:21 jason-precision3660 kde-open5[3252]:
+kf.service.services: KApplicationTrader: mimeType
+"x-scheme-handler/file" not found
+Jun 23 00:17:21 jason-precision3660 systemd[978]: Started Dolphin -
+File Manager.
+Jun 23 00:17:21 jason-precision3660 kwin_x11[1072]: qt.qpa.xcb:
+QXcbConnection: XCB error: 3 (BadWindow), sequence: 51553, resource
+id: 75497477, major code: 18 (ChangeProperty), mino
+r code: 0
+Jun 23 00:17:21 jason-precision3660 kwin_x11[1072]: qt.qpa.xcb:
+QXcbConnection: XCB error: 3 (BadWindow), sequence: 51558, resource
+id: 75497478, major code: 18 (ChangeProperty), mino
+r code: 0
+Jun 23 00:17:21 jason-precision3660 kwin_x11[1072]: qt.qpa.xcb:
+QXcbConnection: XCB error: 3 (BadWindow), sequence: 51562, resource
+id: 75497479, major code: 18 (ChangeProperty), mino
+r code: 0
+Jun 23 00:17:21 jason-precision3660 dolphin[3258]: org.kde.dolphin:
+Unknown class  ""  in session saved data!
+Jun 23 00:17:21 jason-precision3660 dolphin[3258]: kf.kio.widgets:
+Cannot read information about filesystem under path
+"/home/jharrop/.cache/thumbnails/"
+Jun 23 00:17:28 jason-precision3660 kernel: usb 2-9: USB disconnect,
+device number 3
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#11
+uas_zap_pending 0 uas-tag 1 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#11
+CDB: Read(10) 28 00 26 05 84 48 00 00 80 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#12
+uas_zap_pending 0 uas-tag 2 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#12
+CDB: Read(10) 28 00 00 09 93 b0 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#13
+uas_zap_pending 0 uas-tag 3 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#13
+CDB: Read(10) 28 00 00 49 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#14
+uas_zap_pending 0 uas-tag 4 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#14
+CDB: Read(10) 28 00 00 89 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#15
+uas_zap_pending 0 uas-tag 5 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#15
+CDB: Read(10) 28 00 00 c9 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#16
+uas_zap_pending 0 uas-tag 6 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#16
+CDB: Read(10) 28 00 01 09 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#17
+uas_zap_pending 0 uas-tag 7 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#17
+CDB: Read(10) 28 00 01 49 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#18
+uas_zap_pending 0 uas-tag 8 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#18
+CDB: Read(10) 28 00 01 89 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#19
+uas_zap_pending 0 uas-tag 9 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#19
+CDB: Read(10) 28 00 01 c9 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#20
+uas_zap_pending 0 uas-tag 10 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#20
+CDB: Read(10) 28 00 01 c9 70 50 00 00 30 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#24
+uas_zap_pending 0 uas-tag 11 inflight: CMD
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#24
+CDB: Write(10) 2a 00 3a 0d 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#11
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=6s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#11
+CDB: Read(10) 28 00 26 05 84 48 00 00 80 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 637895752 op 0x0:(READ) flags 0x80700 phys_seg
+16 prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#12
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#12
+CDB: Read(10) 28 00 00 09 93 b0 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 627632 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#13
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#13
+CDB: Read(10) 28 00 00 49 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 4812800 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#14
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#14
+CDB: Read(10) 28 00 00 89 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 9007104 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 637895752 op 0x0:(READ) flags 0x0 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#15
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#15
+CDB: Read(10) 28 00 00 c9 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 13201408 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#16
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#16
+CDB: Read(10) 28 00 01 09 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 17395712 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#17
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#17
+CDB: Read(10) 28 00 01 49 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 21590016 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#18
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#18
+CDB: Read(10) 28 00 01 89 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 25784320 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#19
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#19
+CDB: Read(10) 28 00 01 c9 70 00 00 00 08 00
+Jun 23 00:17:28 jason-precision3660 kernel: blk_update_request: I/O
+error, dev sdb, sector 29978624 op 0x0:(READ) flags 0x83700 phys_seg 1
+prio class 0
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#20
+FAILED Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK cmd_age=5s
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb] tag#20
+CDB: Read(10) 28 00 01 c9 70 50 00 00 30 00
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 121667584, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: JBD2: Error -5 detected
+when updating journal superblock for sdb2-8.
+Jun 23 00:17:28 jason-precision3660 kernel: Aborting journal on device sdb2-8.
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 121667584, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: JBD2: Error -5 detected
+when updating journal superblock for sdb2-8.
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 127, block_bitmap = 36
+70031
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): Remounting
+filesystem read-only
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 255, block_bitmap = 78
+64335
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 383, block_bitmap = 12
+058639
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 511, block_bitmap = 16
+252943
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 639, block_bitmap = 20
+447247
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 767, block_bitmap = 24
+641551
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 895, block_bitmap = 28
+835855
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 1023, block_bitmap = 3
+3030159
+Jun 23 00:17:28 jason-precision3660 kernel: Buffer I/O error on dev
+sdb2, logical block 0, lost sync page write
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 1151, block_bitmap = 3
+7224463
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs (sdb2): I/O error
+while writing superblock
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs error (device
+sdb2): ext4_wait_block_bitmap:531: comm ext4lazyinit: Cannot read
+block bitmap - block_group = 1279, block_bitmap = 4
+1418767
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 kernel: EXT4-fs warning (device
+sdb2): dx_probe:790: inode #17956868: lblock 0: comm kioslave5: error
+-5 reading directory block
+Jun 23 00:17:28 jason-precision3660 udisksd[956]: Cleaning up mount
+point /run/media/jharrop/93adcd90-e911-4f78-82b0-b3c1f45284d2 (device
+8:18 no longer exists)
+Jun 23 00:17:28 jason-precision3660 systemd[1]:
+run-media-jharrop-93adcd90\x2de911\x2d4f78\x2d82b0\x2db3c1f45284d2.mount:
+Deactivated successfully.
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+Synchronizing SCSI cache
+Jun 23 00:17:28 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+Synchronize Cache(10) failed: Result: hostbyte=DID_ERROR
+driverbyte=DRIVER_OK
+Jun 23 00:17:28 jason-precision3660 kernel: usb 2-9: new SuperSpeed
+Plus Gen 2x2 USB device number 4 using xhci_hcd
+Jun 23 00:17:28 jason-precision3660 kernel: usb 2-9: New USB device
+found, idVendor=174c, idProduct=2362, bcdDevice= 1.00
+Jun 23 00:17:28 jason-precision3660 kernel: usb 2-9: New USB device
+strings: Mfr=2, Product=3, SerialNumber=1
+Jun 23 00:17:28 jason-precision3660 kernel: usb 2-9: Product: SilverStone MS12
+Jun 23 00:17:28 jason-precision3660 kernel: usb 2-9: Manufacturer: Asmedia
+Jun 23 00:17:28 jason-precision3660 kernel: usb 2-9: SerialNumber: 000000000DA1
+Jun 23 00:17:28 jason-precision3660 kernel: scsi host8: uas
+Jun 23 00:17:28 jason-precision3660 mtp-probe[3348]: checking bus 2,
+device 4: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-9"
+Jun 23 00:17:28 jason-precision3660 mtp-probe[3348]: bus: 2, device: 4
+was not an MTP device
+Jun 23 00:17:28 jason-precision3660 mtp-probe[3349]: checking bus 2,
+device 4: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-9"
+Jun 23 00:17:28 jason-precision3660 mtp-probe[3349]: bus: 2, device: 4
+was not an MTP device
+Jun 23 00:17:29 jason-precision3660 kernel: scsi 8:0:0:0:
+Direct-Access     SST-     MS12 MVMe        0    PQ: 0 ANSI: 6
+Jun 23 00:17:29 jason-precision3660 kernel: sd 8:0:0:0: Attached scsi
+generic sg1 type 0
+Jun 23 00:17:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+Jun 23 00:17:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+Protect is off
+Jun 23 00:17:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Mode
+Sense: 43 00 00 00
+Jun 23 00:17:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jun 23 00:17:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Optimal
+transfer size 2097152 bytes
+Jun 23 00:17:29 jason-precision3660 kernel:  sdb: sdb1 sdb2
+Jun 23 00:17:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Attached SCSI disk
+Jun 23 00:17:30 jason-precision3660 plasmashell[1166]:
+file:///usr/lib/qt/qml/org/kde/plasma/extras/ExpandableListItem.qml:292:
+TypeError: Cannot read property 'enabled' of null
+Jun 23 00:17:30 jason-precision3660 plasmashell[1166]:
+file:///usr/lib/qt/qml/org/kde/plasma/extras/ExpandableListItem.qml:292:
+TypeError: Cannot read property 'enabled' of null
+Jun 23 00:17:30 jason-precision3660 plasmashell[1166]:
+file:///usr/lib/qt/qml/org/kde/plasma/extras/ExpandableListItem.qml:292:
+TypeError: Cannot read property 'enabled' of null
+Jun 23 00:17:30 jason-precision3660 udisksd[956]: Mounted /dev/sdb2 at
+/run/media/jharrop/93adcd90-e911-4f78-82b0-b3c1f45284d2 on behalf of
+uid 1000
+Jun 23 00:17:30 jason-precision3660 kernel: EXT4-fs (sdb2): recovery complete
+Jun 23 00:17:30 jason-precision3660 kernel: EXT4-fs (sdb2): mounted
+filesystem with ordered data mode. Opts: errors=remount-ro. Quota
+mode: none.
+Jun 23 00:17:30 jason-precision3660 plasmashell[1166]:
+file:///usr/lib/qt/qml/org/kde/plasma/extras/ExpandableListItem.qml:292:
+TypeError: Cannot read property 'enabled' of null
+Jun 23 00:17:33 jason-precision3660 kernel: usb 2-9: USB disconnect,
+device number 4
+Jun 23 00:17:33 jason-precision3660 udisksd[956]: Cleaning up mount
+point /run/media/jharrop/93adcd90-e911-4f78-82b0-b3c1f45284d2 (device
+8:18 no longer exists)
+Jun 23 00:17:33 jason-precision3660 systemd[1]:
+run-media-jharrop-93adcd90\x2de911\x2d4f78\x2d82b0\x2db3c1f45284d2.mount:
+Deactivated successfully.
+Jun 23 00:17:33 jason-precision3660 plasmashell[1166]:
+file:///usr/lib/qt/qml/org/kde/plasma/extras/ExpandableListItem.qml:292:
+TypeError: Cannot read property 'enabled' of null
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+Synchronizing SCSI cache
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+Synchronize Cache(10) failed: Result: hostbyte=DID_ERROR
+driverbyte=DRIVER_OK
+Jun 23 00:17:33 jason-precision3660 kernel: usb 2-9: new SuperSpeed
+Plus Gen 2x2 USB device number 5 using xhci_hcd
+Jun 23 00:17:33 jason-precision3660 kernel: usb 2-9: New USB device
+found, idVendor=174c, idProduct=2362, bcdDevice= 1.00
+Jun 23 00:17:33 jason-precision3660 kernel: usb 2-9: New USB device
+strings: Mfr=2, Product=3, SerialNumber=1
+Jun 23 00:17:33 jason-precision3660 kernel: usb 2-9: Product: SilverStone MS12
+Jun 23 00:17:33 jason-precision3660 kernel: usb 2-9: Manufacturer: Asmedia
+Jun 23 00:17:33 jason-precision3660 kernel: usb 2-9: SerialNumber: 000000000DA1
+Jun 23 00:17:33 jason-precision3660 kernel: scsi host8: uas
+Jun 23 00:17:33 jason-precision3660 kernel: scsi 8:0:0:0:
+Direct-Access     SST-     MS12 MVMe        0    PQ: 0 ANSI: 6
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: Attached scsi
+generic sg1 type 0
+Jun 23 00:17:33 jason-precision3660 mtp-probe[3365]: checking bus 2,
+device 5: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-9"
+Jun 23 00:17:33 jason-precision3660 mtp-probe[3365]: bus: 2, device: 5
+was not an MTP device
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+Protect is off
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Mode
+Sense: 43 00 00 00
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Optimal
+transfer size 2097152 bytes
+Jun 23 00:17:33 jason-precision3660 mtp-probe[3366]: checking bus 2,
+device 5: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-9"
+Jun 23 00:17:33 jason-precision3660 mtp-probe[3366]: bus: 2, device: 5
+was not an MTP device
+Jun 23 00:17:33 jason-precision3660 kernel:  sdb: sdb1 sdb2
+Jun 23 00:17:33 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Attached SCSI disk
+Jun 23 00:17:33 jason-precision3660 kernel: EXT4-fs (sdb2): recovery complete
+Jun 23 00:17:33 jason-precision3660 kernel: EXT4-fs (sdb2): mounted
+filesystem with ordered data mode. Opts: errors=remount-ro. Quota
+mode: none.
+Jun 23 00:17:33 jason-precision3660 udisksd[956]: Mounted /dev/sdb2 at
+/run/media/jharrop/93adcd90-e911-4f78-82b0-b3c1f45284d2 on behalf of
+uid 1000
 
-I looked at the fsa4480 driver and the device has a publicly available
-datasheet[2]. That device is designed for "audio accessory mode" but I
-guess it's being used to simply mux SBU lines? There isn't an upstream
-user of the binding so far, but it also doesn't look like a complete
-binding. I'd expect to see DN_L/R as a graph output connected to the
-usb-c-connector and probably have a usb2.0 input port and a 'sound-dai'
-property to represent the input audio path.
 
-Finally, simply connecting to the typec controller node isn't sufficient
-because a typec controller can be controlling many usb-c-connectors so I
-don't see how the graph binding would be able to figure out how many
-usb-c-connectors are connected to a mux like device, unless we took the
-approach of this patch. Is that why you're proposing this binding? To
-avoid describing a graph binding in the usb-c-connector and effectively
-"pushing" the port count up to the mux?
+It works in a Gen 2x1 port:
 
-[2] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
+Jun 23 00:19:28 jason-precision3660 kernel: dell_wmi: Unknown key with
+type 0x0012 and code 0x000f pressed
+Jun 23 00:19:28 jason-precision3660 kernel: usb 2-3: new SuperSpeed
+Plus Gen 2x1 USB device number 6 using xhci_hcd
+Jun 23 00:19:28 jason-precision3660 kernel: usb 2-3: New USB device
+found, idVendor=174c, idProduct=2362, bcdDevice= 1.00
+Jun 23 00:19:28 jason-precision3660 kernel: usb 2-3: New USB device
+strings: Mfr=2, Product=3, SerialNumber=1
+Jun 23 00:19:28 jason-precision3660 kernel: usb 2-3: Product: SilverStone MS12
+Jun 23 00:19:28 jason-precision3660 kernel: usb 2-3: Manufacturer: Asmedia
+Jun 23 00:19:28 jason-precision3660 kernel: usb 2-3: SerialNumber: 000000000DA1
+Jun 23 00:19:28 jason-precision3660 kernel: scsi host8: uas
+Jun 23 00:19:28 jason-precision3660 mtp-probe[3410]: checking bus 2,
+device 6: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-3"
+Jun 23 00:19:28 jason-precision3660 mtp-probe[3410]: bus: 2, device: 6
+was not an MTP device
+Jun 23 00:19:28 jason-precision3660 mtp-probe[3411]: checking bus 2,
+device 6: "/sys/devices/pci0000:00/0000:00:14.0/usb2/2-3"
+Jun 23 00:19:28 jason-precision3660 mtp-probe[3411]: bus: 2, device: 6
+was not an MTP device
+Jun 23 00:19:29 jason-precision3660 kernel: scsi 8:0:0:0:
+Direct-Access     SST-     MS12 MVMe        0    PQ: 0 ANSI: 6
+Jun 23 00:19:29 jason-precision3660 kernel: sd 8:0:0:0: Attached scsi
+generic sg1 type 0
+Jun 23 00:19:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb]
+1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+Jun 23 00:19:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+Protect is off
+Jun 23 00:19:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Mode
+Sense: 43 00 00 00
+Jun 23 00:19:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Write
+cache: enabled, read cache: enabled, doesn't support DPO or FUA
+Jun 23 00:19:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Optimal
+transfer size 2097152 bytes
+Jun 23 00:19:29 jason-precision3660 kernel:  sdb: sdb1 sdb2
+Jun 23 00:19:29 jason-precision3660 kernel: sd 8:0:0:0: [sdb] Attached SCSI disk
+Jun 23 00:19:30 jason-precision3660 kernel: EXT4-fs (sdb2): mounted
+filesystem with ordered data mode. Opts: errors=remount-ro. Quota
+mode: none.
+Jun 23 00:19:30 jason-precision3660 udisksd[956]: Mounted /dev/sdb2 at
+/run/media/jharrop/93adcd90-e911-4f78-82b0-b3c1f45284d2 on behalf of
+uid 1000
