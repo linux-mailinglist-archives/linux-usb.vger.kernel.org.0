@@ -2,171 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD9F558D1F
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 04:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8749558D2B
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 04:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiFXCLV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 22:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S229454AbiFXCOC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 22:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiFXCLU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 22:11:20 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2135.outbound.protection.outlook.com [40.107.215.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B04506DB;
-        Thu, 23 Jun 2022 19:11:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ByjWm9vWDHZw2hPKd3yR0mXguB2vDuuTE5tVwQWOQuvjxpKMDlmtzTe4kwGLiRsqTqdsopwb30z8Ai/dXrcgnUH3FLwQxUiNQ5OJQweiJ5aYgdrQNuvwXfvV8kYjwJ8olC7AYq8ykcjITTjdVGCs4dm4bIwOH4UzeSGqTTK5TzYpdXsygnaZlcSmVaTuBNqUXWTvQGyN2pWejLZkGoSV4dEE6ZklArQfElRNPQAOQxcH6o8xMeB4u6DzggUEh0vbdBoJ7dnB4D4cOnh3tKe3JP5FxivL6u+syntJWaxkLCq2j/mLLiClsAcyFU7Wr6tog13yJUvsXkP6hBhMmzTZOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IN14z4VoSw3b22MCQ82jnhgUrkQW9rG5NISQs4+t6ao=;
- b=AjMd7u7UFdbaU0AoLJJ+G86cYzsax6OvkUGQJxr/hRBhAS2KiPoNOoO+BKq5od9f8eotw8AvOtYath0ViZEv6BT7qyIZwQ9t2OOl4Cj+qiE18zUrNS+ne0YcY/zhDIYGXsxS6KkAt4WpGcTyN4DXuKOLtU1f9dTdnn3T7r8vKf3dDijepN3lyKUaQaoI0xjf+OCIDutuSDAvvwD6fID6IAHSdWdQndl/azcuRyQiVpmA0eby5PB0oNb3wo0pDkHcrr/dxEfR0FiwQqNeZqzc8Bd1eenmVljnuMM9Foc4lXcu96PsF0J2gv2DJ/nFNRW/yHfjRLAXqoWUH39bBKzwUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IN14z4VoSw3b22MCQ82jnhgUrkQW9rG5NISQs4+t6ao=;
- b=J853vQsRYMn8DF/AZwkcNfdKN5PRXHBN5ZyZHT1ASTjuS8pGqKMjH4qHOe/OuSZtKHxGT59Kg9w7bne3pOjnQSEYd1I62rfQBmrhRByjOehND0vyXmIvgVTwjjJFqcY12WYrm/W1HDWRkbGUUqROD1H5FFiCvxFb6CEf12tRKb5A/n0VcNQ8ype11d5s2h1mWWWfjwtBmpM70uH83sZikPmQjuSaM9B40JCoTp53T5JWZA09jaRRp3v1yid/G/MpTFVUZ5UTweM927XMFLw48LjO3wl4JldBDOAjiyz7E+AoFsFcKUZGTY/MLOBt7R24F9KsejZjR+GCFSfOz0rcjw==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by HK0PR06MB3089.apcprd06.prod.outlook.com (2603:1096:203:8c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Fri, 24 Jun
- 2022 02:11:09 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::46d:a7a:f047:e9bf]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::46d:a7a:f047:e9bf%5]) with mapi id 15.20.5353.022; Fri, 24 Jun 2022
- 02:11:09 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <roger.quadros@nokia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH RESEND] usb: gadget: f_mass_storage: Make CD-ROM emulation
- works with Windows OS
-Thread-Topic: [PATCH RESEND] usb: gadget: f_mass_storage: Make CD-ROM
- emulation works with Windows OS
-Thread-Index: AQHYhq3rzhxyDFo2ik6AmHo1KwAqPK1dEz8AgAC9vcA=
-Date:   Fri, 24 Jun 2022 02:11:09 +0000
-Message-ID: <HK0PR06MB3202F448E528F2047E1C3B1080B49@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220623030405.1922980-1-neal_liu@aspeedtech.com>
- <YrR9PrjBXGV5O6bq@rowland.harvard.edu>
-In-Reply-To: <YrR9PrjBXGV5O6bq@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 585a9bae-f9b8-4963-e5a4-08da5586ce05
-x-ms-traffictypediagnostic: HK0PR06MB3089:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /xIhgBPZKqY7HeQylnURpITqmMXZembH2d8ix5pypZBu/PwEM9SC+vLMsD3cjVH0qpB/3UufRdjCYugZAG/jrsT8pltDzaeIrB7v3rgJKZRi6uJflKK1tcUIWrKRmzU+T66UDINvHgT54pnzUBACFDSLtgxFVK0wKO9WJhsLbVR3eITz8Ndu4wT54i1DSpLzNd/3ODxTvPWcZkrMO/DLJM0LTwTZ5RHkpEgdQooFm+OZwHQ87jj1AdCcCU0p0YKkYazYdC0BaV0QANWhuhCTb5bi3EclDXAB8vL0sTaa7M8llqv9kt0CCOzOpEdPYzCT7DBcIu1JIKRTTdGzElpEcEsrJ7bsoLjJp0/9fBjqs+/rv/0+hRwd0NItTQdEYNK9zn1ENWqO7uB9+HeBbvSebV3Va95JO4SDlCoubq21u7F7uAlYdBHlUEB2G1fBgkltqgy8g82C52/zaOWqw4mLKKrH/MQYT7QYydn4GIlwsoCthRruW6uvktEW1geroulP2M/ZCD05T399R1kxTm0ojZd+TWShTOkOIyLwHinOMd0YLcrfNfpsFoW/YR2M82rFKM9+Gh/YjyJ2vxzlLKT+HEuwk74t5yeE96PVGexQUMEwuMont3YZEEx+D/7JreNrlXHnq3uWy46T3vX7YgyZdCpUnzexLMlz2syw7El+F5HmmbXb5dqoU8msfVTVHyY7pWqhtaBbXcNy2aDivoeOZQf0iQ3go2lthrRV8eomeEgJfT2AiFhthNFnr3D5PxOl3wLJG75qfmA0EiuAZoc1c2U07alfV7EuTdUhPlmxH5A=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(39850400004)(346002)(376002)(366004)(64756008)(4326008)(66446008)(7416002)(52536014)(33656002)(71200400001)(6916009)(8676002)(66946007)(76116006)(66476007)(66556008)(55016003)(316002)(83380400001)(2906002)(26005)(107886003)(5660300002)(478600001)(9686003)(186003)(41300700001)(86362001)(54906003)(8936002)(38100700002)(38070700005)(6506007)(122000001)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?E3lTgepvzf17iDinqXSTefKLLQi1PrhgGE1Id+WbZrLtXEXlYm9+10p2mPXa?=
- =?us-ascii?Q?ECW5+MiJfW1cKIoode15F5WahqnnbRI1tcblLgHXjnGAR0RRwqy8BxLcqh94?=
- =?us-ascii?Q?xoUKX2vVWGKsrPT60nS5NP0t/cPkg3TgbC/KsChPTu1/BH+pnkPS8AH2CB8u?=
- =?us-ascii?Q?xX40B/Ybrg++aPdVl+vi1D/AQEWYoQbn2LDNRl5KOXYHdgzP3VL0UQnFhxCh?=
- =?us-ascii?Q?m6s7piy4GBnn8LM9AVcbcA/ccRjbbmnKKKZ7hCRHev0nSPXmbWMtTMuWkBgm?=
- =?us-ascii?Q?Q/WlCZHThdvovets9PwaEG4ooyJSGLtcy4pI+Ys5FvuDKrJk9Ru577Em/r2d?=
- =?us-ascii?Q?XbgdLkJlOD7DjnYpBuxWztfpGwN2xkSbQG9+4Sg3je4GeVXJSlhLrv9DNUr5?=
- =?us-ascii?Q?SqYhNN3ndiD3B4/XpmXG4NF/LObEbHVFGAZCDam1K9iej5kFc6DorlECzbuH?=
- =?us-ascii?Q?mX5qEyKJhn7MM7Lrpti4RkiB1GsRTQubvGi8sV7YPKt7tY9N64BSjxutdNlD?=
- =?us-ascii?Q?4YaR7/EkoJj2v70a6niXkRh/bUHjbsjTVIV151Xub0odafGIAUXoZH4eiyRW?=
- =?us-ascii?Q?QLbW/nX1UavCQamfNyZejRR/RYGESD96fH1yhKOpztAV3iAweZ30xpC0uBwH?=
- =?us-ascii?Q?mMSz3BWcCuSyakihkF38gSbu1AadwgzrzSq56WQWIpRCB9FPlSQk2syt5uzZ?=
- =?us-ascii?Q?Bd2rhUE15FgEcQNzAbxPSjvS4QoX5HTW9RA1QP5itqhHzLDMufSe9xlayfPe?=
- =?us-ascii?Q?fRYdiAzFlJF2JWRpGUjdjzJvPnblpY80UAvONiTMwvsj4KLnPU2jnxobStSu?=
- =?us-ascii?Q?okeq9/QhU6dfsOpCpJqdET5Yp7x9Vr6ElHCRzFYkqp4PWCc90kCSak7ZR/i8?=
- =?us-ascii?Q?yOB+VeTixmvrbfkDF5Q5zJ/gQFfkuV+8dksHmeWUO+O+Ipby4JzU6Wh/SAdw?=
- =?us-ascii?Q?28L+TemDiUxKPYgqn9sdUgLE+CjvJvGNgnLzxk19Cez9oOBNbII2Rmhcd7O2?=
- =?us-ascii?Q?OGm12G8P0N1H/N+MX1ivN+2N3kkZIGgwcSwMK/6rpTbNpWwCX2Kdqx7W8d/b?=
- =?us-ascii?Q?fTF4yT2xqah+H6dj2IFm5NNlw1hLQgKb56Mm6K9t3YPdh/A90mdZi03rbDNh?=
- =?us-ascii?Q?QXShptnCLn30wClFQqdN2rOEbxc+qEd6irAMIyUopdZaXYz8DRqOtesp4ZWt?=
- =?us-ascii?Q?ctLo726irA1osKHlfGs5R9Imtqyn0IcyEmLUn3S5Nr0jwTDZMBY4j/VK9UX9?=
- =?us-ascii?Q?QskYw56fG6HhxBO1nATBnxyt+2Jqz/ruerDw9ea9z4mbtB9vGBKtE5TarkKi?=
- =?us-ascii?Q?6yJ3VP9xjJRYfTo/n21i4oYjpHvLpf7O5Puy33tSPCT48wJeh4BTXjih/hZB?=
- =?us-ascii?Q?iNLHZlaf2wtViTDnkzCDT2oqs4iurT4ZgrrHfpsxpECsLgZxB6zOpUKVQk2d?=
- =?us-ascii?Q?QnaJKt0bxB0UvJJR//m4Igo9kTFgwgJ4ONxAJQxoRmiA0/8f7Pdnfe2Q4w8d?=
- =?us-ascii?Q?D+Cj765HjskJmKmnYhVsYdLQ/Cj7g2zdenJrgLx5GRd4AZFhTCNL9sPE5dLV?=
- =?us-ascii?Q?1PXaS/OUsxF2+7/Q/xPcKY7CZ4OmPsBFHSn2ZkFA?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229823AbiFXCOB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 22:14:01 -0400
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79255131A
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 19:13:59 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id 4-20020a4a1404000000b0041bfe1a4cffso230256ood.0
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 19:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=/VGk8F/SGTm+nA86WQSFAF1khuATXIOmF7Nb/YW6zYU=;
+        b=U/aMFLc9SlPd0ev9cbNDFUH3VZKjxLKW1usFu47cpdQVNYEfRax18X59Fi1QCls4Kz
+         /m6OenxKag+dBrD6MDGaB6XsTliXs89R/ZvtHWPjrPuJ5PYveZy18cNT4Q60enrEIudb
+         IcU8OWtqxoWRLS260YbgyuS9xrDef0ymfLOpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=/VGk8F/SGTm+nA86WQSFAF1khuATXIOmF7Nb/YW6zYU=;
+        b=s/txpC8eocJL5Zg9RZKPPGjF/mrb+EGFGunurhHSy3v8fYWaogA61Vkl/AfAxdf4jG
+         tk2Zv/lNNR8FSByMQ+zktJRP+7VR9LT3WTlcMJBCjW5kCzmByMSt4crR6vzu+rAGeGXl
+         TgLCDS06NSFv2R55JoOUnEhxSwkayFIkIYJjr327fVJtLkNBLZVIRH5Fgu5LfC2tX81j
+         UQuBZNov2gBTEVpRCKdLcHuRqgs7x7A11oB2dwWLF4bmwmDrL8rn8li+VbuULXIHugm+
+         c0P/hCa684C3vtOqIF43DEBc1tS1mSs7Ag2bg9HsR998EwExjtHS/783aaOb6E44hQ9R
+         Povw==
+X-Gm-Message-State: AJIora+UD0oGnjV91vzpSItKfOASTsZqWr1mwYkj0Ww9WH57hlrmKjXz
+        qmwZJj7kgE80zPzg+lu7LLRr/DhY3g1wl/9nDiIEgw==
+X-Google-Smtp-Source: AGRyM1tSxFFQ/8QuvcgiN9oT0/xNSfBR6w7RlimtXUAU8niX16bpVvTWIUPp0rLiKRd3ZOPqXYv8KQj1I+iTf8xqCqs=
+X-Received: by 2002:a4a:98a6:0:b0:41b:e04e:70ce with SMTP id
+ a35-20020a4a98a6000000b0041be04e70cemr5013135ooj.25.1656036838607; Thu, 23
+ Jun 2022 19:13:58 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 23 Jun 2022 19:13:58 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 585a9bae-f9b8-4963-e5a4-08da5586ce05
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2022 02:11:09.6349
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9wbS5Ua9KpK95+8pfWx8MOAHr9No5COQ2gQi0c9PeIRCg+I1BMj73oKnB744iT2+2tEft/MZL1m7HgP/ODjNBg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3089
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
+ <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
+ <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com> <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 23 Jun 2022 19:13:57 -0700
+Message-ID: <CAE-0n53i90ZUFSmrR=ScXtMdn_bWPY49WWTf9LXbxu_udGgP9w@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On Thu, Jun 23, 2022 at 11:04:05AM +0800, Neal Liu wrote:
-> > Add read TOC with format 2 to support CD-ROM emulation with Windows
-> > OS.
-> > This patch is tested on Windows OS Server 2019.
->=20
-> This description says "format 2", but the patch actually adds code for th=
-e case
-> where format is 1.  This sort of mistake is not acceptable.
-
-Sorry for typo. I'll update it for next patch.
-
->=20
-> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > ---
-> >  drivers/usb/gadget/function/f_mass_storage.c | 1 +
-> >  1 file changed, 1 insertion(+)
+Quoting Prashant Malani (2022-06-23 17:35:38)
+> On Thu, Jun 23, 2022 at 4:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
 > >
-> > diff --git a/drivers/usb/gadget/function/f_mass_storage.c
-> > b/drivers/usb/gadget/function/f_mass_storage.c
-> > index 3a77bca0ebe1..3c2a5f1e8b66 100644
-> > --- a/drivers/usb/gadget/function/f_mass_storage.c
-> > +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> > @@ -1209,6 +1209,7 @@ static int do_read_toc(struct fsg_common
-> > *common, struct fsg_buffhd *bh)
+> > I'm not aware of any documentation for the dos and don'ts here. Are
+> > there any examples in the bindings directory that split up a device into
+> > subnodes that isn't in bindings/mfd?
+>
+> usb-c-connector [3] and its users is an example.
+
+What are the subnodes? The graph ports? That is not what I meant. I
+meant splitting up a device functionality, like type-c and display
+bridge, into subnodes. Composition of devices through DT bindings isn't
+how it's done. Instead, we dump all the different functionality into the
+same node. For example, look at the number of bindings that have both
+#clock-cells and #reset-cells, when those are distinct frameworks in the
+kernel and also different properties. We don't make subnodes to contain
+the different functionality of a device.
+
+And in this case I still don't see the point to making a subnode. The
+API can simply setup a type-c switch based on a graph binding for the
+toplevel node, e.g. the drm-bridge, and the driver can tell the API
+which port+endpoint to use to search the graph for the usb-c-connector
+to associate with the switch. We don't need to connect the graph within
+the drm-bridge node to the graph within the typec-switch node to do
+that. That's an internal detail of the drm-bridge that we don't expose
+to DT, because the driver knows the detail. It also aligns the graph
+binding for the top-level node with non-typec bindings, like drm, which
+don't use a second level of graph binding to achieve essentially the
+same thing when the output is connected to a DP connector.
+
 > >
-> >  	switch (format) {
-> >  	case 0:
-> > +	case 1:
-> >  		/* Formatted TOC */
-> >  		len =3D 4 + 2*8;		/* 4 byte header + 2 descriptors */
-> >  		memset(buf, 0, len);
->=20
-> When format is 1, the driver is supposed to ignore the start_track value.=
-  Your
-> patch does not do this.
->=20
-> The default case in this switch statement has a comment saying that
-> Mutil-session is not supported.  As a result of this change, it now _is_
-> supported.  The patch needs to update that comment.
+> > >
+> > > > Why doesn't it work to
+> > > > merge everything inside usb-switch directly into the drm-bridge node?
+> > >
+> > > I attempted to explain the rationale in the previous version [1], but
+> > > using a dedicated sub-node means the driver doesn't haven't to
+> > > inspect individual ports to determine which of them need switches
+> > > registered for them. If it sees a `typec-switch`, it registers a
+> > > mode-switch and/or orientation-switch. IMO it simplifies the hardware
+> > > device binding too.
+> >
+> > How is that any harder than hard-coding that detail into the driver
+> > about which port and endpoint is possibly connected to the
+> > usb-c-connector (or retimer)? All of that logic could be behind some API
+> > that registers a typec-switch based on a graph port number that's passed
+> > in, ala drm_of_find_panel_or_bridge()'s design.
+>
+> If each driver has to do it (and the port specifics vary for each driver),
+> it becomes an avoidable overhead for each of them.
+> I prefer hard-coding such details if avoidable. I suppose both approaches
+> require modifications to the binding and the driver code.
 
-Okay, thanks for pointing out. I'll update it as well.
+Ok, sounds like it is not any harder.
 
+>
+> >
+> > Coming from a DT writer's perspective, I just want to go through the
+> > list of output pins in the datasheet and match them up to the ports
+> > binding for this device. If it's a pure DP bridge, where USB hardware
+> > isn't an input or an output like the ITE chip, then I don't want to have
+> > to describe a port graph binding for the case when it's connected to a
+> > dp-connector (see dp-connector.yaml) in the top-level node and then have
+> > to make an entirely different subnode for the usb-c-connector case with
+> > a whole other set of graph ports.
+>
+> This approach still allows for that, if the driver has any use for it
+> (AFAICT these drivers don't).
+> Iff that driver uses it, one can (optionally) route their output
+> (top-level) ports through the
+> "typec-switch" sub-node (and onwards as required).
+> If it's being used in a "pure-DP" configuration, the "typec-switch" just
+> goes away (the top level ports can be routed as desired by the driver).
+> (Again, I must reiterate that neither this driver or the anx driver
+> utilizes this)
+>
+> >
+> > How would I even know which two differential pairs correspond to port0
+> > or port1 in this binding in the ITE case?
+>
+> Why do we need to know that? It doesn't affect this or the other
+> driver or hardware's
+> functioning in a perceivable way.
+
+If the device registers allow control of the DP lane to physical pin
+mapping, so that DP lane0 and DP lane1 can be swapped logically, then
+we'll want to know which DP lanes we need to swap by writing some lane
+remapping register in the device. Sometimes for routing purposes devices
+support this lane remapping feature so the PCB can route the lines
+directly to the connector instead of going in circles and destroying the
+signal integrity.
+
+>
+> > Ideally we make the graph
+> > binding more strict for devices by enforcing that their graph ports
+> > exist. Otherwise we're not fully describing the connections between
+> > devices and our dtb checkers are going to let things through where the
+> > driver most likely will fail because it can't figure out what to do,
+> > e.g. display DP on 4 lanes or play some DP lane rerouting games to act
+> > as a mux.
+>
+> How is the current binding enforcing this? The typec-switch binding
+> as a first step ensures that the DT is connecting the hardware(anx,ite
+> etc) to something
+> that at least "claims" to be a Type-C switch.
+
+I'm simply saying that we can extend existing bindings like anx or ite
+to have required properties for ports so that we know the driver will
+find something on the other end of the graph. A binding that doesn't
+have any ports will be invalid. I don't know if that's possible to do
+in the schema.
+
+>
+> > Is that why you're proposing this binding? To
+> > avoid describing a graph binding in the usb-c-connector and effectively
+> > "pushing" the port count up to the mux?
+>
+> No, that is not the intention behind this series. The
+> 'usb-c-connector' still needs the
+> graph binding to the `typec-switch`. SBU, HS and SS lanes might have different
+> muxes altogether (usb-c-connect has separate ports for SBU, HS and SS lanes)
+
+If the usb-c-connector still needs a graph binding to the typec-switch
+then why isn't that part of this series?
