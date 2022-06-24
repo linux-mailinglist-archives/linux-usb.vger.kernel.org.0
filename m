@@ -2,73 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689D8559503
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 10:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AF1559534
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 10:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiFXIGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 04:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S231383AbiFXIRO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 04:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiFXIGh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 04:06:37 -0400
-Received: from mail.altsetonline.com (mail.altsetonline.com [51.254.119.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E96574E5C
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 01:05:31 -0700 (PDT)
-Received: by mail.altsetonline.com (Postfix, from userid 1002)
-        id 2520424019; Fri, 24 Jun 2022 08:05:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=altsetonline.com;
-        s=mail; t=1656057930;
-        bh=ZWOA/1seUbDdknp7vWPZTi/LTxkJxgWJ33h0PDOotrA=;
-        h=Date:From:To:Subject:From;
-        b=MUJiAp1r+pzCN5Dwr3b9D1Dkpc+LtqqcJamP1WOBOe2ZpqpuDD40crTjHGGGfaVYM
-         E2PMmMOIYuJBU6h2vFLrBqI9hIkL5POzKU4foGA9Cn1cGhR2uDZqmWm5zp7p5CqqwZ
-         tuzflQcXGUkjCLPm6+eB1fIwT/gr2o8iPrqqrxsWHIk+YtQxPgn384q5jYEcXTLZD7
-         /rFlMpVdIZVIJAddPKcQdI+kC5SzBs4uoZ4mOaXAMR2vff4Sl4GyNMILTVyFjav937
-         oaI9oHbRTga/iecTp4PoXtcrspCglQWDoq++T/fYePlxa1aqs1Xh5PNM1AmwlvrELb
-         LS3KEXorfV6Sw==
-Received: by mail.altsetonline.com for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 08:05:11 GMT
-Message-ID: <20220624064500-0.1.19.6j2g.0.bic65o1dy5@altsetonline.com>
-Date:   Fri, 24 Jun 2022 08:05:11 GMT
-From:   "Walker Cooney" <walker.cooney@altsetonline.com>
-To:     <linux-usb@vger.kernel.org>
-Subject: SEO analysis 
-X-Mailer: mail.altsetonline.com
+        with ESMTP id S231285AbiFXIRM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 04:17:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E236E7A9
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 01:17:11 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4eV1-0001E4-3n; Fri, 24 Jun 2022 10:17:07 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4eV0-0005w0-JZ; Fri, 24 Jun 2022 10:17:06 +0200
+Date:   Fri, 24 Jun 2022 10:17:06 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Anton Lundin <glance@acc.umu.se>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [REGRESSION] AX88772 card booted without cable can't receive
+Message-ID: <20220624081706.GB14396@pengutronix.de>
+References: <20220622141638.GE930160@montezuma.acc.umu.se>
+ <20220623063649.GD23685@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220623063649.GD23685@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Anton,
 
-would you like to reach more clients?
+On Thu, Jun 23, 2022 at 08:36:49AM +0200, Oleksij Rempel wrote:
+> Hi Anton,
+> 
+> Thank you for your report! I'll take a look on it ASAP.
+> 
+> Regards,
+> Oleksij
+> 
+> On Wed, Jun 22, 2022 at 04:16:38PM +0200, Anton Lundin wrote:
+> > Hi.
+> > 
+> > I've found a issue with a Dlink usb ether adapter, that can't receive
+> > anything until it self transmits if it's plugged in while booting, and
+> > doesn't have link.
+> > 
+> > Later when a cable is attached, link is detected but nothing is received
+> > either by daemons listening to ip address on that interface, or seen
+> > with tcpdump.
+> > 
+> > The dongle is a:
+> > D-Link Corp. DUB-E100 Fast Ethernet Adapter(rev.C1) [ASIX AX88772]
+> > 
+> > And it's detected at boot as:
+> > libphy: Asix MDIO Bus: probed
+> > Asix Electronics AX88772C usb-003:004:10: attached PHY driver (mii_bus:phy_addr=usb-003:004:10, irq=POLL)
+> > asix 3-10.4:1.0 eth1: register 'asix' at usb-0000:00:14.0-10.4, ASIX AX88772 USB 2.0 Ethernet, <masked-mac>
+> > usbcore: registered new interface driver asix
+> > 
+> > 
+> > While in this state, the hardware starts sending pause frames to the
+> > network when it has recived a couple of frames, and they look like:
+> > 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> > 0010   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> > 
+> > 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> > 0010   ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> > 
+> > And these two frames are repeated every couple of seconds.
+> > 
+> > The card wakes up when something triggers a transmit on that card, and
+> > then starts receiving traffic as normal.
+> > 
+> > I've bisected this issue down to:
+> > "net: usb: asix: ax88772: add phylib support" (e532a096be0e)
+> > 
+> > 
+> > Reverting that makes the interface work as normal, even if the machine
+> > boots without a cable plugged in.
+> > 
+> > Another issue found with exactly the same patch is that if it's loaded
+> > as a module, then unloaded and loaded again, it fails to initialize the
+> > card with:
+> > 
+> > sysfs: cannot create duplicate filename '/devices/virtual/mdio_bus/usb-003:004'
+> > CPU: 0 PID: 3733 Comm: modprobe Tainted: G           O      5.15.10-core_64_preempt #3
+> > Hardware name:  <masked-hardware-name>
+> > Call Trace:
+> >  <TASK>
+> >  ? dump_stack_lvl+0x34/0x44
+> >  ? sysfs_warn_dup.cold+0x17/0x24
+> >  ? sysfs_create_dir_ns+0xbc/0xd0
+> >  ? kobject_add_internal+0xa6/0x260
+> >  ? kobject_add+0x7e/0xb0
+> >  ? preempt_count_add+0x68/0xa0
+> >  ? device_add+0x10f/0x8d0
+> >  ? dev_set_name+0x53/0x70
+> >  ? __mdiobus_register+0xc2/0x350
+> >  ? __devm_mdiobus_register+0x64/0xb0
+> >  ? ax88772_bind+0x22a/0x340 [asix]
+> >  ? usbnet_probe+0x346/0x870
+> >  ? usb_match_dynamic_id+0x8f/0xa0
+> >  ? usb_probe_interface+0x9b/0x150
+> >  ? really_probe.part.0+0x237/0x280
+> >  ? __driver_probe_device+0x8c/0xd0
+> >  ? driver_probe_device+0x1e/0xe0
+> >  ? __driver_attach+0xa8/0x170
+> >  ? __device_attach_driver+0xe0/0xe0
+> >  ? bus_for_each_dev+0x77/0xc0
+> >  ? bus_add_driver+0x10b/0x1c0
+> >  ? driver_register+0x8b/0xe0
+> >  ? usb_register_driver+0x84/0x120
+> >  ? 0xffffffffc06e4000
+> >  ? do_one_initcall+0x41/0x1f0
+> >  ? kmem_cache_alloc_trace+0x3f/0x1b0
+> >  ? do_init_module+0x5c/0x260
+> >  ? __do_sys_finit_module+0xa0/0xe0
+> >  ? do_syscall_64+0x35/0x80
+> >  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+> >  </TASK>
+> > kobject_add_internal failed for usb-003:004 with -EEXIST, don't try to register things with the same name in the same directory.
+> > libphy: mii_bus usb-003:004 failed to register
+> > asix: probe of 3-10.4:1.0 failed with error -22 
+> > usbcore: registered new interface driver asix
+> > 
+> > 
+> > Both these issues with "net: usb: asix: ax88772: add phylib support"
+> > (e532a096be0e) can be reproduced all the way from when it was introduced
+> > to linus current tree.
+> > 
+> > 
+> > I'm sorry to say that I don't know enough about either libphy or asix to
+> > figure out what cause the issues can be.
 
-As one of the first SEO agencies in Europe, we=E2=80=99ve introduced SEO =
-360 service (SEO, UX, and SEM), which assures a multidimensional approach=
- to optimising company=E2=80=99s visibility online and increasing website=
- traffic.
+It looks like we have here 3 different bugs:
+- no rx before tx
+  addresses by this patch:
+  https://lore.kernel.org/all/20220624075139.3139300-1-o.rempel@pengutronix.de/
+- pause frames flood without advertising pause frames support
+  addresses by this patch:
+  https://lore.kernel.org/all/20220624075139.3139300-2-o.rempel@pengutronix.de/
 
-We provide a free consultation with our specialist, during which we will =
-conduct a detailed analysis of your website or e-shop, positioning indica=
-tors and check the actions and results achieved by your competitors.
+  Can you please test this patches.
 
-Our clients gain notable results by using a dedicated strategy, extensive=
- website analytics, technical optimisation, adding new subpages and link =
-building.
+- not everything is properly cleaned after module unload.
 
-With 14 years of experience and the skills of over 350 specialists workin=
-g on 3 continents, you can increase your sales and become an industry lea=
-der.
+The last one i as bit more complicated. Lukas Wunner spend last months to solve
+this issues:
+https://lore.kernel.org/all/d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de/
 
-Please let us know if you want to learn more about our methods and possib=
-le results.
+Not sure if this work can be easily backported to v5.15.
 
-Yours sincerely,
-
-Walker Cooney
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
