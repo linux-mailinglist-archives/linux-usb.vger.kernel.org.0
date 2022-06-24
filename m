@@ -2,216 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6790559E70
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 18:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D50559E9D
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 18:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiFXQQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 12:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
+        id S229844AbiFXQbL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 12:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiFXQQc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 12:16:32 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020514CD47
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 09:16:31 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eo8so4243519edb.0
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 09:16:30 -0700 (PDT)
+        with ESMTP id S229605AbiFXQbK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 12:31:10 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3FA50B22
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 09:31:09 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id s17so3232315iob.7
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 09:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YocsH/SCIFBtqFkbbqYZ9NPO0UIAT3/bIxNj7wG+byE=;
-        b=yhdKSJLG78moAYzJ88cQkhH/Hj5st2xbcRGlEiwd0dUxqsNyyB7j3EJGWPeIUgohrw
-         vx7twc6VO4e5ryjWo8HD3Wu3vpxXVbeoTYKzYFhl08J0gKex+mXu/mgeNrrsAY3ZM6sW
-         ZfE/T+ddDwm97PYBRken2rgWFIfj9dppAXIhbg8rnqOqVtaG3CiBSc9R0JsymSKxPnik
-         LhyNphKCPMTtVlZR9LkrqwWVANaJlRr7W9oROdhI4bb/zRzCrRYifa76XKZKrZLMsWVq
-         fkJdb2ukyNt6MCxrdbgQjjU1n8bUBYQx7ortZngOVow2D1b81R6+zdK6bIUpkR2JpewG
-         W5Dg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=42vqXHuiZ9lUJjbA2pfwnVdZIl0tCd1lnlfeS2c09o8=;
+        b=RdMOSt9wBjBPkoVnwIYFV+VWkAATYKxJkmR6c2wP03QQrnPnEPVstOUHv72i6D0Eag
+         8SqoitFjIH/S8uacVOj2LyJdXIKFjWUpj+Lt6uhPElN+EdbdcBfpVVunGnZ3P9GeCMsV
+         GFw++SB20sFA9doxngusBTyA8m1dXVk/ld/lA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=YocsH/SCIFBtqFkbbqYZ9NPO0UIAT3/bIxNj7wG+byE=;
-        b=2eHXNAhmTVqk+psSjuRX9SpPy3cicWvlx0vTt4dyWV2KweHOd+GWWJfix4cewYq6qm
-         j2n6UHQOvUsXok2kJxmWq1FdeZ0f/bUeIGuf2ie1HG1VEznNMghv3mnLuRyuOct4CRdj
-         5O4jCw9qTIkqLeBjjrfvzir2hGOQPjooGF7YNAjY15RKBAeit5+f4wxlpHcsZvs0Azfd
-         jBAnW6+qbNdyUc8maMBcrM34CKHmaaYs8dj9Xzy7dzrgl+IAD9oY4Qvcqi2MzvtGC3IZ
-         to5VhIgSLDZZVx6H3lfdQmab366I3JLlzDQfHusFTL/g80YiMoKw/lx6J/O3M3c2kzjK
-         XJ5g==
-X-Gm-Message-State: AJIora8aBg99SaJcKfcKkjtJMIWBfc53xLZ55XhPk9aNr2EphB2+s6wY
-        JRWgcqHKP2Gy544radrF3Bgk1w==
-X-Google-Smtp-Source: AGRyM1sRGlX6n9a00k4nlkcTq8GcVHrv/VdC8qA06SSsZy9JjDIaeQFaarDYrDBySHNlCTH2NeO2uA==
-X-Received: by 2002:a05:6402:4248:b0:435:9150:ccfb with SMTP id g8-20020a056402424800b004359150ccfbmr18736992edb.374.1656087389569;
-        Fri, 24 Jun 2022 09:16:29 -0700 (PDT)
-Received: from [192.168.0.237] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k12-20020a17090666cc00b007041e969a8asm1350125ejp.97.2022.06.24.09.16.28
+        bh=42vqXHuiZ9lUJjbA2pfwnVdZIl0tCd1lnlfeS2c09o8=;
+        b=5xEGFryfH733NHuPDQGGkLS/+mmP9npC/Vx7r/GhXW3k80VEJjplOLTagGko5KPN+Q
+         uEVvP5xfdoBC2rsf9OimWlsCDUnfGptQ86LUNKYhozp1kxam7SgThJyTk+3UpiUDTrq4
+         e9/hx+/RPDAsZDHgZUwUUp0j99/qFD3iXMcfj/0LyLhw8lMuUGl7a7o1fHZc5KoCebcc
+         2eRKqmccg8G0gTG85jk7u6uAmxfoeNwZW4efmWyF+4PBKIGYXl1wUvXSQuvXNGJ2MWHW
+         ymAnDtqRbrSxoxeWQtvDO4bPbIFAibg8OzTl6mr/qW5mMrXw7xhOilPd6DEoChDXhB1I
+         lcTQ==
+X-Gm-Message-State: AJIora/b5nF+rxl0CKVh1qZyJ+fYfBJWyhi5jBkLF/BWlsCQmal0xWbY
+        FMnKWL8k44NqacvaiwOIK3Z/0Q==
+X-Google-Smtp-Source: AGRyM1sahCDCNcX7Yf0xMwht08Evwx8yKQuTO2jO/VzugNl12Q27ofkLUPw6J1t5eNZJ4g7Xw354jg==
+X-Received: by 2002:a6b:b842:0:b0:669:b35b:fb66 with SMTP id i63-20020a6bb842000000b00669b35bfb66mr8027574iof.108.1656088268262;
+        Fri, 24 Jun 2022 09:31:08 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b201-20020a6bb2d2000000b00674c8448c3csm1445557iof.6.2022.06.24.09.31.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 09:16:29 -0700 (PDT)
-Message-ID: <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
-Date:   Fri, 24 Jun 2022 18:16:27 +0200
+        Fri, 24 Jun 2022 09:31:07 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Hongren Zenithal Zheng <i@zenithal.me>,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
+ <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
+ <YrXNltWSYbplstPx@rowland.harvard.edu>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
+Date:   Fri, 24 Jun 2022 10:31:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
- controller
+In-Reply-To: <YrXNltWSYbplstPx@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, robh+dt@kernel.org,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
-References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
- <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/06/2022 17:54, Fabrice Gasnier wrote:
-> This patch adds DT schema documentation for the STM32G0 Type-C controller.
-
-No "This patch"
-
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> STM32G0 provides an integrated USB Type-C and power delivery interface.
-> It can be programmed with a firmware to handle UCSI protocol over I2C
-> interface. A GPIO is used as an interrupt line.
-> It may be used as a wakeup source, so use optional "wakeup-source" and
-> "power-domains" properties to support wakeup.
+On 6/24/22 8:43 AM, Alan Stern wrote:
+> On Thu, Jun 23, 2022 at 11:45:13AM -0600, Shuah Khan wrote:
+>> On 6/23/22 11:30 AM, Hongren Zenithal Zheng wrote:
+>>> On Fri, Jun 10, 2022 at 05:33:35PM -0400, Rhett Aultman wrote:
+>>>>
+>>>> In order to have all the flags in numerical order, URB_DIR_IN is
+>>>> renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
+>>>> value 0x0200.
+>>>
+>>>>    #define URB_FREE_BUFFER		0x0100	/* Free transfer buffer with the URB */
+>>>> +#define URB_FREE_COHERENT	0x0200  /* Free DMA memory of transfer buffer */
+>>>>    /* The following flags are used internally by usbcore and HCDs */
+>>>> -#define URB_DIR_IN		0x0200	/* Transfer from device to host */
+>>>> +#define URB_DIR_IN		0x0400	/* Transfer from device to host */
+>>>>    #define URB_DIR_OUT		0
+>>>>    #define URB_DIR_MASK		URB_DIR_IN
+>>>> -- 
+>>>> 2.30.2
+>>>>
+>>>
+>>> I'm afraid this is a change of uapi as this field is, unfortunately,
+>>> exported by usbip to userspace as TCP packets.
+>>>
+>>> This may also cause incompatibility (surprisingly not for this case,
+>>> detailed below) between usbip server and client
+>>> when one kernel is using the new flags and the other one is not.
+>>>
+>>> If we do change this, we may need to bump usbip protocol version
+>>> accordingly.
+>>>
+>>
+>>
+>>> A copy of Alan Stern's suggestion here for reference
+>>>> I don't see anything wrong with this, except that it would be nice to keep
+>>>> the flag values in numerical order.  In other words, set URB_FREE_COHERENT
+>>>> to 0x0200 and change URB_DIR_IN to 0x0400.
+>>>>
+>>>> Alan Stern
+>>
+>> Thank you Alan for this detailed analysis of uapi impacts and
+>> usbip host side and vhci incompatibilities. Userspace is going
+>> to be affected. In addition to the usbip tool in the kernel repo,
+>> there are other versions floating around that would break if we
+>> were to change the flags.
+>>
+>>> One way to solve this issue for usbip
+>>> is to add some boilerplate transform
+>>> from URB_* to USBIP_FLAGS_*
+>>> as it is de facto uapi now.
+>>
+>> It doesn't sound like a there is a compelling reason other than
+>> "it would be nice to keep the flag values in numerical order".
+>>
+>> I would not recommend this option. I am not seeing any value to adding
+>> change URB_* to USBIP_FLAGS_* layer without some serious techinical
+>> concerns.
+>>
+>>>
+>>> Another way is to use 0x0400 for FREE_COHERENT.
+>>> usbip will not take care of this bit as
+>>> it would be masked.
+>>>
+>>
+>> I would go with this option adding a clear comment with link to this
+>> discussion.
+>>
+>>> Cc Shuah Khan here since she is the maintainer
+>>> on usbip.
+>>>
+>>
+>> Thank you adding me to the discussion.
 > 
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> ---
->  .../bindings/usb/st,typec-stm32g0.yaml        | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
+> I can see this causing more problems in the future.  There's no hint in
+> include/linux/usb.h that any of the values it defines are part of a user
+> API.  If they are, they should be moved to include/uapi/linux/usb/.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
-> new file mode 100644
-> index 0000000000000..b2729bd015a1a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/st,typec-stm32g0.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 
-No quotes.
+Please elaborate on more problems in the future.
 
-> +
-> +title: STMicroelectronics STM32G0 Type-C controller bindings
+> In general, if a user program depends on kernel details that are not
+> designed to be part of a user API, you should expect that the program
+> will sometimes break from one kernel version to another.
+> 
+> Yes, I know Linus insists that kernel changes should not cause
+> regressions in userspace, but the line has to be drawn somewhere.
+> Otherwise the kernel could never change at all.
+> 
 
-s/bindings//
+I have had to change the usbip sysfs interface api in the past to
+address security bugs related to information leaks. I am not saying
+no. I am asking if there is a good reason to do this. So far I haven't
+heard one.
 
-> +
-> +description: |
-> +  The STM32G0 MCU can be programmed to control Type-C connector(s) through I2C
-> +  typically using the UCSI protocol over I2C, with a dedicated alert
-> +  (interrupt) pin.
-> +
-> +maintainers:
-> +  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stm32g0-typec
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    type: object> +    allOf:
-> +      - $ref: ../connector/usb-connector.yaml#
-
-Full path, so /schemas/connector/...
-
-unevaluatedProperties: false
-
-> +
-> +  firmware-name:
-> +    description: |
-> +      Should contain the name of the default firmware image
-> +      file located on the firmware search path
-> +
-> +  wakeup-source: true
-> +  power-domains: true
-
-maxItems
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c5 {
-
-Just "i2c"
-
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      stm32g0@53 {
-
-Generic node name describing class of the device.
-
-> +        compatible = "st,stm32g0-typec";
-> +        reg = <0x53>;
-> +        /* Alert pin on GPIO PE12 */
-> +        interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
-> +        interrupt-parent = <&gpioe>;
-> +
-> +        /* Example with one type-C connector */
-> +        connector {
-> +          compatible = "usb-c-connector";
-> +          label = "USB-C";
-> +
-> +          port {
-
-This does not look like proper schema of connector.yaml.
-
-> +            con_usb_c_ep: endpoint {
-> +              remote-endpoint = <&usbotg_hs_ep>;
-> +            };
-> +          };
-> +        };
-> +      };
-> +    };
-> +
-> +    usbotg_hs {
-
-Generic node names, no underscores in node names.
-
-> +      usb-role-switch;
-> +      port {
-> +        usbotg_hs_ep: endpoint {
-> +          remote-endpoint = <&con_usb_c_ep>;
-> +        };
-> +      };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof
+thanks,
+-- Shuah
