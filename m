@@ -2,112 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96427559C78
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 16:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5944C559CA1
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 16:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbiFXOim (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 10:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
+        id S233408AbiFXOps (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 10:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbiFXOib (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 10:38:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0427F2DEC
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 07:38:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B27B31F92E;
-        Fri, 24 Jun 2022 14:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1656081508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zEJ+bnOFO9MEmpT8ZqhKqm5rumsDLYR8YKX7swVfOs4=;
-        b=xv9t/oLRk5tnSrz2O42aSRHfNUK4g9fat/ZUoLn3lBtJfynHx2JkBpVsC+w0uQZ4kV1TeO
-        0oDyowCstVscDal3gL9Xc+04Aq0pEUS5z7DSqJQaOocF3ZGWK8raJ7qSLIwRn5rpUVA8Fi
-        428e98R/ZS5jaKFq8WrrP99DBwdxT6w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1656081508;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zEJ+bnOFO9MEmpT8ZqhKqm5rumsDLYR8YKX7swVfOs4=;
-        b=+J0rfnlMgkfj19e8FcnEzVZWLmyDGusZB6hCHcgoGiqNv/EWTYV6nQnXLGANgdrPpYHpDr
-        QSILXNy8z/ELSnAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E8F913ACA;
-        Fri, 24 Jun 2022 14:38:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rg4zHWTMtWKxJgAAMHmgww
-        (envelope-from <jroedel@suse.de>); Fri, 24 Jun 2022 14:38:28 +0000
-Date:   Fri, 24 Jun 2022 16:38:27 +0200
-From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <jroedel@suse.de>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Jon Grimm <jon.grimm@amd.com>,
-        "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
-Subject: DMA Faults with XHCI driver
-Message-ID: <YrXMY0Nd0Yn6XDSN@suse.de>
+        with ESMTP id S233236AbiFXOpB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 10:45:01 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B29AD6DB3A
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 07:43:35 -0700 (PDT)
+Received: (qmail 34626 invoked by uid 1000); 24 Jun 2022 10:43:34 -0400
+Date:   Fri, 24 Jun 2022 10:43:34 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Hongren Zenithal Zheng <i@zenithal.me>,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+Message-ID: <YrXNltWSYbplstPx@rowland.harvard.edu>
+References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com>
+ <YrSjRvb8rIIayGlg@Sun>
+ <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On Thu, Jun 23, 2022 at 11:45:13AM -0600, Shuah Khan wrote:
+> On 6/23/22 11:30 AM, Hongren Zenithal Zheng wrote:
+> > On Fri, Jun 10, 2022 at 05:33:35PM -0400, Rhett Aultman wrote:
+> > > 
+> > > In order to have all the flags in numerical order, URB_DIR_IN is
+> > > renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
+> > > value 0x0200.
+> > 
+> > >   #define URB_FREE_BUFFER		0x0100	/* Free transfer buffer with the URB */
+> > > +#define URB_FREE_COHERENT	0x0200  /* Free DMA memory of transfer buffer */
+> > >   /* The following flags are used internally by usbcore and HCDs */
+> > > -#define URB_DIR_IN		0x0200	/* Transfer from device to host */
+> > > +#define URB_DIR_IN		0x0400	/* Transfer from device to host */
+> > >   #define URB_DIR_OUT		0
+> > >   #define URB_DIR_MASK		URB_DIR_IN
+> > > -- 
+> > > 2.30.2
+> > > 
+> > 
+> > I'm afraid this is a change of uapi as this field is, unfortunately,
+> > exported by usbip to userspace as TCP packets.
+> > 
+> > This may also cause incompatibility (surprisingly not for this case,
+> > detailed below) between usbip server and client
+> > when one kernel is using the new flags and the other one is not.
+> > 
+> > If we do change this, we may need to bump usbip protocol version
+> > accordingly.
+> > 
+> 
+> 
+> > A copy of Alan Stern's suggestion here for reference
+> > > I don't see anything wrong with this, except that it would be nice to keep
+> > > the flag values in numerical order.  In other words, set URB_FREE_COHERENT
+> > > to 0x0200 and change URB_DIR_IN to 0x0400.
+> > > 
+> > > Alan Stern
+> 
+> Thank you Alan for this detailed analysis of uapi impacts and
+> usbip host side and vhci incompatibilities. Userspace is going
+> to be affected. In addition to the usbip tool in the kernel repo,
+> there are other versions floating around that would break if we
+> were to change the flags.
+> 
+> > One way to solve this issue for usbip
+> > is to add some boilerplate transform
+> > from URB_* to USBIP_FLAGS_*
+> > as it is de facto uapi now.
+> 
+> It doesn't sound like a there is a compelling reason other than
+> "it would be nice to keep the flag values in numerical order".
+> 
+> I would not recommend this option. I am not seeing any value to adding
+> change URB_* to USBIP_FLAGS_* layer without some serious techinical
+> concerns.
+> 
+> > 
+> > Another way is to use 0x0400 for FREE_COHERENT.
+> > usbip will not take care of this bit as
+> > it would be masked.
+> > 
+> 
+> I would go with this option adding a clear comment with link to this
+> discussion.
+> 
+> > Cc Shuah Khan here since she is the maintainer
+> > on usbip.
+> > 
+> 
+> Thank you adding me to the discussion.
 
-here is a report about something strange happening on my system after a
-recent IOMMU change. I am starting to see this message at boot:
+I can see this causing more problems in the future.  There's no hint in 
+include/linux/usb.h that any of the values it defines are part of a user 
+API.  If they are, they should be moved to include/uapi/linux/usb/.
 
-	xhci_hcd 0000:02:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000f address=0xff00ffffffefe000 flags=0x0000]
+In general, if a user program depends on kernel details that are not 
+designed to be part of a user API, you should expect that the program 
+will sometimes break from one kernel version to another.
 
-It means that the XHCI device tried a DMA access at address
-0xff00ffffffefe000, which was not mapped in the IOMMU page table.
+Yes, I know Linus insists that kernel changes should not cause 
+regressions in userspace, but the line has to be drawn somewhere.  
+Otherwise the kernel could never change at all.
 
-Devices attached to that XHCI controller will not work after that
-message.
-
-There is a related change in the IOMMU code which uncovered this, the
-change basically lets the IOMMU dma-allocator not allocate below 4GB by
-default, but use the whole space covered by the DMA mask.
-
-To better track this down I limited the DMA-space to 48 bits, and the
-message still shows up.
-
-I think this might be a problem in the XHCI driver, e.g. it might mangle
-an allocated DMA address somehow if it is bigger than 32 bit.
-
-The device behind 0000:02:00.0 is a
-
-	02:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] Device 43d0 (rev 01)
-
-Please let me know what I can do to help tracking this down.
-
-Regards,
-
--- 
-Jörg Rödel
-jroedel@suse.de
-
-SUSE Software Solutions Germany GmbH
-Frankenstraße 146
-90461 Nürnberg
-Germany
-
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-
+Alan Stern
