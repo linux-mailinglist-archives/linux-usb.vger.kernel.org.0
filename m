@@ -2,118 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B6B559BA5
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 16:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96427559C78
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 16:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiFXOeq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 10:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
+        id S232900AbiFXOim (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 10:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbiFXOeo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 10:34:44 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id EFB2F4EF5B
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 07:34:41 -0700 (PDT)
-Received: (qmail 34279 invoked by uid 1000); 24 Jun 2022 10:34:40 -0400
-Date:   Fri, 24 Jun 2022 10:34:40 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+aa620fb1ece874a3f34c@syzkaller.appspotmail.com>
-Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, hdanton@sina.com, jannh@google.com,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, schspa@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: null-ptr-deref Read in ida_free (2)
-Message-ID: <YrXLgOCf4e4kmIzH@rowland.harvard.edu>
-References: <000000000000fd80ab05e2314a27@google.com>
+        with ESMTP id S232644AbiFXOib (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 10:38:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0427F2DEC
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 07:38:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B27B31F92E;
+        Fri, 24 Jun 2022 14:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656081508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zEJ+bnOFO9MEmpT8ZqhKqm5rumsDLYR8YKX7swVfOs4=;
+        b=xv9t/oLRk5tnSrz2O42aSRHfNUK4g9fat/ZUoLn3lBtJfynHx2JkBpVsC+w0uQZ4kV1TeO
+        0oDyowCstVscDal3gL9Xc+04Aq0pEUS5z7DSqJQaOocF3ZGWK8raJ7qSLIwRn5rpUVA8Fi
+        428e98R/ZS5jaKFq8WrrP99DBwdxT6w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656081508;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zEJ+bnOFO9MEmpT8ZqhKqm5rumsDLYR8YKX7swVfOs4=;
+        b=+J0rfnlMgkfj19e8FcnEzVZWLmyDGusZB6hCHcgoGiqNv/EWTYV6nQnXLGANgdrPpYHpDr
+        QSILXNy8z/ELSnAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E8F913ACA;
+        Fri, 24 Jun 2022 14:38:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rg4zHWTMtWKxJgAAMHmgww
+        (envelope-from <jroedel@suse.de>); Fri, 24 Jun 2022 14:38:28 +0000
+Date:   Fri, 24 Jun 2022 16:38:27 +0200
+From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <jroedel@suse.de>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Jon Grimm <jon.grimm@amd.com>,
+        "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+Subject: DMA Faults with XHCI driver
+Message-ID: <YrXMY0Nd0Yn6XDSN@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <000000000000fd80ab05e2314a27@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 06:10:22AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    08897940f458 Add linux-next specific files for 20220623
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14fc8c60080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=fb185a52c6ad0a8e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=aa620fb1ece874a3f34c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116b4140080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ab12e4080000
-> 
-> The issue was bisected to:
-> 
-> commit f2d8c2606825317b77db1f9ba0fc26ef26160b30
-> Author: Alan Stern <stern@rowland.harvard.edu>
-> Date:   Mon Jun 13 14:17:03 2022 +0000
-> 
->     usb: gadget: Fix non-unique driver names in raw-gadget driver
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15b40318080000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=17b40318080000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13b40318080000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+aa620fb1ece874a3f34c@syzkaller.appspotmail.com
-> Fixes: f2d8c2606825 ("usb: gadget: Fix non-unique driver names in raw-gadget driver")
-> 
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-> BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-> BUG: KASAN: null-ptr-deref in ida_free+0x1b6/0x2e0 lib/idr.c:510
-> Read of size 8 at addr 0000000000000000 by task syz-executor185/3627
-> 
-> CPU: 1 PID: 3627 Comm: syz-executor185 Not tainted 5.19.0-rc3-next-20220623-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
->  check_region_inline mm/kasan/generic.c:183 [inline]
->  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
->  instrument_atomic_read include/linux/instrumented.h:71 [inline]
->  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
->  ida_free+0x1b6/0x2e0 lib/idr.c:510
->  dev_free+0xec/0x700 drivers/usb/gadget/legacy/raw_gadget.c:212
->  kref_put include/linux/kref.h:65 [inline]
->  raw_release+0x219/0x290 drivers/usb/gadget/legacy/raw_gadget.c:424
->  __fput+0x277/0x9d0 fs/file_table.c:317
->  task_work_run+0xdd/0x1a0 kernel/task_work.c:177
->  exit_task_work include/linux/task_work.h:38 [inline]
->  do_exit+0xb05/0x2a00 kernel/exit.c:795
->  do_group_exit+0xd2/0x2f0 kernel/exit.c:925
->  __do_sys_exit_group kernel/exit.c:936 [inline]
->  __se_sys_exit_group kernel/exit.c:934 [inline]
->  __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f12d28b6bd9
-> Code: Unable to access opcode bytes at RIP 0x7f12d28b6baf.
-> RSP: 002b:00007ffea2859da8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 00007f12d292b3f0 RCX: 00007f12d28b6bd9
-> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 000000000000000b
-> R10: 00007ffea2857e00 R11: 0000000000000246 R12: 00007f12d292b3f0
-> R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
->  </TASK>
-> ==================================================================
+Hi Mathias,
 
-This should be fixed by the patch that was just merged.
+here is a report about something strange happening on my system after a
+recent IOMMU change. I am starting to see this message at boot:
 
-Alan Stern
+	xhci_hcd 0000:02:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000f address=0xff00ffffffefe000 flags=0x0000]
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 90bc2af24638
+It means that the XHCI device tried a DMA access at address
+0xff00ffffffefe000, which was not mapped in the IOMMU page table.
+
+Devices attached to that XHCI controller will not work after that
+message.
+
+There is a related change in the IOMMU code which uncovered this, the
+change basically lets the IOMMU dma-allocator not allocate below 4GB by
+default, but use the whole space covered by the DMA mask.
+
+To better track this down I limited the DMA-space to 48 bits, and the
+message still shows up.
+
+I think this might be a problem in the XHCI driver, e.g. it might mangle
+an allocated DMA address somehow if it is bigger than 32 bit.
+
+The device behind 0000:02:00.0 is a
+
+	02:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] Device 43d0 (rev 01)
+
+Please let me know what I can do to help tracking this down.
+
+Regards,
+
+-- 
+Jörg Rödel
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Frankenstraße 146
+90461 Nürnberg
+Germany
+
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+
