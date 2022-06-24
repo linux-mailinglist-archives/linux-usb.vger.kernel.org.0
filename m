@@ -2,87 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F0E558D84
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 04:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4712558D8B
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 04:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiFXCsW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 22:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S229693AbiFXCxB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 22:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiFXCsS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 22:48:18 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6B56FAC
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 19:48:15 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3137316bb69so11888467b3.10
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 19:48:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YKyN5JqmGy0NbSA1Z9PTmCedNth3mSVx0zzY9Z21JQM=;
-        b=hjG25EfB5bTXQotsqRt6ff9N1ADaT7MbXUocs4cyQdBrXRiX6shNT0/rVyn3iT2lK+
-         hf4EvYMQVmeGEwP/tdvTNYg021ogxosTw4uVh9Qf1cQOIdury3HwqGeMnWRi3NYBx8P6
-         3yufMuJXcEACXpObr5lr4k0ducVYHg2zBkA5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YKyN5JqmGy0NbSA1Z9PTmCedNth3mSVx0zzY9Z21JQM=;
-        b=ErHqwhY7RnJDJGUQFGCfz8Y+8pdVjX4RsdnFrCNznsagolyndXqxoSfkLX9iisR5i2
-         ibvxCYM+y2bunxye7Es6w9Dd1zhq+B6lH4W0+tXg7c8mlruqrF7+8QoRW5i3AGWSP+ai
-         9TzanjGl+K/gdBr6ZYY5tJw+86lZt0Cptnbo12g7RPgNGiMh4p2gy/Rf4EzCQyor1qf6
-         UoLP7IkgXvcGy9JjMh/DW0WbsdlBm7xNYiUJY7txTc04D254/cq00bLqQfQ7GSCEW2lJ
-         rMOtpdIBV5blmo0HZLBFRshkMwG14XPjg0J8wJhuRsYZhA5i0jZfTuxwbxD/tZmdcghn
-         24bA==
-X-Gm-Message-State: AJIora9o525Ov8cYR84Mc3GRgwHInGS/acRqnN+EmdXF/526kI5u+sGQ
-        AngKJguzelDglbOkd8cUk9cZMtPevYICDluZyyu3hA==
-X-Google-Smtp-Source: AGRyM1t0eJeEfbuHQBiWX9UjkVcXvo/BSWqirhC1XZp/FdTEWGdFKQ6NBEOW4fqK40C2hZC8mfMxLl64c0jr0GQFi28=
-X-Received: by 2002:a0d:f882:0:b0:2f4:d830:6fd with SMTP id
- i124-20020a0df882000000b002f4d83006fdmr14819739ywf.387.1656038895014; Thu, 23
- Jun 2022 19:48:15 -0700 (PDT)
+        with ESMTP id S229546AbiFXCxB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 22:53:01 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236842BF1
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jun 2022 19:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656039180; x=1687575180;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/3VJKhXMG51fC98464O9WH4OJvuJwQKC8IuRx/g6KRE=;
+  b=XflzC672RyR15brUiT0w1+Q3pdwEP+oXMAcxtpdOPyFJrVFjvVAZATR0
+   mBnk4N75hwgt+9AAwHYb2JVTDstyZnQtzJmm77atEkgY4JJ8Bh3mAxjeL
+   +Sra/yaXq/c5O+ohVEsL6bH+wEkNWKDOIZ6YqK0K69VCJLxyOxn/rOif8
+   mioCZ7/aIVZrWFS3mBQrBLNxr5D8XDSatPFmR0kPIuoTxq7jrUFelG+/a
+   BDjbRAB+5g0tqyZERfibsVRjwL9OswUttmhNHw6jRjUu0C60VA4kCREd6
+   6vLkylY92vMBOaPY/KwvBYNDVoGJgSXJPf1ys3wcjG9NRdmIHC7tl3X7S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="367225284"
+X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
+   d="scan'208";a="367225284"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 19:52:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
+   d="scan'208";a="593017505"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Jun 2022 19:52:58 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4ZRJ-0003Y6-Ta;
+        Fri, 24 Jun 2022 02:52:57 +0000
+Date:   Fri, 24 Jun 2022 10:52:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 8ffdc53a60049f3930afe161dc51c67959c8d83d
+Message-ID: <62b526e7.2qw5ORhPyU6VpDyW%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
- <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
- <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
- <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com> <CAE-0n53i90ZUFSmrR=ScXtMdn_bWPY49WWTf9LXbxu_udGgP9w@mail.gmail.com>
-In-Reply-To: <CAE-0n53i90ZUFSmrR=ScXtMdn_bWPY49WWTf9LXbxu_udGgP9w@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 23 Jun 2022 19:48:04 -0700
-Message-ID: <CACeCKaffqb6v7TFji2u00VSQ=DGvRe-gcxMnAEbZCC1qtDZF6A@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,170 +62,79 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 7:13 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Prashant Malani (2022-06-23 17:35:38)
-> > On Thu, Jun 23, 2022 at 4:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > >
-> > > I'm not aware of any documentation for the dos and don'ts here. Are
-> > > there any examples in the bindings directory that split up a device into
-> > > subnodes that isn't in bindings/mfd?
-> >
-> > usb-c-connector [3] and its users is an example.
->
-> What are the subnodes? The graph ports? That is not what I meant.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 8ffdc53a60049f3930afe161dc51c67959c8d83d  xhci-pci: Allow host runtime PM as default for Intel Meteor Lake xHCI
 
-cros-ec-typec [4] uses subnodes of usb-c-connector. Chrome OS DTs
-use the ports from the included usb-c-connector to switching hardware.
+elapsed time: 722m
 
-> I meant splitting up a device functionality, like type-c and display
-> bridge, into subnodes. Composition of devices through DT bindings isn't
-> how it's done. Instead, we dump all the different functionality into the
-> same node. For example, look at the number of bindings that have both
-> #clock-cells and #reset-cells, when those are distinct frameworks in the
-> kernel and also different properties. We don't make subnodes to contain
-> the different functionality of a device.
->
-> And in this case I still don't see the point to making a subnode.
+configs tested: 58
+configs skipped: 2
 
-I've already provided my best effort at explaining the rationale.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> The
-> API can simply setup a type-c switch based on a graph binding for the
-> toplevel node, e.g. the drm-bridge, and the driver can tell the API
-> which port+endpoint to use to search the graph for the usb-c-connector
-> to associate with the switch.
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220623
+s390                 randconfig-r044-20220623
+riscv                randconfig-r042-20220623
+riscv                             allnoconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
 
-OK, drm-bridge uses that approach. This is another approach. I didn't fully
-understand why we *have* to follow what drm-bridge is doing.
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+hexagon              randconfig-r041-20220623
+hexagon              randconfig-r045-20220623
 
-> We don't need to connect the graph within
-> the drm-bridge node to the graph within the typec-switch node to do
-> that. That's an internal detail of the drm-bridge that we don't expose
-> to DT, because the driver knows the detail.
-
-I still don't understand why we can't do that. These devices have actual
-hardware blocks that represent the Type-C switch functionality.
-
-> It also aligns the graph
-> binding for the top-level node with non-typec bindings, like drm, which
-> don't use a second level of graph binding to achieve essentially the
-> same thing when the output is connected to a DP connector.
->
-> > >
-> > > >
-> > > > > Why doesn't it work to
-> > > > > merge everything inside usb-switch directly into the drm-bridge node?
-> > > >
-> > > > I attempted to explain the rationale in the previous version [1], but
-> > > > using a dedicated sub-node means the driver doesn't haven't to
-> > > > inspect individual ports to determine which of them need switches
-> > > > registered for them. If it sees a `typec-switch`, it registers a
-> > > > mode-switch and/or orientation-switch. IMO it simplifies the hardware
-> > > > device binding too.
-> > >
-> > > How is that any harder than hard-coding that detail into the driver
-> > > about which port and endpoint is possibly connected to the
-> > > usb-c-connector (or retimer)? All of that logic could be behind some API
-> > > that registers a typec-switch based on a graph port number that's passed
-> > > in, ala drm_of_find_panel_or_bridge()'s design.
-> >
-> > If each driver has to do it (and the port specifics vary for each driver),
-> > it becomes an avoidable overhead for each of them.
-> > I prefer hard-coding such details if avoidable. I suppose both approaches
-> > require modifications to the binding and the driver code.
->
-> Ok, sounds like it is not any harder.
-
-I feel this approach is easier :)
-
->
-> >
-> > >
-> > > Coming from a DT writer's perspective, I just want to go through the
-> > > list of output pins in the datasheet and match them up to the ports
-> > > binding for this device. If it's a pure DP bridge, where USB hardware
-> > > isn't an input or an output like the ITE chip, then I don't want to have
-> > > to describe a port graph binding for the case when it's connected to a
-> > > dp-connector (see dp-connector.yaml) in the top-level node and then have
-> > > to make an entirely different subnode for the usb-c-connector case with
-> > > a whole other set of graph ports.
-> >
-> > This approach still allows for that, if the driver has any use for it
-> > (AFAICT these drivers don't).
-> > Iff that driver uses it, one can (optionally) route their output
-> > (top-level) ports through the
-> > "typec-switch" sub-node (and onwards as required).
-> > If it's being used in a "pure-DP" configuration, the "typec-switch" just
-> > goes away (the top level ports can be routed as desired by the driver).
-> > (Again, I must reiterate that neither this driver or the anx driver
-> > utilizes this)
-> >
-> > >
-> > > How would I even know which two differential pairs correspond to port0
-> > > or port1 in this binding in the ITE case?
-> >
-> > Why do we need to know that? It doesn't affect this or the other
-> > driver or hardware's
-> > functioning in a perceivable way.
->
-> If the device registers allow control of the DP lane to physical pin
-> mapping, so that DP lane0 and DP lane1 can be swapped logically, then
-> we'll want to know which DP lanes we need to swap by writing some lane
-> remapping register in the device. Sometimes for routing purposes devices
-> support this lane remapping feature so the PCB can route the lines
-> directly to the connector instead of going in circles and destroying the
-> signal integrity.
-
-Then add more end-points to port@1 (for each differential pair
-you want to describe) of the usb-c-connector and route them
-to the typec-switch accordingly.
-FWIW I'm not aware of h/w *that supports DP alt mode* that uses the
-functionality
-you're referring to.
-
->
-> >
-> > > Ideally we make the graph
-> > > binding more strict for devices by enforcing that their graph ports
-> > > exist. Otherwise we're not fully describing the connections between
-> > > devices and our dtb checkers are going to let things through where the
-> > > driver most likely will fail because it can't figure out what to do,
-> > > e.g. display DP on 4 lanes or play some DP lane rerouting games to act
-> > > as a mux.
-> >
-> > How is the current binding enforcing this? The typec-switch binding
-> > as a first step ensures that the DT is connecting the hardware(anx,ite
-> > etc) to something
-> > that at least "claims" to be a Type-C switch.
->
-> I'm simply saying that we can extend existing bindings like anx or ite
-> to have required properties for ports so that we know the driver will
-> find something on the other end of the graph. A binding that doesn't
-> have any ports will be invalid.
-
-typec-switch requires a port.
-
-I don't know if that's possible to do
-> in the schema.
->
-> >
-> > > Is that why you're proposing this binding? To
-> > > avoid describing a graph binding in the usb-c-connector and effectively
-> > > "pushing" the port count up to the mux?
-> >
-> > No, that is not the intention behind this series. The
-> > 'usb-c-connector' still needs the
-> > graph binding to the `typec-switch`. SBU, HS and SS lanes might have different
-> > muxes altogether (usb-c-connect has separate ports for SBU, HS and SS lanes)
->
-> If the usb-c-connector still needs a graph binding to the typec-switch
-> then why isn't that part of this series?
-
-That's not what I meant (what I meant earlier is the intention is not
-what you stated).
-I simply meant that the usb-c-connectors ports should be connected to
-the typec-switch
-ports. There isn't any binding update required for this.
-
-[4] https://www.kernel.org/doc/Documentation/devicetree/bindings/chrome/google%2Ccros-ec-typec.yaml
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
