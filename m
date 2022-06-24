@@ -2,177 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D50559E9D
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 18:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A0E559F3C
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 19:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiFXQbL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 12:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S231910AbiFXRKK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 13:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiFXQbK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 12:31:10 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3FA50B22
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 09:31:09 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id s17so3232315iob.7
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 09:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=42vqXHuiZ9lUJjbA2pfwnVdZIl0tCd1lnlfeS2c09o8=;
-        b=RdMOSt9wBjBPkoVnwIYFV+VWkAATYKxJkmR6c2wP03QQrnPnEPVstOUHv72i6D0Eag
-         8SqoitFjIH/S8uacVOj2LyJdXIKFjWUpj+Lt6uhPElN+EdbdcBfpVVunGnZ3P9GeCMsV
-         GFw++SB20sFA9doxngusBTyA8m1dXVk/ld/lA=
+        with ESMTP id S231892AbiFXRKJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 13:10:09 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392905D108
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 10:10:09 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id l2-20020a056e0212e200b002d9258029c4so1749831iln.22
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 10:10:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=42vqXHuiZ9lUJjbA2pfwnVdZIl0tCd1lnlfeS2c09o8=;
-        b=5xEGFryfH733NHuPDQGGkLS/+mmP9npC/Vx7r/GhXW3k80VEJjplOLTagGko5KPN+Q
-         uEVvP5xfdoBC2rsf9OimWlsCDUnfGptQ86LUNKYhozp1kxam7SgThJyTk+3UpiUDTrq4
-         e9/hx+/RPDAsZDHgZUwUUp0j99/qFD3iXMcfj/0LyLhw8lMuUGl7a7o1fHZc5KoCebcc
-         2eRKqmccg8G0gTG85jk7u6uAmxfoeNwZW4efmWyF+4PBKIGYXl1wUvXSQuvXNGJ2MWHW
-         ymAnDtqRbrSxoxeWQtvDO4bPbIFAibg8OzTl6mr/qW5mMrXw7xhOilPd6DEoChDXhB1I
-         lcTQ==
-X-Gm-Message-State: AJIora/b5nF+rxl0CKVh1qZyJ+fYfBJWyhi5jBkLF/BWlsCQmal0xWbY
-        FMnKWL8k44NqacvaiwOIK3Z/0Q==
-X-Google-Smtp-Source: AGRyM1sahCDCNcX7Yf0xMwht08Evwx8yKQuTO2jO/VzugNl12Q27ofkLUPw6J1t5eNZJ4g7Xw354jg==
-X-Received: by 2002:a6b:b842:0:b0:669:b35b:fb66 with SMTP id i63-20020a6bb842000000b00669b35bfb66mr8027574iof.108.1656088268262;
-        Fri, 24 Jun 2022 09:31:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b201-20020a6bb2d2000000b00674c8448c3csm1445557iof.6.2022.06.24.09.31.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 09:31:07 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Hongren Zenithal Zheng <i@zenithal.me>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
- <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
- <YrXNltWSYbplstPx@rowland.harvard.edu>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
-Date:   Fri, 24 Jun 2022 10:31:06 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=HjdbkPhwZOSgjSTqBCfPksHKCWoZqNFbd8Z/G+uV0aE=;
+        b=7n54pA2zwFo7B1te0+MtTFTl+5Jdanhc8nHwcjWzEZLU2FRznpqj9Oy1cogHAsco2l
+         rlPW2hvEYFeBDJvDw+OXTuVEYwmmfAl2QPc+YR+Tvwk1LjRA7eTNUEgDcPvGtVPhBNts
+         Ho5qJNHD5JBaMJl982TWcIEZQVrmTUMouM3kJImB4UG0py1cf2NzUH4iyxMNRkGl0bcz
+         4Sr0xONZ57h9KhaRAkd6gzKv0ElCD0oKBOH0HsiTrsM71qe94zthjqeMrtSpf32l5gMN
+         +rzXKL9TTxwVJSf/uT+bb79NRUQL4aDiQ0OAMIzXHlOO9nU1+7G4a0E/lWS9cmZKw63T
+         IJgw==
+X-Gm-Message-State: AJIora9PQAV/crViqfHgBFfc8nGby4n14mLR/wzDCNOOuiuQPUJtYYJT
+        HsAhl72GrhJxSHtj5hXc9JXQl7CJHZk3WM13LXm6T8WZQ2Uf
+X-Google-Smtp-Source: AGRyM1srH3KT+XQ/btwSJLikREunXBEHi2XBpCWOly1/wTfR+ogUNIukOKGik56oSOVV0OAtR++d6H796G7NWYo8gak06sU8p0Qr
 MIME-Version: 1.0
-In-Reply-To: <YrXNltWSYbplstPx@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2cc6:b0:66a:2ab:ef35 with SMTP id
+ j6-20020a0566022cc600b0066a02abef35mr8217221iow.115.1656090608526; Fri, 24
+ Jun 2022 10:10:08 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 10:10:08 -0700
+In-Reply-To: <YrXLgOCf4e4kmIzH@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006fecd605e234a41f@google.com>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in ida_free (2)
+From:   syzbot <syzbot+aa620fb1ece874a3f34c@syzkaller.appspotmail.com>
+To:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, hdanton@sina.com, jannh@google.com,
+        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, schspa@gmail.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/24/22 8:43 AM, Alan Stern wrote:
-> On Thu, Jun 23, 2022 at 11:45:13AM -0600, Shuah Khan wrote:
->> On 6/23/22 11:30 AM, Hongren Zenithal Zheng wrote:
->>> On Fri, Jun 10, 2022 at 05:33:35PM -0400, Rhett Aultman wrote:
->>>>
->>>> In order to have all the flags in numerical order, URB_DIR_IN is
->>>> renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
->>>> value 0x0200.
->>>
->>>>    #define URB_FREE_BUFFER		0x0100	/* Free transfer buffer with the URB */
->>>> +#define URB_FREE_COHERENT	0x0200  /* Free DMA memory of transfer buffer */
->>>>    /* The following flags are used internally by usbcore and HCDs */
->>>> -#define URB_DIR_IN		0x0200	/* Transfer from device to host */
->>>> +#define URB_DIR_IN		0x0400	/* Transfer from device to host */
->>>>    #define URB_DIR_OUT		0
->>>>    #define URB_DIR_MASK		URB_DIR_IN
->>>> -- 
->>>> 2.30.2
->>>>
->>>
->>> I'm afraid this is a change of uapi as this field is, unfortunately,
->>> exported by usbip to userspace as TCP packets.
->>>
->>> This may also cause incompatibility (surprisingly not for this case,
->>> detailed below) between usbip server and client
->>> when one kernel is using the new flags and the other one is not.
->>>
->>> If we do change this, we may need to bump usbip protocol version
->>> accordingly.
->>>
->>
->>
->>> A copy of Alan Stern's suggestion here for reference
->>>> I don't see anything wrong with this, except that it would be nice to keep
->>>> the flag values in numerical order.  In other words, set URB_FREE_COHERENT
->>>> to 0x0200 and change URB_DIR_IN to 0x0400.
->>>>
->>>> Alan Stern
->>
->> Thank you Alan for this detailed analysis of uapi impacts and
->> usbip host side and vhci incompatibilities. Userspace is going
->> to be affected. In addition to the usbip tool in the kernel repo,
->> there are other versions floating around that would break if we
->> were to change the flags.
->>
->>> One way to solve this issue for usbip
->>> is to add some boilerplate transform
->>> from URB_* to USBIP_FLAGS_*
->>> as it is de facto uapi now.
->>
->> It doesn't sound like a there is a compelling reason other than
->> "it would be nice to keep the flag values in numerical order".
->>
->> I would not recommend this option. I am not seeing any value to adding
->> change URB_* to USBIP_FLAGS_* layer without some serious techinical
->> concerns.
->>
->>>
->>> Another way is to use 0x0400 for FREE_COHERENT.
->>> usbip will not take care of this bit as
->>> it would be masked.
->>>
->>
->> I would go with this option adding a clear comment with link to this
->> discussion.
->>
->>> Cc Shuah Khan here since she is the maintainer
->>> on usbip.
->>>
->>
->> Thank you adding me to the discussion.
-> 
-> I can see this causing more problems in the future.  There's no hint in
-> include/linux/usb.h that any of the values it defines are part of a user
-> API.  If they are, they should be moved to include/uapi/linux/usb/.
-> 
+Hello,
 
-Please elaborate on more problems in the future.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> In general, if a user program depends on kernel details that are not
-> designed to be part of a user API, you should expect that the program
-> will sometimes break from one kernel version to another.
-> 
-> Yes, I know Linus insists that kernel changes should not cause
-> regressions in userspace, but the line has to be drawn somewhere.
-> Otherwise the kernel could never change at all.
-> 
+Reported-and-tested-by: syzbot+aa620fb1ece874a3f34c@syzkaller.appspotmail.com
 
-I have had to change the usbip sysfs interface api in the past to
-address security bugs related to information leaks. I am not saying
-no. I am asking if there is a good reason to do this. So far I haven't
-heard one.
+Tested on:
 
-thanks,
--- Shuah
+commit:         90bc2af2 USB: gadget: Fix double-free bug in raw_gadge..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=102c524c080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=34c24e9249d527bb
+dashboard link: https://syzkaller.appspot.com/bug?extid=aa620fb1ece874a3f34c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.
