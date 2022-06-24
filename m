@@ -2,159 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A534555A2C7
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 22:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FFD55A2E3
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 22:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiFXUdo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 16:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S231365AbiFXUlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 16:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiFXUdn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 16:33:43 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F9A3057E
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 13:33:41 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id u15so6916612ejc.10
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 13:33:41 -0700 (PDT)
+        with ESMTP id S229441AbiFXUlu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 16:41:50 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F6363630;
+        Fri, 24 Jun 2022 13:41:49 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id w20so6385682lfa.11;
+        Fri, 24 Jun 2022 13:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FKj5ILhZahDV8g/Lut3oLM8+DsVW+fpPjZNGs2Euucg=;
-        b=afsOnPACkNSZDgVS+pIbxolTcSijCuyb7htJeGVKjAnSPbba2GUTQklfN5+p5N8nDK
-         rDBOOOGDB6aLTM6hsycJi2/UavX/B5Pe+kGFLd5YcvrTNW1qe6JBBB7Kfq66XCrN+X6V
-         M5UoHzam3sQXoxWgoOY3gDxJKhff4C2aFnTfU=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/jG5W+ePlStAo427FPsgRmaP+U/0rD3zZzMdqRYYbmg=;
+        b=J+tGRTrSFTb1R8Vpr8cSIVIm/o2Vqxs+I2fXmSTA2UCTtbWmE8Fg0sRokRImAhBYJw
+         xq7CLvEwVzlTrLtsqp1g006ujV5OnJj6pfhLyOXJVcvgkrAaVPto4YFjTBaYYLnZklOc
+         RvhVBLvpez2CY1JRQ9ku0JYimoPj+tDA9JkYdy9BkhyGCoZWIqk092HsH7cBc3aIziGu
+         TkTChrOWEoXvt6JpnGete/IfDHoeui49vS+4xpjhT6JRSieX1d7duusa0LwdX9qk+Bnw
+         AX5WP9DSydJ1DC6VDm1jnKdb1rbFKACQ2BUrbWYCFK32Rs0jp3v3FvMwz9aYq+5feFhg
+         HGQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FKj5ILhZahDV8g/Lut3oLM8+DsVW+fpPjZNGs2Euucg=;
-        b=TKih1iSwsqB62lMAd5QMMLjD32XUii9qbe5zugJzOpwY9hc+ndnGVkyzPxyZOQMpjT
-         DlaRcLMwWuatvGkWxRiMcziHL4qQ+arW4N6fA5lUVGjf4qkigzj8pFJ1biXzXSA/6l6D
-         3CZc9q21amIKbY5m+b/JDsLpo5RDAnOS3aGm9MSkvD1nVm+zGtarSTdD07dmOIcF+lL5
-         mLLYVikvlGQEuy71LKVNHS2FVo/viztDDkN4xoUSfXez2ivJr7KPP9NPkNqp0nLYSHL8
-         S9rWraFGbF6pd2K8AfbxsxJBnU/vAeF2ni+hYMWyk9yidBTFiFe50Oz9qGpqYZytGjX9
-         2P1A==
-X-Gm-Message-State: AJIora8MvjfQYSOmS33Gy4UHJftB6fWb5xDoD+zMX/5u5gD+fHSSeulb
-        AbhLq+ZZNC+cJu0aVwzNFHfJ9zhh0O4ocLJW
-X-Google-Smtp-Source: AGRyM1uk47GHAPh25gn1X1BrtYGdleelnOPKP+VXtOt5aIgYQP51EnZenQ/sFt1p/j/I8tPT5iCapg==
-X-Received: by 2002:a17:907:8692:b0:711:d49f:994d with SMTP id qa18-20020a170907869200b00711d49f994dmr796385ejc.578.1656102820233;
-        Fri, 24 Jun 2022 13:33:40 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id op23-20020a170906bcf700b0070aaad0a173sm1636529ejb.192.2022.06.24.13.33.38
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 13:33:38 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so2143613wml.2
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 13:33:38 -0700 (PDT)
-X-Received: by 2002:a05:600c:34d0:b0:3a0:2c07:73ac with SMTP id
- d16-20020a05600c34d000b003a02c0773acmr5870508wmq.85.1656102817852; Fri, 24
- Jun 2022 13:33:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220622214931.1914770-1-mka@chromium.org> <20220622144857.v23.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
-In-Reply-To: <20220622144857.v23.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 24 Jun 2022 13:33:25 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XHnRNQQo8i95ROiZPOGqAD_=FfU0uzy83Vigb+Xsr4XQ@mail.gmail.com>
-Message-ID: <CAD=FV=XHnRNQQo8i95ROiZPOGqAD_=FfU0uzy83Vigb+Xsr4XQ@mail.gmail.com>
-Subject: Re: [PATCH v23 2/3] usb: misc: Add onboard_usb_hub driver
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/jG5W+ePlStAo427FPsgRmaP+U/0rD3zZzMdqRYYbmg=;
+        b=4g633KW7j9ex4QmL5MknDRJlC566VDtFOQ3ajoCrqEZbfrZwfLB+L5vkkm0kQXBP4A
+         3kyHzeO+8E20MObWfvJAxc70tiZfhzvvhxMHEhddSkpL3ZALJ/0OItLMG7o5HJg2vOkb
+         efZXLfKwL/fHefrv5cJLzGtv6qyzjoKDd0T+GmiNqL1kJqx0UnkNlOvBudkhU03p/yCc
+         BG6Mrp1uymkKdMH78+C6P6YR7jcLKX/F0tp21kEKrrpnZqWL2WV+0x1s7fDlIN9gFtM6
+         lqlSkaiOynY6zO0FaJwg6d+/2pJJWv1kwtb6acjcdYN/k9AxH9ItqwUrrb+JVPy7Rfn0
+         /wkA==
+X-Gm-Message-State: AJIora9MgOVNkvknWycY94gxfhV+IawDQ86jaw6jLmmKZ8MTfEdZuqVP
+        VVmF/bIKPLY5tATNZCmHoSQYBgzhJkapUg==
+X-Google-Smtp-Source: AGRyM1uctHDCNUKjjxfR1aVDBN/pntJ2Pv6ctSxnvIPYmNdb7JIuhWvHsn1bfb+oEyhecmXfDr12sw==
+X-Received: by 2002:ac2:5616:0:b0:47f:8d53:f602 with SMTP id v22-20020ac25616000000b0047f8d53f602mr419029lfd.169.1656103302868;
+        Fri, 24 Jun 2022 13:41:42 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id s9-20020a056512314900b0047f88d15ec0sm506070lfi.251.2022.06.24.13.41.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 13:41:42 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 23:41:39 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-snps-arc@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v9 2/5] arm: dts: lpc18xx: Harmonize EHCI/OHCI DT
+ nodes name
+Message-ID: <20220624204139.ndyi437ye7c2gl45@mobilestation>
+References: <20220624141622.7149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624141622.7149-3-Sergey.Semin@baikalelectronics.ru>
+ <1f426a67-2cf2-b67e-3cd0-a4c452591baa@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f426a67-2cf2-b67e-3cd0-a4c452591baa@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Fri, Jun 24, 2022 at 07:14:44PM +0200, Krzysztof Kozlowski wrote:
+> On 24/06/2022 16:16, Serge Semin wrote:
+> > In accordance with the Generic EHCI/OHCI bindings the corresponding node
+> > name is suppose to comply with the Generic USB HCD DT schema, which
+> > requires the USB nodes to have the name acceptable by the regexp:
+> > "^usb(@.*)?" . Make sure the "generic-ehci" and "generic-ohci"-compatible
+> > nodes are correctly named.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+> > Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > ---
+> >  arch/arm/boot/dts/lpc18xx.dtsi | 4 ++--
+> 
 
-On Wed, Jun 22, 2022 at 2:49 PM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index 4c5ddbd75b7e..7fd40183a395 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -295,3 +295,19 @@ config BRCM_USB_PINMAP
->           This option enables support for remapping some USB external
->           signals, which are typically on dedicated pins on the chip,
->           to any gpio.
-> +
-> +config USB_ONBOARD_HUB
-> +       bool "Onboard USB hub support"
+> You should split the patchset per architecture, because maybe that's why
+> no one picks it up?
 
-The above needs to be "tristate", not bool.
+Each patch is sent out to the corresponding mailing list and the
+maintainers. I don't think splitting the patchset into the subsets will
+be more efficient especially seeing the initial patchset consisted of
+30 patches of which only five left.
 
-Weirdly the way you have it if you set "CONFIG_USB=m" and
-"CONFIG_USB_ONBOARD_HUB=y" you don't get any compile errors, but also
-the onboard usb hub doesn't even get compiled (!). Once you switch to
-tristate then setting "CONFIG_USB=m" will force the onboard hub to be
-a module too (since it's underneath the "if" in the Kconfig).
+I was very busy last year with another activities so what was left of this
+patchset was stalling on my local repo all that time. I have been very
+surprised to realise that the submitted part still hasn't been merged in for
+all that time. So I've got back to resubmitting the series.
 
-...ugh, but once you do that then you start getting compile errors if
-you have "CONFIG_USB=y" and "CONFIG_USB_ONBOARD_HUB=m". I guess that
-can be fixed with something like this
+* Though the Qualcom dts have been fixed by you lately.
 
--usbcore-$(CONFIG_USB_ONBOARD_HUB)      += ../misc/onboard_usb_hub_pdevs.o
-+ifdef CONFIG_USB_ONBOARD_HUB
-+usbcore-y                      += ../misc/onboard_usb_hub_pdevs.o
-+endif
+> 
+> Let me pick up ARM bits through my cleanup series. If anyone objects,
+> please let me know.
 
-Given the problems we've had in the past, please make sure you test
-with all combinations of "=y" and "=m" for CONFIG_USB and
-CONFIG_USB_ONBOARD_HUB. Note that on sc7180-trogdor devices if you
-want CONFIG_USB to be a module don't forget to also set
-CONFIG_USB_DWC3=m or DWC3 will force you to gadget mode...
+Ok. Thanks.
 
+-Sergey
 
-> +/**
-> + * onboard_hub_create_pdevs -- create platform devices for onboard USB hubs
-> + * @parent_hub : parent hub to scan for connected onboard hubs
-> + * @pdev_list  : list of onboard hub platform devices owned by the parent hub
-> + *
-> + * Creates a platform device for each supported onboard hub that is connected to
-> + * the given parent hub. The platform device is in charge of initializing the
-> + * hub (enable regulators, take the hub out of reset, ...) and can optionally
-> + * control whether the hub remains powered during system suspend or not.
-> +
-> + * To keep track of the platform devices they are added to
-> + * a list that is owned by the parent hub.
-
-super nitty, but the above two lines of comment could be word-wrapped better.
-
-
-> + */
-> +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
-> +{
-> +       int i;
-> +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
-
-As per my response on v22, would you be willing to rename that to
-"parent_hcd"? I'll probably still confuse myself next time I read this
-function, but at least maybe this will help me recognize more quickly
-that this isn't necessarily the child's hcd in the case of the root
-hub.
-
--Doug
+> 
+> Best regards,
+> Krzysztof
