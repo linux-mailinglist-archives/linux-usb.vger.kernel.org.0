@@ -2,58 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A711F558D16
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 04:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD9F558D1F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jun 2022 04:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiFXCB1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jun 2022 22:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S229920AbiFXCLV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jun 2022 22:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiFXCB0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 22:01:26 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2139.outbound.protection.outlook.com [40.107.255.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F88A60F04;
-        Thu, 23 Jun 2022 19:01:22 -0700 (PDT)
+        with ESMTP id S229632AbiFXCLU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jun 2022 22:11:20 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2135.outbound.protection.outlook.com [40.107.215.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B04506DB;
+        Thu, 23 Jun 2022 19:11:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QUiOxZFNiI0zw3tJqiB03vMUF5NUKrIzfgiqFLLAJ6TwqVzrtRbkCXzuBl1Sc9Be3ij4udtMpK59ygsSeJGp7KGiG1tvKRrVuWHuv3aEXB2U2ctNbho6Sv9WXWaMzqQNOh8P9PBwz9h2LOa3XPrPZ+IW7JBStU+W3XaNFzFmQZO+eWA90OB7Uh+ST5m+PPOkvoyDHUqAXz6YCr52XPXQSrWcZnRjetK/RZQUYUw4mGA54MyDMGGAVLqf2l9dYGcRDP2ZdnT+XfBAhjGFBtWbBaqCojGuedYasOGDIKQ0kT86B2BOeMhSL6MqDaQQ5SggRLf+fBo9P1dvcKIPEHEVCw==
+ b=ByjWm9vWDHZw2hPKd3yR0mXguB2vDuuTE5tVwQWOQuvjxpKMDlmtzTe4kwGLiRsqTqdsopwb30z8Ai/dXrcgnUH3FLwQxUiNQ5OJQweiJ5aYgdrQNuvwXfvV8kYjwJ8olC7AYq8ykcjITTjdVGCs4dm4bIwOH4UzeSGqTTK5TzYpdXsygnaZlcSmVaTuBNqUXWTvQGyN2pWejLZkGoSV4dEE6ZklArQfElRNPQAOQxcH6o8xMeB4u6DzggUEh0vbdBoJ7dnB4D4cOnh3tKe3JP5FxivL6u+syntJWaxkLCq2j/mLLiClsAcyFU7Wr6tog13yJUvsXkP6hBhMmzTZOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FH7zUDPbS/IGGPj/uHSPcGR8nBM56Np71q1R75v+VoE=;
- b=iv77MvJeZKqaKyDmc+NQ1AFKjxh/7MHrhqmNxQt37KBf7PcyQNtC6I6W/jhlJ0O/66Ho0Pasg9UNG1CkOsIZ51N23WV44NEQ1H/4o+ehdRX7nqbXXz7NAotUNHytQSRYIPGyN3tbGbWd1eYIyoG/sihokZO3VshiKognM8sYhBp63SH2yC/QMcClMd3VqjryYTa+Nbou8lWRIyyuvdIZDkB9kY/gFZ20iIcVVYEAk9sOsMIacKh/9NxQfgYCCc82ez6aEACd6V0b+oL39vuLI9BNsUFflV5uvF+OR+uuHUVAjIj+4jYD6hx0S6osAP0BLIcN7qdn4KCXuuTPRBYK4A==
+ bh=IN14z4VoSw3b22MCQ82jnhgUrkQW9rG5NISQs4+t6ao=;
+ b=AjMd7u7UFdbaU0AoLJJ+G86cYzsax6OvkUGQJxr/hRBhAS2KiPoNOoO+BKq5od9f8eotw8AvOtYath0ViZEv6BT7qyIZwQ9t2OOl4Cj+qiE18zUrNS+ne0YcY/zhDIYGXsxS6KkAt4WpGcTyN4DXuKOLtU1f9dTdnn3T7r8vKf3dDijepN3lyKUaQaoI0xjf+OCIDutuSDAvvwD6fID6IAHSdWdQndl/azcuRyQiVpmA0eby5PB0oNb3wo0pDkHcrr/dxEfR0FiwQqNeZqzc8Bd1eenmVljnuMM9Foc4lXcu96PsF0J2gv2DJ/nFNRW/yHfjRLAXqoWUH39bBKzwUA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
  header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FH7zUDPbS/IGGPj/uHSPcGR8nBM56Np71q1R75v+VoE=;
- b=pXVEpm4LyKaoGimSkoliO+xbfYhABLGOAuV8KSYT4bNilqTvJilH1VBFBk1mw4jhFwJ4fNyrMYeN7bP5PRSTTM4Awpa6RAnceL4ulP/nPIxRd2RNu3K4YDZ0OS6cbQQKfa9xhzGvbiROZ0d4+DcbTqmS/deXfcHnEwFq1DtXqvoSbdk3wnxVMzFFxqwKUWi/sqd/KQ32G7B236OAMgsUUOTcl5Hig747Wgg0C3coPbpdJ7l7Wse1PnAeuSFl/5p6hJ/ZxybJwKwgkj11/V3G7XO+LkFFYOgVGjnOFr0W5Qf5lr+/HYSXwttR60YTVImBIUwFLusxMtZjyL7DiB/pHw==
+ bh=IN14z4VoSw3b22MCQ82jnhgUrkQW9rG5NISQs4+t6ao=;
+ b=J853vQsRYMn8DF/AZwkcNfdKN5PRXHBN5ZyZHT1ASTjuS8pGqKMjH4qHOe/OuSZtKHxGT59Kg9w7bne3pOjnQSEYd1I62rfQBmrhRByjOehND0vyXmIvgVTwjjJFqcY12WYrm/W1HDWRkbGUUqROD1H5FFiCvxFb6CEf12tRKb5A/n0VcNQ8ype11d5s2h1mWWWfjwtBmpM70uH83sZikPmQjuSaM9B40JCoTp53T5JWZA09jaRRp3v1yid/G/MpTFVUZ5UTweM927XMFLw48LjO3wl4JldBDOAjiyz7E+AoFsFcKUZGTY/MLOBt7R24F9KsejZjR+GCFSfOz0rcjw==
 Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by TYZPR06MB4286.apcprd06.prod.outlook.com (2603:1096:400:64::13) with
+ by HK0PR06MB3089.apcprd06.prod.outlook.com (2603:1096:203:8c::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16; Fri, 24 Jun
- 2022 02:01:18 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Fri, 24 Jun
+ 2022 02:11:09 +0000
 Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
  ([fe80::46d:a7a:f047:e9bf]) by HK0PR06MB3202.apcprd06.prod.outlook.com
  ([fe80::46d:a7a:f047:e9bf%5]) with mapi id 15.20.5353.022; Fri, 24 Jun 2022
- 02:01:18 +0000
+ 02:11:09 +0000
 From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
 CC:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        Roger Quadros <roger.quadros@nokia.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: RE: [PATCH v2] usb: gadget: aspeed_udc: fix handling of tx_len == 0
-Thread-Topic: [PATCH v2] usb: gadget: aspeed_udc: fix handling of tx_len == 0
-Thread-Index: AQHYhwFDotvNHoTltkGrBcSk9lSRr61dzizA
-Date:   Fri, 24 Jun 2022 02:01:18 +0000
-Message-ID: <HK0PR06MB3202A24ACAA94B6525ECA7DF80B49@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <YrRj38cU1nV4gsUX@kili>
-In-Reply-To: <YrRj38cU1nV4gsUX@kili>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH RESEND] usb: gadget: f_mass_storage: Make CD-ROM emulation
+ works with Windows OS
+Thread-Topic: [PATCH RESEND] usb: gadget: f_mass_storage: Make CD-ROM
+ emulation works with Windows OS
+Thread-Index: AQHYhq3rzhxyDFo2ik6AmHo1KwAqPK1dEz8AgAC9vcA=
+Date:   Fri, 24 Jun 2022 02:11:09 +0000
+Message-ID: <HK0PR06MB3202F448E528F2047E1C3B1080B49@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220623030405.1922980-1-neal_liu@aspeedtech.com>
+ <YrR9PrjBXGV5O6bq@rowland.harvard.edu>
+In-Reply-To: <YrR9PrjBXGV5O6bq@rowland.harvard.edu>
 Accept-Language: en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
@@ -61,55 +69,55 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=aspeedtech.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 21730ab2-7d6c-46b8-1bdf-08da55856d6c
-x-ms-traffictypediagnostic: TYZPR06MB4286:EE_
+x-ms-office365-filtering-correlation-id: 585a9bae-f9b8-4963-e5a4-08da5586ce05
+x-ms-traffictypediagnostic: HK0PR06MB3089:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cE6oecyobzgfz1ppHRFCKPCUM6tP5UNovhfSlJu7pI87noJQl15h3uuv0ZMbgFJXyyovQWVYGE/wI9Ls4UcJulyxFAurGa1S2s/9bvhOYLs4IZMMv2fFVk/UVjwdlIF59kXzKLvN1C08rtFiFDJZKBtpYTgNohQPmrzRQo6jypAeWc7U67059pw+k4tV6yV8FTOKELeATqDiAyloCgKQ+4CZcAcWWs+L4bOL+4j6DnkeD6A8lc8q7X8jQ1LAw153kWlrVSw2bZ4maGTVPZhutvoIoLnZtCTdDVcAMTghEzNferPWTZXf3gtLZQH7GNXch+q9+Uoc/BKoDaNqqz/ms5wCbwytpb3+pLGS8AiBAMsPVIs7opnqJLgRFSQqK8yTlaFnO+PkWHvqQiuLBWHYPAc2MCp3zq7stAh7YBAbkGc7ZqW12qaD9VXIAWTf8rmLN0MWZ4zl4NFM30p4bChDsSbBnfNnOTL3ruNbvnrC2ZqkjFcw6LiAlfnsJXrmhrx/uhuJAAiYy9HIPd0Rl0dwiwqxl5wUAx5QdGdY4ih8O0kSPoTP+uo4MSY/SShu/x0j/Kf/QiEWnh9yCNK+ZtKTWefwSHZK1ipp0e9GdaaYcfEQCmP32ZeBYpLJYm5A/xqBrpjBW3SEYovzqRXysYpOd7i9uIfkKWKp1riNKtYp3p+zF8bITqVk8jGXnbR97FWais/oHRMqZhIN9LbwbXMuUKkqgwqeqnaJIRzPk8JR6SGCLJxBwbgy11isBQj9bOV5aYs27SOBtypWxvHxzvcaWM3sutJxf4ZwxckzNNvPmU0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(346002)(376002)(136003)(39840400004)(38100700002)(86362001)(55016003)(316002)(122000001)(38070700005)(41300700001)(478600001)(9686003)(8936002)(186003)(6506007)(5660300002)(2906002)(83380400001)(8676002)(52536014)(64756008)(54906003)(4326008)(76116006)(66946007)(33656002)(26005)(71200400001)(66476007)(66556008)(7696005)(66446008)(6916009);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: /xIhgBPZKqY7HeQylnURpITqmMXZembH2d8ix5pypZBu/PwEM9SC+vLMsD3cjVH0qpB/3UufRdjCYugZAG/jrsT8pltDzaeIrB7v3rgJKZRi6uJflKK1tcUIWrKRmzU+T66UDINvHgT54pnzUBACFDSLtgxFVK0wKO9WJhsLbVR3eITz8Ndu4wT54i1DSpLzNd/3ODxTvPWcZkrMO/DLJM0LTwTZ5RHkpEgdQooFm+OZwHQ87jj1AdCcCU0p0YKkYazYdC0BaV0QANWhuhCTb5bi3EclDXAB8vL0sTaa7M8llqv9kt0CCOzOpEdPYzCT7DBcIu1JIKRTTdGzElpEcEsrJ7bsoLjJp0/9fBjqs+/rv/0+hRwd0NItTQdEYNK9zn1ENWqO7uB9+HeBbvSebV3Va95JO4SDlCoubq21u7F7uAlYdBHlUEB2G1fBgkltqgy8g82C52/zaOWqw4mLKKrH/MQYT7QYydn4GIlwsoCthRruW6uvktEW1geroulP2M/ZCD05T399R1kxTm0ojZd+TWShTOkOIyLwHinOMd0YLcrfNfpsFoW/YR2M82rFKM9+Gh/YjyJ2vxzlLKT+HEuwk74t5yeE96PVGexQUMEwuMont3YZEEx+D/7JreNrlXHnq3uWy46T3vX7YgyZdCpUnzexLMlz2syw7El+F5HmmbXb5dqoU8msfVTVHyY7pWqhtaBbXcNy2aDivoeOZQf0iQ3go2lthrRV8eomeEgJfT2AiFhthNFnr3D5PxOl3wLJG75qfmA0EiuAZoc1c2U07alfV7EuTdUhPlmxH5A=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(39850400004)(346002)(376002)(366004)(64756008)(4326008)(66446008)(7416002)(52536014)(33656002)(71200400001)(6916009)(8676002)(66946007)(76116006)(66476007)(66556008)(55016003)(316002)(83380400001)(2906002)(26005)(107886003)(5660300002)(478600001)(9686003)(186003)(41300700001)(86362001)(54906003)(8936002)(38100700002)(38070700005)(6506007)(122000001)(7696005);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KmhWEhRZf4p5jOWaQbrkpG+gf5RrQF6Aatwhb/epbzav5bjrQ1FnfQbuBwTg?=
- =?us-ascii?Q?OgVXpL2TwPdf+MWKa1H5/iEW98g4Iqi1V0UlpLIYr3b8kp3JBh1fJcuvvq32?=
- =?us-ascii?Q?7GAzSRh1FiEI5vI5LX7fszyJ5qeDSx94spjUk3WCuJYW+u6QjvUK8bkwqyeW?=
- =?us-ascii?Q?PkQggKkYwWlit4wO1fgcRxqlJNlxljESX3MZnvaK2gpTKg5vNpHMEiZJmljS?=
- =?us-ascii?Q?hj5syITu+d91bVsSAD1/DaBKd2AScS6P2e8dFqqWwiG+WAXodXqRTHNWzqNu?=
- =?us-ascii?Q?r3I6EWRktCF3j9CmDdNhMBF1jdlHP8Ht/O+3IXF6nrHmqLJoQyHKg4UwwKLX?=
- =?us-ascii?Q?7JOUQS5tqEq0Q3vu2tloPNvsNqGsHGchs04nOaKGrLitfi4sU/LSrxNRCRg3?=
- =?us-ascii?Q?0ZvTh/VNou2jA/0LPP9NYBfj6WqLgqy0sagANgs6L0eQz3A9F1UhYNQNlpoz?=
- =?us-ascii?Q?oI16ItuIn5k7kqSb4Ofgmi8nf8VICYDq4/5vWOKCrRawAbmlY/rRsh0z0XNx?=
- =?us-ascii?Q?J1FJdBwte51siI7Iu6IlNWWf/Euz0CFxjGvpBSbeiv08ryvRiVXOoM9up46r?=
- =?us-ascii?Q?J4QWacZlpq0nKsmZxPkF7jkUNzpzksNvBei4DYqmg8bbPdQbfXPt7DKaxGFo?=
- =?us-ascii?Q?tECvEU15twkqL7GEqLkYKVrWbYhkclB/mINGVBSfXkRcopOkUzg/VzR5+Ixp?=
- =?us-ascii?Q?la/8W9ukErM9EYL8r0b/9oGnzLJVhlm9eJjTtY8kkQfemlloNnFQzhlnpW9r?=
- =?us-ascii?Q?lLqOgVPwOyd2bS72K3QXk9jgIW6zemZb2qbSi+OpivAWbYCP7VP84kqEVcpS?=
- =?us-ascii?Q?R6idd05ZUUzucMdaKBjgqTlDi6jUOii5/A2gj+b5REt6cuFl7V4upXqUXcm+?=
- =?us-ascii?Q?mD7aWUR3CPosZ+JRRT//W9KzsarUkr1hhcQ6xEMvS1I0c+bUBW1Azwc04E0z?=
- =?us-ascii?Q?F8c3tx7nXm06u6bCyd75ZGLvYQQOD9Ylgljgbmuj8ABKzfTlTGFlFTXSb69U?=
- =?us-ascii?Q?44QSdLAE+a9MO7sf899wAjj0DPdBo1jbBk0ygCqrHVwQlFJfeAekg6dVgoFF?=
- =?us-ascii?Q?ywPFYv4GFhS0T1Y0yXMEUtFs4Rm9UF4fC2hMHr+9aNqlLa2qHhBLDRLv21Nj?=
- =?us-ascii?Q?Jkbc+vJ1Kw0zPOWK1G1hALj2aRJNktc/hqfQA/B+yLcLTD+ZfaS82sQnKYw7?=
- =?us-ascii?Q?WQdLxwbwIa5QcRURP99jlqjW6gP+PRifXirOLhN4UKsFkDAAjpoD93ttfmg2?=
- =?us-ascii?Q?BYGEcNzsaJmdUmMYsfhf7hhTcF8p2we4fZ4xnRi3A9N0Y/qkIRPBV0E17mZE?=
- =?us-ascii?Q?C4S+UEQTEyNbf8n0Gehp75bqn/7JUBTD/UE1PDZ/PUj9Il3HsAzCiogvwLdM?=
- =?us-ascii?Q?FsIbXMAvkSJJCa3CdFEQ9Du0j/km8Ri80tbQiA5BTj52l1ijFmj3CSusUc21?=
- =?us-ascii?Q?H7QxKrYY0iNhCr0EmCI7pQRb3taFp1vF1pgx3Eeooqq1uyddl014qoS9ZebZ?=
- =?us-ascii?Q?NV0bhCt4IEXumFmO2WdJZTF6cgmpxUdOkCkIXhPcv7XkFf/SfQ7o5WFXKF8L?=
- =?us-ascii?Q?cOFeK58bvg3ABFiW4FWbDrP6IxY9ZIO7JW/uspoA?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?E3lTgepvzf17iDinqXSTefKLLQi1PrhgGE1Id+WbZrLtXEXlYm9+10p2mPXa?=
+ =?us-ascii?Q?ECW5+MiJfW1cKIoode15F5WahqnnbRI1tcblLgHXjnGAR0RRwqy8BxLcqh94?=
+ =?us-ascii?Q?xoUKX2vVWGKsrPT60nS5NP0t/cPkg3TgbC/KsChPTu1/BH+pnkPS8AH2CB8u?=
+ =?us-ascii?Q?xX40B/Ybrg++aPdVl+vi1D/AQEWYoQbn2LDNRl5KOXYHdgzP3VL0UQnFhxCh?=
+ =?us-ascii?Q?m6s7piy4GBnn8LM9AVcbcA/ccRjbbmnKKKZ7hCRHev0nSPXmbWMtTMuWkBgm?=
+ =?us-ascii?Q?Q/WlCZHThdvovets9PwaEG4ooyJSGLtcy4pI+Ys5FvuDKrJk9Ru577Em/r2d?=
+ =?us-ascii?Q?XbgdLkJlOD7DjnYpBuxWztfpGwN2xkSbQG9+4Sg3je4GeVXJSlhLrv9DNUr5?=
+ =?us-ascii?Q?SqYhNN3ndiD3B4/XpmXG4NF/LObEbHVFGAZCDam1K9iej5kFc6DorlECzbuH?=
+ =?us-ascii?Q?mX5qEyKJhn7MM7Lrpti4RkiB1GsRTQubvGi8sV7YPKt7tY9N64BSjxutdNlD?=
+ =?us-ascii?Q?4YaR7/EkoJj2v70a6niXkRh/bUHjbsjTVIV151Xub0odafGIAUXoZH4eiyRW?=
+ =?us-ascii?Q?QLbW/nX1UavCQamfNyZejRR/RYGESD96fH1yhKOpztAV3iAweZ30xpC0uBwH?=
+ =?us-ascii?Q?mMSz3BWcCuSyakihkF38gSbu1AadwgzrzSq56WQWIpRCB9FPlSQk2syt5uzZ?=
+ =?us-ascii?Q?Bd2rhUE15FgEcQNzAbxPSjvS4QoX5HTW9RA1QP5itqhHzLDMufSe9xlayfPe?=
+ =?us-ascii?Q?fRYdiAzFlJF2JWRpGUjdjzJvPnblpY80UAvONiTMwvsj4KLnPU2jnxobStSu?=
+ =?us-ascii?Q?okeq9/QhU6dfsOpCpJqdET5Yp7x9Vr6ElHCRzFYkqp4PWCc90kCSak7ZR/i8?=
+ =?us-ascii?Q?yOB+VeTixmvrbfkDF5Q5zJ/gQFfkuV+8dksHmeWUO+O+Ipby4JzU6Wh/SAdw?=
+ =?us-ascii?Q?28L+TemDiUxKPYgqn9sdUgLE+CjvJvGNgnLzxk19Cez9oOBNbII2Rmhcd7O2?=
+ =?us-ascii?Q?OGm12G8P0N1H/N+MX1ivN+2N3kkZIGgwcSwMK/6rpTbNpWwCX2Kdqx7W8d/b?=
+ =?us-ascii?Q?fTF4yT2xqah+H6dj2IFm5NNlw1hLQgKb56Mm6K9t3YPdh/A90mdZi03rbDNh?=
+ =?us-ascii?Q?QXShptnCLn30wClFQqdN2rOEbxc+qEd6irAMIyUopdZaXYz8DRqOtesp4ZWt?=
+ =?us-ascii?Q?ctLo726irA1osKHlfGs5R9Imtqyn0IcyEmLUn3S5Nr0jwTDZMBY4j/VK9UX9?=
+ =?us-ascii?Q?QskYw56fG6HhxBO1nATBnxyt+2Jqz/ruerDw9ea9z4mbtB9vGBKtE5TarkKi?=
+ =?us-ascii?Q?6yJ3VP9xjJRYfTo/n21i4oYjpHvLpf7O5Puy33tSPCT48wJeh4BTXjih/hZB?=
+ =?us-ascii?Q?iNLHZlaf2wtViTDnkzCDT2oqs4iurT4ZgrrHfpsxpECsLgZxB6zOpUKVQk2d?=
+ =?us-ascii?Q?QnaJKt0bxB0UvJJR//m4Igo9kTFgwgJ4ONxAJQxoRmiA0/8f7Pdnfe2Q4w8d?=
+ =?us-ascii?Q?D+Cj765HjskJmKmnYhVsYdLQ/Cj7g2zdenJrgLx5GRd4AZFhTCNL9sPE5dLV?=
+ =?us-ascii?Q?1PXaS/OUsxF2+7/Q/xPcKY7CZ4OmPsBFHSn2ZkFA?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: aspeedtech.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21730ab2-7d6c-46b8-1bdf-08da55856d6c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2022 02:01:18.0690
+X-MS-Exchange-CrossTenant-Network-Message-Id: 585a9bae-f9b8-4963-e5a4-08da5586ce05
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2022 02:11:09.6349
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6FGfGnjEOc6w2IPrTrsx5+757wKiXKQOqiw6rQQlZKeA8h4Y7eeTy1orPLEo3FVDZZbFcUz91no3JBkpNN+uZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4286
+X-MS-Exchange-CrossTenant-userprincipalname: 9wbS5Ua9KpK95+8pfWx8MOAHr9No5COQ2gQi0c9PeIRCg+I1BMj73oKnB744iT2+2tEft/MZL1m7HgP/ODjNBg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3089
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -120,56 +128,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> The bug is that we should still enter this loop if "tx_len" is zero.
+> On Thu, Jun 23, 2022 at 11:04:05AM +0800, Neal Liu wrote:
+> > Add read TOC with format 2 to support CD-ROM emulation with Windows
+> > OS.
+> > This patch is tested on Windows OS Server 2019.
 >=20
-> Reported-by: Neal Liu <neal_liu@aspeedtech.com>
-> Fixes: c09b1f372e74 ("usb: gadget: aspeed_udc: cleanup loop in
-> ast_dma_descriptor_setup()")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
-> v2: Remove the unnecessary "chunk >=3D 0" condition
+> This description says "format 2", but the patch actually adds code for th=
+e case
+> where format is 1.  This sort of mistake is not acceptable.
 
-I mean v1 looks good to me.
-Sorry if you are misunderstanding.
+Sorry for typo. I'll update it for next patch.
 
 >=20
->  drivers/usb/gadget/udc/aspeed_udc.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> > ---
+> >  drivers/usb/gadget/function/f_mass_storage.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/usb/gadget/function/f_mass_storage.c
+> > b/drivers/usb/gadget/function/f_mass_storage.c
+> > index 3a77bca0ebe1..3c2a5f1e8b66 100644
+> > --- a/drivers/usb/gadget/function/f_mass_storage.c
+> > +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> > @@ -1209,6 +1209,7 @@ static int do_read_toc(struct fsg_common
+> > *common, struct fsg_buffhd *bh)
+> >
+> >  	switch (format) {
+> >  	case 0:
+> > +	case 1:
+> >  		/* Formatted TOC */
+> >  		len =3D 4 + 2*8;		/* 4 byte header + 2 descriptors */
+> >  		memset(buf, 0, len);
 >=20
-> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c
-> b/drivers/usb/gadget/udc/aspeed_udc.c
-> index d75a4e070bf7..6ff02acc5662 100644
-> --- a/drivers/usb/gadget/udc/aspeed_udc.c
-> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
-> @@ -476,6 +476,7 @@ static int ast_dma_descriptor_setup(struct ast_udc_ep
-> *ep, u32 dma_buf,  {
->  	struct ast_udc_dev *udc =3D ep->udc;
->  	struct device *dev =3D &udc->pdev->dev;
-> +	bool last =3D false;
->  	int chunk, count;
->  	u32 offset;
+> When format is 1, the driver is supposed to ignore the start_track value.=
+  Your
+> patch does not do this.
 >=20
-> @@ -493,14 +494,16 @@ static int ast_dma_descriptor_setup(struct
-> ast_udc_ep *ep, u32 dma_buf,
->  	       "tx_len", tx_len);
->=20
->  	/* Create Descriptor Lists */
-> -	while (chunk > 0 && count < AST_UDC_DESCS_COUNT) {
-> +	while (!last && count < AST_UDC_DESCS_COUNT) {
->=20
->  		ep->descs[ep->descs_wptr].des_0 =3D dma_buf + offset;
->=20
-> -		if (chunk > ep->chunk_max)
-> +		if (chunk > ep->chunk_max) {
->  			ep->descs[ep->descs_wptr].des_1 =3D ep->chunk_max;
-> -		else
-> +		} else {
->  			ep->descs[ep->descs_wptr].des_1 =3D chunk;
-> +			last =3D true;
-> +		}
->=20
->  		chunk -=3D ep->chunk_max;
->=20
-> --
-> 2.35.1
+> The default case in this switch statement has a comment saying that
+> Mutil-session is not supported.  As a result of this change, it now _is_
+> supported.  The patch needs to update that comment.
+
+Okay, thanks for pointing out. I'll update it as well.
 
