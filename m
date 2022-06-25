@@ -2,87 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A8D55A753
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 07:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B991955A786
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 08:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiFYFkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jun 2022 01:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S232055AbiFYGh6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jun 2022 02:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiFYFkQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jun 2022 01:40:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9586A51333;
-        Fri, 24 Jun 2022 22:40:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3089F60AE3;
-        Sat, 25 Jun 2022 05:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AB8CC341CC;
-        Sat, 25 Jun 2022 05:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656135614;
-        bh=DDmA3+A5PginCNfJ8pUS0urfuAliRawSeMY/W6w8LRw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cLrB7WOu3OG1JF2sheq1bhBZ42+UENE4BCOpP5gqn628eC2Ic7W7Yttriqz+FW99r
-         hgXyPzGWbFldn0j2NAPLkDHBiPLYLBeZD/vPN1V8ldJFXQd7W5gv7A3FI1YqfYXjAH
-         4vY6nbB2SaimTQBasxyBag0IY4KDLZ4b6M8kXRAHkqoYmZS/fsZ7SSgsF44XbzZVas
-         EJluPdvejP/t79E8AMkpK0BXMD/sTC99GwHRjHvFGQIarlfZSkfW9I8/TvklIWrybZ
-         Dg/7RGj4XCWQshQ0ytJjerGIRjLduZnCOx6+voH077Lx7J2uzlQgYI3o+yYxwN8uP/
-         EKkDHXB9eXPpg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3E75EE8DBEE;
-        Sat, 25 Jun 2022 05:40:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231643AbiFYGh6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jun 2022 02:37:58 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36934C6D
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 23:37:56 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 4zQToScCo6rrE4zQTo0f6d; Sat, 25 Jun 2022 08:37:53 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 25 Jun 2022 08:37:53 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <f2e89d3a-f6ad-6fdc-1bd1-eb38f5a8f569@wanadoo.fr>
+Date:   Sat, 25 Jun 2022 08:37:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/4] usb: typec: ucsi: stm32g0: add support for stm32g0
+ i2c controller
+Content-Language: en-US
+To:     fabrice.gasnier@foss.st.com
+Cc:     alexandre.torgue@foss.st.com, amelie.delaunay@foss.st.com,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org
+References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
+ <20220624155413.399190-3-fabrice.gasnier@foss.st.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220624155413.399190-3-fabrice.gasnier@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] usbnet: Fix linkwatch use-after-free on
- disconnect
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165613561425.1389.15199490480360862907.git-patchwork-notify@kernel.org>
-Date:   Sat, 25 Jun 2022 05:40:14 +0000
-References: <d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de>
-In-Reply-To: <d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, jannh@google.com, o.rempel@pengutronix.de,
-        linux@rempel-privat.de, edumazet@google.com,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org, andrew@lunn.ch,
-        jackychou@asix.com.tw, w@1wt.eu, LinoSanfilippo@gmx.de,
-        p.rosenberger@kunbus.com, hkallweit1@gmail.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 23 Jun 2022 14:50:59 +0200 you wrote:
-> usbnet uses the work usbnet_deferred_kevent() to perform tasks which may
-> sleep.  On disconnect, completion of the work was originally awaited in
-> ->ndo_stop().  But in 2003, that was moved to ->disconnect() by historic
-> commit "[PATCH] USB: usbnet, prevent exotic rtnl deadlock":
+Le 24/06/2022 à 17:54, Fabrice Gasnier a écrit :
+> STM32G0 provides an integrated USB Type-C and power delivery interface.
+> It can be programmed with a firmware to handle UCSI protocol over I2C
+> interface. A GPIO is used as an interrupt line.
 > 
->   https://git.kernel.org/tglx/history/c/0f138bbfd83c
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier-rj0Iel/JR4NBDgjK7y7TUQ@public.gmane.org>
+> ---
+>   drivers/usb/typec/ucsi/Kconfig        |  10 ++
+>   drivers/usb/typec/ucsi/Makefile       |   1 +
+>   drivers/usb/typec/ucsi/ucsi_stm32g0.c | 218 ++++++++++++++++++++++++++
+>   3 files changed, 229 insertions(+)
+>   create mode 100644 drivers/usb/typec/ucsi/ucsi_stm32g0.c
 > 
-> [...]
 
-Here is the summary with links:
-  - [net-next,v2] usbnet: Fix linkwatch use-after-free on disconnect
-    https://git.kernel.org/netdev/net-next/c/a69e617e533e
+[...]
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> +static int ucsi_stm32g0_async_write(struct ucsi *ucsi, unsigned int offset, const void *val,
+> +				    size_t len)
+> +{
+> +	struct ucsi_stm32g0 *g0 = ucsi_get_drvdata(ucsi);
+> +	struct i2c_client *client = g0->client;
+> +	struct i2c_msg msg[] = {
+> +		{
+> +			.addr	= client->addr,
+> +			.flags  = 0,
+> +		}
+> +	};
+> +	unsigned char *buf;
+> +	int ret;
+> +
+> +	buf = kzalloc(len + 1, GFP_KERNEL);
 
+Hi,
 
+Nit: kmalloc() would be enough here, the whole buffer is written just a 
+few lines after.
+
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	buf[0] = offset;
+> +	memcpy(&buf[1], val, len);
+> +	msg[0].len = len + 1;
+> +	msg[0].buf = buf;
+> +
+> +	ret = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
+> +	kfree(buf);
+> +	if (ret != ARRAY_SIZE(msg)) {
+> +		dev_err(g0->dev, "i2c write %02x, %02x error: %d\n", client->addr, buf[0], ret);
+
+Use-after-free of buf.
+
+> +
+> +		return ret < 0 ? ret : -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+Just my 2c,
+CJ
+
+[...]
