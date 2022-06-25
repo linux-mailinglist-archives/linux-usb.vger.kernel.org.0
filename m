@@ -2,93 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA6A55A5C5
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 03:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC6D55A62C
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 04:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiFYBVV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 21:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
+        id S231889AbiFYCgB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 22:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiFYBVU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 21:21:20 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0A22871E
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 18:21:18 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so5950584fac.13
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 18:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=BRJxtK7by35Zc8QH/nnvKQKs9hK/8AIEzJouUPpaTpA=;
-        b=ipnQNOEUKRMUQtRZdBO/Uv8XHyRCyACkN75EaXH9G5TIYduaIi6Fs3ClcaZUdqHlQ/
-         +azX+aM5vTZ05ypVs97hsPIGZ6MeiRi0gG49Mkz0HiH4qpW09CVB+6Nr2tzBDQpHvTYT
-         AgDl0IMUAOBERWThy7J32xiYX4nq4ZwFo2lak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=BRJxtK7by35Zc8QH/nnvKQKs9hK/8AIEzJouUPpaTpA=;
-        b=0HEv6mS0AN413Np4tRLVbeO78JiPmleF0F4tun88wgynPF4PKRN4xhl85//fzl/KT8
-         YwjBv5LdopwB3anQEjoSbs+EfZMeDnwf2YB1PJPPVLKFjXkJtit4KyZ9XUY2f3R77Vcr
-         oLwbLID3AdajYWf9iAqQlcYz7wJS+44+pUx5YWUbdsE0BASYp/R8xrKBYFpcVaUS2N3Y
-         G2QrjY0bnOIy9G9SJLLfS1eRrVe3Pqa6Rq9oZMb0uyEWAXsyv/rgaxZmHAkA7rxHjnsz
-         hHC3px1oym1vz55L8sqcGc9IR06t4lTdzmV0B2Qpo0TQk8dq7tIv7IMiw7wB9tlGUXJq
-         HxNQ==
-X-Gm-Message-State: AJIora8i45HolqljY2WmODboe1GD3bgyGuoNjFerd+fslNWE7giFXr/L
-        7zV0Cbr0+WC0QO7Ag3/R/w/NZcsss0YyhxHrCdvmpA==
-X-Google-Smtp-Source: AGRyM1u6/T+WcVjOW9N89LEkv92dI1MrVPLEX2x3G21Lc4IDCSUfjTNLNtnwWFOb4IiXjzG08Co3TRX9cSNHdNMmXMo=
-X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
- w1-20020a056870b38100b000fe2004b3b5mr1223058oap.63.1656120078008; Fri, 24 Jun
- 2022 18:21:18 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 24 Jun 2022 18:21:17 -0700
+        with ESMTP id S230224AbiFYCgA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 22:36:00 -0400
+Received: from mail.gtsys.com.hk (tunnel316222-pt.tunnel.tserv25.sin1.ipv6.he.net [IPv6:2001:470:35:5f1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05754F464
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 19:35:57 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 2A74422A1D9A;
+        Sat, 25 Jun 2022 10:35:55 +0800 (HKT)
+X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
+Received: from mail.gtsys.com.hk ([127.0.0.1])
+        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mBwMJya5XdlS; Sat, 25 Jun 2022 10:35:55 +0800 (HKT)
+Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 0563922A1D96;
+        Sat, 25 Jun 2022 10:35:55 +0800 (HKT)
+Received: from [10.128.1.32] (unknown [182.239.122.235])
+        by s01.gtsys.com.hk (Postfix) with ESMTPSA id CD287C01B49;
+        Sat, 25 Jun 2022 10:35:54 +0800 (HKT)
+Subject: Re: serial: usb: cdc-acm: OMRON B5L ToF, device probe failed
+To:     Oliver Neukum <oneukum@suse.com>,
+        "michael.lee@omron.com" <michael.lee@omron.com>,
+        Lars Melin <larsm17@gmail.com>,
+        USB list <linux-usb@vger.kernel.org>
+References: <85ebf554-effd-c89e-6eb8-c149442b931c@gtsys.com.hk>
+ <fc9986a6-0b11-d949-2196-1ad35d3f4d98@gtsys.com.hk>
+ <1af7ff05-8558-9162-a0cd-ac140ddaf2e1@gmail.com>
+ <cbcc2071-5b56-025e-cae6-5af0210e2363@gtsys.com.hk>
+ <OSZP286MB1776CCBCBFE38B25C7DB9978E1B39@OSZP286MB1776.JPNP286.PROD.OUTLOOK.COM>
+ <40395457-0927-c169-7d9f-47d1912e2c39@suse.com>
+ <f3aaf9e8-07c7-2c50-48c3-723c51f9445a@gtsys.com.hk>
+ <dc9f9c31-b72d-0895-544a-13764538d991@suse.com>
+ <3194ea30-34da-3d34-6d4a-08dc7c8d683a@gtsys.com.hk>
+ <4f4977bf-6096-592c-9c06-44aacb82ccd7@gtsys.com.hk>
+ <68fffa09-1522-bef0-f76e-610e2345a70c@suse.com>
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Message-ID: <85ff1357-5a70-3ee1-4098-08401f522c7a@gtsys.com.hk>
+Date:   Sat, 25 Jun 2022 10:35:54 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <CACeCKad_vB+cHzwkBrvi90u7mBmJbk=YuecOwsp1xexYUiq-_A@mail.gmail.com>
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
- <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
- <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
- <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com>
- <CAE-0n53i90ZUFSmrR=ScXtMdn_bWPY49WWTf9LXbxu_udGgP9w@mail.gmail.com>
- <CACeCKaffqb6v7TFji2u00VSQ=DGvRe-gcxMnAEbZCC1qtDZF6A@mail.gmail.com>
- <CAE-0n51AYqr4wcD-JaVaTYjFgxCj+iX+xAYKCrZCqGHE2XEUgA@mail.gmail.com> <CACeCKad_vB+cHzwkBrvi90u7mBmJbk=YuecOwsp1xexYUiq-_A@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 24 Jun 2022 18:21:17 -0700
-Message-ID: <CAE-0n50yT79TTqBWqqG8jpuhFZhCqV75hpViESgojRutCZ1M9A@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <68fffa09-1522-bef0-f76e-610e2345a70c@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,80 +62,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prashant Malani (2022-06-24 14:41:36)
-> On Fri, Jun 24, 2022 at 12:50 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Prashant Malani (2022-06-23 19:48:04)
-> > > On Thu, Jun 23, 2022 at 7:13 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > Quoting Prashant Malani (2022-06-23 17:35:38)
-> > > > > On Thu, Jun 23, 2022 at 4:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > > > >
-> > > > > > I'm not aware of any documentation for the dos and don'ts here. Are
-> > > > > > there any examples in the bindings directory that split up a device into
-> > > > > > subnodes that isn't in bindings/mfd?
-> > > > >
-> > > > > usb-c-connector [3] and its users is an example.
-> > > >
-> > > > What are the subnodes? The graph ports? That is not what I meant.
-> > >
-> > > cros-ec-typec [4] uses subnodes of usb-c-connector. Chrome OS DTs
-> > > use the ports from the included usb-c-connector to switching hardware.
-> >
-> > Ok, got it. usb-c-connector nodes are children of the typec controller
-> > (in this case cros-ec-typec) because otherwise we would need to make a
-> > phandle link from the usb-c-connector node(s) under the root node / to
-> > the typec controller. The phandle link may need to be done in both
-> > directions, so it makes more sense to put the usb-c-connector nodes
-> > underneath the typec controller to express the direct relationship
-> > between the typec controller and the usb-c-connectors.
-> >
-> > Furthermore, the usb-c-connector is not integrated as part of the EC in
-> > the same package. There is a discrete part placed on the board that
-> > corresponds to the usb-c-connector and that is separate from the EC. The
-> > connectors are in essence only controllable through the EC because
-> > that's the typec controller.
+
+On 23/6/2022 5:39 pm, Oliver Neukum wrote:
 >
-> From the perspective of the AP, the `usb-c-connector` *is* an integrated part of
-> the Chrome EC; there is no alternative way to control it except
-> through the Chrome EC.
-> So the above example reinforces the usage model for typec-switch (which is
-> also an "integrated" component).
-
-No the usb-c-connector is not an integrated part of the EC. It is a
-discrete part with a part number that gets placed on the PCB. From the
-perspective of the AP it is controlled via the EC, but it is not
-integrated into the same package that the EC is packaged in to be
-soldered down to the PCB.
-
-So the example of usb-c-connector as a subnode doesn't reinforce the
-argument for a typec-switch binding. It highlights the difference that
-I've been trying to explain. The difference between internal vs.
-external components of a device. In the EC case the usb-c-connector is
-an external component from the EC, hence the two nodes. In the anx or
-ite case the typec switch is an internal component, hence the single
-node for the anx or ite part.
-
+> On 23.06.22 10:55, Chris Ruehl wrote:
+>>
+>> On 23/6/2022 4:44 pm, Chris Ruehl wrote:
+>>> On 23/6/2022 4:28 pm, Oliver Neukum wrote:
+>>>> if you absolutely want it to be driven from CDC-ACM, try this
+>>>> new attached patch.
+>>>> In your original patch you used NO_UNION_NORMAL. That will allow
+>>>> a device to work without a union descriptor but with the normal
+>>>> two interfaces. This devices has what in terms of ACM is a collapsed
+>>>> interface without a union descriptor.
+>>>> The driver provides for that but then it checks for the exact
+>>>> number of required endpoints, which is three. Your device has
+>>>> four endpoints.
+>>>> The patch ignores a fourth endpoint.
+>> Apply the patch ,
+>> still no /dev/ttyACM0 comes up.
+> Hi,
 >
-> This really is a limited binding change that helps describe connections
-> between Type-C components, helps these components integrate with
-> the kernel Type-C framework, and consolidates the associated properties.
-> I believe it works for most current use cases in the upstream kernel.
+> please send me dmesg. This should not happen.
 >
-> I'm happy to discuss more theoretical use cases further, but
-> respectfully, I prefer to do
-> so off-list.
-
-I'm happy to move the discussion to the anx or ite bindings if you'd
-prefer to discuss more concrete bindings.
-
+> 	Regards
+> 		Oliver
 >
-> If the maintainer is OK with it (Krzysztof has reviewed it, but I
-> don't want to presume
-> what the protocol is for patches in this subsystem), and we've
-> provided 2 users as asked for
-> in v4 [5], then I request its consideration for submission.
-> If the maintainers have further concerns, we'd be happy to address them.
->
+Hi,
+sorry for let you wait but I had a bunch of testing with the b5l to deliver
+my solution to the team.
 
-Rob?
+here the dmesg after apply your patch & NO_NORMAL_UNION
+
+[266005.246312] usb 2-1.4.4.1: new high-speed USB device number 19 using ehci-pci
+[266005.344658] usb 2-1.4.4.1: New USB device found, idVendor=0590, 
+idProduct=00ca, bcdDevice= 2.00
+[266005.344666] usb 2-1.4.4.1: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[266005.344670] usb 2-1.4.4.1: Product: OMRON B5L-001011
+[266005.344673] usb 2-1.4.4.1: Manufacturer: OMRON Corporation
+[266005.344675] usb 2-1.4.4.1: SerialNumber: 010000319A1
+[266005.458809] usbcore: registered new interface driver cdc_acm
+[266005.458814] cdc_acm: USB Abstract Control Model driver for USB modems and 
+ISDN adapters
+
+T:  Bus=02 Lev=04 Prnt=05 Port=00 Cnt=01 Dev#= 19 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=02(comm.) Sub=02 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=0590 ProdID=00ca Rev= 2.00
+S:  Manufacturer=OMRON Corporation
+S:  Product=OMRON B5L-001011
+S:  SerialNumber=010000319A1
+C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=  4mA
+I:* If#= 0 Alt= 0 #EPs= 4 Cls=02(comm.) Sub=02 Prot=00 Driver=(none)
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+
+-Chris
+
+-- 
+GTSYS Limited RFID Technology
+9/F, Unit E, R07, Kwai Shing Industrial Building Phase 2,
+42-46 Tai Lin Pai Road, Kwai Chung, N.T., Hong Kong
+Tel (852) 9079 9521
+
+Disclaimer: https://www.gtsys.com.hk/email/classified.html
+
