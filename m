@@ -2,60 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B555355A63B
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 04:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E36355A6AB
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 05:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiFYCmq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 22:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S232006AbiFYDnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 23:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiFYCmp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 22:42:45 -0400
-Received: from mail.gtsys.com.hk (tunnel316222-pt.tunnel.tserv25.sin1.ipv6.he.net [IPv6:2001:470:35:5f1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1690662729
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 19:42:44 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id AB46622A1D9A;
-        Sat, 25 Jun 2022 10:42:39 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RXDV0SJGw888; Sat, 25 Jun 2022 10:42:39 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 8746922A1D96;
-        Sat, 25 Jun 2022 10:42:39 +0800 (HKT)
-Received: from [10.128.1.32] (unknown [182.239.122.235])
-        by s01.gtsys.com.hk (Postfix) with ESMTPSA id 4A707C01B49;
-        Sat, 25 Jun 2022 10:42:39 +0800 (HKT)
-Subject: Re: serial: usb: cdc-acm: OMRON B5L ToF, device probe failed
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-To:     Oliver Neukum <oneukum@suse.com>,
-        "michael.lee@omron.com" <michael.lee@omron.com>,
-        Lars Melin <larsm17@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>
-References: <85ebf554-effd-c89e-6eb8-c149442b931c@gtsys.com.hk>
- <fc9986a6-0b11-d949-2196-1ad35d3f4d98@gtsys.com.hk>
- <1af7ff05-8558-9162-a0cd-ac140ddaf2e1@gmail.com>
- <cbcc2071-5b56-025e-cae6-5af0210e2363@gtsys.com.hk>
- <OSZP286MB1776CCBCBFE38B25C7DB9978E1B39@OSZP286MB1776.JPNP286.PROD.OUTLOOK.COM>
- <40395457-0927-c169-7d9f-47d1912e2c39@suse.com>
- <f3aaf9e8-07c7-2c50-48c3-723c51f9445a@gtsys.com.hk>
- <dc9f9c31-b72d-0895-544a-13764538d991@suse.com>
- <3194ea30-34da-3d34-6d4a-08dc7c8d683a@gtsys.com.hk>
- <4f4977bf-6096-592c-9c06-44aacb82ccd7@gtsys.com.hk>
- <68fffa09-1522-bef0-f76e-610e2345a70c@suse.com>
- <85ff1357-5a70-3ee1-4098-08401f522c7a@gtsys.com.hk>
-Message-ID: <00b699c1-ac40-7309-5b24-e527af999de2@gtsys.com.hk>
-Date:   Sat, 25 Jun 2022 10:42:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        with ESMTP id S231220AbiFYDnN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 23:43:13 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C4713F62;
+        Fri, 24 Jun 2022 20:43:05 -0700 (PDT)
+X-UUID: d3528aa41f1e4062b45d413fc9c3860d-20220625
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:b31e0792-f028-4a94-85fa-ad233c9808bf,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.6,REQID:b31e0792-f028-4a94-85fa-ad233c9808bf,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:b14ad71,CLOUDID:e65378ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:03d3e511f511,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d3528aa41f1e4062b45d413fc9c3860d-20220625
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 783343857; Sat, 25 Jun 2022 11:42:59 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 25 Jun 2022 11:42:58 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 25 Jun 2022 11:42:57 +0800
+Message-ID: <4efb47b5323891c72dd0341f911ced74f39bfb07.camel@mediatek.com>
+Subject: Re: [PATCH] usb: gadget: f_uac1: add IAD descriptor
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        "Julian Scheel" <julian@jusst.de>, xin lin <xin.lin@mediatek.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Date:   Sat, 25 Jun 2022 11:42:57 +0800
+In-Reply-To: <YrWif4oeelZrctmr@kroah.com>
+References: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
+         <YrWif4oeelZrctmr@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <85ff1357-5a70-3ee1-4098-08401f522c7a@gtsys.com.hk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,90 +69,160 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, 2022-06-24 at 13:39 +0200, Greg Kroah-Hartman wrote:
+> On Wed, Jun 22, 2022 at 04:57:57PM +0800, Chunfeng Yun wrote:
+> > From: xin lin <xin.lin@mediatek.com>
+> > 
+> > Win10 can not enumerate composite device of UVC+UAC1+ADB without
+> > IAD descriptor
+> > in uac1.0, so add it.
+> 
+> I do not know what this means at all, sorry.  Can you please provide
+> a
+> better changelog text that describes what all of this is in more
+> detail?
+Ok, will add it in next version
 
+> 
+> 
+> 
+> > 
+> > Signed-off-by: xin lin <xin.lin@mediatek.com>
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > ---
+> >  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_uac1.c
+> > b/drivers/usb/gadget/function/f_uac1.c
+> > index 6f0e1d803dc2..8390207bc513 100644
+> > --- a/drivers/usb/gadget/function/f_uac1.c
+> > +++ b/drivers/usb/gadget/function/f_uac1.c
+> > @@ -71,6 +71,17 @@ static inline struct f_uac1_opts
+> > *g_audio_to_uac1_opts(struct g_audio *audio)
+> >   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
+> >   */
+> >  
+> > +static struct usb_interface_assoc_descriptor iad_desc = {
+> > +	.bLength = sizeof(iad_desc),
+> > +	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
+> > +
+> > +	.bFirstInterface = 0,
+> > +	.bInterfaceCount = 3,
+> > +	.bFunctionClass = USB_CLASS_AUDIO,
+> > +	.bFunctionSubClass = 0,
+> > +	.bFunctionProtocol = UAC_VERSION_1,
+> > +};
+> > +
+> >  /* B.3.1  Standard AC Interface Descriptor */
+> >  static struct usb_interface_descriptor ac_interface_desc = {
+> >  	.bLength =		USB_DT_INTERFACE_SIZE,
+> > @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor
+> > as_iso_in_desc = {
+> >  };
+> >  
+> >  static struct usb_descriptor_header *f_audio_desc[] = {
+> > +	(struct usb_descriptor_header *)&iad_desc,
+> 
+> Why put this first?  Is that a requirement?
+Yes, it's a requirement,
+Interface Association Descriptor ECN:
+"An interface association descriptor must be located before the set of
+interface descriptors (including all alternate settings) for the
+interfaces it associates."
 
-On 25/6/2022 10:35 am, Chris Ruehl wrote:
->
-> On 23/6/2022 5:39 pm, Oliver Neukum wrote:
->>
->> On 23.06.22 10:55, Chris Ruehl wrote:
->>>
->>> On 23/6/2022 4:44 pm, Chris Ruehl wrote:
->>>> On 23/6/2022 4:28 pm, Oliver Neukum wrote:
->>>>> if you absolutely want it to be driven from CDC-ACM, try this
->>>>> new attached patch.
->>>>> In your original patch you used NO_UNION_NORMAL. That will allow
->>>>> a device to work without a union descriptor but with the normal
->>>>> two interfaces. This devices has what in terms of ACM is a collapsed
->>>>> interface without a union descriptor.
->>>>> The driver provides for that but then it checks for the exact
->>>>> number of required endpoints, which is three. Your device has
->>>>> four endpoints.
->>>>> The patch ignores a fourth endpoint.
->>> Apply the patch ,
->>> still no /dev/ttyACM0 comes up.
->> Hi,
->>
->> please send me dmesg. This should not happen.
->>
->>     Regards
->>         Oliver
->>
-> Hi,
-> sorry for let you wait but I had a bunch of testing with the b5l to deliver
-> my solution to the team.
->
-> here the dmesg after apply your patch & NO_NORMAL_UNION
->
-> [266005.246312] usb 2-1.4.4.1: new high-speed USB device number 19 using ehci-pci
-> [266005.344658] usb 2-1.4.4.1: New USB device found, idVendor=0590, 
-> idProduct=00ca, bcdDevice= 2.00
-> [266005.344666] usb 2-1.4.4.1: New USB device strings: Mfr=1, Product=2, 
-> SerialNumber=3
-> [266005.344670] usb 2-1.4.4.1: Product: OMRON B5L-001011
-> [266005.344673] usb 2-1.4.4.1: Manufacturer: OMRON Corporation
-> [266005.344675] usb 2-1.4.4.1: SerialNumber: 010000319A1
-> [266005.458809] usbcore: registered new interface driver cdc_acm
-> [266005.458814] cdc_acm: USB Abstract Control Model driver for USB modems and 
-> ISDN adapters
->
-> T:  Bus=02 Lev=04 Prnt=05 Port=00 Cnt=01 Dev#= 19 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=02(comm.) Sub=02 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=0590 ProdID=00ca Rev= 2.00
-> S:  Manufacturer=OMRON Corporation
-> S:  Product=OMRON B5L-001011
-> S:  SerialNumber=010000319A1
-> C:* #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=  4mA
-> I:* If#= 0 Alt= 0 #EPs= 4 Cls=02(comm.) Sub=02 Prot=00 Driver=(none)
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=03(Int.) MxPS=  64 Ivl=4096ms
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
->
-> -Chris
->
+> 
+> >  	(struct usb_descriptor_header *)&ac_interface_desc,
+> >  	(struct usb_descriptor_header *)&ac_header_desc,
+> >  
+> > @@ -293,6 +305,7 @@ static struct usb_descriptor_header
+> > *f_audio_desc[] = {
+> >  };
+> >  
+> >  enum {
+> > +	STR_ASSOC,
+> 
+> Again, why first?
+follow uac2 driver
+> 
+> >  	STR_AC_IF,
+> >  	STR_USB_OUT_IT,
+> >  	STR_USB_OUT_IT_CH_NAMES,
+> > @@ -310,6 +323,7 @@ enum {
+> >  
+> >  static struct usb_string strings_uac1[] = {
+> >  	/* [STR_AC_IF].s = DYNAMIC, */
+> > +	[STR_ASSOC].s = "Source/Sink",
+> >  	[STR_USB_OUT_IT].s = "Playback Input terminal",
+> >  	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
+> >  	[STR_IO_OUT_OT].s = "Playback Output terminal",
+> > @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct
+> > f_uac1_opts *opts)
+> >  	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
+> >  	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
+> >  
+> > +	iad_desc.bInterfaceCount = 1;
+> 
+> Why this change?
+FS, HS may be different, count up them again.
 
-The Arduino and the I/O of 3 channels with a working interface to compare.
+> 
+> 
+> >  	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc-
+> > >bLength);
+> >  
+> >  	if (EPIN_EN(opts)) {
+> > @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct
+> > f_uac1_opts *opts)
+> >  		if (FUIN_EN(opts))
+> >  			len += in_feature_unit_desc->bLength;
+> >  		ac_header_desc->wTotalLength = cpu_to_le16(len);
+> > +		iad_desc.bInterfaceCount++;
+> >  	}
+> >  	if (EPOUT_EN(opts)) {
+> >  		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
+> > @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct
+> > f_uac1_opts *opts)
+> >  		if (FUOUT_EN(opts))
+> >  			len += out_feature_unit_desc->bLength;
+> >  		ac_header_desc->wTotalLength = cpu_to_le16(len);
+> > +		iad_desc.bInterfaceCount++;
+> >  	}
+> >  
+> >  	i = 0;
+> > +	f_audio_desc[i++] = USBDHDR(&iad_desc);
+> 
+> Again, why first?
+It is a requirement as ECN says.
 
-T:  Bus=02 Lev=03 Prnt=04 Port=01 Cnt=02 Dev#= 20 Spd=12   MxCh= 0
-D:  Ver= 1.10 Cls=02(comm.) Sub=00 Prot=00 MxPS= 8 #Cfgs=  1
-P:  Vendor=2341 ProdID=0042 Rev= 0.01
-S:  Manufacturer=Arduino (www.arduino.cc)
-S:  SerialNumber=850363135303517102C0
-C:* #Ifs= 2 Cfg#= 1 Atr=c0 MxPwr=100mA
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=01 Driver=cdc_acm
-E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=255ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_acm
-E:  Ad=04(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> 
+> >  	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+> >  	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+> >  
+> > @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct
+> > usb_configuration *c, struct usb_function *f)
+> >  		}
+> >  	}
+> >  
+> > +	iad_desc.iFunction = us[STR_ASSOC].id;
+> >  	ac_interface_desc.iInterface = us[STR_AC_IF].id;
+> >  	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
+> >  	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
+> > @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct
+> > usb_configuration *c, struct usb_function *f)
+> >  	status = usb_interface_id(c, f);
+> >  	if (status < 0)
+> >  		goto err_free_fu;
+> > +
+> > +	iad_desc.bFirstInterface = status;
+> 
+> Shouldn't this be needed without your change?
+Need update, it's not always 0.
 
+Thanks a lot
 
-
--- 
-GTSYS Limited RFID Technology
-9/F, Unit E, R07, Kwai Shing Industrial Building Phase 2,
-42-46 Tai Lin Pai Road, Kwai Chung, N.T., Hong Kong
-Tel (852) 9079 9521
-
-Disclaimer: https://www.gtsys.com.hk/email/classified.html
+> 
+> thanks,
+> 
+> greg k-h
 
