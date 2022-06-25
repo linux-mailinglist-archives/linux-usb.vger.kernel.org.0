@@ -2,64 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69E455ABB9
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 19:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C842B55AC02
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 21:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiFYRTv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jun 2022 13:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        id S233311AbiFYSaI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jun 2022 14:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231904AbiFYRTu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jun 2022 13:19:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B9E120A2
-        for <linux-usb@vger.kernel.org>; Sat, 25 Jun 2022 10:19:49 -0700 (PDT)
+        with ESMTP id S233288AbiFYSaG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jun 2022 14:30:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F57212A99;
+        Sat, 25 Jun 2022 11:30:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 663B8B80BEB
-        for <linux-usb@vger.kernel.org>; Sat, 25 Jun 2022 17:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 05A5FC3411C
-        for <linux-usb@vger.kernel.org>; Sat, 25 Jun 2022 17:19:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2A7560ABE;
+        Sat, 25 Jun 2022 18:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97EA1C341C6;
+        Sat, 25 Jun 2022 18:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656177587;
-        bh=ost0gG3jvoUGLxTxQJnxlxxJs3n6+StPf2kOBn9gKQw=;
-        h=From:To:Subject:Date:From;
-        b=av2RCMHGeX2JndRFKbEuPbM6rZBr9GLJ4TkPkHo6OPJKtrsTbuVuPuMJEML1VqAbN
-         wKe8N3TUtKMfufEU9/sCqs12fEP50yGk8ehoZEYpnwQ75GK76OEj/S2eycTazf153S
-         tFCxc8U+MX5oZWbA5IYAvfBVeY5grqkdkt3ROp7xdtRXp73mn10LguUmSBNTgyCa+/
-         yIkx4OEK039xAL4ulUwru7FtuDUPdumouDro3VtLfV56J0N5Xqc371LFmrkKHonIHV
-         anpAGZHQwf3jlMP3WbF50Kn4pMcrRVtEwJZI7ocJ7F9Y7GdN9BsGOlqkqgddnHjoub
-         E0jGwE7bPLv0A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id DE3B0C05FD2; Sat, 25 Jun 2022 17:19:46 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216171] New: Hibernation not working because of xhci_hcd
-Date:   Sat, 25 Jun 2022 17:19:46 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: prz.kopa@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression attachments.created
-Message-ID: <bug-216171-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        s=k20201202; t=1656181805;
+        bh=mr0EPKWftMUQBZ3R8JQHBFfDl2BQOUehCprlVi9OPb4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Jsy8Pv0YYv/jdvAUG/VlzteKZjDnqjW1reyQXDfklV3td7w42hZCXIvtahTNz02pq
+         rva9QEAfOzXobY9wIg8EvS3JTC8haIDi1XMzrLc2S18zT/CKcyqBvRZRpr4PHFyarM
+         ci4COQKPhMEfn1aKfzOh8Xyt6JdsFFlg1EcUl4k4KZo+hRmHYsJERd6umYvWUztU3K
+         ogzZOdFQO1M12WNo+A9q93umID0X6QyadXqzx7VYQGXkZ+Aml27vUSQHwGzPKfjqR9
+         WGsnSNd0vhUas/5GErnvqjjL+7/wFoT7R0wT+Ddy1IushxZAX0QG2FjFuiifYL3XOE
+         Vzo2KV1yTYm9w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 809FBE7386C;
+        Sat, 25 Jun 2022 18:30:05 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 5.19-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YrcerztKA0mJxjVh@kroah.com>
+References: <YrcerztKA0mJxjVh@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YrcerztKA0mJxjVh@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc4
+X-PR-Tracked-Commit-Id: b24346a240b36cfc4df194d145463874985aa29b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c24eb8d6a5b2da4cbef6a053f58ea9818c6dd659
+Message-Id: <165618180549.26648.2841966637601024152.pr-tracker-bot@kernel.org>
+Date:   Sat, 25 Jun 2022 18:30:05 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,39 +61,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216171
+The pull request you sent on Sat, 25 Jun 2022 16:41:51 +0200:
 
-            Bug ID: 216171
-           Summary: Hibernation not working because of xhci_hcd
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.18.6-arch1-1
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: prz.kopa@gmail.com
-        Regression: No
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc4
 
-Created attachment 301268
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D301268&action=3Dedit
-Dmesg log with failed hibernation attempt
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c24eb8d6a5b2da4cbef6a053f58ea9818c6dd659
 
-Starting from 5.18.4 my notebook (Dell Latitude 3340) won't hibernate -
-hibernation fails with dmesg errors related to xhci_hcd. I'm attaching dmesg
-log with failed hibernation attempt. Problem goes away after reverting comm=
-it
-63acaa8e9c65dc34dc249440216f8e977f5d2748 (USB: hcd-pci: Fully suspend across
-freeze/thaw cycle). After reverting this commit on linux 5.18.6 my system c=
-an
-again successfully hibernate.
+Thank you!
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
