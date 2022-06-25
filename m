@@ -2,66 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E36355A6AB
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 05:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5F455A707
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 06:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbiFYDnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 23:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S229850AbiFYE00 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jun 2022 00:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiFYDnN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 23:43:13 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C4713F62;
-        Fri, 24 Jun 2022 20:43:05 -0700 (PDT)
-X-UUID: d3528aa41f1e4062b45d413fc9c3860d-20220625
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:b31e0792-f028-4a94-85fa-ad233c9808bf,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.6,REQID:b31e0792-f028-4a94-85fa-ad233c9808bf,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:b14ad71,CLOUDID:e65378ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:03d3e511f511,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d3528aa41f1e4062b45d413fc9c3860d-20220625
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 783343857; Sat, 25 Jun 2022 11:42:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 25 Jun 2022 11:42:58 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 25 Jun 2022 11:42:57 +0800
-Message-ID: <4efb47b5323891c72dd0341f911ced74f39bfb07.camel@mediatek.com>
-Subject: Re: [PATCH] usb: gadget: f_uac1: add IAD descriptor
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        "Julian Scheel" <julian@jusst.de>, xin lin <xin.lin@mediatek.com>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Sat, 25 Jun 2022 11:42:57 +0800
-In-Reply-To: <YrWif4oeelZrctmr@kroah.com>
-References: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
-         <YrWif4oeelZrctmr@kroah.com>
+        with ESMTP id S229520AbiFYE0Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jun 2022 00:26:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C1BD107
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 21:26:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFD6360C0D
+        for <linux-usb@vger.kernel.org>; Sat, 25 Jun 2022 04:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1603CC341C0
+        for <linux-usb@vger.kernel.org>; Sat, 25 Jun 2022 04:26:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656131180;
+        bh=JjCueDt69AJKgFNcFxntJGJCuqsRDWvKxExJWDbqRGA=;
+        h=From:To:Subject:Date:From;
+        b=D9wMa2Ch9VGJUVMK0GJnqg6clkdSdfOjbws9lVd5EZcUAC6qqFWeChNUZCDQ4VmqE
+         8FLWgb6jKkj/koBUVkjBlupOn87Ffvp7ZJHEjmUapkyt3ZaB7929UY44NKH4kEtkNT
+         lfagK+TLq7f+IfU0sspV5Z53swn8NVWxrI8/zTPfAncM2Lpwq2K+wt/bi8Rc1+w2gL
+         p1d8eTHWtLWEoVM8vPHGNQMS/wWMzxcPCuOzjqXCiOim83uehLhuB6QgoOjD3O/o2c
+         TACZ2kga/SuvxVGJ3hJM/0stTL9397ve3Dk0Ks2n0wD8kFAT8vTqQpdtpxk7Tu7pBr
+         e1WVLt+RMaW4Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 03544C05FD2; Sat, 25 Jun 2022 04:26:20 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216170] New: Ideapad Yoga freezes on USB removal
+Date:   Sat, 25 Jun 2022 04:26:19 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: rawat.arnav@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-216170-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,160 +70,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2022-06-24 at 13:39 +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jun 22, 2022 at 04:57:57PM +0800, Chunfeng Yun wrote:
-> > From: xin lin <xin.lin@mediatek.com>
-> > 
-> > Win10 can not enumerate composite device of UVC+UAC1+ADB without
-> > IAD descriptor
-> > in uac1.0, so add it.
-> 
-> I do not know what this means at all, sorry.  Can you please provide
-> a
-> better changelog text that describes what all of this is in more
-> detail?
-Ok, will add it in next version
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216170
 
-> 
-> 
-> 
-> > 
-> > Signed-off-by: xin lin <xin.lin@mediatek.com>
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> >  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_uac1.c
-> > b/drivers/usb/gadget/function/f_uac1.c
-> > index 6f0e1d803dc2..8390207bc513 100644
-> > --- a/drivers/usb/gadget/function/f_uac1.c
-> > +++ b/drivers/usb/gadget/function/f_uac1.c
-> > @@ -71,6 +71,17 @@ static inline struct f_uac1_opts
-> > *g_audio_to_uac1_opts(struct g_audio *audio)
-> >   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
-> >   */
-> >  
-> > +static struct usb_interface_assoc_descriptor iad_desc = {
-> > +	.bLength = sizeof(iad_desc),
-> > +	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
-> > +
-> > +	.bFirstInterface = 0,
-> > +	.bInterfaceCount = 3,
-> > +	.bFunctionClass = USB_CLASS_AUDIO,
-> > +	.bFunctionSubClass = 0,
-> > +	.bFunctionProtocol = UAC_VERSION_1,
-> > +};
-> > +
-> >  /* B.3.1  Standard AC Interface Descriptor */
-> >  static struct usb_interface_descriptor ac_interface_desc = {
-> >  	.bLength =		USB_DT_INTERFACE_SIZE,
-> > @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor
-> > as_iso_in_desc = {
-> >  };
-> >  
-> >  static struct usb_descriptor_header *f_audio_desc[] = {
-> > +	(struct usb_descriptor_header *)&iad_desc,
-> 
-> Why put this first?  Is that a requirement?
-Yes, it's a requirement,
-Interface Association Descriptor ECN:
-"An interface association descriptor must be located before the set of
-interface descriptors (including all alternate settings) for the
-interfaces it associates."
+            Bug ID: 216170
+           Summary: Ideapad Yoga freezes on USB removal
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.18.4
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: rawat.arnav@gmail.com
+        Regression: No
 
-> 
-> >  	(struct usb_descriptor_header *)&ac_interface_desc,
-> >  	(struct usb_descriptor_header *)&ac_header_desc,
-> >  
-> > @@ -293,6 +305,7 @@ static struct usb_descriptor_header
-> > *f_audio_desc[] = {
-> >  };
-> >  
-> >  enum {
-> > +	STR_ASSOC,
-> 
-> Again, why first?
-follow uac2 driver
-> 
-> >  	STR_AC_IF,
-> >  	STR_USB_OUT_IT,
-> >  	STR_USB_OUT_IT_CH_NAMES,
-> > @@ -310,6 +323,7 @@ enum {
-> >  
-> >  static struct usb_string strings_uac1[] = {
-> >  	/* [STR_AC_IF].s = DYNAMIC, */
-> > +	[STR_ASSOC].s = "Source/Sink",
-> >  	[STR_USB_OUT_IT].s = "Playback Input terminal",
-> >  	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
-> >  	[STR_IO_OUT_OT].s = "Playback Output terminal",
-> > @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >  	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
-> >  	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
-> >  
-> > +	iad_desc.bInterfaceCount = 1;
-> 
-> Why this change?
-FS, HS may be different, count up them again.
+On (any) USB device removal from a Yoga 9i laptop, the system completely lo=
+cks
+up, needing a hard restart. The kernel does not write any relevant logs to =
+disk
+when the lockups occur, making debugging difficult. I am open to suggestion=
+s on
+how to debug this problem, and about any kernel options I can apply to iden=
+tify
+the cause of the lockup.
 
-> 
-> 
-> >  	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc-
-> > >bLength);
-> >  
-> >  	if (EPIN_EN(opts)) {
-> > @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >  		if (FUIN_EN(opts))
-> >  			len += in_feature_unit_desc->bLength;
-> >  		ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +		iad_desc.bInterfaceCount++;
-> >  	}
-> >  	if (EPOUT_EN(opts)) {
-> >  		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-> > @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >  		if (FUOUT_EN(opts))
-> >  			len += out_feature_unit_desc->bLength;
-> >  		ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +		iad_desc.bInterfaceCount++;
-> >  	}
-> >  
-> >  	i = 0;
-> > +	f_audio_desc[i++] = USBDHDR(&iad_desc);
-> 
-> Again, why first?
-It is a requirement as ECN says.
+The kernel parameters for hardware watchdogs and hard lockup panic do not w=
+ork.
+Neither do sysrq keys. The lockup does not behave as a kernel panic - kexec=
+ is
+not used, and neither does the caps light blink.
 
-> 
-> >  	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
-> >  	f_audio_desc[i++] = USBDHDR(ac_header_desc);
-> >  
-> > @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >  		}
-> >  	}
-> >  
-> > +	iad_desc.iFunction = us[STR_ASSOC].id;
-> >  	ac_interface_desc.iInterface = us[STR_AC_IF].id;
-> >  	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
-> >  	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
-> > @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >  	status = usb_interface_id(c, f);
-> >  	if (status < 0)
-> >  		goto err_free_fu;
-> > +
-> > +	iad_desc.bFirstInterface = status;
-> 
-> Shouldn't this be needed without your change?
-Need update, it's not always 0.
+Model: Yoga 9i 14ITL5 82BG
+Kernel: 5.18.4
 
-Thanks a lot
+--=20
+You may reply to this email to add a comment.
 
-> 
-> thanks,
-> 
-> greg k-h
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
