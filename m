@@ -2,72 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237F655A5A9
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 02:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA6A55A5C5
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 03:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiFYAyb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jun 2022 20:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S230487AbiFYBVV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jun 2022 21:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiFYAy2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 20:54:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740CE5001A;
-        Fri, 24 Jun 2022 17:54:26 -0700 (PDT)
-X-UUID: 780357f6997c455fb5477ca2b5b98988-20220625
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:de213be8-96b4-4f51-8d3f-3c2a1c709920,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:70
-X-CID-INFO: VERSION:1.1.6,REQID:de213be8-96b4-4f51-8d3f-3c2a1c709920,OB:0,LOB:
-        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:70
-X-CID-META: VersionHash:b14ad71,CLOUDID:99a476ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:4ca74c2c1c80,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 780357f6997c455fb5477ca2b5b98988-20220625
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1674105141; Sat, 25 Jun 2022 08:54:19 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 25 Jun 2022 08:54:18 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 25 Jun 2022 08:54:18 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Sat, 25 Jun 2022 08:54:18 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <peterwu.pub@gmail.com>
-CC:     <alice_chen@richtek.com>, <broonie@kernel.org>,
-        <chiaen_wu@richtek.com>, <chunfeng.yun@mediatek.com>,
-        <cy_huang@richtek.com>, <daniel.thompson@linaro.org>,
-        <deller@gmx.de>, <devicetree@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <gregkh@linuxfoundation.org>,
-        <heikki.krogerus@linux.intel.com>, <jic23@kernel.org>,
-        <jingoohan1@gmail.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <lars@metafoo.de>, <lee.jones@linaro.org>, <lgirdwood@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux@roeck-us.net>,
-        <matthias.bgg@gmail.com>, <pavel@ucw.cz>, <robh+dt@kernel.org>,
-        <sre@kernel.org>, <szunichen@gmail.com>
-Subject: Re: [PATCH v3 02/14] dt-bindings: power: supply: Add Mediatek MT6370 Charger
-Date:   Sat, 25 Jun 2022 08:54:18 +0800
-Message-ID: <20220625005418.7565-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220623115631.22209-3-peterwu.pub@gmail.com>
-References: <20220623115631.22209-3-peterwu.pub@gmail.com>
+        with ESMTP id S229912AbiFYBVU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jun 2022 21:21:20 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0A22871E
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 18:21:18 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so5950584fac.13
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 18:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=BRJxtK7by35Zc8QH/nnvKQKs9hK/8AIEzJouUPpaTpA=;
+        b=ipnQNOEUKRMUQtRZdBO/Uv8XHyRCyACkN75EaXH9G5TIYduaIi6Fs3ClcaZUdqHlQ/
+         +azX+aM5vTZ05ypVs97hsPIGZ6MeiRi0gG49Mkz0HiH4qpW09CVB+6Nr2tzBDQpHvTYT
+         AgDl0IMUAOBERWThy7J32xiYX4nq4ZwFo2lak=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=BRJxtK7by35Zc8QH/nnvKQKs9hK/8AIEzJouUPpaTpA=;
+        b=0HEv6mS0AN413Np4tRLVbeO78JiPmleF0F4tun88wgynPF4PKRN4xhl85//fzl/KT8
+         YwjBv5LdopwB3anQEjoSbs+EfZMeDnwf2YB1PJPPVLKFjXkJtit4KyZ9XUY2f3R77Vcr
+         oLwbLID3AdajYWf9iAqQlcYz7wJS+44+pUx5YWUbdsE0BASYp/R8xrKBYFpcVaUS2N3Y
+         G2QrjY0bnOIy9G9SJLLfS1eRrVe3Pqa6Rq9oZMb0uyEWAXsyv/rgaxZmHAkA7rxHjnsz
+         hHC3px1oym1vz55L8sqcGc9IR06t4lTdzmV0B2Qpo0TQk8dq7tIv7IMiw7wB9tlGUXJq
+         HxNQ==
+X-Gm-Message-State: AJIora8i45HolqljY2WmODboe1GD3bgyGuoNjFerd+fslNWE7giFXr/L
+        7zV0Cbr0+WC0QO7Ag3/R/w/NZcsss0YyhxHrCdvmpA==
+X-Google-Smtp-Source: AGRyM1u6/T+WcVjOW9N89LEkv92dI1MrVPLEX2x3G21Lc4IDCSUfjTNLNtnwWFOb4IiXjzG08Co3TRX9cSNHdNMmXMo=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr1223058oap.63.1656120078008; Fri, 24 Jun
+ 2022 18:21:18 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 24 Jun 2022 18:21:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <CACeCKad_vB+cHzwkBrvi90u7mBmJbk=YuecOwsp1xexYUiq-_A@mail.gmail.com>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
+ <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
+ <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
+ <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com>
+ <CAE-0n53i90ZUFSmrR=ScXtMdn_bWPY49WWTf9LXbxu_udGgP9w@mail.gmail.com>
+ <CACeCKaffqb6v7TFji2u00VSQ=DGvRe-gcxMnAEbZCC1qtDZF6A@mail.gmail.com>
+ <CAE-0n51AYqr4wcD-JaVaTYjFgxCj+iX+xAYKCrZCqGHE2XEUgA@mail.gmail.com> <CACeCKad_vB+cHzwkBrvi90u7mBmJbk=YuecOwsp1xexYUiq-_A@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 24 Jun 2022 18:21:17 -0700
+Message-ID: <CAE-0n50yT79TTqBWqqG8jpuhFZhCqV75hpViESgojRutCZ1M9A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,125 +96,80 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi ChiaEn,
+Quoting Prashant Malani (2022-06-24 14:41:36)
+> On Fri, Jun 24, 2022 at 12:50 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Prashant Malani (2022-06-23 19:48:04)
+> > > On Thu, Jun 23, 2022 at 7:13 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > > >
+> > > > Quoting Prashant Malani (2022-06-23 17:35:38)
+> > > > > On Thu, Jun 23, 2022 at 4:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > > > > >
+> > > > > > I'm not aware of any documentation for the dos and don'ts here. Are
+> > > > > > there any examples in the bindings directory that split up a device into
+> > > > > > subnodes that isn't in bindings/mfd?
+> > > > >
+> > > > > usb-c-connector [3] and its users is an example.
+> > > >
+> > > > What are the subnodes? The graph ports? That is not what I meant.
+> > >
+> > > cros-ec-typec [4] uses subnodes of usb-c-connector. Chrome OS DTs
+> > > use the ports from the included usb-c-connector to switching hardware.
+> >
+> > Ok, got it. usb-c-connector nodes are children of the typec controller
+> > (in this case cros-ec-typec) because otherwise we would need to make a
+> > phandle link from the usb-c-connector node(s) under the root node / to
+> > the typec controller. The phandle link may need to be done in both
+> > directions, so it makes more sense to put the usb-c-connector nodes
+> > underneath the typec controller to express the direct relationship
+> > between the typec controller and the usb-c-connectors.
+> >
+> > Furthermore, the usb-c-connector is not integrated as part of the EC in
+> > the same package. There is a discrete part placed on the board that
+> > corresponds to the usb-c-connector and that is separate from the EC. The
+> > connectors are in essence only controllable through the EC because
+> > that's the typec controller.
+>
+> From the perspective of the AP, the `usb-c-connector` *is* an integrated part of
+> the Chrome EC; there is no alternative way to control it except
+> through the Chrome EC.
+> So the above example reinforces the usage model for typec-switch (which is
+> also an "integrated" component).
 
-> Add Mediatek MT6370 Charger binding documentation.
+No the usb-c-connector is not an integrated part of the EC. It is a
+discrete part with a part number that gets placed on the PCB. From the
+perspective of the AP it is controlled via the EC, but it is not
+integrated into the same package that the EC is packaged in to be
+soldered down to the PCB.
 
-s/Mediatek/MediaTek/
+So the example of usb-c-connector as a subnode doesn't reinforce the
+argument for a typec-switch binding. It highlights the difference that
+I've been trying to explain. The difference between internal vs.
+external components of a device. In the EC case the usb-c-connector is
+an external component from the EC, hence the two nodes. In the anx or
+ite case the typec switch is an internal component, hence the single
+node for the anx or ite part.
 
-Would you mind fix that for the series?
+>
+> This really is a limited binding change that helps describe connections
+> between Type-C components, helps these components integrate with
+> the kernel Type-C framework, and consolidates the associated properties.
+> I believe it works for most current use cases in the upstream kernel.
+>
+> I'm happy to discuss more theoretical use cases further, but
+> respectfully, I prefer to do
+> so off-list.
 
-cheers,
-Miles
+I'm happy to move the discussion to the anx or ite bindings if you'd
+prefer to discuss more concrete bindings.
 
-> 
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
-> 
-> v3
-> - Add items and remove maxItems of io-channels
-> - Add io-channel-names and describe each item
-> - Add "unevaluatedProperties: false" in "usb-otg-vbus-regulator"
-> - Rename "enable-gpio" to "enable-gpios" in "usb-otg-vbus-regulator"
-> ---
->  .../power/supply/mediatek,mt6370-charger.yaml      | 87 ++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
-> new file mode 100644
-> index 0000000..f138db6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek MT6370 Battery Charger
-> +
-> +maintainers:
-> +  - ChiaEn Wu <chiaen_wu@richtek.com>
-> +
-> +description: |
-> +  This module is part of the MT6370 MFD device.
-> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6370-charger
-> +
-> +  interrupts:
-> +    description: |
-> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
-> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
-> +      are required.
-> +    items:
-> +      - description: BC1.2 done irq
-> +      - description: usb plug in irq
-> +      - description: mivr irq
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: attach_i
-> +      - const: uvp_d_evt
-> +      - const: mivr
-> +
-> +  io-channels:
-> +    description: |
-> +      Use ADC channel to read VBUS, IBUS, IBAT, etc., info.
-> +    minItems: 1
-> +    items:
-> +      - description: |
-> +          VBUS voltage with lower accuracy (+-75mV) but higher measure
-> +          range (1~22V)
-> +      - description: |
-> +          VBUS voltage with higher accuracy (+-30mV) but lower measure
-> +          range (1~9.76V)
-> +      - description: the main system input voltage
-> +      - description: battery voltage
-> +      - description: battery temperature-sense input voltage
-> +      - description: IBUS current (required)
-> +      - description: battery current
-> +      - description: |
-> +          regulated output voltage to supply for the PWM low-side gate driver
-> +          and the bootstrap capacitor
-> +      - description: IC junction temperature
-> +
-> +  io-channel-names:
-> +    items:
-> +      - const: vbusdiv5
-> +      - const: vbusdiv2
-> +      - const: vsys
-> +      - const: vbat
-> +      - const: ts_bat
-> +      - const: ibus
-> +      - const: ibat
-> +      - const: chg_vddp
-> +      - const: temp_jc
-> +
-> +  usb-otg-vbus-regulator:
-> +    type: object
-> +    description: OTG boost regulator.
-> +    unevaluatedProperties: false
-> +    $ref: /schemas/regulator/regulator.yaml#
-> +
-> +    properties:
-> +      enable-gpios:
-> +        maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - interrupt-names
-> +  - io-channels
-> +
-> +additionalProperties: false
-> +
-> +...
-> -- 
-> 2.7.4
-> 
-> 
+>
+> If the maintainer is OK with it (Krzysztof has reviewed it, but I
+> don't want to presume
+> what the protocol is for patches in this subsystem), and we've
+> provided 2 users as asked for
+> in v4 [5], then I request its consideration for submission.
+> If the maintainers have further concerns, we'd be happy to address them.
+>
+
+Rob?
