@@ -2,214 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5299255A72F
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 07:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A8D55A753
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jun 2022 07:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbiFYFLF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jun 2022 01:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S231713AbiFYFkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jun 2022 01:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiFYFLE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jun 2022 01:11:04 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C74B48E63
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 22:11:03 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id u13-20020a170902e5cd00b0016a53274671so2290155plf.15
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jun 2022 22:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=rVO2p/4gWmOyb4ep6RqSpRHzECQ50xC37PSaOv1SUGw=;
-        b=ZnYxgZ7WqalP2dGkVphlbAjbjTTwDrWhD3RAM4V8o6/4InFeKP/4fGh9nmuKlyAEvo
-         oKBc3t8krwimc05NLMyCHViXO4A+w6+YsDo8b4CVr4LSG+mLmKz2pA2pe2zjAb1cJ6H/
-         jaoeav2d7SWqkbw5WcEyh4WTNEuMEQYzcCSOTK7q3hfcEnQ9xVm8hYFPtL1wb+JG794S
-         7Ua4nSkKwOPkLvqgcU+sR2WWAX0aCCZfNetn+bckdI9KhaloJ63hrQo0IsbYsbBAj14f
-         03k70sCmEYyFHwzJ40aHjS4YgKpS01/1TW15oVuFATsCHtlepIt02aV2Uauk1+rNeD9w
-         hKow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=rVO2p/4gWmOyb4ep6RqSpRHzECQ50xC37PSaOv1SUGw=;
-        b=YguJRqbY0pC3miceV/8J45WjYkAEg7Bv+uXBDt4NJchtIDdZm2UkHa05H9rso708bi
-         +Qhz0W4jXsjtUzxtRqziAmyAVw1W1BiezKPjqe+higD1oaPjVHA9JD3+R82S6SVicIf3
-         wD/uKtiSDf3kFBjwA7S/HZdmKXbSO3u2rTlKG8LDGYekXlxZ5o6IfrQ3NXBVXiZ2GfIK
-         qv4jkgSulGjU4wEXrvdFk42wz0lzApL23zIFG18CazZ2GnAxxoh0usGAhBwDxqo8Z8ot
-         HiwALIAbEWhx1hmkcwte/8CogOj+m8B2098aJ4YkcPSqY00g32n63ghixxsxvLog+AJA
-         Q+AA==
-X-Gm-Message-State: AJIora8f7c2fPElxMgNqneNvZsfmV+GySa05HHvDZt9lVGKg1HBipHHr
-        QVRUUtlmj8CwjD9slEHWE3KCUfoSWw97tQ==
-X-Google-Smtp-Source: AGRyM1vSgWc7GnZSpUv1n7qCzLhhitXpo2LTAKE1+91FirTZI0V7zE22wJcwEw3RTwL8dSDR+tYk87aSCL5uPw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
- t9-20020a17090a024900b001e0a8a33c6cmr438311pje.0.1656133861539; Fri, 24 Jun
- 2022 22:11:01 -0700 (PDT)
-Date:   Sat, 25 Jun 2022 13:08:39 +0800
-In-Reply-To: <20220625050838.1618469-1-davidgow@google.com>
-Message-Id: <20220625050838.1618469-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v3 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231331AbiFYFkQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jun 2022 01:40:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9586A51333;
+        Fri, 24 Jun 2022 22:40:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3089F60AE3;
+        Sat, 25 Jun 2022 05:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AB8CC341CC;
+        Sat, 25 Jun 2022 05:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656135614;
+        bh=DDmA3+A5PginCNfJ8pUS0urfuAliRawSeMY/W6w8LRw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cLrB7WOu3OG1JF2sheq1bhBZ42+UENE4BCOpP5gqn628eC2Ic7W7Yttriqz+FW99r
+         hgXyPzGWbFldn0j2NAPLkDHBiPLYLBeZD/vPN1V8ldJFXQd7W5gv7A3FI1YqfYXjAH
+         4vY6nbB2SaimTQBasxyBag0IY4KDLZ4b6M8kXRAHkqoYmZS/fsZ7SSgsF44XbzZVas
+         EJluPdvejP/t79E8AMkpK0BXMD/sTC99GwHRjHvFGQIarlfZSkfW9I8/TvklIWrybZ
+         Dg/7RGj4XCWQshQ0ytJjerGIRjLduZnCOx6+voH077Lx7J2uzlQgYI3o+yYxwN8uP/
+         EKkDHXB9eXPpg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3E75EE8DBEE;
+        Sat, 25 Jun 2022 05:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] usbnet: Fix linkwatch use-after-free on
+ disconnect
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165613561425.1389.15199490480360862907.git-patchwork-notify@kernel.org>
+Date:   Sat, 25 Jun 2022 05:40:14 +0000
+References: <d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de>
+In-Reply-To: <d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, jannh@google.com, o.rempel@pengutronix.de,
+        linux@rempel-privat.de, edumazet@google.com,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org, andrew@lunn.ch,
+        jackychou@asix.com.tw, w@1wt.eu, LinoSanfilippo@gmx.de,
+        p.rosenberger@kunbus.com, hkallweit1@gmail.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The kunit_test_suite() macro is no-longer incompatible with module_add,
-so its use can be reinstated.
+Hello:
 
-Since this fixes parsing with builtins and kunit_tool, also enable the
-test by default when KUNIT_ALL_TESTS is enabled.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-The test can now be run via kunit_tool with:
-	./tools/testing/kunit/kunit.py run --arch=x86_64 \
-	--kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-	--kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-	--kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-	--kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-	'sdhci-of-aspeed'
+On Thu, 23 Jun 2022 14:50:59 +0200 you wrote:
+> usbnet uses the work usbnet_deferred_kevent() to perform tasks which may
+> sleep.  On disconnect, completion of the work was originally awaited in
+> ->ndo_stop().  But in 2003, that was moved to ->disconnect() by historic
+> commit "[PATCH] USB: usbnet, prevent exotic rtnl deadlock":
+> 
+>   https://git.kernel.org/tglx/history/c/0f138bbfd83c
+> 
+> [...]
 
-(It may be worth adding a .kunitconfig at some point, as there are
-enough dependencies to make that command scarily long.)
+Here is the summary with links:
+  - [net-next,v2] usbnet: Fix linkwatch use-after-free on disconnect
+    https://git.kernel.org/netdev/net-next/c/a69e617e533e
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20220621085345.603820-6-davidgow@google.com/
-- Clean up the aspeed_sdc_init() function to get rid of an obsolete goto
-  (Thanks Daniel)
-- Add Daniel and Ulf's Acked-by tags.
-
-No changes since v1:
-https://lore.kernel.org/linux-kselftest/20220618090310.1174932-6-davidgow@google.com/
-
----
- drivers/mmc/host/Kconfig                |  5 ++--
- drivers/mmc/host/sdhci-of-aspeed-test.c |  8 +-----
- drivers/mmc/host/sdhci-of-aspeed.c      | 34 +------------------------
- 3 files changed, 5 insertions(+), 42 deletions(-)
-
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index d6144978e32d..10c563999d3d 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -169,8 +169,9 @@ config MMC_SDHCI_OF_ASPEED
- 	  If unsure, say N.
- 
- config MMC_SDHCI_OF_ASPEED_TEST
--	bool "Tests for the ASPEED SDHCI driver"
--	depends on MMC_SDHCI_OF_ASPEED && KUNIT=y
-+	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
-+	depends on MMC_SDHCI_OF_ASPEED && KUNIT
-+	default KUNIT_ALL_TESTS
- 	help
- 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
- 	  option only if you will boot the kernel for the purpose of running
-diff --git a/drivers/mmc/host/sdhci-of-aspeed-test.c b/drivers/mmc/host/sdhci-of-aspeed-test.c
-index 1ed4f86291f2..ecb502606c53 100644
---- a/drivers/mmc/host/sdhci-of-aspeed-test.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed-test.c
-@@ -96,10 +96,4 @@ static struct kunit_suite aspeed_sdhci_test_suite = {
- 	.test_cases = aspeed_sdhci_test_cases,
- };
- 
--static struct kunit_suite *aspeed_sdc_test_suite_array[] = {
--	&aspeed_sdhci_test_suite,
--	NULL,
--};
--
--static struct kunit_suite **aspeed_sdc_test_suites
--	__used __section(".kunit_test_suites") = aspeed_sdc_test_suite_array;
-+kunit_test_suite(aspeed_sdhci_test_suite);
-diff --git a/drivers/mmc/host/sdhci-of-aspeed.c b/drivers/mmc/host/sdhci-of-aspeed.c
-index 6e4e132903a6..ba6677bf7372 100644
---- a/drivers/mmc/host/sdhci-of-aspeed.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed.c
-@@ -606,25 +606,6 @@ static struct platform_driver aspeed_sdc_driver = {
- 
- #if defined(CONFIG_MMC_SDHCI_OF_ASPEED_TEST)
- #include "sdhci-of-aspeed-test.c"
--
--static inline int aspeed_sdc_tests_init(void)
--{
--	return __kunit_test_suites_init(aspeed_sdc_test_suites);
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--	__kunit_test_suites_exit(aspeed_sdc_test_suites);
--}
--#else
--static inline int aspeed_sdc_tests_init(void)
--{
--	return 0;
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--}
- #endif
- 
- static int __init aspeed_sdc_init(void)
-@@ -637,18 +618,7 @@ static int __init aspeed_sdc_init(void)
- 
- 	rc = platform_driver_register(&aspeed_sdc_driver);
- 	if (rc < 0)
--		goto cleanup_sdhci;
--
--	rc = aspeed_sdc_tests_init();
--	if (rc < 0) {
--		platform_driver_unregister(&aspeed_sdc_driver);
--		goto cleanup_sdhci;
--	}
--
--	return 0;
--
--cleanup_sdhci:
--	platform_driver_unregister(&aspeed_sdhci_driver);
-+		platform_driver_unregister(&aspeed_sdhci_driver);
- 
- 	return rc;
- }
-@@ -656,8 +626,6 @@ module_init(aspeed_sdc_init);
- 
- static void __exit aspeed_sdc_exit(void)
- {
--	aspeed_sdc_tests_exit();
--
- 	platform_driver_unregister(&aspeed_sdc_driver);
- 	platform_driver_unregister(&aspeed_sdhci_driver);
- }
+You are awesome, thank you!
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
