@@ -2,61 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB56D55B152
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jun 2022 12:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5771655B146
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jun 2022 12:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbiFZKqU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Jun 2022 06:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        id S234297AbiFZKtM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Jun 2022 06:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbiFZKqT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jun 2022 06:46:19 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FECA12AF7
-        for <linux-usb@vger.kernel.org>; Sun, 26 Jun 2022 03:46:18 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id o10so9318122edi.1
-        for <linux-usb@vger.kernel.org>; Sun, 26 Jun 2022 03:46:18 -0700 (PDT)
+        with ESMTP id S234180AbiFZKtL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jun 2022 06:49:11 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA9E11809
+        for <linux-usb@vger.kernel.org>; Sun, 26 Jun 2022 03:49:09 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id fd6so9291149edb.5
+        for <linux-usb@vger.kernel.org>; Sun, 26 Jun 2022 03:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IR5ASCo6Y/Rs1/PH2JcO8TDLcE91NrIowM+FbUwhGRc=;
-        b=or3a9faEfHAGd6P1JG+ETIMPC9qnTPWQ1U3JQvxvvcbaP0M4zp0oVG+fSiQQqsXq2g
-         +iCKH752/3VDi2b8QYCFJdXRg9c34dOAtlmH7c58wrHVVudODXsWxLb+QOx/gHT08qD6
-         msEBnvQHHd20+Yh8uUgZiBfnjp88MK+nn/6kf0MvrU41FX3tu+3TePh3bhjkYbxcZCij
-         Yf1dNp63XzTly3S4JAHnNoSdUXr8/VLy1LXd0bLC/F7Tft3AMMoDUuGpmBCi4ST3itVZ
-         QFCWI1XipWQhkBhhDKBVtOxMQ4acvaTQvVoAajg98C7CtvMe2OezfG/26oFvlYXzBv0B
-         MidQ==
+        bh=mmEZuF3sSMd4FiYZEbnqFV/YPFODuaItHC3npgDdbmY=;
+        b=sAMMH6H1Igx/l0oc1TMDg0yhWD2+7xxpQaRJDVU6VU99ReByrwf8ByJmoIccKcHJSm
+         142dAFEQavZd/Lmt6SXt8gOGFKGqQgRV2VE7d0t2EIm0REzEjNN3T1s6/KoJu3XjI82Q
+         WMx9uHdTA3us9tlf1cJtjA2qmFZh29yPpUTMg1rKPB2a59W+6SmYCIvI6cNupMNVhk+j
+         FwrhlWmqH+MvVAEdOyw5O86MjNyqIr149R6dLVMzWMq8Eee9z1WWZtNEzFQ1x22A0J9e
+         NiT8yRtxZbHC2i6+utob8AGe5tnCIFEMB3gF4Fw+VADCwTtmXWXPhvNa4omYr/YSeldv
+         S11A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=IR5ASCo6Y/Rs1/PH2JcO8TDLcE91NrIowM+FbUwhGRc=;
-        b=dBLEl8fLiVh5dC742YFeQR1Pkm6l62xJDpE+dJNJBPifbrvnALFnLDdGuQsW40wMYc
-         SS3TxwEikyfDg+CvvZtCkfue121smsMdGYp4bFPm/edPluQXJ6W748Y8ZBu6mtTP71+Z
-         0Ho6bs/rCBnswlhe8Mw39Yclm1+lCgiDL9BXzdum5mLAUV+sQP+jc7X450uIdp+WkK8f
-         tZw3wMz2lhfVZp/GsnjCd2eOKEPUDWpSuMdVUoqj9WOKtEhJZ97e8seVUtJ3IOgeCL6N
-         ZoqZMWzZSRMDRnJ587ZL2dzHKb51IlJLG0kMk9+HYYPQS4dw4aEdHedXmg0MqKv+PIQQ
-         tcUg==
-X-Gm-Message-State: AJIora9XAOBVcAiFJdpDN+1mU0ScvzBaOQ9abzFU4P+CHUcLLXHrkpN5
-        AZvlTPAcxCrLhg5kIC3BCddupw==
-X-Google-Smtp-Source: AGRyM1v9t9D/Wd5uU9xYXVJRI1WbAqZUpUFiKyMzRg8VSkIRrTAJcHRXDC6RuuCxKlZQHNNFkzUySw==
-X-Received: by 2002:a05:6402:4306:b0:435:a1c9:4272 with SMTP id m6-20020a056402430600b00435a1c94272mr10184877edc.205.1656240377073;
-        Sun, 26 Jun 2022 03:46:17 -0700 (PDT)
+        bh=mmEZuF3sSMd4FiYZEbnqFV/YPFODuaItHC3npgDdbmY=;
+        b=zCMPP8NyFI6b1e2+UcEigXGiPWih/gc4CUx0jwLdJqKmxBS/mWpYG7G1/DrRNDUowh
+         9SULiVR7VSw2068Ad1Z4w8VcIXVv5hVXoSAEo4vybLjk3L/z51AEaiekoztPpoTrY8nA
+         DGlaNOlteC/iMQbZraeepG+uAV8i24VGWvwKUwXsatHIAkeYSlpTHqkKVsfSb5ZB7l/o
+         CpZOq9LglbXtR9B5jP7uIE+Vx9tazCpAHV2o2r7PfKITG1+VcQk47/inu2Hzrqns0Jdu
+         +qXm19SdAPuXLptXjDRvbLLJbu9IOEjvUUDQOOtciaLTARC2lvGOKP8dzUgq5rhJw8ug
+         QGhQ==
+X-Gm-Message-State: AJIora+LZOnqEmO1CzUES+6HJZEKWYjGbXQwkOr9+JNHLi0wkg0m1YQJ
+        ijMLRuKsv3ExzMNx23TgvRfFIw==
+X-Google-Smtp-Source: AGRyM1umek5iPRNqIejfVVCxmNssO5BgP+bQ+pexW3w1fg6cBla9xeht8NvKw++YLsTe34mcv9gYLw==
+X-Received: by 2002:a05:6402:3886:b0:435:643a:b7ae with SMTP id fd6-20020a056402388600b00435643ab7aemr10010189edb.4.1656240548399;
+        Sun, 26 Jun 2022 03:49:08 -0700 (PDT)
 Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g18-20020a170906595200b006f3ef214e20sm3576655ejr.134.2022.06.26.03.46.15
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906941600b0072660d8d83fsm1643197ejx.188.2022.06.26.03.49.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 03:46:16 -0700 (PDT)
-Message-ID: <ed35498e-7509-f701-84f5-3b3550021ac8@linaro.org>
-Date:   Sun, 26 Jun 2022 12:46:15 +0200
+        Sun, 26 Jun 2022 03:49:08 -0700 (PDT)
+Message-ID: <8b9c2b8e-fb65-2b65-1294-47d3b5623f66@linaro.org>
+Date:   Sun, 26 Jun 2022 12:49:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH RESEND v9 4/5] arm: dts: stih407-family: Harmonize DWC
- USB3 DT nodes name
+Subject: Re: [PATCH RESEND v9 5/5] arm64: dts: apm: Harmonize DWC USB3 DT
+ nodes name
 Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
@@ -69,10 +70,8 @@ To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         linux-usb@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Khuong Dinh <khuong@os.amperecomputing.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Patrice Chotard <patrice.chotard@st.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -81,9 +80,11 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         linuxppc-dev@lists.ozlabs.org, linux-snps-arc@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220624141622.7149-1-Sergey.Semin@baikalelectronics.ru>
- <20220624141622.7149-5-Sergey.Semin@baikalelectronics.ru>
+ <20220624141622.7149-6-Sergey.Semin@baikalelectronics.ru>
+ <eb00b6c3-ae5e-9858-ab5f-fd78229ff436@linaro.org>
+ <20220624205902.y2un4lr7d3zkc6jx@mobilestation>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220624141622.7149-5-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220624205902.y2un4lr7d3zkc6jx@mobilestation>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,18 +97,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/06/2022 16:16, Serge Semin wrote:
-> In accordance with the DWC USB3 bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-> named.
+On 24/06/2022 22:59, Serge Semin wrote:
+> On Fri, Jun 24, 2022 at 07:17:53PM +0200, Krzysztof Kozlowski wrote:
+>> On 24/06/2022 16:16, Serge Semin wrote:
+>>> In accordance with the DWC USB3 bindings the corresponding node
+>>> name is suppose to comply with the Generic USB HCD DT schema, which
+>>> requires the USB nodes to have the name acceptable by the regexp:
+>>> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+>>> named despite of the warning comment about possible backward
+>>> compatibility issues.
+>>
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
+>> Sometimes node name is exposed to user-space which depends on it. How
+>> did you check there is no issue here?
+> 
+> I well remember the Qcom problem caused by one of my patch:
+> https://lore.kernel.org/lkml/CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com/
+> 
+> The next patch caused the same problem, but hasn't been reverted.
+> https://lore.kernel.org/lkml/CALAqxLWGujgR7p8Vb5S_RimRVYxwm5XF-c4NkKgMH-43wEBaWg@mail.gmail.com/
+> 
+> As before I am more inclined to thinking that the problem was mainly caused
+> by the improper node-name utilization. Anyway John later noted that the
+> problem was fixed in the user-space. 
 
-Thanks, applied.
+Yes, I remember. The node names are not considered ABI, therefore any
+reliance on them is not correct.
+
+I wonder however what was the reasoning for this comment in APM DTS.
+
+> That why afterwards you were able
+> to provide the commit b77a1c4d6b05 ("arm64: dts: qcom: correct DWC3
+> node names and unit addresses").
+> 
+> Anyway I am not able to track the way the node-name is used on the
+> affected platform and can't make sure that the dts would be still
+> working well on that devices. But seeing nobody responded/commented on
+> this patch for more than a year we can at least try to merge this in
+> and see whether it causes any problem should the denoted platform is
+> still in use. If it does we can revert the update back and forget
+> about it.
+
+The APM is kind of abandoned, so indeed we might never get a reply.
+
+I'll take it.
 
 Best regards,
 Krzysztof
