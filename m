@@ -2,299 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2585955CF34
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2FDF55C983
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237709AbiF0On0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 10:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
+        id S236594AbiF0OyT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 10:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237598AbiF0OnY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 10:43:24 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D6DBE20
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 07:43:22 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id o16so13414102wra.4
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 07:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=I3nC8B6be2rJKcDVylzZNDnz/D1EgBd9lnRAuMjTZ0A=;
-        b=OflRcSKTk5KJCsJhl/OOpbqhK8lJUAG5ameoeZ6v2VCXjDvoRSiavCQ3R1SeKuwP7R
-         KbeemSWZj0FBD0BGYqlJ9zS8r30ytnBo+ZfnhbBnEGCCqGR3VFgmCBFbM2Ri1w9nKmD3
-         Puk4NGy6VbGJKlsvbgETb7enuUR4hHJxrlL9u/Sn+TdoGHt16rM9rdRt04CQ42UTxvO6
-         Kzxmo/2csAxoA6QVmMiAYzHNH4FzLTzgjs6VRdFBeRRrEEdOz6cKDRINsq4la0W19ECu
-         u9sf6CUJIC8M2wLb+kZTBI0plSWsnXdcymHtHQ14ks2Lqp8b0msjqo9WP4H8G6nqd6wR
-         LRdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=I3nC8B6be2rJKcDVylzZNDnz/D1EgBd9lnRAuMjTZ0A=;
-        b=YhzGfx3t/xVViD9M25vhfCbmJpAe/H/RG0BkCkI4YQeoC+4cHKc4P/MtRHQVAyds3v
-         Y1rHcxa5t7e72h7Do9dog/LzNR70MLhyF2/JR1IFAwnl6+ZMnN+Yb7Hi/6CnelxZxJ1V
-         RnrLQ41V+zUigvn3R9Y6bjkVde4QQbYv6j3ZKXxj0v77/olLdfDSDa7doh1bt2V1aIMY
-         +gWBwcWf3D58/e+iQhwpm0OOHdEhFip0UjGPv3WsjFoWMgTchEoj0Lekl8OM6iSEH5gI
-         Bd+n0CrjEUhqdwqEWg85+BS7GqLZnZxaFe4KKV7hIPyGmQ/B4XvNAfwFFnHz/IYUb3Fg
-         TOZA==
-X-Gm-Message-State: AJIora+sZhJUDVazoeHpznZGeyLHq1HSTqcuG3i8W9RWEA5eowE8lqwf
-        8cxxVJlv81/SFxHvG/A9/Ztv0A==
-X-Google-Smtp-Source: AGRyM1tP0/3e0jF/X+My1isKflET6012raahzAfSWgsOfNodPOmlFfVxCEOpkadCal8x3313vLkjhQ==
-X-Received: by 2002:a5d:5a19:0:b0:21b:8eb8:f54b with SMTP id bq25-20020a5d5a19000000b0021b8eb8f54bmr12266223wrb.663.1656341000915;
-        Mon, 27 Jun 2022 07:43:20 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id e7-20020adfe7c7000000b0021b9100b844sm10943277wrn.91.2022.06.27.07.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 07:43:20 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:43:18 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     frank zago <frank@zago.net>, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] mfd: ch341: add core driver for the WCH CH341 in
- I2C/SPI/GPIO mode
-Message-ID: <YrnCBpvA8/y38Brg@google.com>
-References: <20220616013747.126051-1-frank@zago.net>
- <20220616013747.126051-2-frank@zago.net>
- <Yrm48AYxkmoUgdwr@google.com>
- <Yrm+kH6NvTy5A9WO@kroah.com>
+        with ESMTP id S235980AbiF0OyR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 10:54:17 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C07BD1583A
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 07:54:15 -0700 (PDT)
+Received: (qmail 121138 invoked by uid 1000); 27 Jun 2022 10:54:14 -0400
+Date:   Mon, 27 Jun 2022 10:54:14 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <roger.quadros@nokia.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+Subject: Re: [PATCH v2] usb: gadget: f_mass_storage: Make CD-ROM emulation
+ works with Windows OS
+Message-ID: <YrnEli0fdOERpIXe@rowland.harvard.edu>
+References: <20220624021916.318067-1-neal_liu@aspeedtech.com>
+ <YrXJss4cTtfenu90@rowland.harvard.edu>
+ <HK0PR06MB320272ACB1CA4ADFF8DDABC080B99@HK0PR06MB3202.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yrm+kH6NvTy5A9WO@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <HK0PR06MB320272ACB1CA4ADFF8DDABC080B99@HK0PR06MB3202.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 27 Jun 2022, Greg Kroah-Hartman wrote:
-
-> On Mon, Jun 27, 2022 at 03:04:32PM +0100, Lee Jones wrote:
-> > USB review please.
-> > 
-> > > The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> > > 
-> > > of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> > > manage I2C and GPIO.
-> > > 
-> > > Signed-off-by: frank zago <frank@zago.net>
+On Mon, Jun 27, 2022 at 02:56:40AM +0000, Neal Liu wrote:
+> > On Fri, Jun 24, 2022 at 10:19:16AM +0800, Neal Liu wrote:
+> > > Add read TOC with format 1 to support CD-ROM emulation with Windows
+> > > OS.
+> > > This patch is tested on Windows OS Server 2019.
+> > >
+> > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
 > > > ---
-> > >  MAINTAINERS               |  7 +++
-> > >  drivers/mfd/Kconfig       | 10 +++++
-> > >  drivers/mfd/Makefile      |  1 +
-> > >  drivers/mfd/ch341-core.c  | 90 +++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/ch341.h | 18 ++++++++
-> > >  5 files changed, 126 insertions(+)
-> > >  create mode 100644 drivers/mfd/ch341-core.c
-> > >  create mode 100644 include/linux/mfd/ch341.h
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 43d3d07afccd..628eeaa9bf68 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -21475,6 +21475,13 @@ M:	David Härdeman <david@hardeman.nu>
-> > >  S:	Maintained
-> > >  F:	drivers/media/rc/winbond-cir.c
-> > >  
-> > > +WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
-> > > +M:	Frank Zago <frank@zago.net>
-> > > +L:	linux-usb@vger.kernel.org
-> > > +S:	Maintained
-> > > +F:	drivers/mfd/ch341-core.c
-> > > +F:	include/linux/mfd/ch341.h
-> > > +
-> > >  WINSYSTEMS EBC-C384 WATCHDOG DRIVER
-> > >  M:	William Breathitt Gray <vilhelm.gray@gmail.com>
-> > >  L:	linux-watchdog@vger.kernel.org
-> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > index 3b59456f5545..893acc821a42 100644
-> > > --- a/drivers/mfd/Kconfig
-> > > +++ b/drivers/mfd/Kconfig
-> > > @@ -1784,6 +1784,16 @@ config MFD_LOCHNAGAR
-> > >  	help
-> > >  	  Support for Cirrus Logic Lochnagar audio development board.
-> > >  
-> > > +config MFD_CH341
-> > > +	tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
-> > > +	depends on USB
-> > > +	help
-> > > +	  If you say yes to this option, support for the CH341 series
-> > > +	  of chips, running in I2C/SPI/GPIO mode will be included.
-> > > +
-> > > +	  This driver can also be built as a module.  If so, the
-> > > +	  module will be called ch341-core.
-> > > +
-> > >  config MFD_ARIZONA
-> > >  	select REGMAP
-> > >  	select REGMAP_IRQ
-> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > > index 858cacf659d6..fd615ab3929f 100644
-> > > --- a/drivers/mfd/Makefile
-> > > +++ b/drivers/mfd/Makefile
-> > > @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
-> > >  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
-> > >  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
-> > >  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-> > > +obj-$(CONFIG_MFD_CH341)		+= ch341-core.o
-> > >  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
-> > >  obj-$(CONFIG_MFD_ENE_KB3930)	+= ene-kb3930.o
-> > >  obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
-> > > diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
-> > > new file mode 100644
-> > > index 000000000000..f08a67dd6074
-> > > --- /dev/null
-> > > +++ b/drivers/mfd/ch341-core.c
-> > > @@ -0,0 +1,90 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Core driver for the CH341A, CH341B and CH341T in I2C/SPI/GPIO
-> > > + * mode. There are cell drivers available for I2C and GPIO. SPI is not
-> > > + * yet supported.
-> > > + *
-> > > + * Copyright 2022, Frank Zago
-> > > + * Copyright (c) 2017 Gunar Schorcht (gunar@schorcht.net)
-> > > + * Copyright (c) 2016 Tse Lun Bien
-> > > + * Copyright (c) 2014 Marco Gittler
-> > > + * Copyright (c) 2006-2007 Till Harbaum (Till@Harbaum.org)
-> > > + */
-> > > +
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/mfd/ch341.h>
-> > > +#include <linux/mfd/core.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/usb.h>
-> > > +
-> > > +static const struct mfd_cell ch341_devs[] = {
-> > > +	{
-> > > +		.name = "ch341-gpio",
-> > > +	},
-> > > +	{
-> > > +		.name = "ch341-i2c",
-> > > +	},
-> > > +};
-> > > +
-> > > +static int ch341_usb_probe(struct usb_interface *iface,
-> > > +			   const struct usb_device_id *usb_id)
-> > > +{
-> > > +	struct usb_endpoint_descriptor *bulk_out;
-> > > +	struct usb_endpoint_descriptor *bulk_in;
-> > > +	struct usb_endpoint_descriptor *intr_in;
-> > > +	struct ch341_ddata *ddata;
-> > > +	int ret;
-> > > +
-> > > +	ddata = devm_kzalloc(&iface->dev, sizeof(*ddata), GFP_KERNEL);
-> > > +	if (!ddata)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ddata->usb_dev = interface_to_usbdev(iface);
-> > > +	mutex_init(&ddata->usb_lock);
-> > > +
-> > > +	ret = usb_find_common_endpoints(iface->cur_altsetting, &bulk_in,
-> > > +					&bulk_out, &intr_in, NULL);
-> > > +	if (ret) {
-> > > +		dev_err(&iface->dev, "Could not find all endpoints\n");
-> > > +		return -ENODEV;
-> > > +	}
-> > > +
-> > > +	ddata->ep_in = bulk_in->bEndpointAddress;
-> > > +	ddata->ep_out = bulk_out->bEndpointAddress;
-> > > +	ddata->ep_intr = intr_in->bEndpointAddress;
-> > > +	ddata->ep_intr_interval = intr_in->bInterval;
-> > > +
-> > > +	usb_set_intfdata(iface, ddata);
-> > > +
-> > > +	ret = mfd_add_devices(&iface->dev, PLATFORM_DEVID_AUTO, ch341_devs,
-> > > +			      ARRAY_SIZE(ch341_devs), NULL, 0, NULL);
-> > > +	if (ret)
-> > > +		return dev_err_probe(&iface->dev, ret,
-> > > +				     "Failed to register child devices\n");
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void ch341_usb_disconnect(struct usb_interface *usb_if)
-> > > +{
-> > > +	mfd_remove_devices(&usb_if->dev);
-> > > +}
-> > > +
-> > > +static const struct usb_device_id ch341_usb_table[] = {
-> > > +	{ USB_DEVICE(0x1a86, 0x5512) },
-> > > +	{ }
-> > > +};
-> > > +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
-> > > +
-> > > +static struct usb_driver ch341_usb_driver = {
-> > > +	.name       = "ch341-mfd",
-> > > +	.id_table   = ch341_usb_table,
-> > > +	.probe      = ch341_usb_probe,
-> > > +	.disconnect = ch341_usb_disconnect,
-> > > +};
-> > > +module_usb_driver(ch341_usb_driver);
-> > > +
-> > > +MODULE_AUTHOR("Frank Zago <frank@zago.net>");
-> > > +MODULE_DESCRIPTION("CH341 USB to I2C/SPI/GPIO adapter");
-> > > +MODULE_LICENSE("GPL");
-> > > diff --git a/include/linux/mfd/ch341.h b/include/linux/mfd/ch341.h
-> > > new file mode 100644
-> > > index 000000000000..44f5da0720bd
-> > > --- /dev/null
-> > > +++ b/include/linux/mfd/ch341.h
-> > > @@ -0,0 +1,18 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/* Definitions for the CH341 driver */
-> > > +
-> > > +#include <linux/mutex.h>
-> > > +#include <linux/types.h>
-> > > +
-> > > +struct usb_device;
-> > > +struct usb_interface;
-> > > +
-> > > +struct ch341_ddata {
-> > > +	struct usb_device *usb_dev;
-> > > +	struct mutex usb_lock;
-> > > +
-> > > +	int ep_in;
-> > > +	int ep_out;
-> > > +	int ep_intr;
-> > > +	u8 ep_intr_interval;
-> > > +};
+> > >  drivers/usb/gadget/function/f_mass_storage.c | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/gadget/function/f_mass_storage.c
+> > > b/drivers/usb/gadget/function/f_mass_storage.c
+> > > index 3a77bca0ebe1..9edf76c22605 100644
+> > > --- a/drivers/usb/gadget/function/f_mass_storage.c
+> > > +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> > > @@ -1209,7 +1209,8 @@ static int do_read_toc(struct fsg_common
+> > > *common, struct fsg_buffhd *bh)
+> > >
+> > >  	switch (format) {
+> > >  	case 0:
+> > > -		/* Formatted TOC */
+> > > +	case 1:
+> > > +		/* Formatted TOC, Session info */
+> > 
+> > This comment is a little misleading.  0 is formatted TOC, and 1 is
+> > multi-session info.  The way you wrote it, it looks like the comment applies to
+> > both formats.  Do it like this:
+> > 
+> > 	case 0:		/* Formatted TOC */
+> > 	case 1:		/* Multi-session info */
+> > 
 > 
+> Okay, looks more clear. I'll fix it in next patch.
 > 
-> Looks sane enough, but doesn't actually do any USB data transfers, maybe
-> that happens somewhere else...
+> > >  		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
+> > >  		memset(buf, 0, len);
+> > >  		buf[1] = len - 2;	/* TOC Length excludes length field */
+> > 
+> > It looks like you ignored one of the problems I pointed out in my earlier email:
+> > 
+> > > When format is 1, the driver is supposed to ignore the start_track
+> > > value.  Your patch does not do this.
+> > 
+> > Please fix this.
+> > 
+> 
+> Do you mean ignore the "start_track > 1" above?
 
-I expect those to happen in *both* of these:
+Yes, that's what I mean.
 
-  static const struct mfd_cell ch341_devs[] = {
-	{
-		.name = "ch341-gpio",
-	},
-	{
-		.name = "ch341-i2c",
-	},
-  };
+> Do this check only for format 0? Or format 0 & 2?
 
-Is that correct Frank?
+According to the MMC spec, the Track/Session Number is ignored for 
+format 1.  For format 0 it is valid as a Track Number, and for format 2 
+it is valid as a Session Number.  Therefore it should be checked for 
+formats 0 and 2 but not for format 1.
 
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Thanks.
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Alan Stern
