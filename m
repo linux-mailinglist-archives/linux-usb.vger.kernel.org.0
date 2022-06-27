@@ -2,145 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F3955DAF6
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4352155D0E0
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240989AbiF0TyH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 15:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S240783AbiF0UCx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 16:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241247AbiF0Txt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 15:53:49 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2731AD80
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 12:53:47 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 68so10039863pgb.10
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 12:53:47 -0700 (PDT)
+        with ESMTP id S240767AbiF0UCx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 16:02:53 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CA71C920
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 13:02:50 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id s20-20020a056830439400b0060c3e43b548so8152884otv.7
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 13:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=k/l4LcE4w+6LYrCo6/Ek+44r04gbnpHm9yyPA0qKR6A=;
-        b=ryYp2naL1201DMNfPmSbpexCs+zqiLsBQDBXHc9esFHxBJ8Ep2LLrsgHtxJtosu2+J
-         1iBYfvQQXv6NYwKQ2qXQCc4mHXYQGPYeeUC3hu2OgPUPjZXH+3Hi6Zqo5SyTeGerBVQA
-         p1Bh5daOuP6Q9UMRPxlj6vxZpUjBpxOPEYhjttl3pP6gtksJnO1wA5G3ERXmm3iOhFrs
-         MlyYmEaZt8I/cdZ0xlE1RQA9V/oE3k4e+iV7r8nrUlXmSvlRImOQktUmXD254MFh7ceV
-         2zbWTxt+/QD0MTYLBrv8xqePAliI2A59OkEqXOPrksIatTeOcW53aiRz+65e7KopsoX+
-         3osw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=32+pYyBzsUADZK/USZZWRdjG4+AC0lABRMoHRP/yr1M=;
+        b=nxV1pazrE3xVmh1LX/HlRMYNTdOjbKwW0RRCRVu9T6jkSNo72sz01NuioSXN637++Z
+         b2AmAuDtTrrhStoYWSiOXtpgTrLKdZeEkbwlHG4tCtrt1pXbnIQ8Sc3i5QhU0GyPpZW2
+         zh5xzrpaq2r4OY2ESHBGrWRJGNUk8oZYa/f3M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=k/l4LcE4w+6LYrCo6/Ek+44r04gbnpHm9yyPA0qKR6A=;
-        b=uqlM2bWG0Kp8ic4FsAy7j5GDPXz9yfUpUyEMuvSPQ6+es+NCqXJqeh+xcXePm5I0i9
-         huzNs+bsC/1Bdcx9s8JoAFlJ9ZJ/l54AhTqaVGYAJkpuPLRDF5RjbTC4eJU7yYQmsE/c
-         j5pcyM9b4aGJPwZkgcyWFtR+KSgeUtI+1SR7XFQf/QkV0QutPLla603qMBtXURmj+w06
-         7JTqWqsn3i/s4Z3kVMifWK9/D6WYIxhfnODKjICi6JUB9tFcSTD2O81vkbQ2Y7p0KLt9
-         4d7k82lCJWx40v2CNGTPDhYP+FspM+B1ftcouorgWikvTKLzACKU4GJjH3C5tVo209rr
-         v4Og==
-X-Gm-Message-State: AJIora+wjS/TKj1aE1FGn3T50COHkTrZrApPXuLxPgJcyI/VCRpr4sGp
-        JasKPWmEJE/k3oVxpihcqWwEgg==
-X-Google-Smtp-Source: AGRyM1ssDeW6Ux1oaY9ixgaaapzXMFszbxcRVeOWaHAYiiaVMZ4HUYtPzqxXzR6I8+fqeJNf8u9hpg==
-X-Received: by 2002:a63:7a5d:0:b0:40c:fcbe:4799 with SMTP id j29-20020a637a5d000000b0040cfcbe4799mr14428539pgn.297.1656359626928;
-        Mon, 27 Jun 2022 12:53:46 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id c16-20020a056a00009000b0051c1b445094sm7821510pfj.7.2022.06.27.12.53.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 12:53:46 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 12:53:43 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220627125343.44e24c41@hermes.local>
-In-Reply-To: <20220627180432.GA136081@embeddedor>
-References: <20220627180432.GA136081@embeddedor>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=32+pYyBzsUADZK/USZZWRdjG4+AC0lABRMoHRP/yr1M=;
+        b=ZlaOR5+GmcqppsODz1O8VBhsHZ1rmm7E6Ta3dhu7PuOgqINco0L+wdS9fyLoipFo2/
+         EPKJierBxePTC3axR/sUXjSJavROLcd6aHyQ5LfcCX7/E7Jl0mJkes4uLc3i41JXFk5m
+         Fn+xTFKP270grpS9Pz0tcwBFI3NK5N3jotaOaYiDnUlLsgLiF4p/GTnyqQQBizcnaoE9
+         iK58hDOEK1n1d/dkIXSospBHwfbxRhGxIFjfY8W3cseqWfiJi7dvwbKdBLDzIMAe1CDO
+         1xAYu3b4fOAjK+Wk/ZeZ+HNlhNeVLQ0n+PwhPJxDj+XQD8h5tZQJLXe9BNgwQOjAGXeM
+         rv6g==
+X-Gm-Message-State: AJIora/3a6F8FOU076yZCGpxWoBuLit2O2wqsn1LqM5bjDyuhNHCQIJL
+        36WzYmOcV+v24Ca1JjBhr5KY4L4sCAIPpwPyL8KXzA==
+X-Google-Smtp-Source: AGRyM1sUw3aUn8cs+jsZnRLI9HEdw7aGdjxn3slIwtFmzZUccOZBZrgs+CFrxV/GByzKlfqxHxRNuOwt68VgnVijZA8=
+X-Received: by 2002:a9d:6484:0:b0:60b:eb0b:4054 with SMTP id
+ g4-20020a9d6484000000b0060beb0b4054mr6754340otl.159.1656360170138; Mon, 27
+ Jun 2022 13:02:50 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 27 Jun 2022 13:02:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com> <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 27 Jun 2022 13:02:49 -0700
+Message-ID: <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system suspend
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 27 Jun 2022 20:04:32 +0200
-"Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
+Quoting Pavan Kondeti (2022-06-20 01:54:15)
+> +Felipe, Bjorn
+>
+> On Thu, Jun 16, 2022 at 10:15:49AM -0700, Matthias Kaehlcke wrote:
+> > On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
+> >
+> > Good point! It doesn't really ensure that the child is probed (actually it
+> > won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
+> > could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
+> > the PHYs should be ready and dwc3_probe() be invoked through
+> > of_platform_populate().
+>
+> This is a generic problem i.e if a parent can only proceed after the child
+> devices are bounded (i.e probed successfully), how to ensure this behavior
+> from the parent's probe? Since we can't block the parent probe (async probe is
+> not the default behavior), we have to identify the condition that the children
+> are deferring probe, so that parent also can do that.
+>
+> Can we add a API in drivers core to tell if a device probe is deferred or
+> not? This can be done by testing list_empty(&dev->p->deferred_probe) under
+> deferred_probe_mutex mutex. The parent can return EPROBE_DEFER based on this
+> API return value.
+>
+> Another alternative would be explicitly checking if the child device suppliers
+> are ready or not before adding child device. That would require decoupling
+> of_platform_populate() to creating devices and adding devices.
+>
+> Note that this problem is not just limited to suppliers not ready. if the
+> dwc3-qcom is made asynchronous probe, then its child also probed
+> asynchronously and there is no guarantee that child would be probed by the
+> time of_platform_populate() is returned.  The bus notifier might come handy
+> in this case. The parent can register for this notifier and waiting for
+> the children device's BUS_NOTIFY_BOUND_DRIVER/BUS_NOTIFY_DRIVER_NOT_BOUND
+> notifications. This would also work in our case, if we move to
+> of_platform_populate() outside the probe().
+>
+> Would like to hear other people thoughts on this.
+>
 
-> There is a regular need in the kernel to provide a way to declare
-> having a dynamically sized set of trailing elements in a structure.
-> Kernel code should always use =E2=80=9Cflexible array members=E2=80=9D[1]=
- for these
-> cases. The older style of one-element or zero-length arrays should
-> no longer be used[2].
->=20
-> This code was transformed with the help of Coccinelle:
-> (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file scr=
-ipt.cocci --include-headers --dir . > output.patch)
->=20
-> @@
-> identifier S, member, array;
-> type T1, T2;
-> @@
->=20
-> struct S {
->   ...
->   T1 member;
->   T2 array[
-> - 0
->   ];
-> };
->=20
-> -fstrict-flex-arrays=3D3 is coming and we need to land these changes
-> to prevent issues like these in the short future:
->=20
-> ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destinat=
-ion buffer has size 0,
-> but the source string has length 2 (including NUL byte) [-Wfortify-source]
-> 		strcpy(de3->name, ".");
-> 		^
->=20
-> Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
-> this breaks anything, we can use a union with a new member name.
->=20
-> [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-le=
-ngth-and-one-element-arrays
->=20
-> Link: https://github.com/KSPP/linux/issues/78
-> Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%2=
-5lkp@intel.com/
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Thanks this fixes warning with gcc-12 in iproute2.
-In function =E2=80=98xfrm_algo_parse=E2=80=99,
-    inlined from =E2=80=98xfrm_state_modify.constprop=E2=80=99 at xfrm_stat=
-e.c:573:5:
-xfrm_state.c:162:32: warning: writing 1 byte into a region of size 0 [-Wstr=
-ingop-overflow=3D]
-  162 |                         buf[j] =3D val;
-      |                         ~~~~~~~^~~~~
+I'm not following very closely but it sounds like a problem that may be
+solved by using the component driver code (see
+include/linux/component.h). That would let you move anything that needs
+to be done once the child devices probe to the aggregate driver 'bind'
+function (see struct component_master_ops::bind).
