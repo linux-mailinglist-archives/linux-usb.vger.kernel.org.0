@@ -2,168 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353A055CB46
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD46F55D810
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242757AbiF0WyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 18:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S238443AbiF0XCa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 19:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241330AbiF0WyU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 18:54:20 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A594CB48
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 15:54:19 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id i194so11130800ioa.12
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 15:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cyogCsoy11kmMpciXZ21N3veIA+ouiJO53HdSyXPKqo=;
-        b=IzvrakVgQ5Pe6+VmhlCD7JceS4ayPXMrbQsxfGJ67bMrXlfOgxC8PlSEZJveOg/dzw
-         mUJqxRQaCL/2y3CiLPtp9FQDWNn/3A5Ln5kUxdk0FKUgGEx5i4OxYhLLaGuQErtuasSA
-         5X+hhibkOSuiijfgSiRTnpu3Y6OHl2YJO4Bvw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cyogCsoy11kmMpciXZ21N3veIA+ouiJO53HdSyXPKqo=;
-        b=WCdLw/JPCaojLidVi8KPT0aYhuSKxmP8Qtgn3CUt3iMay/xdfsOj5d4m8tN5AeTlvU
-         BViIJ417VAwoiCa5n64WIcblMeab/zF/7yczZSuOdOtswp6E8q0+fY+yBNICWyKlE3Ps
-         9zMmlGAbovruQVzP6SgS2rBDk8OMg+D+YX9A8Jx/kpfWVOE1fTEvARq4R7idIJ6mNiHp
-         5rrLeGcpLFDGmK6F57yTqQSzZei+moqcwD82TL0ZOp37cKpwC6mbmUsED4OaGH40DCOY
-         BloCBJiYeifVlwjWwB5CBHritIUHBm4fX+ZdU+CKK+YBE45kxBdyFlHufs0cbHxldGyM
-         xzeg==
-X-Gm-Message-State: AJIora8mZmDW0rT6774LBpiO7/Y6MugFNZJ2GG1Jt4CX2gKzKN+Vkwjm
-        eYD+0bNK5kf1ws06z7dpXG1xJg==
-X-Google-Smtp-Source: AGRyM1sk1urSpMzR/rHfszWoj3gyWAacu9mBasm+cc2mgbT7otUdULgWvA/yaPE8ZPNWAFJ4rssVVg==
-X-Received: by 2002:a02:8609:0:b0:330:e92c:2cc4 with SMTP id e9-20020a028609000000b00330e92c2cc4mr9024050jai.95.1656370458977;
-        Mon, 27 Jun 2022 15:54:18 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b17-20020a92c851000000b002d93dbbee35sm5035081ilq.9.2022.06.27.15.54.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 15:54:18 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Hongren Zenithal Zheng <i@zenithal.me>
-Cc:     Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
- <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
- <YrXNltWSYbplstPx@rowland.harvard.edu>
- <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
- <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
-Date:   Mon, 27 Jun 2022 16:54:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S240955AbiF0XC1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 19:02:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159FF21E1A
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 16:02:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3D43614F6
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 23:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C3D0C34115
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 23:02:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656370946;
+        bh=B9OLwp6UhvcXocLXMsaA7uGkELBHJ/jLC6Xwif6crr4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=rxlqIv6WBi0pYYFCCeF6FHJpAJuOgSuHw6NDJQKTy9V+0zcHuM94GFJuvMTsNl8vU
+         cv0JGEVj5ANXipOr7sXezweDfKE1cCJzhz04k0eIO/O5LM83Mc8vhbM9CVTNk/td9R
+         Qv46cGo2frZ4Vyo9kW42pR0zV0wIkyVtMGiIrIOblhGogZKAZ73slIphLYQpMzs5Dz
+         J3cq42GHeoUFVxVtLR+g727lSM7Pg48PXsZYwl2aGynEp/auW6OWjoKkRRgVKDpYnV
+         VI6Px9RpeMv3D9PuXN++BOliAjchHcolkEJYh3A2knuC8WwUTfLDYQkOI3FLPlDWGR
+         zzgVg0+sZb/5w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id E3A31CAC6E2; Mon, 27 Jun 2022 23:02:25 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216140] rtsx_usb causes error: xhci_hcd rejecting DMA map of
+ vmalloc memory
+Date:   Mon, 27 Jun 2022 23:02:25 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: kernel@mitchellaugustin.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216140-208809-DFW0fTl9bA@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216140-208809@https.bugzilla.kernel.org/>
+References: <bug-216140-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/24/22 12:07 PM, Alan Stern wrote:
-> On Fri, Jun 24, 2022 at 10:31:06AM -0600, Shuah Khan wrote:
->> On 6/24/22 8:43 AM, Alan Stern wrote:
->>>> It doesn't sound like a there is a compelling reason other than
->>>> "it would be nice to keep the flag values in numerical order".
->>>>
->>>> I would not recommend this option. I am not seeing any value to adding
->>>> change URB_* to USBIP_FLAGS_* layer without some serious techinical
->>>> concerns.
->>>>
->>>>>
->>>>> Another way is to use 0x0400 for FREE_COHERENT.
->>>>> usbip will not take care of this bit as
->>>>> it would be masked.
->>>>>
->>>>
->>>> I would go with this option adding a clear comment with link to this
->>>> discussion.
->>>>
->>>>> Cc Shuah Khan here since she is the maintainer
->>>>> on usbip.
->>>>>
->>>>
->>>> Thank you adding me to the discussion.
->>>
->>> I can see this causing more problems in the future.  There's no hint in
->>> include/linux/usb.h that any of the values it defines are part of a user
->>> API.  If they are, they should be moved to include/uapi/linux/usb/.
->>>
->>
->> Please elaborate on more problems in the future.
-> 
-> In the future people will want to make other changes to
-> include/linux/usb.h and they will not be aware that those changes will
-> adversely affect usbip, because there is no documentation saying that
-> the values defined in usb.h are part of a user API.  That will be a
-> problem, because those changes may be serious and important ones, not
-> just decorative or stylistic as in this case.
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216140
 
-How often do these values change based on our past experience with these
-fields?
+Mitchell Augustin (kernel@mitchellaugustin.com) changed:
 
->>> In general, if a user program depends on kernel details that are not
->>> designed to be part of a user API, you should expect that the program
->>> will sometimes break from one kernel version to another.
->>>
->>> Yes, I know Linus insists that kernel changes should not cause
->>> regressions in userspace, but the line has to be drawn somewhere.
->>> Otherwise the kernel could never change at all.
->>>
->>
->> I have had to change the usbip sysfs interface api in the past to
->> address security bugs related to information leaks. I am not saying
->> no. I am asking if there is a good reason to do this. So far I haven't
->> heard one.
-> 
-> I agree with Hongren that values defined in include/linux/ should not be
-> part of a user API.  There are two choices:
-> 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |kernel@mitchellaugustin.com
 
-I agree with this in general. I don't think this is an explicit decision
-to make them part of API. It is a consequence of simply copying the
-transfer_flags. I am with you both on not being able to recognize the
-impact until as this is rather obscure usage hidden away in the packets.
-These defines aren't directly referenced.
+--- Comment #2 from Mitchell Augustin (kernel@mitchellaugustin.com) ---
+You may want to try 5.19-rc4. My ASUS Vivobook s510un's trackpad seems to w=
+ork
+correctly with that version.
 
-> 	Move the definitions into include/uapi/linux/, or
-> 
+--=20
+You may reply to this email to add a comment.
 
-Wouldn't this be easier way to handle the change? With this option
-the uapi will be well documented.
-
-> 	Add code to translate the values between the numbers used in
-> 	userspace and the numbers used in the kernel.  (This is what
-> 	was done for urb->transfer_flags in devio.c:proc_do_submiturb()
-> 	near line 1862.)
-> 
-
-I looked at the code and looks simple enough. I am okay going this route
-if we see issues with the option 1.
-
-thanks,
--- Shuah
+You are receiving this mail because:
+You are watching the assignee of the bug.=
