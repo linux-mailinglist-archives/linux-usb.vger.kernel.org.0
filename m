@@ -2,192 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7348855CC30
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F01455C157
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiF0SOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 14:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        id S240324AbiF0Sb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 14:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240135AbiF0SOv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 14:14:51 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AF2DF3A
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 11:14:50 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id b2so1886185plx.7
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 11:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YDu+rnzv/wK9KMXyP+OWEFPMR3eGHlB5shg9D6MCzeY=;
-        b=JBXLeZp4mtmOWzRgE7UX5PSOgKH/UmtDdwVz6xHMHWYuupKW+grq9s2SVVcQ3TL14S
-         S2Inz2nMS46xy2+pxsHf8UjURC9u0MP4F2P/dMfrz1qPk6J1v9Bxj+FA0boi600YqvBc
-         TiPwkugWCE40PGeW0VkF/83AwoF5NXuSZ7wGk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YDu+rnzv/wK9KMXyP+OWEFPMR3eGHlB5shg9D6MCzeY=;
-        b=evxNQ+GCIxbjtzFxdgtVGoY2e/0sN3cm0S7/huw9BnfYLCf0Wh45yCB2/tBd17Ytcz
-         xboVcUeLqEtgpHldn3K40ldt3u+R/DnkAjierPtxEDgleoHAUBXETKotchMMFIhgG52K
-         FvGdQYGhlO76cFSjd3FnCiI2JWobPLf97nlbRkuaJN9aeboXOKzfWQaRZiyHBWTGD6Lm
-         zWNxPJDRYnh1NSIFR++60ATM3lfEIvcjX8DwFoUhtESW6NikHejjsgH+qd4z853P+pS2
-         lr5PMFfyrTDQqb/QVFJp66ejlGcmU9JrczQoOADEAefh/eYRYHrCnrC+HVH7J3cePXjd
-         Oh5A==
-X-Gm-Message-State: AJIora81wQMJDqUrMYNU42xV3pmVz4rpNt6CgM+M1ysu0xllSX9SmBR/
-        oJbz1bPLuLqT3PL5k48UJfcZzA==
-X-Google-Smtp-Source: AGRyM1ttfaRHnKvsy/Dd2GaC6fMPgvM5TU9FqTHfpPQHimpwJCPbF2nsZ2Qq9eTV3MPQFZggGBtONA==
-X-Received: by 2002:a17:90b:278e:b0:1ee:f086:9c9d with SMTP id pw14-20020a17090b278e00b001eef0869c9dmr2816272pjb.182.1656353689781;
-        Mon, 27 Jun 2022 11:14:49 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:f31c:687c:3a61:62c5])
-        by smtp.gmail.com with UTF8SMTPSA id b1-20020a17090a12c100b001ec71258838sm9932330pjg.27.2022.06.27.11.14.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 11:14:49 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 11:14:47 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <Yrnzl8k81f9JTMIQ@google.com>
-References: <YqpprpUHmlD62YzI@google.com>
- <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
- <Yqub17iT4O7aqFMi@google.com>
- <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
- <YquoSMiQS+RG8rOM@google.com>
- <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
- <YqvMffveCPiKQEUk@google.com>
- <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
- <YqytDNB2y4+qT8GD@google.com>
- <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
+        with ESMTP id S240226AbiF0Sbn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 14:31:43 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7B91E3DF;
+        Mon, 27 Jun 2022 11:27:42 -0700 (PDT)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o5tSV-000G0X-5e; Mon, 27 Jun 2022 20:27:39 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o5tSU-000TKD-AF; Mon, 27 Jun 2022 20:27:38 +0200
+Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
+ flexible-array members
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, dm-devel@redhat.com,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
+        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
+References: <20220627180432.GA136081@embeddedor>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
+Date:   Mon, 27 Jun 2022 20:27:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220627180432.GA136081@embeddedor>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26586/Mon Jun 27 10:06:41 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 01:33:19PM -0700, Doug Anderson wrote:
-> Hi,
+On 6/27/22 8:04 PM, Gustavo A. R. Silva wrote:
+> There is a regular need in the kernel to provide a way to declare
+> having a dynamically sized set of trailing elements in a structure.
+> Kernel code should always use “flexible array members”[1] for these
+> cases. The older style of one-element or zero-length arrays should
+> no longer be used[2].
 > 
-> On Fri, Jun 17, 2022 at 9:34 AM Matthias Kaehlcke <mka@chromium.org> wrote:
-> >
-> > > Looking at the "companion-hub" case with fresh eyes, too, I wonder if
-> > > that can be simpler. If we find a companion hub, do we need both the
-> > > check for usb_hcd_is_primary_hcd() and the check to see whether the
-> > > pdev was already created?
-> >
-> > I was also doubting about this and concluded that it is still needed.
-> >
-> > Let's use once more the trogdor config as example, which has one physical
-> > onboard hub chip with a USB 3.1 hub and a USB 2.1 companion hub, connected
-> > to the dwc3 controller:
-> >
-> > &usb_1_dwc3 {
-> >         dr_mode = "host";
-> >         #address-cells = <1>;
-> >         #size-cells = <0>;
-> >
-> >         /* 2.x hub on port 1 */
-> >         usb_hub_2_x: hub@1 {
-> >                 compatible = "usbbda,5411";
-> >                 reg = <1>;
-> >                 vdd-supply = <&pp3300_hub>;
-> >                 companion-hub = <&usb_hub_3_x>;
-> >         };
-> >
-> >         /* 3.x hub on port 2 */
-> >         usb_hub_3_x: hub@2 {
-> >                 compatible = "usbbda,411";
-> >                 reg = <2>;
-> >                 vdd-supply = <&pp3300_hub>;
-> >                 companion-hub = <&usb_hub_2_x>;
-> >         };
-> > };
-> >
-> > Let's assume we don't check for the pdev. With our change above for root hubs
-> > the loop is now only executed for the primary HCD. In the first iteration
-> > we encounter the 2.x hub, it has a companion hub, but that alone doesn't
-> > tell us much, so we create a pdev. In the next iteration we encouter the
-> > 3.x hub, it also has a companion hub, but we don't know/check that the
-> > companion already has a pdev, so we create another one for the same
-> > physical hub.
+> This code was transformed with the help of Coccinelle:
+> (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file script.cocci --include-headers --dir . > output.patch)
 > 
-> Ah, you are correct. You only run into that case for the root hub,
-> correct? For everything else it's impossible?
+> @@
+> identifier S, member, array;
+> type T1, T2;
+> @@
 > 
-> ...and I guess things would be different if inside the loop you
-> actually set "hcd" to point to the "hcd" of the child device. I guess
-> that's where my confusion keeps stemming from. "hcd" is the parent's
-> host controller which is not always the same as the child's host
-> controller.
-
-I'd phrase it differently: for root hubs the 'parent_hub' isn't necessarily
-the parent of each 'child' node.
-
-> It would have been keen if we could somehow know the child's host
-> controller and get a pointer to that, but we can't because the child
-> device hasn't been enumerated yet.
+> struct S {
+>    ...
+>    T1 member;
+>    T2 array[
+> - 0
+>    ];
+> };
 > 
-> OK, I'm convinced. I'll mention it in your v23 but maybe I'll have a
-> slightly better chance of figuring this out if/when I look at this
-> again if we rename "hcd" to "parent_hcd".
+> -fstrict-flex-arrays=3 is coming and we need to land these changes
+> to prevent issues like these in the short future:
+> 
+> ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destination buffer has size 0,
+> but the source string has length 2 (including NUL byte) [-Wfortify-source]
+> 		strcpy(de3->name, ".");
+> 		^
+> 
+> Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
+> this breaks anything, we can use a union with a new member name.
+> 
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Link: https://github.com/KSPP/linux/issues/78
+> Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%25lkp@intel.com/
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+> Hi all!
+> 
+> JFYI: I'm adding this to my -next tree. :)
 
-I'm not convinced that this would generally help to reduce the confusion.
-To me 'parent_hcd' sounds as if there was a tree of HCDs, which isn't
-the case. Also one could still read 'parent_hcd' as the HCD of all
-'child' nodes.
+Fyi, this breaks BPF CI:
 
-Maybe a bit more verbose documentation like this could help:
+https://github.com/kernel-patches/bpf/runs/7078719372?check_suite_focus=true
 
-  Some background about the logic in this function, which can be a bit hard
-  to follow:
-
-  Root hubs don't have dedicated device tree nodes, but use the node of their
-  HCD. The primary and secondary HCD are usually represented by a single DT
-  node. That means the root hubs of the primary and secondary HCD share the
-  same device tree node (the HCD node). As a result this function can be
-  called twice with the same DT node for root hubs. We only want to create a
-  single platform device for each physical onboard hub, hence for root hubs
-  the loop is only executed for the primary hub. Since the function scans
-  through all child nodes it still creates pdevs for onboard hubs connected
-  to the secondary hub if needed.
-
-  Further there must be only one platform device for onboard hubs with a
-  companion hub (the hub is a single physical device). To achieve this two
-  measures are taken: pdevs for onboard hubs with a companion are only
-  created when the function is called on behalf of the parent hub that is
-  connected to the primary HCD (directly or through other hubs). For onboard
-  hubs connected to root hubs the function processes the nodes of both
-  companions. A platform device is only created if the companion hub doesn't
-  have one already.
-
-
-When writing this I realized that the check for an existing platform device
-for companions could be put inside an 'if (!parent_hub->parent)' block. It
-isn't necessary for hubs deeper down in the chain, since their pdev will only
-be created for the hub (indirectly) connected to the primary HCD.
+   [...]
+   progs/map_ptr_kern.c:314:26: error: field 'trie_key' with variable sized type 'struct bpf_lpm_trie_key' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+           struct bpf_lpm_trie_key trie_key;
+                                   ^
+   1 error generated.
+   make: *** [Makefile:519: /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/map_ptr_kern.o] Error 1
+   make: *** Waiting for unfinished jobs....
+   Error: Process completed with exit code 2.
