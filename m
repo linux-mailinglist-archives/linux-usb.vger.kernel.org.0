@@ -2,47 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620C955D722
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0D755E2D1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238511AbiF0Plt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 11:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S236316AbiF0PnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 11:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238503AbiF0Plp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 11:41:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C581A049;
-        Mon, 27 Jun 2022 08:41:44 -0700 (PDT)
+        with ESMTP id S238640AbiF0PnJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 11:43:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE22BB9
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 08:43:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AF98BCE1B71;
-        Mon, 27 Jun 2022 15:41:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE4FC3411D;
-        Mon, 27 Jun 2022 15:41:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C630DCE1B75
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 15:43:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F38C341CC
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 15:43:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656344501;
-        bh=aiwnae3RpvaoNHCXh1x025cNVic3O5YgH/JbQXDcqyk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HYMFvVWoNMbZUkhVg15LtO3y9BDYgIswDZYdFrpMdh4hKo+6ljeQ/H3/r3eQzx3q4
-         Pbe/huWRhSTlkvfZT06qoHfk43KazvPVU5AGlL+ejEEpf8OqQZn6issz+qaGue3NAS
-         AYEtStU7T1xXdlK8SnGiH8uYZgQK2MOMYft37SfThhN5gM8fRIC5hVLuBdZZRmPw6b
-         WEsA3CN+ORIwlpoCQfn38hT0bPkZGUog06+JJ5gt1SJEePy6/UyUn6LjOfdTvUPOHe
-         XmoS81q2E1aLLaJgqvRJHNjT/jfX6a+KwqDBvQdjK6n1wBtut1M2HAOZOTlk5Jv4Qk
-         /2fXcz/Cnyteg==
-Date:   Mon, 27 Jun 2022 08:41:31 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usbnet: fix memory leak in error case
-Message-ID: <20220627084131.6f80c62e@kernel.org>
-In-Reply-To: <20220627131626.31376-1-oneukum@suse.com>
-References: <20220627131626.31376-1-oneukum@suse.com>
+        s=k20201202; t=1656344582;
+        bh=CKHMDXojyAVGknyEK9CXAxoH5So1LcAEOpDD/Vy6REg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=q9GaOJQBT3CkNrfY1LFiWLBlLHSvA/0kGEroapPJKffRxPY27WVCnpIINIQhL1aV2
+         DBslwOn3bS42NYFVgX7GpHB7cDSyjmia+MfybtxmI42jDRjGN2dL5hgrGuTnl1J5jz
+         oUWxssYQnljIqCE2Yw+VaVWCU1JERcFQuLpMz+ofo+MdHgHaExmNGKpkqaU9JBO8WD
+         2qq5VXUmEd/nsGc3bo98j7NkP1fmHf9QNZo7CXqxeTWlFBLVeLPRdBti6ZyPhih43E
+         9tTtt6d7EfBH+KP1HayKRC04SDD0e4yb1jRYQY8Re+jiHV01ZtWJDYPGvZoVtbP1VT
+         wUAcSgmCYAweg==
+Received: by mail-vk1-f180.google.com with SMTP id j26so4645945vki.12
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 08:43:02 -0700 (PDT)
+X-Gm-Message-State: AJIora+gwvEOUQVv4v1uB6ZzUV4tuffMi74vlz4IX17pzgk9xn6lhB/+
+        VAYb8j4EaTWFZoJ99I3QpKONqxtxBEJYW45hrg==
+X-Google-Smtp-Source: AGRyM1tkqhclTIJflBrTkmr5Jd5BYzGYhiBLJyRS8Xa1qsjZ/kW95OWTv679hb8U/+MH/mM05GZLrH1MZJUoEV9YcQY=
+X-Received: by 2002:a1f:2bd5:0:b0:370:23aa:ead7 with SMTP id
+ r204-20020a1f2bd5000000b0037023aaead7mr1354772vkr.26.1656344580900; Mon, 27
+ Jun 2022 08:43:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220621230941.381f9791@Cyrus.lan>
+In-Reply-To: <20220621230941.381f9791@Cyrus.lan>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 27 Jun 2022 09:42:49 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKv9XmNcDDQvNnNXuF7DTf28tF+c3sDkpDdnyNvdx2d7w@mail.gmail.com>
+Message-ID: <CAL_JsqKv9XmNcDDQvNnNXuF7DTf28tF+c3sDkpDdnyNvdx2d7w@mail.gmail.com>
+Subject: Re: [PATCH RFC] drivers/usb/ehci-fsl: Fix interrupt setup in host mode.
+To:     Darren Stevens <darren@stevens-zone.net>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Scott Wood <oss@buserror.net>,
+        Christian Zigotzky <chzigotzky@xenosoft.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,9 +64,122 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 27 Jun 2022 15:16:26 +0200 Oliver Neukum wrote:
-> usbnet_write_cmd_async() mixed up which buffers
-> need to be freed in which error case.
+On Tue, Jun 21, 2022 at 4:09 PM Darren Stevens <darren@stevens-zone.net> wrote:
+>
+> In patch a1a2b7125e1079 (Drop static setup of IRQ resource from DT
+> core) we stopped platform_get_resource() from returning the IRQ, as all
+> drivers were supposed to have switched to platform_get_irq()
+> Unfortunately the Freescale EHCI driver in host mode got missed. Fix
+> it. Also fix allocation of resources to work with current kernel.
+>
+> Fixes:a1a2b7125e1079 (Drop static setup of IRQ resource from DT core)
+> Reported-by Christian Zigotzky <chzigotzky@xenosoft.de>
+> Signed-off-by Darren Stevens <darren@stevens-zone.net>
+> ---
+> Tested on AmigaOne X5000/20 and X5000/40 not sure if this is entirely
+> correct fix though. Contains code by Rob Herring (in fsl-mph-dr-of.c)
+>
+> diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+> index 385be30..d0bf7fb 100644
+> --- a/drivers/usb/host/ehci-fsl.c
+> +++ b/drivers/usb/host/ehci-fsl.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/fsl_devices.h>
+>  #include <linux/of_platform.h>
+> +#include <linux/of_address.h>
+>  #include <linux/io.h>
+>
+>  #include "ehci.h"
+> @@ -46,9 +47,10 @@ static struct hc_driver __read_mostly
+> fsl_ehci_hc_driver; */
+>  static int fsl_ehci_drv_probe(struct platform_device *pdev)
+>  {
+> +       struct device_node *dn = pdev->dev.of_node;
+>         struct fsl_usb2_platform_data *pdata;
+>         struct usb_hcd *hcd;
+> -       struct resource *res;
+> +       struct resource res;
+>         int irq;
+>         int retval;
+>         u32 tmp;
+> @@ -76,14 +78,10 @@ static int fsl_ehci_drv_probe(struct
+> platform_device *pdev) return -ENODEV;
+>         }
+>
+> -       res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
 
-When reposting with a corrected netdev address please add a Fixes tag as
-well.
+Ah, this was the part I was missing...
+
+> -       if (!res) {
+> -               dev_err(&pdev->dev,
+> -                       "Found HC with no IRQ. Check %s setup!\n",
+> -                       dev_name(&pdev->dev));
+> -               return -ENODEV;
+> +       irq = platform_get_irq(pdev, 0);
+> +       if (irq < 0) {
+> +               return irq;
+>         }
+> -       irq = res->start;
+>
+>         hcd = __usb_create_hcd(&fsl_ehci_hc_driver, pdev->dev.parent,
+>                                &pdev->dev, dev_name(&pdev->dev), NULL);
+> @@ -92,15 +90,21 @@ static int fsl_ehci_drv_probe(struct
+> platform_device *pdev) goto err1;
+>         }
+>
+> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       hcd->regs = devm_ioremap_resource(&pdev->dev, res);
+> +       platform_set_drvdata(pdev, hcd);
+> +       pdev->dev.platform_data = pdata;
+> +
+> +       tmp = of_address_to_resource(dn, 0, &res);
+
+There's no need to change this. platform_get_resource() still works
+for IORESOURCE_MEM.
+
+Plus, drivers shouldn't use of_address_to_resource().
+
+> +       if (tmp)
+> +               return tmp;
+> +
+> +       hcd->regs = devm_ioremap_resource(&pdev->dev, &res);
+>         if (IS_ERR(hcd->regs)) {
+>                 retval = PTR_ERR(hcd->regs);
+>                 goto err2;
+>         }
+>
+> -       hcd->rsrc_start = res->start;
+> -       hcd->rsrc_len = resource_size(res);
+> +       hcd->rsrc_start = res.start;
+> +       hcd->rsrc_len = resource_size(&res);
+>
+>         pdata->regs = hcd->regs;
+>
+> diff --git a/drivers/usb/host/fsl-mph-dr-of.c
+> b/drivers/usb/host/fsl-mph-dr-of.c index 44a7e58..766e4ab 100644
+> --- a/drivers/usb/host/fsl-mph-dr-of.c
+> +++ b/drivers/usb/host/fsl-mph-dr-of.c
+> @@ -80,8 +80,6 @@ static struct platform_device
+> *fsl_usb2_device_register( const char *name, int id)
+>  {
+>         struct platform_device *pdev;
+> -       const struct resource *res = ofdev->resource;
+> -       unsigned int num = ofdev->num_resources;
+>         int retval;
+>
+>         pdev = platform_device_alloc(name, id);
+> @@ -106,11 +104,8 @@ static struct platform_device
+> *fsl_usb2_device_register( if (retval)
+>                 goto error;
+>
+> -       if (num) {
+> -               retval = platform_device_add_resources(pdev, res, num);
+> -               if (retval)
+> -                       goto error;
+> -       }
+> +       pdev->dev.of_node = ofdev->dev.of_node;
+> +       pdev->dev.of_node_reused = true;
+>
+>         retval = platform_device_add(pdev);
+>         if (retval)
