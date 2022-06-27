@@ -2,135 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB68055C305
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EAF55D9AA
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240233AbiF0TG1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 15:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S240365AbiF0TMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 15:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240129AbiF0TG0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 15:06:26 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA83263C
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id k9so627479pfg.5
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OwptFnOeVufNyWYVaUbNezAsNgxBLnSp5YRWWMPGeU4=;
-        b=Nep8adCrywMhk8ZutjZQ3tfryiXOviRDQw/MQJ/JqaCRwLAZt0pJQkuJPU5dUZf0T8
-         mzkjbRZ2Ht+PdUAcSPscDpb9zx/DbqWcULKOOejsjs9DKG/rTHE+7L/G+JDzAmlu5xbC
-         cXz3xW2lTdrodfN1MJJZBsb4eykNpRuRhXsMI=
+        with ESMTP id S237808AbiF0TMq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 15:12:46 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501D75FFD;
+        Mon, 27 Jun 2022 12:12:38 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id p69so10553310iod.10;
+        Mon, 27 Jun 2022 12:12:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OwptFnOeVufNyWYVaUbNezAsNgxBLnSp5YRWWMPGeU4=;
-        b=47E09GY0S/cxu01OuobY6xHmrrzxqbqrh/j8vzhyn0pFj+tR4Bpm5Uy5546O8TJyaE
-         QMnGwst06Z+Y1w57n2nxSZwCEJ5XeESjNwMQHy53b9/QkUbswsy/9H3bX8sWmfTc2W/I
-         fIbwo9UikFyBNGr0/AM+UMQW8ntuR471R6cGoaiaWOQCtWjSgyLGFdUoLM6KyPNezNY4
-         dpKD+rnwLWSenR1P50hORf66v64s39OmO/HSUkqZPv9y+zBcG9FtrpKVABDa1PRwE1qC
-         HTN/+NVxJ3HmtJm7wIm1LGrhbOdxx68apR9BZk+wm/d4p6CcvrTZDEfn1HGePpKh21c3
-         aqmQ==
-X-Gm-Message-State: AJIora/+p5F2Mp7TRzkqxctgRrOybg4EGGQH+TYzEuA3NEwY+PkrJGRX
-        yh//DlqiR7ur5UmUwsCNdeb6GdT6YMj9eA==
-X-Google-Smtp-Source: AGRyM1uzKMX8lc3yOB65UK4bfLsFrTm5HeZk66lgKZ+5KpmhBSQTuno7q2Sp0F6BljBpXtnRsGe1DA==
-X-Received: by 2002:aa7:989a:0:b0:525:252f:3c51 with SMTP id r26-20020aa7989a000000b00525252f3c51mr510250pfl.39.1656356784404;
-        Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:f31c:687c:3a61:62c5])
-        by smtp.gmail.com with UTF8SMTPSA id f9-20020a170902f38900b0016a51167b75sm7523839ple.286.2022.06.27.12.06.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 12:06:21 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Doug Anderson <dianders@chromium.org>,
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=rBNw7xXQioxzgqOQKpFDuGhIR7glkYA10EWg8sjqgd4=;
+        b=GgRYLjvgXk+EiH+QJ8KSHl+VyxMifw6CQSFYEOh7C1JnCUMv7Ig1yAxlWqw3eT07Ur
+         P/se4HDRVfgT7vNmQmeRhHZhuK1ZdeVxP2c8Zo43iLp7TQb6PmkeQXuLvbmuxshBD86c
+         eqBxWqqKxJbf7iNxXYhnYU70lJkJqp0KC24xR3bL8asgfC69iWl3ZkjgdPEAOr3U13Gq
+         WLLnWU4YcvlT1UK9Hz8Sug0tnzVYML9JAZLyf59w79FzuycyT+Ds/ZOvMgU9BzE8sS4E
+         bQ9wWuiOef5Rjocw58eYqjmLtCyfmWUWe9PO5Is+qJ6oihrzZaeqxKCytvyxdCRkokoU
+         VCZA==
+X-Gm-Message-State: AJIora9lbjzUdJvcQv4639QfcKJkv0v19tQt75IFIG2t2JNA0dmvflVG
+        dlhk29wqZheK2h7XhRZBIw==
+X-Google-Smtp-Source: AGRyM1u2B6Wf8qeEwHG7bcsztdsHikAwGp9sb2uWhc4F9Mv0d1Tnjqyg8TLRYOrF2g2p1n5I0n92IA==
+X-Received: by 2002:a05:6638:1686:b0:331:c1ed:9f55 with SMTP id f6-20020a056638168600b00331c1ed9f55mr9142195jat.201.1656357157501;
+        Mon, 27 Jun 2022 12:12:37 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id i6-20020a056e020d8600b002d90ac862b6sm4876207ilj.55.2022.06.27.12.12.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 12:12:36 -0700 (PDT)
+Received: (nullmailer pid 2785808 invoked by uid 1000);
+        Mon, 27 Jun 2022 19:12:35 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?b?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <Yrn/rfrzSWod5SCT@google.com>
-References: <Yqub17iT4O7aqFMi@google.com>
- <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
- <YquoSMiQS+RG8rOM@google.com>
- <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
- <YqvMffveCPiKQEUk@google.com>
- <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
- <YqytDNB2y4+qT8GD@google.com>
- <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
- <Yrnzl8k81f9JTMIQ@google.com>
- <Yrn8y4GGZm+NyXIi@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yrn8y4GGZm+NyXIi@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220623193702.817996-3-nfraprado@collabora.com>
+References: <20220623193702.817996-1-nfraprado@collabora.com> <20220623193702.817996-3-nfraprado@collabora.com>
+Subject: Re: [PATCH v2 2/4] dt-bindings: usb: mtk-xhci: Make all clocks required
+Date:   Mon, 27 Jun 2022 13:12:35 -0600
+Message-Id: <1656357155.295131.2785807.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:54:03PM -0400, Alan Stern wrote:
-> On Mon, Jun 27, 2022 at 11:14:47AM -0700, Matthias Kaehlcke wrote:
-> > Maybe a bit more verbose documentation like this could help:
-> > 
-> >   Some background about the logic in this function, which can be a bit hard
-> >   to follow:
-> > 
-> >   Root hubs don't have dedicated device tree nodes, but use the node of their
-> >   HCD. The primary and secondary HCD are usually represented by a single DT
-> >   node. That means the root hubs of the primary and secondary HCD share the
-> >   same device tree node (the HCD node). As a result this function can be
-> >   called twice with the same DT node for root hubs. We only want to create a
-> >   single platform device for each physical onboard hub, hence for root hubs
-> >   the loop is only executed for the primary hub. Since the function scans
+On Thu, 23 Jun 2022 15:37:00 -0400, Nícolas F. R. A. Prado wrote:
+> All of the clocks listed in the binding are always wired to the XHCI
+> controller hardware blocks on all SoCs. The reason some clocks were made
+> optional in the binding was to account for the fact that depending on
+> the SoC, some of the clocks might be fixed (ie not controlled by
+> software).
 > 
-> By "primary hub", you mean "root hub for the primary HCD", right?  This 
-> should be clarified.
+> Given that the devicetree should represent the hardware, make all clocks
+> required in the binding. Subsequent patches will make the DTS changes to
+> specify fixed-clocks for the clocks that aren't controllable.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> 
+> Changes in v2:
+> - Undid clock list changes that allowed middle clocks to be missing from
+>   v1 and made all clocks required instead
+> - Rewrote commit message and title
+> 
+>  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
 
-Ok, thanks for the suggestion!
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> >   through all child nodes it still creates pdevs for onboard hubs connected
-> >   to the secondary hub if needed.
-> 
-> And likewise for "secondary hub".
->
-> > 
-> >   Further there must be only one platform device for onboard hubs with a
-> >   companion hub (the hub is a single physical device). To achieve this two
-> 
-> What do you mean by "companion hub"?  I think you are using the wrong 
-> word here.  If you're talking about the relation between the two logical 
-> hubs (one attached to the SuperSpeed bus and one attached to the 
-> Low/Full/High-speed bus) within a physical USB-3 hub, the correct term 
-> for this is "peer".  See the existing usages in hub.h, hub.c, and 
-> port.c.
-> 
-> "Companion" refers to something completely different (i.e., the UHCI or 
-> OHCI controllers that handle Low/Full-speed connections on behalf of a 
-> High-speed EHCI controller).
+yamllint warnings/errors:
 
-Yes it's the relation between the two logical hub. The term 'companion-hub'
-stems from the binding and has been around since v6 of this series. I guess
-we should update the binding if the terminology isn't correct.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11271000: usb@11270000:clocks: [[4294967295, 94], [4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11271000: usb@11270000:clock-names: ['sys_ck', 'ref_ck'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11270000: clocks: [[4294967295, 94], [4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11270000: clock-names: ['sys_ck', 'ref_ck'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@112c1000: usb@11270000:clocks: [[4294967295, 94], [4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@112c1000: usb@11270000:clock-names: ['sys_ck', 'ref_ck'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11270000: clocks: [[4294967295, 94], [4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11270000: clock-names: ['sys_ck', 'ref_ck'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11201000: usb@11200000:clocks: [[4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11201000: usb@11200000:clock-names: ['sys_ck'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11200000: clocks: [[4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtu3.example.dtb: usb@11200000: clock-names: ['sys_ck'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.example.dtb: usb@11270000: clocks: [[4294967295, 94], [4294967295]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.example.dtb: usb@11270000: clock-names: ['sys_ck', 'ref_ck'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
