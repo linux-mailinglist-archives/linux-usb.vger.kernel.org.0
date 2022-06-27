@@ -2,66 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8032155C34D
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C392755D469
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238601AbiF0PxI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 11:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53030 "EHLO
+        id S239227AbiF0Q2V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 12:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238916AbiF0Pww (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 11:52:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353231AF2B
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 08:52:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8BE57CE1B98
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 15:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2588C341CA
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 15:52:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656345154;
-        bh=gQ/8rpTLJoHf5hQ/J7Tim5kyblxVTDM3oOXl5+ou4X8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IbsyGbkPTtqeePxaq5vuQk6Ht9AerYj0BNdaIJeaP2yIG4mWUvLkdgXT8Edp2ohY7
-         nzPSwVaENUOq3xv4oKUyhKgAs0ak4sniH6vMOI9UqqfMKtPYoltLcJBkRkvNWugATA
-         WpHq+crwQUruG8rRlTTZaRkJIo0F2SXec9xqPCwZPZYnPpY1iRRrfvaPHQ0vfaGL6P
-         KnEFJ2a8LKiPE5L1X7ryDbtrE09FJuwK4pLr8fEvvAj/g+IBAWr/HUQOCRZPHs1S23
-         d8QvdDm0CVWq8Tno6vdGnev1gtzAOPuqy05cd2fo/wNcAbR3jB1bH3PQLRLdynNkkg
-         2obC0cGmD2mOA==
-Received: by mail-vs1-f51.google.com with SMTP id h38so9377965vsv.7
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 08:52:34 -0700 (PDT)
-X-Gm-Message-State: AJIora9mPeR3ILzhCoFy7Ak6mk8D+6U4IxpKzwJVJEBkRcjWcqC4ho94
-        s0G2JGM8DAraEVOLMmh+ro+RykW4frGpdyWiSQ==
-X-Google-Smtp-Source: AGRyM1spI4V2i5L3miuavcwk5M71oji9JvRZrCj9WaP3J+qZiNMHshh0zQhnC3gDnlZgRs+sJkzpms/ovm9XpOnk2fk=
-X-Received: by 2002:a67:1787:0:b0:354:6490:437f with SMTP id
- 129-20020a671787000000b003546490437fmr4876195vsx.26.1656345153833; Mon, 27
- Jun 2022 08:52:33 -0700 (PDT)
+        with ESMTP id S239251AbiF0Q2R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 12:28:17 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0C0B7C7
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 09:28:13 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id s1so13811837wra.9
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 09:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RFbscGfZ1HvqkolFfPgOHxRAqCYKsO6AGhI1CWcF3U0=;
+        b=QL9P5fYJiAGJ0cVberqQxZgecUlCyO035Rs/RHERScTvlSGjFZWJwcJ83NKx7icnCf
+         MmmkqeK7/MKYHkhThvS+4I5n6eilA1iv0cTdd1jM4UXHDDaaVEXvSnXIRzJWnCUCUcUi
+         hfbpR0k3AwYuP7wFzDx1Qb4iWIpTN9nBpMOsMz5YzOvQfMZ+aNGdk1BwqtUaNtHKCBDC
+         fA9t5x0TJ4kWUQmeUPz8VsbAvV+0a4AUoZiJIyO7qENghiYMyKTM8whwQHTooEBVZnfa
+         hv7NO7jkwT4JYF/WPaOvNMBn/r4c0lJo2uE2cyoUPVH1HBvXxtPYqUUryaiaIppTOHk7
+         Xteg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RFbscGfZ1HvqkolFfPgOHxRAqCYKsO6AGhI1CWcF3U0=;
+        b=MZIwDJ4wMdy61nlLstZrMzyQ9om6c7RjRx2P4h+x7Xh3g9g7xJZNZogNAfR+sDsHiI
+         XCKu+hv8XQXyMNU4z0b+MPA4gczpv5FqyzGBFzGIpKqM5LtBxsD6AsnPdF5RCR3HVaP7
+         PBaxxJlmJ2OBoA8x7dMfHLwjvIpNPmrm8IEvi8AYSndtV/DXgf+M7c3/knfWW+6OkPUk
+         9qqGVj7GkUNokwuWqBwtCzXeUyrACctoYPaSBgvWmx6WoXWoTQHUc4fsVqXHifZLE/3H
+         +tTdpm4a/Mt04ymVHiY4d88sTyLHiutvd6gI7m1xQ8dxp/1xRsDAAKU3xiFmXBKXXj33
+         BsMQ==
+X-Gm-Message-State: AJIora9zLXJxW/eyUXbg0wsY9OQRAlF53yswj2ruUrrDveMneKMSlI4z
+        VljGBl2unMNqZUEZ37WI481/hQ==
+X-Google-Smtp-Source: AGRyM1tWghCzrhvaQKuNnG4CtD67zaV7MVCuo84J73jDL9LXJFGuDL/uN51RLsUeyYqHqBL/FNulUA==
+X-Received: by 2002:a5d:5966:0:b0:21b:80b5:ecc3 with SMTP id e38-20020a5d5966000000b0021b80b5ecc3mr12930472wri.130.1656347292409;
+        Mon, 27 Jun 2022 09:28:12 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id m17-20020adfe0d1000000b0021b866397a7sm11132854wri.1.2022.06.27.09.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 09:28:12 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 17:28:09 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>,
+        ChiYuan Huang <cy_huang@richtek.com>
+Subject: Re: [PATCH v2 08/15] mfd: mt6370: Add Mediatek MT6370 support
+Message-ID: <YrnamaUx236MsNQa@google.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-9-peterwu.pub@gmail.com>
+ <Yqph8jwHU8rPooJA@google.com>
+ <CABtFH5KLVQFYOBGZ--9+s4GrHXbsDao-yL-KCFwL3FD_kbNhjg@mail.gmail.com>
+ <Yrm7NTID16g8gM5t@google.com>
+ <CABtFH5L7B_kEvG5E2Um5EANEScJPTfQthyLNfCbvoHq_YDpXxQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220625214151.547b3570@Cyrus.lan> <947e4583-fe0b-b8af-61b3-2d120357727c@gmail.com>
- <53ac873c23e.3ae9df00@auth.smtp.1and1.co.uk>
-In-Reply-To: <53ac873c23e.3ae9df00@auth.smtp.1and1.co.uk>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 27 Jun 2022 09:52:22 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKd2QaoPH16JqKrx0_XNmyUgKqsiOD56QHO1C0r1rCp7g@mail.gmail.com>
-Message-ID: <CAL_JsqKd2QaoPH16JqKrx0_XNmyUgKqsiOD56QHO1C0r1rCp7g@mail.gmail.com>
-Subject: Re: drivers/usb/host/ehci-fsl: Fix interrupt setup in host mode.
-To:     Darren Stevens <darren@stevens-zone.net>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Scott Wood <oss@buserror.net>,
-        Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Yang-Leo Li <leoyang.li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABtFH5L7B_kEvG5E2Um5EANEScJPTfQthyLNfCbvoHq_YDpXxQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,53 +94,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 2:03 PM Darren Stevens <darren@stevens-zone.net> wr=
-ote:
->
-> Hello Sergei
->
-> On 26/06/2022, Sergei Shtylyov wrote:
-> > Hello!
-> >
-> > On 6/25/22 11:41 PM, Darren Stevens wrote:
-> >
-> >> In patch a1a2b7125e10 (Drop static setup of IRQ resource from DT
-> >> core) we stopped platform_get_resource() from returning the IRQ, as al=
-l
-> >
-> > In commit a1a2b7125e10 ("Drop static setup of IRQ resource from DT core=
-")
-> >
-> >> drivers were supposed to have switched to platform_get_irq()
-> >> Unfortunately the Freescale EHCI driver in host mode got missed. Fix
-> >> it. Also fix allocation of resources to work with current kernel.
-> >
-> >    The basic rule (especially for the fixes) is "do one thing per patch=
-".
->
-> I thought I'd done that, this is the minimum amount of changes that fix w=
-hat changed in the specified commit.
->
-> > [...]
-> >> @@ -92,15 +89,18 @@ static int fsl_ehci_drv_probe(struct platform_devi=
-ce *pdev)
-> >>          goto err1;
-> >>      }
-> >>
-> >> -    res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >> -    hcd->regs =3D devm_ioremap_resource(&pdev->dev, res);
-> >> +    tmp =3D of_address_to_resource(dn, 0, &res);
-> >
-> >    Hm, why? What does this fix?
->
-> With baseline the mouse and keyboard on our machines don't work - dmesg r=
-eports no interrupt. Fixing the interrupt detection throws a 'invalid resou=
-re' error instead (No idea why), which these lines fix. Both problems disap=
-pear if we revert the 'fixes' patch.
->
+[...]
 
-I see the problem. You need to keep the
-platform_device_add_resources() call in fsl-mph-dr-of.c so that the
-memory resource is copied from the parent to the child device.
+> > > > > +#define MT6370_IRQ_DSV_VPOS_OCP              124
+> > > > > +#define MT6370_IRQ_DSV_BST_OCP               125
+> > > > > +#define MT6370_IRQ_DSV_VNEG_SCP              126
+> > > > > +#define MT6370_IRQ_DSV_VPOS_SCP              127
+> > > > > +
+> > > > > +struct mt6370_info {
+> > > > > +     struct i2c_client *i2c[MT6370_MAX_I2C];
+> > > > > +     struct device *dev;
+> > > > > +     struct regmap *regmap;
+> > > > > +     struct regmap_irq_chip_data *irq_data;
+> > > > > +};
+> > > >
+> > > > Can we shove all of the above into a header file?
+> > >
+> > > Well... In Patch v1, we put these "#define IRQ" into
+> > > "include/dt-bindings/mfd/mediatek,mt6370.h".
+> > > But the reviewer of DT files hoped us to remove this header file, we
+> > > put these "#define IRQ" in this .c file.
+> > > Shall we leave them here or put them into the header file in
+> > > "driver/power/supply/mt6370-charger.h"?
+> >
+> > Where are they used?
+> 
+> Sorry, I wrote the wrong path last time...
+> What I should say last time was to put them into the header file into
+> "driver/mfd/mt6370.h"
+> These "#define IRQ" are just used in "driver/mfd/mt6370.c"
+> I’m really sorry for making this mistake...
 
-Rob
+Yes, that would be fine.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
