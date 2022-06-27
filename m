@@ -2,48 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3694855C930
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620C555C5C7
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239723AbiF0MI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 08:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S239740AbiF0MIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 08:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240410AbiF0MHl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 08:07:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637A0CE18;
-        Mon, 27 Jun 2022 05:06:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F27E961553;
-        Mon, 27 Jun 2022 12:05:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074BFC3411D;
-        Mon, 27 Jun 2022 12:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656331559;
-        bh=jWx+ZB/3GO7W16Tms7wsdO71Vn4Hhk3NED6hLwj/3Vo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HTWHbxqbon+yqo7Ep8WyNw8mz35CvkkYAkzcH9ea4zDjnA9Alxwjz80BIpHvFK2+v
-         Ywmkj5Zev1zNgqpkzu4iQQ+Jas5o0wktpqfIZvliDgdxwNlhXJmgZ2lAyEzFJ6i4sV
-         kS9Jfw4+ZF7UgzZ/VpcNipeXVvqY8GtxcQlMf/bQ=
-Date:   Mon, 27 Jun 2022 13:45:08 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     zhoun <zhounan@nfschina.com>
-Cc:     balbi@kernel.org, jakobkoschel@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        lutovinova@ispras.ru
-Subject: Re: [PATCH v2] usb: remove unnecessary mv_u3d* conversion
-Message-ID: <YrmYRElMVwVz5tAr@kroah.com>
-References: <YrV2aQc8lB6wDEbE@kroah.com>
- <20220627031108.12246-1-zhounan@nfschina.com>
+        with ESMTP id S238821AbiF0MIZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 08:08:25 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF1EBE2A
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 05:08:24 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 184so8891995pga.12
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 05:08:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=06jPNAZfzAoGgQl8zbNvqdsYgxEmj2PgncyI+QMckww=;
+        b=jNbUtmgWgbaqG1I8zhOW7EJd+LDRzF8lzb3MP1Teq9WYEDAPdJ03ZelH2VqOQAhOH9
+         jJXlEoqQFChUZC5tV2ku2uipkRISCl7P3MfaoQr2HL6xG88maqXYNVzF+X+j26TEak55
+         68w0+kLoYFAsvnM2ayEE2hp7EcQ4oEa2MIUMk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=06jPNAZfzAoGgQl8zbNvqdsYgxEmj2PgncyI+QMckww=;
+        b=OKXB0n65gBdJ0ZT+FJMclslJxB5kKu6QMFarMIVXKLpoFL7RqXLLmsog+yBgJ/gpmO
+         2CZyfrUsltr+yM49+M+Ym8x6SZQR0WdxAxbjWBddS97bD7dlGxQRHw65EFDvxDouqkeO
+         BbhzrteeOHdBnGLADwrBZmf42XsEiTs8B7xkrDJiCyilkJjqmqZQoNlW4qxT+xonK+tt
+         Hu3841Q4w9jbch/CWgZ19bGamkOwvi7guWKVSJV5KfLLkRfRe4Dy/Q3d7k/QFxjM0Wlq
+         F+pgHCIViRxdlXNjx/yx+HwVflXBOvphc7aKPULf/Qi1qH7h4Y8otkcfTgKMlueXLUMK
+         UVjA==
+X-Gm-Message-State: AJIora82dYiFc19Hvqa3qeoJFyCshvi503sThfKryOvXuhjiXOw7z0Av
+        MGIjw9Cn6sATJQwhEes/pRoHgAgxHsLSI06b49PIiQ==
+X-Google-Smtp-Source: AGRyM1tn7CTUAGa8vxwDHEtcApJ0iPpY0zAFtVf+pIjjpIceKh16KQCYU3O27H9kS7acv6DSw/yGlZIFtxKnuuYHGfg=
+X-Received: by 2002:a63:6ac3:0:b0:411:4aa9:9034 with SMTP id
+ f186-20020a636ac3000000b004114aa99034mr699050pgc.94.1656331704192; Mon, 27
+ Jun 2022 05:08:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627031108.12246-1-zhounan@nfschina.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <CAOf5uwnJ1Z4k6NSqdLZ0UNkbWMdoYgSRecwWNHXMH24_WVZrOg@mail.gmail.com>
+ <YrlacG25I8bZZ1VR@kroah.com> <CAOf5uw=X=y7BZZpdW-89orU=aL5oc01b19q7CvvQpXfOjm+m3Q@mail.gmail.com>
+ <YrmYMO+u4EqSjTZ8@kroah.com>
+In-Reply-To: <YrmYMO+u4EqSjTZ8@kroah.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Mon, 27 Jun 2022 14:08:12 +0200
+Message-ID: <CAOf5uwki+0dhpXTXJxZr7KNOUDZx8UgrJSssRYzVVsUzsLhsTA@mail.gmail.com>
+Subject: Re: f_hid GET_REPORT extension
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,58 +64,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 11:11:08PM -0400, zhoun wrote:
-> From: Zhou nan <zhounan@nfschina.com>
-> 
-> remove unnecessary mv_u3d* type casting.
-> After analysis, the two u3d objects have the same type.
-> 
-> Signed-off-by: Zhou nan <zhounan@nfschina.com>
-> ---
->  drivers/usb/gadget/udc/mv_u3d_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
-> index 598654a3cb41..102278a71307 100644
-> --- a/drivers/usb/gadget/udc/mv_u3d_core.c
-> +++ b/drivers/usb/gadget/udc/mv_u3d_core.c
-> @@ -175,7 +175,7 @@ void mv_u3d_done(struct mv_u3d_ep *ep, struct mv_u3d_req *req, int status)
->  	__releases(&ep->udc->lock)
->  	__acquires(&ep->udc->lock)
->  {
-> -	struct mv_u3d *u3d = (struct mv_u3d *)ep->u3d;
-> +	struct mv_u3d *u3d = ep->u3d;
->  
->  	dev_dbg(u3d->dev, "mv_u3d_done: remove req->queue\n");
->  	/* Removed the req from ep queue */
-> -- 
-> 2.27.0
-> 
+Hi Greg
 
-Hi,
+On Mon, Jun 27, 2022 at 2:05 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jun 27, 2022 at 10:02:27AM +0200, Michael Nazzareno Trimarchi wrote:
+> > Hi Greg
+> >
+> > On Mon, Jun 27, 2022 at 9:21 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Mon, Jun 27, 2022 at 09:06:05AM +0200, Michael Nazzareno Trimarchi wrote:
+> > > > Hi Felipe and Greg
+> > > >
+> > > > I'm starting to write some code to extend the GET_REPORT and let the
+> > > > userspace on the device side to pre-fill the answer on this request.
+> > > > Right now the answer is always 0. The idea is to create a sysfs
+> > > > support to fill reports struct on report request on the host side.
+> > > > This will help to
+> > > > emulate devices that export features report for example. As far as I
+> > > > understand the hidg side just use read and write and read is used to
+> > > > extract
+> > > > the result of SET_REPORT is that the gadget is properly configured. Is
+> > > > it the right direction?
+> > >
+> > > Without code, it is very hard to understand what you are doing here,
+> > > sorry.
+> > >
+> >
+> > Agree, I need only a suggestion what is the best way to expose it
+> >
+> > > Also, why sysfs?
+> >
+> > Let me clarify this point. Right now the userspace manage the set_report
+> >
+> > static ssize_t f_hidg_read(struct file *file, char __user *buffer,
+> >                            size_t count, loff_t *ptr)
+> > {
+> >         struct f_hidg *hidg = file->private_data;
+> >
+> >         if (hidg->use_out_ep)
+> >                 return f_hidg_intout_read(file, buffer, count, ptr);
+> >         else
+> >                 return f_hidg_ssreport_read(file, buffer, count, ptr);
+> > }
+> >
+> > The report can be write from usb side and read on gadget side if use_out_ep
+> > is 0 (this is a configuration). Now, the answer to set_report is done
+> > sync on request
+> > and the usb message is buffered on the kernel side. During the
+> > get_report as far I understand we should reply
+> > the same way on bus. The idea is handle the type and report number and
+> > find it on a list of report that must be prepared
+> > on the gadget side. The hidg ops interface need to handle report
+> > preparation so I was thinking in two solutions:
+> > - sysfs kind of interface
+> > - ioctl like interface
+>
+> sysfs is good for "one value per file", but not good for interactions
+> where you have back/forth from userspace to the kernel.  ioctls are good
+> for "do something in the kernel and get this value back" type of
+> operation.  configfs is good for initializing data for something before
+> you "finalize" it.  So it all depends on what your userspace
+> interaction is going to be here as to what interface to use.
+>
+> prototype it and see what works.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Thank you for the explanation. I will prototype it
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Michael
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+>
+> greg k-h
