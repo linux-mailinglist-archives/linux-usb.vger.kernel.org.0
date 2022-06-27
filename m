@@ -2,53 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90EE55C50A
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3179655C6F2
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240913AbiF0VFS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 17:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S239290AbiF0Vnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 17:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239752AbiF0VFR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 17:05:17 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CA3BE21;
-        Mon, 27 Jun 2022 14:05:16 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id h85so10946819iof.4;
-        Mon, 27 Jun 2022 14:05:16 -0700 (PDT)
+        with ESMTP id S241392AbiF0Vnw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 17:43:52 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290F81164
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 14:43:51 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id r3so18977306ybr.6
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 14:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zVVDV7APfU9r2RLbdKg5/cTGtWPknd1MSe7r7DyJqGA=;
+        b=WK98TF2fZfBa0/bAmyVmVIC8Zjaro5lVsqZPE5F2DRd46BRHPENt4IdG+aMKFgGu6J
+         UevhukZvj75uZFsswaLyKxkHDNFvW7Cc+3iPnoqOqD4ItNDx0K39pOfz9U6daqXVR8xU
+         ur0I66+aTKigkDWmRRrnTlFqWXcdrUkD5QxlA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2Vz+PIAaZ/qnk8nyNJa+zdscW6Bv7pgzaLQ1N3O646A=;
-        b=fb8+D+yNUn8PFpbBCK2tOaynmaUkCmyisKNHU4wp+0l44GMrZnA7sk1Hug7FPbXsK3
-         GWxs+eggF3HrzBOwaBq/s72HDMIluF7IJZrXgcx71gA17A0919tc7feK+nJeuyeVTED9
-         cDHwgChUeF3Ylgf9Dsos807/ggRLqbbnFJ0/AwP/m9udsfELHX+ZmticY7VwsM68v4gi
-         /aYm0ZiutyUcOTIw4ck2xAxI3yIaUYE2QLxrPAgMkWzgu2lwZd8h2nqJqKJ1a2sMhYxs
-         yGv9WlwcjssVaocue43u0fPKQ+82Yhr9zBwkrb6QxbWjRc/VIcbkTT0EdAkrP9bD+ZOu
-         CMcA==
-X-Gm-Message-State: AJIora8mpLQAoOl33sgcqS6iWOfQCRD4KfAX61v8AhE/rkrL7cf0WX5K
-        Q4TE5MNIEsyykEtKRkZWJA==
-X-Google-Smtp-Source: AGRyM1vd1hXiT92FmmZEOLGUlOXC2cFf/xqKvRpLsJL6tDRsS+f6gzt0eb8Fg2+4cpBZmPRJbrsmGQ==
-X-Received: by 2002:a05:6638:25c8:b0:332:198c:dbf6 with SMTP id u8-20020a05663825c800b00332198cdbf6mr8908919jat.52.1656363915770;
-        Mon, 27 Jun 2022 14:05:15 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id a13-20020a927f0d000000b002d8f50441absm4934985ild.10.2022.06.27.14.05.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 14:05:15 -0700 (PDT)
-Received: (nullmailer pid 2956189 invoked by uid 1000);
-        Mon, 27 Jun 2022 21:05:12 -0000
-Date:   Mon, 27 Jun 2022 15:05:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Prashant Malani <pmalani@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zVVDV7APfU9r2RLbdKg5/cTGtWPknd1MSe7r7DyJqGA=;
+        b=RHIY7lXGMBhEQvZhrKoct2W3/KTDsyRM9d/akiFWkrSOz7fvIGJwLcyZgTOiREPvk3
+         u/8ChCSrYT5cwDMFaIIsw3Y1I2v4f9WlJxz3RgbvUNXxiAQ94qKtDDCjniJlbk4juSnu
+         iJdIfCZVSa2fvldBsUyLEHPYb1KX6uAhDwfUHcOeTZzDXPs9XG+kqyc0ApvddPG28O2Y
+         aAme87BXwvBuCuDC3nbyoMa0PxnhnVhnyvR1OeC61mVNJTWvYmED7LCZHlJpGGVNKbdc
+         F3TlUZuuMuXyljix8EMZWhOLXsx6FxeJfjHIc9h71di2A2lAip1esVPCMyYJ1X7hfjWV
+         LWVQ==
+X-Gm-Message-State: AJIora+pb5Yw3QsX9RaOJfNBzor/HseC/E45DWw1E6PTss5yQPoPt/vI
+        pNFYVO2xFmLRDdPAixiHUn8ZgKOWWCh8mkj7mXo92g==
+X-Google-Smtp-Source: AGRyM1vMpp/K/ujDLij5isvZcyN2Qbx0yJqK9sa2MgUAZ3WMBHbnXgtvinV7drhL36FdOgCoVMVawRrt3FHUO4o+rng=
+X-Received: by 2002:a25:da0b:0:b0:66c:850f:1b71 with SMTP id
+ n11-20020a25da0b000000b0066c850f1b71mr16460322ybf.336.1656366230372; Mon, 27
+ Jun 2022 14:43:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
+In-Reply-To: <20220627210407.GA2905757-robh@kernel.org>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Mon, 27 Jun 2022 14:43:39 -0700
+Message-ID: <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Rob Herring <robh@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         bleung@chromium.org, swboyd@chromium.org,
         heikki.krogerus@linux.intel.com,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -63,24 +73,16 @@ Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Robert Foss <robert.foss@linaro.org>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Xin Ji <xji@analogixsemi.com>
-Subject: Re: [PATCH v5 7/9] drm/bridge: it6505: Register number of Type C
- switches
-Message-ID: <20220627210512.GB2905757-robh@kernel.org>
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-8-pmalani@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622173605.1168416-8-pmalani@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,58 +90,146 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 05:34:36PM +0000, Prashant Malani wrote:
-> From: Pin-Yen Lin <treapking@chromium.org>
-> 
-> Parse the "switches" node, if available, and count and store the number
-> of Type-C switches within it. The extcon registration is still
-> supported, but we don't expect both extcon and typec-switch be
-> registered at the same time.
-> 
-> This patch sets a foundation for the actual registering of Type-C
-> switches with the Type-C connector class framework.
-> 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
-> 
-> v5 is the first version for this patch.
-> 
->  drivers/gpu/drm/bridge/ite-it6505.c | 34 +++++++++++++++++++++++++----
->  1 file changed, 30 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index 4b673c4792d7..b259f9f367f6 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -452,6 +452,7 @@ struct it6505 {
->  	struct delayed_work delayed_audio;
->  	struct it6505_audio_data audio;
->  	struct dentry *debugfs;
-> +	int num_typec_switches;
->  
->  	/* it6505 driver hold option */
->  	bool enable_drv_hold;
-> @@ -3229,13 +3230,28 @@ static void it6505_shutdown(struct i2c_client *client)
->  		it6505_lane_off(it6505);
->  }
->  
-> +static int it6505_register_typec_switches(struct device *device, struct it6505 *it6505)
-> +{
-> +	struct device_node *of;
-> +
-> +	of = of_get_child_by_name(device->of_node, "switches");
-> +	if (!of)
-> +		return -ENODEV;
-> +
-> +	it6505->num_typec_switches = of_get_child_count(of);
-> +	if (it6505->num_typec_switches <= 0)
-> +		return -ENODEV;
-> +
-> +	return 0;
-> +}
+Hello Rob,
 
-Not that I expect this to remain, but you have the same function in 2 
-files. That's a clear sign this belongs in a helper.
+On Mon, Jun 27, 2022 at 2:04 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Jun 22, 2022 at 05:34:30PM +0000, Prashant Malani wrote:
+> > Introduce a binding which represents a component that can control the
+> > routing of USB Type-C data lines as well as address data line
+> > orientation (based on CC lines' orientation).
+> >
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > Tested-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
+> >
+> > Changes since v4:
+> > - Added Reviewed-by tags.
+> > - Patch moved to 1/9 position (since Patch v4 1/7 and 2/7 were
+> >   applied to usb-next)
+> >
+> > Changes since v3:
+> > - No changes.
+> >
+> > Changes since v2:
+> > - Added Reviewed-by and Tested-by tags.
+> >
+> > Changes since v1:
+> > - Removed "items" from compatible.
+> > - Fixed indentation in example.
+> >
+> >  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++++++++
+> >  1 file changed, 74 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.=
+yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/=
+Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > new file mode 100644
+> > index 000000000000..78b0190c8543
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > @@ -0,0 +1,74 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: USB Type-C Switch
+> > +
+> > +maintainers:
+> > +  - Prashant Malani <pmalani@chromium.org>
+> > +
+> > +description:
+> > +  A USB Type-C switch represents a component which routes USB Type-C d=
+ata
+> > +  lines to various protocol host controllers (e.g USB, VESA DisplayPor=
+t,
+> > +  Thunderbolt etc.) depending on which mode the Type-C port, port part=
+ner
+> > +  and cable are operating in. It can also modify lane routing based on
+> > +  the orientation of a connected Type-C peripheral.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: typec-switch
+> > +
+> > +  mode-switch:
+> > +    type: boolean
+> > +    description: Specify that this switch can handle alternate mode sw=
+itching.
+> > +
+> > +  orientation-switch:
+> > +    type: boolean
+> > +    description: Specify that this switch can handle orientation switc=
+hing.
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +    description: OF graph binding modelling data lines to the Type-C s=
+witch.
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: Link between the switch and a Type-C connector.
+> > +
+> > +    required:
+> > +      - port@0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - ports
+> > +
+> > +anyOf:
+> > +  - required:
+> > +      - mode-switch
+> > +  - required:
+> > +      - orientation-switch
+> > +
+> > +additionalProperties: true
+> > +
+> > +examples:
+> > +  - |
+> > +    drm-bridge {
+> > +        usb-switch {
+> > +            compatible =3D "typec-switch";
+>
+> Unless this child is supposed to represent what the parent output is
+> connected to, this is just wrong as, at least for the it6505 chip, it
+> doesn't know anything about Type-C functionality. The bridge is
+> just a protocol converter AFAICT.
 
-Rob
+I'll let Pin-Yen comment on the specifics of the it6505 chip.
+
+>
+> If the child node represents what the output is connected to (like a
+> bus), then yes that is a pattern we have used.
+
+For the anx7625 case, the child node does represent what the output is conn=
+ected
+to (the usb-c-connector via the switch). Does that not qualify? Or do you m=
+ean
+the child node should be a usb-c-connector itself?
+
+> For example, a panel
+> represented as child node of a display controller. However, that only
+> works for simple cases, and is a pattern we have gotten away from in
+> favor of using the graph binding.
+
+The child node will still use a OF graph binding to connect to the
+usb-c-connector.
+Is that insufficient to consider a child node usage here?
+By "using the graph binding", do you mean "only use the top-level ports" ?
+I'm trying to clarify this, so that it will inform future versions and patc=
+hes.
+
+>
+> I think Stephen and I are pretty much saying the same thing.
+>
+> Rob
