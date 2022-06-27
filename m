@@ -2,106 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B4C55D3FA
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F4255C981
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiF0LSk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 07:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S238812AbiF0MI2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 08:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234474AbiF0LSk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 07:18:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79479654C
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 04:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656328719; x=1687864719;
-  h=message-id:date:mime-version:to:references:from:subject:
-   in-reply-to:content-transfer-encoding;
-  bh=iC6Bb+nmBNBwNqtyT/Gc9b+41mbMagvJSQU011GSAIc=;
-  b=h+lxUsbLXJwHlsQlIk8A6nmETzjpypyLAo1ncTl+Y+GtG/NCo61eaLDw
-   b8EVDNGc8TIQXEG6SD85IZKUmCMrwFjy4K8msR2ih0wLdw57Rqv62R6Ag
-   sm0fgkS8NIb3XVMRD8CA0OZI65xCImfSS2lj5r1JW5tmmUQAhr6LzciFB
-   +AQ7/2vI8sDbxU1wsOOymT2F0+1dL/kkAWi4cDLhZ+egD1RDf8kox5brv
-   aOJI1umQF11S+tCtPrW/N/I9ITTd34eVghwJZW29ntq+aKROrY7ipP5y+
-   3G8jMR8jFeViSYvO5qJjvUHsg/doZqqpw2YPFP6d5ncCjpm22uAT2SAMT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="264469807"
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="264469807"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 04:18:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="732274577"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Jun 2022 04:18:38 -0700
-Message-ID: <c4efa4a8-7ad6-e0f7-0c3b-73ddc31b2353@linux.intel.com>
-Date:   Mon, 27 Jun 2022 14:20:10 +0300
+        with ESMTP id S240409AbiF0MHl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 08:07:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4D0F2C
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 05:05:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2481D61506
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 12:05:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B32C3411D;
+        Mon, 27 Jun 2022 12:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656331556;
+        bh=67Ik/eoZyJhS4eBAvMTvEKN7fzs6K6+e5ThzPYKP6E8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YKBPjpLNmgzfGN4jLiBJCgfjCdGHGsXDDq+A3qCBepae9zbc6mOY3mr9U1DbdM1AR
+         ENFacF4IrU0GjGasW62YqHBf5dVRgQIl7SFTcbZrTzSHjvVEbFjG/uFfij602T1fkB
+         eziPNjLqh/dASBe4VXHXECmLymwq7yUcSrHZPYds=
+Date:   Mon, 27 Jun 2022 13:44:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: f_hid GET_REPORT extension
+Message-ID: <YrmYMO+u4EqSjTZ8@kroah.com>
+References: <CAOf5uwnJ1Z4k6NSqdLZ0UNkbWMdoYgSRecwWNHXMH24_WVZrOg@mail.gmail.com>
+ <YrlacG25I8bZZ1VR@kroah.com>
+ <CAOf5uw=X=y7BZZpdW-89orU=aL5oc01b19q7CvvQpXfOjm+m3Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Content-Language: en-US
-To:     bugzilla-daemon@kernel.org, linux-usb@vger.kernel.org
-References: <bug-216171-208809@https.bugzilla.kernel.org/>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [Bug 216171] New: Hibernation not working because of xhci_hcd
-In-Reply-To: <bug-216171-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOf5uw=X=y7BZZpdW-89orU=aL5oc01b19q7CvvQpXfOjm+m3Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25.6.2022 20.19, bugzilla-daemon@kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=216171
+On Mon, Jun 27, 2022 at 10:02:27AM +0200, Michael Nazzareno Trimarchi wrote:
+> Hi Greg
 > 
->              Bug ID: 216171
->             Summary: Hibernation not working because of xhci_hcd
->             Product: Drivers
->             Version: 2.5
->      Kernel Version: 5.18.6-arch1-1
->            Hardware: All
->                  OS: Linux
->                Tree: Mainline
->              Status: NEW
->            Severity: normal
->            Priority: P1
->           Component: USB
->            Assignee: drivers_usb@kernel-bugs.kernel.org
->            Reporter: prz.kopa@gmail.com
->          Regression: No
+> On Mon, Jun 27, 2022 at 9:21 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Jun 27, 2022 at 09:06:05AM +0200, Michael Nazzareno Trimarchi wrote:
+> > > Hi Felipe and Greg
+> > >
+> > > I'm starting to write some code to extend the GET_REPORT and let the
+> > > userspace on the device side to pre-fill the answer on this request.
+> > > Right now the answer is always 0. The idea is to create a sysfs
+> > > support to fill reports struct on report request on the host side.
+> > > This will help to
+> > > emulate devices that export features report for example. As far as I
+> > > understand the hidg side just use read and write and read is used to
+> > > extract
+> > > the result of SET_REPORT is that the gadget is properly configured. Is
+> > > it the right direction?
+> >
+> > Without code, it is very hard to understand what you are doing here,
+> > sorry.
+> >
 > 
-> Created attachment 301268
->    --> https://bugzilla.kernel.org/attachment.cgi?id=301268&action=edit
-> Dmesg log with failed hibernation attempt
+> Agree, I need only a suggestion what is the best way to expose it
 > 
-> Starting from 5.18.4 my notebook (Dell Latitude 3340) won't hibernate -
-> hibernation fails with dmesg errors related to xhci_hcd. I'm attaching dmesg
-> log with failed hibernation attempt. Problem goes away after reverting commit
-> 63acaa8e9c65dc34dc249440216f8e977f5d2748 (USB: hcd-pci: Fully suspend across
-> freeze/thaw cycle). After reverting this commit on linux 5.18.6 my system can
-> again successfully hibernate.
+> > Also, why sysfs?
 > 
+> Let me clarify this point. Right now the userspace manage the set_report
+> 
+> static ssize_t f_hidg_read(struct file *file, char __user *buffer,
+>                            size_t count, loff_t *ptr)
+> {
+>         struct f_hidg *hidg = file->private_data;
+> 
+>         if (hidg->use_out_ep)
+>                 return f_hidg_intout_read(file, buffer, count, ptr);
+>         else
+>                 return f_hidg_ssreport_read(file, buffer, count, ptr);
+> }
+> 
+> The report can be write from usb side and read on gadget side if use_out_ep
+> is 0 (this is a configuration). Now, the answer to set_report is done
+> sync on request
+> and the usb message is buffered on the kernel side. During the
+> get_report as far I understand we should reply
+> the same way on bus. The idea is handle the type and report number and
+> find it on a list of report that must be prepared
+> on the gadget side. The hidg ops interface need to handle report
+> preparation so I was thinking in two solutions:
+> - sysfs kind of interface
+> - ioctl like interface
 
-Looks like there is a pending wakeup:
+sysfs is good for "one value per file", but not good for interactions
+where you have back/forth from userspace to the kernel.  ioctls are good
+for "do something in the kernel and get this value back" type of
+operation.  configfs is good for initializing data for something before
+you "finalize" it.  So it all depends on what your userspace
+interaction is going to be here as to what interface to use.
 
-[   30.475168] xhci_hcd 0000:00:14.0: PM: pci_pm_freeze(): hcd_pci_suspend+0x0/0x30 returns -16
+prototype it and see what works.
 
-Guessing suspend_common() in hcd-pci.c retruns -EBUSY because HCD_WAKEUP_PENDING(hcd) flag is set.
-
-Does xhci dynamic debug show some port event before this?
-
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-
-Thanks
--Mathias
+greg k-h
