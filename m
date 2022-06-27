@@ -2,138 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620C555C5C7
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5F155C55A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239740AbiF0MIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 08:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S236038AbiF0Mci (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 08:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238821AbiF0MIZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 08:08:25 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF1EBE2A
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 05:08:24 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 184so8891995pga.12
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 05:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=06jPNAZfzAoGgQl8zbNvqdsYgxEmj2PgncyI+QMckww=;
-        b=jNbUtmgWgbaqG1I8zhOW7EJd+LDRzF8lzb3MP1Teq9WYEDAPdJ03ZelH2VqOQAhOH9
-         jJXlEoqQFChUZC5tV2ku2uipkRISCl7P3MfaoQr2HL6xG88maqXYNVzF+X+j26TEak55
-         68w0+kLoYFAsvnM2ayEE2hp7EcQ4oEa2MIUMk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=06jPNAZfzAoGgQl8zbNvqdsYgxEmj2PgncyI+QMckww=;
-        b=OKXB0n65gBdJ0ZT+FJMclslJxB5kKu6QMFarMIVXKLpoFL7RqXLLmsog+yBgJ/gpmO
-         2CZyfrUsltr+yM49+M+Ym8x6SZQR0WdxAxbjWBddS97bD7dlGxQRHw65EFDvxDouqkeO
-         BbhzrteeOHdBnGLADwrBZmf42XsEiTs8B7xkrDJiCyilkJjqmqZQoNlW4qxT+xonK+tt
-         Hu3841Q4w9jbch/CWgZ19bGamkOwvi7guWKVSJV5KfLLkRfRe4Dy/Q3d7k/QFxjM0Wlq
-         F+pgHCIViRxdlXNjx/yx+HwVflXBOvphc7aKPULf/Qi1qH7h4Y8otkcfTgKMlueXLUMK
-         UVjA==
-X-Gm-Message-State: AJIora82dYiFc19Hvqa3qeoJFyCshvi503sThfKryOvXuhjiXOw7z0Av
-        MGIjw9Cn6sATJQwhEes/pRoHgAgxHsLSI06b49PIiQ==
-X-Google-Smtp-Source: AGRyM1tn7CTUAGa8vxwDHEtcApJ0iPpY0zAFtVf+pIjjpIceKh16KQCYU3O27H9kS7acv6DSw/yGlZIFtxKnuuYHGfg=
-X-Received: by 2002:a63:6ac3:0:b0:411:4aa9:9034 with SMTP id
- f186-20020a636ac3000000b004114aa99034mr699050pgc.94.1656331704192; Mon, 27
- Jun 2022 05:08:24 -0700 (PDT)
+        with ESMTP id S232779AbiF0Mch (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 08:32:37 -0400
+Received: from mail.acc.umu.se (mail.acc.umu.se [130.239.18.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDD4DEA2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 05:32:35 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by amavisd-new (Postfix) with ESMTP id 486FC44B91;
+        Mon, 27 Jun 2022 14:32:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=acc.umu.se; s=mail1;
+        t=1656333150; bh=cZPTcnYU3Gs89ZwcHRQMfR5tvSY/JrMfJ0nXmkUKEHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d87Pw90bfDRhCP3ZtFG+8IUAkp9NBtV+EwraysL8TG0p7B3f4/GH5opRdHMEt8bpJ
+         aScXM7WC258F3aubQ9s1J5e+iKA6WKP+OC3mjVVHCsAGsMxwaeAwlwBSpudPax0cvJ
+         Q1z7samQD02YTN2RstLr4enH37p1+l06V/DQkbMl43x84da399YboqK28oK9fupONc
+         l/+dsbpIkggiAYYGaOEmILy69quVujfNmuhoDYdJU5FmedzIwJ3oA8FZjExdMEnEFH
+         DtTo9vMjN3vE7epn5L9yVuhLX8dYYL2oPJo5z76SyuurlYAtrctYgUhAXSTbRNYS54
+         DEoRFIbeNPekA==
+Received: by mail.acc.umu.se (Postfix, from userid 24471)
+        id BFDBE44B92; Mon, 27 Jun 2022 14:32:29 +0200 (CEST)
+Date:   Mon, 27 Jun 2022 14:32:29 +0200
+From:   Anton Lundin <glance@acc.umu.se>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [REGRESSION] AX88772 card booted without cable can't receive
+Message-ID: <20220627123229.GF930160@montezuma.acc.umu.se>
+References: <20220622141638.GE930160@montezuma.acc.umu.se>
+ <20220623063649.GD23685@pengutronix.de>
+ <20220624081706.GB14396@pengutronix.de>
 MIME-Version: 1.0
-References: <CAOf5uwnJ1Z4k6NSqdLZ0UNkbWMdoYgSRecwWNHXMH24_WVZrOg@mail.gmail.com>
- <YrlacG25I8bZZ1VR@kroah.com> <CAOf5uw=X=y7BZZpdW-89orU=aL5oc01b19q7CvvQpXfOjm+m3Q@mail.gmail.com>
- <YrmYMO+u4EqSjTZ8@kroah.com>
-In-Reply-To: <YrmYMO+u4EqSjTZ8@kroah.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Mon, 27 Jun 2022 14:08:12 +0200
-Message-ID: <CAOf5uwki+0dhpXTXJxZr7KNOUDZx8UgrJSssRYzVVsUzsLhsTA@mail.gmail.com>
-Subject: Re: f_hid GET_REPORT extension
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220624081706.GB14396@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
+On 24 June, 2022 - Oleksij Rempel wrote:
 
-On Mon, Jun 27, 2022 at 2:05 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jun 27, 2022 at 10:02:27AM +0200, Michael Nazzareno Trimarchi wrote:
-> > Hi Greg
-> >
-> > On Mon, Jun 27, 2022 at 9:21 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Mon, Jun 27, 2022 at 09:06:05AM +0200, Michael Nazzareno Trimarchi wrote:
-> > > > Hi Felipe and Greg
-> > > >
-> > > > I'm starting to write some code to extend the GET_REPORT and let the
-> > > > userspace on the device side to pre-fill the answer on this request.
-> > > > Right now the answer is always 0. The idea is to create a sysfs
-> > > > support to fill reports struct on report request on the host side.
-> > > > This will help to
-> > > > emulate devices that export features report for example. As far as I
-> > > > understand the hidg side just use read and write and read is used to
-> > > > extract
-> > > > the result of SET_REPORT is that the gadget is properly configured. Is
-> > > > it the right direction?
-> > >
-> > > Without code, it is very hard to understand what you are doing here,
-> > > sorry.
-> > >
-> >
-> > Agree, I need only a suggestion what is the best way to expose it
-> >
-> > > Also, why sysfs?
-> >
-> > Let me clarify this point. Right now the userspace manage the set_report
-> >
-> > static ssize_t f_hidg_read(struct file *file, char __user *buffer,
-> >                            size_t count, loff_t *ptr)
-> > {
-> >         struct f_hidg *hidg = file->private_data;
-> >
-> >         if (hidg->use_out_ep)
-> >                 return f_hidg_intout_read(file, buffer, count, ptr);
-> >         else
-> >                 return f_hidg_ssreport_read(file, buffer, count, ptr);
-> > }
-> >
-> > The report can be write from usb side and read on gadget side if use_out_ep
-> > is 0 (this is a configuration). Now, the answer to set_report is done
-> > sync on request
-> > and the usb message is buffered on the kernel side. During the
-> > get_report as far I understand we should reply
-> > the same way on bus. The idea is handle the type and report number and
-> > find it on a list of report that must be prepared
-> > on the gadget side. The hidg ops interface need to handle report
-> > preparation so I was thinking in two solutions:
-> > - sysfs kind of interface
-> > - ioctl like interface
->
-> sysfs is good for "one value per file", but not good for interactions
-> where you have back/forth from userspace to the kernel.  ioctls are good
-> for "do something in the kernel and get this value back" type of
-> operation.  configfs is good for initializing data for something before
-> you "finalize" it.  So it all depends on what your userspace
-> interaction is going to be here as to what interface to use.
->
-> prototype it and see what works.
+> Hi Anton,
+> 
+> On Thu, Jun 23, 2022 at 08:36:49AM +0200, Oleksij Rempel wrote:
+> > Hi Anton,
+> > 
+> > Thank you for your report! I'll take a look on it ASAP.
+> > 
+> > Regards,
+> > Oleksij
+> > 
+> > On Wed, Jun 22, 2022 at 04:16:38PM +0200, Anton Lundin wrote:
+> > > Hi.
+> > > 
+> > > I've found a issue with a Dlink usb ether adapter, that can't receive
+> > > anything until it self transmits if it's plugged in while booting, and
+> > > doesn't have link.
+> > > 
+> > > Later when a cable is attached, link is detected but nothing is received
+> > > either by daemons listening to ip address on that interface, or seen
+> > > with tcpdump.
+> > > 
+> > > The dongle is a:
+> > > D-Link Corp. DUB-E100 Fast Ethernet Adapter(rev.C1) [ASIX AX88772]
+> > > 
+> > > And it's detected at boot as:
+> > > libphy: Asix MDIO Bus: probed
+> > > Asix Electronics AX88772C usb-003:004:10: attached PHY driver (mii_bus:phy_addr=usb-003:004:10, irq=POLL)
+> > > asix 3-10.4:1.0 eth1: register 'asix' at usb-0000:00:14.0-10.4, ASIX AX88772 USB 2.0 Ethernet, <masked-mac>
+> > > usbcore: registered new interface driver asix
+> > > 
+> > > 
+> > > While in this state, the hardware starts sending pause frames to the
+> > > network when it has recived a couple of frames, and they look like:
+> > > 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> > > 0010   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > > 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > > 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> > > 
+> > > 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
+> > > 0010   ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > > 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > > 0030   00 00 00 00 00 00 00 00 00 00 00 00
+> > > 
+> > > And these two frames are repeated every couple of seconds.
+> > > 
+> > > The card wakes up when something triggers a transmit on that card, and
+> > > then starts receiving traffic as normal.
+> > > 
+> > > I've bisected this issue down to:
+> > > "net: usb: asix: ax88772: add phylib support" (e532a096be0e)
+> > > 
+> > > 
+> > > Reverting that makes the interface work as normal, even if the machine
+> > > boots without a cable plugged in.
+> > > 
+> > > Another issue found with exactly the same patch is that if it's loaded
+> > > as a module, then unloaded and loaded again, it fails to initialize the
+> > > card with:
+> > > 
+> > > sysfs: cannot create duplicate filename '/devices/virtual/mdio_bus/usb-003:004'
+> > > CPU: 0 PID: 3733 Comm: modprobe Tainted: G           O      5.15.10-core_64_preempt #3
+> > > Hardware name:  <masked-hardware-name>
+> > > Call Trace:
+> > >  <TASK>
+> > >  ? dump_stack_lvl+0x34/0x44
+> > >  ? sysfs_warn_dup.cold+0x17/0x24
+> > >  ? sysfs_create_dir_ns+0xbc/0xd0
+> > >  ? kobject_add_internal+0xa6/0x260
+> > >  ? kobject_add+0x7e/0xb0
+> > >  ? preempt_count_add+0x68/0xa0
+> > >  ? device_add+0x10f/0x8d0
+> > >  ? dev_set_name+0x53/0x70
+> > >  ? __mdiobus_register+0xc2/0x350
+> > >  ? __devm_mdiobus_register+0x64/0xb0
+> > >  ? ax88772_bind+0x22a/0x340 [asix]
+> > >  ? usbnet_probe+0x346/0x870
+> > >  ? usb_match_dynamic_id+0x8f/0xa0
+> > >  ? usb_probe_interface+0x9b/0x150
+> > >  ? really_probe.part.0+0x237/0x280
+> > >  ? __driver_probe_device+0x8c/0xd0
+> > >  ? driver_probe_device+0x1e/0xe0
+> > >  ? __driver_attach+0xa8/0x170
+> > >  ? __device_attach_driver+0xe0/0xe0
+> > >  ? bus_for_each_dev+0x77/0xc0
+> > >  ? bus_add_driver+0x10b/0x1c0
+> > >  ? driver_register+0x8b/0xe0
+> > >  ? usb_register_driver+0x84/0x120
+> > >  ? 0xffffffffc06e4000
+> > >  ? do_one_initcall+0x41/0x1f0
+> > >  ? kmem_cache_alloc_trace+0x3f/0x1b0
+> > >  ? do_init_module+0x5c/0x260
+> > >  ? __do_sys_finit_module+0xa0/0xe0
+> > >  ? do_syscall_64+0x35/0x80
+> > >  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > >  </TASK>
+> > > kobject_add_internal failed for usb-003:004 with -EEXIST, don't try to register things with the same name in the same directory.
+> > > libphy: mii_bus usb-003:004 failed to register
+> > > asix: probe of 3-10.4:1.0 failed with error -22 
+> > > usbcore: registered new interface driver asix
+> > > 
+> > > 
+> > > Both these issues with "net: usb: asix: ax88772: add phylib support"
+> > > (e532a096be0e) can be reproduced all the way from when it was introduced
+> > > to linus current tree.
+> > > 
+> > > 
+> > > I'm sorry to say that I don't know enough about either libphy or asix to
+> > > figure out what cause the issues can be.
+> 
+> It looks like we have here 3 different bugs:
+> - no rx before tx
+>   addresses by this patch:
+>   https://lore.kernel.org/all/20220624075139.3139300-1-o.rempel@pengutronix.de/
+> - pause frames flood without advertising pause frames support
+>   addresses by this patch:
+>   https://lore.kernel.org/all/20220624075139.3139300-2-o.rempel@pengutronix.de/
+> 
+>   Can you please test this patches.
 
-Thank you for the explanation. I will prototype it
+I've tested these and after these patches I think these two issues are
+fixed.
 
-Michael
+If you'd like you can add:
+Tested-by: Anton Lundin <glance@acc.umu.se>
 
->
-> greg k-h
+
+> - not everything is properly cleaned after module unload.
+> 
+> The last one i as bit more complicated. Lukas Wunner spend last months to solve
+> this issues:
+> https://lore.kernel.org/all/d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de/
+> 
+
+Ok, no worries. If it's already known and fixed in later revisions, I'm
+fine with that.
+
+
+//Anton
