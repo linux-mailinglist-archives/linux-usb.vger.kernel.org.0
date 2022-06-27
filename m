@@ -2,59 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B4955C7EF
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175FA55C4F6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiF0ICz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 04:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
+        id S233564AbiF0K2t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 06:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbiF0ICt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 04:02:49 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22FB219E
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 01:02:39 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d5so7437394plo.12
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 01:02:39 -0700 (PDT)
+        with ESMTP id S232641AbiF0K2s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 06:28:48 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03218D5C
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 03:28:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U9ZhIgUUmsDiTy1D6RsSS6DjCwopLYM2je5TrJXuLs0=;
-        b=ld8kUiYomFxvXk5s54yQmCoo3n9AMf7RE/Iu7+6QFv2JiE/ytuZ8vuREpIxmd5OiqP
-         pSxYrTsZ6366kdB4+7WwBmSCDUUqImazJhzLc8nBP6lZPYYl05UrJZW0NjY+9Y8GvWK1
-         scrl9aVX38HREnsQsk/FKoSRmJomB9UWNKKpc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U9ZhIgUUmsDiTy1D6RsSS6DjCwopLYM2je5TrJXuLs0=;
-        b=OLUeZIdrjYAsMVgM1R0Q1MSVDesWR1sJh6AWyLEB5cClewcbRIT/SO4yU8jiuSrSSU
-         SERYz16moG9Wn5wzNL6BEQ5G0L32TunL1GjcjoRcuqWE8GKU+QrKmmDSnywn3IQdbDkz
-         VJUzwJ+hAiFkhHrdOfdD/LMzL2ISyu/ez2jLTT76s9D2OqPxYE34bTf2sVCy2XEKzhLA
-         mNpdnbejWfAAc9/Uz8Vw6d1cl/p1J/P92pgCaKroil8ZUX5kFAfRfm2uY4in+GX9dXQI
-         uiBnC1qG3o3TbIKOWIeGjvuYHqtXl4QnJg7lVDJoHfX/2IPzAy5ZVJ7S8Hu32df7+Y4K
-         +DiQ==
-X-Gm-Message-State: AJIora/wTE+RCY6fbFRHzEqRRad/XYKVWHnt4qsf5rHfIb3Uhtw/5Akv
-        TonUNKbo9ikJ0SNlo6hGnYzga9bstGc8KHJyDqeSz01NJd6QqA==
-X-Google-Smtp-Source: AGRyM1sG2yZxivB0dfIEyo6536JIF3Z0n/ms9dkOq/dB6dUo/5ydBENbI/9MxkHfnfrz+78QFoHU9KF1x1VeX3tWtIw=
-X-Received: by 2002:a17:903:22cc:b0:16a:612e:7962 with SMTP id
- y12-20020a17090322cc00b0016a612e7962mr13280170plg.134.1656316959290; Mon, 27
- Jun 2022 01:02:39 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656325728; x=1687861728;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=G7ZQQ9IrUzeNuOTP3ANfJSeSus2/izj0WUWgL2240I4=;
+  b=VQPeiqPSdCnfnK0qe+AS63PRu5ZKdqvF9sZ+znoZY4Wem32wJfMzEBzn
+   wijapCEY/VNgafpHr/c3533S8qN+uPkM3U9MtWUbmTKvKMAguwznRz8PC
+   kHxCUJ4V7vMSiAfjFPpTy9kZ9KIhtSft9WqqmHRvk4DJlvwxgtMjtxx6T
+   k=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jun 2022 03:28:47 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:28:47 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 03:28:47 -0700
+Received: from [10.206.25.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
+ 2022 03:28:44 -0700
+Message-ID: <400a84d5-4d23-bf67-4a80-773bf2129da0@quicinc.com>
+Date:   Mon, 27 Jun 2022 15:58:42 +0530
 MIME-Version: 1.0
-References: <CAOf5uwnJ1Z4k6NSqdLZ0UNkbWMdoYgSRecwWNHXMH24_WVZrOg@mail.gmail.com>
- <YrlacG25I8bZZ1VR@kroah.com>
-In-Reply-To: <YrlacG25I8bZZ1VR@kroah.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Mon, 27 Jun 2022 10:02:27 +0200
-Message-ID: <CAOf5uw=X=y7BZZpdW-89orU=aL5oc01b19q7CvvQpXfOjm+m3Q@mail.gmail.com>
-Subject: Re: f_hid GET_REPORT extension
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] usb: dwc3: core: Deprecate GCTL.CORESOFTRESET
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+CC:     John Youn <John.Youn@synopsys.com>
+References: <9df529fde6e55f5508321b6bc26e92848044ef2b.1655338967.git.Thinh.Nguyen@synopsys.com>
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <9df529fde6e55f5508321b6bc26e92848044ef2b.1655338967.git.Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,61 +67,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
+Hi Thinh,
 
-On Mon, Jun 27, 2022 at 9:21 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On 6/16/22 5:54 AM, Thinh Nguyen wrote:
+> Synopsys IP DWC_usb32 and DWC_usb31 version 1.90a and above deprecated
+> GCTL.CORESOFTRESET. The DRD mode switching flow is updated to remove the
+> GCTL soft reset. Add version checks to prevent using deprecated setting
+> in mode switching flow.
 >
-> On Mon, Jun 27, 2022 at 09:06:05AM +0200, Michael Nazzareno Trimarchi wrote:
-> > Hi Felipe and Greg
-> >
-> > I'm starting to write some code to extend the GET_REPORT and let the
-> > userspace on the device side to pre-fill the answer on this request.
-> > Right now the answer is always 0. The idea is to create a sysfs
-> > support to fill reports struct on report request on the host side.
-> > This will help to
-> > emulate devices that export features report for example. As far as I
-> > understand the hidg side just use read and write and read is used to
-> > extract
-> > the result of SET_REPORT is that the gadget is properly configured. Is
-> > it the right direction?
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>   Changes in v2:
+>   - Rebase on Greg's usb-testing branch.
 >
-> Without code, it is very hard to understand what you are doing here,
-> sorry.
+>   drivers/usb/dwc3/core.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 >
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 2c12bbbcd55c..91278d2a72b8 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -159,7 +159,8 @@ static void __dwc3_set_mode(struct work_struct *work)
+>   	}
+>   
+>   	/* For DRD host or device mode only */
+> -	if (dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG) {
+> +	if ((DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
+just curious, i might be wrong here but, did you meant to use
 
-Agree, I need only a suggestion what is the best way to expose it
+(DWC3_IP_IS(DWC3) && DWC3_VER_IS_PRIOR(DWC31, 190A) ?
 
-> Also, why sysfs?
+because from the commit text it looks like we are trying to avoid doing GCTL core soft reset for GEN1 above 190A
+and GEN2. But the check fails for GEN1 controller with version above 190A.
 
-Let me clarify this point. Right now the userspace manage the set_report
-
-static ssize_t f_hidg_read(struct file *file, char __user *buffer,
-                           size_t count, loff_t *ptr)
-{
-        struct f_hidg *hidg = file->private_data;
-
-        if (hidg->use_out_ep)
-                return f_hidg_intout_read(file, buffer, count, ptr);
-        else
-                return f_hidg_ssreport_read(file, buffer, count, ptr);
-}
-
-The report can be write from usb side and read on gadget side if use_out_ep
-is 0 (this is a configuration). Now, the answer to set_report is done
-sync on request
-and the usb message is buffered on the kernel side. During the
-get_report as far I understand we should reply
-the same way on bus. The idea is handle the type and report number and
-find it on a list of report that must be prepared
-on the gadget side. The hidg ops interface need to handle report
-preparation so I was thinking in two solutions:
-- sysfs kind of interface
-- ioctl like interface
-
-Michael
-
+> +	    dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG) {
+>   		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+>   		reg |= DWC3_GCTL_CORESOFTRESET;
+>   		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
 >
-> thanks,
->
-> greg k-h
+> base-commit: 235a6d80f021d9c3bb5652fb6b19d092a7339248
+
+Thanks,
+
+-Udipto
+
