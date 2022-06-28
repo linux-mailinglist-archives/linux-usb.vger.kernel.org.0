@@ -2,50 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F1955DC3B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8069255CCB3
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245268AbiF1G0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jun 2022 02:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
+        id S1343571AbiF1GoF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jun 2022 02:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234837AbiF1G0L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 02:26:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C05DE64;
-        Mon, 27 Jun 2022 23:26:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2219B618E3;
-        Tue, 28 Jun 2022 06:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F12C3411D;
-        Tue, 28 Jun 2022 06:26:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656397569;
-        bh=FCX0XRo3D49ZdUr67eJ3VvX3ZKDk1wg0jbSa/sjSNQo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jvKwFwJaIQ2IjbJQGbPKLnQ74ig/BYaLYrkxpPVy9K0iCkrNniImj0bVS3I/CTSwm
-         JB4tHyF5rXSWj2MNbhvooqwdmrM1cvpQ12f8YqeANgXZdjfLkjnbSI2pm468pCTRWf
-         lYJpCFJdTgw7y+qdvY0GzGMJ3leRmGB5uALvcJAc=
-Date:   Tue, 28 Jun 2022 08:26:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v12 3/3] usb: typec: anx7411: Add Analogix PD ANX7411
- support
-Message-ID: <Yrqe/3Mpnmw4sfyx@kroah.com>
-References: <20220628044843.2257885-1-xji@analogixsemi.com>
- <20220628044843.2257885-3-xji@analogixsemi.com>
+        with ESMTP id S244813AbiF1GoE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 02:44:04 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB013CD8
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 23:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656398643; x=1687934643;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EehI4NDi5r5BKDbCumg8kdMumkncNEAVDe5zKHDp6+A=;
+  b=X/6BeL/TdnH5MTzaBnsVS5Vftz+7FiWYGlgzDMGjhCNGBDl6JV9T0AWn
+   XO2ngNCMpt3NPuZEKK6pZr0uYc8kQS+58rqKIm9oAIU5CLZNDQI+IQYgt
+   5kZ6+LmfB+jwmdP1QAyd+h+U45nQZDVuAKOFZo3rjbCNO5I3wlJCv90le
+   Q=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 27 Jun 2022 23:44:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 23:44:03 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 23:44:02 -0700
+Received: from [10.206.25.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
+ 2022 23:44:00 -0700
+Message-ID: <817f66cc-8971-ee48-0a4a-4d442b2e7451@quicinc.com>
+Date:   Tue, 28 Jun 2022 12:13:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628044843.2257885-3-xji@analogixsemi.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] usb: dwc3: core: Deprecate GCTL.CORESOFTRESET
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     John Youn <John.Youn@synopsys.com>
+References: <9df529fde6e55f5508321b6bc26e92848044ef2b.1655338967.git.Thinh.Nguyen@synopsys.com>
+ <400a84d5-4d23-bf67-4a80-773bf2129da0@quicinc.com>
+ <708f3063-cf2f-5d4e-6afd-ee1702b080e1@synopsys.com>
+From:   Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <708f3063-cf2f-5d4e-6afd-ee1702b080e1@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,72 +69,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 12:48:42PM +0800, Xin Ji wrote:
-> +static int anx7411_process_cmd(struct anx7411_data *ctx)
-> +{
-> +	struct device *dev = &ctx->spi_client->dev;
-> +	struct fw_msg *msg = &ctx->recv_msg;
-> +	u8 len;
-> +	u8 crc;
-> +	int ret;
-> +
-> +	/* Read message from firmware */
-> +	ret = anx7411_reg_block_read(ctx->spi_client, CMD_RECV_BUF,
-> +				     MSG_LEN, (u8 *)msg);
-> +	if (ret < 0)
-> +		return 0;
-> +
-> +	if (!msg->msg_len)
-> +		return 0;
-> +
-> +	anx7411_reg_write(ctx->spi_client, CMD_RECV_BUF, 0);
+Hi Thinh,
 
-Again, you are not checking the return value here.  What happens if this
-failed?
+On 6/27/22 10:26 PM, Thinh Nguyen wrote:
+> On 6/27/2022 3:28 AM, Udipto Goswami wrote:
+>> Hi Thinh,
+>>
+>> On 6/16/22 5:54 AM, Thinh Nguyen wrote:
+>>> Synopsys IP DWC_usb32 and DWC_usb31 version 1.90a and above deprecated
+>>> GCTL.CORESOFTRESET. The DRD mode switching flow is updated to remove the
+>>> GCTL soft reset. Add version checks to prevent using deprecated setting
+>>> in mode switching flow.
+>>>
+>>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>>> ---
+>>>    Changes in v2:
+>>>    - Rebase on Greg's usb-testing branch.
+>>>
+>>>    drivers/usb/dwc3/core.c | 3 ++-
+>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>> index 2c12bbbcd55c..91278d2a72b8 100644
+>>> --- a/drivers/usb/dwc3/core.c
+>>> +++ b/drivers/usb/dwc3/core.c
+>>> @@ -159,7 +159,8 @@ static void __dwc3_set_mode(struct work_struct
+>>> *work)
+>>>        }
+>>>          /* For DRD host or device mode only */
+>>> -    if (dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG) {
+>>> +    if ((DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
+>> just curious, i might be wrong here but, did you meant to use
+>>
+>> (DWC3_IP_IS(DWC3) && DWC3_VER_IS_PRIOR(DWC31, 190A) ?
+>
+> No. The check above should always be false right? The controller can't
+> be both DWC_usb3 and DWC_usb31 IP at the same time.
 
-> +
-> +	len = msg->msg_len & MSG_LEN_MASK;
-> +	crc = checksum(dev, (u8 *)msg, len + HEADER_LEN);
-> +	if (crc) {
-> +		dev_err(dev, "message error crc(0x%.02x)\n", crc);
-> +		return -ERANGE;
-> +	}
-> +
-> +	return anx7411_parse_cmd(ctx, msg->msg_type, msg->buf, len - 1);
-> +}
-> +
-> +static void anx7411_translate_payload(struct device *dev, __le32 *payload,
-> +				      u32 *pdo, int nr, const char *type)
-> +{
-> +	int i;
-> +
-> +	if (nr > PDO_MAX_OBJECTS) {
-> +		dev_err(dev, "nr(%d) exceed PDO_MAX_OBJECTS(%d)\n",
-> +			nr, PDO_MAX_OBJECTS);
-> +
-> +		return;
-> +	}
-> +
-> +	for (i = 0; i < nr; i++)
-> +		payload[i] = cpu_to_le32(pdo[i]);
-> +}
-> +
-> +static void anx7411_config(struct anx7411_data *ctx)
-> +{
-> +	struct device *dev = &ctx->spi_client->dev;
-> +	struct typec_params *typecp = &ctx->typec;
-> +	__le32 payload[PDO_MAX_OBJECTS];
-> +
-> +	/* Config PD FW work under PD 2.0 */
-> +	anx7411_reg_write(ctx->spi_client, PD_REV_INIT, PD_REV20);
-> +	anx7411_reg_write(ctx->tcpc_client, FW_CTRL_0,
-> +			  UNSTRUCT_VDM_EN | DELAY_200MS |
-> +			  VSAFE1 | FRS_EN);
-> +	anx7411_reg_write(ctx->spi_client, FW_CTRL_1,
-> +			  AUTO_PD_EN | FORCE_SEND_RDO);
+got it, i misunderstood DWC_usb3 to be same as DWC_usb31. Apologies!
 
-Same with all of these, what happens if this fails?
 
-thanks,
+>
+>> because from the commit text it looks like we are trying to avoid
+>> doing GCTL core soft reset for GEN1 above 190A
+>> and GEN2. But the check fails for GEN1 controller with version above
+>> 190A.
+>>
+> I'm not clear what you meant by GEN1/GEN2 here. We're not doing any
+> GEN1/GEN2 check here. And what fails?
 
-greg k-h
+i meant DWC_usb3 & DWC_usb31 by Gen1/Gen2, sorry for the confusion.
+
+>
+> BR,
+>
+> Thinh
+>
