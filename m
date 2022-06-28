@@ -2,69 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D11155EF7F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 22:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD96855EFB6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 22:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiF1UX2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jun 2022 16:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S230327AbiF1Ukw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jun 2022 16:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbiF1UVz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 16:21:55 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3993DA48
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:19:46 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id be10so18752210oib.7
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:19:46 -0700 (PDT)
+        with ESMTP id S230381AbiF1Uku (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 16:40:50 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5C922BDB
+        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:40:45 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so8302234otb.5
+        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4K1yIyRlfarxdrcJIzjiuU7hE/FjddqU64uWG9lU5uE=;
-        b=lbQqjU431Wi9OuZDFQyx7Bl/jXktkn19UGNRQGHrPqTpTVbR/33SCwCPq47m5ZEth9
-         BCG6LofI/0ryNHTqyqT2+EgPR9o27P8CYHE5JEl8RPKLAsB3cps5rDl5RGEwEtdzgDAf
-         qD3BY8oda35aPIcwoTO6gkviHFXrbPRgMzmp0T4faq5A6hISzUiyh3tOJdSrh7yrwIFU
-         K2bo+zS2ZVb3EF0SlOhM/VlsBDLevDVJ6QyVl9Q1XHfJBJJsM5fsQBn7saBG3WqnBw22
-         OS4C56JVs7ozuprOV5qjJW75+SKUHikTQcwrJcvGjbOzmq+Ot8Ccpk6EDmIT3Yr0aXpI
-         9gfQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=g7DzDcGO0C//Tm2mK6aKPbRwKZWmv3UtbhY+R8SWnp0=;
+        b=KWNEvpPfmo2SmKf5bhaztGdiQA6tvFbLTUxtrhK6rIjkzfNXr0keJwbndIKL9tV+kc
+         GJvLAH4zZhqCxZY5XcSqSB007mXJECoqbN7dcQdel3VfCXDBC+smGP7zRPJ+jnJwH0lC
+         EKUm1ID9cMqQTYUrXSF130ZWwW3VemS6uvCCk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4K1yIyRlfarxdrcJIzjiuU7hE/FjddqU64uWG9lU5uE=;
-        b=OoTY79ODakPriwnXrR3hqi1sdn5UdNxMe860DrNseBygUY3/sRgSfiOPD1jzdlasvP
-         yQfgapesaMYlSCyhab3+LsH+MUj/xXK1PkyAF5s0Cx91Fh2qCsTMn/z5Khd6nWfofqlw
-         oxNAs6BcCKAhWzYf9weHxwQoXJRsLRlWMgbFqw1Fc1aEow4/zjH8r4KgMxULNSvA0T5n
-         aCZklYE0qTxgA7ATu4Hd9+zbcYmNsF23M+vpXh9CWF6U6q5+5aA/PTzH3ZrEB5kHHHoT
-         MJg30GBOOA3LLDovMcNFK7lB4giBN6Srd7i3/RAP5DdGakU26OuqlRf1k6S+fwvjO2EV
-         fQyg==
-X-Gm-Message-State: AJIora+OFYaVp30iHNg3DO5Zy+1sUPOVntQqxvd5ff9t49rvz+AdQxhY
-        tPfd2bCrLHZwt64okwqfZyqPPDuwVpiQGQ==
-X-Google-Smtp-Source: AGRyM1sV/uc5rapmEnvedSYRD9dxwsr83iT1JIXKk5etidOjlOK90qhSAkEX8h2nVT5NhEsf1HGvWQ==
-X-Received: by 2002:a05:6808:d50:b0:333:415e:2ca5 with SMTP id w16-20020a0568080d5000b00333415e2ca5mr948193oik.53.1656447586121;
-        Tue, 28 Jun 2022 13:19:46 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:19:45 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: (subset) [PATCH v2 0/4] Devicetree updates for Interconnect, USB3 and PHY support
-Date:   Tue, 28 Jun 2022 15:19:12 -0500
-Message-Id: <165644753307.10525.4732064519492926832.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1651482395-29443-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1651482395-29443-1-git-send-email-quic_rohiagar@quicinc.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=g7DzDcGO0C//Tm2mK6aKPbRwKZWmv3UtbhY+R8SWnp0=;
+        b=KGy5J0ZK70ZVwONm+FMBbQDjsHV0gO2k6u6wL6YauJKPYdLPLWV8FFjKo7HuYfpzJ/
+         jsZbWCJ8u7UxTdblP6pONzUd7xrciKsHRBZ+7pJSh9Exk4/ETBNKlkU2fjXckdXvJrh+
+         Lu4vUvvuNhUFVpzzTIHrSCLsWuKsB414zR85V+d7BMS65PTFB3I/Wa6PY+cruBCu11ML
+         WthaEuA2Z1XMgFRe6eO/a13Dd9Ffy5Xj0UmDmrRv8DRVKRWtRe5kzem1fBXIfkkzZh59
+         7XUZsHNEB+Q5x0DTHTrnPL/8umiDyoeSDuV7k7UHuen6NuUckI6QMSqiQU498qaMgiw2
+         ZhuQ==
+X-Gm-Message-State: AJIora+qJXpF7nhxabMmd6MDLl5jClg71RHoScf957mfGGTUXDPXx9AR
+        TJ1wKgNxjM+FNe1TauDpWUcJ9E0dawsSZ1WZFlF8dA==
+X-Google-Smtp-Source: AGRyM1tGIqN+N5fxU26uQPwuhb/+Q+PPDxiV9zB3lkXobvidTtjy4ULjamLp4gDIpHvSTR5pfmD19QEOr8obxLOLWwA=
+X-Received: by 2002:a9d:6484:0:b0:60b:eb0b:4054 with SMTP id
+ g4-20020a9d6484000000b0060beb0b4054mr9324278otl.159.1656448844842; Tue, 28
+ Jun 2022 13:40:44 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 28 Jun 2022 15:40:44 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-6-pmalani@chromium.org> <CAE-0n517BB8YbN5AZG6M3ZrZGOJDV=+t0R9d8wD+gVqO1aD1Xg@mail.gmail.com>
+ <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 28 Jun 2022 15:40:44 -0500
+Message-ID: <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
+Subject: Re: [PATCH v5 5/9] drm/bridge: anx7625: Add typec_mux_set callback function
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Pin-Yen Lin <treapking@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,27 +90,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2 May 2022 14:36:31 +0530, Rohit Agarwal wrote:
-> This series adds the devicetree nodes to support the interconnect, USB3 and PHY support.
-> 
-> Changes from v1:
->  - Addressed Krzysztof's comments.
->  - Rebased on top of 5.18-rc5.
-> 
-> Thanks,
-> Rohit.
-> 
-> [...]
+Quoting Prashant Malani (2022-06-28 12:48:11)
+> On Tue, Jun 28, 2022 at 12:25 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Prashant Malani (2022-06-22 10:34:34)
+> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > index bd21f159b973..5992fc8beeeb 100644
+> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+[..]
+> > > +
+> > > +       if (ctx->num_typec_switches == 1)
+> >
+> > How do we handle the case where the usb-c-connector is directly
+> > connected to the RX1/TX1 and RX2/TX2 pins? This device would be an
+> > orientation (normal/reverse) and mode switch (usb/dp) in that scenario,
+> > but this code is written in a way that the orientation switch isn't
+> > going to flip the crosspoint switch for the different pin assignments.
+>
+> If all 4 SS lanes are connected to 1 usb-c-connector; there would be
+> just 1 "typec-switch" node.
+> In that case, the DT would only specify it as an "orientation-switch"
+> and register
+> an orientation-switch with the Type-C framework. The orientation switch would
+> pretty much do what the mode-switch callback does here (configuring
+> the crosspoint
+> switch).
+> One could also register a "mode-switch" there but it wouldn't do
+> anything (all 4 lanes are already
+> connected so there is nothing to re-route in the crosspoint switch).
+> Hence the above "if" check.
 
-Applied, thanks!
+Would we still want to route the DP traffic out if the pin assignment
+didn't have DP? Does the hardware support some mode where the DP traffic
+is shutdown? Or maybe the HPD pin needs to be quieted unless DP is
+assigned?
 
-[1/4] ARM: dts: qcom: sdx65: Add interconnect nodes
-      commit: b456b5e7d1df276a4e1050680eec86ccb99d8a82
-[3/4] ARM: dts: qcom: sdx65: Add USB3 and PHY support
-      commit: fbb6447deba87dc409e274d9d6d90d9c79851fb7
-[4/4] ARM: dts: qcom: sdx65-mtp: Enable USB3 and PHY support
-      commit: eeaec4f2b926ffcb35a9c1c4af549ac9f7a6ce56
+I suppose none of those things matter though as long as there is some
+typec switch registered here so that the driver can be informed of the
+pin assignment. Is it right that the "mode-switch" property is only
+required in DT if this device is going to control the mode of the
+connector, i.e. USB+DP, or just DP? Where this device can't do that
+because it doesn't support only DP.
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+>
+> Unfortunately, I don't have hardware which connects all 4 SS lanes
+> from 1 Type-C port
+> to the anx7625, so I didn't add the orientation switch handling to the
+> driver (since I have no way of verifying it).
+
+Alright. Maybe add a TODO then so it's more obvious that orientation
+isn't handled.
+
+>
+> Regarding DP alt-mode pin assignments : I think anx7625 will only support Pin D
+> (only 2 lane DP, no 4 lane DP).
+>
+
+Makes sense. Thanks!
