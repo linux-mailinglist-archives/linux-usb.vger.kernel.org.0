@@ -2,133 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C2155C122
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 14:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDBA55DA3A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 15:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243068AbiF1BcR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jun 2022 21:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S243127AbiF1BfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jun 2022 21:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241582AbiF1BcQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 21:32:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7F3766D
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 18:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656379935; x=1687915935;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hlukxxE3HrYSbUuEnC3T36k1kpPGAwOWrNIRupgtGtk=;
-  b=A+JIbKEZvMEv+5Nn0YqZ1aNOLUTA6wilkx3nDLDMgCOhMbJkTCQf8QsX
-   4UZaSeygh8FUQwiwKON9KskAQ4XdA01YaV9h+kfw8cZG0T89WskZIzg7/
-   ojNTXKo7ILGeraTNq9UcGrfHz4Dc0Lbbl35woYsESf6xsApUce9vhIyNy
-   1OjM8tTY/H9IpbePRRkCMVvR11P7+NcuVhYZNJIMS35gTr80H48vcVpEW
-   CX1X1w6KivExn9hdDkto4DnaacpkCsgcyU4qMS7sugu063Ekn2gD5iUR3
-   k/oKVMVlem/aH6PSR6OxDiiATjYwexvJLGg0d7d+Yo3ymOJVRv7E+yd73
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="367917583"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="367917583"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 18:32:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="657924340"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Jun 2022 18:32:14 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o605O-0009LS-1e;
-        Tue, 28 Jun 2022 01:32:14 +0000
-Date:   Tue, 28 Jun 2022 09:31:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- ebc4969ae125e65fdb563f66f4bfa7aec95f7eb4
-Message-ID: <62ba59e6.CLZj7ZZASg4x4TmN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S243082AbiF1BfV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jun 2022 21:35:21 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6DF2B167FE
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jun 2022 18:35:20 -0700 (PDT)
+Received: (qmail 139257 invoked by uid 1000); 27 Jun 2022 21:35:19 -0400
+Date:   Mon, 27 Jun 2022 21:35:19 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Hongren Zenithal Zheng <i@zenithal.me>,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+Message-ID: <Yrpa1zpwfauSMoTi@rowland.harvard.edu>
+References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com>
+ <YrSjRvb8rIIayGlg@Sun>
+ <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
+ <YrXNltWSYbplstPx@rowland.harvard.edu>
+ <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
+ <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
+ <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: ebc4969ae125e65fdb563f66f4bfa7aec95f7eb4  dt-bindings: usb: mtk-xhci: Make all clocks required
+On Mon, Jun 27, 2022 at 04:54:17PM -0600, Shuah Khan wrote:
+> On 6/24/22 12:07 PM, Alan Stern wrote:
+> > In the future people will want to make other changes to
+> > include/linux/usb.h and they will not be aware that those changes will
+> > adversely affect usbip, because there is no documentation saying that
+> > the values defined in usb.h are part of a user API.  That will be a
+> > problem, because those changes may be serious and important ones, not
+> > just decorative or stylistic as in this case.
+> > 
+> 
+> How often do these values change based on our past experience with these
+> fields?
 
-elapsed time: 725m
+I don't know.  You could check the git history to find out for certain.  
+My guess would be every eight or ten years.
 
-configs tested: 52
-configs skipped: 2
+> > I agree with Hongren that values defined in include/linux/ should not be
+> > part of a user API.  There are two choices:
+> > 
+> 
+> I agree with this in general. I don't think this is an explicit decision
+> to make them part of API. It is a consequence of simply copying the
+> transfer_flags. I am with you both on not being able to recognize the
+> impact until as this is rather obscure usage hidden away in the packets.
+> These defines aren't directly referenced.
+> 
+> > 	Move the definitions into include/uapi/linux/, or
+> > 
+> 
+> Wouldn't this be easier way to handle the change? With this option
+> the uapi will be well documented.
+> 
+> > 	Add code to translate the values between the numbers used in
+> > 	userspace and the numbers used in the kernel.  (This is what
+> > 	was done for urb->transfer_flags in devio.c:proc_do_submiturb()
+> > 	near line 1862.)
+> > 
+> 
+> I looked at the code and looks simple enough. I am okay going this route
+> if we see issues with the option 1.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+It's up to you; either approach is okay with me.  However, I do think 
+that the second option is a little better; I don't see any good reason 
+why the kernel should be forced to use the same numeric values for these 
+flags forever.  Especially since the only user program that needs to 
+know them is usbip, which is fairly closely tied to the kernel; if there 
+were more programs using those values then they would constitute a good 
+reason for choosing the first option.
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64               randconfig-a012-20220627
-x86_64               randconfig-a016-20220627
-x86_64               randconfig-a011-20220627
-x86_64               randconfig-a013-20220627
-x86_64               randconfig-a014-20220627
-x86_64               randconfig-a015-20220627
-i386                 randconfig-a014-20220627
-i386                 randconfig-a012-20220627
-i386                 randconfig-a015-20220627
-i386                 randconfig-a011-20220627
-i386                 randconfig-a013-20220627
-i386                 randconfig-a016-20220627
-arc                  randconfig-r043-20220627
-s390                 randconfig-r044-20220627
-riscv                randconfig-r042-20220627
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64               randconfig-a002-20220627
-x86_64               randconfig-a003-20220627
-x86_64               randconfig-a001-20220627
-x86_64               randconfig-a005-20220627
-x86_64               randconfig-a004-20220627
-x86_64               randconfig-a006-20220627
-i386                 randconfig-a002-20220627
-i386                 randconfig-a004-20220627
-i386                 randconfig-a003-20220627
-i386                 randconfig-a001-20220627
-i386                 randconfig-a005-20220627
-i386                 randconfig-a006-20220627
-hexagon              randconfig-r041-20220627
-hexagon              randconfig-r045-20220627
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Alan Stern
