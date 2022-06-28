@@ -2,58 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD96855EFB6
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 22:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0285C55F005
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 22:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiF1Ukw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jun 2022 16:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
+        id S229679AbiF1U4h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jun 2022 16:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiF1Uku (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 16:40:50 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5C922BDB
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:40:45 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so8302234otb.5
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:40:45 -0700 (PDT)
+        with ESMTP id S229521AbiF1U4h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 16:56:37 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA2938BE0
+        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:56:35 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id r3so24334770ybr.6
+        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 13:56:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=g7DzDcGO0C//Tm2mK6aKPbRwKZWmv3UtbhY+R8SWnp0=;
-        b=KWNEvpPfmo2SmKf5bhaztGdiQA6tvFbLTUxtrhK6rIjkzfNXr0keJwbndIKL9tV+kc
-         GJvLAH4zZhqCxZY5XcSqSB007mXJECoqbN7dcQdel3VfCXDBC+smGP7zRPJ+jnJwH0lC
-         EKUm1ID9cMqQTYUrXSF130ZWwW3VemS6uvCCk=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yKQEF36ycuzYUOPVu3KHfZYhntaUg963Kzu5sKnBaTc=;
+        b=hrycYo1Ilsww+6NSQ+00snPQqSnCaqYxagPNrHHbji/zEqKK13+YAs/PV+CuDfQbBu
+         1hqyk4kUqZ87fcFU2QapjCjwUok2kTlDVLOgj8IhXpbiZ6Pk2rqljqQjXtn+fUJOBF4o
+         lHcwA+kIIuZmPGVBLi+HinV4qMJyrpvEDpgMU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=g7DzDcGO0C//Tm2mK6aKPbRwKZWmv3UtbhY+R8SWnp0=;
-        b=KGy5J0ZK70ZVwONm+FMBbQDjsHV0gO2k6u6wL6YauJKPYdLPLWV8FFjKo7HuYfpzJ/
-         jsZbWCJ8u7UxTdblP6pONzUd7xrciKsHRBZ+7pJSh9Exk4/ETBNKlkU2fjXckdXvJrh+
-         Lu4vUvvuNhUFVpzzTIHrSCLsWuKsB414zR85V+d7BMS65PTFB3I/Wa6PY+cruBCu11ML
-         WthaEuA2Z1XMgFRe6eO/a13Dd9Ffy5Xj0UmDmrRv8DRVKRWtRe5kzem1fBXIfkkzZh59
-         7XUZsHNEB+Q5x0DTHTrnPL/8umiDyoeSDuV7k7UHuen6NuUckI6QMSqiQU498qaMgiw2
-         ZhuQ==
-X-Gm-Message-State: AJIora+qJXpF7nhxabMmd6MDLl5jClg71RHoScf957mfGGTUXDPXx9AR
-        TJ1wKgNxjM+FNe1TauDpWUcJ9E0dawsSZ1WZFlF8dA==
-X-Google-Smtp-Source: AGRyM1tGIqN+N5fxU26uQPwuhb/+Q+PPDxiV9zB3lkXobvidTtjy4ULjamLp4gDIpHvSTR5pfmD19QEOr8obxLOLWwA=
-X-Received: by 2002:a9d:6484:0:b0:60b:eb0b:4054 with SMTP id
- g4-20020a9d6484000000b0060beb0b4054mr9324278otl.159.1656448844842; Tue, 28
- Jun 2022 13:40:44 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 28 Jun 2022 15:40:44 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yKQEF36ycuzYUOPVu3KHfZYhntaUg963Kzu5sKnBaTc=;
+        b=5XCeabwSLuu3IXrTqzIK/1/OmZhWs+8h/dLrQZwe+clPwg32H71ambVMqj0qF6ABMX
+         hPc/aqlmKDu4hsEUWkWqd6aJTB2jZQJ0R1o0IKEPrEAnJdSuFacABxQcVvTeAvjpmJxu
+         F+WOSg4mOUBzmXKPHhCj+7kgqNVAcXDbvODxAd+5dKRxoT5M2Hz9FrgLm7vOo3sekYLp
+         WobyTkfSZ3mL8u9s951vSm/mNbAnuRg7T5Kypovn+LYFCj1EJcgvejM0yhYV4w/AOa7K
+         LfPja3HNVMj86ryZsK1E05ShjMY/5yj7CUoqTCp9WNhpMlhfzMaPK72ETk4KddclbXai
+         LZ1Q==
+X-Gm-Message-State: AJIora/lUp05NpOUzo59dV8ilZBCYTlXqQ5B1ThMvDBNIgnwQJZEt66z
+        3VhPJj2vJLb5MC8DeRgpceIKnDc48kEnzbCxtdQJTQ==
+X-Google-Smtp-Source: AGRyM1vOU4sWRKsuKs1MQzRMOWXKj7H/A1ySaV28jwKyhx0FOruidnjEBvhX9AMkjs2jfYPoSZZSOGETFzHMDMKUVHo=
+X-Received: by 2002:a25:da0b:0:b0:66c:850f:1b71 with SMTP id
+ n11-20020a25da0b000000b0066c850f1b71mr22360839ybf.336.1656449794292; Tue, 28
+ Jun 2022 13:56:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
 References: <20220622173605.1168416-1-pmalani@chromium.org>
  <20220622173605.1168416-6-pmalani@chromium.org> <CAE-0n517BB8YbN5AZG6M3ZrZGOJDV=+t0R9d8wD+gVqO1aD1Xg@mail.gmail.com>
- <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 28 Jun 2022 15:40:44 -0500
-Message-ID: <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
+ <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com> <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
+In-Reply-To: <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 28 Jun 2022 13:56:22 -0700
+Message-ID: <CACeCKafzB0wW_B2TOEWywLMyB+UhYCpXYDVBV=UbyxBiGnv1Rw@mail.gmail.com>
 Subject: Re: [PATCH v5 5/9] drm/bridge: anx7625: Add typec_mux_set callback function
-To:     Prashant Malani <pmalani@chromium.org>
+To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         bleung@chromium.org, heikki.krogerus@linux.intel.com,
         Pin-Yen Lin <treapking@chromium.org>,
@@ -90,61 +87,85 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prashant Malani (2022-06-28 12:48:11)
-> On Tue, Jun 28, 2022 at 12:25 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On Tue, Jun 28, 2022 at 1:40 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Prashant Malani (2022-06-28 12:48:11)
+> > On Tue, Jun 28, 2022 at 12:25 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Prashant Malani (2022-06-22 10:34:34)
+> > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > index bd21f159b973..5992fc8beeeb 100644
+> > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> [..]
+> > > > +
+> > > > +       if (ctx->num_typec_switches == 1)
+> > >
+> > > How do we handle the case where the usb-c-connector is directly
+> > > connected to the RX1/TX1 and RX2/TX2 pins? This device would be an
+> > > orientation (normal/reverse) and mode switch (usb/dp) in that scenario,
+> > > but this code is written in a way that the orientation switch isn't
+> > > going to flip the crosspoint switch for the different pin assignments.
 > >
-> > Quoting Prashant Malani (2022-06-22 10:34:34)
-> > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > index bd21f159b973..5992fc8beeeb 100644
-> > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-[..]
-> > > +
-> > > +       if (ctx->num_typec_switches == 1)
+> > If all 4 SS lanes are connected to 1 usb-c-connector; there would be
+> > just 1 "typec-switch" node.
+> > In that case, the DT would only specify it as an "orientation-switch"
+> > and register
+> > an orientation-switch with the Type-C framework. The orientation switch would
+> > pretty much do what the mode-switch callback does here (configuring
+> > the crosspoint
+> > switch).
+> > One could also register a "mode-switch" there but it wouldn't do
+> > anything (all 4 lanes are already
+> > connected so there is nothing to re-route in the crosspoint switch).
+> > Hence the above "if" check.
+>
+> Would we still want to route the DP traffic out if the pin assignment
+> didn't have DP? Does the hardware support some mode where the DP traffic
+> is shutdown? Or maybe the HPD pin needs to be quieted unless DP is
+> assigned?
+
+I reference this below, but in the 1 connector case, CC lines would also be
+routed to the anx7625 from the usb-connector, so it will know when HPD
+is asserted
+or not.
+
+>
+> I suppose none of those things matter though as long as there is some
+> typec switch registered here so that the driver can be informed of the
+> pin assignment. Is it right that the "mode-switch" property is only
+> required in DT if this device is going to control the mode of the
+> connector, i.e. USB+DP, or just DP? Where this device can't do that
+> because it doesn't support only DP.
+
+If the anx7625 is used just to route all lanes from 1 usb-c-connector (i.e
+the USB+DP case), a mode-switch wouldn't be of much use, since one
+would also route the CC lines to the built-in PD controller; so it will
+already have knowledge of what mode the switch is in.
+
+The mode-switch is likely only relevant for this hardware configuration(
+it's "DP only" in the sense that the USB pins to the SoC never go anywhere).
+One only has 2 SS lanes each (from each usb-c-connector).
+
+Since there is no CC-line, the anx7625 needs to know which one has DP
+enabled on it.
+
+>
 > >
-> > How do we handle the case where the usb-c-connector is directly
-> > connected to the RX1/TX1 and RX2/TX2 pins? This device would be an
-> > orientation (normal/reverse) and mode switch (usb/dp) in that scenario,
-> > but this code is written in a way that the orientation switch isn't
-> > going to flip the crosspoint switch for the different pin assignments.
+> > Unfortunately, I don't have hardware which connects all 4 SS lanes
+> > from 1 Type-C port
+> > to the anx7625, so I didn't add the orientation switch handling to the
+> > driver (since I have no way of verifying it).
 >
-> If all 4 SS lanes are connected to 1 usb-c-connector; there would be
-> just 1 "typec-switch" node.
-> In that case, the DT would only specify it as an "orientation-switch"
-> and register
-> an orientation-switch with the Type-C framework. The orientation switch would
-> pretty much do what the mode-switch callback does here (configuring
-> the crosspoint
-> switch).
-> One could also register a "mode-switch" there but it wouldn't do
-> anything (all 4 lanes are already
-> connected so there is nothing to re-route in the crosspoint switch).
-> Hence the above "if" check.
+> Alright. Maybe add a TODO then so it's more obvious that orientation
+> isn't handled.
 
-Would we still want to route the DP traffic out if the pin assignment
-didn't have DP? Does the hardware support some mode where the DP traffic
-is shutdown? Or maybe the HPD pin needs to be quieted unless DP is
-assigned?
-
-I suppose none of those things matter though as long as there is some
-typec switch registered here so that the driver can be informed of the
-pin assignment. Is it right that the "mode-switch" property is only
-required in DT if this device is going to control the mode of the
-connector, i.e. USB+DP, or just DP? Where this device can't do that
-because it doesn't support only DP.
+Ack. Will add a comment in v6.
 
 >
-> Unfortunately, I don't have hardware which connects all 4 SS lanes
-> from 1 Type-C port
-> to the anx7625, so I didn't add the orientation switch handling to the
-> driver (since I have no way of verifying it).
-
-Alright. Maybe add a TODO then so it's more obvious that orientation
-isn't handled.
-
+> >
+> > Regarding DP alt-mode pin assignments : I think anx7625 will only support Pin D
+> > (only 2 lane DP, no 4 lane DP).
+> >
 >
-> Regarding DP alt-mode pin assignments : I think anx7625 will only support Pin D
-> (only 2 lane DP, no 4 lane DP).
->
-
-Makes sense. Thanks!
+> Makes sense. Thanks!
