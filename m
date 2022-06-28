@@ -2,49 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B83255E7ED
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 18:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5045E55E664
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 18:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347323AbiF1ODQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jun 2022 10:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
+        id S1346472AbiF1Nzv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jun 2022 09:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347267AbiF1ODP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 10:03:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792801D0DC
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 07:03:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38159B81C9F
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 14:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D15C341CC;
-        Tue, 28 Jun 2022 14:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656424991;
-        bh=yowxv6DcY9RAb5NYJqTI9qf0sQO1qOWm/e9EFTBDL0k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zvd3gWVLYv25h+gfEiWKSjq4akNPvyGVbUok9EPDEFzdc27YsVtKLLco8xDL2GwGS
-         2aB8N3ADawTqR5GORwMU9LI5z/7QbVUy869qEoKNtw9XIR82tK+sQxW2IyvJbKXCiJ
-         iCJRqK+40tt/q5k+VWVUSoSdQIMdUbTy9CftqZEE=
-Date:   Tue, 28 Jun 2022 16:02:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] Thunderbolt/USB4 changes for v5.20 merge window
-Message-ID: <YrsKB31lkuE5RnoX@kroah.com>
-References: <YrrVjj+xZyaqjFFi@lahna>
+        with ESMTP id S1346983AbiF1Nzj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 09:55:39 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A330F64;
+        Tue, 28 Jun 2022 06:55:37 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LXQzr47xSzkWL4;
+        Tue, 28 Jun 2022 21:53:44 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 21:55:34 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 28 Jun
+ 2022 21:55:34 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+CC:     <conor.dooley@microchip.com>,
+        <valentina.fernandezalanis@microchip.com>,
+        <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] usb: musb: mpfs: add missing  clk_disable_unprepare() in mpfs_remove()
+Date:   Tue, 28 Jun 2022 22:05:27 +0800
+Message-ID: <20220628140527.1404439-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrrVjj+xZyaqjFFi@lahna>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,21 +51,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:18:54PM +0300, Mika Westerberg wrote:
-> Hi Greg,
-> 
-> Please find Thunderbolt/USB4 changes for the next merge window below.
-> I'm sending this one early because I will be on vacation pretty much the
-> whole July. I hope this is fine for you. 
-> 
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-> 
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.20-rc1
+clock source is prepared and enabled by clk_prepare_enable()
+in probe function, but no disable or unprepare in remove.
 
-pulled and pushed out,t hanks.
+Fixes: 7a96b6ea90a4 ("usb: musb: Add support for PolarFire SoC's musb controller")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/musb/mpfs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-greg k-h
+diff --git a/drivers/usb/musb/mpfs.c b/drivers/usb/musb/mpfs.c
+index a69ca338eace..cea2e8108867 100644
+--- a/drivers/usb/musb/mpfs.c
++++ b/drivers/usb/musb/mpfs.c
+@@ -239,6 +239,7 @@ static int mpfs_remove(struct platform_device *pdev)
+ {
+ 	struct mpfs_glue *glue = platform_get_drvdata(pdev);
+ 
++	clk_disable_unprepare(glue->clk);
+ 	platform_device_unregister(glue->musb);
+ 	usb_phy_generic_unregister(pdev);
+ 
+-- 
+2.25.1
+
