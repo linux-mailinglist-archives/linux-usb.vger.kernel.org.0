@@ -2,87 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EC255E903
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 18:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5CA55E69A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jun 2022 18:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346720AbiF1OfP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jun 2022 10:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S1345709AbiF1OwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jun 2022 10:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346391AbiF1OfO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 10:35:14 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BD52B269;
-        Tue, 28 Jun 2022 07:35:13 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id z191so13014363iof.6;
-        Tue, 28 Jun 2022 07:35:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0ai+gw7dGip6YcbkUuUo39LuNyFuf2jm5c7GJoByszg=;
-        b=RqJ2U3vuqX8tm+w1uYTnCgx4xp4LcqdC2t+76Gp+tx0DKXkL1mLgal3AsuwlmAxCaC
-         hLfwvLz6ZbgKL8iDg6ghneeUX4RfdsiDyhP5M81FTtNnCHahgxVyO9mD/M3aYGsrPnCr
-         7HhRfPzfC3+2zo5ODU0bMrX9s/ly3y6VacGuGsYEi9fNTeboUQp2ySvYXfFNv2qBinNw
-         qfx3m/GiOCdRU7dxGnbSVZJHLgga7sc4RSfwY8owNYz2jsiSdc6WzHVYLcermA0smWvL
-         r4tyaYlMzo22z60LEmxLExH5SjMv6sOcjoiq0lQBF3/Zy+UDJQzE8hZHnQtfltXrxulN
-         GVPQ==
-X-Gm-Message-State: AJIora8IPfehywgPDcsB3ok+swXLEaqrKHNMevIgGTLZ585obk2IqKNf
-        q+u/sqfi2pE8XR3EryHXuw==
-X-Google-Smtp-Source: AGRyM1uKaqEB6vi1TLsmVLeRCfzFwSm/gBg4hNAbNlJKnO7zeOdgTczQg6XOqflcDWWq3b597qBNPQ==
-X-Received: by 2002:a05:6638:24cb:b0:33c:943f:7df3 with SMTP id y11-20020a05663824cb00b0033c943f7df3mr7423389jat.207.1656426913150;
-        Tue, 28 Jun 2022 07:35:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id s21-20020a6bdc15000000b0067533ab9404sm3349883ioc.16.2022.06.28.07.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 07:35:12 -0700 (PDT)
-Received: (nullmailer pid 422356 invoked by uid 1000);
-        Tue, 28 Jun 2022 14:35:10 -0000
-Date:   Tue, 28 Jun 2022 08:35:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-phy@lists.infradead.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v9 12/12] dt-bindings: arm: freescale: scu-pd: Add
- i.MX8DXL compatible string
-Message-ID: <20220628143510.GA422324-robh@kernel.org>
-References: <20220607111625.1845393-1-abel.vesa@nxp.com>
- <20220607111625.1845393-13-abel.vesa@nxp.com>
+        with ESMTP id S232060AbiF1OwG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 10:52:06 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DEAF731904
+        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 07:52:05 -0700 (PDT)
+Received: (qmail 156938 invoked by uid 1000); 28 Jun 2022 10:52:05 -0400
+Date:   Tue, 28 Jun 2022 10:52:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <roger.quadros@nokia.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v3] usb: gadget: f_mass_storage: Make CD-ROM emulation
+ works with Windows OS
+Message-ID: <YrsVlYL86r1urA9y@rowland.harvard.edu>
+References: <20220628021436.3252262-1-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607111625.1845393-13-abel.vesa@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220628021436.3252262-1-neal_liu@aspeedtech.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 07 Jun 2022 14:16:25 +0300, Abel Vesa wrote:
-> Add i.MX8DXL compatible string to the scu-pd bindings.
+On Tue, Jun 28, 2022 at 10:14:36AM +0800, Neal Liu wrote:
+> Add read TOC with format 1 to support CD-ROM emulation with
+> Windows OS.
+> This patch is tested on Windows OS Server 2019.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Fixes: 89ada0fe669a ("usb: gadget: f_mass_storage: Make CD-ROM emulation work
+> with Mac OS-X")
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
 > ---
->  Documentation/devicetree/bindings/arm/freescale/fsl,scu-pd.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+
+> v3:
+> - ignore start_track value with format 1
+> - add fixes tags
+> - revise comments properly
+> 
+> v2:
+> - revise comments
+> 
+>  drivers/usb/gadget/function/f_mass_storage.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 3a77bca0ebe1..e884f295504f 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -1192,13 +1192,14 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
+>  	u8		format;
+>  	int		i, len;
+>  
+> +	format = common->cmnd[2] & 0xf;
+> +
+>  	if ((common->cmnd[1] & ~0x02) != 0 ||	/* Mask away MSF */
+> -			start_track > 1) {
+> +			(start_track > 1 && format != 0x1)) {
+>  		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
+>  		return -EINVAL;
+>  	}
+>  
+> -	format = common->cmnd[2] & 0xf;
+>  	/*
+>  	 * Check if CDB is old style SFF-8020i
+>  	 * i.e. format is in 2 MSBs of byte 9
+> @@ -1208,8 +1209,8 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
+>  		format = (common->cmnd[9] >> 6) & 0x3;
+>  
+>  	switch (format) {
+> -	case 0:
+> -		/* Formatted TOC */
+> +	case 0:	/* Formatted TOC */
+> +	case 1:	/* Multi-session info */
+>  		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
+>  		memset(buf, 0, len);
+>  		buf[1] = len - 2;	/* TOC Length excludes length field */
+> @@ -1250,7 +1251,7 @@ static int do_read_toc(struct fsg_common *common, struct fsg_buffhd *bh)
+>  		return len;
+>  
+>  	default:
+> -		/* Multi-session, PMA, ATIP, CD-TEXT not supported/required */
+> +		/* PMA, ATIP, CD-TEXT not supported/required */
+>  		curlun->sense_data = SS_INVALID_FIELD_IN_CDB;
+>  		return -EINVAL;
+>  	}
+> -- 
+> 2.25.1
+> 
