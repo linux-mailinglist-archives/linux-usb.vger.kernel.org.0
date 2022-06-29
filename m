@@ -2,77 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AF255FA86
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 10:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6C155FABB
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 10:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiF2IaR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 04:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S232717AbiF2IiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 04:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbiF2IaP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 04:30:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6C13C714;
-        Wed, 29 Jun 2022 01:30:14 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S230019AbiF2IiA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 04:38:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3395D3CA72
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 01:38:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 43B8D66018F1;
-        Wed, 29 Jun 2022 09:30:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656491412;
-        bh=k/GBrayqjumhXVKWOQr+XlgpEvOogSVYRcWj6cKD5Lk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UdlLwzKbbnVcC1GW8Bt2LO9bsJDdYIzHProVcOO4H3U2xFEbc7yph3W0WzowFvvGb
-         7puOjny1P5Ih7ctJ/qoRX8G3GuogiDAJcKNCsLhdXR7coBqJ3nWZZM0cvAVRG6KhMF
-         cyuAzw6gtvbt0H7uL1j9cCrukhclvND4IFtlM2uG6vKQX0z+1MD0lIbKEQKQ0V1dZZ
-         UMkrMwokI2tIIQNpaMn5/jdUpItehgb1kBQw/IEwg3kbQB6N32A8jeOI30k3wV9Ic2
-         Za/b5tKvv2K54ABmmCdb7csiCB/3CgOoBSKQoaU8wAVkXX0BPez1GHKzGNzx2/dLhU
-         aT1VMU7AujulA==
-Message-ID: <a94b6b57-3dcb-aac8-7920-351ec729bc4d@collabora.com>
-Date:   Wed, 29 Jun 2022 10:30:09 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0AFB61B6B
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 08:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11BFC34114;
+        Wed, 29 Jun 2022 08:37:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656491879;
+        bh=voMUPC/MOA9Hg86CL1NlZzWZ1ytOUli1SZIhR2D11CQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IyyPFEGvYlbJQaW1+SxZ9NE8L6yeKklLF3oujnfAx5HwsSWZTS8moctznJd/hb6mP
+         dyNYuSCqAjuzknvEjdinrULynBRf7cFSlsgaASB7muvehGKn+5XLi5iYprZFHeLaZ5
+         2Uy0Z9JwBUOH6xvlahnvcd6PXyRGMPbJ4i4jG4H4=
+Date:   Wed, 29 Jun 2022 10:37:55 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jookia <contact@jookia.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: acm_port_shutdown hangs for 30 seconds
+Message-ID: <YrwPY0faDmVcjTqx@kroah.com>
+References: <YiynBKeGJCMEkgyO@novena-choice-citizen>
+ <YrmpLXcPeHW4fnvz@kroah.com>
+ <YrrILGzC2R3qGiHu@novena-choice-citizen>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v11 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/
-Content-Language: en-US
-To:     Xin Ji <xji@analogixsemi.com>, Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220627044331.2180641-1-xji@analogixsemi.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220627044331.2180641-1-xji@analogixsemi.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrrILGzC2R3qGiHu@novena-choice-citizen>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 27/06/22 06:43, Xin Ji ha scritto:
-> USB PD controllers which consisting of a microcontroller (acting as the TCPM)
-> and a port controller (TCPC) - may require that the driver for the PD
-> controller accesses directly also the on-chip port controller in some cases.
+On Tue, Jun 28, 2022 at 07:21:48PM +1000, Jookia wrote:
+> Hi Greg,
 > 
-> Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
+> Thanks for getting back to this!
 > 
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> On Mon, Jun 27, 2022 at 02:57:17PM +0200, Greg KH wrote:
+> > What host controller driver is this showing up on?
+> 
+> I have the following modules loaded:
+> 
+> xhci_pci_renesas
+> xhci_pci
+> xhci_hcd
+> 
+> This isn't an ARM board or anything, this is a standard x86 desktop
+> (B450 plus motherboard, Ryzen 3700x chipset)- but I believe I've had the
+> same error when using serial cables on a years older computer and in
+> general when doing embedded development.
+> 
+> I believe this issue is related to buggy serial devices, in particular
+> ones run by a microcontroller like an ATmega32u4 and perhaps Linux USB
+> gadget where the device is abruptly reset but the serial session isn't
+> terminated.
+> 
+> The host device USB system has to time out then, which is fine, but in
+> userspace this seems to hang close() instead of doing this
+> asynchronously.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The close is timing out as it tries to flush the data to the device
+which is no longer responding.  So this kind of is expected behavior,
+sorry.
 
+greg k-h
