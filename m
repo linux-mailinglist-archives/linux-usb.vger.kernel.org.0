@@ -2,133 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BFC55F323
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 04:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FD755F348
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 04:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiF2CIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jun 2022 22:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S230404AbiF2CN2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jun 2022 22:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiF2CIq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 22:08:46 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE6925C4B
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jun 2022 19:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656468525; x=1688004525;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GGavIRn39NodUS303mk0CX524+V1NQFRGeIYAWt93lE=;
-  b=NmYSplSL4b3Dq8eCo3hZCcU+vLarrcR5D1aCL9vlwPAJ2TGfVg7ggF5R
-   ef2OcaLfvU39IQTfdfbYWWICQlHBolaYRBK8anaW3kfflSFLbPvwi0p16
-   LNiZ2bdHhvcVy2yjd0C1CVJpf22WJedZ+SQRydJU6iN2D24Oqch/ZlVQu
-   IV0KGp/50riSemmQvkd59qpWRpWuIFBGmyI5G2TXouY4Cy8wU7gTBtwCL
-   M3rYPuG6qd6HMxzC9bcJiBuqs7ju7Tx+Wt0dNCUUM8egKwMjxOzorQ0Os
-   rzCRuQJDTbuXlIM0ookj+HKzRu4l6hJtrfne4sumYoSSnPy7zQb4dcmHW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282631700"
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="282631700"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 19:08:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="658366494"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2022 19:08:43 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6N8F-000ApO-8D;
-        Wed, 29 Jun 2022 02:08:43 +0000
-Date:   Wed, 29 Jun 2022 10:08:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 849f35422319a46c2a52289e2d5c85eb3346a921
-Message-ID: <62bbb415.kfJsRIlq3hyF1O9a%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230083AbiF2CN1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jun 2022 22:13:27 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38630F5BB;
+        Tue, 28 Jun 2022 19:13:16 -0700 (PDT)
+X-UUID: 3bb42ca9036f4d1d938a9a2a23169fb1-20220629
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:cf3a56db-bb7b-470a-8d8d-537b2efe5a3d,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:87442a2,CLOUDID:83a6e662-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 3bb42ca9036f4d1d938a9a2a23169fb1-20220629
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 960008906; Wed, 29 Jun 2022 10:13:09 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 29 Jun 2022 10:13:07 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 29 Jun 2022 10:13:07 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        "Julian Scheel" <julian@jusst.de>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        xin lin <xin.lin@mediatek.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2] usb: gadget: f_uac1: add interface association descriptor
+Date:   Wed, 29 Jun 2022 10:13:04 +0800
+Message-ID: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 849f35422319a46c2a52289e2d5c85eb3346a921  Merge tag 'thunderbolt-for-v5.20-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+From: xin lin <xin.lin@mediatek.com>
 
-elapsed time: 720m
+When we want to use a composite device that supports UVC, UAC1 and
+ADB at the same time, encounter that UAC1 can't work when connected
+to windows 10 system.
+From the online documents of microsoft, "overview of enumeration of
+interface collections on usb composite devices", it recommends that
+vendors use IADs (interface association descriptor) to define
+interface collections.
+After addding IAD, we can fix the issue.
 
-configs tested: 52
-configs skipped: 2
+Signed-off-by: xin lin <xin.lin@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2: modify commit log suggested by Greg
+---
+ drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                                defconfig
-i386                             allyesconfig
-m68k                             allyesconfig
-x86_64               randconfig-a016-20220627
-x86_64               randconfig-a014-20220627
-x86_64               randconfig-a012-20220627
-x86_64               randconfig-a011-20220627
-x86_64               randconfig-a013-20220627
-x86_64               randconfig-a015-20220627
-i386                 randconfig-a012-20220627
-i386                 randconfig-a011-20220627
-i386                 randconfig-a016-20220627
-i386                 randconfig-a013-20220627
-i386                 randconfig-a014-20220627
-i386                 randconfig-a015-20220627
-s390                 randconfig-r044-20220627
-arc                  randconfig-r043-20220627
-riscv                randconfig-r042-20220627
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-i386                 randconfig-a002-20220627
-i386                 randconfig-a004-20220627
-i386                 randconfig-a003-20220627
-i386                 randconfig-a001-20220627
-i386                 randconfig-a006-20220627
-i386                 randconfig-a005-20220627
-x86_64               randconfig-a006-20220627
-x86_64               randconfig-a005-20220627
-hexagon              randconfig-r041-20220627
-hexagon              randconfig-r045-20220627
-x86_64               randconfig-a002-20220627
-x86_64               randconfig-a003-20220627
-x86_64               randconfig-a001-20220627
-x86_64               randconfig-a004-20220627
-
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 6f0e1d803dc2..8390207bc513 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
+  * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
+  */
+ 
++static struct usb_interface_assoc_descriptor iad_desc = {
++	.bLength = sizeof(iad_desc),
++	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
++
++	.bFirstInterface = 0,
++	.bInterfaceCount = 3,
++	.bFunctionClass = USB_CLASS_AUDIO,
++	.bFunctionSubClass = 0,
++	.bFunctionProtocol = UAC_VERSION_1,
++};
++
+ /* B.3.1  Standard AC Interface Descriptor */
+ static struct usb_interface_descriptor ac_interface_desc = {
+ 	.bLength =		USB_DT_INTERFACE_SIZE,
+@@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ };
+ 
+ static struct usb_descriptor_header *f_audio_desc[] = {
++	(struct usb_descriptor_header *)&iad_desc,
+ 	(struct usb_descriptor_header *)&ac_interface_desc,
+ 	(struct usb_descriptor_header *)&ac_header_desc,
+ 
+@@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ };
+ 
+ enum {
++	STR_ASSOC,
+ 	STR_AC_IF,
+ 	STR_USB_OUT_IT,
+ 	STR_USB_OUT_IT_CH_NAMES,
+@@ -310,6 +323,7 @@ enum {
+ 
+ static struct usb_string strings_uac1[] = {
+ 	/* [STR_AC_IF].s = DYNAMIC, */
++	[STR_ASSOC].s = "Source/Sink",
+ 	[STR_USB_OUT_IT].s = "Playback Input terminal",
+ 	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
+ 	[STR_IO_OUT_OT].s = "Playback Output terminal",
+@@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
+ 	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
+ 
++	iad_desc.bInterfaceCount = 1;
+ 	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
+ 
+ 	if (EPIN_EN(opts)) {
+@@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUIN_EN(opts))
+ 			len += in_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 	if (EPOUT_EN(opts)) {
+ 		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
+@@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		if (FUOUT_EN(opts))
+ 			len += out_feature_unit_desc->bLength;
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
++		iad_desc.bInterfaceCount++;
+ 	}
+ 
+ 	i = 0;
++	f_audio_desc[i++] = USBDHDR(&iad_desc);
+ 	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+ 	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+ 
+@@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 	}
+ 
++	iad_desc.iFunction = us[STR_ASSOC].id;
+ 	ac_interface_desc.iInterface = us[STR_AC_IF].id;
+ 	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
+ 	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
+@@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 	status = usb_interface_id(c, f);
+ 	if (status < 0)
+ 		goto err_free_fu;
++
++	iad_desc.bFirstInterface = status;
+ 	ac_interface_desc.bInterfaceNumber = status;
+ 	uac1->ac_intf = status;
+ 	uac1->ac_alt = 0;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+
