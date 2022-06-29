@@ -2,91 +2,258 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57035602C8
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 16:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E50F560311
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 16:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbiF2ObO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 10:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S231551AbiF2Odp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 10:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbiF2Oav (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 10:30:51 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5333330F54
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 07:30:49 -0700 (PDT)
-Received: (qmail 190962 invoked by uid 1000); 29 Jun 2022 10:30:47 -0400
-Date:   Wed, 29 Jun 2022 10:30:47 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Eyal Lebedinsky <eyal@eyal.emu.id.au>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: SATA/USB caddy - wrong device size reported
-Message-ID: <YrxiF/uE0/0Kw7rJ@rowland.harvard.edu>
-References: <a1ac4690-4d46-4461-a90f-dfa4777dbf54@eyal.emu.id.au>
+        with ESMTP id S230447AbiF2Odk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 10:33:40 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279EE2182D
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 07:33:34 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id o4so18839132wrh.3
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 07:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=et3EcQEBUZk/CN1WmGC2ef8SgdBnOceUNyXQ8zegZnQ=;
+        b=NY9EhLcmVasQdduwhrTvgkuRlrqv9dJgtGE65oKC5nKzFPOe0dUvq9ndrReSc+wZCc
+         rquKt8aGLvTTm1TgX9rc4f4iV5YS0w9glfOVzwkDcoBQdePuJsaPQIfpghHFPjx6aFt3
+         Mq/HZLy7KVi0TOV4qL7+7nynumP71XEbhxXTc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=et3EcQEBUZk/CN1WmGC2ef8SgdBnOceUNyXQ8zegZnQ=;
+        b=IXn9lRbjqoxLfNhrs8IE/M5u8/OsiiK5D6BDoAKW0AMkBa5TLc5eTzfyNLVmWzGZw0
+         Qy3h67skmtXaBiTQezB3ZdGh7wdT1kdowjxl9/kKVo+ntvyhU0/8hjMdC6BotPgI7/3h
+         thT9C/4BANtKJ31IaG315oDXH0VN2E4QT4FQihdoQpZIHhKKSNX2U7MqdR5fS9yyduOG
+         a+MSwsphmp4eJES1pX5NdLBEgTMDku4byQrkiOOQFk1lTE8VJYLgIF/79pJJOwqmZZ3S
+         B6lUOvCnRIXMi0LoApV8kKGAowK4lZLIbwGNn5ea3uhwl21CuZFRXYpzzCK4H2ZkJIrn
+         RVXw==
+X-Gm-Message-State: AJIora/efI76yHZCx0FhmII/1KhmLwAswvoOHKaHSoZ2lFrqjgx0hMu3
+        s+lmJP/LHyoCDHyg0nWzdrM4SAvtSCUz9PNW0qDe9A==
+X-Google-Smtp-Source: AGRyM1sylKm/YHfEHJJKoNtk4iDXMychQ2hjNGZay0zkjmxmi8kAllmVuxZxqfR//wwsPw4FU0+o6d/8FykpLAogQcc=
+X-Received: by 2002:a05:6000:1245:b0:21b:83b2:191c with SMTP id
+ j5-20020a056000124500b0021b83b2191cmr3487570wrx.493.1656513213258; Wed, 29
+ Jun 2022 07:33:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a1ac4690-4d46-4461-a90f-dfa4777dbf54@eyal.emu.id.au>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
+ <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com> <20220628182336.GA711518-robh@kernel.org>
+In-Reply-To: <20220628182336.GA711518-robh@kernel.org>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Wed, 29 Jun 2022 22:33:22 +0800
+Message-ID: <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:33:12PM +1000, Eyal Lebedinsky wrote:
-> I do not know if this is a USB thing (but I think so) or an IDE/SATA issue.
-> 
-> I was reading (dd) a few disks and used two different mounts, one is a direct SATA cable, the other uses
-> a UDB caddy.
-> 
-> When I later attempted to loop mount the (dd) images some have failed. The system log show
-> 	bad geometry: block count 488378390 exceeds size of device (488378389 blocks)
-> And sure enough, fdisk shows the device as 4 sectors too short for the partition:
-> 	Disk set-68-disk-23.dd: 1.82 TiB, 2000398931968 bytes, 3907029164 sectors
->                                                                ^^^^^^^^^^
-> 	Units: sectors of 1 * 512 = 512 bytes
-> 	Sector size (logical/physical): 512 bytes / 512 bytes
-> 	I/O size (minimum/optimal): 512 bytes / 512 bytes
-> 	Disklabel type: dos
-> 	Disk identifier: 0xb2c564a3
-> 
-> 	Device             Boot Start        End    Sectors  Size Id Type
-> 	set-68-disk-23.dd1       2048 3907029167 3907027120  1.8T 83 Linux
->                                       ^^^^^^^^^^
-> This image was copied from the USB caddy. Plugging the disk directly (via SATA cable) I get a good geometry:
-> 	Disk /dev/sdj: 1.82 TiB, 2000398934016 bytes, 3907029168 sectors
->                                                       ^^^^^^^^^^
-> 
-> This is a worry, looks like the caddy cannot be trusted.
-> 
-> I looked and the other copies I made today and it seems that the last 4 sectors are always lost, and the partition end
-> is beyond the device size. However the mount usually succeeds because the fs does not use the full partition
-> due to the 4k block size.
-> 
-> Is this a known/common issue? Is this a problem with the caddy?
+On Wed, Jun 29, 2022 at 2:23 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Jun 27, 2022 at 02:43:39PM -0700, Prashant Malani wrote:
+> > Hello Rob,
+> >
+> > On Mon, Jun 27, 2022 at 2:04 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Wed, Jun 22, 2022 at 05:34:30PM +0000, Prashant Malani wrote:
+> > > > Introduce a binding which represents a component that can control t=
+he
+> > > > routing of USB Type-C data lines as well as address data line
+> > > > orientation (based on CC lines' orientation).
+> > > >
+> > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@=
+collabora.com>
+> > > > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > Tested-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > > > ---
+> > > >
+> > > > Changes since v4:
+> > > > - Added Reviewed-by tags.
+> > > > - Patch moved to 1/9 position (since Patch v4 1/7 and 2/7 were
+> > > >   applied to usb-next)
+> > > >
+> > > > Changes since v3:
+> > > > - No changes.
+> > > >
+> > > > Changes since v2:
+> > > > - Added Reviewed-by and Tested-by tags.
+> > > >
+> > > > Changes since v1:
+> > > > - Removed "items" from compatible.
+> > > > - Fixed indentation in example.
+> > > >
+> > > >  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++++=
+++++
+> > > >  1 file changed, 74 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/usb/typec-swi=
+tch.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yam=
+l b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..78b0190c8543
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > @@ -0,0 +1,74 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: USB Type-C Switch
+> > > > +
+> > > > +maintainers:
+> > > > +  - Prashant Malani <pmalani@chromium.org>
+> > > > +
+> > > > +description:
+> > > > +  A USB Type-C switch represents a component which routes USB Type=
+-C data
+> > > > +  lines to various protocol host controllers (e.g USB, VESA Displa=
+yPort,
+> > > > +  Thunderbolt etc.) depending on which mode the Type-C port, port =
+partner
+> > > > +  and cable are operating in. It can also modify lane routing base=
+d on
+> > > > +  the orientation of a connected Type-C peripheral.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: typec-switch
+> > > > +
+> > > > +  mode-switch:
+> > > > +    type: boolean
+> > > > +    description: Specify that this switch can handle alternate mod=
+e switching.
+> > > > +
+> > > > +  orientation-switch:
+> > > > +    type: boolean
+> > > > +    description: Specify that this switch can handle orientation s=
+witching.
+> > > > +
+> > > > +  ports:
+> > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > +    description: OF graph binding modelling data lines to the Type=
+-C switch.
+> > > > +
+> > > > +    properties:
+> > > > +      port@0:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: Link between the switch and a Type-C connecto=
+r.
+> > > > +
+> > > > +    required:
+> > > > +      - port@0
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - ports
+> > > > +
+> > > > +anyOf:
+> > > > +  - required:
+> > > > +      - mode-switch
+> > > > +  - required:
+> > > > +      - orientation-switch
+> > > > +
+> > > > +additionalProperties: true
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    drm-bridge {
+> > > > +        usb-switch {
+> > > > +            compatible =3D "typec-switch";
+> > >
+> > > Unless this child is supposed to represent what the parent output is
+> > > connected to, this is just wrong as, at least for the it6505 chip, it
+> > > doesn't know anything about Type-C functionality. The bridge is
+> > > just a protocol converter AFAICT.
+> >
+> > I'll let Pin-Yen comment on the specifics of the it6505 chip.
+>
+> We're all waiting...
 
-Historically the problem goes the other way: Lots of devices used to 
-report a total size that was one logical block _larger_ than their 
-actual capacity.  This was caused by the firmware authors 
-misunderstanding the READ CAPACITY command, which is supposed to return 
-the block number of the last logical block -- but instead they would 
-return the total number of logical blocks, which is one higher (since 
-the first block is number 0).
+Yes it6505 is just a protocol converter. But in our use case, the output DP
+lines are connected to the Type-C ports and the chip has to know which
+port has DP Alt mode enabled. Does this justify a child node here?
 
-Nowadays most devices seem to sorted this out.  It looks like you found 
-one that makes the opposite mistake: The value it reports is one less 
-than the last block number.
-
-It is definitely a bug in the caddy.  On the other hand, this bug 
-probably doesn't affect the rest of the caddy's operations.
-
-Alan Stern
-
-> I never noticed this before and would rather dump the caddy if it is at fault.
-> 
-> TIA
-> 
-> -- 
-> Eyal Lebedinsky (eyal@eyal.emu.id.au)
+Does it make more sense if we we eliminate the usb-switch node here
+and list the ports in the top level?
+>
+> > > If the child node represents what the output is connected to (like a
+> > > bus), then yes that is a pattern we have used.
+> >
+> > For the anx7625 case, the child node does represent what the output is =
+connected
+> > to (the usb-c-connector via the switch). Does that not qualify? Or do y=
+ou mean
+> > the child node should be a usb-c-connector itself?
+> >
+> > > For example, a panel
+> > > represented as child node of a display controller. However, that only
+> > > works for simple cases, and is a pattern we have gotten away from in
+> > > favor of using the graph binding.
+> >
+> > The child node will still use a OF graph binding to connect to the
+> > usb-c-connector.
+> > Is that insufficient to consider a child node usage here?
+> > By "using the graph binding", do you mean "only use the top-level ports=
+" ?
+> > I'm trying to clarify this, so that it will inform future versions and =
+patches.
+>
+> What I want to see is block diagrams of possible h/w with different
+> scenarios and then what the binding looks like in those cases. The
+> switching/muxing could be in the SoC, a bridge chip, a Type C
+> controller, a standalone mux chip, or ????. If you want a somewhat
+> genericish binding, then you need to consider all of these.
+>
+> I don't really have the b/w to work thru all this (and switch/mux is
+> just one part of dealing with Type-C). This is just one of about a
+> hundred patches I get to review a week.
+>
+> Rob
