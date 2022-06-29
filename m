@@ -2,125 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70E855F62D
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 08:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E30F55F689
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 08:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiF2GHP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 02:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S231744AbiF2G2n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 02:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiF2GGz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 02:06:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361F42983D;
-        Tue, 28 Jun 2022 23:06:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8A2F2CE243D;
-        Wed, 29 Jun 2022 06:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B903C34114;
-        Wed, 29 Jun 2022 06:06:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656482795;
-        bh=v+QrMFau7PMS8LMjF6or9QJ2YF6CwZpdYo1DW6OX/PM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wkuD9Lm/QUKbnK0gSvj9vKBqQtHURYHwsAti95fWhu9rdQna5+oi9b1X8O+lY3V3I
-         rs1HyZWJOM71izFEI+7o9bSAHajpOaXqs3ZhMv9lBliLdckglEubgOvHNs7eeRiLni
-         DmKzoq0+zvXc4f1rwgFC5rIrQboiMKnhqdkMgLN0=
-Date:   Wed, 29 Jun 2022 08:06:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     SebinSebastian <mailmesebin00@gmail.com>
-Cc:     Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH-next] usb: gadget: dereference before null check
-Message-ID: <Yrvr6A8YgyZuWQUz@kroah.com>
-References: <20220629055605.102425-1-mailmesebin00@gmail.com>
+        with ESMTP id S230350AbiF2G2m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 02:28:42 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8292E27B2E;
+        Tue, 28 Jun 2022 23:28:41 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 3AFBD67373; Wed, 29 Jun 2022 08:28:37 +0200 (CEST)
+Date:   Wed, 29 Jun 2022 08:28:37 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: fully convert arm to use dma-direct v3
+Message-ID: <20220629062837.GA17140@lst.de>
+References: <20220614092047.572235-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220629055605.102425-1-mailmesebin00@gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614092047.572235-1-hch@lst.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 11:26:05AM +0530, SebinSebastian wrote:
-> From: Sebin Sebastian <mailmesebin00@gmail.com>
+Any comments or additional testing?  It would be really great to get
+this off the table.
+
+On Tue, Jun 14, 2022 at 11:20:37AM +0200, Christoph Hellwig wrote:
+> Hi all,
 > 
-> Fix coverity warning dereferencing before null check. _ep and desc is
-> deferenced on all paths until the check for null. Move the
-> initilizations after the check for null.
-> Coverity issue: 1518209
+> arm is the last platform not using the dma-direct code for directly
+> mapped DMA.  With the dmaboune removal from Arnd we can easily switch
+> arm to always use dma-direct now (it already does for LPAE configs
+> and nommu).  I'd love to merge this series through the dma-mapping tree
+> as it gives us the opportunity for additional core dma-mapping
+> improvements.
 > 
-> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
-> ---
->  drivers/usb/gadget/udc/aspeed_udc.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+> Changes since v2:
+>  - rebased to Linux 5.19-rc2
 > 
-> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-> index d75a4e070bf7..4f158030e2cc 100644
-> --- a/drivers/usb/gadget/udc/aspeed_udc.c
-> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
-> @@ -341,10 +341,6 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
->  static int ast_udc_ep_enable(struct usb_ep *_ep,
->  			     const struct usb_endpoint_descriptor *desc)
->  {
-> -	u16 maxpacket = usb_endpoint_maxp(desc);
-> -	struct ast_udc_ep *ep = to_ast_ep(_ep);
-> -	struct ast_udc_dev *udc = ep->udc;
-> -	u8 epnum = usb_endpoint_num(desc);
->  	unsigned long flags;
->  	u32 ep_conf = 0;
->  	u8 dir_in;
-> @@ -355,6 +351,12 @@ static int ast_udc_ep_enable(struct usb_ep *_ep,
->  		EP_DBG(ep, "Failed, invalid EP enable param\n");
->  		return -EINVAL;
->  	}
-> +
-> +	u16 maxpacket = usb_endpoint_maxp(desc);
-> +	struct ast_udc_ep *ep = to_ast_ep(_ep);
-> +	struct ast_udc_dev *udc = ep->udc;
-> +	u8 epnum = usb_endpoint_num(desc);
-> +
->  
->  	if (!udc->driver) {
->  		EP_DBG(ep, "bogus device state\n");
-> -- 
-> 2.34.1
+> Changes since v1:
+>  - remove another unused function
+>  - improve a few commit logs
+>  - add three more patches from Robin
 > 
-
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch breaks the build.
-
-- Your patch contains warnings and/or errors noticed by the
-  scripts/checkpatch.pl tool.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+> Diffstat:
+>  arch/arm/common/dmabounce.c                          |  582 -----------------
+>  arch/arm/include/asm/dma-mapping.h                   |  128 ---
+>  b/arch/arm/Kconfig                                   |    5 
+>  b/arch/arm/common/Kconfig                            |    6 
+>  b/arch/arm/common/Makefile                           |    1 
+>  b/arch/arm/common/sa1111.c                           |   64 -
+>  b/arch/arm/include/asm/device.h                      |    3 
+>  b/arch/arm/include/asm/dma-direct.h                  |   49 -
+>  b/arch/arm/include/asm/memory.h                      |    2 
+>  b/arch/arm/mach-footbridge/Kconfig                   |    1 
+>  b/arch/arm/mach-footbridge/common.c                  |   19 
+>  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8 
+>  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4 
+>  b/arch/arm/mach-highbank/highbank.c                  |    2 
+>  b/arch/arm/mach-mvebu/coherency.c                    |    2 
+>  b/arch/arm/mm/dma-mapping.c                          |  649 ++-----------------
+>  b/drivers/usb/core/hcd.c                             |   17 
+>  b/drivers/usb/host/ohci-sa1111.c                     |   25 
+>  18 files changed, 137 insertions(+), 1430 deletions(-)
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+---end quoted text---
