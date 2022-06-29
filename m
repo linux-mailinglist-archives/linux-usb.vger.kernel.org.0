@@ -2,88 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F63D5603C5
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 17:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E835604AC
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 17:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbiF2PBK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 11:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S232545AbiF2PcK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 11:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbiF2PBJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 11:01:09 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBC824967
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 08:01:05 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r20so22920252wra.1
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 08:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BFTLOzROIiPqmhqAxyhqbA3c4cCfg2+85Lj08j7lKrc=;
-        b=KSZCIsiOiM5lSrD/SN2KobYz6mYvLmSMkmIYAm6jJkx0besT50xI2w+S/fmkjIc5Lt
-         CiENPRHqyHQnjG2/XUvVms/IdIjuXzpiz279AxabuBLqetXpajQmuQgYJYEvWegsAq7m
-         g0N0kPNt3eOX0cgC7K0dpvGCTGIkeo0W03voU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BFTLOzROIiPqmhqAxyhqbA3c4cCfg2+85Lj08j7lKrc=;
-        b=mQPd1+avkuF+T0ADpq0NaTaLAjTQy9iHxh1WFAL3m2S2ZzAHFANTVg27NdwEY/IT5m
-         Mtp+OqkqaA/64JziJFBHYYYYV+bHk6v9fSbl8kAn/DDQX8uT2EH7QetrxN86xFxl7eoG
-         ybK51fdWx0kbLCkB5u9t5zrZgXxTixUAHP8ISFwI1Q/0gThunuujJLD0ALE1BBOnsrnh
-         DXZwG69K40Y9sa09ROexMGbrlcPNDHI5QLlibmXQ1QzfAnBxks/RY0S31GKMr5DJnh4U
-         0HrH5OZXcCNqq4hvJwmi2BZTbrzDwY03GgjERnw9DO0zEv6T1fE7wmT6Oa/jf+bjyUR6
-         OswA==
-X-Gm-Message-State: AJIora/304YwPlL8ruIHmTN3LCx3AJ/NZKNsfxT1Xu5I0HEB874huhsU
-        HM36Mz2ypoNYl5cwnveiCng6H1nO1i6GaAwzd0Lwbw==
-X-Google-Smtp-Source: AGRyM1sfGDisJPMkurvd0csySTU2fbtpR7bD1RXmyKvioUnsN/Dz9FmiK+aIh31YNygfWB8TUXd60BEck363CaWXJJY=
-X-Received: by 2002:a05:6000:1245:b0:21b:83b2:191c with SMTP id
- j5-20020a056000124500b0021b83b2191cmr3611692wrx.493.1656514864306; Wed, 29
- Jun 2022 08:01:04 -0700 (PDT)
+        with ESMTP id S231622AbiF2PcK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 11:32:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3512CCA6;
+        Wed, 29 Jun 2022 08:32:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBFD0B81DDF;
+        Wed, 29 Jun 2022 15:32:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FBC7C34114;
+        Wed, 29 Jun 2022 15:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656516726;
+        bh=C7giPN+qsPnR9juAKxwWkHDcLBswzBs0OgjSrpVwzJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m4SjOqpF8ZT7iAgy0s1lC3NNsCXzJ8S9sUOuNZA92qEM8N9RMAmSBsGPTYBu+EfUB
+         BSYHByKEldQ6oPwFq9X2oJCeS7TMof7aLFWv+B3rk7NNQwwCsVTNdcFTbpbcj2FnxG
+         1nPOMWngZjlptmzFRjVNQ9ENdZG5/nRHVZ/TCaWo=
+Date:   Wed, 29 Jun 2022 17:31:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: gadget: dereference before null check
+Message-ID: <Yrxwbb/TbFmYdga/@kroah.com>
+References: <20220629080726.107297-1-mailmesebin00@gmail.com>
+ <YrwMJ+3mdFO2Lpm0@kroah.com>
+ <YrxCP4EE2jhUm8e+@sebin-inspiron>
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
- <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
- <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
-In-Reply-To: <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Wed, 29 Jun 2022 23:00:53 +0800
-Message-ID: <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrxCP4EE2jhUm8e+@sebin-inspiron>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,186 +55,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 10:33 PM Pin-yen Lin <treapking@chromium.org> wrote=
-:
->
-> On Wed, Jun 29, 2022 at 2:23 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Mon, Jun 27, 2022 at 02:43:39PM -0700, Prashant Malani wrote:
-> > > Hello Rob,
-> > >
-> > > On Mon, Jun 27, 2022 at 2:04 PM Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Wed, Jun 22, 2022 at 05:34:30PM +0000, Prashant Malani wrote:
-> > > > > Introduce a binding which represents a component that can control=
- the
-> > > > > routing of USB Type-C data lines as well as address data line
-> > > > > orientation (based on CC lines' orientation).
-> > > > >
-> > > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregn=
-o@collabora.com>
-> > > > > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com=
->
-> > > > > Tested-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> > > > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > > > > ---
-> > > > >
-> > > > > Changes since v4:
-> > > > > - Added Reviewed-by tags.
-> > > > > - Patch moved to 1/9 position (since Patch v4 1/7 and 2/7 were
-> > > > >   applied to usb-next)
-> > > > >
-> > > > > Changes since v3:
-> > > > > - No changes.
-> > > > >
-> > > > > Changes since v2:
-> > > > > - Added Reviewed-by and Tested-by tags.
-> > > > >
-> > > > > Changes since v1:
-> > > > > - Removed "items" from compatible.
-> > > > > - Fixed indentation in example.
-> > > > >
-> > > > >  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++=
-++++++
-> > > > >  1 file changed, 74 insertions(+)
-> > > > >  create mode 100644 Documentation/devicetree/bindings/usb/typec-s=
-witch.yaml
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.y=
-aml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..78b0190c8543
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > > > @@ -0,0 +1,74 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > +
-> > > > > +title: USB Type-C Switch
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Prashant Malani <pmalani@chromium.org>
-> > > > > +
-> > > > > +description:
-> > > > > +  A USB Type-C switch represents a component which routes USB Ty=
-pe-C data
-> > > > > +  lines to various protocol host controllers (e.g USB, VESA Disp=
-layPort,
-> > > > > +  Thunderbolt etc.) depending on which mode the Type-C port, por=
-t partner
-> > > > > +  and cable are operating in. It can also modify lane routing ba=
-sed on
-> > > > > +  the orientation of a connected Type-C peripheral.
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: typec-switch
-> > > > > +
-> > > > > +  mode-switch:
-> > > > > +    type: boolean
-> > > > > +    description: Specify that this switch can handle alternate m=
-ode switching.
-> > > > > +
-> > > > > +  orientation-switch:
-> > > > > +    type: boolean
-> > > > > +    description: Specify that this switch can handle orientation=
- switching.
-> > > > > +
-> > > > > +  ports:
-> > > > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > > > +    description: OF graph binding modelling data lines to the Ty=
-pe-C switch.
-> > > > > +
-> > > > > +    properties:
-> > > > > +      port@0:
-> > > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > > +        description: Link between the switch and a Type-C connec=
-tor.
-> > > > > +
-> > > > > +    required:
-> > > > > +      - port@0
-> > > > > +
-> > > > > +required:
-> > > > > +  - compatible
-> > > > > +  - ports
-> > > > > +
-> > > > > +anyOf:
-> > > > > +  - required:
-> > > > > +      - mode-switch
-> > > > > +  - required:
-> > > > > +      - orientation-switch
-> > > > > +
-> > > > > +additionalProperties: true
-> > > > > +
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +    drm-bridge {
-> > > > > +        usb-switch {
-> > > > > +            compatible =3D "typec-switch";
-> > > >
-> > > > Unless this child is supposed to represent what the parent output i=
-s
-> > > > connected to, this is just wrong as, at least for the it6505 chip, =
-it
-> > > > doesn't know anything about Type-C functionality. The bridge is
-> > > > just a protocol converter AFAICT.
-> > >
-> > > I'll let Pin-Yen comment on the specifics of the it6505 chip.
-> >
-> > We're all waiting...
->
-> Yes it6505 is just a protocol converter. But in our use case, the output =
-DP
-> lines are connected to the Type-C ports and the chip has to know which
-> port has DP Alt mode enabled. Does this justify a child node here?
->
-> Does it make more sense if we we eliminate the usb-switch node here
-> and list the ports in the top level?
-> >
-> > > > If the child node represents what the output is connected to (like =
-a
-> > > > bus), then yes that is a pattern we have used.
-> > >
-> > > For the anx7625 case, the child node does represent what the output i=
-s connected
-> > > to (the usb-c-connector via the switch). Does that not qualify? Or do=
- you mean
-> > > the child node should be a usb-c-connector itself?
-> > >
-> > > > For example, a panel
-> > > > represented as child node of a display controller. However, that on=
-ly
-> > > > works for simple cases, and is a pattern we have gotten away from i=
-n
-> > > > favor of using the graph binding.
-> > >
-> > > The child node will still use a OF graph binding to connect to the
-> > > usb-c-connector.
-> > > Is that insufficient to consider a child node usage here?
-> > > By "using the graph binding", do you mean "only use the top-level por=
-ts" ?
-> > > I'm trying to clarify this, so that it will inform future versions an=
-d patches.
-> >
-> > What I want to see is block diagrams of possible h/w with different
-> > scenarios and then what the binding looks like in those cases. The
-> > switching/muxing could be in the SoC, a bridge chip, a Type C
-> > controller, a standalone mux chip, or ????. If you want a somewhat
-> > genericish binding, then you need to consider all of these.
+On Wed, Jun 29, 2022 at 05:44:55PM +0530, Sebin Sebastian wrote:
+> On Wed, Jun 29, 2022 at 10:24:07AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jun 29, 2022 at 01:37:25PM +0530, SebinSebastian wrote:
+> > > Fix coverity warning dereferencing before null check. _ep and desc is
+> > > dereferenced on all paths until the check for null. Move the
+> > > initializations after the check for null.
+> > > Coverity issue: 1518209
+> > > 
+> > > Signed-off-by: SebinSebastian <mailmesebin00@gmail.com>
+> > > ---
+> > >  drivers/usb/gadget/udc/aspeed_udc.c | 9 +++++----
+> > >  1 file changed, 5 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+> > > index d75a4e070bf7..96f8193fca15 100644
+> > > --- a/drivers/usb/gadget/udc/aspeed_udc.c
+> > > +++ b/drivers/usb/gadget/udc/aspeed_udc.c
+> > > @@ -341,10 +341,6 @@ static void ast_udc_stop_activity(struct ast_udc_dev *udc)
+> > >  static int ast_udc_ep_enable(struct usb_ep *_ep,
+> > >  			     const struct usb_endpoint_descriptor *desc)
+> > >  {
+> > > -	u16 maxpacket = usb_endpoint_maxp(desc);
+> > > -	struct ast_udc_ep *ep = to_ast_ep(_ep);
+> > > -	struct ast_udc_dev *udc = ep->udc;
+> > > -	u8 epnum = usb_endpoint_num(desc);
+> > >  	unsigned long flags;
+> > >  	u32 ep_conf = 0;
+> > >  	u8 dir_in;
+> > > @@ -356,6 +352,11 @@ static int ast_udc_ep_enable(struct usb_ep *_ep,
+> > >  		return -EINVAL;
+> > >  	}
+> > > 
+> > > +	u16 maxpacket = usb_endpoint_maxp(desc);
+> > > +	struct ast_udc_ep *ep = to_ast_ep(_ep);
+> > > +	struct ast_udc_dev *udc = ep->udc;
+> > > +	u8 epnum = usb_endpoint_num(desc);
+> > > +
+> > >  	if (!udc->driver) {
+> > >  		EP_DBG(ep, "bogus device state\n");
+> > >  		return -ESHUTDOWN;
+> > > --
+> > > 2.34.1
+> > > 
+> > 
+> > Hi,
+> > 
+> > This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> > a patch that has triggered this response.  He used to manually respond
+> > to these common problems, but in order to save his sanity (he kept
+> > writing the same thing over and over, yet to different people), I was
+> > created.  Hopefully you will not take offence and will fix the problem
+> > in your patch and resubmit it so that it can be accepted into the Linux
+> > kernel tree.
+> > 
+> > You are receiving this message because of the following common error(s)
+> > as indicated below:
+> > 
+> > - Your patch breaks the build.
+> > 
+> > - Your patch contains warnings and/or errors noticed by the
+> >   scripts/checkpatch.pl tool.
+> > 
+> > - This looks like a new version of a previously submitted patch, but you
+> >   did not list below the --- line any changes from the previous version.
+> >   Please read the section entitled "The canonical patch format" in the
+> >   kernel file, Documentation/SubmittingPatches for what needs to be done
+> >   here to properly describe this.
+> > 
+> > If you wish to discuss this problem further, or you have questions about
+> > how to resolve this issue, please feel free to respond to this email and
+> > Greg will reply once he has dug out from the pending patches received
+> > from other developers.
+> > 
+> > thanks,
+> > 
+> > greg k-h's patch email bot
+> 
+> I am sorry to keep on bothering with this incorrect patches. I am
+> running the checkpatch script everytime before I sent any patches. It is
+> not showing any warnings or errors. Is it because of my name that my
+> patches are getting rejected? I can see a space missing.
 
-Then, is it suitable to put the switch binding into the drivers own binding=
-s
-(i.e., the bindings for it6505 and anx7625), and introduce some helper
-functions to eliminate the duplication in the code?
-Though we will have two similar bindings in two drivers with this approach.
+Did you test build your patch?  If not, why not?
 
-> >
-> > I don't really have the b/w to work thru all this (and switch/mux is
-> > just one part of dealing with Type-C). This is just one of about a
-> > hundred patches I get to review a week.
-> >
-> > Rob
+thanks,
+
+greg k-h
