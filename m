@@ -2,219 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB2B55FC6D
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 11:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165D755FCE8
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 12:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiF2JsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 05:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S232058AbiF2KMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 06:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiF2JrM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 05:47:12 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EE13D1DB;
-        Wed, 29 Jun 2022 02:47:04 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l11so26905078ybu.13;
-        Wed, 29 Jun 2022 02:47:04 -0700 (PDT)
+        with ESMTP id S229777AbiF2KMi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 06:12:38 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BCC21258
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 03:12:37 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u12so31503102eja.8
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 03:12:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EmOXlCPF2PKnBhpQ/luPJrSUkqjOxGD13NDVBnopNTk=;
-        b=oDeMmnlCMTQvwXgm78D0pQRHhja+Ivd+N2hnel6/zhLoaRW5etlOls2REHUUBBbxiU
-         6l5jO+KyaLfcVkIx9mK5+THqtbCE14MXYjrmFL3sq/H+6dwhLMQO80vCeAz+zoyQ6tD4
-         /sWVN2VSVQiH58CXv/s/btxvwH9NpB+wLdHCiYrGdZSp1lqQHEe94WrDw6VCsh/tiS7K
-         NipsDv97v242DKFzN3XNuoV1K7QUj6cBVQ6l3X+zme3htAyNlxEQ1M0ZiBiezEgSY5kH
-         I2NkpkIjtahsqUm+/nZluwhgZxbvHL7ojm2Waao7yrYgQ7tZmB7WJKTeQ2RkU+nrkOtf
-         Fcpg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UQVs/vk3TXmyqHO0m20AymMZtMAnKjYQ1g4TBF6/kA4=;
+        b=tnbsHSwQFfXRfiqLQMLSrwpXtVEZKHjoZImczR4HSgCINnV15+SS3BgKi+MZ9GTu91
+         PwIy2TldEysT/aS+k6lpU5zR2HABIBWqHgagH8Dua908aU7MLwwpdtw8dlg9wHFlF8I7
+         E0OyC++4PcPlsKCYhvi92uu3JJEzJEeNyAaO54vjoOP/ERc+XrTTDrhxhi9rBIj4qYKg
+         jQqIiPMSGudU0xbc/8xyxGtCrCfNqZjLa7Jf2iVuxGs27tsnfFcH9RZq00A4Kkpm85P+
+         nqn1rQnACnMurA89newiVOdC6RJH2z7xdzXMhtaYI1TIC9IB4bPAJ7iZxFhOXAOySxXV
+         D2WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EmOXlCPF2PKnBhpQ/luPJrSUkqjOxGD13NDVBnopNTk=;
-        b=mEmVMWfrJlomOm5nVbd/vyNgJbv6FhC1fgEmrGzCFHyiGgVhLUye642z3x21X5H10U
-         sZDO4UdjAP8In/iSjLxZyNG92tsPExX2Rifhh0Fwej0ve0qq5Wh4OhXgBK72m7LMr+4t
-         Om5JeRxanN9pfmWp6xnQzeUeLwYXDlzQzOPwmmh6sMN2qfDO/XLm3DhtuhDPTjcfOLwO
-         L/Rp+X5Jvx2DjT+detlAbcMQGHL2Au7DsgFWgRnl9wZ6+Y2EH4KLixN72LQG1GGM5l3/
-         EmxZowcX7VS0MxTenqitrBmmzKWshaZipAGqCMoLYwpNbiOvAgtL3ItNt3FX3AEYTf1u
-         2iLA==
-X-Gm-Message-State: AJIora8QpoDmEAt8Wn/5cVyg5sq1oyZ+YrgFdfIV7tbVxZXHTZB8mX33
-        CI2LmQb3GYJIzrULqbk1wVtevqig2Vp8mdjcMpALsaKsyTmq+zIQlto=
-X-Google-Smtp-Source: AGRyM1sCbYX6F5EQnDbOdSwxx4LX2Emni3Xa+5wghs4B8uexCocrG6wMB0Y10Gvfw6NCcvdJhV5sqqKPrCnk4EpsKxM=
-X-Received: by 2002:a25:3383:0:b0:66b:6205:1583 with SMTP id
- z125-20020a253383000000b0066b62051583mr2289015ybz.387.1656496023486; Wed, 29
- Jun 2022 02:47:03 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UQVs/vk3TXmyqHO0m20AymMZtMAnKjYQ1g4TBF6/kA4=;
+        b=kNT7/apNR8ud3XAm3TiW6p4eupdkjTS1PPr9g+m95h+0fY5HymQ53eRuvblaIyYMSE
+         VV4cM/cxzMzKj2SLgRq+CM7rtanexPTX8omTBF2h7uT4Nyx5DZJUDMAq7d97uwvaqVQD
+         CquVgqgSr+xLyFZayjYaEmXC9Gow/V/zs1ToZmA1pnLjceOPw5dCBpapghwUwL42ilXN
+         uEYFkU3f792iXvfgvWtw/ZfkYyi04g2P7Y36JLUx15DkyQktgomUcw1YqECqxS3Tiy9d
+         gpZX/jePGau632G4mjBCL7QX8ZuWC+ffwkYZedgF63N4gZNJphvI6RuBy27BE9mLYrhB
+         +Xyw==
+X-Gm-Message-State: AJIora9nMuMYpt1Qp893jM+kzaP1H7CNmTgC+enYcT4IFDadQbXg73NH
+        +FmbKd0EVe5iE+OvfMLMTNuNUw==
+X-Google-Smtp-Source: AGRyM1sjvx1wOPMp+bijYxCAGUlWcQdG9iZUFcyc5CG2oi0K7eSi07C87KiYcu9D21TT+wr8/GSRfA==
+X-Received: by 2002:a17:906:5305:b0:712:388c:2bf5 with SMTP id h5-20020a170906530500b00712388c2bf5mr2513089ejo.559.1656497556306;
+        Wed, 29 Jun 2022 03:12:36 -0700 (PDT)
+Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g5-20020a17090613c500b00722fb3c99bcsm7531482ejc.203.2022.06.29.03.12.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 03:12:35 -0700 (PDT)
+Message-ID: <f2b16788-32bd-a487-4087-66d876247fdb@linaro.org>
+Date:   Wed, 29 Jun 2022 12:12:29 +0200
 MIME-Version: 1.0
-References: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
-In-Reply-To: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Wed, 29 Jun 2022 12:46:51 +0300
-Message-ID: <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: f_uac1: add interface association descriptor
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v12 2/3] dt-bindings: usb: Add analogix anx7411 PD binding
+Content-Language: en-US
+To:     Xin Ji <xji@analogixsemi.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Julian Scheel <julian@jusst.de>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        xin lin <xin.lin@mediatek.com>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220628044843.2257885-1-xji@analogixsemi.com>
+ <20220628044843.2257885-2-xji@analogixsemi.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220628044843.2257885-2-xji@analogixsemi.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- On Wed, Jun 29, 2022 at 5:13 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> From: xin lin <xin.lin@mediatek.com>
->
-> When we want to use a composite device that supports UVC, UAC1 and
-> ADB at the same time, encounter that UAC1 can't work when connected
-> to windows 10 system.
-> From the online documents of microsoft, "overview of enumeration of
-> interface collections on usb composite devices", it recommends that
-> vendors use IADs (interface association descriptor) to define
-> interface collections.
-> After addding IAD, we can fix the issue.
-
-It is incorrect to add Interface Association Descriptor to the UAC1 function.
-The UAC1 specification was developed much earlier than IAD was invented, and it
-implements this functionality in another way - by describing number of
-associated
-interfaces and interface numbers on Class-Specific AC Interface
-Descriptor level;
-see *bInCollection* and *baInterfaceNr* fields of UAC1 Class-Specific
-AC Interface
-Header Descriptor in 4.3.2 section of UAC1 specification.
-
-This is already implemented in f_uac1.c (see where *bInCollection* and
-*baInterfaceNr*
-are updated), along with support of dynamic capture/playback endpoints
-enablement.
-Adding IAD to the UAC1 driver is duplicating that functionality and
-isn't supported
-by UAC1 spec.
-
-On the other hand, the USB orgcommittee switched the approach of
-interface collection
-definition from a class-specific descriptors level to IAD in the UAC2 spec.
-So why not use UAC2 function for the same purpose, it already has IAD
-implemented
-and is supported by Win10?
-
-Thanks,
-Ruslan
-
->
-> Signed-off-by: xin lin <xin.lin@mediatek.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+On 28/06/2022 06:48, Xin Ji wrote:
+> Add analogix PD chip anx7411 device binding
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
 > ---
-> v2: modify commit log suggested by Greg
-> ---
->  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-> index 6f0e1d803dc2..8390207bc513 100644
-> --- a/drivers/usb/gadget/function/f_uac1.c
-> +++ b/drivers/usb/gadget/function/f_uac1.c
-> @@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
->   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
->   */
->
-> +static struct usb_interface_assoc_descriptor iad_desc = {
-> +       .bLength = sizeof(iad_desc),
-> +       .bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
+>  .../bindings/usb/analogix,anx7411.yaml        | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> new file mode 100644
+> index 000000000000..c5c6d5a9dc17
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+> @@ -0,0 +1,76 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/analogix,anx7411.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+
+Drop the quotes from both places.
+
 > +
-> +       .bFirstInterface = 0,
-> +       .bInterfaceCount = 3,
-> +       .bFunctionClass = USB_CLASS_AUDIO,
-> +       .bFunctionSubClass = 0,
-> +       .bFunctionProtocol = UAC_VERSION_1,
-> +};
+> +title: Analogix ANX7411 Type-C controller bindings
 > +
->  /* B.3.1  Standard AC Interface Descriptor */
->  static struct usb_interface_descriptor ac_interface_desc = {
->         .bLength =              USB_DT_INTERFACE_SIZE,
-> @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
->  };
->
->  static struct usb_descriptor_header *f_audio_desc[] = {
-> +       (struct usb_descriptor_header *)&iad_desc,
->         (struct usb_descriptor_header *)&ac_interface_desc,
->         (struct usb_descriptor_header *)&ac_header_desc,
->
-> @@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
->  };
->
->  enum {
-> +       STR_ASSOC,
->         STR_AC_IF,
->         STR_USB_OUT_IT,
->         STR_USB_OUT_IT_CH_NAMES,
-> @@ -310,6 +323,7 @@ enum {
->
->  static struct usb_string strings_uac1[] = {
->         /* [STR_AC_IF].s = DYNAMIC, */
-> +       [STR_ASSOC].s = "Source/Sink",
->         [STR_USB_OUT_IT].s = "Playback Input terminal",
->         [STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
->         [STR_IO_OUT_OT].s = "Playback Output terminal",
-> @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
->         as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
->         as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
->
-> +       iad_desc.bInterfaceCount = 1;
->         ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
->
->         if (EPIN_EN(opts)) {
-> @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
->                 if (FUIN_EN(opts))
->                         len += in_feature_unit_desc->bLength;
->                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> +               iad_desc.bInterfaceCount++;
->         }
->         if (EPOUT_EN(opts)) {
->                 u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-> @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
->                 if (FUOUT_EN(opts))
->                         len += out_feature_unit_desc->bLength;
->                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> +               iad_desc.bInterfaceCount++;
->         }
->
->         i = 0;
-> +       f_audio_desc[i++] = USBDHDR(&iad_desc);
->         f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
->         f_audio_desc[i++] = USBDHDR(ac_header_desc);
->
-> @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
->                 }
->         }
->
-> +       iad_desc.iFunction = us[STR_ASSOC].id;
->         ac_interface_desc.iInterface = us[STR_AC_IF].id;
->         usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
->         usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
-> @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
->         status = usb_interface_id(c, f);
->         if (status < 0)
->                 goto err_free_fu;
+> +maintainers:
+> +  - Xin Ji <xji@analogixsemi.com>
 > +
-> +       iad_desc.bFirstInterface = status;
->         ac_interface_desc.bInterfaceNumber = status;
->         uac1->ac_intf = status;
->         uac1->ac_alt = 0;
-> --
-> 2.18.0
->
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - analogix,anx7411
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  connector:
+> +    type: object
+> +
+> +    allOf:
+> +      - $ref: ../connector/usb-connector.yaml
+
+additionalProperties: false
+(on the level of allOf)
+
+> +
+> +    properties:
+> +      compatible:
+> +        const: usb-c-connector
+> +
+> +      power-role: true
+> +
+> +      data-role: true
+> +
+> +      try-power-role: true
+> +
+> +    required:
+> +      - compatible
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - connector
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c1 {
+
+"i2c"
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        typec: anx7411@2C {
+
+generic node name, so maybe usb-typec?
+
+If fixed, keep Rob's Rb comment.
+
+> +            compatible = "analogix,anx7411";
+> +            reg = <0x2C>;
+> +            interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-parent = <&gpio0>;
+> +
+> +            typec_con: connector {
+> +                compatible = "usb-c-connector";
+> +                power-role = "dual";
+> +                data-role = "dual";
+> +                try-power-role = "source";
+> +
+> +                port {
+
+I think usb-c-connector requires "ports" node, doesn't it?
+
+> +                    typec_con_ep: endpoint {
+> +                        remote-endpoint = <&usbotg_hs_ep>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
+
+
+Best regards,
+Krzysztof
