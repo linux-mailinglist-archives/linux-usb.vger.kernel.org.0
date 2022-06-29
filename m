@@ -2,194 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165D755FCE8
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 12:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2DD55FD09
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 12:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbiF2KMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 06:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S233193AbiF2KVA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 06:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiF2KMi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 06:12:38 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BCC21258
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 03:12:37 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u12so31503102eja.8
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 03:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UQVs/vk3TXmyqHO0m20AymMZtMAnKjYQ1g4TBF6/kA4=;
-        b=tnbsHSwQFfXRfiqLQMLSrwpXtVEZKHjoZImczR4HSgCINnV15+SS3BgKi+MZ9GTu91
-         PwIy2TldEysT/aS+k6lpU5zR2HABIBWqHgagH8Dua908aU7MLwwpdtw8dlg9wHFlF8I7
-         E0OyC++4PcPlsKCYhvi92uu3JJEzJEeNyAaO54vjoOP/ERc+XrTTDrhxhi9rBIj4qYKg
-         jQqIiPMSGudU0xbc/8xyxGtCrCfNqZjLa7Jf2iVuxGs27tsnfFcH9RZq00A4Kkpm85P+
-         nqn1rQnACnMurA89newiVOdC6RJH2z7xdzXMhtaYI1TIC9IB4bPAJ7iZxFhOXAOySxXV
-         D2WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UQVs/vk3TXmyqHO0m20AymMZtMAnKjYQ1g4TBF6/kA4=;
-        b=kNT7/apNR8ud3XAm3TiW6p4eupdkjTS1PPr9g+m95h+0fY5HymQ53eRuvblaIyYMSE
-         VV4cM/cxzMzKj2SLgRq+CM7rtanexPTX8omTBF2h7uT4Nyx5DZJUDMAq7d97uwvaqVQD
-         CquVgqgSr+xLyFZayjYaEmXC9Gow/V/zs1ToZmA1pnLjceOPw5dCBpapghwUwL42ilXN
-         uEYFkU3f792iXvfgvWtw/ZfkYyi04g2P7Y36JLUx15DkyQktgomUcw1YqECqxS3Tiy9d
-         gpZX/jePGau632G4mjBCL7QX8ZuWC+ffwkYZedgF63N4gZNJphvI6RuBy27BE9mLYrhB
-         +Xyw==
-X-Gm-Message-State: AJIora9nMuMYpt1Qp893jM+kzaP1H7CNmTgC+enYcT4IFDadQbXg73NH
-        +FmbKd0EVe5iE+OvfMLMTNuNUw==
-X-Google-Smtp-Source: AGRyM1sjvx1wOPMp+bijYxCAGUlWcQdG9iZUFcyc5CG2oi0K7eSi07C87KiYcu9D21TT+wr8/GSRfA==
-X-Received: by 2002:a17:906:5305:b0:712:388c:2bf5 with SMTP id h5-20020a170906530500b00712388c2bf5mr2513089ejo.559.1656497556306;
-        Wed, 29 Jun 2022 03:12:36 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g5-20020a17090613c500b00722fb3c99bcsm7531482ejc.203.2022.06.29.03.12.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 03:12:35 -0700 (PDT)
-Message-ID: <f2b16788-32bd-a487-4087-66d876247fdb@linaro.org>
-Date:   Wed, 29 Jun 2022 12:12:29 +0200
+        with ESMTP id S233285AbiF2KU7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 06:20:59 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8360F2CDEA
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 03:20:57 -0700 (PDT)
+Date:   Wed, 29 Jun 2022 20:20:47 +1000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jookia.org; s=key1;
+        t=1656498055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WjcGeJFro2EiGRKcIX4snppxmD4eF5HXiDEKexHP+yY=;
+        b=kSBRLyelY2cd3rVGqFbRjRNh8KitJBGLaRlZAL6DpSRRMB4aYCMQTZD9QNfTtiCL5KfyHM
+        1S08HASIaxHrDt5Cj5aC/9Tm8bYgOa8t82LIuNX2CIhbEPCy7RFNuJ7n5pBpL0ucdWxpEo
+        wjKXyC6rzO2PpbLXhjRHMtgAYMd3ncjcWY+adf2sX7GA4do/E8hvtI1iQ+tPFDxukKVprP
+        2fKtAQqoyBsUTWae6B0yv2Q2vIAQWnpG+wo93oTUccx+Mb/aq2MpdbdRq6EN4MGq9xuSed
+        eAqkOIqsazP9ZDOWNVHAuxqIYQjsQ/bR+PLNHtijNAcLAdTh4/Z6Z/PjUS3t9Q==
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jookia <contact@jookia.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: acm_port_shutdown hangs for 30 seconds
+Message-ID: <Yrwnf8tR5CC53u2p@novena-choice-citizen>
+References: <YiynBKeGJCMEkgyO@novena-choice-citizen>
+ <YrmpLXcPeHW4fnvz@kroah.com>
+ <YrrILGzC2R3qGiHu@novena-choice-citizen>
+ <YrwPY0faDmVcjTqx@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v12 2/3] dt-bindings: usb: Add analogix anx7411 PD binding
-Content-Language: en-US
-To:     Xin Ji <xji@analogixsemi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220628044843.2257885-1-xji@analogixsemi.com>
- <20220628044843.2257885-2-xji@analogixsemi.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220628044843.2257885-2-xji@analogixsemi.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrwPY0faDmVcjTqx@kroah.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: jookia.org
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28/06/2022 06:48, Xin Ji wrote:
-> Add analogix PD chip anx7411 device binding
+On Wed, Jun 29, 2022 at 10:37:55AM +0200, Greg KH wrote:
+> The close is timing out as it tries to flush the data to the device
+> which is no longer responding.  So this kind of is expected behavior,
+> sorry.
+
+That makes sense. I'm guessing that changing this behaviour to be
+asynchronous would break applications that rely on the return code from
+close() to say EIO if it does that.
+
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> ---
->  .../bindings/usb/analogix,anx7411.yaml        | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-> new file mode 100644
-> index 000000000000..c5c6d5a9dc17
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/analogix,anx7411.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> greg k-h
 
-Drop the quotes from both places.
-
-> +
-> +title: Analogix ANX7411 Type-C controller bindings
-> +
-> +maintainers:
-> +  - Xin Ji <xji@analogixsemi.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - analogix,anx7411
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    type: object
-> +
-> +    allOf:
-> +      - $ref: ../connector/usb-connector.yaml
-
-additionalProperties: false
-(on the level of allOf)
-
-> +
-> +    properties:
-> +      compatible:
-> +        const: usb-c-connector
-> +
-> +      power-role: true
-> +
-> +      data-role: true
-> +
-> +      try-power-role: true
-> +
-> +    required:
-> +      - compatible
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - connector
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c1 {
-
-"i2c"
-
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        typec: anx7411@2C {
-
-generic node name, so maybe usb-typec?
-
-If fixed, keep Rob's Rb comment.
-
-> +            compatible = "analogix,anx7411";
-> +            reg = <0x2C>;
-> +            interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
-> +            interrupt-parent = <&gpio0>;
-> +
-> +            typec_con: connector {
-> +                compatible = "usb-c-connector";
-> +                power-role = "dual";
-> +                data-role = "dual";
-> +                try-power-role = "source";
-> +
-> +                port {
-
-I think usb-c-connector requires "ports" node, doesn't it?
-
-> +                    typec_con_ep: endpoint {
-> +                        remote-endpoint = <&usbotg_hs_ep>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof
+Jookia.
