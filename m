@@ -2,30 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E30F55F689
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 08:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15B455F6D8
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 08:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiF2G2n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 02:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S232234AbiF2Gln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 02:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiF2G2m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 02:28:42 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8292E27B2E;
-        Tue, 28 Jun 2022 23:28:41 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3AFBD67373; Wed, 29 Jun 2022 08:28:37 +0200 (CEST)
-Date:   Wed, 29 Jun 2022 08:28:37 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S229511AbiF2Gli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 02:41:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B8425C76;
+        Tue, 28 Jun 2022 23:41:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CE5AB82193;
+        Wed, 29 Jun 2022 06:41:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C8AC34114;
+        Wed, 29 Jun 2022 06:41:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656484894;
+        bh=VUdU1ZN0gTQSz41n281wqpCvgg5hDjrNyKaxOQ1mkWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MnKE4/OSuFQtLTiqSAMzWNNgin1pU5O0ltB0nO8+NNjT1seiimVqcDmx1Kf7GDsnG
+         a1jqthF+q/2fe4oLJFG3+ZaiRzIPPTxNyDgzjA90/QohX8K9143NSIBaG0vNVsMppZ
+         lZUDQFkMnCtwzJ/W1sAHLHAWg00kp+3Xcc5ulIqs=
+Date:   Wed, 29 Jun 2022 08:41:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Andre Przywara <andre.przywara@arm.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Gregory Clement <gregory.clement@bootlin.com>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Laurentiu Tudor <laurentiu.tudor@nxp.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -34,66 +46,27 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
 Subject: Re: fully convert arm to use dma-direct v3
-Message-ID: <20220629062837.GA17140@lst.de>
+Message-ID: <Yrv0HLSj3xAHa+av@kroah.com>
 References: <20220614092047.572235-1-hch@lst.de>
+ <20220629062837.GA17140@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614092047.572235-1-hch@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220629062837.GA17140@lst.de>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Any comments or additional testing?  It would be really great to get
-this off the table.
+On Wed, Jun 29, 2022 at 08:28:37AM +0200, Christoph Hellwig wrote:
+> Any comments or additional testing?  It would be really great to get
+> this off the table.
 
-On Tue, Jun 14, 2022 at 11:20:37AM +0200, Christoph Hellwig wrote:
-> Hi all,
-> 
-> arm is the last platform not using the dma-direct code for directly
-> mapped DMA.  With the dmaboune removal from Arnd we can easily switch
-> arm to always use dma-direct now (it already does for LPAE configs
-> and nommu).  I'd love to merge this series through the dma-mapping tree
-> as it gives us the opportunity for additional core dma-mapping
-> improvements.
-> 
-> Changes since v2:
->  - rebased to Linux 5.19-rc2
-> 
-> Changes since v1:
->  - remove another unused function
->  - improve a few commit logs
->  - add three more patches from Robin
-> 
-> Diffstat:
->  arch/arm/common/dmabounce.c                          |  582 -----------------
->  arch/arm/include/asm/dma-mapping.h                   |  128 ---
->  b/arch/arm/Kconfig                                   |    5 
->  b/arch/arm/common/Kconfig                            |    6 
->  b/arch/arm/common/Makefile                           |    1 
->  b/arch/arm/common/sa1111.c                           |   64 -
->  b/arch/arm/include/asm/device.h                      |    3 
->  b/arch/arm/include/asm/dma-direct.h                  |   49 -
->  b/arch/arm/include/asm/memory.h                      |    2 
->  b/arch/arm/mach-footbridge/Kconfig                   |    1 
->  b/arch/arm/mach-footbridge/common.c                  |   19 
->  b/arch/arm/mach-footbridge/include/mach/dma-direct.h |    8 
->  b/arch/arm/mach-footbridge/include/mach/memory.h     |    4 
->  b/arch/arm/mach-highbank/highbank.c                  |    2 
->  b/arch/arm/mach-mvebu/coherency.c                    |    2 
->  b/arch/arm/mm/dma-mapping.c                          |  649 ++-----------------
->  b/drivers/usb/core/hcd.c                             |   17 
->  b/drivers/usb/host/ohci-sa1111.c                     |   25 
->  18 files changed, 137 insertions(+), 1430 deletions(-)
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
----end quoted text---
+For the USB bits:
+
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
