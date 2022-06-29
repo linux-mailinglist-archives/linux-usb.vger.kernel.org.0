@@ -2,60 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15B455F6D8
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 08:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF1355F6F0
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 08:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiF2Gln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 02:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S231506AbiF2GmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 02:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiF2Gli (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 02:41:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B8425C76;
-        Tue, 28 Jun 2022 23:41:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CE5AB82193;
-        Wed, 29 Jun 2022 06:41:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C8AC34114;
-        Wed, 29 Jun 2022 06:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656484894;
-        bh=VUdU1ZN0gTQSz41n281wqpCvgg5hDjrNyKaxOQ1mkWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MnKE4/OSuFQtLTiqSAMzWNNgin1pU5O0ltB0nO8+NNjT1seiimVqcDmx1Kf7GDsnG
-         a1jqthF+q/2fe4oLJFG3+ZaiRzIPPTxNyDgzjA90/QohX8K9143NSIBaG0vNVsMppZ
-         lZUDQFkMnCtwzJ/W1sAHLHAWg00kp+3Xcc5ulIqs=
-Date:   Wed, 29 Jun 2022 08:41:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: fully convert arm to use dma-direct v3
-Message-ID: <Yrv0HLSj3xAHa+av@kroah.com>
-References: <20220614092047.572235-1-hch@lst.de>
- <20220629062837.GA17140@lst.de>
+        with ESMTP id S230499AbiF2GmB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 02:42:01 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A59DD25C76;
+        Tue, 28 Jun 2022 23:41:58 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id ADC551E80D11;
+        Wed, 29 Jun 2022 14:40:47 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id foXwxc0emph8; Wed, 29 Jun 2022 14:40:45 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 753831E80CDC;
+        Wed, 29 Jun 2022 14:40:44 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] USB: serial: io_edgeport: Fix spelling mistake
+Date:   Wed, 29 Jun 2022 14:41:53 +0800
+Message-Id: <20220629064153.23476-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629062837.GA17140@lst.de>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,10 +45,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 08:28:37AM +0200, Christoph Hellwig wrote:
-> Any comments or additional testing?  It would be really great to get
-> this off the table.
+Change 'paramater' to 'parameter'.
+Change 'timedout' to 'timeout'.
 
-For the USB bits:
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+---
+ drivers/usb/serial/io_edgeport.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
+index bdee78cc4a07..ffa622539a25 100644
+--- a/drivers/usb/serial/io_edgeport.c
++++ b/drivers/usb/serial/io_edgeport.c
+@@ -220,7 +220,7 @@ struct edgeport_serial {
+ 	__u8			rxHeader3;			/* receive header byte 3 */
+ 	__u8			rxPort;				/* the port that we are currently receiving data for */
+ 	__u8			rxStatusCode;			/* the receive status code */
+-	__u8			rxStatusParam;			/* the receive status paramater */
++	__u8			rxStatusParam;			/* the receive status parameter */
+ 	__s16			rxBytesRemaining;		/* the number of port bytes left to read */
+ 	struct usb_serial	*serial;			/* loop back to the owner of this object */
+ };
+@@ -901,7 +901,7 @@ static int edge_open(struct tty_struct *tty, struct usb_serial_port *port)
+ 
+ 	if (!edge_port->open) {
+ 		/* open timed out */
+-		dev_dbg(dev, "%s - open timedout\n", __func__);
++		dev_dbg(dev, "%s - open timeout\n", __func__);
+ 		edge_port->openPending = false;
+ 		return -ENODEV;
+ 	}
+-- 
+2.34.1
+
