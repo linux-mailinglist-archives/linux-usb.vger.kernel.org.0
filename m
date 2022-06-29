@@ -2,86 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1F1560CD8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 00:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCAA560D87
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 01:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiF2W5T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 18:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S231878AbiF2XeD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 19:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiF2W4C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 18:56:02 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB22840906
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 15:55:23 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id i15so30684296ybp.1
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 15:55:23 -0700 (PDT)
+        with ESMTP id S231891AbiF2Xdi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 19:33:38 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2159726540
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 16:33:25 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 145so2668204pga.12
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 16:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y5ZTGoJWK8uoT//Ot+7y7C0qNgpOLHB415dUDB/bM2E=;
-        b=V3LS6TmSOlPaVFdCJ0BuXUrJbm9ByWprG9K7HC9tmT10nT8kfB2ueJ5fw4gRIIgxsi
-         hjQth58XT0ZxT0rxLmC8XnJOOZcs0sOOmkAhVhQjxsBBiXzh28ez6t7aGFLuC4jmRjdN
-         rqWdKH92Zyx+IbHkg8Og4+2IlarHko6eURmHQ=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NsipExiNrrBArXSMUQqN1JMJ/FxaIb/dWMMG0KzbrOs=;
+        b=SKirdDWUbEM76rroMI+QFGcjo0pejKbbRpxDG17OH945v0BbXptuePFWmUkJdnAjDC
+         S2EtS1whCoRGxKcli1T6cnbE4abqW5bDlGUTDrhNt8ay53FxRSaV/ejtnhfaORpv9NCG
+         reeo1rMi9rtgrltdEO9o+VyWwTH8lMHh0bRjA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y5ZTGoJWK8uoT//Ot+7y7C0qNgpOLHB415dUDB/bM2E=;
-        b=XjPuSgNXY8CQm6qze0Fu2CVgCgGCp39fU0fBmHC+OqNfphpazfPH5Peiwn+nwug7Lb
-         TxVxCI/F+VBoTzDq746XGc2T+A9yyTR0URMUchW614f7joe0+FLmvVgmS0QE1iRpd6Ks
-         wwF3iyOMHD2RY5SlBgZN0MorreLKsMuUfehUio9ZvIP6nLcUICwXMMnWNSQNkEBD5eMs
-         SfgXYQAVKt0F9O9spRInOQ/bkYnaKgKxHze9y8zEdz19RZgZF+W7iz3z5nEp/I/KdwBq
-         IsAjx/wSrvhH9fxaqXGMsP9hxokIPiCZU5pNxwy6dmZUoyHzHYQNvef24rT7xXRgAfTQ
-         rX9w==
-X-Gm-Message-State: AJIora9Tf+N/Ktpyf3in2DBkyRaxaTZvtCy/ETvzA+HvSPTzu7oyoD4r
-        v6RB7DRIXI17fbISXfDr2E7oH8hZHhyXWFhcLeWSjg==
-X-Google-Smtp-Source: AGRyM1vYoOdLWULQbH68SDkQmn0KXQiOTLkNIVGkUaz44XEXYq1Av98xn5aI+4eBZ+6aEtA9QjkYgcCPn8rqByb70u4=
-X-Received: by 2002:a25:bcc:0:b0:66c:b80a:2d5 with SMTP id 195-20020a250bcc000000b0066cb80a02d5mr6437342ybl.196.1656543322872;
- Wed, 29 Jun 2022 15:55:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
- <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
- <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
- <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
- <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com> <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
-In-Reply-To: <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NsipExiNrrBArXSMUQqN1JMJ/FxaIb/dWMMG0KzbrOs=;
+        b=iKzHknJoRMwxGQSkvdpfzwp+bwLtVLXj/Xb1mHl5GrdTR97ZK+TX8+KgAVnFx9suJE
+         8Ku6HBghQa7YPSY6VwB1U6SadCRUNbEn52UHsbLmj6aIQpi9raQfV+Nfeg+ytc5/9aHx
+         FTwxisH0gkSaae3pQCazyH2cGuvD5toh1wbPj1ZogzIT7ttbEnnloqjVSZ8Rhcgouusw
+         24V7tB0wjHg3lVi9bLLG0EkhI6GChkuteCPrvFkPL62TUA91iDEeXVllqaNcT+8n2uab
+         ZXNhBsCRrto5ck6A+zEdAXqUfkh8bzvefrQMCkAhGNxu6uqcR9eQl6F0IbrphGtgsKgc
+         UZOA==
+X-Gm-Message-State: AJIora9gmnaRDUubj9+JowXm2Bo4Jj+334zIBE4SKE/VorVCk9Zq6AKA
+        keoslmwMphiN6TJBogay5B6RVw==
+X-Google-Smtp-Source: AGRyM1uT9ojCPeeZmZxFDwuVbWK511n55nDUuKeiOFARtW8UIDcnyVk/Bdy/frMbZN1So/MlNR5MRg==
+X-Received: by 2002:a05:6a00:10c3:b0:525:40fe:6e8d with SMTP id d3-20020a056a0010c300b0052540fe6e8dmr12497366pfu.38.1656545604547;
+        Wed, 29 Jun 2022 16:33:24 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id rm1-20020a17090b3ec100b001ed27d132c1sm127305pjb.2.2022.06.29.16.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jun 2022 16:33:23 -0700 (PDT)
 From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 29 Jun 2022 15:55:10 -0700
-Message-ID: <CACeCKacJnnk4_dXEX7XiboOWrYpfAcE=ukP63agVAYUxWR9Vbg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Subject: [PATCH 0/9] platform/chrome: Type-C switch driver and Type-C framework updates
+Date:   Wed, 29 Jun 2022 23:32:18 +0000
+Message-Id: <20220629233314.3540377-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -92,135 +73,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 2:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> > What device controls the switching in this case? Again, block diagrams
-> > please if you want advice on what the binding should look like.
->
-> My understanding is there are 4 DP lanes on it6505 and two lanes are
-> connected to one usb-c-connector and the other two lanes are connected
-> to a different usb-c-connector. The IT6505 driver will send DP out on
-> the associated two DP lanes depending on which usb-c-connector has DP
-> pins assigned by the typec manager.
->
->                                                      +-------+
->                                                      |       |
->           +--------+                            /----+ usb-c |
->           | IT6505 |                           / /---+       |
->           |        +------------ lane 0 ------/ /    |       |
->           |        +------------ lane 1 -------/     +-------+
->  DPI -----+        |
->           |        |                                 +-------+
->           |        |                                 |       |
->           |        +------------ lane 2 -------------+ usb-c |
->           |        +------------ lane 3 -------------+       |
->           |        |                                 |       |
->           +--------+                                 +-------+
->
-> The bridge is a mux that steers DP to one or the other usb-c-connector
-> based on what the typec manager decides.
->
-> I would expect this to be described with the existing port binding in
-> the it6505 node. The binding would need to be extended to describe the
-> output side.
->
->         bridge@5c {
->             compatible = "ite,it6505";
+This series introduces a retimer class to the USB Type-C framework,
+It also introduces a Chrome EC (Embedded Controller) switch driver which
+registers the aforementioned retimer switches as well as mode-switches.
 
-We'll need a top level "mode-switch" property here.
->             ...
->
->             ports {
->                 #address-cells = <1>;
->                 #size-cells = <0>;
->
->                 port@0 {
->                     reg = <0>;
->                     it6505_in: endpoint {
->                         remote-endpoint = <&dpi_out>;
->                     };
->                 };
->
->                 port@1 {
->                     #address-cells = <1>;
->                     #size-cells = <0>;
->                     reg = <1>;
->
->                     it6505_out_lanes_01: endpoint@0 {
->                         reg = <0>
->                         data-lanes = <0 1>;
->                         remote-endpoint = <&typec0>;
->                     };
->
->                     it6505_out_lanes_23: endpoint@1 {
->                         reg = <1>
->                         data-lanes = <2 3>;
->                         remote-endpoint = <&typec1>;
->                     };
->                 };
->             };
->         };
->
->         usb-c-connector {
->             compatible = "usb-c-connector";
->             ....
->             ports {
->                 #address-cells = <1>;
->                 #size-cells = <0>;
->
->                 port@1 {
->                     reg = <1>;
->                     typec0: endpoint {
->                         remote-endpoint = <&it6505_out_lanes_01>;
->                     };
->                 };
->             };
->         };
+Patch 1 and 2 introduce the retimer class and associated functions to
+the Type-C common code.
 
-We can adopt this binding, but from what I gathered in this thread, that
-shouldn't be done, because IT6505 isn't meant to be aware of Type-C
-connections at all.
+Patches 3-7 add the cros-typec-switch driver
 
->
-> I don't see the benefit to making a genericish binding for typec
-> switches, even if the hardware has typec awareness like anx7625. It
-> looks like the graph binding can already handle what we need. By putting
-> it in the top-level ports node we have one way to describe the
-> input/output of the device instead of describing it in the top-level in
-> the display connector case and the child typec switch node in the usb c
-> connector case.
+Patches 8-9 update cros-ec-typec to get and use retimer switch handles
 
-Ack, I'll drop the generic binding for future revisions.
+Submission suggestion (as always, open to better suggestions):
+- Patch 1 and 2 can go through the USB repo.
+- Patch 3-9 can go through the chrome-platform repo. Since they depend
+  on patches 1 and 2, we can create an "topic branch" off of
+  usb-next once Patch 1 and 2 are submitted, and then apply Patches 3-9
+  on top of that "topic branch" before merging it back into
+  chrome-platform's for-next branch
 
->
-> I think the difficulty comes from the combinatorial explosion of
-> possible configurations. As evidenced here, hardware engineers can take
-> a DP bridge and use it as a DP mux as long as the bridge has lane
-> control. Or they can take a device like anx7625 and ignore the USB
-> aspect and use the internal crosspoint switch as a DP mux. The anx7625
-> part could be a MIPI-to-DP display bridge plus mux that is connected to
-> two dp-connectors, in which case typec isn't even involved, but we could
-> mux between two dp connectors.
+Prashant Malani (9):
+  usb: typec: Add support for retimers
+  usb: typec: Add retimer handle to port
+  platform/chrome: Add Type-C mux set command definitions
+  platform/chrome: cros_typec_switch: Add switch driver
+  platform/chrome: cros_typec_switch: Set EC retimer
+  platform/chrome: cros_typec_switch: Add event check
+  platform/chrome: cros_typec_switch: Register mode switches
+  platform/chrome: cros_ec_typec: Cleanup switch handle return paths
+  platform/chrome: cros_ec_typec: Get retimer handle
 
-Each containing a single DP lane, right?
-I think that will not be a valid configuration, since there is only 1 HPD
-pin (so it's assuming both DP lanes go to the same DP sink).
+ MAINTAINERS                                   |   1 +
+ drivers/platform/chrome/Kconfig               |  11 +
+ drivers/platform/chrome/Makefile              |   1 +
+ drivers/platform/chrome/cros_ec_typec.c       |  50 ++-
+ drivers/platform/chrome/cros_typec_switch.c   | 332 ++++++++++++++++++
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/class.c                     |  17 +-
+ drivers/usb/typec/class.h                     |   2 +
+ drivers/usb/typec/retimer.c                   | 168 +++++++++
+ drivers/usb/typec/retimer.h                   |  15 +
+ .../linux/platform_data/cros_ec_commands.h    |  18 +
+ include/linux/usb/typec_retimer.h             |  45 +++
+ 12 files changed, 653 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_typec_switch.c
+ create mode 100644 drivers/usb/typec/retimer.c
+ create mode 100644 drivers/usb/typec/retimer.h
+ create mode 100644 include/linux/usb/typec_retimer.h
 
-But yes, your larger point is valid: h/w engineers can repurpose these
-bridges in ways the datasheet doesn't originally anticipate.
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
->
-> Also, the typec framework would like to simply walk the graph from the
-> usb-c-connector looking for nodes that have 'mode-switch' or
-> 'orientation-switch' properties and treat those devices as the typec
-> switches for the connector. This means that we have to add these typec
-> properties like 'mode-switch' to something like the IT6505 bridge
-> binding, which is a little awkward. I wonder if those properties aren't
-> really required. Would it be sufficient if the framework could walk the
-> graph and look for registered typec switches in the kernel that have a
-> matching of_node?
-
-My interpretation of the current mode-switch search code [1] is that
-a top level property of "mode-switch" is required.
-
-[1] https://elixir.bootlin.com/linux/v5.19-rc4/source/drivers/usb/typec/mux.c#L347
