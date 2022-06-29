@@ -2,63 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED7056033B
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 16:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F63D5603C5
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 17:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbiF2OiV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 10:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S233608AbiF2PBK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 11:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233528AbiF2OiU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 10:38:20 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25B4A18A
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 07:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656513498; x=1688049498;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=CYqsnQizauRVZ0RBQFQ0+BY4c3cHQsqdAtjRMkQPohc=;
-  b=hg88DWUkyM+GGhVnpzKMnQHU8nLpYfTEhc5WUOw3BWZYTR3ZxuwJjgZa
-   rTcOCzJhtIFbbFJoVW/LPjhBdnrgA20ySoTy4pCRW0T01ZB7noyYkx3CO
-   ClrUVgxwbwD0S5l3w5s7HBZAfO01O8Ybi4jkXq6czjL3V5qAwogH7ZcMH
-   zh9G4CQEIi41cILqx3UDo2LpbvSHqvHM0S8HQpzPfAl2E0BXizIPf5ymR
-   o3760KVyA1yrSyWUo3HBtRmjQk7yFne/pWIMPFRSjwBCZ5Ft0TQyAoV8k
-   63ns+bNnjBg+45tDOG7xxxcBzPyMzQNDI08crlWq2vSkGgoCgZhCav/je
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="280808536"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="280808536"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 07:38:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="733202416"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jun 2022 07:38:17 -0700
-Message-ID: <cdd5b0b2-cfcd-3c25-6b77-2d20ebfc97c5@linux.intel.com>
-Date:   Wed, 29 Jun 2022 17:39:49 +0300
+        with ESMTP id S233482AbiF2PBJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 11:01:09 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBC824967
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 08:01:05 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r20so22920252wra.1
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 08:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BFTLOzROIiPqmhqAxyhqbA3c4cCfg2+85Lj08j7lKrc=;
+        b=KSZCIsiOiM5lSrD/SN2KobYz6mYvLmSMkmIYAm6jJkx0besT50xI2w+S/fmkjIc5Lt
+         CiENPRHqyHQnjG2/XUvVms/IdIjuXzpiz279AxabuBLqetXpajQmuQgYJYEvWegsAq7m
+         g0N0kPNt3eOX0cgC7K0dpvGCTGIkeo0W03voU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BFTLOzROIiPqmhqAxyhqbA3c4cCfg2+85Lj08j7lKrc=;
+        b=mQPd1+avkuF+T0ADpq0NaTaLAjTQy9iHxh1WFAL3m2S2ZzAHFANTVg27NdwEY/IT5m
+         Mtp+OqkqaA/64JziJFBHYYYYV+bHk6v9fSbl8kAn/DDQX8uT2EH7QetrxN86xFxl7eoG
+         ybK51fdWx0kbLCkB5u9t5zrZgXxTixUAHP8ISFwI1Q/0gThunuujJLD0ALE1BBOnsrnh
+         DXZwG69K40Y9sa09ROexMGbrlcPNDHI5QLlibmXQ1QzfAnBxks/RY0S31GKMr5DJnh4U
+         0HrH5OZXcCNqq4hvJwmi2BZTbrzDwY03GgjERnw9DO0zEv6T1fE7wmT6Oa/jf+bjyUR6
+         OswA==
+X-Gm-Message-State: AJIora/304YwPlL8ruIHmTN3LCx3AJ/NZKNsfxT1Xu5I0HEB874huhsU
+        HM36Mz2ypoNYl5cwnveiCng6H1nO1i6GaAwzd0Lwbw==
+X-Google-Smtp-Source: AGRyM1sfGDisJPMkurvd0csySTU2fbtpR7bD1RXmyKvioUnsN/Dz9FmiK+aIh31YNygfWB8TUXd60BEck363CaWXJJY=
+X-Received: by 2002:a05:6000:1245:b0:21b:83b2:191c with SMTP id
+ j5-20020a056000124500b0021b83b2191cmr3611692wrx.493.1656514864306; Wed, 29
+ Jun 2022 08:01:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Content-Language: en-US
-To:     =?UTF-8?B?SsO2cmcgUsO2ZGVs?= <jroedel@suse.de>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jon Grimm <jon.grimm@amd.com>,
-        "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
-References: <YrXMY0Nd0Yn6XDSN@suse.de>
- <8917c751-76dc-98d3-83ac-652aa2249b7d@linux.intel.com>
- <YrqzGpuLdNrbfHL5@suse.de>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: DMA Faults with XHCI driver
-In-Reply-To: <YrqzGpuLdNrbfHL5@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <20220627210407.GA2905757-robh@kernel.org>
+ <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
+ <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+In-Reply-To: <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Wed, 29 Jun 2022 23:00:53 +0800
+Message-ID: <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,102 +92,186 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28.6.2022 10.51, Jörg Rödel wrote:
-> Hi Mathias,
-> 
-> thanks a lot for your reply.
-> 
-> On Mon, Jun 27, 2022 at 01:52:44PM +0300, Mathias Nyman wrote:
->> Add to kernel cmdline:
->> xhci_hcd.dyndbg=+p trace_event=xhci-hcd trace_buf_size=80M
->> <boot>
->> mount -t debugfs none /sys/kernel/debug
->> Send output of dmesg
->> Send content of /sys/kernel/debug/tracing/trace
->>
->> Also if you could dump the content of following registers:
->> cat /sys/kernel/debug/usb/xhci/<pci address>/reg-op
->> cat /sys/kernel/debug/usb/xhci/<pci address>/reg-runtime
->>
->> xhci driver writes dma addresses it allocated for the host into
->> some of those registers
-> 
-> The data you requested is in the attached archive. The trace was
-> actually empty. My kernel has tracing enabled in general, do I need to
-> enable more config options to get the trace?
-> 
+On Wed, Jun 29, 2022 at 10:33 PM Pin-yen Lin <treapking@chromium.org> wrote=
+:
+>
+> On Wed, Jun 29, 2022 at 2:23 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Mon, Jun 27, 2022 at 02:43:39PM -0700, Prashant Malani wrote:
+> > > Hello Rob,
+> > >
+> > > On Mon, Jun 27, 2022 at 2:04 PM Rob Herring <robh@kernel.org> wrote:
+> > > >
+> > > > On Wed, Jun 22, 2022 at 05:34:30PM +0000, Prashant Malani wrote:
+> > > > > Introduce a binding which represents a component that can control=
+ the
+> > > > > routing of USB Type-C data lines as well as address data line
+> > > > > orientation (based on CC lines' orientation).
+> > > > >
+> > > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregn=
+o@collabora.com>
+> > > > > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com=
+>
+> > > > > Tested-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > > > > ---
+> > > > >
+> > > > > Changes since v4:
+> > > > > - Added Reviewed-by tags.
+> > > > > - Patch moved to 1/9 position (since Patch v4 1/7 and 2/7 were
+> > > > >   applied to usb-next)
+> > > > >
+> > > > > Changes since v3:
+> > > > > - No changes.
+> > > > >
+> > > > > Changes since v2:
+> > > > > - Added Reviewed-by and Tested-by tags.
+> > > > >
+> > > > > Changes since v1:
+> > > > > - Removed "items" from compatible.
+> > > > > - Fixed indentation in example.
+> > > > >
+> > > > >  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++=
+++++++
+> > > > >  1 file changed, 74 insertions(+)
+> > > > >  create mode 100644 Documentation/devicetree/bindings/usb/typec-s=
+witch.yaml
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.y=
+aml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..78b0190c8543
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > > @@ -0,0 +1,74 @@
+> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: USB Type-C Switch
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Prashant Malani <pmalani@chromium.org>
+> > > > > +
+> > > > > +description:
+> > > > > +  A USB Type-C switch represents a component which routes USB Ty=
+pe-C data
+> > > > > +  lines to various protocol host controllers (e.g USB, VESA Disp=
+layPort,
+> > > > > +  Thunderbolt etc.) depending on which mode the Type-C port, por=
+t partner
+> > > > > +  and cable are operating in. It can also modify lane routing ba=
+sed on
+> > > > > +  the orientation of a connected Type-C peripheral.
+> > > > > +
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    const: typec-switch
+> > > > > +
+> > > > > +  mode-switch:
+> > > > > +    type: boolean
+> > > > > +    description: Specify that this switch can handle alternate m=
+ode switching.
+> > > > > +
+> > > > > +  orientation-switch:
+> > > > > +    type: boolean
+> > > > > +    description: Specify that this switch can handle orientation=
+ switching.
+> > > > > +
+> > > > > +  ports:
+> > > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > > +    description: OF graph binding modelling data lines to the Ty=
+pe-C switch.
+> > > > > +
+> > > > > +    properties:
+> > > > > +      port@0:
+> > > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > > +        description: Link between the switch and a Type-C connec=
+tor.
+> > > > > +
+> > > > > +    required:
+> > > > > +      - port@0
+> > > > > +
+> > > > > +required:
+> > > > > +  - compatible
+> > > > > +  - ports
+> > > > > +
+> > > > > +anyOf:
+> > > > > +  - required:
+> > > > > +      - mode-switch
+> > > > > +  - required:
+> > > > > +      - orientation-switch
+> > > > > +
+> > > > > +additionalProperties: true
+> > > > > +
+> > > > > +examples:
+> > > > > +  - |
+> > > > > +    drm-bridge {
+> > > > > +        usb-switch {
+> > > > > +            compatible =3D "typec-switch";
+> > > >
+> > > > Unless this child is supposed to represent what the parent output i=
+s
+> > > > connected to, this is just wrong as, at least for the it6505 chip, =
+it
+> > > > doesn't know anything about Type-C functionality. The bridge is
+> > > > just a protocol converter AFAICT.
+> > >
+> > > I'll let Pin-Yen comment on the specifics of the it6505 chip.
+> >
+> > We're all waiting...
+>
+> Yes it6505 is just a protocol converter. But in our use case, the output =
+DP
+> lines are connected to the Type-C ports and the chip has to know which
+> port has DP Alt mode enabled. Does this justify a child node here?
+>
+> Does it make more sense if we we eliminate the usb-switch node here
+> and list the ports in the top level?
+> >
+> > > > If the child node represents what the output is connected to (like =
+a
+> > > > bus), then yes that is a pattern we have used.
+> > >
+> > > For the anx7625 case, the child node does represent what the output i=
+s connected
+> > > to (the usb-c-connector via the switch). Does that not qualify? Or do=
+ you mean
+> > > the child node should be a usb-c-connector itself?
+> > >
+> > > > For example, a panel
+> > > > represented as child node of a display controller. However, that on=
+ly
+> > > > works for simple cases, and is a pattern we have gotten away from i=
+n
+> > > > favor of using the graph binding.
+> > >
+> > > The child node will still use a OF graph binding to connect to the
+> > > usb-c-connector.
+> > > Is that insufficient to consider a child node usage here?
+> > > By "using the graph binding", do you mean "only use the top-level por=
+ts" ?
+> > > I'm trying to clarify this, so that it will inform future versions an=
+d patches.
+> >
+> > What I want to see is block diagrams of possible h/w with different
+> > scenarios and then what the binding looks like in those cases. The
+> > switching/muxing could be in the SoC, a bridge chip, a Type C
+> > controller, a standalone mux chip, or ????. If you want a somewhat
+> > genericish binding, then you need to consider all of these.
 
-Thanks, not sure about which tracing option is missing.
+Then, is it suitable to put the switch binding into the drivers own binding=
+s
+(i.e., the bindings for it6505 and anx7625), and introduce some helper
+functions to eliminate the duplication in the code?
+Though we will have two similar bindings in two drivers with this approach.
 
-You might be right about mangling DMA addresses above 32bit.
-At least that address looks a lot like the command ring DMA address with a
-higher byte zeroed.
-
-Driver allocates and maps memory for the command ring at DMA 0xffffffffffefe000:
-
-[    6.698051] xhci_hcd 0000:02:00.0: First segment DMA is 0xffffffffffefe000
-[    6.698053] xhci_hcd 0000:02:00.0: // Setting command ring address to 0xffffffffffefe001
-
-That address is stored in a 64 bit CRCR register (mmio at xhci->op_regs->cmd_ring)
-by writing low 32 bits first, then high 32 bits.
-
-The AMD-Vi IO_PAGE_FAULT for accessing 0xff00ffffffefe000 comes right after driver
-asked xHC to process commands from the command ring (the Ding dong! message)
-xHC device reads the commands from the DMA address written to the CRCR register.
-The faulty address has the same lower 32 bits as the command ring we allocated.
-
-[    6.880028] xhci_hcd 0000:02:00.0: // Ding dong!
-[    6.880045] xhci_hcd 0000:02:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000f address=0xff00ffffffefe000 flags=0x0000]
-
-Can't find a reason for zeroed bits in the upper 32 bit part.
-Looks like we always write all 64 bits to CRCR register.
-
-Maybe a race where command ring is started while writing high 32 bits to CRCR?
-Writing address bits to CRCR register are ignored if command ring is running.
-
-Also looks like roothub might be runtime suspending just before the issue.
-
-Anyway, maybe flushing the CRCR register by reading it back after writing it would help:
-
----
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 8c19e151a945..e54829898a2c 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2473,6 +2473,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
-                         "// Setting command ring address to 0x%016llx", val_64);
-         xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
-  
-+       xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
-+
-         /* Reserve one command ring TRB for disabling LPM.
-          * Since the USB core grabs the shared usb_bus bandwidth mutex before
-          * disabling LPM, we only need to reserve one TRB for all devices.
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 46d0b9ad6f74..721715ba5085 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -390,6 +390,9 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
-         crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
-         xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
-  
-+       xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
-+
-         /* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
-          * completion of the Command Abort operation. If CRR is not negated in 5
-          * seconds then driver handles it as if host died (-ENODEV).
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 9ac56e9ffc64..6180a721693d 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -854,6 +854,8 @@ static void xhci_set_cmd_ring_deq(struct xhci_hcd *xhci)
-                         "// Setting command ring address to 0x%llx",
-                         (long unsigned long) val_64);
-         xhci_write_64(xhci, val_64, &xhci->op_regs->cmd_ring);
-+
-+       xhci_read_64(xhci, &xhci->op_regs->cmd_ring);
-  }
-  
-  /*
-
+> >
+> > I don't really have the b/w to work thru all this (and switch/mux is
+> > just one part of dealing with Type-C). This is just one of about a
+> > hundred patches I get to review a week.
+> >
+> > Rob
