@@ -2,732 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5C855FD96
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 12:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43CD55FF35
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jun 2022 14:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbiF2KlH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 06:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
+        id S232804AbiF2MB1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 08:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiF2KlE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 06:41:04 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED143E0C1;
-        Wed, 29 Jun 2022 03:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656499262; x=1688035262;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=R8VB6/tjMDgTxKnue93AU4hdI5XOBKB8dDAwO/qOwjg=;
-  b=nP2egLQDaZ77vNECafRiIqybpfmzq1pYkQkHVEh6iAAp1AxjadNoy9bB
-   SVE6KOcWsaRjv9e5kEkFZ87jNtglU/EG954OwOOW51Bw6JWA338QuQl7S
-   PK9hbVoS6mKOnjusCl/DMBbjb5PfJ9OOqYagz0YuTJCSIwd37xv5T6huS
-   Wt16jeMF4EP5RlJy3rtZGnZ9O3T54idMQvOghmaBrvAyhnXYLAipwWyW0
-   in6NH4H2ybwXyCpESrMq3NOz7EsETkcfWNNn0vvCEnXlE3HMF8ev4k27u
-   RjeggAU12ucW+9JpjvAeXGjnzQ7//gERLtS1g/4mQ5faeLu0iX6Q1315p
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="343686249"
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="343686249"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 03:40:54 -0700
-X-IronPort-AV: E=Sophos;i="5.92,231,1650956400"; 
-   d="scan'208";a="617536648"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2022 03:40:46 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o6V7i-000xcv-MD;
-        Wed, 29 Jun 2022 13:40:42 +0300
-Date:   Wed, 29 Jun 2022 13:40:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <YrwsKnRZqksuTCVe@smile.fi.intel.com>
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S233293AbiF2MBZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 08:01:25 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2077.outbound.protection.outlook.com [40.107.20.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EC43FBC9
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jun 2022 05:01:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BMwjZrhhNzkrDvzGPubgOp7UVxPMS1UKSCZdtmh+j76phlKGbpL44iudn7X5Hd6+FmUw2I1YOxDW2Wygubhp6BgiLgOLsnh7u3anrWHm5Z1iE4n0GdE4hd9o5LMD2KXrAo579JcYAvkXO0foQqX+npI8GiJtVXkHPNFOIbgo8VZQv3aLnENcLuVxrDVUKVpysqdj5Ahweb/QmK06hLSqoNVj+IcPs5RmWIbcrWPYmJiam8LAfA118fraZ0akpLDVfu7E4j3GaNFhnotk8cEjzJkS1czBI7H23F7DcIURKH5rkSpJqs5+2FPR3lt1iN/6iAFOmnvk6QE7Kjnd3V5V+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D0kAsGnv5YeaIPs8Q740voakgnwm2hMjplJvGu87dSA=;
+ b=SmQbrRUn7oyffw4WDuTDcusYtZChUUqI04CbnHVyJ0+PzaxwQZltZRynGnGL17i47ZFGOQ4DNSIHXEyM6z0euSnetHK/Qr7mg/Gu9odUEv/lMpt0ns8gVz3M1Z+V4+ssO/Yg3qGkO2mRCQ3QnY3dwPg9glXsj1v57/GHZokNVReaHC86fANmN6R5uHkGJVlhUU8zPC97sqcLQSwQzVC+BCaEzn2LySmqZFADOxpmsUFY4YU6b8+0mEKisCp6Q8T1Tjdw1coxw1xTVFHKoWx/V35FEDi+xVkOVC3orONkjblKqJUpryGItxekm+YKSkXlpm+GJ7yajX3K61arjdJA5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D0kAsGnv5YeaIPs8Q740voakgnwm2hMjplJvGu87dSA=;
+ b=EahVqg+nfXHI7z7T5qyoh7cYLZnvIYCnGIXFnmOcNYiXUH/XJWIvLqczDhldCAYIPgInNDc4rriVEpG5/TQqSqmrERhGuX7WAZBXmkt5mosmbo/YaNh6P18Lu5pM/QPGgnbFe7hI0cTyrEExfxz6R2WNYTSXTtxo3WAd8WshRLuQtjZ7yytU/IqM/tJdt7M+lOyF0u7MYaoqCNQ3daBFS6XFlioC51oxhquJ8pZ3lKGFVXsKL+z3e2u/7yyYcIl4+fMx/iDe08wwzb5Rw/GydnvkyR1nqkdB/EGOAoWYJGgDn5C1vq7KJ/0ZqqHJhLUj938+xPCbhJTOUrj6hsHORg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16) by VI1PR0402MB2735.eurprd04.prod.outlook.com
+ (2603:10a6:800:b5::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Wed, 29 Jun
+ 2022 12:01:20 +0000
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::21d5:a855:6e65:cf5d]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::21d5:a855:6e65:cf5d%12]) with mapi id 15.20.5395.014; Wed, 29 Jun
+ 2022 12:01:20 +0000
+Message-ID: <78bf969a-2936-1eee-9d07-9c1694b25761@suse.com>
+Date:   Wed, 29 Jun 2022 14:01:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: acm_port_shutdown hangs for 30 seconds
+Content-Language: en-US
+To:     Jookia <contact@jookia.org>, linux-usb@vger.kernel.org
+References: <YiynBKeGJCMEkgyO@novena-choice-citizen>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <YiynBKeGJCMEkgyO@novena-choice-citizen>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0053.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::17) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f6babcdb-f1fa-4e76-eae0-08da59c7143e
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB2735:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gkx4r0JlFKcw4cQpsR2txKzFmGMFXty3CmdGzVcHZCVSffAF9YilbmdDtFg+AGOIWvoJ4E1lK/pJun4jPECC9Rs2VwicgepAKMTsF9pWWoRzeJbZFnZ4W6GwV0lkwH6/guegay/oA6Z+/g0jvn6+tiemFFXpJqelz2oZKd9zmkkwPuwNhYQBLKEsCSGNo4Wr6v4UJ4R3ff9i265VsxWm/m4YwFT+LPS3vJb8Ab8vxYv/3c4bQRNyWDJ2p6u47Hz4uWzEn8kvkn26CLKi1wujcp/1RAu9J1lJj+SjnJQMoeWA22gLokCnJeugQJMDpzxoBOgm6obLzFsRawzKa81Om8bYDe67sXusx9107BhOSWiwzoqSEyyE25bIa+G5ugOmc5krEgKGJN5sPFC387vdG7J/jd6R291mUDZhSZbknj2uwRsL2bjsmJfVcW75r0G+BbYIWAvBKmOwNlF/9eVWF94hhKdVDQ6SXM53fY5ah/aLTLaua9u+CdOJrS9yNOVJJEjnxxmZ8NJiiTZDKb5QMzcUUBaTq1+tLwY1MOmQHo8u4T0db0DH3f3nNsfiH3bf6FPsFJlm9Cw/9kkntC9LucHxcKN9CazyNJ4ulRp9RwcYsoSBv5B1Ar722oUXSWLEgBrZJtVY3xnzfOcRuBjWWgi2r7Fio9wJ/0Gy9jbNbwH2/2tCHKwB2K7FMueQP80cmLUi/Dh2UexinaX7bkZr5D+Jj2YdkIGh58W4Im3KDmf/tNJmQR/fiPa3qmVE7kKo8KwZ/gpFBJ0So39I6Sjy3ORoIhikFFzHNphjppWVU99Qi15yqrXv0KK5Wu91mahh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(376002)(136003)(39860400002)(346002)(2616005)(41300700001)(186003)(86362001)(36756003)(6486002)(31696002)(478600001)(66556008)(316002)(38100700002)(66476007)(8676002)(2906002)(66946007)(83380400001)(5660300002)(6512007)(31686004)(6506007)(53546011)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZDhwQUs4T24zb1V6Sm43NERiWWo0My8rdFZDTmJzUG00eElYSFRQVVFvKysv?=
+ =?utf-8?B?RDdPWFpYa0pTRWI2bHFNKzVNMjFCUmsxYWgwUXZLYzgrbFFEcWg1b3hMUnpT?=
+ =?utf-8?B?dVE1Qno3dFpMdlhmSmd4ZzYxNzFZYmVrdXJWUWhYY3J2SnNvaUQwRzJmV3lj?=
+ =?utf-8?B?ZEhEUStKTXpvOGlGbWRBbFBKSlVxNllLTXZ5aXdRVkVBUlJISU1ZM0UrVU5S?=
+ =?utf-8?B?djg1MXIxaXdtT0MrM1RNSERFSkdFZzROWkFoQXgxc0ovWG41djZsNHZMaElQ?=
+ =?utf-8?B?dnRKK2lpVm02dXlKSFZEc1NReldJaFlHUWQ0NWxTN0ptSENla3ovQXZWcno0?=
+ =?utf-8?B?cmJpaEVEajVHdklBZGVGcTBaYTRhdEpIM2dvZm9NWU9GbDRVa01CVnNHRVhY?=
+ =?utf-8?B?bXNKTzZ4YzViOG4xaW5INmNDTmRtRGlhK1RLbWFnZEJYTEwzOXdTRXUvdmNx?=
+ =?utf-8?B?bWRheWFJLytxbTNrVml3Q2c0WWFFTzZFM3FIZHRQUTlYUExUSzJramRSVXg3?=
+ =?utf-8?B?dCswNVQraFM5QmEwbDFpMWJISTI2czlqN1NFcHlUcXVNNUpJQ1dLUVhIMVpK?=
+ =?utf-8?B?L2pPQXVJblkvQ0RJamwrT1VKa2FwTDhrUUU0Q0hiVGx1QW5tRVUrYjBoSW44?=
+ =?utf-8?B?K29DZkk4aHZRcGxiY3NaS00zZVhRRjEzbno1d1lJejkzdC8xTlpDL2RJM1cz?=
+ =?utf-8?B?ZVNFNUtmWjBySGtId2pNc0xYZ1NoUlFiWWRWYXV6eUtlR2lWY1RKU1F5a0dh?=
+ =?utf-8?B?c1p1Qm14MktqMWczZ0thM3RrbkNVa0d2anViN3k0ckNaL0oxeTRCa2R5cCtq?=
+ =?utf-8?B?QWsxR2t0cFJDcW8wR2N4TjNlSTRnMFVXaUJ0ditLRlJIcDZXNitvSE82Mnhh?=
+ =?utf-8?B?OWZNUzhMVjNqeVU4R29DdVlTaDNhVGNpcXk3MCtzQUFjR2VxckJ4Ui9YR3Zm?=
+ =?utf-8?B?Tm03ci9EOVNlYm9YcU5DWDhXUW8xU0YrNHZJNGhuaEhBU3FCdm5IaHNnVFJp?=
+ =?utf-8?B?ZzY0QUdjQVZyV2ZvYWJIbEV3ejczQ2JVanFuUzNPd3N4QUh1UkxkZ0N4cGQ4?=
+ =?utf-8?B?WUF5eERiNVh1dGlQblhXUDE1YnB0eDdFU0x4WFQ4YmN0YkxxVytOSjZtV2d5?=
+ =?utf-8?B?bzZZckZiSlZNd3V0N1Q1QWNRcnJSYTFPRGpXV1NNNk5xM3A3eGFvL3NHaGF6?=
+ =?utf-8?B?amJkbFBNWDBzcGYyVE1QY056QmNDVDZJcUQ4WlhsdkJ5WVFGM1RRZFptZ3kz?=
+ =?utf-8?B?cFFlOUFySVRCNCtyUVFPaXhpZWtzSlFVVTMzYUlwV0dvMVRwckJEODZBT05y?=
+ =?utf-8?B?UmxaNTFhaUxvVTc0RzdhSURLM1RrdGFLY1NtQkdRVUwwVGxTWVl1K09ma1l4?=
+ =?utf-8?B?VE1zcTl6Z0xYRFFzZFdETUNDbHBrUkxVc1hyZ2N5cnZIZ3hYQmd4RGdKZDlt?=
+ =?utf-8?B?UTRWMURHQWg5ekZDdjdPS0Mza0pRSkF3RG9VZmdoUGF3eWg3ZUpCRyszZ2hI?=
+ =?utf-8?B?OGtaYysyUndXaDFQTG5BZDF6Wmg5c0NOa2xqWC9CaXRoVHg5WTd6dlV1NXF0?=
+ =?utf-8?B?cGFBeXZROHBhNVk5eHg3Zll1L0hwc2w5U1BKV0dnYzhVR2VQMGRybi9vazFC?=
+ =?utf-8?B?V2pwTXNqVk5RRTlDdWd1TXQ3N1pxbWFMc0k4ZE8wU1NMNU9nZktUSW8zNWI5?=
+ =?utf-8?B?djc3Zkk3SDZVNC9PY0s3NWx5aEJvaTV6R1V1MDhLR0Z6TW9uRmZZajZKbDRK?=
+ =?utf-8?B?SVowM1d6U01oS1U1MFlJbkxJUXBXVWNzakZKY2VIN0pVWWF3NnlndXpIM05G?=
+ =?utf-8?B?aEllN3ZSVXBCOEpjU05CMkVPSmwzTkkrRFpuL05aaGtrbUZMUk1yMm9yMjVw?=
+ =?utf-8?B?aXFBZ09IL3AxRFVTbE44Y3kydy9BVFJGWkVMdzkvQWhtbVJWVisxSklEUC9J?=
+ =?utf-8?B?UEhjUXA5VXMxcWs0TUplNU95b3lrc0ZIZE8xN1E4R2xqMVBsUGxLck1jUTNF?=
+ =?utf-8?B?QTEvbnFDTzhxZUFNazBKZHN3TWhGQVNqVlpxOTZpcEV6dXI5MkFSRlRaQVJ2?=
+ =?utf-8?B?MThZMUxMT2hIdnlaaG96clVETmVOZlBnVmxvYjJBaDVhQjNkanRzc1ZhVW82?=
+ =?utf-8?B?NUZucVVDSys3ZXIxa01aa1pxNkFwSmdNbUdDL2ZyemdKa2NnYnEyQVZqUWdQ?=
+ =?utf-8?Q?xvMCmcPYbmIi+f8dSJ5YEMyjp6enJWbx70zFQEDd5Plg?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6babcdb-f1fa-4e76-eae0-08da59c7143e
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2022 12:01:20.1565
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TIL6DQNxDfIAIPDBRLxAbPeeO5pKCLesaCDsg5Q3ETnkvNnPyFGhv1loh/EMobdqbLwESBKI/URwsekSMrryXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2735
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:03:12PM +0200, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
+
+
+On 12.03.22 14:58, Jookia wrote:
+> Hello there,
 > 
-> The value returned by an i2c driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
+> I've been banging my head against this issue over the years but sat down
+> and started to debug it today.
 > 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
+> When I try to quit GNU screen, minicom or another serial program it
+> sometimes hangs for around 30 seconds.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  Documentation/i2c/writing-clients.rst                     | 2 +-
->  arch/arm/mach-davinci/board-dm644x-evm.c                  | 3 +--
->  arch/arm/mach-davinci/board-dm646x-evm.c                  | 3 +--
->  arch/powerpc/platforms/83xx/mcu_mpc8349emitx.c            | 3 +--
->  drivers/auxdisplay/ht16k33.c                              | 4 +---
->  drivers/auxdisplay/lcd2s.c                                | 3 +--
->  drivers/char/ipmi/ipmb_dev_int.c                          | 4 +---
->  drivers/char/ipmi/ipmi_ipmb.c                             | 4 +---
->  drivers/char/ipmi/ipmi_ssif.c                             | 6 ++----
->  drivers/char/tpm/st33zp24/i2c.c                           | 4 +---
->  drivers/char/tpm/tpm_i2c_atmel.c                          | 3 +--
->  drivers/char/tpm/tpm_i2c_infineon.c                       | 4 +---
->  drivers/char/tpm/tpm_i2c_nuvoton.c                        | 3 +--
->  drivers/char/tpm/tpm_tis_i2c_cr50.c                       | 6 ++----
->  drivers/clk/clk-cdce706.c                                 | 3 +--
->  drivers/clk/clk-cs2000-cp.c                               | 4 +---
->  drivers/clk/clk-si514.c                                   | 3 +--
->  drivers/clk/clk-si5341.c                                  | 4 +---
->  drivers/clk/clk-si5351.c                                  | 4 +---
->  drivers/clk/clk-si570.c                                   | 3 +--
->  drivers/clk/clk-versaclock5.c                             | 4 +---
->  drivers/crypto/atmel-ecc.c                                | 6 ++----
->  drivers/crypto/atmel-sha204a.c                            | 6 ++----
->  drivers/extcon/extcon-rt8973a.c                           | 4 +---
->  drivers/gpio/gpio-adp5588.c                               | 4 +---
->  drivers/gpio/gpio-max7300.c                               | 4 +---
->  drivers/gpio/gpio-pca953x.c                               | 4 +---
->  drivers/gpio/gpio-pcf857x.c                               | 4 +---
->  drivers/gpio/gpio-tpic2810.c                              | 4 +---
->  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c              | 4 +---
->  drivers/gpu/drm/bridge/analogix/analogix-anx6345.c        | 4 +---
->  drivers/gpu/drm/bridge/analogix/analogix-anx78xx.c        | 4 +---
->  drivers/gpu/drm/bridge/analogix/anx7625.c                 | 4 +---
->  drivers/gpu/drm/bridge/chrontel-ch7033.c                  | 4 +---
->  drivers/gpu/drm/bridge/cros-ec-anx7688.c                  | 4 +---
->  drivers/gpu/drm/bridge/ite-it6505.c                       | 4 +---
->  drivers/gpu/drm/bridge/ite-it66121.c                      | 4 +---
->  drivers/gpu/drm/bridge/lontium-lt8912b.c                  | 3 +--
->  drivers/gpu/drm/bridge/lontium-lt9211.c                   | 4 +---
->  drivers/gpu/drm/bridge/lontium-lt9611.c                   | 4 +---
->  drivers/gpu/drm/bridge/lontium-lt9611uxc.c                | 4 +---
->  drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c  | 8 ++------
->  drivers/gpu/drm/bridge/nxp-ptn3460.c                      | 4 +---
->  drivers/gpu/drm/bridge/parade-ps8622.c                    | 4 +---
->  drivers/gpu/drm/bridge/parade-ps8640.c                    | 4 +---
->  drivers/gpu/drm/bridge/sii902x.c                          | 4 +---
->  drivers/gpu/drm/bridge/sii9234.c                          | 4 +---
->  drivers/gpu/drm/bridge/sil-sii8620.c                      | 4 +---
->  drivers/gpu/drm/bridge/tc358767.c                         | 4 +---
->  drivers/gpu/drm/bridge/tc358768.c                         | 4 +---
->  drivers/gpu/drm/bridge/tc358775.c                         | 4 +---
->  drivers/gpu/drm/bridge/ti-sn65dsi83.c                     | 4 +---
->  drivers/gpu/drm/bridge/ti-tfp410.c                        | 4 +---
->  drivers/gpu/drm/i2c/ch7006_drv.c                          | 4 +---
->  drivers/gpu/drm/i2c/tda9950.c                             | 4 +---
->  drivers/gpu/drm/i2c/tda998x_drv.c                         | 3 +--
->  drivers/gpu/drm/panel/panel-olimex-lcd-olinuxino.c        | 4 +---
->  drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c     | 4 +---
->  drivers/gpu/drm/solomon/ssd130x-i2c.c                     | 4 +---
->  drivers/hid/i2c-hid/i2c-hid-core.c                        | 4 +---
->  drivers/hid/i2c-hid/i2c-hid.h                             | 2 +-
->  drivers/hwmon/adc128d818.c                                | 4 +---
->  drivers/hwmon/adt7470.c                                   | 3 +--
->  drivers/hwmon/asb100.c                                    | 6 ++----
->  drivers/hwmon/asc7621.c                                   | 4 +---
->  drivers/hwmon/dme1737.c                                   | 4 +---
->  drivers/hwmon/f75375s.c                                   | 5 ++---
->  drivers/hwmon/fschmd.c                                    | 6 ++----
->  drivers/hwmon/ftsteutates.c                               | 3 +--
->  drivers/hwmon/ina209.c                                    | 4 +---
->  drivers/hwmon/ina3221.c                                   | 4 +---
->  drivers/hwmon/jc42.c                                      | 3 +--
->  drivers/hwmon/mcp3021.c                                   | 4 +---
->  drivers/hwmon/occ/p8_i2c.c                                | 4 +---
->  drivers/hwmon/pcf8591.c                                   | 3 +--
->  drivers/hwmon/smm665.c                                    | 3 +--
->  drivers/hwmon/tps23861.c                                  | 4 +---
->  drivers/hwmon/w83781d.c                                   | 4 +---
->  drivers/hwmon/w83791d.c                                   | 6 ++----
->  drivers/hwmon/w83792d.c                                   | 6 ++----
->  drivers/hwmon/w83793.c                                    | 6 ++----
->  drivers/hwmon/w83795.c                                    | 4 +---
->  drivers/hwmon/w83l785ts.c                                 | 6 ++----
->  drivers/i2c/i2c-core-base.c                               | 6 +-----
->  drivers/i2c/i2c-slave-eeprom.c                            | 4 +---
->  drivers/i2c/i2c-slave-testunit.c                          | 3 +--
->  drivers/i2c/i2c-smbus.c                                   | 3 +--
->  drivers/i2c/muxes/i2c-mux-ltc4306.c                       | 4 +---
->  drivers/i2c/muxes/i2c-mux-pca9541.c                       | 3 +--
->  drivers/i2c/muxes/i2c-mux-pca954x.c                       | 3 +--
->  drivers/iio/accel/bma180.c                                | 4 +---
->  drivers/iio/accel/bma400_i2c.c                            | 4 +---
->  drivers/iio/accel/bmc150-accel-i2c.c                      | 4 +---
->  drivers/iio/accel/kxcjk-1013.c                            | 4 +---
->  drivers/iio/accel/kxsd9-i2c.c                             | 4 +---
->  drivers/iio/accel/mc3230.c                                | 4 +---
->  drivers/iio/accel/mma7455_i2c.c                           | 4 +---
->  drivers/iio/accel/mma7660.c                               | 4 +---
->  drivers/iio/accel/mma8452.c                               | 4 +---
->  drivers/iio/accel/mma9551.c                               | 4 +---
->  drivers/iio/accel/mma9553.c                               | 4 +---
->  drivers/iio/accel/stk8312.c                               | 4 +---
->  drivers/iio/accel/stk8ba50.c                              | 4 +---
->  drivers/iio/adc/ad799x.c                                  | 4 +---
->  drivers/iio/adc/ina2xx-adc.c                              | 4 +---
->  drivers/iio/adc/ltc2497.c                                 | 4 +---
->  drivers/iio/adc/ti-ads1015.c                              | 4 +---
->  drivers/iio/chemical/atlas-sensor.c                       | 4 +---
->  drivers/iio/chemical/ccs811.c                             | 4 +---
->  drivers/iio/chemical/sgp30.c                              | 4 +---
->  drivers/iio/dac/ad5380.c                                  | 4 +---
->  drivers/iio/dac/ad5446.c                                  | 4 +---
->  drivers/iio/dac/ad5593r.c                                 | 4 +---
->  drivers/iio/dac/ad5696-i2c.c                              | 4 +---
->  drivers/iio/dac/ds4424.c                                  | 4 +---
->  drivers/iio/dac/m62332.c                                  | 4 +---
->  drivers/iio/dac/mcp4725.c                                 | 4 +---
->  drivers/iio/dac/ti-dac5571.c                              | 4 +---
->  drivers/iio/gyro/bmg160_i2c.c                             | 4 +---
->  drivers/iio/gyro/fxas21002c_i2c.c                         | 4 +---
->  drivers/iio/gyro/itg3200_core.c                           | 4 +---
->  drivers/iio/gyro/mpu3050-i2c.c                            | 4 +---
->  drivers/iio/health/afe4404.c                              | 4 +---
->  drivers/iio/health/max30100.c                             | 4 +---
->  drivers/iio/health/max30102.c                             | 4 +---
->  drivers/iio/humidity/hdc2010.c                            | 4 +---
->  drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c                 | 4 +---
->  drivers/iio/imu/kmx61.c                                   | 4 +---
->  drivers/iio/light/apds9300.c                              | 4 +---
->  drivers/iio/light/apds9960.c                              | 4 +---
->  drivers/iio/light/bh1750.c                                | 4 +---
->  drivers/iio/light/bh1780.c                                | 4 +---
->  drivers/iio/light/cm3232.c                                | 4 +---
->  drivers/iio/light/cm36651.c                               | 4 +---
->  drivers/iio/light/gp2ap002.c                              | 4 +---
->  drivers/iio/light/gp2ap020a00f.c                          | 4 +---
->  drivers/iio/light/isl29028.c                              | 4 +---
->  drivers/iio/light/isl29125.c                              | 4 +---
->  drivers/iio/light/jsa1212.c                               | 4 +---
->  drivers/iio/light/ltr501.c                                | 4 +---
->  drivers/iio/light/opt3001.c                               | 6 ++----
->  drivers/iio/light/pa12203001.c                            | 4 +---
->  drivers/iio/light/rpr0521.c                               | 4 +---
->  drivers/iio/light/stk3310.c                               | 4 +---
->  drivers/iio/light/tcs3472.c                               | 4 +---
->  drivers/iio/light/tsl2563.c                               | 4 +---
->  drivers/iio/light/tsl2583.c                               | 4 +---
->  drivers/iio/light/tsl4531.c                               | 4 +---
->  drivers/iio/light/us5182d.c                               | 4 +---
->  drivers/iio/light/vcnl4000.c                              | 4 +---
->  drivers/iio/light/vcnl4035.c                              | 4 +---
->  drivers/iio/light/veml6070.c                              | 4 +---
->  drivers/iio/magnetometer/ak8974.c                         | 4 +---
->  drivers/iio/magnetometer/ak8975.c                         | 4 +---
->  drivers/iio/magnetometer/bmc150_magn_i2c.c                | 4 +---
->  drivers/iio/magnetometer/hmc5843_i2c.c                    | 4 +---
->  drivers/iio/magnetometer/mag3110.c                        | 4 +---
->  drivers/iio/magnetometer/yamaha-yas530.c                  | 4 +---
->  drivers/iio/potentiostat/lmp91000.c                       | 4 +---
->  drivers/iio/pressure/mpl3115.c                            | 4 +---
->  drivers/iio/pressure/ms5611_i2c.c                         | 4 +---
->  drivers/iio/pressure/zpa2326_i2c.c                        | 4 +---
->  drivers/iio/proximity/pulsedlight-lidar-lite-v2.c         | 4 +---
->  drivers/iio/proximity/sx9500.c                            | 4 +---
->  drivers/iio/temperature/mlx90614.c                        | 4 +---
->  drivers/iio/temperature/mlx90632.c                        | 4 +---
->  drivers/input/joystick/as5011.c                           | 4 +---
->  drivers/input/keyboard/adp5588-keys.c                     | 4 +---
->  drivers/input/keyboard/lm8323.c                           | 4 +---
->  drivers/input/keyboard/lm8333.c                           | 4 +---
->  drivers/input/keyboard/mcs_touchkey.c                     | 4 +---
->  drivers/input/keyboard/qt1070.c                           | 4 +---
->  drivers/input/keyboard/qt2160.c                           | 4 +---
->  drivers/input/keyboard/tca6416-keypad.c                   | 4 +---
->  drivers/input/misc/adxl34x-i2c.c                          | 4 +---
->  drivers/input/misc/bma150.c                               | 4 +---
->  drivers/input/misc/cma3000_d0x_i2c.c                      | 4 +---
->  drivers/input/misc/pcf8574_keypad.c                       | 4 +---
->  drivers/input/mouse/synaptics_i2c.c                       | 4 +---
->  drivers/input/rmi4/rmi_smbus.c                            | 4 +---
->  drivers/input/touchscreen/atmel_mxt_ts.c                  | 4 +---
->  drivers/input/touchscreen/bu21013_ts.c                    | 4 +---
->  drivers/input/touchscreen/cyttsp4_i2c.c                   | 4 +---
->  drivers/input/touchscreen/edt-ft5x06.c                    | 4 +---
->  drivers/input/touchscreen/goodix.c                        | 4 +---
->  drivers/input/touchscreen/migor_ts.c                      | 4 +---
->  drivers/input/touchscreen/s6sy761.c                       | 4 +---
->  drivers/input/touchscreen/stmfts.c                        | 4 +---
->  drivers/input/touchscreen/tsc2004.c                       | 4 +---
->  drivers/leds/flash/leds-as3645a.c                         | 4 +---
->  drivers/leds/flash/leds-lm3601x.c                         | 4 +---
->  drivers/leds/flash/leds-rt4505.c                          | 3 +--
->  drivers/leds/leds-an30259a.c                              | 4 +---
->  drivers/leds/leds-aw2013.c                                | 4 +---
->  drivers/leds/leds-bd2802.c                                | 4 +---
->  drivers/leds/leds-blinkm.c                                | 3 +--
->  drivers/leds/leds-is31fl319x.c                            | 3 +--
->  drivers/leds/leds-is31fl32xx.c                            | 4 +---
->  drivers/leds/leds-lm3530.c                                | 3 +--
->  drivers/leds/leds-lm3532.c                                | 4 +---
->  drivers/leds/leds-lm355x.c                                | 4 +---
->  drivers/leds/leds-lm3642.c                                | 3 +--
->  drivers/leds/leds-lm3692x.c                               | 4 +---
->  drivers/leds/leds-lm3697.c                                | 4 +---
->  drivers/leds/leds-lp3944.c                                | 4 +---
->  drivers/leds/leds-lp3952.c                                | 4 +---
->  drivers/leds/leds-lp50xx.c                                | 4 +---
->  drivers/leds/leds-lp5521.c                                | 4 +---
->  drivers/leds/leds-lp5523.c                                | 4 +---
->  drivers/leds/leds-lp5562.c                                | 4 +---
->  drivers/leds/leds-lp8501.c                                | 4 +---
->  drivers/leds/leds-lp8860.c                                | 4 +---
->  drivers/leds/leds-pca9532.c                               | 6 ++----
->  drivers/leds/leds-tca6507.c                               | 4 +---
->  drivers/leds/leds-turris-omnia.c                          | 4 +---
->  drivers/macintosh/ams/ams-i2c.c                           | 4 +---
->  drivers/macintosh/therm_adt746x.c                         | 4 +---
->  drivers/macintosh/therm_windtunnel.c                      | 4 +---
->  drivers/macintosh/windfarm_ad7417_sensor.c                | 4 +---
->  drivers/macintosh/windfarm_fcu_controls.c                 | 3 +--
->  drivers/macintosh/windfarm_lm75_sensor.c                  | 4 +---
->  drivers/macintosh/windfarm_lm87_sensor.c                  | 4 +---
->  drivers/macintosh/windfarm_max6690_sensor.c               | 4 +---
->  drivers/macintosh/windfarm_smu_sat.c                      | 4 +---
->  drivers/media/cec/i2c/ch7322.c                            | 4 +---
->  drivers/media/dvb-frontends/a8293.c                       | 3 +--
->  drivers/media/dvb-frontends/af9013.c                      | 4 +---
->  drivers/media/dvb-frontends/af9033.c                      | 4 +---
->  drivers/media/dvb-frontends/au8522_decoder.c              | 3 +--
->  drivers/media/dvb-frontends/cxd2099.c                     | 4 +---
->  drivers/media/dvb-frontends/cxd2820r_core.c               | 4 +---
->  drivers/media/dvb-frontends/dvb-pll.c                     | 3 +--
->  drivers/media/dvb-frontends/lgdt3306a.c                   | 4 +---
->  drivers/media/dvb-frontends/lgdt330x.c                    | 4 +---
->  drivers/media/dvb-frontends/m88ds3103.c                   | 3 +--
->  drivers/media/dvb-frontends/mn88443x.c                    | 4 +---
->  drivers/media/dvb-frontends/mn88472.c                     | 4 +---
->  drivers/media/dvb-frontends/mn88473.c                     | 4 +---
->  drivers/media/dvb-frontends/mxl692.c                      | 4 +---
->  drivers/media/dvb-frontends/rtl2830.c                     | 4 +---
->  drivers/media/dvb-frontends/rtl2832.c                     | 4 +---
->  drivers/media/dvb-frontends/si2165.c                      | 3 +--
->  drivers/media/dvb-frontends/si2168.c                      | 4 +---
->  drivers/media/dvb-frontends/sp2.c                         | 3 +--
->  drivers/media/dvb-frontends/stv090x.c                     | 3 +--
->  drivers/media/dvb-frontends/stv6110x.c                    | 3 +--
->  drivers/media/dvb-frontends/tc90522.c                     | 3 +--
->  drivers/media/dvb-frontends/tda10071.c                    | 3 +--
->  drivers/media/dvb-frontends/ts2020.c                      | 3 +--
->  drivers/media/i2c/ad5820.c                                | 3 +--
->  drivers/media/i2c/ad9389b.c                               | 3 +--
->  drivers/media/i2c/adp1653.c                               | 4 +---
->  drivers/media/i2c/adv7170.c                               | 3 +--
->  drivers/media/i2c/adv7175.c                               | 3 +--
->  drivers/media/i2c/adv7180.c                               | 4 +---
->  drivers/media/i2c/adv7183.c                               | 3 +--
->  drivers/media/i2c/adv7343.c                               | 4 +---
->  drivers/media/i2c/adv7393.c                               | 4 +---
->  drivers/media/i2c/adv748x/adv748x-core.c                  | 4 +---
->  drivers/media/i2c/adv7511-v4l2.c                          | 3 +--
->  drivers/media/i2c/adv7604.c                               | 3 +--
->  drivers/media/i2c/adv7842.c                               | 3 +--
->  drivers/media/i2c/ak7375.c                                | 4 +---
->  drivers/media/i2c/ak881x.c                                | 4 +---
->  drivers/media/i2c/bt819.c                                 | 3 +--
->  drivers/media/i2c/bt856.c                                 | 3 +--
->  drivers/media/i2c/bt866.c                                 | 3 +--
->  drivers/media/i2c/ccs/ccs-core.c                          | 4 +---
->  drivers/media/i2c/cs3308.c                                | 3 +--
->  drivers/media/i2c/cs5345.c                                | 3 +--
->  drivers/media/i2c/cs53l32a.c                              | 3 +--
->  drivers/media/i2c/cx25840/cx25840-core.c                  | 3 +--
->  drivers/media/i2c/dw9714.c                                | 4 +---
->  drivers/media/i2c/dw9768.c                                | 4 +---
->  drivers/media/i2c/dw9807-vcm.c                            | 4 +---
->  drivers/media/i2c/et8ek8/et8ek8_driver.c                  | 4 +---
->  drivers/media/i2c/hi556.c                                 | 4 +---
->  drivers/media/i2c/hi846.c                                 | 4 +---
->  drivers/media/i2c/hi847.c                                 | 4 +---
->  drivers/media/i2c/imx208.c                                | 4 +---
->  drivers/media/i2c/imx214.c                                | 4 +---
->  drivers/media/i2c/imx219.c                                | 4 +---
->  drivers/media/i2c/imx258.c                                | 4 +---
->  drivers/media/i2c/imx274.c                                | 3 +--
->  drivers/media/i2c/imx290.c                                | 4 +---
->  drivers/media/i2c/imx319.c                                | 4 +---
->  drivers/media/i2c/imx334.c                                | 4 +---
->  drivers/media/i2c/imx335.c                                | 4 +---
->  drivers/media/i2c/imx355.c                                | 4 +---
->  drivers/media/i2c/imx412.c                                | 4 +---
->  drivers/media/i2c/ir-kbd-i2c.c                            | 4 +---
->  drivers/media/i2c/isl7998x.c                              | 4 +---
->  drivers/media/i2c/ks0127.c                                | 3 +--
->  drivers/media/i2c/lm3560.c                                | 4 +---
->  drivers/media/i2c/lm3646.c                                | 4 +---
->  drivers/media/i2c/m52790.c                                | 3 +--
->  drivers/media/i2c/m5mols/m5mols_core.c                    | 4 +---
->  drivers/media/i2c/max2175.c                               | 4 +---
->  drivers/media/i2c/max9286.c                               | 4 +---
->  drivers/media/i2c/ml86v7667.c                             | 4 +---
->  drivers/media/i2c/msp3400-driver.c                        | 3 +--
->  drivers/media/i2c/mt9m001.c                               | 4 +---
->  drivers/media/i2c/mt9m032.c                               | 3 +--
->  drivers/media/i2c/mt9m111.c                               | 4 +---
->  drivers/media/i2c/mt9p031.c                               | 4 +---
->  drivers/media/i2c/mt9t001.c                               | 3 +--
->  drivers/media/i2c/mt9t112.c                               | 4 +---
->  drivers/media/i2c/mt9v011.c                               | 4 +---
->  drivers/media/i2c/mt9v032.c                               | 4 +---
->  drivers/media/i2c/mt9v111.c                               | 4 +---
->  drivers/media/i2c/noon010pc30.c                           | 4 +---
->  drivers/media/i2c/og01a1b.c                               | 4 +---
->  drivers/media/i2c/ov02a10.c                               | 4 +---
->  drivers/media/i2c/ov08d10.c                               | 4 +---
->  drivers/media/i2c/ov13858.c                               | 4 +---
->  drivers/media/i2c/ov13b10.c                               | 4 +---
->  drivers/media/i2c/ov2640.c                                | 3 +--
->  drivers/media/i2c/ov2659.c                                | 4 +---
->  drivers/media/i2c/ov2680.c                                | 4 +---
->  drivers/media/i2c/ov2685.c                                | 4 +---
->  drivers/media/i2c/ov2740.c                                | 4 +---
->  drivers/media/i2c/ov5640.c                                | 4 +---
->  drivers/media/i2c/ov5645.c                                | 4 +---
->  drivers/media/i2c/ov5647.c                                | 4 +---
->  drivers/media/i2c/ov5648.c                                | 4 +---
->  drivers/media/i2c/ov5670.c                                | 4 +---
->  drivers/media/i2c/ov5675.c                                | 4 +---
->  drivers/media/i2c/ov5693.c                                | 4 +---
->  drivers/media/i2c/ov5695.c                                | 4 +---
->  drivers/media/i2c/ov6650.c                                | 3 +--
->  drivers/media/i2c/ov7251.c                                | 4 +---
->  drivers/media/i2c/ov7640.c                                | 4 +---
->  drivers/media/i2c/ov7670.c                                | 3 +--
->  drivers/media/i2c/ov772x.c                                | 4 +---
->  drivers/media/i2c/ov7740.c                                | 3 +--
->  drivers/media/i2c/ov8856.c                                | 4 +---
->  drivers/media/i2c/ov8865.c                                | 4 +---
->  drivers/media/i2c/ov9282.c                                | 4 +---
->  drivers/media/i2c/ov9640.c                                | 4 +---
->  drivers/media/i2c/ov9650.c                                | 4 +---
->  drivers/media/i2c/ov9734.c                                | 4 +---
->  drivers/media/i2c/rdacm20.c                               | 4 +---
->  drivers/media/i2c/rdacm21.c                               | 4 +---
->  drivers/media/i2c/rj54n1cb0c.c                            | 4 +---
->  drivers/media/i2c/s5c73m3/s5c73m3-core.c                  | 4 +---
->  drivers/media/i2c/s5k4ecgx.c                              | 4 +---
->  drivers/media/i2c/s5k5baf.c                               | 4 +---
->  drivers/media/i2c/s5k6a3.c                                | 3 +--
->  drivers/media/i2c/s5k6aa.c                                | 4 +---
->  drivers/media/i2c/saa6588.c                               | 4 +---
->  drivers/media/i2c/saa6752hs.c                             | 3 +--
->  drivers/media/i2c/saa7110.c                               | 3 +--
->  drivers/media/i2c/saa7115.c                               | 3 +--
->  drivers/media/i2c/saa7127.c                               | 3 +--
->  drivers/media/i2c/saa717x.c                               | 3 +--
->  drivers/media/i2c/saa7185.c                               | 3 +--
->  drivers/media/i2c/sony-btf-mpx.c                          | 4 +---
->  drivers/media/i2c/sr030pc30.c                             | 3 +--
->  drivers/media/i2c/st-mipid02.c                            | 4 +---
->  drivers/media/i2c/tc358743.c                              | 4 +---
->  drivers/media/i2c/tda1997x.c                              | 4 +---
->  drivers/media/i2c/tda7432.c                               | 3 +--
->  drivers/media/i2c/tda9840.c                               | 3 +--
->  drivers/media/i2c/tea6415c.c                              | 3 +--
->  drivers/media/i2c/tea6420.c                               | 3 +--
->  drivers/media/i2c/ths7303.c                               | 4 +---
->  drivers/media/i2c/ths8200.c                               | 4 +---
->  drivers/media/i2c/tlv320aic23b.c                          | 3 +--
->  drivers/media/i2c/tvaudio.c                               | 3 +--
->  drivers/media/i2c/tvp514x.c                               | 3 +--
->  drivers/media/i2c/tvp5150.c                               | 4 +---
->  drivers/media/i2c/tvp7002.c                               | 3 +--
->  drivers/media/i2c/tw2804.c                                | 3 +--
->  drivers/media/i2c/tw9903.c                                | 3 +--
->  drivers/media/i2c/tw9906.c                                | 3 +--
->  drivers/media/i2c/tw9910.c                                | 4 +---
->  drivers/media/i2c/uda1342.c                               | 3 +--
->  drivers/media/i2c/upd64031a.c                             | 3 +--
->  drivers/media/i2c/upd64083.c                              | 3 +--
->  drivers/media/i2c/video-i2c.c                             | 4 +---
->  drivers/media/i2c/vp27smpx.c                              | 3 +--
->  drivers/media/i2c/vpx3220.c                               | 4 +---
->  drivers/media/i2c/vs6624.c                                | 3 +--
->  drivers/media/i2c/wm8739.c                                | 3 +--
->  drivers/media/i2c/wm8775.c                                | 3 +--
->  drivers/media/radio/radio-tea5764.c                       | 3 +--
->  drivers/media/radio/saa7706h.c                            | 3 +--
->  drivers/media/radio/si470x/radio-si470x-i2c.c             | 3 +--
->  drivers/media/radio/si4713/si4713.c                       | 4 +---
->  drivers/media/radio/tef6862.c                             | 3 +--
->  drivers/media/test-drivers/vidtv/vidtv_demod.c            | 4 +---
->  drivers/media/test-drivers/vidtv/vidtv_tuner.c            | 4 +---
->  drivers/media/tuners/e4000.c                              | 4 +---
->  drivers/media/tuners/fc2580.c                             | 3 +--
->  drivers/media/tuners/m88rs6000t.c                         | 4 +---
->  drivers/media/tuners/mt2060.c                             | 4 +---
->  drivers/media/tuners/mxl301rf.c                           | 3 +--
->  drivers/media/tuners/qm1d1b0004.c                         | 3 +--
->  drivers/media/tuners/qm1d1c0042.c                         | 3 +--
->  drivers/media/tuners/si2157.c                             | 4 +---
->  drivers/media/tuners/tda18212.c                           | 4 +---
->  drivers/media/tuners/tda18250.c                           | 4 +---
->  drivers/media/tuners/tua9001.c                            | 3 +--
->  drivers/media/usb/go7007/s2250-board.c                    | 3 +--
->  drivers/media/v4l2-core/tuner-core.c                      | 3 +--
->  drivers/mfd/88pm800.c                                     | 4 +---
->  drivers/mfd/88pm805.c                                     | 4 +---
->  drivers/mfd/88pm860x-core.c                               | 3 +--
->  drivers/mfd/acer-ec-a500.c                                | 4 +---
->  drivers/mfd/arizona-i2c.c                                 | 4 +---
->  drivers/mfd/axp20x-i2c.c                                  | 4 +---
->  drivers/mfd/da903x.c                                      | 3 +--
->  drivers/mfd/da9052-i2c.c                                  | 3 +--
->  drivers/mfd/da9055-i2c.c                                  | 4 +---
->  drivers/mfd/da9062-core.c                                 | 4 +---
->  drivers/mfd/da9150-core.c                                 | 4 +---
->  drivers/mfd/dm355evm_msp.c                                | 3 +--
->  drivers/mfd/ene-kb3930.c                                  | 4 +---
->  drivers/mfd/gateworks-gsc.c                               | 4 +---
->  drivers/mfd/intel_soc_pmic_core.c                         | 4 +---
->  drivers/mfd/iqs62x.c                                      | 4 +---
->  drivers/mfd/lm3533-core.c                                 | 4 +---
->  drivers/mfd/lp8788.c                                      | 3 +--
->  drivers/mfd/madera-i2c.c                                  | 4 +---
->  drivers/mfd/max14577.c                                    | 4 +---
->  drivers/mfd/max77693.c                                    | 4 +---
->  drivers/mfd/max8907.c                                     | 4 +---
->  drivers/mfd/max8925-i2c.c                                 | 3 +--
->  drivers/mfd/mc13xxx-i2c.c                                 | 3 +--
->  drivers/mfd/menelaus.c                                    | 3 +--
->  drivers/mfd/ntxec.c                                       | 4 +---
->  drivers/mfd/palmas.c                                      | 4 +---
->  drivers/mfd/pcf50633-core.c                               | 4 +---
->  drivers/mfd/retu-mfd.c                                    | 4 +---
->  drivers/mfd/rk808.c                                       | 4 +---
->  drivers/mfd/rn5t618.c                                     | 4 +---
->  drivers/mfd/rsmu_i2c.c                                    | 4 +---
->  drivers/mfd/rt4831.c                                      | 4 +---
->  drivers/mfd/si476x-i2c.c                                  | 4 +---
->  drivers/mfd/stmfx.c                                       | 4 +---
->  drivers/mfd/stmpe-i2c.c                                   | 4 +---
->  drivers/mfd/tc3589x.c                                     | 4 +---
->  drivers/mfd/tps6105x.c                                    | 4 +---
->  drivers/mfd/tps65010.c                                    | 3 +--
->  drivers/mfd/tps65086.c                                    | 4 +---
->  drivers/mfd/tps65217.c                                    | 4 +---
->  drivers/mfd/tps6586x.c                                    | 3 +--
->  drivers/mfd/tps65912-i2c.c                                | 4 +---
->  drivers/mfd/twl-core.c                                    | 3 +--
->  drivers/mfd/twl6040.c                                     | 4 +---
->  drivers/mfd/wm8994-core.c                                 | 4 +---
->  drivers/misc/ad525x_dpot-i2c.c                            | 3 +--
->  drivers/misc/apds9802als.c                                | 3 +--
->  drivers/misc/apds990x.c                                   | 3 +--
->  drivers/misc/bh1770glc.c                                  | 4 +---
->  drivers/misc/ds1682.c                                     | 3 +--
->  drivers/misc/eeprom/at24.c                                | 4 +---
->  drivers/misc/eeprom/ee1004.c                              | 4 +---
->  drivers/misc/eeprom/eeprom.c                              | 4 +---
->  drivers/misc/eeprom/idt_89hpesx.c                         | 4 +---
->  drivers/misc/eeprom/max6875.c                             | 4 +---
->  drivers/misc/hmc6352.c                                    | 3 +--
->  drivers/misc/ics932s401.c                                 | 5 ++---
->  drivers/misc/isl29003.c                                   | 3 +--
->  drivers/misc/isl29020.c                                   | 3 +--
->  drivers/misc/lis3lv02d/lis3lv02d_i2c.c                    | 3 +--
->  drivers/misc/tsl2550.c                                    | 4 +---
->  drivers/mtd/maps/pismo.c                                  | 4 +---
->  drivers/net/dsa/lan9303_i2c.c                             | 6 ++----
->  drivers/net/dsa/microchip/ksz9477_i2c.c                   | 4 +---
->  drivers/net/dsa/xrs700x/xrs700x_i2c.c                     | 6 ++----
->  drivers/net/ethernet/mellanox/mlxsw/i2c.c                 | 4 +---
->  drivers/net/mctp/mctp-i2c.c                               | 3 +--
->  drivers/nfc/fdp/i2c.c                                     | 4 +---
->  drivers/nfc/microread/i2c.c                               | 4 +---
->  drivers/nfc/nfcmrvl/i2c.c                                 | 4 +---
->  drivers/nfc/nxp-nci/i2c.c                                 | 4 +---
->  drivers/nfc/pn533/i2c.c                                   | 4 +---
->  drivers/nfc/pn544/i2c.c                                   | 4 +---
->  drivers/nfc/s3fwrn5/i2c.c                                 | 4 +---
->  drivers/nfc/st-nci/i2c.c                                  | 4 +---
->  drivers/nfc/st21nfca/i2c.c                                | 4 +---
->  drivers/of/unittest.c                                     | 6 ++----
->  drivers/platform/chrome/cros_ec_i2c.c                     | 4 +---
->  drivers/platform/surface/surface3_power.c                 | 4 +---
->  drivers/platform/x86/asus-tf103c-dock.c                   | 4 +---
->  drivers/platform/x86/intel/int3472/tps68470.c             | 4 +---
->  drivers/power/supply/bq2415x_charger.c                    | 4 +---
->  drivers/power/supply/bq24190_charger.c                    | 4 +---
->  drivers/power/supply/bq24257_charger.c                    | 4 +---
->  drivers/power/supply/bq25890_charger.c                    | 4 +---
->  drivers/power/supply/bq27xxx_battery_i2c.c                | 4 +---
->  drivers/power/supply/cw2015_battery.c                     | 3 +--
->  drivers/power/supply/ds2782_battery.c                     | 4 +---
->  drivers/power/supply/lp8727_charger.c                     | 3 +--
->  drivers/power/supply/rt5033_battery.c                     | 4 +---
->  drivers/power/supply/rt9455_charger.c                     | 4 +---
->  drivers/power/supply/smb347-charger.c                     | 4 +---
->  drivers/power/supply/z2_battery.c                         | 4 +---
->  drivers/pwm/pwm-pca9685.c                                 | 4 +---
->  drivers/regulator/da9121-regulator.c                      | 3 +--
->  drivers/regulator/lp8755.c                                | 4 +---
->  drivers/regulator/rpi-panel-attiny-regulator.c            | 4 +---
->  drivers/rtc/rtc-bq32k.c                                   | 4 +---
->  drivers/rtc/rtc-ds1374.c                                  | 4 +---
->  drivers/rtc/rtc-isl12026.c                                | 3 +--
->  drivers/rtc/rtc-m41t80.c                                  | 4 +---
->  drivers/rtc/rtc-rs5c372.c                                 | 3 +--
->  drivers/rtc/rtc-x1205.c                                   | 3 +--
->  drivers/staging/media/atomisp/i2c/atomisp-gc0310.c        | 4 +---
->  drivers/staging/media/atomisp/i2c/atomisp-gc2235.c        | 4 +---
->  drivers/staging/media/atomisp/i2c/atomisp-lm3554.c        | 4 +---
->  drivers/staging/media/atomisp/i2c/atomisp-mt9m114.c       | 3 +--
->  drivers/staging/media/atomisp/i2c/atomisp-ov2680.c        | 4 +---
->  drivers/staging/media/atomisp/i2c/atomisp-ov2722.c        | 4 +---
->  drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c | 4 +---
->  drivers/staging/media/max96712/max96712.c                 | 4 +---
->  drivers/staging/most/i2c/i2c.c                            | 4 +---
->  drivers/staging/olpc_dcon/olpc_dcon.c                     | 4 +---
->  drivers/tty/serial/sc16is7xx.c                            | 4 +---
->  drivers/usb/misc/usb3503.c                                | 4 +---
->  drivers/usb/phy/phy-isp1301-omap.c                        | 4 +---
->  drivers/usb/phy/phy-isp1301.c                             | 4 +---
->  drivers/usb/typec/hd3ss3220.c                             | 4 +---
->  drivers/usb/typec/mux/fsa4480.c                           | 4 +---
->  drivers/usb/typec/mux/pi3usb30532.c                       | 3 +--
->  drivers/usb/typec/rt1719.c                                | 4 +---
->  drivers/usb/typec/stusb160x.c                             | 4 +---
->  drivers/usb/typec/tcpm/fusb302.c                          | 4 +---
->  drivers/usb/typec/tcpm/tcpci.c                            | 4 +---
->  drivers/usb/typec/tcpm/tcpci_maxim.c                      | 4 +---
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c                    | 3 +--
->  drivers/usb/typec/tipd/core.c                             | 4 +---
->  drivers/usb/typec/ucsi/ucsi_ccg.c                         | 4 +---
->  drivers/usb/typec/wusb3801.c                              | 4 +---
->  drivers/video/backlight/adp8860_bl.c                      | 4 +---
->  drivers/video/backlight/adp8870_bl.c                      | 4 +---
->  drivers/video/backlight/arcxcnn_bl.c                      | 4 +---
->  drivers/video/backlight/bd6107.c                          | 4 +---
->  drivers/video/backlight/lm3630a_bl.c                      | 3 +--
->  drivers/video/backlight/lm3639_bl.c                       | 3 +--
->  drivers/video/backlight/lp855x_bl.c                       | 4 +---
->  drivers/video/backlight/lv5207lp.c                        | 4 +---
->  drivers/video/backlight/tosa_bl.c                         | 3 +--
->  drivers/video/fbdev/matrox/matroxfb_maven.c               | 3 +--
->  drivers/video/fbdev/ssd1307fb.c                           | 4 +---
->  drivers/w1/masters/ds2482.c                               | 3 +--
->  drivers/watchdog/ziirave_wdt.c                            | 4 +---
->  include/linux/i2c.h                                       | 2 +-
->  lib/Kconfig.kasan                                         | 1 +
->  sound/aoa/codecs/onyx.c                                   | 3 +--
->  sound/aoa/codecs/tas.c                                    | 3 +--
->  sound/pci/hda/cs35l41_hda_i2c.c                           | 4 +---
->  sound/ppc/keywest.c                                       | 6 ++----
->  sound/soc/codecs/adau1761-i2c.c                           | 3 +--
->  sound/soc/codecs/adau1781-i2c.c                           | 3 +--
->  sound/soc/codecs/ak4375.c                                 | 4 +---
->  sound/soc/codecs/ak4458.c                                 | 4 +---
->  sound/soc/codecs/ak4641.c                                 | 4 +---
->  sound/soc/codecs/ak5558.c                                 | 4 +---
->  sound/soc/codecs/cs35l32.c                                | 4 +---
->  sound/soc/codecs/cs35l33.c                                | 4 +---
->  sound/soc/codecs/cs35l34.c                                | 4 +---
->  sound/soc/codecs/cs35l35.c                                | 4 +---
->  sound/soc/codecs/cs35l36.c                                | 4 +---
->  sound/soc/codecs/cs35l41-i2c.c                            | 4 +---
->  sound/soc/codecs/cs35l45-i2c.c                            | 4 +---
->  sound/soc/codecs/cs4234.c                                 | 4 +---
->  sound/soc/codecs/cs4265.c                                 | 4 +---
->  sound/soc/codecs/cs4270.c                                 | 4 +---
->  sound/soc/codecs/cs42l42.c                                | 4 +---
->  sound/soc/codecs/cs42l51-i2c.c                            | 4 +---
->  sound/soc/codecs/cs42l56.c                                | 3 +--
->  sound/soc/codecs/cs42xx8-i2c.c                            | 4 +---
->  sound/soc/codecs/cs43130.c                                | 4 +---
->  sound/soc/codecs/cs4349.c                                 | 4 +---
->  sound/soc/codecs/cs53l30.c                                | 4 +---
->  sound/soc/codecs/cx2072x.c                                | 3 +--
->  sound/soc/codecs/max98090.c                               | 4 +---
->  sound/soc/codecs/max9860.c                                | 3 +--
->  sound/soc/codecs/max98927.c                               | 4 +---
->  sound/soc/codecs/mt6660.c                                 | 3 +--
->  sound/soc/codecs/nau8821.c                                | 4 +---
->  sound/soc/codecs/nau8825.c                                | 6 ++----
->  sound/soc/codecs/pcm1789-i2c.c                            | 4 +---
->  sound/soc/codecs/pcm3168a-i2c.c                           | 4 +---
->  sound/soc/codecs/pcm512x-i2c.c                            | 3 +--
->  sound/soc/codecs/rt274.c                                  | 4 +---
->  sound/soc/codecs/rt286.c                                  | 4 +---
->  sound/soc/codecs/rt298.c                                  | 4 +---
->  sound/soc/codecs/rt5616.c                                 | 6 ++----
->  sound/soc/codecs/rt5631.c                                 | 6 ++----
->  sound/soc/codecs/rt5645.c                                 | 4 +---
->  sound/soc/codecs/rt5663.c                                 | 4 +---
->  sound/soc/codecs/rt5670.c                                 | 4 +---
->  sound/soc/codecs/rt5677.c                                 | 4 +---
->  sound/soc/codecs/rt5682-i2c.c                             | 4 +---
->  sound/soc/codecs/rt5682s.c                                | 4 +---
->  sound/soc/codecs/rt9120.c                                 | 3 +--
->  sound/soc/codecs/sgtl5000.c                               | 4 +---
->  sound/soc/codecs/sta350.c                                 | 6 ++----
->  sound/soc/codecs/tas2552.c                                | 3 +--
->  sound/soc/codecs/tas5086.c                                | 6 ++----
->  sound/soc/codecs/tas571x.c                                | 4 +---
->  sound/soc/codecs/tas5805m.c                               | 3 +--
->  sound/soc/codecs/tas6424.c                                | 4 +---
->  sound/soc/codecs/tlv320adc3xxx.c                          | 3 +--
->  sound/soc/codecs/tlv320aic32x4-i2c.c                      | 4 +---
->  sound/soc/codecs/tlv320aic3x-i2c.c                        | 4 +---
->  sound/soc/codecs/tlv320dac33.c                            | 4 +---
->  sound/soc/codecs/wm1250-ev1.c                             | 4 +---
->  sound/soc/codecs/wm2200.c                                 | 4 +---
->  sound/soc/codecs/wm5100.c                                 | 4 +---
->  sound/soc/codecs/wm8804-i2c.c                             | 3 +--
->  sound/soc/codecs/wm8900.c                                 | 6 ++----
->  sound/soc/codecs/wm8903.c                                 | 4 +---
->  sound/soc/codecs/wm8960.c                                 | 6 ++----
->  sound/soc/codecs/wm8962.c                                 | 3 +--
->  sound/soc/codecs/wm8993.c                                 | 4 +---
->  sound/soc/codecs/wm8996.c                                 | 4 +---
->  sound/soc/codecs/wm9081.c                                 | 6 ++----
+> To reproduce I do this:
+> 
+> 1. Connect an Arduino Micro with stock LED blink firmware
+> 2. Run 'screen /dev/ttyACM1 9600'
+> 3. Type some letters (no response from the board is given)
+> 4. Quit in some way
+> 
+> If I skip step 3 (typing letters), the hang does not happen.
 
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+You have something in the buffer, which the tty layer will try to send.
 
-for the drivers I'm involved in development of.
+> In userspace the hang happens at a call to close() on the TTY, and using
 
--- 
-With Best Regards,
-Andy Shevchenko
+The tty layer is supposed to wait a defined amount of time
+if a tty needs to drain.
+This amount (among many other things) is traditionally
+set with the TIOCSSERIAL ioctl()
 
+> perf and ftrace it looks to be spending a lot of time poisoning urbs in
+> acm_port_shutdown.
+
+That is a bit odd.
+
+> - Is this a bug?
+
+Maybe, but unlikely. If and only it takes much more time than the
+termios say.
+
+> - Can I reduce the timeout somehow?
+
+ioctl() TIOCSSERIAL. If that does not work,
+it's a bug.
+
+	HTH
+		Oliver
 
