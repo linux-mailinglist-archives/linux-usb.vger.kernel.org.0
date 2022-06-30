@@ -2,83 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AD45621D2
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 20:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CF356225D
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 20:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbiF3SNQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jun 2022 14:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S236764AbiF3Swi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jun 2022 14:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiF3SNP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 14:13:15 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9707810E0;
-        Thu, 30 Jun 2022 11:13:12 -0700 (PDT)
+        with ESMTP id S236407AbiF3Swh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 14:52:37 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A150F2F38F
+        for <linux-usb@vger.kernel.org>; Thu, 30 Jun 2022 11:52:35 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id e2so86616edv.3
+        for <linux-usb@vger.kernel.org>; Thu, 30 Jun 2022 11:52:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656612794; x=1688148794;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PEKZxYZlf0wcPMg3FnbHkkbDO5CYIxcaK6zhZdRvs6E=;
-  b=CVcEjdAD/stI+71OPiaOFw3053D9mP5f9gO0aqBcMXKC330nm6L1gjwe
-   1MnAXeANF1MGjwhPhfUWJ6xFBktg+LwipR7q7Fc/AudYqOUAevrwesELO
-   EOrUCgWBNgbRHbkI9pGspZhZebF47Qm4ufKMVZ04M2NPx57zM9sXTl+Sr
-   s=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 30 Jun 2022 11:13:12 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 11:13:11 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 30 Jun 2022 11:13:11 -0700
-Received: from [10.216.41.79] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 30 Jun
- 2022 11:13:05 -0700
-Message-ID: <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
-Date:   Thu, 30 Jun 2022 23:43:01 +0530
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=a8QSshNO4PquU5B4T04Oyu46tpetIS7gSpq8ikJQaP4=;
+        b=guCz8DJvJtTM9cHPdxsAV0VRJgFftXXGEHsFsTFB0Hy5F3ILiFqsR3FaeUtfjwkQFk
+         fpJr0vQ3LT7+n3T5uFFRcrTtZ4NJgaEtFPhJ24Jy2PYiiFWVYFQrxhVDsi0id2gjOV9j
+         VWRxQAboe83RB4FEWqToMuRiSsjn3v1pNMhx8bFV9vBcQx11Q+vdvoNaCOvUmVGVkU9o
+         AEbUy6+nzOaLfx6GWhy4VR/lFKAwb/B2w8yvuCyrMFKADUHkvB+yhM8rTG8fE07GWG2f
+         KAkhK/DI4GiIhU06ULCvnlRyAqmbTs/kiP0+dat6Br3w7uPosZrsfySHDPVq9mTlIELZ
+         JIaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a8QSshNO4PquU5B4T04Oyu46tpetIS7gSpq8ikJQaP4=;
+        b=D+2yQqydRhqPNRVIuCM+JrQ19P0WcDTw2NQKXgsTXh2nkt6+o1xnOvi+usc5QmUM4Z
+         a5s99j/cGJWn5VUSkBV5+QuTTUQbcsLa0r3yJT+ODD8rydgCq9XVI7RURP5Pa+NujTWq
+         OEcqfwLUwAJjhJ6aDO8x1YDXxCiFGNtAEqQbGcmsgBB3EwIiO9/6ErO8x8TC1ycfgJIt
+         dzww0w9KqvXhNfBiOTl+IbFainxoFF3vN35SHcB5JsSLgYpZt1KwSLymH9Y4XlU38B9F
+         bSncWhhCUp8Y+99xiyZptsAq47fawbWHvcTZaRXH22oPLB8YAYxYr34l0Q52c0tqCdUY
+         +/iw==
+X-Gm-Message-State: AJIora+XurBA+4wkyt0cneltGGoWxyD8KPbT+FFCPbidv+JZ09PdG19l
+        LfpSsvVqU1dFE3sZJYk7QrTOPQ==
+X-Google-Smtp-Source: AGRyM1ttbJa44TsLRuzrOQZzeUeHw4K/sJQOM8KEFXgvISl4OmM8FZuHPnujXo2BxwYgn3l0moDkDg==
+X-Received: by 2002:a05:6402:3304:b0:437:74dc:b6ea with SMTP id e4-20020a056402330400b0043774dcb6eamr13919912eda.141.1656615154199;
+        Thu, 30 Jun 2022 11:52:34 -0700 (PDT)
+Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d15-20020a170906c20f00b006feb875503fsm9477611ejz.78.2022.06.30.11.52.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 11:52:33 -0700 (PDT)
+Message-ID: <68801874-d62b-4300-03db-3702d55a4b0c@linaro.org>
+Date:   Thu, 30 Jun 2022 20:52:31 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system
- suspend
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 06/13] arm64: dts: qcom: correct DWC3 node names and unit
+ addresses
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
- <YqtlRQOwb3t6Xtd0@google.com>
- <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
+ <20220504131923.214367-7-krzysztof.kozlowski@linaro.org>
+ <Yr0Yz7UATt0aqvL1@builder.lan>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yr0Yz7UATt0aqvL1@builder.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,64 +80,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 30/06/2022 05:30, Bjorn Andersson wrote:
+> On Wed 04 May 08:19 CDT 2022, Krzysztof Kozlowski wrote:
+> [..]
+>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>> index 692cf4be4eef..6af80a627c3a 100644
+>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>> @@ -3868,7 +3868,7 @@ usb_1: usb@a6f8800 {
+>>  					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
+>>  			interconnect-names = "usb-ddr", "apps-usb";
+>>  
+>> -			usb_1_dwc3: dwc3@a600000 {
+>> +			usb_1_dwc3: usb@a600000 {
+> 
+> Linux uses the dev_name() when identifying each of these controllers in
+> /sys/class/UDC, as such changing the name here will break existing USB
+> ConfigFS Gadget users.
+> 
+> We had this fixed for a while, but where forced to revert it.
+> 
+> 
+> So I think, in order for us to merge this without breaking AOSP, we'd
+> need to come up with a way to retain the old UDC name (perhaps a label
+> property?)
 
-On 6/30/2022 3:45 AM, Stephen Boyd wrote:
-> Quoting Pavan Kondeti (2022-06-27 22:31:48)
->> On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
->>> Quoting Pavan Kondeti (2022-06-20 01:54:15)
->>>> Would like to hear other people thoughts on this.
->>>>
->>> I'm not following very closely but it sounds like a problem that may be
->>> solved by using the component driver code (see
->>> include/linux/component.h). That would let you move anything that needs
->>> to be done once the child devices probe to the aggregate driver 'bind'
->>> function (see struct component_master_ops::bind).
->> Thanks Stephen for letting us know about the component device framework.
->>
->> IIUC,
->>
->> - dwc3-qcom (parent of the dwc3 core) registers as a component master by
->> calling component_master_add_with_match() before calling
->> of_platform_populate(). The match callback could be as simple as comparing
->> the device against our child device.
->>
->> - The dwc3 core (child) at the end of its probe can add as a component by calling
->> component_add().
->>
->> - The above triggers the component_master_ops::bind callback implemented in
->>    dwc3-qcom driver which signals that we are good to go.
->>
->> - The dwc-qcom can call component_bind_all() to finish the formality i.e
->>    telling the dwc3 core that we are good to go.
->>
->> Is my understanding correct? This is what we are looking for i.e a way for
->> the child device(s) to signal the parent when the former is bounded.
-> Sounds about right to me.
->
->> Also what happens when the child device probe fails for any reason. i.e
->> component_add() would never be called so the master driver i.e dwc3-qcom would
->> wait indefinitely. May be it needs to implement a timeout or runtime suspend
->> etc should take care of keeping the resoures in suspend state.
-> When the child fails probe, it should return -EPROBE_DEFER if probe
-> needs to be deferred. Then the driver will attempt probe at a later
-> time. If probe fails without defer then it will never work and dwc3-qcom
-> will wait indefinitely. Not much we can do in that situation.
-Hi Stephen,
+Ugh, I thought this was long time solved [1][2] and allowed to merge
+most of [3] to get merged.
 
-   Thanks for the idea. But doesn't adding dwc3 as a component to an agg
-driver meanthat this change needs to be done on all glue drivers, as
-component_bind_all( ) from master componentis supposed to let the dwc3
-core know that we are good to go ?
-> dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> whatever needs to be done once the dwc3 core is registered in the
-> dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> probably just be some callback from dwc3 core at the end of probe that
-> calls some function in dwc3-qcom.
-Since the issue we are facing is that the ssphy device links are not ready
-causing the dwc3 probe not being invoked, can we add an API as Pavan 
-suggested
-to check if deferred_probe listfor dwc3 device is empty or not andbased on
-that we can choose to defer our qcomprobe ? In this case, we don't need to
-touch the dwc3 core driver and would be making changesonly in qcom glue 
-driver.
+
+[1]
+https://lore.kernel.org/all/CALAqxLWGujgR7p8Vb5S_RimRVYxwm5XF-c4NkKgMH-43wEBaWg@mail.gmail.com/
+
+[2]
+https://lore.kernel.org/linux-usb/CALAqxLXrs0_Xs0JV5H-wS1q2CJ7XhW5Dj90eu=uazkRXXEMUxQ@mail.gmail.com/
+
+[3]
+https://lore.kernel.org/all/20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru/
+
+
+Best regards,
+Krzysztof
