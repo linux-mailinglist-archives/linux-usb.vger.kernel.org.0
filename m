@@ -2,119 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E495E561507
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 10:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245BE561579
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 10:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbiF3I1Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jun 2022 04:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S231130AbiF3Izl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jun 2022 04:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiF3I1W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 04:27:22 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140084.outbound.protection.outlook.com [40.107.14.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66972102;
-        Thu, 30 Jun 2022 01:27:21 -0700 (PDT)
+        with ESMTP id S229536AbiF3Izj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 04:55:39 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2054.outbound.protection.outlook.com [40.107.22.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11308427EE
+        for <linux-usb@vger.kernel.org>; Thu, 30 Jun 2022 01:55:39 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P9FYBoIJfRIxXOcf8AvqfF7jwEabhJbEFqbK3NwuWxJmbl1FyOnBzyqAIUpk5B4lx43aSylUMavgE04WPavWRJQtZK+FEQRaOmWcOhYWDEjlrHI8ADHPWe7gJ+jTvPaCkwybQInt7Py7CaOy7tQCUwGiPcJIPAaGgYxRbzvDykUfFjhkFkkM4GvZPshBc/um41VkzpHotLGFZ0RTiiJ18nK9j8n5t/b9Kr9+tfLkZ85pWkqvw3s2279VQeGAsypkLK1woOSBOT/00dW+XI5s+2IegqSNH9LfmhP/pAgvluuf37rfsYTT3O+JHKcQS0Bz0EdShTSFB8j2xsWVex3Y2A==
+ b=eF2eKDfy2/3Pi9rfGV1GozcHy5xEZrl/skPGlVVo5IAnEB7/B8hhx1MfQMCs/Rl5k1TifaDiJQZK/j/778CvV/ROSDfc/yTTOjs2aGKbgeH5RSr8CqwZ1Tvriz/WQcByQsFP4+3qKYvVjjadWafMxTnoQamqhyb8639g/bcM/jlRRdRfQa6Uk61f9RB84S13AMECJA1NCMV3SBiTkq9IczFFJqdbnintYT5lHMxpqHOOeyVQ1uieoEaZWpMkZvwGYm6n6CZJiDAanRRaiJddLidtJAcYG3Btv9YNRaV+M4wyWC6AGTo3JqqTzA89Xs9j3FgbOuUIVuoGSDDTbg2ouA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TOFZZZpLTXwil1+MyWfTTZx5F/thlnLkZjH2j0EN8IQ=;
- b=f6HJbddDWbAQiioBKcqb/8/IqkHj3sYYI5RcwIpxn9ZR3Dvr//To5TjxlWTRFrVkVsiFzKKmXLNdOEchQxCVsGEfuVH/ZEzRKC3ESR2rMrI9B/1K87PPq9cvTbyBhffPbzIJsaNP9ZPVW8eKwn5JEqsW7obZdZmMCC1AM5jkQetpNIgAxP8k7tlBpFBWO9a7rZ/G73+oDAowZqUYsDWmEEjG1qNLHUvcvYBesn5asOCz05T7dcpmhIIZK5uMpE6XMa3QLxQdSh2u/j9WOZStgtMat7IpHCdiLlnkH9+JqdLkycIRtj7nAOUF1m8mBb3mTBlJzGYayKQzMwRAuVNPdA==
+ bh=Z5tF4/I7KSqClHPQl7W94AFF9oLRuV3FjIciRcUvrok=;
+ b=EDhuYgUizP+e5DbiLf64yZc+G+/HNAhMVj3+c1bYM4MtC/hpxZTiuv1w4ZQXqrAN81lSM596haBYMY4REMcFsJjyiojY8FCyJAR0G6DFrKneVDksmXjN0EcD94lJ+ftOKGEpDkDvjS3G7iPNG/cdK35neTEZg/+RbwnsKYYEqvRzU6PR+ui2QuHNZpbL+3UBuXKqAvW6MF+CU8EDhUAV00Ff2iTXRgCBo5+yQ4eoiQkW4v42JKJFMOnw9lB0Si7r6M8HN+D+RLU7lBQt49lCFwZJ4+gxhGApNQhwTSGdLYAiAQNjQgVQW5vzF1LmxTk4Bf41mVHKBDDiEXhrD0nI5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TOFZZZpLTXwil1+MyWfTTZx5F/thlnLkZjH2j0EN8IQ=;
- b=Jk8j50KdhoMqe4MUx8CD1UVc7UuUxE8bsEKA6vjc8OJJDZ92EtEqD9qeUNscSfmsFaix2KRglBFyyOZY9M9VM3szlwuhqGx2PehTdSEWJMp4PSROCCg/1UJGA6J6hEnLYdQ0At72fTSh2mOxzEWdDaP2AKKvXSfGFZkijl4lqP1zub2J/3OBj6ygpQz3gaRkxXFCySObQfHVniYvETe8oPbZgGLyxyokLRKDJLzwX2Rd3tipHrQJ69vWc6qhmaBUbumO/iz760xYGaXs0yy8/snVU7jTYE/Kxeiojh9e/cToDkI1CW062f/rdPfVCmwN+fQPQsQUlZI3fE2SsFUAUA==
+ bh=Z5tF4/I7KSqClHPQl7W94AFF9oLRuV3FjIciRcUvrok=;
+ b=vKWKZuHw8EeToQ6ZDccijIILuX6oA6htfEvgjqDsYtMGHAZxv/7jbP6KJMDBT+WeMaXp2sGAm8ng5GQizHlEYk8vKof981hVDBZOAiAUuesyKlauJL9K4DgppAi3uheixRAdCqgZsw5fSmGkMMzH5SfuVNdKxD5zkn2ZvUpujEg1Dk6t7MQ5aijjAG89dTP+zXojEDoCqzTphtb1mx/FY4f/8h7Iu/MLuXclj9AAzs8IWsvostm8HUtPErOV+E8OPpTBRoCYNRGomdjxRmH+HUMDqibRvrwzwpPEDwwtc4+3Bfw+pd0ZJxmnxGyHsiIaU3WPN1yxkfhX+BNHO8C84g==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=suse.com;
 Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by AM0PR0402MB3651.eurprd04.prod.outlook.com
- (2603:10a6:208:5::27) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10a6:800:58::16) by VE1PR04MB6526.eurprd04.prod.outlook.com
+ (2603:10a6:803:11d::26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Thu, 30 Jun
- 2022 08:27:18 +0000
+ 2022 08:55:36 +0000
 Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
  ([fe80::21d5:a855:6e65:cf5d]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
  ([fe80::21d5:a855:6e65:cf5d%12]) with mapi id 15.20.5395.014; Thu, 30 Jun
- 2022 08:27:18 +0000
-Message-ID: <3fe54848-f9ab-9cda-6da2-6f37d8cf337f@suse.com>
-Date:   Thu, 30 Jun 2022 10:27:16 +0200
+ 2022 08:55:36 +0000
+Message-ID: <ae3ccebe-79ef-5dda-ae35-b753869a8822@suse.com>
+Date:   Thu, 30 Jun 2022 10:55:34 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH RESEND v2 1/2] net: usb: cdc_ether: Add Fibocom L610 modem
+Subject: Re: SATA/USB caddy - wrong device size reported
 Content-Language: en-US
-To:     Sven Schwermer <sven@svenschwermer.de>, linux-usb@vger.kernel.org,
-        oliver@neukum.org
-Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        linux-kernel@vger.kernel.org
-References: <20220627133620.272716-1-sven@svenschwermer.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Eyal Lebedinsky <eyal@eyal.emu.id.au>
+Cc:     linux-usb@vger.kernel.org
+References: <a1ac4690-4d46-4461-a90f-dfa4777dbf54@eyal.emu.id.au>
+ <YrxiF/uE0/0Kw7rJ@rowland.harvard.edu>
 From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20220627133620.272716-1-sven@svenschwermer.de>
+In-Reply-To: <YrxiF/uE0/0Kw7rJ@rowland.harvard.edu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0115.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a8::14) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-ClientProxiedBy: FR3P281CA0025.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::23) To VI1PR0401MB2526.eurprd04.prod.outlook.com
  (2603:10a6:800:58::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e9cbe7ec-6b29-4ef5-7ca9-08da5a725824
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3651:EE_
+X-MS-Office365-Filtering-Correlation-Id: 331aaa42-2cbe-4a3a-14a6-08da5a764c52
+X-MS-TrafficTypeDiagnostic: VE1PR04MB6526:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NMDEjz9Wel1vaDDuIjPheYmusmMekXopHns8E+VkKalAlpptD9y47UMPyhiDfNausWu+uemTDrAalKXWasInwGylEVIoL8E+SKe48aUIDFGuIHWqCFg/WZGP0joBRwAds//ExlEDccrfLHmwqxEu08uD874l35OVJelQLf0Pfr+aoxivQkgflbMLE09ejYhV179rptqBHROQL6HoYXf3f2auuTl+42hRfh/70Sn2jxpvzY5Lc8XyMjUuw+b3Qi/DdJlPdZCiXrIfuaZTQPHs/YQDywAPZ44/xppFz3lek4/VJuXD+JkI7i8+nCwlIL56eZomJX3hpOG5Yrrfqg7W1qPB3z4GSyP4nl0AO+uvTShY2g1m8E3bc5v8KpT9PU6CzB+JaTdakUkxEAyIYwl1ywU3D8DuEl7YOyVd9IR5F8hmXnKJ7kxECFdUM50vibHIE3tTV/zmzRSNHo9bBYF0bMbegmeIfPj+yjHf0fuBZ1rQoJM8To5Au9iFIbEnxmXIYY+37pQG30QIW1gJZqHiEv2o8lR/seD8pQbrvJ+gipAXnvp/zkmqMx9p1DXrv7LOsbzppH31Jyols7uW74io6MHhUdmZvcMIIRf5rKdYt6onJCP6gWYOpDSlJEO8aUiqrHmgN+cv3d7cFlA5Ko3WI8lzS7N0rwo5HdP+xHW0TGOzEGx5k4ozRRItlyuqvIfYdiNTRtK6b5PfRBQw/PNGKK+yGxRt481AJk3Iu8G3Alt7P2vBVGcYiGV0KGF5yyg8GwyrSz/kjSArFjPdBBGPTQDn/AAZNkQW+R6XY4RjzwfMg6khhi/DIleRHZTvuAFRNV4ihM9eaF66eJr7VXcwQQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(376002)(39860400002)(366004)(136003)(53546011)(66556008)(4326008)(66476007)(66946007)(186003)(8936002)(478600001)(6506007)(6486002)(36756003)(86362001)(31696002)(5660300002)(6512007)(316002)(2906002)(2616005)(31686004)(8676002)(38100700002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jBRzpTpStYsFDRhhDBaHhXhUZIHyyA652SXrzQCVjruduVyHbFlsNrNL7t+xx4zAN4qMfLgNDuTTy0VzH70JW9iYDeq+K+mAq62VSkVHITKFvJ4dB8rDZUkWDRQ1kjFjcNKfhUE1IiQALo+afbV5xKRDUiuFT2E7l6j8S6huvTM5QuC0+4+NZnVuXmalnuTLD79J91x7nCUtMdc7OWTEVl5Vr0289IguO8wOzWomUJBKSWHxb3w0zo6FwSQmrRodl9ZUwea/NlzEP1ygM/kq33wpF7oKs4bpVzPFrkGF4fTYzady8ClEPB2P5ah8BvskMxSgCaZwlK9hMVut9oz+pywVFcPAI3R416AXYzCcz0/OSRPRNyMZdSZiZI+EkOm2+eChZEwtCgHKWqHKZs0lSJUX9hSDmle+au4Do0W3fhYL2bOW8AfbRiB7L64R6BA8xQrhiHJ/uXKc1HTromMaQJ4Ac/jp/7fDQ6zf+rdDzvY8Cll7wqUFYAauiNjg1ef0ahHP7K7hWy/1yTz2OtgaxfFTBHxcp0LnSVX8RzxgEZ3JcuSOzDh4MT0ZZeAVp7Yee+yYG4EJOVnv91gqtSq91VswiiOtsp3QW3hnHL0KrEgoYemGxVzQAf1COGPVKMz6so7N0XbDUD9U7O7KnoG48MJkEri1LdKZYcmyURu9nFCSfQl+9YKnLPUzlcYL4g+y00N08Cw0gj6nAxgRnnBeZCY3y81ldbZpy1n2a+Jequ5wkIqBwlDUF5L8obgix/y8udKFoGu6hSbF8BCtesD9+Mhr22X7E5eUJkmgMcsUDy51bS73M5+hnjolP0Gzl1xbdgjQX+DV4/nsXkcx1AKHDA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(136003)(376002)(39860400002)(396003)(8676002)(36756003)(2616005)(5660300002)(4744005)(316002)(8936002)(186003)(6512007)(31686004)(478600001)(83380400001)(4326008)(31696002)(110136005)(6506007)(2906002)(66556008)(38100700002)(53546011)(41300700001)(86362001)(66476007)(6486002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SW9uT3pmWlhkRnVlbTA5ajhpSHVWZTZvemticjBJbDdnWm1mdGdtaXFMekh6?=
- =?utf-8?B?NFFXTXNmRlAwTktLejdhS1hIU01DbC94L3dSWDNYcnJpb0IwUmViVFo4eTJZ?=
- =?utf-8?B?TmVYSmg2RVFNV3M2QzYzNW1YOGFWYlp0Tkc1d3EzWTFsZE5jSGFYVGk2L0Vr?=
- =?utf-8?B?bGJWY096QWlPS3V3RHNmQWR0OWU5QXVJYmVTc0Roa0VQYlB1ZVF4akpkL3Az?=
- =?utf-8?B?Vzl4KzZhaURSbllOUHFxbkh0TkhDZE41YkxLTU1IOVB3cHp5TkN0T0lscE9E?=
- =?utf-8?B?RDhyZG1iTHR2TVJIaDVtQnI4R1hVSEhDeG1vc3J6dytjOFJGV2xiZTRVeVQ0?=
- =?utf-8?B?SXR5eDBlS1JPSXZGM09yb3BtaW1GTjB3V1ZDS090Y09ab0xBQkRaT0xkZXFS?=
- =?utf-8?B?MGd2eitOUURIdUJMeFFGaEtjUERRU1FsU0w1K2JndzJmTlpnRGp6eUh5Uzl6?=
- =?utf-8?B?OUR6b3BXMmlVZ2lLRlFBcXRFN1NRbUhFVmVBd2NIdDFSL0tZRzZtcjhxeXE5?=
- =?utf-8?B?Q1M5T0lsVEFvTHI2cTJUTCtDMjlybkdFYjJhSXBhaFdwWGsyU1J6Y1RxLzdm?=
- =?utf-8?B?MFV0LzdMbjlxeGxicVdKN29SMHlvenF2d1hQK0pUcVJFdEhFaldsOFpUL1lG?=
- =?utf-8?B?NDVCdWJjci9Md242c3V1Z2ZsTk1rZFhPdlQ4QUY4N2Q3dTIxTk1vaThCUjN3?=
- =?utf-8?B?WHpMUTRrd3p0VllQekZzZTlQbndQU1VVSzNLT1Rrc3NYMElHb0o5VXVBNXoz?=
- =?utf-8?B?ZlF3ZFZhUXdCaG9CWWx4Vmw3Smp4R3A0TlMwRTFNdUEyOXZmU0hNUE1ycDlI?=
- =?utf-8?B?Qi9ncVZKN1QySkhIdmlDalMwTWJGT0U1MnJOeWRTcVVPYnBMQlZMeE1hNWYx?=
- =?utf-8?B?S1RpdE8reFo1N1p1Q3M3VTlDYldSNUFIeUdQdnRmTlBwVzQ3MlFZWEpvb3FM?=
- =?utf-8?B?U21UYTZFdEd2L2xxUEt1SDhJemtoTlBSQVdKSzM1TXRtb2FvUHlDQTFyR1VD?=
- =?utf-8?B?dXVvY2E5ckxUSHdKejUvbTJFYUhzbmNjMzE2OTRQVStyYVdzRDJGYUF5Uzdm?=
- =?utf-8?B?QUdtWWY4TytnazBrMnRJRS9YMGJFR1NJMmQ4OTBMS2w0T3A5L0ZMSFcxUllT?=
- =?utf-8?B?OXBDZTN1M0ZQdmZPQ0hRckZiUnEvbkF6eFA1VkgrSHprcmpiajd0ajludzBr?=
- =?utf-8?B?b05BNU1saEs5Y0cvKzEwSGR2ZjQ1V2VhWUVhbUpFdUVVbU9XeG4wWm9sSVQy?=
- =?utf-8?B?MEVNTzFoQnl6WVNOaTBBK2lnNnYydVBtY2Q0d0tjbmFRT1JhUVZ5QVZLMXdh?=
- =?utf-8?B?cVcwZjV3N1NDdFN5dkdyTllCKzJIWnl2VHhoUXRWcFNNMS90S1dEcmJJMjJx?=
- =?utf-8?B?djJRNWV0Z2h3a3E5dTZyQkRkVlllN2RyYnVlTldLQ0Y0NmJIWk5IdE16bGtl?=
- =?utf-8?B?bGQ5elF1MkZTRHMzOWF6TVNOSmdGTlRSOEt4alVETGlVaUJQK2N1bk85Rlpx?=
- =?utf-8?B?Skk3RWlJSDRRUWFyZnNORjFDdDJuUXhzalBYWW5qejVrbDZKU2dZSlNSSkRj?=
- =?utf-8?B?TzYxR2FQZGFvdlZzL21GK1RoNnVadUFsQmZFREhhamN0VVE3U2V3L3BQNXdF?=
- =?utf-8?B?Wm44Q0hWQ2RaWW1reVB2TEw5QjBmZDNuTWxTY3Nodng5SmNBcnpPYTl1Q1ht?=
- =?utf-8?B?cjNKTkZzak5OK04rcjBxYWg4djNNbFZ0RnNaVkVIZVoxOXZpZ09heStlV1ly?=
- =?utf-8?B?RHB2dlFZRVlqaUtBbncyaXFBd3NHY2ZoaDFHenNaNW1NcGoxandUaDd0WHdF?=
- =?utf-8?B?dmkrbzYzdzFHVXN5TlFKSnpIdFJIdzRXb1pBckJLQzRCV3ZSaUhsK3B4bFRB?=
- =?utf-8?B?Q00yWXIySTBlYzZGUTlrT2Z2VjFiUDhBU3BMcGZjYk9STWRUMXhTZWdiOHQr?=
- =?utf-8?B?cUFvTEthb3VqM092MDFnZTBSdmJmNlBaajRxUkFpeDhlaWRjQ0F2cFk3WVFx?=
- =?utf-8?B?OGtEMnJGQTRtM1JHd0NRWi9Ra2g3d3V3WkxrZG9raGc1ckJBMnhhclpyN1h1?=
- =?utf-8?B?Q0RpS041cUc3d2QwRzduYVBUalM2Z1M5OTN4bmxJRzh3VENVTTNMMVhHbGo4?=
- =?utf-8?B?ZzFHZEsxcDM5eGtDR3hYVXh6eU5HdlJ0TjJtVVl4bklGMXU3V2Q0SXU3b2tF?=
- =?utf-8?Q?JvvoOv1sTEGSZLhdTnHEcMXR+sgcFWIRsfFvUlHcpp54?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zko2OFNQZ1lWcDFVQ2JDRXZzMWtoZ2ZjVTdneXRrZEg0cHp6RzJVY3U2MUs1?=
+ =?utf-8?B?dDdzQWVodG5jRlZEQTVjWXJrditSeDB0UGFCbXhJK3R3MFlYRldoNkFDTmw0?=
+ =?utf-8?B?MjZQVHNrNXZHVFdockJmSzdNTFZWaE81bVBqQ3Bnc244UFZTZEtlRC8wdVly?=
+ =?utf-8?B?bzdlQVZsZHBvb3dZN2dsdTZIQkpoMGJLbXIxdlhUREpFdjAwRU14QlJrbGZ3?=
+ =?utf-8?B?d0VFQmU0OGlIRG12V0pwZjhScTlDcDFCVmFXbHdHVHVDanhqa0NOTGkwTmM5?=
+ =?utf-8?B?ZHR1WE95ZmtJbnVhdDREbVhNeW12cmZtNTlsazIzU2JmbTAwTDhCUTgvSS9B?=
+ =?utf-8?B?cThuWmtuZjBKQitzZUxIanMyOC8xeEQ2dlpTYXhOMnduSXQvMmRZSXNtbUpX?=
+ =?utf-8?B?RDczUXdNTHdHM3lIQ2VBSUl0MEVaSDJJd1dlUSsvVWR3L1lpWUoxSFJ3ZW1m?=
+ =?utf-8?B?UFE0ZE5XeWZPVFlSMlFab0lxdnlCWFFQc1pFMWg3cFJDTUNxdzJ5YkpqT0VI?=
+ =?utf-8?B?QXFhQk13YU5sbGJrR1c4WmlqVDFocUpnbmpiTUZWNWo3OXhIZEhESklCL0lO?=
+ =?utf-8?B?MXFmb0FMakJ5SEFXeStRMkt0OTVvSWFydVNRVmJ2akJHc0JqcEpHYW9GQlE1?=
+ =?utf-8?B?UEh3dzNLc2hrd3lXNXQwVHlxUWtFd1F6L3pBZEZTYzBXYzlaRk11b2g5bkgx?=
+ =?utf-8?B?VG43K2FVTDNVa2xzNXBBNjBBdC9qRVp4VTVnYmF4TDcxaW9CcWwwM0ZTWi80?=
+ =?utf-8?B?U016czFBdzUrMS9vWEQxTTlYOGlpdXAxYXN0blZweGxYc3gvdi9vOUdWZ0Qx?=
+ =?utf-8?B?eUdtbWdCeEJRalI2UTh5UDFMYUdnRS9MWnBwY1pRYzBteHZmRys3cEpKdkZV?=
+ =?utf-8?B?YjNzcXVKcXpJM2t0ZEh0M00vckM0WVJ6cWg2VXl0TEVSM2hUSk1VZXI5REJi?=
+ =?utf-8?B?Ympsb3QwYTMwQVpnOUx3RHhyYnFrUmdqVGtqbHNrL0RIbDNZaDNHTzNHMWdi?=
+ =?utf-8?B?Y21UaW9kK21hZWlxWEFjOVZHRE82bjZrNm9jRFI2ZDZBQ2xNOFZZRW81Q1BB?=
+ =?utf-8?B?Nkp0MXBkRVJsZ21VY2dpcDFvcnloajRsL0lOdzgvenJ2QUFWVkxoazVpUGU5?=
+ =?utf-8?B?dVdFU2w3czhLYUlTT0pHa2xhN09MZlM5bFh4Wi9vOXZKeGxJOUJkUGltOStO?=
+ =?utf-8?B?ZjhpVW1HM2lGQVdINHZKUTJxT0ZOUHozV2dzczZzZE5KVkhVL3BadDFHOVF2?=
+ =?utf-8?B?L29GOXIvYlZWY1BBQW1jSjVTT1lqem5pL3FyQkhacHhKekQ4L21pSU1LRmhl?=
+ =?utf-8?B?cXl6V2ttc28rZGVQTHBDY0FRR0szRzcza1V2T3B5anhJTVJESUxRQ0k5a0Ra?=
+ =?utf-8?B?S3ZObVppOHhzMThDREVJM0RGcnp6R01nQkdRamZTNFZmR243SkVKVkMxT0M4?=
+ =?utf-8?B?eDY0RlBFV3NzWFBsZjI1aGVzM1V5eVk2SWZ0QlhwUC83U0NBRDRsTGcvVFRN?=
+ =?utf-8?B?bnlwNFFHcUlVdkl5M0pHeHIwZ2RUVi8zMGQ0YmI4OWNqR2IrM0FHQjgyamln?=
+ =?utf-8?B?cWpuQXRKcnN5R0ErMkVhN05UYy9xQWdmckhUUVhCYWdUM1Y2c0pXRG9ZVUZK?=
+ =?utf-8?B?SS9nU1Y3TWhDS0pIV3FJYktERlFPdHNPVlZuNVZDVnVSVnlxMGVWRFJTTjdL?=
+ =?utf-8?B?cUhkbGhtZnlSK0tyVGkveDhLb05CMS8weTdMUFM3c3N1K0VTUUlxUks5WnVt?=
+ =?utf-8?B?ckNFRTlKRC9vZ1IwRlB3Tk0wRjduQkIvUWJJcmYzOEV5ZnhxVXlRSFhBQm45?=
+ =?utf-8?B?S25nMVh1MW9aRjBJcWVwa3J0K3ZaaWRKY2Vvc25CTEloZGZ3SGRxckxpcnR4?=
+ =?utf-8?B?UUw3LzR2M1FXNEJRV2EwQS9UV2o1NmhoVU40Q2ExbFdPVW1QanZkeHB6eHhQ?=
+ =?utf-8?B?U2NoSTVPNlRZaUNTVmRhVnl4YjZoZUhnZWhLcDlCT052R21PbFdwbGZCTkJM?=
+ =?utf-8?B?WVJTT3FEQlUwaUpndThESXBYdkdjTnEyMmNXRWVSMVNxcFVQMWFxRU1sb1Fy?=
+ =?utf-8?B?V1B1eGFVOHcwNGYycGQzVktrMkhrSzA4LzNCOFp3R3lUTXo0eW1KaWpiMVcr?=
+ =?utf-8?B?eDVYZ1p3eitkZ2FmNVlWbk56ZFFOTTBPYlN3Tk1aY2RHdVNPVDE4RDZIRGF2?=
+ =?utf-8?Q?hXKZm7Z7wVZaPnYQHTXCzVxJY3FfSPjn7+2NL178grm0?=
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9cbe7ec-6b29-4ef5-7ca9-08da5a725824
+X-MS-Exchange-CrossTenant-Network-Message-Id: 331aaa42-2cbe-4a3a-14a6-08da5a764c52
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 08:27:17.9935
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2022 08:55:36.1153
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gdhBBxRZumIUXGV26VN/G+EgitqDsiDZbOujTLhi7Yv00xpo0n8yfWiO+6XhJ96PsVkvU6Dq2M1Sk+3IWlbyYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3651
+X-MS-Exchange-CrossTenant-UserPrincipalName: L+Nnm6gIzzzQ5igB/WQiKvIlpoCXxMqp4i3g1EENsIiOTYF+6QgekcU3YYrewI5s/cnRrEE2/Z86Qh/gw9rSUA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6526
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -127,58 +127,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 27.06.22 15:36, Sven Schwermer wrote:
-> From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+On 29.06.22 16:30, Alan Stern wrote:
+
+> Historically the problem goes the other way: Lots of devices used to 
+> report a total size that was one logical block _larger_ than their 
+> actual capacity.  This was caused by the firmware authors 
+> misunderstanding the READ CAPACITY command, which is supposed to return 
+> the block number of the last logical block -- but instead they would 
+> return the total number of logical blocks, which is one higher (since 
+> the first block is number 0).
 > 
-> Since this is a modem device enumerating as an Ethernet adapter, we need
-> to whitelist it as a WWAN device which tells userspace that this device
-> requires setup (via AT commands) before it can be used.
+> Nowadays most devices seem to sorted this out.  It looks like you found 
+> one that makes the opposite mistake: The value it reports is one less 
+> than the last block number.
 > 
-> The L610 modem has 3 USB configurations that are configurable via the AT
-> command AT+GTUSBMODE={31,32,33} which make the modem enumerate with the
-> following interfaces, respectively:
-> 
-> 31: Modem + NV + MOS + Diag + LOG + AT + AT
-> 32: ECM + Modem + NV + MOS + Diag + LOG + AT + AT
-> 33: RNDIS + Modem + NV + MOS + Diag + LOG + AT + AT
-> 
-> A detailed description of the USB configuration for the ECM mode
-> (+GTUSBMODE=32) follows:
-> 
-> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=122 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1782 ProdID=4d11 Rev= 0.00
-> S:  Manufacturer=FIBOCOM
-> S:  Product=L610
-> C:* #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=400mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+> It is definitely a bug in the caddy.  On the other hand, this bug 
+> probably doesn't affect the rest of the caddy's operations.
+
+Or alternatively, the caddy is marked as quirky by mistake.
+In that case we need the descriptors of your device to compare it
+to the list of quirky devices. Could you provide "lsusb -v"?
+
+	Regards
+		Oliver
+
