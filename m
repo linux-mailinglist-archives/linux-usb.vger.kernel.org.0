@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFA3560E5B
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 02:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED1B560E99
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jun 2022 03:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiF3AwL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jun 2022 20:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S229930AbiF3BK0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jun 2022 21:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiF3AwK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 20:52:10 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4F763FDAB;
-        Wed, 29 Jun 2022 17:52:08 -0700 (PDT)
+        with ESMTP id S229453AbiF3BKZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jun 2022 21:10:25 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10E3B403ED;
+        Wed, 29 Jun 2022 18:10:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Msj1Q
-        C6+hqxSIXMSAOcQBdkaMXFRb0rZzELsEToclcY=; b=W5+aqmNpOBgWQCZ2244BF
-        DQdm/Ucmg63hkZqJHkcRA5UomTaxYRlctL97y4dwznuMMiOkNRtt5SHwduEzCEFC
-        uGBD1aGJJwkhqgSj+7CTjbq/New4grv2sPBVrXYInlkqrIwTKjLVuPA8J29eIZ28
-        exzyNuQNlDUheK2IIqk/wI=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=DKUrC
+        qPEXYuKmW3w0+RErOtr/L90fVOnjPQkW+LNK0M=; b=AC5ZbvbRavyZiyK78dsM6
+        vF1UK3Fwr0+2Oa5LkkFS+j3Cz+4+s43WbfVer8f44obElPwXsFbqmP9Ddykfmsrh
+        IB6bgmOLprWiSsH43veqQcR6WdYUm7I3Oq2DGwlVgl3mjY8KLNKHpjCKhRAC44ci
+        c1iksDfxu1c6vKNhoXuCLE=
 Received: from localhost.localdomain (unknown [123.112.69.106])
-        by smtp3 (Coremail) with SMTP id G9xpCgAHs5un87xiTZlmMg--.54029S4;
-        Thu, 30 Jun 2022 08:52:00 +0800 (CST)
+        by smtp4 (Coremail) with SMTP id HNxpCgCHlt3x97xijOXeLw--.53498S4;
+        Thu, 30 Jun 2022 09:10:17 +0800 (CST)
 From:   Jianglei Nie <niejianglei2021@163.com>
-To:     pawell@cadence.com, gregkh@linuxfoundation.org
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] usb: cdnsp: Fix potential memory leak in cdnsp_alloc_stream_info()
-Date:   Thu, 30 Jun 2022 08:51:48 +0800
-Message-Id: <20220630005148.2166473-1-niejianglei2021@163.com>
+Subject: [PATCH] usb: host: xhci: Fix potential memory leak in xhci_alloc_stream_info()
+Date:   Thu, 30 Jun 2022 09:10:08 +0800
+Message-Id: <20220630011008.2167298-1-niejianglei2021@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgAHs5un87xiTZlmMg--.54029S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GrWrXr47Kw1fWFW8AFyDtrb_yoWDXFc_ZF
-        4a9FZrGF1jkws7Gw1Fqr98urWqyr42vFWkXa12qr4fGF18ur93AryxZr4xXFW7J3y5Jrnr
-        Z348t3y5ur1kJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRE7PEPUUUUU==
+X-CM-TRANSID: HNxpCgCHlt3x97xijOXeLw--.53498S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw48KFWxCF17WF1DuFy8Zrb_yoW8AFW7pF
+        yfZw1Fkr43tF1kGF1DJa4YvayrKw18Ka45KrZrG34kur4UJF4YgF1UCFW8urySvrn5Xr10
+        yF95twn5JF4UGFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRqYLPUUUUU=
 X-Originating-IP: [123.112.69.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiFRAwjF5mLi7PcwAAs9
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiMhkwjFWBzt3EiwAAsf
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -50,32 +50,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-cdnsp_alloc_stream_info() allocates stream context array for stream_info
-->stream_ctx_array with cdnsp_alloc_stream_ctx(). When some error occurs,
+xhci_alloc_stream_info() allocates stream context array for stream_info
+->stream_ctx_array with xhci_alloc_stream_ctx(). When some error occurs,
 stream_info->stream_ctx_array is not released, which will lead to a
 memory leak.
 
 We can fix it by releasing the stream_info->stream_ctx_array with
-cdnsp_free_stream_ctx() on the error path to avoid the potential memory
+xhci_free_stream_ctx() on the error path to avoid the potential memory
 leak.
 
 Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 ---
- drivers/usb/cdns3/cdnsp-mem.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/xhci-mem.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
-index 97866bfb2da9..319037848151 100644
---- a/drivers/usb/cdns3/cdnsp-mem.c
-+++ b/drivers/usb/cdns3/cdnsp-mem.c
-@@ -631,6 +631,7 @@ int cdnsp_alloc_stream_info(struct cdnsp_device *pdev,
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 8c19e151a945..a71d3a873467 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -648,8 +648,13 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
+ 	/* Allocate everything needed to free the stream rings later */
+ 	stream_info->free_streams_command =
+ 		xhci_alloc_command_with_ctx(xhci, true, mem_flags);
+-	if (!stream_info->free_streams_command)
++	if (!stream_info->free_streams_command) {
++		xhci_free_stream_ctx(xhci,
++			stream_info->num_stream_ctxs,
++			stream_info->stream_ctx_array,
++			stream_info->ctx_array_dma);
+ 		goto cleanup_ctx;
++	}
+ 
+ 	INIT_RADIX_TREE(&stream_info->trb_address_map, GFP_ATOMIC);
+ 
+@@ -700,6 +705,10 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
  			stream_info->stream_rings[cur_stream] = NULL;
  		}
  	}
-+	cdnsp_free_stream_ctx(pdev, pep);
- 
- cleanup_stream_rings:
- 	kfree(pep->stream_info.stream_rings);
++	xhci_free_stream_ctx(xhci,
++			stream_info->num_stream_ctxs,
++			stream_info->stream_ctx_array,
++			stream_info->ctx_array_dma);
+ 	xhci_free_command(xhci, stream_info->free_streams_command);
+ cleanup_ctx:
+ 	kfree(stream_info->stream_rings);
 -- 
 2.25.1
 
