@@ -2,132 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15905563125
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 12:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81464563180
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 12:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235363AbiGAKPm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Jul 2022 06:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S236381AbiGAKfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Jul 2022 06:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbiGAKPj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 06:15:39 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA0C76942;
-        Fri,  1 Jul 2022 03:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656670538; x=1688206538;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tjB+YWtXrkSRn425vyGQBHRy7XsCGQmbQOkFimaKvD8=;
-  b=mGlH6Ehl4+p81Okw+KAPIJ8ISKWWOor6jcsuLgWeklkjkPq/S4mFaAR7
-   zW7HxKB5YTd2mklPt2aAyW01+GOomRDxHWRnR4att7T+0rqTCKiKFdkye
-   kVFOylkjldrDHyuhz+A0ya4u0RQMaipMPq/cfv8811uBEo4P+PKztL7fK
-   8=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 01 Jul 2022 03:15:37 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 03:15:36 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Jul 2022 03:15:36 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Jul 2022 03:15:30 -0700
-Date:   Fri, 1 Jul 2022 15:45:26 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Mathias Nyman" <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
-References: <Yqd9IHQEj3Ex+FcF@google.com>
- <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
- <YqtlRQOwb3t6Xtd0@google.com>
- <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
- <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
- <Yr5JmrSaus8xKpM9@google.com>
+        with ESMTP id S236333AbiGAKfW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 06:35:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE157969E;
+        Fri,  1 Jul 2022 03:35:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B61062339;
+        Fri,  1 Jul 2022 10:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6C4C341C6;
+        Fri,  1 Jul 2022 10:35:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656671720;
+        bh=5hX8oRoPZn4b5fAaXxxYWDQveykgB7sgy/RluBH/fJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UWsq++M5k0Wo3efjXd1fLAQzurXJaA8GNRq0b6drz75gynuFHQa39dFdvKWiH04u3
+         u89Q2AoTV2EoGcNYW3oH4iH1+CvKo0EWKBfUMEyz0xZlzarTk2K6bJkFVql7L82ddO
+         LuY+yThHSOoxvhtr0vmohQ3P7cO/ZS7ygZl7sY6A=
+Date:   Fri, 1 Jul 2022 12:35:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ray Chi <raychi@google.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Albert Wang <albertccwang@google.com>
+Subject: Re: [PATCH] USB: hub: add module parameters to usbcore for port init
+ retries
+Message-ID: <Yr7N5ZjKLpeQflxd@kroah.com>
+References: <20220617102256.3253019-1-raychi@google.com>
+ <YrFxLYibDtyuxSO6@kroah.com>
+ <CAPBYUsBbP7ssGXSRyWN46u1-Qaa712QLm748FhJ-M3pANZUsng@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yr5JmrSaus8xKpM9@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAPBYUsBbP7ssGXSRyWN46u1-Qaa712QLm748FhJ-M3pANZUsng@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 06:10:50PM -0700, Matthias Kaehlcke wrote:
-> > > dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> > > whatever needs to be done once the dwc3 core is registered in the
-> > > dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> > > there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> > > probably just be some callback from dwc3 core at the end of probe that
-> > > calls some function in dwc3-qcom.
-> > Since the issue we are facing is that the ssphy device links are not ready
-> > causing the dwc3 probe not being invoked, can we add an API as Pavan
-> > suggested
-> > to check if deferred_probe listfor dwc3 device is empty or not andbased on
-> > that we can choose to defer our qcomprobe ? In this case, we don't need to
-> > touch the dwc3 core driver and would be making changesonly in qcom glue
-> > driver.
+On Fri, Jul 01, 2022 at 05:46:42PM +0800, Ray Chi wrote:
+> On Tue, Jun 21, 2022 at 3:20 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Jun 17, 2022 at 06:22:56PM +0800, Ray Chi wrote:
+> > > Currently, there is a Kconfig (CONFIG_USB_FEW_INIT_RETRIES) to
+> > > reduce retries when the port initialization is failed. The retry
+> > > times are fixed and assigned in compile time. To improve the
+> > > flexibility, this patch add four module parameters:
+> > > port_reset_tries, set_address_tries, get_descriptor_tries,
+> > > and get_maxpacket0_tries, to replace the original default values.
+> > >
+> > > The default value of module parameters is the same as before
+> > > to preserve the existing behavior.
+> > >
+> > > Signed-off-by: Ray Chi <raychi@google.com>
+> > > ---
+> > >  .../admin-guide/kernel-parameters.txt         | 16 ++++++++++
+> > >  drivers/usb/core/hub.c                        | 31 ++++++++++++++++---
+> > >  2 files changed, 42 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > > index 8090130b544b..c467b2778128 100644
+> > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > @@ -6277,6 +6277,22 @@
+> > >                       USB_REQ_GET_DESCRIPTOR request in milliseconds
+> > >                       (default 5000 = 5.0 seconds).
+> > >
+> > > +     usbcore.port_reset_tries=
+> > > +                     [USB] Set the retry time of port reset for each
+> > > +                     port initialization (default PORT_RESET_TRIES = 5).
+> > > +
+> > > +     usbcore.set_address_tries=
+> > > +                     [USB] set the retry time of set address for each
+> > > +                     port initialization (default SET_ADDRESS_TRIES = 2).
+> > > +
+> > > +     usbcore.get_descriptor_tries=
+> > > +                     [USB] set the retry time of set address for each
+> > > +                     port initialization (default GET_DESCRIPTOR_TRIES = 2).
+> > > +
+> > > +     usbcore.get_maxpacket0_tries=
+> > > +                     [USB] set the retry time of get maxpacket0 for each
+> > > +                     port initialization (default GET_MAXPACKET0_TRIES = 3).
+> > > +
+> > >       usbcore.nousb   [USB] Disable the USB subsystem
+> > >
+> > >       usbcore.quirks=
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > > index b7f66dcd1fe0..c5c695886424 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -2788,6 +2788,27 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
+> > >  #define HUB_LONG_RESET_TIME  200
+> > >  #define HUB_RESET_TIMEOUT    800
+> > >
+> > > +/* define retry time for port reset */
+> > > +static int port_reset_tries = PORT_RESET_TRIES;
+> > > +module_param(port_reset_tries, int, S_IRUGO|S_IWUSR);
+> > > +MODULE_PARM_DESC(port_reset_tries, "retry times of port reset for each port initialization");
+> >
+> > Please no.  Module parameters are from the 1990's, let us never add new
+> > ones if at all possible.
+> >
+> > These are global options, for all devices in the system.  Instead, use
+> > per-device settings if you really need to change these values.
 > 
-> As mentioned above, it shouldn't be necessary to add component support to
-> all the glue drivers. An API to check for deferred probing is an option,
-> however there is a possible race condition: When the dwc3-qcom driver checks
-> for a deferred probe the core could still be probing, in that situation the
-> glue would proceed before the core driver is ready. That could be avoided
-> with the component based approach.
+> Sorry for the late reply.
+> Since the driver is using define macro to decide the retry time
+> currently, we can't
+> modify the value directly. Do you mean setting by device tree for
+> per-device settings? or other methods?
 
-The race can happen only if asynchronous probe is enabled, otherwise the
-child's probe happens synchronously in of_platform_populate() 
+Yes, anything other than a module parameter as you just modified the
+value of ALL devices in the system, which I do not think you really
+want, right?  Odds are you just want to be able to work around a broken
+internal USB hub, and do not want this option changed for anything that
+a user plugs into the system, right?
 
-OTOH, would the below condition suffice for our needs here? if our device
-is not bounded to a driver, we check the state of initcalls and return
-either error or -EPROBE_DEFER
+> > But I would even push back on that and ask why these values need to be
+> > changed at all.  What hardware is broken so badly that our timeout
+> > settings do not work properly?  Can we modify them gracefully to "just
+> > work" without any need for tweaking or requiring any modification by a
+> > user at all?  That would be the better solution instead of requiring
+> > users to do this on their own when confronted by misbehaving hardware.
+> 
+> I got some reports from end users, but I couldn't see the hardware
+> information due to
+> enumeration not being complete. There are too many hardwares owned by end users.
+> It is hard to make work for all of them. In addition, some users just
+> tried to reboot the Host device
+> when they found their connected hardware not working. It would cause
+> the device reset or hang
+> due to the retry mechanism. This is why I want to modify the retry times.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 7b6eff5..519a503 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
- 		dev_err(dev, "failed to get dwc3 platform device\n");
- 	}
- 
-+	if (!qcom->dwc3->dev.driver)
-+		return driver_deferred_probe_check_state(&qcom->dwc3->dev);
-+
- node_put:
- 	of_node_put(dwc3_np);
- 
-Thanks,
-Pavan
+So this is for external devices?  Then just change the kernel build
+option for those systems?  In all the 20+ years, we haven't seen a real
+need for this yet, what just changed to require it?
+
+thanks,
+
+greg k-h
