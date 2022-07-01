@@ -2,60 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF05562D72
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 10:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C269F562F42
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 10:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236031AbiGAIJG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Jul 2022 04:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S235258AbiGAI6J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Jul 2022 04:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbiGAIJE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 04:09:04 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024F46EEB4;
-        Fri,  1 Jul 2022 01:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656662944; x=1688198944;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bv+bHqAlrS5dSgayycU0aCdMK8LHFKYhwKL0uZKnS50=;
-  b=r8V3YwJ5wQMLaFu2XKDE81wRxRPoaj4YN/SxxlE2c3LAxZVC2VIOQHkw
-   NGn8zX9ziT1WpdpbixMrY3q4McahKtX1xZ8NtAPqEjkyGy6a4KOCAlEIS
-   2zxdfTXreCLyexPJf4IMdzqFLiXWqTO5yBpclJpgikUre2I+le3pQs2aU
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jul 2022 01:09:03 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 01:09:03 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Jul 2022 01:09:03 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 1 Jul 2022 01:09:01 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2] usb: typec: add missing uevent when partner support PD
-Date:   Fri, 1 Jul 2022 16:08:54 +0800
-Message-ID: <1656662934-10226-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S235284AbiGAI57 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 04:57:59 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2109.outbound.protection.outlook.com [40.107.117.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF6321813;
+        Fri,  1 Jul 2022 01:57:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aU9A8dNCfSf/dYbqQUMWs86xpp2dNaXVqyLfIlSHJaIRuVhprXeSPTOBUVG9A6hzT5wgNCZIx7uBvPwud+dwbeQG+pQlgHEc6khBh/96q2W9I/DqGRnx/Opc64HAsuB5OD1uOwzGFPuP7lSsPBA9PY7rpvEHPIDZ/W2esN9RZ2PshHtD2P/anp6uMqFz7W/XzfA9AAFSLjljGH2EMPPyPRhS0lKpYgh5rmSCWBTXpOg4vbsccDjFVOzkC/wzuivJ11IQD4lmRf0pAjF82S4WL5RJQ7MiVQwtaenSbVlKh/SjHBnSjEMT6ERW+nG+dVI5r74iVSefv3YFM8LhFdEFZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cTYGs285OhliNocKjfv30+vduphzv6ofPaoXzjht0LM=;
+ b=m4RMaMQmDp9FPMCs9iv9OGCLZZDYhTkUIS7nNvYFzVPZMMuLm7xgX3ZKjBo5q0XdefyeQN4ZSgrZmCUfa8W2E5XXdcVYRkMXwMbC8tDj6MULiOY5As9tPTMmDNZO+9hY/mfmArWARmhufyVpx9fs0QQdPEBx3tTJiUT4K+PTbK+V57yqqCCpGG5PxU5qO7yUGmK4PyyqpnE5JR/G/D8ys5VersIyxsd4ynj2kuYTKiJJv0o+Da1YwHvLP58Z61NlnhRVMnaa3ikb1Dzj4TGlzfB3tzOFABqXC06+NkygWFqUwV8XfBMEkoEOU8/y/sPqgUOQMeQ/KawD5DLTiKylfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cTYGs285OhliNocKjfv30+vduphzv6ofPaoXzjht0LM=;
+ b=GEcMmfQN/fCuESpcqJsx7ca5ySIbHww67K2IOjM0ktlpp9TkIC2kZGInfNCD6p5qCEFTKBJK6zUgbSDDOTJeyaEL2cimaaHVhbRPhnb4kGRTpVHTxMeIweb4fmVRBdegh4E2GoLBLZg1jeEZprJJlKaA8JevO9eutsQM+Ipe/wYZaEDYTEnqlTWRSYzBI1kFQ/+Bf13xmdbvbelFJj+ZwYa8OI4y3XWL1nT+O+Iiek52h9jyg1MNSoUQbe+86fw32k3xjGlN5RGrThlmyM1d1uS62EuMOfTUJGXyDIgg8gNc0R9H2Blc+CSqd6vBzKciviHqvoIJZklD40XmmKKOXA==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by SG2PR06MB2106.apcprd06.prod.outlook.com (2603:1096:4:b::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5395.15; Fri, 1 Jul 2022 08:57:51 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::46d:a7a:f047:e9bf]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::46d:a7a:f047:e9bf%5]) with mapi id 15.20.5373.018; Fri, 1 Jul 2022
+ 08:57:51 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+Subject: RE: Questions about usb to serial driver
+Thread-Topic: Questions about usb to serial driver
+Thread-Index: AdiM+OnNdGp6/p28TOGY715mtlYERwAIYqqAAANDRFA=
+Date:   Fri, 1 Jul 2022 08:57:51 +0000
+Message-ID: <HK0PR06MB3202364874FC7283767C05D280BD9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <HK0PR06MB3202C7064582E6CB027237BC80BD9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Yr6fQbeo/FDrBmfU@kroah.com>
+In-Reply-To: <Yr6fQbeo/FDrBmfU@kroah.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 276ef34b-c47e-4d78-88d7-08da5b3fc756
+x-ms-traffictypediagnostic: SG2PR06MB2106:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UPg9/eZ3pwZJULGj33vYbxGMKBfZ6TllZcC3pbJtti1ifmU0ryHX9EhaeIWSxwZM5a7r6TduAUKeiejPtFgZ5k7R6wizo0+kwm4FDKcq2Y7vbnWUSSdCrgezPi3oISEBkzCi9GCdJsqzKNusmyYluTwnby8ylyiiP/xygtbTIXogX6XoaccaIOhswlj/VdUjcLfjJRkTKFoxY/dYTaI6GPSYoqdWTCoXfd7Y/cuG5fFz/0rsFWPyJWyRbon1qogDg5uJwrEbhap+TrtKPKw/vhY0J9HPYT3gNhoQgB4js09NE6G7RJqWWBnoqoQxT2r27oNi4qtVy4unwPu5LxTow/eMui78b21Bi97xVfDzCeat0QbcXwrsmXdGXDjMKS08Jvc07vKggXwoESLc8vMa1M05LziTW7rff4CZO3LGA5rNfl5io6QaqL1BJTW745WGFd4wXpIjajerL4FQ2A6TjkiVFZuLI6ipezyb2RUzHc3zaXWc1nnrK9knGhcZWBU+LY5phrhjX2wbSU+T/H3SyAlWf/mtXm72OcevDmatS5bYyL0yTWyzkEXm+KsX5JeVBHZdT1Q1sFy1i1Y1TraK85PPssY8t4uu0hYBq/Z59LnDjuaryWf923lzOGVz/izxT11o00p7//gWIwIFb1btCZQFlVGCypyaitWDrz0q7DOJN577HJ7WdUFo60tCbcgSwjrQ/IHDh99ghRS1eGJPkcvRm+sqmKJ05cdco8v8QxrVQck5t7OkpdqxEU8G+hTPZ75eiKluQttFir2aVMbZYZrcBIcEb7nzVu3+OkG84HG5DhYyXYe7/EITNCSZAYgl
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(346002)(396003)(376002)(39850400004)(136003)(71200400001)(186003)(478600001)(55016003)(38100700002)(83380400001)(4326008)(64756008)(38070700005)(316002)(122000001)(6916009)(76116006)(66446008)(66556008)(66476007)(5660300002)(7696005)(6506007)(52536014)(66946007)(33656002)(53546011)(9686003)(26005)(86362001)(41300700001)(8936002)(8676002)(2906002)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HFuSzDjasehO1HrzCv+daMFWm/aZQwmKTsPUvTXFjh7Je7YZ/wzomYOVvjJu?=
+ =?us-ascii?Q?2bmvnO/EIQW1mx6+ubfPq6Yah5HYC4D4HW+gcRgR3mgiEAFc0yHTQKECzRia?=
+ =?us-ascii?Q?NLDims41mADSzPtu6rcundwxqWn/88v/G87f1vUdrONtQsZvkdsSohm3J7Gp?=
+ =?us-ascii?Q?L250RnNDkap2l5E9bBpeNNaM8djoadekoVGDB88JZ2vJY8YCN/zTIi5QryZ9?=
+ =?us-ascii?Q?L097l0TDv/JFO6NGh0JHlxsLHoMpCEaaxZldeqrKq6WUPpOF5l5Uta7Vvqql?=
+ =?us-ascii?Q?t/oue497AtQqjQsD64cYIc2/4popq8bI9LXAOeHFtqfys2XiPgUogWN1XWUT?=
+ =?us-ascii?Q?mViHJyAB7bnKzay8rkCXA5CsViCevBvNaj7NZmVxyvRMHxrQ5qA46Srn5Ldz?=
+ =?us-ascii?Q?gVwcTItsp+rFMKFKX/A8ltJEqN5VwZ/rU5PFf5U3STmYCXHCgi2atCIWcVmd?=
+ =?us-ascii?Q?1mwAw4OXLYiakAMLSeuoJGllvG6lrbUXtG7UgNdv6PMlvL3dzQuVuejUVtSy?=
+ =?us-ascii?Q?WacvjZOxudDgQoycXo08KjF4TD0IPPQH6C5SXiNtsgvtWsyyUZziSy4G895a?=
+ =?us-ascii?Q?39iDVXcRZdl5CUFLuWsAWIzcOybN0g7zDVhUwZAkIa4a8VbyjbkTZIbPVbjJ?=
+ =?us-ascii?Q?aHvWQ0Z4ijqTukIhNNi9PAHxEaV5/1fSvi41AVuGQtsqtL/dw2EEmEv5Crsq?=
+ =?us-ascii?Q?TJ6d0+9q3F+pTVkqyozfwKin+Kc1DHWmasK+PY98wmm230AazBR4WEGmShLe?=
+ =?us-ascii?Q?KHSBDRM8Bh35L+mS8L6jSMA1XQCYO+pW1JQQFCGmIqE4FM4VpZN2nlfiG6yh?=
+ =?us-ascii?Q?nZQF6XXwVtSteu8aq7yubBp8AMQAbrTdgKHX00UUmxJVodE6hB2pUmfkzkfS?=
+ =?us-ascii?Q?6o8hpDsA2OZEXKP/kahrM+8vVOnc2YFWD5r8kGMZKP9BOYve3lcB4LlevZe+?=
+ =?us-ascii?Q?iE4d1JbkK0P4L7rMJBJ7dhbhg8S5G2XnY/IiyZ+AD+Rs/C01KqEp52Dh07MH?=
+ =?us-ascii?Q?uyGR6z77ZP0zRmbhuOVMZFqECbFzmFMt9hcVSULCYVBCAvxMBFs9nmd51fE/?=
+ =?us-ascii?Q?liMWQ1rZy5ve/1/C8OQ32oIWlxZIfyaKqKVnRq2xRjfFrEy0hHyaLld88RfP?=
+ =?us-ascii?Q?NCF9ctx7lLHSiF3GmMgxM18xcmEJ8+h2I+j122qzLiRNrAuXPp+Mrlj3h8+e?=
+ =?us-ascii?Q?kAwbw5dDU8frDEyotFxICc4OcKO55bIQx5zovNsgF4G9OjZaiX0kzf1UFD+2?=
+ =?us-ascii?Q?z/G0Yo1U1Kf5MMVeUVHmTWtFFF32QfvZm6yI0nnvby3YqCsz6CybT/5WxXrG?=
+ =?us-ascii?Q?VA6uhS4bmKurGqho7/4cBiZTbiaAkTGmb8WuF253Ve65Rs2dZb5H5Setqbm6?=
+ =?us-ascii?Q?HCRhwZqO/Wbk8FHX2gAcKFh69kL6r5g9meiKMzD5oqnLHIdmCGaCTg31IgnQ?=
+ =?us-ascii?Q?8zFJQc9yuVxAVYbgJGra3Y4AD1RVa8rO/BfInugsxY8hihbFh+RPncxESdoX?=
+ =?us-ascii?Q?iY7Hlz4ejB1sjXwEK4iHHF5kStBOORU19W9KTzKF0YVzFNS0EzaCg9MsCoKZ?=
+ =?us-ascii?Q?4kEyL7DPZ6XXoLK3P+d3r1SaOr4QhuZ8QWuPAYqF?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 276ef34b-c47e-4d78-88d7-08da5b3fc756
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2022 08:57:51.1594
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mpTYBBHvLeFY7AiWM4q2AUXX9GUpzijpFbV1PuuIYIrI3IMcxtLvL30L6Kc2KFL8Ya3awLDC6LZGWSac0K1pEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2106
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,39 +115,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-System like Android allow user control power role from UI, it is possible
-to implement application base on typec uevent to refresh UI, but found
-there is chance that UI show different state from typec attribute file.
+> -----Original Message-----
+> From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> Sent: Friday, July 1, 2022 3:16 PM
+> To: Neal Liu <neal_liu@aspeedtech.com>
+> Cc: linux-usb@vger.kernel.org; linux-serial@vger.kernel.org
+> Subject: Re: Questions about usb to serial driver
+>=20
+> On Fri, Jul 01, 2022 at 03:16:13AM +0000, Neal Liu wrote:
+> > Hi all,
+> >
+> > I have a question about USB-serial and I hope I can find the answer fro=
+m
+> here.
+> > I'll be appreciated it if there is any feedback from you.
+> >
+> > My question is If I have a USB device controller (udc) and a uart
+> > controller (16550) independently in a SoC, is there any usb-serial driv=
+ers or
+> applications that could possible to support/connect:
+> > -	udc tx to uart rx
+> > -	uart tx to udc rx
+> >
+> > Any chance I can make this SoC as a usb-serial devices?
+>=20
+> Sure, use the CONFIG_USB_CONFIGFS_SERIAL or CONFIG_USB_CONFIGFS_ACM
+> build options and hook your gadget up to the serial port in userspace and=
+ you
+> will have a very expensive usb-serial converter (there are very cheap chi=
+ps that
+> do the same thing if you want to make a simpler
+> device.)
+>=20
+> hope this helps,
 
-In typec_set_pwr_opmode(), when partner support PD, there is no uevent
-send to user space which cause the problem.
+Thanks Greg!
 
-Fix it by sending uevent notification when change power mode to PD.
+What the detail steps exactly for "hook your gadget up to the serial port i=
+n userspace"?
+Assume my system has:
+1 system uart: ttyS0
+1 uart: ttyS1
+1 usb gadget cdc acm: ttyGS0
 
-Fixes: bdecb33af34f ("usb: typec: API for controlling USB Type-C Multiplexers")
-Cc: stable@vger.kernel.org
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: (v1 https://lore.kernel.org/linux-usb/1656637315-31229-1-git-send-email-quic_linyyuan@quicinc.com/)
-    fix review comment from Greg,
-    add Fixes tag,
-    improve commit description.
+How to hook up ttyS1 to ttyGS0, so that I could communicate through below p=
+ath.
+PC1 - usb interface - my SoC (ttyGS0 - ttyS1) - rs232 interface - PC2?
 
- drivers/usb/typec/class.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index bbc46b1..3da94f712 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1851,6 +1851,7 @@ void typec_set_pwr_opmode(struct typec_port *port,
- 			partner->usb_pd = 1;
- 			sysfs_notify(&partner_dev->kobj, NULL,
- 				     "supports_usb_power_delivery");
-+			kobject_uevent(&partner_dev->kobj, KOBJ_CHANGE);
- 		}
- 		put_device(partner_dev);
- 	}
--- 
-2.7.4
-
+-Neal
