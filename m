@@ -2,133 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA6D563AF9
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 22:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774CB563B45
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 22:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiGAU2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Jul 2022 16:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S229971AbiGAUsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Jul 2022 16:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiGAU2G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 16:28:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1D153EC7
-        for <linux-usb@vger.kernel.org>; Fri,  1 Jul 2022 13:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656707285; x=1688243285;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=90Ocx8y6100ttoNVQH7eGjGeqxBN6/K6VuMmuUH2tTs=;
-  b=L3s6/i8mJ4q0vOF+RctZ7IyQVxMGfZUVfADMTxHsd/ZAD6l4L+PaRlwr
-   TjrOpwnjXOdlCCieaQnywSyzgoADKuhGfMCUfwkhWcm40sgoKwOhMY8Np
-   OfEJ5a/Dpr0c7EObq5fOSG2ILF//El7UbocYZO5DgK6WWCsRYhr89VdR5
-   462N3mNabuCphn+cgHbEqjvPZ/AUpgKHOQOiS3juzHkqa3FbJbPJ9ZhrV
-   hiug6GPlShid0W952EAY+8h4P5kfPaCKdMCH8lHExPSlDJVUixQiZs3p3
-   XeXN3scqJQvQ8xzqmBQGzamApb6lYO+/bEy8hxBxUoFOm4v+rLi04jsPT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="283469650"
-X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="283469650"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 13:28:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,238,1650956400"; 
-   d="scan'208";a="734182490"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Jul 2022 13:28:04 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7NFD-000EKY-AG;
-        Fri, 01 Jul 2022 20:28:03 +0000
-Date:   Sat, 02 Jul 2022 04:27:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 90557fa89d3e99286506593fd5180f699c41b152
-Message-ID: <62bf58c3.wQ/qLDNS757dNNMv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229570AbiGAUsA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 16:48:00 -0400
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EBD5C977;
+        Fri,  1 Jul 2022 13:47:57 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id C8CAD102DFB85;
+        Fri,  1 Jul 2022 22:47:55 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 6FC6861A6B50;
+        Fri,  1 Jul 2022 22:47:55 +0200 (CEST)
+X-Mailbox-Line: From c45e311ac5b95798fe7cddd7bb834c5df83bb97e Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1656707954.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Fri, 1 Jul 2022 22:47:50 +0200
+Subject: [PATCH net-next v2 0/3] Deadlock no more in LAN95xx
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Ferry Toth <fntoth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Alan Stern <stern@rowland.harvard.edu>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 90557fa89d3e99286506593fd5180f699c41b152  dt-bindings: usb: atmel: Add Microchip LAN9662 compatible string
+Second attempt at fixing a runtime resume deadlock in the LAN95xx USB driver:
 
-elapsed time: 725m
+In short, the driver isn't using the "nopm" register accessors in portions
+of its runtime resume path, causing a deadlock.  I'm fixing that by
+auto-detecting whether nopm accessors shall be used, instead of
+having to explicitly call them wherever it's necessary.
+As a byproduct, code size shrinks significantly (see diffstat below).
 
-configs tested: 52
-configs skipped: 2
+Back in April I submitted a first attempt which was rejected by Alan Stern:
+https://lore.kernel.org/all/6710d8c18ff54139cdc538763ba544187c5a0cee.1651041411.git.lukas@wunner.de/
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+That approach only detected whether a PM callback is running concurrently,
+not whether the access is performed by the PM callback.  I've come up with
+a different approach which should resolve the objection (see patch [1/3]).
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20220629
-s390                 randconfig-r044-20220629
-riscv                randconfig-r042-20220629
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
+Thanks!
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-hexagon              randconfig-r045-20220629
-hexagon              randconfig-r041-20220629
+Lukas Wunner (3):
+  usbnet: smsc95xx: Fix deadlock on runtime resume
+  usbnet: smsc95xx: Clean up nopm handling
+  usbnet: smsc95xx: Clean up unnecessary BUG_ON() upon register access
+
+ drivers/net/usb/smsc95xx.c | 202 ++++++++++++++++---------------------
+ 1 file changed, 86 insertions(+), 116 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
