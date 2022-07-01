@@ -2,83 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50B45636FD
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 17:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C865563740
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 17:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbiGAPgV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Jul 2022 11:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S229541AbiGAPwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Jul 2022 11:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGAPgU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 11:36:20 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0FD3969B
-        for <linux-usb@vger.kernel.org>; Fri,  1 Jul 2022 08:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656689779; x=1688225779;
-  h=message-id:date:mime-version:from:to:cc:subject:
-   content-transfer-encoding;
-  bh=/dPGJRcQtPAc1p1xA0oFrGO5zj+gQyVd1spBe/ckc1I=;
-  b=LhstW84ENPDw1n9PE9+WaCaKMBSwK1eBeYorPoXzFbz/zUUhwS1IWwx6
-   6sbXHHozvrVRaCpWncOrq/utvUeCUs4HyAEs/EgQbbo4GDF4sU8yLd8MQ
-   cFM35kG9E09FLLTD5IbsknDFlSFVkTThlbsgMsE1USQBV4SbRltdKKvmp
-   oL6iIlNU17p13O+tixtHRE2P/LkIh0x7BwMiBUPVYXh5sD2suStSlf/vO
-   VuhmA5M83513dmAHAXoaH1czsTtIPFbElimURYAJ9XOPTRbjpXW5zKFy2
-   UJLbbn/pwOZKYrhV3QqdnEBHhcWoeyUg0QyqQJ9b71o6QZRa6A7jef0Hd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="308193763"
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="308193763"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 08:36:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
-   d="scan'208";a="681438328"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Jul 2022 08:36:18 -0700
-Message-ID: <b7f90a48-c275-fc61-cf6b-fa425d2f05ec@linux.intel.com>
-Date:   Fri, 1 Jul 2022 18:37:51 +0300
+        with ESMTP id S229535AbiGAPwy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 11:52:54 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871D713CDA
+        for <linux-usb@vger.kernel.org>; Fri,  1 Jul 2022 08:52:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id t21so2843925pfq.1
+        for <linux-usb@vger.kernel.org>; Fri, 01 Jul 2022 08:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GwCJQx8sgFjKqx/lCA3RxH+lFCAU49v9gAkFazVr4kI=;
+        b=JGyKim5cmpBfr8P3eul8H76XrfNlBpwWXjFJV6xVwpsD8Wx+/M1K7OOCy9WXfWxjjd
+         lJzA67y66zVfCRfRcnAC9DhfnLsXQjccJc3KhK4qyFU33+g0xaWzX5KGnRiVKwn6nvJn
+         IRswZzOBwkqI61T41Z6RekZBAHdeIEba6xJFw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GwCJQx8sgFjKqx/lCA3RxH+lFCAU49v9gAkFazVr4kI=;
+        b=sh5PLe/I0w1ShoMBgXFoGWSwMBtc/hk/n0EpbVCG9jobzqC0Jdr14B0qeLjF/xvRMk
+         7DfNmE1Xm9avI+MwA521gzztNOJrefIc2g20mF9EypRXt6JRg66V+V3VR4Ifv/+v/sJq
+         e+2lyDimzdJ2TyED5gIzLtmvbqQiGV4wmH+GecbZfubRg8q6efCGfA85g5ZoZG2D6j1j
+         Mlpov+fdplHXBpIhlqS/Jc74GRBhwxIxFny4WTOxANxXT2maPhZQhv/uTi8Iz1eQ4M+1
+         5loCfPAhAf1yttPIf0wA5eujinl+bmjsAThh8WYAtbZTQRSLBPTG8CVgWXU5o42LMszE
+         X2mA==
+X-Gm-Message-State: AJIora8FlMetWBtBQeyKImsMZpSs5+JNIK4H3mkMauUhmhcGCytuBqfY
+        2cz5sdSgpnIxdKnqtAG9BzZmnQ==
+X-Google-Smtp-Source: AGRyM1unAQ7Hy3XTb21SIviGN36FXP7laFKOa5oKp755UdNTtbj9rY+F/HVa5luU0xbBFupWbBWmmw==
+X-Received: by 2002:a63:334d:0:b0:40c:3c28:1ec4 with SMTP id z74-20020a63334d000000b0040c3c281ec4mr13002795pgz.623.1656690772093;
+        Fri, 01 Jul 2022 08:52:52 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:faad:e53e:b60a:f694])
+        by smtp.gmail.com with UTF8SMTPSA id mj17-20020a17090b369100b001e2bd411079sm4327044pjb.20.2022.07.01.08.52.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 08:52:51 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 08:52:49 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <Yr8YUYJGJ5FRA3cv@google.com>
+References: <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
+ <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+ <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
+ <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
+ <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
+ <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
+ <Yr5JmrSaus8xKpM9@google.com>
+ <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     USB <linux-usb@vger.kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        alan Stern <stern@rowland.harvard.edu>
-Subject: xhci maintenance on vacation most of July
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220701101526.GA30468@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+On Fri, Jul 01, 2022 at 03:45:26PM +0530, Pavan Kondeti wrote:
+> On Thu, Jun 30, 2022 at 06:10:50PM -0700, Matthias Kaehlcke wrote:
+> > > > dwc3-qcom should wait for dwc3 core to call component_add() and then do
+> > > > whatever needs to be done once the dwc3 core is registered in the
+> > > > dwc3-qcom bind callback. Honestly this may all be a little overkill if
+> > > > there's only two drivers here, dwc3-qcom and dwc3 core. It could
+> > > > probably just be some callback from dwc3 core at the end of probe that
+> > > > calls some function in dwc3-qcom.
+> > > Since the issue we are facing is that the ssphy device links are not ready
+> > > causing the dwc3 probe not being invoked, can we add an API as Pavan
+> > > suggested
+> > > to check if deferred_probe listfor dwc3 device is empty or not andbased on
+> > > that we can choose to defer our qcomprobe ? In this case, we don't need to
+> > > touch the dwc3 core driver and would be making changesonly in qcom glue
+> > > driver.
+> > 
+> > As mentioned above, it shouldn't be necessary to add component support to
+> > all the glue drivers. An API to check for deferred probing is an option,
+> > however there is a possible race condition: When the dwc3-qcom driver checks
+> > for a deferred probe the core could still be probing, in that situation the
+> > glue would proceed before the core driver is ready. That could be avoided
+> > with the component based approach.
+> 
+> The race can happen only if asynchronous probe is enabled, otherwise the
+> child's probe happens synchronously in of_platform_populate() 
 
-I'll be on vacation most of July. I'll check in for a couple days (18-19 July),
-but otherwise xhci maintenance will for my part resume in August.
+I was thinking about the case where the dwc3-qcom probe is initially deferred,
+then the deferred probe starts shortly after (asynchronously) and now the
+dwc3-qcom driver does its check. Probably it's not very likely to happen ...
 
-Thanks
--Mathias
+> OTOH, would the below condition suffice for our needs here? if our device
+> is not bounded to a driver, we check the state of initcalls and return
+> either error or -EPROBE_DEFER
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 7b6eff5..519a503 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>  		dev_err(dev, "failed to get dwc3 platform device\n");
+>  	}
+>  
+> +	if (!qcom->dwc3->dev.driver)
+> +		return driver_deferred_probe_check_state(&qcom->dwc3->dev);
+> +
+>  node_put:
+>  	of_node_put(dwc3_np);
 
+I like the simplicity of it, no need for new APIs.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+The components based approach would be slightly safer, but in practice I
+think this should be good enough.
