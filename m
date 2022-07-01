@@ -2,72 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552B3563BCF
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 23:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF93563C1D
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 23:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiGAVhM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Jul 2022 17:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S231163AbiGAV4P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Jul 2022 17:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGAVhH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 17:37:07 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8197D5C94E;
-        Fri,  1 Jul 2022 14:37:05 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id h20so2151982ilj.13;
-        Fri, 01 Jul 2022 14:37:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=J86v2cLDP22dhdMQY1gkogeTSb0Yh6JFnGz+u5RmAN4=;
-        b=n7EBcob2aoNHxC3VdPMo1ya4BTxVa2InRSrwDJr5w049qokmz0zxnfDLxuHFZws8jm
-         A5ScfalNpF+UP1plY/q37I0bzHDx73uikxv1F5dlGwoPEhjH7t9wYitbioLlFXW87S3q
-         4RTQzDHDBM/BweJzZCFhh2AmQ2fEyDn5syFUMETKUSi7BKgu4+qun5L9MLo/LlZTZzZl
-         MrT2+MzRW48jskGRyv9amINACQYWIp9nFT32LaE+3xpg0o16amIqIm2ZYanWkBqa5NBz
-         w3qa9QqpWULIwdcftW2HRlLzKchu1IhpPCuj+BCAMRb91VowQAR70xHfAlFxJM4MGFaN
-         JSAQ==
-X-Gm-Message-State: AJIora9dVxF842sfFyDyKgt4SJ0PXP1ND7j+1/sF+U8iyD5XG95UNJtZ
-        j0lffUs3KOHfJ8vPtaLs+w==
-X-Google-Smtp-Source: AGRyM1sYR91twYxQYAQPVbEe2Fqnz0wIkKnwr9gOaTJIX2q5xD/4kgmop65ap+DhwWDj1Bc3j/yEmw==
-X-Received: by 2002:a05:6e02:1c85:b0:2da:956b:6bc with SMTP id w5-20020a056e021c8500b002da956b06bcmr9686339ill.36.1656711424773;
-        Fri, 01 Jul 2022 14:37:04 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id x5-20020a026f05000000b0033eb2f2ccfasm100716jab.43.2022.07.01.14.37.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 14:37:04 -0700 (PDT)
-Received: (nullmailer pid 1599831 invoked by uid 1000);
-        Fri, 01 Jul 2022 21:37:02 -0000
-Date:   Fri, 1 Jul 2022 15:37:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] dt-bindings: usb: mtk-xhci: Make all clocks
- required
-Message-ID: <20220701213702.GA1591697-robh@kernel.org>
-References: <20220623193702.817996-1-nfraprado@collabora.com>
- <20220623193702.817996-3-nfraprado@collabora.com>
- <93c6b7201533325cf7758637dd194a372f3c00c6.camel@mediatek.com>
- <20220629185546.z6rn7xp3ejpmaupi@notapiano>
+        with ESMTP id S230183AbiGAV4O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 17:56:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2C270AEF
+        for <linux-usb@vger.kernel.org>; Fri,  1 Jul 2022 14:56:13 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1o7OcW-0007pT-9b; Fri, 01 Jul 2022 23:56:12 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1o7OcV-0000fn-Nt; Fri, 01 Jul 2022 23:56:11 +0200
+Date:   Fri, 1 Jul 2022 23:56:11 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] usb: dwc3: gadget: fix high-speed multiplier setting
+Message-ID: <20220701215611.GB7981@pengutronix.de>
+References: <20220630140216.185919-1-m.grzeschik@pengutronix.de>
+ <Yr6qMFCR4Dmr6oai@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RASg3xLB4tUQ4RcS"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220629185546.z6rn7xp3ejpmaupi@notapiano>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <Yr6qMFCR4Dmr6oai@kroah.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,74 +53,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 02:55:46PM -0400, Nícolas F. R. A. Prado wrote:
-> On Tue, Jun 28, 2022 at 08:57:45AM +0800, Chunfeng Yun wrote:
-> > Hi Nícolas,
-> > 
-> > On Thu, 2022-06-23 at 15:37 -0400, Nícolas F. R. A. Prado wrote:
-> > > All of the clocks listed in the binding are always wired to the XHCI
-> > > controller hardware blocks on all SoCs. The reason some clocks were
-> > > made
-> > > optional in the binding was to account for the fact that depending on
-> > > the SoC, some of the clocks might be fixed (ie not controlled by
-> > > software).
-> > > 
-> > > Given that the devicetree should represent the hardware, make all
-> > > clocks
-> > > required in the binding. Subsequent patches will make the DTS changes
-> > > to
-> > > specify fixed-clocks for the clocks that aren't controllable.
-> > > 
-> > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > > 
-> > > ---
-> > > 
-> > > Changes in v2:
-> > > - Undid clock list changes that allowed middle clocks to be missing
-> > > from
-> > >   v1 and made all clocks required instead
-> > > - Rewrote commit message and title
-> > > 
-> > >  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 4 +
-> > > ---
-> > >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
-> > > xhci.yaml
-> > > index 63cbc2b62d18..1444d18ef9bc 100644
-> > > --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> > > @@ -67,7 +67,6 @@ properties:
-> > >      maxItems: 1
-> > >  
-> > >    clocks:
-> > > -    minItems: 1
-> > >      items:
-> > >        - description: Controller clock used by normal mode
-> > >        - description: Reference clock used by low power mode etc
-> > > @@ -76,9 +75,8 @@ properties:
-> > >        - description: controller clock
-> > >  
-> > >    clock-names:
-> > > -    minItems: 1
-> > >      items:
-> > > -      - const: sys_ck  # required, the following ones are optional
-> > > +      - const: sys_ck
-> > >        - const: ref_ck
-> > >        - const: mcu_ck
-> > >        - const: dma_ck
-> > 
-> > This patch causes more check warning, I prefer to leave dt-bindings
-> > unchanged, but just fix mt8195's dts warning instead, thanks a lot
-> 
-> Hi Chunfeng,
-> 
-> the warnings reported by Rob's bot only happen if patches 3 and 4 aren't applied
-> to adapt the devicetrees. They are ABI breaking changes, but I understood this
-> as the desired solution from the discussion we had with Krzysztof on v1 [1].
 
-The warnings have nothing to do with patches 3 and 4 as those are for 
-dts files. It's examples in bindings that are the problem.
+--RASg3xLB4tUQ4RcS
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+On Fri, Jul 01, 2022 at 10:02:56AM +0200, Greg KH wrote:
+>On Thu, Jun 30, 2022 at 04:02:16PM +0200, Michael Grzeschik wrote:
+>> For high-speed transfers the __dwc3_prepare_one_trb function is
+>> calculating the multiplier setting for the trb based on the length of
+>> the trb currently prepared. This assumption is wrong. For trbs with a
+>> sglist the length of the actual request has to be taken instead.
+>>
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>> ---
+>>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 8716bece107208..0fc3ecfaa48baf 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -1186,7 +1186,7 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep =
+*dep, struct dwc3_trb *trb,
+>>  		dma_addr_t dma, unsigned int length, unsigned int chain,
+>>  		unsigned int node, unsigned int stream_id,
+>>  		unsigned int short_not_ok, unsigned int no_interrupt,
+>> -		unsigned int is_last, bool must_interrupt)
+>> +		unsigned int is_last, bool must_interrupt, int req_length)
+>
+>Why not put this right next to 'length'?
+
+Yes, would probably make more sense, but:
+
+>And wow, that's a crazy number of options for a function.  Why is this
+>even a separate function at all?  Why can't it just be in
+>dwc3_prepare_one_trb() as that's the only place this is called?
+
+This is an absolute legitimate question. I will send a v2 including a
+patch refactoring this to one function beforehand.
+
+Thanks,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--RASg3xLB4tUQ4RcS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmK/bXgACgkQC+njFXoe
+LGSEehAAyrJtD6ZRGVMT9J4+k6qxZkwBYJGF/62fFkUzMdUp4FhZYZuW8bgMsKIT
+eaE+mdHu1cQMzCEEmUApCJbpfOs+oPUTSOwPgmze6nuYM5lLT3eH6nNl/2KIMn22
+HNdEaZC7s2tAG3VfWJAoYqBsWHtozq9TaOBFzisc8mCTr/AVU09ro9buGlBJ5Mru
+5p/cpM2PW+B3QF+XZ1vSAZ+pVa6+aeIrLwqDi/FIAkuvbPV4Z66yWYyluGsAsYLR
+Anw/wGJsXo5Yr/QI+72JxJgIaDHMpoQLIUOg/Kdu0XvlNiB2hTRA9Sk30hFOpB9E
+urXgHHyziquepcgOroRXWlm31rhFOVyGNN8A8ewtaYWR9tXh/AGbWfLTjY2CJZ6f
+SiWplHE31cPWiusElTpAcVW5+ThhD7a4ytMl6OmL0T5LkGQvPwL8crmi9k5UBHLu
+KkLdP8IHogPsxfzwtn6oDLtvBXUfqfItbom4ZtYf3yFfaMwH+3OUdZ8ydZNcbsCJ
+pRRnf5RRS/cv0Y05uKlZMe3fvAtFni1NBT8wiKuRxvNEMU8OBZwsVC5KhSzi4+jA
+t710oEbEwUqS/w+IAP/h9MNY777KhW61iPLmHl4Q8mQkbV2oNm9CF7TXTLUgN9lS
+ytgvf2BXWGXz66ogaAEoYQd/MRukiPs4oWhcBrY0mM9OViL5OKk=
+=ZEB8
+-----END PGP SIGNATURE-----
+
+--RASg3xLB4tUQ4RcS--
