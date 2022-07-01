@@ -2,46 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A1B562BFD
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 08:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050E6562C16
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 08:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233646AbiGAGvJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Jul 2022 02:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S234233AbiGAG5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Jul 2022 02:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbiGAGvI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 02:51:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC4348838;
-        Thu, 30 Jun 2022 23:51:07 -0700 (PDT)
+        with ESMTP id S229481AbiGAG5R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 02:57:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCBD599FE;
+        Thu, 30 Jun 2022 23:57:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DC90B82E39;
-        Fri,  1 Jul 2022 06:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501E3C3411E;
-        Fri,  1 Jul 2022 06:51:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2862DB82E3B;
+        Fri,  1 Jul 2022 06:57:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43215C3411E;
+        Fri,  1 Jul 2022 06:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656658264;
-        bh=WYAqg0oikTaIjRA7PucH60yRMReGtRCz0Qahgb5/Qa4=;
+        s=korg; t=1656658633;
+        bh=2BimP7+fL1GUW8UT2q+nV98iiK84sXxO3qo4dUxkW1Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OKeIKCM6eKVqr880J2WzA16mhXOToiW9Bk5uMvMmn+jzvE5YgdwF6bwTNcn7Ms7jt
-         Py6HgEkvtrlJ4FeI7d/RRbpSKBXOpBXLCQbTs1BH6j7ehJve++hlLKyN7sXNv7qCY0
-         lSl7dofydE2xJGfTbmcAtxVkxUSwVzyeMFoGsFcU=
-Date:   Fri, 1 Jul 2022 08:51:01 +0200
+        b=SXri5mU5myjlSKs2E4HsxLTYeXr35taERzStvKpdWzGc/qm0uBTbY98C6SxnYEiXq
+         cjeuZeZtb8kvcrClMjhsTtJChVvDe9kVb8lGR7D4of42huJK5MXBUWwoVfCaZ9npM8
+         5R5t8sxmBhja3EdkmQRY9scHCa4K5zn1A5izczxY=
+Date:   Fri, 1 Jul 2022 08:57:11 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com
-Subject: Re: [PATCH v2] net: usb: Fix typo in code
-Message-ID: <Yr6ZVZH+b8oAZdHc@kroah.com>
-References: <Yr6R/wsl+HlOwOEm@kroah.com>
- <20220701064723.2935-1-kunyu@nfschina.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-pm@vger.kernel.org, Richard Gong <richard.gong@amd.com>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 10/10] HID: usbhid: Set USB mice as s2idle wakeup
+ resources
+Message-ID: <Yr6ax+aEuNaB98BR@kroah.com>
+References: <20220701023328.2783-1-mario.limonciello@amd.com>
+ <20220701023328.2783-10-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701064723.2935-1-kunyu@nfschina.com>
+In-Reply-To: <20220701023328.2783-10-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,67 +55,77 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 02:47:23PM +0800, Li kunyu wrote:
-> Remove the repeated ';' from code.
+On Thu, Jun 30, 2022 at 09:33:28PM -0500, Mario Limonciello wrote:
+> The USB HID transport layer doesn't configure mice for wakeup by default.
+> Thus users can not wake system from s2idle via USB mouse. However, users
+> can wake the same system from Modern Standby on Windows with the same USB
+> mouse.
 > 
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> Microsoft documentation indicates that all USB mice and touchpads should
+> be waking the system from Modern Standby.
+> 
+> Many people who have used Windows on a PC that supports Modern Standby
+> have an expectation that s2idle wakeup sources should behave the same in
+> Linux. For example if your PC is configured "dual-boot" and is used docked
+> it's very common to wakeup by using a USB mouse connected to your dock in
+> Windows. Switching to Linux this is not enabled by default and you'll
+> need to manually turn it on or use a different wakeup source than you did
+> for Windows.
+> 
+> Changes for wakeups have been made in other subsystems such as the PS/2
+> keyboard driver which align how wakeup sources in Linux and Modern Standby
+> in Windows behave. To align expectations from users on USB mice, make this
+> behavior the same when the system is configured both by the OEM and the
+> user to use s2idle in Linux.
+> 
+> This means that at a minimum supported mice will be able to wakeup by
+> clicking a button. If the USB mouse is powered over the s2idle cycle (such
+> as a wireless mouse with a battery) it's also possible that moving it
+> may wake up the system.  This is HW dependent behavior.
+> 
+> If the user sets the system to use S3 instead of s2idle, or the OEM ships
+> the system defaulting to S3, this behavior will not be turned on by
+> default.
+> 
+> Users who have a modern laptop that supports s2idle and use s2idle but
+> prefer the previous Linux kernel behavior can turn this off via a udev
+> rule.
+> 
+> Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#input-devices-1
+> Link: https://lore.kernel.org/linux-usb/20220404214557.3329796-1-richard.gong@amd.com/
+> Suggested-by: Richard Gong <richard.gong@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/net/usb/catc.c | 2 +-
->  1 file changed, 1 insertions(+), 1 deletions(-)
+> More people keep coming to us confused that they couldn't wake a Linux system
+> up from sleep using a mouse, so this patch is being revived.
 > 
-> diff --git a/drivers/net/usb/catc.c b/drivers/net/usb/catc.c
-> index e7fe9c0f63a9..268c32521691 100644
-> --- a/drivers/net/usb/catc.c
-> +++ b/drivers/net/usb/catc.c
-> @@ -781,7 +781,7 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
->  			intf->altsetting->desc.bInterfaceNumber, 1)) {
->  		dev_err(dev, "Can't set altsetting 1.\n");
->  		ret = -EIO;
-> -		goto fail_mem;;
-> +		goto fail_mem;
->  	}
->  
->  	netdev = alloc_etherdev(sizeof(struct catc));
-> -- 
-> 2.18.2
+> Microsoft documentation doesn't indicate any allowlist for this behavior, and
+> they actually prescribe it for all USB mice and touchpads.
+
+Note, this is very different than older versions of Windows.  Any idea
+when this behavior and prescription changed?
+
+Also, how are you going to handle the differences between "internal" and
+"external" USB mice and touchpads?  The microsoft link above only
+references external USB and Bluetooth devices, not internal ones.
+
 > 
+> changes from v2->v3:
+>  * Use `pm_suspend_preferred_s2idle`
+>  * Drop now unnecessary acpi.h header inclusion
+>  * Update commit message
+>  * Adjust comments from v2 per thread
+> 
+> changes from v1->v2:
+>  * Resubmit by Mario
+>  * Update commit message
+>  * Only activate on systems configured by user and OEM for using s2idle
+> ---
+>  drivers/hid/usbhid/hid-core.c | 37 ++++++++++++++++++++++++-----------
+>  1 file changed, 26 insertions(+), 11 deletions(-)
 
-Hi,
+Where are patches 1-9 of this series?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+confused,
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+greg k-h
