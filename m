@@ -2,81 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8932E562D5F
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 10:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF05562D72
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 10:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbiGAIDO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Jul 2022 04:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S236031AbiGAIJG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Jul 2022 04:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236230AbiGAIDF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 04:03:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E9070AC8
-        for <linux-usb@vger.kernel.org>; Fri,  1 Jul 2022 01:03:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8DA461749
-        for <linux-usb@vger.kernel.org>; Fri,  1 Jul 2022 08:02:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC9AC3411E;
-        Fri,  1 Jul 2022 08:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656662579;
-        bh=dOZR+eKSQioAIE/ks0bLsrBJm1aWt3KIwlxJycUg2+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N54j+ocLU/7U4AYa8TjNBK7bSdwbqOLLzAPvbgbFgEOSYG6NQGkzAK7mAlWhLGmLW
-         gn/fY0RH1hdLSEcpvMUhpopzwLVdRPaqilZeYQeRxziezc+Oz+ifyE3el5zj0O5M20
-         uxyq9Rx/ZH+yvqb+RjFXyfWZwVnUbTlkfZFh33H4=
-Date:   Fri, 1 Jul 2022 10:02:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] usb: dwc3: gadget: fix high-speed multiplier setting
-Message-ID: <Yr6qMFCR4Dmr6oai@kroah.com>
-References: <20220630140216.185919-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S233106AbiGAIJE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Jul 2022 04:09:04 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024F46EEB4;
+        Fri,  1 Jul 2022 01:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656662944; x=1688198944;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bv+bHqAlrS5dSgayycU0aCdMK8LHFKYhwKL0uZKnS50=;
+  b=r8V3YwJ5wQMLaFu2XKDE81wRxRPoaj4YN/SxxlE2c3LAxZVC2VIOQHkw
+   NGn8zX9ziT1WpdpbixMrY3q4McahKtX1xZ8NtAPqEjkyGy6a4KOCAlEIS
+   2zxdfTXreCLyexPJf4IMdzqFLiXWqTO5yBpclJpgikUre2I+le3pQs2aU
+   M=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jul 2022 01:09:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 01:09:03 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 1 Jul 2022 01:09:03 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 1 Jul 2022 01:09:01 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v2] usb: typec: add missing uevent when partner support PD
+Date:   Fri, 1 Jul 2022 16:08:54 +0800
+Message-ID: <1656662934-10226-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630140216.185919-1-m.grzeschik@pengutronix.de>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 04:02:16PM +0200, Michael Grzeschik wrote:
-> For high-speed transfers the __dwc3_prepare_one_trb function is
-> calculating the multiplier setting for the trb based on the length of
-> the trb currently prepared. This assumption is wrong. For trbs with a
-> sglist the length of the actual request has to be taken instead.
-> 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> ---
->  drivers/usb/dwc3/gadget.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 8716bece107208..0fc3ecfaa48baf 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1186,7 +1186,7 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
->  		dma_addr_t dma, unsigned int length, unsigned int chain,
->  		unsigned int node, unsigned int stream_id,
->  		unsigned int short_not_ok, unsigned int no_interrupt,
-> -		unsigned int is_last, bool must_interrupt)
-> +		unsigned int is_last, bool must_interrupt, int req_length)
+System like Android allow user control power role from UI, it is possible
+to implement application base on typec uevent to refresh UI, but found
+there is chance that UI show different state from typec attribute file.
 
-Why not put this right next to 'length'?
+In typec_set_pwr_opmode(), when partner support PD, there is no uevent
+send to user space which cause the problem.
 
-And wow, that's a crazy number of options for a function.  Why is this
-even a separate function at all?  Why can't it just be in
-dwc3_prepare_one_trb() as that's the only place this is called?
+Fix it by sending uevent notification when change power mode to PD.
 
-thanks,
+Fixes: bdecb33af34f ("usb: typec: API for controlling USB Type-C Multiplexers")
+Cc: stable@vger.kernel.org
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+v2: (v1 https://lore.kernel.org/linux-usb/1656637315-31229-1-git-send-email-quic_linyyuan@quicinc.com/)
+    fix review comment from Greg,
+    add Fixes tag,
+    improve commit description.
 
-greg k-h
+ drivers/usb/typec/class.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index bbc46b1..3da94f712 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1851,6 +1851,7 @@ void typec_set_pwr_opmode(struct typec_port *port,
+ 			partner->usb_pd = 1;
+ 			sysfs_notify(&partner_dev->kobj, NULL,
+ 				     "supports_usb_power_delivery");
++			kobject_uevent(&partner_dev->kobj, KOBJ_CHANGE);
+ 		}
+ 		put_device(partner_dev);
+ 	}
+-- 
+2.7.4
+
