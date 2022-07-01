@@ -2,59 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D76C562892
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 03:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DE15628BE
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 04:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiGABu1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jun 2022 21:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S232735AbiGACIO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jun 2022 22:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiGABuY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 21:50:24 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC6917599
-        for <linux-usb@vger.kernel.org>; Thu, 30 Jun 2022 18:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656640223; x=1688176223;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+qRHvIBGz/06ms+zvlNPf6f76QeV/QnfzYGtLbA0rDw=;
-  b=npqo5OVIdKjid6DI5Tq/dLoRnP49hOsx+t8bcBfVuJmwshtZPUQDpd8g
-   Ojpxbtcbw3U4tGs1lPbcsjmad9ui0tq5nzOXyrf3KiSWBTXLIUpi8rnPP
-   F2zu5c9F+J7Ie8/EGCs84DpQG71+guNlpIjsYps2Kp9JjJ1C560B7e4tS
-   K7mb+UBReFy7/RxTAG3EXjT04262UGlAPRwVSpLmYSVz3+xjowlOcxMMb
-   InNzZ0DI558OpQJErhLKVks1aY7LBF0lep/VHlfkSyFnXsQK91PHUl9bE
-   XPjMP0PTl/VjBDQCM1Vdlx0ts2wJL5lp6DMQxVndLcPw+ikIwS42MWupO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="368841939"
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="368841939"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 18:50:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
-   d="scan'208";a="659249530"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2022 18:50:20 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o75nX-000DQ1-Io;
-        Fri, 01 Jul 2022 01:50:19 +0000
-Date:   Fri, 01 Jul 2022 09:49:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 1ce69c35b86038dd11d3a6115a04501c5b89a940
-Message-ID: <62be52c3.VPGPtQg7H6CGNjf0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S231199AbiGACIN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 22:08:13 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29308BF56;
+        Thu, 30 Jun 2022 19:08:12 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 1D5EA1E80D21;
+        Fri,  1 Jul 2022 10:06:45 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id j6CcEk6owDcw; Fri,  1 Jul 2022 10:06:42 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 592AA1E80D09;
+        Fri,  1 Jul 2022 10:06:42 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] net: usb: Fix typo in code
+Date:   Fri,  1 Jul 2022 10:07:51 +0800
+Message-Id: <20220701020751.3059-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,78 +43,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 1ce69c35b86038dd11d3a6115a04501c5b89a940  usb: host: xhci: use snprintf() in xhci_decode_trb()
+hasdata does not need to be initialized to zero. It will be assigned a
+value in the following judgment conditions.
+Remove the repeated ';' from code.
 
-elapsed time: 723m
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ drivers/net/usb/catc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-configs tested: 57
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-powerpc                    klondike_defconfig
-arm64                            alldefconfig
-powerpc                       holly_defconfig
-powerpc                 mpc8540_ads_defconfig
-ia64                             allmodconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220629
-s390                 randconfig-r044-20220629
-riscv                randconfig-r042-20220629
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-powerpc                   lite5200b_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220629
-hexagon              randconfig-r041-20220629
-
+diff --git a/drivers/net/usb/catc.c b/drivers/net/usb/catc.c
+index e7fe9c0f63a9..268c32521691 100644
+--- a/drivers/net/usb/catc.c
++++ b/drivers/net/usb/catc.c
+@@ -280,7 +280,7 @@ static void catc_irq_done(struct urb *urb)
+ 	struct catc *catc = urb->context;
+ 	u8 *data = urb->transfer_buffer;
+ 	int status = urb->status;
+-	unsigned int hasdata = 0, linksts = LinkNoChange;
++	unsigned int hasdata, linksts = LinkNoChange;
+ 	int res;
+ 
+ 	if (!catc->is_f5u011) {
+@@ -335,7 +335,7 @@ static void catc_irq_done(struct urb *urb)
+ 		} 
+ 	}
+ resubmit:
+-	res = usb_submit_urb (urb, GFP_ATOMIC);
++	res = usb_submit_urb(urb, GFP_ATOMIC);
+ 	if (res)
+ 		dev_err(&catc->usbdev->dev,
+ 			"can't resubmit intr, %s-%s, status %d\n",
+@@ -781,7 +781,7 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
+ 			intf->altsetting->desc.bInterfaceNumber, 1)) {
+ 		dev_err(dev, "Can't set altsetting 1.\n");
+ 		ret = -EIO;
+-		goto fail_mem;;
++		goto fail_mem;
+ 	}
+ 
+ 	netdev = alloc_etherdev(sizeof(struct catc));
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.2
+
