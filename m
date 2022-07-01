@@ -2,87 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963FF562803
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 03:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D76C562892
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 03:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbiGABKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jun 2022 21:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S231918AbiGABu1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jun 2022 21:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiGABKy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 21:10:54 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB70599FE
-        for <linux-usb@vger.kernel.org>; Thu, 30 Jun 2022 18:10:53 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so4905816pjj.3
-        for <linux-usb@vger.kernel.org>; Thu, 30 Jun 2022 18:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=riTJwa3bSi1lLAzR0nqCjL0PHBsnxUZ/utBEO403z1w=;
-        b=ltNB9b6L0WGcQxcX0/zTfMYJWLZ5Ohm0RVW23tFGV26KJCU4e9EuEgAabskt1fun7R
-         sDaVg3iYXC2n+vMsd+iFqp/kURHYFb4mqL6qBPMauoi5W+lzr8NKcvB7IbRIWMuNGmEe
-         Km++r1KUdVbrGUMBhkWoymNyhyKB+dYqkklYg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=riTJwa3bSi1lLAzR0nqCjL0PHBsnxUZ/utBEO403z1w=;
-        b=bXZWgm6kGvJW9J+daSB1Uo0dIpuelsq3s6pRtwrrTImnunpbjFWdLjy8a6xiATX3+n
-         HoCiIijbDdPTn9FvJtcrmvRW9LR4QU+kAmX5DMH2HRvUpKtoNSXmTcQ9NIZq8ENomdkA
-         lW3ogYZBM8Tsu0RvEWPSIqLbGc7eZPukXnMgvbRmC1qTjiIYGWFV3eM75vOM71kgy+bi
-         DFNh6Mh3DslwsM7k3fMBkIschgprIMg1+hfV/H5vATVLAByziv/jW2Q26TkElhk2BfcN
-         IThkNweyjOaRJQwptgFqLpmQG2ginjUwFndJE1EvBsGI/qXMyQkYOq2SXYNCPrMKi8dt
-         jXZw==
-X-Gm-Message-State: AJIora/g3X65NGruahHjfAeQmRuiKGLNjUtkW9p7gKWYU3acKqEFn9X9
-        cVLlbDM/hG6BR59MPK92BmkiDw==
-X-Google-Smtp-Source: AGRyM1vDSzuWMSHmKGJrOwsdSFxwevV5a9CXWieue+Xhh8FwWZKfTik7az0sP8Slnk1ABp9iIsgQhA==
-X-Received: by 2002:a17:90a:7c05:b0:1ee:e40c:589b with SMTP id v5-20020a17090a7c0500b001eee40c589bmr13559159pjf.78.1656637852674;
-        Thu, 30 Jun 2022 18:10:52 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:dca8:e419:789:7bec])
-        by smtp.gmail.com with UTF8SMTPSA id pc3-20020a17090b3b8300b001ef3f85d1aasm2179295pjb.9.2022.06.30.18.10.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 18:10:52 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 18:10:50 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Yr5JmrSaus8xKpM9@google.com>
-References: <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com>
- <YqjLHyUVEjf7I3MI@google.com>
- <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
- <YqtlRQOwb3t6Xtd0@google.com>
- <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n52bq9feA6BVdAp791SWQtT1Yj4M2ppg3o_KOaRFO8r+0Q@mail.gmail.com>
- <20220628053148.GA21797@hu-pkondeti-hyd.qualcomm.com>
- <CAE-0n50PGw_XSZ0-iV7gem6+-LENoq6ZVOwX3f+0XjkrHg-rLw@mail.gmail.com>
- <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
+        with ESMTP id S232320AbiGABuY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 21:50:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC6917599
+        for <linux-usb@vger.kernel.org>; Thu, 30 Jun 2022 18:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656640223; x=1688176223;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+qRHvIBGz/06ms+zvlNPf6f76QeV/QnfzYGtLbA0rDw=;
+  b=npqo5OVIdKjid6DI5Tq/dLoRnP49hOsx+t8bcBfVuJmwshtZPUQDpd8g
+   Ojpxbtcbw3U4tGs1lPbcsjmad9ui0tq5nzOXyrf3KiSWBTXLIUpi8rnPP
+   F2zu5c9F+J7Ie8/EGCs84DpQG71+guNlpIjsYps2Kp9JjJ1C560B7e4tS
+   K7mb+UBReFy7/RxTAG3EXjT04262UGlAPRwVSpLmYSVz3+xjowlOcxMMb
+   InNzZ0DI558OpQJErhLKVks1aY7LBF0lep/VHlfkSyFnXsQK91PHUl9bE
+   XPjMP0PTl/VjBDQCM1Vdlx0ts2wJL5lp6DMQxVndLcPw+ikIwS42MWupO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10394"; a="368841939"
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="368841939"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 18:50:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,236,1650956400"; 
+   d="scan'208";a="659249530"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2022 18:50:20 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o75nX-000DQ1-Io;
+        Fri, 01 Jul 2022 01:50:19 +0000
+Date:   Fri, 01 Jul 2022 09:49:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 1ce69c35b86038dd11d3a6115a04501c5b89a940
+Message-ID: <62be52c3.VPGPtQg7H6CGNjf0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c16a1c37-9183-8d0c-a5ad-39b897a0ab24@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,80 +62,78 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 11:43:01PM +0530, Krishna Kurapati PSSNV wrote:
-> 
-> On 6/30/2022 3:45 AM, Stephen Boyd wrote:
-> > Quoting Pavan Kondeti (2022-06-27 22:31:48)
-> > > On Mon, Jun 27, 2022 at 01:02:49PM -0700, Stephen Boyd wrote:
-> > > > Quoting Pavan Kondeti (2022-06-20 01:54:15)
-> > > > > Would like to hear other people thoughts on this.
-> > > > > 
-> > > > I'm not following very closely but it sounds like a problem that may be
-> > > > solved by using the component driver code (see
-> > > > include/linux/component.h). That would let you move anything that needs
-> > > > to be done once the child devices probe to the aggregate driver 'bind'
-> > > > function (see struct component_master_ops::bind).
-> > > Thanks Stephen for letting us know about the component device framework.
-> > > 
-> > > IIUC,
-> > > 
-> > > - dwc3-qcom (parent of the dwc3 core) registers as a component master by
-> > > calling component_master_add_with_match() before calling
-> > > of_platform_populate(). The match callback could be as simple as comparing
-> > > the device against our child device.
-> > > 
-> > > - The dwc3 core (child) at the end of its probe can add as a component by calling
-> > > component_add().
-> > > 
-> > > - The above triggers the component_master_ops::bind callback implemented in
-> > >    dwc3-qcom driver which signals that we are good to go.
-> > > 
-> > > - The dwc-qcom can call component_bind_all() to finish the formality i.e
-> > >    telling the dwc3 core that we are good to go.
-> > > 
-> > > Is my understanding correct? This is what we are looking for i.e a way for
-> > > the child device(s) to signal the parent when the former is bounded.
-> > Sounds about right to me.
-> > 
-> > > Also what happens when the child device probe fails for any reason. i.e
-> > > component_add() would never be called so the master driver i.e dwc3-qcom would
-> > > wait indefinitely. May be it needs to implement a timeout or runtime suspend
-> > > etc should take care of keeping the resoures in suspend state.
-> > When the child fails probe, it should return -EPROBE_DEFER if probe
-> > needs to be deferred. Then the driver will attempt probe at a later
-> > time. If probe fails without defer then it will never work and dwc3-qcom
-> > will wait indefinitely. Not much we can do in that situation.
-> Hi Stephen,
-> 
->   Thanks for the idea. But doesn't adding dwc3 as a component to an agg
-> driver meanthat this change needs to be done on all glue drivers, as
-> component_bind_all( ) from master componentis supposed to let the dwc3
-> core know that we are good to go ?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 1ce69c35b86038dd11d3a6115a04501c5b89a940  usb: host: xhci: use snprintf() in xhci_decode_trb()
 
-Ideally all glue drivers would add component support, however I don't think
-it is strictly necessary. Currently the dwc3 core already assumes that
-everything is in place when it is probed. The core could have empty bind()
-and unbind() callbacks, with that things in the core would remain
-essentially as they are and the core doesn't depend on the glue driver to
-call component_bind_all().
+elapsed time: 723m
 
-> > dwc3-qcom should wait for dwc3 core to call component_add() and then do
-> > whatever needs to be done once the dwc3 core is registered in the
-> > dwc3-qcom bind callback. Honestly this may all be a little overkill if
-> > there's only two drivers here, dwc3-qcom and dwc3 core. It could
-> > probably just be some callback from dwc3 core at the end of probe that
-> > calls some function in dwc3-qcom.
-> Since the issue we are facing is that the ssphy device links are not ready
-> causing the dwc3 probe not being invoked, can we add an API as Pavan
-> suggested
-> to check if deferred_probe listfor dwc3 device is empty or not andbased on
-> that we can choose to defer our qcomprobe ? In this case, we don't need to
-> touch the dwc3 core driver and would be making changesonly in qcom glue
-> driver.
+configs tested: 57
+configs skipped: 2
 
-As mentioned above, it shouldn't be necessary to add component support to
-all the glue drivers. An API to check for deferred probing is an option,
-however there is a possible race condition: When the dwc3-qcom driver checks
-for a deferred probe the core could still be probing, in that situation the
-glue would proceed before the core driver is ready. That could be avoided
-with the component based approach.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+powerpc                    klondike_defconfig
+arm64                            alldefconfig
+powerpc                       holly_defconfig
+powerpc                 mpc8540_ads_defconfig
+ia64                             allmodconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220629
+s390                 randconfig-r044-20220629
+riscv                randconfig-r042-20220629
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+
+clang tested configs:
+powerpc                   lite5200b_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220629
+hexagon              randconfig-r041-20220629
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
