@@ -2,94 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8578156290E
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 04:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC18F56297E
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Jul 2022 05:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233741AbiGACd5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jun 2022 22:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S233934AbiGADQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jun 2022 23:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiGACdl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 22:33:41 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7530B61D5B;
-        Thu, 30 Jun 2022 19:33:38 -0700 (PDT)
+        with ESMTP id S233952AbiGADQV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jun 2022 23:16:21 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2112.outbound.protection.outlook.com [40.107.117.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5848144A24;
+        Thu, 30 Jun 2022 20:16:16 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=izqvq9cHhJjEDHs3SWrxpv7vwXXRNwqN+rLTrwwZxuDouYpwYXJOMWOA2fjvIKWSohfRfZ1p9PfHSVjHAwOFdgVge/41MKvx7sRSjRsiPpc5Wux0SzNfnQV8Nxnjuujn4SBFy9G6OkE1FV7qVrT2vKGdLyRwJ6Ykxu9qeMNLYm1BrnvAPuahJaQfyTr9bXCIx+9PzeOaK+gbLw3S3wQ0vKF7hCvUCdQfIwfW1Wtb+3qlroEGiJp8IAPZTMUU4elPLS4YJnNFBW7KGcWK8iIPbbeCYXS/FY7CXBYObssqKmWGZaRXWCJg8Lffc+HqQBbg2P02yf1e9Sd96yu7/624IA==
+ b=AXi3jRPj7hkRgSg0m+ksqni36fPfYb1A0+I+2QHLfu+N4KDxcT7AsSI+6NKsryDm/CK3FPKtfSpfUqEL6Ebom4V3gIIR+KE92MPp+4Zwal5ZrGnAxNslZdPEy8u5+jZUuY1BulhXkwoyJMwX+pwnFq9CHorOs8FVVBWnMeAinY1HUEyoQY4ONP7qXIDgDHmewkavz0b2GxplkLbKzWtOXitfMiafRRf2IdPierhwUT5OUDhAk4gdyczNnCNeBLyBxcAkK4jTRMfuAxNr74TG1FauCtVRE8mMr6eOXUeZOW6ieDqb/AhaCyc8XrBzYgLxIYMY1LTrsmvVwu5Mf3Asyg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ds5u4rRkCsRMI2FUO2XS3EpFLNvC4Pj9U42rUkxWM/k=;
- b=fkQbySNm45E5zxUrItbsQV4xdkGngb4y+fIOQrDACGooBeboe40jXV70breTp5B0rYZs5uEidl+zJBd1Wy+wKbGq52eHCwb++7hKleLR0ppW5Jl8Ixn2P0+H+UgPWLGX+faZ1kKylPZBDW6BzDvqofG5WXFk4zm62PD3NtL9wvt3u9yhvZFa9Qg35+3sJA4f16/YWXj4/40t8ovypWKP+tYjQF0omVxgvwEW0AqjkC/j7KmbRQ2nMp/1+qRUXpaxYkpA6128O8K33o0Ai2r7xK17vAUGzefnyvLwIYI4q6IcXodGMQYaRK/gKY0M2LC8PospZ9ZcVqbLMfmFmNL4NQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=rosjfANZV1uTtprNkzCSh6SN4aslbt6UmM8DV96Psxs=;
+ b=PzWQJYTR1ol7KE+G56GvP61IEMsrj1dYKPyTMk1xK12qznCHVpsCWuAnskrAN6Ulh9pyH4XKITKw2ctenw1WpupwgZX2rPPcvtQxXbUXFjTQJxnM3KnYa8XsyjZYOm2aePqyDpkAKF/fI94ATC2HUTuGbPqmJIeoaW+3KA58Ux3+iAbbBA3gtI3BMeQ5pIJbNZLlAoeIgrgN6HYdFxO86VILJ/dVG0KWXF/nj/t8tpaloriK1aO3uKRB4d4qMt/bBa3bzy1BYMF6uxZhJrfEpZKgblzRiH1X2SDOR0CRElzkWE9TxEDCLK/1WpyA8wcP93bLB3kfOxJyrtlIksNXSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ds5u4rRkCsRMI2FUO2XS3EpFLNvC4Pj9U42rUkxWM/k=;
- b=n7hZv++FMBIu0EAndacMX23CPmveYB69trHdKdBpcLnVLk8R0Zc4yg2hkGQOf7eVUFeF0LCcRiVIl9wYaT+xPaErOuJ1SomZUD7V5PY2FbPlgO1TGylcHivASA78kld1QyPuyb5MwQLTZe0/6eG15JDUUBepY82xFjt8qxmj3xo=
-Received: from BN9PR03CA0237.namprd03.prod.outlook.com (2603:10b6:408:f8::32)
- by SJ0PR12MB5422.namprd12.prod.outlook.com (2603:10b6:a03:3ac::15) with
+ bh=rosjfANZV1uTtprNkzCSh6SN4aslbt6UmM8DV96Psxs=;
+ b=J/h1wNJ9Xs9Ugf2X7+DUXiSVhvNkBSoBCDWyHLrN3NviAFz15jNJyj4JziKaTNLf0xICPszCKVpnRJH3yRspNCDbtMqAdQspUYIT56sZ/1fTae+kw0FY1hKg8WHk7eSlxzJ4LVA4xvMC0kMnfskaKMz1cHlrQyR0r3nbtNgTZ7h0AcCA0kQj62rwDKfco3ih/E5nDmXSgndRGjTI0uUgz9iZH210fcdZ7NBglyNWs8gK3tdL3YF+E3WZGarT0TfzFbaFHzoggDAVCGv39PaeIOD7OQujchbpouiAiPEaBH4qGKT6ZSGRiPQTOVYI7QkPPr0FKHLFGNfH/Tf19eJ+EQ==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by SG2PR06MB3434.apcprd06.prod.outlook.com (2603:1096:4:a0::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
- 2022 02:33:36 +0000
-Received: from BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f8:cafe::e6) by BN9PR03CA0237.outlook.office365.com
- (2603:10b6:408:f8::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15 via Frontend
- Transport; Fri, 1 Jul 2022 02:33:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT045.mail.protection.outlook.com (10.13.177.47) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5395.14 via Frontend Transport; Fri, 1 Jul 2022 02:33:36 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 30 Jun
- 2022 21:33:35 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>, Jiri Kosina <jikos@kernel.org>,
-        "Benjamin Tissoires" <benjamin.tissoires@redhat.com>
-CC:     <linux-pm@vger.kernel.org>, Richard Gong <richard.gong@amd.com>,
-        <linux-usb@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 10/10] HID: usbhid: Set USB mice as s2idle wakeup resources
-Date:   Thu, 30 Jun 2022 21:33:28 -0500
-Message-ID: <20220701023328.2783-10-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220701023328.2783-1-mario.limonciello@amd.com>
-References: <20220701023328.2783-1-mario.limonciello@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Fri, 1 Jul
+ 2022 03:16:13 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::46d:a7a:f047:e9bf]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::46d:a7a:f047:e9bf%5]) with mapi id 15.20.5373.018; Fri, 1 Jul 2022
+ 03:16:13 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: Questions about usb to serial driver
+Thread-Topic: Questions about usb to serial driver
+Thread-Index: AdiM+OnNdGp6/p28TOGY715mtlYERw==
+Date:   Fri, 1 Jul 2022 03:16:13 +0000
+Message-ID: <HK0PR06MB3202C7064582E6CB027237BC80BD9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b1497df0-0d83-4d62-82e8-08da5b100d80
+x-ms-traffictypediagnostic: SG2PR06MB3434:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DpG8021U7L/jKZl/lwmIY5u6FyXjQzhez//3A+tVN9J2KYoRAnOQrvR0gEX4Y83vJ+oSiPhjzQwl7K6cv6d865BYdZWN+9OKtfNau4RhUuViBwmoGqLxWBElRfETDBqxNgrDtJ+2nx/UZ+gx5TWEAGaZ2mkrzLszqwu4W1qDzonoF9yjQQzXNzTOTJQwblMQoSGBqzii7lw+uPuEnvppHfVm/XBQic7pJFSdekc33gs2xMS0GyQxBf5xLXY8ZTM1J/9RJAku15q+GbHHUll904vxarjZ/uUDEhRtXOY8ekonicEgBxs3ydXgPEOymyqdpD7rcHAbO9nVcS1hAMFi7XvrX0cW6vRd2Z/j268PN1vamANyJYIlCwUlSTZjhmjEMOPGkdljgbuehme7pf2UmyC/qumq+FobpYs4Q5pEs1mzRda36D3j+7IPbSzQkIlNWdwagYsnQi2qVQ0HFG3544fpa50d8sg08sYpSpTrUopk0jUeEAOmn6pkT/KAfusMohqrVXtQaSLRLcdPl77TsNeWR2UlBT9z5kw3cwIOVocxDvSYBoS4jixC8xe2fWIDuGy4kUrCZDT6PH6/Z50rZbkG/lYU9ZIW59uvFFh1JOkIG62SJe90rf6Oh6lJEcDQcOEnD0drXhXSauPPCseu97e6lPcrOiwdmw2NKejOm0n6uDlZQVNupSzfZcrBOpy9BHJG3ziA+lFkWFqHiDZyWDDTbUtPg1DX6SpNxSpQ7jbE7xxtGXHG0o63HAVIBib2TuF5Yt0YL4XKnpL2MN1CwPdOq/Y7a3aXWA5ymudbJcN71Whsxa+H56I+Cgs8bqHU
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39850400004)(346002)(136003)(366004)(396003)(41300700001)(186003)(7696005)(26005)(52536014)(6506007)(316002)(8676002)(110136005)(64756008)(86362001)(9686003)(33656002)(2906002)(66446008)(76116006)(71200400001)(8936002)(66476007)(5660300002)(122000001)(38070700005)(66946007)(4744005)(478600001)(55016003)(38100700002)(66556008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3s7C3lgMuRBiWqncPUAWuNiYlw47TrUgLrgGAZHvqhnExB0B2MZgC3QKFNLq?=
+ =?us-ascii?Q?GsSdbcFZnazTk4GGb5jd1ctxoo5Udi4El+xV3BQ0Q1YiOn8LbkDazBL7tsZx?=
+ =?us-ascii?Q?w6IkyegP6csrpA+kPN/iAceW/brmP2WzLfwMlLJcvWL7a1iSxgGQLBAISZi3?=
+ =?us-ascii?Q?itib1WBBfDiI/YMO+x8jqGnHS3bt2yOapUtA+HLzgURY8WXWgfagZ5Y9kEqW?=
+ =?us-ascii?Q?OjWJDzFCps5tqVrNIUkyml+6jkVKJc2W/UrNDfa4z8F18K6DsEHwU70Y9pvP?=
+ =?us-ascii?Q?mJCM8W1FjT32cvtsXcuYLpyMOc5WcLFs4XvDy9EUJyIZSD0HofiCunPxpLWa?=
+ =?us-ascii?Q?V6HEpPelQe9SI78y3yRChpHHeEuGaNOnkS9cirMNlvjson6pf71ZMwK6Iz+v?=
+ =?us-ascii?Q?wEgI57rDgLr2wBLztffoWb5NnOCfTIWRpEI9nFO10oho8Tj+HE7gx8srkFS+?=
+ =?us-ascii?Q?e72/qYRWHrtN2KGvvA2sskwk+SxfYd0mXC7cV6n1LbCyVH3yqS5bpOLhp3Ts?=
+ =?us-ascii?Q?sPQfehYSdS32WxoPiG0B6/EdO+EmlPtpIAY/hwqM4o/t/rmWIyS3zZIVEdea?=
+ =?us-ascii?Q?nJoKL+UquD/TOv+O/XFFQPqxHPti3qOqGx+sOqAdraRnCWLY6lzVC4i/IThY?=
+ =?us-ascii?Q?dTS7o3yBeHFXGYoEawfZ3WpRNdaifsyWQ0198570e96pUIFQLtqIhhwZ1Lca?=
+ =?us-ascii?Q?wfiW7lpEKvpo5guDYJGqYZNawMMQYav2XvKJ0zs3jCoJscJTtxmCU44OpA0s?=
+ =?us-ascii?Q?A/lObGK68hVyquA+QPT48NY5d16mz378f8LivbY/Xzb1XEJsSQdZfUic9iAz?=
+ =?us-ascii?Q?TWJYsUyi+B6+8y36dXfqP7LtwN+N6m3x7y5P9rGIXSLlHAfXdz64cwNp98ut?=
+ =?us-ascii?Q?QRisksfbYNB6YdCVGJmnS4J4TF/PRTnDnMD31uCvicw0+1uaogMEFlTMVDhF?=
+ =?us-ascii?Q?DzDIVoOfsGA0R5HTu77hz5bclSu84MDXB1ueXgNDGv5Vno3MeE75jdb4qdyl?=
+ =?us-ascii?Q?dGFkEqVPl3zyDw9AeDLM1y1T5zE/B5SXIdRTiHe9nJJGm+Lo5D1+MoGEa/Jc?=
+ =?us-ascii?Q?2Qt+1bLRt3t05r/rZdiHD6jy1bQEDCKmO82xBoMw+CgLa8y/PFw8rkHyrJon?=
+ =?us-ascii?Q?bOFc1wdE1RmUf/to4dyQWs63LNGJHyEGOAcqRl5RLET/kJmusS/QW3DYTPRc?=
+ =?us-ascii?Q?gFWi80z/q2qqzd7JLBUz40eIaibjdQapMLHhJQOp72sDgD2fJBeqpYu4EYC/?=
+ =?us-ascii?Q?iW64mc6inHDYEIJGuLJtQc0YIPwrCSeFySqGZz9jLlCxR3uKuy8D3YxEelQL?=
+ =?us-ascii?Q?3rr6I977nLDiEvozIUdetYCoE1Kg2km1N1Cc+OPEdIVmEDy/QaeSNQjAmgP/?=
+ =?us-ascii?Q?rpCW8ZW+BjyLOolpCfey+Cl2cArJozgbTJfeMzwYos3ORjyrsuov4qrdYich?=
+ =?us-ascii?Q?F2dW9xLWt0cTDbE4nwp8H3oAFhFyrxcKJ+JqKJ78WelNl+2/yWTDN6cjj7Ff?=
+ =?us-ascii?Q?J1au+Cvq+mX1tNeWCSWVpMxJek0JlVNI8OOgsTxDlAdtoOb79eXJVSKQApR5?=
+ =?us-ascii?Q?eaE/tXqOVF+a26ivmnisbR2xcxZJAkmgaEuzYnoz?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7172b8b2-510d-4aed-9d1a-08da5b0a199e
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5422:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wBthxZMrcknrwZ8V48kPMITVyjClYaWzR5pCmM6C8rizbZ6gARP3+vvGWc/V4bLIetv1nD5cax4y5bwyfQceWGckD4LFdpk8sEbU2f/YYIIEEgLujuumreJrAgedaTJzUj+zi+ownsDs7pBXx5KqN2Tz2N+baHVo40Kqpncw0flC+n1ehCtwfbLeIjU8mpnj6ETPP33S4tRWKiSFwHhFp6qtnLDWVL7ntr2XsYKtbFJ4m5jW5MwysFTBN0gzdXd9doy2YItAwd0QgWr3QI+V9SYp1nw795AYm1NmNbuVpdrrI3vNyZvJoU9GRYQe9j1Z/2N/14/epCIiVL8YXixKuRoumSz4I8lr/2vOLyoBCuM4J00JZC9Gmf/IxbiFueopneSf5HODj0nbpbdHaw3fNDWMISQ6iZLiXBJWCkgaseRwvkwsIIbVBVmuMf5kqGF6RwSqsUMCodNI9gbwBQ+MNFnxPSkhWkQ5n+/d2cesIOeHQAvI+HA1LpQ7qYjpGItsWx1cEyNpQ0F64qkxYWRavaiP3UK/LUwXgZaFwG5ZQKxe0uSzBRGkmDeeystkGMIltskR1Z3jGU/ujK4/vemWm9Q5i76jw76Z9MtxHsRMBMR217Ym39Z5sFZ6bRYwRUYAn9w6ipAUi8kG2wow1k5ANt/nsUFSn+uZ+1b0aWAzXwr+wF+OH9+aEmKhPVpRG35bkV5ZLAZyb3yuUSwqDJE+Tp+JllJ5ZMr2RxxuDyh3wxkPjiTV+Y4LczkngYvIOq+hMp7nN3p3umAEDadtRlWtHAcJ6kBLz1ANSPFhLH8Xe3S0XVckKEbKQWwS5NfF5IXYuHyVg0SZSGUDYYhYYORgrEqnXxeY/PsyOLo1lY1J76UEuZYpmJZbE25eCbu+LaMTqyq4TTywc1USPTnKiS+UGHkCCexasWw+V5tMOeHAwcg=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(346002)(376002)(40470700004)(46966006)(36840700001)(110136005)(478600001)(45080400002)(70586007)(966005)(86362001)(36756003)(81166007)(7696005)(6666004)(41300700001)(336012)(426003)(47076005)(54906003)(26005)(316002)(8676002)(70206006)(4326008)(2616005)(186003)(16526019)(1076003)(82310400005)(2906002)(40460700003)(40480700001)(44832011)(5660300002)(8936002)(83380400001)(356005)(82740400003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 02:33:36.3191
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1497df0-0d83-4d62-82e8-08da5b100d80
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2022 03:16:13.0320
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7172b8b2-510d-4aed-9d1a-08da5b0a199e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5422
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: St3VsXkrj1YZYruZabaMlR8Po0ve5fncJZYt/Vf7HG+2gFNVJrdXW8ffpvpyEKrZ04SYR3o5O0n9rXncBiID/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3434
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -100,121 +113,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB HID transport layer doesn't configure mice for wakeup by default.
-Thus users can not wake system from s2idle via USB mouse. However, users
-can wake the same system from Modern Standby on Windows with the same USB
-mouse.
+Hi all,
 
-Microsoft documentation indicates that all USB mice and touchpads should
-be waking the system from Modern Standby.
+I have a question about USB-serial and I hope I can find the answer from he=
+re.
+I'll be appreciated it if there is any feedback from you.
 
-Many people who have used Windows on a PC that supports Modern Standby
-have an expectation that s2idle wakeup sources should behave the same in
-Linux. For example if your PC is configured "dual-boot" and is used docked
-it's very common to wakeup by using a USB mouse connected to your dock in
-Windows. Switching to Linux this is not enabled by default and you'll
-need to manually turn it on or use a different wakeup source than you did
-for Windows.
+My question is If I have a USB device controller (udc) and a uart controlle=
+r (16550) independently in a SoC,
+is there any usb-serial drivers or applications that could possible to supp=
+ort/connect:
+-	udc tx to uart rx
+-	uart tx to udc rx
 
-Changes for wakeups have been made in other subsystems such as the PS/2
-keyboard driver which align how wakeup sources in Linux and Modern Standby
-in Windows behave. To align expectations from users on USB mice, make this
-behavior the same when the system is configured both by the OEM and the
-user to use s2idle in Linux.
+Any chance I can make this SoC as a usb-serial devices?
+Is there any exist drivers or applications I can reference it?
+Thanks
 
-This means that at a minimum supported mice will be able to wakeup by
-clicking a button. If the USB mouse is powered over the s2idle cycle (such
-as a wireless mouse with a battery) it's also possible that moving it
-may wake up the system.  This is HW dependent behavior.
-
-If the user sets the system to use S3 instead of s2idle, or the OEM ships
-the system defaulting to S3, this behavior will not be turned on by
-default.
-
-Users who have a modern laptop that supports s2idle and use s2idle but
-prefer the previous Linux kernel behavior can turn this off via a udev
-rule.
-
-Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#input-devices-1
-Link: https://lore.kernel.org/linux-usb/20220404214557.3329796-1-richard.gong@amd.com/
-Suggested-by: Richard Gong <richard.gong@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-More people keep coming to us confused that they couldn't wake a Linux system
-up from sleep using a mouse, so this patch is being revived.
-
-Microsoft documentation doesn't indicate any allowlist for this behavior, and
-they actually prescribe it for all USB mice and touchpads.
-
-changes from v2->v3:
- * Use `pm_suspend_preferred_s2idle`
- * Drop now unnecessary acpi.h header inclusion
- * Update commit message
- * Adjust comments from v2 per thread
-
-changes from v1->v2:
- * Resubmit by Mario
- * Update commit message
- * Only activate on systems configured by user and OEM for using s2idle
----
- drivers/hid/usbhid/hid-core.c | 37 ++++++++++++++++++++++++-----------
- 1 file changed, 26 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 4490e2f7252a..d08511f00d3b 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -26,6 +26,7 @@
- #include <linux/wait.h>
- #include <linux/workqueue.h>
- #include <linux/string.h>
-+#include <linux/suspend.h>
- 
- #include <linux/usb.h>
- 
-@@ -1176,17 +1177,31 @@ static int usbhid_start(struct hid_device *hid)
- 		usb_autopm_put_interface(usbhid->intf);
- 	}
- 
--	/* Some keyboards don't work until their LEDs have been set.
--	 * Since BIOSes do set the LEDs, it must be safe for any device
--	 * that supports the keyboard boot protocol.
--	 * In addition, enable remote wakeup by default for all keyboard
--	 * devices supporting the boot protocol.
--	 */
--	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT &&
--			interface->desc.bInterfaceProtocol ==
--				USB_INTERFACE_PROTOCOL_KEYBOARD) {
--		usbhid_set_leds(hid);
--		device_set_wakeup_enable(&dev->dev, 1);
-+	if (interface->desc.bInterfaceSubClass == USB_INTERFACE_SUBCLASS_BOOT) {
-+		switch (interface->desc.bInterfaceProtocol) {
-+		/* Some keyboards don't work until their LEDs have been set.
-+		 * Since BIOSes do set the LEDs, it must be safe for any device
-+		 * that supports the keyboard boot protocol.
-+		 * In addition, enable remote wakeup by default for all keyboard
-+		 * devices supporting the boot protocol.
-+		 */
-+		case USB_INTERFACE_PROTOCOL_KEYBOARD:
-+			usbhid_set_leds(hid);
-+			device_set_wakeup_enable(&dev->dev, 1);
-+			break;
-+		/*
-+		 * Windows configures USB mice to be a wakeup source from Modern
-+		 * Standby, and users have expectations that s2idle wakeup sources
-+		 * behave the same.  Thus setup remote wakeup by default for mice
-+		 * supporting boot protocol if the system supports s2idle and the user
-+		 * has not disabled it on the kernel command line.
-+		 */
-+		case USB_INTERFACE_PROTOCOL_MOUSE:
-+			if (pm_suspend_preferred_s2idle() &&
-+			    pm_suspend_default_s2idle())
-+				device_set_wakeup_enable(&dev->dev, 1);
-+			break;
-+		}
- 	}
- 
- 	mutex_unlock(&usbhid->mutex);
--- 
-2.34.1
-
+Best Regards,
+-Neal
