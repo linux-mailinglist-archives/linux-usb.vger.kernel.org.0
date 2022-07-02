@@ -2,61 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60762563F17
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Jul 2022 10:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC1A563F2D
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Jul 2022 11:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbiGBIln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Jul 2022 04:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S231557AbiGBJJk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Jul 2022 05:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGBIlm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 04:41:42 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38EF1758F;
-        Sat,  2 Jul 2022 01:41:39 -0700 (PDT)
-X-UUID: ba75ed63f65b405296e4e46d91d4a0d4-20220702
+        with ESMTP id S231540AbiGBJJj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 05:09:39 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15821ADB3
+        for <linux-usb@vger.kernel.org>; Sat,  2 Jul 2022 02:09:36 -0700 (PDT)
+X-UUID: 0095c05ae3ad4ae5860fd9202def3370-20220702
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:7bb2a622-aaa9-4e81-9748-fe952e890322,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.7,REQID:7bb2a622-aaa9-4e81-9748-fe952e890322,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:87442a2,CLOUDID:febd6ad6-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:3378c9d810bb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ba75ed63f65b405296e4e46d91d4a0d4-20220702
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.7,REQID:51ec707d-2b1a-4e41-85f0-7aafcad8ad1b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:466a5b86-57f0-47ca-ba27-fe8c57fbf305,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 0095c05ae3ad4ae5860fd9202def3370-20220702
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 171830191; Sat, 02 Jul 2022 16:41:34 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 807459761; Sat, 02 Jul 2022 17:09:31 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Sat, 2 Jul 2022 16:41:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Sat, 2 Jul 2022 16:41:32 +0800
-Message-ID: <df7a6c412d6b96e5fd7bed8973d57b9214d4f590.camel@mediatek.com>
-Subject: Re: [PATCH v2] usb: gadget: f_uac1: add interface association
- descriptor
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 2 Jul 2022 17:09:30 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 2 Jul 2022 17:09:30 +0800
+Message-ID: <f6f308d2ffe9a40d3182a923308162d7c4d80a6b.camel@mediatek.com>
+Subject: Re: support USB 3.2 function remote wake
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Julian Scheel <julian@jusst.de>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        xin lin <xin.lin@mediatek.com>,
-        "Linux USB" <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Sat, 2 Jul 2022 16:41:32 +0800
-In-Reply-To: <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
-References: <20220629021304.21725-1-chunfeng.yun@mediatek.com>
-         <CAB=otbQ3L0G6NYvFwBe268auGG3iS6shk9z+SpgKrkLthn-qGg@mail.gmail.com>
+        Alan Stern <stern@rowland.harvard.edu>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Sat, 2 Jul 2022 17:09:30 +0800
+In-Reply-To: <Yrwn6Y7OMdPtN+g/@kroah.com>
+References: <cd7169df640fe6dab85f6d94cb8f40c181e08d2b.camel@mediatek.com>
+         <Yrwn6Y7OMdPtN+g/@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -71,179 +59,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2022-06-29 at 12:46 +0300, Ruslan Bilovol wrote:
->  On Wed, Jun 29, 2022 at 5:13 AM Chunfeng Yun <
-> chunfeng.yun@mediatek.com> wrote:
+On Wed, 2022-06-29 at 12:22 +0200, Greg Kroah-Hartman wrote:
+> On Wed, Jun 29, 2022 at 05:02:54PM +0800, Chunfeng Yun wrote:
+> > Hi,
 > > 
-> > From: xin lin <xin.lin@mediatek.com>
-> > 
-> > When we want to use a composite device that supports UVC, UAC1 and
-> > ADB at the same time, encounter that UAC1 can't work when connected
-> > to windows 10 system.
-> > From the online documents of microsoft, "overview of enumeration of
-> > interface collections on usb composite devices", it recommends that
-> > vendors use IADs (interface association descriptor) to define
-> > interface collections.
-> > After addding IAD, we can fix the issue.
+> > I plan to support function remote wakeup on our usb3 device
+> > controller
+> > driver.
 > 
-> It is incorrect to add Interface Association Descriptor to the UAC1
-> function.
-> The UAC1 specification was developed much earlier than IAD was
-> invented, and it
-> implements this functionality in another way - by describing number
-> of
-> associated
-> interfaces and interface numbers on Class-Specific AC Interface
-> Descriptor level;
-> see *bInCollection* and *baInterfaceNr* fields of UAC1 Class-Specific
-> AC Interface
-> Header Descriptor in 4.3.2 section of UAC1 specification.
-> 
-> This is already implemented in f_uac1.c (see where *bInCollection*
-> and
-> *baInterfaceNr*
-> are updated), along with support of dynamic capture/playback
-> endpoints
-> enablement.
-> Adding IAD to the UAC1 driver is duplicating that functionality and
-> isn't supported
-> by UAC1 spec.
-Ok, seems win10 don't support this way.
-
-Abandon this patch.
+> Is this based on dwc3 or some new silicon?
+Based on mtu3;
 
 > 
-> On the other hand, the USB orgcommittee switched the approach of
-> interface collection
-> definition from a class-specific descriptors level to IAD in the UAC2
-> spec.
-> So why not use UAC2 function for the same purpose, it already has IAD
-> implemented
-> and is supported by Win10?
-unfortunately, also encounter enumeration issues on some versions of
-win10.
+> > A function may signal that it wants to exit from Function Suspend
+> > by
+> > sending a Function Wake Notification to the host, and the
+> > notification
+> > need knows the first interface number in this function.
+> > But the current gadget ops:
+> >     int (*wakeup)(struct usb_gadget *);
+> > does not provide information about interface number;
+> 
+> Why would the interface matter as you need to do this for the whole
+> device, not just one interface, right?
+Yes, it is, but usb3.2 only supports function remote wakeup.
 
-Thanks
+I look at the code of core/hub.c, as described in function
+usb_enable_remote_wakeup():
+" For USB-3 devices: Assume there's only one function on the device and
+enable remote wake for the first interface.  FIXME if the interface
+association descriptor shows there's more than one function.
+"
+It assume the interface number is 0, and don't support multi-function
+devices with IAD.
 
 > 
-> Thanks,
-> Ruslan
+> > There seems to be two ways:
+> > 1. add a new parameter as below,
+> >     int (*wakeup)(struct usb_gadget *, u8 intf);
+> > 2. add a new ops, such as,
+> >     int (*function_wakeup)(struct usb_gadget *, u8 intf);
+> > 
+> > Do you have any suggestions?
 > 
-> > 
-> > Signed-off-by: xin lin <xin.lin@mediatek.com>
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> > v2: modify commit log suggested by Greg
-> > ---
-> >  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_uac1.c
-> > b/drivers/usb/gadget/function/f_uac1.c
-> > index 6f0e1d803dc2..8390207bc513 100644
-> > --- a/drivers/usb/gadget/function/f_uac1.c
-> > +++ b/drivers/usb/gadget/function/f_uac1.c
-> > @@ -71,6 +71,17 @@ static inline struct f_uac1_opts
-> > *g_audio_to_uac1_opts(struct g_audio *audio)
-> >   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
-> >   */
-> > 
-> > +static struct usb_interface_assoc_descriptor iad_desc = {
-> > +       .bLength = sizeof(iad_desc),
-> > +       .bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
-> > +
-> > +       .bFirstInterface = 0,
-> > +       .bInterfaceCount = 3,
-> > +       .bFunctionClass = USB_CLASS_AUDIO,
-> > +       .bFunctionSubClass = 0,
-> > +       .bFunctionProtocol = UAC_VERSION_1,
-> > +};
-> > +
-> >  /* B.3.1  Standard AC Interface Descriptor */
-> >  static struct usb_interface_descriptor ac_interface_desc = {
-> >         .bLength =              USB_DT_INTERFACE_SIZE,
-> > @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor
-> > as_iso_in_desc = {
-> >  };
-> > 
-> >  static struct usb_descriptor_header *f_audio_desc[] = {
-> > +       (struct usb_descriptor_header *)&iad_desc,
-> >         (struct usb_descriptor_header *)&ac_interface_desc,
-> >         (struct usb_descriptor_header *)&ac_header_desc,
-> > 
-> > @@ -293,6 +305,7 @@ static struct usb_descriptor_header
-> > *f_audio_desc[] = {
-> >  };
-> > 
-> >  enum {
-> > +       STR_ASSOC,
-> >         STR_AC_IF,
-> >         STR_USB_OUT_IT,
-> >         STR_USB_OUT_IT_CH_NAMES,
-> > @@ -310,6 +323,7 @@ enum {
-> > 
-> >  static struct usb_string strings_uac1[] = {
-> >         /* [STR_AC_IF].s = DYNAMIC, */
-> > +       [STR_ASSOC].s = "Source/Sink",
-> >         [STR_USB_OUT_IT].s = "Playback Input terminal",
-> >         [STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
-> >         [STR_IO_OUT_OT].s = "Playback Output terminal",
-> > @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >         as_out_header_desc.bTerminalLink =
-> > usb_out_it_desc.bTerminalID;
-> >         as_in_header_desc.bTerminalLink =
-> > usb_in_ot_desc.bTerminalID;
-> > 
-> > +       iad_desc.bInterfaceCount = 1;
-> >         ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc-
-> > >bLength);
-> > 
-> >         if (EPIN_EN(opts)) {
-> > @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >                 if (FUIN_EN(opts))
-> >                         len += in_feature_unit_desc->bLength;
-> >                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +               iad_desc.bInterfaceCount++;
-> >         }
-> >         if (EPOUT_EN(opts)) {
-> >                 u16 len = le16_to_cpu(ac_header_desc-
-> > >wTotalLength);
-> > @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >                 if (FUOUT_EN(opts))
-> >                         len += out_feature_unit_desc->bLength;
-> >                 ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +               iad_desc.bInterfaceCount++;
-> >         }
-> > 
-> >         i = 0;
-> > +       f_audio_desc[i++] = USBDHDR(&iad_desc);
-> >         f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
-> >         f_audio_desc[i++] = USBDHDR(ac_header_desc);
-> > 
-> > @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >                 }
-> >         }
-> > 
-> > +       iad_desc.iFunction = us[STR_ASSOC].id;
-> >         ac_interface_desc.iInterface = us[STR_AC_IF].id;
-> >         usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
-> >         usb_out_it_desc.iChannelNames =
-> > us[STR_USB_OUT_IT_CH_NAMES].id;
-> > @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >         status = usb_interface_id(c, f);
-> >         if (status < 0)
-> >                 goto err_free_fu;
-> > +
-> > +       iad_desc.bFirstInterface = status;
-> >         ac_interface_desc.bInterfaceNumber = status;
-> >         uac1->ac_intf = status;
-> >         uac1->ac_alt = 0;
-> > --
-> > 2.18.0
-> > 
+> Look at what the existing ones do, 
+Yes, I looked at all existing ones that support remote wakeup, but
+seems no one support function wakeup (maybe also assume the interface
+number is 0 if it does);
+
+If we also follow the ways of host, no need change ops.
+but there is also limitation for composite device with IAD;
+
+
+> I do not think you have different
+> suspend levels per USB interface, but rather the whole device.
+
+>   Try it
+> and see.
+> 
+> thanks,
+> 
+> greg k-h
 
