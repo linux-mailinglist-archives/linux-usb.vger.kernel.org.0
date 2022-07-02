@@ -2,52 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C775642CB
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Jul 2022 23:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA35C56430F
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Jul 2022 00:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiGBVET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Jul 2022 17:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S230216AbiGBWQJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Jul 2022 18:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGBVES (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 17:04:18 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FE4DE8F
-        for <linux-usb@vger.kernel.org>; Sat,  2 Jul 2022 14:04:14 -0700 (PDT)
-Received: from Cyrus.lan ([86.151.31.128]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.179]) with ESMTPA (Nemesis) id
- 1Mqrjz-1nlpiW0UXx-00mqvZ; Sat, 02 Jul 2022 23:03:57 +0200
-Date:   Sat, 2 Jul 2022 22:03:55 +0100
-From:   Darren Stevens <darren@stevens-zone.net>
-To:     linuxppc-dev@lists.ozlabs.org, oss@buserror.net,
-        chzigotzky@xenosoft.de, robh@kernel.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org
-Cc:     shawnguo@kernel.org, leoyang.li@nxp.com
-Subject: [PATCH v3] drivers/usb/host/ehci-fsl: Fix interrupt setup in host
- mode.
-Message-ID: <20220702220355.63b36fb8@Cyrus.lan>
-X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.30; powerpc-unknown-linux-gnu)
+        with ESMTP id S229441AbiGBWQI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 18:16:08 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C83BC03
+        for <linux-usb@vger.kernel.org>; Sat,  2 Jul 2022 15:16:07 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id f1-20020a056602070100b00674f8035487so3283992iox.17
+        for <linux-usb@vger.kernel.org>; Sat, 02 Jul 2022 15:16:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=M98UdBzRCd+0BXICitMF/rM+Sf8iZdHszQuTgRzs2AE=;
+        b=ABCLm6cyvQt+72bOj0lUkmTd3uAMFVLtKHDMk90Lo9BLcbWRromPzYpfM76WLCppwl
+         a36zr8i0El8nrTS+p5YQmJxYq2VEjeDiqPVXU/NmzYlfFzNcORVK8JkjkSZh/HqvnOq3
+         CkkcBdxwRGQtFrObcPvfxo9JPEPtmYaoyc38OZeY/GtwiS84Zwxi78YJH/PKaRTZ1G/d
+         Sexj5T+J6txixw/hUjDFv9Oj2tl04O5FGxMXNdHiQD8mECJK+C/wD10ssLhNG352rpkY
+         A1RGlPXF4mszTxeBm8ZnSavPJEZGrEMJujC4wTVR9WzbQJRemZPmeIrqzeUVmTyn4xUO
+         zbug==
+X-Gm-Message-State: AJIora/r1fsV9TwHRt6DbAKrbUqnGYimkE7evV1WAoW8AqhERdWTqUI3
+        3X3IuoJN3anzD4m49tPz9ibq4AN8skPvS4I1qbdVMSL3N6/L
+X-Google-Smtp-Source: AGRyM1vGFPa0EDmhSGdCmfNIPNkmjMBuqzee53YhAjeeRI2mSbyPaaZeeNM43jHkn580f9WKpXvANPtC82iuhPk39bKfAVM46MWs
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:7dP2sXcx+tU1+/TK79yzyTjl/O/pWtJa8WSayWZhp5S7eX3nEwZ
- afTpN6tXjGqRooJMr+bEZLB1jXf7XbtJdJUVXUK3CsI78xgvFzsAkIy1K/wSjWbMTKCOahn
- i1S+CpXI25tmplwOGpNqWt+lC6JWA5SSQ9ihdu+1dhKqHD8JAJPVhgT9caMizZkUGa+zGmc
- TsJ+CfUxgzkQtOoHvGbPA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:waBTCM5aggM=:MYE3wOGLouHP+Ua+1kPWs1
- xz+CRH8yUyBTCC14DqB4UqTHr3lXxjr3MiMRUQIAJ7Gs7aPcJfvNPd3lsyJtti5sUsfR9leZW
- 7W5wLeOsMYRDtGGWj+NMZkZFoXHptKpIonkGZrlYUD+8x+AZirWRqEDcC+0nLqr/7iOFi1My+
- WOcAB25IypiG8eW9haPNRqowIp7X4JtMiQIzIihApyVO+1HhChCES1SiYeoIYjCJqtWZzpEtZ
- qhgeTCgpEi2GNQp9KAdvHmleP/sCLUkSdI1QqYxdvVYaIZy9a+9NkdT0iQQ+LbMEk3dWGOIiK
- 5FS8QOrvLyGRoP30dKla3wEdh+fNS6E5Ma8005xgv6VU5MCXiRtSDeY3mYooDIjhNeCdt9S2j
- d3dpYLs7a68d185C498TpxiNuaIR7oeb6Yn2OKo5qVL/BtQHRpmL0xI1pMciMUXsxbPulCvgU
- Ry5dgHWjCnLhvGoisU5/woug9pZGX5IzSCGO2eYYjhPTEMPTePtzyC6IDHA/UCk4rKSpQ1B8k
- y//+kL1orzxwmh1NhMAoW8q53cAIrN97p7MxAUaUbyJdtysQp+1RmOVET/YHnhxTFl2pYx4mx
- VBgcg1ERy6HprJK0a/njX2P0NyVb8t3oP8crBjTdnR01i7LwERDgCJ6lHBlnCuWb7ozqnEcfn
- 3bJIPuvmDZS+f7Lvu4L0KJkQh/U25xtf2YekXraVVjxDm624lLmIOhLlT0qiDccUOKipn1bWP
- R7iMLdZYZOLPmqG1GWr7LVTFZeekypYkJJfPHnKuT+M1U8d0mXV3FHPgdHI=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:3387:b0:33c:9f9e:5a17 with SMTP id
+ h7-20020a056638338700b0033c9f9e5a17mr13107546jav.12.1656800166927; Sat, 02
+ Jul 2022 15:16:06 -0700 (PDT)
+Date:   Sat, 02 Jul 2022 15:16:06 -0700
+In-Reply-To: <000000000000ed47a705e2cbd347@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000069e4ad05e2d9d9e2@google.com>
+Subject: Re: [syzbot] INFO: task hung in __input_unregister_device (4)
+From:   syzbot <syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com>
+To:     dmitry.torokhov@gmail.com, johan@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rydberg@bitmath.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,58 +56,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In patch a1a2b7125e10 (Drop static setup of IRQ resource from DT
-core) we stopped platform_get_resource() from returning the IRQ, as all
-drivers were supposed to have switched to platform_get_irq()
-Unfortunately the Freescale EHCI driver in host mode got missed. Fix
-it.
+syzbot has bisected this issue to:
 
-Fixes: a1a2b7125e10 (Drop static setup of IRQ resource from DT core)
-Reported-by: Christian Zigotzky <chzigotzky@xenosoft.de>
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Darren Stevens <darren@stevens-zone.net>
----
- v3 - Corrected resource allocation in fsl-mph-dr-of.c
+commit 744d0090a5f6dfa4c81b53402ccdf08313100429
+Author: Johan Hovold <johan@kernel.org>
+Date:   Wed Nov 10 06:58:01 2021 +0000
 
- v2 - Fixed coding style, removed a couple of unneeded initializations,
-      cc'd Layerscape maintainers.
+    Input: iforce - fix control-message timeout
 
-Tested on AmigaOne X5000/20 and X5000/40 Contains code by Rob Herring 
-(in fsl-mph-dr-of.c)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1603376c080000
+start commit:   089866061428 Merge tag 'libnvdimm-fixes-5.19-rc5' of git:/..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1503376c080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1103376c080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=833001d0819ddbc9
+dashboard link: https://syzkaller.appspot.com/bug?extid=deb6abc36aad4008f407
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158619f0080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1072b5f4080000
 
-diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-index 385be30..896c0d1 100644
---- a/drivers/usb/host/ehci-fsl.c
-+++ b/drivers/usb/host/ehci-fsl.c
-@@ -76,14 +76,9 @@ static int fsl_ehci_drv_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev,
--			"Found HC with no IRQ. Check %s setup!\n",
--			dev_name(&pdev->dev));
--		return -ENODEV;
--	}
--	irq = res->start;
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
- 
- 	hcd = __usb_create_hcd(&fsl_ehci_hc_driver, pdev->dev.parent,
- 			       &pdev->dev, dev_name(&pdev->dev), NULL);
-diff --git a/drivers/usb/host/fsl-mph-dr-of.c b/drivers/usb/host/fsl-mph-dr-of.c
-index 44a7e58..e5df175 100644
---- a/drivers/usb/host/fsl-mph-dr-of.c
-+++ b/drivers/usb/host/fsl-mph-dr-of.c
-@@ -112,6 +112,9 @@ static struct platform_device *fsl_usb2_device_register(
- 			goto error;
- 	}
- 
-+	pdev->dev.of_node = ofdev->dev.of_node;
-+	pdev->dev.of_node_reused = true;
-+
- 	retval = platform_device_add(pdev);
- 	if (retval)
- 		goto error;
+Reported-by: syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com
+Fixes: 744d0090a5f6 ("Input: iforce - fix control-message timeout")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
