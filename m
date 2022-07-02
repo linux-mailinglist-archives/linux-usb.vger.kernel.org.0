@@ -2,113 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A379856429E
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Jul 2022 21:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C775642CB
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Jul 2022 23:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiGBTw6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Jul 2022 15:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S229798AbiGBVET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Jul 2022 17:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbiGBTwz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 15:52:55 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5467B86E;
-        Sat,  2 Jul 2022 12:52:54 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 536175C0152;
-        Sat,  2 Jul 2022 15:52:54 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 02 Jul 2022 15:52:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1656791574; x=1656877974; bh=Yv
-        Glt1rTnRirLsLlAHuPoEj1EgT6NLZWDvwyEakI4Yw=; b=E3dXktjJI4YfkXGADb
-        eKG5xZsEihcJ6i8ApIDeOxgD5Kz0TzxWygPax/Hhbcofhr9P+wGwePZxZuluAsnF
-        lpZSBmdWOe+6ztJ+ycEWH4/7x9Zi37ntFe/eCw+bD+uI7s0h0uppSDReHNMJb+7q
-        MKcSAS30iTJRHQKm8ttM8Oahcd/XRZsMCkejfn+phezurkQWUsp3q5XVBnmY0jkU
-        pFXvxOmKCxhvXl5bfsoXcTeapqm+OJNHIXQqb1GPSfwTNKvDk/WKezxUaaHjNhGI
-        Ia/ajslSJNKT0kMBc2EbfSp/Mhp9CwZa3BFZPL7ox3mbv4HHqmmJea/khw8Ryzfm
-        CTRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1656791574; x=1656877974; bh=YvGlt1rTnRirL
-        sLlAHuPoEj1EgT6NLZWDvwyEakI4Yw=; b=gYHsLMtTqjrDlQz2TtxP+U5mxcI5l
-        QWVff78oezSaIDDUm3rH9fGaocmw8hD+LyWtB7a0vlHyWRae2c0RespO1I46o7Co
-        3R0GipqDs5/emYI1ec2A+ZEdcqZCu4jjlIOWUHFj3VRbMQ5KFnrWWLoRU1g+cgJS
-        RAtURFkzWGGyhXjYKX6Mh0QaFaNE/1OTBqbj9BukeIoDUp+cQ+5NW0r43Zc6SRlz
-        UiGmQ2NvSCtKCskll1TzqCgXBkPX61beDKZJ3jo6FOa0I3MTnKM2jIi3yxw7aw/1
-        wVxGhu63ia7wBO65TV1f9QI93RoE5Z81KbDhkWqwhZNg3rQFoghSBiwXg==
-X-ME-Sender: <xms:FqLAYkL-oEgcpV73YpN3YSezNc1m387JiEtOk7FUGWW4C7yGQd04-w>
-    <xme:FqLAYkKqyXlkaBT0zIGa7RCPIe82k2LOlGlDut4jBINISUAFuu4DENurMPcZUCImN
-    xVMyUk6ugtLlGJZtQ>
-X-ME-Received: <xmr:FqLAYksiDTJmoLhAtkawd7IQkRteMMWkuoyhkAZPpq2vh-gezLeUCBUbE0XgfW8luk8Fyfipzl8uZaO9ra79GxMEUOhlHWO5eVcAlJ2kNzfHzxBXh_ex8ZtCotFZY4y_GE1B8A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehhedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
-    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:FqLAYhZobgj03oOQKCXUpSQBgsZAruSr_LJ2hzUOgYftVr-XXjoHxg>
-    <xmx:FqLAYrbZEQ0cYkf_sLYRSEU6pj5FwT5C5A51DqC_RERWZMULIMjU1w>
-    <xmx:FqLAYtDS4aKW2DKHss7k8tLhxd___CzUJ7ir9dgXwFh3mZ4cVupeVQ>
-    <xmx:FqLAYoRFGuykpNYcbpxL76K3ZKf2GbkdyxSfxddzWIFbUdJX1-Eisg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 2 Jul 2022 15:52:53 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org
-Subject: [PATCH 3/3] dt-bindings: usb: generic-ohci: Add Allwinner D1 compatible
-Date:   Sat,  2 Jul 2022 14:52:49 -0500
-Message-Id: <20220702195249.54160-4-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220702195249.54160-1-samuel@sholland.org>
-References: <20220702195249.54160-1-samuel@sholland.org>
+        with ESMTP id S229486AbiGBVES (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 17:04:18 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FE4DE8F
+        for <linux-usb@vger.kernel.org>; Sat,  2 Jul 2022 14:04:14 -0700 (PDT)
+Received: from Cyrus.lan ([86.151.31.128]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.179]) with ESMTPA (Nemesis) id
+ 1Mqrjz-1nlpiW0UXx-00mqvZ; Sat, 02 Jul 2022 23:03:57 +0200
+Date:   Sat, 2 Jul 2022 22:03:55 +0100
+From:   Darren Stevens <darren@stevens-zone.net>
+To:     linuxppc-dev@lists.ozlabs.org, oss@buserror.net,
+        chzigotzky@xenosoft.de, robh@kernel.org, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org
+Cc:     shawnguo@kernel.org, leoyang.li@nxp.com
+Subject: [PATCH v3] drivers/usb/host/ehci-fsl: Fix interrupt setup in host
+ mode.
+Message-ID: <20220702220355.63b36fb8@Cyrus.lan>
+X-Mailer: Claws Mail 3.13.2 (GTK+ 2.24.30; powerpc-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:7dP2sXcx+tU1+/TK79yzyTjl/O/pWtJa8WSayWZhp5S7eX3nEwZ
+ afTpN6tXjGqRooJMr+bEZLB1jXf7XbtJdJUVXUK3CsI78xgvFzsAkIy1K/wSjWbMTKCOahn
+ i1S+CpXI25tmplwOGpNqWt+lC6JWA5SSQ9ihdu+1dhKqHD8JAJPVhgT9caMizZkUGa+zGmc
+ TsJ+CfUxgzkQtOoHvGbPA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:waBTCM5aggM=:MYE3wOGLouHP+Ua+1kPWs1
+ xz+CRH8yUyBTCC14DqB4UqTHr3lXxjr3MiMRUQIAJ7Gs7aPcJfvNPd3lsyJtti5sUsfR9leZW
+ 7W5wLeOsMYRDtGGWj+NMZkZFoXHptKpIonkGZrlYUD+8x+AZirWRqEDcC+0nLqr/7iOFi1My+
+ WOcAB25IypiG8eW9haPNRqowIp7X4JtMiQIzIihApyVO+1HhChCES1SiYeoIYjCJqtWZzpEtZ
+ qhgeTCgpEi2GNQp9KAdvHmleP/sCLUkSdI1QqYxdvVYaIZy9a+9NkdT0iQQ+LbMEk3dWGOIiK
+ 5FS8QOrvLyGRoP30dKla3wEdh+fNS6E5Ma8005xgv6VU5MCXiRtSDeY3mYooDIjhNeCdt9S2j
+ d3dpYLs7a68d185C498TpxiNuaIR7oeb6Yn2OKo5qVL/BtQHRpmL0xI1pMciMUXsxbPulCvgU
+ Ry5dgHWjCnLhvGoisU5/woug9pZGX5IzSCGO2eYYjhPTEMPTePtzyC6IDHA/UCk4rKSpQ1B8k
+ y//+kL1orzxwmh1NhMAoW8q53cAIrN97p7MxAUaUbyJdtysQp+1RmOVET/YHnhxTFl2pYx4mx
+ VBgcg1ERy6HprJK0a/njX2P0NyVb8t3oP8crBjTdnR01i7LwERDgCJ6lHBlnCuWb7ozqnEcfn
+ 3bJIPuvmDZS+f7Lvu4L0KJkQh/U25xtf2YekXraVVjxDm624lLmIOhLlT0qiDccUOKipn1bWP
+ R7iMLdZYZOLPmqG1GWr7LVTFZeekypYkJJfPHnKuT+M1U8d0mXV3FHPgdHI=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Allwinner D1 contains USB controllers which claim to be compatible
-with the OHCI specification version 1.0a.
+In patch a1a2b7125e10 (Drop static setup of IRQ resource from DT
+core) we stopped platform_get_resource() from returning the IRQ, as all
+drivers were supposed to have switched to platform_get_irq()
+Unfortunately the Freescale EHCI driver in host mode got missed. Fix
+it.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+Fixes: a1a2b7125e10 (Drop static setup of IRQ resource from DT core)
+Reported-by: Christian Zigotzky <chzigotzky@xenosoft.de>
+Suggested-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Darren Stevens <darren@stevens-zone.net>
 ---
+ v3 - Corrected resource allocation in fsl-mph-dr-of.c
 
- Documentation/devicetree/bindings/usb/generic-ohci.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ v2 - Fixed coding style, removed a couple of unneeded initializations,
+      cc'd Layerscape maintainers.
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-index bb6bbd5f129d..180361b79f52 100644
---- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-@@ -28,6 +28,7 @@ properties:
-               - allwinner,sun8i-h3-ohci
-               - allwinner,sun8i-r40-ohci
-               - allwinner,sun9i-a80-ohci
-+              - allwinner,sun20i-d1-ohci
-               - brcm,bcm3384-ohci
-               - brcm,bcm63268-ohci
-               - brcm,bcm6328-ohci
--- 
-2.35.1
+Tested on AmigaOne X5000/20 and X5000/40 Contains code by Rob Herring 
+(in fsl-mph-dr-of.c)
 
+diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+index 385be30..896c0d1 100644
+--- a/drivers/usb/host/ehci-fsl.c
++++ b/drivers/usb/host/ehci-fsl.c
+@@ -76,14 +76,9 @@ static int fsl_ehci_drv_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev,
+-			"Found HC with no IRQ. Check %s setup!\n",
+-			dev_name(&pdev->dev));
+-		return -ENODEV;
+-	}
+-	irq = res->start;
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
+ 
+ 	hcd = __usb_create_hcd(&fsl_ehci_hc_driver, pdev->dev.parent,
+ 			       &pdev->dev, dev_name(&pdev->dev), NULL);
+diff --git a/drivers/usb/host/fsl-mph-dr-of.c b/drivers/usb/host/fsl-mph-dr-of.c
+index 44a7e58..e5df175 100644
+--- a/drivers/usb/host/fsl-mph-dr-of.c
++++ b/drivers/usb/host/fsl-mph-dr-of.c
+@@ -112,6 +112,9 @@ static struct platform_device *fsl_usb2_device_register(
+ 			goto error;
+ 	}
+ 
++	pdev->dev.of_node = ofdev->dev.of_node;
++	pdev->dev.of_node_reused = true;
++
+ 	retval = platform_device_add(pdev);
+ 	if (retval)
+ 		goto error;
