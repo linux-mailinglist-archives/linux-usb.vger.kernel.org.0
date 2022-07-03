@@ -2,159 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C56F564391
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Jul 2022 03:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB70564410
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Jul 2022 06:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiGCBn3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Jul 2022 21:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S232303AbiGCD5v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Jul 2022 23:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGCBn2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 21:43:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A6A63B9;
-        Sat,  2 Jul 2022 18:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656812607; x=1688348607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OSVk8TVsRlITYlm+qWwWWkByFgjzt7WSCgcujDDdJmQ=;
-  b=EKXEIC6d5Pr2akd7b9qQ23dzAIQRmYTGcRC8yoqjNR2RbwxVQvqZg0nT
-   M8E9O0Hm4aFkz1Sw1uxfiygW1uj4VtLFWO4aqKUbZ30BxGisbfuRwI3pV
-   27XeJc073vdKJXdzegmcUzfv7bLeKGDwYl+15VncTBB3APB19/FsM4rbL
-   HwYmlwa7+OUVuEUWPZLw14sfag/68KyHqZzkSSfG7b9quZ95GRLB64NUd
-   XPR93zGvvz6aoo4MRc89BhXrN7P4vyKzDXV1/amSJ495KjOfgYyRo67dR
-   hIsDDXBTk5Up18+4+aQwjJXqxaxjWB5JAKwX5/D+RVwyKa6N29bBpcFSD
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10396"; a="308419503"
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="308419503"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2022 18:43:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,241,1650956400"; 
-   d="scan'208";a="542104810"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jul 2022 18:43:24 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o7odv-000Fw7-Lc;
-        Sun, 03 Jul 2022 01:43:23 +0000
-Date:   Sun, 3 Jul 2022 09:42:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     kbuild-all@lists.01.org, Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S231303AbiGCD5W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Jul 2022 23:57:22 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6EDB4B6
+        for <linux-usb@vger.kernel.org>; Sat,  2 Jul 2022 20:57:18 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id s13-20020a0568301e0d00b00616ad12fee7so5072692otr.10
+        for <linux-usb@vger.kernel.org>; Sat, 02 Jul 2022 20:57:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=s77EFLX3f4858K5Tvi5UUeX7uxQG/9+kOd7qmZZ+6fk=;
+        b=W/Pd0vH2xSJvq3gQP6djtfxi5SwISkVzQzOHq0lYXWT42suNyTMJwJfG4prFfB55gh
+         iXnvDjn2GweiV6vu8xE0sFMqLgUKI7vAlYmDS868OaEFfOBXzKFjOiFfQmQoeD/jjB3j
+         /2ZuTkrJoVA+jVKsY254BFW8C2HMQPgDOolfZV/XknEc1zAP1gj34FYABEs8VZlEgwt2
+         UsErZrYSy1tdNmahCs4qwBRlZ5h0TofgoK4s0AzOfxdVyDH+ZvAVoOuB9yjIJrwMyxvI
+         ZiRrGmEBE3h7XGRmzNgdAmpwFXm6Jgvl+eJXg6Mkpi7WhFVAAD5YGO7JT0wx8L+oEn8g
+         fJsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=s77EFLX3f4858K5Tvi5UUeX7uxQG/9+kOd7qmZZ+6fk=;
+        b=dmOLamtQtcqGD74VokgBrsCa5PsbVW/7Y/PiMXfXq3Vqd7DZoA6wkh1HInEVBMNrl+
+         PGZSN/rgi5iuuqxqq5R6YoVVCHhtrN0v5SsaawA/u2gTvdSQ/5by0fi48KWPkiuLfWgv
+         KpEAdWIZXI9heKU4EcUyBr3n6NAi1TZe31o6Qmi1+9U5/IzqB7S0DfSB1hiN8jmnqQVh
+         HheQwB5Kv/uDwzNOc4nfucoXNRr0QOS/biGtjO9fRiGLxpfWtiG99hEB8xVii1Dlp7ud
+         b7SvjdJiS8WNkmX7XCqCBZWZIdzsFzsJpUuacBypxbAE26/hTURbx1I4V3lxoPaPX27c
+         LgTA==
+X-Gm-Message-State: AJIora8gTrT3Tmb6kl0oNDBb6AG8TXT7ZaecNts1FupXo6tkcLUaS/c/
+        GyOYaQ6jqk6BI/alcMuoezOsYA==
+X-Google-Smtp-Source: AGRyM1twvMNTNa1pndDJEyMJm4cm8fdhKmc7/AnG+g8lqE3uPrr4ZSC1Bi+8lVgvImh21osIIZln1Q==
+X-Received: by 2002:a05:6830:1f42:b0:616:bacf:5d5f with SMTP id u2-20020a0568301f4200b00616bacf5d5fmr9612328oth.341.1656820638075;
+        Sat, 02 Jul 2022 20:57:18 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 25-20020aca0f19000000b0032e5d0b5d5fsm12965910oip.58.2022.07.02.20.57.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Jul 2022 20:57:17 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: gadget: udc: tracing: Do not open code __string()
- with __dynamic_array()
-Message-ID: <202207030931.QMgcEvNT-lkp@intel.com>
-References: <20220702200127.399d2358@gandalf.local.home>
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH 00/13] dt-bindings/arm64: dts: qcom: minor cleanups with DT schema
+Date:   Sat,  2 Jul 2022 22:56:14 -0500
+Message-Id: <165682055968.445910.10567681463445860902.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
+References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220702200127.399d2358@gandalf.local.home>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Steven,
+On Wed, 4 May 2022 15:19:10 +0200, Krzysztof Kozlowski wrote:
+> The patches are independent, so they can be picked up as is (or everything
+> through Qualcomm SoC tree).
+> 
+> Best regards,
+> Krzysztof
+> 
+> Krzysztof Kozlowski (13):
+>   dt-bindings: soc: qcom: aoss: document qcom,sm8450-aoss-qmp
+>   dt-bindings: soc: qcom: qcom,smd-rpm: add power-controller
+>   dt-bindings: usb: qcom,dwc3: add IPQ8074, MSM8994, QCS404 and SM6125
+>   dt-bindings: usb: qcom,dwc3: fix clock matching
+>   arm64: dts: qcom: add missing AOSS QMP compatible fallback
+>   arm64: dts: qcom: correct DWC3 node names and unit addresses
+>   arm64: dts: qcom: ipq8074: add dedicated qcom,ipq8074-dwc3 compatible
+>   arm64: dts: qcom: msm8994: add dedicated qcom,msm8994-dwc3 compatible
+>   arm64: dts: qcom: sm6125: add dedicated qcom,sm6125-dwc3 compatible
+>   arm64: dts: qcom: qcs404: add dedicated qcom,qcs404-dwc3 compatible
+>   arm64: dts: qcom: msm8996: add clock-names to DWC3 USB node
+>   arm64: dts: qcom: align DWC3 USB clocks with DT schema
+>   arm64: dts: qcom: align DWC3 USB interrupts with DT schema
+> 
+> [...]
 
-Thank you for the patch! Yet something to improve:
+Applied, thanks!
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on linus/master v5.19-rc4 next-20220701]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+[05/13] arm64: dts: qcom: add missing AOSS QMP compatible fallback
+        commit: 6ba93ba9f63fbc44c3a6af7fe6f2536d009cfd5a
+[07/13] arm64: dts: qcom: ipq8074: add dedicated qcom,ipq8074-dwc3 compatible
+        (no commit info)
+[08/13] arm64: dts: qcom: msm8994: add dedicated qcom,msm8994-dwc3 compatible
+        (no commit info)
+[09/13] arm64: dts: qcom: sm6125: add dedicated qcom,sm6125-dwc3 compatible
+        (no commit info)
+[10/13] arm64: dts: qcom: qcs404: add dedicated qcom,qcs404-dwc3 compatible
+        (no commit info)
+[11/13] arm64: dts: qcom: msm8996: add clock-names to DWC3 USB node
+        (no commit info)
+[12/13] arm64: dts: qcom: align DWC3 USB clocks with DT schema
+        (no commit info)
+[13/13] arm64: dts: qcom: align DWC3 USB interrupts with DT schema
+        (no commit info)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/USB-gadget-udc-tracing-Do-not-open-code-__string-with-__dynamic_array/20220703-080329
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: riscv-buildonly-randconfig-r001-20220703 (https://download.01.org/0day-ci/archive/20220703/202207030931.QMgcEvNT-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/63b33d8f7a24820f05bd2b8330b19c3d78e0c36f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/USB-gadget-udc-tracing-Do-not-open-code-__string-with-__dynamic_array/20220703-080329
-        git checkout 63b33d8f7a24820f05bd2b8330b19c3d78e0c36f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/trace/define_trace.h:102,
-                    from drivers/usb/gadget/udc/trace.h:289,
-                    from drivers/usb/gadget/udc/trace.c:10:
->> drivers/usb/gadget/udc/./trace.h:217:41: error: expected expression before ';' token
-     217 |                 __string(name, ep->name);
-         |                                         ^
-   include/trace/trace_events.h:244:9: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     244 |         tstruct                                                         \
-         |         ^~~~~~~
-   drivers/usb/gadget/udc/./trace.h:216:9: note: in expansion of macro 'TP_STRUCT__entry'
-     216 |         TP_STRUCT__entry(
-         |         ^~~~~~~~~~~~~~~~
-
-
-vim +217 drivers/usb/gadget/udc/./trace.h
-
-   212	
-   213	DECLARE_EVENT_CLASS(udc_log_req,
-   214		TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
-   215		TP_ARGS(ep, req, ret),
-   216		TP_STRUCT__entry(
- > 217			__string(name, ep->name);
-   218			__field(unsigned, length)
-   219			__field(unsigned, actual)
-   220			__field(unsigned, num_sgs)
-   221			__field(unsigned, num_mapped_sgs)
-   222			__field(unsigned, stream_id)
-   223			__field(unsigned, no_interrupt)
-   224			__field(unsigned, zero)
-   225			__field(unsigned, short_not_ok)
-   226			__field(int, status)
-   227			__field(int, ret)
-   228			__field(struct usb_request *, req)
-   229		),
-   230		TP_fast_assign(
-   231			__assign_str(name, ep->name);
-   232			__entry->length = req->length;
-   233			__entry->actual = req->actual;
-   234			__entry->num_sgs = req->num_sgs;
-   235			__entry->num_mapped_sgs = req->num_mapped_sgs;
-   236			__entry->stream_id = req->stream_id;
-   237			__entry->no_interrupt = req->no_interrupt;
-   238			__entry->zero = req->zero;
-   239			__entry->short_not_ok = req->short_not_ok;
-   240			__entry->status = req->status;
-   241			__entry->ret = ret;
-   242			__entry->req = req;
-   243		),
-   244		TP_printk("%s: req %p length %d/%d sgs %d/%d stream %d %s%s%s status %d --> %d",
-   245			__get_str(name),__entry->req,  __entry->actual, __entry->length,
-   246			__entry->num_mapped_sgs, __entry->num_sgs, __entry->stream_id,
-   247			__entry->zero ? "Z" : "z",
-   248			__entry->short_not_ok ? "S" : "s",
-   249			__entry->no_interrupt ? "i" : "I",
-   250			__entry->status, __entry->ret
-   251		)
-   252	);
-   253	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bjorn Andersson <bjorn.andersson@linaro.org>
