@@ -2,119 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8496F564779
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Jul 2022 15:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E945564984
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Jul 2022 21:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiGCNOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Jul 2022 09:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        id S232738AbiGCT0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Jul 2022 15:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbiGCNOy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Jul 2022 09:14:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5475463F2;
-        Sun,  3 Jul 2022 06:14:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5E0360AC0;
-        Sun,  3 Jul 2022 13:14:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAF6C341C6;
-        Sun,  3 Jul 2022 13:14:50 +0000 (UTC)
-Date:   Sun, 3 Jul 2022 09:14:49 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S229986AbiGCT0G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Jul 2022 15:26:06 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C3421BE;
+        Sun,  3 Jul 2022 12:26:05 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n10so6868838plp.0;
+        Sun, 03 Jul 2022 12:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ko4FLx/zT4WyjidusLHvpuHoIsoPjnk74mrmMkIRO34=;
+        b=aSdePPkaoiggVQvZTHd0K8u6V+AHMuklxapVQ+2i5AWbeU8NHrmU5QqWEhoxHzIGJ6
+         YudfyhsmJlv8i2lKL5Hmqdo5fIs2da6Z4CdCe/4VFFoLMTRKop3pctci2TTn58/J0iau
+         wI/T7ZrJDFxrY713Jpd9o05JRWbPSuFV4lgS/SZLftRUVoh8sIqhCehgnSWgkBdapf2+
+         86e4vqu2E7cxgY5b9l+8XqiEfBEJYzT3GkwbT8T6ct+rnOMg309m13iI64cGNEG0Gj1o
+         ytOASkzU3tfffpp3eyVwLFzg4gUoKRAZ6OtTwZ7iZRrpXQ7g3+cdrZ2Mh9/WntPvmThK
+         9/mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ko4FLx/zT4WyjidusLHvpuHoIsoPjnk74mrmMkIRO34=;
+        b=sMtyuTTWoTSWUA0Z2KOSpAarkIByyCryeUkk6enwErCSROy741q7LvW58axFMgR88t
+         CTUPbiekNR9BODdBJw9DJiuJdyGFTBDDIZk9g14xF6J3Aw1dsDOhZ/x6M6rjtNsVMZp8
+         A4Blh3UwPBBKzFhwnKRbIR/jwpGDhlF97axa32RFshtNMw2/grn5pr9G8Sgunajkf0T+
+         TWuH6ufIogRXqVS4Q4cf6ig9VhnQUz9E3MoSSsGP0JOPA166Q93DTwysIy7fziD6XDNe
+         iDWAaXPntv5aB4AKt0n4jpC0ZI543cv1LGhqoVQWDraRmlt0JzpoHueNP20Dms3/qOhu
+         GVjg==
+X-Gm-Message-State: AJIora93TWp5oU19wH2Vn4JUKN+B35xA6BRjfNiX1o2bvw6bwVgrUWFZ
+        14D5OZW7QZcZDLATzIBHQdw4PLKYjh1J+RnD
+X-Google-Smtp-Source: AGRyM1vRgNbXzRNTe19H3aGcY46VOCbn98Rj38c8aEYnLB5138lI378QP7k4qXTLsoPtTbXjvTPm7g==
+X-Received: by 2002:a17:90a:af98:b0:1ef:1d10:c052 with SMTP id w24-20020a17090aaf9800b001ef1d10c052mr30691024pjq.111.1656876365391;
+        Sun, 03 Jul 2022 12:26:05 -0700 (PDT)
+Received: from fedora.. ([103.230.107.40])
+        by smtp.gmail.com with ESMTPSA id s91-20020a17090a69e400b001ef831a2015sm1341876pjj.22.2022.07.03.12.26.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 12:26:05 -0700 (PDT)
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+To:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2] USB: gadget: udc: tracing: Do not open code __string()
- with __dynamic_array()
-Message-ID: <20220703091449.317f94b1@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Felipe Balbi <balbi@kernel.org>, khalid.masum.92@gmail.com
+Subject: [PATCH] usb: dwc3: Describe function parameter 'mult'
+Date:   Mon,  4 Jul 2022 01:24:48 +0600
+Message-Id: <20220703192448.13763-1-khalid.masum.92@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Currently the parameter is not described. Which triggers warning when using
+make htmldocs. Fix it by describing the parameter.
 
-The event classes udc_log_ep and udc_log_req both declare:
-
-    __dynamic_array(char, name, UDC_TRACE_STR_MAX)
-
-Which will reserve UDC_TRACE_STR_MAX bytes on the ring buffer for the
-event to write in name. It then uses snprintf() to write into that space.
-
-Assuming that the string being copied is nul terminated, it is better to
-just use the __string() helper. That way only the size of the string is
-saved into the ring buffer and not the max size (yes, the entire
-UDC_TRACE_STR_MAX is used in the trace event, and anything not used is
-just junk in the ring buffer). Worse, there's also meta data saved into
-the event that denotes where the string is stored in the event and also
-saves its size, which is always going to be UDC_TRACE_STR_MAX.
-
-Convert both to use the __string() and __assign_str() helpers that are for
-this kind of use case.
-
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
 ---
-Changes since v1: Link: https://lkml.kernel.org/r/20220702200127.399d2358@gandalf.local.home
-  - Commit the fix to the extra semicolon that I found compiling
-    the code, but forgot to do a commit --amend before sending.
+ drivers/usb/dwc3/gadget.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/usb/gadget/udc/trace.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/trace.h b/drivers/usb/gadget/udc/trace.h
-index 98584f6b6c66..abdbcb1bacb0 100644
---- a/drivers/usb/gadget/udc/trace.h
-+++ b/drivers/usb/gadget/udc/trace.h
-@@ -140,7 +140,7 @@ DECLARE_EVENT_CLASS(udc_log_ep,
- 	TP_PROTO(struct usb_ep *ep, int ret),
- 	TP_ARGS(ep, ret),
- 	TP_STRUCT__entry(
--		__dynamic_array(char, name, UDC_TRACE_STR_MAX)
-+		__string(name, ep->name)
- 		__field(unsigned, maxpacket)
- 		__field(unsigned, maxpacket_limit)
- 		__field(unsigned, max_streams)
-@@ -152,7 +152,7 @@ DECLARE_EVENT_CLASS(udc_log_ep,
- 		__field(int, ret)
- 	),
- 	TP_fast_assign(
--		snprintf(__get_str(name), UDC_TRACE_STR_MAX, "%s", ep->name);
-+		__assign_str(name, ep->name);
- 		__entry->maxpacket = ep->maxpacket;
- 		__entry->maxpacket_limit = ep->maxpacket_limit;
- 		__entry->max_streams = ep->max_streams;
-@@ -214,7 +214,7 @@ DECLARE_EVENT_CLASS(udc_log_req,
- 	TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
- 	TP_ARGS(ep, req, ret),
- 	TP_STRUCT__entry(
--		__dynamic_array(char, name, UDC_TRACE_STR_MAX)
-+		__string(name, ep->name)
- 		__field(unsigned, length)
- 		__field(unsigned, actual)
- 		__field(unsigned, num_sgs)
-@@ -228,7 +228,7 @@ DECLARE_EVENT_CLASS(udc_log_req,
- 		__field(struct usb_request *, req)
- 	),
- 	TP_fast_assign(
--		snprintf(__get_str(name), UDC_TRACE_STR_MAX, "%s", ep->name);
-+		__assign_str(name, ep->name);
- 		__entry->length = req->length;
- 		__entry->actual = req->actual;
- 		__entry->num_sgs = req->num_sgs;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 8716bece1072..e8c86b08cd83 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -657,6 +657,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+ /**
+  * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
+  * @dwc: pointer to the DWC3 context
++ * @mult: multiplier, 'mult' value for SS Isoc EPs
+  *
+  * Calculates the size value based on the equation below:
+  *
 -- 
-2.35.1
+2.36.1
 
