@@ -2,95 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E945564984
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Jul 2022 21:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7585649A7
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Jul 2022 21:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiGCT0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Jul 2022 15:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S231867AbiGCT7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Jul 2022 15:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiGCT0G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Jul 2022 15:26:06 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C3421BE;
-        Sun,  3 Jul 2022 12:26:05 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id n10so6868838plp.0;
-        Sun, 03 Jul 2022 12:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ko4FLx/zT4WyjidusLHvpuHoIsoPjnk74mrmMkIRO34=;
-        b=aSdePPkaoiggVQvZTHd0K8u6V+AHMuklxapVQ+2i5AWbeU8NHrmU5QqWEhoxHzIGJ6
-         YudfyhsmJlv8i2lKL5Hmqdo5fIs2da6Z4CdCe/4VFFoLMTRKop3pctci2TTn58/J0iau
-         wI/T7ZrJDFxrY713Jpd9o05JRWbPSuFV4lgS/SZLftRUVoh8sIqhCehgnSWgkBdapf2+
-         86e4vqu2E7cxgY5b9l+8XqiEfBEJYzT3GkwbT8T6ct+rnOMg309m13iI64cGNEG0Gj1o
-         ytOASkzU3tfffpp3eyVwLFzg4gUoKRAZ6OtTwZ7iZRrpXQ7g3+cdrZ2Mh9/WntPvmThK
-         9/mw==
+        with ESMTP id S229985AbiGCT73 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Jul 2022 15:59:29 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1532645
+        for <linux-usb@vger.kernel.org>; Sun,  3 Jul 2022 12:59:26 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id d11-20020a6bb40b000000b006727828a19fso4675359iof.15
+        for <linux-usb@vger.kernel.org>; Sun, 03 Jul 2022 12:59:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ko4FLx/zT4WyjidusLHvpuHoIsoPjnk74mrmMkIRO34=;
-        b=sMtyuTTWoTSWUA0Z2KOSpAarkIByyCryeUkk6enwErCSROy741q7LvW58axFMgR88t
-         CTUPbiekNR9BODdBJw9DJiuJdyGFTBDDIZk9g14xF6J3Aw1dsDOhZ/x6M6rjtNsVMZp8
-         A4Blh3UwPBBKzFhwnKRbIR/jwpGDhlF97axa32RFshtNMw2/grn5pr9G8Sgunajkf0T+
-         TWuH6ufIogRXqVS4Q4cf6ig9VhnQUz9E3MoSSsGP0JOPA166Q93DTwysIy7fziD6XDNe
-         iDWAaXPntv5aB4AKt0n4jpC0ZI543cv1LGhqoVQWDraRmlt0JzpoHueNP20Dms3/qOhu
-         GVjg==
-X-Gm-Message-State: AJIora93TWp5oU19wH2Vn4JUKN+B35xA6BRjfNiX1o2bvw6bwVgrUWFZ
-        14D5OZW7QZcZDLATzIBHQdw4PLKYjh1J+RnD
-X-Google-Smtp-Source: AGRyM1vRgNbXzRNTe19H3aGcY46VOCbn98Rj38c8aEYnLB5138lI378QP7k4qXTLsoPtTbXjvTPm7g==
-X-Received: by 2002:a17:90a:af98:b0:1ef:1d10:c052 with SMTP id w24-20020a17090aaf9800b001ef1d10c052mr30691024pjq.111.1656876365391;
-        Sun, 03 Jul 2022 12:26:05 -0700 (PDT)
-Received: from fedora.. ([103.230.107.40])
-        by smtp.gmail.com with ESMTPSA id s91-20020a17090a69e400b001ef831a2015sm1341876pjj.22.2022.07.03.12.26.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 12:26:05 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, khalid.masum.92@gmail.com
-Subject: [PATCH] usb: dwc3: Describe function parameter 'mult'
-Date:   Mon,  4 Jul 2022 01:24:48 +0600
-Message-Id: <20220703192448.13763-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=fxd2zYEs/HK7g0AzqmEBakp3jQ09ZVxB2p2F7iSzL+s=;
+        b=tmvwAM3omwysIs75SNT3aPPsgwfArz0h1UayjsJqDTWezinrdDIlKKg9lvf2rXvyyO
+         N7W3l8Z46b4utwnLhGrqTXOG3FAMSJtUo8pKZzKcsimZg0sN4U5CuzZcwHfVGssc1RNi
+         OrJ/6wsz4XHlDQgPM2hd1HgQrOn36lVblPxGL31pfmRQIi4fJpO8oEj1+3C7J2NY2+kQ
+         domS5TF4Jsc90DfahoOJDGoe6aXIaxhenHWUMIPNEweBa+bGRmi2ywcyJuOe7kzGJ5sP
+         1HtE9siWQh8/dJhmWPbb9jV4QjVpqVBKgYedkms89AB4vlL6+tKUz335PzyuTWkNlBkd
+         PsEg==
+X-Gm-Message-State: AJIora+FGcuFZy0MGak2AcFSwe4yNRN1mIAfCMog3SSaSPivN0IrsbCp
+        irHszL54TVWvE7GpUuJcunQUHgSOPwbK9crWNyqGdL4pmWin
+X-Google-Smtp-Source: AGRyM1tQk5sWerO2mo6W6rwl1EvrlyrkR4zkU87anpM25YNSfUyem4FZeDgdMzjusVOPnonkVHsazMgBXF9Q2sgJxwR7g63wJ7oa
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1d96:b0:2da:6dfd:7f8c with SMTP id
+ h22-20020a056e021d9600b002da6dfd7f8cmr13906179ila.322.1656878365466; Sun, 03
+ Jul 2022 12:59:25 -0700 (PDT)
+Date:   Sun, 03 Jul 2022 12:59:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000068e76205e2ec0e6b@google.com>
+Subject: [syzbot] WARNING in match_held_lock
+From:   syzbot <syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com>
+To:     boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, longman@redhat.com, mingo@redhat.com,
+        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
+        will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the parameter is not described. Which triggers warning when using
-make htmldocs. Fix it by describing the parameter.
+Hello,
 
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    849f35422319 Merge tag 'thunderbolt-for-v5.20-rc1' of git:..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f9d498080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=33f1eaa5b20a699
+dashboard link: https://syzkaller.appspot.com/bug?extid=6c67d4224af196c99976
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(!hlock->nest_lock)
+WARNING: CPU: 0 PID: 4591 at kernel/locking/lockdep.c:5135 match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
+Modules linked in:
+CPU: 0 PID: 4591 Comm: syz-executor.0 Not tainted 5.19.0-rc4-syzkaller-00090-g849f35422319 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
+Code: e8 f8 2d 24 fc 85 c0 74 e4 8b 05 a6 16 ef 02 85 c0 75 da 48 c7 c6 a0 95 47 86 48 c7 c7 20 92 47 86 89 44 24 04 e8 03 9a d1 ff <0f> 0b 8b 44 24 04 eb bd 66 66 2e 0f 1f 84 00 00 00 00 00 41 57 41
+RSP: 0018:ffffc9000c997d50 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: ffff88811600cb68 RCX: 0000000000000000
+RDX: ffff88811600b900 RSI: ffffffff812c0fe8 RDI: fffff52001932f9c
+RBP: ffffffff87a94640 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000003 R11: 776172206373696d R12: ffff88811600b900
+R13: ffff88811600c2f8 R14: 00000000ffffffff R15: ffff88811600cb68
+FS:  00007f684e67c700(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f684e639fc0 CR3: 00000001376c9000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __lock_is_held kernel/locking/lockdep.c:5406 [inline]
+ lock_is_held_type+0xa7/0x140 kernel/locking/lockdep.c:5708
+ lock_is_held include/linux/lockdep.h:279 [inline]
+ rcu_read_lock_sched_held+0x3a/0x70 kernel/rcu/update.c:125
+ trace_lock_acquire include/trace/events/lock.h:24 [inline]
+ lock_acquire+0x480/0x570 kernel/locking/lockdep.c:5636
+ do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
+ do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
+ vtime_task_switch_generic+0xb5/0x5a0 kernel/sched/cputime.c:768
+ vtime_task_switch include/linux/vtime.h:95 [inline]
+ finish_task_switch.isra.0+0x4e3/0xa10 kernel/sched/core.c:5020
+ schedule_tail+0x7/0xd0 kernel/sched/core.c:5082
+ ret_from_fork+0x8/0x30 arch/x86/entry/entry_64.S:287
+ </TASK>
+
+
 ---
- drivers/usb/dwc3/gadget.c | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 8716bece1072..e8c86b08cd83 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -657,6 +657,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
- /**
-  * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
-  * @dwc: pointer to the DWC3 context
-+ * @mult: multiplier, 'mult' value for SS Isoc EPs
-  *
-  * Calculates the size value based on the equation below:
-  *
--- 
-2.36.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
