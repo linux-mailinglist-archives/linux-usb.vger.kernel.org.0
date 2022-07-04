@@ -2,115 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43000564B67
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 04:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD4A564CFF
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 07:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiGDB7v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Jul 2022 21:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S231585AbiGDFjd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jul 2022 01:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGDB7u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Jul 2022 21:59:50 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2060.outbound.protection.outlook.com [40.107.21.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C0C2DC7
-        for <linux-usb@vger.kernel.org>; Sun,  3 Jul 2022 18:59:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7u6qJ9425l1QQ/dBhY1NGtR4Zdz2eMlWv5AFl35PFkOIKbE2iJKLikW3YDgTHdKnHdlYnbIHtHIK4ulmlWC7qZjzk2ft6ikPN+CAOrstV/IMDIigTHlG1WYm67SWKC+XBPTOsle5qrKyo5ytIxC5KhTXWBhBIp5Eu7qAHz65BV9dBGaLIXPkrc7L+UreOB1+eh4wVWV4ORZdLCKhVvVOPV9QXyeh9rPp23e0oBsMGJ+Dq+N+B1dLnih3JLXKYBKTcON9nRwvgIoA1bv419xQbdfJGCz9WWW6dVIi3tvk8H2KG2VmUEVxRxRXDS98nB6p/ji6+EQ3AkT9Nxer14Gag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k0ax8+hpXAnlNhWgmWA3oEj30A5jZSXCdCE3kqtNU6g=;
- b=c4WHftUbnvMNroCAZxVUFf7e8QYMuUOodJM8JZCsKDWFvE5+Phqv8mgAYPEE4CjVP44UgznxPc8Glfce3IzMcIkL4lXLS02SwyrLan6K5sqzPQ/9EuPZwJ9voeYbwicMOUFdf9jI2ImNbAJwv13xu9ba1vNb513+v/cCKpQhpMq8j7iUEq/ApKp6oJnEAgdYgT6EehwGsSi5PBb2ns1SGuSJXzB+psuK21T8ittFam+BD/w9cefW7SJwRX9fYu8FOZwAmWHJZZ+g4YrOO8zg8HSnFSneXCW76L2G4XazHOl8yQUO1uSaCCm+MpjvDt17RHYzjCBceWkxQssg3jfXkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k0ax8+hpXAnlNhWgmWA3oEj30A5jZSXCdCE3kqtNU6g=;
- b=V+TpjQxQKJJJdM7PIq1eJw5MnvdjG+OgvGOftb4fXib1Blo5DIQmD/Gnsrlcbe6UyClIvsaNMoN92xmUM/pC/DU6x5qHKne1IvBao7JIx7IoRWC/skWlT84xpaJIU23EDF1XqKItDdp4Ic72QkXiE59yYd9kSt+OHE/E0kmi9nY=
-Received: from PAXPR04MB8784.eurprd04.prod.outlook.com (2603:10a6:102:20f::23)
- by DB7PR04MB5306.eurprd04.prod.outlook.com (2603:10a6:10:1f::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Mon, 4 Jul
- 2022 01:59:45 +0000
-Received: from PAXPR04MB8784.eurprd04.prod.outlook.com
- ([fe80::30ae:e991:c3ce:a0c6]) by PAXPR04MB8784.eurprd04.prod.outlook.com
- ([fe80::30ae:e991:c3ce:a0c6%9]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
- 01:59:45 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     Peter Chen <peter.chen@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>, dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [EXT] Re: [PATCH] usb: chipidea: udc: check request status before
- setting device address
-Thread-Topic: [EXT] Re: [PATCH] usb: chipidea: udc: check request status
- before setting device address
-Thread-Index: AQHYhq5WOiR0/OrgBkeSOefRZTwFG61r3heAgAGmQiA=
-Date:   Mon, 4 Jul 2022 01:59:45 +0000
-Message-ID: <PAXPR04MB8784CA907581DCFDCFD196128CBE9@PAXPR04MB8784.eurprd04.prod.outlook.com>
-References: <20220623030242.41796-1-xu.yang_2@nxp.com>
- <20220703004209.GB1382015@Peter>
-In-Reply-To: <20220703004209.GB1382015@Peter>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c28b701a-c812-478a-dc88-08da5d60de75
-x-ms-traffictypediagnostic: DB7PR04MB5306:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aQKCOiUi0EO1C9ZxCIJb/Zpq4IY8nolYJAV+Gpwkjz1sTWU8wYq4AFOoNRmf3lypMAn9/AYLA4J3nJuU2NoYxQQmDlZvvZ2BjnyIV+psA114mN31KUwF5AUuc065Z+Bn1q2cFzNGAyiJn7m4qdkAB57dxeiT9/Zy6CKNSXI8ZE4opVsRrCj6kUq++3dV9yTN8LPTyM+IP/VJ0T7qxG9OseqgbaPNfeq9mUu06wWL7Hhwbys163R7th8MbIa+Oh7yV3pFGaKlqBPDv39++iJYcfkzVRJNCWQSsCv9k2oZlCvptVgMYOwJaJxk4/VmNE9H8S2MOfnBlL1PUkuFoSHa846EQxrn1TmOVIHWEciZc/Y32A2ircs0V30xTlrnz6AMH/WCk7xZ/ccRUiI5TX1SjhifXnTjwK4hP/vLG3c3gmsSpttrYZ4g7tRcqqP7L2dLOzISxYzt30/FFxXudnoPlnZJUgrRhlNd/i19JDoX+YOa5FNyG+QQr++LEB+BCN3dxxUqSz9Kga9DgQxfOd+njMRF2fAkX6OL0eilNWH/Jw3q/YMfnG66kbQh4QNwOnKqorFQ2AdyEvBUinA+X88LF4EZoSPwYgKIl+YMh01yoSnPt+1c8SFni1E2jFuuTyPn/XP2QM6hiPym03X5TogLc1XXrEYUgiv+1vidXJLC4bzpj5m26olHH7v/+EXdpicFyLwmjdJln83Zj2UbNjrZCLRxFL+aoyoUJHsMPRMx3TTrqRwbzYnH0QRTm5CyVlylIlV5logqrHRO7lNrkZAIb9YRtE43o78sXaRFa+UhTIVqP2oaZt7tWsw+rqCbhOJw
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8784.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(39860400002)(346002)(376002)(396003)(5660300002)(4326008)(76116006)(8936002)(26005)(53546011)(6506007)(7696005)(8676002)(66946007)(66556008)(66476007)(66446008)(64756008)(52536014)(83380400001)(2906002)(186003)(38100700002)(6916009)(54906003)(55016003)(478600001)(9686003)(86362001)(38070700005)(41300700001)(316002)(33656002)(122000001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?D1L5WawHUSH1z7uBw/+PCIWoNKZUwtkP3SmEuPMDwhArrWUp7rC4jWjTXIiC?=
- =?us-ascii?Q?9ShVO3oml9jr88lvDHjhSdb6XxOQe3JgOyP+cAWcGrYWG+Lk83KjfHQ+QL41?=
- =?us-ascii?Q?bq1+9UTQsJ8hFyTGXFKVYkgjp8cBCbfKq3FZDRA/BZxn5rmFo74lsOtg4clH?=
- =?us-ascii?Q?4Qb1JA/RJXFlsGIpWpxzzwp3BRDcNolR4ZNqZlbzCobMIa+/UDjCS4aKkn8D?=
- =?us-ascii?Q?hn4bam+vSYrfiN71jBxgKWyzviYz+B6LWjfhWThDgWSPoHCvtCm+5Q6pz3x2?=
- =?us-ascii?Q?Gk6a+ntYQC69TgxQNTnVktpQeT7/UyLFDIWbQ9z15HV/ZJ6Bs3/YxwuUB36t?=
- =?us-ascii?Q?APgMyMGRA5mKDbKs0Ro+/8xghL6oizef76IYC5kjOK8BqS4rxBxPsoYpJpKm?=
- =?us-ascii?Q?lKz2c0VBmEVtM2h8qwdiL1+KZXcQptZoxQnwz3xTBagmFUd2OEGHiFS/x0H2?=
- =?us-ascii?Q?1oBQvtnOOfd6pJjPVACxYqRYk8RWN6Xjrx1YXexIheloGymKJ04dE40jSLC4?=
- =?us-ascii?Q?8gPKCGSGYdJsUEatNKUVqk4QgPJgquELNynN4ZtzIf5jeQdkXEtY2D7PvJTn?=
- =?us-ascii?Q?btXYhjRtBJob44JlTetYbMkmSzMcPUz4Pf0DXXeQf8TPqkHhcWIW8kGmw5ZC?=
- =?us-ascii?Q?/Z+hNsn5hbMXrZNtTE3qc9zsJ0VaL4BaV9UafGHS2ShPndxv0iCMqEVKqGaY?=
- =?us-ascii?Q?q54b9HthO9AT2q00dZET/tx2q7CSW5mEUGLR7E74ci1H87nwHXPo/fSMLbVm?=
- =?us-ascii?Q?DWSQQ7qZ0mEBTeq7AG1CqzNEdouTw5ILrz3065/tpSwFq3p4HUXBgzV9KflY?=
- =?us-ascii?Q?AnbE9Torq2blVoVCC661ni89nM62t/Y5etLzv40c9nneV7qc/LiAWaw9ipvu?=
- =?us-ascii?Q?iQfwBITiG0qxmO5YQydBcTePqnBRmtqTd5izC2VVN0siWP5qjaBz+2z9SQ/R?=
- =?us-ascii?Q?9aE4k1mmXclSZwmzOGy5lU2upDRhnIo4dJnCstVwVgjxUYIS+sF0bgD+EOai?=
- =?us-ascii?Q?lw7Av8SlWcv72bWEJALHDbBP0dEkLPrCtH3scHUBe9+qJya3U4xrlkGnjC6H?=
- =?us-ascii?Q?kdQWuh0zTZq3vK48FZinvQqjbVuFg4llgWnPNEessyrmik854Zi8wZ/2Ms4u?=
- =?us-ascii?Q?dCLag3cEaSVH854STcboc7QjeIKf5qJ9I+okz7/0dafyz6A757lsLugEqEHd?=
- =?us-ascii?Q?SIcVZpM1lxVVqK/rJj90qxe2abwFv5wW+JdeL7TSBx51EBRuXUQGHz+Rmahj?=
- =?us-ascii?Q?mjnyjLPNy9SAfKoxmr1VjEaa5vMssK4BmximrfMhwX19m7GvC1tSpM3JPeFK?=
- =?us-ascii?Q?C4f30Ff0D0y7CbyskevuLd5ORk6mgXI+pmpZHkKqAG/5pe9Q4nd6P19NRJ6D?=
- =?us-ascii?Q?iZehht44oHMPTtp1l0BwtCy6XLSRB7wJF3qVyUtmyFWziPS0Nlh0yQ3tg0+n?=
- =?us-ascii?Q?UmVBShkhTSJXhHMH7JvI2xCM5qOuNEczp3uiVCsyGYk8RJMF/f/P51t2wEk2?=
- =?us-ascii?Q?9tbCyRhfmTt96eyXAAHsdJUXAr47O7XP3cdf4lexxlPs39NR1hG8v3uDymky?=
- =?us-ascii?Q?1Z1buRlQ47lpOB50Emg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229591AbiGDFja (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 01:39:30 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A646307;
+        Sun,  3 Jul 2022 22:39:29 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id n12so8059271pfq.0;
+        Sun, 03 Jul 2022 22:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AXCYs1tP3RVWM+wE/Nbrq4/WIRuAc/tat3MFvoxWwq4=;
+        b=gqw1bkUJBy0g7w922SCzSfqpBppoz4/wfY+7W8PIvhtPcdieDA61ykbf/3np9uMmIo
+         YJxtrDFf4H3Xfb8bQlgZB2aK7c+S1qXMmUbNl77Gz4jqbZL4aJCK3+0snaWDnt4O0P/q
+         +IVJXKNzJhlMF5RmFDG38BXJWKqlnDRIqDU8Yrx4jMvnVIg2lxd3ZGVXnuR4qxJN5SU2
+         OsxRvf/2LdPLZYeYFYzLZ2Ry5QQF6jP0LaoPZxmpPtuXOqEN8j/sGLVgf5oUg55+fk68
+         BhvJH0vYRjhlhPypTQRG/qvoymoYkURwTn8foQTChFG4WMHWkjGgnrpmLi7REZN09b/J
+         Yo4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AXCYs1tP3RVWM+wE/Nbrq4/WIRuAc/tat3MFvoxWwq4=;
+        b=4bZgQT6y4yb/DOLgHoB7qP6wBZ2/hrPwJHFCr3kYN6nXhDbvTFxGIV6SaSeBMnSOg2
+         mnVao8lxnwbl3nqbxCAzcvTGaqhCXxwypZClo0jeto/z8m3KKHieO9vzmO2rl8ZFa+MG
+         GZW069LOKvV3gNgjVI23bDohuf4/j1T2eSjqXjiNM75Z1V+qezxT9VW0S3ZwJVNT0A3f
+         Ah8A0cJTRmivI3Dpnc05Yx/19KOnAbUbeRKO0YtQYEzq7WdoY/bqezSlNiBTS0QqVyvt
+         6ebzPksl6BmR2gqLomIaFZ+jy1r6q+Era617TBFWpMcFaoX5evz+1E/YJ8Jz0/u/o2Bx
+         v1uA==
+X-Gm-Message-State: AJIora+klTwvZJcRTHsPYxuN/kRz5ZXQnjY4FN5hOQ6uw+9LlUEq8jW6
+        QUrHnZbW4LiWGjy+S3b2I2k=
+X-Google-Smtp-Source: AGRyM1v5mLSIHJIvXqk3IwGmWzHXsHokTfrTW6HYIKy36LxlvLHGrVjlljwEGM3p415A4KhJ0QYB4A==
+X-Received: by 2002:a65:6c0a:0:b0:3fa:c20c:cbe7 with SMTP id y10-20020a656c0a000000b003fac20ccbe7mr24026870pgu.611.1656913168404;
+        Sun, 03 Jul 2022 22:39:28 -0700 (PDT)
+Received: from RD-3580-24288.rt.l (42-72-4-255.emome-ip.hinet.net. [42.72.4.255])
+        by smtp.gmail.com with ESMTPSA id h24-20020a635318000000b0040dffa7e3d7sm13904507pgb.16.2022.07.03.22.39.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 22:39:27 -0700 (PDT)
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+To:     lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+Subject: [PATCH v4 00/13] Add Mediatek MT6370 PMIC support
+Date:   Mon,  4 Jul 2022 13:38:48 +0800
+Message-Id: <20220704053901.728-1-peterwu.pub@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8784.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c28b701a-c812-478a-dc88-08da5d60de75
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2022 01:59:45.6388
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4pwL/zSqZi2Ugx0xGaou1iBL0e4x/3EMB5BUFlbNNVFytraBQoZ3r8JYEue2wT+aNCItD73OXFD9CnruPvuj2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5306
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,81 +80,332 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+From: ChiaEn Wu <chiaen_wu@richtek.com>
 
-> -----Original Message-----
-> From: Peter Chen <peter.chen@kernel.org>
-> Sent: Sunday, July 3, 2022 8:42 AM
-> To: Xu Yang <xu.yang_2@nxp.com>
-> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; Jun Li
-> <jun.li@nxp.com>; dl-linux-imx <linux-imx@nxp.com>
-> Subject: [EXT] Re: [PATCH] usb: chipidea: udc: check request status befor=
-e
-> setting device address
->=20
-> Caution: EXT Email
->=20
-> On 22-06-23 11:02:42, Xu Yang wrote:
-> > The complete() function may be called even though request is not
-> > completed.
->=20
-> Would you please explain more when the complete() is called but the
-> request has not completed, and this happens before set_address has
-> finished?
+This patch series add Mediatek MT6370 PMIC support. The MT6370 is a
+highly-integrated smart power management IC, which includes a single
+cell Li-Ion/Li-Polymer switching battery charger, a USB
+Type-C & Power Delivery (PD) controller, dual Flash LED current sources,
+a RGB LED driver, a backlight WLED driver, a display bias driver and a
+general LDO for portable devices.
 
-The following sequence will be a case:
-1. the HOST sent SET_ADDRESS control message to DEVICE.
-2. the DEVICE acked this message and queued a usb_request (0 data length) f=
-or future IN transfer.
-3. somehow the setup interrupt is not cleared by USB controller or received=
- other setup token rather IN token.
-4. the driver will go through below functions:
+In this series of patches, we based on Andy Shevchenko's mfd patch used to
+adjust the Makefile order.
+(https://lore.kernel.org/all/20220616182524.7956-2-andriy.shevchenko@linux.intel.com/)
+Among with this, we took some changes for MT6370 and refined the MT6370 device
+tree files to comply with DT specifications.
 
-isr_setup_packet_handler(ci);
-  _ep_nuke(ci->ep0in);
-    usb_gadget_giveback_request(&hwep->ep, &hwreq->req);
-      req->complete(ep, req);
-        isr_setup_status_complete();
-          hw_usb_set_address(ci, ci->address);
-            usb_gadget_set_state(&ci->gadget, USB_STATE_ADDRESS);
+Thank you,
+ChiaEn Wu
 
-Xu Yang
+---
+Changes in v4:
+- In patch 02/13:
+	- Add minItems of "io-channel-names"
+	- Replace text "Mediatek" with "MediaTek"
 
->=20
-> Peter
->=20
-> > In this case, it's necessary to check request status so as not to set
-> > device address wrongly.
-> >
-> > Fixes: 10775eb17bee ("usb: chipidea: udc: update gadget states
-> > according to ch9")
-> > cc: <stable@vger.kernel.org>
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > ---
-> >  drivers/usb/chipidea/udc.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> > index 0c9ae9768a67..8c3e3a635ac2 100644
-> > --- a/drivers/usb/chipidea/udc.c
-> > +++ b/drivers/usb/chipidea/udc.c
-> > @@ -1048,6 +1048,9 @@ isr_setup_status_complete(struct usb_ep *ep,
-> struct usb_request *req)
-> >       struct ci_hdrc *ci =3D req->context;
-> >       unsigned long flags;
-> >
-> > +     if (req->status < 0)
-> > +             return;
-> > +
-> >       if (ci->setaddr) {
-> >               hw_usb_set_address(ci, ci->address);
-> >               ci->setaddr =3D false;
-> > --
-> > 2.25.1
-> >
->=20
-> --
->=20
-> Thanks,
-> Peter Chen
+- In patch 06/13:
+	- Roll back all "$ref: " to v2 patch style (using
+	  "/schemas/...")
+
+- In patch 07/13:
+	- Replace text "Mediatek" with "MediaTek" in Kconfig
+	- Replace "first break and then return" with "return directly"
+	  in
+	  "mt6370_check_vendor_info()"
+	- Add module name related description in Kconfig helptext
+	- Add Copyright in the source code
+	- Add header file "mt6370.h" for all "#define IRQ"
+	- Adjust Makefile order of MT6370
+	- Refine "bank_idx" and "bank_addr" in
+	  "mt6375_regmap_read()" / "mt6375_regmap_write()"
+	- Refine redundant "else if" in "mt6370_regmap_read()"
+
+- In patch 08/13:
+    - Replace text "Mediatek" with "MediaTek" in Kconfig
+    - Replace "first ret=regulator_(dis/en)able and then return"
+      with "return directly" in "mt6370_tcpc_set_vbus()"
+    - Replace header file <linux/of.h> with <linux/mod_devicetable.h>
+    - Add Copyright in the source code
+    - Add module name related description in Kconfig helptext
+    - Remove header file <linux/of.h>
+    - Refine all probe error by using dev_err_probe()
+
+- In patch 09/13:
+	- Replace text "Mediatek" with "MediaTek"
+	- Replace all "first dev_err() and then return" with "return
+	  dev_err_probe()"
+	- Add Copyright in the source code
+	- Add module name related description in Kconfig
+	- Add unit suffix of macro "ADC_CONV_POLLING_TIME"
+	- Add new macro "ADC_CONV_TIME_MS"
+	- Adjust the position of include file <mediatek,mt6370_adc.h>
+	- Adjust the postions between <linux/module.h> and
+	  <linux/mod_devicetable.h>
+	- Fix some incorrect characters
+
+- In patch 10/13:
+	- Replace text "Mediatek" with "MediaTek" in Kconfig and
+	  MODULE_DESCRIPTION()
+	- Replace "mt6370_chg_val_to_reg" and "mt6370_chg_reg_to_val"
+	  with
+	  "linear_range" API
+	- Replace "first break and then return" with "return directly"
+	  in all
+	  cases of get/set power_supply_property
+	- Replace all "first dev_err() and then return" with "return
+	  dev_err_probe()"
+	- Replace all "return IS_ERR(priv->rdev) ? PTR_ERR(priv->rdev) :
+	  0" with
+	  "PTR_ERR_OR_ZERO()"
+	- Replace "priv->dev->of_node" with "dev_of_node()"
+	- Add Copyright in the source code
+	- Add module name related description in Kconfig helptext
+	- Add proper unit of "MT6370_MIVR_IBUS_TH"
+	- Add error check in "mt6370_chg_get_status"
+	- Remove including <mediatek,mt6370_adc.h> header file
+	- Remove redundant comma of every enum terminator line
+	- Remove unwanted blank lines
+	- Remove the useless label (toggle_cfo_exit:)
+	- Remove using atomic
+	- Remove using of_match_ptr()
+	- Fix some incorrect characters
+	- Fix updating wrong bits when using ena_gpiod of OTG regulator
+	- Adjust the probe order in probe()
+
+- In patch 11/13:
+	- Replace text "Mediatek" with "MediaTek" in Kconfig
+	- Replace text "const" with "constant" in Kconfig
+	- Add Copyright in the source code
+
+- In patch 12/13:
+	- Replace text "Mediatek" with "MediaTek" in Kconfig
+	- Add Copyright in the source code
+
+- In patch 13/13:
+	- Replace text "Mediatek" with "MediaTek" in Kconfig
+	- Add Copyright in the source code
+	- Revise the comment of "PWM HYS STEPS"
+
+
+Changes in v3:
+- Remove ADC ABI file, which is added in v2 Patch 7
+- In patch 02/14:
+	- Add items and remove maxItems of io-channels
+	- Add io-channel-names and describe each item
+	- Add "unevaluatedProperties: false" in "usb-otg-vbus-regulator"
+	- Rename "enable-gpio" to "enable-gpios" in "usb-otg-vbus-regulator"
+- In patch 03/14:
+	- Use leds-class-multicolor.yaml instead of common.yaml.
+	- Split multi-led and led node.
+	- Add subdevice "led" in "multi-led".
+- In patch 04/14:
+	- Remove the description of enum.
+- In patch 05/14:
+	- Rename "mediatek,bled-pwm-hys-input-threshold-steps" to
+	  "mediatek,bled-pwm-hys-input-th-steps"
+	- Refine "bled-pwm-hys-input-th-steps", "bled-ovp-microvolt",
+	  "bled-ocp-microamp" enum values
+- In patch 06/14:
+	- Use " in entire patchset
+	- Refine ADC description
+	- Rename "enable-gpio" to "enable-gpios" in "regualtor"
+- In patch 07/14:
+	- Refine Kconfig help text
+	- Refine error message of unknown vendor ID in
+	  mt6370_check_vendor_info()
+	- Refine return value handling of mt6370_regmap_read()
+	- Refine all probe error by using dev_err_probe()
+	- Refine "bank_idx" and "bank_addr" in mt6370_regmap_read() and
+	  mt6370_regmap_write()
+	- Add "#define VENID*" and drop the comments in
+	  mt6370_check_vendor_info()
+	- Drop "MFD" in MODULE_DESCRIPTION()
+- In patch 09/14:
+	- Refine Kconfig help text
+- In patch 10/14:
+	- Refine Kconfig help text
+	- Refine all channel value in read_scale()
+		a. current: uA --> mA
+		b. voltage: uV --> mV
+		c. temperature: degrees Celsius --> milli degrees Celsius
+	- Add "default:" condition of switch statement in read_scale() and read_raw()
+	- Add error message for reading ADC register failed
+	- Add the comment for adc_lock
+	- Add <linux/mod_devicetable.h> header file for struct of_device_id
+	- Replace "adc" text with "ADC" in all of the error messages
+- In patch 12/14:
+	- Refine the grammer of the Kconfig.
+	- Change reg mode to the const current mode.
+- In patch 14/14:
+	- Refine bool properties parsing (pwm-enable, ovp-shutdown, ocp-shutdown) in DT
+	  parsing function
+	- Refine u32 and u8 properties parsing (pwm-hys-input-th-steps, ovp-microvolt,
+	  ocp-microamp), from using register value to using actual value
+	- Refine error string of "channle-use" parsing failed
+	- Refine Kconfig help text
+
+
+Changes in v2:
+- In patch 01/15:
+	- Add "unevaluatedProperties: false".
+	- Delete "DT bindings".
+	- Refine the description to fit in 80 columns.
+	- Skip the connector description.
+- In patch 02/15:
+	- Refine items description of interrupt-name
+	- Rename "usb-otg-vbus" to "usb-otg-vbus-regulator"
+	- Add constraint properties for ADC
+- In patch 03/15:
+	- Skip not useful description of "^(multi-)?led@[0-3]$"
+	  and reg.
+	- Due to the dependency, remove the mention of mfd
+	  document directory.
+	- Delete Soft-start property. In design aspect, we think
+	  soft-restart should always be enabled, our new chip
+	  has deleted the related setting register , also, we don’t
+	  allow user adjust this parameter in this chip.
+	- Refine the commit message.
+- In patch 04/15:
+	- Skip not useful description of "^led@[0-1]$" and reg.
+	- Add apace after '#'.
+	- Refine the commit message.
+- In patch 05/15:
+	- Remove "binding documentation" in subject title
+	- Refine description of mt6370 backlight binding
+	  document
+	- Refine properties name(bled-pwm-hys-input-bit,
+	  bled-ovp-microvolt, bled-ocp-microamp) and their
+	  description
+- In patch 06/15:
+	- Refine ADC and Regulator descriptions
+	- Refine include header usage in example
+	- Refine node name to generic node name("pmic@34")
+	- Refine led example indentation
+	- Refine license of mediatek,mt6370_adc.h
+	- Rename the dts example from IRQ define to number.
+	- Remove mediatek,mt6370.h
+- In patch 07/15:
+	- Add ABI documentation for mt6370 non-standard ADC
+	  sysfs interfaces.
+- In patch 08/15:
+	- Add all IRQ define into mt6370.c.
+	- Refine include header usage
+- In patch 09/15:
+	- No changes.
+- In patch 10/15:
+	- Use 'gpiod_get_from_of_node' to replace
+	  'fwnode_gpiod_get_index'.
+- In patch 11/15:
+	- Refine Kconfig mt6370 help text
+	- Refine mask&shift to FIELD_PREP()
+	- Refine mutex lock name ("lock" -> "adc_lock")
+	- Refine mt6370_adc_read_scale()
+	- Refine mt6370_adc_read_offset()
+	- Refine mt6370_channel_labels[] by using enum to index
+	  chan spec
+	- Refine MT6370_ADC_CHAN()
+	- Refine indio_dev->name
+	- Remove useless include header files
+- In patch 12/15:
+	- Refine mt6370_chg_otg_rdesc.of_match
+	  ("mt6370,otg-vbus" -> "usb-otg-vbus-regulator") to match
+	  DT binding
+- In patch 13/15:
+	- Refine Kconfig description.
+	- Remove include "linux/of.h" and use
+	  "linux/mod_devicetable.h".
+	- Place a comma for the last element of the const
+	  unsigned int array.
+	- Add a comment line for the mutex 'lock'.
+	- In probe function, use 'dev_err_probe' in some
+	  judgement to reduce the LOC.
+	- Refine include header usage.
+	  BIT/GENMASK -> linux/bits.h
+	  FIELD_GET -> linux/bitfield.h
+- In patch 14/15:
+	- Add blank line.
+	- Replace container_of() with to_mt6370_led() .
+	- Refine description of ramping.
+	- Refine the mt6370_init_common_properties function.
+	- Refine the probe return.
+- In patch 15/15:
+	- Refine MT6370 help text in Kconfig
+	- Refine DT Parse function
+	- Remove useless enum
+	- Add comment for 6372 backward compatible in
+	  bl_update_status() and
+	  check_vendor_info()
+	- Using dev_err_probe(); insteads dev_err()&return; in
+	  the probe()
+
+Alice Chen (2):
+  dt-bindings: leds: Add Mediatek MT6370 flashlight
+  leds: flashlight: mt6370: Add Mediatek MT6370 flashlight support
+
+ChiYuan Huang (7):
+  dt-bindings: usb: Add Mediatek MT6370 TCPC
+  dt-bindings: leds: mt6370: Add Mediatek mt6370 current sink type LED
+    indicator
+  dt-bindings: backlight: Add Mediatek MT6370 backlight
+  dt-bindings: mfd: Add Mediatek MT6370
+  mfd: mt6370: Add Mediatek MT6370 support
+  usb: typec: tcpci_mt6370: Add Mediatek MT6370 tcpci driver
+  leds: mt6370: Add Mediatek MT6370 current sink type LED Indicator
+    support
+
+ChiaEn Wu (4):
+  dt-bindings: power: supply: Add Mediatek MT6370 Charger
+  iio: adc: mt6370: Add Mediatek MT6370 support
+  power: supply: mt6370: Add Mediatek MT6370 charger driver
+  video: backlight: mt6370: Add Mediatek MT6370 support
+
+ .../leds/backlight/mediatek,mt6370-backlight.yaml  |   92 ++
+ .../bindings/leds/mediatek,mt6370-flashlight.yaml  |   41 +
+ .../bindings/leds/mediatek,mt6370-indicator.yaml   |   77 ++
+ .../devicetree/bindings/mfd/mediatek,mt6370.yaml   |  280 ++++++
+ .../power/supply/mediatek,mt6370-charger.yaml      |   88 ++
+ .../bindings/usb/mediatek,mt6370-tcpc.yaml         |   36 +
+ drivers/iio/adc/Kconfig                            |   12 +
+ drivers/iio/adc/Makefile                           |    1 +
+ drivers/iio/adc/mt6370-adc.c                       |  274 +++++
+ drivers/leds/Kconfig                               |   14 +
+ drivers/leds/Makefile                              |    1 +
+ drivers/leds/flash/Kconfig                         |   12 +
+ drivers/leds/flash/Makefile                        |    1 +
+ drivers/leds/flash/leds-mt6370-flash.c             |  662 ++++++++++++
+ drivers/leds/leds-mt6370.c                         |  994 ++++++++++++++++++
+ drivers/mfd/Kconfig                                |   16 +
+ drivers/mfd/Makefile                               |    1 +
+ drivers/mfd/mt6370.c                               |  289 ++++++
+ drivers/mfd/mt6370.h                               |   88 ++
+ drivers/power/supply/Kconfig                       |   14 +
+ drivers/power/supply/Makefile                      |    1 +
+ drivers/power/supply/mt6370-charger.c              | 1062 ++++++++++++++++++++
+ drivers/usb/typec/tcpm/Kconfig                     |   11 +
+ drivers/usb/typec/tcpm/Makefile                    |    1 +
+ drivers/usb/typec/tcpm/tcpci_mt6370.c              |  207 ++++
+ drivers/video/backlight/Kconfig                    |   12 +
+ drivers/video/backlight/Makefile                   |    1 +
+ drivers/video/backlight/mt6370-backlight.c         |  352 +++++++
+ include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |   18 +
+ 29 files changed, 4658 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/backlight/mediatek,mt6370-backlight.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/mediatek,mt6370-tcpc.yaml
+ create mode 100644 drivers/iio/adc/mt6370-adc.c
+ create mode 100644 drivers/leds/flash/leds-mt6370-flash.c
+ create mode 100644 drivers/leds/leds-mt6370.c
+ create mode 100644 drivers/mfd/mt6370.c
+ create mode 100644 drivers/mfd/mt6370.h
+ create mode 100644 drivers/power/supply/mt6370-charger.c
+ create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6370.c
+ create mode 100644 drivers/video/backlight/mt6370-backlight.c
+ create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
+
+-- 
+2.7.4
 
