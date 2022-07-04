@@ -2,84 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3AC565876
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 16:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01F4565A72
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 17:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiGDOSV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jul 2022 10:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S234036AbiGDPyw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jul 2022 11:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbiGDOSS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 10:18:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F73EBF60
-        for <linux-usb@vger.kernel.org>; Mon,  4 Jul 2022 07:18:17 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1o8Mtz-0005h1-Vb; Mon, 04 Jul 2022 16:18:16 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1o8Mtv-004OCa-OE; Mon, 04 Jul 2022 16:18:15 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1o8Mty-006QeI-6H; Mon, 04 Jul 2022 16:18:14 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, kernel@pengutronix.de
-Subject: [PATCH v2 2/2] usb: dwc3: gadget: fix high speed multiplier setting
-Date:   Mon,  4 Jul 2022 16:18:12 +0200
-Message-Id: <20220704141812.1532306-3-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220704141812.1532306-1-m.grzeschik@pengutronix.de>
-References: <20220704141812.1532306-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S233764AbiGDPyv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 11:54:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4097C9FD4
+        for <linux-usb@vger.kernel.org>; Mon,  4 Jul 2022 08:54:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 000CF22602;
+        Mon,  4 Jul 2022 15:54:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656950089; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4oouX+wWA2m9btGP9XKS/GAKwHVqfBLk2MWQfFuvG0o=;
+        b=l0nmfluRNEHcbMd1Fym25gxuKAqtatE66TaR6y45laOz4ICXssAtysCH+jwdOvbl9atQqA
+        xCbkTOG9BgStldi6QCXDDkOq6TEHKmv91GzIRoRgyoSiloRVgIcdKrWJrmeiuR62iVmj4H
+        yWYUHc333Tyy7DZH+0BpqQdL06f1odw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656950089;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4oouX+wWA2m9btGP9XKS/GAKwHVqfBLk2MWQfFuvG0o=;
+        b=yez1IjpDLdJfo0k8f/gTp1Whv+dgZq7OBvYDoFe9/33o4f0LPaMRbNcFroOBwSMCzTI/5C
+        urMdYsfsrY7cdzCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B87101342C;
+        Mon,  4 Jul 2022 15:54:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nI1kK0gNw2JVAgAAMHmgww
+        (envelope-from <jroedel@suse.de>); Mon, 04 Jul 2022 15:54:48 +0000
+Date:   Mon, 4 Jul 2022 17:54:47 +0200
+From:   =?iso-8859-1?Q?J=F6rg_R=F6del?= <jroedel@suse.de>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jon Grimm <jon.grimm@amd.com>,
+        "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+Subject: Re: DMA Faults with XHCI driver
+Message-ID: <YsMNR9KtZVPMNC9Y@suse.de>
+References: <YrXMY0Nd0Yn6XDSN@suse.de>
+ <8917c751-76dc-98d3-83ac-652aa2249b7d@linux.intel.com>
+ <YrqzGpuLdNrbfHL5@suse.de>
+ <cdd5b0b2-cfcd-3c25-6b77-2d20ebfc97c5@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cdd5b0b2-cfcd-3c25-6b77-2d20ebfc97c5@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For High-Speed Transfers the prepare_one_trb function is calculating the
-multiplier setting for the trb based on the length parameter of the trb
-currently prepared. This assumption is wrong. For trbs with a sg list,
-the length of the actual request has to be taken instead.
+Hi Mathias,
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
-v1 -> v2: - added refactor patch before this patch
-          - using req->request.length as condition value
+On Wed, Jun 29, 2022 at 05:39:49PM +0300, Mathias Nyman wrote:
+> Anyway, maybe flushing the CRCR register by reading it back after writing it would help:
 
- drivers/usb/dwc3/gadget.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for your help and sorry for the delay. I tried the patch but it
+didn't help, the io fault still appears and the device does not work.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index dcd8fc209ccd6a..4366c45c28cf6d 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1265,10 +1265,10 @@ static void dwc3_prepare_one_trb(struct dwc3_ep *dep,
- 				unsigned int mult = 2;
- 				unsigned int maxp = usb_endpoint_maxp(ep->desc);
- 
--				if (trb_length <= (2 * maxp))
-+				if (req->request.length <= (2 * maxp))
- 					mult--;
- 
--				if (trb_length <= maxp)
-+				if (req->request.length <= maxp)
- 					mult--;
- 
- 				trb->size |= DWC3_TRB_SIZE_PCM1(mult);
+I added some more debugging, actually printing the cmd_ring address read
+by the calls you patch adds. Unfortunately they all returned 0, looks
+like the register is write-only RAZ on this hardware.
+
+Is it possible that the device actually can't handle a 64 bit DMA mask
+and needs a smaller one, say 40 bits?
+
+Regards,
+
 -- 
-2.30.2
+Jörg Rödel
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Frankenstraße 146
+90461 Nürnberg
+Germany
+
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
 
