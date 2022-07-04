@@ -2,154 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5944956506F
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 11:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908A45650EF
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 11:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbiGDJIj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jul 2022 05:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S233793AbiGDJdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jul 2022 05:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiGDJIh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 05:08:37 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A91265A;
-        Mon,  4 Jul 2022 02:08:35 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2647VSbn031460;
-        Mon, 4 Jul 2022 11:08:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=hSr9h6Lsw/kEcOYpJnY2XLYWBREQsrXq8yfjO4tL5Dk=;
- b=34ygLB0JfpcZEgnNsReUDny7p1awHtZEqP75BaOKY00TghJpSjzhtTOjm/1J76HWHj2J
- Af0r4FlUSBWJAO4Eoo1jyH1pOb4Kwd2RQqx24m/mJQz7LWsz9y2iZPn6yzrsdJ3JIQOI
- WHnvEteqBsXc33NgBKTvEnLzsf9FxXTMREv5au3q/t2itYTfAwIt8KoVIRojECbCsMZX
- 6Kei9RRYgbfb1ZKSsgzDWAs/wysjqpH2VBSEIaj9ihbYvd4Yx10FdYBpAc2AIrH1p4q+
- RjNb1IY0Jl/XlqRd2VCvqgfPjGCDom8WYazXWx8hYBru4BfoBu0TcLzq2lUfPIiqGqJE ow== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h2cwhs073-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Jul 2022 11:08:25 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 248DC10002A;
-        Mon,  4 Jul 2022 11:08:23 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9752F215158;
-        Mon,  4 Jul 2022 11:08:23 +0200 (CEST)
-Received: from [10.48.1.102] (10.75.127.47) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 4 Jul
- 2022 11:08:23 +0200
-Message-ID: <13266b3e-7571-23fa-13bd-1c8107a5f90d@foss.st.com>
-Date:   Mon, 4 Jul 2022 11:08:22 +0200
+        with ESMTP id S233948AbiGDJcv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 05:32:51 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8BFE0C7;
+        Mon,  4 Jul 2022 02:31:41 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so13070622pjl.5;
+        Mon, 04 Jul 2022 02:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xIA0tkEJFCPwLmR+R6eKHNKrvI9a6bVM4TsihGfrld0=;
+        b=f8MhiLRjvn4JhQhz9F64yCgS5B6jrH8tJwT1awj7AGv9RShuJdBVz84vc1kQVsx0Lv
+         eNwaezjyn3nuI01xLjtA8+y0NZAqsqTswX489ZxWe/DK4qA3KOAt8JChBJylkfu6iBcj
+         ORlmB+OW6RB+2+Vau8HlQetnTopYsjVTFjp0f9KRNoR/+YI371o5iIsodX7EUGlhLxKP
+         kIepqqS2tlY+l7PfLRiLbmuc06ZAkcN8W3clHbhEfFPx2LGi5BU/JurrZIflfzIJK1dI
+         KLvXaDm+sy2U5Xe0lntfK9VA1zVFQuJyC2Hbzq2cctn7nouM2bwK0yqcoPWSdeZyN5vE
+         +/GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xIA0tkEJFCPwLmR+R6eKHNKrvI9a6bVM4TsihGfrld0=;
+        b=POMPhCymPAxgLj2H6m7adApMVcTrUWLx1gC5wWoSYnMk8y7f37BYaMomk10afoT4mg
+         VvWRteExDmC6YL2pHc9YTYlaPZSrBAL8Ku456f5j2U16C6v1q8vs8h9SlOcF7eVCo9VQ
+         otonsIoxN6lV0Is0xQpYoRAgzcMFjlmZAEdkzcnLW9sTtjAqoRWvP+VTSDUSsFjt6H5w
+         khuhWdTW2ScsDwWGtolr2cIEP9YeCMPxo2aUSYmcZ1G3x1QlwP64PPRVowc+XgCXg6UN
+         x1CYrcPKhqcPx5VaAsFPeL6fc3BQZb/7/nS0yUyEEilfHfkywXsIF8r8zIsqo2GQvS9l
+         d61Q==
+X-Gm-Message-State: AJIora+ywkXY3rglOW+A0MWGoerBEpEer7QEG6ser+wAjZxjmjxxKPfg
+        fz3MvTmVktNpFh+dIjt/DF/1kEYY97iCmWGriEw=
+X-Google-Smtp-Source: AGRyM1snqrRpQbd96zgAVBmjrPX1x2o3afFwTRTiOLpzM13U4eENpimphE3z0PHrUTRqdjm3Nu9HaCkQlEPGsPeCLlE=
+X-Received: by 2002:a17:903:110c:b0:168:fa61:1440 with SMTP id
+ n12-20020a170903110c00b00168fa611440mr34740455plh.149.1656927100855; Mon, 04
+ Jul 2022 02:31:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
- controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <robh+dt@kernel.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <gregkh@linuxfoundation.org>, <heikki.krogerus@linux.intel.com>
-References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
- <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
- <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
- <845d6817-d2e4-7925-f7f5-da1102514636@foss.st.com>
- <286633b2-43d2-655e-b3f1-54bf5c7a4a21@linaro.org>
- <6ef58f1f-ee8a-b060-6fda-d1388b3ede6d@foss.st.com>
- <f86dd47c-0fc5-6c93-a49e-534610d10c49@linaro.org>
- <dfad8fb5-6205-d620-81eb-5d44b9175e05@foss.st.com>
- <0821acfe-bcfe-b1d8-c1a9-81023f4ab6a0@linaro.org>
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-In-Reply-To: <0821acfe-bcfe-b1d8-c1a9-81023f4ab6a0@linaro.org>
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-9-peterwu.pub@gmail.com>
+ <YsKXcnys2Wa8Zz0p@kroah.com>
+In-Reply-To: <YsKXcnys2Wa8Zz0p@kroah.com>
+From:   szuni chen <szunichen@gmail.com>
+Date:   Mon, 4 Jul 2022 17:31:29 +0800
+Message-ID: <CA+hk2fYA3phYAoh+BFr0ddy9MR8Ro1WCoqBpa1UK2StwMtLyfQ@mail.gmail.com>
+Subject: Re: [PATCH v4 08/13] usb: typec: tcpci_mt6370: Add Mediatek MT6370
+ tcpci driver
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-04_07,2022-06-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/4/22 09:55, Krzysztof Kozlowski wrote:
-> On 01/07/2022 12:04, Fabrice Gasnier wrote:
->>
->> Then I no longer get this warning upon build. But the dtbs_check complains:
->> ---
->> connector: ports: 'port@0' is a required property
->> 	From schema: ..
->> Documentation/devicetree/bindings/connector/usb-connector.yaml
->>
->> So It looks like to me there's something missing to handle the single
->> port case in usb-connector.yaml, when using the "ports".
->>
->> Maybe usb-connector could be updated to handle "port" (w/o unit-addr) ?
-> 
-> Not really, the dtc warning looks false-positive. Especially that you
-> need port@1 for USB 3.0 (super speed), unless you do not support it?
+Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=884=E6=
+=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:32=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, Jul 04, 2022 at 01:38:56PM +0800, ChiaEn Wu wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add chip level mt6370 tcpci driver.
+>
+> What does this mean?  Please provide more information about the hardware
+> being supported here so we know how to review this.
 
-Hi Krzysztof,
+Dear Greg,
 
-Having USB2.0 High speed port only is perfectly valid. port@1 is
-optional to support USB3.0 as you mention.
+MediaTek MT6370 is a highly-integrated smart power management IC,
+which includes a single cell Li-Ion/Li-Polymer switching battery charger,
+a USB Type-C & Power Delivery (PD) controller, dual flash LED current sourc=
+es,
+a RGB LED driver, a backlight WLED driver, a display bias driver and a
+general LDO for portable devices.
 
-I've no opinion regarding a possible false positive warning. I'd like to
-sort this out, perhaps Rob has some recommendation regarding this ?
+This driver is used for the Type-C & Power Delivery controller in
+MediaTek MT6370 IC.
 
-Please advise,
-Best regards,
-Fabrice
+If we change the commit message to
 
-> 
->> I'm talking about:
->>     required:
->>       - port@0
->>
->> So, I came up with:
->>
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -176,6 +176,9 @@ properties:
->>        port number as described below.
->>
->>      properties:
->> +      port:
->> +        $ref: /schemas/graph.yaml#/properties/port
->> +
->>        port@0:
->>          $ref: /schemas/graph.yaml#/properties/port
->>          description: High Speed (HS), present in all connectors.
->> @@ -189,8 +192,11 @@ properties:
->>          description: Sideband Use (SBU), present in USB-C. This
->> describes the
->>            alternate mode connection of which SBU is a part.
->>
->> -    required:
->> -      - port@0
->> +    oneOf:
->> +      - required:
->> +          - port
->> +      - required:
->> +          - port@0
->>
->>
->> Do you agree on this approach ? (I can add a pre-cursor patch to this
->> series, to handle the single port case)
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
+"Add MediaTek MT6370 tcpci driver.
+MediaTek MT6370 is a multi-functional IC that includes USB Type-C.
+It works with Type-C Port Controller Manager to provide USB PD and USB
+Type-C functionalities."
+
+does this meet your requirements?
+Or =E2=80=9CAdd tcpci driver for Mediatek MT6370 IC=E2=80=9D is enough?
+
+Sincerely,
+Alice Chen
