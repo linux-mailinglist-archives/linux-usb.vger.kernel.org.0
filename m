@@ -2,59 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BE8565050
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 11:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ACF56505A
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 11:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbiGDJE7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jul 2022 05:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S233567AbiGDJHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jul 2022 05:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbiGDJE6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 05:04:58 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27F2B7E7
-        for <linux-usb@vger.kernel.org>; Mon,  4 Jul 2022 02:04:56 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z13so14602494lfj.13
-        for <linux-usb@vger.kernel.org>; Mon, 04 Jul 2022 02:04:56 -0700 (PDT)
+        with ESMTP id S233555AbiGDJHS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 05:07:18 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0390CBE17
+        for <linux-usb@vger.kernel.org>; Mon,  4 Jul 2022 02:07:16 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id x3so14702193lfd.2
+        for <linux-usb@vger.kernel.org>; Mon, 04 Jul 2022 02:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
-        b=PYvq706wWC49R4jolMknaPmpRLaoYvxAwS/yrvpFklnZZejweFemyL+imVd3ZQHAkf
-         2/oXHaA9SGkarCtUTpJuT3rbr6E8/ZVClvuR1xBNSKo+a8wG5DTug1kwbGjWuOCBcI70
-         dWGUwdFSDfUGxCvJG/zPrfbQm+BbCyObhS6xtSNndCwmGipu6Cfuvu+r8eMks7OKGo0b
-         2YzZ/37v4uOxttWU2JFcYvY4M9Qr68hL1wTP8MZfoSjc1J2+2NJTNQry+5XTQR6atCko
-         dT/Z9yNTRRG/tHVo63yXJDe5gp8/LH7Off+y7xl7ruy7e2ZiSNNwjEwSUYfXcOFTMnzE
-         rrgQ==
+        bh=BtyIymdH2qSSNBvNEoKc/50n+YaYkErYRhVN3d4+GHk=;
+        b=XiM+E5UdwfyHsyHbIllCDzfZVdzGil+LXmUM3o6WF4PkRJ4XqFmVWojD1MoYEM77UY
+         8+GhsWQjoigl4ndUWRWWskLeKNbMy9E0wfbPwsNxu0WoSBISOu84MorLmmWNIKgTWfWC
+         Qj12RXtMOdfS1+T4b+EPVwW0F4GFOMBWYctm4pNB8bg1eHfe2AaGwUodg+mu7efIXksV
+         TNtl7aJRF9CsWzUdAnNF1x2c3v41JPbqU1Ies4ozEErlMu42mw5lQIEqwp2GwAssuDYK
+         Cw3KRx93bb5JTFartqor8wS0/vf3qj4RGn/Vtt/gfoVCkPpTOdjeZN4O1NmlZR66TIIo
+         LfSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=n4B9YLkKJASUbF6SDeFOUfEsE0vnt4+YdnmVDhP06z4=;
-        b=TWYw2i0NJMk/O1TkH/H3GNMY+ngfEyX7Hzid2TQ7AvWixhMb9lEomAPMM37af4uoFt
-         CGGFrT8iDQApT+PdHbi4znQcUtzfT3mUIBOa/YfFx7LB4fhtcj/RIHMI3CqOMlSGpauP
-         r86D1yBe8v5PMatSPQeib+7gKhXe+FP+I6Fhl8hLcMHow+iHPbtiHqMScPtirG9e2vjc
-         R/pMKTZYzeKFK8EPE6TgZwb3gYnLab7zwHj3O2oW261LjVovb49/ZiF0H+/KmZ/CEgS2
-         yh+FbjwrBW957ucoCF94ppvbVHn37QeoYnli9WGuEtP/HAGVRsR1n6p6S8PkP04hRxpp
-         oTYg==
-X-Gm-Message-State: AJIora9mv4nvwoI1qO++hgPHPznl0UsGicS3KnvixHXDO9+8dcg7uWuR
-        MRBIM1JtLpKZ5EL7/RcsNcmchQ==
-X-Google-Smtp-Source: AGRyM1sLHkpEL/e3FbHHjgOt2aInxHNlxFrHeEIa0L1/Bz4GYdHDD1jIwPyFeJeq+08viN1qBJk27g==
-X-Received: by 2002:a05:6512:acb:b0:481:cce:3c22 with SMTP id n11-20020a0565120acb00b004810cce3c22mr17601128lfu.45.1656925495041;
-        Mon, 04 Jul 2022 02:04:55 -0700 (PDT)
+        bh=BtyIymdH2qSSNBvNEoKc/50n+YaYkErYRhVN3d4+GHk=;
+        b=66BjHhNL8ggq63R49aGisBHHUkIt6jtSJ//q2HFNrhwSqemeVYDwS6bY5WUdY2T6c4
+         jp7fweZ+kdpxsO5N5Im0mAPYHlSe5T6XFbdNOy+QKEX6Vg7tJzXfuWRr0qLvQftkB3zM
+         JNqA3cdYFnf4qScjS1rONwvUWwTlOYmxGBuou/TMKgRTk2IyUfNqCnQi1MeiVl17NJ9S
+         CMNBaaIFn/A6WaMDiocyZqESnj9vfrPehMbVEVBbyGaEV2msqScoY1dkwEg9fGGL96fa
+         ZEkaFshczP4MWQDCDcwyRMlfX+n1YkY4z9dDqO5WGubx2x2xIc8pJOU9osPj3RDlV1fq
+         QINQ==
+X-Gm-Message-State: AJIora8PeHhdE3CB7ThFHVV2xxu+DE6A8OPAiDBKrho3lx6JKSorI8rG
+        D8GtLqyKu/I8T99uQhwhURU0/Q==
+X-Google-Smtp-Source: AGRyM1tI9Ub9KvPHASQI5b2883dspTVBOFIXRiN1cbb02P3TVGpg8m7UwRb/aJtvqXiUk+O/khToVA==
+X-Received: by 2002:a05:6512:2810:b0:47f:a76c:8770 with SMTP id cf16-20020a056512281000b0047fa76c8770mr19891464lfb.116.1656925635286;
+        Mon, 04 Jul 2022 02:07:15 -0700 (PDT)
 Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id 8-20020ac25f08000000b0047863382e3dsm5024155lfq.215.2022.07.04.02.04.53
+        by smtp.gmail.com with ESMTPSA id e18-20020ac25472000000b0047f77cc3287sm5036384lfn.274.2022.07.04.02.07.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 02:04:54 -0700 (PDT)
-Message-ID: <4513594b-ece6-a4c2-82ba-d334f5c4234b@linaro.org>
-Date:   Mon, 4 Jul 2022 11:04:53 +0200
+        Mon, 04 Jul 2022 02:07:14 -0700 (PDT)
+Message-ID: <247e5688-8aff-1c7c-80e4-b39c5f2fae9b@linaro.org>
+Date:   Mon, 4 Jul 2022 11:07:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v4 02/13] dt-bindings: power: supply: Add Mediatek MT6370
- Charger
+Subject: Re: [PATCH v4 06/13] dt-bindings: mfd: Add Mediatek MT6370
 Content-Language: en-US
 To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
         daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
@@ -72,14 +71,14 @@ Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
         linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
         szunichen@gmail.com
 References: <20220704053901.728-1-peterwu.pub@gmail.com>
- <20220704053901.728-3-peterwu.pub@gmail.com>
+ <20220704053901.728-7-peterwu.pub@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220704053901.728-3-peterwu.pub@gmail.com>
+In-Reply-To: <20220704053901.728-7-peterwu.pub@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,16 +87,30 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 04/07/2022 07:38, ChiaEn Wu wrote:
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> Add Mediatek MT6370 Charger binding documentation.
+> Add Mediatek MT6370 binding documentation.
 > 
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > ---
+> 
+> v4
+> - Roll back all "$ref: " to v2 patch style (using
+>   "/schemas/...")
+> ---
+>  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
+>  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
+>  2 files changed, 298 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+>  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
+> 
 
+Looks ok. This depends on previous DT bindings patches, so all of them
+should go through one tree or with some pull requests (but that would be
+a lot). You should mention it in cover letter to get the acks from
+subsystem maintainers.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
 
 Best regards,
 Krzysztof
