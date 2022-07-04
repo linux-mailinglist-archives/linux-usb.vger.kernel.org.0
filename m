@@ -2,99 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66899565255
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 12:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0533C56530A
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Jul 2022 13:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiGDK3J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Jul 2022 06:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S233906AbiGDLHd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Jul 2022 07:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbiGDK3F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 06:29:05 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AEB26C0;
-        Mon,  4 Jul 2022 03:29:03 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 6D212240008;
-        Mon,  4 Jul 2022 10:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656930542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LSXnCRxUl4U9Qi112GF1nMAAGUftrLkrbGlg6cMy5Gg=;
-        b=cBz/PcInNbBTr5htwUDKttOie/ZgPjXmHxtQhYCqfNrs2NACOTx9Dtw8V+zRJuBapjAqlR
-        3TyQE0Qi7DRJYNw9E8pTY2XjibFpklli0uHxIyIfeh2sOSFlbuu+6b70th4TfOgPtTKECo
-        OTA0yPA8TDNO0BEAUFj26eMIwXJXLP0T6Mdt+2JlL3DD74ievXF326IayDluLoPWWSMPtc
-        axmKiHjTiaNC7tVfrToH6ALAjg79Uv/f0Ex8yvQ039283WWTP/ZnLroznTshBGDrM3okYO
-        i1AL4VFmKdCsmZJPiWcLOPH0MOnZ79e55W3rq3vUQ7j59Lv1hqWzeGNzyXItOA==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229836AbiGDLHb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Jul 2022 07:07:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28560DFAC;
+        Mon,  4 Jul 2022 04:07:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA67F61624;
+        Mon,  4 Jul 2022 11:07:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4F6C3411E;
+        Mon,  4 Jul 2022 11:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656932850;
+        bh=ShPSNOvgzATtn2/Bsxk03dhF7u+9UjNpwSKkcGRvTT0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yg7oJSBac1jklWTdfgCXuJ3ysIGEvXrqf9/zfqWj42Iyu5IX6vLXQxNYM/N8zePVv
+         gl+h3HeUDHDoljmR2gePU76jeomtKSKBVHs4jLc0sVpZAXzp8rEBO43+ANIOsKdZ6Y
+         UAo9IGe43RtjSE/pzqD1J5iVI+6bU5b1kL+Sse4w=
+Date:   Mon, 4 Jul 2022 13:07:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     szuni chen <szunichen@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH v5 3/3] ARM: dts: lan966x: Add UDPHS support
-Date:   Mon,  4 Jul 2022 12:28:45 +0200
-Message-Id: <20220704102845.168438-4-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220704102845.168438-1-herve.codina@bootlin.com>
-References: <20220704102845.168438-1-herve.codina@bootlin.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Subject: Re: [PATCH v4 08/13] usb: typec: tcpci_mt6370: Add Mediatek MT6370
+ tcpci driver
+Message-ID: <YsLJ7+HiqaBTwCLg@kroah.com>
+References: <20220704053901.728-1-peterwu.pub@gmail.com>
+ <20220704053901.728-9-peterwu.pub@gmail.com>
+ <YsKXcnys2Wa8Zz0p@kroah.com>
+ <CA+hk2fYA3phYAoh+BFr0ddy9MR8Ro1WCoqBpa1UK2StwMtLyfQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CA+hk2fYA3phYAoh+BFr0ddy9MR8Ro1WCoqBpa1UK2StwMtLyfQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add UDPHS (the USB High Speed Device Port controller) support.
+On Mon, Jul 04, 2022 at 05:31:29PM +0800, szuni chen wrote:
+> Greg KH <gregkh@linuxfoundation.org> 於 2022年7月4日 週一 下午3:32寫道：
+> >
+> > On Mon, Jul 04, 2022 at 01:38:56PM +0800, ChiaEn Wu wrote:
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > Add chip level mt6370 tcpci driver.
+> >
+> > What does this mean?  Please provide more information about the hardware
+> > being supported here so we know how to review this.
+> 
+> Dear Greg,
+> 
+> MediaTek MT6370 is a highly-integrated smart power management IC,
+> which includes a single cell Li-Ion/Li-Polymer switching battery charger,
+> a USB Type-C & Power Delivery (PD) controller, dual flash LED current sources,
+> a RGB LED driver, a backlight WLED driver, a display bias driver and a
+> general LDO for portable devices.
+> 
+> This driver is used for the Type-C & Power Delivery controller in
+> MediaTek MT6370 IC.
+> 
+> If we change the commit message to
+> 
+> "Add MediaTek MT6370 tcpci driver.
+> MediaTek MT6370 is a multi-functional IC that includes USB Type-C.
+> It works with Type-C Port Controller Manager to provide USB PD and USB
+> Type-C functionalities."
+> 
+> does this meet your requirements?
 
-The both lan966x SOCs (LAN9662 and LAN9668) have the same UDPHS
-IP. This IP is also the same as the one present in the SAMA5D3
-SOC.
+What would you want to see if you were reading a changelog text for an
+unfamiliar hardware device?  More text is always better!
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- arch/arm/boot/dts/lan966x.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+thanks,
 
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 3cb02fffe716..a54fee5254a4 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -84,6 +84,17 @@ soc {
- 		#size-cells = <1>;
- 		ranges;
- 
-+		udc: usb@200000 {
-+			compatible = "microchip,lan9662-udc",
-+				     "atmel,sama5d3-udc";
-+			reg = <0x00200000 0x80000>,
-+			      <0xe0808000 0x400>;
-+			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clks GCK_GATE_UDPHS>, <&nic_clk>;
-+			clock-names = "pclk", "hclk";
-+			status = "disabled";
-+		};
-+
- 		switch: switch@e0000000 {
- 			compatible = "microchip,lan966x-switch";
- 			reg = <0xe0000000 0x0100000>,
--- 
-2.35.3
-
+greg k-h
