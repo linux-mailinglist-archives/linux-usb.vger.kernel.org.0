@@ -2,82 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19023567866
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jul 2022 22:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A213E56787F
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jul 2022 22:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiGEUaw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jul 2022 16:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42828 "EHLO
+        id S231648AbiGEUgd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jul 2022 16:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiGEUar (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jul 2022 16:30:47 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641EC1C903;
-        Tue,  5 Jul 2022 13:30:37 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id y18so12240539iof.2;
-        Tue, 05 Jul 2022 13:30:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CxSIBZ2jt/pLFazAIwW59noEAO34Ns2wBgEVpI7Mfqw=;
-        b=HgIR/lvtmkxeW4CmThwtaOjDMUzdVFYIKwBz048XsrzAFoPIE3nuO6gOKzu91KDywH
-         zWxvSIML/jPZIrJGjnGGVCr/QMmSF/RtN5afMJDWeBOekUjyDPTHRrJHhVTmkdC06KWL
-         LAjUJErHjElUi/VJIs6fv+4PCCfkipKsZhclEIscuDcjImSM2owRgm6x4ObsUkjBypWA
-         gBUU7iUD6ZWWKUMLdpPmRF83eV/AHcC5FqrM6r+a9oMfBaDFEyZ+75GibbMDBSntFHr9
-         9pt3ryIvrhUYgO5aCRAR4+aIDXsZQKViLbTvStD+OTNY5DpqqiD7+2p3DSGY7qLmVL7B
-         lKoA==
-X-Gm-Message-State: AJIora9heaNwHSNPfeh+7tK0o3FD/H9K5C0YF0V/7a+CNb8XTT+G8cmb
-        44Kutl0Lqw7hBQuR/Aey/w==
-X-Google-Smtp-Source: AGRyM1sE+zZ5ACiYVTRNPKT1VCnFOrF8wpzg7YmCt1PaLASTZMzUxCyInyFvTe6hDgajT/k+H4YxSg==
-X-Received: by 2002:a05:6638:22d3:b0:33c:a25e:e3ca with SMTP id j19-20020a05663822d300b0033ca25ee3camr22616206jat.191.1657053037104;
-        Tue, 05 Jul 2022 13:30:37 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id m7-20020a0566022e8700b0067885c5fd94sm3051749iow.29.2022.07.05.13.30.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 13:30:36 -0700 (PDT)
-Received: (nullmailer pid 2573162 invoked by uid 1000);
-        Tue, 05 Jul 2022 20:30:34 -0000
-Date:   Tue, 5 Jul 2022 14:30:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        with ESMTP id S231715AbiGEUgb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jul 2022 16:36:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231821C12D;
+        Tue,  5 Jul 2022 13:36:29 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0AC7B660180F;
+        Tue,  5 Jul 2022 21:36:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657053387;
+        bh=OrwB8qOVDqFzOmPNBZc6oHWmrOYIVjhvGlY/DI5Fmbk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lwmHEE/rRolwWUxTzRAtTvFqraneOsrTub3hjYLXaYUxiqQYrpdmBj+MUr4E5kfbV
+         elmrfnZhaM09/ZMNfJ3hs+xT3nx9DgjMZPklZIp2l+bJCUJ2iBR2YSiAAcE/FEQcy3
+         j0/S0tKcRLHASd1Adsa/qfkAZyPRiuEOzW8WOHP8O1g8vlkew1/E5mIIpYPdWgCyKp
+         u7J/UHsDpavuRqlwAg4GOpnBWlVYS5nTT/qen3z3vRnxxtW3BMvvqCbWtPY00On4ka
+         sY7J+WcNHBCEltQdD7sc1FWNRFLsHF9WypC9Of9jPxTA8cNr3RM3iznimFj3IyaNMI
+         g1d0jZSQ5gQBw==
+Date:   Tue, 5 Jul 2022 16:36:21 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-sunxi@lists.linux.dev,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 3/3] dt-bindings: usb: generic-ohci: Add Allwinner D1
- compatible
-Message-ID: <20220705203034.GA2573110-robh@kernel.org>
-References: <20220702195249.54160-1-samuel@sholland.org>
- <20220702195249.54160-4-samuel@sholland.org>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: usb: mtk-xhci: Make all clocks
+ required
+Message-ID: <20220705203621.hunczzwfhiwpcrhy@notapiano>
+References: <20220623193702.817996-1-nfraprado@collabora.com>
+ <20220623193702.817996-3-nfraprado@collabora.com>
+ <93c6b7201533325cf7758637dd194a372f3c00c6.camel@mediatek.com>
+ <20220629185546.z6rn7xp3ejpmaupi@notapiano>
+ <20220701213702.GA1591697-robh@kernel.org>
+ <5f85280ea5fd0d4b445307a13a70c3e3fe552ccf.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220702195249.54160-4-samuel@sholland.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5f85280ea5fd0d4b445307a13a70c3e3fe552ccf.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 02 Jul 2022 14:52:49 -0500, Samuel Holland wrote:
-> The Allwinner D1 contains USB controllers which claim to be compatible
-> with the OHCI specification version 1.0a.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  Documentation/devicetree/bindings/usb/generic-ohci.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Sat, Jul 02, 2022 at 04:24:12PM +0800, Chunfeng Yun wrote:
+> On Fri, 2022-07-01 at 15:37 -0600, Rob Herring wrote:
+> > On Wed, Jun 29, 2022 at 02:55:46PM -0400, Nícolas F. R. A. Prado
+> > wrote:
+> > > On Tue, Jun 28, 2022 at 08:57:45AM +0800, Chunfeng Yun wrote:
+> > > > Hi Nícolas,
+> > > > 
+> > > > On Thu, 2022-06-23 at 15:37 -0400, Nícolas F. R. A. Prado wrote:
+> > > > > All of the clocks listed in the binding are always wired to the
+> > > > > XHCI
+> > > > > controller hardware blocks on all SoCs. The reason some clocks
+> > > > > were
+> > > > > made
+> > > > > optional in the binding was to account for the fact that
+> > > > > depending on
+> > > > > the SoC, some of the clocks might be fixed (ie not controlled
+> > > > > by
+> > > > > software).
+> > > > > 
+> > > > > Given that the devicetree should represent the hardware, make
+> > > > > all
+> > > > > clocks
+> > > > > required in the binding. Subsequent patches will make the DTS
+> > > > > changes
+> > > > > to
+> > > > > specify fixed-clocks for the clocks that aren't controllable.
+> > > > > 
+> > > > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > > 
+> > > > > ---
+> > > > > 
+> > > > > Changes in v2:
+> > > > > - Undid clock list changes that allowed middle clocks to be
+> > > > > missing
+> > > > > from
+> > > > >   v1 and made all clocks required instead
+> > > > > - Rewrote commit message and title
+> > > > > 
+> > > > >  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml |
+> > > > > 4 +
+> > > > > ---
+> > > > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > > > > 
+> > > > > diff --git
+> > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > xhci.yaml
+> > > > > index 63cbc2b62d18..1444d18ef9bc 100644
+> > > > > --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > xhci.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > xhci.yaml
+> > > > > @@ -67,7 +67,6 @@ properties:
+> > > > >      maxItems: 1
+> > > > >  
+> > > > >    clocks:
+> > > > > -    minItems: 1
+> > > > >      items:
+> > > > >        - description: Controller clock used by normal mode
+> > > > >        - description: Reference clock used by low power mode
+> > > > > etc
+> > > > > @@ -76,9 +75,8 @@ properties:
+> > > > >        - description: controller clock
+> > > > >  
+> > > > >    clock-names:
+> > > > > -    minItems: 1
+> > > > >      items:
+> > > > > -      - const: sys_ck  # required, the following ones are
+> > > > > optional
+> > > > > +      - const: sys_ck
+> > > > >        - const: ref_ck
+> > > > >        - const: mcu_ck
+> > > > >        - const: dma_ck
+> > > > 
+> > > > This patch causes more check warning, I prefer to leave dt-
+> > > > bindings
+> > > > unchanged, but just fix mt8195's dts warning instead, thanks a
+> > > > lot
+> > > 
+> > > Hi Chunfeng,
+> > > 
+> > > the warnings reported by Rob's bot only happen if patches 3 and 4
+> > > aren't applied
+> > > to adapt the devicetrees. They are ABI breaking changes, but I
+> > > understood this
+> > > as the desired solution from the discussion we had with Krzysztof
+> > > on v1 [1].
+> > 
+> > The warnings have nothing to do with patches 3 and 4 as those are
+> > for 
+> > dts files. It's examples in bindings that are the problem.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Sorry, you're right, I misread the errors.
+
+> Yes, I mean almost all existing dts supporting mtk-xhci will also cause
+> similar warnings, as changes in patches 3, 4;
+> 
+> It seems less flexible to make all clock required, not only changes all
+> existing ones but also need more changes if additional clock is added.
+
+Yes, that's a valid concern. I must have misunderstood the discussion in v1
+then.
+
+So, I'm going to send a revert for this change and send a new patch adding fixed
+clocks on the dts for just mt8192 and mt8195 to fix the dtbs_check warnings.
+Does that sound good?
+
+Thanks,
+Nícolas
