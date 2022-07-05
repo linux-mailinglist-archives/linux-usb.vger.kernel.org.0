@@ -2,102 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C818356781A
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Jul 2022 21:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D34567865
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Jul 2022 22:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiGETyA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Jul 2022 15:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S231318AbiGEUaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Jul 2022 16:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiGETyA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jul 2022 15:54:00 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5B265AB;
-        Tue,  5 Jul 2022 12:53:58 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id n8so16704953eda.0;
-        Tue, 05 Jul 2022 12:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oXMuNwTXUvJo0+POZWc/5imaFRdw3zoRSiX+En9QOVw=;
-        b=aCAO7obABtqBdXKJyThLKOxRy3Gkos3sCS85KBPppcd5OtU6W0mAv8wa3910L4g+wv
-         fVzmu9c7Lx8j8FyLigZXQNdR2GQHgxpkhaEKzuYcF0X4V3PODju071tD4JP/R8cA5Rzx
-         1w1//jejTVMZPH0Tj8JKWbCQ79VtMdgFKuWY86K7kkCZC6/DZMdfPlz1/b8wzw+9I6gi
-         Wy8c9PFMCRb3qBkqpLtc/qt87+Sdz+eRCVxRqrDay6SUsCmLAPmMBtKGiMzFdl7COXLj
-         cFeEZpcOIyfO4THHHDc2kD1wA0y2IGoVRMAuFGiD2bTw9Evr8M9iSafyZJ4IDAimmgME
-         PAVg==
+        with ESMTP id S230044AbiGEUaM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Jul 2022 16:30:12 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BC51B78C;
+        Tue,  5 Jul 2022 13:30:12 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id h5so8005667ili.3;
+        Tue, 05 Jul 2022 13:30:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oXMuNwTXUvJo0+POZWc/5imaFRdw3zoRSiX+En9QOVw=;
-        b=dFtGNWj4XAlXsFFyG08KlZp93KBXq3czoxM9fvTdzuF2tr2OLu6smawB45FQt+Xglq
-         H4ktEZEJeg8HHP0q5Q6klw3QS69xWeE2vjSCQzQvVs8qwMPjkDYxoZPKfSMG5rIXpcJi
-         R1q0+t2iSu3Z5rM+BTxploUze2aNLpJ/dE0G4HnT6qPgFSsPu0MyGMP31pJ5QawChRYQ
-         fku6kVV0OIZBq/ugCfvEIeHQf8QYHQ/L3foM9+2/1GYP3GTy3baAAmJZIZ2DnI2Hmi95
-         qDULC7Z2GvHLc94aVjRupD3QUchfv6FjTTq/0GokQeZQB659mZmHV2YLP5TvFkt2SlLF
-         VXZQ==
-X-Gm-Message-State: AJIora91QiMy4tm7wWcbs1H+pdR515YGleNe28Q1ARF/AC890Vnhq2wX
-        +SYn2CQ/29jkf64NWPVzjkA=
-X-Google-Smtp-Source: AGRyM1tkSzZ6D5ILvqab8zXo3yg+wHUqQ7K5bD/agyl++p9ronNEmGXjzgYTHCP0hrx20V7g2KJ6Cw==
-X-Received: by 2002:a05:6402:228f:b0:43a:896:e4f0 with SMTP id cw15-20020a056402228f00b0043a0896e4f0mr23879935edb.81.1657050837497;
-        Tue, 05 Jul 2022 12:53:57 -0700 (PDT)
-Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id a18-20020a50ff12000000b0043789187c1esm18863714edu.80.2022.07.05.12.53.56
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mtbdmlSxv4Cd125/TbfgcIJrtF3An7hCFaLz0pLZoWs=;
+        b=OBEQGFP0r2HiEiR05+0zxGNBNC5yC+oh3zsyRoYkpYA6EMyVPc499lz+ahW16bKdF/
+         H8UaAT5Ehnzu4LN6e8XIkC/n8m6BHD7XxAtQBjFbkUJSEDZxAojWzWzx2vch5wY+6VwW
+         IkO0e7yojZkMp0zM0X4bEYkucx9N78h9nx9ExvvuHpDqfRgSlee46jqu9DX4VqjlETqx
+         Moaf0ijpVrs7ljC1JU43QGm2PnbL2XxCmJhUsRMn3akgvIQ9i6rXVg6OhV87GLpOtkaH
+         1gqVb1eu+vKJxp8nBX5BbN8Pk6jnheoAa8ETVOyZKkVQ3VrlFSZAd6x1bv9MOILx4dsV
+         uwWw==
+X-Gm-Message-State: AJIora8ZOQghdWFqETp9M5Osm912fcXMhQvlzEEPYXi1gfrUbREtJ8Se
+        z8BA5DqnRmZ0rtHCpgRdPQ==
+X-Google-Smtp-Source: AGRyM1vSWK3svILYFkwe79VCaH7I7KebPNrKoSiZdUGdvJ6Egzq/600Yzb17y2wogLo9jufFUm0cHg==
+X-Received: by 2002:a92:6f0a:0:b0:2d9:24b5:9401 with SMTP id k10-20020a926f0a000000b002d924b59401mr20676113ilc.89.1657053011532;
+        Tue, 05 Jul 2022 13:30:11 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id y25-20020a027319000000b00339e42c3e2fsm15225003jab.80.2022.07.05.13.30.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 12:53:57 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tue, 05 Jul 2022 13:30:11 -0700 (PDT)
+Received: (nullmailer pid 2572306 invoked by uid 1000);
+        Tue, 05 Jul 2022 20:30:09 -0000
+Date:   Tue, 5 Jul 2022 14:30:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     linux-usb@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org
-Subject: Re: Re: [PATCH 0/3] dt-bindings: usb: Document Allwinner D1 compatibles
-Date:   Tue, 05 Jul 2022 21:53:55 +0200
-Message-ID: <1688790.QkHrqEjB74@kista>
-In-Reply-To: <44784082.fMDQidcC6G@kista>
-References: <20220702195249.54160-1-samuel@sholland.org> <44784082.fMDQidcC6G@kista>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, linux-sunxi@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: sunxi-musb: Add Allwinner D1
+ compatible
+Message-ID: <20220705203009.GA2572274-robh@kernel.org>
+References: <20220702195249.54160-1-samuel@sholland.org>
+ <20220702195249.54160-2-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220702195249.54160-2-samuel@sholland.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne ponedeljek, 04. julij 2022 ob 22:35:24 CEST je Jernej =C5=A0krabec napi=
-sal(a):
-> Dne sobota, 02. julij 2022 ob 21:52:46 CEST je Samuel Holland napisal(a):
-> > These patches document the compatible strings for the USB controllers in
-> > the Allwinner D1 SoC, which require no special driver support.
-> >=20
-> > Samuel Holland (3):
-> >   dt-bindings: usb: sunxi-musb: Add Allwinner D1 compatible
-> >   dt-bindings: usb: generic-ehci: Add Allwinner D1 compatible
-> >   dt-bindings: usb: generic-ohci: Add Allwinner D1 compatible
->=20
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+On Sat, 02 Jul 2022 14:52:47 -0500, Samuel Holland wrote:
+> The MUSB controller in the Allwinner D1 has 10 endpoints, making it
+> compatible with the A33 variant of the hardware.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  .../devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml        | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Applied all three, thanks!
-=20
-Best regards,
-Jernej
-=20
-> >  .../devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml        | 1 +
-> >  Documentation/devicetree/bindings/usb/generic-ehci.yaml          | 1 +
-> >  Documentation/devicetree/bindings/usb/generic-ohci.yaml          | 1 +
-> >  3 files changed, 3 insertions(+)
-> >=20
-> > --
-> > 2.35.1
-
-
+Acked-by: Rob Herring <robh@kernel.org>
