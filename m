@@ -2,228 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75234568B0B
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 16:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AC3568E10
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 17:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiGFOQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 10:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S232596AbiGFPtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 11:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiGFOQM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 10:16:12 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DB22D1836D
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 07:16:10 -0700 (PDT)
-Received: (qmail 395406 invoked by uid 1000); 6 Jul 2022 10:16:10 -0400
-Date:   Wed, 6 Jul 2022 10:16:10 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     clivewi1@btinternet.com
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Problem with USB EHCI Drivers on Linux Kernel 5.18.9
-Message-ID: <YsWZKlOAybseQvB9@rowland.harvard.edu>
-References: <000b01d890f8$d22c7e10$76857a30$@btinternet.com>
+        with ESMTP id S233419AbiGFPtE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 11:49:04 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2211F0
+        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 08:42:33 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id i3so20280389oif.13
+        for <linux-usb@vger.kernel.org>; Wed, 06 Jul 2022 08:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Uk0kx353H+gGEfDDNFmV1k9XciWZTV5g6S3ovbgNaYc=;
+        b=hzQmJSoG6h+7EGgNAYu/3jJGfPSENpZr9Hgn7mcP+Lu9uwDMSPL5YukrBHEa26ClN/
+         8q6vGYcEjtOs/diJgcO5q0cePkWRS8Mwb4N2MCMxGFGKrPxGncI+XU1ZVsJO93ZgnDZH
+         Vg/YAK0QTKTBGs3jY3XcVs3ZvfsOKFJcz1M2K/gB1QnunyYkiPVmpy4HZh5EXYtHh53s
+         bZ9ogD2DSzYfy+ERAILtvgzMp2yZLwaZzrbCrEenvP5SOkh5BHlC4QvHksRYQ0kv24tS
+         n1iBNYU2nujJFWsj0Jh9tYSrkYOxc9ndn5FQ5OqWzewXpYKRAxJqLTeyV46AOUw01nJB
+         e8lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Uk0kx353H+gGEfDDNFmV1k9XciWZTV5g6S3ovbgNaYc=;
+        b=P64RaubihXbAK48uF+MoWFEg3BorH9dihuqSAOW6zzpJ7aOatOCdBwAGDmExeerwll
+         MZRX5hz35w2ToRuoVG0odSmsLiAOEpCSnZrQjQAuc3UY6PJUNQjcgJBWArAO/ECgcoUs
+         hTQ4vBV38XXuZ+uEDODggLrah1yKfEPsSi723dfiJnnAbu+tX/xnIq11HCQlWaDEPC0W
+         JPXbcZACuysZCXG4OLemECIUKkwU7+V3LGLENGuRoWmb8Hn5PfQNZ7qkTZaiylAF734V
+         ce3f+EAXhKeaBa5IyQBxxSFEawAkadRNMZGDPYMHdboF4F2ObXiSsrRKn5rwC+gPtDzH
+         cPFg==
+X-Gm-Message-State: AJIora+GtqrP2hXu8OisNthXRN0UF+gCr4NiM51wzZUaPQFytgvgifCT
+        RKqe7uAszJTYuCqz6lMmrTNWzZAE/GSMnlfxYFJJ2EgMksgKGA==
+X-Google-Smtp-Source: AGRyM1v5b6C/XmnVXUfpR6TfdpesQ3rCV8QKS3jjr1IBRz1z+vQums1DcJpNlX3gbkyoKwYLTLFDcmbylnCX55OorpU=
+X-Received: by 2002:aca:c282:0:b0:32f:546:61ff with SMTP id
+ s124-20020acac282000000b0032f054661ffmr21630907oif.39.1657122152972; Wed, 06
+ Jul 2022 08:42:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <000b01d890f8$d22c7e10$76857a30$@btinternet.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a4a:4545:0:0:0:0:0 with HTTP; Wed, 6 Jul 2022 08:42:32 -0700 (PDT)
+Reply-To: sgtkaylla202@gmail.com
+From:   Kayla Manthey <avrielharry73@gmail.com>
+Date:   Wed, 6 Jul 2022 15:42:32 +0000
+Message-ID: <CAFSKFDZorTqVon74xJgTmsDSoRnaojAJE7tciJpwgtoQgogjhg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 06:25:35AM +0100, clivewi1@btinternet.com wrote:
-> 
-> 
-> Dear Alan Stern
-> 
->  
-> 
-> I am emailing you because I couldn’t find where to make a bug report, and it
-> appears you are the maintainer of the kernel driver I believe I am having
-> problems with.
-
-The appropriate place for reporting bugs like this is the 
-<linux-usb@vger.kernel.org> mailing list (CC'ed), as shown near the end 
-of your email.  Be aware that the mailing list does not accept emails 
-that are in HTML format (it wants plain text only) and GIF attachments 
-are frowned upon (especially completely blank ones).
-
-> I would expect that you have had this problem brought to your attention so I
-> am hoping you can help me with a solution.
-
-Nope, I don't recall hearing about it before.
-
-> I have found that the problem being caused by having my Creative Labs Sound
-> Blaster (SB1240) plugged in when the computer is booted with kernel 5.18.9.
-> 
->  
-> 
-> It appears to be something that has changed within USB ECHI drivers between
-> kernel version 5.10.120, and 5.18.9 in the later version is failing to
-> initialise the USB hubs properly when they have a device plugged into them.
-
-Actually, the error messages below show that the kernel is failing to 
-initialize the Sound Blaster, not the USB hub.  Device 2-1 is the hub; 
-2-1.1 is the Sound Blaster.
-
-You can try running some kernel versions between 5.10 and 5.18, to pin 
-down exactly where the problem first appeared.  Git bisection will help 
-you do this (there are instructions for it easily available on the web).
-
-Incidentally, guessing where in the kernel an important change occurred 
-is rarely a good idea; such guesses are most often wrong.  For instance, 
-in your case the device having trouble is a Sound Blaster, so why not 
-guess that the change occurred in the USB sound driver?  What makes you 
-think the EHCI driver has anything to do with it?  And even if the 
-problem had been initializing a hub rather than the sound device, why 
-not guess that the problem was in the hub driver?  My point is that the 
-problem could have started in many different places; even an expert 
-would have a hard time telling where to look given only the information 
-in your email.
-
-> The following is a list of the USB devices with the drivers from the two
-> Kernel versions, and also the shorten error messages from the logs which
-> just keeps repeating.
-> 
->  
-> 
-> Thanks for your assistance with my problem.
-> 
->  
-> 
-> I look forward to receiving any assistance you are able to provide.
-
-Waiting to hear back with the results of your bisection test...
-
-Alan Stern
-
-> Yours sincerely
-> 
->  
-> 
-> Clive Widdus
-> 
->  
-> 
-> ============================================================================
-> ========
-> 
->  
-> 
-> Working USB Bus Kernel 5.10.120 built by Debian 11.3 (Buster)
-> 
->  
-> 
-> clive@Vortex-Rikers-5:~$ lsusb -t 
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
->    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M 
->        |__ Port 1: Dev 3, If 0, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 1, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 2, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 3, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 4, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 5, Class=Human Interface Device, Driver=usbhid,
-> 12M 
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
->    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M 
->        |__ Port 5: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M 
->        |__ Port 6: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid,
-> 1.5M 
->        |__ Port 6: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M 
-> clive@Vortex-Rikers-5:~$ 
-> 
-> Nothing from dmesg as the interface works with no problems.
-> 
->  
-> 
->  
-> 
-> Failing USB, Kernel 5.18.9 Built by Clive on Debian 11.3 (Buster)
-> 
->  
-> 
-> Dmesg
-> 
->  
-> 
-> [   17.376149] usb 2-1.1: 4:1: usb_set_interface failed (-32) 
-> [   17.376522] usb 2-1.1: 4:0: usb_set_interface failed (-32)
-> 
-> 
-> 
-> [   17.458654] usb 2-1.1: 2:3: usb_set_interface failed (-32) 
-> [   17.459029] usb 2-1.1: 2:0: usb_set_interface failed (-32)
-> 
-> 
-> 
-> [   17.520952] usb 2-1.1: 3:1: usb_set_interface failed (-32) 
-> [   17.521330] usb 2-1.1: 3:0: usb_set_interface failed (-32)
-> 
-> 
-> 
-> [   17.568827] usb 2-1.1: 1:1: usb_set_interface failed (-32) 
-> [   17.569221] usb 2-1.1: 1:0: usb_set_interface failed (-32) 
-> [   19.007909] rfkill: input handler disabled
-> 
-> 
-> 
-> Nothing from dmesg if the sound blaster is not plugged in; all works fine if
-> the sound blaster is plugged in after the machine has booted.
-> 
-> 
-> 
-> live@Vortex-Rikers-5:~$ lsusb -t  
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
->    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M 
->        |__ Port 1: Dev 3, If 0, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 1, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 2, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 3, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 4, Class=Audio, Driver=snd-usb-audio, 12M 
->        |__ Port 1: Dev 3, If 5, Class=Human Interface Device, Driver=usbhid,
-> 12M 
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
->    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M 
->        |__ Port 5: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M 
->        |__ Port 6: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid,
-> 1.5M 
->        |__ Port 6: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid,
-> 1.5M 
-> clive@Vortex-Rikers-5:~$ 
-> 
-> USB EHCI DRIVER¶
-> <https://www.kernel.org/doc/html/latest/process/maintainers.html#usb-ehci-dr
-> iver> 
-> 
-> 
-> Mail
-> 
-> Alan Stern <stern@rowland.harvard.edu <mailto:stern%40rowland.harvard.edu> >
-> 
-> Mailing list
-> 
-> linux-usb@vger.kernel.org <mailto:linux-usb%40vger.kernel.org> 
-> 
-> Status
-> 
-> Maintained
-> 
-> Files
-> 
-> usb/ehci <https://www.kernel.org/doc/html/latest/usb/ehci.html>
-> drivers/usb/host/ehci*
-> 
->  
-> 
->  
-> 
-
-
+LS0gDQrQl9C00YDQsNCy0L4g0LTRgNCw0LPQsA0K0JLQtSDQvNC+0LvQsNC8LCDQtNCw0LvQuCDR
+mNCwINC00L7QsdC40LLRgtC1INC80L7RmNCw0YLQsCDQv9GA0LXRgtGF0L7QtNC90LAg0L/QvtGA
+0LDQutCwLCDQstC4INCx0LvQsNCz0L7QtNCw0YDQsNC8Lg0K
