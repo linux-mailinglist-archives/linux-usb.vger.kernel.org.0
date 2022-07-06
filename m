@@ -2,119 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E14E567F83
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 09:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8135680A5
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 10:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiGFHGY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 03:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
+        id S231675AbiGFIAH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 04:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiGFHGR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 03:06:17 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D799F21E02
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 00:06:16 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id u14so17309003ljh.2
-        for <linux-usb@vger.kernel.org>; Wed, 06 Jul 2022 00:06:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bz6Q6Fa1YPetlBznSCPVIVUyt5DE98y2dZImsjK2Yv8=;
-        b=tvIqGHClygD44BkugbMwanSv/36LJecwYVa+DSFyov6VN0U3qfLZb3nu87e6Esx1Gr
-         HRaLCL0bxhrc63Fsrwteu3cgA2d5YNbLdQqXdieLgMp1oBHVNuErVcpXEl0ai83XBfnF
-         K3NGU1lYCNjfweUXSoc04dJHls6JmxY4zO+4jBoMu5Scc7WL+8t9jL4Aa513JH/J5vpT
-         EdoP7jq0kknSNbF86js20S1NhRPHZpn34l4Ja/MXmartLTQRlLDFjSGORA5MwWpmS3g1
-         BHRsaj3TDoDhuTeW0APz491J1XYBKI6dguTvE8Drf3MxaEE0wXk1ag7aWi04d7/xWr1u
-         iHfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bz6Q6Fa1YPetlBznSCPVIVUyt5DE98y2dZImsjK2Yv8=;
-        b=SBUsqwsD+Drww6cBziGsRe7/13bMcpV/L+RZ20JhD1GY2jfEkkwg+WKU2lh2a+Q/0m
-         nKGHA3N4yR0tdySxWvO5aWRWXmcuORAtMgusO2GPsPRaXG7TMuWRDgZJy3RXUUpS2/1W
-         3TljdVSVmf8T9yTcy7dL17PVXfmeWMEPj1zH+7pncRm9Gz95JNT5v7DL8oL80XjzsdZ7
-         Or+Cm7e4olL1oDpKLcYFZNAN7lE7wdTkB3g9GF9WNipAVamAWOqsy45ZMnqiq8Mbn5Ex
-         pkBgRvDHueEKFQhT1f8JqrebNXeEoREgSFLhOa7eQ1dKiuTOjDWm5y82VhIvtbuWNTav
-         Sabg==
-X-Gm-Message-State: AJIora90vKOvD+sk2DgpSuP4FcE6tcG1fjq5Xdz9cFfge0NZr978Q5Z+
-        6DjiOKJvl49BHGI0OddAJUQdRg==
-X-Google-Smtp-Source: AGRyM1usm4O5Yb3o6i6Cn0wioXtQfAUgzfnG2UsRxbcZnwyO45UOmIaUEy5e/hW+wuLQ6mMtvCgPDg==
-X-Received: by 2002:a2e:984e:0:b0:25a:9fd7:c6d3 with SMTP id e14-20020a2e984e000000b0025a9fd7c6d3mr21762666ljj.66.1657091175181;
-        Wed, 06 Jul 2022 00:06:15 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id s15-20020a2e150f000000b0025a89f36accsm5970693ljd.42.2022.07.06.00.06.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 00:06:14 -0700 (PDT)
-Message-ID: <3d23244e-d926-ad9c-68b6-50ac8b4fd752@linaro.org>
-Date:   Wed, 6 Jul 2022 09:06:13 +0200
+        with ESMTP id S231476AbiGFIAF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 04:00:05 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31B6A1900E;
+        Wed,  6 Jul 2022 01:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Msj1Q
+        C6+hqxSIXMSAOcQBdkaMXFRb0rZzELsEToclcY=; b=jelA2TkPCVEuiP2+Yihjz
+        xFKo0/E7JG030cyO9VHgg97hNhNIgflovw9X2j6b7ZVXGAqVo0MR5FR8KbfKc51S
+        vLHGaVRM66raANWQoJepMw8DdFZyRBzvrQmt93aFb4Bx7SdXca59ZudGX/3vRIF9
+        CH9V3SpbI0Cezu4/2muWno=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp1 (Coremail) with SMTP id GdxpCgDHlqHaQMVimzpAMw--.41942S4;
+        Wed, 06 Jul 2022 15:59:55 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     pawell@cadence.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] usb: cdnsp: Fix potential memory leak in cdnsp_alloc_stream_info()
+Date:   Wed,  6 Jul 2022 15:59:21 +0800
+Message-Id: <20220706075921.2255059-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
- controller
-Content-Language: en-US
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com,
-        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com
-References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
- <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
- <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
- <845d6817-d2e4-7925-f7f5-da1102514636@foss.st.com>
- <286633b2-43d2-655e-b3f1-54bf5c7a4a21@linaro.org>
- <6ef58f1f-ee8a-b060-6fda-d1388b3ede6d@foss.st.com>
- <f86dd47c-0fc5-6c93-a49e-534610d10c49@linaro.org>
- <dfad8fb5-6205-d620-81eb-5d44b9175e05@foss.st.com>
- <0821acfe-bcfe-b1d8-c1a9-81023f4ab6a0@linaro.org>
- <13266b3e-7571-23fa-13bd-1c8107a5f90d@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <13266b3e-7571-23fa-13bd-1c8107a5f90d@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgDHlqHaQMVimzpAMw--.41942S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GrWrXr47Kw1fWFW8AFyDtrb_yoWDXFc_ZF
+        4a9FZrGF1jkws7Gw1Fqr98urWqyr42vFWkXa12qr4fGF18ur93AryxZr4xXFW7J3y5Jrnr
+        Z348t3y5ur1kJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREK9atUUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBORs2jF-POXSRtQAAsh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04/07/2022 11:08, Fabrice Gasnier wrote:
-> On 7/4/22 09:55, Krzysztof Kozlowski wrote:
->> On 01/07/2022 12:04, Fabrice Gasnier wrote:
->>>
->>> Then I no longer get this warning upon build. But the dtbs_check complains:
->>> ---
->>> connector: ports: 'port@0' is a required property
->>> 	From schema: ..
->>> Documentation/devicetree/bindings/connector/usb-connector.yaml
->>>
->>> So It looks like to me there's something missing to handle the single
->>> port case in usb-connector.yaml, when using the "ports".
->>>
->>> Maybe usb-connector could be updated to handle "port" (w/o unit-addr) ?
->>
->> Not really, the dtc warning looks false-positive. Especially that you
->> need port@1 for USB 3.0 (super speed), unless you do not support it?
-> 
-> Hi Krzysztof,
-> 
-> Having USB2.0 High speed port only is perfectly valid. port@1 is
-> optional to support USB3.0 as you mention.
-> 
-> I've no opinion regarding a possible false positive warning. I'd like to
-> sort this out, perhaps Rob has some recommendation regarding this ?
+cdnsp_alloc_stream_info() allocates stream context array for stream_info
+->stream_ctx_array with cdnsp_alloc_stream_ctx(). When some error occurs,
+stream_info->stream_ctx_array is not released, which will lead to a
+memory leak.
 
-I would propose to skip the DTC warning and stick to the schema with
-only one port@0.
+We can fix it by releasing the stream_info->stream_ctx_array with
+cdnsp_free_stream_ctx() on the error path to avoid the potential memory
+leak.
 
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/usb/cdns3/cdnsp-mem.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
+index 97866bfb2da9..319037848151 100644
+--- a/drivers/usb/cdns3/cdnsp-mem.c
++++ b/drivers/usb/cdns3/cdnsp-mem.c
+@@ -631,6 +631,7 @@ int cdnsp_alloc_stream_info(struct cdnsp_device *pdev,
+ 			stream_info->stream_rings[cur_stream] = NULL;
+ 		}
+ 	}
++	cdnsp_free_stream_ctx(pdev, pep);
+ 
+ cleanup_stream_rings:
+ 	kfree(pep->stream_info.stream_rings);
+-- 
+2.25.1
+
