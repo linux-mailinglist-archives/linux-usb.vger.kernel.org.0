@@ -2,151 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3615691B0
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 20:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E41856924D
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 21:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233578AbiGFS0d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 14:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        id S234218AbiGFTAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 15:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbiGFS0c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 14:26:32 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506D5C7F
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 11:26:30 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31c8a1e9e33so96388617b3.5
-        for <linux-usb@vger.kernel.org>; Wed, 06 Jul 2022 11:26:30 -0700 (PDT)
+        with ESMTP id S233419AbiGFTAV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 15:00:21 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265451EAD7;
+        Wed,  6 Jul 2022 12:00:20 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id fd6so20422735edb.5;
+        Wed, 06 Jul 2022 12:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AKNzyuxVbT+auUhZLi3IyFDil3epaFKjcWDvpCGicX8=;
-        b=Uxpv0YELVEct5DKRBFz2Fhk7QOvnqJthA8Ckw5wBsDZGh8wJXJiOrindJG/RdyVU2K
-         5kOY4qIummQC7LrVENX11WZTxRSqjS7URB43qjRq8OGIZqeDgCN81GIPSiMWTmCOOup2
-         QQdGRwejIFzn0MvwrWJWBomzFz7wDHAU+ejoU=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3RfVCr1wdSbFKycunLeMa8Y0qn5/ZBGG09gYaTJHdUo=;
+        b=ECRHYRwEMx+7ksygXlOsm0PdRH2A1Vxdrajxe+R3gPhDIKgy69LhPi3Md26Vromf86
+         o5f8uWcC/V2Yv1qY4fXs6K+2sipe8SDdi19SJ0wYubx39Ehiy3jc6/UBBVA48lbLJtSS
+         48VxRIehzxEjJba0a3WN9HmZbU7QycVYHLfNAoJjuYzataU/Ux5E468kb1IMaTL4IJJa
+         qmhyjkCwteF8n8cXjkzPkjdOfH5saP8jBK+esgc7Kb7/G57vgo0nKcoGEKZN340xZ5FL
+         jJCTQV67O8UuYdXNqEmpeDxS2MCaV/zOLM38Ph9o9P7Y8ZZjJuijj0tY6kpKI653RBDG
+         9nrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AKNzyuxVbT+auUhZLi3IyFDil3epaFKjcWDvpCGicX8=;
-        b=mLemdOtk1VI6btgSNMthWSbc9JkZZxDVjkdRVYICFseSoBbBF4QFivIj13oTQoMuEX
-         M4vAkK3zxe0IEoTpm6M7kk+fcd2lttH5Jor993W6JYtc6nlFemG7t3JeQhjF+BU52hGe
-         m6q7nPNjF4Lv0XLzFcIoro3mLe8wxqjnvAGoR7MGHeY2hHEFoTkO/JfkWLAsNoK/28Kk
-         sApEx+9iZrkm/VECsA2Moph+Q9q3/LzRAGZUqnKo15S79Nqd/kHrMgS29aQnzBpZuKBm
-         a/k/rFwtUCwJlBCSCS7EcpQc0PP06N1cgcYpyA1cmRtEEWsmejt4hYMPOykHe2N+LqVy
-         k2HA==
-X-Gm-Message-State: AJIora/FWvvuwkt9AZJd6U12ARlwZLXbk/I2UCyTrGy4z6Lc6nh0oDi6
-        8gPZHmgiNUy8EpB81wFw4bcaWE3595sQs57z8PCbwQ==
-X-Google-Smtp-Source: AGRyM1udr5yyAZaFO4FJIEc1fs4jCrlvFfgCL6OO6ePlgo7ORdpuX2cwPgLlDUrByF02oMjAX082RxZNAQZV1iQkw1A=
-X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
- j129-20020a0dc787000000b0031ba963e1demr47186325ywd.283.1657131989488; Wed, 06
- Jul 2022 11:26:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3RfVCr1wdSbFKycunLeMa8Y0qn5/ZBGG09gYaTJHdUo=;
+        b=6R1t6EXG//YyigHX2Cy6YALFeBlOEQYJ/C0Q0YeSH3mt5PNvruwB8kZ8GtVr76+yCd
+         Qui7HmlPrHH7G4T45cjA7MchFAABMqXSExQIiQZhse0FzvymHivVooB55ijRdiNwi34V
+         NXTZ2MNW+Rn7efMqk6m0Y0ZZaOknliSPlk9RDcfJAorRCYbzaZidMESlQnU5WWMz8Yac
+         6vMKsd+Cb9hKqWUsg96uteuzN5Je8aEP2D02qujhV879N+9QA5ij7UibOohDbsL2OsZE
+         wcWEaxs3BhWZJQ54+PtODW2Q7VHrxp1vO49cVSFPFbMKrZnS0E5bpWEgwAInMQC5W6Zn
+         LtpQ==
+X-Gm-Message-State: AJIora+jKm0AK8o/4xsuAjwCJSrUQzbDqTl5hJUTyFh0j1ssP0rs+sIW
+        yrX+cH4wgGM6QAs/WlOdl/vZU7CF5d5oFihu
+X-Google-Smtp-Source: AGRyM1udtywZFL4f9QmrjH+QPS4+UQMRWUY2sLmoXtUk5XwDzIkNlerdLHrvhXpIp4ezHmcHOARHQA==
+X-Received: by 2002:a05:6402:104a:b0:435:c7cd:11dc with SMTP id e10-20020a056402104a00b00435c7cd11dcmr56691431edu.335.1657134018349;
+        Wed, 06 Jul 2022 12:00:18 -0700 (PDT)
+Received: from localhost.localdomain (87-168-253.netrunf.cytanet.com.cy. [87.228.168.253])
+        by smtp.gmail.com with ESMTPSA id g17-20020aa7c591000000b0043a4a5813d8sm8188879edq.2.2022.07.06.12.00.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 12:00:17 -0700 (PDT)
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     stern@rowland.harvard.edu, balbi@kernel.org,
+        gregkh@linuxfoundation.org, caihuoqing@baidu.com,
+        mdevaev@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: f_mass_storage: forced_eject attribute
+Date:   Wed,  6 Jul 2022 21:59:37 +0300
+Message-Id: <20220706185936.24692-1-mdevaev@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-6-pmalani@chromium.org> <CAE-0n517BB8YbN5AZG6M3ZrZGOJDV=+t0R9d8wD+gVqO1aD1Xg@mail.gmail.com>
- <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
- <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
- <CACeCKafzB0wW_B2TOEWywLMyB+UhYCpXYDVBV=UbyxBiGnv1Rw@mail.gmail.com>
- <CAE-0n50Akd8QikGhaAQgxLkJBhE-7KQf5aJ_P2ajOmCjLk555g@mail.gmail.com> <CACeCKafQT_RBrkHJNE2ezahSsHLPrbnS69QbfnjxBoUhi6hjwQ@mail.gmail.com>
-In-Reply-To: <CACeCKafQT_RBrkHJNE2ezahSsHLPrbnS69QbfnjxBoUhi6hjwQ@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 6 Jul 2022 11:26:19 -0700
-Message-ID: <CACeCKafya_XA+C3eJUvT4vjQSgsjdewVkCb+Jr2tA1605jjfjg@mail.gmail.com>
-Subject: Re: [PATCH v5 5/9] drm/bridge: anx7625: Add typec_mux_set callback function
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Pin-Yen Lin <treapking@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 4:38 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> On Thu, Jun 30, 2022 at 4:21 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Prashant Malani (2022-06-28 13:56:22)
-> > > On Tue, Jun 28, 2022 at 1:40 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > I suppose none of those things matter though as long as there is some
-> > > > typec switch registered here so that the driver can be informed of the
-> > > > pin assignment. Is it right that the "mode-switch" property is only
-> > > > required in DT if this device is going to control the mode of the
-> > > > connector, i.e. USB+DP, or just DP? Where this device can't do that
-> > > > because it doesn't support only DP.
-> > >
-> > > If the anx7625 is used just to route all lanes from 1 usb-c-connector (i.e
-> > > the USB+DP case), a mode-switch wouldn't be of much use, since one
-> > > would also route the CC lines to the built-in PD controller; so it will
-> > > already have knowledge of what mode the switch is in.
-> > >
-> > > The mode-switch is likely only relevant for this hardware configuration(
-> > > it's "DP only" in the sense that the USB pins to the SoC never go anywhere).
-> > > One only has 2 SS lanes each (from each usb-c-connector).
-> > >
-> > > Since there is no CC-line, the anx7625 needs to know which one has DP
-> > > enabled on it.
-> >
-> > Can the CC line be "captured" and not actually sent to the anx7625?
->
-> That's what happens on Chrome OS. The cc line goes to the EC (and is "consumed"
-> by the TCPM (Type C Port Manager)) and signals are then sent to the AP
-> over the Host command interface to `cros-ec-typec`. The signals here being all
-> the PD messages communicated between the peripheral and the port.
->
-> > I imagine if that is possible, maybe the CC lines would go to some
-> > micro-controller or something that did more typec management things and
-> > then the anx7625 driver would need to do software control of the mode
-> > and orientation control.
->
-> I _guess_ that is possible (though it would seem odd to not use all the PD
-> control hardware in that configuration)? If an system implements it in
-> such a way
-> then:
-> 1. mode-switch: Can be updated to do something when num_typec_switches == 1 (
-> in the mux_set function imp.l I haven't looked into what registers
-> need to be configured, since we
-> don't have this hardware implementation.
-> 2. orientation-switch: This should be registered, and then flip the
-> lanes when the port
-> driver tells it the orientation is one way or another.
->
-> So, if someone uses it that way, I think the driver needs only minor
-> updates to support it.
+It allows to reset prevent_medium_removal flag and "eject" the image.
 
-Stephen, any pending concerns?
-If not,I will post a v6 series with the suggested changes:
-- Drop typec-switch binding; instead add a new top-level port with
-end-points for each Type-C connector's switch.
-- Drop it6505 patches.
-- Squash anx7625 driver patches into one patch.
-- Add a comment mentioning that we aren't registering the orientation-switch.
+The patch is a completely alternative implementation of the previously
+proposed [1], the idea of which was born after the mentioned discussion.
+
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
+---
+ .../testing/configfs-usb-gadget-mass-storage  |  6 +++++
+ Documentation/usb/gadget-testing.rst          |  6 +++++
+ Documentation/usb/mass-storage.rst            |  9 +++++++
+ drivers/usb/gadget/function/f_mass_storage.c  | 25 +++++++++++++++++++
+ drivers/usb/gadget/function/storage_common.c  | 11 ++++++++
+ drivers/usb/gadget/function/storage_common.h  |  2 ++
+ 6 files changed, 59 insertions(+)
+
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+index c86b63a7bb43..87859ef40579 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
++++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+@@ -32,4 +32,10 @@ Description:
+ 				being a CD-ROM.
+ 		nofua		Flag specifying that FUA flag
+ 				in SCSI WRITE(10,12)
++		forced_eject	This write-only flag only makes sence when
++				the function is active. It causes a forced
++				detaching of the backing file from the LUN,
++				regardless of whether the host has allowed it.
++				Any non-zero number of bytes written will
++				result in ejection.
+ 		===========	==============================================
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index c18113077889..1481173d8719 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -333,6 +333,12 @@ In each lun directory there are the following attribute files:
+ 			being a CD-ROM.
+ 	nofua		Flag specifying that FUA flag
+ 			in SCSI WRITE(10,12)
++	forced_eject	This write-only flag only makes sence when
++			the function is active. It causes a forced
++			detaching of the backing file from the LUN,
++			regardless of whether the host has allowed it.
++			Any non-zero number of bytes written will
++			result in ejection.
+ 	=============== ==============================================
+ 
+ Testing the MASS STORAGE function
+diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
+index d181b47c3cb6..f72e59237bce 100644
+--- a/Documentation/usb/mass-storage.rst
++++ b/Documentation/usb/mass-storage.rst
+@@ -181,6 +181,15 @@ sysfs entries
+     Reflects the state of nofua flag for given logical unit.  It can
+     be read and written.
+ 
++  - forced_eject
++
++    When written into, it allows to detach the backing file for given
++    logical unit, regardless of whether the host has allowed it.
++    The content doesn't matter, any non-zero number of bytes will
++    lead the forced eject.
++
++    Can not be read.
++
+   Other then those, as usual, the values of module parameters can be
+   read from /sys/module/g_mass_storage/parameters/* files.
+ 
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 6ad669dde41c..00cac2a38178 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+ 	return fsg_store_file(curlun, filesem, buf, count);
+ }
+ 
++static ssize_t forced_eject_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
++	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
++
++	return fsg_store_forced_eject(curlun, filesem, buf, count);
++}
++
+ static DEVICE_ATTR_RW(nofua);
+ /* mode wil be set in fsg_lun_attr_is_visible() */
+ static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+ static DEVICE_ATTR(file, 0, file_show, file_store);
++static DEVICE_ATTR_WO(forced_eject);
+ 
+ /****************************** FSG COMMON ******************************/
+ 
+@@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
+ 	&dev_attr_ro.attr,
+ 	&dev_attr_file.attr,
+ 	&dev_attr_nofua.attr,
++	&dev_attr_forced_eject.attr,
+ 	NULL
+ };
+ 
+@@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
+ 
+ CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
+ 
++static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
++					       const char *page, size_t len)
++{
++	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
++	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
++
++	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
++				      page, len);
++}
++
++CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
++
+ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_file,
+ 	&fsg_lun_opts_attr_ro,
+@@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_cdrom,
+ 	&fsg_lun_opts_attr_nofua,
+ 	&fsg_lun_opts_attr_inquiry_string,
++	&fsg_lun_opts_attr_forced_eject,
+ 	NULL,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+index b859a158a414..8cd95bf7831f 100644
+--- a/drivers/usb/gadget/function/storage_common.c
++++ b/drivers/usb/gadget/function/storage_common.c
+@@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+ }
+ EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
+ 
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count)
++{
++	int ret;
++
++	curlun->prevent_medium_removal = 0;
++	ret = fsg_store_file(curlun, filesem, "", 0);
++	return ret < 0 ? ret : count;
++}
++EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
++
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+index bdeb1e233fc9..0a544a82cbf8 100644
+--- a/drivers/usb/gadget/function/storage_common.h
++++ b/drivers/usb/gadget/function/storage_common.h
+@@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
+ 			    size_t count);
+ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+ 				 size_t count);
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count);
+ 
+ #endif /* USB_STORAGE_COMMON_H */
+-- 
+2.37.0
+
