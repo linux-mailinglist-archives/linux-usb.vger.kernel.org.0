@@ -2,189 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70148568850
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 14:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75234568B0B
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 16:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbiGFM3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 08:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
+        id S230420AbiGFOQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 10:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbiGFM3m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 08:29:42 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C82252AE;
-        Wed,  6 Jul 2022 05:29:41 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id 128so14201985pfv.12;
-        Wed, 06 Jul 2022 05:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Hb++T+TqCvDDSG4SBCoSH1P7Ah+WnHjdFZYreo/Hfko=;
-        b=BbLBe2M3A8AWYlkobJbHlvQGtkIi9eJ1fhKZi72SH5Q2ISxXT7FCisfhD8WM4lH4xn
-         W0CMzEvgH43SmSf7IKjKCnmg/2Zng2dsdDfG0DO6WyudObcH2lWwXFZn438iwngDQTy9
-         9lNAeMttwPLTSdmF32rO0PSm2NM7RttTK/QbVjE9AcaSXlFo/CwbSN7djMsEG32FDk9h
-         YSj2jTqW4IDq6AxxSnDHYlwHdgI4WrUYVmVfTbq4JHR+k7uEkbAt5rIkYXFZSA32SsdC
-         HFoTIk4jjeZsOxecJdOjOhupnXAp6o2zjzZnsywdRclt8yr/Fvg9yEPG+dn5ub7JJq6D
-         KbIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Hb++T+TqCvDDSG4SBCoSH1P7Ah+WnHjdFZYreo/Hfko=;
-        b=hRNJquQKpeTCKZLo51JgLyfkfRKpuNyFFbOr73gqb6XvhiUuZi8C2Z7QGpOgJZYdti
-         Oru7OLF6THIev3HNwLsq+KNmoH9gRVi5hyjeO/xE2LtDJn2m8jz+ObZ0c/6w22/TAant
-         753pV3PkkZP9oiZccbZa19C1p1lwHSvyhnnn81+n+HtrBb7OrCgMXA0kng+16nv21/KZ
-         jBqQc/TN7HthTz8n4wZfoIpiP25flaYuQYNm88r21VJdVQ9lujKn0nRdsiGdFM8IeA0B
-         2cg4FH7bGVY7XlQJ2cyASK/pviTGaYs2s//ZICfBki53/xg3XSiE+bTFJ91m1kCsEZWI
-         LlFA==
-X-Gm-Message-State: AJIora/h728szld/aQ/DxXvAvUeaAb5qyrODr4unbgIEQk/dVptwmHnj
-        Pj/p57uqTOU97+1TS9nEHt0=
-X-Google-Smtp-Source: AGRyM1uoDB6L35OBcFGnbcqaTY9nnQDgNQnuXvTDk9jhj/6DUZ25v7WIWUrr9kdjfBQjynFmHIdieg==
-X-Received: by 2002:a63:2b84:0:b0:412:5277:99dc with SMTP id r126-20020a632b84000000b00412527799dcmr12015920pgr.208.1657110581088;
-        Wed, 06 Jul 2022 05:29:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r13-20020a63d90d000000b0041166bf9ca8sm15810700pgg.34.2022.07.06.05.29.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 05:29:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 6 Jul 2022 05:29:37 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v13 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/
-Message-ID: <20220706122937.GA492220@roeck-us.net>
-References: <20220705053657.2340274-1-xji@analogixsemi.com>
+        with ESMTP id S229870AbiGFOQM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 10:16:12 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DB22D1836D
+        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 07:16:10 -0700 (PDT)
+Received: (qmail 395406 invoked by uid 1000); 6 Jul 2022 10:16:10 -0400
+Date:   Wed, 6 Jul 2022 10:16:10 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     clivewi1@btinternet.com
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Problem with USB EHCI Drivers on Linux Kernel 5.18.9
+Message-ID: <YsWZKlOAybseQvB9@rowland.harvard.edu>
+References: <000b01d890f8$d22c7e10$76857a30$@btinternet.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220705053657.2340274-1-xji@analogixsemi.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <000b01d890f8$d22c7e10$76857a30$@btinternet.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 01:36:54PM +0800, Xin Ji wrote:
-> USB PD controllers which consisting of a microcontroller (acting as the TCPM)
-> and a port controller (TCPC) - may require that the driver for the PD
-> controller accesses directly also the on-chip port controller in some cases.
+On Wed, Jul 06, 2022 at 06:25:35AM +0100, clivewi1@btinternet.com wrote:
 > 
-> Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
 > 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> Dear Alan Stern
+> 
+>  
+> 
+> I am emailing you because I couldn’t find where to make a bug report, and it
+> appears you are the maintainer of the kernel driver I believe I am having
+> problems with.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+The appropriate place for reporting bugs like this is the 
+<linux-usb@vger.kernel.org> mailing list (CC'ed), as shown near the end 
+of your email.  Be aware that the mailing list does not accept emails 
+that are in HTML format (it wants plain text only) and GIF attachments 
+are frowned upon (especially completely blank ones).
 
+> I would expect that you have had this problem brought to your attention so I
+> am hoping you can help me with a solution.
+
+Nope, I don't recall hearing about it before.
+
+> I have found that the problem being caused by having my Creative Labs Sound
+> Blaster (SB1240) plugged in when the computer is booted with kernel 5.18.9.
 > 
-> ---
-> V9 -> V10: Rebase on the latest code
-> V8 -> V9 : Add more commit message
-> V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
+>  
 > 
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
->  drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
->  drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
->  {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
->  5 files changed, 5 insertions(+), 7 deletions(-)
->  rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+> It appears to be something that has changed within USB ECHI drivers between
+> kernel version 5.10.120, and 5.18.9 in the later version is failing to
+> initialise the USB hubs properly when they have a device plugged into them.
+
+Actually, the error messages below show that the kernel is failing to 
+initialize the Sound Blaster, not the USB hub.  Device 2-1 is the hub; 
+2-1.1 is the Sound Blaster.
+
+You can try running some kernel versions between 5.10 and 5.18, to pin 
+down exactly where the problem first appeared.  Git bisection will help 
+you do this (there are instructions for it easily available on the web).
+
+Incidentally, guessing where in the kernel an important change occurred 
+is rarely a good idea; such guesses are most often wrong.  For instance, 
+in your case the device having trouble is a Sound Blaster, so why not 
+guess that the change occurred in the USB sound driver?  What makes you 
+think the EHCI driver has anything to do with it?  And even if the 
+problem had been initializing a hub rather than the sound device, why 
+not guess that the problem was in the hub driver?  My point is that the 
+problem could have started in many different places; even an expert 
+would have a hard time telling where to look given only the information 
+in your email.
+
+> The following is a list of the USB devices with the drivers from the two
+> Kernel versions, and also the shorten error messages from the logs which
+> just keeps repeating.
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index f33e08eb7670..812784702d53 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -13,11 +13,10 @@
->  #include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/usb/pd.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  #include <linux/usb/typec.h>
 >  
-> -#include "tcpci.h"
-> -
->  #define	PD_RETRY_COUNT_DEFAULT			3
->  #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
->  #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index df2505570f07..4b6705f3d7b7 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -11,11 +11,10 @@
->  #include <linux/module.h>
->  #include <linux/regmap.h>
->  #include <linux/usb/pd.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  #include <linux/usb/typec.h>
->  
-> -#include "tcpci.h"
-> -
->  #define PD_ACTIVITY_TIMEOUT_MS				10000
->  
->  #define TCPC_VENDOR_ALERT				0x80
-> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> index 8a952eaf9016..1b7c31278ebb 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> @@ -11,10 +11,9 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  
-> -#include "tcpci.h"
-> -
->  #define MT6360_REG_PHYCTRL1	0x80
->  #define MT6360_REG_PHYCTRL3	0x82
->  #define MT6360_REG_PHYCTRL7	0x86
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index b56a0880a044..3291ca4948da 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -10,9 +10,9 @@
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  #include <linux/regmap.h>
-> -#include "tcpci.h"
->  
->  #define RT1711H_VID		0x29CF
->  #define RT1711H_PID		0x1711
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
-> similarity index 99%
-> rename from drivers/usb/typec/tcpm/tcpci.h
-> rename to include/linux/usb/tcpci.h
-> index b2edd45f13c6..20c0bedb8ec8 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/include/linux/usb/tcpci.h
-> @@ -9,6 +9,7 @@
->  #define __LINUX_USB_TCPCI_H
->  
->  #include <linux/usb/typec.h>
-> +#include <linux/usb/tcpm.h>
->  
->  #define TCPC_VENDOR_ID			0x0
->  #define TCPC_PRODUCT_ID			0x2
-> -- 
-> 2.25.1
 > 
+> Thanks for your assistance with my problem.
+> 
+>  
+> 
+> I look forward to receiving any assistance you are able to provide.
+
+Waiting to hear back with the results of your bisection test...
+
+Alan Stern
+
+> Yours sincerely
+> 
+>  
+> 
+> Clive Widdus
+> 
+>  
+> 
+> ============================================================================
+> ========
+> 
+>  
+> 
+> Working USB Bus Kernel 5.10.120 built by Debian 11.3 (Buster)
+> 
+>  
+> 
+> clive@Vortex-Rikers-5:~$ lsusb -t 
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
+>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M 
+>        |__ Port 1: Dev 3, If 0, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 1, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 2, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 3, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 4, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 5, Class=Human Interface Device, Driver=usbhid,
+> 12M 
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
+>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M 
+>        |__ Port 5: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
+> 1.5M 
+>        |__ Port 6: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid,
+> 1.5M 
+>        |__ Port 6: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid,
+> 1.5M 
+> clive@Vortex-Rikers-5:~$ 
+> 
+> Nothing from dmesg as the interface works with no problems.
+> 
+>  
+> 
+>  
+> 
+> Failing USB, Kernel 5.18.9 Built by Clive on Debian 11.3 (Buster)
+> 
+>  
+> 
+> Dmesg
+> 
+>  
+> 
+> [   17.376149] usb 2-1.1: 4:1: usb_set_interface failed (-32) 
+> [   17.376522] usb 2-1.1: 4:0: usb_set_interface failed (-32)
+> 
+> 
+> 
+> [   17.458654] usb 2-1.1: 2:3: usb_set_interface failed (-32) 
+> [   17.459029] usb 2-1.1: 2:0: usb_set_interface failed (-32)
+> 
+> 
+> 
+> [   17.520952] usb 2-1.1: 3:1: usb_set_interface failed (-32) 
+> [   17.521330] usb 2-1.1: 3:0: usb_set_interface failed (-32)
+> 
+> 
+> 
+> [   17.568827] usb 2-1.1: 1:1: usb_set_interface failed (-32) 
+> [   17.569221] usb 2-1.1: 1:0: usb_set_interface failed (-32) 
+> [   19.007909] rfkill: input handler disabled
+> 
+> 
+> 
+> Nothing from dmesg if the sound blaster is not plugged in; all works fine if
+> the sound blaster is plugged in after the machine has booted.
+> 
+> 
+> 
+> live@Vortex-Rikers-5:~$ lsusb -t  
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
+>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M 
+>        |__ Port 1: Dev 3, If 0, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 1, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 2, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 3, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 4, Class=Audio, Driver=snd-usb-audio, 12M 
+>        |__ Port 1: Dev 3, If 5, Class=Human Interface Device, Driver=usbhid,
+> 12M 
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M 
+>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M 
+>        |__ Port 5: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid,
+> 1.5M 
+>        |__ Port 6: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid,
+> 1.5M 
+>        |__ Port 6: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid,
+> 1.5M 
+> clive@Vortex-Rikers-5:~$ 
+> 
+> USB EHCI DRIVER¶
+> <https://www.kernel.org/doc/html/latest/process/maintainers.html#usb-ehci-dr
+> iver> 
+> 
+> 
+> Mail
+> 
+> Alan Stern <stern@rowland.harvard.edu <mailto:stern%40rowland.harvard.edu> >
+> 
+> Mailing list
+> 
+> linux-usb@vger.kernel.org <mailto:linux-usb%40vger.kernel.org> 
+> 
+> Status
+> 
+> Maintained
+> 
+> Files
+> 
+> usb/ehci <https://www.kernel.org/doc/html/latest/usb/ehci.html>
+> drivers/usb/host/ehci*
+> 
+>  
+> 
+>  
+> 
+
+
