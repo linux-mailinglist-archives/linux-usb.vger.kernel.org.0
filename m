@@ -2,205 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4B656909C
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 19:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BBF569103
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 19:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbiGFRYn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 13:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
+        id S233097AbiGFRrR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 13:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233600AbiGFRYk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 13:24:40 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EF2C12
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 10:24:40 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id g126so522224pfb.3
-        for <linux-usb@vger.kernel.org>; Wed, 06 Jul 2022 10:24:40 -0700 (PDT)
+        with ESMTP id S231892AbiGFRrQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 13:47:16 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C00B33B;
+        Wed,  6 Jul 2022 10:47:15 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id k30so12088232edk.8;
+        Wed, 06 Jul 2022 10:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9wJYhm3/uWhsYJmynbAY7FTE4gP8XZZTFiI3IimxN8Y=;
-        b=iZriOZXyCldJ6EpfWLc38+p6zVv9PJXGin48PsdmvE7K9UyUAisfs2dr5lVJDqR+1K
-         Qi/Q9fB+OE6chmCevHzRyqepd4fbkRRp4n2JGk+jnvl0dEq0CSQlYnwoa0veOrch+OMt
-         t14io2EjMPFpsslOrhjs2EvfojxZ6INlSgBjM=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WMGCefUtPu8UwO6ERml6n2ZI6wHVNjwGQiWTcNMaDt8=;
+        b=XRzM2s5gsW+2XIeJx9zST87Dkr0yBh1JLoOgB7sEy/hLnoHYgASmLndmmwGBPbdWYx
+         hSDdPh5gZmIUvzo/uHphQi1sSexVaCqkaQVgV0+3jHDKSaTVkAV4+EhLxtQ0OvGJR3d8
+         SCe76l/dR66w58TmCgvZtENLXnYDIkPTC94JYmyIfMft0yECZRnRUFBc4MCiqsL9zWtk
+         V5c8RFTjqBel8ffrGOouKqY+T8VJWuZ897hPSLoHDWYirLl1pxfst6fXZtWK+84+iYNl
+         wQbfLCw5JthRZgc5HIrbBScEvbOCafgTcf7HGbHgc7s2CUQUHAlCQieT/s9BQXplxUGe
+         iSiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9wJYhm3/uWhsYJmynbAY7FTE4gP8XZZTFiI3IimxN8Y=;
-        b=QUNS16TBag0zgpiYdliiqJpSuSjI2dNrqkCLx3E8zWXcBPhg6714gr2oAVLPW44CPt
-         7rDgxDJloW0+I+/G60SJAuYgBDnNI+LucOY5fKelOy/WEoJWAICTdDbvKTLihFUUBSx7
-         iNUheXifqA/E/V/z8C6TTxuutkz1a6pmHKEDBZM2itfFTqXya+Ze3Cdwa0dgH2wxkysJ
-         26CuzeqI5Orc3C61N269NkqtYZJUpaNMj+rslNyVEBuUHJuLWZ2M3aQ4vT9PBjA3CgKx
-         s6r+SzxkFDg5jhpb+mnzkUoPaRITBH7JRyrvt7axpGHdiGEx6uMC3dP+3OxcvtRvZEku
-         V2Zg==
-X-Gm-Message-State: AJIora8h+MKPTyBxb6d27gaLqyZRm1Ko3Ootcp5jBP1mf0/PIDc+tPKg
-        cYmwhK4p2g59M1aBn1YzpDN+sw==
-X-Google-Smtp-Source: AGRyM1v911WfKv30HIMZoXMDln5NS8h6Td0E42t4vok/WYmteTorc1q3WEdPHRP3YpXnKD/r3xfGhQ==
-X-Received: by 2002:a65:4b82:0:b0:412:4346:f594 with SMTP id t2-20020a654b82000000b004124346f594mr15836152pgq.593.1657128279640;
-        Wed, 06 Jul 2022 10:24:39 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h14-20020a170902f7ce00b0016be0d5483asm7514953plw.252.2022.07.06.10.24.39
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WMGCefUtPu8UwO6ERml6n2ZI6wHVNjwGQiWTcNMaDt8=;
+        b=K+QXXouVyV4G7CyfRLw7THV1pQuLJv0sqqBc6ph7dWxU7T86PZ8Yj3fs8Dq8N1t8Or
+         K2pZsgddJIZjQ5ggTbowv+u2pGUdfff/wl/IKl2l3q3NcvjhidvmMrQGzvWL5H18vJ/J
+         eTD4CJEa8A5hbt16fmDFgmeO/BymceRA/dk7rmC/wMWmz5wGbAt327GjrGNhH/2RjaAV
+         JAzYQh9Kc1fnolGcYsPv+98qSUJfA29A2YM1lNjAnRMb87RUh5y3KdO1dTtkFjCrYygs
+         6HlIdzvgWE6Ef8MUwqG36TYjD3sUAM4+Szi1/1tW+t05PU05LbzyGdMCwu5huUJGdcw7
+         78TQ==
+X-Gm-Message-State: AJIora+j6vv8VU/IJVG0/n6/z7okGEXHRjIp8ctUQ+H7s8l4qHJmUQg+
+        +pHie2KC/09cclb4k7624xqcIPl6rTWQcmMs
+X-Google-Smtp-Source: AGRyM1siy18+UGvFM82oNCh1h17PbVkWfOI8tJwH3vSrS46mbZeFShaTA30dUZR6noxdbd8NecxUYQ==
+X-Received: by 2002:a05:6402:4243:b0:437:618c:695a with SMTP id g3-20020a056402424300b00437618c695amr57133692edb.222.1657129633400;
+        Wed, 06 Jul 2022 10:47:13 -0700 (PDT)
+Received: from localhost.localdomain (87-168-253.netrunf.cytanet.com.cy. [87.228.168.253])
+        by smtp.gmail.com with ESMTPSA id ev20-20020a056402541400b0043a20be7a33sm8627180edb.90.2022.07.06.10.47.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 10:24:39 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v2 9/9] platform/chrome: cros_ec_typec: Get retimer handle
-Date:   Wed,  6 Jul 2022 17:15:13 +0000
-Message-Id: <20220706171601.807042-10-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-In-Reply-To: <20220706171601.807042-1-pmalani@chromium.org>
-References: <20220706171601.807042-1-pmalani@chromium.org>
+        Wed, 06 Jul 2022 10:47:12 -0700 (PDT)
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     stern@rowland.harvard.edu, balbi@kernel.org,
+        gregkh@linuxfoundation.org, caihuoqing@baidu.com,
+        mdevaev@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_mass_storage: forced_eject attribute
+Date:   Wed,  6 Jul 2022 20:46:34 +0300
+Message-Id: <20220706174634.20639-1-mdevaev@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Where available, obtain the handle to retimer switch specified via
-firmware, and update the mux configuration callsites to add retimer
-support for supported modes.
+It allows to reset prevent_medium_removal flag and "eject" the image.
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
+The patch is a completely alternative implementation of the previously
+proposed [1], the idea of which was born after the mentioned discussion.
+
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
 ---
+ drivers/usb/gadget/function/f_mass_storage.c | 25 ++++++++++++++++++++
+ drivers/usb/gadget/function/storage_common.c | 11 +++++++++
+ drivers/usb/gadget/function/storage_common.h |  2 ++
+ 3 files changed, 38 insertions(+)
 
-Changes since v1:
-- No changes.
-
- drivers/platform/chrome/cros_ec_typec.c | 44 +++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 39e6fd4491a9..38c4ac754ea9 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -20,6 +20,7 @@
- #include <linux/usb/typec_altmode.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
-+#include <linux/usb/typec_retimer.h>
- #include <linux/usb/typec_tbt.h>
- #include <linux/usb/role.h>
- 
-@@ -53,6 +54,7 @@ struct cros_typec_port {
- 	struct usb_pd_identity c_identity;
- 	struct typec_switch *ori_sw;
- 	struct typec_mux *mux;
-+	struct typec_retimer *retimer;
- 	struct usb_role_switch *role_sw;
- 
- 	/* Variables keeping track of switch state. */
-@@ -142,6 +144,12 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- 		goto mux_err;
- 	}
- 
-+	port->retimer = fwnode_typec_retimer_get(fwnode);
-+	if (IS_ERR(port->retimer)) {
-+		dev_dbg(dev, "Retimer handle not found.\n");
-+		goto retimer_sw_err;
-+	}
-+
- 	port->ori_sw = fwnode_typec_switch_get(fwnode);
- 	if (IS_ERR(port->ori_sw)) {
- 		dev_dbg(dev, "Orientation switch handle not found.\n");
-@@ -159,6 +167,8 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- role_sw_err:
- 	typec_switch_put(port->ori_sw);
- ori_sw_err:
-+	typec_retimer_put(port->retimer);
-+retimer_sw_err:
- 	typec_mux_put(port->mux);
- mux_err:
- 	return -ENODEV;
-@@ -203,6 +213,21 @@ static void cros_typec_unregister_altmodes(struct cros_typec_data *typec, int po
- 	}
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 6ad669dde41c..00cac2a38178 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+ 	return fsg_store_file(curlun, filesem, buf, count);
  }
  
-+/*
-+ * Map the Type-C Mux state to retimer state and call the retimer set function. We need this
-+ * because we re-use the Type-C mux state for retimers.
-+ */
-+static int cros_typec_retimer_set(struct typec_retimer  *retimer, struct typec_mux_state state)
++static ssize_t forced_eject_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
 +{
-+	struct typec_retimer_state rstate = {
-+		.alt = state.alt,
-+		.mode = state.mode,
-+		.data = state.data,
-+	};
++	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
++	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
 +
-+	return typec_retimer_set(retimer, &rstate);
++	return fsg_store_forced_eject(curlun, filesem, buf, count);
 +}
 +
- static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
- {
- 	port->state.alt = NULL;
-@@ -211,6 +236,7 @@ static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
+ static DEVICE_ATTR_RW(nofua);
+ /* mode wil be set in fsg_lun_attr_is_visible() */
+ static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+ static DEVICE_ATTR(file, 0, file_show, file_store);
++static DEVICE_ATTR_WO(forced_eject);
  
- 	usb_role_switch_set_role(port->role_sw, USB_ROLE_NONE);
- 	typec_switch_set(port->ori_sw, TYPEC_ORIENTATION_NONE);
-+	cros_typec_retimer_set(port->retimer, port->state);
+ /****************************** FSG COMMON ******************************/
  
- 	return typec_mux_set(port->mux, &port->state);
+@@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
+ 	&dev_attr_ro.attr,
+ 	&dev_attr_file.attr,
+ 	&dev_attr_nofua.attr,
++	&dev_attr_forced_eject.attr,
+ 	NULL
+ };
+ 
+@@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
+ 
+ CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
+ 
++static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
++					       const char *page, size_t len)
++{
++	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
++	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
++
++	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
++				      page, len);
++}
++
++CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
++
+ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_file,
+ 	&fsg_lun_opts_attr_ro,
+@@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_cdrom,
+ 	&fsg_lun_opts_attr_nofua,
+ 	&fsg_lun_opts_attr_inquiry_string,
++	&fsg_lun_opts_attr_forced_eject,
+ 	NULL,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+index b859a158a414..8cd95bf7831f 100644
+--- a/drivers/usb/gadget/function/storage_common.c
++++ b/drivers/usb/gadget/function/storage_common.c
+@@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
  }
-@@ -381,9 +407,14 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+ EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
  
- static int cros_typec_usb_safe_state(struct cros_typec_port *port)
- {
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count)
++{
 +	int ret;
- 	port->state.mode = TYPEC_STATE_SAFE;
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
 +
-+	return ret;
- }
- 
- /*
-@@ -480,7 +511,11 @@ static int cros_typec_enable_dp(struct cros_typec_data *typec,
- 	port->state.data = &dp_data;
- 	port->state.mode = TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
++	curlun->prevent_medium_removal = 0;
++	ret = fsg_store_file(curlun, filesem, "", 0);
++	return ret < 0 ? ret : count;
++}
++EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
 +
-+	return ret;
- }
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+index bdeb1e233fc9..0a544a82cbf8 100644
+--- a/drivers/usb/gadget/function/storage_common.h
++++ b/drivers/usb/gadget/function/storage_common.h
+@@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
+ 			    size_t count);
+ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+ 				 size_t count);
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count);
  
- static int cros_typec_enable_usb4(struct cros_typec_data *typec,
-@@ -569,7 +604,10 @@ static int cros_typec_configure_mux(struct cros_typec_data *typec, int port_num,
- 	} else if (port->mux_flags & USB_PD_MUX_USB_ENABLED) {
- 		port->state.alt = NULL;
- 		port->state.mode = TYPEC_STATE_USB;
--		ret = typec_mux_set(port->mux, &port->state);
-+
-+		ret = cros_typec_retimer_set(port->retimer, port->state);
-+		if (!ret)
-+			ret = typec_mux_set(port->mux, &port->state);
- 	} else {
- 		dev_dbg(typec->dev,
- 			"Unrecognized mode requested, mux flags: %x\n",
+ #endif /* USB_STORAGE_COMMON_H */
 -- 
-2.37.0.rc0.161.g10f37bed90-goog
+2.37.0
 
