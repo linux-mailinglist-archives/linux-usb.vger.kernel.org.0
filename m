@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E6056942C
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 23:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3071756943A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 23:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbiGFVUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 17:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S234403AbiGFVVw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 17:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiGFVUI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 17:20:08 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074D117A81
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 14:20:07 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id u15so4761384ejx.9
-        for <linux-usb@vger.kernel.org>; Wed, 06 Jul 2022 14:20:06 -0700 (PDT)
+        with ESMTP id S232688AbiGFVVv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 17:21:51 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1448240A5
+        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 14:21:49 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id q6so29144207eji.13
+        for <linux-usb@vger.kernel.org>; Wed, 06 Jul 2022 14:21:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g2UCDhMKypb3YzjSBsPeyBiF2PeTe0+wdsZ8OfsVOrY=;
-        b=sVFcjcHg2LfnGZPa5eF4aYhrF8RBJQ8TTDW3HHOvEbkPNvYtsAnwKb0K9pOEDOHtGr
-         5MLLVwfPiM5Ww6QytB5EQA6Nv4l7GlTpEl6BHslrWSxudyACtyeDn+/ZFJZbD1bb3K9g
-         TZc7d/Zj9PZ7ZFUq4pHASajIqU2e8MJPeQkohIwy1iMQWIy/F/DvYF5Pg7FC73nJd9sj
-         zfOlEUGVa9h3Ia4yQ4Di7y12ZyeK4KqxzVmiemdXbK61C1koJczt92TGDpDqfG5fy06O
-         a4NUSg/QnJ0l5x1VskRXEKu8EID1WZo1+FI60c+NpXidysJLk+EWwBPd3Ybclut9mea0
-         NJaQ==
+        bh=b+jNR09nevXwyZD3QcB2efT/aRwjkNE4wZb+r0B6XwE=;
+        b=I6DkDmx26h+CaG/uyqSSoQf0Kpgi3UibjsyI7hR3HtcwlbuXqjSaN373PhsoVA8c/q
+         dP48qLIWwvOkDivqhfCZ9qhqTvobqYE1RdzdhZgsY9X6p1WRrO8y8vZlwC4mJguHh3J2
+         QVHtybfrf6REnR+cLGEVSkcYhTZoN+EAZzqyp91YnDE2h0AB5urwdz4ZAbag8iGXPhdf
+         +G7Qe/WEhy5mYP3bU+JrpZquZQ5DIQOI4BCF/cQ1ezg8Awhq0CRvK74F06s5exP/dLGW
+         dhns8DWwOEGwfzBkdzyAULDjp5+Hd43di+1wckPzbttZOsctcdW6qtLlSLhGgc2hRwlB
+         lU9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g2UCDhMKypb3YzjSBsPeyBiF2PeTe0+wdsZ8OfsVOrY=;
-        b=ZbAHbIet3rdhcs6G9JExyhGmhbb0QbxdmDajzNXh/j8G5m4pIxOTVMqtw6THVieuGl
-         milJw/pbyKuESbcGjul7n9ShHHotdXjdGf8aDB8PtRSxCgQ8TlcoOYYkTei6U58qo9g0
-         8bhkVDBkEr9vcWfyieHZqLUirHLua8gnke+hnycf+HqAzaOHq3lOf6sP3/KJKKxbiq4i
-         +sy27iTCZIjlXRG60s8XjMYnOxxzKzqBT/55fV5tXJTZ5qhaMei7JYZZ2hUGgyL4rZhw
-         F8KLIcgP9U/tc6vfUU5Bq7XXTTc3rK5nnTyIEdEA+0eQkVuwFNVSfagGgJiEaOqNON1d
-         uZrA==
-X-Gm-Message-State: AJIora+rP3ml2pCuIUxlPJHqpu8NyMPOtK+bgmMqhFxXt0bJhz+MMBSP
-        lNmzjnAWmX18kR4he8n6c7+4V4dx0zS0vPfH03boUQ==
-X-Google-Smtp-Source: AGRyM1susXO3wYeoDf0WuEIfBGex3/UVxBp2DE1XLABw70yWDUei6RgD/KNu5S+8rGhboeMpSh2JSE05/UMRGugtit0=
-X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id
- hr1-20020a1709073f8100b006ff1a3d9092mr41342820ejc.319.1657142405356; Wed, 06
- Jul 2022 14:20:05 -0700 (PDT)
+        bh=b+jNR09nevXwyZD3QcB2efT/aRwjkNE4wZb+r0B6XwE=;
+        b=2yuvGkxGXaNWk5iIklNAi7sYgJiHKj0Y2fEnPsB1NSWev0+preRZOKRmX7lqfuzujx
+         pszvNfbpgU9iGzMiEmJOiEFtjyBOLrSh/eBgti8UtLWiBY2HvXDixPLArkIFfSqzlIPA
+         Gyzp3SMxzD06GdBTXPodWwHYzw87VcLgyJ8WfSTAW0KavQPD0G1JlUxNYRggMQ/hRxZy
+         vprdo1aEmp5D96RnOcThuWz6iGgQysNQdRFRlcVp6St1FAjkOj/QFdmTlGiGxrFc5G/b
+         qjdZpGLqK61V+Up0EzJ3Z5e2oG1nF5P5M5jPbhhzeRMeNmldDaPwANvQXY2qA6alJ2EH
+         FVeg==
+X-Gm-Message-State: AJIora8aRxQ4HmaWin/bx7/ry1CuwgJw6hnGucT4bBkr/GiHy474ndlT
+        pbG7stztKjbSrT381UoXUC9heNVfCcBOkDJjRQVJXw==
+X-Google-Smtp-Source: AGRyM1unmOCSqJ1JoDSIrmquHUHd+3hyWJM/lpJegqaohJgOcShxHgQq8EC+4/uCGtnOiBPC//jVBWUzROPdZlv/7Ms=
+X-Received: by 2002:a17:906:cc96:b0:728:baf0:ba03 with SMTP id
+ oq22-20020a170906cc9600b00728baf0ba03mr40471193ejb.52.1657142508217; Wed, 06
+ Jul 2022 14:21:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-4-davidgow@google.com>
-In-Reply-To: <20220625050838.1618469-4-davidgow@google.com>
+References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-5-davidgow@google.com>
+In-Reply-To: <20220625050838.1618469-5-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 17:19:54 -0400
-Message-ID: <CAFd5g471_it8CQmBJnrhS=T3AgdfQF2tr4A9n=sYuWayovXmLw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] thunderbolt: test: Use kunit_test_suite() macro
+Date:   Wed, 6 Jul 2022 17:21:37 -0400
+Message-ID: <CAFd5g45www4FZ0BoXN+mbqAJEkub07mM-nfzMtjm4p3q_VSCXw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] nitro_enclaves: test: Use kunit_test_suite() macro
 To:     David Gow <davidgow@google.com>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
@@ -82,20 +82,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Sat, Jun 25, 2022 at 1:10 AM David Gow <davidgow@google.com> wrote:
 >
-> The new implementation of kunit_test_suite() for modules no longer
-> conflicts with module_init, so can now be used by the thunderbolt tests.
+> The kunit_test_suite() macro previously conflicted with module_init,
+> making it unsuitable for use in the nitro_enclaves test. Now that it's
+> fixed, we can use it instead of a custom call into internal KUnit
+> functions to run the test.
 >
-> Also update the Kconfig entry to enable the test when KUNIT_ALL_TESTS is
-> enabled.
+> As a side-effect, this means that the test results are properly included
+> with other suites when built-in. To celebrate, enable the test by
+> default when KUNIT_ALL_TESTS is set (and NITRO_ENCLAVES enabled).
 >
-> This means that kunit_tool can now successfully run and parse the test
-> results with, for example:
+> The nitro_enclave tests can now be run via kunit_tool with:
 >         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
->         --kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_USB4=y \
->         'thunderbolt'
+>         --kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_SMP=y \
+>         --kconfig_add CONFIG_HOTPLUG_CPU=y \
+>         --kconfig_add CONFIG_VIRT_DRIVERS=y \
+>         --kconfig_add CONFIG_NITRO_ENCLAVES=y \
+>         'ne_misc_dev_test'
 >
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Acked-by: Daniel Latypov <dlatypov@google.com>
+> (This is a pretty long command, so it may be worth adding a .kunitconfig
+> file at some point, instead.)
+>
+> Reviewed-by: Andra Paraschiv <andraprs@amazon.com>
 > Signed-off-by: David Gow <davidgow@google.com>
 
 Acked-by: Brendan Higgins <brendanhiggins@google.com>
