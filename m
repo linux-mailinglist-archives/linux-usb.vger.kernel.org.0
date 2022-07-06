@@ -2,50 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C404D567E50
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 08:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E14E567F83
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Jul 2022 09:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiGFG0E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 02:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S230070AbiGFHGY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 03:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiGFG0D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 02:26:03 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47D421D
-        for <linux-usb@vger.kernel.org>; Tue,  5 Jul 2022 23:26:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EA0F0CE1DC1
-        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 06:25:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DBD7C341C0;
-        Wed,  6 Jul 2022 06:25:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657088758;
-        bh=Hv5X/POqw70nE+UpedJ1HzvFyxP3pDgVqOqOS39K0sY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pxHswFpZTK+eQlvSVqajCfpQ5YWyC4A8323hTi+yeRoNSjr4dsG/yw6/EB0fVkWmX
-         47XF/0OwgUGdOesCyb+S29l4Kf9jKJ5A96mL8labP4IBXRg4fupJ3r4SfOgYJ7xlmR
-         grUCqV7OjlC3bXtAXupFYijyQlb3FmNd5pJXsFc0=
-Date:   Wed, 6 Jul 2022 08:25:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
-Cc:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        Basavaraj.Natikar@amd.com, mario.limonciello@amd.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Add DP out resource when DP tunnel is
- discovered.
-Message-ID: <YsUq80qWepLR2mZ9@kroah.com>
-References: <1657085978-130560-1-git-send-email-Sanju.Mehta@amd.com>
+        with ESMTP id S230043AbiGFHGR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 03:06:17 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D799F21E02
+        for <linux-usb@vger.kernel.org>; Wed,  6 Jul 2022 00:06:16 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id u14so17309003ljh.2
+        for <linux-usb@vger.kernel.org>; Wed, 06 Jul 2022 00:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bz6Q6Fa1YPetlBznSCPVIVUyt5DE98y2dZImsjK2Yv8=;
+        b=tvIqGHClygD44BkugbMwanSv/36LJecwYVa+DSFyov6VN0U3qfLZb3nu87e6Esx1Gr
+         HRaLCL0bxhrc63Fsrwteu3cgA2d5YNbLdQqXdieLgMp1oBHVNuErVcpXEl0ai83XBfnF
+         K3NGU1lYCNjfweUXSoc04dJHls6JmxY4zO+4jBoMu5Scc7WL+8t9jL4Aa513JH/J5vpT
+         EdoP7jq0kknSNbF86js20S1NhRPHZpn34l4Ja/MXmartLTQRlLDFjSGORA5MwWpmS3g1
+         BHRsaj3TDoDhuTeW0APz491J1XYBKI6dguTvE8Drf3MxaEE0wXk1ag7aWi04d7/xWr1u
+         iHfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bz6Q6Fa1YPetlBznSCPVIVUyt5DE98y2dZImsjK2Yv8=;
+        b=SBUsqwsD+Drww6cBziGsRe7/13bMcpV/L+RZ20JhD1GY2jfEkkwg+WKU2lh2a+Q/0m
+         nKGHA3N4yR0tdySxWvO5aWRWXmcuORAtMgusO2GPsPRaXG7TMuWRDgZJy3RXUUpS2/1W
+         3TljdVSVmf8T9yTcy7dL17PVXfmeWMEPj1zH+7pncRm9Gz95JNT5v7DL8oL80XjzsdZ7
+         Or+Cm7e4olL1oDpKLcYFZNAN7lE7wdTkB3g9GF9WNipAVamAWOqsy45ZMnqiq8Mbn5Ex
+         pkBgRvDHueEKFQhT1f8JqrebNXeEoREgSFLhOa7eQ1dKiuTOjDWm5y82VhIvtbuWNTav
+         Sabg==
+X-Gm-Message-State: AJIora90vKOvD+sk2DgpSuP4FcE6tcG1fjq5Xdz9cFfge0NZr978Q5Z+
+        6DjiOKJvl49BHGI0OddAJUQdRg==
+X-Google-Smtp-Source: AGRyM1usm4O5Yb3o6i6Cn0wioXtQfAUgzfnG2UsRxbcZnwyO45UOmIaUEy5e/hW+wuLQ6mMtvCgPDg==
+X-Received: by 2002:a2e:984e:0:b0:25a:9fd7:c6d3 with SMTP id e14-20020a2e984e000000b0025a9fd7c6d3mr21762666ljj.66.1657091175181;
+        Wed, 06 Jul 2022 00:06:15 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id s15-20020a2e150f000000b0025a89f36accsm5970693ljd.42.2022.07.06.00.06.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Jul 2022 00:06:14 -0700 (PDT)
+Message-ID: <3d23244e-d926-ad9c-68b6-50ac8b4fd752@linaro.org>
+Date:   Wed, 6 Jul 2022 09:06:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1657085978-130560-1-git-send-email-Sanju.Mehta@amd.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
+ controller
+Content-Language: en-US
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com
+References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
+ <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
+ <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
+ <845d6817-d2e4-7925-f7f5-da1102514636@foss.st.com>
+ <286633b2-43d2-655e-b3f1-54bf5c7a4a21@linaro.org>
+ <6ef58f1f-ee8a-b060-6fda-d1388b3ede6d@foss.st.com>
+ <f86dd47c-0fc5-6c93-a49e-534610d10c49@linaro.org>
+ <dfad8fb5-6205-d620-81eb-5d44b9175e05@foss.st.com>
+ <0821acfe-bcfe-b1d8-c1a9-81023f4ab6a0@linaro.org>
+ <13266b3e-7571-23fa-13bd-1c8107a5f90d@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <13266b3e-7571-23fa-13bd-1c8107a5f90d@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,63 +86,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 12:39:38AM -0500, Sanjay R Mehta wrote:
-> From: Sanjay R Mehta <sanju.mehta@amd.com>
+On 04/07/2022 11:08, Fabrice Gasnier wrote:
+> On 7/4/22 09:55, Krzysztof Kozlowski wrote:
+>> On 01/07/2022 12:04, Fabrice Gasnier wrote:
+>>>
+>>> Then I no longer get this warning upon build. But the dtbs_check complains:
+>>> ---
+>>> connector: ports: 'port@0' is a required property
+>>> 	From schema: ..
+>>> Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>>
+>>> So It looks like to me there's something missing to handle the single
+>>> port case in usb-connector.yaml, when using the "ports".
+>>>
+>>> Maybe usb-connector could be updated to handle "port" (w/o unit-addr) ?
+>>
+>> Not really, the dtc warning looks false-positive. Especially that you
+>> need port@1 for USB 3.0 (super speed), unless you do not support it?
 > 
-> If the boot firmware implements a connection manager of its
-> own it may create a DP tunnel and will be handed off to Linux
-> CM, but the DP out resource is not saved in the dp_resource
-> list.
+> Hi Krzysztof,
 > 
-> This patch adds tunnelled DP out port to the dp_resource list
-> once the DP tunnel is discovered.
+> Having USB2.0 High speed port only is perfectly valid. port@1 is
+> optional to support USB3.0 as you mention.
 > 
-> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
-> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> ---
->  drivers/thunderbolt/tb.c     | 15 +++++++++++++++
->  drivers/thunderbolt/tb.h     |  1 +
->  drivers/thunderbolt/tunnel.c |  2 ++
->  3 files changed, 18 insertions(+)
-> 
-> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> index 9a3214f..dcd0c3e 100644
-> --- a/drivers/thunderbolt/tb.c
-> +++ b/drivers/thunderbolt/tb.c
-> @@ -1006,6 +1006,21 @@ static void tb_dp_resource_unavailable(struct tb *tb, struct tb_port *port)
->  	tb_tunnel_dp(tb);
->  }
->  
-> +void tb_dp_resource_available_discovered(struct tb *tb, struct tb_port *port)
-> +{
-> +	struct tb_cm *tcm = tb_priv(tb);
-> +	struct tb_port *p;
-> +
-> +	list_for_each_entry(p, &tcm->dp_resources, list) {
-> +		if (p == port)
-> +			return;
-> +	}
-> +
-> +	tb_port_dbg(port, "DP %s resource available discovered\n",
-> +		    tb_port_is_dpin(port) ? "IN" : "OUT");
-> +	list_add_tail(&port->list, &tcm->dp_resources);
-> +}
-> +
->  static void tb_dp_resource_available(struct tb *tb, struct tb_port *port)
->  {
->  	struct tb_cm *tcm = tb_priv(tb);
-> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> index 4602c69..cef2fe3 100644
-> --- a/drivers/thunderbolt/tb.h
-> +++ b/drivers/thunderbolt/tb.h
-> @@ -1222,6 +1222,7 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port);
->  void usb4_port_device_remove(struct usb4_port *usb4);
->  int usb4_port_device_resume(struct usb4_port *usb4);
->  
-> +void tb_dp_resource_available_discovered(struct tb *tb, struct tb_port *port);
+> I've no opinion regarding a possible false positive warning. I'd like to
+> sort this out, perhaps Rob has some recommendation regarding this ?
 
-Why not put this in the .h file next to the other tb_* calls?
+I would propose to skip the DTC warning and stick to the schema with
+only one port@0.
 
-thanks,
 
-greg k-h
+Best regards,
+Krzysztof
