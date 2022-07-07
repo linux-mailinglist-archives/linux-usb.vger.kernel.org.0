@@ -2,156 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CD956A4E5
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 16:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA5256A665
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 16:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235725AbiGGODJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 10:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S236366AbiGGO6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 10:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235106AbiGGODC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 10:03:02 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB9A2408D;
-        Thu,  7 Jul 2022 07:03:01 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id g126so5153510pfb.3;
-        Thu, 07 Jul 2022 07:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=afbiyF16Fd4Ewaaf3EKKCpvpR7aHAsNAQp7K3TuQXs4=;
-        b=EzpeppBfdoHkOWruUNAYNHzOi8S5lBuVkWR/uarc/O7MDVJ2qM1NUNdy3hxzZeKinw
-         1f6tPe15AftcBiSP1Sugt5jiQpAKlLcyz+gPyHgHTvK6IkiuSg6SYHkmzqBCpGaHkm3K
-         GirawtqITR+EFkG0pF8QxPm0bxzk97EH7JYJxQXFRi4d1kRfsZVOuxKRapjByLByJ3DF
-         qAVqAZfaAfJT+F8T/W2rPtPmXy6/uaYwejGaDWQ5Frl3XCXwsQlqWF67lU3BIXdseGBS
-         CTJ5pH+oR76s++4uNTCxHCZwHNyWF4xdxY3ay2k5fQlKGRbstnEbIjnAVDZkl7wMQgN9
-         oSpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=afbiyF16Fd4Ewaaf3EKKCpvpR7aHAsNAQp7K3TuQXs4=;
-        b=z/OhwksyOp469scWVs4PaYhNC01pXiyHvOwOAPTqy+pvH2sZnN6XRZ28vSAujPutvg
-         AQGgZhLZ6b3oc+7LSlfFt5U0/C+XJmECqeCtvLa4OnsKYoIxPft0iiHX4dtUOUVVNUB7
-         o72nh0ELJf3U9b+yyqEedzG2zEcK016yJwvgjxBOYlp6WuNXVcI+F2+gmAIiXH9GEXmI
-         e0vcR+88sWEl5sqYG3UvOQtrtLFGVXKrKxZQO0pdrK7dgKYQvLkQtqOvnIUOjXNMCnTL
-         ZOSG6KMdU1kw0QUexsBYdIFk/iqmwXqSO9SNDDktXRZnojoCdRBSKzl/F4iaHlhna0VS
-         T/iA==
-X-Gm-Message-State: AJIora+ocuIwxhLJzHhnnSu+WxjiLc3tnw/dFIKUzzDFT6j9ccAbwr5i
-        VaOjjRnKKhvxqeBmGOblA/WrVTwMxpHjaNmP
-X-Google-Smtp-Source: AGRyM1uGEg1zRLKU3mt/8yK/HfEqKFBdv1eoQpzxhqHLW6DjIp1gLh6JEsU/RWRdBfoHFypH/TfaNQ==
-X-Received: by 2002:a17:90b:4c8f:b0:1ec:cdd0:41b7 with SMTP id my15-20020a17090b4c8f00b001eccdd041b7mr5420238pjb.119.1657202580508;
-        Thu, 07 Jul 2022 07:03:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k127-20020a632485000000b004148cbdd4e5sm1215293pgk.57.2022.07.07.07.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 07:02:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 7 Jul 2022 07:02:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        virtualization@lists.linux-foundation.org,
-        usbb2k-api-dev@nongnu.org, tipc-discussion@lists.sourceforge.net,
-        target-devel@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        samba-technical@lists.samba.org, rds-devel@oss.oracle.com,
-        patches@opensource.cirrus.com, osmocom-net-gprs@lists.osmocom.org,
-        openipmi-developer@lists.sourceforge.net, nvdimm@lists.linux.dev,
-        ntb@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
-        megaraidlinux.pdl@broadcom.com, linuxppc-dev@lists.ozlabs.org,
-        linux1394-devel@lists.sourceforge.net, linux-x25@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-parisc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-nfc@lists.01.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linaro-mm-sig@lists.linaro.org,
-        legousb-devel@lists.sourceforge.net, kvm@vger.kernel.org,
-        keyrings@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
-        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
-        intel-wired-lan@lists.osuosl.org, greybus-dev@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, dm-devel@redhat.com,
-        devicetree@vger.kernel.org, dev@openvswitch.org,
-        dccp@vger.kernel.org, damon@lists.linux.dev,
-        coreteam@netfilter.org, cgroups@vger.kernel.org,
-        ceph-devel@vger.kernel.org, ath11k@lists.infradead.org,
-        apparmor@lists.ubuntu.com, amd-gfx@lists.freedesktop.org,
-        alsa-devel@alsa-project.org,
-        accessrunner-general@lists.sourceforge.net
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 088b9c375534d905a4d337c78db3b3bfbb52c4a0
-Message-ID: <20220707140258.GA3492673@roeck-us.net>
-References: <62c683a2.g1VSVt6BrQC6ZzOz%lkp@intel.com>
- <YsaUgfPbOg7WuBuB@kroah.com>
+        with ESMTP id S236734AbiGGO6Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 10:58:16 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3EBF757273
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 07:57:43 -0700 (PDT)
+Received: (qmail 427876 invoked by uid 1000); 7 Jul 2022 10:57:42 -0400
+Date:   Thu, 7 Jul 2022 10:57:42 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, caihuoqing@baidu.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: f_mass_storage: forced_eject attribute
+Message-ID: <Ysb0ZiEveXvmrC2f@rowland.harvard.edu>
+References: <20220706185936.24692-1-mdevaev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsaUgfPbOg7WuBuB@kroah.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220706185936.24692-1-mdevaev@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 10:08:33AM +0200, Greg KH wrote:
-
-[ ... ]
-> > 
-> > Unverified Error/Warning (likely false positive, please contact us if interested):
-> > 
-> > arch/x86/events/core.c:2114 init_hw_perf_events() warn: missing error code 'err'
-> > drivers/android/binder.c:1481:19-23: ERROR: from is NULL but dereferenced.
-> > drivers/android/binder.c:2920:29-33: ERROR: target_thread is NULL but dereferenced.
-> > drivers/android/binder.c:353:25-35: ERROR: node -> proc is NULL but dereferenced.
-> > drivers/android/binder.c:4888:16-20: ERROR: t is NULL but dereferenced.
-> > drivers/base/regmap/regmap.c:1996:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> > drivers/char/random.c:869:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> > drivers/firmware/arm_scmi/clock.c:394:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> > drivers/firmware/arm_scmi/powercap.c:376:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> > drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/vega10_powertune.c:1214:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> > drivers/gpu/drm/amd/display/dc/os_types.h: drm/drm_print.h is included more than once.
-> > drivers/gpu/drm/bridge/ite-it66121.c:1398:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> > drivers/greybus/operation.c:617:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+On Wed, Jul 06, 2022 at 09:59:37PM +0300, Maxim Devaev wrote:
+> It allows to reset prevent_medium_removal flag and "eject" the image.
 > 
-> <snip>
-> 
-> When the compiler crashes, why are you blaming all of these different
-> mailing lists?  Perhaps you need to fix your compiler :)
-> 
+> The patch is a completely alternative implementation of the previously
+> proposed [1], the idea of which was born after the mentioned discussion.
 
-To be fair, it says above "likely false positive, please contact us
-if interested". Also, the 32-bit build errors _are_ real, and the NULL
-dereferences in the binder driver are at the very least suspicious.
+Generally quite good, but the documentation needs some improvement.
 
-Guenter
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+> Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
+> ---
+>  .../testing/configfs-usb-gadget-mass-storage  |  6 +++++
+>  Documentation/usb/gadget-testing.rst          |  6 +++++
+>  Documentation/usb/mass-storage.rst            |  9 +++++++
+>  drivers/usb/gadget/function/f_mass_storage.c  | 25 +++++++++++++++++++
+>  drivers/usb/gadget/function/storage_common.c  | 11 ++++++++
+>  drivers/usb/gadget/function/storage_common.h  |  2 ++
+>  6 files changed, 59 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> index c86b63a7bb43..87859ef40579 100644
+> --- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> +++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+> @@ -32,4 +32,10 @@ Description:
+>  				being a CD-ROM.
+>  		nofua		Flag specifying that FUA flag
+>  				in SCSI WRITE(10,12)
+> +		forced_eject	This write-only flag only makes sence when
+
+s/flag/file/
+
+Instead of "only makes sense" (note the spelling), how about "is useful 
+only" or "operates only"?
+
+By the way, what does happen if someone writes to this attribute file 
+before the function is active?  Have you tested this?
+
+> +				the function is active. It causes a forced
+> +				detaching of the backing file from the LUN,
+
+Slightly improved wording: "It causes the backing file to be forcibly 
+detached from the LUN".
+
+> +				regardless of whether the host has allowed it.
+> +				Any non-zero number of bytes written will
+> +				result in ejection.
+
+Doesn't a zero-byte write also work?
+
+The same suggested changes apply to the documentation added below.
+
+>  		===========	==============================================
+> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+> index c18113077889..1481173d8719 100644
+> --- a/Documentation/usb/gadget-testing.rst
+> +++ b/Documentation/usb/gadget-testing.rst
+> @@ -333,6 +333,12 @@ In each lun directory there are the following attribute files:
+>  			being a CD-ROM.
+>  	nofua		Flag specifying that FUA flag
+>  			in SCSI WRITE(10,12)
+> +	forced_eject	This write-only flag only makes sence when
+> +			the function is active. It causes a forced
+> +			detaching of the backing file from the LUN,
+> +			regardless of whether the host has allowed it.
+> +			Any non-zero number of bytes written will
+> +			result in ejection.
+>  	=============== ==============================================
+>  
+>  Testing the MASS STORAGE function
+> diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
+> index d181b47c3cb6..f72e59237bce 100644
+> --- a/Documentation/usb/mass-storage.rst
+> +++ b/Documentation/usb/mass-storage.rst
+> @@ -181,6 +181,15 @@ sysfs entries
+>      Reflects the state of nofua flag for given logical unit.  It can
+>      be read and written.
+>  
+> +  - forced_eject
+> +
+> +    When written into, it allows to detach the backing file for given
+
+This should be phrased in the same way as above.  The file doesn't 
+"allow" anything; it _causes_ the backing file to be detached.
+
+> +    logical unit, regardless of whether the host has allowed it.
+
+Same as above, use "LUN" here instead of "logical unit".
+
+Alan Stern
+
+> +    The content doesn't matter, any non-zero number of bytes will
+> +    lead the forced eject.
+> +
+> +    Can not be read.
+> +
+>    Other then those, as usual, the values of module parameters can be
+>    read from /sys/module/g_mass_storage/parameters/* files.
+>  
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 6ad669dde41c..00cac2a38178 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+>  	return fsg_store_file(curlun, filesem, buf, count);
+>  }
+>  
+> +static ssize_t forced_eject_store(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  const char *buf, size_t count)
+> +{
+> +	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
+> +	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
+> +
+> +	return fsg_store_forced_eject(curlun, filesem, buf, count);
+> +}
+> +
+>  static DEVICE_ATTR_RW(nofua);
+>  /* mode wil be set in fsg_lun_attr_is_visible() */
+>  static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+>  static DEVICE_ATTR(file, 0, file_show, file_store);
+> +static DEVICE_ATTR_WO(forced_eject);
+>  
+>  /****************************** FSG COMMON ******************************/
+>  
+> @@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
+>  	&dev_attr_ro.attr,
+>  	&dev_attr_file.attr,
+>  	&dev_attr_nofua.attr,
+> +	&dev_attr_forced_eject.attr,
+>  	NULL
+>  };
+>  
+> @@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
+>  
+>  CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
+>  
+> +static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
+> +					       const char *page, size_t len)
+> +{
+> +	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
+> +	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
+> +
+> +	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
+> +				      page, len);
+> +}
+> +
+> +CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
+> +
+>  static struct configfs_attribute *fsg_lun_attrs[] = {
+>  	&fsg_lun_opts_attr_file,
+>  	&fsg_lun_opts_attr_ro,
+> @@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
+>  	&fsg_lun_opts_attr_cdrom,
+>  	&fsg_lun_opts_attr_nofua,
+>  	&fsg_lun_opts_attr_inquiry_string,
+> +	&fsg_lun_opts_attr_forced_eject,
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+> index b859a158a414..8cd95bf7831f 100644
+> --- a/drivers/usb/gadget/function/storage_common.c
+> +++ b/drivers/usb/gadget/function/storage_common.c
+> @@ -519,4 +519,15 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+>  }
+>  EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
+>  
+> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
+> +			       const char *buf, size_t count)
+> +{
+> +	int ret;
+> +
+> +	curlun->prevent_medium_removal = 0;
+> +	ret = fsg_store_file(curlun, filesem, "", 0);
+> +	return ret < 0 ? ret : count;
+> +}
+> +EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
+> +
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+> index bdeb1e233fc9..0a544a82cbf8 100644
+> --- a/drivers/usb/gadget/function/storage_common.h
+> +++ b/drivers/usb/gadget/function/storage_common.h
+> @@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
+>  			    size_t count);
+>  ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+>  				 size_t count);
+> +ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
+> +			       const char *buf, size_t count);
+>  
+>  #endif /* USB_STORAGE_COMMON_H */
+> -- 
+> 2.37.0
+> 
