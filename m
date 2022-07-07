@@ -2,56 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A795656AE1C
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 00:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3ECC56AE4B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 00:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236803AbiGGWGh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 18:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+        id S236934AbiGGWU4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 18:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236775AbiGGWGg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 18:06:36 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35415A2DB
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 15:06:34 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 64so25626671ybt.12
-        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 15:06:34 -0700 (PDT)
+        with ESMTP id S236925AbiGGWUy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 18:20:54 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA98606A8
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 15:20:53 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so149962pjm.2
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 15:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7UFGapQUmVzze+bPOzX448q4o7gbh7fA6vE58zBhvvM=;
-        b=ZP8qKMGpzxTcxHpyX+YtpLCre0I0SLiX8dNkR8f1hwUFCt8K0TvDtqClFnq/w5L0y9
-         cOcFu5jmvSQaMMLyPQMZEZytUZO4bCtIFApl70ZnFq5Db+3RXsPhWy0AoUmubKqhZ4So
-         bw1yhLs9WWrUn7z2sQ9FUW77rqTD7DgTUYGfU=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lQsjAc0YQIb9NGXs3HwZPWuZRhoPR+NwcjVw3jJIBFQ=;
+        b=XbKmDZy/WMqhyN9B6r1DiEk/QAbsScJ+CPdadwH6TXX4GDj1u7aiAI7fl26RJaYYGQ
+         FV81cwccRYv5EVCLSxS0nmWI5PSdob23rpAO9QjAZG+FRRv7VHpQUaS4dPfx7Hb4IS1O
+         tUG6Ya1zI60mw6iAXPx15Eus8qh9MgnPMjvTA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7UFGapQUmVzze+bPOzX448q4o7gbh7fA6vE58zBhvvM=;
-        b=yGJy9okzmqiVv0+GRP7M9mCD38n8cRyQrdJ4NFn9NVUsRUIzw81MdM/Lf/j8TC9BrP
-         7p3MXB0z4/KCHf7PISOmqQsPrTkzKUYAwuodQrvJuiN2ynVguJBwC8rc3SdICTIKJG8d
-         TQbOpA/mDccAFMt8d6PrbRpD2RivnFimKql4/UAy1AiU0l/5pj1iwuU8PtpXX5ys6CWL
-         lC6A8NxpqDPlujbvQfZIKhlOjVAfUFUXXkQUt7mIGqq4mrUgOjPXQJ1ZYHIvE+MubVoR
-         0V3E+sxJG81jRZUQUz4Z24lH9kNlWCW2OFTBFO1Sg9x75vxo62+INJRa0LXsEEFgtyYw
-         iM/g==
-X-Gm-Message-State: AJIora9iRNfU0GLP5Giv0YdtwJMVpOjfvCILpvJXK9wWeZZRlC8BfoPD
-        6c62qYsLAuBlRgOa/t7Rv63gUNGU6Ln3PcILElzEaw==
-X-Google-Smtp-Source: AGRyM1tA88lK8bMldivq5Q8tXTohFQGXUUrPduGItjYoy9GpwYyOXFyU3HX0TeVAhcOPU/AITKKPXUEpF+NN+gSsVRg=
-X-Received: by 2002:a25:b7cf:0:b0:66e:2ddc:dda7 with SMTP id
- u15-20020a25b7cf000000b0066e2ddcdda7mr88408ybj.197.1657231593901; Thu, 07 Jul
- 2022 15:06:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220706171601.807042-7-pmalani@chromium.org> <202207071256.63ElDHIG-lkp@intel.com>
-In-Reply-To: <202207071256.63ElDHIG-lkp@intel.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lQsjAc0YQIb9NGXs3HwZPWuZRhoPR+NwcjVw3jJIBFQ=;
+        b=ffbprzQKVslYgirtFJX4F8w4W6FHwfDKMEX1lIM6v/awF3o9/0ZcO4+5DzPKbUl2Sd
+         GbZjlt0Hgskyf0Tik3aoSxVxPmcAXQsDIliV0eEr7J/Yb2x94Pd3J1ZVGORlG0MLg9bn
+         5Gj/l5xK/XMNrwHBSSkyW+h4ikavzOsdGRQFNfACJa8USeOk/kjuHMWI9pvMki6Ctynj
+         8ZPxTqLQ+Q6XnfykPL6RB71dZCIzGY9z43Qb5klcVYOokceQlKjlxnXRnA8j/NxCPEJ4
+         PaY8YDIhYiC0IMW0YVAZu8mEncG0r8XgB5Nzcy6sDz25Bu+j+h6UqDEO73CmCxQbaWkB
+         mMyQ==
+X-Gm-Message-State: AJIora+nphliWmWOTICHq+JqpDtIP13MvdWx3qiSg9DYpZLIOpUwf8V5
+        ON2p5w4BFXjmUt8/ps0u/4zgzQ==
+X-Google-Smtp-Source: AGRyM1sjFfRCrP/YQPVZOHPRuRcIuvCoR1wzUjn4/i2bvcYMaksJCxhurBqN4qfLnF4xhiqZEw68pA==
+X-Received: by 2002:a17:90b:4f48:b0:1ef:8ed0:df4d with SMTP id pj8-20020a17090b4f4800b001ef8ed0df4dmr7617959pjb.224.1657232452829;
+        Thu, 07 Jul 2022 15:20:52 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b005289bfcee91sm5545657pfe.59.2022.07.07.15.20.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 15:20:52 -0700 (PDT)
 From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 7 Jul 2022 15:06:23 -0700
-Message-ID: <CACeCKadwM7VVZadZxDr-TQ0DB1Dy5mv2bwY=p+p3Y1uVNHE8Tg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] platform/chrome: cros_typec_switch: Add event check
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev, kbuild-all@lists.01.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
         Daisuke Nojiri <dnojiri@chromium.org>,
         "Dustin L. Howett" <dustin@howett.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -59,7 +56,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Tzung-Bi Shih <tzungbi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v3 0/9] Type-C switch driver and Type-C framework updates
+Date:   Thu,  7 Jul 2022 22:20:07 +0000
+Message-Id: <20220707222045.1415417-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,46 +72,64 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 9:26 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Prashant,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on usb/usb-testing]
-> [cannot apply to chrome-platform/for-next linus/master balbi-usb/testing/next peter-chen-usb/for-usb-next v5.19-rc5]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/platform-chrome-Type-C-switch-driver-and-Type-C-framework-updates/20220707-012614
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220707/202207071256.63ElDHIG-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/60e03c1b36c0e3533e481b44152faab38448be5b
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Prashant-Malani/platform-chrome-Type-C-switch-driver-and-Type-C-framework-updates/20220707-012614
->         git checkout 60e03c1b36c0e3533e481b44152faab38448be5b
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/chrome/ kernel/bpf/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/platform/chrome/cros_typec_switch.c:81:6: warning: no previous prototype for 'cros_typec_check_event' [-Wmissing-prototypes]
->       81 | bool cros_typec_check_event(struct cros_typec_switch_data *sdata, int port_num, u32 mask)
->          |      ^~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/chrome/cros_typec_switch.c:159:6: warning: no previous prototype for 'cros_typec_unregister_switches' [-Wmissing-prototypes]
->      159 | void cros_typec_unregister_switches(struct cros_typec_switch_data *sdata)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/chrome/cros_typec_switch.c:170:5: warning: no previous prototype for 'cros_typec_register_retimer' [-Wmissing-prototypes]
->      170 | int cros_typec_register_retimer(struct cros_typec_port *port, struct fwnode_handle *fwnode)
->          |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-I'll fix these warnings and send out a v3.
-Apologies for the churn.
+This series introduces a retimer class to the USB Type-C framework,
+It also introduces a Chrome EC (Embedded Controller) switch driver which
+registers the aforementioned retimer switches as well as mode-switches.
 
--Prashant
+Patch 1 and 2 introduce the retimer class and associated functions to
+the Type-C common code.
+
+Patches 3-7 add the cros-typec-switch driver.
+
+Patches 8-9 update cros-ec-typec to get and use retimer switch handles.
+
+Submission suggestion (as always, open to better suggestions):
+- Patch 1 and 2 can go through the USB repo.
+- Patch 3-9 can go through the chrome-platform repo. Since they depend
+  on patches 1 and 2, we can create an "topic branch" off of usb-next
+  once Patch 1 and 2 are submitted, and then apply Patches 3-9 on top
+  of that "topic branch" before merging it back into chrome-platform's
+  for-next branch
+
+v2: https://lore.kernel.org/linux-usb/20220706171601.807042-1-pmalani@chromium.org/
+
+Changes since v2:
+- Fixed missing "static" declarations, and removed newlines from
+  function signatures.
+
+Changes since v1:
+- Changed class name and retimer device type name, and fixed
+  retimer reference release issue.
+
+Prashant Malani (9):
+  usb: typec: Add support for retimers
+  usb: typec: Add retimer handle to port
+  platform/chrome: Add Type-C mux set command definitions
+  platform/chrome: cros_typec_switch: Add switch driver
+  platform/chrome: cros_typec_switch: Set EC retimer
+  platform/chrome: cros_typec_switch: Add event check
+  platform/chrome: cros_typec_switch: Register mode switches
+  platform/chrome: cros_ec_typec: Cleanup switch handle return paths
+  platform/chrome: cros_ec_typec: Get retimer handle
+
+ MAINTAINERS                                   |   1 +
+ drivers/platform/chrome/Kconfig               |  11 +
+ drivers/platform/chrome/Makefile              |   1 +
+ drivers/platform/chrome/cros_ec_typec.c       |  50 ++-
+ drivers/platform/chrome/cros_typec_switch.c   | 332 ++++++++++++++++++
+ drivers/usb/typec/Makefile                    |   2 +-
+ drivers/usb/typec/class.c                     |  18 +-
+ drivers/usb/typec/class.h                     |   2 +
+ drivers/usb/typec/retimer.c                   | 168 +++++++++
+ drivers/usb/typec/retimer.h                   |  15 +
+ .../linux/platform_data/cros_ec_commands.h    |  18 +
+ include/linux/usb/typec_retimer.h             |  45 +++
+ 12 files changed, 654 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_typec_switch.c
+ create mode 100644 drivers/usb/typec/retimer.c
+ create mode 100644 drivers/usb/typec/retimer.h
+ create mode 100644 include/linux/usb/typec_retimer.h
+
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+
