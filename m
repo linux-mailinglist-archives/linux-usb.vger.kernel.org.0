@@ -2,278 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4E556A05A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 12:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE97B56A0ED
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 13:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbiGGKtk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 06:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S235293AbiGGLNE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 07:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbiGGKti (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 06:49:38 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF112564C6;
-        Thu,  7 Jul 2022 03:49:37 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id y9so4344889pff.12;
-        Thu, 07 Jul 2022 03:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/FFWXQHfHuTAnSajIxw6WITRnf577MGViKmqh2rQTck=;
-        b=pNuDXa/tbcZ8L6jUMcFhfkiiN+HCY2bTy8g4vxrKF0uCnbdZzaUEHFI3UEhvKFQ1UC
-         eE6uNL4ZcikxGKWmBQMWNFn2vi2ETQWNjJHAKM/K8ooax1hYtWjIkuCEoiWjzlwmG9GX
-         WoMgg2sO0TOL1BOmFZkYZQjlUeFnk4VUM4ID13qr9aO5fAUOHNV8WcMiuWT0KyCv3tNs
-         yt5TOLt/k314oncIAs4MSxNIPDyesqnVGGLLLmR1OaKx2ayShDI5LtdAatcf/iDhjUT+
-         nlXRge1dqHFL7OZkv58zzWV44JyXq8nAHQm1a8SdNpsI3zpdsjcEr5X6BK+lhzi+b04Z
-         O/RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/FFWXQHfHuTAnSajIxw6WITRnf577MGViKmqh2rQTck=;
-        b=p/tO1xIVx83xaaVnQOtPe1agONqonGUSwCMwNVjMgG+8XqFqmGWuYZWqsaHuPjo6VW
-         295vUjclOp1Cb8oO4S690ZRH4EmDPx79e4jjLKB78Uet3fwznhU9ghsIQcGMeR67Ap6Q
-         xLVXfketpGr/YcJyV76oY56er0HuDwIw/Kh0+QlfmVZmqyMc98La0SBb73i5zmylmzfR
-         BoC5ZHW28i66xi7ISstl9zdy5yynlLZpixoCnvbkBcNgmjuP+Su41XvWiaA9tFQ5gZIz
-         DPkurssdLXEUfYDxsMb7gugIPLAVzkBc9SoAj04hzOaXh5Vc63nFI3Wqizg2Affilds6
-         GVhw==
-X-Gm-Message-State: AJIora/cpEEQMHlXGfbRHbXz3sb6382yY1YRR/of5dcV0XLcWuitsaFg
-        N/omYqwM35/G1yCPRT16IX5aXsIPQWFKYaL3qzQ=
-X-Google-Smtp-Source: AGRyM1uUqVtaUItLC5GM5dPIqcXaBtnctDbivq8Sa/TY+MZ4zlzxxNsXElMIyQ3R0dNWkSwoY0p+UAWXxA72d7sMMAo=
-X-Received: by 2002:a05:6a00:179e:b0:518:9e1d:1cbd with SMTP id
- s30-20020a056a00179e00b005189e1d1cbdmr52012436pfg.12.1657190977288; Thu, 07
- Jul 2022 03:49:37 -0700 (PDT)
+        with ESMTP id S235362AbiGGLNA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 07:13:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9863B5724D
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 04:12:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FA74B82047
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 11:12:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3E3C3411E;
+        Thu,  7 Jul 2022 11:12:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657192375;
+        bh=am2w6j+wKU7ZksXpVzGRoVopfEz2xCHBt18QY8NxdmM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T3dgdddL5f9za4tjRdR0APR8MEqZYw0vGdtLUEDZoLbgRb0Hsglnfjl27kcYCE3Ff
+         UidheKvW34Ihb+q6KMsR3mlAPnPYURcJtlXiyz1iMPwbz6+EyqS4Qqj6BBwnz5+sKA
+         oRl73JL8D+P9qIy9FEYL3Mrg1PB3p1gBBsYlhcnM=
+Date:   Thu, 7 Jul 2022 13:12:52 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sanjay R Mehta <sanmehta@amd.com>
+Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>,
+        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        Basavaraj.Natikar@amd.com, mario.limonciello@amd.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Add DP out resource when DP tunnel is
+ discovered.
+Message-ID: <Ysa/tM1e3N3hWkRL@kroah.com>
+References: <1657085978-130560-1-git-send-email-Sanju.Mehta@amd.com>
+ <YsUq80qWepLR2mZ9@kroah.com>
+ <8c913bc1-1ebc-d536-433e-bf3e2cc1f9c1@amd.com>
+ <0b9f2b04-7734-4d05-f027-cd3d7f49064e@amd.com>
 MIME-Version: 1.0
-References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-13-peterwu.pub@gmail.com>
- <CAHp75Vciq4M4kVrabNV9vTLLcd1vR=bMe8JLEdAF9MkRTpcB5g@mail.gmail.com>
-In-Reply-To: <CAHp75Vciq4M4kVrabNV9vTLLcd1vR=bMe8JLEdAF9MkRTpcB5g@mail.gmail.com>
-From:   szuni chen <szunichen@gmail.com>
-Date:   Thu, 7 Jul 2022 18:49:26 +0800
-Message-ID: <CA+hk2fbm8ppKecVJL6D9rYJizf9baV8mOmwRx6GyO+MKvJ3xBQ@mail.gmail.com>
-Subject: Re: [PATCH v4 12/13] leds: flashlight: mt6370: Add Mediatek MT6370
- flashlight support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b9f2b04-7734-4d05-f027-cd3d7f49064e@amd.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andy,
+On Thu, Jul 07, 2022 at 04:01:12PM +0530, Sanjay R Mehta wrote:
+> 
+> 
+> On 7/6/2022 5:30 PM, Sanjay R Mehta wrote:
+> > 
+> > 
+> > On 7/6/2022 11:55 AM, Greg KH wrote:
+> >> On Wed, Jul 06, 2022 at 12:39:38AM -0500, Sanjay R Mehta wrote:
+> >>> From: Sanjay R Mehta <sanju.mehta@amd.com>
+> >>>
+> >>> If the boot firmware implements a connection manager of its
+> >>> own it may create a DP tunnel and will be handed off to Linux
+> >>> CM, but the DP out resource is not saved in the dp_resource
+> >>> list.
+> >>>
+> >>> This patch adds tunnelled DP out port to the dp_resource list
+> >>> once the DP tunnel is discovered.
+> >>>
+> >>> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+> >>> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> >>> ---
+> >>>  drivers/thunderbolt/tb.c     | 15 +++++++++++++++
+> >>>  drivers/thunderbolt/tb.h     |  1 +
+> >>>  drivers/thunderbolt/tunnel.c |  2 ++
+> >>>  3 files changed, 18 insertions(+)
+> >>>
+> >>> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> >>> index 9a3214f..dcd0c3e 100644
+> >>> --- a/drivers/thunderbolt/tb.c
+> >>> +++ b/drivers/thunderbolt/tb.c
+> >>> @@ -1006,6 +1006,21 @@ static void tb_dp_resource_unavailable(struct tb *tb, struct tb_port *port)
+> >>>  	tb_tunnel_dp(tb);
+> >>>  }
+> >>>  
+> >>> +void tb_dp_resource_available_discovered(struct tb *tb, struct tb_port *port)
+> >>> +{
+> >>> +	struct tb_cm *tcm = tb_priv(tb);
+> >>> +	struct tb_port *p;
+> >>> +
+> >>> +	list_for_each_entry(p, &tcm->dp_resources, list) {
+> >>> +		if (p == port)
+> >>> +			return;
+> >>> +	}
+> >>> +
+> >>> +	tb_port_dbg(port, "DP %s resource available discovered\n",
+> >>> +		    tb_port_is_dpin(port) ? "IN" : "OUT");
+> >>> +	list_add_tail(&port->list, &tcm->dp_resources);
+> >>> +}
+> >>> +
+> >>>  static void tb_dp_resource_available(struct tb *tb, struct tb_port *port)
+> >>>  {
+> >>>  	struct tb_cm *tcm = tb_priv(tb);
+> >>> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> >>> index 4602c69..cef2fe3 100644
+> >>> --- a/drivers/thunderbolt/tb.h
+> >>> +++ b/drivers/thunderbolt/tb.h
+> >>> @@ -1222,6 +1222,7 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port);
+> >>>  void usb4_port_device_remove(struct usb4_port *usb4);
+> >>>  int usb4_port_device_resume(struct usb4_port *usb4);
+> >>>  
+> >>> +void tb_dp_resource_available_discovered(struct tb *tb, struct tb_port *port);
+> >>
+> >> Why not put this in the .h file next to the other tb_* calls?
+> >>
+> > 
+> Hi Greg,
+> 
+> I forgot to explain that in this function, I have used a structure
+> "struct tb_cm" which is defined and used only in tb.c file. Hence have
+> to keep this function in tb.c file.
 
-Thank you for the valuable comment.
+I was not referring to the .c file here.
 
-Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
-=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:06=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Mon, Jul 4, 2022 at 7:43 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> > Add Mediatek MT6370 flashlight support.
->
-> ...
->
-> > +         This driver can also be built as a module. If so the module
->
-> If so,
->
-Thank you, I'll fix it in the next version.
+thanks,
 
-> > +         will be called "leds-mt6370-flash.ko".
->
-> No ".ko" part.
->
-Thank you, I'll fix it in the next version.
-
-> ...
->
-> > +#define MT6370_ITORCH_MINUA            25000
-> > +#define MT6370_ITORCH_STEPUA           12500
-> > +#define MT6370_ITORCH_MAXUA            400000
-> > +#define MT6370_ITORCH_DOUBLE_MAXUA     800000
-> > +#define MT6370_ISTRB_MINUA             50000
-> > +#define MT6370_ISTRB_STEPUA            12500
-> > +#define MT6370_ISTRB_MAXUA             1500000
-> > +#define MT6370_ISTRB_DOUBLE_MAXUA      3000000
-> > +#define MT6370_STRBTO_MINUS            64000
-> > +#define MT6370_STRBTO_STEPUS           32000
-> > +#define MT6370_STRBTO_MAXUS            2432000
->
-> Make units suffix visible, i.e. _US, _uA, etc.
->
-Thank you, I'll fix it in the next version.
-
-> ...
->
-> > +       if (curr)
-> > +               val |=3D MT6370_TORCHEN_MASK;
-> > +
-> > +
->
-> One blank line is enough.
->
-Thank you, I'll fix it in the next version.
-
-> ...
->
-> > +       /*
-> > +        * Due to the current spike when turning on flash,
-> > +        * let brightness to be kept by framework.
->
-> brightness be
-> the framework
->
-Thank you, I'll fix it in the next version.
-
-> > +        * This empty function is used to
-> > +        * prevent led_classdev_flash register ops check failure.
-> > +        */
->
-Thank you, I'll fix it in the next version.
-> ...
->
-> > +       } else {
-> > +               ret =3D regmap_update_bits(priv->regmap,
-> > +                                        MT6370_REG_FLEDISTRB(led->led_=
-no),
-> > +                                        MT6370_ISTROBE_MASK, val);
->
-> > +               if (ret)
-> > +                       return ret;
->
-> Dup of the below.
->
-Thank you, I'll fix it in the next version.
-
-> > +       }
-> > +       return ret;
->
-> ...
->
-> > +       /*
-> > +        * If the flash need to be on,
-> > +        * config the flash current ramping up to the setting value
-> > +        * Else, always recover back to the minimum one
->
-> Missed periods.
->
-Thank you, I'll fix it in the next version.
-
-> > +        */
->
-> ...
->
-> > +       /*
-> > +        * For the flash turn on/off, HW ramping up/down time is 5ms/50=
-0us
-> > +        * respectively.
-> > +        */
-> > +       if (!prev && curr)
-> > +               usleep_range(5000, 6000);
-> > +       else if (prev && !curr)
-> > +               udelay(500);
->
-> Comment doesn't explain why this is suddenly a busy loop operation?
->
-For the flash turn on/off, HW ramping up/down waiting time is
-5ms/500us, respectively.
-The busy loop is for preventing turn on/off in wait time, which will
-cause unexpected problems.
-
-If I change the comment to
-"For the flash turn on/off, HW ramping up/down waiting time is
-5ms/500us, respectively.
-Need to wait until HW ramping successfully to prevent the unexpected proble=
-m.",
-will this meet your expectation?
-
->
-> > +static int mt6370_led_register(struct device *parent, struct mt6370_le=
-d *led,
-> > +                               struct led_init_data *init_data)
-> > +{
-> > +       struct v4l2_flash_config v4l2_config =3D {0};
-> > +       int ret;
-> > +
-> > +       ret =3D devm_led_classdev_flash_register_ext(parent, &led->flas=
-h,
-> > +                                                  init_data);
-> > +       if (ret) {
-> > +               dev_err(parent, "Couldn't register flash %d\n", led->le=
-d_no);
-> > +               return ret;
-> > +       }
-> > +
-> > +       mt6370_init_v4l2_flash_config(led, &v4l2_config);
-> > +       led->v4l2_flash =3D v4l2_flash_init(parent, init_data->fwnode,
-> > +                                         &led->flash, &v4l2_flash_ops,
-> > +                                         &v4l2_config);
-> > +       if (IS_ERR(led->v4l2_flash)) {
-> > +               dev_err(parent, "Failed to register %d v4l2 sd\n", led-=
->led_no);
-> > +               return PTR_ERR(led->v4l2_flash);
-> > +       }
-> > +
-> > +       return 0;
-> > +}
->
-> ...
->
-> > +       } else
-> > +               val =3D clamp_align(val, MT6370_STRBTO_MINUS, MT6370_ST=
-RBTO_MAXUS,
-> > +                                 MT6370_STRBTO_STEPUS);
->
-> Missed {}
->
-Thank you, I'll fix it in the next version.
-
-> > +
-> > +
->
-> One blank line is enough.
->
-Thank you, I'll fix it in the next version.
-
-> --
-
-Yours Sincerely,
-Alice
+greg k-h
