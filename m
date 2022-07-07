@@ -2,88 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDEC569EC3
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 11:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2486569F71
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 12:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235162AbiGGJnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 05:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S235426AbiGGKSG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 06:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiGGJnV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 05:43:21 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20345070
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 02:43:21 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-10bec750eedso16929541fac.8
-        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 02:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=Fei5ldd1DMp40UpYey+IXPJbTXnAtUnFZhG4+jmAP/s=;
-        b=GVdAxiuimo/PtedpAVWzJdvqeTJfTfSqOOFtOjNB0+yJwa0cB6waY7v3uaZN4rM07D
-         jmrvfbXd+ie2TFtaM+/ivobvduiTaOEJq7KfeyfKJGGSAQHmvYN14T/i3rziUYvWnGl2
-         GbDISHfsnHA3X1aBabP7BCjL8cGGdEBLWQ7uWMeOi1h3SJqf8oYRj8/n6aMC3VKU/wBZ
-         d/POvdPYZ3GY/ebbnrkY39wmUQ6OF+X421emK6NngJQp6apqJUE/snvFWNedUDZdNQLC
-         RqVoDewKp0y7UyWmhj3fdyCELvNdmiozyG0yTmdH71abQM7knbkEAJ6X/aF9Gj+iB5Gi
-         GJQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=Fei5ldd1DMp40UpYey+IXPJbTXnAtUnFZhG4+jmAP/s=;
-        b=F4DaHKuH1/DaY51v6sDM7tqIt4fRpLvqgfpfqTT/b8rO36e0MVLZ9iiFhi6K/dz3vo
-         rsyiONynQs/GedOWQpLz6uGwKVDleT05BpoCEAVW06jXsSwIJdob8Ub1Fu7anf+BiJ8N
-         zATdONPxHYClQn1Dp9Pm9wrYQf+SdAj5YMVO46R/lVO5nUxiDjL47YB0L8/KM1OEElNB
-         ohSnmStCr5l9FeYnboWbM7uUDO+yOj7Ai/JWiHEmfq1j02AlJcld3c/HFc8+LfntQYKU
-         GFwnN6ilTW4hntNfpkPBKcxzHnXtK9O/anI7FpG3aPv2ZgjGI6XG/1b35QooT4aZxlqD
-         cyrA==
-X-Gm-Message-State: AJIora+RkL5VtdNL1hC+/8RLJfSths0bR5RxZvmfhMfoTzs4wZXYPoJR
-        hkNeXza2cpiaxkkg5ErxEmkwud52sITN0iSLanesetJucqw=
-X-Google-Smtp-Source: AGRyM1sR9UX2zyOCgaROEoYEvFeEpDQHO3kMhsHpQwlNNRFN6ra6Yn2C8iQIEintGEiotufwJ7co9c1bI08u1nYvtiI=
-X-Received: by 2002:a05:6870:b30a:b0:10c:190d:b32f with SMTP id
- a10-20020a056870b30a00b0010c190db32fmr2235177oao.14.1657187000630; Thu, 07
- Jul 2022 02:43:20 -0700 (PDT)
+        with ESMTP id S235391AbiGGKR6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 06:17:58 -0400
+X-Greylist: delayed 366 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 03:17:56 PDT
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D63350739;
+        Thu,  7 Jul 2022 03:17:56 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 4A03E41255;
+        Thu,  7 Jul 2022 10:11:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-transfer-encoding:content-disposition
+        :content-type:content-type:mime-version:references:message-id
+        :subject:subject:from:from:date:date:received:received:received
+        :received; s=mta-01; t=1657188708; x=1659003109; bh=Cm5oYM0j2avm
+        1cv/2MMA7utZ0Xk4TbOjhwCW9dIdoKk=; b=ZaJyJC5qy7NXBHEIfU+m6ZpKOVMP
+        mlYVqbMpD9TuIht+DyX1A5M+6ymfAcYqC3MSONvbdITQY05bjIaaG0svQPFVe4Su
+        oXiiAUF9RZaOXFWnJGJwlY72nB50LBofTl/1kwe2pmY1hpofuywL/CjiEKUxQMpT
+        KT/5tvTTkpDirBY=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id M-j5Z8M0AQqG; Thu,  7 Jul 2022 13:11:48 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 3BB0B4124A;
+        Thu,  7 Jul 2022 13:11:47 +0300 (MSK)
+Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Thu, 7 Jul 2022 13:11:47 +0300
+Received: from yadro.com (10.199.20.241) by T-EXCH-09.corp.yadro.com
+ (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Thu, 7 Jul 2022
+ 13:11:45 +0300
+Date:   Thu, 7 Jul 2022 13:11:45 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 15/36] target: Include INQUIRY length
+Message-ID: <YsaxYW6Q661qoaar@yadro.com>
+References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
+ <2557ef61dddba5056b9d89d73248bf4140e92f19.1657149962.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-From:   "Jozo M." <jomajm@gmail.com>
-Date:   Thu, 7 Jul 2022 11:43:09 +0200
-Message-ID: <CA+BOZ0uBvKHc3idN+Pn_g4Z4e5ObYPZ4WY4f78fzj_B=8c5qJw@mail.gmail.com>
-Subject: gadgetfs inode.c - possible memory corruption ?
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2557ef61dddba5056b9d89d73248bf4140e92f19.1657149962.git.Thinh.Nguyen@synopsys.com>
+X-Originating-IP: [10.199.20.241]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, Jul 06, 2022 at 04:35:57PM -0700, Thinh Nguyen wrote:
+> «Внимание! Данное письмо от внешнего адресата!»
+> 
+> The INQUIRY data length is minimum 36 bytes plus additional length
+> jindicated in the descriptor. See SPC4-r37 section 6.6.2. The "len" here
+> is the total length of the INQUIRY data. Make sure to include the 36
+> initial bytes.
 
-my kernel running on imx6 was crashing on USB gadgetfs because my
-kernel was using wait_event API instead of completion (I was convinced
-it is due to wrong HW setup).
-During research gadgetfs inode.c function ep_io was not clear for me:
-
-we are submiting USB request here
-      value = usb_ep_queue (epdata->ep, req, GFP_ATOMIC);
-then we are waiting for completion here:
-      value = wait_for_completion_interruptible(&done);
-but if completion is interrupted we end up here:
-      spin_unlock_irq (&epdata->dev->lock);
-      DBG (epdata->dev, "endpoint gone\n");
-      epdata->status = -ENODEV;
-
-At this point ep_io is terminated and stack is not valid. Later on
-epio_complete might be called from IRQ and it calls complete ((struct
-completion *)req->context) but stack is no longer valid;
-Shouldn't we put req->context = NULL;  before spin_unlock_irq
-(&epdata->dev->lock); ?
-      req->context = NULL;
-      spin_unlock_irq (&epdata->dev->lock);
-      DBG (epdata->dev, "endpoint gone\n");
-      epdata->status = -ENODEV;
-
-Thanks,
-Jozef
+I think you're wrong, because Standard INQUIRY data format clearly
+defines ADDITIONAL LENGTH as (n - 4), where n is the total length of the
+INQUIRY data including the the mandatory bytes.
+ 
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/target/target_core_spc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+> index dd799158609d..1801e10cd575 100644
+> --- a/drivers/target/target_core_spc.c
+> +++ b/drivers/target/target_core_spc.c
+> @@ -756,7 +756,7 @@ spc_emulate_inquiry(struct se_cmd *cmd)
+>                 }
+> 
+>                 ret = spc_emulate_inquiry_std(cmd, buf);
+> -               len = buf[4] + 5;
+> +               len = buf[4] + 5 + INQUIRY_LEN;
+>                 goto out;
+>         }
+> 
+> --
+> 2.28.0
+> 
