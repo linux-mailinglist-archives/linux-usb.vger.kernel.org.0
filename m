@@ -2,101 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AB556A3CB
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 15:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D91956A3DA
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 15:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbiGGNgz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 09:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S236012AbiGGNjM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 09:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbiGGNgy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 09:36:54 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DE81EAEF;
-        Thu,  7 Jul 2022 06:36:53 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id C507D412C4;
-        Thu,  7 Jul 2022 13:36:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received:received; s=mta-01; t=
-        1657201010; x=1659015411; bh=zUvmMWD6iFCfHHkpBy7NcvluLpihixshrpR
-        oASJvo/I=; b=L0FRHozSCzg7evOnJRl8KhMzrx8DZHSPTLKcOaUheIF/Dt0JQj0
-        C3Xr9dzA3rC81fg2zUHgjGS0SihUaj43HwEx8gyonAwdVrKgGTDj8HEj15ZKb4Rm
-        YoVKbmQc3Kx5GQ6VKEje/CS+WNv6y8Ih6mXSz6o/bOHmTeCjO+AHRUdA=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hKlvNcvD0SxE; Thu,  7 Jul 2022 16:36:50 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 22E834127A;
-        Thu,  7 Jul 2022 16:36:45 +0300 (MSK)
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Thu, 7 Jul 2022 16:36:45 +0300
-Received: from yadro.com (10.178.114.42) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Thu, 7 Jul 2022
- 16:36:44 +0300
-Date:   Thu, 7 Jul 2022 16:36:44 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 07/36] target: Don't do tmr_notify on empty aborted list
-Message-ID: <20220707133644.GE23838@yadro.com>
-References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
- <92ec6c71a200b42c1a70ba2054087da9715741c8.1657149962.git.Thinh.Nguyen@synopsys.com>
+        with ESMTP id S236008AbiGGNjL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 09:39:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B39517E06
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 06:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657201149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DQU1Mm0tfkiOVObsi+2CfhCELbvXlun5JOUv56uX35A=;
+        b=HByZJY+J0wX+xFsqxJU5JNR1UCuyTwDaL9J4nxudwFxKMt0R087mel2vVMwTipYE3fdFfa
+        YqRCdnbui3G86W0DYno9Idfc0jyOI5sje0fLvKuikXEP2Mnz4zLYQW7YoHRY+UHJcS3pXA
+        B7blynyuqE9ue7kg/tVS2OAEfRHhiss=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-mLCsjqTxOKePm-jF6ddvzw-1; Thu, 07 Jul 2022 09:39:02 -0400
+X-MC-Unique: mLCsjqTxOKePm-jF6ddvzw-1
+Received: by mail-qt1-f198.google.com with SMTP id d4-20020ac86144000000b00319586f86fcso15441785qtm.16
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 06:39:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=DQU1Mm0tfkiOVObsi+2CfhCELbvXlun5JOUv56uX35A=;
+        b=6ODJQ5gVoF9WBdp6zq7DoHujiOwjIjQZMqA4ZDr5UofyK0aqwJ/QlU2k/qnv7tIOD7
+         BceXIIke/fe/9P3O0SgMWuVZu/GbxEgd1+76XHwto4RXsGR/m07pxF4ALwR2hwuEWGfa
+         1I98YS0gbCsvvJovRGKV/gfzDJgBUqu9SHaNgoWtgmXWUwk2U8fmqirvd6K30XLeChP8
+         /VJ7NuGb8VGdG7gDrqGloNoTmk/5Gw26i7vGShfA4PlmSujQokS0cbFn1CICSdq2ZwjJ
+         20mCHHlWF0v5xTz2EqissiPCmjxcepgmPgYFFXVEIAgbaQG/nbhOlIi++N20fKdhZ944
+         9SSQ==
+X-Gm-Message-State: AJIora9KNoLmfI+WSv9E3Bp5yEqrkTouqqW5S3hW9IaPZFZks0xY8KwW
+        v5Gq9AD9mq23NAclQ2m7KtKzqdL4jofDvmyHs9EsfTWrME2U2KqAOGqkedkcGwDQnLxq1oSSMwG
+        +x7OcnZ13bqCHyJJD/xwS
+X-Received: by 2002:a05:622a:1186:b0:31a:2cda:b5ba with SMTP id m6-20020a05622a118600b0031a2cdab5bamr37324778qtk.203.1657201142036;
+        Thu, 07 Jul 2022 06:39:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vyA9jRRyQ2EzjVUjKAaIsVggJqF0GM7HZ5o84MWKSP9+6ifnr+uDpmzTruyKB1FCeIY3ByYg==
+X-Received: by 2002:a05:622a:1186:b0:31a:2cda:b5ba with SMTP id m6-20020a05622a118600b0031a2cdab5bamr37324757qtk.203.1657201141761;
+        Thu, 07 Jul 2022 06:39:01 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-106-148.dyn.eolo.it. [146.241.106.148])
+        by smtp.gmail.com with ESMTPSA id u9-20020a05622a17c900b0031d3d0b2a04sm12043982qtk.9.2022.07.07.06.39.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 06:39:01 -0700 (PDT)
+Message-ID: <496c06361f98dcce32117b6ee938cfff716d4f82.camel@redhat.com>
+Subject: Re: [PATCH] usbnet: modern method to get random MAC
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Oliver Neukum <oneukum@suse.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Date:   Thu, 07 Jul 2022 15:38:58 +0200
+In-Reply-To: <20220706091504.15306-1-oneukum@suse.com>
+References: <20220706091504.15306-1-oneukum@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <92ec6c71a200b42c1a70ba2054087da9715741c8.1657149962.git.Thinh.Nguyen@synopsys.com>
-X-Originating-IP: [10.178.114.42]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
-
-On Wed, Jul 06, 2022 at 04:35:07PM -0700, Thinh Nguyen wrote:
-> If there's no command to abort, just skip doing tmr_notify to an empty
-> list.
-AFAIK, that was intentionaly:
-https://lore.kernel.org/all/20200726153510.13077-3-bstroesser@ts.fujitsu.com/
-   'If no commands were aborted, an empty list is supplied.'
-
- 
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
->  drivers/target/target_core_tmr.c | 3 ---
->  1 file changed, 3 deletions(-)
+On Wed, 2022-07-06 at 11:15 +0200, Oliver Neukum wrote:
+> The old method had the bug of issuing the same
+> random MAC over and over even to two devices at the
+> same time. Instead of fixing that, this does as
+> Jakub suggested and moves to the modern method.
 > 
-> diff --git a/drivers/target/target_core_tmr.c b/drivers/target/target_core_tmr.c
-> index 724ddabda488..718d985e4860 100644
-> --- a/drivers/target/target_core_tmr.c
-> +++ b/drivers/target/target_core_tmr.c
-> @@ -167,9 +167,6 @@ void core_tmr_abort_task(
->  		spin_unlock_irqrestore(&dev->queues[i].lock, flags);
+> This bug is as old as the driver.
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/net/usb/usbnet.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index c70def1a87ca..715cc8b66776 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -61,9 +61,6 @@
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> -// randomly generated ethernet address
+> -static u8	node_id [ETH_ALEN];
+> -
+>  /* use ethtool to change the level for any given device */
+>  static int msg_level = -1;
+>  module_param (msg_level, int, 0);
+> @@ -1725,7 +1722,6 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+>  
+>  	dev->net = net;
+>  	strscpy(net->name, "usb%d", sizeof(net->name));
+> -	eth_hw_addr_set(net, node_id);
+>  
+>  	/* rx and tx sides can use different message sizes;
+>  	 * bind() should set rx_urb_size in that case.
+> @@ -1793,9 +1789,13 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+>  		goto out4;
 >  	}
 >  
-> -	if (dev->transport->tmr_notify)
-> -		dev->transport->tmr_notify(dev, TMR_ABORT_TASK, &aborted_list);
-> -
->  	printk("ABORT_TASK: Sending TMR_FUNCTION_COMPLETE for ref_tag: %lld\n",
->  			tmr->ref_task_tag);
->  	tmr->response = TMR_FUNCTION_COMPLETE;
+> -	/* let userspace know we have a random address */
+> -	if (ether_addr_equal(net->dev_addr, node_id))
+> -		net->addr_assign_type = NET_ADDR_RANDOM;
+> +	/*
+> +	 * if the device does not come with a MAC
+> +	 * we ask the network core to generate us one
+> +	 * and flag the device accordingly
+> +	 */
+
+Minir nit: even if usbnet uses a mixed style for comments, I think it's
+better to stick to netdev format for new code.
+
+	/* if the device does not come with a MAC
+...
+	 */
+
+Thanks!
+
+/P
+
+> +	if (!is_valid_ether_addr(net->dev_addr))
+> +		eth_hw_addr_random(net);
+>  
+>  	if ((dev->driver_info->flags & FLAG_WLAN) != 0)
+>  		SET_NETDEV_DEVTYPE(net, &wlan_type);
+> @@ -2205,7 +2205,6 @@ static int __init usbnet_init(void)
+>  	BUILD_BUG_ON(
+>  		sizeof_field(struct sk_buff, cb) < sizeof(struct skb_data));
+>  
+> -	eth_random_addr(node_id);
+>  	return 0;
+>  }
+>  module_init(usbnet_init);
+
