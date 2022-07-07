@@ -2,59 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FFD569E0C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 10:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17021569E7E
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 11:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbiGGIqx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 04:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
+        id S235100AbiGGJW6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 05:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235406AbiGGIqo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 04:46:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BE850707;
-        Thu,  7 Jul 2022 01:46:44 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S234797AbiGGJW5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 05:22:57 -0400
+X-Greylist: delayed 482 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 02:22:56 PDT
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853D732EC7;
+        Thu,  7 Jul 2022 02:22:56 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 26A7C412DE;
+        Thu,  7 Jul 2022 09:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        mime-version:content-transfer-encoding:content-type:content-type
+        :content-language:accept-language:in-reply-to:references
+        :message-id:date:date:subject:subject:from:from:received
+        :received:received:received:received; s=mta-01; t=1657185291; x=
+        1658999692; bh=sn7ppcDc4q0hu3Ls0LT6KG8ETT6oibJ0Tr8PPEXqSLI=; b=s
+        mBpodBYBXiHLIQA6LSaHOnakoGjDF+IR9EQhYtiWag5ZE60sE8IHdOwErg0bt5AU
+        dTyCUgJxJySs207Diw9+yMHqSx0M1VuLH+/PNwz/tcTHL1Asq+biejz5QQFNYiqu
+        W1D8Q/OyjuxDYHKdEQlP+rJOQdb/rC44Lkt1F/d4Bg=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mDqkA6QnfPKN; Thu,  7 Jul 2022 12:14:51 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B696B66019AF;
-        Thu,  7 Jul 2022 09:46:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657183602;
-        bh=+RoEDtvlz7kX0ABpmjKMkzrvHUlXdJAQN4BA4t4KiEk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hIuT6QshTj2nHgBO7rIg/1trvSfx/lMT51tKLt7DNLCM5C74CZtk0++3hez1V4wol
-         RpumqL9cqQKeX+wH7IrQtPNjHk0nC7j5OVPZ4qAcyfqlJSZOB3x2RlG7DL8A7msRyc
-         WOmsvSbgjshYbnsjiJBBP3BKGubz7+cgy66YBBbUIERCexop8xcSIDVHBOpFhgGVwe
-         SgP4GudwtXDtLW8JuLUR4b08xOOLZET8n2erjFh08AbjQX0rhnpmnryi8bsSD5nAxz
-         ZXNJqVirkiaHKkvu1GHsya8jvEXMiYFUOxOUjOKFUWEa0k5MW4vi4u7w/94/auP8UB
-         0ymH5gA8XpKhg==
-Message-ID: <66db0f7e-6c42-562e-0f4e-4e741f17c979@collabora.com>
-Date:   Thu, 7 Jul 2022 10:46:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: usb: mtk-xhci: add compatible for mt8188
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        by mta-01.yadro.com (Postfix) with ESMTPS id 1E9BC411FD;
+        Thu,  7 Jul 2022 12:14:49 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Thu, 7 Jul 2022 12:14:48 +0300
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.9; Thu, 7 Jul 2022 12:14:48 +0300
+Received: from T-EXCH-08.corp.yadro.com ([172.17.11.58]) by
+ T-EXCH-08.corp.yadro.com ([172.17.11.58]) with mapi id 15.02.1118.009; Thu, 7
+ Jul 2022 12:14:48 +0300
+From:   Dmitriy Bogdanov <d.bogdanov@yadro.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220707015041.12264-1-chunfeng.yun@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220707015041.12264-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
+Subject: RE: [PATCH 34/36] usb: gadget: f_tcm: Free tags earlier
+Thread-Topic: [PATCH 34/36] usb: gadget: f_tcm: Free tags earlier
+Thread-Index: AQHYkZFt2dlz1fcCV0GBRBN7WQpUfq1ynPhw
+Date:   Thu, 7 Jul 2022 09:14:48 +0000
+Message-ID: <17d93b498de04ee5b550ff0fe8b91847@yadro.com>
+References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
+ <6a5487365f0804447d4cbb8911d0719d8b21b601.1657149962.git.Thinh.Nguyen@synopsys.com>
+In-Reply-To: <6a5487365f0804447d4cbb8911d0719d8b21b601.1657149962.git.Thinh.Nguyen@synopsys.com>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.178.114.42]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,29 +83,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il 07/07/22 03:50, Chunfeng Yun ha scritto:
-> Add compatible for mt8188
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> ---
->   Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> index 892718459d25..97d93119d088 100644
-> --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-> @@ -31,6 +31,7 @@ properties:
->             - mediatek,mt8173-xhci
->             - mediatek,mt8183-xhci
->             - mediatek,mt8186-xhci
-> +          - mediatek,mt8188-xhci
->             - mediatek,mt8192-xhci
->             - mediatek,mt8195-xhci
->         - const: mediatek,mtk-xhci
-> 
-
-
+SGkgVGhpbmgsDQoNCj4gRnJlZSB1cCBzYml0bWFwIGluZGV4IGltbWVkaWF0ZWx5IG9uY2UgdGhl
+IGNvbW1hbmQgaXMgY29tcGxldGVkIHJhdGhlcg0KPiB0aGFuIHdhaXRpbmcgZm9yIGtyZWYgdG8g
+Y2FsbCBmcmVlaW5nIHRhZy4gVGhpcyBrZWVwcyB0aGUgc2JpdG1hcCBxdWV1ZQ0KPiBmcmVlIHF1
+aWNrZXIuDQo+IA0KVGhhdCBpcyBjb21wbGV0ZWx5IHdyb25nLiBTYml0bWFwIGluZGV4IGlzIGEg
+cGxhY2Ugb2YgdXNiZ19jbWQqIGluDQphIHByZS1hbGxvY2F0ZWQgbWVtb3J5IHBvb2wuIEl0IG11
+c3Qgbm90IGJlIGZyZWVkIHVudGlsIHVzYmdfY21kKg0KaXMgbm90IHVzZWQuDQoNCj4gU2lnbmVk
+LW9mZi1ieTogVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPg0KPiAtLS0N
+Cj4gIGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX3RjbS5jIHwgNiArKysrKysNCj4gIDEg
+ZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L3VzYi9nYWRnZXQvZnVuY3Rpb24vZl90Y20uYyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlv
+bi9mX3RjbS5jDQo+IGluZGV4IGMxM2FhNjFkODJhYS4uZmEwOTk5OWFkZGE3IDEwMDY0NA0KPiAt
+LS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl90Y20uYw0KPiArKysgYi9kcml2ZXJz
+L3VzYi9nYWRnZXQvZnVuY3Rpb24vZl90Y20uYw0KPiBAQCAtNTcwLDYgKzU3MCw3IEBAIHN0YXRp
+YyB2b2lkIHVhc3Bfc3RhdHVzX2RhdGFfY21wbChzdHJ1Y3QgdXNiX2VwICplcCwgc3RydWN0IHVz
+Yl9yZXF1ZXN0ICpyZXEpDQo+ICAgICAgICAgc3RydWN0IHVzYmdfY21kICpjbWQgPSByZXEtPmNv
+bnRleHQ7DQo+ICAgICAgICAgc3RydWN0IHVhc19zdHJlYW0gKnN0cmVhbSA9IGNtZC0+c3RyZWFt
+Ow0KPiAgICAgICAgIHN0cnVjdCBmX3VhcyAqZnUgPSBjbWQtPmZ1Ow0KPiArICAgICAgIHN0cnVj
+dCBzZV9zZXNzaW9uICpzZV9zZXNzID0gY21kLT5zZV9jbWQuc2Vfc2VzczsNCj4gICAgICAgICBp
+bnQgcmV0Ow0KPiANCj4gICAgICAgICBpZiAocmVxLT5zdGF0dXMgPT0gLUVTSFVURE9XTikNCj4g
+QEAgLTYwMyw2ICs2MDQsOCBAQCBzdGF0aWMgdm9pZCB1YXNwX3N0YXR1c19kYXRhX2NtcGwoc3Ry
+dWN0IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVzdCAqcmVxKQ0KPiAgICAgICAgICAgICAg
+ICAgYnJlYWs7DQo+IA0KPiAgICAgICAgIGNhc2UgVUFTUF9RVUVVRV9DT01NQU5EOg0KPiArDQo+
+ICsgICAgICAgICAgICAgICB0YXJnZXRfZnJlZV90YWcoc2Vfc2VzcywgJmNtZC0+c2VfY21kKTsN
+Cj4gICAgICAgICAgICAgICAgIHRyYW5zcG9ydF9nZW5lcmljX2ZyZWVfY21kKCZjbWQtPnNlX2Nt
+ZCwgMCk7DQo+ICAgICAgICAgICAgICAgICB1c2JfZXBfcXVldWUoZnUtPmVwX2NtZCwgY21kLT5y
+ZXEsIEdGUF9BVE9NSUMpOw0KPiANCj4gQEAgLTYxNCw2ICs2MTcsNyBAQCBzdGF0aWMgdm9pZCB1
+YXNwX3N0YXR1c19kYXRhX2NtcGwoc3RydWN0IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVz
+dCAqcmVxKQ0KPiAgICAgICAgIHJldHVybjsNCj4gDQo+ICBjbGVhbnVwOg0KPiArICAgICAgIHRh
+cmdldF9mcmVlX3RhZyhzZV9zZXNzLCAmY21kLT5zZV9jbWQpOw0KPiAgICAgICAgIHRyYW5zcG9y
+dF9nZW5lcmljX2ZyZWVfY21kKCZjbWQtPnNlX2NtZCwgMCk7DQo+ICB9DQo+IA0KPiBAQCAtOTQx
+LDYgKzk0NSw3IEBAIHN0YXRpYyB2b2lkIHVzYmdfZGF0YV93cml0ZV9jbXBsKHN0cnVjdCB1c2Jf
+ZXAgKmVwLCBzdHJ1Y3QgdXNiX3JlcXVlc3QgKnJlcSkNCj4gICAgICAgICBzdHJ1Y3Qgc2VfY21k
+ICpzZV9jbWQgPSAmY21kLT5zZV9jbWQ7DQo+IA0KPiAgICAgICAgIGlmIChyZXEtPnN0YXR1cyA9
+PSAtRVNIVVRET1dOKSB7DQo+ICsgICAgICAgICAgICAgICB0YXJnZXRfZnJlZV90YWcoc2VfY21k
+LT5zZV9zZXNzLCBzZV9jbWQpOw0KPiAgICAgICAgICAgICAgICAgdHJhbnNwb3J0X2dlbmVyaWNf
+ZnJlZV9jbWQoJmNtZC0+c2VfY21kLCAwKTsNCj4gICAgICAgICAgICAgICAgIHJldHVybjsNCj4g
+ICAgICAgICB9DQo+IEBAIC05NjMsNiArOTY4LDcgQEAgc3RhdGljIHZvaWQgdXNiZ19kYXRhX3dy
+aXRlX2NtcGwoc3RydWN0IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVzdCAqcmVxKQ0KPiAg
+Y2xlYW51cDoNCj4gICAgICAgICAvKiBDb21tYW5kIHdhcyBhYm9ydGVkICovDQo+ICAgICAgICAg
+aWYgKGNtZC0+c3RhdGUgPT0gVUFTUF9RVUVVRV9DT01NQU5EKSB7DQo+ICsgICAgICAgICAgICAg
+ICB0YXJnZXRfZnJlZV90YWcoc2VfY21kLT5zZV9zZXNzLCBzZV9jbWQpOw0KPiAgICAgICAgICAg
+ICAgICAgdHJhbnNwb3J0X2dlbmVyaWNfZnJlZV9jbWQoc2VfY21kLCAwKTsNCj4gICAgICAgICAg
+ICAgICAgIHJldHVybjsNCj4gICAgICAgICB9DQoNCg==
