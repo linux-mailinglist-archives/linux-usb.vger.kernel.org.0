@@ -2,170 +2,278 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846D6569FFA
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 12:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4E556A05A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 12:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235363AbiGGKbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 06:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
+        id S235248AbiGGKtk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 06:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235337AbiGGKbT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 06:31:19 -0400
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FE7564FB;
-        Thu,  7 Jul 2022 03:31:19 -0700 (PDT)
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CE614C0767;
-        Thu,  7 Jul 2022 10:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1657189878; bh=Yd2aEdEE9cu/u333X0ce+CfdmJDGskggKlon7UGuc+0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=YP9qtYF0bHppJpd9gB2ta8b7rWU+pKULrwZU4/hc1T9wNsQwrV1bOpv3GAef+Pozn
-         kTz69a507fuFJwAR+x8k6EMAGMU9XIat/fk+uS5QyDrDI1CN2sct//g4ULD44U6jFO
-         xfSUOEJsLPh+1c7xBZ/o6LjRxJLxlHbUgymSWYOyUDuabCOmtAvqI2zPNxtRgUiLSb
-         u/2dBSf9GcjmstRuZRsWIfcsgg1rG6EEIzf6nqY0P4OwjAZNfwVSkWc96+86a/fc5x
-         Kxi1ddUugEKdUsxb+CMfPj1kOg6FnromhTZ/3KkA7odWQ1e3kPrK/BI3W6TWl9CHQ6
-         mQ93HccFIPwZg==
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 3E5B3A009C;
-        Thu,  7 Jul 2022 10:31:18 +0000 (UTC)
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id B64EA800B4;
-        Thu,  7 Jul 2022 10:31:17 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="GkklYAI0";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C+qa0OxEFrfTIqf7BU24oyy1xNW3t6050MdTgRB6aQAc7O5UztPob0fZ8Aa76WiJNkCwwIbTkgOOvvRss9mSj2ReDwNlyX7aTGBgXoHcGPuVvbqqGYjHZkIxeUjBMg7oSB4W36Sy47UuMwwepioyvH7ngMC+Gw5C7cvsXZt/4A3msfQPJ2pmUQkY7uoj+WJw/XODcnpfAGVPMbJuoxcrWwdUP0JM3Kb6iJxasZfczvqBl+S6fRnjbCHRoZe4lLD73rXFmw4kgq83BXYa7QaNkONH44jk9mSFGqICazqvkYpkU7zWaS89RqkaqiUbVZz/opn7A1HTM3bD2IP2X1tzkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yd2aEdEE9cu/u333X0ce+CfdmJDGskggKlon7UGuc+0=;
- b=TJIIUNZihxMAx7EjqOc0a6MWIsmDgb5QD2r9VH/W1fGCFI696pLExGS5ghxq+gTlpOwaX8MmMZjiIn+5S60tG1Qm8IHSV4YoCPd4smgGk118F84FLrfWwXUdRjqXxKuT9ckMTSPkhYqOMgKR8ac/yZ4X65gCwudRtrej6jQnE+oBX+hQgSQqOY2voyVPdGI8tiJuin3UbWau1wSVBnhBZNPeBpTf803IbQtSC92YPiC0Oh0uvMlF9MLslIkfVd6Mehkunm0pdb9touF5LJka7Z8EN6RBAjSsU4wDnWDtVNlw4zzCl0uZ4WQ8HZMB1h7nJnswkQpV3fI1+Ab+MQp87Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yd2aEdEE9cu/u333X0ce+CfdmJDGskggKlon7UGuc+0=;
- b=GkklYAI0GLURR/RqEHlWAwxHMrlCmJhAq256MhBhsMd4JaMlBcjBHlWS3OtRbXH3kQtf69klK+sRXf4xq0KwYjDBYMELrA1n44JyX6z+zTTUgWK4IuvL1TVw91C7IprU4G51TRCJPsizWLL+CwGm6HR6DrzGsprTd+w/xTfiECk=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by BN6PR12MB1730.namprd12.prod.outlook.com (2603:10b6:404:ff::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Thu, 7 Jul
- 2022 10:31:14 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::8948:d205:4d47:c54c]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::8948:d205:4d47:c54c%7]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
- 10:31:13 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
-Subject: Re: [PATCH 20/36] usb: gadget: f_tcm: Limit number of sessions
-Thread-Topic: [PATCH 20/36] usb: gadget: f_tcm: Limit number of sessions
-Thread-Index: AQHYkZE54KU2RuPxqEe5mAlGbAtht61yepIAgAA7qIA=
-Date:   Thu, 7 Jul 2022 10:31:13 +0000
-Message-ID: <1836e1b5-0aca-460a-ea96-e86593f9960f@synopsys.com>
-References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
- <d344403eb32d950eafacf616ccc19ce742a6b3b6.1657149962.git.Thinh.Nguyen@synopsys.com>
- <YsaD5lqtetyVBUD5@kroah.com>
-In-Reply-To: <YsaD5lqtetyVBUD5@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b3ba8cb8-5ffd-4bde-c7a8-08da6003d151
-x-ms-traffictypediagnostic: BN6PR12MB1730:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yYgfM4mcxRIZNLELPimi3LWGIuvaCdodQUwmkvq9RMGg56z3eT8BJunSPBNSM4Fpa3ZZWU08e1Qek07PEHh/XDBmFDGGeRPsusL2uFkXPXvMy7aDY6pQJFMrNB2k8R5XZwrsBRomMebTxKfSsLw6R3wORM2E0Mh8AQnIFZQ3J5w24rrweaQXHvXJ0VO5hPOoUClxo2sTxhF33n7Y7DQvrvg6BMkKl7UJIFqONQNlF6P5nNfsDkukbwXm/+rS3UcIJMtvLglVeKAkoaA45Ga16WzE6/Lzni0dNrYIILDz0R3nhxaCvlTSj6QMdh0bN9n5QwBZYAW2F8LNgV/vAe057db4Q6qeAfrh+pR8iY5PnzqzX+VJV6fn6LaTP5l568antvPckT0p+pu4qQHB2AYpfe9AXaZWxIQZon+xHt30QElselqIxYLdmJTU/xN1xem/R2j/Hw6+oMV9C4iIZF142J7IdoWv0qGEnec+eA+wgRe7KBMaZ9QOJcL/48Jh8m4RLbIWvR+WJVCja4n577iYtiC9yhZViSwxqv6U8vRju4QFMfH7bk+QvqduiZSMFH1o4/E0uG/Q4c+cXO8zTk0yK459uqIYrdc4pdn/peHMI9Q30NlezVc2QhHnYKQvXmFLYo3nxK16OiCrrdCc8AReI7R4K2vw9TPVctAWGVHCkO889suP0O2sGfSkNYlBC2EKqU/LhhvXGXLv8FROfQgfzVI3hO6oUQEFDHIysUtPO5clJrp2uZU8iBs94FxV4SycztiENilgIeBXki41GPeftNfIrkuapmxkWVtGkdZBGRCoYgwVUZ/KZV1VGM7q5R7MJZ5bn/qJyDfH0KCqebHuaiey5XYgeACiXwS92S3DHbECHDfYy/qtoschWTuawY/I
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(136003)(39860400002)(376002)(366004)(86362001)(26005)(6506007)(6512007)(41300700001)(2906002)(31696002)(2616005)(6486002)(478600001)(8936002)(5660300002)(4744005)(38070700005)(122000001)(83380400001)(186003)(38100700002)(64756008)(91956017)(71200400001)(31686004)(66446008)(36756003)(4326008)(316002)(76116006)(66946007)(110136005)(54906003)(8676002)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TW9hUit3dHBjaE9wck1tK3Z2TE53dG41YXBMUVU5WXYzY0lpam94TlVRbVFq?=
- =?utf-8?B?K0k4OEFUNWpIbUhQRzNQSlVKNXIvVVNJNDczRnFlZVhDTVVsek93MnFlUkJw?=
- =?utf-8?B?YzV3UmJ2emdJbjM3K1NWdGxmYWljUklkSE5Ja3h2WDlDcjY4MDl6N0JTbjNn?=
- =?utf-8?B?WEVtbENaWVpteDcvSDBMSFVXSVNXcE4yMndNYTVobUtQR0J5UGNzSDBTaVJQ?=
- =?utf-8?B?cU9GWTlEYjVjcGxiNVZXMDVXQk5IM2pFbVNxRlVmTjdvU3crdW9CdzM3RG9w?=
- =?utf-8?B?eHlFdzgrM21XTng5UUpLL0ZQN3FyT1JuN3U0MmcyTVplNm0rUXc0bXlBMlIx?=
- =?utf-8?B?WkxiV0RLTDhxTjkwMkd2TStGOUtsVGNPVHFGa1k3a2RTb0s4REQvaWRCYTVZ?=
- =?utf-8?B?VmpKZFo4TllyMEZnb2ZvWDZ4cTUwOTRTbkZQWnpwQmdSY1ZQMEQveGVycUMr?=
- =?utf-8?B?SzBhZ09jVC9TUURqRHNxRlE3b2JtNHB0ZUJybjdwSHB5QldOanRsUmwyOGVz?=
- =?utf-8?B?MzBid004UHI4TkZPeWQ2aGhDaUJVeGNXSDVOb3lmVWhlNTNtV0NOZkkzcEcy?=
- =?utf-8?B?VkVyeVdQNXNKbm5UUWhBb0pYTjdYUzJja2ZuN3NYdUtkdUNXanNOODNNT2Fo?=
- =?utf-8?B?MFFNL1N6UXhuUTVPMVlPdFNnR040RmZNN1d0alRrWi9LOENkb1VrMHhnZW1u?=
- =?utf-8?B?VnZHYUNzYUVRY2Q5RzlxNTBBcWFENmlaNU41THRVbWJydFFsMW1lM1NRMmFU?=
- =?utf-8?B?dXBVSDZWRFdhcm96Ym44TDVUZHN3ZlhyZEJMVzljN0JUN0xBR1o3U3JMTVV4?=
- =?utf-8?B?NEVGbDVRZHI3RVJDRjBCd0dqZTNiOGlTVlRKY0llSm9HS0ZLQjFtT05sUUJn?=
- =?utf-8?B?WG1hVWlHMkdUMHF5U0ZyN2NYOFQzS3dDS0o4eVF0ZUtaeXZBMkVmNXlzNkg5?=
- =?utf-8?B?WWpCU04wVm92V3g1d3VVQVE3N3JlcERMYmZKRm5UMk5DY1pnOXV0cVJwQ1BW?=
- =?utf-8?B?Q0p1SHdzTlRYUElXZXQ1UlZDSTdjQnkwV2dya2pLbVIvUEdFaWNhOGVsOXlz?=
- =?utf-8?B?YnJZQkpUcHlzZ0FvaFRIa1dCMUdNdmJFdllWUEczNEVoMWF2aitZUXZTcTI1?=
- =?utf-8?B?RXhXM2JKTzhORVhvdHVRYlpVQ2h5YmltTk1JOUx5YlVUelJ5M3orRkp3T1NM?=
- =?utf-8?B?RHNMNlg1YmtkZzV4QXM4czY3elo0SitXcnEvQzdBUGJRb01iRVNMcTFxVFI3?=
- =?utf-8?B?YmtFcEpwVG9FV2kxM3ZIeTl0a01YTVFWbXQ3VzRUSmQxcUo4WkcvdkxYend5?=
- =?utf-8?B?dzVRcGNUbVNzL2Y5NnBjYlFRaEdNdmMwdUE2SjlFUy9ZYmVpTURaWnBVL3Yz?=
- =?utf-8?B?WnlVSFBaNEhDU0l3aVhnaEg0b2EySlJPMTdTM3FvME4zamh0aVNraytHTWRI?=
- =?utf-8?B?L1pTdFdVYXN4OUV1VkY1ZmloUmxxaVhORTk4bWdmN0lvQ1Myay9ZY0Z4VlZI?=
- =?utf-8?B?Skp0bHd6UjFrRTVBZklzbm5ucitqcXNNSy9wc1lxZkRWRytQbldFMjVmRmZZ?=
- =?utf-8?B?b0JRek43UWU5YTdIUDd3Z21aYW9aM0FnZ0FVcFRkVnJRYVdMMXA4YUk2ajVR?=
- =?utf-8?B?R01rbGJjVEI1MHJya2QrdndqNlB5NlkzTU1YWlNXS3plbVBRVnc4aGY4Uzl5?=
- =?utf-8?B?N3hrekpNOWRsNXVib0hJNkNEdjNNellienZWbWduMTFYSUtES2F4aHJTb2lo?=
- =?utf-8?B?OTRSYlY3N2pFenJhd2FmcjUyZXozWTBSL3lOdm8wVGtvSmNZVWxBbk9VS2JR?=
- =?utf-8?B?VUhmaFBYcWxsMnQyTGNUQ1JxbVFQZVpoK0VOcnRXLzdpdWxVNjRRWFpRUW53?=
- =?utf-8?B?RjVrZ1JXdUg4Z3RsdHRVa0NILzRGTWxvZGVFc2loRlZ6Rk11YmM1UHhyZElY?=
- =?utf-8?B?Qk1HODQ3UHFGZDQ4T05RdEVDK0pNTW1aNElZYVNHeC9nWW0wZ2lOcXlyY0Jo?=
- =?utf-8?B?MjE0c1laR2E0azlNU0FEZy93b3Q2UVgvRE9XZE9ZaG94OW1lV25tbHJNOHlX?=
- =?utf-8?B?bUVkdm9Ba0xHZlJBQVduTW1tWEtlWTFubzJWa2l4SGVsQU1MZjlaVVd1L2hR?=
- =?utf-8?Q?p2LjorhT/gYtEZOynBE/rWaCM?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <691169E939C9454895679B8449D0AE14@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S231710AbiGGKti (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 06:49:38 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF112564C6;
+        Thu,  7 Jul 2022 03:49:37 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id y9so4344889pff.12;
+        Thu, 07 Jul 2022 03:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/FFWXQHfHuTAnSajIxw6WITRnf577MGViKmqh2rQTck=;
+        b=pNuDXa/tbcZ8L6jUMcFhfkiiN+HCY2bTy8g4vxrKF0uCnbdZzaUEHFI3UEhvKFQ1UC
+         eE6uNL4ZcikxGKWmBQMWNFn2vi2ETQWNjJHAKM/K8ooax1hYtWjIkuCEoiWjzlwmG9GX
+         WoMgg2sO0TOL1BOmFZkYZQjlUeFnk4VUM4ID13qr9aO5fAUOHNV8WcMiuWT0KyCv3tNs
+         yt5TOLt/k314oncIAs4MSxNIPDyesqnVGGLLLmR1OaKx2ayShDI5LtdAatcf/iDhjUT+
+         nlXRge1dqHFL7OZkv58zzWV44JyXq8nAHQm1a8SdNpsI3zpdsjcEr5X6BK+lhzi+b04Z
+         O/RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/FFWXQHfHuTAnSajIxw6WITRnf577MGViKmqh2rQTck=;
+        b=p/tO1xIVx83xaaVnQOtPe1agONqonGUSwCMwNVjMgG+8XqFqmGWuYZWqsaHuPjo6VW
+         295vUjclOp1Cb8oO4S690ZRH4EmDPx79e4jjLKB78Uet3fwznhU9ghsIQcGMeR67Ap6Q
+         xLVXfketpGr/YcJyV76oY56er0HuDwIw/Kh0+QlfmVZmqyMc98La0SBb73i5zmylmzfR
+         BoC5ZHW28i66xi7ISstl9zdy5yynlLZpixoCnvbkBcNgmjuP+Su41XvWiaA9tFQ5gZIz
+         DPkurssdLXEUfYDxsMb7gugIPLAVzkBc9SoAj04hzOaXh5Vc63nFI3Wqizg2Affilds6
+         GVhw==
+X-Gm-Message-State: AJIora/cpEEQMHlXGfbRHbXz3sb6382yY1YRR/of5dcV0XLcWuitsaFg
+        N/omYqwM35/G1yCPRT16IX5aXsIPQWFKYaL3qzQ=
+X-Google-Smtp-Source: AGRyM1uUqVtaUItLC5GM5dPIqcXaBtnctDbivq8Sa/TY+MZ4zlzxxNsXElMIyQ3R0dNWkSwoY0p+UAWXxA72d7sMMAo=
+X-Received: by 2002:a05:6a00:179e:b0:518:9e1d:1cbd with SMTP id
+ s30-20020a056a00179e00b005189e1d1cbdmr52012436pfg.12.1657190977288; Thu, 07
+ Jul 2022 03:49:37 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3ba8cb8-5ffd-4bde-c7a8-08da6003d151
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2022 10:31:13.9156
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4/6gt/VueKCzX6B55JDF5m5Ces+p7/4X1gW043qa3LrgrWPadTRo8+x+eh9paAa8HnyoAsGL9MmuEWvUyy4SMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1730
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-13-peterwu.pub@gmail.com>
+ <CAHp75Vciq4M4kVrabNV9vTLLcd1vR=bMe8JLEdAF9MkRTpcB5g@mail.gmail.com>
+In-Reply-To: <CAHp75Vciq4M4kVrabNV9vTLLcd1vR=bMe8JLEdAF9MkRTpcB5g@mail.gmail.com>
+From:   szuni chen <szunichen@gmail.com>
+Date:   Thu, 7 Jul 2022 18:49:26 +0800
+Message-ID: <CA+hk2fbm8ppKecVJL6D9rYJizf9baV8mOmwRx6GyO+MKvJ3xBQ@mail.gmail.com>
+Subject: Re: [PATCH v4 12/13] leds: flashlight: mt6370: Add Mediatek MT6370
+ flashlight support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gNy82LzIwMjIsIEdyZWcgS3JvYWgtSGFydG1hbiB3cm90ZToNCj4gT24gV2VkLCBKdWwgMDYs
-IDIwMjIgYXQgMDQ6MzY6MjhQTSAtMDcwMCwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPj4gT25seSBh
-bGxvY2F0ZSB1cCB0byBVU0JHX05VTV9DTURTIG51bWJlciBvZiBzZXNzaW9ucy4NCj4gV2h5PyAg
-VGhpcyBzYXlzIHdoYXQgeW91IGRvLCBidXQgbm90IHdoeSB5b3UgYXJlIGRvaW5nIGl0LiAgWW91
-IGRlc2NyaWJlDQo+IHRoZSAid2h5IiBxdWl0ZSB3ZWxsIGluIGVhcmxpZXIgcGF0Y2hlcyBpbiB0
-aGlzIHNlcmllcywgc28gcGxlYXNlIGZvbGxvdw0KPiB0aGF0IHN0eWxlIGhlcmUgdG9vIDopDQoN
-Ck9vcHMuLi4gd2lsbCB1cGRhdGUuDQoNClRoYW5rcywNClRoaW5oDQo=
+Hi Andy,
+
+Thank you for the valuable comment.
+
+Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
+=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:06=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On Mon, Jul 4, 2022 at 7:43 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> > Add Mediatek MT6370 flashlight support.
+>
+> ...
+>
+> > +         This driver can also be built as a module. If so the module
+>
+> If so,
+>
+Thank you, I'll fix it in the next version.
+
+> > +         will be called "leds-mt6370-flash.ko".
+>
+> No ".ko" part.
+>
+Thank you, I'll fix it in the next version.
+
+> ...
+>
+> > +#define MT6370_ITORCH_MINUA            25000
+> > +#define MT6370_ITORCH_STEPUA           12500
+> > +#define MT6370_ITORCH_MAXUA            400000
+> > +#define MT6370_ITORCH_DOUBLE_MAXUA     800000
+> > +#define MT6370_ISTRB_MINUA             50000
+> > +#define MT6370_ISTRB_STEPUA            12500
+> > +#define MT6370_ISTRB_MAXUA             1500000
+> > +#define MT6370_ISTRB_DOUBLE_MAXUA      3000000
+> > +#define MT6370_STRBTO_MINUS            64000
+> > +#define MT6370_STRBTO_STEPUS           32000
+> > +#define MT6370_STRBTO_MAXUS            2432000
+>
+> Make units suffix visible, i.e. _US, _uA, etc.
+>
+Thank you, I'll fix it in the next version.
+
+> ...
+>
+> > +       if (curr)
+> > +               val |=3D MT6370_TORCHEN_MASK;
+> > +
+> > +
+>
+> One blank line is enough.
+>
+Thank you, I'll fix it in the next version.
+
+> ...
+>
+> > +       /*
+> > +        * Due to the current spike when turning on flash,
+> > +        * let brightness to be kept by framework.
+>
+> brightness be
+> the framework
+>
+Thank you, I'll fix it in the next version.
+
+> > +        * This empty function is used to
+> > +        * prevent led_classdev_flash register ops check failure.
+> > +        */
+>
+Thank you, I'll fix it in the next version.
+> ...
+>
+> > +       } else {
+> > +               ret =3D regmap_update_bits(priv->regmap,
+> > +                                        MT6370_REG_FLEDISTRB(led->led_=
+no),
+> > +                                        MT6370_ISTROBE_MASK, val);
+>
+> > +               if (ret)
+> > +                       return ret;
+>
+> Dup of the below.
+>
+Thank you, I'll fix it in the next version.
+
+> > +       }
+> > +       return ret;
+>
+> ...
+>
+> > +       /*
+> > +        * If the flash need to be on,
+> > +        * config the flash current ramping up to the setting value
+> > +        * Else, always recover back to the minimum one
+>
+> Missed periods.
+>
+Thank you, I'll fix it in the next version.
+
+> > +        */
+>
+> ...
+>
+> > +       /*
+> > +        * For the flash turn on/off, HW ramping up/down time is 5ms/50=
+0us
+> > +        * respectively.
+> > +        */
+> > +       if (!prev && curr)
+> > +               usleep_range(5000, 6000);
+> > +       else if (prev && !curr)
+> > +               udelay(500);
+>
+> Comment doesn't explain why this is suddenly a busy loop operation?
+>
+For the flash turn on/off, HW ramping up/down waiting time is
+5ms/500us, respectively.
+The busy loop is for preventing turn on/off in wait time, which will
+cause unexpected problems.
+
+If I change the comment to
+"For the flash turn on/off, HW ramping up/down waiting time is
+5ms/500us, respectively.
+Need to wait until HW ramping successfully to prevent the unexpected proble=
+m.",
+will this meet your expectation?
+
+>
+> > +static int mt6370_led_register(struct device *parent, struct mt6370_le=
+d *led,
+> > +                               struct led_init_data *init_data)
+> > +{
+> > +       struct v4l2_flash_config v4l2_config =3D {0};
+> > +       int ret;
+> > +
+> > +       ret =3D devm_led_classdev_flash_register_ext(parent, &led->flas=
+h,
+> > +                                                  init_data);
+> > +       if (ret) {
+> > +               dev_err(parent, "Couldn't register flash %d\n", led->le=
+d_no);
+> > +               return ret;
+> > +       }
+> > +
+> > +       mt6370_init_v4l2_flash_config(led, &v4l2_config);
+> > +       led->v4l2_flash =3D v4l2_flash_init(parent, init_data->fwnode,
+> > +                                         &led->flash, &v4l2_flash_ops,
+> > +                                         &v4l2_config);
+> > +       if (IS_ERR(led->v4l2_flash)) {
+> > +               dev_err(parent, "Failed to register %d v4l2 sd\n", led-=
+>led_no);
+> > +               return PTR_ERR(led->v4l2_flash);
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+>
+> ...
+>
+> > +       } else
+> > +               val =3D clamp_align(val, MT6370_STRBTO_MINUS, MT6370_ST=
+RBTO_MAXUS,
+> > +                                 MT6370_STRBTO_STEPUS);
+>
+> Missed {}
+>
+Thank you, I'll fix it in the next version.
+
+> > +
+> > +
+>
+> One blank line is enough.
+>
+Thank you, I'll fix it in the next version.
+
+> --
+
+Yours Sincerely,
+Alice
