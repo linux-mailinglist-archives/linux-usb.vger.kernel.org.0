@@ -2,127 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17021569E7E
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 11:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDEC569EC3
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 11:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235100AbiGGJW6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 05:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
+        id S235162AbiGGJnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 05:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbiGGJW5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 05:22:57 -0400
-X-Greylist: delayed 482 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 02:22:56 PDT
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853D732EC7;
-        Thu,  7 Jul 2022 02:22:56 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 26A7C412DE;
-        Thu,  7 Jul 2022 09:14:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        mime-version:content-transfer-encoding:content-type:content-type
-        :content-language:accept-language:in-reply-to:references
-        :message-id:date:date:subject:subject:from:from:received
-        :received:received:received:received; s=mta-01; t=1657185291; x=
-        1658999692; bh=sn7ppcDc4q0hu3Ls0LT6KG8ETT6oibJ0Tr8PPEXqSLI=; b=s
-        mBpodBYBXiHLIQA6LSaHOnakoGjDF+IR9EQhYtiWag5ZE60sE8IHdOwErg0bt5AU
-        dTyCUgJxJySs207Diw9+yMHqSx0M1VuLH+/PNwz/tcTHL1Asq+biejz5QQFNYiqu
-        W1D8Q/OyjuxDYHKdEQlP+rJOQdb/rC44Lkt1F/d4Bg=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mDqkA6QnfPKN; Thu,  7 Jul 2022 12:14:51 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 1E9BC411FD;
-        Thu,  7 Jul 2022 12:14:49 +0300 (MSK)
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Thu, 7 Jul 2022 12:14:48 +0300
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.9; Thu, 7 Jul 2022 12:14:48 +0300
-Received: from T-EXCH-08.corp.yadro.com ([172.17.11.58]) by
- T-EXCH-08.corp.yadro.com ([172.17.11.58]) with mapi id 15.02.1118.009; Thu, 7
- Jul 2022 12:14:48 +0300
-From:   Dmitriy Bogdanov <d.bogdanov@yadro.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
-Subject: RE: [PATCH 34/36] usb: gadget: f_tcm: Free tags earlier
-Thread-Topic: [PATCH 34/36] usb: gadget: f_tcm: Free tags earlier
-Thread-Index: AQHYkZFt2dlz1fcCV0GBRBN7WQpUfq1ynPhw
-Date:   Thu, 7 Jul 2022 09:14:48 +0000
-Message-ID: <17d93b498de04ee5b550ff0fe8b91847@yadro.com>
-References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
- <6a5487365f0804447d4cbb8911d0719d8b21b601.1657149962.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <6a5487365f0804447d4cbb8911d0719d8b21b601.1657149962.git.Thinh.Nguyen@synopsys.com>
-Accept-Language: ru-RU, en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.178.114.42]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233783AbiGGJnV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 05:43:21 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20345070
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 02:43:21 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-10bec750eedso16929541fac.8
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 02:43:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Fei5ldd1DMp40UpYey+IXPJbTXnAtUnFZhG4+jmAP/s=;
+        b=GVdAxiuimo/PtedpAVWzJdvqeTJfTfSqOOFtOjNB0+yJwa0cB6waY7v3uaZN4rM07D
+         jmrvfbXd+ie2TFtaM+/ivobvduiTaOEJq7KfeyfKJGGSAQHmvYN14T/i3rziUYvWnGl2
+         GbDISHfsnHA3X1aBabP7BCjL8cGGdEBLWQ7uWMeOi1h3SJqf8oYRj8/n6aMC3VKU/wBZ
+         d/POvdPYZ3GY/ebbnrkY39wmUQ6OF+X421emK6NngJQp6apqJUE/snvFWNedUDZdNQLC
+         RqVoDewKp0y7UyWmhj3fdyCELvNdmiozyG0yTmdH71abQM7knbkEAJ6X/aF9Gj+iB5Gi
+         GJQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=Fei5ldd1DMp40UpYey+IXPJbTXnAtUnFZhG4+jmAP/s=;
+        b=F4DaHKuH1/DaY51v6sDM7tqIt4fRpLvqgfpfqTT/b8rO36e0MVLZ9iiFhi6K/dz3vo
+         rsyiONynQs/GedOWQpLz6uGwKVDleT05BpoCEAVW06jXsSwIJdob8Ub1Fu7anf+BiJ8N
+         zATdONPxHYClQn1Dp9Pm9wrYQf+SdAj5YMVO46R/lVO5nUxiDjL47YB0L8/KM1OEElNB
+         ohSnmStCr5l9FeYnboWbM7uUDO+yOj7Ai/JWiHEmfq1j02AlJcld3c/HFc8+LfntQYKU
+         GFwnN6ilTW4hntNfpkPBKcxzHnXtK9O/anI7FpG3aPv2ZgjGI6XG/1b35QooT4aZxlqD
+         cyrA==
+X-Gm-Message-State: AJIora+RkL5VtdNL1hC+/8RLJfSths0bR5RxZvmfhMfoTzs4wZXYPoJR
+        hkNeXza2cpiaxkkg5ErxEmkwud52sITN0iSLanesetJucqw=
+X-Google-Smtp-Source: AGRyM1sR9UX2zyOCgaROEoYEvFeEpDQHO3kMhsHpQwlNNRFN6ra6Yn2C8iQIEintGEiotufwJ7co9c1bI08u1nYvtiI=
+X-Received: by 2002:a05:6870:b30a:b0:10c:190d:b32f with SMTP id
+ a10-20020a056870b30a00b0010c190db32fmr2235177oao.14.1657187000630; Thu, 07
+ Jul 2022 02:43:20 -0700 (PDT)
 MIME-Version: 1.0
+From:   "Jozo M." <jomajm@gmail.com>
+Date:   Thu, 7 Jul 2022 11:43:09 +0200
+Message-ID: <CA+BOZ0uBvKHc3idN+Pn_g4Z4e5ObYPZ4WY4f78fzj_B=8c5qJw@mail.gmail.com>
+Subject: gadgetfs inode.c - possible memory corruption ?
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgVGhpbmgsDQoNCj4gRnJlZSB1cCBzYml0bWFwIGluZGV4IGltbWVkaWF0ZWx5IG9uY2UgdGhl
-IGNvbW1hbmQgaXMgY29tcGxldGVkIHJhdGhlcg0KPiB0aGFuIHdhaXRpbmcgZm9yIGtyZWYgdG8g
-Y2FsbCBmcmVlaW5nIHRhZy4gVGhpcyBrZWVwcyB0aGUgc2JpdG1hcCBxdWV1ZQ0KPiBmcmVlIHF1
-aWNrZXIuDQo+IA0KVGhhdCBpcyBjb21wbGV0ZWx5IHdyb25nLiBTYml0bWFwIGluZGV4IGlzIGEg
-cGxhY2Ugb2YgdXNiZ19jbWQqIGluDQphIHByZS1hbGxvY2F0ZWQgbWVtb3J5IHBvb2wuIEl0IG11
-c3Qgbm90IGJlIGZyZWVkIHVudGlsIHVzYmdfY21kKg0KaXMgbm90IHVzZWQuDQoNCj4gU2lnbmVk
-LW9mZi1ieTogVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPg0KPiAtLS0N
-Cj4gIGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX3RjbS5jIHwgNiArKysrKysNCj4gIDEg
-ZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9nYWRnZXQvZnVuY3Rpb24vZl90Y20uYyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlv
-bi9mX3RjbS5jDQo+IGluZGV4IGMxM2FhNjFkODJhYS4uZmEwOTk5OWFkZGE3IDEwMDY0NA0KPiAt
-LS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl90Y20uYw0KPiArKysgYi9kcml2ZXJz
-L3VzYi9nYWRnZXQvZnVuY3Rpb24vZl90Y20uYw0KPiBAQCAtNTcwLDYgKzU3MCw3IEBAIHN0YXRp
-YyB2b2lkIHVhc3Bfc3RhdHVzX2RhdGFfY21wbChzdHJ1Y3QgdXNiX2VwICplcCwgc3RydWN0IHVz
-Yl9yZXF1ZXN0ICpyZXEpDQo+ICAgICAgICAgc3RydWN0IHVzYmdfY21kICpjbWQgPSByZXEtPmNv
-bnRleHQ7DQo+ICAgICAgICAgc3RydWN0IHVhc19zdHJlYW0gKnN0cmVhbSA9IGNtZC0+c3RyZWFt
-Ow0KPiAgICAgICAgIHN0cnVjdCBmX3VhcyAqZnUgPSBjbWQtPmZ1Ow0KPiArICAgICAgIHN0cnVj
-dCBzZV9zZXNzaW9uICpzZV9zZXNzID0gY21kLT5zZV9jbWQuc2Vfc2VzczsNCj4gICAgICAgICBp
-bnQgcmV0Ow0KPiANCj4gICAgICAgICBpZiAocmVxLT5zdGF0dXMgPT0gLUVTSFVURE9XTikNCj4g
-QEAgLTYwMyw2ICs2MDQsOCBAQCBzdGF0aWMgdm9pZCB1YXNwX3N0YXR1c19kYXRhX2NtcGwoc3Ry
-dWN0IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVzdCAqcmVxKQ0KPiAgICAgICAgICAgICAg
-ICAgYnJlYWs7DQo+IA0KPiAgICAgICAgIGNhc2UgVUFTUF9RVUVVRV9DT01NQU5EOg0KPiArDQo+
-ICsgICAgICAgICAgICAgICB0YXJnZXRfZnJlZV90YWcoc2Vfc2VzcywgJmNtZC0+c2VfY21kKTsN
-Cj4gICAgICAgICAgICAgICAgIHRyYW5zcG9ydF9nZW5lcmljX2ZyZWVfY21kKCZjbWQtPnNlX2Nt
-ZCwgMCk7DQo+ICAgICAgICAgICAgICAgICB1c2JfZXBfcXVldWUoZnUtPmVwX2NtZCwgY21kLT5y
-ZXEsIEdGUF9BVE9NSUMpOw0KPiANCj4gQEAgLTYxNCw2ICs2MTcsNyBAQCBzdGF0aWMgdm9pZCB1
-YXNwX3N0YXR1c19kYXRhX2NtcGwoc3RydWN0IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVz
-dCAqcmVxKQ0KPiAgICAgICAgIHJldHVybjsNCj4gDQo+ICBjbGVhbnVwOg0KPiArICAgICAgIHRh
-cmdldF9mcmVlX3RhZyhzZV9zZXNzLCAmY21kLT5zZV9jbWQpOw0KPiAgICAgICAgIHRyYW5zcG9y
-dF9nZW5lcmljX2ZyZWVfY21kKCZjbWQtPnNlX2NtZCwgMCk7DQo+ICB9DQo+IA0KPiBAQCAtOTQx
-LDYgKzk0NSw3IEBAIHN0YXRpYyB2b2lkIHVzYmdfZGF0YV93cml0ZV9jbXBsKHN0cnVjdCB1c2Jf
-ZXAgKmVwLCBzdHJ1Y3QgdXNiX3JlcXVlc3QgKnJlcSkNCj4gICAgICAgICBzdHJ1Y3Qgc2VfY21k
-ICpzZV9jbWQgPSAmY21kLT5zZV9jbWQ7DQo+IA0KPiAgICAgICAgIGlmIChyZXEtPnN0YXR1cyA9
-PSAtRVNIVVRET1dOKSB7DQo+ICsgICAgICAgICAgICAgICB0YXJnZXRfZnJlZV90YWcoc2VfY21k
-LT5zZV9zZXNzLCBzZV9jbWQpOw0KPiAgICAgICAgICAgICAgICAgdHJhbnNwb3J0X2dlbmVyaWNf
-ZnJlZV9jbWQoJmNtZC0+c2VfY21kLCAwKTsNCj4gICAgICAgICAgICAgICAgIHJldHVybjsNCj4g
-ICAgICAgICB9DQo+IEBAIC05NjMsNiArOTY4LDcgQEAgc3RhdGljIHZvaWQgdXNiZ19kYXRhX3dy
-aXRlX2NtcGwoc3RydWN0IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVzdCAqcmVxKQ0KPiAg
-Y2xlYW51cDoNCj4gICAgICAgICAvKiBDb21tYW5kIHdhcyBhYm9ydGVkICovDQo+ICAgICAgICAg
-aWYgKGNtZC0+c3RhdGUgPT0gVUFTUF9RVUVVRV9DT01NQU5EKSB7DQo+ICsgICAgICAgICAgICAg
-ICB0YXJnZXRfZnJlZV90YWcoc2VfY21kLT5zZV9zZXNzLCBzZV9jbWQpOw0KPiAgICAgICAgICAg
-ICAgICAgdHJhbnNwb3J0X2dlbmVyaWNfZnJlZV9jbWQoc2VfY21kLCAwKTsNCj4gICAgICAgICAg
-ICAgICAgIHJldHVybjsNCj4gICAgICAgICB9DQoNCg==
+Hello,
+
+my kernel running on imx6 was crashing on USB gadgetfs because my
+kernel was using wait_event API instead of completion (I was convinced
+it is due to wrong HW setup).
+During research gadgetfs inode.c function ep_io was not clear for me:
+
+we are submiting USB request here
+      value = usb_ep_queue (epdata->ep, req, GFP_ATOMIC);
+then we are waiting for completion here:
+      value = wait_for_completion_interruptible(&done);
+but if completion is interrupted we end up here:
+      spin_unlock_irq (&epdata->dev->lock);
+      DBG (epdata->dev, "endpoint gone\n");
+      epdata->status = -ENODEV;
+
+At this point ep_io is terminated and stack is not valid. Later on
+epio_complete might be called from IRQ and it calls complete ((struct
+completion *)req->context) but stack is no longer valid;
+Shouldn't we put req->context = NULL;  before spin_unlock_irq
+(&epdata->dev->lock); ?
+      req->context = NULL;
+      spin_unlock_irq (&epdata->dev->lock);
+      DBG (epdata->dev, "endpoint gone\n");
+      epdata->status = -ENODEV;
+
+Thanks,
+Jozef
