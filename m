@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C7156AE5D
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 00:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A8D56AE61
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 00:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiGGW0L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 18:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S236975AbiGGW1N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 18:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236377AbiGGW0K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 18:26:10 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E113165D44
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 15:26:09 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id l12so9509722plk.13
-        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 15:26:09 -0700 (PDT)
+        with ESMTP id S236438AbiGGW1M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 18:27:12 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A2F65D4C
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 15:27:10 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id n12so22051136pfq.0
+        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 15:27:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=U15qmYXT9GH8TjN1Ut3guN2hyLaKnAjiTAFtYvltatM=;
-        b=QnIsu/zns+A7aL1LdpvG6NIX4YjyjQ5N4RZKvlVq8nxakt02znaMQSjhSi48KGXzJY
-         gWKS93PjxBD+sqRwECfk0eB1+jYFUeZP1uH8ty/nXlj7b6tqwcYg6gzhzvM1UkjkIg6h
-         I6x7S1UFRhTnakk0t8GEKyiFS3C8GX1R4J5Xg=
+        bh=HWZjQkLUf6qk+G+fYBQqj9gsWBV3+/ITHeFpM/SM9wo=;
+        b=ixoq2AkyRxuboKSJKZx8muAfii9lRyEyzUS7IFt5M7B/IMVJjo9CY9WhHpxlS674W3
+         3z+yGgk1ivWbkvzY1w7ar5/W0LICNY6nxFr+x1karg5PUrxrZL18qEI43CHgT4aIhLU4
+         LIrSEeiIrXEMfbdNzDD6tuaXHUxvyiznfkyZg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=U15qmYXT9GH8TjN1Ut3guN2hyLaKnAjiTAFtYvltatM=;
-        b=H5QALxoqyA88AL5zo/vC6mM26AYp26vvwsWJGD8W0ef/ZeHsc1Vihqw6nMEcJdgOLi
-         ntIAVzz0S0jjhtJ8bjADvyj1Y7BH6dOyuR14k9hQmbUCqQwmJQn290Mu13nfOEbEqBRZ
-         m1GumqhT5tg2Dcm/CgQ3shrCjqavMkwzTd45j181+q34Wg8ADNlirYFKbQ8r5pzzZxJ/
-         bS4LgaD0gFwuJNj8VjFHdT28FMx09OBl8lcgs6WMtus7VIqtTIf2yZBbEVZREUkI3ZAJ
-         ne4EBHeh+oAv4hR9+Huip4dvFON9JtYl+acu0M0Z4Nboje34y9pNLGT097CiNrYHm18h
-         2eSQ==
-X-Gm-Message-State: AJIora+CtTaltg1FINMnOrZq8pVqTmZl6QtSCX/skw1AqgUiJk9XG3Nu
-        1882JGi/YRglMFOlH52k25ih9A==
-X-Google-Smtp-Source: AGRyM1tGwWrSbLUTuvLlh27HVREzxYeyt55EEOyBrvpGsutFkPg0Kb9f8sySfTse8Q7jNRckhyok6w==
-X-Received: by 2002:a17:90b:2341:b0:1ef:819f:dfc4 with SMTP id ms1-20020a17090b234100b001ef819fdfc4mr7563605pjb.206.1657232769470;
-        Thu, 07 Jul 2022 15:26:09 -0700 (PDT)
+        bh=HWZjQkLUf6qk+G+fYBQqj9gsWBV3+/ITHeFpM/SM9wo=;
+        b=zGVSGXVaIgL5LotJZmy3t0o3etDkr07J+ZlgUeX9rXNHkPl+/vnqgZHwwdctzLZXtn
+         19fDdX4GBIMPZ5VhlcwBlPbls0w1UAjAFQA5EPgfkDTTrbh2zol2Gv8ALEhqaDwEZTob
+         rMFFMZpWnUrg1sd15ZuTUVzFkEL3PXOmYwVQCh9epoJNf3DkIIzSbe9HEuOd789/ypE9
+         8P4Lo0CgnQ5weUlarz0y5LVF9RqYTJJyajF2K7wuyhWHl85QO5oG58iU0W4pXGQDptuN
+         LL1YOJ+kc5dqLGqC4jbtbUuLrlOtf8JlLa5pE/A6lFcBDISBzCINPK4O1pjmWm6UbLPN
+         qSfQ==
+X-Gm-Message-State: AJIora+68aVaVYO3kBNQUQy+oygydov/uxCz6osVmsPU9QawpIl5zVUc
+        uJhHTFMSx2eXeln7DzkqibcXLA==
+X-Google-Smtp-Source: AGRyM1vw7KYRt0Y5e064i6OXHvQrKKt7U3rCYM4QH9TVNn7L62a4a+W9UcU9HuwSNJmdWTrWyRlCSQ==
+X-Received: by 2002:a65:5b44:0:b0:412:b6dc:7076 with SMTP id y4-20020a655b44000000b00412b6dc7076mr270918pgr.601.1657232830357;
+        Thu, 07 Jul 2022 15:27:10 -0700 (PDT)
 Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b005289bfcee91sm5545657pfe.59.2022.07.07.15.26.09
+        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b005289bfcee91sm5545657pfe.59.2022.07.07.15.27.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 15:26:09 -0700 (PDT)
+        Thu, 07 Jul 2022 15:27:10 -0700 (PDT)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         chrome-platform@lists.linux.dev
@@ -54,11 +54,12 @@ Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <groeck@chromium.org>,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v3 7/9] platform/chrome: cros_typec_switch: Register mode switches
-Date:   Thu,  7 Jul 2022 22:20:14 +0000
-Message-Id: <20220707222045.1415417-8-pmalani@chromium.org>
+Subject: [PATCH v3 8/9] platform/chrome: cros_ec_typec: Cleanup switch handle return paths
+Date:   Thu,  7 Jul 2022 22:20:15 +0000
+Message-Id: <20220707222045.1415417-9-pmalani@chromium.org>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 In-Reply-To: <20220707222045.1415417-1-pmalani@chromium.org>
 References: <20220707222045.1415417-1-pmalani@chromium.org>
@@ -74,105 +75,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Register mode switch devices for Type C connectors, when they are
-specified by firmware. These control Type C configuration for any USB
-Type-C mode switches (sometimes known as "muxes") which are controlled
-by the Chrome EC.
+Some of the return paths for the cros_typec_get_switch_handles()
+aren't necessary. Clean up the return paths to only undo the handle
+get's which succeeded.
 
 Signed-off-by: Prashant Malani <pmalani@chromium.org>
 ---
 
 Changes since v2:
-- Fixed missing "static" identifier.
+- No changes.
 
 Changes since v1:
 - No changes.
 
- drivers/platform/chrome/cros_typec_switch.c | 40 +++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ drivers/platform/chrome/cros_ec_typec.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/platform/chrome/cros_typec_switch.c b/drivers/platform/chrome/cros_typec_switch.c
-index 7c01957a032d..024a2bb146b2 100644
---- a/drivers/platform/chrome/cros_typec_switch.c
-+++ b/drivers/platform/chrome/cros_typec_switch.c
-@@ -15,6 +15,7 @@
- #include <linux/platform_device.h>
- #include <linux/usb/typec_altmode.h>
- #include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
- #include <linux/usb/typec_retimer.h>
- 
- #define DRV_NAME "cros-typec-switch"
-@@ -22,6 +23,7 @@
- /* Handles and other relevant data required for each port's switches. */
- struct cros_typec_port {
- 	int port_num;
-+	struct typec_mux_dev *mode_switch;
- 	struct typec_retimer *retimer;
- 	struct cros_typec_switch_data *sdata;
- };
-@@ -147,6 +149,15 @@ static int cros_typec_configure_mux(struct cros_typec_switch_data *sdata, int po
- 	return -ETIMEDOUT;
- }
- 
-+static int cros_typec_mode_switch_set(struct typec_mux_dev *mode_switch,
-+				      struct typec_mux_state *state)
-+{
-+	struct cros_typec_port *port = typec_mux_get_drvdata(mode_switch);
-+
-+	/* Mode switches have index 0. */
-+	return cros_typec_configure_mux(port->sdata, port->port_num, 0, state->mode, state->alt);
-+}
-+
- static int cros_typec_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
- {
- 	struct cros_typec_port *port = typec_retimer_get_drvdata(retimer);
-@@ -163,9 +174,27 @@ static void cros_typec_unregister_switches(struct cros_typec_switch_data *sdata)
- 		if (!sdata->ports[i])
- 			continue;
- 		typec_retimer_unregister(sdata->ports[i]->retimer);
-+		typec_mux_unregister(sdata->ports[i]->mode_switch);
- 	}
- }
- 
-+static int cros_typec_register_mode_switch(struct cros_typec_port *port,
-+					   struct fwnode_handle *fwnode)
-+{
-+	struct typec_mux_desc mode_switch_desc = {
-+		.fwnode = fwnode,
-+		.drvdata = port,
-+		.name = fwnode_get_name(fwnode),
-+		.set = cros_typec_mode_switch_set,
-+	};
-+
-+	port->mode_switch = typec_mux_register(port->sdata->dev, &mode_switch_desc);
-+	if (IS_ERR(port->mode_switch))
-+		return PTR_ERR(port->mode_switch);
-+
-+	return 0;
-+}
-+
- static int cros_typec_register_retimer(struct cros_typec_port *port, struct fwnode_handle *fwnode)
- {
- 	struct typec_retimer_desc retimer_desc = {
-@@ -235,6 +264,17 @@ static int cros_typec_register_switches(struct cros_typec_switch_data *sdata)
- 		}
- 
- 		dev_dbg(dev, "Retimer switch registered for index %llu\n", index);
-+
-+		if (!fwnode_property_read_bool(fwnode, "mode-switch"))
-+			continue;
-+
-+		ret = cros_typec_register_mode_switch(port, fwnode);
-+		if (ret) {
-+			dev_err(dev, "Mode switch register failed\n");
-+			goto err_switch;
-+		}
-+
-+		dev_dbg(dev, "Mode switch registered for index %llu\n", index);
- 	}
- 
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index 7cb2e35c4ded..39e6fd4491a9 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -157,12 +157,10 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
  	return 0;
+ 
+ role_sw_err:
+-	usb_role_switch_put(port->role_sw);
+-ori_sw_err:
+ 	typec_switch_put(port->ori_sw);
+-mux_err:
++ori_sw_err:
+ 	typec_mux_put(port->mux);
+-
++mux_err:
+ 	return -ENODEV;
+ }
+ 
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
