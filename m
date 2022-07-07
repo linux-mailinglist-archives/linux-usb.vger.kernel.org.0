@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE97B56A0ED
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 13:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AEBE56A0F1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 13:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235293AbiGGLNE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 07:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        id S235098AbiGGLPA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Jul 2022 07:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbiGGLNA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 07:13:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9863B5724D
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 04:12:57 -0700 (PDT)
+        with ESMTP id S234912AbiGGLPA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 07:15:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A830C183BB
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 04:14:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FA74B82047
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 11:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3E3C3411E;
-        Thu,  7 Jul 2022 11:12:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C34D622F0
+        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 11:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580F4C3411E;
+        Thu,  7 Jul 2022 11:14:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657192375;
-        bh=am2w6j+wKU7ZksXpVzGRoVopfEz2xCHBt18QY8NxdmM=;
+        s=korg; t=1657192498;
+        bh=UgCJY3Nq2TCx3s9iGRqTuAOXZfW9BUVFcty9G3fPldM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T3dgdddL5f9za4tjRdR0APR8MEqZYw0vGdtLUEDZoLbgRb0Hsglnfjl27kcYCE3Ff
-         UidheKvW34Ihb+q6KMsR3mlAPnPYURcJtlXiyz1iMPwbz6+EyqS4Qqj6BBwnz5+sKA
-         oRl73JL8D+P9qIy9FEYL3Mrg1PB3p1gBBsYlhcnM=
-Date:   Thu, 7 Jul 2022 13:12:52 +0200
+        b=EFWHACk+nifj4vGyMOkTxFfUaBdTmnk3ysOJ3S1VDc37OO0oeIQJOIyAAq2MvLcxe
+         FjI1nVa9lc8t2W4uR1ToyJNVV5p9Wf/VrLxaYXMHQuH8SdjhzFY32/nPFJIypXb/qF
+         Zav5yjxLGjy8lIE7TTMAlfFdM7vshvHkPq1hDjV8=
+Date:   Thu, 7 Jul 2022 13:14:55 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Sanjay R Mehta <sanmehta@amd.com>
 Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>,
@@ -38,7 +38,7 @@ Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>,
         linux-usb@vger.kernel.org
 Subject: Re: [PATCH] thunderbolt: Add DP out resource when DP tunnel is
  discovered.
-Message-ID: <Ysa/tM1e3N3hWkRL@kroah.com>
+Message-ID: <YsbAL5HS9yEXJXh3@kroah.com>
 References: <1657085978-130560-1-git-send-email-Sanju.Mehta@amd.com>
  <YsUq80qWepLR2mZ9@kroah.com>
  <8c913bc1-1ebc-d536-433e-bf3e2cc1f9c1@amd.com>
@@ -128,7 +128,9 @@ On Thu, Jul 07, 2022 at 04:01:12PM +0530, Sanjay R Mehta wrote:
 > "struct tb_cm" which is defined and used only in tb.c file. Hence have
 > to keep this function in tb.c file.
 
-I was not referring to the .c file here.
+To be more specific, I mean why not put it below the line:
+	int tb_dp_port_enable(struct tb_port *port, bool enable);
+in this .h file in an attempt to keep things orderly.
 
 thanks,
 
