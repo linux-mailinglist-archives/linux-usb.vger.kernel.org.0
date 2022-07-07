@@ -2,146 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C585696E4
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 02:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3311D569741
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Jul 2022 03:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiGGA3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Jul 2022 20:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S234821AbiGGBLR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Jul 2022 21:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiGGA3b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 20:29:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250921F625;
-        Wed,  6 Jul 2022 17:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657153770; x=1688689770;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/wuMRpi/YaEhOxvugOenqe7PKLGIkfSrr02ZOvYLTtc=;
-  b=Px9QHepbxnCZAzvY/1WLUyUDNO8E5olFlLc+ZpF4aJbSSuSMWCrfe98R
-   7q1nlyYN09rRKrr1dSBrOa4+J1JXviLcK9wLEzTjxNpQbe0+0cO+WMUT1
-   SsooQTIJxcO/ZzGA2gATNArWYBFV+OHswtc/WJ2gc0zwf+yCxdd6FgZ86
-   wsrzQ0eOMamxNMQSN3Ft86Zi4DSTewdQNGiCEP5OsdeMSV8VdiMb9g+3e
-   1XMp9lsXg0+omPOoQT6A5ExVJnQUn54pIkYKft94XpHmfTVDAqCd8F6is
-   8ORC3sbkTOs7o1LpfkMyBL0FLZe+bg28IE+IhroUkAp2GKSM5yAUS2ahT
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="285021644"
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="285021644"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2022 17:29:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,251,1650956400"; 
-   d="scan'208";a="661173745"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Jul 2022 17:29:25 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9FOX-000LJC-2b;
-        Thu, 07 Jul 2022 00:29:25 +0000
-Date:   Thu, 7 Jul 2022 08:29:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     kbuild-all@lists.01.org, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
+        with ESMTP id S234822AbiGGBLA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Jul 2022 21:11:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BCE2D1DA;
+        Wed,  6 Jul 2022 18:10:47 -0700 (PDT)
+X-UUID: 143a25d7f46e4b69abd2527959728f7d-20220707
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:338708dd-17f2-491d-957d-20cb2abe685c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.8,REQID:338708dd-17f2-491d-957d-20cb2abe685c,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:0f94e32,CLOUDID:ada3ced6-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:f65fabf43280,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 143a25d7f46e4b69abd2527959728f7d-20220707
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1327031085; Thu, 07 Jul 2022 09:10:40 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 7 Jul 2022 09:10:39 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 7 Jul 2022 09:10:38 +0800
+Message-ID: <ed72abf85a7c167dfd2abd64a79422a19fc53d06.camel@mediatek.com>
+Subject: Re: [PATCH v2 2/4] dt-bindings: usb: mtk-xhci: Make all clocks
+ required
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [PATCH v2 4/9] platform/chrome: cros_typec_switch: Add switch
- driver
-Message-ID: <202207070816.tREVcI4a-lkp@intel.com>
-References: <20220706171601.807042-5-pmalani@chromium.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <kernel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>
+Date:   Thu, 7 Jul 2022 09:10:38 +0800
+In-Reply-To: <20220705203621.hunczzwfhiwpcrhy@notapiano>
+References: <20220623193702.817996-1-nfraprado@collabora.com>
+         <20220623193702.817996-3-nfraprado@collabora.com>
+         <93c6b7201533325cf7758637dd194a372f3c00c6.camel@mediatek.com>
+         <20220629185546.z6rn7xp3ejpmaupi@notapiano>
+         <20220701213702.GA1591697-robh@kernel.org>
+         <5f85280ea5fd0d4b445307a13a70c3e3fe552ccf.camel@mediatek.com>
+         <20220705203621.hunczzwfhiwpcrhy@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706171601.807042-5-pmalani@chromium.org>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+On Tue, 2022-07-05 at 16:36 -0400, Nícolas F. R. A. Prado wrote:
+> On Sat, Jul 02, 2022 at 04:24:12PM +0800, Chunfeng Yun wrote:
+> > On Fri, 2022-07-01 at 15:37 -0600, Rob Herring wrote:
+> > > On Wed, Jun 29, 2022 at 02:55:46PM -0400, Nícolas F. R. A. Prado
+> > > wrote:
+> > > > On Tue, Jun 28, 2022 at 08:57:45AM +0800, Chunfeng Yun wrote:
+> > > > > Hi Nícolas,
+> > > > > 
+> > > > > On Thu, 2022-06-23 at 15:37 -0400, Nícolas F. R. A. Prado
+> > > > > wrote:
+> > > > > > All of the clocks listed in the binding are always wired to
+> > > > > > the
+> > > > > > XHCI
+> > > > > > controller hardware blocks on all SoCs. The reason some
+> > > > > > clocks
+> > > > > > were
+> > > > > > made
+> > > > > > optional in the binding was to account for the fact that
+> > > > > > depending on
+> > > > > > the SoC, some of the clocks might be fixed (ie not
+> > > > > > controlled
+> > > > > > by
+> > > > > > software).
+> > > > > > 
+> > > > > > Given that the devicetree should represent the hardware,
+> > > > > > make
+> > > > > > all
+> > > > > > clocks
+> > > > > > required in the binding. Subsequent patches will make the
+> > > > > > DTS
+> > > > > > changes
+> > > > > > to
+> > > > > > specify fixed-clocks for the clocks that aren't
+> > > > > > controllable.
+> > > > > > 
+> > > > > > Signed-off-by: Nícolas F. R. A. Prado <
+> > > > > > nfraprado@collabora.com>
+> > > > > > 
+> > > > > > ---
+> > > > > > 
+> > > > > > Changes in v2:
+> > > > > > - Undid clock list changes that allowed middle clocks to be
+> > > > > > missing
+> > > > > > from
+> > > > > >   v1 and made all clocks required instead
+> > > > > > - Rewrote commit message and title
+> > > > > > 
+> > > > > >  Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > xhci.yaml |
+> > > > > > 4 +
+> > > > > > ---
+> > > > > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > > > > > 
+> > > > > > diff --git
+> > > > > > a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > xhci.yaml
+> > > > > > b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > xhci.yaml
+> > > > > > index 63cbc2b62d18..1444d18ef9bc 100644
+> > > > > > --- a/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > xhci.yaml
+> > > > > > +++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-
+> > > > > > xhci.yaml
+> > > > > > @@ -67,7 +67,6 @@ properties:
+> > > > > >      maxItems: 1
+> > > > > >  
+> > > > > >    clocks:
+> > > > > > -    minItems: 1
+> > > > > >      items:
+> > > > > >        - description: Controller clock used by normal mode
+> > > > > >        - description: Reference clock used by low power
+> > > > > > mode
+> > > > > > etc
+> > > > > > @@ -76,9 +75,8 @@ properties:
+> > > > > >        - description: controller clock
+> > > > > >  
+> > > > > >    clock-names:
+> > > > > > -    minItems: 1
+> > > > > >      items:
+> > > > > > -      - const: sys_ck  # required, the following ones are
+> > > > > > optional
+> > > > > > +      - const: sys_ck
+> > > > > >        - const: ref_ck
+> > > > > >        - const: mcu_ck
+> > > > > >        - const: dma_ck
+> > > > > 
+> > > > > This patch causes more check warning, I prefer to leave dt-
+> > > > > bindings
+> > > > > unchanged, but just fix mt8195's dts warning instead, thanks
+> > > > > a
+> > > > > lot
+> > > > 
+> > > > Hi Chunfeng,
+> > > > 
+> > > > the warnings reported by Rob's bot only happen if patches 3 and
+> > > > 4
+> > > > aren't applied
+> > > > to adapt the devicetrees. They are ABI breaking changes, but I
+> > > > understood this
+> > > > as the desired solution from the discussion we had with
+> > > > Krzysztof
+> > > > on v1 [1].
+> > > 
+> > > The warnings have nothing to do with patches 3 and 4 as those are
+> > > for 
+> > > dts files. It's examples in bindings that are the problem.
+> 
+> Sorry, you're right, I misread the errors.
+> 
+> > Yes, I mean almost all existing dts supporting mtk-xhci will also
+> > cause
+> > similar warnings, as changes in patches 3, 4;
+> > 
+> > It seems less flexible to make all clock required, not only changes
+> > all
+> > existing ones but also need more changes if additional clock is
+> > added.
+> 
+> Yes, that's a valid concern. I must have misunderstood the discussion
+> in v1
+> then.
+> 
+> So, I'm going to send a revert for this change and send a new patch
+> adding fixed
+> clocks on the dts for just mt8192 and mt8195 to fix the dtbs_check
+> warnings.
+> Does that sound good?
+Yes, sound good, thanks a lot
 
-I love your patch! Perhaps something to improve:
+> 
+> Thanks,
+> Nícolas
 
-[auto build test WARNING on usb/usb-testing]
-[cannot apply to chrome-platform/for-next linus/master balbi-usb/testing/next peter-chen-usb/for-usb-next v5.19-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Prashant-Malani/platform-chrome-Type-C-switch-driver-and-Type-C-framework-updates/20220707-012614
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220707/202207070816.tREVcI4a-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/6d9c4808fd780ebdf18235d615764c504b95a03d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Prashant-Malani/platform-chrome-Type-C-switch-driver-and-Type-C-framework-updates/20220707-012614
-        git checkout 6d9c4808fd780ebdf18235d615764c504b95a03d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/chrome/ kernel/bpf/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/platform/chrome/cros_typec_switch.c:37:6: warning: no previous prototype for 'cros_typec_unregister_switches' [-Wmissing-prototypes]
-      37 | void cros_typec_unregister_switches(struct cros_typec_switch_data *sdata)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/platform/chrome/cros_typec_switch.c:48:5: warning: no previous prototype for 'cros_typec_register_retimer' [-Wmissing-prototypes]
-      48 | int cros_typec_register_retimer(struct cros_typec_port *port, struct fwnode_handle *fwnode)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/cros_typec_unregister_switches +37 drivers/platform/chrome/cros_typec_switch.c
-
-    36	
-  > 37	void cros_typec_unregister_switches(struct cros_typec_switch_data *sdata)
-    38	{
-    39		int i;
-    40	
-    41		for (i = 0; i < EC_USB_PD_MAX_PORTS; i++) {
-    42			if (!sdata->ports[i])
-    43				continue;
-    44			typec_retimer_unregister(sdata->ports[i]->retimer);
-    45		}
-    46	}
-    47	
-  > 48	int cros_typec_register_retimer(struct cros_typec_port *port, struct fwnode_handle *fwnode)
-    49	{
-    50		struct typec_retimer_desc retimer_desc = {
-    51			.fwnode = fwnode,
-    52			.drvdata = port,
-    53			.name = fwnode_get_name(fwnode),
-    54			.set = cros_typec_retimer_set,
-    55		};
-    56	
-    57		port->retimer = typec_retimer_register(port->sdata->dev, &retimer_desc);
-    58		if (IS_ERR(port->retimer))
-    59			return PTR_ERR(port->retimer);
-    60	
-    61		return 0;
-    62	}
-    63	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
