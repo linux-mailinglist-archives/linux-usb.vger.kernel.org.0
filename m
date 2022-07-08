@@ -2,39 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6272A56B544
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 11:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D28C56B5C8
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 11:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237877AbiGHJVn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jul 2022 05:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S237529AbiGHJkB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 05:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237484AbiGHJVj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 05:21:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC165073C;
-        Fri,  8 Jul 2022 02:21:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9190626F4;
-        Fri,  8 Jul 2022 09:21:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE064C341C0;
-        Fri,  8 Jul 2022 09:21:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657272090;
-        bh=sR+zrj6Jh8+CXHksvH2t6G7kDXoYwnJpKv6ougosx2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FGFILMUSORUl9kCT1Zvri5+FUzKG2n8iczH3pm1IrFetQob+s1yDs2013+UaiFqGF
-         4e1Z4u43YTbLWPtoFJzmnbB/jZXXyQlCOA11zpT//sOGkp4qJ2WjDbPghN1twgKPXH
-         vnwzf/ShnFSN+p7VCB82LTpjRfpO1s3VIrYalw20=
-Date:   Fri, 8 Jul 2022 11:21:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
+        with ESMTP id S237190AbiGHJj7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 05:39:59 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3ED6B245;
+        Fri,  8 Jul 2022 02:39:58 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.81.246) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 8 Jul 2022
+ 12:39:49 +0300
+Subject: Re: [PATCH v3 2/9] usb: typec: Add retimer handle to port
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Prashant Malani <pmalani@chromium.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <chrome-platform@lists.linux.dev>, <bleung@chromium.org>,
+        <heikki.krogerus@linux.intel.com>,
         Daisuke Nojiri <dnojiri@chromium.org>,
         "Dustin L. Howett" <dustin@howett.net>,
         Guenter Roeck <groeck@chromium.org>,
@@ -42,17 +31,58 @@ Cc:     Prashant Malani <pmalani@chromium.org>,
         Kees Cook <keescook@chromium.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: Re: [PATCH v3 2/9] usb: typec: Add retimer handle to port
-Message-ID: <Ysf3F3VvmoqCFj4P@kroah.com>
 References: <20220707222045.1415417-1-pmalani@chromium.org>
  <20220707222045.1415417-3-pmalani@chromium.org>
- <509bf6fe-4406-c577-aa70-6eb70801e375@omp.ru>
+ <509bf6fe-4406-c577-aa70-6eb70801e375@omp.ru> <Ysf3F3VvmoqCFj4P@kroah.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <fb07d914-b756-1f9d-b670-4d18e84352bb@omp.ru>
+Date:   Fri, 8 Jul 2022 12:39:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <509bf6fe-4406-c577-aa70-6eb70801e375@omp.ru>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Ysf3F3VvmoqCFj4P@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.81.246]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/08/2022 09:19:09
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171638 [Jul 08 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 493 493 c80a237886b75a8eec705b487193915475443854
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.246 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.246 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.81.246:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.246
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/08/2022 09:21:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 7/8/2022 6:55:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,47 +91,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 11:46:44AM +0300, Sergey Shtylyov wrote:
-> Hello!
+On 7/8/22 12:21 PM, Greg Kroah-Hartman wrote:
+[...]
+>>> Similar to mux and orientation switch, add a handle for registered
+>>> retimer to the port, so that it has handles to the various switches
+>>> connected to it.
+>>>
+>>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+>>> ---
+>>>
+>>> Changes since v2:
+>>> - No changes.
+>>>
+>>> Changes since v1:
+>>> - Relinquish retimer reference during typec_release.
+>>>
+>>>  drivers/usb/typec/class.c | 9 +++++++++
+>>>  drivers/usb/typec/class.h | 1 +
+>>>  2 files changed, 10 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+>>> index 9062836bb638..f08e32d552b4 100644
+>>> --- a/drivers/usb/typec/class.c
+>>> +++ b/drivers/usb/typec/class.c
+>> [...]
+>>> @@ -2249,6 +2251,13 @@ struct typec_port *typec_register_port(struct device *parent,
+>>>  		return ERR_PTR(ret);
+>>>  	}
+>>>  
+>>> +	port->retimer = typec_retimer_get(&port->dev);
+>>> +	if (IS_ERR(port->retimer)) {
+>>> +		ret = PTR_ERR(port->retimer);
+>>> +		put_device(&port->dev);
+>>> +		return ERR_PTR(ret);
+>>
+>>    Why convert it to and fro, and not just return port->retimer?
 > 
-> On 7/8/22 1:20 AM, Prashant Malani wrote:
+> That would be a use-after-free as port might now be gone.
+
+   Ah, indeed!
+   It would also ensue an explicit pointer cast...
+
+> thanks,
 > 
-> > Similar to mux and orientation switch, add a handle for registered
-> > retimer to the port, so that it has handles to the various switches
-> > connected to it.
-> > 
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > ---
-> > 
-> > Changes since v2:
-> > - No changes.
-> > 
-> > Changes since v1:
-> > - Relinquish retimer reference during typec_release.
-> > 
-> >  drivers/usb/typec/class.c | 9 +++++++++
-> >  drivers/usb/typec/class.h | 1 +
-> >  2 files changed, 10 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> > index 9062836bb638..f08e32d552b4 100644
-> > --- a/drivers/usb/typec/class.c
-> > +++ b/drivers/usb/typec/class.c
-> [...]
-> > @@ -2249,6 +2251,13 @@ struct typec_port *typec_register_port(struct device *parent,
-> >  		return ERR_PTR(ret);
-> >  	}
-> >  
-> > +	port->retimer = typec_retimer_get(&port->dev);
-> > +	if (IS_ERR(port->retimer)) {
-> > +		ret = PTR_ERR(port->retimer);
-> > +		put_device(&port->dev);
-> > +		return ERR_PTR(ret);
-> 
->    Why convert it to and fro, and not just return port->retimer?
+> greg k-h
 
-That would be a use-after-free as port might now be gone.
-
-thanks,
-
-greg k-h
+MBR, Sergey
