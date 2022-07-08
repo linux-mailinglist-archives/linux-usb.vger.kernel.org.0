@@ -2,138 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D28C56B5C8
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 11:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B95D56B5F8
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 11:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237529AbiGHJkB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jul 2022 05:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S237904AbiGHJuf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 05:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237190AbiGHJj7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 05:39:59 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3ED6B245;
-        Fri,  8 Jul 2022 02:39:58 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.81.246) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 8 Jul 2022
- 12:39:49 +0300
-Subject: Re: [PATCH v3 2/9] usb: typec: Add retimer handle to port
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Prashant Malani <pmalani@chromium.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <chrome-platform@lists.linux.dev>, <bleung@chromium.org>,
-        <heikki.krogerus@linux.intel.com>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-References: <20220707222045.1415417-1-pmalani@chromium.org>
- <20220707222045.1415417-3-pmalani@chromium.org>
- <509bf6fe-4406-c577-aa70-6eb70801e375@omp.ru> <Ysf3F3VvmoqCFj4P@kroah.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <fb07d914-b756-1f9d-b670-4d18e84352bb@omp.ru>
-Date:   Fri, 8 Jul 2022 12:39:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S237839AbiGHJuc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 05:50:32 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDBC814AF;
+        Fri,  8 Jul 2022 02:50:26 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 06C214127F;
+        Fri,  8 Jul 2022 09:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received:received; s=mta-01; t=
+        1657273823; x=1659088224; bh=L9xiSJ4wb7SIjzoKVfcWATfBoGlBueLU2uy
+        JU/azvQU=; b=dYIY+NstzmVenzgz+Y81lh+MXhrvN7d7NUzE5U6Z8H3/XgJxLEb
+        zl+QgtWsMWFdbjJQ9J7waLhs6QmdQgZZ/zY5oVfyi8w7NjTc7gK7flAGgTij+eIv
+        75+6rKLSI4j4OR6r6XK5Pf49bSkq74F4ahp9f6C77SeFN9RC0moKA6yY=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Q-KfWmISjgnr; Fri,  8 Jul 2022 12:50:23 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 1ED984126B;
+        Fri,  8 Jul 2022 12:50:20 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 8 Jul 2022 12:50:20 +0300
+Received: from yadro.com (10.178.114.42) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 8 Jul 2022
+ 12:50:19 +0300
+Date:   Fri, 8 Jul 2022 12:50:19 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 10/36] target: Implement TMR_ABORT_TASK_SET
+Message-ID: <20220708095019.GA31374@yadro.com>
+References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
+ <0004ae8cc8650a32f2aaab0ef9ee3b6e6eb6b69c.1657149962.git.Thinh.Nguyen@synopsys.com>
+ <20220707194018.GH23838@yadro.com>
 MIME-Version: 1.0
-In-Reply-To: <Ysf3F3VvmoqCFj4P@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.81.246]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/08/2022 09:19:09
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 171638 [Jul 08 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 493 493 c80a237886b75a8eec705b487193915475443854
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.246 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.246 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.81.246:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.246
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 07/08/2022 09:21:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 7/8/2022 6:55:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220707194018.GH23838@yadro.com>
+X-Originating-IP: [10.178.114.42]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/8/22 12:21 PM, Greg Kroah-Hartman wrote:
-[...]
->>> Similar to mux and orientation switch, add a handle for registered
->>> retimer to the port, so that it has handles to the various switches
->>> connected to it.
->>>
->>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
->>> ---
->>>
->>> Changes since v2:
->>> - No changes.
->>>
->>> Changes since v1:
->>> - Relinquish retimer reference during typec_release.
->>>
->>>  drivers/usb/typec/class.c | 9 +++++++++
->>>  drivers/usb/typec/class.h | 1 +
->>>  2 files changed, 10 insertions(+)
->>>
->>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
->>> index 9062836bb638..f08e32d552b4 100644
->>> --- a/drivers/usb/typec/class.c
->>> +++ b/drivers/usb/typec/class.c
->> [...]
->>> @@ -2249,6 +2251,13 @@ struct typec_port *typec_register_port(struct device *parent,
->>>  		return ERR_PTR(ret);
->>>  	}
->>>  
->>> +	port->retimer = typec_retimer_get(&port->dev);
->>> +	if (IS_ERR(port->retimer)) {
->>> +		ret = PTR_ERR(port->retimer);
->>> +		put_device(&port->dev);
->>> +		return ERR_PTR(ret);
->>
->>    Why convert it to and fro, and not just return port->retimer?
+On Thu, Jul 07, 2022 at 10:40:18PM +0300, Dmitry Bogdanov wrote:
+> Hi Thinh,
 > 
-> That would be a use-after-free as port might now be gone.
-
-   Ah, indeed!
-   It would also ensue an explicit pointer cast...
-
-> thanks,
-> 
-> greg k-h
-
-MBR, Sergey
+> On Wed, Jul 06, 2022 at 04:35:26PM -0700, Thinh Nguyen wrote:
+> > Task ABORT TASK SET function is required by SCSI transport protocol
+> > standards (SAM-4 r14 section 7.3). It is similar to ABORT TASK
+> > function, but it applies to all commands received on a specified I_T
+> > nexus rather than a specific referenced command. Modify
+> > core_tmr_abort_task() to support TMR_ABORT_TASK_SET.
+> TCM Core does not support Task Sets, there is no list of commands per
+> I_T nexus. Your patch aborts all commands in all I_T nexuses for the
+> particular backstore device. That is defenitely not according to SAM.
+Sorry, there is a check against se_sess, so this patch looks good
+actually.
+> > 
+> > Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > ---
+> >  drivers/target/target_core_tmr.c       | 16 +++++++++++-----
+> >  drivers/target/target_core_transport.c |  2 +-
+> >  2 files changed, 12 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/target/target_core_tmr.c b/drivers/target/target_core_tmr.c
+> > index 3e73f60319d5..e77721db1ea9 100644
+> > --- a/drivers/target/target_core_tmr.c
+> > +++ b/drivers/target/target_core_tmr.c
+> > @@ -132,11 +132,13 @@ void core_tmr_abort_task(
+> >  				continue;
+> >  
+> >  			ref_tag = se_cmd->tag;
+> > -			if (tmr->ref_task_tag != ref_tag)
+> > -				continue;
+> > +			if (tmr->function == TMR_ABORT_TASK) {
+> > +				if (tmr->ref_task_tag != ref_tag)
+> > +					continue;
+> >  
+> > -			pr_err("ABORT_TASK: Found referenced %s task_tag: %llu\n",
+> > -			       se_cmd->se_tfo->fabric_name, ref_tag);
+> > +				pr_err("ABORT_TASK: Found referenced %s task_tag: %llu\n",
+> > +				       se_cmd->se_tfo->fabric_name, ref_tag);
+> > +			}
+> >  
+> >  			spin_lock(&se_sess->sess_cmd_lock);
+> >  			rc = __target_check_io_state(se_cmd, se_sess, 0);
+> > @@ -159,7 +161,11 @@ void core_tmr_abort_task(
+> >  			target_put_cmd_and_wait(se_cmd);
+> >  
+> >  			atomic_long_inc(&dev->aborts_complete);
+> > -			goto exit;
+> > +
+> > +			if (tmr->function == TMR_ABORT_TASK)
+> > +				goto exit;
+> > +
+> > +			spin_lock_irqsave(&dev->queues[i].lock, flags);
+> >  		}
+> >  		spin_unlock_irqrestore(&dev->queues[i].lock, flags);
+> >  	}
+> > diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+> > index cbd876e44cf0..bc1e4a7c4538 100644
+> > --- a/drivers/target/target_core_transport.c
+> > +++ b/drivers/target/target_core_transport.c
+> > @@ -3519,9 +3519,9 @@ static void target_tmr_work(struct work_struct *work)
+> >  
+> >  	switch (tmr->function) {
+> >  	case TMR_ABORT_TASK:
+> > +	case TMR_ABORT_TASK_SET:
+> >  		core_tmr_abort_task(dev, tmr, cmd->se_sess);
+> >  		break;
+> > -	case TMR_ABORT_TASK_SET:
+> >  	case TMR_CLEAR_ACA:
+> >  	case TMR_CLEAR_TASK_SET:
+> >  		tmr->response = TMR_TASK_MGMT_FUNCTION_NOT_SUPPORTED;
