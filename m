@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E37756B917
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 14:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F62256B92B
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 14:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238234AbiGHL7I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jul 2022 07:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
+        id S238237AbiGHL7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 07:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238119AbiGHL7H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 07:59:07 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA519A698
-        for <linux-usb@vger.kernel.org>; Fri,  8 Jul 2022 04:59:06 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id o4so30241649wrh.3
-        for <linux-usb@vger.kernel.org>; Fri, 08 Jul 2022 04:59:05 -0700 (PDT)
+        with ESMTP id S238230AbiGHL7I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 07:59:08 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426539A69F
+        for <linux-usb@vger.kernel.org>; Fri,  8 Jul 2022 04:59:07 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r14so24453777wrg.1
+        for <linux-usb@vger.kernel.org>; Fri, 08 Jul 2022 04:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dzKDE1uBJvt2gX7ZdYoRvRdyIdUe1nxk3awvgL9qY+Y=;
-        b=FlI4u6OWNlz86YzZ7RhIO5/Jd7v00zipXBQw0NWdgB7zaD48hygY7HRQZ3P012Upot
-         n69jIyfqiWMfviN2yitSkOLkZM4QD+ERvVfi3Zwhs74C8rU1krOPy9dR7Naa5OIfO2sB
-         88o+mcgAQyv6mZgUxJ4ylfCnlCdY5e5W9z0Cx0VufpvgoigdFY+zwf1MB2cc6lSUUvKS
-         +WZWot1jzGMMLWFt/4e3jTnvkQaq3yRnlXf+E+fvYKGZ69IGmKMx0MceLJdcr1t9f6ls
-         Il1rHmZhD3DOSV5yyMPypydymb8N6f3mRIy1jfYXxOdKDM9xqUlYVXd/cZd/tlaPfkrh
-         tnkg==
+        bh=PQd5KukuVRiN5L0KlbcVNHjHjkFnetKH3Ol5RF7yC2g=;
+        b=PsC8yEYKVpxPpapCvVSoXT5cTwmP2xCxJXg7cu0lbmnUlgnRFQU+sm0RezZd5weeDj
+         bhTPYMUDW35WfgTpt2+Irq4kCRbqmh8Gx5Ao3tTmoFiUIlBzZiG6QsDacJTUVt2GfekT
+         oKn6PFgVOJ4Qb3b9yjERekH0uc34Nuj1l329Ap4hY254yqYu5B2GOItWPn00fjMkTpPl
+         iUnRZXKKpjS5yu8GqsG8uUCM7r47cNoWDzXB+PFxvm12qqtQfpD4J+wgMUU4razAtRNv
+         HMPT13+VvuM1nUJYITKiDreo6kM+nrpYL4tUcGbmmrpeAqVzBAvy6IzR1ysZ3yCASmC5
+         rPrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dzKDE1uBJvt2gX7ZdYoRvRdyIdUe1nxk3awvgL9qY+Y=;
-        b=Ef/uDDxD6Rjf3ZdIzhAtoVaLN6tG9Gynk/M+akRfSFIIABU0gb0o3TGZ+7nH82+1f3
-         dlBAu3pWtExB+vyhllcbW0ZYZcLkCMt6addrxoueDihA+wBzXSrMlzhTuebm/jEQQA0t
-         QT0QwaTL20fg95IM6FLVJvaHJMu8TYVjX8i4PDx+vV9ziKaXGvKrCF2V9hjwlGKV4Zcu
-         BntYkExHsZWUj/WBCic6iAScpKYBI+BSQREBy9PK+uGn1bpE4fIpZb3ngBGsxyn7oQuK
-         mXjvvq6z9aD0FNVSrD5DKuE6RkaS5A9l/Twk/ARMlNXWlCM5VxF1yDaG84mbcIMY0GJK
-         2zIA==
-X-Gm-Message-State: AJIora9xUlbgvDpCtCHa4nNSt0LSVQJLSSSsji/tBbFQKq6L/AAZAZX0
-        FqXzsFd91v8vQJNRGC5Xa/JzwkA1ut4mjQ==
-X-Google-Smtp-Source: AGRyM1vhPFqm2+sYalz2RdBlAyNy8f5Jw7aVYRNDJuNpBZAOL745CEgPJ4Bp9LIN5ez9VKRhEqknbg==
-X-Received: by 2002:a5d:4982:0:b0:21d:6e04:1fb3 with SMTP id r2-20020a5d4982000000b0021d6e041fb3mr3022384wrq.69.1657281544357;
-        Fri, 08 Jul 2022 04:59:04 -0700 (PDT)
+        bh=PQd5KukuVRiN5L0KlbcVNHjHjkFnetKH3Ol5RF7yC2g=;
+        b=kptFJLXGuCvRFa/Oon3EXXkZ7mv5ftO3SyFP1H68qSfp0jXxXPWxDM/voLipCVEwVy
+         rLy2Dg+aZRiTKMFKca6bBtIHmjWJ7X1QmOqxNcF/JReYQqZGS4lsd8Eta/YtWs6smTOQ
+         uW07g53JFeBt+up6S5Fwd/vYpCFaiw/oZ9SFjr5CxKC00U5Jsq6mAyf/auetU21HyONO
+         jLL01TJyW+3pPTVfd8BbHdzBEXZdVlT/RjD4tMK7PmIkZz4zLsU0V4BXD0hPntS95W8f
+         +1NrDkQRby5AQzEuhINhq5r5vw2dIV39vqP21fxaKNT5lINfgNhUEAFDjNZOkReGFbfU
+         SQBw==
+X-Gm-Message-State: AJIora8T5kCfYvij2ILiGTsRjRWzq/hW8n4cCX9D3IF42ONIIauuW5Fs
+        jcLQ3Gc1ouAxDp+gPDZlA3HBuci+ZBrt5A==
+X-Google-Smtp-Source: AGRyM1v8tWX9G5s5pv8JDLkYgIRpAOBMJrMNcPJjItnC//kKgi33dMo/MEchE5SVPWaCx2y2cbD+OA==
+X-Received: by 2002:adf:fb03:0:b0:21d:70cb:d6b5 with SMTP id c3-20020adffb03000000b0021d70cbd6b5mr2933435wrr.548.1657281545541;
+        Fri, 08 Jul 2022 04:59:05 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id z5-20020adfe545000000b0021b81855c1csm49436474wrm.27.2022.07.08.04.59.03
+        by smtp.gmail.com with ESMTPSA id z5-20020adfe545000000b0021b81855c1csm49436474wrm.27.2022.07.08.04.59.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 04:59:03 -0700 (PDT)
+        Fri, 08 Jul 2022 04:59:04 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
 Cc:     faizel.kb@dicortech.com, baihaowen@meizu.com,
         bryan.odonoghue@linaro.org
-Subject: [PATCH 1/3] tools: usb: testusb: Add wireless speed reporting
-Date:   Fri,  8 Jul 2022 12:58:57 +0100
-Message-Id: <20220708115859.2095714-2-bryan.odonoghue@linaro.org>
+Subject: [PATCH 2/3] tools: usb: testusb: Add super speed reporting
+Date:   Fri,  8 Jul 2022 12:58:58 +0100
+Message-Id: <20220708115859.2095714-3-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220708115859.2095714-1-bryan.odonoghue@linaro.org>
 References: <20220708115859.2095714-1-bryan.odonoghue@linaro.org>
@@ -69,46 +69,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the ability to detect and print the USB speed as "wireless" if/when the
+Add the ability to detect and print the USB speed as "super" if/when the
 kernel reports that speed.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- tools/usb/testusb.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ tools/usb/testusb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/tools/usb/testusb.c b/tools/usb/testusb.c
-index 474bae868b353..6f428f9253844 100644
+index 6f428f9253844..d996a3819322e 100644
 --- a/tools/usb/testusb.c
 +++ b/tools/usb/testusb.c
-@@ -96,7 +96,8 @@ struct usb_interface_descriptor {
- enum usb_device_speed {
- 	USB_SPEED_UNKNOWN = 0,			/* enumerating */
+@@ -98,6 +98,7 @@ enum usb_device_speed {
  	USB_SPEED_LOW, USB_SPEED_FULL,		/* usb 1.1 */
--	USB_SPEED_HIGH				/* usb 2.0 */
-+	USB_SPEED_HIGH,				/* usb 2.0 */
-+	USB_SPEED_WIRELESS,			/* wireless (usb 2.5) */
+ 	USB_SPEED_HIGH,				/* usb 2.0 */
+ 	USB_SPEED_WIRELESS,			/* wireless (usb 2.5) */
++	USB_SPEED_SUPER,			/* usb 3.0 */
  };
  
  /*-------------------------------------------------------------------------*/
-@@ -104,11 +105,12 @@ enum usb_device_speed {
- static char *speed (enum usb_device_speed s)
- {
- 	switch (s) {
--	case USB_SPEED_UNKNOWN:	return "unknown";
--	case USB_SPEED_LOW:	return "low";
--	case USB_SPEED_FULL:	return "full";
--	case USB_SPEED_HIGH:	return "high";
--	default:		return "??";
-+	case USB_SPEED_UNKNOWN:		return "unknown";
-+	case USB_SPEED_LOW:		return "low";
-+	case USB_SPEED_FULL:		return "full";
-+	case USB_SPEED_HIGH:		return "high";
-+	case USB_SPEED_WIRELESS:	return "wireless";
-+	default:			return "??";
+@@ -110,6 +111,7 @@ static char *speed (enum usb_device_speed s)
+ 	case USB_SPEED_FULL:		return "full";
+ 	case USB_SPEED_HIGH:		return "high";
+ 	case USB_SPEED_WIRELESS:	return "wireless";
++	case USB_SPEED_SUPER:		return "super";
+ 	default:			return "??";
  	}
  }
- 
 -- 
 2.36.1
 
