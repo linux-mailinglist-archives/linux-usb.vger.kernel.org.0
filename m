@@ -2,208 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E6056AE68
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 00:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3053456B307
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 09:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbiGGW2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Jul 2022 18:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S237378AbiGHHAi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 03:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236408AbiGGW2h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Jul 2022 18:28:37 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF6B27FF8
-        for <linux-usb@vger.kernel.org>; Thu,  7 Jul 2022 15:28:35 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c13so11124334pla.6
-        for <linux-usb@vger.kernel.org>; Thu, 07 Jul 2022 15:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uxGLQrmVdJkUuWt9NFaUI7Z08fb3rgzdHRf9FAvVKgw=;
-        b=nicL//rVudE/er1S99AVCTW5nBDeJ7vX2B4hG7Yv4pliRITYLCOBG47GAOKJC9Fdrd
-         NKb6E0fCTenDvDM5xvYevZDb83lMFGMH3wY/2v2I5siIrOnB9UFwAWvNQHjXDMHbvcgu
-         tTeeaeHmmVY6oBVb60D7cDCb0ghoxnm4qxY6Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uxGLQrmVdJkUuWt9NFaUI7Z08fb3rgzdHRf9FAvVKgw=;
-        b=oXqV/Plly+1Waaim8N/L+5TMZEJlkCGMdRzpUrNhRXnH6zpaAEzdqmWXsAEgmQgr7a
-         0VReb/bluM7s1bvhhRddz8PQPK7yL1l0aCjfQ5b2d8z2NU/tVYkHI+nzJg+uQUKnX/ax
-         /rqwaOLirfxJnP/HjumCrOZZV58O2wZZ261kYEuLWyCrGax4Al/6Heeik/QHkEonwsEF
-         xACZtJd7bX2R8LNdBOQ8EmyVeh9OWoXUt1eU6hPMlkRD3CjfaXCvBHl66biX5YnGyfGV
-         EX4isb66eqiFtp5hPL6coYmomPfs1m1vqgecY6/mPxmvFNigy41R9fVh0O2gG79AKChb
-         pFQA==
-X-Gm-Message-State: AJIora8kz0EkDZbrMb8tMY0T9OKTxNSk5XzKP31XRYT8EE77VIM9q5T4
-        4AlqN/HZ8jT0Mjsdwr4fnHGTnA==
-X-Google-Smtp-Source: AGRyM1uws4QaEh1Qxx+3rORBhlNAIeZ5eYIJkvKt5NX0VItF58Rs/EFwcECalDZoXUEEuTG9aePQZQ==
-X-Received: by 2002:a17:90b:3d86:b0:1ef:9672:f647 with SMTP id pq6-20020a17090b3d8600b001ef9672f647mr135726pjb.198.1657232915530;
-        Thu, 07 Jul 2022 15:28:35 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b005289bfcee91sm5545657pfe.59.2022.07.07.15.28.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 15:28:35 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
+        with ESMTP id S237343AbiGHHAe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 03:00:34 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9E07392B;
+        Fri,  8 Jul 2022 00:00:32 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 7927F4131B;
+        Fri,  8 Jul 2022 07:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received:received; s=mta-01; t=
+        1657263629; x=1659078030; bh=MBV3TvvM1n5Hc7FOwTH/MwMmBFNpICLgwiz
+        WYtOUXYg=; b=sPmy7Bo5cSdbzcKaeuUM1e7Lzp90HoEfT/Irp/Ekys9rajfqABR
+        LPUlBb7gNBOwweAvup+6HIiyzf4453FMofV1sdV1PyZzk5n2K06vPiEbB4og31VB
+        pQ21wrlYPXf7t1DfJTExGVh4daSuiVyhOjSo2iqmrIBFQcI78PwDnBB4=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fZ_XuRx9ayFh; Fri,  8 Jul 2022 10:00:29 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 4D84A41301;
+        Fri,  8 Jul 2022 10:00:27 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 8 Jul 2022 10:00:27 +0300
+Received: from yadro.com (10.178.114.42) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 8 Jul 2022
+ 10:00:26 +0300
+Date:   Fri, 8 Jul 2022 10:00:26 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v3 9/9] platform/chrome: cros_ec_typec: Get retimer handle
-Date:   Thu,  7 Jul 2022 22:20:16 +0000
-Message-Id: <20220707222045.1415417-10-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-In-Reply-To: <20220707222045.1415417-1-pmalani@chromium.org>
-References: <20220707222045.1415417-1-pmalani@chromium.org>
+        <linux-usb@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>,
+        <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
+Subject: Re: [PATCH 18/36] usb: gadget: f_tcm: Don't set static stream_id
+Message-ID: <20220708070026.GK23838@yadro.com>
+References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
+ <d9863f8d7065cd9d5f6923ce002a86f6ee6509a9.1657149962.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <d9863f8d7065cd9d5f6923ce002a86f6ee6509a9.1657149962.git.Thinh.Nguyen@synopsys.com>
+X-Originating-IP: [10.178.114.42]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Where available, obtain the handle to retimer switch specified via
-firmware, and update the mux configuration callsites to add retimer
-support for supported modes.
-
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
-
-Changes since v2:
-- No changes.
-
-Changes since v1:
-- No changes.
-
- drivers/platform/chrome/cros_ec_typec.c | 44 +++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 39e6fd4491a9..38c4ac754ea9 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -20,6 +20,7 @@
- #include <linux/usb/typec_altmode.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
-+#include <linux/usb/typec_retimer.h>
- #include <linux/usb/typec_tbt.h>
- #include <linux/usb/role.h>
- 
-@@ -53,6 +54,7 @@ struct cros_typec_port {
- 	struct usb_pd_identity c_identity;
- 	struct typec_switch *ori_sw;
- 	struct typec_mux *mux;
-+	struct typec_retimer *retimer;
- 	struct usb_role_switch *role_sw;
- 
- 	/* Variables keeping track of switch state. */
-@@ -142,6 +144,12 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- 		goto mux_err;
- 	}
- 
-+	port->retimer = fwnode_typec_retimer_get(fwnode);
-+	if (IS_ERR(port->retimer)) {
-+		dev_dbg(dev, "Retimer handle not found.\n");
-+		goto retimer_sw_err;
-+	}
-+
- 	port->ori_sw = fwnode_typec_switch_get(fwnode);
- 	if (IS_ERR(port->ori_sw)) {
- 		dev_dbg(dev, "Orientation switch handle not found.\n");
-@@ -159,6 +167,8 @@ static int cros_typec_get_switch_handles(struct cros_typec_port *port,
- role_sw_err:
- 	typec_switch_put(port->ori_sw);
- ori_sw_err:
-+	typec_retimer_put(port->retimer);
-+retimer_sw_err:
- 	typec_mux_put(port->mux);
- mux_err:
- 	return -ENODEV;
-@@ -203,6 +213,21 @@ static void cros_typec_unregister_altmodes(struct cros_typec_data *typec, int po
- 	}
- }
- 
-+/*
-+ * Map the Type-C Mux state to retimer state and call the retimer set function. We need this
-+ * because we re-use the Type-C mux state for retimers.
-+ */
-+static int cros_typec_retimer_set(struct typec_retimer  *retimer, struct typec_mux_state state)
-+{
-+	struct typec_retimer_state rstate = {
-+		.alt = state.alt,
-+		.mode = state.mode,
-+		.data = state.data,
-+	};
-+
-+	return typec_retimer_set(retimer, &rstate);
-+}
-+
- static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
- {
- 	port->state.alt = NULL;
-@@ -211,6 +236,7 @@ static int cros_typec_usb_disconnect_state(struct cros_typec_port *port)
- 
- 	usb_role_switch_set_role(port->role_sw, USB_ROLE_NONE);
- 	typec_switch_set(port->ori_sw, TYPEC_ORIENTATION_NONE);
-+	cros_typec_retimer_set(port->retimer, port->state);
- 
- 	return typec_mux_set(port->mux, &port->state);
- }
-@@ -381,9 +407,14 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
- 
- static int cros_typec_usb_safe_state(struct cros_typec_port *port)
- {
-+	int ret;
- 	port->state.mode = TYPEC_STATE_SAFE;
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
-+
-+	return ret;
- }
- 
- /*
-@@ -480,7 +511,11 @@ static int cros_typec_enable_dp(struct cros_typec_data *typec,
- 	port->state.data = &dp_data;
- 	port->state.mode = TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
- 
--	return typec_mux_set(port->mux, &port->state);
-+	ret = cros_typec_retimer_set(port->retimer, port->state);
-+	if (!ret)
-+		ret = typec_mux_set(port->mux, &port->state);
-+
-+	return ret;
- }
- 
- static int cros_typec_enable_usb4(struct cros_typec_data *typec,
-@@ -569,7 +604,10 @@ static int cros_typec_configure_mux(struct cros_typec_data *typec, int port_num,
- 	} else if (port->mux_flags & USB_PD_MUX_USB_ENABLED) {
- 		port->state.alt = NULL;
- 		port->state.mode = TYPEC_STATE_USB;
--		ret = typec_mux_set(port->mux, &port->state);
-+
-+		ret = cros_typec_retimer_set(port->retimer, port->state);
-+		if (!ret)
-+			ret = typec_mux_set(port->mux, &port->state);
- 	} else {
- 		dev_dbg(typec->dev,
- 			"Unrecognized mode requested, mux flags: %x\n",
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+On Wed, Jul 06, 2022 at 04:36:15PM -0700, Thinh Nguyen wrote:
+> Host can assign stream ID value greater than number of streams
+> allocated. The tcm function needs to keep track of which stream is
+> available to assign the stream ID. This patch doesn't track that, but at
+> least it makes sure that there's no Oops if the host send tag with a
+> value greater than the number of supported streams.
+> 
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/gadget/function/f_tcm.c | 32 +++++------------------------
+>  1 file changed, 5 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+> index 270ec631481d..7721216dc9bc 100644
+> --- a/drivers/usb/gadget/function/f_tcm.c
+> +++ b/drivers/usb/gadget/function/f_tcm.c
+> @@ -532,6 +532,7 @@ static int uasp_prepare_r_request(struct usbg_cmd *cmd)
+>  	}
+>  
+>  	stream->req_in->is_last = 1;
+> +	stream->req_in->stream_id = cmd->tag;
+>  	stream->req_in->complete = uasp_status_data_cmpl;
+>  	stream->req_in->length = se_cmd->data_length;
+>  	stream->req_in->context = cmd;
+> @@ -556,6 +557,7 @@ static void uasp_prepare_status(struct usbg_cmd *cmd)
+>  	iu->len = cpu_to_be16(se_cmd->scsi_sense_length);
+>  	iu->status = se_cmd->scsi_status;
+>  	stream->req_status->is_last = 1;
+> +	stream->req_status->stream_id = cmd->tag;
+>  	stream->req_status->context = cmd;
+>  	stream->req_status->length = se_cmd->scsi_sense_length + 16;
+>  	stream->req_status->buf = iu;
+> @@ -786,19 +788,6 @@ static int uasp_alloc_cmd(struct f_uas *fu)
+>  	return -ENOMEM;
+>  }
+>  
+> -static void uasp_setup_stream_res(struct f_uas *fu, int max_streams)
+> -{
+> -	int i;
+> -
+> -	for (i = 0; i < max_streams; i++) {
+> -		struct uas_stream *s = &fu->stream[i];
+> -
+> -		s->req_in->stream_id = i + 1;
+> -		s->req_out->stream_id = i + 1;
+> -		s->req_status->stream_id = i + 1;
+> -	}
+> -}
+> -
+>  static int uasp_prepare_reqs(struct f_uas *fu)
+>  {
+>  	int ret;
+> @@ -819,7 +808,6 @@ static int uasp_prepare_reqs(struct f_uas *fu)
+>  	ret = uasp_alloc_cmd(fu);
+>  	if (ret)
+>  		goto err_free_stream;
+> -	uasp_setup_stream_res(fu, max_streams);
+>  
+>  	ret = usb_ep_queue(fu->ep_cmd, fu->cmd.req, GFP_ATOMIC);
+>  	if (ret)
+> @@ -995,6 +983,7 @@ static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
+>  	}
+>  
+>  	req->is_last = 1;
+> +	req->stream_id = cmd->tag;
+>  	req->complete = usbg_data_write_cmpl;
+>  	req->length = se_cmd->data_length;
+>  	req->context = cmd;
+> @@ -1125,16 +1114,8 @@ static int usbg_submit_command(struct f_uas *fu,
+>  	}
+>  	memcpy(cmd->cmd_buf, cmd_iu->cdb, cmd_len);
+>  
+> -	if (fu->flags & USBG_USE_STREAMS) {
+> -		if (cmd->tag > UASP_SS_EP_COMP_NUM_STREAMS)
+> -			goto err;
+> -		if (!cmd->tag)
+> -			cmd->stream = &fu->stream[0];
+> -		else
+> -			cmd->stream = &fu->stream[cmd->tag - 1];
+> -	} else {
+> -		cmd->stream = &fu->stream[0];
+> -	}
+> +	cmd->stream = &fu->stream[cmd->tag %
+> +		UASP_SS_EP_COMP_NUM_STREAMS];
+Use USBG_NUM_CMDS instead of UASP_SS_EP_COMP_NUM_STREAMS like in other
+places.
+>  
+>  	switch (cmd_iu->prio_attr & 0x7) {
+>  	case UAS_HEAD_TAG:
+> @@ -1161,9 +1142,6 @@ static int usbg_submit_command(struct f_uas *fu,
+>  	queue_work(tpg->workqueue, &cmd->work);
+>  
+>  	return 0;
+> -err:
+> -	usbg_release_cmd(&cmd->se_cmd);
+> -	return -EINVAL;
+>  }
+>  
+>  static void bot_cmd_work(struct work_struct *work)
