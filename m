@@ -2,45 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1409956B9F0
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 14:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F0A56BA0D
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 14:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiGHMph (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jul 2022 08:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S237707AbiGHMt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 08:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237638AbiGHMpg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 08:45:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2532659277
-        for <linux-usb@vger.kernel.org>; Fri,  8 Jul 2022 05:45:36 -0700 (PDT)
+        with ESMTP id S237613AbiGHMt1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 08:49:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA0018375;
+        Fri,  8 Jul 2022 05:49:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9783B826A6
-        for <linux-usb@vger.kernel.org>; Fri,  8 Jul 2022 12:45:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A02C341C0;
-        Fri,  8 Jul 2022 12:45:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 658B862731;
+        Fri,  8 Jul 2022 12:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466F5C341C0;
+        Fri,  8 Jul 2022 12:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657284333;
-        bh=4+tU0po0K5bi+AuXMoqQmUKjo+tjw2nPFZTMJWjQAlE=;
+        s=korg; t=1657284565;
+        bh=y3uOgzP8/1oD6loS+5aG+kabJ0xwbf5tnpouDRqeJ9I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vGkRJx2SS2UEivEb7y1aAcQYQWdqihRBU4WQ+BkgZs7LHFB3OaFDbuLjZ8B6mbc0D
-         krOwT9WaU5Bry5gPm/tLH+EzTcguqh5JUfVvASmnspYtIBr/bvG/rEpGPyw8e9m/ee
-         KBxbbIjsz2kxjqwHdJwd2qXgIp7zGJvrq0LftiZc=
-Date:   Fri, 8 Jul 2022 14:45:30 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, balbi@kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v2 2/2] usb: dwc3: gadget: fix high speed multiplier
- setting
-Message-ID: <Ysgm6nD02TKEYJeq@kroah.com>
-References: <20220704141812.1532306-1-m.grzeschik@pengutronix.de>
- <20220704141812.1532306-3-m.grzeschik@pengutronix.de>
+        b=RLUvr3duWQ4+6vdOFSNT8z543LC7P0xRKqI6yHYtY1i4p0Cm7fnHAnkZCXDtQzZCa
+         ZPtyVWI9UnS1wQvzy3/8YIrd6h1PZ2pWlzVLc8uZ0Y+hv+cX9PtImuAgsPThL4DdJ1
+         Ntltfdvff7g+ac/EA6DlVwQ+OOI3vu9U6oC3Gvk4=
+Date:   Fri, 8 Jul 2022 14:49:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH] usb: dwc3: Describe function parameter 'mult'
+Message-ID: <Ysgn0hxHkt3pvzAB@kroah.com>
+References: <20220703192448.13763-1-khalid.masum.92@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220704141812.1532306-3-m.grzeschik@pengutronix.de>
+In-Reply-To: <20220703192448.13763-1-khalid.masum.92@gmail.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,20 +53,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 04:18:12PM +0200, Michael Grzeschik wrote:
-> For High-Speed Transfers the prepare_one_trb function is calculating the
-> multiplier setting for the trb based on the length parameter of the trb
-> currently prepared. This assumption is wrong. For trbs with a sg list,
-> the length of the actual request has to be taken instead.
+On Mon, Jul 04, 2022 at 01:24:48AM +0600, Khalid Masum wrote:
+> Currently the parameter is not described. Which triggers warning when using
+> make htmldocs. Fix it by describing the parameter.
 > 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
 > ---
-> v1 -> v2: - added refactor patch before this patch
->           - using req->request.length as condition value
+>  drivers/usb/dwc3/gadget.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 8716bece1072..e8c86b08cd83 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -657,6 +657,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+>  /**
+>   * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
+>   * @dwc: pointer to the DWC3 context
+> + * @mult: multiplier, 'mult' value for SS Isoc EPs
+>   *
+>   * Calculates the size value based on the equation below:
+>   *
+> -- 
+> 2.36.1
+> 
 
-Does this need to be backported to older kernels or is it ok for
-5.20-rc1?
-
-thanks,
-
-greg k-h
+Does not apply to my usb-next branch :(
