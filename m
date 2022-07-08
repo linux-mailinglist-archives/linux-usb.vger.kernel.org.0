@@ -2,65 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C697E56C2DF
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jul 2022 01:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA33A56C359
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Jul 2022 01:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239154AbiGHTKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jul 2022 15:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        id S239600AbiGHT0O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 15:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238234AbiGHTKT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 15:10:19 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC9F1D30F;
-        Fri,  8 Jul 2022 12:10:18 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id y2so20523620ior.12;
-        Fri, 08 Jul 2022 12:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qkcbC6yq5XLhBzTTu+MMovI7rdFjrz0afp4P2lwP3Gk=;
-        b=Ufb7JbLaRhwgNFKC3wKUcoi0CLM79ax4hGpkwdpDERueBoG2oimALdcBQiMMdk8AQ0
-         S4bIhQsF1yRoxsk9YWyrT2KajKQlFdZXYuGkuaExm2x8kCra+o5KI23F/7QJl0sFwi/5
-         ZmHqrmRYDUBYnC3YIiaBwMMTlPSxuGkX9O+7cTrfcKBB3cf4u7k8R3mSWesnJOXh72Qc
-         /P1QeI/wFCk8Ct6GoGKa7uuf8G6ztBGEYJLSJx3z4mwtRR0vIy8Qr6oQVs3pG0LWQf+V
-         fzqa/tH4Anl7pjYUUO4okchtUi+3/smTZNVRXNCE9fSr8M2Gb6sQj/fS7+zyv7QgBVZl
-         rprw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qkcbC6yq5XLhBzTTu+MMovI7rdFjrz0afp4P2lwP3Gk=;
-        b=dOHRekn69Y/XioiRfpm+5/Fbh235YvyspFhuucfWHIIsGXaHMsVTgESU4olsXhJ0Ti
-         SqAtmz8LB+HwRwh7GjUQ8peDXJhlNVgenemITdJVBrNjM8d6DCxqkamSMzCwK5Ym4rJ0
-         z4+oyYvwGxuysbM8NKN6XF0OZ7cYa3kou13VGAH2FIh6LvOdJUQjOVK8puML0z3I/KFI
-         zdNXro8Rb7uxDmA0QDpx1ovx8/EA/msB4XgYBMbpgzbkETJ5cbL6qYZVrdFNdW4/cfik
-         rA1DNlO4TjI8ebw4RsOFLckygGdM63L0nVJz0UxKVbRi4pCunoxn41a8yusAah+yfb8+
-         3BQQ==
-X-Gm-Message-State: AJIora+axOzMfF0OrH2boojj6PTs3uh5fQwYr7jPyihX71+5NgA5fUcI
-        p2n1skCN4DPyfm7tPPft6hFaNiD+nI3NvrvQVb4=
-X-Google-Smtp-Source: AGRyM1vjrSQNi3fUurB4mnaqOn2/DN69XlyXYO+6EfgfC+s7JyKUTAOAPdIQ9gUdIjFF2zBdLd86vSxWQZKRB/0SjcQ=
-X-Received: by 2002:a05:6602:1682:b0:65d:f539:e30 with SMTP id
- s2-20020a056602168200b0065df5390e30mr2690129iow.81.1657307418278; Fri, 08 Jul
- 2022 12:10:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220703192448.13763-1-khalid.masum.92@gmail.com> <Ysgn0hxHkt3pvzAB@kroah.com>
-In-Reply-To: <Ysgn0hxHkt3pvzAB@kroah.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Sat, 9 Jul 2022 01:10:07 +0600
-Message-ID: <CAABMjtF98YwVaaaAKftFyta5CPM2As=1ykvyDf8CDLsCusKxkQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: Describe function parameter 'mult'
+        with ESMTP id S238768AbiGHT0O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 15:26:14 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A8E20189;
+        Fri,  8 Jul 2022 12:26:13 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 52D5866019F2;
+        Fri,  8 Jul 2022 20:26:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657308371;
+        bh=XB+Q5+iW9bzcYdl1fBbqu9s42fjAPkdcGjUotn5OaPM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aAjTkJkxs/dZshN+srt3jMFNrbpIL9P4Xd9CTTckQX5iZDBqf1Ce/WjXCA+ekWoUE
+         qBLcmyhpoR/8rczvCLZwMVOp4tKqKTs9Y/nUzg+TSzbowItA6xb/GoxwjnEV2pUDgB
+         wAF0Qq97/uPv3kXY8F5kdsfP3OrqUMLHDBulNZ1JJlqSACpP5Cx6vCW2rhmXt36eWf
+         DXne89DgjSxE1AZWLja3vqAJiinx/G7Y1bTSjNcL07NZ5rg8zj9cC05qP4uLgFIEhT
+         Jv5DHCY/Re4aRnglvJYWNVPjGBV75pGJDCmpGMO7p7OQDDQqqorNEs+XcEcptx5D8J
+         UNHbLJPMIl2hA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH] Revert "dt-bindings: usb: mtk-xhci: Make all clocks required"
+Date:   Fri,  8 Jul 2022 15:26:05 -0400
+Message-Id: <20220708192605.43351-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,34 +61,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 6:49 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jul 04, 2022 at 01:24:48AM +0600, Khalid Masum wrote:
-> > Currently the parameter is not described. Which triggers warning when using
-> > make htmldocs. Fix it by describing the parameter.
-> >
-> > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 8716bece1072..e8c86b08cd83 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -657,6 +657,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
-> >  /**
-> >   * dwc3_gadget_calc_tx_fifo_size - calculates the txfifo size value
-> >   * @dwc: pointer to the DWC3 context
-> > + * @mult: multiplier, 'mult' value for SS Isoc EPs
-> >   *
-> >   * Calculates the size value based on the equation below:
-> >   *
-> > --
-> > 2.36.1
-> >
->
-> Does not apply to my usb-next branch :(
+This reverts commit ebc4969ae125e65fdb563f66f4bfa7aec95f7eb4. That
+commit was supposed to make the binding better reflect the MediaTek XHCI
+hardware block by requiring all clocks to be present. But doing that
+also causes too much noise in the devicetrees, since it requires
+updating old MediaTek DTs to add clock handles for the fixed clocks, and
+going forward every new clock added to the binding would require even
+more updates.
 
-Thanks. I looked into usb-next and a fix is already there.
+The commit also didn't update the example to match the changes, causing
+additional warnings.
+
+Instead let's keep the clocks optional so that old devicetrees can keep
+omitting the fixed clocks, and we'll just add the clocks as required on
+new DTs.
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+---
+
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+index 1444d18ef9bc..63cbc2b62d18 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+@@ -67,6 +67,7 @@ properties:
+     maxItems: 1
+ 
+   clocks:
++    minItems: 1
+     items:
+       - description: Controller clock used by normal mode
+       - description: Reference clock used by low power mode etc
+@@ -75,8 +76,9 @@ properties:
+       - description: controller clock
+ 
+   clock-names:
++    minItems: 1
+     items:
+-      - const: sys_ck
++      - const: sys_ck  # required, the following ones are optional
+       - const: ref_ck
+       - const: mcu_ck
+       - const: dma_ck
+-- 
+2.37.0
+
