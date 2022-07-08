@@ -2,91 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86A156B37F
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 09:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AC156B3A6
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Jul 2022 09:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237606AbiGHH3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jul 2022 03:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S237279AbiGHHfz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 03:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237538AbiGHH3m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 03:29:42 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C597B371;
-        Fri,  8 Jul 2022 00:29:41 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id s128so11351727oie.10;
-        Fri, 08 Jul 2022 00:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FqDGYB2ZlAdYkNMvFd6Ayqwfz0mqZucM34tUZPUG1Us=;
-        b=R6vyxjgrOBxJy/RCXfqquYq/iCG4Gn10idHi9TUCPWWes5QMNS2UsZ3drdbbtrlSHm
-         t+ZIBDy0VsbmnMsrt+tBTsZVc8rBm+xMu8vKKx2dzBSYeTJ9lCzr/JmGFfZ91IUMEzEg
-         HzbUElzis4lq8RQVp85gieJZijBrn+rYPKCaiWuv6NyeiTGP/ay++fDwUE3xwJnp1Y5i
-         oiUmOZcIKdvdazLV35kcPC1VEUXce0tNro8WJaqMfc8/d8q5V2HIXGLCrlE41WI/Doq0
-         9BOh7jAhd0PQS+VyARpbZn/rBjr0wasgkFDEoTvDTPjioLr6mqNfgeW75YBN0Agw3aR1
-         a1IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FqDGYB2ZlAdYkNMvFd6Ayqwfz0mqZucM34tUZPUG1Us=;
-        b=SBuQv5oEnGdv7cuIMbT/n0QhCHn1o8BKLR7M71qGaWOSXcXb9AsMy/dcuPoX14Qvlc
-         TTdOOmB6y/cr/fSm7mFXNKIkCf4QAz7dDSOFzFBnSmrxAgXkFJ+0p87v1od8b6qz0ihJ
-         9fLlFsLsRqQ7sG3rLcw4hNWDQyTYlA1jlIIafknjAwBZ/B2wpVJG3WMG8lHGIkRgW5Ko
-         Tl31B7ljqzBRE6nx0YMjrfiTPFsfzVA685yGukhJJkvBJ7IdycgJHiQWvrRCzgBcLW9h
-         QahkbauCFmVdS4JblwufB6Qv6PNp0zboJmKaOIyDCplGZ4Bsk4TtXaMJmEnjYOI7lqiI
-         5+iw==
-X-Gm-Message-State: AJIora+EjJ5lvUfQ+ujyj8PZhVHuTK8fNB43q5YpTAHZJoYUImU5YBLe
-        ebzU1jFucTc0aaz7bteB2JRtcBATJv4eaGPWNAQ=
-X-Google-Smtp-Source: AGRyM1t7P4KOphW//PbZ3donZNYvZfjhA3SSuSfTX1plQv2+xKHqyHnud79z1+8clasW0VDOoFzl0Q7NuaEqWsoxJDw=
-X-Received: by 2002:a05:6808:148b:b0:335:8f41:3ab0 with SMTP id
- e11-20020a056808148b00b003358f413ab0mr1061698oiw.172.1657265379601; Fri, 08
- Jul 2022 00:29:39 -0700 (PDT)
+        with ESMTP id S237028AbiGHHfy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 03:35:54 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC64E7C1AB;
+        Fri,  8 Jul 2022 00:35:53 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 297CF41263;
+        Fri,  8 Jul 2022 07:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received:received; s=mta-01; t=
+        1657265751; x=1659080152; bh=pyi3WPmYCwLTZLN0o14rSoiMGYCctnNyG0Q
+        VEsJk9vM=; b=A0f2B9Tnw8WhG33dWjDaM0y5gSAOdVjNtQY7rH5H4CEF7ifocWP
+        m05/xC4Spb0hhfsJwcp0WiZX5imcEI7hlflMe1qWx+zhy/zkDBFlz+LHIXOA773g
+        88Hqw0H7yb6pNMR2rAIM5iVb3koVTIee/kKVNG3Eqxbl+nC5u7Ncq29w=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oQfybfdEI_kI; Fri,  8 Jul 2022 10:35:51 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id CE8F8412E1;
+        Fri,  8 Jul 2022 10:35:46 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 8 Jul 2022 10:35:46 +0300
+Received: from yadro.com (10.178.114.42) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 8 Jul 2022
+ 10:35:45 +0300
+Date:   Fri, 8 Jul 2022 10:35:46 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>,
+        <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
+Subject: Re: [PATCH 32/36] usb: gadget: f_tcm: Send sense reason
+Message-ID: <20220708073546.GL23838@yadro.com>
+References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
+ <ce84775a1364314625f366d1bf5f71befb1ca335.1657149962.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-References: <20220708070645.6130-1-jomajm@gmail.com> <YsfacfpE+h/GLTC4@kroah.com>
-In-Reply-To: <YsfacfpE+h/GLTC4@kroah.com>
-From:   "Jozo M." <jomajm@gmail.com>
-Date:   Fri, 8 Jul 2022 09:29:28 +0200
-Message-ID: <CA+BOZ0vfn_qcinsiKgpLxLKCzEMJHt9DP9Y8S9ONe8z_D80JuQ@mail.gmail.com>
-Subject: Re: [PATCH] gadgetfs: ep_io - wait until IRQ finishes
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>, Hangyu Hua <hbh25y@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ce84775a1364314625f366d1bf5f71befb1ca335.1657149962.git.Thinh.Nguyen@synopsys.com>
+X-Originating-IP: [10.178.114.42]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The first commit 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2
-
-pi 8. 7. 2022 o 9:19 Greg Kroah-Hartman <gregkh@linuxfoundation.org> nap=C3=
-=ADsal(a):
->
-> On Fri, Jul 08, 2022 at 09:06:44AM +0200, Jozef Martiniak wrote:
-> > after usb_ep_queue() if wait_for_completion_interruptible() is
-> > interrupted we need to wait until IRQ gets finished.
-> >
-> > Otherwise complete() from epio_complete() can corrupt stack.
-> >
-> > Signed-off-by: Jozef Martiniak <jomajm@gmail.com>
->
-> What commit id does this fix?
->
-> thanks,
->
-> greg k-h
+On Wed, Jul 06, 2022 at 04:37:43PM -0700, Thinh Nguyen wrote:
+> If there's a failure, report it back to the host with a sense reason.
+> 
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/gadget/function/f_tcm.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+> index 7162be5fdf2f..fb9b71158c4b 100644
+> --- a/drivers/usb/gadget/function/f_tcm.c
+> +++ b/drivers/usb/gadget/function/f_tcm.c
+> @@ -669,6 +669,9 @@ static int uasp_send_read_response(struct usbg_cmd *cmd)
+>  			pr_err("%s(%d) => %d\n", __func__, __LINE__, ret);
+>  	}
+>  out:
+> +	if (ret)
+> +		transport_send_check_condition_and_sense(&cmd->se_cmd,
+> +				TCM_CHECK_CONDITION_UNIT_ATTENTION, 0);
+>  	return ret;
+>  }
+>  
+> @@ -711,6 +714,9 @@ static int uasp_send_write_request(struct usbg_cmd *cmd)
+>  	}
+>  
+>  cleanup:
+> +	if (ret)
+> +		transport_send_check_condition_and_sense(&cmd->se_cmd,
+> +				TCM_CHECK_CONDITION_UNIT_ATTENTION, 0);
+1. TCM_CHECK_CONDITION_UNIT_ATTENTION is used if some UA is allocated.
+You do not have UA allocated here, so that reason is not apropriate.
+2. I am not sure that it's ok to initiate sending failure response if
+you cannot send a response right now.
+Other fabric drivers just returns -EAGAIN in case of some lack of
+resources to send a response. Then TCM Core will retry to sent that
+response again.
+>  	return ret;
+>  }
+>  
+> @@ -955,7 +961,15 @@ static void usbg_data_write_cmpl(struct usb_ep *ep, struct usb_request *req)
+>  	return;
+>  
+>  cleanup:
+> -	transport_generic_free_cmd(&cmd->se_cmd, 0);
+> +	/* Command was aborted */
+> +	if (cmd->state == UASP_QUEUE_COMMAND) {
+> +		transport_generic_free_cmd(se_cmd, 0);
+> +		return;
+> +	}
+> +
+> +	cmd->state = UASP_QUEUE_COMMAND;
+> +	transport_send_check_condition_and_sense(se_cmd,
+> +			TCM_CHECK_CONDITION_UNIT_ATTENTION, 0);
+>  }
+>  
+>  static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
