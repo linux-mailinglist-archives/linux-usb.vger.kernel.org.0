@@ -2,166 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A24A56C5F8
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Jul 2022 04:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99C456C62F
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Jul 2022 05:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiGIC0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Jul 2022 22:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S229522AbiGIDUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Jul 2022 23:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGIC0V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 22:26:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289EC79EDE;
-        Fri,  8 Jul 2022 19:26:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657333580; x=1688869580;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NFZVAj+FkFGpC1g8eGOjw6NUO0iZIB6Us6j0cDgGUKU=;
-  b=EJWH8H40Uw2kaEUrAyGpENWaEKGUI5l22TvroLefmXNcAVj8VWAd8W5O
-   rhruf8ycFjlw4duzyVP5B5oygmWKfJ8auUHqfl5p75TSIfYnY33P02KLm
-   RRiH/rG06F8eW/q6pwvm9KgfJ6EQ63yv6dtY5nQl6dCuM8FWXh+3vtylY
-   zFHXstH4EhkdxjlJSkK86X54REMNHYXbDtoyPowiGwE0uj9JCoOwNShxc
-   lMYg7OsOWgWQwSHsWGVF6XPwDSoFVnC5nG0MMMjb0IufsBN7S8LnP9y34
-   o5lmDLx0bUqAvfdeOcqRG+RI1FPB1ZVL5c41Ez760qbMH7xOfXwNCP4F1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="348386967"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="348386967"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 19:26:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="770962947"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Jul 2022 19:26:17 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oA0Aj-000OCS-3n;
-        Sat, 09 Jul 2022 02:26:17 +0000
-Date:   Sat, 9 Jul 2022 10:26:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com,
-        quic_jackp@quicinc.com, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: [PATCH 3/5] usb: dwc3: gadget: Adjust IRQ management during soft
- disconnect/connect
-Message-ID: <202207091054.eGEUvBXn-lkp@intel.com>
-References: <20220708185007.21743-4-quic_wcheng@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220708185007.21743-4-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229379AbiGIDUI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Jul 2022 23:20:08 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BF866ADF
+        for <linux-usb@vger.kernel.org>; Fri,  8 Jul 2022 20:20:07 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-317f6128c86so4164747b3.22
+        for <linux-usb@vger.kernel.org>; Fri, 08 Jul 2022 20:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=+6mxQwenuketJNKTw2AgKFfZAqlF6au6yl4FTcttxec=;
+        b=msMkA6mMPXw2DPMUq74vBSihilJyTAYJuh/S0rF3IC0cPUdu0AeobvaBuBjtiEaNII
+         NOmrLvdaC1siW8gfkU3VdyX8XWubTcJ7N8ejX2AMWIS5YBFys+TvqXBYHaVHSNltPLp6
+         CM75KN3k6KbthTszveXONoTcH1G34XiQSURviEVH+ZIXVpH3TnRoS7XDEp/Qr0A2GlZA
+         HkmtaJ6ydDOGq7aPzND/i9cUqwLgaFgrR2XFBj59P6jnvpTM44S4ioqga7l/HAa/G62h
+         9QLhIfp9lXOjBKlQtkjDngTTNxcgLxNwQGMEnAZiyi+8f0Xv4XD9xt1Y25zBorh7w2vw
+         qFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=+6mxQwenuketJNKTw2AgKFfZAqlF6au6yl4FTcttxec=;
+        b=nqPJStXIBNizKHsg9DrV9ub+PEt0J2HTdtIh8SrHsdqaFfBitiXKxWQFYG4DsSnutT
+         AxV0vQkPg6npBRV8G+vYjakx7OHYc2Fm9MZ5NvmkpbXoR4iurakJo5dPDjsjg0J9yzA9
+         eo6Y3BlE4X4a+90N1H9kKKQPd/HTFd0VSMc+PLlo2uyjo0kEr8p3q/HIr9fyl1td1Z3n
+         0LjbF1TeeDsvSZGVnszLubQnLGhuUpYle/Ddd4L7XfsV7n6Dn2qBiaWdSYlYWOlofFJ8
+         Nsp6Dztk5MHGL6w0yRKWb1Fyycp/AYVAEpzPZJLVwIm1qhfSgMEgoBMAwO9hFLUrttPz
+         fuIA==
+X-Gm-Message-State: AJIora/k+kO7FrL22y+etxdGAezge8RwYSQ/blwsYosRttzBB0iC+F2j
+        UbPSZlfd2lUHS6F+mZzZ+RGIAL0TfC6IdQ==
+X-Google-Smtp-Source: AGRyM1tgsnBX7aPla1Mr0qumw/V3OTEIp6cC1PNLFxa8hu9gpm9EJthrRffSNiaj4BlnO6ehELCNCbFGypYSnw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:13c6:0:b0:669:33b:97cb with SMTP id
+ 189-20020a2513c6000000b00669033b97cbmr6543203ybt.583.1657336806987; Fri, 08
+ Jul 2022 20:20:06 -0700 (PDT)
+Date:   Sat,  9 Jul 2022 11:19:56 +0800
+Message-Id: <20220709032001.819487-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v4 0/5] Rework KUnit test execution in modules
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Wesley,
+This patch series makes two changes to how KUnit test suites are stored
+and executed:
+- The .kunit_test_suites section is now used for tests in modules (in
+  lieu of a module_init funciton), as well as for built-in tests. The
+  module loader will now trigger test execution. This frees up the
+  module_init function for other uses.
+- Instead of storing an array of arrays of suites, have the
+  kunit_test_suite() and kunit_test_suites() macros append to one global
+  (or per-module) list of test suites. This removes a needless layer of
+  indirection, and removes the need to NULL-terminate suite_sets.
 
-Thank you for the patch! Perhaps something to improve:
+The upshot of this is that it should now be possible to use the
+kunit_test_suite() and kunit_test_suites() macros to register test
+suites even from within modules which otherwise had module_init
+functions. This was proving to be quite a common issue, resulting in
+several modules calling into KUnit's private suite execution functions
+to run their tests (often introducing incompatibilities with the KUnit
+tooling).
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on linus/master v5.19-rc5 next-20220708]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This series also fixes the thunderbolt, nitro_enclaves, and
+sdhci-of-aspeed tests to use kunit_test_suite() now that it works. This
+is required, as otherwise the first two patches may break these tests
+entirely.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wesley-Cheng/Fix-controller-halt-and-endxfer-timeout-issues/20220709-025241
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20220709/202207091054.eGEUvBXn-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/457fe4752b0f6dcc5c1b329f91003b7ffc518b44
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wesley-Cheng/Fix-controller-halt-and-endxfer-timeout-issues/20220709-025241
-        git checkout 457fe4752b0f6dcc5c1b329f91003b7ffc518b44
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/dwc3/
+Huge thanks to Jeremy Kerr, who designed and implemented the module
+loader changes, and to Daniel Latypov for pushing the simplification of
+the nested arrays in .kunit_test_suites.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I've tested this series both with builtin tests on a number of
+architectures, and with modules on x86_64, and it seems good-to-go to
+me. More testing (particularly of modules) with more interesting setups
+never hurts, though!
 
-All warnings (new ones prefixed by >>):
+Cheers,
+-- David
 
-   drivers/usb/dwc3/gadget.c: In function 'dwc3_gadget_ep_dequeue':
->> drivers/usb/dwc3/gadget.c:2032:41: warning: unused variable 'flags' [-Wunused-variable]
-    2032 |         unsigned long                   flags;
-         |                                         ^~~~~
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20220625050838.1618469-1-davidgow@google.com/
+- Rebase on top of the TAINT_TEST patch series. This should now apply
+  cleanly on top of the kunit branch:
+  https://lore.kernel.org/linux-kselftest/20220708044847.531566-1-davidgow@google.com/T/#u
+- Add Brendan's Reviewed/Acked-by tags.
 
+Daniel Latypov (1):
+  kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
 
-vim +/flags +2032 drivers/usb/dwc3/gadget.c
+David Gow (3):
+  thunderbolt: test: Use kunit_test_suite() macro
+  nitro_enclaves: test: Use kunit_test_suite() macro
+  mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
 
-d4f1afe5e896c1 Felipe Balbi 2018-08-01  2022  
-72246da40f3719 Felipe Balbi 2011-08-19  2023  static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-72246da40f3719 Felipe Balbi 2011-08-19  2024  		struct usb_request *request)
-72246da40f3719 Felipe Balbi 2011-08-19  2025  {
-72246da40f3719 Felipe Balbi 2011-08-19  2026  	struct dwc3_request		*req = to_dwc3_request(request);
-72246da40f3719 Felipe Balbi 2011-08-19  2027  	struct dwc3_request		*r = NULL;
-72246da40f3719 Felipe Balbi 2011-08-19  2028  
-72246da40f3719 Felipe Balbi 2011-08-19  2029  	struct dwc3_ep			*dep = to_dwc3_ep(ep);
-72246da40f3719 Felipe Balbi 2011-08-19  2030  	struct dwc3			*dwc = dep->dwc;
-72246da40f3719 Felipe Balbi 2011-08-19  2031  
-72246da40f3719 Felipe Balbi 2011-08-19 @2032  	unsigned long			flags;
-72246da40f3719 Felipe Balbi 2011-08-19  2033  	int				ret = 0;
-72246da40f3719 Felipe Balbi 2011-08-19  2034  
-2c4cbe6e5a9c71 Felipe Balbi 2014-04-30  2035  	trace_dwc3_ep_dequeue(req);
-2c4cbe6e5a9c71 Felipe Balbi 2014-04-30  2036  
-457fe4752b0f6d Wesley Cheng 2022-07-08  2037  	spin_lock(&dwc->lock);
-72246da40f3719 Felipe Balbi 2011-08-19  2038  
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2039  	list_for_each_entry(r, &dep->cancelled_list, list) {
-72246da40f3719 Felipe Balbi 2011-08-19  2040  		if (r == req)
-fcd2def6639293 Thinh Nguyen 2020-03-05  2041  			goto out;
-72246da40f3719 Felipe Balbi 2011-08-19  2042  	}
-72246da40f3719 Felipe Balbi 2011-08-19  2043  
-aa3342c8bb618a Felipe Balbi 2016-03-14  2044  	list_for_each_entry(r, &dep->pending_list, list) {
-fcd2def6639293 Thinh Nguyen 2020-03-05  2045  		if (r == req) {
-fcd2def6639293 Thinh Nguyen 2020-03-05  2046  			dwc3_gadget_giveback(dep, req, -ECONNRESET);
-fcd2def6639293 Thinh Nguyen 2020-03-05  2047  			goto out;
-fcd2def6639293 Thinh Nguyen 2020-03-05  2048  		}
-72246da40f3719 Felipe Balbi 2011-08-19  2049  	}
-72246da40f3719 Felipe Balbi 2011-08-19  2050  
-aa3342c8bb618a Felipe Balbi 2016-03-14  2051  	list_for_each_entry(r, &dep->started_list, list) {
-72246da40f3719 Felipe Balbi 2011-08-19  2052  		if (r == req) {
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2053  			struct dwc3_request *t;
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2054  
-72246da40f3719 Felipe Balbi 2011-08-19  2055  			/* wait until it is processed */
-c5353b225df9b2 Felipe Balbi 2019-02-13  2056  			dwc3_stop_active_transfer(dep, true, true);
-cf3113d893d442 Felipe Balbi 2017-02-17  2057  
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2058  			/*
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2059  			 * Remove any started request if the transfer is
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2060  			 * cancelled.
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2061  			 */
-a7027ca69d82ae Thinh Nguyen 2020-03-05  2062  			list_for_each_entry_safe(r, t, &dep->started_list, list)
-04dd6e76b22889 Ray Chi      2021-03-28  2063  				dwc3_gadget_move_cancelled_request(r,
-04dd6e76b22889 Ray Chi      2021-03-28  2064  						DWC3_REQUEST_STATUS_DEQUEUED);
-cf3113d893d442 Felipe Balbi 2017-02-17  2065  
-a5c7682aaaa10e Thinh Nguyen 2021-01-04  2066  			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
-a5c7682aaaa10e Thinh Nguyen 2021-01-04  2067  
-fcd2def6639293 Thinh Nguyen 2020-03-05  2068  			goto out;
-72246da40f3719 Felipe Balbi 2011-08-19  2069  		}
-72246da40f3719 Felipe Balbi 2011-08-19  2070  	}
-fcd2def6639293 Thinh Nguyen 2020-03-05  2071  
-04fb365c453e14 Felipe Balbi 2017-05-17  2072  	dev_err(dwc->dev, "request %pK was not queued to %s\n",
-72246da40f3719 Felipe Balbi 2011-08-19  2073  		request, ep->name);
-72246da40f3719 Felipe Balbi 2011-08-19  2074  	ret = -EINVAL;
-fcd2def6639293 Thinh Nguyen 2020-03-05  2075  out:
-457fe4752b0f6d Wesley Cheng 2022-07-08  2076  	spin_unlock(&dwc->lock);
-72246da40f3719 Felipe Balbi 2011-08-19  2077  
-72246da40f3719 Felipe Balbi 2011-08-19  2078  	return ret;
-72246da40f3719 Felipe Balbi 2011-08-19  2079  }
-72246da40f3719 Felipe Balbi 2011-08-19  2080  
+Jeremy Kerr (1):
+  kunit: unify module and builtin suite definitions
+
+ drivers/mmc/host/Kconfig                      |   5 +-
+ drivers/mmc/host/sdhci-of-aspeed-test.c       |   8 +-
+ drivers/mmc/host/sdhci-of-aspeed.c            |  34 +----
+ drivers/thunderbolt/Kconfig                   |   6 +-
+ drivers/thunderbolt/domain.c                  |   3 -
+ drivers/thunderbolt/tb.h                      |   8 -
+ drivers/thunderbolt/test.c                    |  12 +-
+ drivers/virt/nitro_enclaves/Kconfig           |   5 +-
+ drivers/virt/nitro_enclaves/ne_misc_dev.c     |  27 ----
+ .../virt/nitro_enclaves/ne_misc_dev_test.c    |   5 +-
+ include/kunit/test.h                          |  62 ++------
+ include/linux/module.h                        |   5 +
+ kernel/module/main.c                          |   6 +
+ lib/kunit/executor.c                          | 115 ++++----------
+ lib/kunit/executor_test.c                     | 144 +++++-------------
+ lib/kunit/test.c                              |  54 ++++++-
+ 16 files changed, 155 insertions(+), 344 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0.rc0.161.g10f37bed90-goog
+
