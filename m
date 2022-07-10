@@ -2,203 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C18856CD56
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Jul 2022 08:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6754A56D136
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Jul 2022 22:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiGJG2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Jul 2022 02:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S229530AbiGJUQk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Jul 2022 16:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGJG2E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Jul 2022 02:28:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E5611C28
-        for <linux-usb@vger.kernel.org>; Sat,  9 Jul 2022 23:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657434482; x=1688970482;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z6plBLcDxnLtDVk7hDVbxawZU44FcILgxXdRxC/f+T4=;
-  b=IOOHpBIkncI/j3L1XcIo/j+qwW5+R8cCxLmSlhHIR7js3CLx973z30ZZ
-   tf3ZDSKFFKGLFeGgx9llJeuQNW8aEBdEjMusm2xQs83E7GbbjHvhLjCyd
-   t0p5fjFDbJvc1BMbdZmauxhPrUYQLzQrU3ms+mbVziyA3miQgxkNj1uID
-   aV81EFGdl0JdVuM5fUn0Jk3RDlj2xV/4Kewecxi56gMGnKCftqOZ/cB1O
-   cWA9LzmTLCusW8rqJ/JrquGXp8//X4yIa48OH6fzntnCqKlStZbDtu5Ct
-   zx7qVcP3l3zFiCN0kqKA258WCahkSDNMKBk6ptoYNomJHaTlozKpaYWfp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10403"; a="370796492"
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="370796492"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2022 23:28:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,260,1650956400"; 
-   d="scan'208";a="697287928"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Jul 2022 23:28:00 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oAQQC-000PXY-8U;
-        Sun, 10 Jul 2022 06:28:00 +0000
-Date:   Sun, 10 Jul 2022 14:27:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: [usb:usb-next 27/33]
- drivers/usb/core/../misc/onboard_usb_hub_pdevs.c:65:6: warning: no previous
- prototype for 'onboard_hub_create_pdevs'
-Message-ID: <202207101421.kHbwWznT-lkp@intel.com>
+        with ESMTP id S229456AbiGJUQj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Jul 2022 16:16:39 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D8F11A35;
+        Sun, 10 Jul 2022 13:16:37 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bu1so3463203wrb.9;
+        Sun, 10 Jul 2022 13:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/w7JDJxF8jO/KsKgUOwEOwtZvjheCEOivfqjdOXPkNY=;
+        b=KZPaktByD5qzokvlf0TyNenv83Ju3yme0c36Kqt3Fki9Aw8MrEFKniXdhCBLDJP80Q
+         1jQykSihiQ1O5nrFUP2imnxGf/pww2Tlwvbz01tPg0nlDLE1S1eNJyCjDBOgluQ2hvEq
+         ZBpCY1nRHZaGsH6kPTALUz/5qfmvhWSmwi3LUjusIEPovWdwgH1PxgFSJE5yMRFMz4hN
+         R38izh+IL5YFNu5qotgyjsFzL7BVhz74nMIwtPiNfrEoU8jz9/7Z0PJjKxQbxpXcR0hd
+         8vyb4/6M4sK9om6Cz6Wq0hJFO1UtZfQf9Ad99HbPkHwHdHJoh7UvALGIMoFmsmGWlnZC
+         SRkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/w7JDJxF8jO/KsKgUOwEOwtZvjheCEOivfqjdOXPkNY=;
+        b=kfuSL1+kIVlIc8l4+armGPEpMtV5gkQYxrtTtHho+85AyiAuQf27vnVJiQzawVzIHi
+         NMMoi/PivaJZS2iM2GBYteqdnIoSFORA/Y+XxiueBAbfc4vAb17pa7fOsLobJARvw2b/
+         laGGPmKN62VYMhRCTktE6g3JkIX8pFQWVivDPHZThkL/zrDKxYWBNEh57YbEAVL2Q9ES
+         qXJr9dn9TLpMY5z2ayNGY84y008vpuiocyZErIf5V2whMCZOQVv0jeyPiZ9kPBLJ/n0t
+         5UJYBgtDNPVBVw3cY7CTBnhno7ZfThSGkH6SXSbwQarpFfFjSa13yNUZYclD+iP4J5bi
+         YN6Q==
+X-Gm-Message-State: AJIora8d+ObJjUpztGudo9R10l0m8DIJqIjrCGXCiMhsA7ddo+sW7rFQ
+        Adv9H6fcwTUNnQi0pZv5CJ14P6vB/tGuYA==
+X-Google-Smtp-Source: AGRyM1vo5EFac1r93IwzIvPZZpk8XU8OvXi4FlZ/F6iTGHphsLtALd2Bu9n2nLYH2Q3Y5XXNI4z9/g==
+X-Received: by 2002:a5d:64ed:0:b0:21b:c8ea:54f8 with SMTP id g13-20020a5d64ed000000b0021bc8ea54f8mr13111093wri.541.1657484195805;
+        Sun, 10 Jul 2022 13:16:35 -0700 (PDT)
+Received: from localhost.localdomain (62-170-35.netrun.cytanet.com.cy. [62.228.170.35])
+        by smtp.gmail.com with ESMTPSA id y5-20020adff6c5000000b0021d83071683sm4226059wrp.64.2022.07.10.13.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Jul 2022 13:16:35 -0700 (PDT)
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     mdevaev@gmail.com, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org, corbet@lwn.net, balbi@kernel.org,
+        caihuoqing@baidu.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v4] usb: gadget: f_mass_storage: forced_eject attribute
+Date:   Sun, 10 Jul 2022 23:16:06 +0300
+Message-Id: <20220710201605.211434-1-mdevaev@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-head:   8affe37c525d800a2628c4ecfaed13b77dc5634a
-commit: 8bc063641cebf9d555e41d135db2b5035b521768 [27/33] usb: misc: Add onboard_usb_hub driver
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220710/202207101421.kHbwWznT-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=8bc063641cebf9d555e41d135db2b5035b521768
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-next
-        git checkout 8bc063641cebf9d555e41d135db2b5035b521768
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/usb/ sound/soc/
+It allows to reset prevent_medium_removal flag and "eject" the image.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The patch is a completely alternative implementation of the previously
+proposed [1], the idea of which was born after the mentioned discussion.
 
-All warnings (new ones prefixed by >>):
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+Link: https://lore.kernel.org/lkml/20220406092445.215288-1-mdevaev@gmail.com [1]
+---
+ v3 -> v4: Added comment for fsg_store_forced_eject() internals
+ v2 -> v3: Improved spelling
+ v1 -> v2: Added documentation for the ABI and sysfs
 
->> drivers/usb/core/../misc/onboard_usb_hub_pdevs.c:65:6: warning: no previous prototype for 'onboard_hub_create_pdevs' [-Wmissing-prototypes]
-      65 | void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/core/../misc/onboard_usb_hub_pdevs.c:132:6: warning: no previous prototype for 'onboard_hub_destroy_pdevs' [-Wmissing-prototypes]
-     132 | void onboard_hub_destroy_pdevs(struct list_head *pdev_list)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+ .../testing/configfs-usb-gadget-mass-storage  |  6 +++++
+ Documentation/usb/gadget-testing.rst          |  6 +++++
+ Documentation/usb/mass-storage.rst            |  9 +++++++
+ drivers/usb/gadget/function/f_mass_storage.c  | 25 +++++++++++++++++++
+ drivers/usb/gadget/function/storage_common.c  | 15 +++++++++++
+ drivers/usb/gadget/function/storage_common.h  |  2 ++
+ 6 files changed, 63 insertions(+)
 
-
-vim +/onboard_hub_create_pdevs +65 drivers/usb/core/../misc/onboard_usb_hub_pdevs.c
-
-    30	
-    31	/**
-    32	 * onboard_hub_create_pdevs -- create platform devices for onboard USB hubs
-    33	 * @parent_hub	: parent hub to scan for connected onboard hubs
-    34	 * @pdev_list	: list of onboard hub platform devices owned by the parent hub
-    35	 *
-    36	 * Creates a platform device for each supported onboard hub that is connected to
-    37	 * the given parent hub. The platform device is in charge of initializing the
-    38	 * hub (enable regulators, take the hub out of reset, ...) and can optionally
-    39	 * control whether the hub remains powered during system suspend or not.
-    40	 *
-    41	 * To keep track of the platform devices they are added to a list that is owned
-    42	 * by the parent hub.
-    43	 *
-    44	 * Some background about the logic in this function, which can be a bit hard
-    45	 * to follow:
-    46	 *
-    47	 * Root hubs don't have dedicated device tree nodes, but use the node of their
-    48	 * HCD. The primary and secondary HCD are usually represented by a single DT
-    49	 * node. That means the root hubs of the primary and secondary HCD share the
-    50	 * same device tree node (the HCD node). As a result this function can be called
-    51	 * twice with the same DT node for root hubs. We only want to create a single
-    52	 * platform device for each physical onboard hub, hence for root hubs the loop
-    53	 * is only executed for the root hub of the primary HCD. Since the function
-    54	 * scans through all child nodes it still creates pdevs for onboard hubs
-    55	 * connected to the root hub of the secondary HCD if needed.
-    56	 *
-    57	 * Further there must be only one platform device for onboard hubs with a peer
-    58	 * hub (the hub is a single physical device). To achieve this two measures are
-    59	 * taken: pdevs for onboard hubs with a peer are only created when the function
-    60	 * is called on behalf of the parent hub that is connected to the primary HCD
-    61	 * (directly or through other hubs). For onboard hubs connected to root hubs
-    62	 * the function processes the nodes of both peers. A platform device is only
-    63	 * created if the peer hub doesn't have one already.
-    64	 */
-  > 65	void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
-    66	{
-    67		int i;
-    68		struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
-    69		struct device_node *np, *npc;
-    70		struct platform_device *pdev;
-    71		struct pdev_list_entry *pdle;
-    72	
-    73		if (!parent_hub->dev.of_node)
-    74			return;
-    75	
-    76		if (!parent_hub->parent && !usb_hcd_is_primary_hcd(hcd))
-    77			return;
-    78	
-    79		for (i = 1; i <= parent_hub->maxchild; i++) {
-    80			np = usb_of_get_device_node(parent_hub, i);
-    81			if (!np)
-    82				continue;
-    83	
-    84			if (!of_is_onboard_usb_hub(np))
-    85				goto node_put;
-    86	
-    87			npc = of_parse_phandle(np, "peer-hub", 0);
-    88			if (npc) {
-    89				if (!usb_hcd_is_primary_hcd(hcd)) {
-    90					of_node_put(npc);
-    91					goto node_put;
-    92				}
-    93	
-    94				pdev = of_find_device_by_node(npc);
-    95				of_node_put(npc);
-    96	
-    97				if (pdev) {
-    98					put_device(&pdev->dev);
-    99					goto node_put;
-   100				}
-   101			}
-   102	
-   103			pdev = of_platform_device_create(np, NULL, &parent_hub->dev);
-   104			if (!pdev) {
-   105				dev_err(&parent_hub->dev,
-   106					"failed to create platform device for onboard hub '%pOF'\n", np);
-   107				goto node_put;
-   108			}
-   109	
-   110			pdle = kzalloc(sizeof(*pdle), GFP_KERNEL);
-   111			if (!pdle) {
-   112				of_platform_device_destroy(&pdev->dev, NULL);
-   113				goto node_put;
-   114			}
-   115	
-   116			pdle->pdev = pdev;
-   117			list_add(&pdle->node, pdev_list);
-   118	
-   119	node_put:
-   120			of_node_put(np);
-   121		}
-   122	}
-   123	EXPORT_SYMBOL_GPL(onboard_hub_create_pdevs);
-   124	
-   125	/**
-   126	 * onboard_hub_destroy_pdevs -- free resources of onboard hub platform devices
-   127	 * @pdev_list	: list of onboard hub platform devices
-   128	 *
-   129	 * Destroys the platform devices in the given list and frees the memory associated
-   130	 * with the list entry.
-   131	 */
- > 132	void onboard_hub_destroy_pdevs(struct list_head *pdev_list)
-
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+index c86b63a7bb43..d899adb57e81 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
++++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
+@@ -32,4 +32,10 @@ Description:
+ 				being a CD-ROM.
+ 		nofua		Flag specifying that FUA flag
+ 				in SCSI WRITE(10,12)
++		forced_eject	This write-only file is useful only when
++				the function is active. It causes the backing
++				file to be forcibly detached from the LUN,
++				regardless of whether the host has allowed it.
++				Any non-zero number of bytes written will
++				result in ejection.
+ 		===========	==============================================
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index c18113077889..15624c4fe633 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -333,6 +333,12 @@ In each lun directory there are the following attribute files:
+ 			being a CD-ROM.
+ 	nofua		Flag specifying that FUA flag
+ 			in SCSI WRITE(10,12)
++	forced_eject	This write-only file is useful only when
++			the function is active. It causes the backing
++			file to be forcibly detached from the LUN,
++			regardless of whether the host has allowed it.
++			Any non-zero number of bytes written will
++			result in ejection.
+ 	=============== ==============================================
+ 
+ Testing the MASS STORAGE function
+diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
+index d181b47c3cb6..f399ec631599 100644
+--- a/Documentation/usb/mass-storage.rst
++++ b/Documentation/usb/mass-storage.rst
+@@ -181,6 +181,15 @@ sysfs entries
+     Reflects the state of nofua flag for given logical unit.  It can
+     be read and written.
+ 
++  - forced_eject
++
++    When written into, it causes the backing file to be forcibly
++    detached from the LUN, regardless of whether the host has allowed
++    it.  The content doesn't matter, any non-zero number of bytes
++    written will result in ejection.
++
++    Can not be read.
++
+   Other then those, as usual, the values of module parameters can be
+   read from /sys/module/g_mass_storage/parameters/* files.
+ 
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 6ad669dde41c..00cac2a38178 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -2520,10 +2520,21 @@ static ssize_t file_store(struct device *dev, struct device_attribute *attr,
+ 	return fsg_store_file(curlun, filesem, buf, count);
+ }
+ 
++static ssize_t forced_eject_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct fsg_lun		*curlun = fsg_lun_from_dev(dev);
++	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
++
++	return fsg_store_forced_eject(curlun, filesem, buf, count);
++}
++
+ static DEVICE_ATTR_RW(nofua);
+ /* mode wil be set in fsg_lun_attr_is_visible() */
+ static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+ static DEVICE_ATTR(file, 0, file_show, file_store);
++static DEVICE_ATTR_WO(forced_eject);
+ 
+ /****************************** FSG COMMON ******************************/
+ 
+@@ -2677,6 +2688,7 @@ static struct attribute *fsg_lun_dev_attrs[] = {
+ 	&dev_attr_ro.attr,
+ 	&dev_attr_file.attr,
+ 	&dev_attr_nofua.attr,
++	&dev_attr_forced_eject.attr,
+ 	NULL
+ };
+ 
+@@ -3090,6 +3102,18 @@ static ssize_t fsg_lun_opts_inquiry_string_store(struct config_item *item,
+ 
+ CONFIGFS_ATTR(fsg_lun_opts_, inquiry_string);
+ 
++static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
++					       const char *page, size_t len)
++{
++	struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
++	struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
++
++	return fsg_store_forced_eject(opts->lun, &fsg_opts->common->filesem,
++				      page, len);
++}
++
++CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
++
+ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_file,
+ 	&fsg_lun_opts_attr_ro,
+@@ -3097,6 +3121,7 @@ static struct configfs_attribute *fsg_lun_attrs[] = {
+ 	&fsg_lun_opts_attr_cdrom,
+ 	&fsg_lun_opts_attr_nofua,
+ 	&fsg_lun_opts_attr_inquiry_string,
++	&fsg_lun_opts_attr_forced_eject,
+ 	NULL,
+ };
+ 
+diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+index b859a158a414..03035dbbe97b 100644
+--- a/drivers/usb/gadget/function/storage_common.c
++++ b/drivers/usb/gadget/function/storage_common.c
+@@ -519,4 +519,19 @@ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+ }
+ EXPORT_SYMBOL_GPL(fsg_store_inquiry_string);
+ 
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count)
++{
++	int ret;
++
++	/*
++	 * Forcibly detach the backing file from the LUN
++	 * regardless of whether the host has allowed it.
++	 */
++	curlun->prevent_medium_removal = 0;
++	ret = fsg_store_file(curlun, filesem, "", 0);
++	return ret < 0 ? ret : count;
++}
++EXPORT_SYMBOL_GPL(fsg_store_forced_eject);
++
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+index bdeb1e233fc9..0a544a82cbf8 100644
+--- a/drivers/usb/gadget/function/storage_common.h
++++ b/drivers/usb/gadget/function/storage_common.h
+@@ -219,5 +219,7 @@ ssize_t fsg_store_removable(struct fsg_lun *curlun, const char *buf,
+ 			    size_t count);
+ ssize_t fsg_store_inquiry_string(struct fsg_lun *curlun, const char *buf,
+ 				 size_t count);
++ssize_t fsg_store_forced_eject(struct fsg_lun *curlun, struct rw_semaphore *filesem,
++			       const char *buf, size_t count);
+ 
+ #endif /* USB_STORAGE_COMMON_H */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0
+
