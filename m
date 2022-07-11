@@ -2,165 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36FE56FFEC
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Jul 2022 13:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C5F570124
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Jul 2022 13:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiGKLOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jul 2022 07:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S231144AbiGKLtX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jul 2022 07:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiGKLOg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jul 2022 07:14:36 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2A42408B;
-        Mon, 11 Jul 2022 03:32:03 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id h23so8031926ejj.12;
-        Mon, 11 Jul 2022 03:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=W0F0+dXTQ5eUSgDBHtSzB6kQwdC7rU5BTU/Dvmo8qbM=;
-        b=nWO73xisKGyqbJpJMOLdWmivDT9xRGxyxw/UWEmyu39dESuDatvQqUC8uvyEi0aH5w
-         mwcnL56EgxCXWPL64aCqN8OznS+xd59Zhs/Cuq+cl7YZiWRGdUHNqFz1vKiKxmHLaP/5
-         9pdmB1e+qx0b50yer41UOVE/yVIvXtyou5f03Jlj1ETCqf7euZlrfnVN7OWRa442u/R7
-         m6tmvtaP6f4kd1Xw+TWd+Nllb10hSjj8FND9000Tkmd5G3Yb0bd3O5XPd7FQVz4u9jOz
-         HnSkcdlcRngrtrAZDTvTVTl4F1GHOEcV379z4sX6evPSv92C1IWMXqoVtYAtmwJQh2Cd
-         VqQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W0F0+dXTQ5eUSgDBHtSzB6kQwdC7rU5BTU/Dvmo8qbM=;
-        b=8M1nkLBtbmWBqgKelcq4aUcm0VOaHSONneqIb+QBHUzZ7BwWoKp/dR/hJpVjv2OJr8
-         itWPjFKinTVxMjgxl8szxtXHaW1khqTQ2dw88GQGTZay9nNQZj/vPvCGsu1CYJqacE3N
-         XU7w4u3DVHR/fvks2G1lM9dGO5ffcVv4Tob8hbBpwQLPcLZlOkxwhrn5rLTPTW15KXBP
-         HopkF6gF7gHdrjYPPG4/Rp1vJqTruEsWjTSmtp5MFILhylPJBX2q5an2NTNLsUZZuf9a
-         x5DffHPN4VbOQPjBahPnN/Dal25WC0l4HPZovFZbvVebiCfleA+qObKeKkS2/FpvyqAi
-         Jr/A==
-X-Gm-Message-State: AJIora9MyJppsLQ5jRR+ANIh9+uE8CU6mDFW7bqtir7qd1pxu4fgGwve
-        N7sHKbURTSFJy32k3j367IQ=
-X-Google-Smtp-Source: AGRyM1vuLUXIw/ymJcxqq1Ve89ZFAgjwLLXthqOqTdiN5W7avF6BbaN2zBtOM8M/Bw56CXDfGnQCCg==
-X-Received: by 2002:a17:907:7e87:b0:72b:4af3:bf57 with SMTP id qb7-20020a1709077e8700b0072b4af3bf57mr7007733ejc.9.1657535521700;
-        Mon, 11 Jul 2022 03:32:01 -0700 (PDT)
-Received: from [192.168.178.40] (ipbcc1d9fa.dynamic.kabel-deutschland.de. [188.193.217.250])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b00722bc0aa9e3sm2533464ejo.162.2022.07.11.03.32.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 03:32:01 -0700 (PDT)
-Message-ID: <205876d4-5455-4f31-4c9b-34df736f68fc@gmail.com>
-Date:   Mon, 11 Jul 2022 12:31:59 +0200
+        with ESMTP id S229585AbiGKLtQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jul 2022 07:49:16 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB51115C;
+        Mon, 11 Jul 2022 04:49:14 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26B8GhDu023853;
+        Mon, 11 Jul 2022 13:48:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=IBdPZD/lgcjOqxf5WRf16r/XmqP10xUsJSLa25j+xfA=;
+ b=q5Z5UPwAbRwN0wgwvmFjR8apZhP7Beg8MBFKZ3jAatKXy0zj0iG1LLJ+TpVCWXYGHJ4u
+ x8YWumDgNLUd+JCBXNTKcwTsgDspuNjx8c+R5ZS7LfSJuRAyfKqoOym4gTLi4Jm5HDCX
+ uM+2Imkm+gziVTW9vIzPp3fAb0fidJTdH7Sah4AcV1M3kLwCF4H3mF/gk16P6OTRSc8p
+ yRdK0oYHRJgOu8pCoRdNv0XoDPeHRmSH6cgacwyO2qosMClnwbJY0ADTqXiwoTJD8IAk
+ WUWmkz2jIbwFY0JD+GKeV29auv5EpKyv5JPVbnWX6DOVUkC9GK9LPF82niTg/CiKtV/I Gg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h6xtak3vt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Jul 2022 13:48:48 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E3D3C10002A;
+        Mon, 11 Jul 2022 13:48:46 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DB69C21D384;
+        Mon, 11 Jul 2022 13:48:46 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 11 Jul
+ 2022 13:48:46 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <christophe.jaillet@wanadoo.fr>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH v2 0/4] usb: typec: ucsi: add support for stm32g0
+Date:   Mon, 11 Jul 2022 13:48:27 +0200
+Message-ID: <20220711114831.25205-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 04/36] target: Does tmr notify on aborted command
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
- <a15b6eb1fd62e7e8bc7ad65f77cd327a2afde07e.1657149962.git.Thinh.Nguyen@synopsys.com>
- <20220707125657.GB23838@yadro.com>
- <154d432d-b91d-d16f-d5d4-89fd8eb7eb7b@synopsys.com>
-From:   Bodo Stroesser <bostroesser@gmail.com>
-In-Reply-To: <154d432d-b91d-d16f-d5d4-89fd8eb7eb7b@synopsys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-11_17,2022-07-08_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
+STM32G0 provides an integrated USB Type-C and power delivery interface [1].
+It can be programmed with a firmware [2] to act as a PPM. Currently it
+implements UCSI protocol over I2C interface. A GPIO is used as an interrupt
+line.
 
-On 09.07.22 01:11, Thinh Nguyen wrote:
-> On 7/7/2022, Dmitry Bogdanov wrote:
->> Hi Thinh,
->>
->> On Wed, Jul 06, 2022 at 04:34:49PM -0700, Thinh Nguyen wrote:
->>> If the tmr_notify is not implemented, simply execute a generic command
->>> completion to notify the command abort.
->> Why? What are you trying to fix?
-> 
-> If tmr_notify() is not implemented (which most don't), then the user
-> won't get notified of the command completion.
+This series adds a driver to support it, including:
+- dt-bindings documentation
+- optional STM32G0 firmware control and update, over a secondary I2C address
+- power management
 
-When you talk about 'user' you indeed mean the initiator, right?
+[1] https://wiki.st.com/stm32mcu/wiki/Introduction_to_USB_Power_Delivery_with_STM32
+[2] https://github.com/STMicroelectronics/x-cube-ucsi
 
-The initiator _is_ notified of command completion, because TMR
-completion is deferred until all aborted cmds are completed!
+Changes in v2:
+- Krzysztof's review comments on dt-bindings: update commit message, use ports,
+  use unevaluatedProperties: false for usb-connector schema, define maxItems
+  for power-domains, adopt generic node names, remove quotes.
+- Christophe's comments on driver:
+  use kmalloc instead of kzalloc
+  Use-after-free of buf: directly print the offset
 
-> 
-> I was trying to directly notify the user via target_complete_cmd(). It
-> may not be the right way to handle this, any advise?
+Fabrice Gasnier (4):
+  dt-bindings: usb: typec: add bindings for stm32g0 controller
+  usb: typec: ucsi: stm32g0: add support for stm32g0 i2c controller
+  usb: typec: ucsi: stm32g0: add bootloader support
+  usb: typec: ucsi: stm32g0: add support for power management
 
-Target core must defer TMR completion until backend has completed all
-aborted cmds, because completion of TMR tells initiator, that processing
-of aborted cmds has ended and it now can start new cmds.
+ .../bindings/usb/st,typec-stm32g0.yaml        |  90 ++
+ drivers/usb/typec/ucsi/Kconfig                |  10 +
+ drivers/usb/typec/ucsi/Makefile               |   1 +
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c         | 777 ++++++++++++++++++
+ 4 files changed, 878 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
+ create mode 100644 drivers/usb/typec/ucsi/ucsi_stm32g0.c
 
-I implemented the tmr_notify callback for two reasons:
+-- 
+2.25.1
 
-1) It allows e.g. userspace backend on tcmu to create a consistent
-logging not only showing scsi cmds, but the TMRs also.
-Only cmds that are aborted before they reach backend processing (for
-tcmu that means: before they reach tcmu's cmd ring) are not visible
-for the backend.
-Additionally, some userspace daemons need to know about incoming TMRs
-to allow handling of special situations.
-
-2) it allows to speed up TMR processing, if backend uses it to finish /
-abort processing of aborted cmds as early as possible. In tcmu for all
-cmds in the cmd ring this is up to userspace.
-
-If you want to speed up TMR processing for other backends, you could do
-that by implementing tmr_notify() in those backends. Changing the core
-IMHO is the wrong way.
-
-Bodo
-
-
-> 
-> Thanks,
-> Thinh
-> 
->>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>> ---
->>>    drivers/target/target_core_tmr.c | 4 ++++
->>>    1 file changed, 4 insertions(+)
->>>
->>> diff --git a/drivers/target/target_core_tmr.c b/drivers/target/target_core_tmr.c
->>> index 7a7e24069ba7..2af80d0998bf 100644
->>> --- a/drivers/target/target_core_tmr.c
->>> +++ b/drivers/target/target_core_tmr.c
->>> @@ -14,6 +14,7 @@
->>>    #include <linux/spinlock.h>
->>>    #include <linux/list.h>
->>>    #include <linux/export.h>
->>> +#include <scsi/scsi_proto.h>
->>>    
->>>    #include <target/target_core_base.h>
->>>    #include <target/target_core_backend.h>
->>> @@ -150,6 +151,9 @@ void core_tmr_abort_task(
->>>    			if (dev->transport->tmr_notify)
->>>    				dev->transport->tmr_notify(dev, TMR_ABORT_TASK,
->>>    							   &aborted_list);
->>> +			else
->>> +				target_complete_cmd(se_cmd,
->>> +						    SAM_STAT_TASK_ABORTED);
->> That is wrong and breaks a command lifecycle and command kref counting.
->> target_complete_cmd is used to be called by a backend driver.
->>>    
->>>    			list_del_init(&se_cmd->state_list);
->>>    			target_put_cmd_and_wait(se_cmd);
-> 
