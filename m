@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A04571EA5
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 17:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B2E571EA0
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 17:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbiGLPOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 11:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S229918AbiGLPOX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 11:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbiGLPN5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 11:13:57 -0400
+        with ESMTP id S233235AbiGLPNu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 11:13:50 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD6FD13A7;
-        Tue, 12 Jul 2022 08:06:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC63D1393;
+        Tue, 12 Jul 2022 08:06:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1657638415; x=1689174415;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=H20Yshd9F2kwcQGnW9HMTIT2LodAkeqAkKIMjvmxWKo=;
-  b=GplaDu+ZsUxb3xolw5jPNsfaogZP+c0VnVn83M/E6ScHRUcGMkH7j6hR
-   3LsEoW6XVFlo1W3iBrHdaydIVqi++eHw9xmi+PfdJtmOMQaZROsVJq1ng
-   e4fykOvinygs5g/pk9EhKKYVQy84He1cGuOk6zJ9nP9+fQxgC9QTA6C2z
-   0p0oadU3qz+br17F0hgJSMMS58V+C6EdbZAoeVl9+h+gS0k5kRaaDeRq9
-   1UO+HgehOwR35lUWlSobuM685W2jmWQfq2zt8HYrYg20cSJZ5qnMIPUGN
-   EPGxYflb5B60cnp6zuFDfqINrlABsFugRHrhZTdrstg5G0xG8TYL5L2Zj
+  t=1657638410; x=1689174410;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OfgXpXXnxYkkdwb4bULIi/Pbx109DJwee81W/cf3QsM=;
+  b=Maf5gXjPcn35A/9jvJKn2XzTDtwdW6Wlo+WOt8ObjYqYFhqpHWlKCJGe
+   /wLhQpe54FVfcjpN+puM8xN21nQhzZkW6xqzkYw0dVyPryiUKQyWiniYC
+   bldaEJ+vcQKVgoqB+Mw2j//894ScxVWeW3a02HeIhRc0S1Kt8+bkjBPvm
+   /RVrCN1Kp28IixrDbxkLgXzVBJnc0+3v7CTJgeC1Wy+ted8waRKyZAf7T
+   zS95DvSk84WZBRLvcfims6OKOexZIfDnJMUDJrJOosIb/CH/zjbPnIZHp
+   7/d9/YeEBEIUO+Tbglnew6v74SiXghR6lo1qbiU1m04pksZpdShRER+OO
    g==;
 X-IronPort-AV: E=Sophos;i="5.92,266,1650924000"; 
-   d="scan'208";a="25005749"
+   d="scan'208";a="25005746"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 12 Jul 2022 17:06:47 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -39,24 +39,24 @@ X-PGP-Universal: processed;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1657638407; x=1689174407;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=H20Yshd9F2kwcQGnW9HMTIT2LodAkeqAkKIMjvmxWKo=;
-  b=HSsaPnjCWcjiHvXdY66kdKz35WsATJ09KzZKlD0eFUpIymnVQveae6VX
-   pw8M9ygp84FBKvvwVpSFLO6OSpuPBcvxGl3Nsdi3Ik+EbMBKBMawXl/Sz
-   UTctCrYGHX50gshRpg8BaJmXObIhbjxRf4JnLbUVHF299UIP+8oDButfp
-   YTCXwmBjTp5P7R+i33io+K5LRqEyYc/keg24Is76qzEOeduBFAKeuIjzh
-   Z/SZIPpfJI8Pyzu8d0rZqE2nLC6r95AjxBWyThkNewFh/igws1PCuSFRH
-   RPrsCtx2/Ajxxtd4N0jRyGL14jBm6IKlAmmMOYxY6Zm2DfiOWg+s2mRKd
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OfgXpXXnxYkkdwb4bULIi/Pbx109DJwee81W/cf3QsM=;
+  b=pZxY0k/GxPT9fzQAfFCsullpK6SF5cWRHKvR6cqycTBkoXt2CxrUkfKP
+   dt7QilL6/Zflulc0E0Ir23Bh/Rq2XnoyP01/jRxpzU6YFlWG1ILhq1Vrj
+   5ya14V7fuwA4a+TjRFmbnhDCDb3FHvnPCH2AX1X3FdFWOKKKS4ckZuJJY
+   FLZhxosavLGGcxUlUQRkQ1ywo7lLYJ8cRbAREgCIeUXCOwQf3nglH379T
+   DTLKkE6/jiv+XNA4Uk/Enwi48I5qVgMpH6PQU7gy81hPCmIwKKSCLLQfh
+   9d2VWiC5VaBZw70fJYHhBCOZhzuvN+RuSdSjRmkn/Dejs0ZPictoyNtwn
    g==;
 X-IronPort-AV: E=Sophos;i="5.92,266,1650924000"; 
-   d="scan'208";a="25005738"
+   d="scan'208";a="25005739"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 12 Jul 2022 17:06:32 +0200
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D205F280056;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 02425280072;
         Tue, 12 Jul 2022 17:06:31 +0200 (CEST)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -65,10 +65,12 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Kaehlcke <mka@chromium.org>
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: usb: Add binding for TI USB8041 hub controller
-Date:   Tue, 12 Jul 2022 17:06:25 +0200
-Message-Id: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
+Subject: [PATCH 2/3] usb: misc: onboard_usb_hub: Add reset-gpio support
+Date:   Tue, 12 Jul 2022 17:06:26 +0200
+Message-Id: <20220712150627.1444761-2-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
+References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,100 +82,109 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The TI USB8041 is a USB 3.0 hub controller with 4 ports.
-
-This initial version of the binding only describes USB related aspects
-of the USB8041, it does not cover the option of connecting the controller
-as an i2c slave.
+Despite default reset upon probe, release reset line after powering up
+the hub and assert reset again before powering down.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
-Well, this is essentially a ripoff of
-Documentation/devicetree/bindings/usb/realtek,rts5411.yaml with USB IDs
-replaced, reset-gpio added and example adjusted.
-IMHO this should be merged together with realtek,rts5411.yaml. Is it ok
-to rename bindings files? I guess a common onboard-usb-hub.yaml matching
-the driver seens reasonable. Any recommendations how to proceed?
+My current DT node on my TQMa8MPxL looks like this
+```
+&usb_dwc3_1 {
+	dr_mode = "host";
+	#address-cells = <1>;
+	#size-cells = <0>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usbhub>;
+	status = "okay";
 
- .../devicetree/bindings/usb/ti,usb8041.yaml   | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+	hub_2_0: hub@1 {
+		compatible = "usb451,8142";
+		reg = <1>;
+		peer-hub = <&hub_3_0>;
+		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
+	};
 
-diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-new file mode 100644
-index 000000000000..9a49d60527b1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/ti,usb8041.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+	hub_3_0: hub@2 {
+		compatible = "usb451,8140";
+		reg = <2>;
+		peer-hub = <&hub_2_0>;
+		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
+	};
+};
+```
+which I don't like much for 2 reasons:
+* the pinctrl has to be put in a common top-node of USB hub node. The pinctrl
+  can not be requested twice.
+* Apparently there is no conflict on the reset-gpio only because just one device
+  gets probed here:
+> $ ls /sys/bus/platform/drivers/onboard-usb-hub/
+> 38200000.usb:hub@1  bind  uevent  unbind
+
+But this seems better than to use a common fixed-regulator referenced by both
+hub nodes, which just is controlled by GPIO and does not supply any voltages.
+Note: It might also be necessary to add bindings to specify ramp up times and/or
+reset timeouts.
+
+ drivers/usb/misc/onboard_usb_hub.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index 6b9b949d17d3..348fb5270266 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/device.h>
+ #include <linux/export.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+@@ -38,6 +39,7 @@ struct usbdev_node {
+ struct onboard_hub {
+ 	struct regulator *vdd;
+ 	struct device *dev;
++	struct gpio_desc *reset_gpio;
+ 	bool always_powered_in_suspend;
+ 	bool is_powered_on;
+ 	bool going_away;
+@@ -56,6 +58,10 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
+ 		return err;
+ 	}
+ 
++	/* Deassert reset */
++	usleep_range(3000, 3100);
++	gpiod_set_value_cansleep(hub->reset_gpio, 0);
 +
-+title: Binding for the TI USB8041 USB 3.0 hub controller
+ 	hub->is_powered_on = true;
+ 
+ 	return 0;
+@@ -65,6 +71,10 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
+ {
+ 	int err;
+ 
++	/* Assert reset */
++	gpiod_set_value_cansleep(hub->reset_gpio, 1);
++	usleep_range(4000, 5000);
 +
-+maintainers:
-+  - Matthias Kaehlcke <mka@chromium.org>
+ 	err = regulator_disable(hub->vdd);
+ 	if (err) {
+ 		dev_err(hub->dev, "failed to disable regulator: %d\n", err);
+@@ -231,6 +241,14 @@ static int onboard_hub_probe(struct platform_device *pdev)
+ 	if (IS_ERR(hub->vdd))
+ 		return PTR_ERR(hub->vdd);
+ 
++	/* Put the hub into reset, pull reset line low, and assure 4ms reset low timing. */
++	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
++						  GPIOD_OUT_HIGH);
++	if (IS_ERR(hub->reset_gpio))
++		return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
 +
-+allOf:
-+  - $ref: usb-device.yaml#
++	usleep_range(4000, 5000);
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - usb451,8140
-+          - usb451,8142
-+
-+  reg: true
-+
-+  reset-gpio:
-+    maxItems: 1
-+    description:
-+      GPIO specifier for GSRT# pin.
-+
-+  vdd-supply:
-+    description:
-+      phandle to the regulator that provides power to the hub.
-+
-+  peer-hub:
-+    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - peer-hub
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb451,8142";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb451,8140";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+        };
-+    };
+ 	hub->dev = dev;
+ 	mutex_init(&hub->lock);
+ 	INIT_LIST_HEAD(&hub->udev_list);
 -- 
 2.25.1
 
