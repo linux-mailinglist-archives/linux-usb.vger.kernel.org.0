@@ -2,223 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0481157224D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 20:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBD0572827
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 23:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233068AbiGLSSK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 14:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S234035AbiGLVAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 17:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiGLSSJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 14:18:09 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EC7C84F9
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 11:18:07 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id v7so6108826pfb.0
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 11:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WPyCZCcgRUzZsgo3Nml1/n2m8T3DKmOD/9FwlsdSDuo=;
-        b=JhQTJ6OKu27VMYtC3XrWaDPw7r7oalG+HImNIEPECos7kj5Wc3fciQs0P/9MiucS57
-         OwI3hSNEUjik2LWWm4A7A8y3BHrA/pp3Y404MDzKU8VYmgy3FTLHU3iGPbdlYzYz3Ey3
-         KVQjAESmtXhwuEJ2T/BEOiEGt19IHnl+B3Br8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WPyCZCcgRUzZsgo3Nml1/n2m8T3DKmOD/9FwlsdSDuo=;
-        b=eY1z5+37i3tLv2XMYU+6prNv7CgYl+ZYmo/7jele/83eJ8SVYbLQ7ciEvVJVFw0oVo
-         +Rcli2Yhv4uKKtpm4BDAh9o6iaxAyDzA4nJjDgMs4BfMUgw9xIM7YX9ZVV1W6qPrAOzx
-         ZMKI1xi2ed43DclA1Zmy0khz5RwVzRU11geh3Jhx+/U+iKHw0Jq6qzto/txMhAdjDyu3
-         yoLx25tFLBTuRkEMKnX1eV6prbxoeWpXOPq0RVFS/UnCM9dg1mYC7krxjtGKNF57XcHe
-         AIt8Z3kMagqu7r4rSXsti98UBRfJOwH9vQK13P0EU+CW5XF/k1+GMtS/I7SN4gJ2wQD1
-         MX3w==
-X-Gm-Message-State: AJIora/MbX+Yr7wlkBzfV1bZeL8aHLpXNhOyzAr3Eh8s0oykalp/B58/
-        gdpgt5543txiRzG8qd6O7LEr5g==
-X-Google-Smtp-Source: AGRyM1uGdihPeZQVnDJohJX0eeNE/WnDTki1ikwigoXt19hTTs9u9zfpuLT70MecM9aJEN7LGXK0vA==
-X-Received: by 2002:a63:2314:0:b0:412:a5ee:fe1e with SMTP id j20-20020a632314000000b00412a5eefe1emr20949768pgj.186.1657649887265;
-        Tue, 12 Jul 2022 11:18:07 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:e036:8c0d:9cf:7a45])
-        by smtp.gmail.com with UTF8SMTPSA id y22-20020a634956000000b0040c8dd84ff5sm6411768pgk.72.2022.07.12.11.18.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 11:18:06 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 11:18:05 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: misc: onboard_usb_hub: Add reset-gpio support
-Message-ID: <Ys263f5K4WRoSZ45@google.com>
-References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
- <20220712150627.1444761-2-alexander.stein@ew.tq-group.com>
+        with ESMTP id S234221AbiGLVAc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 17:00:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B243FDB2F7
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 13:56:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78C2DB81BEB
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 20:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 28BE0C3411C
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 20:56:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657659392;
+        bh=yHDGnMf4z3fkwg9F0XDHOH/az/IIxii9DnvmncdXCss=;
+        h=From:To:Subject:Date:From;
+        b=YMHwCJAJX9fbfpnRaAmEWiuFRHlfOxoW+I4dNEoOd0qyuu+dz3AxhmXck+Om38MPW
+         mepoj+RSCpBx/gdzE3mbN9foYvYV1wI2X5jh/jcykEcxJpDJ5SroEUHSsn8H6hFRlS
+         waG7JwPhy7+zs23YYqreLBov3tRYYatigwm552B4XGbKiQUZdpHsDCn60HcX61ytwP
+         W9icHOjtnYoH75qnzz+AcSb7w25BCo0t+J+beBRwy3UXjWCB6z+rzYTFTV+HZAs6Fe
+         GEYRs+8d/GDHsTh5viQbvLHlhxIoi3of2ZS55ceziRPS7eakOzdZ57UMBX1IEk4Xuz
+         MYkNf0OfJ7GKg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0CCB9C05FD2; Tue, 12 Jul 2022 20:56:32 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216243] New: Shutdown successful but machine does not power off
+Date:   Tue, 12 Jul 2022 20:56:31 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bminaker@uwindsor.ca
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_file_loc bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cc cf_regression attachments.created
+Message-ID: <bug-216243-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220712150627.1444761-2-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 05:06:26PM +0200, Alexander Stein wrote:
-> Despite default reset upon probe, release reset line after powering up
-> the hub and assert reset again before powering down.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> My current DT node on my TQMa8MPxL looks like this
-> ```
-> &usb_dwc3_1 {
-> 	dr_mode = "host";
-> 	#address-cells = <1>;
-> 	#size-cells = <0>;
-> 	pinctrl-names = "default";
-> 	pinctrl-0 = <&pinctrl_usbhub>;
-> 	status = "okay";
-> 
-> 	hub_2_0: hub@1 {
-> 		compatible = "usb451,8142";
-> 		reg = <1>;
-> 		peer-hub = <&hub_3_0>;
-> 		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
-> 	};
-> 
-> 	hub_3_0: hub@2 {
-> 		compatible = "usb451,8140";
-> 		reg = <2>;
-> 		peer-hub = <&hub_2_0>;
-> 		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
-> 	};
-> };
-> ```
-> which I don't like much for 2 reasons:
-> * the pinctrl has to be put in a common top-node of USB hub node. The pinctrl
->   can not be requested twice.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216243
 
-Agreed, that's not great. The pinctrl doesn't have to be necessarily in the USB
-controller node, it could also be in the static section of the board, but that
-isn't really much of an improvement :( Not sure there is much to do given that
-the USB devices also process the pinctrl info (besides the onboard_hub platform
-device doing the same).
+               URL: http://bbs.archlinux.org/viewtopic.php?id=3D277872
+            Bug ID: 216243
+           Summary: Shutdown successful but machine does not power off
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.18.8, 5.18.9, 5.18.10
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: bminaker@uwindsor.ca
+                CC: mathias.nyman@linux.intel.com
+        Regression: No
 
-> * Apparently there is no conflict on the reset-gpio only because just one device
->   gets probed here:
-> > $ ls /sys/bus/platform/drivers/onboard-usb-hub/
-> > 38200000.usb:hub@1  bind  uevent  unbind
+Created attachment 301404
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D301404&action=3Dedit
+journalctl -b -1 --no-pager > log.txt
 
-Right, the driver creates a single platform device for each physical hub.
+Laptop will not power off with kernel 5.18.8 and above.
 
-> But this seems better than to use a common fixed-regulator referenced by both
-> hub nodes, which just is controlled by GPIO and does not supply any voltages.
+Kernel 5.18.10 with 9245c6c1f0095d1e9d7862253680cb1e53e65e76 reverted works=
+ as
+expected.
 
-Agreed, if the GPIO controls a reset line it should be implemented as such.
+-----------------
 
-> Note: It might also be necessary to add bindings to specify ramp up times and/or
-> reset timeouts.
+$ git bisect good
+9245c6c1f0095d1e9d7862253680cb1e53e65e76 is the first bad commit
+commit 9245c6c1f0095d1e9d7862253680cb1e53e65e76
+Author: Mathias Nyman <mathias.nyman@linux.intel.com>
+Date:   Thu Jun 23 14:19:43 2022 +0300
 
-The times are hub specific, not board specific, right? If that's the case then
-a binding shouldn't be needed, the timing can be derived from the compatible
-string.
+    xhci: turn off port power in shutdown
 
->  drivers/usb/misc/onboard_usb_hub.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> index 6b9b949d17d3..348fb5270266 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.c
-> +++ b/drivers/usb/misc/onboard_usb_hub.c
-> @@ -7,6 +7,7 @@
->  
->  #include <linux/device.h>
->  #include <linux/export.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/init.h>
->  #include <linux/kernel.h>
->  #include <linux/list.h>
-> @@ -38,6 +39,7 @@ struct usbdev_node {
->  struct onboard_hub {
->  	struct regulator *vdd;
->  	struct device *dev;
-> +	struct gpio_desc *reset_gpio;
->  	bool always_powered_in_suspend;
->  	bool is_powered_on;
->  	bool going_away;
-> @@ -56,6 +58,10 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
->  		return err;
->  	}
->  
-> +	/* Deassert reset */
+    commit 83810f84ecf11dfc5a9414a8b762c3501b328185 upstream.
 
-The comment isn't really needed, it's clear from the context.
+    If ports are not turned off in shutdown then runtime suspended
+    self-powered USB devices may survive in U3 link state over S5.
 
-> +	usleep_range(3000, 3100);
+    During subsequent boot, if firmware sends an IPC command to program
+    the port in DISCONNECT state, it will time out, causing significant
+    delay in the boot time.
 
-These shouldn't be hard coded. Instead you could add a model specific struct
-'hub_data' (or similar) and associate it with the compatible string through
-onboard_hub_match.data
+    Turning off roothub port power is also recommended in xhci
+    specification 4.19.4 "Port Power" in the additional note.
 
-You could use fsleep() instead of usleep_range(). It does the _range part
-automatically (with a value of 2x).
+    Cc: stable@vger.kernel.org
+    Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+    Link:
+https://lore.kernel.org/r/20220623111945.1557702-3-mathias.nyman@linux.inte=
+l.com
+    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-> +	gpiod_set_value_cansleep(hub->reset_gpio, 0);
+ drivers/usb/host/xhci-hub.c |  2 +-
+ drivers/usb/host/xhci.c     | 15 +++++++++++++--
+ drivers/usb/host/xhci.h     |  2 ++
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+$ git bisect log
+git bisect start
+# bad: [2437f53721bcd154d50224acee23e7dbb8d8c62b] Linux 5.18.8
+git bisect bad 2437f53721bcd154d50224acee23e7dbb8d8c62b
+# good: [7afbac05cb1c95e286ce97a40ee1c9f1791446c7] Linux 5.18.7
+git bisect good 7afbac05cb1c95e286ce97a40ee1c9f1791446c7
+# good: [296692f5fe5965ee8e2f3690abe18815ee8c0d48] regmap-irq: Fix offset/i=
+ndex
+mismatch in read_sub_irq_data()
+git bisect good 296692f5fe5965ee8e2f3690abe18815ee8c0d48
+# bad: [d0368d4b1e294dd7ed7e1e678e8c95c906dab338] iio: accel: mma8452: igno=
+re
+the return value of reset operation
+git bisect bad d0368d4b1e294dd7ed7e1e678e8c95c906dab338
+# good: [27702e63d2baa759e07084cccac60a00818b5848] s390/crash: add missing
+iterator advance in copy_oldmem_page()
+git bisect good 27702e63d2baa759e07084cccac60a00818b5848
+# bad: [d5c672ce67b450889ce7721ebfe7b62905d36a06] btrfs: fix race between
+reflinking and ordered extent completion
+git bisect bad d5c672ce67b450889ce7721ebfe7b62905d36a06
+# bad: [d95ac8b920de1d39525fadc408ce675697626ca6] usb: gadget: uvc: fix list
+double add in uvcg_video_pump
+git bisect bad d95ac8b920de1d39525fadc408ce675697626ca6
+# bad: [9245c6c1f0095d1e9d7862253680cb1e53e65e76] xhci: turn off port power=
+ in
+shutdown
+git bisect bad 9245c6c1f0095d1e9d7862253680cb1e53e65e76
+# good: [0e72cea60cb8b6791a194e04cf0abdd57780cd13] s390/crash: make
+copy_oldmem_page() return number of bytes copied
+git bisect good 0e72cea60cb8b6791a194e04cf0abdd57780cd13
+# first bad commit: [9245c6c1f0095d1e9d7862253680cb1e53e65e76] xhci: turn o=
+ff
+port power in shutdown
 
-Since this includes delays maybe put the reset inside an 'if (hub->reset_gpio)'
-block. Not super important for these short delays, but they might be longer
-for some hubs.
+--=20
+You may reply to this email to add a comment.
 
-> +
->  	hub->is_powered_on = true;
->  
->  	return 0;
-> @@ -65,6 +71,10 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
->  {
->  	int err;
->  
-> +	/* Assert reset */
-
-drop comment
-
-> +	gpiod_set_value_cansleep(hub->reset_gpio, 1);
-
-Put inside 'if (hub->reset_gpio)' to avoid unnecessary delays when no reset
-is configured.
-
-> +	usleep_range(4000, 5000);
-
-Use per-model values.
-
-> +
->  	err = regulator_disable(hub->vdd);
->  	if (err) {
->  		dev_err(hub->dev, "failed to disable regulator: %d\n", err);
-> @@ -231,6 +241,14 @@ static int onboard_hub_probe(struct platform_device *pdev)
->  	if (IS_ERR(hub->vdd))
->  		return PTR_ERR(hub->vdd);
->  
-> +	/* Put the hub into reset, pull reset line low, and assure 4ms reset low timing. */
-
-drop comment, it's mostly evident from the code. Maybe not the usleep_range()
-part, but that should become clearer when per model values are used.
-
-> +	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-> +						  GPIOD_OUT_HIGH);
-> +	if (IS_ERR(hub->reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
-> +
-> +	usleep_range(4000, 5000);
-> +
->  	hub->dev = dev;
->  	mutex_init(&hub->lock);
->  	INIT_LIST_HEAD(&hub->udev_list);
-> -- 
-> 2.25.1
-> 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
