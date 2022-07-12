@@ -2,185 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32909571712
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 12:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE4C571732
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 12:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiGLKTa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 06:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S232702AbiGLKW4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 06:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbiGLKTX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 06:19:23 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3639CACEE8;
-        Tue, 12 Jul 2022 03:19:19 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26C92jRH002380;
-        Tue, 12 Jul 2022 12:18:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=uDqCvZc0Uom4P6pD2RoNWs0xsgJc1i+hVyrc5eMNVlw=;
- b=rtEJViEdQtlzhS7Ua/hha/MJYx3j3bs7pvfzIXTbEF5a9oC9NAwx2mY6AHNj4iGam+4d
- O6Anh78w+aCscggDD+pbr3It2RZri62h8CfuW8h/pDSScq25goBZ8eGMF3wTHzwiSFPw
- Ho8r8WBulxKthjWJsLXwi5OrOoZkpe3YouiqnfCq5Yg14HmciDQaho/P5jZPRSbGCQGa
- WNQRLsLg9vCxaIHRUay+ubGpAtTrSH1g5BcTq5Su1ogwM0cC/Z1jSYncaKtGHoGZsTrZ
- OEMsXd7cWThoHCi6Hbcimvk1gyz+bADuozNYOqxV3FBLzLjZCtYk9JbJ2bbZBYbzd0P5 MQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h9173j15b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Jul 2022 12:18:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 740D010002A;
-        Tue, 12 Jul 2022 12:18:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6A6142171CC;
-        Tue, 12 Jul 2022 12:18:55 +0200 (CEST)
-Received: from [10.48.1.102] (10.75.127.49) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 12 Jul
- 2022 12:18:54 +0200
-Message-ID: <d9962ee2-bc92-e550-6dd9-1a0d0ed704e2@foss.st.com>
-Date:   Tue, 12 Jul 2022 12:18:53 +0200
+        with ESMTP id S230187AbiGLKWy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 06:22:54 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D308ADD46
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 03:22:53 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id i128-20020a1c3b86000000b003a2ce31b4f8so6476051wma.1
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 03:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rYt9mJQXaGbahl8QZrYNjHB9pJ9eAjTgp/ns4Eb/t8M=;
+        b=C5cPOGc9EqUsoFUWmrc7jVCibS5iN0UUoBC/PfD22KAgo7wUifuge6eKtWgdHhTmhK
+         fvpH/mXMm0hRgT9dWl3DZZDJL93EODM9jrUcKm7gjTFh/xMon7EdLXhbB2YK122pbx73
+         rwuP0BAxkambkdp1i6kemqXPccg0rBuRv2ni0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rYt9mJQXaGbahl8QZrYNjHB9pJ9eAjTgp/ns4Eb/t8M=;
+        b=ffuB3WMbzKqaYxiPcY55u6AdZJW4/ozx4jlvWs8xv5eKPpgkt62qLK8VuKCvYDI61b
+         xeMngzeWZ+rdVSdD8MkEF+81M4U5TzhOMGvdNaEOi6iAMGR+2ZBPSFMs4e/hXy10qPru
+         zb02EYD1zuglrI0hWJI76/BnvDbRQ4dAbVn7NnK8M70nzmDjiPeU60eWh9ufRqS0U19+
+         JYoCGTCf5HHmrvO9HcaYzVj4kyjmg1CvlcHnMKOcliSKOlXR3BS94A2QNPByAkkW7dKp
+         aavBYeAjbrfBblVuiN5QWutyYPngTntONp53vgMsVrWSeB4Z3t/5wIyrC2wDFRKl0/eW
+         RwYA==
+X-Gm-Message-State: AJIora/2lbS483z2eXS49gtrXVyuLAMAUyGESY4Ukqm3FrqFTZTwpLRE
+        39g7G8r4UlAuh6Unb3mEI1Psa2cRzt0d8H+QOLCXww==
+X-Google-Smtp-Source: AGRyM1svSmDLIfSSDkmMhxcC2NCCDtQdNFo2Jmf8Eb2S0Zy+X9IE/1D5IMRYMtZUefJka9rOnNuo/87dPKq7cEDP4jA=
+X-Received: by 2002:a05:600c:3d13:b0:3a2:cb5f:87e7 with SMTP id
+ bh19-20020a05600c3d1300b003a2cb5f87e7mr3008291wmb.178.1657621371850; Tue, 12
+ Jul 2022 03:22:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/4] dt-bindings: usb: typec: add bindings for stm32g0
- controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <christophe.jaillet@wanadoo.fr>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>
-References: <20220711120122.25804-1-fabrice.gasnier@foss.st.com>
- <20220711120122.25804-2-fabrice.gasnier@foss.st.com>
- <403ba7a3-7e3d-4daa-6c14-d8bb4a3d6087@linaro.org>
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-In-Reply-To: <403ba7a3-7e3d-4daa-6c14-d8bb4a3d6087@linaro.org>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-6-pmalani@chromium.org> <CAE-0n517BB8YbN5AZG6M3ZrZGOJDV=+t0R9d8wD+gVqO1aD1Xg@mail.gmail.com>
+ <CACeCKafR8hFke_tc2=1VGDNF-CFrZoAG1aUKuxGJG-6pd37hbg@mail.gmail.com>
+ <CAE-0n50XbO5Wu4-429Ao05A4QrbSXoi1wBjTpGFjKm3pZj1Ybg@mail.gmail.com>
+ <CACeCKafzB0wW_B2TOEWywLMyB+UhYCpXYDVBV=UbyxBiGnv1Rw@mail.gmail.com>
+ <CAE-0n50Akd8QikGhaAQgxLkJBhE-7KQf5aJ_P2ajOmCjLk555g@mail.gmail.com>
+ <CACeCKafQT_RBrkHJNE2ezahSsHLPrbnS69QbfnjxBoUhi6hjwQ@mail.gmail.com>
+ <CACeCKafya_XA+C3eJUvT4vjQSgsjdewVkCb+Jr2tA1605jjfjg@mail.gmail.com> <CAE-0n53kujMrzFG++5kaS4QKj2YrzLJEu5R76W887rCW_S592g@mail.gmail.com>
+In-Reply-To: <CAE-0n53kujMrzFG++5kaS4QKj2YrzLJEu5R76W887rCW_S592g@mail.gmail.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Tue, 12 Jul 2022 18:22:40 +0800
+Message-ID: <CAEXTbpdVr07Ur2L1NQjk8Vn=yUK=70K0sgbfTxsMJEvGd7CD2A@mail.gmail.com>
+Subject: Re: [PATCH v5 5/9] drm/bridge: anx7625: Add typec_mux_set callback function
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-12_05,2022-07-12_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/12/22 10:42, Krzysztof Kozlowski wrote:
-> On 11/07/2022 14:01, Fabrice Gasnier wrote:
->> Add DT schema documentation for the STM32G0 Type-C PD (Power Delivery)
->> controller.
->> STM32G0 provides an integrated USB Type-C and power delivery interface.
->> It can be programmed with a firmware to handle UCSI protocol over I2C
->> interface. A GPIO is used as an interrupt line.
->> It may be used as a wakeup source, so use optional "wakeup-source" and
->> "power-domains" properties to support wakeup.
->>
->> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
->> ---
->> Changes in v2:
->> - Krzysztof's review comments: update commit message, use ports, use
->>   unevaluatedProperties: false for usb-connector schema, define maxItems
->>   for power-domains, adopt generic node names, remove quotes
->> ---
->>  .../bindings/usb/st,typec-stm32g0.yaml        | 90 +++++++++++++++++++
->>  1 file changed, 90 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
->> new file mode 100644
->> index 0000000000000..7b3a2c2124e38
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
->> @@ -0,0 +1,90 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/usb/st,typec-stm32g0.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: STMicroelectronics STM32G0 USB Type-C PD controller
->> +
->> +description: |
->> +  The STM32G0 MCU can be programmed to control Type-C connector(s) through I2C
->> +  typically using the UCSI protocol over I2C, with a dedicated alert
->> +  (interrupt) pin.
->> +
->> +maintainers:
->> +  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: st,stm32g0-typec
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  connector:
->> +    type: object
->> +    $ref: /schemas/connector/usb-connector.yaml#
->> +    unevaluatedProperties: false
->> +
->> +  firmware-name:
->> +    description: |
->> +      Should contain the name of the default firmware image
->> +      file located on the firmware search path
->> +
->> +  wakeup-source: true
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
-> 
-> Isn't connector a required property? I would assume the device does not
-> make much sense to operate without it.
+On Thu, Jul 7, 2022 at 8:17 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Prashant Malani (2022-07-06 11:26:19)
+> >
+> > Stephen, any pending concerns?
+>
+> No more pending concerns.
+>
+> > If not,I will post a v6 series with the suggested changes:
+> > - Drop typec-switch binding; instead add a new top-level port with
+> > end-points for each Type-C connector's switch.
+> > - Drop it6505 patches.
+> > - Squash anx7625 driver patches into one patch.
+> > - Add a comment mentioning that we aren't registering the orientation-switch.
 
-Hi Krzysztof,
+We've been working on these changes, and the new DT node looks like this:
 
-Indeed, that's sensible. I'll add connector to the required properties.
+```
+    anx_bridge_dp: anx7625-dp@58 {
+        [...]
+        mode-switch;
+        ports {
+            [...]
+            typec_switches: port@2 {
+                #adderss-cells = <1>;
+                #size-cells = <0>;
+                reg = <2>;
 
-> 
-> What about firmware-name? Do you expect hardware to work fine without it
-> (default firmware?)?
+                anx_typec0: endpoint@0 {
+                    reg = <0>;
+                    remote-endpoint = <&typec_port0>;
+                };
+                anx_typec1: endpoint@1 {
+                    reg = <1>;
+                    remote-endpoint = <&typec_port1>;
+                };
+            };
+        };
+```
+
+However we found some issues with that approach:
+1. The current typec mux API does not allow us to put muxes into
+`ports` directly.
+`fwnode_typec_mux_get` searches for the parent node behind the port(s)
+nodes, so we cannot register the muxes with the port nodes unless we
+change the interface.
+2. We need a compatible string between the `endpoint` nodes and the
+parent node (anx7625-dp@58).
+This is because when the driver core builds the device links, they
+only add links on nodes with a compatible string for `remote-endpoint`
+properties[1].
+Without a compatible string, the parent node of `typec_port0`
+(cros-ec-typec in our case) has to be probed before anx7625, but this
+leads to a deadlock because cros-ec-typec requires anx7625 to register
+the typec_mux drivers first. I'm not sure if this is cros-ec-typec
+specific, though.
+*Any* compatible string fixes this issue, and it doesn't have to be
+"typec-switch".
+
+--
+
+Alternatively, can we split the two muxes into two sub-nodes, like the
+following snippet?
+
+```
+    anx_bridge_dp: anx7625-dp@58 {
+        [...]
+        mode-switch;
+
+        anx_mux0 {
+            compatible = "typec-switch";
+            reg = <0>;
+
+            port {
+                anx_typec0: endpoint {
+                    remote-endpoint = <&typec_port0>;
+                };
+            };
+        };
+
+        anx_mux1 {
+            compatible = "typec-switch";
+            reg = <1>;
+
+            port {
+                anx_typec1: endpoint {
+                    remote-endpoint = <&typec_port1>;
+                };
+            };
+        };
+```
+
+This eliminates the additional "switches" node in the devicetree. The
+sub-nodes also describe our hardware design, which split the DP lanes
+of anx7625 to two type-c ports.
+
+[1]: The `node_not_dev` property searches for a node with a compatible
+string: https://elixir.bootlin.com/linux/latest/source/drivers/of/property.c#L1390
 
 
-Basically, the default firmware could be loaded in production. The
-firmware content itself may be customized to restrict the firmware
-update feature. That's a pure application decision of the firmware.
-There could be other means to update it too (like via CC lines, with
-external tools), instead of I2C lines.
 
-Hence, the firmware-name is made optional here.
-
-I can update the commit message with this explanation if this clarifies it.
-
-Thanks for reviewing,
-Best Regards,
-Fabrice
-
-> 
-> 
-> Best regards,
-> Krzysztof
+>
+> Ok. I'll take a look on v6.
