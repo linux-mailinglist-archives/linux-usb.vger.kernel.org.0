@@ -2,55 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2921E570F5B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 03:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCB7570F64
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 03:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiGLBT6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Jul 2022 21:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S230225AbiGLBWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Jul 2022 21:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiGLBT4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jul 2022 21:19:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F1A5245F;
-        Mon, 11 Jul 2022 18:19:55 -0700 (PDT)
+        with ESMTP id S229645AbiGLBWk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Jul 2022 21:22:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B1661104
+        for <linux-usb@vger.kernel.org>; Mon, 11 Jul 2022 18:22:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E57D86163F;
-        Tue, 12 Jul 2022 01:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA6FC341C8;
-        Tue, 12 Jul 2022 01:19:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73D78B8162D
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 01:22:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29ACFC34115;
+        Tue, 12 Jul 2022 01:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657588794;
-        bh=Ix2ta+DW8dj5jT8OH9n1J2Kk3GuzFkbKY8qR6aMYzSg=;
+        s=k20201202; t=1657588957;
+        bh=J0+3yau5wP2DMORfiVKQvm9JmU58Sk11zIX6X5dddZQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uFlF58+en7nYWs9++XeO5XxD6F28FpyVqWihHBelFAIxHxNygnTDV8uUoOR4JOuBf
-         UTuNeSrdljh/8TpABt5FjTKF237KyeVtIhNSv7qz1cUk2hGq6e06etBABf6Qo8mZ0N
-         j/xAI2RIOsdURIDcRReue7bWiEnwbjMbwotvgLgvogiHcAxjogRvjK/UkqWfhdX7Ul
-         9/3LSnA/UuAo1QrLTlgil4ZOsqQGIG5sewYDk3CUhKITOWx1wRAqynyQilYbi7zb3l
-         4DTS0fjdocdqrcOqKbiTFScM3QnX+eSSrxBAQYtj7/W033VHzC+Y6Yig3ExGy/kbGX
-         yH72HEWrOUGPw==
-Date:   Tue, 12 Jul 2022 09:19:48 +0800
+        b=T0W6L6KfkuPvrxX1mq66HhpVlDSIr2kqK0Zh++CY+6kCl7Xb55UKfPkW7v0saAC7i
+         KRsIQ25Q8B3KJP/ngjONRWrZZOxkVhI8+P4PMnM7exSIlzKs1D36o9U2wmbs0JLFPa
+         kOsLMPIcwrMzCrfU0vifo3EVyeOl5LgR1jZboe0n+nZe+WSgQ5GgWxWPxhd+7wlWI9
+         CxwfF0lAaxzQEJd6co952lBtpkmNHwW8hTx4ac0lB4G6PqxJShkGZtZo0DVv+nrUT6
+         GRKBB4XgI14bWETUJ5GrPCfQOnJi+U3DDjRNx7bWJkAP6ihLAhJvGqLQLKYGAMVLJ/
+         CduOZ3NZ/NO3w==
+Date:   Tue, 12 Jul 2022 09:22:32 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     "Mehta, Piyush" <piyush.mehta@amd.com>
-Cc:     Piyush Mehta <piyush.mehta@xilinx.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git@xilinx.com" <git@xilinx.com>,
-        "sivadur@xilinx.com" <sivadur@xilinx.com>,
-        "radheys@xilinx.com" <radheys@xilinx.com>
-Subject: Re: [RFC PATCH] usb: chipidea: Add support for VBUS control with PHY
-Message-ID: <20220712011948.GA210054@nchen-desktop>
-References: <20220524120802.9394-1-piyush.mehta@xilinx.com>
- <20220703003434.GA1382015@Peter>
- <MN2PR12MB4333A5DB77BC767A01A7AA2688879@MN2PR12MB4333.namprd12.prod.outlook.com>
+        Jun Li <jun.li@nxp.com>, dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [EXT] Re: [PATCH] usb: chipidea: udc: check request status
+ before setting device address
+Message-ID: <20220712012232.GB210054@nchen-desktop>
+References: <20220623030242.41796-1-xu.yang_2@nxp.com>
+ <20220703004209.GB1382015@Peter>
+ <PAXPR04MB8784CA907581DCFDCFD196128CBE9@PAXPR04MB8784.eurprd04.prod.outlook.com>
+ <20220709100019.GA1517786@Peter>
+ <PAXPR04MB8784B4FE5F4F4F8EAE0315B28C879@PAXPR04MB8784.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MN2PR12MB4333A5DB77BC767A01A7AA2688879@MN2PR12MB4333.namprd12.prod.outlook.com>
+In-Reply-To: <PAXPR04MB8784B4FE5F4F4F8EAE0315B28C879@PAXPR04MB8784.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,136 +59,128 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-07-11 16:45:20, Mehta, Piyush wrote:
-> Hello Peter,
-> 
-> Thanks for the review.
-> Yes, we are supporting OTG feature and have used OTG FSM platform.
-
-Please generate the formal patch with my ack, thanks.
-
-Acked-by: Peter Chen <peter.chen@kernel.org>
-
-> 
-> Regards,
-> Piyush Mehta 
+On 22-07-11 01:36:39, Xu Yang wrote:
+> Hi Peter,
 > 
 > > -----Original Message-----
 > > From: Peter Chen <peter.chen@kernel.org>
-> > Sent: Sunday, July 3, 2022 6:05 AM
-> > To: Piyush Mehta <piyush.mehta@xilinx.com>
-> > Cc: gregkh@linuxfoundation.org; michal.simek@xilinx.com; linux-
-> > usb@vger.kernel.org; linux-kernel@vger.kernel.org; git@xilinx.com;
-> > sivadur@xilinx.com; radheys@xilinx.com
-> > Subject: Re: [RFC PATCH] usb: chipidea: Add support for VBUS control with
-> > PHY
+> > Sent: Saturday, July 9, 2022 6:00 PM
+> > To: Xu Yang <xu.yang_2@nxp.com>
+> > Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; Jun Li
+> > <jun.li@nxp.com>; dl-linux-imx <linux-imx@nxp.com>
+> > Subject: Re: [EXT] Re: [PATCH] usb: chipidea: udc: check request status
+> > before setting device address
 > > 
-> > CAUTION: This message has originated from an External Source. Please use
-> > proper judgment and caution when opening attachments, clicking links, or
-> > responding to this email.
+> > Caution: EXT Email
+> > 
+> > On 22-07-04 01:59:45, Xu Yang wrote:
+> > > Hi Peter,
+> > >
+> > > > -----Original Message-----
+> > > > From: Peter Chen <peter.chen@kernel.org>
+> > > > Sent: Sunday, July 3, 2022 8:42 AM
+> > > > To: Xu Yang <xu.yang_2@nxp.com>
+> > > > Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org; Jun Li
+> > > > <jun.li@nxp.com>; dl-linux-imx <linux-imx@nxp.com>
+> > > > Subject: [EXT] Re: [PATCH] usb: chipidea: udc: check request status
+> > before
+> > > > setting device address
+> > > >
+> > > > Caution: EXT Email
+> > > >
+> > > > On 22-06-23 11:02:42, Xu Yang wrote:
+> > > > > The complete() function may be called even though request is not
+> > > > > completed.
+> > > >
+> > > > Would you please explain more when the complete() is called but the
+> > > > request has not completed, and this happens before set_address has
+> > > > finished?
+> > >
+> > > The following sequence will be a case:
+> > > 1. the HOST sent SET_ADDRESS control message to DEVICE.
+> > > 2. the DEVICE acked this message and queued a usb_request (0 data length)
+> > for future IN transfer.
+> > > 3. somehow the setup interrupt is not cleared by USB controller
 > > 
 > > 
-> > On 22-05-24 17:38:02, Piyush Mehta wrote:
-> > > Some platforms make use of VBUS control over PHY which means
-> > > controller driver has to access PHY registers to turn on/off VBUS
-> > > line.This patch adds support for such platforms in chipidea.
-> > >
-> > > Flag 'CI_HDRC_PHY_VBUS_CONTROL' added to support VBus control
-> > feature.
-> > >
-> > > Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-> > > ---
-> > > We have created this patch as RFC, as I introduced a new flag
-> > > (CI_HDRC_PHY_VBUS_CONTROL) and would like to get comment if it's the
-> > > proper way to check for VBus support for zynq.
-> > > ---
-> > >  drivers/usb/chipidea/ci_hdrc_usb2.c | 1 +
-> > >  drivers/usb/chipidea/host.c         | 7 +++++++
-> > >  drivers/usb/chipidea/otg_fsm.c      | 7 +++++++
-> > >  include/linux/usb/chipidea.h        | 1 +
-> > >  4 files changed, 16 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/chipidea/ci_hdrc_usb2.c
-> > > b/drivers/usb/chipidea/ci_hdrc_usb2.c
-> > > index 89e1d82..dc86b12 100644
-> > > --- a/drivers/usb/chipidea/ci_hdrc_usb2.c
-> > > +++ b/drivers/usb/chipidea/ci_hdrc_usb2.c
-> > > @@ -30,6 +30,7 @@ static const struct ci_hdrc_platform_data
-> > > ci_default_pdata = {
-> > >
-> > >  static const struct ci_hdrc_platform_data ci_zynq_pdata = {
-> > >       .capoffset      = DEF_CAPOFFSET,
-> > > +     .flags          = CI_HDRC_PHY_VBUS_CONTROL,
-> > >  };
-> > >
-> > >  static const struct ci_hdrc_platform_data ci_zevio_pdata = { diff
-> > > --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-> > > index bdc3885..bc3634a 100644
-> > > --- a/drivers/usb/chipidea/host.c
-> > > +++ b/drivers/usb/chipidea/host.c
-> > > @@ -63,6 +63,13 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int
-> > portnum, bool enable)
-> > >               priv->enabled = enable;
-> > >       }
-> > >
-> > > +     if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL) {
-> > > +             if (enable)
-> > > +                     usb_phy_vbus_on(ci->usb_phy);
-> > > +             else
-> > > +                     usb_phy_vbus_off(ci->usb_phy);
-> > > +     }
-> > > +
-> > >       if (enable && (ci->platdata->phy_mode ==
-> > USBPHY_INTERFACE_MODE_HSIC)) {
-> > >               /*
-> > >                * Marvell 28nm HSIC PHY requires forcing the port to HS mode.
-> > > diff --git a/drivers/usb/chipidea/otg_fsm.c
-> > > b/drivers/usb/chipidea/otg_fsm.c index 6ed4b00..5ed9164 100644
-> > > --- a/drivers/usb/chipidea/otg_fsm.c
-> > > +++ b/drivers/usb/chipidea/otg_fsm.c
-> > > @@ -471,6 +471,10 @@ static void ci_otg_drv_vbus(struct otg_fsm *fsm,
-> > int on)
-> > >                               return;
-> > >                       }
-> > >               }
-> > > +
-> > > +             if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL)
-> > > +                     usb_phy_vbus_on(ci->usb_phy);
-> > > +
-> > >               /* Disable data pulse irq */
-> > >               hw_write_otgsc(ci, OTGSC_DPIE, 0);
-> > >
-> > > @@ -480,6 +484,9 @@ static void ci_otg_drv_vbus(struct otg_fsm *fsm, int
-> > on)
-> > >               if (ci->platdata->reg_vbus)
-> > >                       regulator_disable(ci->platdata->reg_vbus);
-> > >
-> > > +             if (ci->platdata->flags & CI_HDRC_PHY_VBUS_CONTROL)
-> > > +                     usb_phy_vbus_off(ci->usb_phy);
-> > > +
+> > You mean even software clear the OP_ENDPTSETUPSTAT bits, but controller
+> > itself doesn't clear its interrupt, and trigger the same
+> > interrupt handler again?
+> 
+> Yes, still not sure the root cause of this werid behavior. Will dig it out later.
+> 
 > > 
-> > Have your platform used OTG FSM? If not used, do not need to change it.
-> > Otherwise, it is okay for me.
+> > > or received other setup token rather IN token.
+> > That's possible. Have you found that at bus analyzer?
+> 
+> Not yet.
+> 
+> > 
+> > 
+> > > 4. the driver will go through below functions:
+> > >
+> > > isr_setup_packet_handler(ci);
+> > >   _ep_nuke(ci->ep0in);
+> > >     usb_gadget_giveback_request(&hwep->ep, &hwreq->req);
+> > >       req->complete(ep, req);
+> > >         isr_setup_status_complete();
+> > >           hw_usb_set_address(ci, ci->address);
+> > >             usb_gadget_set_state(&ci->gadget, USB_STATE_ADDRESS);
+> > >
+> > 
+> > Would you please add your above description and send patch again?
+> 
+> This patch has been received by Greg. Do I still need to send patch again?
+> 
+
+That's ok. Thanks for clarifying above.
+
+Peter
+
+> Xu Yang
+> 
 > > 
 > > Peter
-> > 
-> > >               fsm->a_bus_drop = 1;
-> > >               fsm->a_bus_req = 0;
-> > >       }
-> > > diff --git a/include/linux/usb/chipidea.h
-> > > b/include/linux/usb/chipidea.h index edf3342..ee38835 100644
-> > > --- a/include/linux/usb/chipidea.h
-> > > +++ b/include/linux/usb/chipidea.h
-> > > @@ -62,6 +62,7 @@ struct ci_hdrc_platform_data {  #define
-> > > CI_HDRC_REQUIRES_ALIGNED_DMA BIT(13)
-> > >  #define CI_HDRC_IMX_IS_HSIC          BIT(14)
-> > >  #define CI_HDRC_PMQOS                        BIT(15)
-> > > +#define CI_HDRC_PHY_VBUS_CONTROL     BIT(16)
-> > >       enum usb_dr_mode        dr_mode;
-> > >  #define CI_HDRC_CONTROLLER_RESET_EVENT               0
-> > >  #define CI_HDRC_CONTROLLER_STOPPED_EVENT     1
-> > > --
-> > > 2.7.4
+> > > Xu Yang
+> > >
+> > > >
+> > > > Peter
+> > > >
+> > > > > In this case, it's necessary to check request status so as not to set
+> > > > > device address wrongly.
+> > > > >
+> > > > > Fixes: 10775eb17bee ("usb: chipidea: udc: update gadget states
+> > > > > according to ch9")
+> > > > > cc: <stable@vger.kernel.org>
+> > > > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > > > ---
+> > > > >  drivers/usb/chipidea/udc.c | 3 +++
+> > > > >  1 file changed, 3 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> > > > > index 0c9ae9768a67..8c3e3a635ac2 100644
+> > > > > --- a/drivers/usb/chipidea/udc.c
+> > > > > +++ b/drivers/usb/chipidea/udc.c
+> > > > > @@ -1048,6 +1048,9 @@ isr_setup_status_complete(struct usb_ep
+> > *ep,
+> > > > struct usb_request *req)
+> > > > >       struct ci_hdrc *ci = req->context;
+> > > > >       unsigned long flags;
+> > > > >
+> > > > > +     if (req->status < 0)
+> > > > > +             return;
+> > > > > +
+> > > > >       if (ci->setaddr) {
+> > > > >               hw_usb_set_address(ci, ci->address);
+> > > > >               ci->setaddr = false;
+> > > > > --
+> > > > > 2.25.1
+> > > > >
+> > > >
+> > > > --
+> > > >
+> > > > Thanks,
+> > > > Peter Chen
 > > >
 > > 
 > > --
