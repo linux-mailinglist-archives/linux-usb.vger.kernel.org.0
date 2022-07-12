@@ -2,51 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECCA5719E9
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 14:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8495D571A38
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 14:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbiGLMZs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 08:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S230311AbiGLMny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 08:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbiGLMZc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 08:25:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A420B6DBA;
-        Tue, 12 Jul 2022 05:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657628716; x=1689164716;
-  h=from:to:cc:subject:date:message-id;
-  bh=NrR8m557LkmdRR5G5crqjbGQfjqfSgnTa5G/VBrQrx4=;
-  b=LItuT9Aoc0R4chST4wWLOPs2yC3TXnPExBCf/v56Ux3NA4mMjl2OuqxG
-   5qJTdT7ApBm5tuAtIEznrosForKpUA6hNkuaHpP2lxEn6OYc0yd/7ZNv4
-   2eMxhpWtZiFRpDXrpXlWZ0nXeqUvNlPa2CLKJveYE3Y8OsTJI+3uuP0G0
-   Cyz0pbpQhwQ1BOn2GBlAr+yPEPOlwm4EfojgqJQ+DkxJiwOuMTMjev8yi
-   iRBgnuct7xRi2HzRZIaPwaQI+b6qhkoC9TIyRdEIuEXHPCTZK5GyXMxIu
-   l1zyokjs+TENO1QDZdDjfr1IcBbojg6VK/DF39yCo0l4AKsu0kqmkm1PT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10405"; a="348895023"
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="348895023"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 05:25:15 -0700
-X-IronPort-AV: E=Sophos;i="5.92,265,1650956400"; 
-   d="scan'208";a="570172287"
-Received: from benkao-pc.itwn.intel.com ([10.5.232.139])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 05:25:14 -0700
-From:   Ben Kao <ben.kao@intel.com>
-To:     mathias.nyman@intel.com
-Cc:     mathias.nyman@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ben Kao <ben.kao@intel.com>
-Subject: [PATCH] xhci-pci: Enable runtime PM on Alder Lake-N PCH xHCI controller
-Date:   Tue, 12 Jul 2022 20:24:42 +0800
-Message-Id: <20220712122442.22504-1-ben.kao@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229526AbiGLMnw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 08:43:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7CD32065;
+        Tue, 12 Jul 2022 05:43:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1C80B81816;
+        Tue, 12 Jul 2022 12:43:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637B8C3411C;
+        Tue, 12 Jul 2022 12:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657629828;
+        bh=pJsxsIkxzdE6TIbOKNl3gsVKK6ceL91vfhLdJaMSbH8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=x4UOBE0EHiymr0xPTajxEznlFbIexTaPI/66JgKLGYpwl6oIbf/y6MjlfiELPzUax
+         NPd1JOyU7C4tonOGyP7P2nuKMxMlrSJzg0//YgqIw+tDVnF5MlENpN7+5JwUhhlQro
+         8dcfgVfMI8NhyZvRGTZ64cNwNHSPR2zAU3KrYd2w=
+Date:   Tue, 12 Jul 2022 14:43:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jonathan Woithe <jwoithe@just42.net>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
+ chunks
+Message-ID: <Ys1sfRyL6El7go94@kroah.com>
+References: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,35 +51,69 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are two Alder Lake-N xHCI host controllers with PCI IDs
-0x464e and 0x54ed, now we add the quirk to default enable runtime
-PM for 0x54ed.
+On Tue, Jul 12, 2022 at 09:29:57PM +0930, Jonathan Woithe wrote:
+> Hi all
+> 
+> For many years I have been using a CH341 USB-serial converter (VID:PID
+> 4348:5523) to drive a microcontroller programming dongle.  This was under
+> kernel 4.4.14.  When I recently upgraded the machine to a 5.15.27 kernel the
+> programmer stopped working, reporting timeouts.  Using a loopback cable and
+> minicom I discovered that under 5.15.27 data was only delivered back to
+> minicom in blocks of 32 characters.  This explains why the programming
+> software reported timeouts.  It seems that either outgoing data is blocked
+> until 32 bytes are ready for transmission, or receive data is only reported
+> in blocks of 32 bytes.
+> 
+> Under 4.4.14 (and all kernels prior to 4.10.0), individual characters are
+> echoed back by minicom as soon as they hare pressed on the keyboard.
+> 
+> As far as I can tell, the regression affects all kernels since 4.10.0.
+> 
+> I have done a git bisect which identified the following commit as the source
+> of the problem.
+> 
+> commit 55fa15b5987db22b4f35d3f0798928c126be5f1c
+> Author: Johan Hovold <johan@kernel.org>
+> Date:   Fri Jan 6 19:15:16 2017 +0100
 
-Signed-off-by: Ben Kao <ben.kao@intel.com>
----
- drivers/usb/host/xhci-pci.c | 2 ++
- 1 file changed, 2 insertions(+)
+Please always cc: the developer who wrote a commit that you have
+questions about, so that they are sure to see it, otherwise it's just
+random luck :)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index dce6c0ec8d34..44486156bd5d 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -61,6 +61,7 @@
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI		0x464e
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI	0x51ed
-+#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
- #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI		0xa71e
- #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_XHCI		0x7ec0
- 
-@@ -272,6 +273,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_METEOR_LAKE_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
--- 
-2.17.1
+>     USB: serial: ch341: fix baud rate and line-control handling
+> 
+>     Revert to using direct register writes to set the divisor and
+>     line-control registers.
+> 
+>     A recent change switched to using the init vendor command to update
+>     these registers, something which also enabled support for CH341A
+>     devices. It turns out that simply setting bit 7 in the divisor register
+>     is sufficient to support CH341A and specifically prevent data from being
+>     buffered until a full endpoint-size packet (32 bytes) has been received.
+> 
+>     Using the init command also had the side-effect of temporarily
+>     deasserting the DTR/RTS signals on every termios change (including
+>     initialisation on open) something which for example could cause problems
+>     in setups where DTR is used to trigger a reset.
+> 
+>     Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on
+>     reconfiguration")
+>     Signed-off-by: Johan Hovold <johan@kernel.org>
 
+It seems like this change does the opposite of what it says, we don't
+want the device to wait for a full endpoint of packets to send stuff
+out, right?
+
+> It would be great if this regression could be addressed.  At present I must
+> boot a pre-4.10 kernel whenever I need to use the programming dongle with
+> this converter.
+> 
+> Please let me know if there is anything I can do to help resolve the
+> problem.
+
+If you revert this commit on top of the latest kernel release, does it
+solve the problem for you?
+
+thanks,
+
+greg k-h
