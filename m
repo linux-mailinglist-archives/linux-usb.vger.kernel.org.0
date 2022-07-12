@@ -2,75 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854975728AC
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 23:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD02157290A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 00:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbiGLVdG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 17:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S230254AbiGLWJw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 18:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiGLVdE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 17:33:04 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9F1D1ED6
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 14:33:03 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bf9so16038160lfb.13
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 14:33:03 -0700 (PDT)
+        with ESMTP id S229755AbiGLWJv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 18:09:51 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2081DBD392;
+        Tue, 12 Jul 2022 15:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TIpqXGqUdbc7bp5Nv9vg+wT2LovVtvXFE8gEfCoQ/p8=;
-        b=qrsWGWfNqgj1aZfKL3NgvzRw2+cN5C0H4oH3PJ/UGPr8pZbVgLort1Gp/E2AYiC9Aq
-         BAUq3Wug/N8IhkPgpXRI6aID5xtl7j8KHHO02t5Jzu5fQxRnNZKYIbB1qPMfnbROP581
-         es4sskdOo3FvRpaQQGiPPQCtUqDHf1EQs5pjOiUXu2UJcefI51izTX93YnKnPlTL1Ll9
-         +qypjg1dV5Mtl+IrP9ywQK4l3aAgjLWBDHTy1GhbuqwBCJGUiYUGZRibw/VoIg4yc0uD
-         XwFvAL5WNrH5drluy65wT6j2fc/uilW5ay0HpPWTWkBg4iSB8+arP0K3Wr21rrsZRqQv
-         LP5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TIpqXGqUdbc7bp5Nv9vg+wT2LovVtvXFE8gEfCoQ/p8=;
-        b=oadbXrVFCAMZsil93gffBUaI0dsqeaJBoC2P49nZ0G1cgdro8rOs7VMjcEUKF7U8WV
-         hYLusbcJ4du6dpGFTgRQNoF53Dt8QLbTMxEM1pyhDHIFX1I0cVgjc7v8ptW/xTjx2Yl0
-         ldJldHHHeIeDuHgYQZ+MK211p/uUajEyX7E/yt/0Hzl1bHSJMyFlSbR3BjI4B1BEoeUK
-         XnA1Ez1sO+CtfkidosstKTFG77joOQGGr0LstCiXIWT+V2mUFEy+iPK8hprVSClXotBL
-         5ze9+KcWhFR7BGV9QsGkjCYylzIuT8tkWz6D04irli4mWeLtzPE2z4GlEfFb6jKUmLsz
-         zMSw==
-X-Gm-Message-State: AJIora8eTfGw3kjhOuVSR46nEsliQUxCJcRlFnvLZM/Bzpks8w7SQPrP
-        aw0vKEsRs2/N2Q0VmD+mCyZGeQ==
-X-Google-Smtp-Source: AGRyM1sR8GDYomRROdIPnmNEdFknF591zTF+eQqR8/kcs+ehwUsWazfVo/ZnMuA66BXVMjgeAhz7WA==
-X-Received: by 2002:a05:6512:239c:b0:489:cc5c:177e with SMTP id c28-20020a056512239c00b00489cc5c177emr2686lfv.645.1657661582291;
-        Tue, 12 Jul 2022 14:33:02 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id u2-20020a05651206c200b00488ab8914b5sm2380747lff.213.2022.07.12.14.33.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 14:33:01 -0700 (PDT)
-Message-ID: <1c19780c-6ce7-dd32-257d-7bdf8271055e@linaro.org>
-Date:   Tue, 12 Jul 2022 23:32:59 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657663791; x=1689199791;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lAo1VfvPuLlXREWPm6OylD9fuy8q1fMF1LonA1ckRLY=;
+  b=RRPJoFR5WOtxM6y7Pok1QJKupW8KjKVl4ogf8Zn6FH/EQCSCpkkwwC5C
+   18kd9rqhxCwGvhIQuFd6VAn1JnwdTU/oLeF7fPCCUty0RdZLz9+a0bPC3
+   vD0+vKFALWB9PgZwo1i3IXi22uzS8DP68/HAaqB6R03IJLBxvRPLbDj76
+   Y=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 12 Jul 2022 15:09:51 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 15:09:50 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 12 Jul 2022 15:08:50 -0700
+Received: from [10.110.36.60] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 12 Jul
+ 2022 15:08:49 -0700
+Message-ID: <8029f6bb-4704-0495-00d2-ee78ee684eb3@quicinc.com>
+Date:   Tue, 12 Jul 2022 15:08:49 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] dt-bindings: usb: Add binding for TI USB8041 hub
- controller
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4/5] usb: dwc3: Allow end transfer commands to be sent
+ during soft disconnect
 Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
- <7c838790-1dd9-732a-e5cb-f2ea6454411a@linaro.org>
- <Ys3ngK0b4QtWbQKv@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Ys3ngK0b4QtWbQKv@google.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20220708185007.21743-1-quic_wcheng@quicinc.com>
+ <20220708185007.21743-5-quic_wcheng@quicinc.com>
+ <06498069-db45-202b-eba6-47bfa6948143@synopsys.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <06498069-db45-202b-eba6-47bfa6948143@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,28 +71,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/07/2022 23:28, Matthias Kaehlcke wrote:
+Hi Thinh,
+
+On 7/8/2022 6:58 PM, Thinh Nguyen wrote:
+> On 7/8/2022, Wesley Cheng wrote:
+>> If soft disconnect is in progress, allow the endxfer command to be sent,
+>> without this, there is an issue where the stop active transfer call
+>> (during pullup disable) wouldn't actually issue the endxfer command,
+>> while clearing the DEP flag.
 >>
->> But another question - why "peer-hub"? I remember some discussion about
->> naming, so was peer preferred over companion?
+>> In addition, if the DWC3_EP_DELAY_STOP flag was set before soft disconnect
+>> started (i.e. from the dequeue path), ensure that when the EP0 transaction
+>> completes during soft disconnect, to issue the endxfer with the force
+>> parameter set, as it does not expect a command complete event.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>    drivers/usb/dwc3/ep0.c    | 3 +--
+>>    drivers/usb/dwc3/gadget.c | 5 ++++-
+>>    2 files changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 506ef717fdc0..5851b0e9db0a 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -290,8 +290,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>>    		if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
+>>    			continue;
+>>    
+>> -		dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
+>> -		dwc3_stop_active_transfer(dwc3_ep, true, true);
+>> +		dwc3_stop_active_transfer(dwc3_ep, true, dwc->connected);
+>>    	}
+>>    }
+>>    
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index bd40608b19df..fba2797ad9ae 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -3696,8 +3696,10 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>>    	if (dep->number <= 1 && dwc->ep0state != EP0_DATA_PHASE)
+>>    		return;
+>>    
+>> +	if (interrupt && (dep->flags & DWC3_EP_DELAY_STOP))
+>> +		return;
+>> +
+>>    	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
+>> -	    (dep->flags & DWC3_EP_DELAY_STOP) ||
+>>    	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+>>    		return;
+>>    
+>> @@ -3744,6 +3746,7 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>>    	__dwc3_stop_active_transfer(dep, force, interrupt);
+>>    	spin_lock(&dwc->lock);
+>>    
+>> +	dep->flags &= ~DWC3_EP_DELAY_STOP;
 > 
-> Yes, Alan Stern pointed out that 'companion' can be confusing in the context
-> of USB:
-> 
->   What do you mean by "companion hub"?  I think you are using the wrong
->   word here.  If you're talking about the relation between the two logical
->   hubs (one attached to the SuperSpeed bus and one attached to the
->   Low/Full/High-speed bus) within a physical USB-3 hub, the correct term
->   for this is "peer".  See the existing usages in hub.h, hub.c, and
->   port.c.
-> 
->   "Companion" refers to something completely different (i.e., the UHCI or
->   OHCI controllers that handle Low/Full-speed connections on behalf of a
->   High-speed EHCI controller).
-> 
-> https://patchwork.kernel.org/comment/24912563/
+> Can we clear this flag in __dwc3_stop_active_transfer(). It should apply
+> if End Transfer command was sent.
 
-Thanks, that explains a lot!
+I wanted to make sure that we weren't modifying the DEP flags outside of 
+a spin lock.  Patch#3 modifies it where we unlock before calling 
+__dwc3_stop_active_transfer(), so we can allow the dwc3 threaded IRQ 
+handle events while the cmd status polling happens.
 
-Best regards,
-Krzysztof
+Maybe we can unlock/lock the dwc3->lock inside 
+__dwc3_stop_active_transfer() and that way we can ensure DEP flags are 
+modified properly?
+
+Thanks
+Wesley Cheng
