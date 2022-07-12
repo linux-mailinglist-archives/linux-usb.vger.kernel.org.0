@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAE35728AA
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 23:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854975728AC
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 23:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbiGLVcS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 17:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S233228AbiGLVdG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 17:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiGLVcR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 17:32:17 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347D5D139A
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 14:32:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id o7so16056904lfq.9
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 14:32:16 -0700 (PDT)
+        with ESMTP id S231402AbiGLVdE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 17:33:04 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9F1D1ED6
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 14:33:03 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id bf9so16038160lfb.13
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 14:33:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QZY1I7ZGfIoUdU5OKb8hnvePyeo8oO92kEUWTFHLrS0=;
-        b=mZqYGWIxfVKF3Pf0EezhE+aJu998idmt9TJpCANwVjdKdURHTeMeo84u7Jo4K4J7q1
-         9HQdhdRap/k5syGADGIzWzP5O+7pJUDf3kihpWORb/+SpJuVrD1As08ej33MKFC1NYTw
-         3vpGldJ/s2/JnVqmztQpu/b9DCS/rEl027l0sdh6I3oPLQ6reKraryy3GH6I1goExrFG
-         niggsmxA83dxPoI3uW/wCZdmy86KeeFV5Mz0K0+PPIHmVWHkvnLgqqiLvBhjIoAka/Qw
-         iRwjZ3tQsTAbN8sjLGVR9l2H19ft4RAuB9BkDHsV6slKNE29eZicTqiW01gNau9BRMO7
-         7VUQ==
+        bh=TIpqXGqUdbc7bp5Nv9vg+wT2LovVtvXFE8gEfCoQ/p8=;
+        b=qrsWGWfNqgj1aZfKL3NgvzRw2+cN5C0H4oH3PJ/UGPr8pZbVgLort1Gp/E2AYiC9Aq
+         BAUq3Wug/N8IhkPgpXRI6aID5xtl7j8KHHO02t5Jzu5fQxRnNZKYIbB1qPMfnbROP581
+         es4sskdOo3FvRpaQQGiPPQCtUqDHf1EQs5pjOiUXu2UJcefI51izTX93YnKnPlTL1Ll9
+         +qypjg1dV5Mtl+IrP9ywQK4l3aAgjLWBDHTy1GhbuqwBCJGUiYUGZRibw/VoIg4yc0uD
+         XwFvAL5WNrH5drluy65wT6j2fc/uilW5ay0HpPWTWkBg4iSB8+arP0K3Wr21rrsZRqQv
+         LP5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=QZY1I7ZGfIoUdU5OKb8hnvePyeo8oO92kEUWTFHLrS0=;
-        b=voHdkzR4XEMjKrq9yGoIIMTvYP2XrMWKbh3WR+Af8pcYRXayNii9+UOXLwWisSp4Va
-         hSHv7L90TfLyVshLEE6P9wgFfLZRUNSbHgauFHgv4L3RXFsJDAdA40yd3h0X0KqXsbhW
-         BV0J0R7R/uJW94/nFRAMJDiEILPbzAN15dP8crKVUeIheWK43TW/w4li041MjRHw84ll
-         CNwZjFRDbJU0+7o7h0ru2/QAtgrP0cXHMKP4I8lP1buXDMCI5R+QrPiAAWHDu+hgI3OH
-         wlLILyCJL5EEltKcwdP35nn0Bsqs5uGGCevSDaf/38Yo9SWDmIqabt0dquP/8UJTxaLU
-         LENg==
-X-Gm-Message-State: AJIora/U/cnFe2Y+ZQ7tNvOvclHNQS7JNTcGKvo7m+A13/KxmbnhujLG
-        /S6LUH/bhmJI2hkVV1Lajh6SWQ==
-X-Google-Smtp-Source: AGRyM1swfJZb29PRnci0zOf2DgRkRRMGBK5/J87ROOvoAkMFG6At4bbT8AFOXuhOzYXB87oiamuTSQ==
-X-Received: by 2002:a05:6512:c24:b0:489:15ea:91c8 with SMTP id z36-20020a0565120c2400b0048915ea91c8mr18513lfu.33.1657661534569;
-        Tue, 12 Jul 2022 14:32:14 -0700 (PDT)
+        bh=TIpqXGqUdbc7bp5Nv9vg+wT2LovVtvXFE8gEfCoQ/p8=;
+        b=oadbXrVFCAMZsil93gffBUaI0dsqeaJBoC2P49nZ0G1cgdro8rOs7VMjcEUKF7U8WV
+         hYLusbcJ4du6dpGFTgRQNoF53Dt8QLbTMxEM1pyhDHIFX1I0cVgjc7v8ptW/xTjx2Yl0
+         ldJldHHHeIeDuHgYQZ+MK211p/uUajEyX7E/yt/0Hzl1bHSJMyFlSbR3BjI4B1BEoeUK
+         XnA1Ez1sO+CtfkidosstKTFG77joOQGGr0LstCiXIWT+V2mUFEy+iPK8hprVSClXotBL
+         5ze9+KcWhFR7BGV9QsGkjCYylzIuT8tkWz6D04irli4mWeLtzPE2z4GlEfFb6jKUmLsz
+         zMSw==
+X-Gm-Message-State: AJIora8eTfGw3kjhOuVSR46nEsliQUxCJcRlFnvLZM/Bzpks8w7SQPrP
+        aw0vKEsRs2/N2Q0VmD+mCyZGeQ==
+X-Google-Smtp-Source: AGRyM1sR8GDYomRROdIPnmNEdFknF591zTF+eQqR8/kcs+ehwUsWazfVo/ZnMuA66BXVMjgeAhz7WA==
+X-Received: by 2002:a05:6512:239c:b0:489:cc5c:177e with SMTP id c28-20020a056512239c00b00489cc5c177emr2686lfv.645.1657661582291;
+        Tue, 12 Jul 2022 14:33:02 -0700 (PDT)
 Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id s19-20020a056512215300b004855224ead0sm2393673lfr.158.2022.07.12.14.32.13
+        by smtp.gmail.com with ESMTPSA id u2-20020a05651206c200b00488ab8914b5sm2380747lff.213.2022.07.12.14.33.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 14:32:14 -0700 (PDT)
-Message-ID: <b2476f28-6830-860d-9bd6-502aa24031e5@linaro.org>
-Date:   Tue, 12 Jul 2022 23:32:12 +0200
+        Tue, 12 Jul 2022 14:33:01 -0700 (PDT)
+Message-ID: <1c19780c-6ce7-dd32-257d-7bdf8271055e@linaro.org>
+Date:   Tue, 12 Jul 2022 23:32:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
@@ -63,11 +63,10 @@ Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org
 References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
- <Ys2uiei+ZOVYaOMy@google.com>
- <34e2a75a-b6dc-d5ae-4820-58cee2b0dd29@linaro.org>
- <Ys3mrAukkXXDHopg@google.com>
+ <7c838790-1dd9-732a-e5cb-f2ea6454411a@linaro.org>
+ <Ys3ngK0b4QtWbQKv@google.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Ys3mrAukkXXDHopg@google.com>
+In-Reply-To: <Ys3ngK0b4QtWbQKv@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,55 +79,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/07/2022 23:25, Matthias Kaehlcke wrote:
-> On Tue, Jul 12, 2022 at 11:12:06PM +0200, Krzysztof Kozlowski wrote:
->> On 12/07/2022 19:25, Matthias Kaehlcke wrote:
->>> Hi Alexander,
->>>
->>> On Tue, Jul 12, 2022 at 05:06:25PM +0200, Alexander Stein wrote:
->>>> The TI USB8041 is a USB 3.0 hub controller with 4 ports.
->>>>
->>>> This initial version of the binding only describes USB related aspects
->>>> of the USB8041, it does not cover the option of connecting the controller
->>>> as an i2c slave.
->>>>
->>>> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
->>>> ---
->>>> Well, this is essentially a ripoff of
->>>> Documentation/devicetree/bindings/usb/realtek,rts5411.yaml with USB IDs
->>>> replaced, reset-gpio added and example adjusted.
->>>> IMHO this should be merged together with realtek,rts5411.yaml. Is it ok
->>>> to rename bindings files? I guess a common onboard-usb-hub.yaml matching
->>>> the driver seens reasonable. Any recommendations how to proceed?
->>>
->>> It's a tradeoff between keeping the individual bindings simple and avoid
->>> unnecessary duplication. The current RTS5411 and TI USB8041 bindings are
->>> very similar, which suggests combining them. However over time hubs with
->>> diverging features could be added (e.g. with multiple regulators, a link
->>> to an I2C/SPI bus, a clock, ...). With that a common binding might become
->>> too messy.
->>>
->>> From a quick look through Documentation/devicetree/bindings it doesn't
->>> seem common to have generic bindings that cover components from multiple
->>> vendors. In that sense I'm leaning towards separate bindings.
->>>
->>> Rob, do you have any particular preference or suggestion?
+On 12/07/2022 23:28, Matthias Kaehlcke wrote:
 >>
->> Not Rob, but my suggestion is not to merge bindings of unrelated
->> devices, even if they are the same class. By unrelated I mean, made by
->> different companies, designed differently and having nothing in common
->> by design. Bindings can be still similar, but should not be merged just
->> because they are similar.
+>> But another question - why "peer-hub"? I remember some discussion about
+>> naming, so was peer preferred over companion?
 > 
-> Thanks for your advice, let's keep separate bindings then.
+> Yes, Alan Stern pointed out that 'companion' can be confusing in the context
+> of USB:
+> 
+>   What do you mean by "companion hub"?  I think you are using the wrong
+>   word here.  If you're talking about the relation between the two logical
+>   hubs (one attached to the SuperSpeed bus and one attached to the
+>   Low/Full/High-speed bus) within a physical USB-3 hub, the correct term
+>   for this is "peer".  See the existing usages in hub.h, hub.c, and
+>   port.c.
+> 
+>   "Companion" refers to something completely different (i.e., the UHCI or
+>   OHCI controllers that handle Low/Full-speed connections on behalf of a
+>   High-speed EHCI controller).
+> 
+> https://patchwork.kernel.org/comment/24912563/
 
-Although for the record let me add that we did merge some trivial hwmon
-devices like LM75 or LM90 but their bindings are trivial and programming
-model is also similar between each other (handled by same device
-driver). I guess we can be here flexible, so the question would be how
-similar these USB hubs are.
-
-If in doubt, just keep it separate.
+Thanks, that explains a lot!
 
 Best regards,
 Krzysztof
