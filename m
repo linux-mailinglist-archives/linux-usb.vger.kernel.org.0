@@ -2,45 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6825571910
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 13:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5773571912
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 13:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbiGLLyY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 07:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S229872AbiGLLy0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 07:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiGLLyL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 07:54:11 -0400
+        with ESMTP id S232787AbiGLLyN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 07:54:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67281B6297
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 04:53:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E4B629D;
+        Tue, 12 Jul 2022 04:53:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E03276155D
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 11:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CDDC3411C;
-        Tue, 12 Jul 2022 11:53:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0C5561574;
+        Tue, 12 Jul 2022 11:53:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F48C341CD;
+        Tue, 12 Jul 2022 11:53:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657626791;
-        bh=SjsyX64Kh5U6Xkiu/IiiEHA0fldnmoKAIaf5KYOsXw0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KonHjXIE3odLLPbmw6KKsmTGbojRJNLIcrMzZ4ZrXJBe58d6rsve1TNzvN9u0Jyl9
-         q19VCeB18m7ipxyQEJy/28CYRab4rM1oV8Zw8IqdDFhJlcO0NXM7LeH5FVTRW5zOhO
-         HOHxRXJCl3VrZlfdXbPHwEiZuWBELdCFn0HeDHBvLwZ/q8JREW1Wnx+Jv3pVScZDz8
-         g2WFkFqWm50XZFkwUn0J+YiHMoOPdJgWH/QPtv2Th+mJqEvU7DQ0nb44F4oeI9GF4U
-         MpVOFeXq06nNKAR6xKBhCVcIDHd/X/45KDggJ4qv50PA/6ZB9EG3gLN2s4RCNMejoV
-         mOSc15cIY6twA==
+        s=k20201202; t=1657626793;
+        bh=6FigCnzE+Dx/FTtyanL8zrhQ0aZVYbr/GBQY5us+fH0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cNPTMY5FNXdp6Wu6EXjb9vtuAaqtxL26Xu3K917cBSHbDgu+rOonCJdSJLe5EbnM4
+         FmYPRS4qpROLP040K+Vg42t49c4l+9g8nYOhvP6oCJwZxCWR2fVq4ZvfzMrSdh7MlB
+         0bB8XKMEM0fgyv3DeSmcLJX9bEwLAj2vq4ud+fzHJMkIMjcuv7cO9Kk6Q4mt8VWCsd
+         st8MAkjVkYZtKjyc6EFCSD8Q+z50fVJN/hsxsvQgwY4tyoWIZ3BGxIF/bQpYQpbCcV
+         jsbISFgqatWdrCB32hheK6gbQU3UeQj3LEhbCOU0EQ+1TvimFpPCdzCu6VXchU0knt
+         53QQUHG8nAf5w==
 From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To:     linux-usb@vger.kernel.org
 Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
         Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v2 0/7] ftdi_sio driver improvements
-Date:   Tue, 12 Jul 2022 13:52:59 +0200
-Message-Id: <20220712115306.26471-1-kabel@kernel.org>
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 1/7] USB: serial: ftdi_sio: Fix divisor overflow
+Date:   Tue, 12 Jul 2022 13:53:00 +0200
+Message-Id: <20220712115306.26471-2-kabel@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220712115306.26471-1-kabel@kernel.org>
+References: <20220712115306.26471-1-kabel@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -54,28 +57,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi guys,
+From: Pali Rohár <pali@kernel.org>
 
-Pali has worked out some improvements for the ftdi_sio USB serial
-driver and I have reviewed and tested them.
+The baud rate generating divisor is a 17-bit wide (14 bits integer part
+and 3 bits fractional part).
 
-Changes since v1:
-- addressed issues pointed out by Greg: better commit messages,
-  fixed checkpatch warning, dropped usage of (u32)-1
+Example:
+  base clock = 48 MHz
+  requested baud rate = 180 Baud
+  divisor = 48,000,000 / (16 * 180) = 0b100000100011010.101
 
-Pali Rohár (7):
-  USB: serial: ftdi_sio: Fix divisor overflow
-  USB: serial: ftdi_sio: Add missing baud rate validation
-  USB: serial: ftdi_sio: Extract SIO divisor code to function
-  USB: serial: ftdi_sio: Do not reset baud rate to 9600 Baud on error
-  USB: serial: ftdi_sio: Fix baud rate rounding for ASYNC_SPD_CUST
-  USB: serial: ftdi_sio: Fix custom_divisor and c_*speed for
-    ASYNC_SPD_CUST
-  USB: serial: ftdi_sio: Fill c_*speed fields with real baud rate
+  In this case the MSB gets discarded because of the overflow, and the
+  actually used divisor will be 0b100011010.101 = 282.625, resulting
+  in baud rate 10615 Baud, instead of the requested 180 Baud.
 
- drivers/usb/serial/ftdi_sio.c | 187 ++++++++++++++++++++++++++++------
- 1 file changed, 156 insertions(+), 31 deletions(-)
+The best possible thing to do in this case is to generate lowest possible
+baud rate (in the example it would be 183 Baud), by using maximum possible
+divisor.
 
+In case of divisor overflow, use maximum possible divisor.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Tested-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Cc: stable@vger.kernel.org
+---
+ drivers/usb/serial/ftdi_sio.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index b440d338a895..ea40f367e70c 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1157,6 +1157,8 @@ static unsigned short int ftdi_232am_baud_base_to_divisor(int baud, int base)
+ 	int divisor3 = DIV_ROUND_CLOSEST(base, 2 * baud);
+ 	if ((divisor3 & 0x7) == 7)
+ 		divisor3++; /* round x.7/8 up to x+1 */
++	if (divisor3 > GENMASK(16, 0))
++		divisor3 = GENMASK(16, 0);
+ 	divisor = divisor3 >> 3;
+ 	divisor3 &= 0x7;
+ 	if (divisor3 == 1)
+@@ -1181,6 +1183,8 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base)
+ 	u32 divisor;
+ 	/* divisor shifted 3 bits to the left */
+ 	int divisor3 = DIV_ROUND_CLOSEST(base, 2 * baud);
++	if (divisor3 > GENMASK(16, 0))
++		divisor3 = GENMASK(16, 0);
+ 	divisor = divisor3 >> 3;
+ 	divisor |= (u32)divfrac[divisor3 & 0x7] << 14;
+ 	/* Deal with special cases for highest baud rates. */
+@@ -1204,6 +1208,8 @@ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base)
+ 
+ 	/* hi-speed baud rate is 10-bit sampling instead of 16-bit */
+ 	divisor3 = DIV_ROUND_CLOSEST(8 * base, 10 * baud);
++	if (divisor3 > GENMASK(16, 0))
++		divisor3 = GENMASK(16, 0);
+ 
+ 	divisor = divisor3 >> 3;
+ 	divisor |= (u32)divfrac[divisor3 & 0x7] << 14;
 -- 
 2.35.1
 
