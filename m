@@ -2,54 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E61F57216E
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 18:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217815721AE
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 19:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbiGLQxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 12:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S231364AbiGLRZd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 13:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiGLQxj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 12:53:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FF1631A;
-        Tue, 12 Jul 2022 09:53:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFDC261999;
-        Tue, 12 Jul 2022 16:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45CB8C3411C;
-        Tue, 12 Jul 2022 16:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657644816;
-        bh=AteLLtbvakx1vBJu6F5E6kPBaxAVBPBVW1kg1qHqUNM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VYAAnmbLEjSDEBj3t8q0Uq4RiByFfY0kiGQTiRpXbr2R3MQlFHHyWvuKQj7QDXn/h
-         b3HAcs0hQjZrAlPu3NC8zuJS1oGhWwzvo2e3wv4WkM6mwpnqoKtgt82C/O0U1prSrZ
-         eztc02DytcfTWQy7pyj42nZCOsreMPrHpwaygkZ8CALKZ/TkojjwImm3JCozPMFIfU
-         LgGsWPLI8vDHFIcWbf/0b2muuqRkC///g2xzATUl2ErzWkViMexJ/qEv92weAOo/Mu
-         MIV/I+yQGDdk7bjzu+Ew3BRITeLo79sIFVWUVpiadLqYzm/DIAzjSfhFugCT+P4F2z
-         0QDyhQHxP0WfA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBJ8k-000726-De; Tue, 12 Jul 2022 18:53:39 +0200
-Date:   Tue, 12 Jul 2022 18:53:38 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jonathan Woithe <jwoithe@just42.net>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
- chunks
-Message-ID: <Ys2nEmkvz2dfAKkU@hovoldconsulting.com>
-References: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
- <Ys1sfRyL6El7go94@kroah.com>
+        with ESMTP id S229491AbiGLRZc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 13:25:32 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A340FBF564
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 10:25:31 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id p11so1424140pgr.12
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 10:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E4jmP6FgBCuShM2yxd3P64q5em9gcVisC0GtASF23gY=;
+        b=FS9WBUbEEfYEED3QgznDAAd2QkvgwO8CwVKF/P6n1kM8GGIhSNb93+xyeUxDA1EDyQ
+         p2dM/Uq1070+OKhh6yFhYCGB8qK/JwLqc2DnZgMVTqNLjvIrHfVjC8guWPXBl387f72A
+         Irj7ZDgvmLZPt0Oav1k+pugcVsvw6PX4Y1riE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E4jmP6FgBCuShM2yxd3P64q5em9gcVisC0GtASF23gY=;
+        b=7y81EvbJXpez8faPNQfIwGqQnnxiBxRdLmbO0R3Q4bCbpygeatVNy3Gmc0cyXqVEEz
+         ql5gIJt2vJ8L2S78FcA3Lz0y2vREqYHVmOqQvPILDIo6IHfsHh7okaejAxeJxC8BjPRX
+         t9rOEofjGYXqnjHu8pSeeZtL7TyApEZ5hBO3iqPSRx15it5Gm3nSmd+AVMFfvgn1VTX2
+         HjtY+8RSn1uxQBMvvqZ/qr8SLXJZHTsBLQK8nALuKN9wovLoPyuNZuRSPISrQoK0XNVJ
+         HXCea/lXVKGJPi/bEd0nOBUalp6pbaveRRqhito5McUiMAv9Gqg9edoAGSIMytIWYRD3
+         ttFg==
+X-Gm-Message-State: AJIora/JNaw7TcJC+CvRE3KAXT7vuv4vj927D++SkJxh4TnVFuIYOo5H
+        6KqmBB4SktXpOZXH/9GTIewgHg==
+X-Google-Smtp-Source: AGRyM1sWnN7nqx3ogAdQ99HHTgyORP8SiZVeXDB3osYj+OyDitCE/Klmi1y59hDRdQwCbKmsVzSQNg==
+X-Received: by 2002:a63:ef05:0:b0:416:306:db8d with SMTP id u5-20020a63ef05000000b004160306db8dmr9853565pgh.203.1657646731167;
+        Tue, 12 Jul 2022 10:25:31 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:e036:8c0d:9cf:7a45])
+        by smtp.gmail.com with UTF8SMTPSA id b15-20020a170902650f00b0016397da033csm7071064plk.62.2022.07.12.10.25.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 10:25:30 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 10:25:29 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: usb: Add binding for TI USB8041 hub
+ controller
+Message-ID: <Ys2uiei+ZOVYaOMy@google.com>
+References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ys1sfRyL6El7go94@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,91 +69,118 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 02:43:41PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jul 12, 2022 at 09:29:57PM +0930, Jonathan Woithe wrote:
-> > Hi all
-> > 
-> > For many years I have been using a CH341 USB-serial converter (VID:PID
-> > 4348:5523) to drive a microcontroller programming dongle.  This was under
-> > kernel 4.4.14.  When I recently upgraded the machine to a 5.15.27 kernel the
-> > programmer stopped working, reporting timeouts.  Using a loopback cable and
-> > minicom I discovered that under 5.15.27 data was only delivered back to
-> > minicom in blocks of 32 characters.  This explains why the programming
-> > software reported timeouts.  It seems that either outgoing data is blocked
-> > until 32 bytes are ready for transmission, or receive data is only reported
-> > in blocks of 32 bytes.
-> > 
-> > Under 4.4.14 (and all kernels prior to 4.10.0), individual characters are
-> > echoed back by minicom as soon as they hare pressed on the keyboard.
-> > 
-> > As far as I can tell, the regression affects all kernels since 4.10.0.
-> > 
-> > I have done a git bisect which identified the following commit as the source
-> > of the problem.
-> > 
-> > commit 55fa15b5987db22b4f35d3f0798928c126be5f1c
-> > Author: Johan Hovold <johan@kernel.org>
-> > Date:   Fri Jan 6 19:15:16 2017 +0100
+Hi Alexander,
+
+On Tue, Jul 12, 2022 at 05:06:25PM +0200, Alexander Stein wrote:
+> The TI USB8041 is a USB 3.0 hub controller with 4 ports.
 > 
-> Please always cc: the developer who wrote a commit that you have
-> questions about, so that they are sure to see it, otherwise it's just
-> random luck :)
-
-Thanks for the report, and for forwarding it.
- 
-> >     USB: serial: ch341: fix baud rate and line-control handling
-> > 
-> >     Revert to using direct register writes to set the divisor and
-> >     line-control registers.
-> > 
-> >     A recent change switched to using the init vendor command to update
-> >     these registers, something which also enabled support for CH341A
-> >     devices. It turns out that simply setting bit 7 in the divisor register
-> >     is sufficient to support CH341A and specifically prevent data from being
-> >     buffered until a full endpoint-size packet (32 bytes) has been received.
-> > 
-> >     Using the init command also had the side-effect of temporarily
-> >     deasserting the DTR/RTS signals on every termios change (including
-> >     initialisation on open) something which for example could cause problems
-> >     in setups where DTR is used to trigger a reset.
-> > 
-> >     Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on
-> >     reconfiguration")
-> >     Signed-off-by: Johan Hovold <johan@kernel.org>
+> This initial version of the binding only describes USB related aspects
+> of the USB8041, it does not cover the option of connecting the controller
+> as an i2c slave.
 > 
-> It seems like this change does the opposite of what it says, we don't
-> want the device to wait for a full endpoint of packets to send stuff
-> out, right?
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Well, this is essentially a ripoff of
+> Documentation/devicetree/bindings/usb/realtek,rts5411.yaml with USB IDs
+> replaced, reset-gpio added and example adjusted.
+> IMHO this should be merged together with realtek,rts5411.yaml. Is it ok
+> to rename bindings files? I guess a common onboard-usb-hub.yaml matching
+> the driver seens reasonable. Any recommendations how to proceed?
 
-No, the commit does what it says, namely to fix a regression just like
-the one reported here (i.e. that data was buffered in 32 byte chunks).
+It's a tradeoff between keeping the individual bindings simple and avoid
+unnecessary duplication. The current RTS5411 and TI USB8041 bindings are
+very similar, which suggests combining them. However over time hubs with
+diverging features could be added (e.g. with multiple regulators, a link
+to an I2C/SPI bus, a clock, ...). With that a common binding might become
+too messy.
 
-The offending commit was merged in 4.10-rc1 and the above fixed
-corrected it 4.10-rc3.
+From a quick look through Documentation/devicetree/bindings it doesn't
+seem common to have generic bindings that cover components from multiple
+vendors. In that sense I'm leaning towards separate bindings.
 
-> > It would be great if this regression could be addressed.  At present I must
-> > boot a pre-4.10 kernel whenever I need to use the programming dongle with
-> > this converter.
-> > 
-> > Please let me know if there is anything I can do to help resolve the
-> > problem.
+Rob, do you have any particular preference or suggestion?
+
+m.
+
+>  .../devicetree/bindings/usb/ti,usb8041.yaml   | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,usb8041.yaml
 > 
-> If you revert this commit on top of the latest kernel release, does it
-> solve the problem for you?
-
-Simply reverting the commit blamed by the bisection should only makes
-things worse, at least for some device types.
-
-Perhaps we need to set that bit 7 based on the type, even if the bit
-meaning having been inverted seems a bit far-fetched.
-
-Jonathan, could you try simply commenting out the
-	
-	val |= BIT(7);
-
-statement in ch341_set_baudrate_lcr()?
-
-Also, what chip version do you have (see debug statement in
-ch341_configure())?
-
-Johan
+> diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> new file mode 100644
+> index 000000000000..9a49d60527b1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ti,usb8041.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Binding for the TI USB8041 USB 3.0 hub controller
+> +
+> +maintainers:
+> +  - Matthias Kaehlcke <mka@chromium.org>
+> +
+> +allOf:
+> +  - $ref: usb-device.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - usb451,8140
+> +          - usb451,8142
+> +
+> +  reg: true
+> +
+> +  reset-gpio:
+> +    maxItems: 1
+> +    description:
+> +      GPIO specifier for GSRT# pin.
+> +
+> +  vdd-supply:
+> +    description:
+> +      phandle to the regulator that provides power to the hub.
+> +
+> +  peer-hub:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    description:
+> +      phandle to the peer hub on the controller.
+> +
+> +required:
+> +  - peer-hub
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    usb {
+> +        dr_mode = "host";
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        /* 2.0 hub on port 1 */
+> +        hub_2_0: hub@1 {
+> +          compatible = "usb451,8142";
+> +          reg = <1>;
+> +          peer-hub = <&hub_3_0>;
+> +          reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
+> +        };
+> +
+> +        /* 3.0 hub on port 2 */
+> +        hub_3_0: hub@2 {
+> +          compatible = "usb451,8140";
+> +          reg = <2>;
+> +          peer-hub = <&hub_2_0>;
+> +          reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
+> +        };
+> +    };
+> -- 
+> 2.25.1
+> 
