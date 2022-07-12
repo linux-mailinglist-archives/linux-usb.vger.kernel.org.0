@@ -2,94 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D90C5721EA
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 19:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0481157224D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Jul 2022 20:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbiGLRp5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 13:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S233068AbiGLSSK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 14:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiGLRp4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 13:45:56 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8334CCDA2B;
-        Tue, 12 Jul 2022 10:45:55 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id n68so8591605iod.3;
-        Tue, 12 Jul 2022 10:45:55 -0700 (PDT)
+        with ESMTP id S230004AbiGLSSJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 14:18:09 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EC7C84F9
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 11:18:07 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id v7so6108826pfb.0
+        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 11:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WPyCZCcgRUzZsgo3Nml1/n2m8T3DKmOD/9FwlsdSDuo=;
+        b=JhQTJ6OKu27VMYtC3XrWaDPw7r7oalG+HImNIEPECos7kj5Wc3fciQs0P/9MiucS57
+         OwI3hSNEUjik2LWWm4A7A8y3BHrA/pp3Y404MDzKU8VYmgy3FTLHU3iGPbdlYzYz3Ey3
+         KVQjAESmtXhwuEJ2T/BEOiEGt19IHnl+B3Br8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EeA/Q4dpzXnIdEu9s3UYVlS9gYTtGYBnZ7WQ/eoGAPk=;
-        b=qxaiuVAXsabNBVVCVvb13Nc7Q8i1/ZzQbJs1k95To8cJhV30t6jx/h8iiFKy/fBNvj
-         f3fQKglC8/D9DWlIZ5K3Pcn+L/tXbrhx6z0ILLVIvo/tc+Jfcd7W1k061FcWzOwivxi1
-         LFsPf8xsBrjcUL8onn69iwMAmvM00Uzb5zIGppz2/TQqVHPrB6aS60jxCIRtTt0kLP0z
-         v9qtNaR7pcN1fOA4UVOSvZ1FyHqVHOMANf7zsRHExG0rbQ6oNsZZMAAz+FdCLY81QzJV
-         W6kUSEP3JwnJ/jDTkh1u1SnfbmFpAiOU1IskBhngIppeRhHS9eJuU/FqcwBfT5zFJ01p
-         lC3Q==
-X-Gm-Message-State: AJIora/koPsKWf8VgCLWhAgQN2272de54HOpt8lwF9Dy6eu8mFxoo5na
-        FXJgjVNEAnAzzPntw/Kqtg==
-X-Google-Smtp-Source: AGRyM1uOsNLXCW82QVYju7l6Xv2Jo7ce6JDXo6vc89kZT8WdBgtZT0+8I+FmmdzRidS+JO3TPYW5FQ==
-X-Received: by 2002:a05:6638:2404:b0:33f:7105:ed23 with SMTP id z4-20020a056638240400b0033f7105ed23mr2456174jat.50.1657647954774;
-        Tue, 12 Jul 2022 10:45:54 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o9-20020a022209000000b0033f7d500749sm171977jao.128.2022.07.12.10.45.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 10:45:54 -0700 (PDT)
-Received: (nullmailer pid 2083290 invoked by uid 1000);
-        Tue, 12 Jul 2022 17:45:51 -0000
-Date:   Tue, 12 Jul 2022 11:45:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Pin-yen Lin <treapking@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        bh=WPyCZCcgRUzZsgo3Nml1/n2m8T3DKmOD/9FwlsdSDuo=;
+        b=eY1z5+37i3tLv2XMYU+6prNv7CgYl+ZYmo/7jele/83eJ8SVYbLQ7ciEvVJVFw0oVo
+         +Rcli2Yhv4uKKtpm4BDAh9o6iaxAyDzA4nJjDgMs4BfMUgw9xIM7YX9ZVV1W6qPrAOzx
+         ZMKI1xi2ed43DclA1Zmy0khz5RwVzRU11geh3Jhx+/U+iKHw0Jq6qzto/txMhAdjDyu3
+         yoLx25tFLBTuRkEMKnX1eV6prbxoeWpXOPq0RVFS/UnCM9dg1mYC7krxjtGKNF57XcHe
+         AIt8Z3kMagqu7r4rSXsti98UBRfJOwH9vQK13P0EU+CW5XF/k1+GMtS/I7SN4gJ2wQD1
+         MX3w==
+X-Gm-Message-State: AJIora/MbX+Yr7wlkBzfV1bZeL8aHLpXNhOyzAr3Eh8s0oykalp/B58/
+        gdpgt5543txiRzG8qd6O7LEr5g==
+X-Google-Smtp-Source: AGRyM1uGdihPeZQVnDJohJX0eeNE/WnDTki1ikwigoXt19hTTs9u9zfpuLT70MecM9aJEN7LGXK0vA==
+X-Received: by 2002:a63:2314:0:b0:412:a5ee:fe1e with SMTP id j20-20020a632314000000b00412a5eefe1emr20949768pgj.186.1657649887265;
+        Tue, 12 Jul 2022 11:18:07 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:e036:8c0d:9cf:7a45])
+        by smtp.gmail.com with UTF8SMTPSA id y22-20020a634956000000b0040c8dd84ff5sm6411768pgk.72.2022.07.12.11.18.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 11:18:06 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 11:18:05 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-Message-ID: <20220712174551.GG1823936-robh@kernel.org>
-References: <20220627210407.GA2905757-robh@kernel.org>
- <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
- <20220628182336.GA711518-robh@kernel.org>
- <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
- <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
- <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com>
- <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
- <CACeCKacJnnk4_dXEX7XiboOWrYpfAcE=ukP63agVAYUxWR9Vbg@mail.gmail.com>
- <CAE-0n50jm1ovUcBC0GCQJszk-4u+0vDQtAxHxsu9SLyn_CkQuQ@mail.gmail.com>
- <CACeCKadtmGZ5iuTHdMms6ZHGn-Uv=MbcdtqmUzqCb=5WHuPj2Q@mail.gmail.com>
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: misc: onboard_usb_hub: Add reset-gpio support
+Message-ID: <Ys263f5K4WRoSZ45@google.com>
+References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
+ <20220712150627.1444761-2-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACeCKadtmGZ5iuTHdMms6ZHGn-Uv=MbcdtqmUzqCb=5WHuPj2Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220712150627.1444761-2-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,46 +69,156 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 10:10:32AM -0700, Prashant Malani wrote:
-> (CC+ Bjorn)
+On Tue, Jul 12, 2022 at 05:06:26PM +0200, Alexander Stein wrote:
+> Despite default reset upon probe, release reset line after powering up
+> the hub and assert reset again before powering down.
 > 
-> On Wed, Jun 29, 2022 at 4:55 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Prashant Malani (2022-06-29 15:55:10)
-> > > On Wed, Jun 29, 2022 at 2:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > My understanding is there are 4 DP lanes on it6505 and two lanes are
-> > > > connected to one usb-c-connector and the other two lanes are connected
-> > > > to a different usb-c-connector. The IT6505 driver will send DP out on
-> > > > the associated two DP lanes depending on which usb-c-connector has DP
-> > > > pins assigned by the typec manager.
-> > [...]
-> > >
-> > > We can adopt this binding, but from what I gathered in this thread, that
-> > > shouldn't be done, because IT6505 isn't meant to be aware of Type-C
-> > > connections at all.
-> >
-> > How will the driver know which usb-c-connector to route DP to without
-> > making the binding aware of typec connections?
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> My current DT node on my TQMa8MPxL looks like this
+> ```
+> &usb_dwc3_1 {
+> 	dr_mode = "host";
+> 	#address-cells = <1>;
+> 	#size-cells = <0>;
+> 	pinctrl-names = "default";
+> 	pinctrl-0 = <&pinctrl_usbhub>;
+> 	status = "okay";
 > 
-> I agree with you; I'm saying my interpretation of the comments of this
-> thread are that it's not the intended usage of the it6505 part, so the driver
-> shouldn't be updated to support that.
+> 	hub_2_0: hub@1 {
+> 		compatible = "usb451,8142";
+> 		reg = <1>;
+> 		peer-hub = <&hub_3_0>;
+> 		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
+> 	};
+> 
+> 	hub_3_0: hub@2 {
+> 		compatible = "usb451,8140";
+> 		reg = <2>;
+> 		peer-hub = <&hub_2_0>;
+> 		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
+> 	};
+> };
+> ```
+> which I don't like much for 2 reasons:
+> * the pinctrl has to be put in a common top-node of USB hub node. The pinctrl
+>   can not be requested twice.
 
-That's not the right interpretation. There should not be some Type-C 
-specific child mux/switch node because the device has no such h/w within 
-it. Assuming all the possibilities Stephen outlined are valid, it's 
-clear this lane selection has nothing to do with Type-C. It does have an 
-output port for its DP output already and using that to describe the 
-connection to DP connector(s) and/or Type-C connector(s) should be 
-handled.
+Agreed, that's not great. The pinctrl doesn't have to be necessarily in the USB
+controller node, it could also be in the static section of the board, but that
+isn't really much of an improvement :( Not sure there is much to do given that
+the USB devices also process the pinctrl info (besides the onboard_hub platform
+device doing the same).
 
-Whether the driver is type-C aware is a separate question from the 
-binding. I would think the driver just needs to be told (or it can ask) 
-which endpoint should be active and it just enables output on the
-corresponding lanes for that endpoint. I'm not sure if all DP bridge 
-chips have the same flexibility on their output lanes, but I would 
-assume many do and we don't want to be duplicating the same code to 
-handle that in every bridge driver.
+> * Apparently there is no conflict on the reset-gpio only because just one device
+>   gets probed here:
+> > $ ls /sys/bus/platform/drivers/onboard-usb-hub/
+> > 38200000.usb:hub@1  bind  uevent  unbind
 
-Rob
+Right, the driver creates a single platform device for each physical hub.
+
+> But this seems better than to use a common fixed-regulator referenced by both
+> hub nodes, which just is controlled by GPIO and does not supply any voltages.
+
+Agreed, if the GPIO controls a reset line it should be implemented as such.
+
+> Note: It might also be necessary to add bindings to specify ramp up times and/or
+> reset timeouts.
+
+The times are hub specific, not board specific, right? If that's the case then
+a binding shouldn't be needed, the timing can be derived from the compatible
+string.
+
+>  drivers/usb/misc/onboard_usb_hub.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index 6b9b949d17d3..348fb5270266 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -7,6 +7,7 @@
+>  
+>  #include <linux/device.h>
+>  #include <linux/export.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/list.h>
+> @@ -38,6 +39,7 @@ struct usbdev_node {
+>  struct onboard_hub {
+>  	struct regulator *vdd;
+>  	struct device *dev;
+> +	struct gpio_desc *reset_gpio;
+>  	bool always_powered_in_suspend;
+>  	bool is_powered_on;
+>  	bool going_away;
+> @@ -56,6 +58,10 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
+>  		return err;
+>  	}
+>  
+> +	/* Deassert reset */
+
+The comment isn't really needed, it's clear from the context.
+
+> +	usleep_range(3000, 3100);
+
+These shouldn't be hard coded. Instead you could add a model specific struct
+'hub_data' (or similar) and associate it with the compatible string through
+onboard_hub_match.data
+
+You could use fsleep() instead of usleep_range(). It does the _range part
+automatically (with a value of 2x).
+
+> +	gpiod_set_value_cansleep(hub->reset_gpio, 0);
+
+Since this includes delays maybe put the reset inside an 'if (hub->reset_gpio)'
+block. Not super important for these short delays, but they might be longer
+for some hubs.
+
+> +
+>  	hub->is_powered_on = true;
+>  
+>  	return 0;
+> @@ -65,6 +71,10 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
+>  {
+>  	int err;
+>  
+> +	/* Assert reset */
+
+drop comment
+
+> +	gpiod_set_value_cansleep(hub->reset_gpio, 1);
+
+Put inside 'if (hub->reset_gpio)' to avoid unnecessary delays when no reset
+is configured.
+
+> +	usleep_range(4000, 5000);
+
+Use per-model values.
+
+> +
+>  	err = regulator_disable(hub->vdd);
+>  	if (err) {
+>  		dev_err(hub->dev, "failed to disable regulator: %d\n", err);
+> @@ -231,6 +241,14 @@ static int onboard_hub_probe(struct platform_device *pdev)
+>  	if (IS_ERR(hub->vdd))
+>  		return PTR_ERR(hub->vdd);
+>  
+> +	/* Put the hub into reset, pull reset line low, and assure 4ms reset low timing. */
+
+drop comment, it's mostly evident from the code. Maybe not the usleep_range()
+part, but that should become clearer when per model values are used.
+
+> +	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+> +						  GPIOD_OUT_HIGH);
+> +	if (IS_ERR(hub->reset_gpio))
+> +		return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
+> +
+> +	usleep_range(4000, 5000);
+> +
+>  	hub->dev = dev;
+>  	mutex_init(&hub->lock);
+>  	INIT_LIST_HEAD(&hub->udev_list);
+> -- 
+> 2.25.1
+> 
