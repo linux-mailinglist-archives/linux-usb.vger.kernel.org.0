@@ -2,89 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE3A572EA5
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 09:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F98E572EF7
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 09:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbiGMHDP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 03:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
+        id S230386AbiGMHU7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 03:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiGMHDO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 03:03:14 -0400
-Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E26D6E0F5F;
-        Wed, 13 Jul 2022 00:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tWMSY
-        4YaH1wvIRkN61jC3EsRnE5d4N+7+2ua4h8gC1g=; b=Majd4FEg6BNOHzuWlRkfN
-        UGTvDhaBdq0/EUcYPEB1SH7G/eMbqzb03VFhLGvY/Wf2vU4T8YwBypZH4G6dd1m6
-        PfMaGpVLxaljPxYHnC31V/u3w0BaHKGRSaT7XMIpFPFZwNncrJvN06APWXCttL8e
-        fUaiTEUR3VmHYzFcfsyCQw=
-Received: from localhost.localdomain (unknown [111.48.58.12])
-        by smtp11 (Coremail) with SMTP id D8CowAAnAvUPbs5ivRB3Mg--.8833S2;
-        Wed, 13 Jul 2022 15:02:46 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>
-Subject: [PATCH] usb: ldusb: replace ternary operator with max_t()
-Date:   Wed, 13 Jul 2022 15:02:05 +0800
-Message-Id: <20220713070205.3047256-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229706AbiGMHU6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 03:20:58 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF5773935;
+        Wed, 13 Jul 2022 00:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1657696856; x=1689232856;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zGRFqnL8wey+C+xRbb7l2vPyx9racNuOsu3Vhe4v1JU=;
+  b=VTp1jr2ZZLJ76bIAjt8JQynb4roz65XI93CMUk1+28FFTrGzlmCvCTAm
+   BK38MKGDBgnBcMI5U/WnqvOSjwweFSuEPBRf3Jf/8W06GmpoCFOx0cdME
+   mRMn2OXcsIaoee+oaObk0FTDTZs8/LLYwXemRbZodk6Q/33tE1aPSsjgb
+   xwnCKAlwOL0MylbiPcOla6LaBJBEzLY/fj/6+udHTRF2pSeCERQkXYkQr
+   S2M4etHS8FuqQHjdC68VcaziUR+bqso1WLGHgagTNSQJlP57uz/My0xw7
+   xhcVtu6GGMyajLPr3aWdUgZ4n2bGGuOVEkbwRsUo9gMCWe8ZtcWF4UBsE
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,267,1650924000"; 
+   d="scan'208";a="25017947"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 13 Jul 2022 09:20:54 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 13 Jul 2022 09:20:54 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 13 Jul 2022 09:20:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1657696854; x=1689232854;
+  h=from:to:cc:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:subject;
+  bh=zGRFqnL8wey+C+xRbb7l2vPyx9racNuOsu3Vhe4v1JU=;
+  b=UoSlSRdAY+f2tQa+kEcAbw/ftq2OLZJZ0TYIRONw0OTydXlChp9eyRdT
+   gT3LJ5++YQ0j/yeqmCCZ6ye9b1wGdOu0E2esv47UwCXllqwZLw8522ayh
+   jCHlcUcXAr0kXI1VHOEdiN+3GXV1m02K0ntu3Opj3dDy9jpArKQQtGPvD
+   CncBPbWnVabPaNSV5wIhGKbj05SOL+NcLDM8lcCWkYCbmhvdlRq7OfPGi
+   luDrUbTTdW0svPeAbovTNSlXAcnp9f1TY6uOweZTGYf/Qf3iVi8qh7H0+
+   t6WPFXbd6v+uVeoxZTqDvTfrYVvvem59L+ErElhPp2UzqVLBNcNJzY7Lu
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,267,1650924000"; 
+   d="scan'208";a="25017946"
+Subject: Re: Re: [PATCH 1/3] dt-bindings: usb: Add binding for TI USB8041 hub
+ controller
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 13 Jul 2022 09:20:54 +0200
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4F7C4280056;
+        Wed, 13 Jul 2022 09:20:54 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Date:   Wed, 13 Jul 2022 09:20:54 +0200
+Message-ID: <8966410.CDJkKcVGEf@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <7c838790-1dd9-732a-e5cb-f2ea6454411a@linaro.org>
+References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com> <7c838790-1dd9-732a-e5cb-f2ea6454411a@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: D8CowAAnAvUPbs5ivRB3Mg--.8833S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CF13trWfZFW3XFW3Ar43Jrb_yoW8Ar45pr
-        W5GFs8Xr4UXF17Jw4DAa45AayrJws8ur93Cr97A395JFnxta9Fqr13Ja43Jry5CryfZw4j
-        vrnYy3yUu3yUKrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j46wZUUUUU=
-X-Originating-IP: [111.48.58.12]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbizRY9+1c7NfJz-QAAs4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+Hi Krzysztof,
 
-Fix the following coccicheck warning:
+thanks for the feedback on DT bindings.
 
-drivers/usb/misc/ldusb.c:719: WARNING opportunity for max().
-drivers/usb/misc/ldusb.c:721: WARNING opportunity for max().
+Am Dienstag, 12. Juli 2022, 23:16:21 CEST schrieb Krzysztof Kozlowski:
+> On 12/07/2022 17:06, Alexander Stein wrote:
+> > The TI USB8041 is a USB 3.0 hub controller with 4 ports.
+> > 
+> > This initial version of the binding only describes USB related aspects
+> > of the USB8041, it does not cover the option of connecting the controller
+> > as an i2c slave.
+> > 
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> > Well, this is essentially a ripoff of
+> > Documentation/devicetree/bindings/usb/realtek,rts5411.yaml with USB IDs
+> > replaced, reset-gpio added and example adjusted.
+> > IMHO this should be merged together with realtek,rts5411.yaml. Is it ok
+> > to rename bindings files? I guess a common onboard-usb-hub.yaml matching
+> > the driver seens reasonable. Any recommendations how to proceed?
+> > 
+> >  .../devicetree/bindings/usb/ti,usb8041.yaml   | 69 +++++++++++++++++++
+> >  1 file changed, 69 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> > b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml new file mode
+> > 100644
+> > index 000000000000..9a49d60527b1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/ti,usb8041.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Binding for the TI USB8041 USB 3.0 hub controller
+> > +
+> > +maintainers:
+> > +  - Matthias Kaehlcke <mka@chromium.org>
+> > +
+> > +allOf:
+> > +  - $ref: usb-device.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> 
+> > +    items:
+> No items. It's just one item.
 
-max_t() macro is defined in include/linux/minmax.h. It avoids
-multiple evaluations of the arguments when non-constant and performs
-strict type-checking.
+Sure, will change.
 
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/usb/misc/ldusb.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> > +      - enum:
+> > +          - usb451,8140
+> > +          - usb451,8142
+> > +
+> > +  reg: true
+> > +
+> 
+> > +  reset-gpio:
+> reset-gpios
 
-diff --git a/drivers/usb/misc/ldusb.c b/drivers/usb/misc/ldusb.c
-index dcc88df72df4..7cbef74dfc9a 100644
---- a/drivers/usb/misc/ldusb.c
-+++ b/drivers/usb/misc/ldusb.c
-@@ -716,9 +716,11 @@ static int ld_usb_probe(struct usb_interface *intf, const struct usb_device_id *
- 	dev->interrupt_out_urb = usb_alloc_urb(0, GFP_KERNEL);
- 	if (!dev->interrupt_out_urb)
- 		goto error;
--	dev->interrupt_in_interval = min_interrupt_in_interval > dev->interrupt_in_endpoint->bInterval ? min_interrupt_in_interval : dev->interrupt_in_endpoint->bInterval;
-+	dev->interrupt_in_interval = max_t(int, min_interrupt_in_interval,
-+					   dev->interrupt_in_endpoint->bInterval);
- 	if (dev->interrupt_out_endpoint)
--		dev->interrupt_out_interval = min_interrupt_out_interval > dev->interrupt_out_endpoint->bInterval ? min_interrupt_out_interval : dev->interrupt_out_endpoint->bInterval;
-+		dev->interrupt_out_interval = max_t(int, min_interrupt_out_interval,
-+						    dev->interrupt_out_endpoint->bInterval);
- 
- 	/* we can register the device now, as it is ready */
- 	usb_set_intfdata(intf, dev);
--- 
-2.25.1
+Will change.
+
+> > +    maxItems: 1
+> > +    description:
+> > +      GPIO specifier for GSRT# pin.
+> 
+> Combine maxItems and above into:
+> items:
+>  - description: GPIO specifier for GSRT# pin.
+
+Will change, looks much nicer.
+
+> > +
+> > +  vdd-supply:
+> > +    description:
+> > +      phandle to the regulator that provides power to the hub.
+> 
+> s/phandle to the regulator that provides//
+> and create some nice sentence from left-over, like "VDD power supply to
+> the hub"
+
+Thanks for that suggestion. Will change.
+
+> > +
+> > +  peer-hub:
+> > +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> 
+> No quotes.
+
+Sure, will do so.
+
+> > +    description:
+> > +      phandle to the peer hub on the controller.
+> > +
+> > +required:
+> > +  - peer-hub
+> > +  - compatible
+> > +  - reg
+> 
+> Messed order. Use same as they appear in properties, so
+> compatible+reg+peer-hub.
+> 
+> But another question - why "peer-hub"? I remember some discussion about
+> naming, so was peer preferred over companion?
+> 
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +
+> > +    usb {
+> > +        dr_mode = "host";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        /* 2.0 hub on port 1 */
+> > +        hub_2_0: hub@1 {
+> > +          compatible = "usb451,8142";
+> > +          reg = <1>;
+> > +          peer-hub = <&hub_3_0>;
+> > +          reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
+> 
+> reset-gpios
+
+Yes, 'make dt_binding_check' does not raise any error about this binding.
+
+Thanks and best regards,
+Alexander
+
+
 
