@@ -2,108 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31AC573777
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 15:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06350573829
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 16:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbiGMNeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 09:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S236435AbiGMOAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 10:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiGMNeS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 09:34:18 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E61328D
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 06:34:17 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id s1so7266414vsr.12
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 06:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=vvtS89Fk2u1S3Szl4rrCs3KSXNS797GmNVbZS9fGKtQ=;
-        b=ObpYYD2li8Mhk7lbLgzRitfquvHSldlOHXIxiKGWDWwBhDtMfgxEXJUWqTCj7ANzqI
-         QdGitFMyzpXxVg3MD7gPbUYBJvD4mws846ukH7WedVGocp6k2tGz32gWQB2XLuaY0tBw
-         y/o5PIkYC2KbSI1i4Mo97WSNnl6rNKFOH5zgBEJONhZa8V61VvAMf9WDyPHxTShzsMUZ
-         +ru9IKpQp2Cc4OCfuJYX+bpEmpfb+6k2pPdD9fHZYstQST0VrSZaqHQw1fsOcP/H/hhK
-         Hg0NgRmmuvhIYHJAptxznHpyF6JL90t4WNMTnJ+InqXyYjkko1xu13IQlIAbeQeTAxjT
-         FNjw==
+        with ESMTP id S231301AbiGMOAL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 10:00:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D0D2C66A
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 07:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657720810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LVM/9+bL0Plqw8a52QPl3k4n9Q1+GAafg2rUTujh0Gc=;
+        b=C7MeA/4Cvzux7KlM9poxwLLOphu8PWeg/WjqbwGM9Gufr63eGbZBsoRhWvCslo6Z+EpLod
+        2VRMFcy9MGUROEnhQrxLp2+sSev16rE5TS32z7p5kLa+9bnRHqe+H6/5jpCUoAa6O2y/WE
+        ztIGCHspJ+JGWN8iOAQD0YOPaHvpvZc=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-591-yTTJTtgHM5uAikvwHowsFg-1; Wed, 13 Jul 2022 10:00:08 -0400
+X-MC-Unique: yTTJTtgHM5uAikvwHowsFg-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1015d202b74so5946742fac.20
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 07:00:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=vvtS89Fk2u1S3Szl4rrCs3KSXNS797GmNVbZS9fGKtQ=;
-        b=Y7nteoo1ePVKan7ZNZPcnGhouX3QpwQ4kfo9KXtQjC2KuxBtaM+nmoguPZ0I8cXdAW
-         ruzbCvaLaRJnl4B7hdNiizJe10HzuwFYvNDL0Cs/uv+PV2r00xtbqc+Lh4y+a29YdBMy
-         E8wydHeT3nP7tdknaSDlQgeKbvy1hzm6XfGLwaHYwBzGKhCz6wZsH/z2sr737cjAweYa
-         PrPaYKAFguq608Es7DufxvlDk98dieg1BRZ1jH4UVPZ8h/gIQFO23YCYeDUU3DYSs1h7
-         X8MJ1R5KudUIh0Ea1hqDP4VSpL+8tNPwFMW7cqlPqCSJPd6sfKcjGG66g7nALi6B7TfX
-         ev/w==
-X-Gm-Message-State: AJIora9GTUBasUYSRxmk/gZ2UO02z/7jKqil6jI4LnYe6xsOW34sIgXF
-        bEMztxZrm2Z8G7XZ2iWKgKpMIcpjI70TalgFqYw=
-X-Google-Smtp-Source: AGRyM1tMs9/j0lZB4CZbLMw6KkMebhm4pm583fT2xLekSW5tPgtwltA85i7V3laXUyl8xJ2o8VbLJ8qCEFU4L+uWfiM=
-X-Received: by 2002:a67:f301:0:b0:357:1b13:2691 with SMTP id
- p1-20020a67f301000000b003571b132691mr1192797vsf.6.1657719256338; Wed, 13 Jul
- 2022 06:34:16 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LVM/9+bL0Plqw8a52QPl3k4n9Q1+GAafg2rUTujh0Gc=;
+        b=e06804iMGqIxHiMVb1o5RQQHXz1Jl6hGiHTI82xlfhsPeVqw79uc68/wR4QCblGaCF
+         Qn6dgY1Z3/bdYUYeDJoulRXozRqW5OOuVaNZ9aoRzsRy5mVWG9QcsbqMUdLyvXzsVS9h
+         cihKN0b7znwIKIdtRqk/dhhdJ3faFZ3YXKoFbJVjPNudt3elL9o0Ch4po0SgazAOx2rh
+         aFShCsohfbpLtOVtlrqrIW/ONEHbRqTmJmdKAeYI7PHe9a0NxtlpRy+iP8Z+AI1MP1Wt
+         qfY1YloMLgLn9x9nWAEjcTuhMYhfChdAf2/vxllu6Svgi1d+H20QjmBIxwu4MoQHplQz
+         0PxQ==
+X-Gm-Message-State: AJIora/s7ZYhPs2/8Dlugm9LENi0XNOnFzNfMrTwg4+FjPwCb54hVHrL
+        aXeW8bFO3X1cg4Jg0drs8ekpwWJ7OZ+T9JXc0TD9V0h31gV9kOdHGKuMSdt8uZPfsmhsF83j9T0
+        AONDtW61UrPjHTcTETb1L
+X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr1710707oac.286.1657720807871;
+        Wed, 13 Jul 2022 07:00:07 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tWU5P/M2v4yhf5rjgNK8fNjmlmpbF71huQvwUWO4e55Sg67LK3nJe2ebY/U445BU5Ynrdnxw==
+X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr1710691oac.286.1657720807684;
+        Wed, 13 Jul 2022 07:00:07 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
+        by smtp.gmail.com with ESMTPSA id h82-20020aca3a55000000b00339ff117f38sm3726085oia.53.2022.07.13.07.00.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 07:00:07 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:00:05 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/7] usb: dwc3: qcom: fix missing optional irq warnings
+Message-ID: <20220713140005.qw3nhjlin4vobhvd@halaneylaptop>
+References: <20220713131340.29401-1-johan+linaro@kernel.org>
+ <20220713131340.29401-4-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a9f:3724:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 06:34:15
- -0700 (PDT)
-Reply-To: cfc.ubagroup09@gmail.com
-From:   Kristalina Georgieva <georgiamila084@gmail.com>
-Date:   Wed, 13 Jul 2022 06:34:15 -0700
-Message-ID: <CAGydNXGOcdChY54ox1hfn8cSUQRh-1QqC48Vnmh2Obowq2W4-Q@mail.gmail.com>
-Subject: HEAD UUDISED
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTTO_DEPT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713131340.29401-4-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lugupeetud abisaaja!
-Saatsin sulle selle kirja kuu aega tagasi, aga ma pole sinust midagi kuulnu=
-d, ei
-Olen kindel, et saite selle k=C3=A4tte ja sellep=C3=A4rast saatsin selle te=
-ile uuesti.
-Esiteks olen pr Kristalina Georgieva, tegevdirektor ja
-Rahvusvahelise Valuutafondi president.
+On Wed, Jul 13, 2022 at 03:13:36PM +0200, Johan Hovold wrote:
+> Not all platforms have all of the four currently supported wakeup
+> interrupts so use the optional irq helpers when looking up interrupts to
+> avoid printing error messages when an optional interrupt is not found:
+> 
+> 	dwc3-qcom a6f8800.usb: error -ENXIO: IRQ hs_phy_irq not found
+> 
+> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 77036551987a..c5e482f53e9d 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -490,9 +490,9 @@ static int dwc3_qcom_get_irq(struct platform_device *pdev,
+>  	int ret;
+>  
+>  	if (np)
+> -		ret = platform_get_irq_byname(pdev_irq, name);
+> +		ret = platform_get_irq_byname_optional(pdev_irq, name);
+>  	else
+> -		ret = platform_get_irq(pdev_irq, num);
+> +		ret = platform_get_irq_optional(pdev_irq, num);
+>  
+>  	return ret;
+>  }
+> -- 
+> 2.35.1
+> 
 
-Tegelikult oleme l=C3=A4bi vaadanud k=C3=B5ik =C3=BCmbritsevad takistused j=
-a probleemid
-teie mittet=C3=A4ielik tehing ja teie suutmatus tasuda
-=C3=BClekandetasud, mida v=C3=B5etakse teie vastu j=C3=A4rgmiste v=C3=B5ima=
-luste eest
-varasemate =C3=BClekannete kohta k=C3=BClastage kinnituse saamiseks meie sa=
-iti 38
-=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-Oleme direktorite n=C3=B5ukogu, Maailmapank ja Valuutafond
-Washingtoni Rahvusvaheline (IMF) koos osakonnaga
-Ameerika =C3=9Chendriikide riigikassa ja m=C3=B5ned teised uurimisasutused
-asjakohane siin Ameerika =C3=9Chendriikides. on tellinud
-meie Overseas Payment Remittance Unit, United Bank of
-Africa Lome Togo, et v=C3=A4ljastada teile VISA kaart, kus $
-1,5 miljonit teie fondist, et oma fondist rohkem v=C3=A4lja v=C3=B5tta.
-
-Uurimise k=C3=A4igus avastasime koos
-kardab, et teie makse on hilinenud korrumpeerunud ametnike poolt
-pangast, kes =C3=BCritavad teie raha teie kontodele suunata
-privaatne.
-
-Ja t=C3=A4na anname teile teada, et teie raha on kaardile kantud
-UBA panga VISA ja see on ka kohaletoimetamiseks valmis. N=C3=BC=C3=BCd
-v=C3=B5tke =C3=BChendust UBA panga direktoriga, tema nimi on hr Tony
-Elumelu, e-post: (cfc.ubagroup09@gmail.com)
-et =C3=B6elda, kuidas ATM VISA kaarti k=C3=A4tte saada.
-
-Lugupidamisega
-
-Proua Kristalina Georgieva
