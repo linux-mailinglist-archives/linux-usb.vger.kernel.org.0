@@ -2,106 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B632573775
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 15:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31AC573777
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 15:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiGMNdf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 09:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S232797AbiGMNeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 09:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiGMNdd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 09:33:33 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3398D11D
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 06:33:32 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id f11so9572005pgj.7
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 06:33:32 -0700 (PDT)
+        with ESMTP id S231872AbiGMNeS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 09:34:18 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E61328D
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 06:34:17 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id s1so7266414vsr.12
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 06:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mO/rKYKB8TZovbO5cQAqIciRv98bFTuqiwjEZXYoHPU=;
-        b=CKtFgRg6T4R/hvR/r0vc7i50JKXmFWpQt7EF8rwDWH9qJ/PkwoKPR7KfSZGG6CP+36
-         2r91/84lLbIfDWpZN3fheX0s6LjUyfqGVckSNpEn46HaZeDPe+8Ke/EPOHXlcL2XLM/7
-         Zyc4reFTshnF3IzXuS9IwATqe4Gf2Imcb7+ErUPCzBMhrtBCliz7syPoS2HenyF+gOTU
-         GzhI83uOomiGbbO5jhKIiWSCNIMnBUR+rO64mGmfru6t18PlDjW0wwwTeBRKt1/XEhR/
-         mc13+Z6LB0m5bPPepAnR95jA2YMfzQafk67R10WCapA+tiPNY3eiA50LOM7TJ6CtC97c
-         /r6g==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=vvtS89Fk2u1S3Szl4rrCs3KSXNS797GmNVbZS9fGKtQ=;
+        b=ObpYYD2li8Mhk7lbLgzRitfquvHSldlOHXIxiKGWDWwBhDtMfgxEXJUWqTCj7ANzqI
+         QdGitFMyzpXxVg3MD7gPbUYBJvD4mws846ukH7WedVGocp6k2tGz32gWQB2XLuaY0tBw
+         y/o5PIkYC2KbSI1i4Mo97WSNnl6rNKFOH5zgBEJONhZa8V61VvAMf9WDyPHxTShzsMUZ
+         +ru9IKpQp2Cc4OCfuJYX+bpEmpfb+6k2pPdD9fHZYstQST0VrSZaqHQw1fsOcP/H/hhK
+         Hg0NgRmmuvhIYHJAptxznHpyF6JL90t4WNMTnJ+InqXyYjkko1xu13IQlIAbeQeTAxjT
+         FNjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mO/rKYKB8TZovbO5cQAqIciRv98bFTuqiwjEZXYoHPU=;
-        b=PqZuNaZLQfFI53jMQDvcJ2A6YcAGKqf+hPmtHXH8chMVrnA/xJE5HAMBpmYraF9RvS
-         cttandHqAsVdWRESNO4d+Hl/SSLsXWK9tiaOxBUlHU5+WvgYd203q0UOkTWlvoF3H1bL
-         4EROueqpYrkNr4RHYczI7I5/TrnROgv9/xSsFQGIhAGNf4Y5LPRR3FipiX/mILjs2qoD
-         IsYsnNLZ7wbwmcX25QcazQcO0nOA1ms/si1YXBCy7t8g9LHpqRuNay5kkumAGQNK0qJA
-         0CWw4EZQ5DJvpSjzJFX6a+pigwmDPg/eJmTJ6Ms/NBs7DTa5cNcj0G2dFbeBy5furCJ3
-         ZsuQ==
-X-Gm-Message-State: AJIora9sWyNCOZfGZa8zGxajT/Y1h/V4xqIdCG4Sf5rz9NgDmLFUBZzu
-        IAe7Lge4KKRyWmmVKkafZSs5xhgq3BMbkvC2kX8=
-X-Google-Smtp-Source: AGRyM1uORNTXXlM0VdfDDuh2ORmeSCAEW9EHJebcVjRfDaCo+I/iHCFEEUtdt9vKhV6QscyHgasZZievpr6uGlWSG/o=
-X-Received: by 2002:a63:455a:0:b0:412:9855:64eb with SMTP id
- u26-20020a63455a000000b00412985564ebmr3059776pgk.131.1657719211585; Wed, 13
- Jul 2022 06:33:31 -0700 (PDT)
+         :subject:to:content-transfer-encoding;
+        bh=vvtS89Fk2u1S3Szl4rrCs3KSXNS797GmNVbZS9fGKtQ=;
+        b=Y7nteoo1ePVKan7ZNZPcnGhouX3QpwQ4kfo9KXtQjC2KuxBtaM+nmoguPZ0I8cXdAW
+         ruzbCvaLaRJnl4B7hdNiizJe10HzuwFYvNDL0Cs/uv+PV2r00xtbqc+Lh4y+a29YdBMy
+         E8wydHeT3nP7tdknaSDlQgeKbvy1hzm6XfGLwaHYwBzGKhCz6wZsH/z2sr737cjAweYa
+         PrPaYKAFguq608Es7DufxvlDk98dieg1BRZ1jH4UVPZ8h/gIQFO23YCYeDUU3DYSs1h7
+         X8MJ1R5KudUIh0Ea1hqDP4VSpL+8tNPwFMW7cqlPqCSJPd6sfKcjGG66g7nALi6B7TfX
+         ev/w==
+X-Gm-Message-State: AJIora9GTUBasUYSRxmk/gZ2UO02z/7jKqil6jI4LnYe6xsOW34sIgXF
+        bEMztxZrm2Z8G7XZ2iWKgKpMIcpjI70TalgFqYw=
+X-Google-Smtp-Source: AGRyM1tMs9/j0lZB4CZbLMw6KkMebhm4pm583fT2xLekSW5tPgtwltA85i7V3laXUyl8xJ2o8VbLJ8qCEFU4L+uWfiM=
+X-Received: by 2002:a67:f301:0:b0:357:1b13:2691 with SMTP id
+ p1-20020a67f301000000b003571b132691mr1192797vsf.6.1657719256338; Wed, 13 Jul
+ 2022 06:34:16 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7022:419a:b0:42:5721:a84b with HTTP; Wed, 13 Jul 2022
- 06:33:30 -0700 (PDT)
-Reply-To: lindacliford05@yahoo.com
-From:   limda clifford <limdaclifford65@gmail.com>
-Date:   Wed, 13 Jul 2022 10:33:30 -0300
-Message-ID: <CAGUtzAs=J89KO5oYHmtki3+8i-wd+GWcqY=YQXuobLLo=6htuw@mail.gmail.com>
-Subject: WITH DUE RESPECT
+Received: by 2002:a9f:3724:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 06:34:15
+ -0700 (PDT)
+Reply-To: cfc.ubagroup09@gmail.com
+From:   Kristalina Georgieva <georgiamila084@gmail.com>
+Date:   Wed, 13 Jul 2022 06:34:15 -0700
+Message-ID: <CAGydNXGOcdChY54ox1hfn8cSUQRh-1QqC48Vnmh2Obowq2W4-Q@mail.gmail.com>
+Subject: HEAD UUDISED
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTTO_DEPT,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
         T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:534 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5016]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [limdaclifford65[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lindacliford05[at]yahoo.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [limdaclifford65[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- Good day dear love one my name is miss linda cliford  from cote
-d'ivoire please i need your help for fund transffer if you  are
-willing please get back to me  for  more information thanks and have a
-good day,
-Waitting to hear from you thamks,
+Lugupeetud abisaaja!
+Saatsin sulle selle kirja kuu aega tagasi, aga ma pole sinust midagi kuulnu=
+d, ei
+Olen kindel, et saite selle k=C3=A4tte ja sellep=C3=A4rast saatsin selle te=
+ile uuesti.
+Esiteks olen pr Kristalina Georgieva, tegevdirektor ja
+Rahvusvahelise Valuutafondi president.
 
-your s Linda Clifford
-Regards
+Tegelikult oleme l=C3=A4bi vaadanud k=C3=B5ik =C3=BCmbritsevad takistused j=
+a probleemid
+teie mittet=C3=A4ielik tehing ja teie suutmatus tasuda
+=C3=BClekandetasud, mida v=C3=B5etakse teie vastu j=C3=A4rgmiste v=C3=B5ima=
+luste eest
+varasemate =C3=BClekannete kohta k=C3=BClastage kinnituse saamiseks meie sa=
+iti 38
+=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W
 
---
+Oleme direktorite n=C3=B5ukogu, Maailmapank ja Valuutafond
+Washingtoni Rahvusvaheline (IMF) koos osakonnaga
+Ameerika =C3=9Chendriikide riigikassa ja m=C3=B5ned teised uurimisasutused
+asjakohane siin Ameerika =C3=9Chendriikides. on tellinud
+meie Overseas Payment Remittance Unit, United Bank of
+Africa Lome Togo, et v=C3=A4ljastada teile VISA kaart, kus $
+1,5 miljonit teie fondist, et oma fondist rohkem v=C3=A4lja v=C3=B5tta.
+
+Uurimise k=C3=A4igus avastasime koos
+kardab, et teie makse on hilinenud korrumpeerunud ametnike poolt
+pangast, kes =C3=BCritavad teie raha teie kontodele suunata
+privaatne.
+
+Ja t=C3=A4na anname teile teada, et teie raha on kaardile kantud
+UBA panga VISA ja see on ka kohaletoimetamiseks valmis. N=C3=BC=C3=BCd
+v=C3=B5tke =C3=BChendust UBA panga direktoriga, tema nimi on hr Tony
+Elumelu, e-post: (cfc.ubagroup09@gmail.com)
+et =C3=B6elda, kuidas ATM VISA kaarti k=C3=A4tte saada.
+
+Lugupidamisega
+
+Proua Kristalina Georgieva
