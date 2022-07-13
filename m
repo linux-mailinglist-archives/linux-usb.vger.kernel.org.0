@@ -2,43 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC315735FC
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 14:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387C3573602
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 14:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236265AbiGMMHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 08:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S236313AbiGMMIE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 08:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiGMMHm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 08:07:42 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D015104037
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 05:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=TVp3F
-        AC4zLQTXrT2vQdzGriRuCr3pjOw+cscr3/4O2w=; b=JtxDwWzg2dPrsfmfU2g5E
-        49TADlK5ut7nKxkLo8bl4jm/8M4gi4e//J6uKXsriOgUFnKBWEuBlIX67qUgfIur
-        YrwQ1Ip4IoNTLThLiOIrqBa0Lh9unmsMJPwsDhOUA+dUidH0axZzlfeW2uwgxIA6
-        WQnK5HERJi83ozbeUNON9A=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp8 (Coremail) with SMTP id NORpCgDnipcJtc5i80FIHw--.47583S2;
-        Wed, 13 Jul 2022 20:05:30 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, joel@jms.id.au,
-        andrew@aj.id.au, linux-usb@vger.kernel.org, windhl@126.com
-Subject: [PATCH] usb: aspeed-vhub: Fix refcount leak bug in ast_vhub_init_desc()
-Date:   Wed, 13 Jul 2022 20:05:28 +0800
-Message-Id: <20220713120528.368168-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S236288AbiGMMH5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 08:07:57 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA17104034;
+        Wed, 13 Jul 2022 05:07:53 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id e69so18909626ybh.2;
+        Wed, 13 Jul 2022 05:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=H60c6BQz+0PUGxMp0vbXoiihGTO7ZBPYPm+08N4mLfI=;
+        b=cFwaO0bDU4Rlt7N9UDqzRHYc/L/LXwPsecY5KlQfSKmfeHbUGfJju92GNvM+QXRy/A
+         MfFCd9EiEFbUqGG0Dk3UDyeTjK2mKB+J26YUCLsjwjV1AqSW8ALXoZ+QUWDjp8FbHEeY
+         dwnLTjlohJXN4MlqdlflbgJKO0LHlSOv3alwCbci2ARAUzjG69r4BZ9OGDCDuqQtQA7F
+         3fzpmlRGWBNYqAxA0gsKxiBlo4ApaOY7UboYG9JKS2cowDCyOJujzJrS984DN9KyXzOA
+         PlokWUEqgVaq6a1qwFa+85+pBBg3DMQ+qHXOl22B3dO6jAPN+bwQ7BsHm3cmgJ/HPnXL
+         vfmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=H60c6BQz+0PUGxMp0vbXoiihGTO7ZBPYPm+08N4mLfI=;
+        b=Fivb87gLnZouIU5+jpNhiWYCJYnKwvrl08ZulwjqKwexabykfs5NmueHwoe9axfZiM
+         WwgJ0XbWWxnl9f2Dr7hMUigRxHvlDBAtXjev0pmWh38OHPFq3aPJmrOASOnk+FlzZm+2
+         vRvb31GLWQxYLclInHmG5SXdolALn2TDcuE6TSswJfLi/gM9hWQhJ4cC4bFb1RYAfZnc
+         QpF/YFQitOwkM2PKC/EzIy89TucBS7SBD/zMYiB/kQ/GJLpOu+qNt8GkyLtCgfXFE9NI
+         +Ke+iAQMSaOzLWoM245iH/95uA5lup89eI9NKsAjxy3F/xP4Hn5xDPlxk8SWKw39Aar5
+         JuuQ==
+X-Gm-Message-State: AJIora+CSYWjUY8C4JxXpsIHgbUraLYgkFMLHQ3Sckf5ZK4tS2EQ4WEl
+        gUZbCPGR3ntZUUCQeVmB9KdqlYB2EZhuTxS094g=
+X-Google-Smtp-Source: AGRyM1sbQCBjmYhKYL+xb2AwlOmpuB0R1EP+WnPrRn0L3M4TSuIwm0awKcRUCK7kwFw6PIL77qpLuzj23J+O5rqZCJA=
+X-Received: by 2002:a25:858e:0:b0:66e:4898:63e2 with SMTP id
+ x14-20020a25858e000000b0066e489863e2mr3559399ybk.296.1657714072552; Wed, 13
+ Jul 2022 05:07:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgDnipcJtc5i80FIHw--.47583S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKFy8tw4DJFWfuFW7Ar4xWFg_yoWDZwcE9F
-        4jg3W3Wr1Uta95Xr4DJ345Zry09a4kWryUu3Wrtr93WFWjvwnrXF1UWrZ5Ar9rZF42va4k
-        Cw1qgFyjkw4FqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUyrW3UUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuB89F2JVkVslCwACsc
+References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-14-peterwu.pub@gmail.com>
+ <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com> <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
+In-Reply-To: <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 13 Jul 2022 14:07:15 +0200
+Message-ID: <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
+Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -49,31 +96,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We should call of_node_put() for the reference returned by
-of_get_child_by_name() which has increased the refcount.
+On Wed, Jul 13, 2022 at 12:53 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:14=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > On Mon, Jul 4, 2022 at 7:43 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
 
-Fixes: 30d2617fd7ed ("usb: gadget: aspeed: allow to set usb strings in device tree")
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/hub.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Please, remove unneeded context when replying!
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-index 65cd4e46f031..e2207d014620 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-@@ -1059,8 +1059,10 @@ static int ast_vhub_init_desc(struct ast_vhub *vhub)
- 	/* Initialize vhub String Descriptors. */
- 	INIT_LIST_HEAD(&vhub->vhub_str_desc);
- 	desc_np = of_get_child_by_name(vhub_np, "vhub-strings");
--	if (desc_np)
-+	if (desc_np) {
- 		ret = ast_vhub_of_parse_str_desc(vhub, desc_np);
-+		of_node_put(desc_np);
-+	}
- 	else
- 		ret = ast_vhub_str_alloc_add(vhub, &ast_vhub_strings);
- 
--- 
-2.25.1
+...
 
+> > > +               brightness_val[0] =3D (brightness - 1) & MT6370_BL_DI=
+M2_MASK;
+> > > +               brightness_val[1] =3D (brightness - 1)
+> > > +                                   >> fls(MT6370_BL_DIM2_MASK);
+> >
+> > Bad indentation. One line?
+>
+> Well... if indent to one line, it will be over 80 characters(or called co=
+lumns?)
+> From my understanding, it is not allowed, right??
+
+It's allowed to some extent.Use your common sense.
+Here it's obviously broken indentation.
+
+...
+
+> > > +               prop_val =3D (ilog2(roundup_pow_of_two(prop_val)) + 1=
+) >> 1;
+> >
+> > Isn't something closer to get_order() or fls()?
+>
+> I will revise it to "(get_order(prop_va * PAGE_SIZE) + 1) / 2" and
+> this change is meet your expectations??
+
+Nope. Try again. What about fls()?
+
+...
+
+> > > +       props->max_brightness =3D min_t(u32, brightness,
+> > > +                                     MT6370_BL_MAX_BRIGHTNESS);
+> >
+> > One line?
+>
+>  Ditto, it will be over 80 characters...
+
+As per above.
+
+--=20
+With Best Regards,
+Andy Shevchenko
