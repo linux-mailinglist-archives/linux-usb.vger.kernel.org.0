@@ -2,63 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0692557398C
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 17:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD37573A0D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 17:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236723AbiGMPDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 11:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
+        id S236478AbiGMPYm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 11:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiGMPDK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 11:03:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949683E75F;
-        Wed, 13 Jul 2022 08:03:08 -0700 (PDT)
+        with ESMTP id S234650AbiGMPYl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 11:24:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD921248EF
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 08:24:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39E03B82025;
-        Wed, 13 Jul 2022 15:03:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB238C34114;
-        Wed, 13 Jul 2022 15:03:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 574E761750
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 15:24:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BC289C341C6
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 15:24:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657724585;
-        bh=wsIdfHIG7F2tnroKm1i5VUPbK8CQs4fRT2cEONpz1T4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b/rJW8Pfre4Q9JN0Jnqo33d4lqnajvsL6J8Pni/Hux2OPtNt+YiEqpigBdqi5UYG4
-         3BV0vEExnz1iTWzkgHxS5UenP5DLkbbABNJ9mrGlgup6K1Qlsae1Xow4ibzIbpDK5H
-         j0mDspbQ5j205vjJiAjHlYzU7A96Rn9tQB2edRsnKRb9VlomGluaE11F3OpYS1lw9E
-         mSZxHB5+dJouGYT00bmK51zf11pH7/a3hyihMqjDAX8QeqGn/8Lp0YUmJ81/TZH6vx
-         dAAtOtTpA8NIHl1G7ZxFarhOJag9ms48K4Hsa9VK3QjFqHTThlDpT2IfupjcaNgWGN
-         6qap4R7lMiGhA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oBdtN-0001SX-GJ; Wed, 13 Jul 2022 17:03:09 +0200
-Date:   Wed, 13 Jul 2022 17:03:09 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] arm64: dts: qcom: sc8280xp: fix USB interrupts
-Message-ID: <Ys7erer+lLaHqLqe@hovoldconsulting.com>
-References: <20220713131340.29401-1-johan+linaro@kernel.org>
- <20220713131340.29401-6-johan+linaro@kernel.org>
- <20220713141228.5z5rmgepj6mepjyp@halaneylaptop>
- <Ys7YKkRAAI0Vbseh@hovoldconsulting.com>
- <20220713144310.kehfuqvfhsjb36ri@halaneylaptop>
+        s=k20201202; t=1657725879;
+        bh=0RyZa8ECq950Se8EBs7p0jPZbfaqWMY0rPZoH0pqKcA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=RDLjB9eaK7MmGV23kc++MfXJ0n5joeHngUxTsrBnje6xjG67hzeAfg7Mtf9GQ9tv7
+         ve/7SS5Sa6xv/5MnCfye3bh2ztpTubw4Re3XX/CZvWVJ73S7WH6wOsmAdNHuRF8PM4
+         m4llKD1D9s22O/jRUAPj/PrxN9Gg9Vp1lMzg/pdmF0ZSmNfrp6LdY4a66wQnqkJXIQ
+         C0BWFb4HO1e8t3NPJw5wI05LYB/ARaYGbWM8QU+P0c3Ha32taosvwS2FONmFafbJDW
+         OHJsajhTyR3XAohHDsWs8ZNItDHlDoaIs9bFUdPnxULwY7NL9eVnnm3FO2/cbLTJy9
+         H4a9UumJZhj0g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 928B1CC13B0; Wed, 13 Jul 2022 15:24:39 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216140] rtsx_usb causes error: xhci_hcd rejecting DMA map of
+ vmalloc memory
+Date:   Wed, 13 Jul 2022 15:24:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: buboleck@abv.bg
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-216140-208809-bExEkoPH1a@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216140-208809@https.bugzilla.kernel.org/>
+References: <bug-216140-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713144310.kehfuqvfhsjb36ri@halaneylaptop>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,15 +71,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:43:10AM -0500, Andrew Halaney wrote:
-> On Wed, Jul 13, 2022 at 04:35:22PM +0200, Johan Hovold wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216140
 
-> > Do you mind if I fold a fix for that into a v2 of this patch?
+Dimitar Kosev (buboleck@abv.bg) changed:
 
-> Sounds good, feel free to add my R-B with that change as well!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |PATCH_ALREADY_AVAILABLE
 
-Done. I'll wait a bit for any further comments before reposting.
+--- Comment #4 from Dimitar Kosev (buboleck@abv.bg) ---
+Fixed in 5.18.11/5.19-rc6 and later with commit
+eb7f8e28420372787933eec079735c35034bda7d
 
-Thanks again.
+--=20
+You may reply to this email to add a comment.
 
-Johan
+You are receiving this mail because:
+You are watching the assignee of the bug.=
