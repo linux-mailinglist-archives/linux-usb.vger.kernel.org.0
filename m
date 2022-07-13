@@ -2,68 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879C9573BA4
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 18:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BE3573C24
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 19:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbiGMQ7t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 12:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S232082AbiGMRpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 13:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiGMQ7s (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 12:59:48 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE4624BF8
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 09:59:46 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso4600279pjj.5
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 09:59:46 -0700 (PDT)
+        with ESMTP id S230102AbiGMRpR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 13:45:17 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC5B2CDCC;
+        Wed, 13 Jul 2022 10:45:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F1CzeIKWJ0IMK4EfYtHrzT59PipvD4EsITImnKg8JKs=;
-        b=dP6aEMSWBaStQQaHU0xC4ZpXviTXPhkywI6GjNZG58tw+TjEf+lr1f3DbCjWFP0deq
-         mrhGoYTX8da+NziUrwofnRFG7sHq4SFMVfT199Or8nLKY2cnWs0pb1dkQrIccTZ7ZnK1
-         tuVVN8XK2+Ka/3MbOub914tkqkqZOdxCVJYp4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F1CzeIKWJ0IMK4EfYtHrzT59PipvD4EsITImnKg8JKs=;
-        b=D0bGZMuQfVSRd2jhJWkWwARItQWd+AEluZH8DnMMHJsxb2M/GCV+hH32NN9fNKBqoQ
-         Rt+xohuTBofd115UmSqYzNpBNQltVCQlPbi3q/uygOPwGb43NC7w7W76r/vyR5wZgAlF
-         VAjgvBhohFNfAz5peykdq8uLBQ+X6RLnzgTx6ZtO9+7dobupYEoJwKIovLlqR6g8TMC5
-         4DSr0Q6LMK286fQe60KvBjx4oHu5vTl3z4r23JkWvUDdgP/OG0rqC0saN4h9XtY15WSN
-         dcmTCjTEX87bJLuEXeHpkpYBKckyJSfUD6kIaXrMf8GE7awYBvF6I8P4qneOvBs9brlv
-         l7HA==
-X-Gm-Message-State: AJIora8uM/cyEbXrJwk5IysGp/zvoGg6GLurABc8b/+JAMvFT1mNBcIZ
-        HpTEuTs969WvOzEUjSUes2tySw==
-X-Google-Smtp-Source: AGRyM1scsheb9eqnRWWNOgAZyMDwHb21wBXHY5/zCtbVFlU4pMvQzH9u88Xxb7k58ALEdTZG3BFGnQ==
-X-Received: by 2002:a17:903:4091:b0:16b:e3d5:b2da with SMTP id z17-20020a170903409100b0016be3d5b2damr3984681plc.58.1657731586355;
-        Wed, 13 Jul 2022 09:59:46 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:31cc:631b:4291:60b5])
-        by smtp.gmail.com with UTF8SMTPSA id w14-20020a1709027b8e00b0016a4db13435sm9071178pll.191.2022.07.13.09.59.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 09:59:45 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 09:59:44 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: misc: onboard_usb_hub: Add reset-gpio support
-Message-ID: <Ys76AHBx/T4kTqnO@google.com>
-References: <20220712150627.1444761-1-alexander.stein@ew.tq-group.com>
- <20220712150627.1444761-2-alexander.stein@ew.tq-group.com>
- <Ys263f5K4WRoSZ45@google.com>
- <1902562.PYKUYFuaPT@steina-w>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657734316; x=1689270316;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OSmfHB+bOHfPpf36dcqHWxEa0qHSKOxtsJseDaw6+jw=;
+  b=k+XmMUF0Q4vzjyH0jyLYibeWB/P6ACjoBCVg85Tjb44sQ8nkTUUWKWBD
+   awfltYbxhnMAh54VfbxH7DY/HaGuuPfp3ObhRVt+NO2eTJwwtl3Kqdx5H
+   HGEtvPlapkYHbFRprGCgkfiKKZi5OyT4ojGTQhLG6s6E0nAksSejTp2UY
+   g=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 13 Jul 2022 10:45:16 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 10:45:16 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 10:45:15 -0700
+Received: from [10.110.36.60] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
+ 2022 10:45:14 -0700
+Message-ID: <59631540-ee6a-41f3-d460-4808162d06c9@quicinc.com>
+Date:   Wed, 13 Jul 2022 10:45:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1902562.PYKUYFuaPT@steina-w>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4/5] usb: dwc3: Allow end transfer commands to be sent
+ during soft disconnect
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20220708185007.21743-1-quic_wcheng@quicinc.com>
+ <20220708185007.21743-5-quic_wcheng@quicinc.com>
+ <06498069-db45-202b-eba6-47bfa6948143@synopsys.com>
+ <8029f6bb-4704-0495-00d2-ee78ee684eb3@quicinc.com>
+ <889ba0fc-4a8c-cb89-ba7c-90119a58b997@synopsys.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <889ba0fc-4a8c-cb89-ba7c-90119a58b997@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,162 +73,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alexander,
+Hi Thinh,
 
-On Wed, Jul 13, 2022 at 08:46:56AM +0200, Alexander Stein wrote:
-> Hi Matthias,
+On 7/12/2022 6:42 PM, Thinh Nguyen wrote:
+> On 7/12/2022, Wesley Cheng wrote:
+>> Hi Thinh,
+>>
+>> On 7/8/2022 6:58 PM, Thinh Nguyen wrote:
+>>> On 7/8/2022, Wesley Cheng wrote:
+>>>> If soft disconnect is in progress, allow the endxfer command to be
+>>>> sent,
+>>>> without this, there is an issue where the stop active transfer call
+>>>> (during pullup disable) wouldn't actually issue the endxfer command,
+>>>> while clearing the DEP flag.
+>>>>
+>>>> In addition, if the DWC3_EP_DELAY_STOP flag was set before soft
+>>>> disconnect
+>>>> started (i.e. from the dequeue path), ensure that when the EP0
+>>>> transaction
+>>>> completes during soft disconnect, to issue the endxfer with the force
+>>>> parameter set, as it does not expect a command complete event.
+>>>>
+>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>> ---
+>>>>     drivers/usb/dwc3/ep0.c    | 3 +--
+>>>>     drivers/usb/dwc3/gadget.c | 5 ++++-
+>>>>     2 files changed, 5 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>>>> index 506ef717fdc0..5851b0e9db0a 100644
+>>>> --- a/drivers/usb/dwc3/ep0.c
+>>>> +++ b/drivers/usb/dwc3/ep0.c
+>>>> @@ -290,8 +290,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>>>>             if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
+>>>>                 continue;
+>>>>     -        dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
+>>>> -        dwc3_stop_active_transfer(dwc3_ep, true, true);
+>>>> +        dwc3_stop_active_transfer(dwc3_ep, true, dwc->connected);
+>>>>         }
+>>>>     }
+>>>>     diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>> index bd40608b19df..fba2797ad9ae 100644
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -3696,8 +3696,10 @@ void dwc3_stop_active_transfer(struct dwc3_ep
+>>>> *dep, bool force,
+>>>>         if (dep->number <= 1 && dwc->ep0state != EP0_DATA_PHASE)
+>>>>             return;
+>>>>     +    if (interrupt && (dep->flags & DWC3_EP_DELAY_STOP))
+>>>> +        return;
+>>>> +
+>>>>         if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
+>>>> -        (dep->flags & DWC3_EP_DELAY_STOP) ||
+>>>>             (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+>>>>             return;
+>>>>     @@ -3744,6 +3746,7 @@ void dwc3_stop_active_transfer(struct
+>>>> dwc3_ep *dep, bool force,
+>>>>         __dwc3_stop_active_transfer(dep, force, interrupt);
+>>>>         spin_lock(&dwc->lock);
+>>>>     +    dep->flags &= ~DWC3_EP_DELAY_STOP;
+>>>
+>>> Can we clear this flag in __dwc3_stop_active_transfer(). It should apply
+>>> if End Transfer command was sent.
+>>
+>> I wanted to make sure that we weren't modifying the DEP flags outside
+>> of a spin lock.  Patch#3 modifies it where we unlock before calling
+>> __dwc3_stop_active_transfer(), so we can allow the dwc3 threaded IRQ
+>> handle events while the cmd status polling happens.
+>>
+>> Maybe we can unlock/lock the dwc3->lock inside
+>> __dwc3_stop_active_transfer() and that way we can ensure DEP flags are
+>> modified properly?
 > 
-> Am Dienstag, 12. Juli 2022, 20:18:05 CEST schrieb Matthias Kaehlcke:
-> > On Tue, Jul 12, 2022 at 05:06:26PM +0200, Alexander Stein wrote:
-> > > Despite default reset upon probe, release reset line after powering up
-> > > the hub and assert reset again before powering down.
-> > > 
-> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > ---
-> > > My current DT node on my TQMa8MPxL looks like this
-> > > ```
-> > > &usb_dwc3_1 {
-> > > 
-> > > 	dr_mode = "host";
-> > > 	#address-cells = <1>;
-> > > 	#size-cells = <0>;
-> > > 	pinctrl-names = "default";
-> > > 	pinctrl-0 = <&pinctrl_usbhub>;
-> > > 	status = "okay";
-> > > 	
-> > > 	hub_2_0: hub@1 {
-> > > 	
-> > > 		compatible = "usb451,8142";
-> > > 		reg = <1>;
-> > > 		peer-hub = <&hub_3_0>;
-> > > 		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
-> > > 	
-> > > 	};
-> > > 	
-> > > 	hub_3_0: hub@2 {
-> > > 	
-> > > 		compatible = "usb451,8140";
-> > > 		reg = <2>;
-> > > 		peer-hub = <&hub_2_0>;
-> > > 		reset-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
-> > > 	
-> > > 	};
-> > > 
-> > > };
-> > > ```
-> > > which I don't like much for 2 reasons:
-> > > * the pinctrl has to be put in a common top-node of USB hub node. The
-> > > pinctrl> 
-> > >   can not be requested twice.
-> > 
-> > Agreed, that's not great. The pinctrl doesn't have to be necessarily in the
-> > USB controller node, it could also be in the static section of the board,
-> > but that isn't really much of an improvement :( Not sure there is much to
-> > do given that the USB devices also process the pinctrl info (besides the
-> > onboard_hub platform device doing the same).
+> I didn't realize that you unlock/lock when calling
+> __dwc3_stop_active_transfer(). We'd need to be careful if we want to
+> unlock/lock it, and avoid it all together if possible. It can be easily
+> overlooked just like dwc3_gadget_giveback().
 > 
-> I tend to keep the pinctrl property next to the ones actually using them. But 
-> in this case it's not possible unfortunately.
-> 
-> > > * Apparently there is no conflict on the reset-gpio only because just one
-> > > device> 
-> > >   gets probed here:
-> > > > $ ls /sys/bus/platform/drivers/onboard-usb-hub/
-> > > > 38200000.usb:hub@1  bind  uevent  unbind
-> > 
-> > Right, the driver creates a single platform device for each physical hub.
-> 
-> Thanks for confirmation.
-> 
-> > > But this seems better than to use a common fixed-regulator referenced by
-> > > both hub nodes, which just is controlled by GPIO and does not supply any
-> > > voltages.
-> > Agreed, if the GPIO controls a reset line it should be implemented as such.
-> > 
-> > > Note: It might also be necessary to add bindings to specify ramp up times
-> > > and/or reset timeouts.
-> > 
-> > The times are hub specific, not board specific, right? If that's the case
-> > then a binding shouldn't be needed, the timing can be derived from the
-> > compatible string.
-> 
-> Well, yes they are hub specific, but board design might influence them as 
-> well, as in increased ramp up delay.
+> What issue did you see without doing this?
 
-Isn't the ramp up delay something that should be configured on the regulator
-side with 'regulator-ramp-delay'?
+I saw endxfer timeout issues if I didn't do it.  If we keep the lock 
+held, then the DWC3 event processing would be blocked across the entire 
+time we are waiting for the command act to clear.  With unlocking before 
+polling, then at least we're still able to handle the EP0 events that 
+are pending.
 
-> > >  drivers/usb/misc/onboard_usb_hub.c | 18 ++++++++++++++++++
-> > >  1 file changed, 18 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/misc/onboard_usb_hub.c
-> > > b/drivers/usb/misc/onboard_usb_hub.c index 6b9b949d17d3..348fb5270266
-> > > 100644
-> > > --- a/drivers/usb/misc/onboard_usb_hub.c
-> > > +++ b/drivers/usb/misc/onboard_usb_hub.c
-> > > @@ -7,6 +7,7 @@
-> > > 
-> > >  #include <linux/device.h>
-> > >  #include <linux/export.h>
-> > > 
-> > > +#include <linux/gpio/consumer.h>
-> > > 
-> > >  #include <linux/init.h>
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/list.h>
-> > > 
-> > > @@ -38,6 +39,7 @@ struct usbdev_node {
-> > > 
-> > >  struct onboard_hub {
-> > >  
-> > >  	struct regulator *vdd;
-> > >  	struct device *dev;
-> > > 
-> > > +	struct gpio_desc *reset_gpio;
-> > > 
-> > >  	bool always_powered_in_suspend;
-> > >  	bool is_powered_on;
-> > >  	bool going_away;
-> > > 
-> > > @@ -56,6 +58,10 @@ static int onboard_hub_power_on(struct onboard_hub
-> > > *hub)
-> > > 
-> > >  		return err;
-> > >  	
-> > >  	}
-> > > 
-> > > +	/* Deassert reset */
-> > 
-> > The comment isn't really needed, it's clear from the context.
-> 
-> Ok, removed.
-> 
-> > > +	usleep_range(3000, 3100);
-> > 
-> > These shouldn't be hard coded. Instead you could add a model specific struct
-> > 'hub_data' (or similar) and associate it with the compatible string through
-> > onboard_hub_match.data
-> 
-> Will do.
-> 
-> > You could use fsleep() instead of usleep_range(). It does the _range part
-> > automatically (with a value of 2x).
-> 
-> Nice idea.
-> 
-> > > +	gpiod_set_value_cansleep(hub->reset_gpio, 0);
-> > 
-> > Since this includes delays maybe put the reset inside an 'if
-> > (hub->reset_gpio)' block. Not super important for these short delays, but
-> > they might be longer for some hubs.
-> 
-> gpiod_set_value_cansleep includes delays? Without gpio_desc it returns early 
-> on. Or do you mean the usleep_range before?
+It was definitely one of the harder scenarios to reproduce.  The main 
+patch series which resolved a lot of the issues early on was patch#1. 
+After adding that the other issues are seen maybe after a day or so of 
+testing.
 
-Yes, I was referring to the usleep_range() before.
-
-> Actually in this case the 3ms is the minimum time from VDD stable to de-
-> assertion of GRST. So even in case the GPIO is manged by hardware itself,
-> software has to wait here before proceeding, IMHO.
-
-Agreed.
+Thanks
+Wesley Cheng
