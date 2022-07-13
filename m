@@ -2,69 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BE3573C24
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 19:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C3A573C6B
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 20:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiGMRpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 13:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S236631AbiGMSQn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 14:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiGMRpR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 13:45:17 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC5B2CDCC;
-        Wed, 13 Jul 2022 10:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657734316; x=1689270316;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OSmfHB+bOHfPpf36dcqHWxEa0qHSKOxtsJseDaw6+jw=;
-  b=k+XmMUF0Q4vzjyH0jyLYibeWB/P6ACjoBCVg85Tjb44sQ8nkTUUWKWBD
-   awfltYbxhnMAh54VfbxH7DY/HaGuuPfp3ObhRVt+NO2eTJwwtl3Kqdx5H
-   HGEtvPlapkYHbFRprGCgkfiKKZi5OyT4ojGTQhLG6s6E0nAksSejTp2UY
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 13 Jul 2022 10:45:16 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 10:45:16 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 13 Jul 2022 10:45:15 -0700
-Received: from [10.110.36.60] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 13 Jul
- 2022 10:45:14 -0700
-Message-ID: <59631540-ee6a-41f3-d460-4808162d06c9@quicinc.com>
-Date:   Wed, 13 Jul 2022 10:45:13 -0700
+        with ESMTP id S236627AbiGMSQl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 14:16:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E802E9E3;
+        Wed, 13 Jul 2022 11:16:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0CE861CC4;
+        Wed, 13 Jul 2022 18:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8812DC34114;
+        Wed, 13 Jul 2022 18:16:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657736199;
+        bh=C+dEVk+WY2th6pPe+z1y4n1Q4cLvYAUNYfWrDpjUD4w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pf1liw+3Zhvb5IoIJVnWC/juTneqqYs4RSUcjEkpAu/BRnYh1hM2rljLxr39plwoM
+         FkS1uk8zcPKnkRl2Ui/ID9V8OeOBcz5uJYTOf64cyuinuCs0nxWNC5L5lT7BzFC9Og
+         0/QjjAfZT4YQKkg5m2z9Ciq1365b+3wQPg/kXckyY7FUNsA8CD30KeM+Q+nMmWDkRb
+         IqtFsEShmroJ4hIyv9oC0c9TJINDulw8qcpZTt/T1WM/4nHtVMvpoolTyckC1JyYcq
+         FFlXSCSTPVAKeiIOFJPJnPeFC/0x8pQlV12ozIabI6sGy8Uicq8/31JZfJQfNfpCNA
+         0ysrpJKcGN2kQ==
+Date:   Wed, 13 Jul 2022 11:16:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        syzbot+1fa91bcd05206ff8cbb5@syzkaller.appspotmail.com
+Subject: Re: [RFC PATCH 1/1] net: kcm: Use sk_psock size for kcm_psock_cache
+Message-ID: <20220713111637.7eca089c@kernel.org>
+In-Reply-To: <20220713063204.6294-2-khalid.masum.92@gmail.com>
+References: <20220713063204.6294-1-khalid.masum.92@gmail.com>
+        <20220713063204.6294-2-khalid.masum.92@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/5] usb: dwc3: Allow end transfer commands to be sent
- during soft disconnect
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20220708185007.21743-1-quic_wcheng@quicinc.com>
- <20220708185007.21743-5-quic_wcheng@quicinc.com>
- <06498069-db45-202b-eba6-47bfa6948143@synopsys.com>
- <8029f6bb-4704-0495-00d2-ee78ee684eb3@quicinc.com>
- <889ba0fc-4a8c-cb89-ba7c-90119a58b997@synopsys.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <889ba0fc-4a8c-cb89-ba7c-90119a58b997@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,95 +65,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
-
-On 7/12/2022 6:42 PM, Thinh Nguyen wrote:
-> On 7/12/2022, Wesley Cheng wrote:
->> Hi Thinh,
->>
->> On 7/8/2022 6:58 PM, Thinh Nguyen wrote:
->>> On 7/8/2022, Wesley Cheng wrote:
->>>> If soft disconnect is in progress, allow the endxfer command to be
->>>> sent,
->>>> without this, there is an issue where the stop active transfer call
->>>> (during pullup disable) wouldn't actually issue the endxfer command,
->>>> while clearing the DEP flag.
->>>>
->>>> In addition, if the DWC3_EP_DELAY_STOP flag was set before soft
->>>> disconnect
->>>> started (i.e. from the dequeue path), ensure that when the EP0
->>>> transaction
->>>> completes during soft disconnect, to issue the endxfer with the force
->>>> parameter set, as it does not expect a command complete event.
->>>>
->>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>>> ---
->>>>     drivers/usb/dwc3/ep0.c    | 3 +--
->>>>     drivers/usb/dwc3/gadget.c | 5 ++++-
->>>>     2 files changed, 5 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->>>> index 506ef717fdc0..5851b0e9db0a 100644
->>>> --- a/drivers/usb/dwc3/ep0.c
->>>> +++ b/drivers/usb/dwc3/ep0.c
->>>> @@ -290,8 +290,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
->>>>             if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
->>>>                 continue;
->>>>     -        dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
->>>> -        dwc3_stop_active_transfer(dwc3_ep, true, true);
->>>> +        dwc3_stop_active_transfer(dwc3_ep, true, dwc->connected);
->>>>         }
->>>>     }
->>>>     diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>> index bd40608b19df..fba2797ad9ae 100644
->>>> --- a/drivers/usb/dwc3/gadget.c
->>>> +++ b/drivers/usb/dwc3/gadget.c
->>>> @@ -3696,8 +3696,10 @@ void dwc3_stop_active_transfer(struct dwc3_ep
->>>> *dep, bool force,
->>>>         if (dep->number <= 1 && dwc->ep0state != EP0_DATA_PHASE)
->>>>             return;
->>>>     +    if (interrupt && (dep->flags & DWC3_EP_DELAY_STOP))
->>>> +        return;
->>>> +
->>>>         if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
->>>> -        (dep->flags & DWC3_EP_DELAY_STOP) ||
->>>>             (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
->>>>             return;
->>>>     @@ -3744,6 +3746,7 @@ void dwc3_stop_active_transfer(struct
->>>> dwc3_ep *dep, bool force,
->>>>         __dwc3_stop_active_transfer(dep, force, interrupt);
->>>>         spin_lock(&dwc->lock);
->>>>     +    dep->flags &= ~DWC3_EP_DELAY_STOP;
->>>
->>> Can we clear this flag in __dwc3_stop_active_transfer(). It should apply
->>> if End Transfer command was sent.
->>
->> I wanted to make sure that we weren't modifying the DEP flags outside
->> of a spin lock.  Patch#3 modifies it where we unlock before calling
->> __dwc3_stop_active_transfer(), so we can allow the dwc3 threaded IRQ
->> handle events while the cmd status polling happens.
->>
->> Maybe we can unlock/lock the dwc3->lock inside
->> __dwc3_stop_active_transfer() and that way we can ensure DEP flags are
->> modified properly?
+On Wed, 13 Jul 2022 12:32:04 +0600 Khalid Masum wrote:
+> `struct sock` has a member `sk_user_data`, which got its memory allocated
+> in `kcm_attach` by `kcm_psock_cache` with the size of `kcm_psock`. Which
+> is not enough when the member is used as `sk_psock` causing out of bound
+> read.
 > 
-> I didn't realize that you unlock/lock when calling
-> __dwc3_stop_active_transfer(). We'd need to be careful if we want to
-> unlock/lock it, and avoid it all together if possible. It can be easily
-> overlooked just like dwc3_gadget_giveback().
+> Use `sk_psock` size to allocate memory instead for `sk_user_data`.
 > 
-> What issue did you see without doing this?
+> Reported-by: syzbot+1fa91bcd05206ff8cbb5@syzkaller.appspotmail.com
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
 
-I saw endxfer timeout issues if I didn't do it.  If we keep the lock 
-held, then the DWC3 event processing would be blocked across the entire 
-time we are waiting for the command act to clear.  With unlocking before 
-polling, then at least we're still able to handle the EP0 events that 
-are pending.
+Odd CC list, it looks like a netdev problem but netdev@ is not copied.
 
-It was definitely one of the harder scenarios to reproduce.  The main 
-patch series which resolved a lot of the issues early on was patch#1. 
-After adding that the other issues are seen maybe after a day or so of 
-testing.
+We had an other parson looking at this on netdev. Is this happening
+when legit kernel socket gets mixed with BPF sockmap?
 
-Thanks
-Wesley Cheng
+Does this fix work?
+
+https://lore.kernel.org/netdev/165030056960.5073.6664402939918720250.stgit@oracle-102.nfsv4.dev/
