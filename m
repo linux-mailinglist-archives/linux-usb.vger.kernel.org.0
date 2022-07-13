@@ -2,111 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A675735EF
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 14:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC315735FC
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 14:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236104AbiGMMBC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 08:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S236265AbiGMMHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 08:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiGMMBB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 08:01:01 -0400
-X-Greylist: delayed 1189 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Jul 2022 05:00:59 PDT
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C289F4235
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 05:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=8ZCq1iSnvi0O00uuBMOScdqdbc5RwcoliWQLs0MPRVc=; b=Z9D/0
-        zOzvVLXlw6ceawn/Xw117z0+LKbgtLfyrEvGdT6jyR8dShVBR+WgO+uUDpbj6SVT7ZeUTxVJi4E8V
-        87giNudYKUWDUv0T3dsns+zIc7IAnp80gcZZahgyabAr573IpNnS1OCB/zzcXR9WpbaKrsC9WvZSp
-        NvKVmNdCDjUSBl404vNSUsvUOeu6I4U6OY22eCrfe2ny7hyjjWP8T4s279+Sqg7DTeHsDg26FxTq/
-        xObn/LVI471dwKJebtiU6b8sR7meDZxCUn87d3r+xakk9LvfOFs/eKlb0sAXF8TjVsDM9CNyF7oup
-        7XH/314jjoKDaI9xplhJuxZA9o2tA==;
-Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1oBaji-00075W-1G;
-        Wed, 13 Jul 2022 12:40:59 +0100
-Date:   Wed, 13 Jul 2022 12:40:53 +0100
-From:   John Keeping <john@metanate.com>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     Wesley Cheng <quic_wcheng@quicinc.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v2 5/5] usb: dwc3: gadget: Increase DWC3 controller halt
- timeout
-Message-ID: <Ys6vReAwrYbEavob@donbot>
-References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
- <20220713003523.29309-6-quic_wcheng@quicinc.com>
- <20220713025643.GC8200@jackp-linux.qualcomm.com>
+        with ESMTP id S231389AbiGMMHm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 08:07:42 -0400
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D015104037
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 05:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=TVp3F
+        AC4zLQTXrT2vQdzGriRuCr3pjOw+cscr3/4O2w=; b=JtxDwWzg2dPrsfmfU2g5E
+        49TADlK5ut7nKxkLo8bl4jm/8M4gi4e//J6uKXsriOgUFnKBWEuBlIX67qUgfIur
+        YrwQ1Ip4IoNTLThLiOIrqBa0Lh9unmsMJPwsDhOUA+dUidH0axZzlfeW2uwgxIA6
+        WQnK5HERJi83ozbeUNON9A=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp8 (Coremail) with SMTP id NORpCgDnipcJtc5i80FIHw--.47583S2;
+        Wed, 13 Jul 2022 20:05:30 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, joel@jms.id.au,
+        andrew@aj.id.au, linux-usb@vger.kernel.org, windhl@126.com
+Subject: [PATCH] usb: aspeed-vhub: Fix refcount leak bug in ast_vhub_init_desc()
+Date:   Wed, 13 Jul 2022 20:05:28 +0800
+Message-Id: <20220713120528.368168-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713025643.GC8200@jackp-linux.qualcomm.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NORpCgDnipcJtc5i80FIHw--.47583S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFy8tw4DJFWfuFW7Ar4xWFg_yoWDZwcE9F
+        4jg3W3Wr1Uta95Xr4DJ345Zry09a4kWryUu3Wrtr93WFWjvwnrXF1UWrZ5Ar9rZF42va4k
+        Cw1qgFyjkw4FqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUyrW3UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuB89F2JVkVslCwACsc
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 07:56:43PM -0700, Jack Pham wrote:
-> Hi Wesley,
-> 
-> On Tue, Jul 12, 2022 at 05:35:23PM -0700, Wesley Cheng wrote:
-> > Since EP0 transactions need to be completed before the controller halt
-> > sequence is finished, this may take some time depending on the host and the
-> > enabled functions.  Increase the controller halt timeout, so that we give
-> > the controller sufficient time to handle EP0 transfers.
-> > 
-> > Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
-> > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > ---
-> > Link:
-> >   https://lore.kernel.org/linux-usb/4988ed34-04a4-060a-ccef-f57790f76a2b@synopsys.com/
-> > 
-> >  drivers/usb/dwc3/gadget.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 41b7007358de..e32d7293c447 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2476,6 +2476,7 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
-> >  	dwc3_gadget_dctl_write_safe(dwc, reg);
-> >  
-> >  	do {
-> > +		msleep(1);
-> 
-> Be aware that this probably won't sleep for *just* 1ms.  From
-> Documentation/timers/timers-howto.rst:
-> 
-> 	msleep(1~20) may not do what the caller intends, and
-> 	will often sleep longer (~20 ms actual sleep for any
-> 	value given in the 1~20ms range). In many cases this
-> 	is not the desired behavior.
-> 
-> So with timeout==500 this loop could very well end up iterating for up
-> to 10 seconds.  Granted this shouldn't be called from any atomic context
-> but just wanted to make sure that the effective increase in timeout as
-> $SUBJECT intends is made clear here and that it's not overly generous.
-> 
-> >  		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-> >  		reg &= DWC3_DSTS_DEVCTRLHLT;
-> >  	} while (--timeout && !(!is_on ^ !reg));
+We should call of_node_put() for the reference returned by
+of_get_child_by_name() which has increased the refcount.
 
-Does it make sense to convert this loop to use read_poll_timeout() and
-make the timeout explicit, something like:
+Fixes: 30d2617fd7ed ("usb: gadget: aspeed: allow to set usb strings in device tree")
+Signed-off-by: Liang He <windhl@126.com>
+---
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-	ret = read_poll_timeout(dwc3_readl, reg, !(!is_on ^ !(reg & DWC3_DSTS_DEVCTRLHLT)),
-				100, timeout * USEC_PER_MSEC, true, dwc->regs, DWC3_DSTS);
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+index 65cd4e46f031..e2207d014620 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+@@ -1059,8 +1059,10 @@ static int ast_vhub_init_desc(struct ast_vhub *vhub)
+ 	/* Initialize vhub String Descriptors. */
+ 	INIT_LIST_HEAD(&vhub->vhub_str_desc);
+ 	desc_np = of_get_child_by_name(vhub_np, "vhub-strings");
+-	if (desc_np)
++	if (desc_np) {
+ 		ret = ast_vhub_of_parse_str_desc(vhub, desc_np);
++		of_node_put(desc_np);
++	}
+ 	else
+ 		ret = ast_vhub_str_alloc_add(vhub, &ast_vhub_strings);
+ 
+-- 
+2.25.1
 
-?
