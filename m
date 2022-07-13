@@ -2,42 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13B0572A3B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 02:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B0E572A41
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 02:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiGMA0T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Jul 2022 20:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S230140AbiGMAfz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Jul 2022 20:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiGMA0S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 20:26:18 -0400
-X-Greylist: delayed 217 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Jul 2022 17:26:17 PDT
-Received: from server.atrad.com.au (server.atrad.com.au [150.101.241.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25425CDA0A
-        for <linux-usb@vger.kernel.org>; Tue, 12 Jul 2022 17:26:16 -0700 (PDT)
-Received: from marvin.atrad.com.au (marvin.atrad.com.au [192.168.0.2])
-        by server.atrad.com.au (8.17.1/8.17.1) with ESMTPS id 26D0MI7Z031440
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 13 Jul 2022 09:52:19 +0930
-Date:   Wed, 13 Jul 2022 09:52:18 +0930
-From:   Jonathan Woithe <jwoithe@just42.net>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
- chunks
-Message-ID: <Ys4QOgNF0pJDwRCJ@marvin.atrad.com.au>
-References: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
- <Ys1sfRyL6El7go94@kroah.com>
- <Ys2nEmkvz2dfAKkU@hovoldconsulting.com>
+        with ESMTP id S229514AbiGMAfy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Jul 2022 20:35:54 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4C98688A;
+        Tue, 12 Jul 2022 17:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657672554; x=1689208554;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=wP60QWyBV7Lv8G2MPVhFC5kEY3bi5afN3NB0xstza4I=;
+  b=dNUpult6wNIkqN4b4F9fkdEtFEVtgCg7Tjaxt0cSfzpipxRP+5XIJ9xk
+   NQPP+anLbPzjQYPpawqzrhtvxkOKd+MO0Lg9uHm9C14U24zZ6SwDepaZP
+   c1kEbc9Wx/IrQNLsfHo+rTa+93MSfLGigVxYg1XWQQCI3pAO3HDBtgbhz
+   U=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Jul 2022 17:35:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2022 17:35:53 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 12 Jul 2022 17:35:36 -0700
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 12 Jul 2022 17:35:36 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v2 0/5] Fix controller halt and endxfer timeout issues
+Date:   Tue, 12 Jul 2022 17:35:18 -0700
+Message-ID: <20220713003523.29309-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys2nEmkvz2dfAKkU@hovoldconsulting.com>
-X-MIMEDefang-action: accept
-X-Scanned-By: MIMEDefang 2.86 on 192.168.0.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,59 +60,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 06:53:38PM +0200, Johan Hovold wrote:
-> On Tue, Jul 12, 2022 at 02:43:41PM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 12, 2022 at 09:29:57PM +0930, Jonathan Woithe wrote:
-> > > I have done a git bisect which identified the following commit as the source
-> > > of the problem.
-> > > 
-> > > commit 55fa15b5987db22b4f35d3f0798928c126be5f1c
-> > > Author: Johan Hovold <johan@kernel.org>
-> > > Date:   Fri Jan 6 19:15:16 2017 +0100
-> > 
-> > Please always cc: the developer who wrote a commit that you have
-> > questions about, so that they are sure to see it, otherwise it's just
-> > random luck :)
-> 
-> Thanks for the report, and for forwarding it.
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
 
-Apologies for overlooking the CC in this instance.
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
 
-> > > It would be great if this regression could be addressed.  At present I must
-> > > boot a pre-4.10 kernel whenever I need to use the programming dongle with
-> > > this converter.
-> > > 
-> > > Please let me know if there is anything I can do to help resolve the
-> > > problem.
-> > 
-> > If you revert this commit on top of the latest kernel release, does it
-> > solve the problem for you?
-> 
-> Simply reverting the commit blamed by the bisection should only makes
-> things worse, at least for some device types.
-> 
-> Perhaps we need to set that bit 7 based on the type, even if the bit
-> meaning having been inverted seems a bit far-fetched.
-> 
-> Jonathan, could you try simply commenting out the
-> 	
-> 	val |= BIT(7);
-> 
-> statement in ch341_set_baudrate_lcr()?
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
 
-Commenting out the above line brought some improvement.  In minicom with a
-loopback connector in place, the first byte sent does not get echoed
-back at all.  However, all other bytes are echoed as soon as they are sent.
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
 
-The kernel used for the above test was 672c0c5 (5.18-rc5), which is the most
-recent I can conveniently get onto the test machine at present.  I tested
-the unmodified kernel before commenting out the line and confirmed that it
-exhibited the full fault condition (bytes come back in blocks of 32).
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
 
-> Also, what chip version do you have (see debug statement in
-> ch341_configure())?
+#4
+Modify the DWC3_EP_DELAY_STOP flag management so that if these flags were set
+before soft disconnect, that the disconnect routine will be able to properly
+issue the endxfer command.
 
-Chip revision is 0x27.
+#5
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
 
-Regards
-  jonathan
+Wesley Cheng (5):
+  usb: dwc3: Do not service EP0 and conndone events if soft disconnected
+  usb: dwc3: gadget: Force sending delayed status during soft disconnect
+  usb: dwc3: gadget: Adjust IRQ management during soft
+    disconnect/connect
+  usb: dwc3: Allow end transfer commands to be sent during soft
+    disconnect
+  usb: dwc3: gadget: Increase DWC3 controller halt timeout
+
+ drivers/usb/dwc3/ep0.c    |  9 +++++----
+ drivers/usb/dwc3/gadget.c | 33 +++++++++++++++++++++++----------
+ 2 files changed, 28 insertions(+), 14 deletions(-)
+
