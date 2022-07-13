@@ -2,54 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC30573833
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 16:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E689357387F
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Jul 2022 16:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbiGMOAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 10:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
+        id S235802AbiGMOMg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Jul 2022 10:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236447AbiGMOAQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 10:00:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75902D1CB;
-        Wed, 13 Jul 2022 07:00:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74DB461D96;
-        Wed, 13 Jul 2022 14:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BF2AAC341C0;
-        Wed, 13 Jul 2022 14:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657720814;
-        bh=nqRDKZknBDuKW18REhA/cBNZYXJqPytagNpFFWtyS08=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mp0OeFruUnTwB+4rkEDx6qXEcMT8cEf5G4PzWMS7mVj1ZSa8SWk5V1C+eglczKpU0
-         CMrM9oGbKbVD0tla3nVQJhr/LGP0S5wVOo0+0oh8LK90+Q2/IRdru4epFQIiwWqEnZ
-         h57OL/Qww1Ym8VD0gF2t3RheAW3abWyH8hD9+pHztdXUZS0O9PnqgKmcG/9ocFtuV9
-         6t/StAKvoWMzxcwl/5/JpY1FUEEtSTlYuI9snlGryEFeHvX/dXJzl2ZRcaDzV6e1D0
-         fn8NR3Mu/LcrDBFNxFPgib7LMmWs+aPY0aPCt78Yq8svoafhkQohGWmIWdOrk5oBuj
-         yLuSoIBNpdndw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9ADB2E4521F;
-        Wed, 13 Jul 2022 14:00:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S235187AbiGMOMf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 10:12:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07761326FF
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 07:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657721552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YhNVgFhX89B7Or7dxJO6r91xjY7lqXIdMrL3sFKe62o=;
+        b=AlLfBgvKinI/jy2ccoVbqybBo/BAMR5BACLEUd44tVgNwrn2gdAS5tAdmSOPmeEyuYrh8O
+        NNOJvoeBc+8ATFCpPN27/F3JYwzgHhfCmFxE6t6AFhWLV5y7ErJd3sxmL4XbAH/d+mjohx
+        EGnis2r1tucfq564h10TqYGmnL6wVKU=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-163-gE9JLUJlP_Ojips6rdXwrQ-1; Wed, 13 Jul 2022 10:12:31 -0400
+X-MC-Unique: gE9JLUJlP_Ojips6rdXwrQ-1
+Received: by mail-oi1-f197.google.com with SMTP id r24-20020a056808211800b0033a0214cfd0so4698873oiw.4
+        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 07:12:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YhNVgFhX89B7Or7dxJO6r91xjY7lqXIdMrL3sFKe62o=;
+        b=QfvKuIsCmzYIux1oA4uqO8RK2QtZtSsp5G0B5BNHO9/8J2OPEi73jbKexHzhKbhdsV
+         ycwku7ock2/c+jCobjtp6qr7RNIquS1eYAg8cyRlvY4O/c7bNtn+6f0/O6194UCfvLfO
+         pMS0vo6J5QEtQ4Xgmgg/++GNoP112XFaoF0R4VtvHeVpHqyR4wnpfrdwoHemxbN20xGk
+         nKRIBFqUfq/vU7Wbp3mOFM/A50eP55xcULoR7mjL8TJksC+eDjAJoAtcfj7qjr91m0pu
+         YZsVrJrZgmJk1Cd4LxQf4hqKb9Aqnz9PZM4voytxBoMH9Gvqg+q4WQ5w3Dn4ZFVxnuVT
+         0bKg==
+X-Gm-Message-State: AJIora+1wTLRWmV2aJGsATBt/LSgEm/cm+a4dPQmhA1aaQOnIjSKokiY
+        eBkJqwoAwxYDMwBzv3XS7OzkHIxlEMn3xbMXIo1tPNYASnD1Gu6pxUtarfpjHR/vlxqXkCIM1oN
+        Lu79PraUK9mugoUbxefJr
+X-Received: by 2002:a05:6870:73c7:b0:10c:24de:63d4 with SMTP id a7-20020a05687073c700b0010c24de63d4mr1824451oan.76.1657721551046;
+        Wed, 13 Jul 2022 07:12:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1spJxbEpfi2ss2QX18y+16qhda8NVczHl6f2bXHBKRgiIdBeWnn3ihlz7RHzcUQDgWHPCHuqg==
+X-Received: by 2002:a05:6870:73c7:b0:10c:24de:63d4 with SMTP id a7-20020a05687073c700b0010c24de63d4mr1824432oan.76.1657721550855;
+        Wed, 13 Jul 2022 07:12:30 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
+        by smtp.gmail.com with ESMTPSA id t17-20020a056830225100b00616929b93d6sm4860341otd.14.2022.07.13.07.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 07:12:30 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:12:28 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] arm64: dts: qcom: sc8280xp: fix USB interrupts
+Message-ID: <20220713141228.5z5rmgepj6mepjyp@halaneylaptop>
+References: <20220713131340.29401-1-johan+linaro@kernel.org>
+ <20220713131340.29401-6-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net] r8152: fix accessing unset transport header
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165772081462.13863.15234899108123755082.git-patchwork-notify@kernel.org>
-Date:   Wed, 13 Jul 2022 14:00:14 +0000
-References: <20220711070004.28010-390-nic_swsd@realtek.com>
-In-Reply-To: <20220711070004.28010-390-nic_swsd@realtek.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713131340.29401-6-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +84,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 13 Jul 2022 11:31:11 +0800 you wrote:
-> A warning is triggered by commit 66e4c8d95008 ("net: warn if transport
-> header was not set"). The warning is harmless, because the value from
-> skb_transport_offset() is only used for skb_is_gso() is true or the
-> skb->ip_summed is equal to CHECKSUM_PARTIAL.
+On Wed, Jul 13, 2022 at 03:13:38PM +0200, Johan Hovold wrote:
+> The two single-port SC8280XP USB controllers do not have an hs_phy_irq
+> interrupt. Instead they have a pwr_event interrupt which is distinct
+> from the former and not yet supported by the driver.
 > 
-> Fixes: 66e4c8d95008 ("net: warn if transport header was not set")
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> Fix the USB node interrupt names so that they match the devicetree
+> binding.
 > 
-> [...]
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 45cc7d714fd2..4a7aa9992f3a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1875,8 +1875,10 @@ usb_0: usb@a6f8800 {
+>  					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 138 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> -					  "dm_hs_phy_irq", "ss_phy_irq";
+> +			interrupt-names = "pwr_event",
+> +					  "dp_hs_phy_irq",
+> +					  "dm_hs_phy_irq",
+> +					  "ss_phy_irq";
+>  
+>  			power-domains = <&gcc USB30_PRIM_GDSC>;
+>  
+> @@ -1925,8 +1927,10 @@ usb_1: usb@a8f8800 {
+>  					      <&pdc 12 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 13 IRQ_TYPE_EDGE_BOTH>,
+>  					      <&pdc 136 IRQ_TYPE_LEVEL_HIGH>;
+> -			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> -					  "dm_hs_phy_irq", "ss_phy_irq";
+> +			interrupt-names = "pwr_event",
+> +					  "dp_hs_phy_irq",
+> +					  "dm_hs_phy_irq",
+> +					  "ss_phy_irq";
 
-Here is the summary with links:
-  - [v2,net] r8152: fix accessing unset transport header
-    https://git.kernel.org/netdev/net/c/057cc8c9005e
+For this specific change to pwr_event:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+    Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
+That being said, I was reviewing this against the (fairly old)
+downstream release I have, and the IRQs defined there look like this:
+
+		interrupts-extended = <&pdc 12 IRQ_TYPE_EDGE_RISING>,
+				<&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>,
+				<&pdc 136 IRQ_TYPE_LEVEL_HIGH>,
+				<&pdc 13 IRQ_TYPE_EDGE_RISING>;
+		interrupt-names = "dp_hs_phy_irq", "pwr_event_irq",
+				"ss_phy_irq", "dm_hs_phy_irq";
+
+The part I want to highlight is that the "pwr_event" irq downstream maps
+to <&intc GIC_SPI 811 IRQ_TYPE_LEVEL_HIGH>, but the current upstream
+devicetree I'm looking at has it mapped to <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>
+
+Do you happen to have any source you can also check to confirm if this
+is a bug or not?
+
+Thanks,
+Andrew
+
+>  
+>  			power-domains = <&gcc USB30_SEC_GDSC>;
+>  
+> -- 
+> 2.35.1
+> 
 
