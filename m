@@ -2,51 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0623757508D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 16:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0886C5750A9
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 16:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239068AbiGNOP1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 10:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S236411AbiGNOXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 10:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239397AbiGNOPY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 10:15:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A187D5D5A4;
-        Thu, 14 Jul 2022 07:15:22 -0700 (PDT)
+        with ESMTP id S232255AbiGNOXB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 10:23:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D9364E39;
+        Thu, 14 Jul 2022 07:23:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D806616ED;
-        Thu, 14 Jul 2022 14:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0D4C34115;
-        Thu, 14 Jul 2022 14:15:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1745DB82627;
+        Thu, 14 Jul 2022 14:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B2E9C341C6;
+        Thu, 14 Jul 2022 14:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657808121;
-        bh=qBmZXjqke+b5VZ+6GVDTR3FwyHeU/2fCZ+RRGekqLDs=;
+        s=korg; t=1657808577;
+        bh=pdAoBFZRz9UfEP/QQUjjAH4AlTTPjJTxY2ZFDkrk9qk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GEDiYXYP9asqFucy4QU2HoBridNPfm2W1ZdfWxhLEfe4bOmpd9AAwoNgiWWWzGjcb
-         wjhjnM8r5dEYw6UXFu3YPHaAQyFe9BKWmOYC4BFL6Xr1hVElcSD1ZXbHmDJVsjJd2p
-         2ZTL1TDTdC1Zfqu1Yf8VH/pB5tOwjyqsqbC5KV3U=
-Date:   Thu, 14 Jul 2022 16:14:10 +0200
+        b=FGFlLSkWn6Xa4BJ1cJkqmvJiuFHNjVqTdF5uRztkX82ue2HMTRM9/loMPfoJDn+gB
+         CmKGeWybZLkT1lhyMZDynfKi5YuLUqm3W79is8fxDf+271ii74G9bEWEFhG2bQnDEZ
+         eycpZpL0OQxatM0D20xODpfpbidlAFnNneL6hD44=
+Date:   Thu, 14 Jul 2022 16:22:54 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v4 0/9] Type-C switch driver and Type-C framework updates
-Message-ID: <YtAksiKCuRZXs3fC@kroah.com>
-References: <20220711072333.2064341-1-pmalani@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 5.19-rc7
+Message-ID: <YtAmvoSgn3J9+1DF@kroah.com>
+References: <YtAitIrTRRVkaUKJ@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220711072333.2064341-1-pmalani@chromium.org>
+In-Reply-To: <YtAitIrTRRVkaUKJ@hovoldconsulting.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,23 +49,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 07:22:54AM +0000, Prashant Malani wrote:
-> This series introduces a retimer class to the USB Type-C framework,
-> It also introduces a Chrome EC (Embedded Controller) switch driver which
-> registers the aforementioned retimer switches as well as mode-switches.
+On Thu, Jul 14, 2022 at 04:05:40PM +0200, Johan Hovold wrote:
+> The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 > 
-> Patch 1 and 2 introduce the retimer class and associated functions to
-> the Type-C common code.
+>   Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
 > 
-> Patches 3-7 add the cros-typec-switch driver.
+> are available in the Git repository at:
 > 
-> Patches 8-9 update cros-ec-typec to get and use retimer switch handles.
-> 
-> Submission suggestion (as always, open to better suggestions):
-> - Patch 1 and 2 can go through the USB repo.
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.19-rc7
 
-Patches 1 and 2 now in my tree.
-
-thanks,
+Ah, had to pull in 5.19-rc6 into my branch, but that worked.  Now pulled
+and pushed out, thanks.
 
 greg k-h
