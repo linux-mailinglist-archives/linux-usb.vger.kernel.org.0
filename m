@@ -2,78 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F27574F0D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 15:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1A7574F58
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 15:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiGNNXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 09:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
+        id S239585AbiGNNjD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 14 Jul 2022 09:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238494AbiGNNWp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 09:22:45 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0BC5D5A4;
-        Thu, 14 Jul 2022 06:22:09 -0700 (PDT)
-Received: from quatroqueijos.. (unknown [177.9.88.15])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S239541AbiGNNjC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 09:39:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898D119289;
+        Thu, 14 Jul 2022 06:39:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 9761D3F3A9;
-        Thu, 14 Jul 2022 13:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1657804927;
-        bh=36Vgpi0nCGl0u3pmcD8xjyNPutMygLK4GXtVa3Et0BU=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=i2J362YfjhMBlccJitl6AaA2T+I1hQ9PYpLi8quPGbMXmZUC5VEMnKjcsCIPQTZV9
-         1uv0K1S6rDV28z1R+Oz1o1woJTpEEPQrkwIp/mGPGeggd86Wc9LcIcuxdpOSuih3kO
-         CJHJ9mvsn/BsmFIKL0hOKC+aPuouVajYzfcDBLMAc5dNCSegQeH+q54kQglhkFkGH1
-         Pfyk4NOBOmlsDfXMEwTZhta/e+ajfENPcZbaofONW/DBHHViufQ3GYyhmymaUyrjBd
-         3EqFcqYElkfdRuV0mRYv0jX+qKwoDKepvCXYUK79vdUkBv+vbzp25zL3fzUj4aSyNi
-         Fiy7eApVrd8ew==
-From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, oneukum@suse.com, grundler@chromium.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH] sr9700: improve packet length sanity check
-Date:   Thu, 14 Jul 2022 10:21:34 -0300
-Message-Id: <20220714132134.426621-1-cascardo@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AE5862090;
+        Thu, 14 Jul 2022 13:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81832C34115;
+        Thu, 14 Jul 2022 13:38:58 +0000 (UTC)
+Date:   Thu, 14 Jul 2022 09:38:57 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 08/13 v2] USB: mtu3: tracing: Use the new __vstring() helper
+Message-ID: <20220714093857.1135e95a@gandalf.local.home>
+In-Reply-To: <20220705224750.354926535@goodmis.org>
+References: <20220705224453.120955146@goodmis.org>
+        <20220705224750.354926535@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The packet format includes a 3 byte headers and a 4 byte CRC. Account for
-that when checking the given length is not larger than the skb length.
+From d6485fe54bd4f04256a8500156a7c05cb3fb9592 Mon Sep 17 00:00:00 2001
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Date: Tue, 5 Jul 2022 18:45:01 -0400
+Subject: [PATCH] USB: mtu3: tracing: Use the new __vstring() helper
 
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Fixes: e9da0b56fe27 ("sr9700: sanity check for packet length")
+Instead of open coding a __dynamic_array() with a fixed length (which
+defeats the purpose of the dynamic array in the first place). Use the new
+__vstring() helper that will use a va_list and only write enough of the
+string into the ring buffer that is needed.
+
+Link: https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org
+
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/net/usb/sr9700.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
-index 5a53e63d33a6..09bb40ac6e09 100644
---- a/drivers/net/usb/sr9700.c
-+++ b/drivers/net/usb/sr9700.c
-@@ -413,7 +413,7 @@ static int sr9700_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 		/* ignore the CRC length */
- 		len = (skb->data[1] | (skb->data[2] << 8)) - 4;
- 
--		if (len > ETH_FRAME_LEN || len > skb->len)
-+		if (len > ETH_FRAME_LEN || len + SR_RX_OVERHEAD > skb->len)
- 			return 0;
- 
- 		/* the last packet of current skb */
+Changes since v1: remove ',' that fails the build.
+
+ drivers/usb/mtu3/mtu3_trace.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/mtu3/mtu3_trace.h b/drivers/usb/mtu3/mtu3_trace.h
+index 1b897636daf2..ef3c17e2f8a6 100644
+--- a/drivers/usb/mtu3/mtu3_trace.h
++++ b/drivers/usb/mtu3/mtu3_trace.h
+@@ -25,11 +25,11 @@ TRACE_EVENT(mtu3_log,
+ 	TP_ARGS(dev, vaf),
+ 	TP_STRUCT__entry(
+ 		__string(name, dev_name(dev))
+-		__dynamic_array(char, msg, MTU3_MSG_MAX)
++		__vstring(msg, vaf->fmt, vaf->va)
+ 	),
+ 	TP_fast_assign(
+ 		__assign_str(name, dev_name(dev));
+-		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf->va);
++		__assign_vstr(msg, vaf->fmt, vaf->va);
+ 	),
+ 	TP_printk("%s: %s", __get_str(name), __get_str(msg))
+ );
 -- 
-2.34.1
+2.35.1
 
