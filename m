@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DA1574B2D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 12:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B04574B33
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 12:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237741AbiGNKvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 06:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S238304AbiGNKw3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 06:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238517AbiGNKvP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 06:51:15 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBF8558C6
-        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 03:51:14 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id bn33so1665313ljb.13
-        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 03:51:14 -0700 (PDT)
+        with ESMTP id S234545AbiGNKw2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 06:52:28 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA37B550AF
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 03:52:26 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id p6so1692117ljc.8
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 03:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EKF2hxWr78hWWpM47JWfd5sxYajsn2nvqoQgIyFQXzQ=;
-        b=zcB/jKufoJCWNIAZnoyfbjAvgjU6EnPBSF3Hw5mBfFlIQQh4a0cae0GVdCwLrCSSLZ
-         LiKIjkxsj7iZr/3rjXhLp8OMFv3msGNQ+8GvvRY+ZcIAOVEjNDHz4/tshhQLlZg4HvO2
-         7GyyKqOYA4hKOAHNAALXSXC/MXfdr5/odn3tCx55b7z5TiOL3IUMLcgSIj+o1NVnTVLw
-         PhrliJlxCOapPHRvcTWVDHSUV/XxGvp8VdCTojrovl51oqCTqHJ3mPjk2g3nYhCQU6Ww
-         9u+xxpytoI+JzTkgwOBxMGffjy524Pc10nJVa0m1xU7h5bZdH8TSM/LHVl7rFoGBVQ+6
-         VPOA==
+        bh=p5GjG0eV0vYuLSZs2y/SOdrMlopF9d7dRJclgcPc3hE=;
+        b=jK77VM9nUux8iXmWo7aCYe1N7UMe5+s/CNo0Rzhmar2T+6xM4PESwtVLqmr2Qml5M2
+         sF/XArXpCnWwpbqbntARJALcDpV65adze8UFvBAcZNMQ/qG4p80CD+HmiwgJv2HJOTFX
+         krn1S8WhtghCJqR4M7xvAgQaPrHj/LDpNKrT7aUzuyz/L2EEYMki6EwJNoXgjTF/T9YK
+         zV+69A8efs+AJJOWLDDXwHHq9a5A7Ai7Xoz+IJa5qBXnazG0uGrlwSNkgSJSpsl4xDOv
+         4t97dR1DSRlZDOUlpFDy8LGXgMC//cGmrCwlQtan1Z2o+xuwb4Tx1h016UWr4BCXU1/l
+         pwfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=EKF2hxWr78hWWpM47JWfd5sxYajsn2nvqoQgIyFQXzQ=;
-        b=2qptWEI0JJGyizCh9+qZJqeBRN7oFRbqNZ2Aj/dnTa5XX4KazEOWohMMXSbZePtj3H
-         2K2r3Qc8K098aRwcYnBiTsKHmzrglNWp4ZQKskSvLn2z0rx8P4s7X/3kTj1IYXZ/gLGz
-         McV+dF8DmA4G3jq0kv4grOfLhmzdSsRMpKcYccIr5xP7OCVCNvyC41UIW6kldw/wW8/N
-         EVSI/xBE+prZQfF/8f5e8aWGeC6qqkvgQa+v36aN9lMW0KR7a812h9z66jeXvqzt8zI0
-         /Grh9c3Ad2BxwHkaDzACDEUdRt0oLGsEGrQIm6V1Z3npkI8zo6aiBagGtZwikqaAnhOl
-         mr7A==
-X-Gm-Message-State: AJIora/2pJ3mmvOr150XnLchYnuUwAcy9UGmesF7duFtRwwCZtM5KZwI
-        CEaji8Fw9TYuUdHubu1MxjLO6w==
-X-Google-Smtp-Source: AGRyM1u6H2CsK9ySyzdRHvOnSZX1xPGCVAf5kmf3IQrK0bbO1d5q55jyw/+Z5V5LZU/qTFTQxxuWjQ==
-X-Received: by 2002:a2e:b0d3:0:b0:25d:6888:7c70 with SMTP id g19-20020a2eb0d3000000b0025d68887c70mr4200675ljl.244.1657795872668;
-        Thu, 14 Jul 2022 03:51:12 -0700 (PDT)
+        bh=p5GjG0eV0vYuLSZs2y/SOdrMlopF9d7dRJclgcPc3hE=;
+        b=D74v9pRBFHFULdIyy2V97jlWQ0TGTBkZVEMEoQ4dV1pPa+39VVXi1TmSzdKK0pqQ/N
+         0m9sXj5EzArvDnpg6feRf5gbMbTkvUg55uVZMy07KmuQSF9YRlkoYQD/8dxSuu3+mNV/
+         1FfXpJB9EDUJyyMgSfBi18I1w5qJyPzt7XZt9EhVFKRXuj81n82ZuqECkuapP6UkuvRM
+         djXj7qlVPHyBW012udr8ZDroRnq/+pphw909o8cKmlQ0lDY4m9uTfJug6k6OYVrEi5Vd
+         4kRpY2IbwU/M6UUooZPhLvoGaiB8PlhTRj5yK6IW6HG/YQJJA+rNR7t724XuPIXW1eZ3
+         gT7Q==
+X-Gm-Message-State: AJIora+T/c2ja5F9sa4BvilcfXDJk6IPhcqbG4jlgW9P5ajAhh8Xa95o
+        b6Y2qTeou26h8c1wAxJ45q0GMWOsLf8a3w==
+X-Google-Smtp-Source: AGRyM1tRighpv3FSsPDbwHBARKoXOLbSJ+Y71+kNTw8wIs8dcy0FYq3u3jdkzvj4OTsNcWhwLWcZbg==
+X-Received: by 2002:a2e:83c6:0:b0:25a:d2c4:76c8 with SMTP id s6-20020a2e83c6000000b0025ad2c476c8mr4152410ljh.336.1657795945212;
+        Thu, 14 Jul 2022 03:52:25 -0700 (PDT)
 Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05651203ab00b0047f9ef4cb92sm292145lfp.297.2022.07.14.03.51.10
+        by smtp.gmail.com with ESMTPSA id be6-20020a056512250600b00489da53b38esm296097lfb.224.2022.07.14.03.52.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 03:51:11 -0700 (PDT)
-Message-ID: <3936bd59-58e0-0493-a792-4aff4b73a809@linaro.org>
-Date:   Thu, 14 Jul 2022 12:51:09 +0200
+        Thu, 14 Jul 2022 03:52:24 -0700 (PDT)
+Message-ID: <093d85b9-6da2-2358-118e-7b5a2d1fa86e@linaro.org>
+Date:   Thu, 14 Jul 2022 12:52:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 1/7] dt-bindings: usb: qcom,dwc3: add SC8280XP binding
+Subject: Re: [PATCH 4/7] arm64: dts: qcom: sc8280xp: fix USB clock order
 Content-Language: en-US
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -67,14 +67,14 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220713131340.29401-1-johan+linaro@kernel.org>
- <20220713131340.29401-2-johan+linaro@kernel.org>
+ <20220713131340.29401-5-johan+linaro@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220713131340.29401-2-johan+linaro@kernel.org>
+In-Reply-To: <20220713131340.29401-5-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,21 +83,46 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 13/07/2022 15:13, Johan Hovold wrote:
-> Add SC8280XP to the DT schema.
+> Fix the USB controller clock order and naming so that they match the
+> devicetree binding.
 > 
-> Note that the SC8280XP controllers use the common set of five clocks and
-> an additional set of four interconnect clocks whose purpose is not
-> entirely clear at this point.
+> Note that the driver currently simply enables all clocks in the order
+> that they are specified in the devicetree. Reordering the clocks as per
+> the binding means that the only explicit ordering constraint found in
+> the vendor driver, that cfg_noc should be enabled before the core_clk,
+> is now honoured.
 > 
-> The set of wakeup interrupts is also different for SC8280XP.
-> 
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 285a9828c250..45cc7d714fd2 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1855,16 +1855,16 @@ usb_0: usb@a6f8800 {
+>  			#size-cells = <2>;
+>  			ranges;
+>  
+> -			clocks = <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+> -				 <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+>  				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+> -				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+>  				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
+> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+>  				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
+>  				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
+>  				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
+>  				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
+> -			clock-names = "core", "iface", "bus_aggr", "utmi", "sleep",
+> +			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
+>  				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
 
-Second patch answers my questions, so:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Your commit title should also include change of naming.
 
 Best regards,
 Krzysztof
