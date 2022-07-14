@@ -2,55 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7EB57540C
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 19:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EFD575426
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 19:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiGNR3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 13:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S232691AbiGNRlG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 13:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiGNR3i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 13:29:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831CB55097;
-        Thu, 14 Jul 2022 10:29:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27BF6620E4;
-        Thu, 14 Jul 2022 17:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2CBC34114;
-        Thu, 14 Jul 2022 17:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657819776;
-        bh=eo67ao+PmEWgpCKzwt6V2TacgfLQ/ODBJXB/xIJDpTo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nGIusFj9Kp+eKcydlmMP+BeXbVLtDjVYAw4xJr2F690moNFmNRmQuv6q/wOhcS52a
-         Q0ykG9wQIP/LAR3FmDk61Qv0QRODUD47sdFfkqJX2PrHzqqkW8b1MDbAdou9M9KJwe
-         WCfx1KeVlTxPhfB9a2jEJcLwQoyNIat1eszCsu+o=
-Date:   Thu, 14 Jul 2022 19:29:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev, bleung@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v4 0/9] Type-C switch driver and Type-C framework updates
-Message-ID: <YtBSfeKKGrFx3wA3@kroah.com>
-References: <20220711072333.2064341-1-pmalani@chromium.org>
- <YtAkeQ1Do7CuM/PR@kroah.com>
- <CACeCKaekD4S93XbYGOia+vuCwc+oRJpcNKVgrxEasa4MDGsSoQ@mail.gmail.com>
+        with ESMTP id S231150AbiGNRlF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 13:41:05 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BA84AD54;
+        Thu, 14 Jul 2022 10:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657820463; x=1689356463;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=itbiD7f+aIv9BzIBOUBnsrDngZzVAGfFrWmHgFXfjDI=;
+  b=hKQEz6Uoqan07yOc6iOwFvss0afQtFn4Csw3q+yXMO8FOScJ0MVV4JZ5
+   B8r+Vovr30x1KnJl8JYHV8AYjcdUFvYWjPCe6kABOm0DLit3Q2VwF1FOL
+   95Mt0CXCBKWp9Qn6zYE9Kt6iuSKZtM6kkMz2nBq0D/byT/D0r8aiUs6AL
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jul 2022 10:41:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 10:41:03 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Jul 2022 10:41:02 -0700
+Received: from [10.71.114.82] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Jul
+ 2022 10:41:01 -0700
+Message-ID: <03434e9c-7a1c-4819-6bfe-54f56401348c@quicinc.com>
+Date:   Thu, 14 Jul 2022 10:41:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKaekD4S93XbYGOia+vuCwc+oRJpcNKVgrxEasa4MDGsSoQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/5] usb: dwc3: gadget: Adjust IRQ management during
+ soft disconnect/connect
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
+ <20220713003523.29309-4-quic_wcheng@quicinc.com>
+ <fbfc9328-418c-4c5e-4553-993331b20cb6@synopsys.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <fbfc9328-418c-4c5e-4553-993331b20cb6@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,37 +71,135 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:02:32AM -0700, Prashant Malani wrote:
+Hi Thinh,
+
+On 7/14/2022 10:38 AM, Thinh Nguyen wrote:
+> On 7/12/2022, Wesley Cheng wrote:
+>> Local interrupts are currently being disabled as part of aquiring the
+>> spin lock before issuing the endxfer command.  Leave interrupts enabled, so
+>> that EP0 events can continue to be processed.  Also, ensure that there are
+>> no pending interrupts before attempting to handle any soft
+>> connect/disconnect.
+>>
+>> Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>    drivers/usb/dwc3/gadget.c | 21 ++++++++++++---------
+>>    1 file changed, 12 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index a455f8d4631d..ee85b773e3fe 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -1674,6 +1674,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+>>    static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
+>>    {
+>>    	struct dwc3_gadget_ep_cmd_params params;
+>> +	struct dwc3 *dwc = dep->dwc;
+>>    	u32 cmd;
+>>    	int ret;
+>>    
+>> @@ -1682,7 +1683,9 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+>>    	cmd |= interrupt ? DWC3_DEPCMD_CMDIOC : 0;
+>>    	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
+>>    	memset(&params, 0, sizeof(params));
+>> +	spin_unlock(&dwc->lock);
+>>    	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+>> +	spin_lock(&dwc->lock);
+>>    	WARN_ON_ONCE(ret);
+>>    	dep->resource_index = 0;
+>>    
+>> @@ -2029,12 +2032,11 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>>    	struct dwc3_ep			*dep = to_dwc3_ep(ep);
+>>    	struct dwc3			*dwc = dep->dwc;
+>>    
+>> -	unsigned long			flags;
+>>    	int				ret = 0;
+>>    
+>>    	trace_dwc3_ep_dequeue(req);
+>>    
+>> -	spin_lock_irqsave(&dwc->lock, flags);
+>> +	spin_lock(&dwc->lock);
+>>    
+>>    	list_for_each_entry(r, &dep->cancelled_list, list) {
+>>    		if (r == req)
+>> @@ -2073,7 +2075,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>>    		request, ep->name);
+>>    	ret = -EINVAL;
+>>    out:
+>> -	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	spin_unlock(&dwc->lock);
+>>    
+>>    	return ret;
+>>    }
+>> @@ -2489,9 +2491,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc);
+>>    
+>>    static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>>    {
+>> -	unsigned long flags;
+>> -
+>> -	spin_lock_irqsave(&dwc->lock, flags);
+>> +	spin_lock(&dwc->lock);
+>>    	dwc->connected = false;
+>>    
+>>    	/*
+>> @@ -2506,10 +2506,10 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>>    
+>>    		reinit_completion(&dwc->ep0_in_setup);
+>>    
+>> -		spin_unlock_irqrestore(&dwc->lock, flags);
+>> +		spin_unlock(&dwc->lock);
+>>    		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
+>>    				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+>> -		spin_lock_irqsave(&dwc->lock, flags);
+>> +		spin_lock(&dwc->lock);
+>>    		if (ret == 0)
+>>    			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
+>>    	}
+>> @@ -2523,7 +2523,7 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>>    	 */
+>>    	dwc3_stop_active_transfers(dwc);
+>>    	__dwc3_gadget_stop(dwc);
+>> -	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	spin_unlock(&dwc->lock);
+>>    
+>>    	/*
+>>    	 * Note: if the GEVNTCOUNT indicates events in the event buffer, the
+>> @@ -2569,6 +2569,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>    		return 0;
+>>    	}
+>>    
+>> +	synchronize_irq(dwc->irq_gadget);
+>> +
+>>    	if (!is_on) {
+>>    		ret = dwc3_gadget_soft_disconnect(dwc);
+>>    	} else {
+>> @@ -3729,6 +3731,7 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>>    	 */
+>>    
+>>    	__dwc3_stop_active_transfer(dep, force, interrupt);
+>> +
+>>    }
+>>    
+>>    static void dwc3_clear_stall_all_ep(struct dwc3 *dwc)
+> 
 > Hi Greg,
 > 
-> On Thu, Jul 14, 2022 at 7:15 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jul 11, 2022 at 07:22:54AM +0000, Prashant Malani wrote:
-> > > This series introduces a retimer class to the USB Type-C framework,
-> > > It also introduces a Chrome EC (Embedded Controller) switch driver which
-> > > registers the aforementioned retimer switches as well as mode-switches.
-> > >
-> > > Patch 1 and 2 introduce the retimer class and associated functions to
-> > > the Type-C common code.
-> > >
-> > > Patches 3-7 add the cros-typec-switch driver.
-> > >
-> > > Patches 8-9 update cros-ec-typec to get and use retimer switch handles.
-> > >
-> > > Submission suggestion (as always, open to better suggestions):
-> > > - Patch 1 and 2 can go through the USB repo.
-> > > - Patch 3-9 can go through the chrome-platform repo. Since they depend
-> > >   on patches 1 and 2, we can create an "topic branch" off of usb-next
-> > >   once Patch 1 and 2 are submitted, and then apply Patches 3-9 on top
-> > >   of that "topic branch" before merging it back into chrome-platform's
-> > >   for-next branch
-> >
-> > That's a mess, I can just take all of them into my tree if you want.
+> Please don't pick up this patch yet. We're still in discussion with
+> this. I have some concern with unlocking/locking when sending End
+> Transfer command. For example, this patch may cause issues with
+> DWC3_EP_END_TRANSFER_PENDING checks.
 > 
-> That works for me. Thanks for taking Patch 1 and 2; it should be fine
-> to apply the rest of the patches to your tree too.
 
-Ok, now queued up.
+Agreed.
 
-greg k-h
+> Hi Wesley,
+> 
+> Did you try out my suggestion yet?
+> 
+
+In process of testing.  Will update you in a few days, since it might 
+take a day or so to reproduce.
+
+Thanks
+Wesley Cheng
