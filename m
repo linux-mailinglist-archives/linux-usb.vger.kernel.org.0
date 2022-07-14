@@ -2,46 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2F857507D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 16:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4F457504B
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 16:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240386AbiGNOMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 10:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
+        id S239273AbiGNOFo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 10:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiGNOM1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 10:12:27 -0400
+        with ESMTP id S232207AbiGNOFn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 10:05:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A084D82D;
-        Thu, 14 Jul 2022 07:12:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2A5382;
+        Thu, 14 Jul 2022 07:05:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 067A7B823A9;
-        Thu, 14 Jul 2022 14:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE83C34114;
-        Thu, 14 Jul 2022 14:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657807938;
-        bh=mvlJ0wufsEtTo9Dxhf5723LkQmjzyNDzx5teMH2feS4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fIGl/Cm8qgB4JLLdsP8ojS41VS2bqdX3a1mPi6QqeLmVXUo/qWZeFMjdB93qjxr05
-         6i0JdXmd5WGoKQQ+ihQgQRIYqzeOCA0q53C8VqEOC71H83ChLM7GYGmk6SpPMEbHIR
-         2jor24XWNoMEprj+483v8ZXQ2MJfKRGA4SniilZs=
-Date:   Thu, 14 Jul 2022 16:01:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     pawell@cadence.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: cdnsp: Fix potential memory leak in
- cdnsp_alloc_stream_info()
-Message-ID: <YtAhzxPihYcqrs1e@kroah.com>
-References: <20220630005148.2166473-1-niejianglei2021@163.com>
- <Yr1IpjRbxNpvpGbR@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0402EB8259F;
+        Thu, 14 Jul 2022 14:05:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FCFC34114;
+        Thu, 14 Jul 2022 14:05:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657807535;
+        bh=D5GgF02NPdE9LjaZDIxMtrmQj0pAf83Dl48OJxwjnTU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mWU3J659D19e9YIWg5I+0qFf1bBw1wGqqd5y/M9yVoW5a4OGi4ZJ9Ojz24qMTq+Ok
+         V7/5H+zN0hGakxWi4FY9FekRrtApFVryRLB7novLvm/SvxjwNDQY3XhaT+X8Z2yPWK
+         tlbIUFanj6nrRUEkdR+1hm6WEoTs17i3Jyi+8DPAdycb690evsjOYbxve7lUFOaXuz
+         TBFvdoJGgjuH4MKhxliNEugBEeNI7CjSSSeQJTelegaKl86JVx91QADcYlsvTVrrYL
+         DXMUhh19PhlCNs0d9NN1lDqtdOkSTexFLHR507pbMuA/gGnhU7gqj2o/gGQN2sSuAx
+         bsTO0200PsvjQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oBzTI-0007zu-Ul; Thu, 14 Jul 2022 16:05:41 +0200
+Date:   Thu, 14 Jul 2022 16:05:40 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.19-rc7
+Message-ID: <YtAitIrTRRVkaUKJ@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yr1IpjRbxNpvpGbR@kroah.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,24 +53,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 08:54:30AM +0200, Greg KH wrote:
-> On Thu, Jun 30, 2022 at 08:51:48AM +0800, Jianglei Nie wrote:
-> > cdnsp_alloc_stream_info() allocates stream context array for stream_info
-> > ->stream_ctx_array with cdnsp_alloc_stream_ctx(). When some error occurs,
-> > stream_info->stream_ctx_array is not released, which will lead to a
-> > memory leak.
-> > 
-> > We can fix it by releasing the stream_info->stream_ctx_array with
-> > cdnsp_free_stream_ctx() on the error path to avoid the potential memory
-> > leak.
-> > 
-> > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> > ---
-> >  drivers/usb/cdns3/cdnsp-mem.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> 
-> What commit id does this fix?
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
-Dropped due to lack of response.
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
 
-greg k-h
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.19-rc7
+
+for you to fetch changes up to 7c239a071d1f04b7137789810807b4108d475c72:
+
+  USB: serial: ftdi_sio: add Belimo device ids (2022-07-13 08:20:32 +0200)
+
+----------------------------------------------------------------
+USB-serial fixes for 5.19-rc7
+
+Here are a couple of new device ids for ftdi_sio.
+
+Everything has been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Lucien Buchmann (1):
+      USB: serial: ftdi_sio: add Belimo device ids
+
+ drivers/usb/serial/ftdi_sio.c     | 3 +++
+ drivers/usb/serial/ftdi_sio_ids.h | 6 ++++++
+ 2 files changed, 9 insertions(+)
