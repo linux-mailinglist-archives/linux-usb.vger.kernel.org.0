@@ -2,197 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0D8574CB4
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 14:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF82574D25
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 14:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238276AbiGNMCm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 08:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S238922AbiGNMLO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 08:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiGNMCk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 08:02:40 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2047.outbound.protection.outlook.com [40.107.93.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957065B7A8;
-        Thu, 14 Jul 2022 05:02:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZmV3B2cWwCA+GiaU+5P/6ngrJacg0wJk5n7MmWqtK12rlPirabDxnPQq2F0BOvmO/T4xqCDYM50MEXqNM6iDB4oQORinsGSojxMIEyCsLlZqK7F49AHeVe63xzLtjAnvmuku368PJc55umyr7LfhN556mBT5Gj5atnfpFsJoP5lvQa4E+3U0PDVQDbf6QNyp8QT1LZqxKe7lu9MkQmvEPj1YxBfwt3o1oYoUeJ2uSO6tvR9qtUorjZevRNKKDimyxLLjJH72ZMga/JQFN6QbKSXlds2vN/zBPf4vmkHE1FjkppiI0R7No9ztt4FgmqGSafrT4ID6u5BH2/ZhPeL4Lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/jj0IMuqd/2MlflydqPd1Io2VhHfqWlTaHZA5efbPWw=;
- b=OFDMJGtK33pxhNeIXVes+z+Tkh86xlehG8tRKWu862UzVBfY15iWH3igGswA6fq18zzap2tkvD3pUi9DzQk7Xa7T5rncI8M/VKLexPsdyFA7Vk9/L6L+q2fam+0MF1XRKn9NHx2qZosJIWXSxvNO7QIazFKXUFV4fi40bZ3Cr26WV4cyRQjj5p1j4fEIs6zohM1pxFsDk8rFsNxBqlLNHAV3SWyHr7SipVBNEJKYRD36RCVuQjecO1uYKBVl8b9+CAoI07E2PTbwWOqCZNZpK7WmfFv/RAeSucOWLSyAmOfp7qvcT/5ODreM9BwXAcbXFGH0/STZuY+ItHlRxlxapQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/jj0IMuqd/2MlflydqPd1Io2VhHfqWlTaHZA5efbPWw=;
- b=JlkltQOC4qWMCfw08NIpBZAvnnt+adVci3q1GERraU/2i/0M1IVQMHBv/gPttgJepLEtsa7HlPZcROAkrdJsNvpv6fL3vvjFoosaz767yJp5/JBYQkMzg1wQGSnYEHrk99n/7S3peF85pvez0zktoxnpekWuG+M2ItKiquxF7Ic=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from SJ0PR03MB6533.namprd03.prod.outlook.com (2603:10b6:a03:386::12)
- by BN8PR03MB4915.namprd03.prod.outlook.com (2603:10b6:408:dc::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Thu, 14 Jul
- 2022 12:02:37 +0000
-Received: from SJ0PR03MB6533.namprd03.prod.outlook.com
- ([fe80::d52:5cb7:8c3b:f666]) by SJ0PR03MB6533.namprd03.prod.outlook.com
- ([fe80::d52:5cb7:8c3b:f666%6]) with mapi id 15.20.5417.026; Thu, 14 Jul 2022
- 12:02:37 +0000
-From:   =?UTF-8?q?=C5=81ukasz=20Spintzyk?= <lukasz.spintzyk@synaptics.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, oliver@neukum.org, kuba@kernel.org,
-        ppd-posix@synaptics.com
-Subject: [PATCH v2 2/2] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
-Date:   Thu, 14 Jul 2022 14:02:17 +0200
-Message-Id: <20220714120217.18635-2-lukasz.spintzyk@synaptics.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220714120217.18635-1-lukasz.spintzyk@synaptics.com>
-References: <20220714120217.18635-1-lukasz.spintzyk@synaptics.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BE1P281CA0071.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:26::16) To SJ0PR03MB6533.namprd03.prod.outlook.com
- (2603:10b6:a03:386::12)
+        with ESMTP id S237264AbiGNMLB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 08:11:01 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C158624B0
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 05:09:21 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id w24-20020a6bd618000000b0067991012f7aso629292ioa.6
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 05:09:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=t/JWl1auGyP7dRyKdtQPk8LnN5k4DzbxUNSFwRTHcRc=;
+        b=GXQBzOyLsK6v5ROpGxKSozfU1voZPmFezTXlZpUNRSLXDQbS88ii59fKm+wPfg7LHF
+         cy4P01Z+lVDSKb/nI4Z086cVb/JRgcrIau4aHSv5eDO6rBN7NTS0I56V8FAhrt9YS4JG
+         7Wp+HsusW9m6JkOAv6kCHwz3ClepM662J72Ul2zKuJ9Q/cmODniJh/KXSdSj9PW+rSLn
+         n9JaMt44MjkQTX+6drAZV5lhQLnD1PAqBW0B1Knp1eDhLkYYFoWVJfGKqFxMGcsQK+LF
+         mzd+r6cZSF26vD0qGetwNH0qhWH0T9wvnS1m+Kb+pEZDFYE9TFSr3P6pLfYyCGvqxatD
+         iA1g==
+X-Gm-Message-State: AJIora+0QsudjGtnYcTS6czfLokIEpAMzLwnSYuJPLntpXQCR0LjhleE
+        z5aUJCKfZJbkcrP7Dl1GS8MZ5J9dHisXeTaKNlmDEXZYXUT9
+X-Google-Smtp-Source: AGRyM1sTlC5YxlWad4CIcwPM0BAjCa6kn9Q4apd6Q8FX/P5y4kUB3LiO16/GSg+78SxoJZg3a6S6HaTkduM5iE0i1VJFzRxvXxhf
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ce38c537-bc5d-4adc-3b9f-08da6590be92
-X-MS-TrafficTypeDiagnostic: BN8PR03MB4915:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uU8mZIjWxj0F7kPmM7SGKnzc+TlScc88sf9ETJVoXsqbxMS6Op8TOT92g6J/uOPBXNq5pdkSrL1r/PZFmatLmxWYSjy9B8Y1f0fpI07MbytFN+8LZHO06umBPOvcINI5LBjreWHgwyHTrDMKloJ5PsP3ekILQd3LywulYCxqqM5mBDQ0X37+TPmTqrTPEd6JuxQOgqKB3XvMNMDe1gGiSGmeOznxHj2p3bujt8e6VeUHOAsw7jiHEJC9aB5O8SVjLh0j6lp5f79INR7id+bw1omUhsGJH99I3hiomrooeTeeDvj5bbrHmTLv/2xipMyEzgNDoq246Df11OOEzzvJAp0qg1fE9pzblznOnyO/051wFjolTw5qtz1s4Uirlrbjl2xt55DoZRsedPSiRQKAQgyXF9Z+0yHxy8KKdib4b/Sl8NLyb4vXb+V0aUXKUXtiWWhICxsltotSn0O5s9TsYsSCfMhyK1gl5+6rikKAIwy9vx/HqTrMmEkR3lEZnsHHW277hSfIGoAA5M2xCfiOLF5ftYNfnx2DV2pucqFjgrPA3Owie5Tjmez6EMTJtrRE/uLFxjy5FJYWi5mCxq9k4U+VACU9MpgDXvuAziGmfBJoQKSiJFOkXx7sX/raqKEE80Gk7zOhAMb1gLsr698AZE14c7Ga3Mhz1PYcMp1cTK/BIXg7VZxlGFKKkzRrdLziRr5dWhK9j7v+H8AyA6F9FgPN0Wp/gnP+03P80EMvqPWxbK5CT3JevNu1GfnweXaLGcFwRdeiaLWzqQtUDoEYNiXC8F8bYZPg2O+3tEFbnSbJ+mqkRha3gwWk+1y+40Wjmyr/MdH2WFW+SC4XYL9xvw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6533.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(39850400004)(396003)(376002)(346002)(6916009)(6666004)(1076003)(6512007)(66476007)(41300700001)(316002)(2906002)(36756003)(8676002)(6486002)(66946007)(26005)(5660300002)(186003)(83380400001)(8936002)(478600001)(52116002)(107886003)(86362001)(2616005)(38350700002)(4326008)(6506007)(66556008)(966005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MjNFRytsR2Vsc3p5TjBEdnB6aWZyMmY4UVlQK2xZUWI5cnpJQ3pUblMwemYy?=
- =?utf-8?B?RnloclUxRnhCT2JYcElsMjI2QnptSlY2WWQyU0YzR0tJdWhGWWNkVjNiNFBT?=
- =?utf-8?B?RFZ5Z04zajFhQlNQWlR0Zmtib3VvQzZJaDQvZzNkRTlPWkhMSUxuQzI2VnBH?=
- =?utf-8?B?ZTZabG42eGprczFRWXE1Tit3dUVUQnZOZlNjRDJyL1BaSHR3QlFDTHVLd1hL?=
- =?utf-8?B?bFJZWXgxQzdjT2JDNDZZMVBhQTROS2hwZGUwNnBteHdpdW5LS3dWWGMyaXpL?=
- =?utf-8?B?QWJaZUZQekp5cHdsR0tCSFlzcjU4T3M5Z3FaWTZmendQdEhmREdnZmk5Z3RC?=
- =?utf-8?B?SllRd1NHSUtsNyszY09vZjlqK1M5em54azVxM200cGUrdjBjVmpIR2NMSjJH?=
- =?utf-8?B?OUtnK3hPSFg3c2lURnpwSzR1ZVVIalhlZkhMeHJ4Tmg3dnlBOU14R0N2NnJ3?=
- =?utf-8?B?K3ZxeHBuRTROdWxhbFlpQnIxR05iRzlhb1Qxd3FyUVZmaEJleW9mckM3KytY?=
- =?utf-8?B?d1grclBNY2ZwUU5FNitOMWFaQ3NqbFRzeGNpT25xbWg1RERCZFkyekZTWTNi?=
- =?utf-8?B?ZkY3SlJ3RUZiRm12UEcra2RQR3ZxZkFGTDRTNjlYOERaMFMxUDd2T0xwQ1cv?=
- =?utf-8?B?d1dpSGdUSGtaN0x4SExvUXdNUW1LWGUyZk9sQ1BUblVYTEJONGp5REpBZU82?=
- =?utf-8?B?c3hXNENXZ216VzZLRUEwZmY5dEhvNnF6NDA0U1I3eHBRNTIyNDN5Tk5EMGxx?=
- =?utf-8?B?UDF5RmUvVVE3dGMrNFhQcDM1bVdHczJMOGZ6bVVxT1N6SnJIRG1LdXlDK081?=
- =?utf-8?B?VVBBSmdod3RvdDVCLzNvZjExTmVDTldZSTF2WjZxVVhTMFJOYzl5YjZZVDdR?=
- =?utf-8?B?NEVsTUxoMk5zWHRNdWlLUWNSUjFNWGtJL3pHWWZ1T1RkcG9SUS96Y0ZMRHRa?=
- =?utf-8?B?dS9vYVRvcndRZ255UmVqQjlGckgvaEw2S2FkVUF0QzNPdS9naU1sakU2aGRa?=
- =?utf-8?B?eVEwZEVYMEFXYW1sclUvMTVlVjFldk5vNnhCU3VYQ05Eb0xCMExvSXZkbk1m?=
- =?utf-8?B?WU9NVzNINlZ2WDd5TFluWUk0eW9DTE92TEdBOXpLR0xPZU44SUlneHovVDZ6?=
- =?utf-8?B?VXJxTUZYM1pLL29BcWoxYVhaYjVUY2FqWk9iblhHQVNqcjN6ZHVDeFJ6OUMy?=
- =?utf-8?B?QUoxUEhZUkFIU2ZoU2g2bXo3M0JpdkdqeFI2eDU1WFRvZVJ5WFRuY2l4TmVU?=
- =?utf-8?B?SFFyVC8rTHNEYVAreFBmYkV3MXhPcjlka2xHcHIwaVBhbnVYU3drbG02RDll?=
- =?utf-8?B?NU01SGE4QmROQ0FoZjQ2ZTZHVVdkRVRqVjNoajZOZ1pGa0lqQmo5ZHhqeUd4?=
- =?utf-8?B?L0Fxeml1bzBkcW8vVlo2dmpCeWZmNDRZQ3k0WU5ubWlwckw5WjBJL3kva3g1?=
- =?utf-8?B?emNBcFVubjJrTGZnamtpSk94MHJrUmgyTVRFWkFJK0pVQ3dXYnJXY2ZmK3R4?=
- =?utf-8?B?K3UrQk9EbEJHelZraDMyU05ubHRtcEV5OEduTExNeGU3aXBDQWREaGpRV3JB?=
- =?utf-8?B?UFlkeFNpQjAzdlF2TDZYRXNLUFBITGpXL29kM3F1V0dic0FoUHB5dG55b1BF?=
- =?utf-8?B?SFUvSFBLTHdKd2dvZlhlS2gwM1p1MnRmcmQxMEo1aHpyUTBoVGg0Z2lHSnJJ?=
- =?utf-8?B?L2JCRHE2TURCQ2E4bzlxcURJYisvSzBYMEZWQ0V3UEJxaFlKVVFtSjJsVjB0?=
- =?utf-8?B?U1prMlFNTWN6THJVdVJGSDdIUzV6MTdGMTRsbEpLN3JYMDZJbW0rd3c4ZkMy?=
- =?utf-8?B?TFo2RWRrYWlWQjFYSWZRYlJtM2M0NlNwZUpZSnJ3aXZEY093bm9HSHBvQ0hu?=
- =?utf-8?B?SFBncW1pUXpvNklWa1hSUmlCaitERVZuSUFveUxGeEs2cGdRQ2xDMnpYZ3g1?=
- =?utf-8?B?NDcvNmJFb3FOT2plS1ZHYWYwT0VrVG9PZ1M1cjhRWm5Bc2c4K1RjY0pYZzNt?=
- =?utf-8?B?elp2a3lMTklna0ljaW5mNlMreDBCbjYzSjllUTQwU0NYWnlGdDJYdmc5VnI5?=
- =?utf-8?B?czhQSVgxQ3l5RVdKeTBlVzdnZTV5MWx2d0hnZjVaZ2E4bnlPcXhUQ1MwSkpr?=
- =?utf-8?Q?++i+IfJbeGeaEknb8GKFAJqTm?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce38c537-bc5d-4adc-3b9f-08da6590be92
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6533.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 12:02:37.4546
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CUMTOkouYtZWlVkWMwnRzDYmb6rkGwmww4evyrwZsFBdse997ts/85KnglgPnrMlpdjZjV85Yjc3yd713KjY8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR03MB4915
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:940a:0:b0:33c:b3f9:3e7f with SMTP id
+ a10-20020a02940a000000b0033cb3f93e7fmr4586868jai.287.1657800561085; Thu, 14
+ Jul 2022 05:09:21 -0700 (PDT)
+Date:   Thu, 14 Jul 2022 05:09:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008d55fe05e3c2c57c@google.com>
+Subject: [syzbot] WARNING in r8712_usb_write_mem/usb_submit_urb
+From:   syzbot <syzbot+6716435e45f2b68f32fa@syzkaller.appspotmail.com>
+To:     Larry.Finger@lwfinger.net, dan.carpenter@oracle.com,
+        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wanngchenng@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DisplayLink ethernet devices require NTB buffers larger then 32kb
-in order to run with highest performance.
+Hello,
 
-This patch is changing upper limit of the rx and tx buffers.
-Those buffers are initialized with CDC_NCM_NTB_DEF_SIZE_RX and
-CDC_NCM_NTB_DEF_SIZE_TX which is 16kb so by default no device is
-affected by increased limit.
+syzbot found the following issue on:
 
-Rx and tx buffer is increased under two conditions:
- - Device need to advertise that it supports higher buffer size in
-   dwNtbMaxInMaxSize and dwNtbMaxOutMaxSize.
- - cdc_ncm/rx_max and cdc_ncm/tx_max driver parameters must be adjusted
-   with udev rule or ethtool.
+HEAD commit:    8affe37c525d usb: dwc3: gadget: fix high speed multiplier ..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=14260cac080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ebec88088cc2071
+dashboard link: https://syzkaller.appspot.com/bug?extid=6716435e45f2b68f32fa
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Summary of testing and performance results:
-Tests were performed on following devices:
- - DisplayLink DL-3xxx family device
- - DisplayLink DL-6xxx family device
- - ASUS USB-C2500 2.5G USB3 ethernet adapter
- - Plugable USB3 1G USB3 ethernet adapter
- - EDIMAX EU-4307 USB-C ethernet adapter
- - Dell DBQBCBC064 USB-C ethernet adapter
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Performance measurements were done with:
- - iperf3 between two linux boxes
- - http://openspeedtest.com/ instance running on local test machine
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6716435e45f2b68f32fa@syzkaller.appspotmail.com
 
-Insights from tests results:
- - All except one from third party usb adapters were not affected by
-   increased buffer size to their advertised dwNtbOutMaxSize and
-   dwNtbInMaxSize.
-   Devices were generally reaching 912-940Mbps both download and upload.
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 1217 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+Modules linked in:
+CPU: 0 PID: 1217 Comm: dhcpcd Not tainted 5.19.0-rc4-syzkaller-00118-g8affe37c525d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+RIP: 0010:usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+Code: 7c 24 18 e8 a0 32 8f fd 48 8b 7c 24 18 e8 76 46 18 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 80 1c a9 86 e8 ee d0 09 02 <0f> 0b e9 58 f8 ff ff e8 72 32 8f fd 48 81 c5 b8 05 00 00 e9 84 f7
+RSP: 0018:ffffc900010576d0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8881130ed580 RSI: ffffffff812c0fe8 RDI: fffff5200020aecc
+RBP: ffff88811d9fd0f0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000003
+R13: ffff8881382359b0 R14: 0000000000000003 R15: ffff888110529b00
+FS:  00007f9441e74740(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fcd7323da70 CR3: 0000000118d80000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ r8712_usb_write_mem+0x2e0/0x3e0 drivers/staging/rtl8712/usb_ops_linux.c:177
+ rtl8712_dl_fw+0x8b8/0xe20 drivers/staging/rtl8712/hal_init.c:203
+ rtl8712_hal_init drivers/staging/rtl8712/hal_init.c:330 [inline]
+ rtl871x_hal_init+0xae/0x180 drivers/staging/rtl8712/hal_init.c:394
+ netdev_open+0xe6/0x690 drivers/staging/rtl8712/os_intfs.c:379
+ __dev_open+0x2c4/0x4d0 net/core/dev.c:1432
+ __dev_change_flags+0x583/0x750 net/core/dev.c:8533
+ dev_change_flags+0x93/0x170 net/core/dev.c:8604
+ devinet_ioctl+0x15d1/0x1ca0 net/ipv4/devinet.c:1146
+ inet_ioctl+0x1e6/0x320 net/ipv4/af_inet.c:968
+ sock_do_ioctl+0xcc/0x230 net/socket.c:1169
+ sock_ioctl+0x2f1/0x640 net/socket.c:1286
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f9441f620e7
+Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 61 9d 0c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffc7f6121f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f9441e746c8 RCX: 00007f9441f620e7
+RDX: 00007ffc7f6223e8 RSI: 0000000000008914 RDI: 0000000000000005
+RBP: 00007ffc7f632598 R08: 00007ffc7f6223a8 R09: 00007ffc7f622358
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc7f6223e8 R14: 0000000000000028 R15: 0000000000008914
+ </TASK>
 
-   Only EDIMAX adapter experienced decreased download size from
-   929Mbps to 827Mbps with iper3, with openspeedtest decrease was from
-   968Mbps to 886Mbps.
 
- - DisplayLink DL-3xxx family devices experienced performance increase
-   with iperf3 download from 300Mbps to 870Mbps and
-   upload from 782Mbps to 844Mbps.
-   With openspeedtest download increased from 556Mbps to 873Mbps
-   and upload from 727Mbps to 973Mbps
-
- - DiplayLink DL-6xxx family devices are not affected by
-   increased buffer size.
-
-Signed-off-by: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v2:
- - Information how to change tx,rx buffer size
- - Added performance tests results to the commit description.
-
-
- include/linux/usb/cdc_ncm.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
-index f7cb3ddce7fb..2d207cb4837d 100644
---- a/include/linux/usb/cdc_ncm.h
-+++ b/include/linux/usb/cdc_ncm.h
-@@ -53,8 +53,8 @@
- #define USB_CDC_NCM_NDP32_LENGTH_MIN		0x20
- 
- /* Maximum NTB length */
--#define	CDC_NCM_NTB_MAX_SIZE_TX			32768	/* bytes */
--#define	CDC_NCM_NTB_MAX_SIZE_RX			32768	/* bytes */
-+#define	CDC_NCM_NTB_MAX_SIZE_TX			65536	/* bytes */
-+#define	CDC_NCM_NTB_MAX_SIZE_RX			65536	/* bytes */
- 
- /* Initial NTB length */
- #define	CDC_NCM_NTB_DEF_SIZE_TX			16384	/* bytes */
--- 
-2.36.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
