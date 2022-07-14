@@ -2,173 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD16574596
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 09:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8129D574646
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 10:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbiGNHNh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 03:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S237167AbiGNIB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 04:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiGNHNe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 03:13:34 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193049E;
-        Thu, 14 Jul 2022 00:13:32 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id v5so836724qvq.8;
-        Thu, 14 Jul 2022 00:13:32 -0700 (PDT)
+        with ESMTP id S236396AbiGNIBV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 04:01:21 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2107.outbound.protection.outlook.com [40.107.237.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FC822522;
+        Thu, 14 Jul 2022 01:01:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YDUPAOKMOphxy9lsBNVGaBZf2g6nDwFWL5egkL4+qo32Ki/WjZykEmo3LP1O3klMRTMBSk2rqHwNJ6vkWw5jGgNGm76CZCRAz35BK+O9Zu/kHYb6sH0HiHqNLOGe3BYL6HmR3JeBLvrI+c3izDxDZkHw/hYfPQgLsyzPdmA4JpjpvVzxRz3IiS3dC5cpuPi+B3VTOPLPS4Vjk8B22sqvSt/zTp0xU9tXfh+ZM34F/OcH5pblx4mMUK77Nhpbdqnrt4FOFC/Spr1bjzwxB6rRSHh5V7WH/AXt6W2AL+wkts7RQdhg3QfoNjg2mHYcrMhwiCZnSLpUMYnHleQzqgDz9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cwwE8cisTu7u6opjMWRDzwUH3LyxGNeq3/utgdQGNHU=;
+ b=MjaJf8Ri+yQs68RPtTfL6r/5fUemLxvYoKMzdF469OMa8yFj84FBGHJ9l5b4qJoc0dYIG/MwyzvOLAU80V+5ZQllxk9iiy6UrByLMaq3CsVo7KPKgQT+PLufmzW0qgFqGAWnDCoj6BF4MqgWT3epijOyIq/7NGS6CQX7KBNxXrqt86SdL5jBj2oIFcLLEbH4BAlK84Dn1g2udTExXr7yWRABMrkwQ26mpTlAKSzeBBItTg/myVv6wxmGhM6t5alU8G4tuDN0/FQuMnZfELRigoYN2gElc7iHwRjQKd7wCT2bSIYFbSJzLTa4oTnn9yitX6kjsfLXStCoGzRU45ISLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Q5UuNt5TPK0IuG39xN+NMro5LKgIqNbr9Zx7mA/mPiM=;
-        b=b0E3JTU5pYWhoLa3ap7YFqzgEMsmY9DzPinFwRbVIUxY93YXyUx7ZCDKj7KmfhQ21C
-         rbLfBjhA9+2Iw8+wRoHdzOZmhqnsY+50XpmOdqNkHbt1cSMSHEnAu5vgSo2cTU4Vp00E
-         OzftT9WeV+jRXDaaNmeyjhArEApdAVnDvnAaK0sb17BX1/wJ+erATO6cVT2LmSg5zo1C
-         AkB0gsToiInDLayKBxHHJLxYpaxBz2afFFQmHItaY08Jtmauimz5lnfp+bStbZf1nc6w
-         aPm7pRJ9mU/zUvlfPRnxcyejhyXF2kYZj0eimP7+p17pN8EvNWU5/v59Wtwmk5hE8TwL
-         aWyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Q5UuNt5TPK0IuG39xN+NMro5LKgIqNbr9Zx7mA/mPiM=;
-        b=H2H0Hsh08lIl9isbT+fqX3nrppbpkgndA5kcwZBTP2zSZKk9UGbhT8rHlvYi4jXFYr
-         7fPQenKSeYkJNQx06LmB1pgkWEE3Kq/JYmEFMSpaO6lk5Lybisar1f2ynNayEsDqIfSY
-         c5BR2Ay+hdoWCJSX8cr4sAc3cpwP95sksn0veU/oM/yJcuo+id8EDWVCZYL12mMA6OSf
-         21slym93QeRbtzeRVEz2xju9enlIHq7I+Z++T15bxUOpHUQxIXxOO9Ix6GmBDN5fxhYV
-         s/ufVVA0tJXSIsy1HYQLG5TiO+1rQzKlzLu8MGjlc9L9DVvv9hLXWQBoCQ16P59Tq/0V
-         Lm0g==
-X-Gm-Message-State: AJIora+IrAq/ZLuM7OhYsw/pH3i9jr02WdTCP6aykSQuCeQfSvwSddn7
-        a1qHJ+WBzCD2fAIGRV6G994esdpGxksiKGfKGwY=
-X-Google-Smtp-Source: AGRyM1vJRbWeeJQDQ5VsDhXvc8TWmApQquCsp5U/iybMpcD3LNzACs5RVUGTHl5IJiCF7b4f25ZlvyBfRyQDbXD00iQ=
-X-Received: by 2002:a0c:9a0c:0:b0:470:54d7:cfd5 with SMTP id
- p12-20020a0c9a0c000000b0047054d7cfd5mr6903769qvd.46.1657782811193; Thu, 14
- Jul 2022 00:13:31 -0700 (PDT)
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cwwE8cisTu7u6opjMWRDzwUH3LyxGNeq3/utgdQGNHU=;
+ b=nGRVNlx40NBUUhnKEmcDNPFzmpNUhV7toGoCedzYvmnEU9MGdNykMC61utWGjkKzy37P0QBcdFj0BOTf7jlDGJZ4UGyEoQ5Ry+hoiJnjzfTRePIzujcEjBShJsZ66wNOuHuWNb8SSPHHiAGq5NNt73PRit7dyQq0gBE/RUg/XKQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by DM5PR04MB0252.namprd04.prod.outlook.com (2603:10b6:3:6f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.21; Thu, 14 Jul
+ 2022 08:01:17 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b%6]) with mapi id 15.20.5438.012; Thu, 14 Jul 2022
+ 08:01:17 +0000
+Date:   Thu, 14 Jul 2022 16:01:12 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v18 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Message-ID: <20220714080112.GA13028@anxtwsw-Precision-3640-Tower>
+References: <20220713084139.2810115-1-xji@analogixsemi.com>
+ <f9e1ad3b-d6ed-7392-2fd9-ca6ff0417b16@linaro.org>
+ <20220714020238.GA4276@anxtwsw-Precision-3640-Tower>
+ <f3c98e31-7c68-34a6-f492-95c1b6eeb625@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3c98e31-7c68-34a6-f492-95c1b6eeb625@linaro.org>
+X-ClientProxiedBy: TY2PR04CA0006.apcprd04.prod.outlook.com
+ (2603:1096:404:f6::18) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-References: <20220704053901.728-1-peterwu.pub@gmail.com> <20220704053901.728-14-peterwu.pub@gmail.com>
- <CAHp75VdwEc9AW1w8ejsxkw+sBTF1dumd99QyzTY9BZaXiViRWQ@mail.gmail.com>
- <CABtFH5K-2+2hbpvpq2nPE5AsznkQxZF2r3MVC64Q39DJhVuUtA@mail.gmail.com> <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
-In-Reply-To: <CAHp75VevDwdAKLYEWJgnMDvzuPuFibLuVqH-GKazEOT76wM6_A@mail.gmail.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Thu, 14 Jul 2022 15:13:19 +0800
-Message-ID: <CABtFH5LT1Ct_9-B_XRrGwYFmL5kGS6KHR7dNVyUO5z4sTy_6oA@mail.gmail.com>
-Subject: Re: [PATCH v4 13/13] video: backlight: mt6370: Add Mediatek MT6370 support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cad38908-33ed-4933-d739-08da656f0797
+X-MS-TrafficTypeDiagnostic: DM5PR04MB0252:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BUsTSxVKXmMeKTomusTM08LuVfi5JodagR4ibIHtRKrd+TAI4RPppxuksb1FPh+J2i9TORO7CjJQKra/xVzX0gbTMbWc+gsVz1CxhyA0tlnuIokbr73QF0JlcsKz9AGaDm1yIfs+gGLzPwFSz6ghDVZG3fdxK6wWw5nRemjQZmwQ5KF/SF4nqqG0RNaOvptpT4PzV1nZNuBKMVuUgPGvDFc2Gfsxvf5uswhaeunqeQYT7laNky5U8Un90dmmvmK4WNv9UwRXpkjauJB+ynJrsyW2Pe7LccqXWR1AzTvoGwln3smGnzvV+g/TYEDxuahfCOVuHftK2SDSjqxJB/T54oI0URJeHW8iZC1yPI+3JlVmPcuQ3CEpq6syaxbEiHO31LeCBiQTBEbUgUwCxtWLMn5dC03pLwfCBmm9OKYdLVIEHgLFcL7xLfgTv67w1B+YGTEWOupjMJqNbtzl9hMCHGV3RAda1T0X5qrA+/R34b3cCQVNaGdKaqR/Np5tdT18eBQoOIAH1DhTb6guI1mvFJ79qxC8ra+iucKkyYg+hpRp1yCHRBmH/LULQnBC6lvGSehudZqpHhMsry/sseF8HQCVnWsfc0hWlnAd2+hg+VBFWRh5NhD49x+PFPDI+L9NKb8uTx4YSOSvhedP6fAlhRdWQ0Xazlqz565uFPGn5TZzpVcOVtp/6SRuagQgkgtKjdOHpkIr3D7mn7g8fBYSicbGrTfYnuWQwb1PvdXdbPLHBkr8AC7CGsf7WXbKhOSyTXqyE3RkLEY+iDwNBhaL0JQv9vKqtByVYje2/BluJgNQh+YyPoQLnf06RvdH1WDm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(346002)(376002)(39840400004)(136003)(366004)(38350700002)(2906002)(316002)(38100700002)(5660300002)(41300700001)(33656002)(4744005)(33716001)(1076003)(52116002)(55236004)(66556008)(8676002)(6506007)(66476007)(6666004)(86362001)(53546011)(66946007)(8936002)(26005)(6512007)(4326008)(6486002)(6916009)(478600001)(186003)(9686003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d2R4/ahctaHMaWEiGUxL/e1GLHRXJXDzjAQIKYF9eBg9FmyqU2rfRi4Ppv5J?=
+ =?us-ascii?Q?M+dXwz04mJQtDqMEzcrMtKgvsMZ0qliDrJjY0pElfpplkFf8nqjkERORH7ef?=
+ =?us-ascii?Q?ci7ZUnoKYKUfWk5zpxMPR1vsRPlHz0kAw3kHV6EuhuMPLBpHD6zBZejO7XwJ?=
+ =?us-ascii?Q?0wPEfB1QMeKY9Mtpf312e1ReV9tk2vn61CW26EClZaoDWCw8XhW17yT8SycR?=
+ =?us-ascii?Q?vrNR/HdSLrCHLXPiUJzgxUTj10QXR1H87Vh4fQQoGZl4E6GWGvhl9oz3bYdK?=
+ =?us-ascii?Q?ne6NnL/y0l9XFYx/S7Qw1Vzi3xSR7Vgwl4/jRZUjEERwte5+9Sc/p2Iy9lHB?=
+ =?us-ascii?Q?PmWSc+rr8OMa+hmiIIf00wJxpDWS8opefSKSxHr5tcUs4GPOchJkTx5b9VZ2?=
+ =?us-ascii?Q?wYuNv4z7/Sa8/ra+9SNmEycw2xBMzUJx7Z60f3qU/mwWvgNS8Ou8nSN/vdC3?=
+ =?us-ascii?Q?0AG0gXnFdABZCaKDiln0GyRnuVQxruiqFpF/SnOOHOwTpqu4D3WJX/k0xoep?=
+ =?us-ascii?Q?3wYis1ydzXGfhd9tJ4Zz10dMKN9nXpA/z6DcJu2rNBDCtdsttoV2ED7h20fw?=
+ =?us-ascii?Q?tRtd4Qok1SjdoRVUEQknvfSGTQoima68upSrVSTZW2uKLLWoIYdaNIJmSx4P?=
+ =?us-ascii?Q?dV9Q3+4dqwFICglYHSV9JAdPeaGMpl+87QDMANk0Fr6l6V/b3T8jgjK/VKOl?=
+ =?us-ascii?Q?n4H38+Qsp4dlczVz44pgfXO4El2K5dlr7RM1lozgrCIyRENAher4UubyObcA?=
+ =?us-ascii?Q?Ar14LiAl+Zy2u5XH/vdGTFXWUjkk0mfusTmJVJ7ClhT7x1YT3zb8szC2R8xJ?=
+ =?us-ascii?Q?1Y/ZNk8xg20eVaiy/rU7WvnCq+heCyyrFNQBvs8bAq+7YRNKnHCPi8H4nYVC?=
+ =?us-ascii?Q?FktykeLnHtDMTliAa+uLV+jE2diPK3HgfcP0sWKnWvdGNAUPaizc2kSCjChu?=
+ =?us-ascii?Q?FAuYDj7jnfCL6BUKMNOV+oT7dK6dXSXudeBGEo/QgbTOLbP8jRNcBlnlf2/2?=
+ =?us-ascii?Q?hazb6SBEquk14IDUfl21MvbwkRA/tbbcIggd5RwqFFY3KAdw8kCGCydKQCOt?=
+ =?us-ascii?Q?xc84Pcn8yD1RoYzs3clduudjQ7D3ZgBrepDJOCzG4CznbR52RoSQx+Z1E8ZU?=
+ =?us-ascii?Q?Iq3wT+VcAwpLz84XgcTFQVzHEd/SUxuphF4JmEuGBLyVZWZgwAVAn0981DoX?=
+ =?us-ascii?Q?lT1W9LiLNJV1zoaS5yN5fOl96T8ra4fjII9FsMtU9NLX0G7t4/dvkAKmLza6?=
+ =?us-ascii?Q?NeTHAlzu4+czc2aCbOhLN48LbMruRbRad+kjSwRh+ANJ+a5UomY2fYB508bc?=
+ =?us-ascii?Q?ssGo5jxOmHeA+3TNvN1sQ9/e3/qfTGjDC4c9iOPff2EJwsA80ip4Lb2nd80N?=
+ =?us-ascii?Q?IKYAeOYWDbOE9r2QJEvrt0AOrps7XdBDwp9/4yX5Aloy6RQUPqxEu1W1wPIJ?=
+ =?us-ascii?Q?wUTBCLilYquUYvrMAx8dwpkvrnHNy8YeG4xJRVxhFdVmio1xbmVoTb3bO7Ks?=
+ =?us-ascii?Q?54Jg/AamYrniwv0e5nI2p2LEm9mrBVH1VZM37iHDBNDD+y+CB9BKaSdzRaEg?=
+ =?us-ascii?Q?rosQn2LGqoHnO0wgi6PP6delwqIFi0Uy+uVQyN+z?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cad38908-33ed-4933-d739-08da656f0797
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2022 08:01:17.1714
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6H1gKabu8LvGZeEnePaRhyuQH5J7XtjblFXfpZKnOan3TXDXMYTADPbUXRma0s6KPwwGNNfHDtg8d7sWQxrGWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0252
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
-=8813=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A8:07=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Wed, Jul 13, 2022 at 12:53 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
-=9C=885=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:14=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > > On Mon, Jul 4, 2022 at 7:43 AM ChiaEn Wu <peterwu.pub@gmail.com> wrot=
-e:
->
-> Please, remove unneeded context when replying!
->
-> ...
->
-> > > > +               brightness_val[0] =3D (brightness - 1) & MT6370_BL_=
-DIM2_MASK;
-> > > > +               brightness_val[1] =3D (brightness - 1)
-> > > > +                                   >> fls(MT6370_BL_DIM2_MASK);
-> > >
-> > > Bad indentation. One line?
-> >
-> > Well... if indent to one line, it will be over 80 characters(or called =
-columns?)
-> > From my understanding, it is not allowed, right??
->
-> It's allowed to some extent.Use your common sense.
-> Here it's obviously broken indentation.
->
-> ...
->
-> > > > +               prop_val =3D (ilog2(roundup_pow_of_two(prop_val)) +=
- 1) >> 1;
-> > >
-> > > Isn't something closer to get_order() or fls()?
-> >
-> > I will revise it to "(get_order(prop_va * PAGE_SIZE) + 1) / 2" and
-> > this change is meet your expectations??
->
-> Nope. Try again. What about fls()?
-
-I have tried two methods so far, as follows
--------------------------------------------------------------
-/*
- * prop_val =3D  1      -->  1 steps --> b'00
- * prop_val =3D  2 ~  4 -->  4 steps --> b'01
- * prop_val =3D  5 ~ 16 --> 16 steps --> b'10
- * prop_val =3D 17 ~ 64 --> 64 steps --> b'11
-*/
-
-// 1. use fls() and ffs() combination
-prop_val =3D ffs(prop_val) =3D=3D fls(prop_val) ? fls(prop_val) >> 1 :
-(fls(prop_val) + 1) >> 1;
-
-// 2. use one line for-loop, but without fls()
-for (i =3D --prop_val, prop_val =3D 0; i >> 2 * prop_val !=3D 0; prop_val++=
-);
--------------------------------------------------------------
-Do these changes meet your expectations??
-
->
-> ...
->
-> > > > +       props->max_brightness =3D min_t(u32, brightness,
-> > > > +                                     MT6370_BL_MAX_BRIGHTNESS);
-> > >
-> > > One line?
-> >
-> >  Ditto, it will be over 80 characters...
->
-> As per above.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+On Thu, Jul 14, 2022 at 08:52:09AM +0200, Krzysztof Kozlowski wrote:
+> On 14/07/2022 04:02, Xin Ji wrote:
+> > On Wed, Jul 13, 2022 at 11:28:16AM +0200, Krzysztof Kozlowski wrote:
+> >> On 13/07/2022 10:41, Xin Ji wrote:
+> >>> Add analogix PD chip anx7411 device binding
+> >>>
+> >>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> >>>
+> >>> ---
+> >>> v17 -> v18 : Change node name from "usb_typec" to "typec"
+> >>
+> >> Node name was anx7411, not usb_typec. What are you changing here? The label?
+> > Hi Krzysztof, sorry, I'm confused by your comment, this patch followed the
+> > other dts example in other yaml file and passed the dts checking by
+> > command "make dt_binding_check".
+> > 
+> > Do you mean change the the node name "anx7411" to "typec"?
+> 
+> Yes, since the some revisions ago I asked to use a generic name for the
+> node (generic node name).
+> 
+> 
+> Best regards,
+> Krzysztof
+Hi Krzysztof, OK, I'll change it in next version.
+Thanks,
+Xin
