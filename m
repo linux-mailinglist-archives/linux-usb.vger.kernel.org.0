@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EEC574D50
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 14:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F27574F0D
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 15:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238615AbiGNMUl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 08:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S230474AbiGNNXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 09:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiGNMUj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 08:20:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB7B1FCC8;
-        Thu, 14 Jul 2022 05:20:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S238494AbiGNNWp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 09:22:45 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0BC5D5A4;
+        Thu, 14 Jul 2022 06:22:09 -0700 (PDT)
+Received: from quatroqueijos.. (unknown [177.9.88.15])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9FE061D7E;
-        Thu, 14 Jul 2022 12:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A4B1C34114;
-        Thu, 14 Jul 2022 12:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657801238;
-        bh=T0bWZ1+6aus86wkYhIjKgAyY3BntT8gojmXQ4imG/vo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tE0H5AjGN1273iOr9NHnQr7kjHz5tu052JUoUYS+gsNc8dL4dRf1XxIlP58Jgi9fb
-         7qS8UKDUrVnOdpf1JwRsfkaipQ5Z1MqAC50jYXugdmr1zIf1BrIJp9xsz2NQBDc3hf
-         DUdFPSKvIrjX2Ku7Scxc7GjNkPboQsULgdckFQiA=
-Date:   Thu, 14 Jul 2022 14:20:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?Q?=C5=81ukasz?= Spintzyk <lukasz.spintzyk@synaptics.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        oliver@neukum.org, kuba@kernel.org, ppd-posix@synaptics.com
-Subject: Re: [PATCH v2 2/2] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
-Message-ID: <YtAKEyplVDC85EKV@kroah.com>
-References: <20220714120217.18635-1-lukasz.spintzyk@synaptics.com>
- <20220714120217.18635-2-lukasz.spintzyk@synaptics.com>
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 9761D3F3A9;
+        Thu, 14 Jul 2022 13:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1657804927;
+        bh=36Vgpi0nCGl0u3pmcD8xjyNPutMygLK4GXtVa3Et0BU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=i2J362YfjhMBlccJitl6AaA2T+I1hQ9PYpLi8quPGbMXmZUC5VEMnKjcsCIPQTZV9
+         1uv0K1S6rDV28z1R+Oz1o1woJTpEEPQrkwIp/mGPGeggd86Wc9LcIcuxdpOSuih3kO
+         CJHJ9mvsn/BsmFIKL0hOKC+aPuouVajYzfcDBLMAc5dNCSegQeH+q54kQglhkFkGH1
+         Pfyk4NOBOmlsDfXMEwTZhta/e+ajfENPcZbaofONW/DBHHViufQ3GYyhmymaUyrjBd
+         3EqFcqYElkfdRuV0mRYv0jX+qKwoDKepvCXYUK79vdUkBv+vbzp25zL3fzUj4aSyNi
+         Fiy7eApVrd8ew==
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, oneukum@suse.com, grundler@chromium.org,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH] sr9700: improve packet length sanity check
+Date:   Thu, 14 Jul 2022 10:21:34 -0300
+Message-Id: <20220714132134.426621-1-cascardo@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220714120217.18635-2-lukasz.spintzyk@synaptics.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,83 +52,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 02:02:17PM +0200, Łukasz Spintzyk wrote:
-> DisplayLink ethernet devices require NTB buffers larger then 32kb
-> in order to run with highest performance.
-> 
-> This patch is changing upper limit of the rx and tx buffers.
-> Those buffers are initialized with CDC_NCM_NTB_DEF_SIZE_RX and
-> CDC_NCM_NTB_DEF_SIZE_TX which is 16kb so by default no device is
-> affected by increased limit.
-> 
-> Rx and tx buffer is increased under two conditions:
->  - Device need to advertise that it supports higher buffer size in
->    dwNtbMaxInMaxSize and dwNtbMaxOutMaxSize.
->  - cdc_ncm/rx_max and cdc_ncm/tx_max driver parameters must be adjusted
->    with udev rule or ethtool.
-> 
-> Summary of testing and performance results:
-> Tests were performed on following devices:
->  - DisplayLink DL-3xxx family device
->  - DisplayLink DL-6xxx family device
->  - ASUS USB-C2500 2.5G USB3 ethernet adapter
->  - Plugable USB3 1G USB3 ethernet adapter
->  - EDIMAX EU-4307 USB-C ethernet adapter
->  - Dell DBQBCBC064 USB-C ethernet adapter
-> 
-> Performance measurements were done with:
->  - iperf3 between two linux boxes
->  - http://openspeedtest.com/ instance running on local test machine
-> 
-> Insights from tests results:
->  - All except one from third party usb adapters were not affected by
->    increased buffer size to their advertised dwNtbOutMaxSize and
->    dwNtbInMaxSize.
->    Devices were generally reaching 912-940Mbps both download and upload.
-> 
->    Only EDIMAX adapter experienced decreased download size from
->    929Mbps to 827Mbps with iper3, with openspeedtest decrease was from
->    968Mbps to 886Mbps.
-> 
->  - DisplayLink DL-3xxx family devices experienced performance increase
->    with iperf3 download from 300Mbps to 870Mbps and
->    upload from 782Mbps to 844Mbps.
->    With openspeedtest download increased from 556Mbps to 873Mbps
->    and upload from 727Mbps to 973Mbps
-> 
->  - DiplayLink DL-6xxx family devices are not affected by
->    increased buffer size.
-> 
-> Signed-off-by: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
-> ---
-> 
-> v2:
->  - Information how to change tx,rx buffer size
->  - Added performance tests results to the commit description.
-> 
-> 
->  include/linux/usb/cdc_ncm.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
-> index f7cb3ddce7fb..2d207cb4837d 100644
-> --- a/include/linux/usb/cdc_ncm.h
-> +++ b/include/linux/usb/cdc_ncm.h
-> @@ -53,8 +53,8 @@
->  #define USB_CDC_NCM_NDP32_LENGTH_MIN		0x20
->  
->  /* Maximum NTB length */
-> -#define	CDC_NCM_NTB_MAX_SIZE_TX			32768	/* bytes */
-> -#define	CDC_NCM_NTB_MAX_SIZE_RX			32768	/* bytes */
-> +#define	CDC_NCM_NTB_MAX_SIZE_TX			65536	/* bytes */
-> +#define	CDC_NCM_NTB_MAX_SIZE_RX			65536	/* bytes */
->  
->  /* Initial NTB length */
->  #define	CDC_NCM_NTB_DEF_SIZE_TX			16384	/* bytes */
-> -- 
-> 2.36.1
-> 
+The packet format includes a 3 byte headers and a 4 byte CRC. Account for
+that when checking the given length is not larger than the skb length.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Fixes: e9da0b56fe27 ("sr9700: sanity check for packet length")
+---
+ drivers/net/usb/sr9700.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the additional information in the changelog text.
+diff --git a/drivers/net/usb/sr9700.c b/drivers/net/usb/sr9700.c
+index 5a53e63d33a6..09bb40ac6e09 100644
+--- a/drivers/net/usb/sr9700.c
++++ b/drivers/net/usb/sr9700.c
+@@ -413,7 +413,7 @@ static int sr9700_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 		/* ignore the CRC length */
+ 		len = (skb->data[1] | (skb->data[2] << 8)) - 4;
+ 
+-		if (len > ETH_FRAME_LEN || len > skb->len)
++		if (len > ETH_FRAME_LEN || len + SR_RX_OVERHEAD > skb->len)
+ 			return 0;
+ 
+ 		/* the last packet of current skb */
+-- 
+2.34.1
+
