@@ -2,104 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B062F574170
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 04:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECED574422
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 07:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiGNC2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Jul 2022 22:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S235187AbiGNFCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 01:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiGNC2h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Jul 2022 22:28:37 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E474DBE4
-        for <linux-usb@vger.kernel.org>; Wed, 13 Jul 2022 19:28:34 -0700 (PDT)
-Received: (qmail 179544 invoked by uid 1000); 13 Jul 2022 22:28:32 -0400
-Date:   Wed, 13 Jul 2022 22:28:32 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Alexey Klimov <klimov.linux@gmail.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: Re: [questions] about usb_set_intfdata(intf, NULL) and if race is
- possible between ->disconnect() and ->suspend()
-Message-ID: <Ys9/ULdm8cVqL1uX@rowland.harvard.edu>
-References: <65e251bdf20b7cc2f48a1be4bfd69456709d01c2.camel@gmail.com>
+        with ESMTP id S237758AbiGNE75 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 00:59:57 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330441F2F3;
+        Wed, 13 Jul 2022 21:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657774600; x=1689310600;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=lo8m1CDkPXiL9g2nnCBXYZuPow5p7LgdYRNIqe9SssU=;
+  b=VEj6W8tdTJTFMw7g9YxfsqSjv5sk5mmsBENSvtC7c7GF4RDorbmHYsEw
+   eFRG/A6DulzW6dgHxNCxlKW5NtkgdInlWo+nTVdVwQvLtL9YelMKLxU5E
+   O1SBs/k1uBkOBTWG2OFOWUmiDhEqYEoewUi9bwuZC01EZEyZHKB6zQrun
+   k=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jul 2022 21:56:40 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 21:56:39 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 21:56:39 -0700
+Received: from hu-rkollals-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 13 Jul 2022 21:56:36 -0700
+From:   Rohith Kollalsi <quic_rkollals@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Rohith Kollalsi" <quic_rkollals@quicinc.com>
+Subject: [PATCH v2] usb: dwc3: core: Do not perform GCTL_CORE_SOFTRESET during bootup
+Date:   Thu, 14 Jul 2022 10:26:25 +0530
+Message-ID: <20220714045625.20377-1-quic_rkollals@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65e251bdf20b7cc2f48a1be4bfd69456709d01c2.camel@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 02:40:03AM +0100, Alexey Klimov wrote:
-> For instance, let's say we have simple usb driver with:
-> 
-> static struct usb_driver usb_some_driver = {
-> 	.name		= DRIVER_NAME,
-> 	.probe		= yet_another_probe,
-> 	.disconnect	= yet_another_disconnect,
-> 	.suspend	= yet_another_suspend,
-> 	.resume		= yet_another_resume,
-> 	.reset_resume	= yet_another_resume,
-> 	.id_table	= yet_another_device_table,
-> };
-> 
-> 1. Can ->suspend and ->disconnect methods race?
+According to the programming guide, it is recommended to
+perform a GCTL_CORE_SOFTRESET only when switching the mode
+from device to host or host to device. However, it is found
+that during bootup when __dwc3_set_mode() is called for the
+first time, GCTL_CORESOFTRESET is done with suspendable bit(BIT 17)
+of DWC3_GUSB3PIPECTL set. This some times leads to issues
+like controller going into bad state and controller registers
+reading value zero. Until GCTL_CORESOFTRESET is done and
+run/stop bit is set core initialization is not complete.
+Setting suspendable bit of DWC3_GUSB3PIPECTL and then
+performing GCTL_CORESOFTRESET is therefore not recommended.
+Avoid this by only performing the reset if current_dr_role is set,
+that is, when doing subsequent role switching.
 
-In short, no.  usb_unbind_interface() does usb_autoresume_device(), so 
-it is guaranteed that the device will not go into autosuspend while the 
-driver's disconnect method is running.
+Fixes: f88359e1588b ("usb: dwc3: core: Do core softreset when switch mode")
+Signed-off-by: Rohith Kollalsi <quic_rkollals@quicinc.com>
+---
+v2: Explaining the scenario in a better way in the comment before
+    GCTL.CoreSoftReset.
 
-> Documentation/driver-api/usb/power-management.rst says:
-> This implies that external suspend/resume events are mutually exclusive
-> with calls to ``probe``, ``disconnect``, ``pre_reset``, and
-> ``post_reset``;
-> 
-> 
-> Comment for usb_suspend_both() says that:
->  * ...	Usbcore will insure that
->  * method calls do not arrive during bind, unbind, or reset operations.
-> and that:
->  * However drivers must be prepared to handle suspend calls arriving at
->  * unpredictable times.
-> 
-> Also I was asked couple of years back what I am going to do if
-> disconnect() and suspend() will race, so seems never hurts to double-
-> check.
-> 
-> 2. Do I need to usb_set_intfdata(intf, NULL) in disconnect method and
-> in probe() function if registration with another subsystem fails?
+ drivers/usb/dwc3/core.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-No.  usb_unbind_interface() does this call for you, and 
-usb_probe_interface() does it if the probe method fails.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 050b2ba5986d..c5c238ab3083 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -158,9 +158,13 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 		break;
+ 	}
+ 
+-	/* For DRD host or device mode only */
+-	if ((DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
+-	    dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG) {
++	/*
++	 * When current_dr_role is not set, there's no role switching.
++	 * Only perform GCTL.CoreSoftReset when there's DRD role switching.
++	 */
++	if (dwc->current_dr_role && ((DWC3_IP_IS(DWC3) ||
++			DWC3_VER_IS_PRIOR(DWC31, 190A)) &&
++			dwc->desired_dr_role != DWC3_GCTL_PRTCAP_OTG)) {
+ 		reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+ 		reg |= DWC3_GCTL_CORESOFTRESET;
+ 		dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+-- 
+2.17.1
 
-Alan Stern
-
-> Like:
-> static int usb_streamlabs_wdt_probe(struct usb_interface *intf,
->                                         const struct usb_device_id *id)
-> {
-> 	...
-> 	usb_set_intfdata(intf, &data);
-> 	...
-> 	retval = devm_subsystem_register_device(&intf->dev, ...);
-> 	if (retval) {
-> 		dev_err(&intf->dev, "error message\n");
-> 		usb_set_intfdata(intf, NULL)
-> 		return retval;
-> 	}
-> }
-> 
-> I saw some patches that clear stale dev->driver_data pointer in
-> disconnect but doesn't seem that all usb drivers do that hence the
-> question.
-> 
-> Thanks,
-> Alexey
-> 
-> 
