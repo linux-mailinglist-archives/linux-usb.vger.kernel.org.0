@@ -2,52 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF82574D25
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 14:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68507574D4C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Jul 2022 14:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238922AbiGNMLO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 08:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S238003AbiGNMTm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Jul 2022 08:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237264AbiGNMLB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 08:11:01 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C158624B0
-        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 05:09:21 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id w24-20020a6bd618000000b0067991012f7aso629292ioa.6
-        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 05:09:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=t/JWl1auGyP7dRyKdtQPk8LnN5k4DzbxUNSFwRTHcRc=;
-        b=GXQBzOyLsK6v5ROpGxKSozfU1voZPmFezTXlZpUNRSLXDQbS88ii59fKm+wPfg7LHF
-         cy4P01Z+lVDSKb/nI4Z086cVb/JRgcrIau4aHSv5eDO6rBN7NTS0I56V8FAhrt9YS4JG
-         7Wp+HsusW9m6JkOAv6kCHwz3ClepM662J72Ul2zKuJ9Q/cmODniJh/KXSdSj9PW+rSLn
-         n9JaMt44MjkQTX+6drAZV5lhQLnD1PAqBW0B1Knp1eDhLkYYFoWVJfGKqFxMGcsQK+LF
-         mzd+r6cZSF26vD0qGetwNH0qhWH0T9wvnS1m+Kb+pEZDFYE9TFSr3P6pLfYyCGvqxatD
-         iA1g==
-X-Gm-Message-State: AJIora+0QsudjGtnYcTS6czfLokIEpAMzLwnSYuJPLntpXQCR0LjhleE
-        z5aUJCKfZJbkcrP7Dl1GS8MZ5J9dHisXeTaKNlmDEXZYXUT9
-X-Google-Smtp-Source: AGRyM1sTlC5YxlWad4CIcwPM0BAjCa6kn9Q4apd6Q8FX/P5y4kUB3LiO16/GSg+78SxoJZg3a6S6HaTkduM5iE0i1VJFzRxvXxhf
+        with ESMTP id S230220AbiGNMTl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 08:19:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443D91A821;
+        Thu, 14 Jul 2022 05:19:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1ACD61EA6;
+        Thu, 14 Jul 2022 12:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF380C34114;
+        Thu, 14 Jul 2022 12:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657801179;
+        bh=djZHnQ5DWpPqB9xL6kTMPqvL+djGHp0K7rCJu0zj2EQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I/3yk0qGYAzMJFuRNNIA3lB0ZFiRtn6Dq0o/V6+FfBOsKbilEyCKJ3afOw+eLM3Pw
+         ityeYMlLorDWPDFQg3JRJqn5nYX0cJk0h5czf+GXbqlv56wSa/7c6GN+URtcrM4j6m
+         fZQ90sJiCZ6YJgHLa4gOB97o/4c8M4G5+UWzkJS0=
+Date:   Thu, 14 Jul 2022 14:19:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?Q?=C5=81ukasz?= Spintzyk <lukasz.spintzyk@synaptics.com>,
+        Bernice Chen <Bernice.Chen@synaptics.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        oliver@neukum.org, kuba@kernel.org, ppd-posix@synaptics.com
+Subject: Re: [PATCH v2 1/2] net/cdc_ncm: Enable ZLP for DisplayLink ethernet
+ devices
+Message-ID: <YtAJ2KleMpkeFfQq@kroah.com>
+References: <20220714120217.18635-1-lukasz.spintzyk@synaptics.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:940a:0:b0:33c:b3f9:3e7f with SMTP id
- a10-20020a02940a000000b0033cb3f93e7fmr4586868jai.287.1657800561085; Thu, 14
- Jul 2022 05:09:21 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 05:09:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008d55fe05e3c2c57c@google.com>
-Subject: [syzbot] WARNING in r8712_usb_write_mem/usb_submit_urb
-From:   syzbot <syzbot+6716435e45f2b68f32fa@syzkaller.appspotmail.com>
-To:     Larry.Finger@lwfinger.net, dan.carpenter@oracle.com,
-        florian.c.schilhabel@googlemail.com, gregkh@linuxfoundation.org,
-        johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, wanngchenng@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220714120217.18635-1-lukasz.spintzyk@synaptics.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,77 +53,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, Jul 14, 2022 at 02:02:16PM +0200, Łukasz Spintzyk wrote:
+> From: Dominik Czerwik <dominik.czerwik@synaptics.com>
+> 
+> This improves performance and stability of
+> DL-3xxx/DL-5xxx/DL-6xxx device series.
+> 
+> Specifically prevents device from temporary network dropouts when
+> playing video from the web and network traffic going through is high.
+> 
+> Signed-off-by: Bernice Chen <Bernice.Chen@synaptics.com>
+> Signed-off-by: Dominik Czerwik <dominik.czerwik@synaptics.com>
+> Signed-off-by: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
+> ---
+> 
+> v2: Added Bernice Chen as company lawyer.
 
-syzbot found the following issue on:
+You forgot to cc: them, as they obviously want to be involved in this
+process.  They do understand what Signed-off-by: means, right?
 
-HEAD commit:    8affe37c525d usb: dwc3: gadget: fix high speed multiplier ..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=14260cac080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ebec88088cc2071
-dashboard link: https://syzkaller.appspot.com/bug?extid=6716435e45f2b68f32fa
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+>  drivers/net/usb/cdc_ncm.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index d55f59ce4a31..4594bf2982ee 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -2,6 +2,7 @@
+>   * cdc_ncm.c
+>   *
+>   * Copyright (C) ST-Ericsson 2010-2012
+> + * Copyright (C) 2022 Synaptics Incorporated. All rights reserved.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Bernice, please note that Dominik is only adding 23 lines to a 2039 line
+file, making this a change that only affects a very small percentage of
+the overall code, and affects the logic in no direct way (they are only
+adding new device information.)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6716435e45f2b68f32fa@syzkaller.appspotmail.com
+Based on that information, you still believe this warrents an addition
+of a copyright notice?  Any pointers to legal rulings where this is
+backed up would be appreciated as it goes against what I have been told
+to allow by my lawyers.
 
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 0 PID: 1217 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
-Modules linked in:
-CPU: 0 PID: 1217 Comm: dhcpcd Not tainted 5.19.0-rc4-syzkaller-00118-g8affe37c525d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-RIP: 0010:usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
-Code: 7c 24 18 e8 a0 32 8f fd 48 8b 7c 24 18 e8 76 46 18 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 80 1c a9 86 e8 ee d0 09 02 <0f> 0b e9 58 f8 ff ff e8 72 32 8f fd 48 81 c5 b8 05 00 00 e9 84 f7
-RSP: 0018:ffffc900010576d0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff8881130ed580 RSI: ffffffff812c0fe8 RDI: fffff5200020aecc
-RBP: ffff88811d9fd0f0 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000003
-R13: ffff8881382359b0 R14: 0000000000000003 R15: ffff888110529b00
-FS:  00007f9441e74740(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fcd7323da70 CR3: 0000000118d80000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- r8712_usb_write_mem+0x2e0/0x3e0 drivers/staging/rtl8712/usb_ops_linux.c:177
- rtl8712_dl_fw+0x8b8/0xe20 drivers/staging/rtl8712/hal_init.c:203
- rtl8712_hal_init drivers/staging/rtl8712/hal_init.c:330 [inline]
- rtl871x_hal_init+0xae/0x180 drivers/staging/rtl8712/hal_init.c:394
- netdev_open+0xe6/0x690 drivers/staging/rtl8712/os_intfs.c:379
- __dev_open+0x2c4/0x4d0 net/core/dev.c:1432
- __dev_change_flags+0x583/0x750 net/core/dev.c:8533
- dev_change_flags+0x93/0x170 net/core/dev.c:8604
- devinet_ioctl+0x15d1/0x1ca0 net/ipv4/devinet.c:1146
- inet_ioctl+0x1e6/0x320 net/ipv4/af_inet.c:968
- sock_do_ioctl+0xcc/0x230 net/socket.c:1169
- sock_ioctl+0x2f1/0x640 net/socket.c:1286
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f9441f620e7
-Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 61 9d 0c 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffc7f6121f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f9441e746c8 RCX: 00007f9441f620e7
-RDX: 00007ffc7f6223e8 RSI: 0000000000008914 RDI: 0000000000000005
-RBP: 00007ffc7f632598 R08: 00007ffc7f6223a8 R09: 00007ffc7f622358
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc7f6223e8 R14: 0000000000000028 R15: 0000000000008914
- </TASK>
+thanks,
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+greg k-h
