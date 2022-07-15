@@ -2,111 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C45575945
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 03:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FF4575B94
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 08:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241052AbiGOB4C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Jul 2022 21:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S231298AbiGOGcR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 02:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240987AbiGOB4A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Jul 2022 21:56:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5618367584;
-        Thu, 14 Jul 2022 18:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657850160; x=1689386160;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KChe3YiLWvtfY16v3Wrv+LYGFrMr3lG5eJioM1UXoK8=;
-  b=il5Kj2cMJEioQPWJOWQZq8uTKoDKdaGbdn5ssUDYVq6DhOD2fStruUVL
-   g5Gi7LKgymdCsDfP9Ooe6nTojPMblDn+IK7WvGfXDKcDz+gA26E65q4C+
-   Z9eCpO0MxAMdtpbNEQEGsqW3T4yCAwyqdsU1EKoPpO3tKKxoHvlnzO6V1
-   StB1BJ6LCoy062BcZNxHPStdGb1v1n31gedBEJY28OKi1d+A4ceEHsLk0
-   vPCj578z57yBsPIOBf+xXg9tISG5MlkltRxvr1bH+N4gz+Mx82pxeUsqJ
-   MxIrd1lmjpefj6MIs7w5epKx63t5pqYTpw1iZtJsUL8r/dyKa/9YaLnrn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="371993857"
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="371993857"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2022 18:56:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,272,1650956400"; 
-   d="scan'208";a="600335169"
-Received: from lkp-server01.sh.intel.com (HELO fd2c14d642b4) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Jul 2022 18:55:57 -0700
-Received: from kbuild by fd2c14d642b4 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCAYe-0001Pp-Fp;
-        Fri, 15 Jul 2022 01:55:56 +0000
-Date:   Fri, 15 Jul 2022 09:55:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vincent Shih <vincent.sunplus@gmail.com>, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, Vincent Shih <vincent.sunplus@gmail.com>
-Subject: Re: [PATCH v3 1/2] phy: usb: Add USB2.0 phy driver for Sunplus SP7021
-Message-ID: <202207150959.Pamg8oYO-lkp@intel.com>
-References: <1657529403-18084-2-git-send-email-vincent.sunplus@gmail.com>
+        with ESMTP id S229504AbiGOGcR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 02:32:17 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDB186EE;
+        Thu, 14 Jul 2022 23:32:10 -0700 (PDT)
+X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0e331e9d-0f9b-4888-b02d-931748d1e7d6,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:a8280f33-b9e4-42b8-b28a-6364427c76bb,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2075644891; Fri, 15 Jul 2022 14:32:07 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 15 Jul 2022 14:32:05 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 15 Jul 2022 14:32:05 +0800
+Message-ID: <1267b234b09280b9b475cfe2bb32580e967e2dac.camel@mediatek.com>
+Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
+ __vstring() helper
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Fri, 15 Jul 2022 14:32:05 +0800
+In-Reply-To: <20220714164330.311734558@goodmis.org>
+References: <20220714164256.403842845@goodmis.org>
+         <20220714164330.311734558@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1657529403-18084-2-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Vincent,
+Hi Steven,
 
-I love your patch! Perhaps something to improve:
+On Thu, 2022-07-14 at 12:43 -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> Instead of open coding a __dynamic_array() with a fixed length (which
+> defeats the purpose of the dynamic array in the first place). Use the
+> new
+> __vstring() helper that will use a va_list and only write enough of
+> the
+> string into the ring buffer that is needed.
+> 
+> Link: 
+> https://urldefense.com/v3/__https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org__;!!CTRNKA9wMg0ARbw!w8nx66BKDTtyusp5i2pyzOGNb-QyxIAWjoZwmSQY0zzor_rqvBgUm5__vKK98ApKcDic$
+>  
+> 
+> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  drivers/usb/mtu3/mtu3_trace.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_trace.h
+> b/drivers/usb/mtu3/mtu3_trace.h
+> index 1b897636daf2..ef3c17e2f8a6 100644
+> --- a/drivers/usb/mtu3/mtu3_trace.h
+> +++ b/drivers/usb/mtu3/mtu3_trace.h
+> @@ -25,11 +25,11 @@ TRACE_EVENT(mtu3_log,
+>  	TP_ARGS(dev, vaf),
+>  	TP_STRUCT__entry(
+>  		__string(name, dev_name(dev))
+> -		__dynamic_array(char, msg, MTU3_MSG_MAX)
+> +		__vstring(msg, vaf->fmt, vaf->va)
+>  	),
+>  	TP_fast_assign(
+>  		__assign_str(name, dev_name(dev));
+> -		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
+> >va);
+> +		__assign_vstr(msg, vaf->fmt, vaf->va);
+>  	),
+>  	TP_printk("%s: %s", __get_str(name), __get_str(msg))
+>  );
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on pza/reset/next linus/master v5.19-rc6 next-20220714]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Can you help to remove macro "MTU3_MSG_MAX" and one blank line after it
+in this file, this macro is not used anymore after apply this patch.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Shih/Add-USB2-0-phy-driver-for-Sunplus-SP7021/20220711-165347
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: (https://download.01.org/0day-ci/archive/20220715/202207150959.Pamg8oYO-lkp@intel.com/config)
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/7370e305e24f576291c9f474664b068188d6de57
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vincent-Shih/Add-USB2-0-phy-driver-for-Sunplus-SP7021/20220711-165347
-        git checkout 7370e305e24f576291c9f474664b068188d6de57
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_NVMEM_SUNPLUS_OCOTP --selectors CONFIG_PHY_SUNPLUS_USB -a=i386
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=i386 olddefconfig
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks a lot
 
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for NVMEM_SUNPLUS_OCOTP when selected by PHY_SUNPLUS_USB
-   
-   WARNING: unmet direct dependencies detected for NVMEM_SUNPLUS_OCOTP
-     Depends on [n]: NVMEM [=n] && (SOC_SP7021 || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
-     Selected by [y]:
-     - PHY_SUNPLUS_USB [=y] && OF [=y] && (SOC_SP7021 || COMPILE_TEST [=y])
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
