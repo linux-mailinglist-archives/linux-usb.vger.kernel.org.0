@@ -2,176 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2B157645D
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 17:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B75E576391
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 16:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbiGOPTM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 11:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S231487AbiGOOY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 10:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235415AbiGOPSu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 11:18:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01495646F
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 08:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657898321; x=1689434321;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZQxE6kIhJDvsJ2Idxd0IwmgpO4FvhvMZzDTMg/UUuEo=;
-  b=aX+B3W7Kegdyg16C0Wa3QDQPTUVaqmNM2wBQhFy/Y33NKvoSDUxVVe1W
-   B3nWosphvWjqhiFsT+ZcC2MFwgDnrjNck8RmOVrOMFAhNs0PxIm06Z4Dy
-   P+rlSOsjSI/Vqb6d4arN99VLjmEwait6AmjWfk3iSqV+penQXrk5fDOoS
-   j94i4/3FrX5IH8E3OVT8DD9DJecQ4wJcSejQAPcsaWACzQ2seJYY1t932
-   3FI6GThhDn2c2/QCVS+yTWeK/0/Gyhcxqu0yUqP83Vgxurind0CVKI+/N
-   kdKRdkRsGi6GH6Ai9uil3sMxYO725VzLwCaFzFSBhFrxCrXvIvQ8aR5vV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10408"; a="286955562"
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="286955562"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 08:18:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,274,1650956400"; 
-   d="scan'208";a="842541121"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jul 2022 08:18:40 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCN5T-0000DY-93;
-        Fri, 15 Jul 2022 15:18:39 +0000
-Date:   Fri, 15 Jul 2022 17:09:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 3486af89dd3c0b0bef194c4bccf17c31ef16b99f
-Message-ID: <62d12ecf.1D1UueQhbFav7EMO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S231394AbiGOOY5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 10:24:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B355D6C11C;
+        Fri, 15 Jul 2022 07:24:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2671B619BA;
+        Fri, 15 Jul 2022 14:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 023F4C34115;
+        Fri, 15 Jul 2022 14:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657895094;
+        bh=gqsoRO92+mlK0ZwNvJsGoKnNnTCOYRtKI3/YidxBbgA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pWnBapWadb8KavruX98mihY0W9d4gGhIWwwBhQUThI3GIWNzhnmsujkRtyQEng2pN
+         ZMpT6O1TOnGYC8NXyhr7fQu8qnvYNs3BkTkrp6FfsiYjlFPUkzqBclF8ASTP8PJXat
+         p7GR2osWup7j2ocp/WKjZtbCPXhZDHW4yLdtnX08=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yan Xinyu <sdlyyxy@bupt.edu.cn>
+Subject: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
+Date:   Fri, 15 Jul 2022 16:24:44 +0200
+Message-Id: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1360; i=gregkh@linuxfoundation.org; h=from:subject; bh=gqsoRO92+mlK0ZwNvJsGoKnNnTCOYRtKI3/YidxBbgA=; b=owGbwMvMwCRo6H6F97bub03G02pJDEkXK5aus/rpLdgjOL9H9Jiv4bRXwcUGUv7cXyV+7112Ibcp ZKthRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAExkdhzD/Ciuc7Iy/sZV6penqcrKJH 88suJlPcM82+csPNmlrwRCzAIWFE7arJD+4cZWAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 3486af89dd3c0b0bef194c4bccf17c31ef16b99f  Merge tag 'usb-serial-5.19-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+The Oppo R11 diagnostic USB connection needs to be bound to the
+usb-serial-simple driver as it just wants to use a dumb pipe to
+communicate to the host.
 
-elapsed time: 1123m
+usb-devices output:
+ T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+ D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+ P: Vendor=22d9 ProdID=276c Rev=04.04
+ S: Manufacturer=OPPO
+ S: Product=SDM660-MTP _SN:09C6BCA7
+ S: SerialNumber=beb2c403
+ C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+ I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
 
-configs tested: 95
-configs skipped: 3
+Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+Cc: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/serial/usb-serial-simple.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-i386                          randconfig-c001
-sparc                             allnoconfig
-arm                           h3600_defconfig
-mips                         cobalt_defconfig
-sh                        sh7785lcr_defconfig
-m68k                       m5275evb_defconfig
-arm                        oxnas_v6_defconfig
-arm                        clps711x_defconfig
-powerpc                      pcm030_defconfig
-m68k                          atari_defconfig
-arc                          axs103_defconfig
-powerpc                     pq2fads_defconfig
-arm                             ezx_defconfig
-sh                             sh03_defconfig
-m68k                        m5272c3_defconfig
-arc                                 defconfig
-arm                         at91_dt_defconfig
-powerpc                 mpc8540_ads_defconfig
-alpha                             allnoconfig
-arm                           viper_defconfig
-sh                        edosk7705_defconfig
-x86_64                                  kexec
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-x86_64                        randconfig-c001
-csky                              allnoconfig
-arc                               allnoconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-powerpc                 mpc836x_rdk_defconfig
-powerpc                    gamecube_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                    mvme5100_defconfig
-s390                             alldefconfig
-powerpc                   lite5200b_defconfig
-arm                      pxa255-idp_defconfig
-arm                          pcm027_defconfig
-arm                       cns3420vb_defconfig
-powerpc                        fsp2_defconfig
-hexagon                             defconfig
-powerpc                      ppc44x_defconfig
-mips                           ip28_defconfig
-powerpc                     ppa8548_defconfig
-powerpc                     kilauea_defconfig
-powerpc                      pmac32_defconfig
-arm                         socfpga_defconfig
-riscv                            alldefconfig
-x86_64                        randconfig-k001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220714
-hexagon              randconfig-r041-20220714
-
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index 4c6747889a19..eb832b94aa3a 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
+ 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
+ 					USB_CLASS_VENDOR_SPEC,	\
+ 					0x50,			\
+-					0x01) }
++					0x01) },		\
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
++					0xff, 0xff, 0x30) }
+ DEVICE(google, GOOGLE_IDS);
+ 
+ /* Libtransistor USB console */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+
