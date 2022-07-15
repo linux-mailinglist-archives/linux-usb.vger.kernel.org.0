@@ -2,99 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119C85768D1
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 23:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38545768E0
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 23:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiGOVY2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 17:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S231192AbiGOV2j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 17:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiGOVY1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 17:24:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7FF43E68;
-        Fri, 15 Jul 2022 14:24:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F02E617B1;
-        Fri, 15 Jul 2022 21:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CE25C34115;
-        Fri, 15 Jul 2022 21:24:25 +0000 (UTC)
-Date:   Fri, 15 Jul 2022 17:24:23 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
- __vstring() helper
-Message-ID: <20220715172423.6b57b9eb@gandalf.local.home>
-In-Reply-To: <962e59c25e981676014157cd111db9e16e237339.camel@mediatek.com>
-References: <20220714164256.403842845@goodmis.org>
-        <20220714164330.311734558@goodmis.org>
-        <962e59c25e981676014157cd111db9e16e237339.camel@mediatek.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229597AbiGOV2i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 17:28:38 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6C3D2;
+        Fri, 15 Jul 2022 14:28:35 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id r18so7836555edb.9;
+        Fri, 15 Jul 2022 14:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=vKP8LRUE0yFoYd2NSJtjDx8dGT5PCA4BqZdFt2yy0yE=;
+        b=Lh9w6zXbZBZA7GiEpjb7SSyhQR9Z0cioFtyjFntBW3I/JmkDdVM4wZa++097wPJchb
+         UNj/v3N7C2YYrtrKVPn7nkyFKlaMK+JwIotUu4/FQ3DYDFix7EpVQeHJXlZEihEiX8Yv
+         8L9bgcuhwMBiq8pBnv8zsEJMjEsp4W/DzfWDwqQ2qqENb8jIgqn4qtHypmYi37VXT9Sf
+         Gaf6hppROhI15zAE3EHbTjyoEUw8eAEQAjgF6OW8L3cDPFOlNz7PuruQ4LyqhUezXsGM
+         QYpaKgqI4p+MxFSY+EqcvQawKQMBYpqeRIZapy7ekfXC5noYFNCgK83GPu0v1PCpNkYD
+         8t4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=vKP8LRUE0yFoYd2NSJtjDx8dGT5PCA4BqZdFt2yy0yE=;
+        b=LwUbPLEG4iRwIIxqOcfQgcfBwCdlObRGduQG6M7AgnvKJpMm4dL9z4RDklXBDrlk/o
+         UtaGcCAMrEjzFJjy7F+mE5nFlEpspFdMXpMGo1jcQLuSSz6qAgT9PiJjxA6xNE41tDLs
+         mCsleZiqgb3FtQTYSDcbjcmo3iWlnWMB4Dn1noBsn5D6+0Z8fRQBB7HZIuefYiHSkUc4
+         C95zWnrAvtbGN9O9zGntl6x4I5V/mKzTz+emW4XH7zWHWMjY2ByYtZIPnQ40WsyAaZ9r
+         0dCpdW3awkYyRBODbfbC3MmRrcEvKxjC5t8BRQYASCfb9WGzVVUXherKA6EYK03Hp8UH
+         C2Mg==
+X-Gm-Message-State: AJIora/l/W8qbBQi06NjXQMs/6AibC4k2exDO3Orvl+5JfUPIdZ1vf1K
+        Da9OufFI/TsDDs+tHV3kwTAY8zLgGDNMNQ==
+X-Google-Smtp-Source: AGRyM1s05yWcHFvP3gv214D8NvoaPGT9vm/UMlinro+VSSYis2KoGNKbdEL2VZPLMx5EOm85tzkSZw==
+X-Received: by 2002:a05:6402:5001:b0:437:8918:8dbe with SMTP id p1-20020a056402500100b0043789188dbemr21343249eda.70.1657920514358;
+        Fri, 15 Jul 2022 14:28:34 -0700 (PDT)
+Received: from ?IPv6:::1? (2a02-a466-aae1-1-410d-5d2b-3240-fd55.fixed6.kpn.net. [2a02:a466:aae1:1:410d:5d2b:3240:fd55])
+        by smtp.gmail.com with ESMTPSA id x25-20020aa7dad9000000b0043a0da110e3sm3526563eds.43.2022.07.15.14.28.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Jul 2022 14:28:33 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 23:28:33 +0200
+From:   Frans Klaver <fransklaver@gmail.com>
+To:     Reinhard Speyerer <rspmn@arcor.de>
+CC:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frans Klaver <frans.klaver@vislink.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: serial: qcserial: add EM9191 support
+User-Agent: K-9 Mail for Android
+In-Reply-To: <YtHVfc40VGbB2Tkz@arcor.de>
+References: <20220715095623.28002-1-frans.klaver@vislink.com> <YtHVfc40VGbB2Tkz@arcor.de>
+Message-ID: <F3F460AC-05D0-4DF9-9C18-B95881B62F8F@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 15 Jul 2022 18:01:44 +0800
-Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 
->  irq/254-1120100-137     [000] d..1.   266.629662: mtu3_log:
-> 11201000.usb: ep0_state SETUPr-speed
-> 
-> "r-speed" seems the remain of last log;
 
-I found an off-by-one bug in the vstring patch. I'll rebase, test and try
-again.
+On July 15, 2022 11:00:45 PM GMT+02:00, Reinhard Speyerer <rspmn@arcor=2Ed=
+e> wrote:
 
-In the mean time, care to add this on top to make sure it's fixed?
+>the qcserial driver used in the usb-devices output above does not seem
+>to be built from the mainline qcserial=2Ec with your patch applied as USB
+>interface 4 is ignored by the QCSERIAL_SWI layout=2E
 
-Thanks!
+Right, I will need to look into that then=2E I won't be able to access the=
+ devices for a couple of weeks, though=2E It might also just have been me n=
+o paying attention while testing=2E I'll get back to this=2E=20
 
--- Steve
 
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index e6f8ba52a958..b18759a673c6 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -922,16 +922,16 @@ perf_trace_buf_submit(void *raw_data, int size, int rctx, u16 type,
-  * gcc warns that you can not use a va_list in an inlined
-  * function. But lets me make it into a macro :-/
-  */
--#define __trace_event_vstr_len(fmt, va)		\
--({						\
--	va_list __ap;				\
--	int __ret;				\
--						\
--	va_copy(__ap, *(va));			\
--	__ret = vsnprintf(NULL, 0, fmt, __ap);	\
--	va_end(__ap);				\
--						\
--	min(__ret, TRACE_EVENT_STR_MAX);	\
-+#define __trace_event_vstr_len(fmt, va)			\
-+({							\
-+	va_list __ap;					\
-+	int __ret;					\
-+							\
-+	va_copy(__ap, *(va));				\
-+	__ret = vsnprintf(NULL, 0, fmt, __ap) + 1;	\
-+	va_end(__ap);					\
-+							\
-+	min(__ret, TRACE_EVENT_STR_MAX);		\
- })
- 
- #endif /* _LINUX_TRACE_EVENT_H */
+>To avoid potential side effects in case Sierra Wireless adds a vendor cla=
+ss
+>USB interface 2 not intended to be used with qcserial=2Ec it might be bes=
+t
+>to use a new QCSERIAL_SWI2 layout similar to what has been done in
+>their MBPL drivers mentioned here
+>https://forum=2Esierrawireless=2Ecom/t/rc7620-and-linux-driver/24308/ =2E
+
+I'll have a look at this too=2E=20
+
+Thanks,=20
+Frans=20
