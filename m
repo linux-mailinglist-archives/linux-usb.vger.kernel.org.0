@@ -2,160 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB89575BE1
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 08:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0C4575C69
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 09:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiGOGxg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 02:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S232051AbiGOHdM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 03:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiGOGxf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 02:53:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645871D5;
-        Thu, 14 Jul 2022 23:53:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232039AbiGOHdL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 03:33:11 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164307BE30;
+        Fri, 15 Jul 2022 00:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1657870390; x=1689406390;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=slT0zUpV9RfPM9uPTk2NhEc4i0611l7L6RhajXWI4dc=;
+  b=Kp+ZYOfV5UFGDXjSLfVh7mrj2bU1edi3zHy6vI2c+0t9b3LSrGXwv61V
+   Kadjp+8Ob4vl3RS1nVWysrmqzvzVWnei0K6mvD3Thjfx0+ZlUoaBeoW9H
+   HXKowm8brABT9QBrllum+DNFzOSgEJL1++a34gcLNxlwSopEmIqJpijTO
+   xZ3htWaMGlU9TYCO9SkhKHF5dW15Be20Dy1V6vt4tSNVcsLB9J57JFcV0
+   dKYgYxT5ehkDOire8SMRuCLRP9BhaFB2S+By2kpplhoGAtz8liSAIcZMj
+   moPoskykzvLlJAgFWcZrwq73s4VwQWqwoUy3el9EOCKrTvK7/95tWong5
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,273,1650924000"; 
+   d="scan'208";a="25068549"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 15 Jul 2022 09:33:04 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 15 Jul 2022 09:33:04 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 15 Jul 2022 09:33:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1657870384; x=1689406384;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=slT0zUpV9RfPM9uPTk2NhEc4i0611l7L6RhajXWI4dc=;
+  b=qjU6c6kmyGIm9czuZNhbq1DnsBTAyvWdjf6Bs3VsWQhJ3eqlyGbEdc5s
+   s/G0edcl6rfto9n7XipGvgvMoDpYapGOeoqmIuO51ZLpog9x6eLW1zfWO
+   gbrY3oiP98uZnvjFYaWOfpPooK1YDVqM7SQ8nekSgh8c82+sEPGuNmSXB
+   A5teuCELUKyNVzFO2berMkAS6XTYRwgdUVqQf0VGq6Dl6vFzx/S17mvUF
+   XkcEFIaBiF+IJW8jy8x7xyrInNMwFxKoA6rlkRPlSp3hLRHq3oxtuCrPz
+   J7NAsPmawTIDsaUTw6MErC+W0gLqRAz19g9Rn9uIY66FIlNfZhEHOz68M
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,273,1650924000"; 
+   d="scan'208";a="25068547"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 15 Jul 2022 09:33:04 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21C26B82ABC;
-        Fri, 15 Jul 2022 06:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E9CC34115;
-        Fri, 15 Jul 2022 06:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657868010;
-        bh=EVtVearHjWGz5Xx49kNdWSKu+VjDeCukGlny9J6I41g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y4bPUUP3ooIplnSDdF1krn6bOpFtUmhUBj0YBMEmlFczWzFLUcWTWnnrumilpH5r5
-         tcq0a7fvCBk4H0hw04mGkNOEtELADJnEOT0iPOqCK6n9lwGgxz4g16zx0tia5SCUy0
-         UmzOQYfgCdJHftWXrUqQcle9F2VDuV1hnqB2JevA=
-Date:   Fri, 15 Jul 2022 08:53:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     sdlyyxy <sdlyyxy@bupt.edu.cn>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: adding support for OPPO R11 diag
- port
-Message-ID: <YtEO51uf0RQNZIRP@kroah.com>
-References: <20220714102037.4113889-1-sdlyyxy@bupt.edu.cn>
- <Ys/2dN9ktCirZsd9@kroah.com>
- <5F187A64-2C88-4F7E-98AD-2A52B17B0DA4@bupt.edu.cn>
- <YtENDiIpq++2l6yD@kroah.com>
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 79FBE280056;
+        Fri, 15 Jul 2022 09:33:04 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: usb: Add binding for TI USB8041 hub controller
+Date:   Fri, 15 Jul 2022 09:32:58 +0200
+Message-Id: <20220715073300.868087-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtENDiIpq++2l6yD@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 08:45:34AM +0200, Greg KH wrote:
-> On Fri, Jul 15, 2022 at 02:39:06PM +0800, sdlyyxy wrote:
-> > Hi Greg,
-> > Thanks for your comments!
-> > 
-> > > On Jul 14, 2022, at 18:56, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > 
-> > > On Thu, Jul 14, 2022 at 06:20:37PM +0800, sdlyyxy wrote:
-> > >> From: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> > >> 
-> > >> This patch adds support for OPPO R11 USB diag serial port to option
-> > >> driver. This phone uses Qualcomm Snapdragon 660 SoC.
-> > >> 
-> > >> usb-devices output:
-> > >> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
-> > >> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-> > >> P: Vendor=22d9 ProdID=276c Rev=04.04
-> > >> S: Manufacturer=OPPO
-> > >> S: Product=SDM660-MTP _SN:09C6BCA7
-> > >> S: SerialNumber=beb2c403
-> > >> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-> > >> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> > > 
-> > > I do not think this has an option usb-serial chip in the device, this is
-> > > a phone with a debug port instead.
-> > > 
-> > Yeah, this phone uses a Qualcomm chip, not an option usb-serial chip.
-> > It has the functionality to enter into a special mode, which provides 
-> > a QCDM-capable diag port as the same behaviour of USB modems. For
-> > Qualcomm devices, there are several drivers: qcserial, qcaux, and 
-> > option. According to qcserial.c, qcaux.c source code and mailing list
-> > conversations [1], this device with diag+adb layout should be driven
-> > by option.
-> 
-> No, this is not an option chip, and does not follow the option device
-> protocols at all.  So this is not the driver to use here.
-> 
-> We should probably switch those other devices as well, they aren't
-> really option devices either.
-> 
-> > >> I: If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-> > > 
-> > > What userspace program is bound to this endpoint?
-> > > 
-> > I think it is used by adb via libusb.
-> > >> 
-> > >> Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> > >> ---
-> > >> drivers/usb/serial/option.c | 5 +++++
-> > >> 1 file changed, 5 insertions(+)
-> > >> 
-> > >> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> > >> index de59fa919540..cf65cb84c3ca 100644
-> > >> --- a/drivers/usb/serial/option.c
-> > >> +++ b/drivers/usb/serial/option.c
-> > >> @@ -573,6 +573,10 @@ static void option_instat_callback(struct urb *urb);
-> > >> #define WETELECOM_PRODUCT_6802			0x6802
-> > >> #define WETELECOM_PRODUCT_WMD300		0x6803
-> > >> 
-> > >> +/* OPPO products */
-> > >> +#define OPPO_VENDOR_ID				0x22d9
-> > >> +#define OPPO_PRODUCT_R11			0x276c
-> > >> +
-> > >> 
-> > >> /* Device flags */
-> > >> 
-> > >> @@ -2155,6 +2159,7 @@ static const struct usb_device_id option_ids[] = {
-> > >> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
-> > >> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
-> > >> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
-> > >> +	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
-> > > 
-> > > This does not look correct, sorry. Try using the usbserial generic
-> > > driver instead to transmit and recieve?
-> > > 
-> > Yes I have tried using usbserial generic driver. As for the interface
-> > #0x0 diag port, it seems working. However, in the same time the 
-> > generic driver will also be attached to interface #0x1, which causes
-> > nonfunction of adb. Using this patch, diag and adb can run 
-> > simultaneously. So it's better than the generic driver?
-> 
-> Ah, we should just bind the simple usb-serial driver to this interface
-> and not bind the generic usb-serial driver to this interface.
-> 
-> Let me make up a simple patch for this for you to test...
+The TI USB8041 is a USB 3.0 hub controller with 4 ports.
 
-Can you try the patch here for this, it should work the same as your
-patch:
+This initial version of the binding only describes USB related aspects
+of the USB8041, it does not cover the option of connecting the controller
+as an i2c slave.
 
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+Changes in v2:
+* Removed 'items' from compatible, it's just en enum now
+* Rename reset-gpio to reset-gpios
+* Use 'items' for reset-gpios
+* Adjust description of vdd-supply
+* Sorted required list
+* Adjusted example
 
-diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-index 4c6747889a19..eb832b94aa3a 100644
---- a/drivers/usb/serial/usb-serial-simple.c
-+++ b/drivers/usb/serial/usb-serial-simple.c
-@@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
- 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
- 					USB_CLASS_VENDOR_SPEC,	\
- 					0x50,			\
--					0x01) }
-+					0x01) },		\
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
-+					0xff, 0xff, 0x30) }
- DEVICE(google, GOOGLE_IDS);
- 
- /* Libtransistor USB console */
+ .../devicetree/bindings/usb/ti,usb8041.yaml   | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+
+diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+new file mode 100644
+index 000000000000..7fe7416e2b51
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/ti,usb8041.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Binding for the TI USB8041 USB 3.0 hub controller
++
++maintainers:
++  - Matthias Kaehlcke <mka@chromium.org>
++
++allOf:
++  - $ref: usb-device.yaml#
++
++properties:
++  compatible:
++    enum:
++      - usb451,8140
++      - usb451,8142
++
++  reg: true
++
++  reset-gpios:
++    items:
++      - description: GPIO specifier for GRST# pin.
++
++  vdd-supply:
++    description:
++      "VDD power supply to the hub"
++
++  peer-hub:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle to the peer hub on the controller.
++
++required:
++  - compatible
++  - reg
++  - peer-hub
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    usb {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        /* 2.0 hub on port 1 */
++        hub_2_0: hub@1 {
++          compatible = "usb451,8142";
++          reg = <1>;
++          peer-hub = <&hub_3_0>;
++          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++        };
++
++        /* 3.0 hub on port 2 */
++        hub_3_0: hub@2 {
++          compatible = "usb451,8140";
++          reg = <2>;
++          peer-hub = <&hub_2_0>;
++          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++        };
++    };
+-- 
+2.25.1
+
