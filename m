@@ -2,141 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DFE575D38
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 10:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA74F575EC0
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 11:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiGOIRg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 04:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S232069AbiGOJlC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 05:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiGOIRg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 04:17:36 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19EA7E83B
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 01:17:34 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id w17so4909119ljh.6
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 01:17:34 -0700 (PDT)
+        with ESMTP id S229872AbiGOJlA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 05:41:00 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25DF7FE5B;
+        Fri, 15 Jul 2022 02:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s9W/XdjFP9+KQHF/tqY2mVW8SA67g63il1VbZxwL808=;
-        b=e9UMm+zKgMsZQFdvLl9oUS39E7XzYzP8V6W2y8aOC1ikKwDXG+P848/z4sdjIg4Iw5
-         KdxDuUhUZsG4aJluwjJQfVipyjCvCTFNpLFs13/A4KWhANsoGdLpD53jhEE5/UebWU78
-         JMB2DAtnScw4Yrzfvva2hEdN0sspdYw+WSUIuxVUqNmqeNaXsXcXAfYSLEnYiIn8DcyJ
-         TqzrplOaG3qxaT2mwgf9+pzdE4i9CgXo3Z2xi1ObQfZAcwIfdyNu5IWV6wec5KSyPPC8
-         eA3nirJx/QCqtjG/Ch0R34rp7Jx85NxFtGMzT111EU8IfzXnF/NsTL7H55IEO13JP359
-         gY1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s9W/XdjFP9+KQHF/tqY2mVW8SA67g63il1VbZxwL808=;
-        b=iAQUdOIlYoHVbsvXaw7lrrK9uXc6wPXf8oGfxax1tGnyv/Wmkkm7gCzo1VSfKxhfM8
-         hpZjPCG/WZiJ4vE+/GRaDLnBv74kgeeZFJmPR/+TMgtngr7QZNSCbPVFWy1K4vRFZMd8
-         f+r4goWAsjU5MzQru7/kUmOomJWDmzd3TUAvfUWT3Fj9dOk7GKKi65mA6pSnNWHzCVRE
-         4vkh1UR5bM3wZStuYSD0kkwx9B6bRp34dVrv8Y7oeAWEIiu/ZgIjjvg+CuTAt076jOdk
-         A9emIt+i2ENVtXLXUkkxAG/Fqs/SfnswHIvXV8KayIu2sH0++ur7KyRkZpv6c3453oN0
-         IERQ==
-X-Gm-Message-State: AJIora/cFgkEnQIbnzbTIOeDs8KAvOh3bi1xoXGjzw6CovAnkY6GV6zA
-        iI5RS2lqiuo4HlxGT20aePt4pQ==
-X-Google-Smtp-Source: AGRyM1v/mgNffd/k50++KMX8gRdYJyXoiTRPm9WsmlaRfo5rSrq7NAA6RVl9GC6g/Wg8UkHNKEWvIA==
-X-Received: by 2002:a2e:84ca:0:b0:25d:77e0:2566 with SMTP id q10-20020a2e84ca000000b0025d77e02566mr6596209ljh.78.1657873053294;
-        Fri, 15 Jul 2022 01:17:33 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id a26-20020ac2505a000000b0047f6b4a53cdsm780989lfm.172.2022.07.15.01.17.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 01:17:32 -0700 (PDT)
-Message-ID: <bdbec92d-877f-effd-e2bc-ebc380f107d5@linaro.org>
-Date:   Fri, 15 Jul 2022 10:17:31 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1657878059; x=1689414059;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4byzoWCV/O/9HsdiJrcmQYBF5BskfwYzj99RRpymhk8=;
+  b=PjH9t7lzLY5y2IKnJDFI9LuWGI68X4mGx4iKKhJc9iN1ewUB9fOxYKr2
+   Xz/Jj1EmwCFZdNowbhqL13RKKSlGN3UpCwtW6fR4fDhC61bD7C4I7IdD2
+   iGHyuYiWidklpQUdrVq0Kye7GlMKpQBeD3P0B37TyhP9kPD1atLlLgzuo
+   Y=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 15 Jul 2022 02:40:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 02:40:58 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 02:40:58 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Jul 2022 02:40:55 -0700
+Date:   Fri, 15 Jul 2022 15:10:50 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
+ probed properly
+Message-ID: <20220715094050.GA24567@hu-pkondeti-hyd.qualcomm.com>
+References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: Add binding for TI USB8041 hub
- controller
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220715073300.868087-1-alexander.stein@ew.tq-group.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220715073300.868087-1-alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/07/2022 09:32, Alexander Stein wrote:
-> The TI USB8041 is a USB 3.0 hub controller with 4 ports.
+On Thu, Jul 14, 2022 at 08:25:16PM +0530, Krishna Kurapati wrote:
+> On SC7180 devices, it is observed that dwc3 probing is deferred
+> because device_links_check_suppliers() finds that '88e3000.phy'
+> isn't ready yet.
 > 
-> This initial version of the binding only describes USB related aspects
-> of the USB8041, it does not cover the option of connecting the controller
-> as an i2c slave.
+> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
+> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
+> configures dwc-qcom's power domain to be always ON. Also it configures
+> dp/dm interrupts accordingly to support wakeup from system suspend.
 > 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> More info regarding the same can be found at:
+> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status"
+> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> 
+> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
+> probe, driver ends up reading the wakeup capability of dwc3 core as false
+> leading to instability in suspend/resume path.
+> 
+> To avoid this scenario, ensure dwc3_probe is successful by checking
+> if appropriate driver is assigned to it or not after the of_platform_populate
+> call. If it isn't then defer dwc3-qcom probe as well.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
-> Changes in v2:
-> * Removed 'items' from compatible, it's just en enum now
-> * Rename reset-gpio to reset-gpios
-> * Use 'items' for reset-gpios
-> * Adjust description of vdd-supply
-> * Sorted required list
-> * Adjusted example
+>  drivers/usb/dwc3/dwc3-qcom.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->  .../devicetree/bindings/usb/ti,usb8041.yaml   | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 7703655..096d1414 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -722,6 +722,9 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+>  		dev_err(dev, "failed to get dwc3 platform device\n");
+>  	}
+>  
+> +	if (!qcom->dwc3->dev.driver)
+> +		return -EPROBE_DEFER;
+> +
+
+you need to drop the dwc3 node reference, so set ret = -EPROBE_DEFER here
+instead of returning.
+
+>  node_put:
+>  	of_node_put(dwc3_np);
+>  
+> -- 
+> 2.7.4
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-> new file mode 100644
-> index 000000000000..7fe7416e2b51
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/ti,usb8041.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Binding for the TI USB8041 USB 3.0 hub controller
-> +
-> +maintainers:
-> +  - Matthias Kaehlcke <mka@chromium.org>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - usb451,8140
-> +      - usb451,8142
-> +
-> +  reg: true
-> +
-> +  reset-gpios:
-> +    items:
-> +      - description: GPIO specifier for GRST# pin.
-> +
-> +  vdd-supply:
-> +    description:
-> +      "VDD power supply to the hub"
 
-No quotes needed.
-
-
-
-Best regards,
-Krzysztof
+Thanks,
+Pavan
