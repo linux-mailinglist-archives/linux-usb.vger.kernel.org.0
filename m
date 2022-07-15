@@ -2,177 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA2B5760C6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 13:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F675761E3
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 14:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiGOLpR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 07:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S234639AbiGOMi4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 08:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiGOLpQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 07:45:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D76A9EB;
-        Fri, 15 Jul 2022 04:45:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229528AbiGOMix (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 08:38:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7162F13DCC;
+        Fri, 15 Jul 2022 05:38:52 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1CBE622FA;
-        Fri, 15 Jul 2022 11:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A5CC3411E;
-        Fri, 15 Jul 2022 11:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1657885514;
-        bh=/+65uXj1d7wLF6R2bhq2x02kgR5AGcMhGNsdTYW80lA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2BF3POxP91QePnwQPPLykOxL4q/kB157rCWU5RjKAYkWQlGLBLvNGwSHoFXOWdnaH
-         9hp8ImIfTAXCGK0L40HJuWBNq5tSZtQ5Ex5gExjQ6ECtejL1y2FDwX7EHUBWacw7bR
-         3di5M8v1vvorzUhUlw1EzdhzdI341BY/msEbyhfg=
-Date:   Fri, 15 Jul 2022 13:45:11 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v2 3/5] usb: dwc3: gadget: Adjust IRQ management during
- soft disconnect/connect
-Message-ID: <YtFTRyTPxM4M3+7j@kroah.com>
-References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
- <20220713003523.29309-4-quic_wcheng@quicinc.com>
- <fbfc9328-418c-4c5e-4553-993331b20cb6@synopsys.com>
- <03434e9c-7a1c-4819-6bfe-54f56401348c@quicinc.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 820746601A60;
+        Fri, 15 Jul 2022 13:38:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1657888730;
+        bh=/TkDguAmwrQGEReJEUwEbAbHZt9Am5gC3Cijy8SnuRk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VoDxu0JROMcD2NU4mSc6KU2oGQ7nEERAimPhTXO1VD8zFmQrbHNDwrMwNlUWql2ae
+         Zuvmkm0S3xwbgzI0zpP/kz9v3yoK04k3QoNZnwBwykuKhQHbqzG51CGtKCFA96Q6hi
+         SeMAcSwP8M3CnBQZ7d6ejvM7cYBoV2bb/L1QWCeHDzIDpF5HfiphDmwnkVigH/QEC8
+         cacBNFGX1b0Sx2GeWa+fRrekL7Ugtuq2wO6cDNApOe8OIX/YGGcz0ksVK6jkZ1EswM
+         /7iGpFbZ+/xKc21HN8XGBZCqDFsk5RLnoa5rUbp9NV/sxPAYXZ8QaDApGSE/izbOhf
+         dhsY8N99yXETA==
+Message-ID: <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com>
+Date:   Fri, 15 Jul 2022 14:38:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03434e9c-7a1c-4819-6bfe-54f56401348c@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 13/13] video: backlight: mt6370: Add MediaTek MT6370
+ support
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220715112607.591-1-peterwu.pub@gmail.com>
+ <20220715112607.591-14-peterwu.pub@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220715112607.591-14-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 10:41:01AM -0700, Wesley Cheng wrote:
-> Hi Thinh,
+Il 15/07/22 13:26, ChiaEn Wu ha scritto:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> On 7/14/2022 10:38 AM, Thinh Nguyen wrote:
-> > On 7/12/2022, Wesley Cheng wrote:
-> > > Local interrupts are currently being disabled as part of aquiring the
-> > > spin lock before issuing the endxfer command.  Leave interrupts enabled, so
-> > > that EP0 events can continue to be processed.  Also, ensure that there are
-> > > no pending interrupts before attempting to handle any soft
-> > > connect/disconnect.
-> > > 
-> > > Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
-> > > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> > > ---
-> > >    drivers/usb/dwc3/gadget.c | 21 ++++++++++++---------
-> > >    1 file changed, 12 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > index a455f8d4631d..ee85b773e3fe 100644
-> > > --- a/drivers/usb/dwc3/gadget.c
-> > > +++ b/drivers/usb/dwc3/gadget.c
-> > > @@ -1674,6 +1674,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
-> > >    static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
-> > >    {
-> > >    	struct dwc3_gadget_ep_cmd_params params;
-> > > +	struct dwc3 *dwc = dep->dwc;
-> > >    	u32 cmd;
-> > >    	int ret;
-> > > @@ -1682,7 +1683,9 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
-> > >    	cmd |= interrupt ? DWC3_DEPCMD_CMDIOC : 0;
-> > >    	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
-> > >    	memset(&params, 0, sizeof(params));
-> > > +	spin_unlock(&dwc->lock);
-> > >    	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
-> > > +	spin_lock(&dwc->lock);
-> > >    	WARN_ON_ONCE(ret);
-> > >    	dep->resource_index = 0;
-> > > @@ -2029,12 +2032,11 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> > >    	struct dwc3_ep			*dep = to_dwc3_ep(ep);
-> > >    	struct dwc3			*dwc = dep->dwc;
-> > > -	unsigned long			flags;
-> > >    	int				ret = 0;
-> > >    	trace_dwc3_ep_dequeue(req);
-> > > -	spin_lock_irqsave(&dwc->lock, flags);
-> > > +	spin_lock(&dwc->lock);
-> > >    	list_for_each_entry(r, &dep->cancelled_list, list) {
-> > >    		if (r == req)
-> > > @@ -2073,7 +2075,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> > >    		request, ep->name);
-> > >    	ret = -EINVAL;
-> > >    out:
-> > > -	spin_unlock_irqrestore(&dwc->lock, flags);
-> > > +	spin_unlock(&dwc->lock);
-> > >    	return ret;
-> > >    }
-> > > @@ -2489,9 +2491,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc);
-> > >    static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
-> > >    {
-> > > -	unsigned long flags;
-> > > -
-> > > -	spin_lock_irqsave(&dwc->lock, flags);
-> > > +	spin_lock(&dwc->lock);
-> > >    	dwc->connected = false;
-> > >    	/*
-> > > @@ -2506,10 +2506,10 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
-> > >    		reinit_completion(&dwc->ep0_in_setup);
-> > > -		spin_unlock_irqrestore(&dwc->lock, flags);
-> > > +		spin_unlock(&dwc->lock);
-> > >    		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
-> > >    				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
-> > > -		spin_lock_irqsave(&dwc->lock, flags);
-> > > +		spin_lock(&dwc->lock);
-> > >    		if (ret == 0)
-> > >    			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
-> > >    	}
-> > > @@ -2523,7 +2523,7 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
-> > >    	 */
-> > >    	dwc3_stop_active_transfers(dwc);
-> > >    	__dwc3_gadget_stop(dwc);
-> > > -	spin_unlock_irqrestore(&dwc->lock, flags);
-> > > +	spin_unlock(&dwc->lock);
-> > >    	/*
-> > >    	 * Note: if the GEVNTCOUNT indicates events in the event buffer, the
-> > > @@ -2569,6 +2569,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-> > >    		return 0;
-> > >    	}
-> > > +	synchronize_irq(dwc->irq_gadget);
-> > > +
-> > >    	if (!is_on) {
-> > >    		ret = dwc3_gadget_soft_disconnect(dwc);
-> > >    	} else {
-> > > @@ -3729,6 +3731,7 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-> > >    	 */
-> > >    	__dwc3_stop_active_transfer(dep, force, interrupt);
-> > > +
-> > >    }
-> > >    static void dwc3_clear_stall_all_ep(struct dwc3 *dwc)
-> > 
-> > Hi Greg,
-> > 
-> > Please don't pick up this patch yet. We're still in discussion with
-> > this. I have some concern with unlocking/locking when sending End
-> > Transfer command. For example, this patch may cause issues with
-> > DWC3_EP_END_TRANSFER_PENDING checks.
-> > 
+> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> driver, display bias voltage supply, one general purpose LDO, and the
+> USB Type-C & PD controller complies with the latest USB Type-C and PD
+> standards.
 > 
-> Agreed.
+> This adds support for MediaTek MT6370 Backlight driver. It's commonly used
+> to drive the display WLED. There are 4 channels inside, and each channel
+> supports up to 30mA of current capability with 2048 current steps in
+> exponential or linear mapping curves.
 > 
-> > Hi Wesley,
-> > 
-> > Did you try out my suggestion yet?
-> > 
-> 
-> In process of testing.  Will update you in a few days, since it might take a
-> day or so to reproduce.
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 
-Ok, I'll drop this whole series from my tree for now.  Please resend
-when you have it working.
+Hello ChiaEn,
 
-greg k-h
+I propose to move this one to drivers/leds (or drivers/pwm) and, instead of
+registering a backlight device, register a PWM device.
+
+This way you will be able to reuse the generic backlight-pwm driver, as you'd
+be feeding the PWM device exposed by this driver to the generic one: this will
+most importantly make it easy to chain it with MTK_DISP_PWM (mtk-pwm-disp)
+with a devicetree that looks like...
+
+	pwmleds-disp {
+
+		compatible = "pwm-leds";
+
+
+
+		disp_led: disp-pwm {
+
+			label = "backlight-pwm";
+
+			pwms = <&pwm0 0 500000>;
+
+			max-brightness = <1024>;
+
+		};
+
+	};
+
+
+
+	backlight_lcd0: backlight {
+
+		compatible = "led-backlight";
+
+		leds = <&disp_led>, <&pmic_bl_led>;
+
+
+
+		default-brightness-level = <300>;
+
+	};
+
+Regards,
+Angelo
+
+
