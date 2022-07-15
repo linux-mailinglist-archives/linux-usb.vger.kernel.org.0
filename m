@@ -2,111 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCCF57684B
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 22:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787905768CA
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 23:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiGOUmC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 16:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
+        id S230379AbiGOVUI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 17:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiGOUmB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 16:42:01 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5F563922
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 13:41:59 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id x184so5602707pfx.2
-        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 13:41:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WtZRDzM8YJ97S/1Li5D/D44YAKcdEwJfblvdKCPMsAc=;
-        b=h9mO28BVHHbGShv1uBCtq7ZZifV3OOTDANCsGvtddURVoUa57Ouy0cRfb8h/UxuZUn
-         wHWtFVlfeAly/PSS/772SluwtFygGQYZrM+pSzu07xnsKlX06xwKk3lXfQqTnzgpPYgs
-         vG9B137tWetNmkSVx/6ucFo/nv10tm0kBnsjc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WtZRDzM8YJ97S/1Li5D/D44YAKcdEwJfblvdKCPMsAc=;
-        b=I1r6YDhT2OFSmChJl7BH7ZBRlx36IQtvDqIlCh4Vuelfy66gL7amjFi+cJXyeArop4
-         83HSWxwkT12jpLXbJxkT1qED9v0gosjgEag5Xmtl0+75lw2KMzdfOCRsIb76rHZkR6Ze
-         ta4Y7GFdxnRVS4ieQzYyN7LFgbXpWUTCx+mgJc5PMEbMjanm0b5HMlTx0S8sG7jSSB5N
-         AWyhY+sM/cx8UCxgKVRaeCGziocp7s3mD3x8ScouSkezwWM9zJvMsbs3J+SG/tMqeXRd
-         92LTd5inojrgs0WX3GfLibnt8z1w+199TGdJEupXXy21Cxke0N8PnkkUk3QhZoszPS67
-         7OAA==
-X-Gm-Message-State: AJIora98dWLfzo6Aq6rFqPis/bwqex8mEHf7Smw7CCFf3qd81azxt2eD
-        kXYsqTgNXqTO6O4kSgVvPsCbKdo6JFlw4A==
-X-Google-Smtp-Source: AGRyM1vr9Gi++zE+26ugt96VQljO9f6LQq5uJA99uXorvAUYnr7XDA1roHUKlradhlJytAU1JAbaOQ==
-X-Received: by 2002:a63:2486:0:b0:412:9de2:eb49 with SMTP id k128-20020a632486000000b004129de2eb49mr13912375pgk.224.1657917718974;
-        Fri, 15 Jul 2022 13:41:58 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:835b:7656:818:a69a])
-        by smtp.gmail.com with UTF8SMTPSA id 187-20020a6205c4000000b0051c4f6d2d95sm4309705pff.106.2022.07.15.13.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Jul 2022 13:41:58 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 13:41:57 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S229513AbiGOVUH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 17:20:07 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Jul 2022 14:20:06 PDT
+Received: from mr4.vodafonemail.de (mr4.vodafonemail.de [145.253.228.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A7671BCC
+        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 14:20:05 -0700 (PDT)
+Received: from smtp.vodafone.de (unknown [10.0.0.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mr4.vodafonemail.de (Postfix) with ESMTPS id 4Ll3gR4Wv7z1y3d;
+        Fri, 15 Jul 2022 21:01:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
+        s=vfde-mb-mr2-21dec; t=1657918883;
+        bh=g0bZNQ/qAGzQLRkN3t2THCJbsEj5rzgZ60pOMTH7Mao=;
+        h=Date:From:To:Subject:Message-ID:References:Content-Type:
+         In-Reply-To:From;
+        b=RhBsweNS+Px1w+brCGcYvdNy6c+SqURr/fXm/i3BR68wsmOck6Gf+6VMpK92azfa9
+         v+N0hBwQgTqULfBxo46CvwWsfg+SRP8g+sFfXzuVLPJKwqg3kByK1nNiMZLw1PoScu
+         zv2ltNpU6PnZjxKqUI1OXWr+Pva46z28G888dTQU=
+Received: from arcor.de (p3ee2ce05.dip0.t-ipconnect.de [62.226.206.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp.vodafone.de (Postfix) with ESMTPSA id 4Ll3g24xSkzHnHl;
+        Fri, 15 Jul 2022 21:00:59 +0000 (UTC)
+Date:   Fri, 15 Jul 2022 23:00:45 +0200
+From:   Reinhard Speyerer <rspmn@arcor.de>
+To:     Frans Klaver <fransklaver@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
- probed properly
-Message-ID: <YtHRFcol5uslEel1@google.com>
-References: <1657891312-21748-1-git-send-email-quic_kriskura@quicinc.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frans Klaver <frans.klaver@vislink.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: serial: qcserial: add EM9191 support
+Message-ID: <YtHVfc40VGbB2Tkz@arcor.de>
+References: <20220715095623.28002-1-frans.klaver@vislink.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1657891312-21748-1-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220715095623.28002-1-frans.klaver@vislink.com>
+X-purgate-type: clean
+X-purgate: clean
+X-purgate-size: 2507
+X-purgate-ID: 155817::1657918881-11F7A23F-EC5999A9/0/0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 06:51:52PM +0530, Krishna Kurapati wrote:
-
-> Subject: usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't probed properly
-
-nit: "isn't probed properly" sounds like a bug or HW issue. In case
-you re-spin maybe change it to "hasn't probed yet" or similar.
-
-> On SC7180 devices, it is observed that dwc3 probing is deferred
-> because device_links_check_suppliers() finds that '88e3000.phy'
-> isn't ready yet.
+On Fri, Jul 15, 2022 at 11:56:23AM +0200, Frans Klaver wrote:
+> From: Frans Klaver <frans.klaver@vislink.com>
 > 
-> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
-> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
-> configures dwc-qcom's power domain to be always ON. Also it configures
-> dp/dm interrupts accordingly to support wakeup from system suspend.
+> Support for QDL mode is already present for EM9191 modules, but the
+> non-QDL mode appears to be missing. Add it now.
 > 
-> More info regarding the same can be found at:
-> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status")
-> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
+> T:  Bus=03 Lev=03 Prnt=04 Port=01 Cnt=02 Dev#= 17 Spd=480 MxCh= 0
+> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=1199 ProdID=90d3 Rev=00.06
+> S:  Manufacturer=Sierra Wireless, Incorporated
+> S:  Product=Sierra Wireless EM9191
+> S:  SerialNumber=8W0463003002A114
+> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=qcserial
+> I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
 > 
-> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
-> probe, driver ends up reading the wakeup capability of dwc3 core as false
-> leading to instability in suspend/resume path.
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Frans Klaver <frans.klaver@vislink.com>
+> ---
+> I noticed an e-mail address discrepancy that git-send-email didn't
+> magically fix for me. No change otherwise.
 > 
-> To avoid this scenario, ensure dwc3_probe is successful by checking
-> if appropriate driver is assigned to it or not after the of_platform_populate
-> call. If it isn't then defer dwc3-qcom probe as well.
+>  drivers/usb/serial/qcserial.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> index 586ef5551e76e..73f6d3a37c0c4 100644
+> --- a/drivers/usb/serial/qcserial.c
+> +++ b/drivers/usb/serial/qcserial.c
+> @@ -166,6 +166,7 @@ static const struct usb_device_id id_table[] = {
+>  	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
+>  	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
+>  	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
+> +	{DEVICE_SWI(0x1199, 0x90d3)},	/* Sierra Wireless EM9191 */
+>  	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
+>  	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
+>  	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
 
-Reported-by: Matthias Kaehlcke <mka@chromium.org>
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Hi Frans,
 
-Please make sure to add reviewers of previous versions or other folks you
-would like to review your patches in cc. I found v2 accidentally while
-looking for something else.
+the qcserial driver used in the usb-devices output above does not seem
+to be built from the mainline qcserial.c with your patch applied as USB
+interface 4 is ignored by the QCSERIAL_SWI layout.
+
+To avoid potential side effects in case Sierra Wireless adds a vendor class
+USB interface 2 not intended to be used with qcserial.c it might be best
+to use a new QCSERIAL_SWI2 layout similar to what has been done in
+their MBPL drivers mentioned here
+https://forum.sierrawireless.com/t/rc7620-and-linux-driver/24308/ .
+
+Regards,
+Reinhard
