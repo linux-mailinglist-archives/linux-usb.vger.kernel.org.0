@@ -2,121 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FF4575B94
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 08:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFB5575BBA
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 08:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiGOGcR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 02:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S231439AbiGOGl3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 15 Jul 2022 02:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGOGcR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 02:32:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDB186EE;
-        Thu, 14 Jul 2022 23:32:10 -0700 (PDT)
-X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:0e331e9d-0f9b-4888-b02d-931748d1e7d6,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:a8280f33-b9e4-42b8-b28a-6364427c76bb,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 3d0e87fc9e8c40ab947928917b85845f-20220715
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2075644891; Fri, 15 Jul 2022 14:32:07 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 15 Jul 2022 14:32:05 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 15 Jul 2022 14:32:05 +0800
-Message-ID: <1267b234b09280b9b475cfe2bb32580e967e2dac.camel@mediatek.com>
-Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
- __vstring() helper
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Fri, 15 Jul 2022 14:32:05 +0800
-In-Reply-To: <20220714164330.311734558@goodmis.org>
-References: <20220714164256.403842845@goodmis.org>
-         <20220714164330.311734558@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231441AbiGOGlM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 02:41:12 -0400
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4E17968B
+        for <linux-usb@vger.kernel.org>; Thu, 14 Jul 2022 23:39:24 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1657867148tcz5m1uz
+Received: from smtpclient.apple ( [111.193.9.146])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 15 Jul 2022 14:39:06 +0800 (CST)
+X-QQ-SSF: 01400000002000B0U000000A0000000
+X-QQ-FEAT: uy3crRmYRWU+wcp35XTR3jXFtYH7pvQ6o2RBeTgVe+6DFnchz8rR0uaBAkNqe
+        GEkQBF3ozDQZn4WnCNEnnGhCcKyVGbzoZshTNJ4fZhoK10L1/i7kkt6TDWDuSAz/24B7lmw
+        nzNkFPHQ6svcZXViXT1KO/bGMYp4dqw2l8HrLFAlhX7Z4rvTZc3e17vCAheFN7QrCmh7MSE
+        rmJ72lFtqo4nybUcB0u6LP++LO1YD4ShDasxPBiUepwpyoYEmAMGC3EQq6S8XYxv2LwlsBT
+        xkpZ7B/GIBD+jrZH8WNq/41Px8OB2ZrsILAkk1y1/nxpm2VglqkrVwX/aj/ERZswOGdGZn8
+        4Wo1o85eLZsEwwsoLLD1Kfhv3ztNEDm18uvW1CGAzjUiad8KHHW+ctG9rXvgpkLcYr9wnYh
+X-QQ-GoodBg: 2
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] USB: serial: option: adding support for OPPO R11 diag
+ port
+From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
+In-Reply-To: <Ys/2dN9ktCirZsd9@kroah.com>
+Date:   Fri, 15 Jul 2022 14:39:06 +0800
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <5F187A64-2C88-4F7E-98AD-2A52B17B0DA4@bupt.edu.cn>
+References: <20220714102037.4113889-1-sdlyyxy@bupt.edu.cn>
+ <Ys/2dN9ktCirZsd9@kroah.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Steven,
+Hi Greg,
+Thanks for your comments!
 
-On Thu, 2022-07-14 at 12:43 -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> On Jul 14, 2022, at 18:56, Greg KH <gregkh@linuxfoundation.org> wrote:
 > 
-> Instead of open coding a __dynamic_array() with a fixed length (which
-> defeats the purpose of the dynamic array in the first place). Use the
-> new
-> __vstring() helper that will use a va_list and only write enough of
-> the
-> string into the ring buffer that is needed.
+> On Thu, Jul 14, 2022 at 06:20:37PM +0800, sdlyyxy wrote:
+>> From: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>> 
+>> This patch adds support for OPPO R11 USB diag serial port to option
+>> driver. This phone uses Qualcomm Snapdragon 660 SoC.
+>> 
+>> usb-devices output:
+>> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+>> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+>> P: Vendor=22d9 ProdID=276c Rev=04.04
+>> S: Manufacturer=OPPO
+>> S: Product=SDM660-MTP _SN:09C6BCA7
+>> S: SerialNumber=beb2c403
+>> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+>> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 > 
-> Link: 
-> https://urldefense.com/v3/__https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org__;!!CTRNKA9wMg0ARbw!w8nx66BKDTtyusp5i2pyzOGNb-QyxIAWjoZwmSQY0zzor_rqvBgUm5__vKK98ApKcDic$
->  
+> I do not think this has an option usb-serial chip in the device, this is
+> a phone with a debug port instead.
 > 
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  drivers/usb/mtu3/mtu3_trace.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Yeah, this phone uses a Qualcomm chip, not an option usb-serial chip.
+It has the functionality to enter into a special mode, which provides 
+a QCDM-capable diag port as the same behaviour of USB modems. For
+Qualcomm devices, there are several drivers: qcserial, qcaux, and 
+option. According to qcserial.c, qcaux.c source code and mailing list
+conversations [1], this device with diag+adb layout should be driven
+by option.
+>> I: If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
 > 
-> diff --git a/drivers/usb/mtu3/mtu3_trace.h
-> b/drivers/usb/mtu3/mtu3_trace.h
-> index 1b897636daf2..ef3c17e2f8a6 100644
-> --- a/drivers/usb/mtu3/mtu3_trace.h
-> +++ b/drivers/usb/mtu3/mtu3_trace.h
-> @@ -25,11 +25,11 @@ TRACE_EVENT(mtu3_log,
->  	TP_ARGS(dev, vaf),
->  	TP_STRUCT__entry(
->  		__string(name, dev_name(dev))
-> -		__dynamic_array(char, msg, MTU3_MSG_MAX)
-> +		__vstring(msg, vaf->fmt, vaf->va)
->  	),
->  	TP_fast_assign(
->  		__assign_str(name, dev_name(dev));
-> -		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
-> >va);
-> +		__assign_vstr(msg, vaf->fmt, vaf->va);
->  	),
->  	TP_printk("%s: %s", __get_str(name), __get_str(msg))
->  );
+> What userspace program is bound to this endpoint?
+> 
+I think it is used by adb via libusb.
+>> 
+>> Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>> ---
+>> drivers/usb/serial/option.c | 5 +++++
+>> 1 file changed, 5 insertions(+)
+>> 
+>> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+>> index de59fa919540..cf65cb84c3ca 100644
+>> --- a/drivers/usb/serial/option.c
+>> +++ b/drivers/usb/serial/option.c
+>> @@ -573,6 +573,10 @@ static void option_instat_callback(struct urb *urb);
+>> #define WETELECOM_PRODUCT_6802			0x6802
+>> #define WETELECOM_PRODUCT_WMD300		0x6803
+>> 
+>> +/* OPPO products */
+>> +#define OPPO_VENDOR_ID				0x22d9
+>> +#define OPPO_PRODUCT_R11			0x276c
+>> +
+>> 
+>> /* Device flags */
+>> 
+>> @@ -2155,6 +2159,7 @@ static const struct usb_device_id option_ids[] = {
+>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
+>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
+>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
+>> +	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
+> 
+> This does not look correct, sorry. Try using the usbserial generic
+> driver instead to transmit and recieve?
+> 
+Yes I have tried using usbserial generic driver. As for the interface
+#0x0 diag port, it seems working. However, in the same time the 
+generic driver will also be attached to interface #0x1, which causes
+nonfunction of adb. Using this patch, diag and adb can run 
+simultaneously. So it's better than the generic driver?
 
-Can you help to remove macro "MTU3_MSG_MAX" and one blank line after it
-in this file, this macro is not used anymore after apply this patch.
+[1] https://patchwork.kernel.org/project/linux-usb/patch/20180623212408.15221-1-aleksander@aleksander.es/
 
-Thanks a lot
+Thanks,
+Sdlyyxy
 
 
 
