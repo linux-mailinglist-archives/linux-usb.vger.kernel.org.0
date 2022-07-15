@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B8A575C6E
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 09:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6334575C6B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 09:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiGOHdJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 03:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S232007AbiGOHdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 03:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiGOHdI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 03:33:08 -0400
+        with ESMTP id S231998AbiGOHdK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 03:33:10 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB017BE15;
-        Fri, 15 Jul 2022 00:33:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF47BE15;
+        Fri, 15 Jul 2022 00:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1657870386; x=1689406386;
+  t=1657870389; x=1689406389;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EtijF1TtJbE7eHGNasjw3sq90Rj8NAQWPgQrZ6WvuZY=;
-  b=kNrls2tmHHZ0mJoqN8OC92v49U5civAk4fhZYvExMz29bt2yzo8CUrpo
-   r4x4l2DJNaEl/ClDh4AXU+T1oeZEJZ2f5sDz0hqdpgAOjzxzzFxE1sgAW
-   kXD4LJ8tgqasLJNv3JXZSLu8hXQ4bsV0mpHVmSXV03pU7A1lEKvFdMd6H
-   60fGoZDIM5I0x7e+c0QyfoZZUco9OjhJALAcNbF6ndv92c+gGSkIZ3UBu
-   nBFv6wqD+JUOlQG4oC2yVtae0MPtoVcRkGmGyrWym4YTuA6anZCXsvNHQ
-   7bg/B/Dxwe8XL9wGQ/KcpOhkiPFPSyXCRzdjHlDUPH49aZCm8rlX91Sm7
-   w==;
+  bh=tGdSVNRbGcgl4TSG2XgPpUaJZtRh2xJZYMqzFHzDF6E=;
+  b=eFhE1PeFydBdKzIFKY2sTM8MCb+x4XDinOeied2yJbPVDF3UHvhBqXnT
+   AoWzmhevspVvjihtjNOX+9PTNaRX2+k2elgb3IUFK0FYD+E2/CaONvxbo
+   F3ElTtTrGdoI93qpV7KyEbMkQBdmqF0ZZeuH5TmLzxNfMgLg8ihLk0Y/f
+   szNWPBkwa2IXTamoljpC6KMh1iXMYJN7SZZ14awkdhMMQlP6/2E8kLKjH
+   iT1GBFblfzkWHaObjR4Z6u3XamiM1L78Mbjn3GqPfM+VxDMIHqP7XOkGJ
+   x8MRrq1MTagJPqYoCscB3J7phJ7qoFSUYh12A6RRBP7nZnyTU2Idv4y9/
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.92,273,1650924000"; 
-   d="scan'208";a="25068550"
+   d="scan'208";a="25068552"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 15 Jul 2022 09:33:04 +0200
+  by mx1-pgp.tq-group.com with ESMTP; 15 Jul 2022 09:33:05 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
   by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 15 Jul 2022 09:33:04 +0200
+  Fri, 15 Jul 2022 09:33:05 +0200
 X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 15 Jul 2022 09:33:04 +0200
+        by tq-pgp-pr1.tq-net.de on Fri, 15 Jul 2022 09:33:05 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1657870384; x=1689406384;
+  t=1657870385; x=1689406385;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EtijF1TtJbE7eHGNasjw3sq90Rj8NAQWPgQrZ6WvuZY=;
-  b=G/xBnLTcckUPL0cuWDvjSdwgIH/CYNT7K9pt+3fkJIT24GvFh/TEw+oG
-   14tvy/lDPw8JfhrisWqCBzVYsBb73lAXBWMUXs/d60i5vlLgXV1xQmFbH
-   2ohIx57sGOzCm1n/DpSrMhQHhl7y/XZiQdp5x0Pb7GYdnKQZ9CzAbohGZ
-   8UT8mGA54rqg+4GfvBAeRM0pIldPzzMTcdYJ2YByBE2Z3wts99nsVhr15
-   3gtddVp25t/NI64xIrE46Z4BHvjAbiKrl8Tmbs8NagKA1iBVmtkaD7o04
-   Yk5IRNZeSYCrmO9waIIOLgkeKBpVLmU8e9kOZBbVbrJiGz4WNWG+4BCxQ
-   A==;
+  bh=tGdSVNRbGcgl4TSG2XgPpUaJZtRh2xJZYMqzFHzDF6E=;
+  b=d96G7uyyZ4x5IYYVkq3ThwaWvwxw0+FTzSnHgyq88UHczVAvzuZL5WUL
+   XcwvppVdchKkPEgC8qbcN0wOk4/qWOVKlptnV4bWf519isxBIE2Z2OMGg
+   HHWlBeE+CLFtAdvMKm10AelHK5T4xepv3HXoIZvqm22BZzNX7ELvYIWsw
+   DABLtu207X+dr1V8bilX0gYbL/tw7pCp4cPOdqkQ+CtfzsrzZRsBxluQv
+   RFzsmOpk1NXToGs2Ly7FRZ+t70IAYnpcBozKv+j/kPIshlqLIyvN2HbNN
+   ztLHQiiufY7yJOHX3tpNp36Fp0p6tEqqiUdhAHHCzs6B0IxZt+MW4IlBt
+   g==;
 X-IronPort-AV: E=Sophos;i="5.92,273,1650924000"; 
-   d="scan'208";a="25068548"
+   d="scan'208";a="25068551"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 15 Jul 2022 09:33:04 +0200
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id A0ABF280072;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C5B19280056;
         Fri, 15 Jul 2022 09:33:04 +0200 (CEST)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -65,9 +65,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Kaehlcke <mka@chromium.org>
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 2/3] usb: misc: onboard_usb_hub: Add reset-gpio support
-Date:   Fri, 15 Jul 2022 09:32:59 +0200
-Message-Id: <20220715073300.868087-2-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v2 3/3] usb: misc: onboard_usb_hub: Add TI USB8041 hub support
+Date:   Fri, 15 Jul 2022 09:33:00 +0200
+Message-Id: <20220715073300.868087-3-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220715073300.868087-1-alexander.stein@ew.tq-group.com>
 References: <20220715073300.868087-1-alexander.stein@ew.tq-group.com>
@@ -82,114 +82,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Despite default reset upon probe, release reset line after powering up
-the hub and assert reset again before powering down.
+This is a 4-port 3.0 USB hub.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
 Changes in v2:
-* Use device specific sleep times, if present
-* Use fsleep instead of usleep_range
+* Add devtype data containing waiting times
 
- drivers/usb/misc/onboard_usb_hub.c | 29 +++++++++++++++++++++++++++++
- drivers/usb/misc/onboard_usb_hub.h |  5 +++++
- 2 files changed, 34 insertions(+)
+ drivers/usb/misc/onboard_usb_hub.c | 3 +++
+ drivers/usb/misc/onboard_usb_hub.h | 7 +++++++
+ 2 files changed, 10 insertions(+)
 
 diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index 6b9b949d17d3..1dd7f4767def 100644
+index 1dd7f4767def..319b4b1748fb 100644
 --- a/drivers/usb/misc/onboard_usb_hub.c
 +++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -7,6 +7,7 @@
+@@ -339,6 +339,7 @@ static struct platform_driver onboard_hub_driver = {
+ /************************** USB driver **************************/
  
- #include <linux/device.h>
- #include <linux/export.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
-@@ -38,6 +39,8 @@ struct usbdev_node {
- struct onboard_hub {
- 	struct regulator *vdd;
- 	struct device *dev;
-+	const struct onboard_hub_devtype_data *devtype_data;
-+	struct gpio_desc *reset_gpio;
- 	bool always_powered_in_suspend;
- 	bool is_powered_on;
- 	bool going_away;
-@@ -56,6 +59,11 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
- 		return err;
- 	}
+ #define VENDOR_ID_REALTEK	0x0bda
++#define VENDOR_ID_TI		0x0451
  
-+	if (hub->devtype_data)
-+		fsleep(hub->devtype_data->power_stable_time);
-+	if (hub->reset_gpio)
-+		gpiod_set_value_cansleep(hub->reset_gpio, 0);
-+
- 	hub->is_powered_on = true;
- 
- 	return 0;
-@@ -65,6 +73,12 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
- {
- 	int err;
- 
-+	if (hub->reset_gpio) {
-+		gpiod_set_value_cansleep(hub->reset_gpio, 1);
-+		if (hub->devtype_data)
-+			fsleep(hub->devtype_data->reset_duration);
-+	}
-+
- 	err = regulator_disable(hub->vdd);
- 	if (err) {
- 		dev_err(hub->dev, "failed to disable regulator: %d\n", err);
-@@ -219,6 +233,7 @@ static void onboard_hub_attach_usb_driver(struct work_struct *work)
- 
- static int onboard_hub_probe(struct platform_device *pdev)
- {
-+	const struct of_device_id *of_id;
- 	struct device *dev = &pdev->dev;
- 	struct onboard_hub *hub;
- 	int err;
-@@ -227,10 +242,24 @@ static int onboard_hub_probe(struct platform_device *pdev)
- 	if (!hub)
- 		return -ENOMEM;
- 
-+	of_id = of_match_device(onboard_hub_match, &pdev->dev);
-+	if (of_id)
-+		hub->devtype_data = of_id->data;
-+	else
-+		return -ENODEV;
-+
- 	hub->vdd = devm_regulator_get(dev, "vdd");
- 	if (IS_ERR(hub->vdd))
- 		return PTR_ERR(hub->vdd);
- 
-+	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-+						  GPIOD_OUT_HIGH);
-+	if (IS_ERR(hub->reset_gpio))
-+		return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
-+
-+	if (hub->devtype_data && hub->reset_gpio)
-+		fsleep(hub->devtype_data->reset_duration);
-+
- 	hub->dev = dev;
- 	mutex_init(&hub->lock);
- 	INIT_LIST_HEAD(&hub->udev_list);
+ /*
+  * Returns the onboard_hub platform device that is associated with the USB
+@@ -416,6 +417,8 @@ static const struct usb_device_id onboard_hub_id_table[] = {
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0414) }, /* RTS5414 USB 3.2 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
++	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
++	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
 diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index d3a5b6938582..7e743f4c8aaa 100644
+index 7e743f4c8aaa..fcb6a9024bbd 100644
 --- a/drivers/usb/misc/onboard_usb_hub.h
 +++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -6,6 +6,11 @@
- #ifndef _USB_MISC_ONBOARD_USB_HUB_H
- #define _USB_MISC_ONBOARD_USB_HUB_H
+@@ -11,7 +11,14 @@ struct onboard_hub_devtype_data {
+ 	unsigned long reset_duration;		/* reset pulse width in us */
+ };
  
-+struct onboard_hub_devtype_data {
-+	unsigned long power_stable_time;	/* power stabilization time in us */
-+	unsigned long reset_duration;		/* reset pulse width in us */
++static const struct onboard_hub_devtype_data ti_tusb8041_data = {
++	.power_stable_time = 3000,
++	.reset_duration = 3000,
 +};
 +
  static const struct of_device_id onboard_hub_match[] = {
++	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
++	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
  	{ .compatible = "usbbda,411" },
  	{ .compatible = "usbbda,5411" },
+ 	{ .compatible = "usbbda,414" },
 -- 
 2.25.1
 
