@@ -2,69 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BC1575EF9
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 12:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1513D575F26
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 12:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiGOKEp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 06:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S234478AbiGOKKU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 15 Jul 2022 06:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiGOKEn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 06:04:43 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5D229837;
-        Fri, 15 Jul 2022 03:04:41 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id x184so4280247pfx.2;
-        Fri, 15 Jul 2022 03:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fo6J+XbkB7jjFutwN0VEI7YAOj/+xVVF5CCYclhdBW8=;
-        b=cpZqSeLeXgdFr2xselYTiiyS8QmVWfuiDmxChj7HxYmgiUfjLE8/1PgSKTdXI2l6AY
-         hDVqVGF8dd9yNNRSx+ar2TvH/V4prpOelnV9VCpx6zeWFGdsf+aYsYw+2Ea4rIHWsSqF
-         tNg9bQagye59J/1AAQy8y0pbU4lyXJH7H+FWPM8uIvg1WjPQNB6zF8MIKhMhNWb8ptvt
-         7NbqvmrV1pjyRfVFhhd2UArs2lM0Fhw/hFtZ1OlfT3KrTAAajj+LRSF7IpIAxaEA2ZmP
-         QkviGo1oZ6fm4BGxoCSQIQyQYrdMaiTZzSFbQwq2SQ4IisfhWe+izHODLXyFZyWS9Bmv
-         ZDCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fo6J+XbkB7jjFutwN0VEI7YAOj/+xVVF5CCYclhdBW8=;
-        b=T00zc1G+q5ptnahUDonJzuHFwdVnU6EW+SjsjyO/Bb1ibTeqPIenPqmFXRjxUvdUCt
-         idLr60xqjV8VmJWICL6/WSBLXnrx7HzxkElsxBkY1nZjvb+axnbyEf+NR1N5oCyvcgjm
-         fD4WP2Ctya4VN44vnIEdkQ6rmhBYG92sFBAyIcv29GfLH5ID8CTv+qpd1Lp5+FQ6pezh
-         x0GR9TEQaIWvs+pUbXeEb4w418dWM/kMpyTUDx2Qged1wGdKYKYuQhACH1ZYFtji68VB
-         c9Lngf8mm+fKLWoFiU157mbqdsSflQfhQJhjimoQBXTB7PrQa7HglNNjxDhVv7jQ92dP
-         HR1Q==
-X-Gm-Message-State: AJIora9J2SPrPl3ChtDE/eLJyivacFPO4RkbEZksOBGvE+leOOpLkOdn
-        jEZAanit+U2fLs7yH4hEnwU=
-X-Google-Smtp-Source: AGRyM1tIJYCQbdShB8m/Lq0TBH8HHecZlnvolRiCPWc6nIJdTSDw0VUSFNsGsQCNp4wIVp0QnCZ4bA==
-X-Received: by 2002:a05:6a00:1d8f:b0:52a:b787:b480 with SMTP id z15-20020a056a001d8f00b0052ab787b480mr13150767pfw.71.1657879480774;
-        Fri, 15 Jul 2022 03:04:40 -0700 (PDT)
-Received: from genechen-System-Product-Name.richtek.com ([2402:7500:569:4518:3851:6d9:846d:fbd1])
-        by smtp.gmail.com with ESMTPSA id v12-20020a1709028d8c00b0016c1948ef7esm3033791plo.296.2022.07.15.03.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jul 2022 03:04:40 -0700 (PDT)
-From:   Gene Chen <gene.chen.richtek@gmail.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, gene_chen@richtek.com,
-        cy_huang@richtek.com
-Subject: [PATCH 3/3] usb: typec: tcpci_rt1711h: Add compatible with rt1715
-Date:   Fri, 15 Jul 2022 18:04:18 +0800
-Message-Id: <20220715100418.155011-4-gene.chen.richtek@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220715100418.155011-1-gene.chen.richtek@gmail.com>
-References: <20220715100418.155011-1-gene.chen.richtek@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S234403AbiGOKJe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 06:09:34 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F27E3F338
+        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 03:09:09 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1657879739tk8lr0p1
+Received: from smtpclient.apple ( [111.193.9.146])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 15 Jul 2022 18:08:58 +0800 (CST)
+X-QQ-SSF: 01400000002000B0U000000A0000000
+X-QQ-FEAT: AaMJIBoe/i0PYt0j3uURsT23Wjes0aFSd1C6tj6TMSJkZTvI5P8XxHZd2Yg7C
+        xzwbSw2Z1yAc1+LdpDoAbda+iFzyaYwKkD1lKuu0WWMlJyNTJJC0JTP5jg4oiMw8G3RTMVr
+        9Lc8D9KvES/suF5SgATopO19q6k2CN7BWmcOsyeK5edru2MJKikvLaKaKnzIQ6HaslLG0Bq
+        8k2Qi8Nw/c1SH7s2+C10lFWxVfIJ0phRPx3o2WeYkAPVnNclDHJmZRvOYgK+1zHhAjJfrU6
+        iEqRuy8s+hNho8BS2KUVD4QhPoXyZw/3AV/rSRk5o5zvEATcZZ9HsrF1YO90BR0N9xi7vw3
+        lzriChWpwSEo+8CbZ4QojmvFi3HK+uIDYp7EnRJ89iVBXzEq0JoKKs/C/GoSw==
+X-QQ-GoodBg: 2
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] USB: serial: option: adding support for OPPO R11 diag
+ port
+From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
+In-Reply-To: <YtEO51uf0RQNZIRP@kroah.com>
+Date:   Fri, 15 Jul 2022 18:08:58 +0800
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <893094CE-73FF-4874-8F5E-2F5ED267B623@bupt.edu.cn>
+References: <20220714102037.4113889-1-sdlyyxy@bupt.edu.cn>
+ <Ys/2dN9ktCirZsd9@kroah.com>
+ <5F187A64-2C88-4F7E-98AD-2A52B17B0DA4@bupt.edu.cn>
+ <YtENDiIpq++2l6yD@kroah.com> <YtEO51uf0RQNZIRP@kroah.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign3
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,285 +56,121 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Gene Chen <gene_chen@richtek.com>
 
-Add compatible with rt1715
+> On Jul 15, 2022, at 14:53, Greg KH <gregkh@linuxfoundation.org> wrote:
+> 
+> On Fri, Jul 15, 2022 at 08:45:34AM +0200, Greg KH wrote:
+>> On Fri, Jul 15, 2022 at 02:39:06PM +0800, sdlyyxy wrote:
+>>> Hi Greg,
+>>> Thanks for your comments!
+>>> 
+>>>> On Jul 14, 2022, at 18:56, Greg KH <gregkh@linuxfoundation.org> wrote:
+>>>> 
+>>>> On Thu, Jul 14, 2022 at 06:20:37PM +0800, sdlyyxy wrote:
+>>>>> From: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>>>>> 
+>>>>> This patch adds support for OPPO R11 USB diag serial port to option
+>>>>> driver. This phone uses Qualcomm Snapdragon 660 SoC.
+>>>>> 
+>>>>> usb-devices output:
+>>>>> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+>>>>> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+>>>>> P: Vendor=22d9 ProdID=276c Rev=04.04
+>>>>> S: Manufacturer=OPPO
+>>>>> S: Product=SDM660-MTP _SN:09C6BCA7
+>>>>> S: SerialNumber=beb2c403
+>>>>> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+>>>>> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+>>>> 
+>>>> I do not think this has an option usb-serial chip in the device, this is
+>>>> a phone with a debug port instead.
+>>>> 
+>>> Yeah, this phone uses a Qualcomm chip, not an option usb-serial chip.
+>>> It has the functionality to enter into a special mode, which provides 
+>>> a QCDM-capable diag port as the same behaviour of USB modems. For
+>>> Qualcomm devices, there are several drivers: qcserial, qcaux, and 
+>>> option. According to qcserial.c, qcaux.c source code and mailing list
+>>> conversations [1], this device with diag+adb layout should be driven
+>>> by option.
+>> 
+>> No, this is not an option chip, and does not follow the option device
+>> protocols at all.  So this is not the driver to use here.
+>> 
+>> We should probably switch those other devices as well, they aren't
+>> really option devices either.
+>> 
+>>>>> I: If#=0x1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+>>>> 
+>>>> What userspace program is bound to this endpoint?
+>>>> 
+>>> I think it is used by adb via libusb.
+>>>>> 
+>>>>> Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>>>>> ---
+>>>>> drivers/usb/serial/option.c | 5 +++++
+>>>>> 1 file changed, 5 insertions(+)
+>>>>> 
+>>>>> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+>>>>> index de59fa919540..cf65cb84c3ca 100644
+>>>>> --- a/drivers/usb/serial/option.c
+>>>>> +++ b/drivers/usb/serial/option.c
+>>>>> @@ -573,6 +573,10 @@ static void option_instat_callback(struct urb *urb);
+>>>>> #define WETELECOM_PRODUCT_6802			0x6802
+>>>>> #define WETELECOM_PRODUCT_WMD300		0x6803
+>>>>> 
+>>>>> +/* OPPO products */
+>>>>> +#define OPPO_VENDOR_ID				0x22d9
+>>>>> +#define OPPO_PRODUCT_R11			0x276c
+>>>>> +
+>>>>> 
+>>>>> /* Device flags */
+>>>>> 
+>>>>> @@ -2155,6 +2159,7 @@ static const struct usb_device_id option_ids[] = {
+>>>>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
+>>>>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
+>>>>> 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
+>>>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
+>>>> 
+>>>> This does not look correct, sorry. Try using the usbserial generic
+>>>> driver instead to transmit and recieve?
+>>>> 
+>>> Yes I have tried using usbserial generic driver. As for the interface
+>>> #0x0 diag port, it seems working. However, in the same time the 
+>>> generic driver will also be attached to interface #0x1, which causes
+>>> nonfunction of adb. Using this patch, diag and adb can run 
+>>> simultaneously. So it's better than the generic driver?
+>> 
+>> Ah, we should just bind the simple usb-serial driver to this interface
+>> and not bind the generic usb-serial driver to this interface.
+>> 
+>> Let me make up a simple patch for this for you to test...
+> 
+> Can you try the patch here for this, it should work the same as your
+> patch:
+> 
+> 
+> diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+> index 4c6747889a19..eb832b94aa3a 100644
+> --- a/drivers/usb/serial/usb-serial-simple.c
+> +++ b/drivers/usb/serial/usb-serial-simple.c
+> @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
+> 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
+> 					USB_CLASS_VENDOR_SPEC,	\
+> 					0x50,			\
+> -					0x01) }
+> +					0x01) },		\
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
+> +					0xff, 0xff, 0x30) }
+> DEVICE(google, GOOGLE_IDS);
+> 
+> /* Libtransistor USB console */
+> 
+Great, this patch works as intended. The VendorID 0x22d9 does not
+belong to Google, shall I add a separate section for OPPO in 
+usb-serial-simple.c and create a new patch?
 
-Signed-off-by: Gene Chen <gene_chen@richtek.com>
----
- drivers/usb/typec/tcpm/tcpci_rt1711h.c | 168 +++++++++++++++++++++++--
- 1 file changed, 161 insertions(+), 7 deletions(-)
+Thanks,
+sdlyyxy
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index b56a0880a044..1fba98e4ef03 100644
---- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-+++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -10,22 +10,31 @@
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/usb/tcpm.h>
- #include <linux/regmap.h>
- #include "tcpci.h"
- 
- #define RT1711H_VID		0x29CF
- #define RT1711H_PID		0x1711
-+#define RT1715_DID		0x2173
- 
--#define RT1711H_RTCTRL8		0x9B
-+#define RT1711H_PHYCTRL1	0x80
-+#define RT1711H_PHYCTRL2	0x81
-+
-+#define RT1711H_RTCTRL4		0x93
-+/* rx threshold of rd/rp: 1b0 for level 0.4V/0.7V, 1b1 for 0.35V/0.75V */
-+#define RT1711H_BMCIO_RXDZSEL	BIT(0)
- 
-+#define RT1711H_RTCTRL8		0x9B
- /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
- #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
- 			    (((ck300) << 7) | ((ship_off) << 5) | \
- 			    ((auto_idle) << 3) | ((tout) & 0x07))
-+#define RT1711H_AUTOIDLEEN_MASK	BIT(3)
-+#define RT1711H_ENEXTMSG_MASK	BIT(4)
- 
- #define RT1711H_RTCTRL11	0x9E
--
- /* I2C timeout = (tout + 1) * 12.5ms */
- #define RT1711H_RTCTRL11_SET(en, tout) \
- 			     (((en) << 7) | ((tout) & 0x0F))
-@@ -35,10 +44,17 @@
- #define RT1711H_RTCTRL15	0xA2
- #define RT1711H_RTCTRL16	0xA3
- 
-+#define RT1711H_RTCTRL18	0xAF
-+/* 1b0 as fixed rx threshold of rd/rp 0.55V, 1b1 depends on RTCRTL4[0] */
-+#define BMCIO_RXDZEN_MASK	BIT(0)
-+
- struct rt1711h_chip {
- 	struct tcpci_data data;
- 	struct tcpci *tcpci;
- 	struct device *dev;
-+	struct regulator *vbus;
-+	bool src_en;
-+	u16 did;
- };
- 
- static int rt1711h_read16(struct rt1711h_chip *chip, unsigned int reg, u16 *val)
-@@ -75,8 +91,9 @@ static struct rt1711h_chip *tdata_to_rt1711h(struct tcpci_data *tdata)
- 
- static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- {
--	int ret;
- 	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
-+	struct regmap *regmap = chip->data.regmap;
-+	int ret;
- 
- 	/* CK 300K from 320K, shipping off, auto_idle enable, tout = 32ms */
- 	ret = rt1711h_write8(chip, RT1711H_RTCTRL8,
-@@ -84,6 +101,14 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- 	if (ret < 0)
- 		return ret;
- 
-+	/* Enable PD30 extended message for RT1715 */
-+	if (chip->did == RT1715_DID) {
-+		ret = regmap_update_bits(regmap, RT1711H_RTCTRL8,
-+					 RT1711H_ENEXTMSG_MASK, 0xFF);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	/* I2C reset : (val + 1) * 12.5ms */
- 	ret = rt1711h_write8(chip, RT1711H_RTCTRL11,
- 			     RT1711H_RTCTRL11_SET(1, 0x0F));
-@@ -101,7 +126,37 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
- 		return ret;
- 
- 	/* dcSRC.DRP : 33% */
--	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-+	ret = rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable phy discard retry, retry count 7, rx filter deglitech 100 us */
-+	ret = rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us */
-+	/* wait time : (val * .4167) us */
-+	return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
-+}
-+
-+static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
-+			    bool src, bool snk)
-+{
-+	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
-+	int ret;
-+
-+	if (chip->src_en == src)
-+		return 1;
-+
-+	if (src)
-+		ret = regulator_enable(chip->vbus);
-+	else
-+		ret = regulator_disable(chip->vbus);
-+
-+	if (!ret)
-+		chip->src_en = src;
-+	return ret ? ret : 1;
- }
- 
- static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
-@@ -109,8 +164,93 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
- {
- 	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
- 
--	return rt1711h_write8(chip, RT1711H_RTCTRL8,
--			      RT1711H_RTCTRL8_SET(0, 1, !enable, 2));
-+	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL8,
-+				  RT1711H_AUTOIDLEEN_MASK, enable ? 0 : 0xFF);
-+}
-+
-+/*
-+ * Selects the CC PHY noise filter voltage level according to the current
-+ * CC voltage level.
-+ *
-+ * @param cc_level The CC voltage level for the port's current role
-+ * @return EC_SUCCESS if writes succeed; failure code otherwise
-+ */
-+static inline int rt1711h_init_cc_params(struct rt1711h_chip *chip,
-+	enum typec_cc_status cc1, enum typec_cc_status cc2)
-+{
-+	u32 rxdz_en = 0, rxdz_sel = 0;
-+	int ret;
-+
-+	if ((cc1 >= TYPEC_CC_RP_1_5 && cc2 < TYPEC_CC_RP_DEF) ||
-+	    (cc2 >= TYPEC_CC_RP_1_5 && cc1 < TYPEC_CC_RP_DEF)) {
-+		if (chip->did == RT1715_DID) {
-+			rxdz_en = 1;
-+			rxdz_sel = 1;
-+		} else {
-+			rxdz_en = 1;
-+			rxdz_sel = 0;
-+		}
-+	} else {
-+		rxdz_en = 0;
-+		rxdz_sel = 1;
-+	}
-+
-+	ret = regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL18,
-+				 BMCIO_RXDZEN_MASK, rxdz_en);
-+	if (ret < 0)
-+		return ret;
-+
-+	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL4,
-+				  RT1711H_BMCIO_RXDZSEL, rxdz_en);
-+}
-+
-+#define tcpc_presenting_rd(reg, cc) \
-+	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-+	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
-+	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
-+
-+static enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
-+{
-+	switch (cc) {
-+	case 0x1:
-+		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
-+	case 0x2:
-+		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
-+	case 0x3:
-+		if (sink)
-+			return TYPEC_CC_RP_3_0;
-+		fallthrough;
-+	case 0x0:
-+	default:
-+		return TYPEC_CC_OPEN;
-+	}
-+}
-+
-+static int rt1711h_get_cc(struct tcpci *tcpci, struct tcpci_data *tdata,
-+			  enum typec_cc_status *cc1, enum typec_cc_status *cc2)
-+{
-+	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
-+	unsigned int reg, role_control;
-+	int ret;
-+
-+	ret = regmap_read(chip->data.regmap, TCPC_ROLE_CTRL, &role_control);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_read(chip->data.regmap, TCPC_CC_STATUS, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	*cc1 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC1_SHIFT) &
-+				 TCPC_CC_STATUS_CC1_MASK,
-+				 reg & TCPC_CC_STATUS_TERM ||
-+				 tcpc_presenting_rd(role_control, CC1));
-+	*cc2 = tcpci_to_typec_cc((reg >> TCPC_CC_STATUS_CC2_SHIFT) &
-+				 TCPC_CC_STATUS_CC2_MASK,
-+				 reg & TCPC_CC_STATUS_TERM ||
-+				 tcpc_presenting_rd(role_control, CC2));
-+
-+	return rt1711h_init_cc_params(chip, *cc1, *cc2);
- }
- 
- static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
-@@ -209,7 +349,11 @@ static int rt1711h_check_revision(struct i2c_client *i2c)
- 		dev_err(&i2c->dev, "pid is not correct, 0x%04x\n", ret);
- 		return -ENODEV;
- 	}
--	return 0;
-+	ret = i2c_smbus_read_word_data(i2c, TCPC_BCD_DEV);
-+	if (ret < 0)
-+		return ret;
-+	dev_info(&i2c->dev, "did is 0x%04x\n", ret);
-+	return ret;
- }
- 
- static int rt1711h_probe(struct i2c_client *client,
-@@ -228,6 +372,8 @@ static int rt1711h_probe(struct i2c_client *client,
- 	if (!chip)
- 		return -ENOMEM;
- 
-+	chip->did = ret;
-+
- 	chip->data.regmap = devm_regmap_init_i2c(client,
- 						 &rt1711h_regmap_config);
- 	if (IS_ERR(chip->data.regmap))
-@@ -245,8 +391,14 @@ static int rt1711h_probe(struct i2c_client *client,
- 	if (ret < 0)
- 		return ret;
- 
-+	chip->vbus = devm_regulator_get(&client->dev, "vbus");
-+	if (IS_ERR(chip->vbus))
-+		return PTR_ERR(chip->vbus);
-+
- 	chip->data.init = rt1711h_init;
-+	chip->data.set_vbus = rt1711h_set_vbus;
- 	chip->data.set_vconn = rt1711h_set_vconn;
-+	chip->data.get_cc = rt1711h_get_cc;
- 	chip->data.start_drp_toggling = rt1711h_start_drp_toggling;
- 	chip->tcpci = tcpci_register_port(chip->dev, &chip->data);
- 	if (IS_ERR_OR_NULL(chip->tcpci))
-@@ -273,6 +425,7 @@ static int rt1711h_remove(struct i2c_client *client)
- 
- static const struct i2c_device_id rt1711h_id[] = {
- 	{ "rt1711h", 0 },
-+	{ "rt1715", 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, rt1711h_id);
-@@ -280,6 +433,7 @@ MODULE_DEVICE_TABLE(i2c, rt1711h_id);
- #ifdef CONFIG_OF
- static const struct of_device_id rt1711h_of_match[] = {
- 	{ .compatible = "richtek,rt1711h", },
-+	{ .compatible = "richtek,rt1715", },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rt1711h_of_match);
--- 
-2.25.1
+
 
