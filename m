@@ -2,67 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B28B5763B5
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 16:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F7A5763F3
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 16:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbiGOOgv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 10:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S229557AbiGOO7d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 15 Jul 2022 10:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiGOOgt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 10:36:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C622E4E856;
-        Fri, 15 Jul 2022 07:36:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BB636177D;
-        Fri, 15 Jul 2022 14:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3862C34115;
-        Fri, 15 Jul 2022 14:36:46 +0000 (UTC)
-Date:   Fri, 15 Jul 2022 10:36:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
- __vstring() helper
-Message-ID: <20220715103645.484f08e9@gandalf.local.home>
-In-Reply-To: <962e59c25e981676014157cd111db9e16e237339.camel@mediatek.com>
-References: <20220714164256.403842845@goodmis.org>
-        <20220714164330.311734558@goodmis.org>
-        <962e59c25e981676014157cd111db9e16e237339.camel@mediatek.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229452AbiGOO7c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 10:59:32 -0400
+X-Greylist: delayed 17416 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Jul 2022 07:59:22 PDT
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF32F7AC04
+        for <linux-usb@vger.kernel.org>; Fri, 15 Jul 2022 07:59:21 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1657897155tqr2bp3v
+Received: from smtpclient.apple ( [111.193.9.146])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 15 Jul 2022 22:59:13 +0800 (CST)
+X-QQ-SSF: 01400000002000B0V000000A0000000
+X-QQ-FEAT: D6RqbDSxuq77H0voCXNyj7blhacEYcoY6ADNOGkft3ieDM3/+6/LTBNFb+hYE
+        5ZjingeLylb9FYZVO476bEPfFF/vetFbiMvouVtMBAZ2Ykho1RghWoKPfeEcYSOIkKMUnfy
+        oJYBb8C6naXCQ+h7/Fz+d4c55HC1wnC+iNtyvQIAInJJP0H5SI/DzB+JS1HYC5G18IJ/i4C
+        WSsFyuQJRoRR8e/+yaFp5YJS+VDQ++in9tdAFKL/Mz2aaINnuALW92AxP9yZtjAWe5t0WyJ
+        hfocF4HetzUI5p12P/tWdiMf2aY/JTqkYpDW0Cg9ypTd3l/YdBSWsi+1C+ZMsiBa1XBHCUV
+        GNciAv3b86J3Qiy2GpD/ep8B5OB9KVKxMh8a2NuWVgS3P1x8zKS89Z/rVR8ZUOnDBrcric+
+        SPfe0edDxHk=
+X-QQ-GoodBg: 2
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
+From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
+In-Reply-To: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+Date:   Fri, 15 Jul 2022 22:59:13 +0800
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
+References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+To:     johan@kernel.org
+X-Mailer: Apple Mail (2.3696.100.31)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign9
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 15 Jul 2022 18:01:44 +0800
-Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 
-> the second and third lines with this patch:
->  irq/254-1120100-137     [000] d..1.   266.629399: mtu3_log:
-> 11201000.usb: link speed super-speed
+> On Jul 15, 2022, at 22:24, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 > 
->  irq/254-1120100-137     [000] d..1.   266.629662: mtu3_log:
-> 11201000.usb: ep0_state SETUPr-speed
+> The Oppo R11 diagnostic USB connection needs to be bound to the
+> usb-serial-simple driver as it just wants to use a dumb pipe to
+> communicate to the host.
 > 
-> "r-speed" seems the remain of last log;
+> usb-devices output:
+> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+> P: Vendor=22d9 ProdID=276c Rev=04.04
+> S: Manufacturer=OPPO
+> S: Product=SDM660-MTP _SN:09C6BCA7
+> S: SerialNumber=beb2c403
+> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
+> 
+> Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+> Cc: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> drivers/usb/serial/usb-serial-simple.c | 4 +++-
+> 1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+> index 4c6747889a19..eb832b94aa3a 100644
+> --- a/drivers/usb/serial/usb-serial-simple.c
+> +++ b/drivers/usb/serial/usb-serial-simple.c
+> @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
+> 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
+> 					USB_CLASS_VENDOR_SPEC,	\
+> 					0x50,			\
+> -					0x01) }
+> +					0x01) },		\
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
+> +					0xff, 0xff, 0x30) }
+> DEVICE(google, GOOGLE_IDS);
+> 
+> /* Libtransistor USB console */
+> -- 
+> 2.37.1
+Tested-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
 
-Thanks for testing! I'll investigate. (Another reason I didn't push to
-linux-next yet).
 
--- Steve
+
