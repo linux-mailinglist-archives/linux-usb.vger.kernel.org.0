@@ -2,150 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE87575EEB
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 12:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2142C575EF2
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Jul 2022 12:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiGOKCB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Jul 2022 06:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
+        id S231858AbiGOKEc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Jul 2022 06:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiGOKB7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 06:01:59 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794D2820E2;
-        Fri, 15 Jul 2022 03:01:52 -0700 (PDT)
-X-UUID: e1c9e414b54a42229a9da0864b48474c-20220715
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:7f7a5a44-ee65-407c-8b52-013836a82498,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:42321533-b9e4-42b8-b28a-6364427c76bb,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: e1c9e414b54a42229a9da0864b48474c-20220715
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1999131225; Fri, 15 Jul 2022 18:01:45 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 15 Jul 2022 18:01:44 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 15 Jul 2022 18:01:44 +0800
-Message-ID: <962e59c25e981676014157cd111db9e16e237339.camel@mediatek.com>
-Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
- __vstring() helper
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Fri, 15 Jul 2022 18:01:44 +0800
-In-Reply-To: <20220714164330.311734558@goodmis.org>
-References: <20220714164256.403842845@goodmis.org>
-         <20220714164330.311734558@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S230233AbiGOKE3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Jul 2022 06:04:29 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD0220DD;
+        Fri, 15 Jul 2022 03:04:27 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so11100008pjo.3;
+        Fri, 15 Jul 2022 03:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wlPe6Ti+DdI7qcqGa9UKlfYf0/Ch+okfzOOFnNrWBEs=;
+        b=DSzv+yZrC+NenYJLs6s/RKYyUFlry6MPbHkjkAASa9ub3sTuL66SL5g+4B8Au9oyaa
+         UasOP2MWBqcf4daJgW3woG4j+z+4lrOP3WbGZQiRA7gu63ZZd9Vw3L/JwBIkcRfeLf/5
+         okjvuWikYUYaWfry2yUIsW62GUgJFeJXZ6RcdOYx/Sdp3TBfzua0t6HFSzuJm0FQlH9l
+         scZcyGP6FX2Ou5q7HvvGpfh/451bar1Wg6+X0iwdt91lu+LEZn/7HzJ51K29o8meN6Wh
+         eIPTGSXQ9ENwndLh4w9N50s2grc5N6l7x7UtxAZNlzMKPgi9njBIbJp30pfKsPxZOWXJ
+         Gt1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wlPe6Ti+DdI7qcqGa9UKlfYf0/Ch+okfzOOFnNrWBEs=;
+        b=JSQBHxWP293WlEi6ZVxLGqYgDIHUFUSv/a0jpsxBKGEvhB9CE1Tweqa31oGlncnfU/
+         V7e9CxGFUOPS7L8xcX07ctdSequsMcik/9YBvsraDenuLcI+ha84+dqZbItACB/36qcp
+         9A94DzJEnjGVlRo7IyuXYYTo48WX9xFqiheRgQ3xwKVnMtChG7s/KBLuCiNssmoWabzx
+         7l9Yzk3sbpHk+bEwRMp1x+9m+f/jMBvTGf/fTojhVketNN1J1VEEVhfnzbnGmsgIoSh0
+         1Sb29lxfgE2LSE6ENNTHNNTMCCPi9hx38/sp0Jji/P69AKTM1WuDiBLL09YgPQ+ZJOuq
+         u7hw==
+X-Gm-Message-State: AJIora9FKym5+kGIAwt5g+QoKoUz1rlzrDIXz4SDjrN7Gr1g0YdlVckZ
+        Qs6yXF8ZQmRzTAmQINhnKFxQjkkJ7AU=
+X-Google-Smtp-Source: AGRyM1sKN1sRVpoDQ2wTknm1LhiKTOyhJWJxsW1ay6cgoMwO6V26jxVk26GNtdvNkysJZUk61CpNYw==
+X-Received: by 2002:a17:90b:4ad0:b0:1f0:28c6:9493 with SMTP id mh16-20020a17090b4ad000b001f028c69493mr20571544pjb.142.1657879467068;
+        Fri, 15 Jul 2022 03:04:27 -0700 (PDT)
+Received: from genechen-System-Product-Name.richtek.com ([2402:7500:569:4518:3851:6d9:846d:fbd1])
+        by smtp.gmail.com with ESMTPSA id v12-20020a1709028d8c00b0016c1948ef7esm3033791plo.296.2022.07.15.03.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 03:04:26 -0700 (PDT)
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, gene_chen@richtek.com,
+        cy_huang@richtek.com
+Subject: [PATCH 0/3] usb: typec: tcpci_rt1711h: Add compatible with rt1715
+Date:   Fri, 15 Jul 2022 18:04:15 +0800
+Message-Id: <20220715100418.155011-1-gene.chen.richtek@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2022-07-14 at 12:43 -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> Instead of open coding a __dynamic_array() with a fixed length (which
-> defeats the purpose of the dynamic array in the first place). Use the
-> new
-> __vstring() helper that will use a va_list and only write enough of
-> the
-> string into the ring buffer that is needed.
-> 
-> Link: 
-> https://urldefense.com/v3/__https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org__;!!CTRNKA9wMg0ARbw!w8nx66BKDTtyusp5i2pyzOGNb-QyxIAWjoZwmSQY0zzor_rqvBgUm5__vKK98ApKcDic$
->  
-> 
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  drivers/usb/mtu3/mtu3_trace.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_trace.h
-> b/drivers/usb/mtu3/mtu3_trace.h
-> index 1b897636daf2..ef3c17e2f8a6 100644
-> --- a/drivers/usb/mtu3/mtu3_trace.h
-> +++ b/drivers/usb/mtu3/mtu3_trace.h
-> @@ -25,11 +25,11 @@ TRACE_EVENT(mtu3_log,
->  	TP_ARGS(dev, vaf),
->  	TP_STRUCT__entry(
->  		__string(name, dev_name(dev))
-> -		__dynamic_array(char, msg, MTU3_MSG_MAX)
-> +		__vstring(msg, vaf->fmt, vaf->va)
->  	),
->  	TP_fast_assign(
->  		__assign_str(name, dev_name(dev));
-> -		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
-> >va);
-> +		__assign_vstr(msg, vaf->fmt, vaf->va);
->  	),
->  	TP_printk("%s: %s", __get_str(name), __get_str(msg))
->  );
+This patch series add binding document for rt1711h and compatible driver with
+rt1715.
 
-After apply this patch, encounter an issue, please check it
+Gene Chen (2)
+ dt-bindings usb: typec: rt1711h: Add binding for Richtek RT1711H
+ usb: typec: tcpci: Add get cc tcpci callback
+ usb: typec: tcpci_rt1711h: Add compatible with rt1715
 
- irq/254-1120100-137     [000] d..1.   266.549473: mtu3_u2_common_isr:
-(00000004)   RESET
- irq/254-1120100-137     [000] d..1.   266.629399: mtu3_log:
-11201000.usb: link speed super-speed
- irq/254-1120100-137     [000] d..1.   266.629662: mtu3_log:
-11201000.usb: ep0_state SETUPr-speed
- irq/254-1120100-137     [000] d..1.   266.629668: mtu3_handle_setup:
-setup - 00 05 001c 0000 0000
- irq/254-1120100-137     [000] d..1.   266.629722: mtu3_log:
-11201000.usb: ep0_state SETUPr-speed
-
-without this patch:
- irq/254-1120100-135     [000] d..1.  1407.425550: mtu3_u2_common_isr:
-(00000004)   RESET
- irq/254-1120100-135     [000] d..1.  1407.475295: mtu3_log:
-11201000.usb: link speed super-speed
- irq/254-1120100-135     [000] d..1.  1407.477469: mtu3_log:
-11201000.usb: ep0_state SETUP
- irq/254-1120100-135     [000] d..1.  1407.477476: mtu3_handle_setup:
-setup - 00 05 001f 0000 0000
- irq/254-1120100-135     [000] d..1.  1407.477518: mtu3_log:
-11201000.usb: ep0_state SETUP
-
-the second and third lines with this patch:
- irq/254-1120100-137     [000] d..1.   266.629399: mtu3_log:
-11201000.usb: link speed super-speed
-
- irq/254-1120100-137     [000] d..1.   266.629662: mtu3_log:
-11201000.usb: ep0_state SETUPr-speed
-
-"r-speed" seems the remain of last log;
-
-
-
+ Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml |   96 +++++++
+ drivers/usb/typec/tcpm/tcpci.c                             |    3 
+ drivers/usb/typec/tcpm/tcpci.h                             |    2 
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c                     |  168 ++++++++++++-
+ 4 files changed, 262 insertions(+), 7 deletions(-)
 
 
