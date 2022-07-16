@@ -2,37 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78112576E24
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Jul 2022 15:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10764576E29
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Jul 2022 15:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiGPNQw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Jul 2022 09:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
+        id S231201AbiGPNYa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Jul 2022 09:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGPNQu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jul 2022 09:16:50 -0400
+        with ESMTP id S229502AbiGPNYa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jul 2022 09:24:30 -0400
 Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033952127E;
-        Sat, 16 Jul 2022 06:16:45 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1657977400t6j6gmp0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24FCB861;
+        Sat, 16 Jul 2022 06:24:24 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1657977852tbzk9yep
 Received: from localhost.localdomain ( [182.148.15.157])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 16 Jul 2022 21:16:36 +0800 (CST)
+        id ; Sat, 16 Jul 2022 21:24:10 +0800 (CST)
 X-QQ-SSF: 01000000002000B0D000B00A0000000
-X-QQ-FEAT: St3bwald4orcfK6Mpy1y00FRLjmPNfEtNTvVBr+Un3ii5nx4QQal6R6m6Yzx9
-        LrKmzvqrrAMXAvg5kB3tarj7/NAkZzUaBG3aYwXD94btwJfTP8iBraGRXJdxl+AW/ImxfB4
-        sq4hHTyZYFOYHAihAXUeoLevKD6KoU51on26044zJ+ZtIVKx7FpIBAEZsqscBcHIMV1WSkM
-        pVyZWBAJzdWRxuL3/SpIgXeE95oFeIiyWFwbVJ8x0mugg+G5SOrBqTebuOEojOEhW1rSIvU
-        ZqbcddOBtZBAfOrne27DqyIExdnCxFI9uAZohKfeOpb4HUp1QdEW9BUZAmASNsy1LjY4U6v
-        2wFNX0Q9rHH7DkXHtSrU4DSa5HtLUisURiKwqMBljPSDEq7txrb9JsJUUUBb1uzxJYN1+Qv
+X-QQ-FEAT: XBN7tc9DADLcu2uX1djkO7Gts01/A6b0NkR6RGNeCs+SC6nJ8/WEgj7daYA3l
+        yIpX+/FdIw/TIuQgryNA/GRuB/FxuZAvKtu4jntTNLuvMdx83L9fecKmc8eoSACGUbiDTbX
+        N4BrumRnJNQ/uxE3ArqI3wA53TdfsM8tRkgwno6iqb2cTLMOtGUVf11TZ6crEFAJ/IxPZ9+
+        I3yBRWIYgVXANBIfotj+BIrvl8kmbeCCWPy0SRQoqIXpXS2yAmiU+GpPYyE6zeahGnF8o9+
+        urM91KN3LPYKdrEYsEKSAUur/vQwcigFngHuX0KUdLWfM1CdeKiWnJzhxu/s7jSiL1eSE41
+        YKLQe9oFkJ8NFOQld22KEQf1qPmEvhuFaZNJPp5XjBah0FNHt7jwrX/ILjjHeC7ZQIpJBXV
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     peter.chen@kernel.org, gregkh@linuxfoundation.org
+To:     gregkh@linuxfoundation.org, jj251510319013@gmail.com,
+        heikki.krogerus@linux.intel.com
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] usb/chipidea: fix repeated words in comments
-Date:   Sat, 16 Jul 2022 21:16:30 +0800
-Message-Id: <20220716131630.33151-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] usb/core: fix repeated words in comments
+Date:   Sat, 16 Jul 2022 21:24:03 +0800
+Message-Id: <20220716132403.35270-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -46,26 +47,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- Delete the redundant word 'power'.
+ Delete the redundant word 'the'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/usb/chipidea/otg_fsm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/driver.c | 2 +-
+ drivers/usb/core/usb.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/chipidea/otg_fsm.c b/drivers/usb/chipidea/otg_fsm.c
-index 6ed4b00dba96..61b157b9c662 100644
---- a/drivers/usb/chipidea/otg_fsm.c
-+++ b/drivers/usb/chipidea/otg_fsm.c
-@@ -459,7 +459,7 @@ static void ci_otg_drv_vbus(struct otg_fsm *fsm, int on)
- 	struct ci_hdrc	*ci = container_of(fsm, struct ci_hdrc, fsm);
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index b87452e22835..7e7e119c253f 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1482,7 +1482,7 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
+  * @msg: Power Management message describing this state transition
+  *
+  * This is the central routine for resuming USB devices.  It calls the
+- * the resume method for @udev and then calls the resume methods for all
++ * resume method for @udev and then calls the resume methods for all
+  * the interface drivers in @udev.
+  *
+  * Autoresume requests originating from a child device or an interface
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index 2f71636af6e1..11b15d7b357a 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -801,7 +801,7 @@ EXPORT_SYMBOL_GPL(usb_intf_get_dma_device);
+  * is simple:
+  *
+  *	When locking both a device and its parent, always lock the
+- *	the parent first.
++ *	parent first.
+  */
  
- 	if (on) {
--		/* Enable power power */
-+		/* Enable power */
- 		hw_write(ci, OP_PORTSC, PORTSC_W1C_BITS | PORTSC_PP,
- 							PORTSC_PP);
- 		if (ci->platdata->reg_vbus) {
+ /**
 -- 
 2.36.1
 
