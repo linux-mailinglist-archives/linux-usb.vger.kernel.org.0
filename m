@@ -2,73 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017F85770BA
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Jul 2022 20:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77A1577138
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Jul 2022 21:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiGPS0P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Jul 2022 14:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
+        id S232559AbiGPTj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Jul 2022 15:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiGPS0P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jul 2022 14:26:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC70192AF;
-        Sat, 16 Jul 2022 11:26:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 672E3611FC;
-        Sat, 16 Jul 2022 18:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C93DAC34115;
-        Sat, 16 Jul 2022 18:26:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657995973;
-        bh=N5Hi1aVwa+Lf/687QxjYjUcRD800NpqrugSRDMxNWQU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=nAbDbi/LkrlWrekLh4Bgt61u5FlPYZ+VxdYjUVmJN7Gf/wArxUimue/lyaqe+9p8Q
-         zVcDA10fWJxsvNtH7/oQHbQ8mh1mQ1G4B8UwVLLZXBQ8uvkiAp7fwu8reApvo8SKMw
-         9xvAB+A6cDdFX8VDkTF7MTPSIDtuanMFPMemKI9RZBRwbAbUbLC9GxaJ3uwuUStU7B
-         8LZvQsH0Us4y+6cIPssQ9u45+uyzDIPYSXgiUPPB2lH/dfQmd6EI5n6x3pSSaXV1hc
-         NkKEXHQHll8PZJdqVw51whVtEr7zxPqN0v1AO6236ZT20xGm7pVrl/u2soNvqvLfv+
-         4CXsee3k4FSXA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B598DE45224;
-        Sat, 16 Jul 2022 18:26:13 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 5.19-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YtJZlE1lf8EdUYRM@kroah.com>
-References: <YtJZlE1lf8EdUYRM@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YtJZlE1lf8EdUYRM@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc7
-X-PR-Tracked-Commit-Id: 3486af89dd3c0b0bef194c4bccf17c31ef16b99f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9ed714dbd574663c1fcb01dde07e949fe7473fa8
-Message-Id: <165799597374.16639.2018440057003376837.pr-tracker-bot@kernel.org>
-Date:   Sat, 16 Jul 2022 18:26:13 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229501AbiGPTj5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jul 2022 15:39:57 -0400
+X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 16 Jul 2022 12:39:56 PDT
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5761A3B2
+        for <linux-usb@vger.kernel.org>; Sat, 16 Jul 2022 12:39:55 -0700 (PDT)
+Received: from localhost.localdomain (abxj77.neoplus.adsl.tpnet.pl [83.9.3.77])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 0CEC71F987;
+        Sat, 16 Jul 2022 21:33:12 +0200 (CEST)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4/6] dt-bindings: usb: qcom,dwc3: Add SM6375 compatible
+Date:   Sat, 16 Jul 2022 21:32:54 +0200
+Message-Id: <20220716193257.456023-4-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220716193257.456023-1-konrad.dybcio@somainline.org>
+References: <20220716193257.456023-1-konrad.dybcio@somainline.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sat, 16 Jul 2022 08:24:20 +0200:
+Add a compatible for DWC3 found on SM6375.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc7
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9ed714dbd574663c1fcb01dde07e949fe7473fa8
-
-Thank you!
-
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index 749e1963ddbb..333ebe4f0798 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -32,6 +32,7 @@ properties:
+           - qcom,sm6115-dwc3
+           - qcom,sm6125-dwc3
+           - qcom,sm6350-dwc3
++          - qcom,sm6375-dwc3
+           - qcom,sm8150-dwc3
+           - qcom,sm8250-dwc3
+           - qcom,sm8350-dwc3
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.37.0
+
