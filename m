@@ -2,108 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45B857989A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 13:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE532579D78
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 14:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237344AbiGSLgz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jul 2022 07:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S241752AbiGSMvs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jul 2022 08:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiGSLgy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 07:36:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F11BE96;
-        Tue, 19 Jul 2022 04:36:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7894D615BE;
-        Tue, 19 Jul 2022 11:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 630FAC341C6;
-        Tue, 19 Jul 2022 11:36:52 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 13:36:49 +0200
-From:   Greg KH <greg@kroah.com>
-To:     =?utf-8?Q?=C5=81ukasz?= Spintzyk <lukasz.spintzyk@synaptics.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        oliver@neukum.org, kuba@kernel.org, ppd-posix@synaptics.com,
-        Bernice.Chen@synaptics.com
-Subject: Re: [PATCH v4 2/2] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
-Message-ID: <YtaXUZ2xzZgEUXAk@kroah.com>
-References: <YtVw+6SC7rtKDzaw@kroah.com>
- <20220719062452.25507-1-lukasz.spintzyk@synaptics.com>
- <20220719062452.25507-2-lukasz.spintzyk@synaptics.com>
+        with ESMTP id S241705AbiGSMuP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 08:50:15 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB4C8EEF0;
+        Tue, 19 Jul 2022 05:19:59 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1658233192tb7rcuw9
+Received: from localhost.localdomain ( [171.223.96.21])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 19 Jul 2022 20:19:51 +0800 (CST)
+X-QQ-SSF: 01000000002000F0U000B00A0000020
+X-QQ-FEAT: 5pqgkH0Zr9WSYSH9EVvGoHl13qkoiczbT5y7djPQqoHGReBpNCKYWor8+tGcl
+        vsupAiOE48SFOK62d61gbv9S3UjRToTQmkH5YR9rcoyjbM3ahUApmjqln0jyjRNQMdQhoRC
+        ED3x5n9Sihg6A9DZznrsurSrT4WI7k2d1Fople1P8boWCKh2qknslb9+sVkM3qt/wfBdCUP
+        AxsR0qXGWF3dgi679s6HlGLZcAJAaFGGeLwgJYlVcc41ki/4cwuMKLB0iXYu13WdDmnVoyM
+        /+EOobLxtDJv0UkLgYrQxIayq5cCcl8yFY7gaDH8AFbSpYUXarMx22YcTfT3wJWePA8zXN+
+        WT50w0gL1wOWMTAKJE9DckCsspzVic2HDdinaUtXahiFwwTf+dQawuXQOQizRnAlWTTfIbe
+        3zaQKebWtP8=
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     gregkh@linuxfoundation.org
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] xhci: Fix comment typo
+Date:   Sat, 16 Jul 2022 12:17:55 +0800
+Message-Id: <20220716041755.34016-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220719062452.25507-2-lukasz.spintzyk@synaptics.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 08:24:52AM +0200, Łukasz Spintzyk wrote:
-> DisplayLink ethernet devices require NTB buffers larger then 32kb
-> in order to run with highest performance.
-> 
-> This patch is changing upper limit of the rx and tx buffers.
-> Those buffers are initialized with CDC_NCM_NTB_DEF_SIZE_RX and
-> CDC_NCM_NTB_DEF_SIZE_TX which is 16kb so by default no device is
-> affected by increased limit.
-> 
-> Rx and tx buffer is increased under two conditions:
->  - Device need to advertise that it supports higher buffer size in
->    dwNtbMaxInMaxSize and dwNtbMaxOutMaxSize.
->  - cdc_ncm/rx_max and cdc_ncm/tx_max driver parameters must be adjusted
->    with udev rule or ethtool.
-> 
-> Summary of testing and performance results:
-> Tests were performed on following devices:
->  - DisplayLink DL-3xxx family device
->  - DisplayLink DL-6xxx family device
->  - ASUS USB-C2500 2.5G USB3 ethernet adapter
->  - Plugable USB3 1G USB3 ethernet adapter
->  - EDIMAX EU-4307 USB-C ethernet adapter
->  - Dell DBQBCBC064 USB-C ethernet adapter
-> 
-> Performance measurements were done with:
->  - iperf3 between two linux boxes
->  - http://openspeedtest.com/ instance running on local test machine
-> 
-> Insights from tests results:
->  - All except one from third party usb adapters were not affected by
->    increased buffer size to their advertised dwNtbOutMaxSize and
->    dwNtbInMaxSize.
->    Devices were generally reaching 912-940Mbps both download and upload.
-> 
->    Only EDIMAX adapter experienced decreased download size from
->    929Mbps to 827Mbps with iper3, with openspeedtest decrease was from
->    968Mbps to 886Mbps.
-> 
->  - DisplayLink DL-3xxx family devices experienced performance increase
->    with iperf3 download from 300Mbps to 870Mbps and
->    upload from 782Mbps to 844Mbps.
->    With openspeedtest download increased from 556Mbps to 873Mbps
->    and upload from 727Mbps to 973Mbps
-> 
->  - DiplayLink DL-6xxx family devices are not affected by
->    increased buffer size.
-> 
-> Signed-off-by: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> 
->  v4: Added Acked-by from link
->     https://lore.kernel.org/netdev/YtAKEyplVDC85EKV@kroah.com/#t
-> 
->  Greg, Hopefully this is what you meant about missing "Reviewed-by".
+The double `the' is duplicated in the comment, remove one.
 
-Yes, but you forgot to list what changed from v1 and v2 here :(
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ drivers/usb/host/xhci-ring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 46d0b9ad6f74..ad81e9a508b1 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1964,7 +1964,7 @@ static void handle_port_status(struct xhci_hcd *xhci,
+ 
+ 	/*
+ 	 * Check to see if xhci-hub.c is waiting on RExit to U0 transition (or
+-	 * RExit to a disconnect state).  If so, let the the driver know it's
++	 * RExit to a disconnect state).  If so, let the driver know it's
+ 	 * out of the RExit state.
+ 	 */
+ 	if (!DEV_SUPERSPEED_ANY(portsc) && hcd->speed < HCD_USB3 &&
+-- 
+2.35.1
 
-greg k-h
