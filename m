@@ -2,70 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909D8576B94
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Jul 2022 06:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEB7576C2B
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Jul 2022 08:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiGPENk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 Jul 2022 00:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S231744AbiGPGYm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Jul 2022 02:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiGPENi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jul 2022 00:13:38 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3F23719A;
-        Fri, 15 Jul 2022 21:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657944815; x=1689480815;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9SlA60LqRPWaHVi9Kb6IIB6MVQAG5blEyQBdXFBEvj0=;
-  b=Mx8O7o4jZd/+INjsVkfxvRSZ/k/bO0uHvGlvLujFfJErpPIuUHbj/XEV
-   9eaeRvYyAFCcORxXynQCnkU5i4OkLUYNp/YcuYvx5oxr2y/7QT6nqTQN5
-   B3fgIW7QLqpeHMbgkJRaJSTnvcksQ1PUaJq4+hFu1ecEj262Yp1e/tl0L
-   Q=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Jul 2022 21:13:34 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 21:13:34 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 15 Jul 2022 21:13:34 -0700
-Received: from [10.216.24.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Jul
- 2022 21:13:30 -0700
-Message-ID: <0093ce1a-51fd-0f02-27dd-9067d7c67569@quicinc.com>
-Date:   Sat, 16 Jul 2022 09:43:27 +0530
+        with ESMTP id S231651AbiGPGYj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Jul 2022 02:24:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13F912AF5;
+        Fri, 15 Jul 2022 23:24:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 538F5B82F5B;
+        Sat, 16 Jul 2022 06:24:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62985C34114;
+        Sat, 16 Jul 2022 06:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657952665;
+        bh=AkmbZ57L8DAjMKN8cVHc0da89FpXYgpW0mPMHQg5OMI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=wsXKBF9zduaYzJLdTzRCEY8H6DlBD/Bt2TAis1ZmhogzALzTWLU6ZDHDiPqFLmiOF
+         zr3lmeWHM5Aut37dm9PIZHHbEIb74XXV+JaDX8WM8WDHvLQb3xZHDr+jW5BLV1/Hx2
+         cAEiPaeCpj9oFu7GGFowVPM3lbKD88ptdSTK14kc=
+Date:   Sat, 16 Jul 2022 08:24:20 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.19-rc7
+Message-ID: <YtJZlE1lf8EdUYRM@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
- probed properly
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-References: <1657891312-21748-1-git-send-email-quic_kriskura@quicinc.com>
- <YtHRFcol5uslEel1@google.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <YtHRFcol5uslEel1@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,43 +47,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
-On 7/16/2022 2:11 AM, Matthias Kaehlcke wrote:
-> On Fri, Jul 15, 2022 at 06:51:52PM +0530, Krishna Kurapati wrote:
->
->> Subject: usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't probed properly
-> nit: "isn't probed properly" sounds like a bug or HW issue. In case
-> you re-spin maybe change it to "hasn't probed yet" or similar.
->
->> On SC7180 devices, it is observed that dwc3 probing is deferred
->> because device_links_check_suppliers() finds that '88e3000.phy'
->> isn't ready yet.
->>
->> As a part of its probe call, dwc3-qcom driver checks if dwc3 core
->> is wakeup capable or not. If the dwc3 core is wakeup capable, driver
->> configures dwc-qcom's power domain to be always ON. Also it configures
->> dp/dm interrupts accordingly to support wakeup from system suspend.
->>
->> More info regarding the same can be found at:
->> commit d9be8d5c5b03 ("usb: dwc3: qcom: Keep power domain on to retain controller status")
->> commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
->>
->> In the event, dwc3 probe gets deferred and is processed after dwc3-qcom
->> probe, driver ends up reading the wakeup capability of dwc3 core as false
->> leading to instability in suspend/resume path.
->>
->> To avoid this scenario, ensure dwc3_probe is successful by checking
->> if appropriate driver is assigned to it or not after the of_platform_populate
->> call. If it isn't then defer dwc3-qcom probe as well.
->>
->> Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reported-by: Matthias Kaehlcke <mka@chromium.org>
-> Tested-by: Matthias Kaehlcke <mka@chromium.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->
-> Please make sure to add reviewers of previous versions or other folks you
-> would like to review your patches in cc. I found v2 accidentally while
-> looking for something else.
-Hi Mathias,
-     Sure, Thanks for the review.
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc7
+
+for you to fetch changes up to 3486af89dd3c0b0bef194c4bccf17c31ef16b99f:
+
+  Merge tag 'usb-serial-5.19-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2022-07-14 16:22:12 +0200)
+
+----------------------------------------------------------------
+USB driver fixes for 5.19-rc7
+
+Here are some small USB driver fixes and new device ids for 5.19-rc7.
+They include:
+	- new usb-serial driver ids
+	- typec uevent fix
+	- uvc gadget driver fix
+	- dwc3 driver fixes
+	- ehci-fsl driver fix
+
+Note, I had to merge in 5.19-rc6 into this branch in order to do a clean
+merge with the usb-serial fixes tree as they were based on that tag of
+yours.
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Darren Stevens (1):
+      drivers/usb/host/ehci-fsl: Fix interrupt setup in host mode.
+
+Greg Kroah-Hartman (2):
+      Merge tag 'v5.19-rc6' into usb-linus
+      Merge tag 'usb-serial-5.19-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Linyu Yuan (1):
+      usb: typec: add missing uevent when partner support PD
+
+Lucien Buchmann (1):
+      USB: serial: ftdi_sio: add Belimo device ids
+
+Michael Grzeschik (1):
+      usb: gadget: uvc: fix changing interface name via configfs
+
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Fix event pending check
+
+Yang Yingliang (1):
+      usb: dwc3-am62: remove unnecesary clk_put()
+
+ drivers/usb/dwc3/dwc3-am62.c               |  8 ++------
+ drivers/usb/dwc3/gadget.c                  |  4 +++-
+ drivers/usb/gadget/function/uvc_configfs.c |  6 ++++--
+ drivers/usb/host/ehci-fsl.c                | 11 +++--------
+ drivers/usb/host/fsl-mph-dr-of.c           |  3 +++
+ drivers/usb/serial/ftdi_sio.c              |  3 +++
+ drivers/usb/serial/ftdi_sio_ids.h          |  6 ++++++
+ drivers/usb/typec/class.c                  |  1 +
+ 8 files changed, 25 insertions(+), 17 deletions(-)
