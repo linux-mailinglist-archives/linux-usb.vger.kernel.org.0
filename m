@@ -2,107 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED73578CB7
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 23:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA6F578E96
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 01:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbiGRV2h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 17:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S235594AbiGRX6Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jul 2022 19:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234784AbiGRV2f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 17:28:35 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71F531DDB
-        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 14:28:32 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id s18-20020a17090aa11200b001f1e9e2438cso1043472pjp.2
-        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 14:28:32 -0700 (PDT)
+        with ESMTP id S235557AbiGRX6V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 19:58:21 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C7533A08;
+        Mon, 18 Jul 2022 16:58:21 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id v21so10465543plo.0;
+        Mon, 18 Jul 2022 16:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PVcgZzjdK9fjloy6/Y+huhUu52yh6ctU8017XyeNTLM=;
-        b=Sa/S6jwMcJ6vjrfJHhWknnUYuPM+pYaLLPuHmCGsdMeJChAHIeOO5asROW8eyJpcIK
-         ZVPoVHm7j1hKHIePlke4jGYo7O7x8uwE/3WaJKMTh36xmHe8nbBADJz6zFb2Ta/zswfl
-         3tOPxbJzDaNmEuC9x6q48jG3Yo4WXSple2DMI=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=lfpfAO950vgc6CgyzR59wbYpjmqhhPVTm3S2sKHzRUo=;
+        b=nq6QbMxVzbmww2sacGmcRULlkzvOtSuXiXIufH9MXO6LY8hiWre8JfBLGTFDkU6r4W
+         WdMePx8zkpHLaMmeGypAzClMDGVYDAFxun3cNvMl/afSnRgIUiZX02GcjcuPBhiFN2XQ
+         9LesUOLElqOseyJo3CR+ok4cQQNhKZJnLuTeXdWFB/uRsYOZHBbf9AxU7szRPD7Axq2K
+         4aXgfRhUBn9vWxHlf5HujiMMx0BDzmuGVasVppkt3cJUth8m5emsUoxP7LDFh0XuVGnx
+         5L/Zv9bPbVV3kOT7OBpEsMTG++H060Dy4vlRYOzHT7Urw/bqMxDi4wO5B33f2T1OEe0G
+         X15w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PVcgZzjdK9fjloy6/Y+huhUu52yh6ctU8017XyeNTLM=;
-        b=YBOt1FnI5MfaDDKu3bgOUHoCR9Ke48LBzWu/yyOnxN3YukS5zuP/LzSbCo4q+TcKq8
-         3xdQI/YEfbX7i7P8RdCqnbmM8S9zseqy2ADDO+wPC3QPH6GagHEVs6SV/8fWHrrg+ghM
-         wTJ+9gHm7FaIsAMpKahBGsnswDaEW0w+07mLoij+UCZJ0KC/s6ZpbuyZk4jPaKlOVsp6
-         NMRtjjEr9nXm2QSu7mQ5U7a4ms08wCj5hRezh7zHjEhm2Ty5SuvhD63RhqaY+ALVh917
-         LvFGXEnkI8+htLYOOp4v+wiMeT/ND953IJ/bvryJMhOwlTt18W8TgvCIcHifMuKc0IAD
-         zlng==
-X-Gm-Message-State: AJIora/nCuojVk8z+fWNq4oi5SbnDMlgRLq1QD8w5LKU91F8ayWom3DK
-        qxoGJC4IJt6toouR/LAJ3wRpbQ==
-X-Google-Smtp-Source: AGRyM1tKSCH41BB852jsIS5RXGkAx+Hvett+tlV5FCfr3isJIr5ePfcCMhOC36ySIh28Iy2UYPICjA==
-X-Received: by 2002:a17:903:18c:b0:16c:51c6:675d with SMTP id z12-20020a170903018c00b0016c51c6675dmr29737274plg.153.1658179712184;
-        Mon, 18 Jul 2022 14:28:32 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z9-20020a631909000000b0041992864d69sm8536830pgl.77.2022.07.18.14.28.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 14:28:31 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, gregkh@linuxfoundation.org,
-        Prashant Malani <pmalani@chromium.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] platform/chrome: cros_typec_switch: Add ACPI Kconfig dep
-Date:   Mon, 18 Jul 2022 21:27:55 +0000
-Message-Id: <20220718212754.1129257-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lfpfAO950vgc6CgyzR59wbYpjmqhhPVTm3S2sKHzRUo=;
+        b=j9OWJjNAfxaj87w7shFRBGDL5imD7KWgThPtxZocahND4K6b1EjsXMoXnDmmCllsu5
+         yrrHiyb2tlrq6O6iGMLLagN09JqW382KN1Gbix3LIKiBEEHODE88ygQPLntHciP8KzGl
+         O94EQcsvwj1qxBc65WC55CsQUWWh36T4ce/ZLl4BRsx06y7eI9zQAVQQ4wWP32i7MDWO
+         uFkzh+PwzseEWqukXFYzJngN/Ohc8WdJfZ6VqALnKIpb1aA7/PS8zHbbjoZpiYzrI/qy
+         ARPaGEHTPJJuQsCqtq36SRanL5supitkFKs3VCQZe3eoN9vIEfjMhgt8isE4ma4bYQYG
+         WTdA==
+X-Gm-Message-State: AJIora9vPiAFhQCEUuDAnhMkiioZXK5dqo8iInvfn8S+5OHVqSrN1eyq
+        ZNvgNKIp1MeZbxxldjm1nqb/BiOpNGk=
+X-Google-Smtp-Source: AGRyM1t7sS8bLgNN0ioTMtghhHyFNQsdnmwFnkUEgJa/6OcIKiZWnchkLsf76GTtl6Wb/SNu258Sbw==
+X-Received: by 2002:a17:902:d2d1:b0:16c:223e:a3db with SMTP id n17-20020a170902d2d100b0016c223ea3dbmr30914234plc.37.1658188700052;
+        Mon, 18 Jul 2022 16:58:20 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id j20-20020a170902759400b00161ccdc172dsm10027067pll.300.2022.07.18.16.58.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 18 Jul 2022 16:58:19 -0700 (PDT)
+From:   justinpopo6@gmail.com
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, jannh@google.com, jackychou@asix.com.tw,
+        jesionowskigreg@gmail.com, joalonsof@gmail.com,
+        justinpopo6@gmail.com, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, f.fainelli@gmail.com
+Cc:     justin.chen@broadcom.com
+Subject: [PATCH 0/5] net: usb: ax88179_178a: improvements and bug fixes
+Date:   Mon, 18 Jul 2022 16:58:04 -0700
+Message-Id: <1658188689-30846-1-git-send-email-justinpopo6@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the ACPI Kconfig dependency that was missed during the initial
-driver submission. Fixes the following compiler errors:
+From: Justin Chen <justinpopo6@gmail.com>
 
-drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to
-undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not
-support implicit function declarations
- [-Wimplicit-function-declaration]
-   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+Power management was partially broken. There were two issues when dropping
+into a sleep state.
+1. Resume was not doing a fully HW restore. Only a partial restore. This
+lead to a couple things being broken on resume. One of them being tcp rx.
+2. wolopt was not being restored properly on resume.
 
-drivers/platform/chrome/cros_typec_switch.c:93:35: error: incomplete
-definition of type 'struct acpi_device'
-   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+Also did some general improvements and clean up to make it easier to fix
+the issues mentioned above.
 
-Fixes: e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
+Justin Chen (5):
+  net: usb: ax88179_178a: remove redundant init code
+  net: usb: ax88179_178a: clean up pm calls
+  net: usb: ax88179_178a: restore state on resume
+  net: usb: ax88179_178a: move priv to driver_priv
+  net: usb: ax88179_178a: wol optimizations
 
-Changes since v1:
-- Correct the malformed Reported-by tag. No functional changes.
-(Apologies for the quick respin.)
+ drivers/net/usb/ax88179_178a.c | 314 +++++++++++++----------------------------
+ 1 file changed, 100 insertions(+), 214 deletions(-)
 
- drivers/platform/chrome/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index c62a514a087f..9d4fc505fa25 100644
---- a/drivers/platform/chrome/Kconfig
-+++ b/drivers/platform/chrome/Kconfig
-@@ -267,7 +267,7 @@ config CHROMEOS_PRIVACY_SCREEN
- 
- config CROS_TYPEC_SWITCH
- 	tristate "ChromeOS EC Type-C Switch Control"
--	depends on MFD_CROS_EC_DEV && TYPEC
-+	depends on MFD_CROS_EC_DEV && TYPEC && ACPI
- 	default MFD_CROS_EC_DEV
- 	help
- 	  If you say Y here, you get support for configuring the Chrome OS EC Type C
 -- 
-2.37.0.170.g444d1eabd0-goog
+2.7.4
 
