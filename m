@@ -2,96 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E1C578480
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 15:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6245784A8
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 16:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiGRN4b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 09:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S234906AbiGROCV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 18 Jul 2022 10:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiGRN4a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 09:56:30 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCA12613B;
-        Mon, 18 Jul 2022 06:56:29 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso7392931wms.2;
-        Mon, 18 Jul 2022 06:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5GaiY4B+fVcmnXKAwsi7m8Aj4lGUBvR7I/9W6/qWXhE=;
-        b=d6a2HGJ1DOesvRkrVZgSQ6iPEldBTUlBgQ9k3NnGUVcyNgxyKIcTc2kdsPDQKUOOsh
-         4J/nvEVxTTl0E4onnZS0zUwKWxO9pjnNCxaD0wWN9PVUybjFPl6RI42KIuQHh4vfkShP
-         fJQlXkKDNfpR7KD5Tx3SaGwhuYeDulAK9P9Z9Y+u2LOt3QOnTyc5mgmLl+C/m4bqct+H
-         giOxHhFobOt82+YV6AxC1RpEI/zA+Ycz3NIWz/ErQN2V/axhvGGex1JNxkWjgMyy5t2n
-         hhs2muTFQoUTJSosvO9Qpp180LKtT7CoNF5pYFKvDX2EJhZBU36QFMOIJKTt5qcIpZQi
-         /qwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5GaiY4B+fVcmnXKAwsi7m8Aj4lGUBvR7I/9W6/qWXhE=;
-        b=5zZpZym5kmiSbEq3B4j6q6ZxrXgyln0A83cpPOE5SShvv6Rz26oWaI+pgUy0KtNG9N
-         gBmUIaZYRRMWgg1oQf8VOOSfKFIAOmPDCTiuTMHJRZZZ2DBBlDrA5hd9r/OWdFROGQko
-         x46pxDgNCHhXF2ll61qUfjNKV+Zl0ZQ7pL9p15ScxWOiHe7GLb3pkpOhfZK42aO30KmK
-         Qs+/pyMPzI7ST1omR8qCwd+EXYnRXu0aYkkqTlvxVxUxNAYzFQnXg2VKOFaecPkO+17X
-         dnDqefqikzdysRiiUOCNPRHEyw66/etXoZj2dYQRPEFvREo3apfkem6g22+OCiXcRQAB
-         dUjg==
-X-Gm-Message-State: AJIora8S4+ejdwkLtLdTcDleA2NJK1kMDn9ibsHJfD7p7Pl/tb+CONB6
-        k2E8Is69xNuqx7j59R2GwF4lsFzCuwM8ZsBlLV8=
-X-Google-Smtp-Source: AGRyM1t+b+B57G30zmJ6SDH+MUo5HsflVXfg85sd+e8uS0SrrTs9lUsnJSmOWUJajxJe7O8JYC1jvg/HjWwDmFR7Nok=
-X-Received: by 2002:a05:600c:19c8:b0:3a1:792e:f913 with SMTP id
- u8-20020a05600c19c800b003a1792ef913mr32475753wmq.182.1658152587885; Mon, 18
- Jul 2022 06:56:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-9-peterwu.pub@gmail.com>
- <CAHp75VdCgdTOu-CdNo9XGY+PrhPh93v_CkAHJC6hkArsKeiXbA@mail.gmail.com>
- <20220718080831.GA31509@cyhuang-hp-elitebook-840-g3.rt> <CAHp75Ve2_UcS9e3pJC2j4FBc21=S8878tQusyxNV1mXtQG423w@mail.gmail.com>
-In-Reply-To: <CAHp75Ve2_UcS9e3pJC2j4FBc21=S8878tQusyxNV1mXtQG423w@mail.gmail.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Mon, 18 Jul 2022 21:56:15 +0800
-Message-ID: <CADiBU3-DbJpD_pyGaOsh8EF=0NpCWgUP5T=RHgxXzwqZzwCyQA@mail.gmail.com>
-Subject: Re: [PATCH v5 08/13] usb: typec: tcpci_mt6370: Add MediaTek MT6370
- tcpci driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S233142AbiGROCU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 10:02:20 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA9313E8F
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 07:02:16 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1658152926t3mn2cfa
+Received: from smtpclient.apple ( [111.193.9.146])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 18 Jul 2022 22:02:05 +0800 (CST)
+X-QQ-SSF: 01400000002000B0V000B00A0000000
+X-QQ-FEAT: D6RqbDSxuq5xgiVzKotCrCzg2lhpBA/M9CkNTCFeKshpCf0niC8i016/BezUu
+        wVyw/wd8SnwuKY8vO1kksH/HrNXksmEI9repRvvu+UAxozVwKYD5Pl3v6qw4iTKtMr5oInX
+        q1FeaC7pOfkOe+R0zapigpx8q7eViSPdWsc+et7kLeBa3bOww2tR32BNQTpX++86YZOjDSd
+        HmNS8hdu/fLfeKAxb2SCkDHP21Puh1ZwxYhK0udH5hjhIC6UL3K/Qz/rQxBULAl5mFeFdTE
+        wpSIu2D++bsCouEHrYeTpOIe1Z3bVb4EwSs6ngxMr5Xer0eKJlrVzl301sVasrRtxxrMjyF
+        B0vFT3KpaNfGODtUAvxzNwwDOpJtaG0ma0lBNWrC89MtW0LPnnbG2OELL5dKT5C2kRiHA6R
+        1IEZj7iDj9g=
+X-QQ-GoodBg: 2
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
+From:   Yan Xinyu <sdlyyxy@bupt.edu.cn>
+In-Reply-To: <YtQuMJz+0MCxMAPk@arcor.de>
+Date:   Mon, 18 Jul 2022 22:02:04 +0800
+Cc:     johan@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <DA894279-AFBC-45A0-851B-3B6EDACB8581@bupt.edu.cn>
+References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+ <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
+ <YtKrbucYNulPEKUp@arcor.de>
+ <333E5B85-7534-4CE5-8AB6-464571CBF61E@bupt.edu.cn>
+ <YtQuMJz+0MCxMAPk@arcor.de>
+To:     Reinhard Speyerer <rspmn@arcor.de>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign4
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,99 +57,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
-=8818=E6=97=A5 =E9=80=B1=E4=B8=80 =E6=99=9A=E4=B8=8A7:39=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Mon, Jul 18, 2022 at 10:08 AM ChiYuan Huang <u0084500@gmail.com> wrote=
-:
-> > On Fri, Jul 15, 2022 at 03:10:42PM +0200, Andy Shevchenko wrote:
-> > > On Fri, Jul 15, 2022 at 1:28 PM ChiaEn Wu <peterwu.pub@gmail.com> wro=
-te:
->
-> ...
->
-> > > > This commit add support for the Type-C & Power Delivery controller =
-in
-> > >
-> > > This commit add -> Add
-> > >
-> > Upper case? Or rewrite it as 'This commit is to add .....'?
->
-> Please, read this documentation [1] for better understanding. It
-> should clarify this and perhaps other possible questions.
->
-> [1]: https://www.kernel.org/doc/html/latest/process/submitting-patches.ht=
-ml#describe-your-changes
->
-I'm thinking why to change it from 'add' to "Add'.
-Ah, I misunderstand it.
-> > > > MediaTek MT6370 IC.
->
-> ...
->
-> > > > +       ret =3D devm_request_threaded_irq(dev, priv->irq, NULL,
-> > > > +                                       mt6370_irq_handler, IRQF_ON=
-ESHOT,
-> > > > +                                       dev_name(dev), priv);
-> > > > +       if (ret) {
-> > >
-> > > > +               tcpci_unregister_port(priv->tcpci);
-> > >
-> > > This is wrong.
-> > > You mixed devm_ with non-devm. Either drop devm_ *after* the first
-> > > non-devm_ call, or convert everything to be managed.
-> > >
-> > How about to add 'devm_add_action_or_reset' for tcpci_unregister_port?
-> > This will convert all as 'devm_' version.
->
-> I think it would work, that wrapper was designed to cover cases like this=
-.
->
-> > > > +               return dev_err_probe(dev, ret, "Failed to allocate =
-irq\n");
-> > > > +       }
->
-> ...
->
-> > > > +static int mt6370_tcpc_remove(struct platform_device *pdev)
-> > > > +{
-> > > > +       struct mt6370_priv *priv =3D platform_get_drvdata(pdev);
-> > >
-> > > > +       disable_irq(priv->irq);
-> > >
-> > > Why?
-> > > An ugly workaround due to ordering issues in ->probe()?
-> > >
-> > Yes, due to the ordering in probe.
-> > 'bus remove' will be called before device resource releases.
-> >
-> > Like as you said, another way is to convert all as non-devm
-> > version after 'tcpci_unregister_port'.
-> >
-> > If to keep the original order, 'disable_irq' before
-> > 'tcpci_unregister_port' can make the flow more safe.
-> >
-> > Or you can think one case if irq triggers after
-> > 'tcpci_unregister_port'. Null pointer occurs.
-> >
-> > Anyway, in next revision, I'll convert all to be 'devm_' version.
-> > For this remove callback, only 'dev_pm_clear_wake_irq' and
-> > 'device_init_wakeup' will be kept.
-> >
-> > Is this better?
->
-> Sounds like a plan!
->
-Already did. Just to double confirm the changes.
-Thanks. All are clear.
-> > > > +       tcpci_unregister_port(priv->tcpci);
-> > > > +       dev_pm_clear_wake_irq(&pdev->dev);
-> > > > +       device_init_wakeup(&pdev->dev, false);
-> > > > +
-> > > > +       return 0;
-> > > > +}
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+> On Jul 17, 2022, at 23:48, Reinhard Speyerer <rspmn@arcor.de> wrote:
+> 
+> Hi Yan,
+> 
+> On Sat, Jul 16, 2022 at 09:36:27PM +0800, sdlyyxy wrote:
+>> Hi Reinhard,
+>> 
+>>> On Jul 16, 2022, at 20:13, Reinhard Speyerer <rspmn@arcor.de> wrote:
+>>> 
+>>> On Fri, Jul 15, 2022 at 10:59:13PM +0800, sdlyyxy wrote:
+>>>> 
+>>>>> On Jul 15, 2022, at 22:24, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>>>>> 
+>>>>> The Oppo R11 diagnostic USB connection needs to be bound to the
+>>>>> usb-serial-simple driver as it just wants to use a dumb pipe to
+>>>>> communicate to the host.
+>>>>> 
+>>>>> usb-devices output:
+>>>>> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+>>>>> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+>>>>> P: Vendor=22d9 ProdID=276c Rev=04.04
+>>>>> S: Manufacturer=OPPO
+>>>>> S: Product=SDM660-MTP _SN:09C6BCA7
+>>>>> S: SerialNumber=beb2c403
+>>>>> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+>>>>> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
+>>>>> 
+>>>>> Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>>>>> Cc: Johan Hovold <johan@kernel.org>
+>>>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>> ---
+>>>>> drivers/usb/serial/usb-serial-simple.c | 4 +++-
+>>>>> 1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>> 
+>>>>> diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+>>>>> index 4c6747889a19..eb832b94aa3a 100644
+>>>>> --- a/drivers/usb/serial/usb-serial-simple.c
+>>>>> +++ b/drivers/usb/serial/usb-serial-simple.c
+>>>>> @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
+>>>>> 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
+>>>>> 					USB_CLASS_VENDOR_SPEC,	\
+>>>>> 					0x50,			\
+>>>>> -					0x01) }
+>>>>> +					0x01) },		\
+>>>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
+>>>>> +					0xff, 0xff, 0x30) }
+>>>>> DEVICE(google, GOOGLE_IDS);
+>>>>> 
+>>>>> /* Libtransistor USB console */
+>>>>> -- 
+>>>>> 2.37.1
+>>>> Tested-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>>> 
+>>> While this may work sufficiently well for real low-volume diag traffic I'd
+>>> expect a significant percentage of diag messages to be lost in practice
+>>> with the usb-serial-simple driver.
+>>> 
+>>> According to the usb-devices output this looks like the Qualcomm USB gadget
+>>> in the DIAG + ADB composition to me.
+>>> 
+>>> Since the option driver uses the usb-wwan framework my suggestion would be
+>>> for the original patch to be applied instead similar to what has been done
+>>> e.g. for the Quectel RM500Q diag port.
+>>> 
+>>> Regards,
+>>> Reinhard
+>>> 
+>> I tested the diag port using two userspace programs: QCSuper[1] 
+>> and scat[2]. Both option and usb-serial-simple drivers generate
+>> similar output, so I cannot comfirm diag message loss. Do you
+>> have any test method suggestions to generate high-volume diag 
+>> traffic and detect message loss?
+>> 
+> 
+> in my experience activating all message logs on the device with a
+> mask value like 0xf or 0x1f is a good way to generate more diag traffic.
+> Please refer to https://source.codeaurora.org/quic/imm/imm/sources/diag
+> (DIAG_CMD_OP_SET_ALL_MSG_MASK) for details.
+> 
+> Regards,
+> Reinhard
+> 
+
+Thank you very much for your advice! I'll try to understand the diag
+protocol and experiment with different USB drivers to figure out their
+difference :)
+
+Regards,
+sdlyyxy
+
+
+
