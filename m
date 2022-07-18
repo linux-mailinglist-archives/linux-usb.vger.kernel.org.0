@@ -2,67 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C3C577F9A
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 12:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F0F578034
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 12:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbiGRK0R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 06:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S234260AbiGRKvn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jul 2022 06:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233880AbiGRK0Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 06:26:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4461C934;
-        Mon, 18 Jul 2022 03:26:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B903B810A0;
-        Mon, 18 Jul 2022 10:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5330DC341C0;
-        Mon, 18 Jul 2022 10:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658139972;
-        bh=MF5LRamwYXcM0ZIXRv1F2d4aJR1Nj2A7Ufiw8kzm5wk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HcSMcBWcxA5i5CXTG1KOdupbZ69haMMTXjtSUg21aLigCBR1MYNul6/5azrTQyp0N
-         Bk7cIDZZP8M+DWwglNq9IhmQN5EGEJc2zSR86g295JCR4OWXRgmjdM67BoUzi0wdhS
-         5+Z60itQuug0RMAvSFJhuBGxwC2pwMnCCsGQHQZk4rm6AXTJ/hyJZMW38x9QCXAJkc
-         aeyg34F2jdUSILqSVnXwoP6/sxAppvQvRwvtsza0s9DXrxRhSQUSzPL1wme/fG3Z8o
-         vt8OzOPhyVpv58O3bULtQPIcVVxkUFAhPi/t79qQIGnKZtlYX+po5jkgDNFqYqCgzg
-         CQRZ3NtYpbF5A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oDNwz-0004wq-Fu; Mon, 18 Jul 2022 12:26:06 +0200
-Date:   Mon, 18 Jul 2022 12:26:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb/serial: fix repeated words in comments
-Message-ID: <YtU1PS9zdcQgY/04@hovoldconsulting.com>
-References: <20220716134826.48413-1-yuanjilin@cdjrlc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220716134826.48413-1-yuanjilin@cdjrlc.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234091AbiGRKvl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 06:51:41 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842BF20194;
+        Mon, 18 Jul 2022 03:51:40 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id p9so11343807pjd.3;
+        Mon, 18 Jul 2022 03:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=a4smhlXQRPY08uZFYWaREPplMOTenvaPYfLKafzeLgY=;
+        b=AKe+sNy1gChpstieXUsxZD5p8A2lNFOyH78szTrmAd73Lmp2K1cEvITIVrP/MNLtCn
+         2r85CO3G5vrj+Gvj8fta7XfmzIxRnJw3s/zWl0OwwdJI/rcG4+v1MnVy6hX+LHOYhrsD
+         lEY/6Dz5TOoYMf8kgMvnROzDlMJ54F2Vk37i1Fc3ICDk3jH6X35iQ8aaMpO5l7Qh3Y2Q
+         dCV7iSPYj8NJdoY+lpNLXAEjZl9beB3I1tgXxXbS0tvOJ1cb5axYI9HBMnk8gMQD/Rtc
+         gXeOLoZi0ZA+MCHSbjmUVEpwfvZCAbgQsHrQDZBY8hHhm23jdSEXBVOAe94HIeqMwZi7
+         iHYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=a4smhlXQRPY08uZFYWaREPplMOTenvaPYfLKafzeLgY=;
+        b=XCM1m+DOeZpCvx19BoF4IEzqIkK6DO9U0Pmd2Q1Au6EpUZduI+t1c6rJ30uPh4wMDE
+         7IYgQHTwMlUJZx2MZdEcfeX8S7bFwAbeNWXWl3c5/8hsZ9qzfNoEpGw4vL/x4Fm8OcCh
+         yJLhkqoBQc7iy8xOyf2yJtXPKCF+5NaxARCnACVSzXKytPMYUJHV8hSbkRrxGjQD0tyh
+         Eal7Wu4mBZ/D2pzHs19B8aQyfcMt4HXJqVBL+0z5eR77qXzWHsVmfib4tty4t4vLCxB2
+         6WRba3g8Z6Vs/acKHESLOG5kYM0rYHdbE8mOril6Q8Yz4lW8DqnP3CNRExbZXqoC6SdU
+         F7nw==
+X-Gm-Message-State: AJIora+Ijic2lGyKXLD7DZ6kOf3jkakoZIOxCmL7veNy7gut8LKf5stD
+        SshES9L2RX5w/G3iFnu6fMc=
+X-Google-Smtp-Source: AGRyM1vWjlz2YT9znDMfpyN2OCP1gJjgGcm6C51sU4kd9nkBsZL7ktnoIxjmL2Pi8skCdAI/z5Sogw==
+X-Received: by 2002:a17:902:ecc3:b0:16c:461d:802b with SMTP id a3-20020a170902ecc300b0016c461d802bmr27958364plh.167.1658141499900;
+        Mon, 18 Jul 2022 03:51:39 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id s2-20020aa78bc2000000b0052ac1af926fsm8914641pfd.20.2022.07.18.03.51.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 18 Jul 2022 03:51:39 -0700 (PDT)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v4 0/2] Add USB2.0 phy driver for Sunplus SP7021
+Date:   Mon, 18 Jul 2022 18:51:18 +0800
+Message-Id: <1658141480-9291-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 09:48:26PM +0800, Jilin Yuan wrote:
->  Delete the redundant word 'the'.
-> 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+This is a patch series for USB2.0 phy driver for Sunplus SP7021 SoC.
 
-This has been addressed in -next:
+Sunplus SP7021 is an ARM Coretex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-next&id=9ec7e8d5fae34b3da52b4b0a7a47877bc6aa8416
+Vincent Shih (2):
+  phy: usb: Add USB2.0 phy driver for Sunplus SP7021
+  dt-bindings: phy: Add bindings doc for Sunplus USB2
 
-Johan
+ .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      |  73 +++++
+ MAINTAINERS                                        |   9 +
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/sunplus/Kconfig                        |  12 +
+ drivers/phy/sunplus/Makefile                       |   2 +
+ drivers/phy/sunplus/phy-sunplus-usb2.c             | 297 +++++++++++++++++++++
+ 7 files changed, 395 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+ create mode 100644 drivers/phy/sunplus/Kconfig
+ create mode 100644 drivers/phy/sunplus/Makefile
+ create mode 100644 drivers/phy/sunplus/phy-sunplus-usb2.c
+
+-- 
+2.7.4
+
