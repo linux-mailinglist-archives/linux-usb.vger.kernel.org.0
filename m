@@ -2,93 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BC457896B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 20:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D505789E3
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 20:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbiGRSTY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 14:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
+        id S232986AbiGRS4R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jul 2022 14:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235884AbiGRSTV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 14:19:21 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F21085FF0;
-        Mon, 18 Jul 2022 11:19:20 -0700 (PDT)
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 422B71C811CC;
-        Tue, 19 Jul 2022 02:19:20 +0800 (CST)
-Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 19
- Jul 2022 02:19:20 +0800
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS03.nuvoton.com
- (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1847.3; Tue, 19 Jul
- 2022 02:19:19 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Tue, 19 Jul 2022 02:19:19 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id EDAA063A20; Mon, 18 Jul 2022 21:19:18 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <gregkh@linuxfoundation.org>,
-        <stern@rowland.harvard.edu>, <tony@atomide.com>,
-        <felipe.balbi@linux.intel.com>, <jgross@suse.com>,
-        <lukas.bulwahn@gmail.com>, <arnd@arndb.de>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v2 3/3] USB: host: npcm: Add NPCM8XX support
-Date:   Mon, 18 Jul 2022 21:18:42 +0300
-Message-ID: <20220718181842.61040-4-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220718181842.61040-1-tmaimon77@gmail.com>
-References: <20220718181842.61040-1-tmaimon77@gmail.com>
+        with ESMTP id S229647AbiGRS4Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 14:56:16 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D245B2C64F
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 11:56:15 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so19089711pjo.3
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 11:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ImWpl/KKv4UFu4MEO4wU0UdHvw3c0qhUubcZMjHwl1c=;
+        b=ZoiVOL41A6vCsGH0b1L/NLRLJ58R67hAbMBl6a3ujrVpjQ4uRQDZ+b6sOUeVZChAv1
+         Db+5EalLfTpv9YtPjcUskcoveKHKgPRjT7MSTzmSENZn0PUr4iiWciunSBvNuGMSCB8i
+         mS/7dQdFnfsxyyVcx128s5nawZVpZOpiVwKlk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ImWpl/KKv4UFu4MEO4wU0UdHvw3c0qhUubcZMjHwl1c=;
+        b=ymN2zaMPHY6DifBg/phSt9zZ86Jrqg2FiSqk8m7WlMsd/cxC3SBmI+LqImabWIp/d8
+         ImlHxIqJ8TVvel20eqAj32buGlcLbNS5Q7zzJI743/DQKL8pDavD3ojj02Rb5j3iks1h
+         8aZ2ZNjzBblRtoDdghD2Gv1xtRFAbOesfa/GOFHJEsi7O+ZWPwF6PbfGtDlvf1pAhcHo
+         o1nhHmcs0jc610tJ9yDv9WMQTXgJb8EAHd5UOR7ArQfkbF+wl6yk4HLWeiaIvfx3fCI9
+         XiP3XJGdiU5hxelkzt8i4lqqJqxefKoe/ObrrsepARsAz31MCe6p/RNEVifxe4nBDFnn
+         JViQ==
+X-Gm-Message-State: AJIora8XotofsBPTkWNtJQXe/lQ8BGR9r51OXMnpnUwS8F94mIeMjEwO
+        gMRYFufzairblHhxW/UPhYMcnw==
+X-Google-Smtp-Source: AGRyM1t8c/cRBGwxbDh8wtrP3JCV2aD79MUsWaVgg+FuCPJnIe4Rl3qht860tDVjt0ZtJy8teE9r9g==
+X-Received: by 2002:a17:902:f092:b0:16c:abb9:f984 with SMTP id p18-20020a170902f09200b0016cabb9f984mr25023585pla.41.1658170575345;
+        Mon, 18 Jul 2022 11:56:15 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id d66-20020a621d45000000b00528669a770esm9791323pfd.90.2022.07.18.11.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 11:56:14 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, gregkh@linuxfoundation.org,
+        Prashant Malani <pmalani@chromium.org>,
+        "Reported-by : kernel test robot" <lkp@intel.com>
+Subject: [PATCH] platform/chrome: cros_typec_switch: Add ACPI Kconfig dep
+Date:   Mon, 18 Jul 2022 18:55:51 +0000
+Message-Id: <20220718185551.1025288-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Modify NPCM USB EHCI host controller configuration to support all NPCM
-BMC SoC.
+Add the ACPI Kconfig dependency that was missed during the initial
+driver submission. Fixes the following compiler errors:
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to
+undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not
+support implicit function declarations
+ [-Wimplicit-function-declaration]
+   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+
+drivers/platform/chrome/cros_typec_switch.c:93:35: error: incomplete
+definition of type 'struct acpi_device'
+   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+
+Fixes: e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
+Reported-by: Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
 ---
- drivers/usb/host/Kconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/platform/chrome/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 682b3d2da623..bcd595e30811 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -205,12 +205,12 @@ config USB_EHCI_FSL
- 	  Variation of ARC USB block used in some Freescale chips.
+diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+index c62a514a087f..9d4fc505fa25 100644
+--- a/drivers/platform/chrome/Kconfig
++++ b/drivers/platform/chrome/Kconfig
+@@ -267,7 +267,7 @@ config CHROMEOS_PRIVACY_SCREEN
  
- config USB_EHCI_HCD_NPCM7XX
--	tristate "Support for Nuvoton NPCM7XX on-chip EHCI USB controller"
--	depends on (USB_EHCI_HCD && ARCH_NPCM7XX) || COMPILE_TEST
--	default y if (USB_EHCI_HCD && ARCH_NPCM7XX)
-+	tristate "Support for Nuvoton NPCM on-chip EHCI USB controller"
-+	depends on (USB_EHCI_HCD && ARCH_NPCM) || COMPILE_TEST
-+	default y if (USB_EHCI_HCD && ARCH_NPCM)
+ config CROS_TYPEC_SWITCH
+ 	tristate "ChromeOS EC Type-C Switch Control"
+-	depends on MFD_CROS_EC_DEV && TYPEC
++	depends on MFD_CROS_EC_DEV && TYPEC && ACPI
+ 	default MFD_CROS_EC_DEV
  	help
- 	  Enables support for the on-chip EHCI controller on
--	  Nuvoton NPCM7XX chips.
-+	  Nuvoton NPCM chips.
- 
- config USB_EHCI_HCD_OMAP
- 	tristate "EHCI support for OMAP3 and later chips"
+ 	  If you say Y here, you get support for configuring the Chrome OS EC Type C
 -- 
-2.33.0
+2.37.0.170.g444d1eabd0-goog
 
