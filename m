@@ -2,154 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9588F578575
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 16:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2CA5785A2
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 16:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234709AbiGROaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 10:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S232593AbiGROkp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jul 2022 10:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbiGROah (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 10:30:37 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0BB8F1E3F5
-        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 07:30:35 -0700 (PDT)
-Received: (qmail 122695 invoked by uid 1000); 18 Jul 2022 10:30:34 -0400
-Date:   Mon, 18 Jul 2022 10:30:34 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        gregkh@linuxfoundation.org, tony@atomide.com,
-        felipe.balbi@linux.intel.com, jgross@suse.com,
-        lukas.bulwahn@gmail.com, arnd@arndb.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] usb: host: npcm7xx: remove USB EHCI host reset
- sequence
-Message-ID: <YtVuildpxcI5By4x@rowland.harvard.edu>
-References: <20220718122922.9396-1-tmaimon77@gmail.com>
- <20220718122922.9396-2-tmaimon77@gmail.com>
+        with ESMTP id S229585AbiGROko (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 10:40:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9482409E;
+        Mon, 18 Jul 2022 07:40:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBE1D60DFA;
+        Mon, 18 Jul 2022 14:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506A1C341C0;
+        Mon, 18 Jul 2022 14:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658155242;
+        bh=NeYIO0BqbILJrEgXnGSOv7KPU6f7mitEcw6t9jGVMfE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DdbJj6NkLQnB/9sdUT5i0gi9jxEcUfDCgZY3JNE78yS8gnqNglUr/+m5YpgVe8aei
+         S63HRa0Th9e4YKk8BYmp82WS1EAbGUfLtePmPpYeUvyYbRBXDjqhptiIk1kkuPbT7t
+         /0JVXcI/rTJwuDM0amNaBWLhegYPyn1IZLlAKpGg=
+Date:   Mon, 18 Jul 2022 16:40:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?Q?=C5=81ukasz?= Spintzyk <lukasz.spintzyk@synaptics.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        oliver@neukum.org, kuba@kernel.org, ppd-posix@synaptics.com,
+        Bernice.Chen@synaptics.com
+Subject: Re: [PATCH v3 1/2] net/cdc_ncm: Enable ZLP for DisplayLink ethernet
+ devices
+Message-ID: <YtVw5ooWFYRZ8gOk@kroah.com>
+References: <YtAJ2KleMpkeFfQq@kroah.com>
+ <20220718123618.7410-1-lukasz.spintzyk@synaptics.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220718122922.9396-2-tmaimon77@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220718123618.7410-1-lukasz.spintzyk@synaptics.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 03:29:20PM +0300, Tomer Maimon wrote:
-> Remove USB EHCI host controller reset sequence from NPCM7XX USB EHCI
-> host probe function because it is done in the NPCM reset driver.
+On Mon, Jul 18, 2022 at 02:36:17PM +0200, Łukasz Spintzyk wrote:
+> From: Dominik Czerwik <dominik.czerwik@synaptics.com>
 > 
-> Due to it, NPCM7XX EHCI driver configuration is dependent on NPCM reset.
+> This improves performance and stability of
+> DL-3xxx/DL-5xxx/DL-6xxx device series.
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Specifically prevents device from temporary network dropouts when
+> playing video from the web and network traffic going through is high.
+> 
+> Signed-off-by: Dominik Czerwik <dominik.czerwik@synaptics.com>
+> Signed-off-by: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
 > ---
-
-Regarding the changes to ehci-npcm7xx.c:
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-But you probably should remove the "#include <linux/regmap.h>" line near 
-the start of the source file.
-
-Alan Stern
-
->  drivers/usb/host/Kconfig        |  2 +-
->  drivers/usb/host/ehci-npcm7xx.c | 47 ---------------------------------
->  2 files changed, 1 insertion(+), 48 deletions(-)
 > 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 682b3d2da623..e05e2cf806f8 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -206,7 +206,7 @@ config USB_EHCI_FSL
->  
->  config USB_EHCI_HCD_NPCM7XX
->  	tristate "Support for Nuvoton NPCM7XX on-chip EHCI USB controller"
-> -	depends on (USB_EHCI_HCD && ARCH_NPCM7XX) || COMPILE_TEST
-> +	depends on (USB_EHCI_HCD && ARCH_NPCM7XX && RESET_NPCM) || COMPILE_TEST
->  	default y if (USB_EHCI_HCD && ARCH_NPCM7XX)
->  	help
->  	  Enables support for the on-chip EHCI controller on
-> diff --git a/drivers/usb/host/ehci-npcm7xx.c b/drivers/usb/host/ehci-npcm7xx.c
-> index 6b5a7a873e01..955e7c8f3db8 100644
-> --- a/drivers/usb/host/ehci-npcm7xx.c
-> +++ b/drivers/usb/host/ehci-npcm7xx.c
-> @@ -28,13 +28,6 @@
->  #define DRIVER_DESC "EHCI npcm7xx driver"
->  
->  static const char hcd_name[] = "npcm7xx-ehci";
-> -
-> -#define  USB2PHYCTL_OFFSET 0x144
-> -
-> -#define  IPSRST2_OFFSET 0x24
-> -#define  IPSRST3_OFFSET 0x34
-> -
-> -
->  static struct hc_driver __read_mostly ehci_npcm7xx_hc_driver;
->  
->  static int __maybe_unused ehci_npcm7xx_drv_suspend(struct device *dev)
-> @@ -60,52 +53,12 @@ static int npcm7xx_ehci_hcd_drv_probe(struct platform_device *pdev)
->  {
->  	struct usb_hcd *hcd;
->  	struct resource *res;
-> -	struct regmap *gcr_regmap;
-> -	struct regmap *rst_regmap;
->  	const struct hc_driver *driver = &ehci_npcm7xx_hc_driver;
->  	int irq;
->  	int retval;
->  
->  	dev_dbg(&pdev->dev,	"initializing npcm7xx ehci USB Controller\n");
->  
-> -	gcr_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
-> -	if (IS_ERR(gcr_regmap)) {
-> -		dev_err(&pdev->dev, "%s: failed to find nuvoton,npcm750-gcr\n",
-> -			__func__);
-> -		return PTR_ERR(gcr_regmap);
-> -	}
-> -
-> -	rst_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-rst");
-> -	if (IS_ERR(rst_regmap)) {
-> -		dev_err(&pdev->dev, "%s: failed to find nuvoton,npcm750-rst\n",
-> -			__func__);
-> -		return PTR_ERR(rst_regmap);
-> -	}
-> -
-> -	/********* phy init  ******/
-> -	// reset usb host
-> -	regmap_update_bits(rst_regmap, IPSRST2_OFFSET,
-> -			(0x1 << 26), (0x1 << 26));
-> -	regmap_update_bits(rst_regmap, IPSRST3_OFFSET,
-> -			(0x1 << 25), (0x1 << 25));
-> -	regmap_update_bits(gcr_regmap, USB2PHYCTL_OFFSET,
-> -			(0x1 << 28), 0);
-> -
-> -	udelay(1);
-> -
-> -	// enable phy
-> -	regmap_update_bits(rst_regmap, IPSRST3_OFFSET,
-> -			(0x1 << 25), 0);
-> -
-> -	udelay(50); // enable phy
-> -
-> -	regmap_update_bits(gcr_regmap, USB2PHYCTL_OFFSET,
-> -			(0x1 << 28), (0x1 << 28));
-> -
-> -	// enable host
-> -	regmap_update_bits(rst_regmap, IPSRST2_OFFSET,
-> -			(0x1 << 26), 0);
-> -
->  	if (usb_disabled())
->  		return -ENODEV;
->  
-> -- 
-> 2.33.0
-> 
+> v3: We have decided to remove that copyright as this is not really 
+>     necessary.
+
+Thank you for working with your lawyers on this, hopefully this is not
+confusing anymore.
+
+greg k-h
