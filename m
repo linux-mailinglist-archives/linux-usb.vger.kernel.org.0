@@ -2,94 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E1B57808A
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 13:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BB75780E2
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 13:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234494AbiGRLSU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 07:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S234212AbiGRLf5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jul 2022 07:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbiGRLSS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 07:18:18 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2F1180B;
-        Mon, 18 Jul 2022 04:18:17 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id r21so7734860qtn.11;
-        Mon, 18 Jul 2022 04:18:17 -0700 (PDT)
+        with ESMTP id S232158AbiGRLfz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 07:35:55 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAC8DF24
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 04:35:54 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IB40QB024899;
+        Mon, 18 Jul 2022 11:35:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2022-7-12;
+ bh=OoYJG1pjRUvR6XnwtMU1qJJE/qTi2GZluGLe/6YOybU=;
+ b=Rwv7ejtP+piPGFlIgJpz7HyOpZ+uuwo+iK4AP9KX7pXTEejJFiHjlAG5pqqgjYKlcwjO
+ xb6b0ABYnT/Y+Y/NlEwSz0HVFjJdYsjv+LRxl90g5+bHnx4ykBk2ay4IuaKtCvMIVwe4
+ 5XaXRvrrCIs9dwYrhkmQXzNcEgy5S0/y7gtwWWD0gxxUL6+ysRl04SoLPcuDHzl//V5u
+ iWwKds4VlXrg0JlfYJ+xdmkj2fWZSZcC8L+wtPbt8Ntg/3AUS5Nr55/sdQeKz14ajAHt
+ usXdftSgJ6PvE1NB2lkkFhi7/xw31hkbuOlp6aAkAYZTD4TKQcH03i6KUZMmZMmRn7mq jg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbm42b0c4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Jul 2022 11:35:49 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26IBY06F027924;
+        Mon, 18 Jul 2022 11:35:48 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1ma62ed-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Jul 2022 11:35:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lMGPQl1oxgklGrFC2rmdNnv3Mqb+dbfiBwjE7eMZ7rpI+F7oKxZDjMREZOhj5cWTTl7BXwaI1ASUZEhjCPJ1N8gbzun1jzbzyQFLsFpHlC5yC++nnhg6nQVlDmySkv1mqubL9PYFjdQuC3ep/PXluii44UOhpwal94dTOxc+J3DC2FayJXMwlW8N5GFmilRfJuFolVsObvvi0R9PoCRhIHcEmmZbYHD8TaCefdS79gvCw4NxQAkkUTOb6x2zD3PUPOEqGimK4gwczmaB3RhpVIqB0cADx+FNRwVctZB3FahrVExYDmMIeFYE+NTnZzUTYq/d1KQle/WXEqPJOhEfWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OoYJG1pjRUvR6XnwtMU1qJJE/qTi2GZluGLe/6YOybU=;
+ b=GDjXGhWXIHHVHYXPXvse96VRf6dY6ll16ETlsynSpcsU69F1NFam/KuxEbefLUjxwM2t480WEGvl+FeLuZ44hGULVmbVXL5aBR0iXsjn7gAzFWXUvoJTB+80TshRWl/ciqX9Kpj48Bu5dmDOee1xWRzuTOxslv8oXxEuz+pirNVAczUXw3k/SMk+bOQKSxcMVf3qmM2gVpNHlibeyNTM7azobRlvOgIYlJMFM4+bG2dcrgFsCNdK4NmygTXvFYITrIS1yde5IC2iRW/XeRmm3ce5SR0fO5ZqAvb7Zwdd3XQWgMJjuLADvLC2tO9POcc1KGHBy5WPemMS6p8GelpUPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wSoYENXBgH2mwK4hdRwcr5ZngBoL0AeSrBZrHAlbPeQ=;
-        b=qFnFWPwvGVggO9eAAgTTMi5N3kU74UfugZ/F1ND8Dh1XwEYNQq9hleridz+UuErbjp
-         kKXke5m5utIeYESJxdI+Imw1dN7Ky712JivV5EepwVudgfHjmTqzT/4Csy8a5PRWaYcW
-         WT7WNRwPzbR88elpVuCiYFy314nf03iGRthvnSl47bKymr5iw2ISiSCilphKmc3sjDBm
-         wiODnzpQ5ZhUPmt72MGydEbUEk8Tl3V01TfyuGjdP3zZ6dMAa1QHvvhfxlrb1Fhq/iC3
-         p3s1kljCg7uX6D1BpJ/6XC9U0bCN4LfKIpfi4lFkm26bo4VkK/Gcyeu4o/iFLsYdoMKG
-         BZIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wSoYENXBgH2mwK4hdRwcr5ZngBoL0AeSrBZrHAlbPeQ=;
-        b=nAuIO1vKX1NU9KD9WZt/ADfLuy3A7qszMDimDHxlqaZNKiNBICNqSGdJf+KGlJ5GSN
-         9jh/83KeH8d2xYTZTvRjMNgiuT6YP5YpuhdFtkdRuu9Sr4swdAxdqWrrW0JK5QZOPsmo
-         OX9eHtVoHgHJOffb81gvsfVkCk59WZxOileVjnt59Xn7cMKfm891XfkwdMi4aBhXSSTN
-         byOM2cGxeeECrES+rL/9VCtZuVq5NbQ1h3N0SY8AisBDucOJnGbsTGsqUUZT80Ccb67P
-         siMwC6B2fOCFxGpNVI3O95ngzH1rx8AVT4W3ezP5oLlSSGltmAT4t0YjexC8AoY++Jlu
-         lPcA==
-X-Gm-Message-State: AJIora8nZVdcLVY+wrYat7Q6QmyBIIjKQ98pRxZSPuAJFPFs4Al58ljV
-        DxLHvxVoX5QrxQ3MRFDskLsn1UhrV9EXQMg7Y8M=
-X-Google-Smtp-Source: AGRyM1sDQntCUf7aWlvIzBrAp3ngAMq6sCK0MNxJ0IaoTAwyexPRWMVJcAdASNSTm/k1fe6tXf81WYvadsLxzbGsFLI=
-X-Received: by 2002:ac8:5a8c:0:b0:31d:2826:d14f with SMTP id
- c12-20020ac85a8c000000b0031d2826d14fmr20168056qtc.198.1658143096830; Mon, 18
- Jul 2022 04:18:16 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OoYJG1pjRUvR6XnwtMU1qJJE/qTi2GZluGLe/6YOybU=;
+ b=xGiW1Ma18C9XK2s4lkyarDfhDNFQ0iUrT0LfALsygvew5Uh1f1WLduDz4EOh8LlZ4LNQ4BVYQje/D4yNH7872gSfCYPLKNGSN79SW9CdvFVg2+jLR9QfFcmQobUEnGP2XcqW3yZ+jtWz7G2NLyjwt69pZ7G5m5eDTGO6JX4qmpU=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR10MB1622.namprd10.prod.outlook.com
+ (2603:10b6:910:8::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Mon, 18 Jul
+ 2022 11:35:46 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
+ 11:35:46 +0000
+Date:   Mon, 18 Jul 2022 14:35:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, Xin Ji <xji@analogixsemi.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-testing 43/55] drivers/usb/typec/anx7411.c:387
+ anx7411_register_partner() warn: passing zero to 'PTR_ERR'
+Message-ID: <202207171059.zvoL5dcM-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0044.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4e::21)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220715112607.591-1-peterwu.pub@gmail.com> <20220715112607.591-14-peterwu.pub@gmail.com>
- <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com> <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
- <ee88aec0-f6f8-c554-6752-447cb0f34e16@collabora.com>
-In-Reply-To: <ee88aec0-f6f8-c554-6752-447cb0f34e16@collabora.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Mon, 18 Jul 2022 19:17:40 +0800
-Message-ID: <CABtFH5J3tjx6mLfXkx_MySXdYg3qms09gX0wxpuFQxWpz3gowQ@mail.gmail.com>
-Subject: Re: [PATCH v5 13/13] video: backlight: mt6370: Add MediaTek MT6370 support
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4c791255-01f1-4d32-0bb6-08da68b1a7e0
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1622:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sVSPPXiAw+g/lhoh0Hy60sT4eCXR1e9i/AO/mjnKNhsVvqBtMfLhj2fDs9fsGwOP/gYOWqjlevyBkGBep1Do+fkpgJKl+H8mOkrPLYRGwwHXGWHG5htSRyOUfT7DbgA4Z683aOGdVpfy8d2HLqK1EIKmMVsbYfDJ/Uak9g6rdldVvekp7BfZ57p8NJBvJuQCWEy6odSqurXnz5f2o5tsoFQQGwQmm1N9XOnbz1nBOapMOw4HRKf1mOVre6ekwTPwTIEN7bdpdjQACEPNzPI+XOcZXM50R5lGEt1KGXO/dEd801/KtzfTVFq1st92oKKKmATm7KDvakEbQLjPgPsnaE8j8hqsRzsxg6WKEPLAtJctCS5+7gevve2sN16UrjWyORHUlAHeNazAWV/lVBzs9z1f87fYuQdfS6CVLBHELUAhPMIllVF0q5PexED+nolFn4ByQVi0K1HNg/Bu252yiPx864QqpP+idi/9DqzFrPrkNKTp0boNQMaGk3wf3+ybxeXBeqkyMBfiIRv2NR7FccaQ9lv+IfhxPQgfRjSZ5LA+fKfMNO86Qci2WtnhYSNLn22az6mcMq6e6IcRS3zYliteCNm+c75vSsiQLO0PsvdD45sSvkY5eiO5LFwpSSCef6kisuwjgNFJViT9h+KM3gNQfs5m/VLnK6BFtR63UwgDvx3hoVI5C90gietEDEcYWFOR7jyTafOgwpHdweF40P2X3IuaYAZCeQfQVGFerOHXuhZpLWumXHPZkifNLIdW0LyRSnAtTW3LREfpop68jTbhwBBK8J/njPGjx6VKBoQsLN7r3JgajWtt4Q6CHBPZM/HKNvpCwcUShH6Lh9P4MP8FFX7YLrvVBL1/8A4p4d7BBaHHTJySEjDyc4ZgXHyuLcL3SuTJt9mqEL0wG9NxHQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(396003)(376002)(366004)(346002)(41300700001)(966005)(478600001)(86362001)(52116002)(6486002)(186003)(6666004)(6506007)(9686003)(1076003)(26005)(66556008)(66946007)(38350700002)(38100700002)(83380400001)(6512007)(8936002)(44832011)(36756003)(2906002)(6916009)(8676002)(4326008)(316002)(5660300002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/EU+qV+tznpPBs0prLaWIeSF7HFAjYla32pgMowBjQG4gaD4d2FHPQUjicFa?=
+ =?us-ascii?Q?RgsNEUD4Sc84SNT0rqpEr87n0aTrWuc+9JAGIqXVKZPgt8Qnqw8h8f2prKvR?=
+ =?us-ascii?Q?QU1CR0vWiWBFIj1VxvacSjjgTQmcPvEB7WdkWWg8itcOaan0rmKgCmqiipl+?=
+ =?us-ascii?Q?uDbn7DNz9I7jP5tAFPs7EPEp5+HlSbmofXCCT2KJo9WmiAZBJYLzPJLDQffX?=
+ =?us-ascii?Q?ABnOYsToH2vUzuoYnBk5eRzq9wIZrsK6ruGwLFVdY7B2aWonNgLen5oxtj6e?=
+ =?us-ascii?Q?jygIgBRN0///kVGYMiWb3KVQpP7cXG7HC3R+r+ctFST/vuzWj3e9vqrcYfst?=
+ =?us-ascii?Q?EaEU9hDHGyIsA7fcJbsxUD2ry1rwndwU0ZOObaIEezA7ke4G2ywutV8MJS2p?=
+ =?us-ascii?Q?9WXnUCvdkMjNVHgLQeBFBVS/DdpJ7eUsk/yW3sgdMl/69W9g+nnX2tAQUnKF?=
+ =?us-ascii?Q?ZbemxQceo9UBizo8EuZmn1NxkzBD3aLgPskZCl7bbWHvh8rQag6MpPkZUsSz?=
+ =?us-ascii?Q?Epn8e6R0hE3D6stnebAUFpf5qGupAUVKL3DeihmQOhdzPw2FkTgMNYbe28kf?=
+ =?us-ascii?Q?YUa5+ASvf7i7eO+YiCdwPR+MG98rUb09eDtVVEHwExohULWMwovED12S+yFY?=
+ =?us-ascii?Q?UCqjvHUj7W5wKPagvKDW9LrZ5fE1/Hr8ng4O5IyQ8ZkjowlyEA3V3DhOYVpj?=
+ =?us-ascii?Q?pXGpkh7P3hd2iajU0caBNlZ9iK0g207Wbx1rglCkZ4uiXpK4EE+ARGhPqPaY?=
+ =?us-ascii?Q?z2PqVQbQ1H6HS9W6nNRcgOBpK1UR4RSEnyRn1Y4N748H8AIo82KYEUAsxJvS?=
+ =?us-ascii?Q?Og2AcLgKgIhT1gtpvsZmcJ3l8XeyHPK2fDtkQVQlXpJfHRQQJJSXie0YsEAl?=
+ =?us-ascii?Q?+lDRYMlJmp2YYaoBZLhEBX31dPBsNOaQqF8RJ1vIYNcePAcZtJPc1CA9xayB?=
+ =?us-ascii?Q?suzKMmeABL1hwVhwb+7k5AOsT5bCk634psVhNskXhkbNfZl67Rl/7vCZVANI?=
+ =?us-ascii?Q?upkOHbC/FO8mjBrciUGSq9eUQ9vwQ6rS/J6nIdraBUKutW1vy13tcXoF4fq3?=
+ =?us-ascii?Q?RbRfy7LwmtxSBw9b1al3+v8L8dpM2imyVV8PZh7EPygfqhTpptJPW/mLjAEt?=
+ =?us-ascii?Q?uBTA5qQosd5LiWmTrvHRWQ7UVj5LhNu3UmTG9i/FBFIi2lYXQ8dS1qJ0BBdf?=
+ =?us-ascii?Q?M+WqFJF1LFVz6+lIunxvMbWD+Ckf+tUh10YbNYcqejIrzSMIyHzBiWyt0jue?=
+ =?us-ascii?Q?OY95RaonggsTeRmMhoezyWeESy5g0P6NgDlbkuDISW0PvOyVW7W9M84h4lw0?=
+ =?us-ascii?Q?BkAbADAZEnBCL7H7UWVR0XADyYxJM4aJ38Arbh/6hf/VsG8tjaoxX/VwufR8?=
+ =?us-ascii?Q?scB9NGOieGMF0kPBuFy/JdBda16GjmS1jSPBIBR9ZbrdOLFaQHpcPRHQFiY2?=
+ =?us-ascii?Q?WSMKtBEhNEofjij2kTv+YEOtGTy3iZnMYvxv7cJHyiaMJITKjzUPy1YYqbJo?=
+ =?us-ascii?Q?YS8LafpBVu0BjwYbu3680sTeGZSRxYuW6xpfPIJm1iyp759f3qVi48jcaid5?=
+ =?us-ascii?Q?XtSU+d5xG/NPO9FYOjPXWrEccbKPf0pRx32Lc/swG3GFiV4Kp77uE48JIG6t?=
+ =?us-ascii?Q?mw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c791255-01f1-4d32-0bb6-08da68b1a7e0
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 11:35:46.6168
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OfHhNywmCLuB0NYbKs6KmT7rVDd00mUuzoQ3uq7i7Dvpn2kV6/4aJiTYLEVvhzBccqlr6rs+53uveZxQCXdfI7YwuAmFocUEVN0fKonG4z8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1622
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-18_10,2022-07-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 spamscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207180049
+X-Proofpoint-ORIG-GUID: Qs7NVNocbErsOZTyh0uCeXFgs-0Fhk8L
+X-Proofpoint-GUID: Qs7NVNocbErsOZTyh0uCeXFgs-0Fhk8L
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,108 +141,88 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 4:27 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   c76d09da77d69d7f737540985912ad2bca654713
+commit: fe6d8a9c8e6456f8e7ba6b4ee528460beaf65a71 [43/55] usb: typec: anx7411: Add Analogix PD ANX7411 support
+config: xtensa-randconfig-m041-20220715 (https://download.01.org/0day-ci/archive/20220717/202207171059.zvoL5dcM-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
 
-<snip>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-> >>
-> >> Hello ChiaEn,
-> >>
-> >> I propose to move this one to drivers/leds (or drivers/pwm) and, instead of
-> >> registering a backlight device, register a PWM device.
-> >>
-> >> This way you will be able to reuse the generic backlight-pwm driver, as you'd
-> >> be feeding the PWM device exposed by this driver to the generic one: this will
-> >> most importantly make it easy to chain it with MTK_DISP_PWM (mtk-pwm-disp)
-> >> with a devicetree that looks like...
-> >
-> > Out of interest, does MT6370 have the same structure for backlights as the prior
-> > systems using mtk-pwm-disp or was mtk-pwm-disp simply a normal(-ish) PWM
-> > that relied on something on the board for all the constant current
-> > driver hardware?
-> >
-> >
->
-> As per my understanding, mtk-pwm-disp is chained to other multimedia features of
-> the display block of MediaTek SoCs, such as the AAL (adaptive ambient light),
-> CABC (content adaptive backlight control) etc, other than being a normal(ish)
-> PWM... that's the reason of my request.
->
-> Moreover, in the end, this PMIC's backlight controller is just a "fancy" PWM
-> controller, with OCP/OVP.
->
-> >>
-> >>      pwmleds-disp {
-> >>              compatible = "pwm-leds";
-> >>
-> >>              disp_led: disp-pwm {
-> >>                      label = "backlight-pwm";
-> >>                      pwms = <&pwm0 0 500000>;
-> >>                      max-brightness = <1024>;
-> >>              };
-> >>      };
-> >>
-> >>      backlight_lcd0: backlight {
-> >>              compatible = "led-backlight";
-> >>              leds = <&disp_led>, <&pmic_bl_led>;
-> >>              default-brightness-level = <300>;
-> >>      };
-> >
-> > I think this proposal has to start with the devicetree bindings rather
-> > than the driver. Instead I think the question is: does this proposal
-> > result in DT bindings that better describe the underlying hardware?
-> >
->
->  From how I understand it - yes: we have a fancy PWM (&pwm0) that we use
-> to control display backlight (backlight-pwm)...
->
-> Obviously, here we're not talking about OLEDs, but LCDs, where the backlight
-> is made of multiple strings of WhiteLED (effectively, a "pwm-leds" controlled
-> "led-backlight").
->
-> Using PWM will also allow for a little more fine-grained board specific
-> configuration, as I think that this PMIC (and/or variants of it) will be
-> used in completely different form factors: I think that's going to be both
-> smartphones and tablets/laptops... and I want to avoid vendor properties
-> to configure the PWM part in a somehow different way.
->
-> > This device has lots of backlight centric features (OCP, OVP, single
-> > control with multiple outputs, exponential curves, etc) and its not
-> > clear where they would fit into the "PWM" bindings.
-> >
->
-> For OCP and OVP, the only bindings that fit would be regulators, but that's
-> not a regulator... and that's about it - I don't really have arguments for
-> that.
->
-> What I really want to see here is usage of "generic" drivers like led_bl
-> and/or pwm_bl as to get some "standardization" around with all the benefits
-> that this carries.
->
-> > Come to think of it I'm also a little worried also about the whole linear
-> > versus exponential curve thing since I thought LED drivers were required
-> > to use exponential curves.
-> >
->
-> That probably depends on how the controller interprets the data, I guess,
-> but I agree with you on this thought.
+New smatch warnings:
+drivers/usb/typec/anx7411.c:387 anx7411_register_partner() warn: passing zero to 'PTR_ERR'
+drivers/usb/typec/anx7411.c:573 anx7411_typec_register_altmode() warn: passing a valid pointer to 'PTR_ERR'
+drivers/usb/typec/anx7411.c:996 anx7411_register_i2c_dummy_clients() error: buffer overflow 'anx7411_i2c_addr' 4 <= 7
+drivers/usb/typec/anx7411.c:1484 anx7411_i2c_probe() warn: missing error code 'ret'
 
-Hi Angelo,
+Old smatch warnings:
+drivers/usb/typec/anx7411.c:997 anx7411_register_i2c_dummy_clients() error: buffer overflow 'anx7411_i2c_addr' 4 <= 7
 
-MT6370 is just a SubPMIC, not an SoC, and is applied in cellular
-telephones, tablet PCs, and portable instruments.
-And the PWM mode of the MT6370 backlight driver is optional, and not
-must be enabled.
-From our perspective, this MT6370 backlight driver is not the same as
-mtk-pwm-disp related driver.
-Thanks!
+vim +/PTR_ERR +387 drivers/usb/typec/anx7411.c
 
->
-> Regards,
-> Angelo
+fe6d8a9c8e6456 Xin Ji 2022-07-14  373  static int anx7411_register_partner(struct anx7411_data *ctx,
+fe6d8a9c8e6456 Xin Ji 2022-07-14  374  				    int pd, int accessory)
+fe6d8a9c8e6456 Xin Ji 2022-07-14  375  {
+fe6d8a9c8e6456 Xin Ji 2022-07-14  376  	struct typec_partner_desc desc;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  377  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  378  	if (ctx->typec.partner)
+fe6d8a9c8e6456 Xin Ji 2022-07-14  379  		return 0;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  380  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  381  	desc.usb_pd = pd;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  382  	desc.accessory = accessory;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  383  	desc.identity = NULL;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  384  	ctx->typec.partner = typec_register_partner(ctx->typec.port, &desc);
+fe6d8a9c8e6456 Xin Ji 2022-07-14  385  	if (IS_ERR(ctx->typec.partner)) {
+fe6d8a9c8e6456 Xin Ji 2022-07-14  386  		ctx->typec.partner = NULL;
+fe6d8a9c8e6456 Xin Ji 2022-07-14 @387  		return PTR_ERR(ctx->typec.partner);
+
+Set to NULL on previous line.
+
+fe6d8a9c8e6456 Xin Ji 2022-07-14  388  	}
+fe6d8a9c8e6456 Xin Ji 2022-07-14  389  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  390  	return 0;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  391  }
+
+[ snip ]
+
+fe6d8a9c8e6456 Xin Ji 2022-07-14  547  static int anx7411_typec_register_altmode(struct anx7411_data *ctx,
+fe6d8a9c8e6456 Xin Ji 2022-07-14  548  					  int svid, int vdo)
+fe6d8a9c8e6456 Xin Ji 2022-07-14  549  {
+fe6d8a9c8e6456 Xin Ji 2022-07-14  550  	struct device *dev = &ctx->spi_client->dev;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  551  	struct typec_altmode_desc desc;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  552  	int i;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  553  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  554  	desc.svid = svid;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  555  	desc.vdo = vdo;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  556  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  557  	for (i = 0; i < MAX_ALTMODE; i++)
+fe6d8a9c8e6456 Xin Ji 2022-07-14  558  		if (!ctx->typec.amode[i])
+fe6d8a9c8e6456 Xin Ji 2022-07-14  559  			break;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  560  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  561  	desc.mode = i + 1; /* start with 1 */
+fe6d8a9c8e6456 Xin Ji 2022-07-14  562  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  563  	if (i >= MAX_ALTMODE) {
+fe6d8a9c8e6456 Xin Ji 2022-07-14  564  		dev_err(dev, "no altmode space for registering\n");
+fe6d8a9c8e6456 Xin Ji 2022-07-14  565  		return -ENOMEM;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  566  	}
+fe6d8a9c8e6456 Xin Ji 2022-07-14  567  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  568  	ctx->typec.amode[i] = typec_partner_register_altmode(ctx->typec.partner,
+fe6d8a9c8e6456 Xin Ji 2022-07-14  569  							     &desc);
+fe6d8a9c8e6456 Xin Ji 2022-07-14  570  	if (IS_ERR(ctx->typec.amode[i])) {
+fe6d8a9c8e6456 Xin Ji 2022-07-14  571  		dev_err(dev, "failed to register altmode\n");
+fe6d8a9c8e6456 Xin Ji 2022-07-14  572  		ctx->typec.amode[i] = NULL;
+fe6d8a9c8e6456 Xin Ji 2022-07-14 @573  		return PTR_ERR(ctx->typec.amode);
+
+Wrong pointer.
+
+fe6d8a9c8e6456 Xin Ji 2022-07-14  574  	}
+fe6d8a9c8e6456 Xin Ji 2022-07-14  575  
+fe6d8a9c8e6456 Xin Ji 2022-07-14  576  	return 0;
+fe6d8a9c8e6456 Xin Ji 2022-07-14  577  }
 
 -- 
-Best Regards,
-ChiaEn Wu
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
