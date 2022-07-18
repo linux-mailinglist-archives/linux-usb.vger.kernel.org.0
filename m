@@ -2,216 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5594A57846D
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 15:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869A8578471
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 15:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiGRNzI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 09:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
+        id S235599AbiGRNzb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jul 2022 09:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235591AbiGRNzH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 09:55:07 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF7F2612A
-        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 06:55:06 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z22so5807838lfu.7
-        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 06:55:06 -0700 (PDT)
+        with ESMTP id S235596AbiGRNz3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 09:55:29 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332392612A
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 06:55:28 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id w17so13695852ljh.6
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 06:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fT/QA3qJ96/hT7NeSsWVhINwMLxP59Qr8cL2A9JBdCU=;
-        b=zK9wEnE92x0ddHXk3LsKDzkbWG0cvWhEwSPCqPXk/JL4CFKEb3Ki9sSGpBjUlwx9XR
-         0pzUMEbxcBo6BS2Ter6Z6EfWZWFoWcoOQkHe+zjzOveunWfXy3TcHrkNfiUeqRq8WIT4
-         h+mEG67igAGdU0B/EoH6WXxQ///VscY7XtnGE779rVt6z8nT3zyf9CJOrL6BjRTioSBr
-         e8tBBPcEyQ3lQYI6eYFlGvTZgYHppESSNCv7gHXFdHmGYo5tcbHwR2c4Y9L33fBXZjrC
-         Ttm+euI8GQA+7wtwEAf+Jjc/xuaU3/rxn6oQG2QoY+0/Zhg+Ojonw2re0VpsjsgLvQFX
-         YQ2w==
+        bh=i1eT6+uUackWcKA/E4yG30SX1xEVWGcn/DycM4jrjWw=;
+        b=juJDKA/nI0HVRB0ZhSrCRTUougH0QUu2p/963vrn6d9474ZvGOCnvJkS8EoGbSqGiX
+         HQ/m+MjDfE4Z1rFuO89arTgkHx3qD+bOVdmvDPvW2sL/evj9mLixCYlJfzqwgtQRgc+G
+         2DiZqYShqcQHH1RQm8HzDPtln0R4t0Wfg3TMnhNrzkXTIY33PcvaKRFmnV/LpkG5zuPn
+         UE3jH6F5LQSPDlB+HIs07vnTVcQJsnDk+8/iIy+1/JQAaqU036YJ7P6G4h2Cahp2FHrE
+         1HVIDNajjGcrha9nf1mlL35Jqx43C0xOAi1nfwnt4iyDRjYSUDuSnQ4nNIGmLHCPOq4b
+         Gv4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=fT/QA3qJ96/hT7NeSsWVhINwMLxP59Qr8cL2A9JBdCU=;
-        b=2ytE3GVWw6Eay9eFeVUKQNPXq+DRuT6s2BjYjNlN0+0E/sWVm2GyZZH8AkoxmzvFP5
-         6IRD6B+Tb7PbYeN3i0cKK7AqgOcUel/TrXBO8c4+bVNkxe+ADjLngYNw1VEzS+yhPvYP
-         Z47WvUqSnqpO6unCXmvr7PMImQIMbOJAfnNEAColOBtnWwQT3EJ0ylk2ybOnVznL+ea5
-         D85A9LiWy8/63zaGWQlZgc6pGxBYb1ytD175tEnfrWlRCbpzMG7aJYTf/IV+LPUSxBsl
-         bzj0fPUL5WKfZfx7o4tEvr0Dwfo/7WWQu2MyZYrQjXrMWGOd48n9jC5TjzRAllWe6osJ
-         TKRA==
-X-Gm-Message-State: AJIora/INKMlHvQ97/UAdduag5s8JTz4X5NJgnRt1GDdQke5PHYwq6Xe
-        HoV3o6vBMVhCN/rFfy8sVInDKQ==
-X-Google-Smtp-Source: AGRyM1uOzsAoBCxC/M1hXO53IeNkutayehcP14EoJ/bF+Bq4znHEWDYqXLS9WnDyqaXGcCAWqQ3E7A==
-X-Received: by 2002:a05:6512:3988:b0:48a:1624:742b with SMTP id j8-20020a056512398800b0048a1624742bmr11741401lfu.174.1658152504634;
-        Mon, 18 Jul 2022 06:55:04 -0700 (PDT)
+        bh=i1eT6+uUackWcKA/E4yG30SX1xEVWGcn/DycM4jrjWw=;
+        b=5u+qDkYGMTk0ZQcdeAP8JX5rIStY9PRt9gvorK1cfFdNVrAY9YEKgEWaHPgJudK01t
+         sxWW6YjHiUT1s8S6J2LSSZ69RaJK8uI1vp7i3JCElxEZGjrl9nORH1xYOoMwIysTLNfZ
+         5rvp+7BdWoiUx3TVnFseUBCAfI6qtuVofdaDCAu81MN2U2ytuE+O8RK6uTYyGtQZRHWh
+         gaMC2F/qWeb+D9lbTMihg/ajCbUi0/1vQgriJGAVhZelaQBx6OeIuwpkmzY3vy+tYH4G
+         APs5ABgRABd+HLdnJbZKecFTdzmKL+mUEK3mYxrQVD6PdeZ6dOnXyS3TlhPyGJW2FE5p
+         DY3A==
+X-Gm-Message-State: AJIora+qOTIvtByLcQjahMHCx8ZNmH0tPndKfN1yHkvPu+ST2+m7CUva
+        x+Ti3RunQMYLNil8I3CL+BXSsQ==
+X-Google-Smtp-Source: AGRyM1tnokAHE/of5YUFEhL+Iv1yuOdCGAcsV3TMFP12ptjWMjuQZJzWbkbkL2xRkl/t7MGfVY+XCg==
+X-Received: by 2002:a2e:aa20:0:b0:25d:a041:2d7 with SMTP id bf32-20020a2eaa20000000b0025da04102d7mr8335598ljb.3.1658152526575;
+        Mon, 18 Jul 2022 06:55:26 -0700 (PDT)
 Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id u1-20020ac258c1000000b0047f943112e3sm2616805lfo.285.2022.07.18.06.55.03
+        by smtp.gmail.com with ESMTPSA id n17-20020a05651203f100b00489dd161153sm2598286lfq.74.2022.07.18.06.55.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:55:04 -0700 (PDT)
-Message-ID: <40224cd7-0e71-7f5a-47c8-142539312f21@linaro.org>
-Date:   Mon, 18 Jul 2022 15:55:03 +0200
+        Mon, 18 Jul 2022 06:55:25 -0700 (PDT)
+Message-ID: <edc61dda-5631-aea9-20a2-514cd60d0bfc@linaro.org>
+Date:   Mon, 18 Jul 2022 15:55:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: usb: renesas, usb3-peri: Document RZ/V2M
- r9a09g011 support
+Subject: Re: [PATCH v1 2/3] dt-bindings: usb: npcm7xx: Add npcm845 compatible
 Content-Language: en-US
-To:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220718134458.19137-1-phil.edworthy@renesas.com>
- <20220718134458.19137-2-phil.edworthy@renesas.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        tony@atomide.com, felipe.balbi@linux.intel.com, jgross@suse.com,
+        lukas.bulwahn@gmail.com, arnd@arndb.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220718122922.9396-1-tmaimon77@gmail.com>
+ <20220718122922.9396-3-tmaimon77@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220718134458.19137-2-phil.edworthy@renesas.com>
+In-Reply-To: <20220718122922.9396-3-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/07/2022 15:44, Phil Edworthy wrote:
-> Document the RZ/V2M SoC bindings.
-> The RZ/V2M SoC is a little different to the R-Car implementations.
-> A few DRD related registers and bits have moved, there is a separate
-> interrupt for DRD, an additional clock for register access and reset
-> lines for DRD and USBP.
+On 18/07/2022 14:29, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 USB EHCI host controller.
 > 
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  .../bindings/usb/renesas,usb3-peri.yaml       | 81 +++++++++++++++----
->  1 file changed, 66 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-> index 9fcf54b10b07..28f785dd2012 100644
-> --- a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-> +++ b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-> @@ -11,27 +11,49 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    items:
-> -      - enum:
-> -          - renesas,r8a774a1-usb3-peri # RZ/G2M
-> -          - renesas,r8a774b1-usb3-peri # RZ/G2N
-> -          - renesas,r8a774c0-usb3-peri # RZ/G2E
-> -          - renesas,r8a774e1-usb3-peri # RZ/G2H
-> -          - renesas,r8a7795-usb3-peri  # R-Car H3
-> -          - renesas,r8a7796-usb3-peri  # R-Car M3-W
-> -          - renesas,r8a77961-usb3-peri # R-Car M3-W+
-> -          - renesas,r8a77965-usb3-peri # R-Car M3-N
-> -          - renesas,r8a77990-usb3-peri # R-Car E3
-> -      - const: renesas,rcar-gen3-usb3-peri
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - renesas,r8a774a1-usb3-peri # RZ/G2M
-> +              - renesas,r8a774b1-usb3-peri # RZ/G2N
-> +              - renesas,r8a774c0-usb3-peri # RZ/G2E
-> +              - renesas,r8a774e1-usb3-peri # RZ/G2H
-> +              - renesas,r8a7795-usb3-peri  # R-Car H3
-> +              - renesas,r8a7796-usb3-peri  # R-Car M3-W
-> +              - renesas,r8a77961-usb3-peri # R-Car M3-W+
-> +              - renesas,r8a77965-usb3-peri # R-Car M3-N
-> +              - renesas,r8a77990-usb3-peri # R-Car E3
-> +          - const: renesas,rcar-gen3-usb3-peri
-> +
-> +      - items:
-> +          - enum:
-> +              - renesas,r9a09g011-usb3-peri # RZ/V2M
-> +          - const: renesas,rzv2m-usb3-peri
->  
->    reg:
->      maxItems: 1
->  
->    interrupts:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: Combined interrupt for DMA, SYS and ERR
-> +      - description: Dual Role Device (DRD)
-> +
-> +  interrupt-names:
-
-minItems:1
-
-> +    items:
-> +      - const: all_p
-> +      - const: drd
->  
->    clocks:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: Main clock
-> +      - description: Register access clock
-> +
-> +  clock-names:
-
-minItems:1
+>  Documentation/devicetree/bindings/usb/npcm7xx-usb.txt | 4 +++-
 
 
-> +    items:
-> +      - const: aclk
-> +      - const: reg
->  
->    phys:
->      maxItems: 1
-> @@ -43,7 +65,15 @@ properties:
->      maxItems: 1
->  
->    resets:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: Peripheral reset
-> +      - description: DRD reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: aresetn_p
-> +      - const: drd_reset
->  
->    usb-role-switch:
->      $ref: /schemas/types.yaml#/definitions/flag
-> @@ -78,6 +108,27 @@ required:
->    - interrupts
->    - clocks
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - renesas,rzv2m-usb3-peri
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +        interrupts:
-> +          minItems: 2
-> +        resets:
-> +          minItems: 2
-> +      required:
-> +        - clock-names
-> +        - interrupt-names
-> +        - resets
-> +        - reset-names
-
-else:
-narrow the number of items
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,
