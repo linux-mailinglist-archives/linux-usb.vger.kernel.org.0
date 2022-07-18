@@ -2,170 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1E1578C07
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 22:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED73578CB7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Jul 2022 23:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiGRUsB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Jul 2022 16:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S233858AbiGRV2h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Jul 2022 17:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiGRUsA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 16:48:00 -0400
-Received: from mr5.vodafonemail.de (mr5.vodafonemail.de [145.253.228.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC497669;
-        Mon, 18 Jul 2022 13:47:58 -0700 (PDT)
-Received: from smtp.vodafone.de (unknown [10.0.0.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mr5.vodafonemail.de (Postfix) with ESMTPS id 4LmvDX47m0z1yGF;
-        Mon, 18 Jul 2022 20:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-mb-mr2-21dec; t=1658177276;
-        bh=SNrPLMGCpjQRbb6blJwXA2sn6QML20WYwo9AlatwEoM=;
-        h=Date:From:To:Subject:Message-ID:References:Content-Type:
-         In-Reply-To:From;
-        b=UK60cWTiNUJ82bDP0Xzs0CxFOlU+yVfPGEZqC/RTGqrqJTYc/MJniyEJ41LhQ4CD4
-         cJ8t9wYHC8vH8LrGHEpejX8BNKUpBrJpsGu3iGPWBIQOqhVsENDdAfbcGGofF+fyIi
-         fNdV6pYc2sQl6UTwCmHWwQNq28t4EGPDYLd9rnpI=
-Received: from arcor.de (p3ee2cf42.dip0.t-ipconnect.de [62.226.207.66])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 4LmvDG6MBmz9sNt;
-        Mon, 18 Jul 2022 20:47:39 +0000 (UTC)
-Date:   Mon, 18 Jul 2022 22:47:24 +0200
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     sdlyyxy <sdlyyxy@bupt.edu.cn>, johan@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
-Message-ID: <YtXG3EVrRKAG7WVx@arcor.de>
-References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
- <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
- <YtKrbucYNulPEKUp@arcor.de>
- <YtRtswctFMLxeglu@kroah.com>
+        with ESMTP id S234784AbiGRV2f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Jul 2022 17:28:35 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71F531DDB
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 14:28:32 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id s18-20020a17090aa11200b001f1e9e2438cso1043472pjp.2
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 14:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PVcgZzjdK9fjloy6/Y+huhUu52yh6ctU8017XyeNTLM=;
+        b=Sa/S6jwMcJ6vjrfJHhWknnUYuPM+pYaLLPuHmCGsdMeJChAHIeOO5asROW8eyJpcIK
+         ZVPoVHm7j1hKHIePlke4jGYo7O7x8uwE/3WaJKMTh36xmHe8nbBADJz6zFb2Ta/zswfl
+         3tOPxbJzDaNmEuC9x6q48jG3Yo4WXSple2DMI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PVcgZzjdK9fjloy6/Y+huhUu52yh6ctU8017XyeNTLM=;
+        b=YBOt1FnI5MfaDDKu3bgOUHoCR9Ke48LBzWu/yyOnxN3YukS5zuP/LzSbCo4q+TcKq8
+         3xdQI/YEfbX7i7P8RdCqnbmM8S9zseqy2ADDO+wPC3QPH6GagHEVs6SV/8fWHrrg+ghM
+         wTJ+9gHm7FaIsAMpKahBGsnswDaEW0w+07mLoij+UCZJ0KC/s6ZpbuyZk4jPaKlOVsp6
+         NMRtjjEr9nXm2QSu7mQ5U7a4ms08wCj5hRezh7zHjEhm2Ty5SuvhD63RhqaY+ALVh917
+         LvFGXEnkI8+htLYOOp4v+wiMeT/ND953IJ/bvryJMhOwlTt18W8TgvCIcHifMuKc0IAD
+         zlng==
+X-Gm-Message-State: AJIora/nCuojVk8z+fWNq4oi5SbnDMlgRLq1QD8w5LKU91F8ayWom3DK
+        qxoGJC4IJt6toouR/LAJ3wRpbQ==
+X-Google-Smtp-Source: AGRyM1tKSCH41BB852jsIS5RXGkAx+Hvett+tlV5FCfr3isJIr5ePfcCMhOC36ySIh28Iy2UYPICjA==
+X-Received: by 2002:a17:903:18c:b0:16c:51c6:675d with SMTP id z12-20020a170903018c00b0016c51c6675dmr29737274plg.153.1658179712184;
+        Mon, 18 Jul 2022 14:28:32 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z9-20020a631909000000b0041992864d69sm8536830pgl.77.2022.07.18.14.28.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 14:28:31 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, gregkh@linuxfoundation.org,
+        Prashant Malani <pmalani@chromium.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] platform/chrome: cros_typec_switch: Add ACPI Kconfig dep
+Date:   Mon, 18 Jul 2022 21:27:55 +0000
+Message-Id: <20220718212754.1129257-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtRtswctFMLxeglu@kroah.com>
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-size: 4575
-X-purgate-ID: 155817::1658177275-BA9E322F-1671A4FF/0/0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Add the ACPI Kconfig dependency that was missed during the initial
+driver submission. Fixes the following compiler errors:
 
-On Sun, Jul 17, 2022 at 10:14:43PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Jul 16, 2022 at 02:13:34PM +0200, Reinhard Speyerer wrote:
-> > On Fri, Jul 15, 2022 at 10:59:13PM +0800, sdlyyxy wrote:
-> > > 
-> > > > On Jul 15, 2022, at 22:24, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > > 
-> > > > The Oppo R11 diagnostic USB connection needs to be bound to the
-> > > > usb-serial-simple driver as it just wants to use a dumb pipe to
-> > > > communicate to the host.
-> > > > 
-> > > > usb-devices output:
-> > > > T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
-> > > > D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-> > > > P: Vendor=22d9 ProdID=276c Rev=04.04
-> > > > S: Manufacturer=OPPO
-> > > > S: Product=SDM660-MTP _SN:09C6BCA7
-> > > > S: SerialNumber=beb2c403
-> > > > C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-> > > > I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
-> > > > 
-> > > > Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> > > > Cc: Johan Hovold <johan@kernel.org>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > > drivers/usb/serial/usb-serial-simple.c | 4 +++-
-> > > > 1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-> > > > index 4c6747889a19..eb832b94aa3a 100644
-> > > > --- a/drivers/usb/serial/usb-serial-simple.c
-> > > > +++ b/drivers/usb/serial/usb-serial-simple.c
-> > > > @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
-> > > > 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
-> > > > 					USB_CLASS_VENDOR_SPEC,	\
-> > > > 					0x50,			\
-> > > > -					0x01) }
-> > > > +					0x01) },		\
-> > > > +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
-> > > > +					0xff, 0xff, 0x30) }
-> > > > DEVICE(google, GOOGLE_IDS);
-> > > > 
-> > > > /* Libtransistor USB console */
-> > > > -- 
-> > > > 2.37.1
-> > > Tested-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> > 
-> > While this may work sufficiently well for real low-volume diag traffic I'd
-> > expect a significant percentage of diag messages to be lost in practice
-> > with the usb-serial-simple driver.
-> > 
-> > According to the usb-devices output this looks like the Qualcomm USB gadget
-> > in the DIAG + ADB composition to me.
-> > 
-> > Since the option driver uses the usb-wwan framework my suggestion would be
-> > for the original patch to be applied instead similar to what has been done
-> > e.g. for the Quectel RM500Q diag port.
-> 
-> But this is not using the option chip, nor using the option flow control
-> protocol at all, so it should not be showing up as a device controlled
-> by the option driver.  It just will not work properly, the simple driver
-> should be doing the exact same thing here.
-> 
+drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to
+undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not
+support implicit function declarations
+ [-Wimplicit-function-declaration]
+   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
 
-you seem to have the misconception that devices handled by the option driver
-would use a USB to serial converter chip from Option similar to e.g. the
-ftdi_sio driver which is not the case.
+drivers/platform/chrome/cros_typec_switch.c:93:35: error: incomplete
+definition of type 'struct acpi_device'
+   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
 
-Quoting from option.c:
-  ===
-  This driver exists because the "normal" serial driver doesn't work too well
-  with GSM modems. Issues:
-  - data loss -- one single Receive URB is not nearly enough
-  - nonstandard flow (Option devices) control
-  - controlling the baud rate doesn't make sense
+Fixes: e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
 
-  This driver is named "option" because the most common device it's
-  used for is a PC-Card (with an internal OHCI-USB interface, behind
-  which the GSM interface sits), made by Option Inc.
-  ===
+Changes since v1:
+- Correct the malformed Reported-by tag. No functional changes.
+(Apologies for the quick respin.)
 
-The GSM/UMTS interface in the Option card actually contains a Qualcomm chip
-which exports its serial ports via USB. The data loss mentioned by Matthias
-above also applies to the diag port.
+ drivers/platform/chrome/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As can be seen from the sendsetup code in the qcserial driver the
-"nonstandard flow (Option devices) control" mentioned above is actually
-a Qualcomm "feature" required for some of their USB serial implementations
-on tne device to work properly.
+diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+index c62a514a087f..9d4fc505fa25 100644
+--- a/drivers/platform/chrome/Kconfig
++++ b/drivers/platform/chrome/Kconfig
+@@ -267,7 +267,7 @@ config CHROMEOS_PRIVACY_SCREEN
+ 
+ config CROS_TYPEC_SWITCH
+ 	tristate "ChromeOS EC Type-C Switch Control"
+-	depends on MFD_CROS_EC_DEV && TYPEC
++	depends on MFD_CROS_EC_DEV && TYPEC && ACPI
+ 	default MFD_CROS_EC_DEV
+ 	help
+ 	  If you say Y here, you get support for configuring the Chrome OS EC Type C
+-- 
+2.37.0.170.g444d1eabd0-goog
 
-In case you suspect potential problems with the sendsetup code and the OPPO
-R11 diag port Yan's option.c patch could be extended like this:
-	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30),
-	  .driver_info = NCTRL(0) },
-
-With a few more lines of code you could also add a new layout to the qcserial
-driver if you prefer for the OPPO R11 to be handled by it for some reason.
-
-Either one would be fine with me.
-
-Please don't give the OPPO R11 diag port on Linux a bad name by letting
-the usb-serial-simple driver handle it.
-
-Thanks,
-Reinhard
