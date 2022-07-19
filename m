@@ -2,71 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE532579D78
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 14:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EEB579D4C
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 14:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241752AbiGSMvs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jul 2022 08:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S241666AbiGSMuO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jul 2022 08:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241705AbiGSMuP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 08:50:15 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB4C8EEF0;
-        Tue, 19 Jul 2022 05:19:59 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1658233192tb7rcuw9
-Received: from localhost.localdomain ( [171.223.96.21])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 19 Jul 2022 20:19:51 +0800 (CST)
-X-QQ-SSF: 01000000002000F0U000B00A0000020
-X-QQ-FEAT: 5pqgkH0Zr9WSYSH9EVvGoHl13qkoiczbT5y7djPQqoHGReBpNCKYWor8+tGcl
-        vsupAiOE48SFOK62d61gbv9S3UjRToTQmkH5YR9rcoyjbM3ahUApmjqln0jyjRNQMdQhoRC
-        ED3x5n9Sihg6A9DZznrsurSrT4WI7k2d1Fople1P8boWCKh2qknslb9+sVkM3qt/wfBdCUP
-        AxsR0qXGWF3dgi679s6HlGLZcAJAaFGGeLwgJYlVcc41ki/4cwuMKLB0iXYu13WdDmnVoyM
-        /+EOobLxtDJv0UkLgYrQxIayq5cCcl8yFY7gaDH8AFbSpYUXarMx22YcTfT3wJWePA8zXN+
-        WT50w0gL1wOWMTAKJE9DckCsspzVic2HDdinaUtXahiFwwTf+dQawuXQOQizRnAlWTTfIbe
-        3zaQKebWtP8=
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     gregkh@linuxfoundation.org
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] xhci: Fix comment typo
-Date:   Sat, 16 Jul 2022 12:17:55 +0800
-Message-Id: <20220716041755.34016-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S242181AbiGSMtv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 08:49:51 -0400
+Received: from server.atrad.com.au (server.atrad.com.au [150.101.241.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7979257E19;
+        Tue, 19 Jul 2022 05:19:48 -0700 (PDT)
+Received: from marvin.atrad.com.au (marvin.atrad.com.au [192.168.0.2])
+        by server.atrad.com.au (8.17.1/8.17.1) with ESMTPS id 26JCIxdD008306
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Tue, 19 Jul 2022 21:49:00 +0930
+Date:   Tue, 19 Jul 2022 21:48:59 +0930
+From:   Jonathan Woithe <jwoithe@just42.net>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Aidan Thornton <makosoft@gmail.com>,
+        Grigori Goronzy <greg@chown.ath.cx>,
+        Michael Hanselmann <public@hansmi.ch>
+Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
+ chunks
+Message-ID: <YtahM9hyrPVATchX@marvin.atrad.com.au>
+References: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
+ <Ys1sfRyL6El7go94@kroah.com>
+ <Ys2nEmkvz2dfAKkU@hovoldconsulting.com>
+ <Ys4QOgNF0pJDwRCJ@marvin.atrad.com.au>
+ <YtUfcSOTl/ia+ahL@hovoldconsulting.com>
+ <YtYsFVCShDeVCeis@marvin.atrad.com.au>
+ <YtZG5vFNpXCXIMf0@hovoldconsulting.com>
+ <YtZQjcUMYZEky+Ta@marvin.atrad.com.au>
+ <YtZbWhGx/nqgAIX7@hovoldconsulting.com>
+ <YtZlwLoDO9CVt9RO@marvin.atrad.com.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtZlwLoDO9CVt9RO@marvin.atrad.com.au>
+X-MIMEDefang-action: accept
+X-Scanned-By: MIMEDefang 2.86 on 192.168.0.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The double `the' is duplicated in the comment, remove one.
+On Tue, Jul 19, 2022 at 05:35:22PM +0930, Jonathan Woithe wrote:
+> > Can you try the below patch and see if that still triggers the lost
+> > character after probe and line settings changes? Please also try to
+> > confirm that LCR can be updated this way at all.
+> 
+> :
+> Of course all testing to this point has been with a loopback adapter which
+> means there's no indication whether line speed (or any other LCR parameters)
+> have really changed.  For complicated reasons I can't easily test using the
+> programmer hardware right now.  I will see if I can work out a way to verify
+> speed and LCR changes with the hardware I have available.  Hacking up a
+> null-modem cable and connecting to a PC which happens to have a real
+> hardware serial port may be the easiest.
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/usb/host/xhci-ring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I have done further testing with the patch below in place.  Unfortunately
+the PC with the real serial port decided not to boot, so instead I'm testing
+with a 3-wire null modem cable into a PL2303-based USB-serial converter on
+another box running a 5.15.38 kernel.  Flow control was turned off since the
+cable wasn't wired for that.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 46d0b9ad6f74..ad81e9a508b1 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1964,7 +1964,7 @@ static void handle_port_status(struct xhci_hcd *xhci,
- 
- 	/*
- 	 * Check to see if xhci-hub.c is waiting on RExit to U0 transition (or
--	 * RExit to a disconnect state).  If so, let the the driver know it's
-+	 * RExit to a disconnect state).  If so, let the driver know it's
- 	 * out of the RExit state.
- 	 */
- 	if (!DEV_SUPERSPEED_ANY(portsc) && hcd->speed < HCD_USB3 &&
--- 
-2.35.1
+Tests done in minicom:
 
+ * Speed: change from 115200 to 38400 and back again.
+
+   The speed setting of the CH341 appears to work correctly.
+
+ * Data length: change from 8 to 7 bits in minicom on both adapters
+
+   CH341 = 8 bits, PL2303 = 8 bits
+    - Data delivered correctly in both directions.
+
+   CH341 = 8 bits, PL2303 = 7 bits
+    - Data sent by the CH341 received correctly by the PL2303
+    - Data sent by the PL2303 not received correctly by the CH341
+
+   CH341 = 7 bits, PL2303 = 7 bits
+    - Data sent by the CH341 received correctly by the PL2303
+    - Data sent by the PL2303 not received correctly by the CH341
+
+   CH341 = 7 bits, PL2303 = 8 bits
+    - Data delivered correctly in both directions.
+
+   There are too many variables in play to know what to make of this given
+   that the response of the PL2303 driver to these changes is unknown.  At
+   first glance the results appear to be rather inconsistent.  Maybe the
+   data length setting is not always affecting tx and rx on one or both of
+   the adapters.
+
+ * Parity: change from None to Even.
+
+   Changing only one adapter to Even parity did not prevent data being
+   received correctly.  Data continued to be received correctly when both
+   were set to even parity.
+
+ * Stop bits: change from 1 to 2.
+
+   All combinations of stop bit settings resulted in correct delivery of
+   data in both directions.
+
+I'm not sure what this proves: most of these settings don't appear to be
+having any effect on either adapter.  In the end, 8N1 works and this is,
+after all, what most people would be using.  The situation with the patch is
+clearly better than it was without the patch because the CH341 is now
+delivering data in a timely manner - just like it did under 4.4.14.
+
+The behaviour of the LCR setting on version 0x27 may not be a new thing: all
+my applications use 8N1, so if any of the other combinations were faulty
+under 4.4.14 I wouldn't know.  I may look into testing the LCR settings
+under 4.4.14 if you think there's value in it.  I expect it will show that
+the patch below restores the 4.4.14 behaviour for hardware version 0x27, and
+that the LCR issues were present in 4.4.14 but masked due to the almost
+universal use of 8N1).  I can also try to work out an alternative way to
+get a real hardware serial port if that would help: I'm thinking it would
+remove any doubt about the LCR setting at one end of the link.
+
+Regards
+  jonathan
+
+> > >From 1c937d58f83df00a7879ff82a2b980d11b3faf7b Mon Sep 17 00:00:00 2001
+> > From: Johan Hovold <johan@kernel.org>
+> > Date: Mon, 18 Jul 2022 10:21:41 +0200
+> > Subject: [PATCH] USB: serial: ch341: fix disabled rx timer on older devices
+> > 
+> > At least one older CH341 appears to have the RX timer enable bit
+> > inverted so that setting it disables the RX timer and prevents the FIFO
+> > from emptying until it is full.
+> > 
+> > Only set the RX timer enable bit for devices with version newer than
+> > 0x27.
+> > 
+> > Also try using the INIT command to update LCR to work around a separate
+> > issue with lost characters after LCR updates on older devices. Note that
+> > using INIT like this triggers a similar problem on newer CH341A.
+> > 
+> > Reported-by: Jonathan Woithe <jwoithe@just42.net>
+> > Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
+> > Not-Signed-off-yet-by: Johan Hovold <johan@kernel.org>
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> >  drivers/usb/serial/ch341.c | 25 +++++++++++++++++++++++--
+> >  1 file changed, 23 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> > index 2798fca71261..d6a4b2572c9c 100644
+> > --- a/drivers/usb/serial/ch341.c
+> > +++ b/drivers/usb/serial/ch341.c
+> > @@ -97,7 +97,10 @@ struct ch341_private {
+> >  	u8 mcr;
+> >  	u8 msr;
+> >  	u8 lcr;
+> > +
+> >  	unsigned long quirks;
+> > +	u8 version;
+> > +
+> >  	unsigned long break_end;
+> >  };
+> >  
+> > @@ -250,8 +253,24 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+> >  	/*
+> >  	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
+> >  	 * has been received unless bit 7 is set.
+> > +	 *
+> > +	 * At least one device with version 0x27 appears to have this bit
+> > +	 * inverted.
+> > +	 */
+> > +	if (priv->version > 0x27)
+> > +		val |= BIT(7);
+> > +
+> > +	/*
+> > +	 * At least one device with version 0x27 loses characters after
+> > +	 * updating LCR directly, try using INIT for that.
+> > +	 *
+> > +	 * Note that this appears to cause lost characters on newer CH341A.
+> >  	 */
+> > -	val |= BIT(7);
+> > +	if (priv->version <= 0x27) {
+> > +		r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT,
+> > +				lcr << 8 | 0x9c, val);
+> > +		return r;
+> > +	}
+> >  
+> >  	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
+> >  			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
+> > @@ -308,7 +327,9 @@ static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
+> >  	r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
+> >  	if (r)
+> >  		return r;
+> > -	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
+> > +
+> > +	priv->version = buffer[0];
+> > +	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", priv->version);
+> >  
+> >  	r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
+> >  	if (r < 0)
+> > -- 
