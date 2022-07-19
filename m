@@ -2,212 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1300757934E
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 08:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9006579358
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 08:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236584AbiGSGfc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jul 2022 02:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S230329AbiGSGhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jul 2022 02:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234732AbiGSGfb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 02:35:31 -0400
-Received: from server.atrad.com.au (server.atrad.com.au [150.101.241.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C740331;
-        Mon, 18 Jul 2022 23:35:28 -0700 (PDT)
-Received: from marvin.atrad.com.au (marvin.atrad.com.au [192.168.0.2])
-        by server.atrad.com.au (8.17.1/8.17.1) with ESMTPS id 26J6Yruo030560
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 19 Jul 2022 16:04:54 +0930
-Date:   Tue, 19 Jul 2022 16:04:53 +0930
-From:   Jonathan Woithe <jwoithe@just42.net>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Aidan Thornton <makosoft@gmail.com>,
-        Grigori Goronzy <greg@chown.ath.cx>,
-        Michael Hanselmann <public@hansmi.ch>
-Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
- chunks
-Message-ID: <YtZQjcUMYZEky+Ta@marvin.atrad.com.au>
-References: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
- <Ys1sfRyL6El7go94@kroah.com>
- <Ys2nEmkvz2dfAKkU@hovoldconsulting.com>
- <Ys4QOgNF0pJDwRCJ@marvin.atrad.com.au>
- <YtUfcSOTl/ia+ahL@hovoldconsulting.com>
- <YtYsFVCShDeVCeis@marvin.atrad.com.au>
- <YtZG5vFNpXCXIMf0@hovoldconsulting.com>
+        with ESMTP id S237047AbiGSGhk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 02:37:40 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07029248FC
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 23:37:39 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t1so23094872lft.8
+        for <linux-usb@vger.kernel.org>; Mon, 18 Jul 2022 23:37:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zbxnuwiWUEBWe91NB7FiBCAVrq5BuRjWFvStCCFlUS4=;
+        b=E1m6bp7VudSZ8BHuoaFsQ8fbX7s/1FM/O7WmamAxX3wIQDoajMNDM5b67/FlYq2MGF
+         WdyaH4OgK74jaDcuTjmpFWk94XtBhYyXylEeOYTa/aPV/77xd9cOaaag2YTMp8OA7MuU
+         KQzX7FB+yqSTam2MaoES3ShNfiVeffobH6ID6/U7g/1zrr3yk2DZ5dZ4tsNQeKaV3MhP
+         ko9q+PNqm+w4/EksbnFVfyJydmGnPvz3PS1E9cjtQvF5y4YiIiXmQTYr0DTlVdWSXetb
+         267ZfFWnGcD1gWAI3wyz6GtGaLgNe5ofbYBy9IeO9qCghvCf15HbO322wcvQdOS3fq27
+         nwPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zbxnuwiWUEBWe91NB7FiBCAVrq5BuRjWFvStCCFlUS4=;
+        b=HhArJ4IbtxkD6TU0RvMODUsVvrh+zSfd7kw1SzcraWqK5Z6bxvjDqg0nm3gDNfNO5M
+         GnQhj6QyRNAC3drs/LVkv2WfFJcZfrmWzgHZpavxdrE/M5C9QtqjUizKjyQeAv6zsEkh
+         NKMwk0psYRdDpya9TspMXpV5l3yLjSN21o1L0fK84VSzI3OJLxeUDC9E8jOXl/A6DS4G
+         RQnYbLn7NZFQqPCk4XnaoS0BCwmB3dKiHIOQzGpWSJysbZSsn8zqzyk2jvvJL8An8q7N
+         aMmwLlBIntTxlfE72ag7o2xF+SVnpTTb9bziHmPa7RfBOrmTiHODYdW+nW3sZ1AiUd7S
+         yMYQ==
+X-Gm-Message-State: AJIora9beXn8iSXxr+XkaddzGo/BR16sNUunU3kYketfJWgtvOcLpjbL
+        w6hiv0o/WbAIse4V+NRf7m4PrA==
+X-Google-Smtp-Source: AGRyM1uDlw/k/WFHUnAY8qkqFnOOKCvjrRffhYq5kD6hyXXeqsr/rXiRIO/6eUX8m+iAbZfZlOY99w==
+X-Received: by 2002:ac2:4c55:0:b0:489:e012:62e5 with SMTP id o21-20020ac24c55000000b00489e01262e5mr15778113lfk.123.1658212657389;
+        Mon, 18 Jul 2022 23:37:37 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id o20-20020a056512231400b00478772eb18esm3042595lfu.92.2022.07.18.23.37.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 23:37:36 -0700 (PDT)
+Message-ID: <b26f2353-c5f3-16f4-11c8-63068baeada5@linaro.org>
+Date:   Tue, 19 Jul 2022 08:37:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtZG5vFNpXCXIMf0@hovoldconsulting.com>
-X-MIMEDefang-action: accept
-X-Scanned-By: MIMEDefang 2.86 on 192.168.0.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: renesas, usb3-peri: Document RZ/V2M
+ r9a09g011 support
+Content-Language: en-US
+To:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220718134458.19137-1-phil.edworthy@renesas.com>
+ <20220718134458.19137-2-phil.edworthy@renesas.com>
+ <40224cd7-0e71-7f5a-47c8-142539312f21@linaro.org>
+ <TYYPR01MB70868B846CAB2F7124148771F58C9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TYYPR01MB70868B846CAB2F7124148771F58C9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 07:53:42AM +0200, Johan Hovold wrote:
-> On Tue, Jul 19, 2022 at 01:29:17PM +0930, Jonathan Woithe wrote:
-> > On Mon, Jul 18, 2022 at 10:53:05AM +0200, Johan Hovold wrote:
-> > > [ +CC: Aidan, Grigori and Michael ]
-> > > 
-> > > On Wed, Jul 13, 2022 at 09:52:18AM +0930, Jonathan Woithe wrote:
-> > > > On Tue, Jul 12, 2022 at 06:53:38PM +0200, Johan Hovold wrote:
-> > > 
-> > > > > Simply reverting the commit blamed by the bisection should only makes
-> > > > > things worse, at least for some device types.
-> > > > > 
-> > > > > Perhaps we need to set that bit 7 based on the type, even if the bit
-> > > > > meaning having been inverted seems a bit far-fetched.
-> > > > > 
-> > > > > Jonathan, could you try simply commenting out the
-> > > > > 	
-> > > > > 	val |= BIT(7);
-> > > > > 
-> > > > > statement in ch341_set_baudrate_lcr()?
-> > > > 
-> > > > Commenting out the above line brought some improvement.  In minicom with a
-> > > > loopback connector in place, the first byte sent does not get echoed
-> > > > back at all.  However, all other bytes are echoed as soon as they are sent.
-> > > 
-> > > Ok, so at least that addresses the disabled TX timer.
-> > > 
-> > > What happens if you change the line speed? Does the first character
-> > > after changing speed also get dropped?
-> > 
-> > Yes it does.  Starting out at 115200 in minicom I confirmed the loss of the
-> > first character.  I changed the line speed to 38400 in minicom and the next
-> > character to be pressed was dropped.  All others after it were fine.  I then
-> > returned to 115200 in minicom and the pattern repeated: the first character
-> > after the speed change was lost, but all others came through.  All these
-> > tests were done in the same minicom session under kernel 672c0c5 with the
-> > 
-> >   val |= BIT(7);
-> > 
-> > line still commented out.
+On 18/07/2022 17:24, Phil Edworthy wrote:
+>>>    phys:
+>>>      maxItems: 1
+>>> @@ -43,7 +65,15 @@ properties:
+>>>      maxItems: 1
+>>>
+>>>    resets:
+>>> -    maxItems: 1
+>>> +    minItems: 1
+>>> +    items:
+>>> +      - description: Peripheral reset
+>>> +      - description: DRD reset
+>>> +
+>>> +  reset-names:
+>>> +    items:
+>>> +      - const: aresetn_p
+>>> +      - const: drd_reset
+>>>
+>>>    usb-role-switch:
+>>>      $ref: /schemas/types.yaml#/definitions/flag
+>>> @@ -78,6 +108,27 @@ required:
+>>>    - interrupts
+>>>    - clocks
+>>>
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - renesas,rzv2m-usb3-peri
+>>> +    then:
+>>> +      properties:
+>>> +        clocks:
+>>> +          minItems: 2
+>>> +        interrupts:
+>>> +          minItems: 2
+>>> +        resets:
+>>> +          minItems: 2
+>>> +      required:
+>>> +        - clock-names
+>>> +        - interrupt-names
+>>> +        - resets
+>>> +        - reset-names
+>>
+>> else:
+>> narrow the number of items
+> Sorry, I don't understand why we need minItems: 1 for
+> interrupt-names/clock-names, but then I'm easily confused!
 > 
-> Thanks for confirming.
-> 
-> I noticed one register write which was removed during 4.10 and we also
-> added support for setting the LCR register which wasn't there before.
-> 
-> Can you try the below patch which adds a register write that should
-> match what the old driver did at 115200 baud?
+> None of the existing users have any interrupt-names/clock-names
+> hence they are not in required. The rzv2m is the only device
+> that needs them so the driver can get them by name, and hence
+> it sets minItems: 2
 
-I applied this patch to 672c0c5.  With the patch as supplied there was no
-change: the first character was lost but all others were delivered as
-expected.
+They are not required but they can appear. Nothing prevents it, based on
+your patch.
 
-> If that doesn't help, can you try just ifdeffing out the LCR update?
 
-I changed the second of the added "#if -0" directives to "#if 1" (thus
-removing the LCR update).  This made things work: all characters were echoed
-back to minicom as they were pressed.
-
-As a final test I changed the first of the added "#if 1" directives to
-"#if 0", effectively removing the extra register write you added earlier.
-The resulting kernel still worked.  It appears that this extra register
-write doesn't have any effect as far as the missing first character is
-concerned.
-
-On the basis of this, it seems the LCR update causes the loss of the first
-character on version 0x27 hardware.
-
-Regards
-  jonathan
-
-> >From d384f68dfda4eaf5b0065bdab236800d65ffb71d Mon Sep 17 00:00:00 2001
-> From: Johan Hovold <johan@kernel.org>
-> Date: Mon, 18 Jul 2022 10:21:41 +0200
-> Subject: [PATCH] USB: serial: ch341: fix disabled rx timer on older devices
-> 
-> At least one older CH341 appears to have the RX timer enable bit
-> inverted so that setting it disables the RX timer and prevents the FIFO
-> from emptying until it is full.
-> 
-> Only set the RX timer enable bit for devices with version newer than
-> 0x27.
-> 
-> Also try restoring a pre-4.10 register write when updating the line
-> settings to see if it has any effect on a lost first byte after
-> changing speed.
-> 
-> Another thing to try is to disable the LCR update, which wasn't
-> supported pre-4.10.
-> 
-> Reported-by: Jonathan Woithe <jwoithe@just42.net>
-> Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
-> Not-Signed-off-yet-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/ch341.c | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-> index 2798fca71261..bd27847ece2c 100644
-> --- a/drivers/usb/serial/ch341.c
-> +++ b/drivers/usb/serial/ch341.c
-> @@ -97,7 +97,10 @@ struct ch341_private {
->  	u8 mcr;
->  	u8 msr;
->  	u8 lcr;
-> +
->  	unsigned long quirks;
-> +	u8 version;
-> +
->  	unsigned long break_end;
->  };
->  
-> @@ -250,8 +253,12 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
->  	/*
->  	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
->  	 * has been received unless bit 7 is set.
-> +	 *
-> +	 * At least one device with version 0x27 appears to have this bit
-> +	 * inverted.
->  	 */
-> -	val |= BIT(7);
-> +	if (priv->version > 0x27)
-> +		val |= BIT(7);
->  
->  	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
->  			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
-> @@ -259,6 +266,12 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
->  	if (r)
->  		return r;
->  
-> +#if 1
-> +	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x0f2c, 0x08);
-> +	if (r)
-> +		return r;
-> +#endif
-> +#if 1
->  	/*
->  	 * Chip versions before version 0x30 as read using
->  	 * CH341_REQ_READ_VERSION used separate registers for line control
-> @@ -269,7 +282,7 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
->  			      CH341_REG_LCR2 << 8 | CH341_REG_LCR, lcr);
->  	if (r)
->  		return r;
-> -
-> +#endif
->  	return r;
->  }
->  
-> @@ -308,7 +321,9 @@ static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
->  	r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
->  	if (r)
->  		return r;
-> -	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
-> +
-> +	priv->version = buffer[0];
-> +	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", priv->version);
->  
->  	r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
->  	if (r < 0)
-> -- 
-> 2.35.1
-
--- 
+Best regards,
+Krzysztof
