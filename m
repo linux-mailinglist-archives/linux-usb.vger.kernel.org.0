@@ -2,133 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA72B5795DA
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 11:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9225795DE
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 11:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbiGSJNp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jul 2022 05:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S235978AbiGSJN6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jul 2022 05:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiGSJNo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 05:13:44 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93FF23BC6
-        for <linux-usb@vger.kernel.org>; Tue, 19 Jul 2022 02:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658222023; x=1689758023;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PvD9hwN3lpjl84PLzHRvSutotyrHAuUDyA+ToWvtSI4=;
-  b=ZPFAZ6d3dq2Kjc+OZ+qoLtU5ROfQKWGd6vO0QuX394Bi5oV6lZvfjRpe
-   4X7ESD8JgXkTiAoP51LoWq4KirJNsu8zLFpdZkYiEMzaPgSq9s/hxNwWB
-   oKgPAZPUXaW5StkQ17+liXuCNkmwqNFqyolsOukQVAoj/31BUs0TM+3yw
-   ZWNojb4qMfJZo1OIZIAb6FnjG4TDnk6FfdGJnqQz7Kqo8hvbHQ2uYKgmL
-   7rHt7w2tl+hw0US/yRrTuRcZrlzCkt/vjhQ3N2LEgzr9mZmNQ71FExCxR
-   3V5boDEnDpVHHvUSIRWXQ/gRCLsoho4I0V3sq74NT27fDL0CGWplM4xNB
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="273274151"
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="273274151"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 02:13:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="597589180"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 Jul 2022 02:13:42 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDjIT-0005TF-MF;
-        Tue, 19 Jul 2022 09:13:41 +0000
-Date:   Tue, 19 Jul 2022 17:13:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 88a15fbb47db483d06b12b1ae69f114b96361a96
-Message-ID: <62d675ac.TJZzHzq4dI24/VDj%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S235982AbiGSJN4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 05:13:56 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E96724BCE
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jul 2022 02:13:55 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id p6so16631909ljc.8
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jul 2022 02:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xPkeUGGqljFl4AGytjlDSXuCv7RrjwY2aVYb7ItSxZ0=;
+        b=IydC834PfqL2kCcRnxI/9nfLkcNwE37+P2J5ZqRKY7HJU1ernPxh3kCDUELR4n984t
+         ikZZx//IY6fzzLJ/CN2MufjsfIPY9ie/vP1p9UG1nSdseXCsHA5oPYEF7egAkeDacUfU
+         lD1VYCbiop+tQ1ZT17HaF/XGDZdcYUugkdZhCJej1c3o9duvd2ca5gq8DPvTvDPzwu4d
+         Cjmi+Q8K+YdL/wri8xfonUn0zGO1Tj6Ual3GLigbXo/6zbuRq95Q5zSt30cC0MD6RlqE
+         Dy3JzbvcqGyOZzjQhZXHB1zpukuxynao7EqG/lCkZyXJ1MfvIgNfBSQLhJo6f9AnjpKs
+         vaBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xPkeUGGqljFl4AGytjlDSXuCv7RrjwY2aVYb7ItSxZ0=;
+        b=lkIi4vMY9mb/N6RwA5Akwcw4zcdV5HbiC+lbhzF3KfyXRU3bbrwGngnoDcodfzR25j
+         zQQc45ntv+nlh4buHY0mRAP9GpsvenLuV/SWGNspv9zIkYJl0RGoNclB3WGlRrrtJSL0
+         TL6IhDRKp1QE/8s8RchJ8UTCzWeAskss6kCPFBYj2amE+IS9cndI4tZQVja/tYjtCQ7c
+         KuomH2Kn4r1yQggtJcK9XhwmhF3steEdwt5beTTp1J4809l9z6h7Q7TF68MVBs2sdJlL
+         f/cjDoXkH0MuDBB84hoeXq4x1W8mkwiEXHaBy3WDU9CCQyaH+EzfQA+nQpWDd4XjGvqs
+         DALQ==
+X-Gm-Message-State: AJIora9HlupXUUNb0bhErbH7t34bTZBB87ZhIm9+Gnaq36obXhC5XV1A
+        bDivJb5OjlKevbHsEBabgDEfKg==
+X-Google-Smtp-Source: AGRyM1teRK3yNuFe+WsSAguuqc0wfWpdBC+zgUhTnBCubi8bMgrfs/0fzb4kS4r7Uc5Gc2PQuJZ5/g==
+X-Received: by 2002:a05:651c:1587:b0:25d:7844:5910 with SMTP id h7-20020a05651c158700b0025d78445910mr15413016ljq.325.1658222033840;
+        Tue, 19 Jul 2022 02:13:53 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id p4-20020a2ea4c4000000b0025d6c8cfafcsm2562736ljm.93.2022.07.19.02.13.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 02:13:53 -0700 (PDT)
+Message-ID: <16a53bbd-beed-2290-e9ca-e9a9e8146488@linaro.org>
+Date:   Tue, 19 Jul 2022 11:13:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: renesas, usb3-peri: Document RZ/V2M
+ r9a09g011 support
+Content-Language: en-US
+To:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220718134458.19137-1-phil.edworthy@renesas.com>
+ <20220718134458.19137-2-phil.edworthy@renesas.com>
+ <40224cd7-0e71-7f5a-47c8-142539312f21@linaro.org>
+ <TYYPR01MB70868B846CAB2F7124148771F58C9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+ <b26f2353-c5f3-16f4-11c8-63068baeada5@linaro.org>
+ <TYYPR01MB70865ABE033AAA53FB228FFDF58F9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TYYPR01MB70865ABE033AAA53FB228FFDF58F9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 88a15fbb47db483d06b12b1ae69f114b96361a96  platform/chrome: cros_typec_switch: Add ACPI Kconfig dep
+On 19/07/2022 11:01, Phil Edworthy wrote:
+> Hi Krzysztof,
+> 
+> On 19 July 2022 07:38 Krzysztof Kozlowski wrote:
+>> On 18/07/2022 17:24, Phil Edworthy wrote:
+>>>>>    phys:
+>>>>>      maxItems: 1
+>>>>> @@ -43,7 +65,15 @@ properties:
+>>>>>      maxItems: 1
+>>>>>
+>>>>>    resets:
+>>>>> -    maxItems: 1
+>>>>> +    minItems: 1
+>>>>> +    items:
+>>>>> +      - description: Peripheral reset
+>>>>> +      - description: DRD reset
+>>>>> +
+>>>>> +  reset-names:
+>>>>> +    items:
+>>>>> +      - const: aresetn_p
+>>>>> +      - const: drd_reset
+>>>>>
+>>>>>    usb-role-switch:
+>>>>>      $ref: /schemas/types.yaml#/definitions/flag
+>>>>> @@ -78,6 +108,27 @@ required:
+>>>>>    - interrupts
+>>>>>    - clocks
+>>>>>
+>>>>> +allOf:
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          contains:
+>>>>> +            enum:
+>>>>> +              - renesas,rzv2m-usb3-peri
+>>>>> +    then:
+>>>>> +      properties:
+>>>>> +        clocks:
+>>>>> +          minItems: 2
+> +        clock-names:
+> +          minItems: 2
+> (See below)
+> 
+>>>>> +        interrupts:
+>>>>> +          minItems: 2
+> +        interrupt-names:
+> +          minItems: 2
+> (See below)
+> 
+>>>>> +        resets:
+>>>>> +          minItems: 2
+>>>>> +      required:
+>>>>> +        - clock-names
+>>>>> +        - interrupt-names
+>>>>> +        - resets
+>>>>> +        - reset-names
+>>>>
+>>>> else:
+>>>> narrow the number of items
+>>> Sorry, I don't understand why we need minItems: 1 for
+>>> interrupt-names/clock-names, but then I'm easily confused!
+>>>
+>>> None of the existing users have any interrupt-names/clock-names
+>>> hence they are not in required. The rzv2m is the only device
+>>> that needs them so the driver can get them by name, and hence
+>>> it sets minItems: 2
+>>
+>> They are not required but they can appear. Nothing prevents it, based on
+>> your patch.
+> 
+> Ok, but instead of 'else: narrow the number of items', shouldn't I
+> set the clock-names/interrupt-names 'minItems: 2' for rzv2m as above?
 
-elapsed time: 729m
+Yes.
 
-configs tested: 52
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allmodconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-m68k                             allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64               randconfig-a015-20220718
-x86_64               randconfig-a016-20220718
-x86_64               randconfig-a013-20220718
-x86_64               randconfig-a012-20220718
-x86_64               randconfig-a011-20220718
-x86_64               randconfig-a014-20220718
-i386                 randconfig-a016-20220718
-i386                 randconfig-a011-20220718
-i386                 randconfig-a013-20220718
-i386                 randconfig-a012-20220718
-i386                 randconfig-a014-20220718
-i386                 randconfig-a015-20220718
-arc                  randconfig-r043-20220718
-riscv                randconfig-r042-20220718
-s390                 randconfig-r044-20220718
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                 randconfig-a001-20220718
-i386                 randconfig-a002-20220718
-i386                 randconfig-a003-20220718
-i386                 randconfig-a004-20220718
-i386                 randconfig-a006-20220718
-i386                 randconfig-a005-20220718
-hexagon              randconfig-r041-20220718
-hexagon              randconfig-r045-20220718
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof
