@@ -2,46 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9486F579362
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 08:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716A85793C7
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 09:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiGSGoQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jul 2022 02:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S234905AbiGSHEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jul 2022 03:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiGSGoQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 02:44:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9B31D0E8;
-        Mon, 18 Jul 2022 23:44:14 -0700 (PDT)
+        with ESMTP id S234012AbiGSHEx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 03:04:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C600331DFF;
+        Tue, 19 Jul 2022 00:04:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DBE0B81862;
-        Tue, 19 Jul 2022 06:44:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA369C341CA;
-        Tue, 19 Jul 2022 06:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658213052;
-        bh=E3bX6qmleWeGq12RkBURl2twNNBfbS4mSd/IGKxbwgs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1OSijaaiRloJgzq5lYHvCJGRBoe4rlqxsuUg+pvVXZKa+0MwGfhQA8QkLqhKqjCfY
-         PuOeIdJry8NeReMwXc9QXrHWWFj+OjiChxfiKuCJns9dUdLIRgwS5UX10bJL5HM4UG
-         8FSPhmxT4or3LCKv/XtrcWq439ci7RUOhM0PXZ2I=
-Date:   Tue, 19 Jul 2022 08:44:08 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev, bleung@chromium.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] platform/chrome: cros_typec_switch: Add ACPI Kconfig
- dep
-Message-ID: <YtZSuI5X96w83S6j@kroah.com>
-References: <20220718212754.1129257-1-pmalani@chromium.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E96361658;
+        Tue, 19 Jul 2022 07:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F5C6C341C6;
+        Tue, 19 Jul 2022 07:04:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658214291;
+        bh=A4C0jcLWbw5eTQtyHQPhjBsYHmiVfNG4D86dfCO5Ujo=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=NCPJOa1HVRbRkzrVQhu12U8H2cs2fal6N1kdmBHkfV0rNMlk0luq5KneJuAQELE9C
+         nd2nC169BS9H+L/00LvyDzq7zZjmfF5l/pRIn7yZJNwyPNmNgq7m5pYXivS9iBLCKw
+         0cB9yl++pbbTllbIRqBZd+ytsdw1t7t16k0g71CewYcvVaIwlWjEOpNMBjzJO7VWB7
+         dE1T9LkoHT7XYMIPZY7qALeNzwKyxWTIZiUvJY6ErJ0N/1v954ROvDtRS2OhML1qRD
+         oy5ylyU1zseH9mVBLfoL+Id/v0cjxzFt0cSbB9PKfhFo+XWZNaU3Aup8bzM29a96VF
+         7r4o2wSIPCxgQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718212754.1129257-1-pmalani@chromium.org>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220704102845.168438-2-herve.codina@bootlin.com>
+References: <20220704102845.168438-1-herve.codina@bootlin.com> <20220704102845.168438-2-herve.codina@bootlin.com>
+Subject: Re: [PATCH v5 1/3] clk: lan966x: Fix the lan966x clock gate register address
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 19 Jul 2022 00:04:49 -0700
+User-Agent: alot/0.10
+Message-Id: <20220719070451.8F5C6C341C6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,29 +64,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 09:27:55PM +0000, Prashant Malani wrote:
-> Add the ACPI Kconfig dependency that was missed during the initial
-> driver submission. Fixes the following compiler errors:
-> 
-> drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to
-> undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not
-> support implicit function declarations
->  [-Wimplicit-function-declaration]
->    ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-> 
-> drivers/platform/chrome/cros_typec_switch.c:93:35: error: incomplete
-> definition of type 'struct acpi_device'
->    ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-> 
-> Fixes: e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+Quoting Herve Codina (2022-07-04 03:28:43)
+> The register address used for the clock gate register is the base
+> register address coming from first reg map (ie. the generic
+> clock registers) instead of the second reg map defining the clock
+> gate register.
+>=20
+> Use the correct clock gate register address.
+>=20
+> Fixes: 5ad5915dea00 ("clk: lan966x: Extend lan966x clock driver for clock=
+ gating support")
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 > ---
-> 
-> Changes since v1:
-> - Correct the malformed Reported-by tag. No functional changes.
-> (Apologies for the quick respin.)
 
-I already have v1 in my tree, so this isn't going to work, sorry.
-
-greg k-h
+Applied to clk-fixes
