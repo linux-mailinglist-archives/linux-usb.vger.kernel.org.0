@@ -2,43 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A76657A2E4
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 17:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D9B57A2F7
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 17:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239358AbiGSPY4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jul 2022 11:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S233950AbiGSP12 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jul 2022 11:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239342AbiGSPYy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 11:24:54 -0400
+        with ESMTP id S237875AbiGSP11 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 11:27:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20F8564E7;
-        Tue, 19 Jul 2022 08:24:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA0B550B7;
+        Tue, 19 Jul 2022 08:27:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 614196183C;
-        Tue, 19 Jul 2022 15:24:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C198C341C6;
-        Tue, 19 Jul 2022 15:24:49 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 11:24:48 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7AFF6189D;
+        Tue, 19 Jul 2022 15:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B4AC341C6;
+        Tue, 19 Jul 2022 15:27:20 +0000 (UTC)
+Date:   Tue, 19 Jul 2022 11:27:19 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
- __vstring() helper
-Message-ID: <20220719112448.4e9915e0@gandalf.local.home>
-In-Reply-To: <2893728a294ef13bdeba9e587083b82fb794cc68.camel@mediatek.com>
-References: <20220714164256.403842845@goodmis.org>
-        <20220714164330.311734558@goodmis.org>
-        <1267b234b09280b9b475cfe2bb32580e967e2dac.camel@mediatek.com>
-        <20220715173944.386743d8@gandalf.local.home>
-        <2893728a294ef13bdeba9e587083b82fb794cc68.camel@mediatek.com>
+Subject: [PATCH v2] USB: mtu3: tracing: Use the new __vstring() helper
+Message-ID: <20220719112719.17e796c6@gandalf.local.home>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -52,51 +45,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 19 Jul 2022 13:23:06 +0800
-Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-> > Care to send me a patch, and I'll just include it in my series?  
-> Seems no need add another patch, just modify this patch as below:
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_trace.h
-> b/drivers/usb/mtu3/mtu3_trace.h
-> index a09deae1146f..03d2a9bac27e 100644
-> --- a/drivers/usb/mtu3/mtu3_trace.h
-> +++ b/drivers/usb/mtu3/mtu3_trace.h
-> @@ -18,18 +18,16 @@
-> 
->  #include "mtu3.h"
-> 
-> -#define MTU3_MSG_MAX   256
-> -
->  TRACE_EVENT(mtu3_log,
->         TP_PROTO(struct device *dev, struct va_format *vaf),
->         TP_ARGS(dev, vaf),
->         TP_STRUCT__entry(
->                 __string(name, dev_name(dev))
-> -               __dynamic_array(char, msg, MTU3_MSG_MAX)
-> +               __vstring(msg, vaf->fmt, vaf->va)
->         ),
->         TP_fast_assign(
->                 __assign_str(name, dev_name(dev));
-> -               vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
-> >va);  
-> +               __assign_vstr(msg, vaf->fmt, vaf->va);
->         ),
->         TP_printk("%s: %s", __get_str(name), __get_str(msg))
->  );
-> >   
-> 
-> remove below two lines
-> "
-> -#define MTU3_MSG_MAX   256
-> -
+Instead of open coding a __dynamic_array() with a fixed length (which
+defeats the purpose of the dynamic array in the first place). Use the new
+__vstring() helper that will use a va_list and only write enough of the
+string into the ring buffer that is needed.
 
-Fine.
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v1: https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org
 
-Even though I already pushed to linux-next, I did something I seldom do. I
-rebased my for-next branch and removed this patch.
+ - Removed MTU3_MSG_MAX define. (Chunfeng Yun)
 
-I'll send a v2.
+ drivers/usb/mtu3/mtu3_trace.h | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
--- Steve
+diff --git a/drivers/usb/mtu3/mtu3_trace.h b/drivers/usb/mtu3/mtu3_trace.h
+index 1b897636daf2..a98fa012b729 100644
+--- a/drivers/usb/mtu3/mtu3_trace.h
++++ b/drivers/usb/mtu3/mtu3_trace.h
+@@ -18,18 +18,16 @@
+ 
+ #include "mtu3.h"
+ 
+-#define MTU3_MSG_MAX	256
+-
+ TRACE_EVENT(mtu3_log,
+ 	TP_PROTO(struct device *dev, struct va_format *vaf),
+ 	TP_ARGS(dev, vaf),
+ 	TP_STRUCT__entry(
+ 		__string(name, dev_name(dev))
+-		__dynamic_array(char, msg, MTU3_MSG_MAX)
++		__vstring(msg, vaf->fmt, vaf->va)
+ 	),
+ 	TP_fast_assign(
+ 		__assign_str(name, dev_name(dev));
+-		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf->va);
++		__assign_vstr(msg, vaf->fmt, vaf->va);
+ 	),
+ 	TP_printk("%s: %s", __get_str(name), __get_str(msg))
+ );
+-- 
+2.35.1
+
