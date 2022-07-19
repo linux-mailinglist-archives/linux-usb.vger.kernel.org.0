@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA13757A868
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Jul 2022 22:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850C657A9A1
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jul 2022 00:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239876AbiGSUmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Jul 2022 16:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
+        id S233843AbiGSWGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Jul 2022 18:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237335AbiGSUl7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 16:41:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78A453D0E;
-        Tue, 19 Jul 2022 13:41:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BE7AB81D3D;
-        Tue, 19 Jul 2022 20:41:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A39C341C6;
-        Tue, 19 Jul 2022 20:41:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658263316;
-        bh=ASqW0sMhLeHSDmcyye21xbAuTqb+hfjpCgPOwiNXB7M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q3RWjWSIvQbq52mnSYBCzUjNm+UQR7+937YNxLoLppxnXVn4mSYz3ZIkvS4r0TYDe
-         HmzRFWrdHIkacoMwhS0mRnj11GEy8ZPObzXoDatX7iODVBuYOIfLrO3mSTXL++dX3m
-         hZT6b0ANga6qIhjNNEoYWbDzFyApUp0MoRzJyJr7Gp89kVweM3Fg1NPkEtpVR7Qf0N
-         n5dz7X+bG7US2uBnFz6g7vL/Fw9TOFLIXzsxJX6eQEY1f4rV6EW1QFNBq9n0R6X1U3
-         euieXm5LP5EVtRmmFSPYQ8TJCGumzetJGRqvvm8iJqxEfLCnoEobuquTelqqoguZvA
-         WsFdhKFYm9KZA==
-Date:   Tue, 19 Jul 2022 13:41:55 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     justinpopo6@gmail.com
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, jannh@google.com, jackychou@asix.com.tw,
-        jesionowskigreg@gmail.com, joalonsof@gmail.com, pabeni@redhat.com,
-        edumazet@google.com, davem@davemloft.net, f.fainelli@gmail.com,
-        justin.chen@broadcom.com
-Subject: Re: [PATCH 1/5] net: usb: ax88179_178a: remove redundant init code
-Message-ID: <20220719134155.409fe0e6@kernel.org>
-In-Reply-To: <1658188689-30846-2-git-send-email-justinpopo6@gmail.com>
-References: <1658188689-30846-1-git-send-email-justinpopo6@gmail.com>
-        <1658188689-30846-2-git-send-email-justinpopo6@gmail.com>
+        with ESMTP id S229784AbiGSWGj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Jul 2022 18:06:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D1E39B9A
+        for <linux-usb@vger.kernel.org>; Tue, 19 Jul 2022 15:06:38 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oDvMN-0006bh-F7; Wed, 20 Jul 2022 00:06:31 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oDvMM-0007qk-Fs; Wed, 20 Jul 2022 00:06:30 +0200
+Date:   Wed, 20 Jul 2022 00:06:30 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Piyush Mehta <piyush.mehta@xilinx.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, balbi@kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
+        git@xilinx.com, sivadur@xilinx.com
+Subject: Re: [PATCH 0/2]  usb: dwc3: core: Enable GUCTL1 bit 10 for fixing
+ crc error after resume
+Message-ID: <20220719220630.GA24858@pengutronix.de>
+References: <20220613124703.4493-1-piyush.mehta@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
+Content-Disposition: inline
+In-Reply-To: <20220613124703.4493-1-piyush.mehta@xilinx.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,17 +56,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 18 Jul 2022 16:58:05 -0700 justinpopo6@gmail.com wrote:
-> From: Justin Chen <justinpopo6@gmail.com>
-> 
-> Bind and reset are basically doing the same thing. Remove the duplicate
-> code and have bind call into reset.
-> 
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
 
-drivers/net/usb/ax88179_178a.c:1329:6: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
-        u8 *tmp;
-            ^
-drivers/net/usb/ax88179_178a.c:1328:7: warning: variable 'tmp16' set but not used [-Wunused-but-set-variable]
-        u16 *tmp16;
-             ^
+--6c2NcOVqGQ03X4Wi
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Piyush!
+
+On Mon, Jun 13, 2022 at 06:17:01PM +0530, Piyush Mehta wrote:
+>This patch of the series does the following:
+>- Add a new DT "snps,enable_guctl1_resume_quirk" quirk
+>- Enable GUCTL1 bit 10 for fixing crc error after resume bug
+>  When this bit is set to '1', the ULPI opmode will be changed
+>  to 'normal' along with HS terminations after EOR.
+>  This option is to support certain legacy ULPI PHYs.
+>
+>Piyush Mehta (2):
+>  dt-bindings: usb: snps,dwc3: Add 'snps,enable_guctl1_resume_quirk'
+>    quirk
+>  usb: dwc3: core: Enable GUCTL1 bit 10 for fixing crc error after
+>    resume bug
+>
+> .../devicetree/bindings/usb/snps,dwc3.yaml       |  6 ++++++
+> drivers/usb/dwc3/core.c                          | 16 ++++++++++++++++
+> drivers/usb/dwc3/core.h                          |  6 ++++++
+> 3 files changed, 28 insertions(+)
+
+I found your series and am wondering if you are planning to send a v2 of
+it? It would really help to see this mainline.
+
+The Xilinx Register Reference states BIT 10 as
+
+RESUME_TERMSEL_XCVRSEL_UNIFY
+
+which seems to be more meaningful than GUCTL1_RESUME_QUIRK. It would
+probably make sense to work this in for v2.
+
+The Documentation is also refering more than just opmode to be 0
+during EOR. (termsel, xcvrsel, opmode).
+
+https://www.xilinx.com/htmldocs/registers/ug1087/ug1087-zynq-ultrascale-reg=
+isters.html#usb3_xhci___guctl1.html
+
+Regards,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--6c2NcOVqGQ03X4Wi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmLXKuIACgkQC+njFXoe
+LGTr7hAArDrtVWqrls/LSuZNB8TcJPoG0qggkJ+gQzs1M3v3r6+S3bhcekzJS3A8
+PzJCqURWI9Cbr4hZyptG5OCU85Hizv8XJ8sVKaQONrONoGX6JxpGQSkLanndBy7n
+5YwHwqDkgziI5DTytrhx8g9nhHc04XKpaeLk9IZL7Oi2FH3+PCji38VJzLBFTLAO
+vHdm4s6TMGoS1Hn5P38PIrarv2ouBj5igSbZWOf7SRv9nUDYq9QtmMQ56GB3sY+u
++LdUHZvJ27+HqBGTLzo9moKpbYkgDq+J33JdUPtSBDFcqVwUl26udynekQoMq1K+
+rwQqaBCqSHWE280mnda1NgXQlQhuyg564jYDVvDOZpGJjUEd8RNIi2KzE3VQZEKS
+BhKQSH+BV9wsBFKex2/uXejzX62OFL5N/jxRAVeVyt350Yo/vVI4AYLUg+fR3gQw
+eCGn+szhH9veQnq6UfWQEIl/oy7ueUUcPKSFKfQBhfx6sBMRqAzIADtko5Uhg0s2
+VYs6e1RvARPodon02BMyFIR4G8G8Fo/8hnmUHw/p+A1tn4xQo1dCqX1XQeIRrmt9
+lJK1q6XUX8piY4/n3Dntc3fJZHzDkadwJEK+fcS5feNl2ZJQnhp0bPb7Avyrqf9w
+l2MAmmK9ewj7VeXFAKxxW03TcQbXt/ayP4l2E2Jkyw8dQ3HWqYo=
+=P5m6
+-----END PGP SIGNATURE-----
+
+--6c2NcOVqGQ03X4Wi--
