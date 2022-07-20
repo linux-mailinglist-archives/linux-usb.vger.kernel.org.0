@@ -2,185 +2,302 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE72A57B3E6
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jul 2022 11:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F9257B41D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jul 2022 11:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiGTJbt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jul 2022 05:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S238064AbiGTJpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jul 2022 05:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiGTJbs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jul 2022 05:31:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A789DA5
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jul 2022 02:31:47 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oE63V-0005sE-2N; Wed, 20 Jul 2022 11:31:45 +0200
-Message-ID: <bb64343ba89cc6534691eed7a9dbba920ba62099.camel@pengutronix.de>
-Subject: Re: [RESEND v2 2/3] usb: gadget: uvc: increase worker prio to
- WQ_HIGHPRI
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Michael Grzeschik <mgr@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        nicolas@ndufresne.ca, kernel@pengutronix.de,
-        linux-media@vger.kernel.org
-Date:   Wed, 20 Jul 2022 11:31:44 +0200
-In-Reply-To: <20220719225247.GB24858@pengutronix.de>
-References: <20220608110339.141036-1-m.grzeschik@pengutronix.de>
-         <20220608110339.141036-3-m.grzeschik@pengutronix.de>
-         <YqDtWkUbp4LPBRxS@pendragon.ideasonboard.com>
-         <20220719225247.GB24858@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        with ESMTP id S230460AbiGTJp3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jul 2022 05:45:29 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64B417049;
+        Wed, 20 Jul 2022 02:45:27 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a15so17294669pjs.0;
+        Wed, 20 Jul 2022 02:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=X3mlWFpj4S2AEsT7TyVuZdiSzXmbO7C8MQMMt/vGg64=;
+        b=RzIw6shq7/p2+9kSSnoLEbXRnqiI0CLXZmBib/B9u6Kz+jdHcSFA9jwb13WPFuw4Rq
+         fi+khaia4vqt0KsUbkVtO8cUSAaWDP5Ofp48hzPoXCkPZvWgqhkzGT7gkdifkkVaGpHP
+         Vjv3e5tTMQKX0ji35J52361j9AXAKZk5adFFy1pVLa86yW7MyrxApLc4xmk2hbLHtdMG
+         Jes4+tanrARtJLDZwim6oT2dcwDiqz9CLMbWipXP/zxJit1vFscdZDO3CQ1i6W9x76Rs
+         LQQiVVOsCpnwlMhlfGSqg7u3rZoTAS4/CJgRyacjIrYgPsi8ovT389k2cQ09CBUGmpVl
+         CoVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=X3mlWFpj4S2AEsT7TyVuZdiSzXmbO7C8MQMMt/vGg64=;
+        b=PXWHLZmznHKvQponPvP6u3yOx/7XdeixN+RgtWryRyN/wkoksJYXz/HRjZ+io42myz
+         KuuOd2RAg+EtT/yjTo5HauAOmUrlbRxHPknyinFyWXF1xbUDt9eMFzkIZrJniVlNaHrk
+         McMwm3PFN2g1Ha9mCbRpLtHqc0IqwNwPzx5SUnBFlrtRYRK0F8ZGNIY2J7DNa59PHu6M
+         QxLVd0ZXsyo8/KrtwKmyu0DlEYSlfh/MLECa8CYbNm/o+3gDTYDz1jpiWapriHjlbk5i
+         xvio+qFj1BkHpTeP1L1oRtARfUKaGla1qMrT1kQAt33PK7VhqxYgPYvJ9V0Pr7nvl6or
+         vMTw==
+X-Gm-Message-State: AJIora+RbGtdhXY6VTnu4pc8TjQnBvpjEB6yXEDc198rgNBM7yKTyxtt
+        +lQRXOUMEX7+lSYPehoUttE=
+X-Google-Smtp-Source: AGRyM1sQfw9FLzUYvY3KYvRCDYSTojdB7+ka4nuileRmLrHXrjld7ic/4DquoAhGcv6UAgnVdVkJ2Q==
+X-Received: by 2002:a17:903:245:b0:16b:9c49:6b1c with SMTP id j5-20020a170903024500b0016b9c496b1cmr36679021plh.153.1658310326952;
+        Wed, 20 Jul 2022 02:45:26 -0700 (PDT)
+Received: from cyhuang-hp-elitebook-840-g3.rt ([2402:7500:487:b1ec:fd78:6fba:974b:164e])
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902a38100b0015ee60ef65bsm13417514pla.260.2022.07.20.02.45.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Jul 2022 02:45:26 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 17:45:15 +0800
+From:   ChiYuan Huang <u0084500@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>,
+        ChiYuan Huang <u0084500@gmail.com>
+Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
+ type LED Indicator support
+Message-ID: <20220720094510.GA29755@cyhuang-hp-elitebook-840-g3.rt>
+References: <20220715112607.591-1-peterwu.pub@gmail.com>
+ <20220715112607.591-12-peterwu.pub@gmail.com>
+ <CAHp75VfyVufzf7CK38BVu_j0B4ax_d1gLAGYDE3H1zaKkuUB=A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VfyVufzf7CK38BVu_j0B4ax_d1gLAGYDE3H1zaKkuUB=A@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, dem 20.07.2022 um 00:52 +0200 schrieb Michael Grzeschik:
-> On Wed, Jun 08, 2022 at 09:41:30PM +0300, Laurent Pinchart wrote:
-> > Hi Michael,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Wed, Jun 08, 2022 at 01:03:38PM +0200, Michael Grzeschik wrote:
-> > > Likewise to the uvcvideo hostside driver, this patch is changing the
-> > > simple workqueue to an async_wq with higher priority. This ensures that
-> > > the worker will not be scheduled away while the video stream is handled.
-> > > 
-> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> > > 
-> > > ---
-> > > v1 -> v2: - added destroy_workqueue in uvc_function_unbind
-> > >           - reworded comment above allow_workqueue
-> > > 
-> > >  drivers/usb/gadget/function/f_uvc.c     | 4 ++++
-> > >  drivers/usb/gadget/function/uvc.h       | 1 +
-> > >  drivers/usb/gadget/function/uvc_v4l2.c  | 2 +-
-> > >  drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
-> > >  4 files changed, 13 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> > > index d3feeeb50841b8..dcc5f057810973 100644
-> > > --- a/drivers/usb/gadget/function/f_uvc.c
-> > > +++ b/drivers/usb/gadget/function/f_uvc.c
-> > > @@ -891,10 +891,14 @@ static void uvc_function_unbind(struct usb_configuration *c,
-> > >  {
-> > >  	struct usb_composite_dev *cdev = c->cdev;
-> > >  	struct uvc_device *uvc = to_uvc(f);
-> > > +	struct uvc_video *video = &uvc->video;
-> > >  	long wait_ret = 1;
-> > > 
-> > >  	uvcg_info(f, "%s()\n", __func__);
-> > > 
-> > > +	if (video->async_wq)
-> > > +		destroy_workqueue(video->async_wq);
-> > > +
-> > >  	/* If we know we're connected via v4l2, then there should be a cleanup
-> > >  	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
-> > >  	 * though the video device removal uevent. Allow some time for the
-> > > diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> > > index 58e383afdd4406..1a31e6c6a5ffb8 100644
-> > > --- a/drivers/usb/gadget/function/uvc.h
-> > > +++ b/drivers/usb/gadget/function/uvc.h
-> > > @@ -88,6 +88,7 @@ struct uvc_video {
-> > >  	struct usb_ep *ep;
-> > > 
-> > >  	struct work_struct pump;
-> > > +	struct workqueue_struct *async_wq;
-> > > 
-> > >  	/* Frame parameters */
-> > >  	u8 bpp;
-> > > diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> > > index fd8f73bb726dd1..fddc392b8ab95d 100644
-> > > --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> > > +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> > > @@ -170,7 +170,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
-> > >  		return ret;
-> > > 
-> > >  	if (uvc->state == UVC_STATE_STREAMING)
-> > > -		schedule_work(&video->pump);
-> > > +		queue_work(video->async_wq, &video->pump);
-> > > 
-> > >  	return ret;
-> > >  }
-> > > diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> > > index a9bb4553db847e..9a9101851bc1e8 100644
-> > > --- a/drivers/usb/gadget/function/uvc_video.c
-> > > +++ b/drivers/usb/gadget/function/uvc_video.c
-> > > @@ -277,7 +277,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
-> > >  	spin_unlock_irqrestore(&video->req_lock, flags);
-> > > 
-> > >  	if (uvc->state == UVC_STATE_STREAMING)
-> > > -		schedule_work(&video->pump);
-> > > +		queue_work(video->async_wq, &video->pump);
-> > >  }
-> > > 
-> > >  static int
-> > > @@ -478,7 +478,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
-> > > 
-> > >  	video->req_int_count = 0;
-> > > 
-> > > -	schedule_work(&video->pump);
-> > > +	queue_work(video->async_wq, &video->pump);
-> > > 
-> > >  	return ret;
-> > >  }
-> > > @@ -492,6 +492,11 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
-> > >  	spin_lock_init(&video->req_lock);
-> > >  	INIT_WORK(&video->pump, uvcg_video_pump);
-> > > 
-> > > +	/* Allocate a work queue for asynchronous video pump handler. */
-> > > +	video->async_wq = alloc_workqueue("uvcvideo", WQ_UNBOUND | WQ_HIGHPRI, 0);
-> > 
-> > Let's call it "uvcgadget" (or "uvc gadget", "uvc-gadget", ...) as
-> > "uvcvideo" refers to the host side driver.
-> > 
-> > I'm still a bit worried about WQ_UNBOUND and the risk of running work
-> > items in parallel on different CPUs. uvcg_video_pump() looks mostly
-> > safe, as it protects video->req_free with a spinlock, and the buffer
-> > queue with another spinlock. The req_int_count increment at the end of
-> > the loop would be unsafe though.
+On Fri, Jul 15, 2022 at 08:29:42PM +0200, Andy Shevchenko wrote:
+> On Fri, Jul 15, 2022 at 1:29 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> >
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > The MediaTek MT6370 is a highly-integrated smart power management IC,
+> > which includes a single cell Li-Ion/Li-Polymer switching battery
+> > charger, a USB Type-C & Power Delivery (PD) controller, dual
+> > Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> > a display bias driver and a general LDO for portable devices.
+> >
+> > In MediaTek MT6370, there are four channel current-sink RGB LEDs that
+> > support hardware pattern for constant current, PWM, and breath mode.
+> > Isink4 channel can also be used as a CHG_VIN power good indicator.
 > 
-> I looked into this again. But am still a bit unsure.
+> ...
 > 
-> Why exactly would req_int_count be unsafe?
+> > +         This driver can also be built as a module. If so the module
 > 
-> I thought WQ_UNBOUND is just making sure, that the workqueue could be
-> scheduled on any CPU, independent of the calling CPU waking the WQ. The
-> function uvcg_video_pump would than be called. But would it then be
-> called in parallel on two CPU at once? I doubt that. So how should
-> touching req_int_count on the bottom of the function be unsafe?
+> so, the
 > 
-> If WQ_UNBOUND would mean, that it would be run on more than one CPU
-> at once, this should clearly be documented.
+> > +         will be called "leds-mt6370.ko".
+> 
+> No ".ko".
+> 
+> Why did you ignore these comments? Please go and fix _everywhere_ in
+> your series.
+> It's basically the rule of thumb, if the reviewer gives a comment
+> against an occurrence of something, go through entire series and check
+> if there are other places like commented one and address them all.
+> 
+> ...
+> 
+> > + * Author: Alice Chen <alice_chen@richtek.com>
+> 
+> Strange, the commit message doesn't have a corresponding SoB, why?
+> 
+Yes, there're two authors Alice and me.
+I'll correct it in next.
+> ...
+> 
+> > +#define MT6370_PWM_DUTY                                31
+> > +#define MT6372_PMW_DUTY                                255
+> 
+> Looks like these are limits by hardware?
+> Check with the datasheet if (BIT(x) - 1) makes more sense here.
+> 
+> ...
+> 
+> > +       switch (led_no) {
+> > +       case MT6370_LED_ISNK1:
+> > +               sel_field = F_LED1_DUTY;
+> > +               break;
+> > +       case MT6370_LED_ISNK2:
+> > +               sel_field = F_LED2_DUTY;
+> > +               break;
+> > +       case MT6370_LED_ISNK3:
+> > +               sel_field = F_LED3_DUTY;
+> > +               break;
+> > +       default:
+> > +               sel_field = F_LED4_DUTY;
+> 
+> Missed break;
+> 
+> > +       }
+> 
+> ...
+> 
+> > +       switch (led_no) {
+> > +       case MT6370_LED_ISNK1:
+> > +               sel_field = F_LED1_FREQ;
+> > +               break;
+> > +       case MT6370_LED_ISNK2:
+> > +               sel_field = F_LED2_FREQ;
+> > +               break;
+> > +       case MT6370_LED_ISNK3:
+> > +               sel_field = F_LED3_FREQ;
+> > +               break;
+> > +       default:
+> > +               sel_field = F_LED4_FREQ;
+> 
+> Ditto.
+> 
+> > +       }
+> 
+> ...
+> 
+> > +       switch (led_no) {
+> > +       case MT6370_LED_ISNK1:
+> > +       case MT6370_LED_ISNK2:
+> > +       case MT6370_LED_ISNK3:
+> > +               *base = MT6370_REG_RGB1_TR + led_no * 3;
+> > +               break;
+> > +       default:
+> > +               *base = MT6370_REG_RGB_CHRIND_TR;
+> 
+> Ditto.
+> It seems you dropped them for all switch-cases. It's not goot, please
+> restore them back.
+> 
+> > +       }
+> 
+> ...
+> 
+> > +       u8 val[P_MAX_PATTERNS / 2] = {0};
+> 
+> { } should suffice
+> 
+> 
+In the above range selector, we use the 'logic or' to generate the
+pattern values.
 
-All workqueues (including the system_wq, that is used by schedule_work)
-can execute multiple workitems at the same time. The max_active
-parameter provided to alloc_workqueue() is what regulates concurrency,
-WQ_UNBOUND has nothing to do with this, expect that it provides a
-different maximum of the possible concurrency.
-
-If the code works fine as-is, then this change should make no
-difference. Without looking into the details, I think the singlethread
-assumption here is satisfied by the video pump being a single work
-item, so if it is already queued it will not be queued again, so there
-is nothing to execute in parallel.
-
-Regards,
-Lucas
-
+If to change it from '{0} to '{ }', is it correct?
+> > +       /*
+> > +        * Pattern list
+> > +        * tr1: byte 0, b'[7: 4]
+> > +        * tr2: byte 0, b'[3: 0]
+> > +        * tf1: byte 1, b'[7: 4]
+> > +        * tf2: byte 1, b'[3: 0]
+> > +        * ton: byte 2, b'[7: 4]
+> > +        * toff: byte 2, b'[3: 0]
+> > +        */
+> > +       for (i = 0; i < P_MAX_PATTERNS; i++) {
+> > +               curr = pattern + i;
+> > +
+> > +               sel_range = i == P_LED_TOFF ? R_LED_TOFF : R_LED_TRFON;
+> > +
+> > +               linear_range_get_selector_within(priv->ranges + sel_range,
+> > +                                                curr->delta_t, &sel);
+> > +
+> > +               val[i / 2] |= sel << (4 * ((i + 1) % 2));
+> > +       }
+> > +
+> > +       memcpy(pattern_val, val, 3);
+> > +       return 0;
+> > +}
+> 
+> ...
+> 
+> > +out:
+> 
+> out_unlock:
+> 
+> > +       mutex_unlock(&priv->lock);
+> > +
+> > +       return ret;
+> 
+> ...
+> 
+> > +out:
+> 
+> Ditto. And so on.
+> 
+> > +       mutex_unlock(&priv->lock);
+> > +
+> > +       return ret;
+> 
+> ...
+> 
+> > +               sub_led = devm_kzalloc(priv->dev,
+> > +                                      sizeof(*sub_led) * MC_CHANNEL_NUM,
+> > +                                      GFP_KERNEL);
+> 
+> NIH devm_kcalloc(). Also check if you really need zeroed data.
+>
+Ok, and after the check, I also need to add one line to set the intensity to 0.
+> > +               if (!sub_led)
+> > +                       return -ENOMEM;
+> 
+> ...
+> 
+> > +                       ret = fwnode_property_read_u32(child, "color", &color);
+> > +                       if (ret) {
+> > +                               dev_err(priv->dev,
+> > +                                       "led %d, no color specified\n",
+> > +                                       led->index);
+> > +                               return ret;
+> 
+> return dev_err_probe(...) ; ?
+> 
+> Ditto for many places in your entire series.
+> 
+> > +                       }
+> 
+> ...
+> 
+> > +       priv = devm_kzalloc(&pdev->dev,
+> > +                           struct_size(priv, leds, count), GFP_KERNEL);
+> 
+> At least one parameter can be placed on the previous line.
+> 
+> > +       if (!priv)
+> > +               return -ENOMEM;
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
