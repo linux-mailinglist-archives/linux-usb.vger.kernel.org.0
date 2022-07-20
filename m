@@ -2,149 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA2D57B8B9
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jul 2022 16:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B0D57BAA9
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jul 2022 17:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbiGTOqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jul 2022 10:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S241194AbiGTPlo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jul 2022 11:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234602AbiGTOqu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jul 2022 10:46:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BA34F1A0
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jul 2022 07:46:48 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oEAyN-0005Od-3G; Wed, 20 Jul 2022 16:46:47 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oEAyM-0028Q7-2e; Wed, 20 Jul 2022 16:46:46 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oEAyL-00EfDs-H3; Wed, 20 Jul 2022 16:46:45 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
-        paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: [PATCH v3] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
-Date:   Wed, 20 Jul 2022 16:46:41 +0200
-Message-Id: <20220720144641.3480432-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232804AbiGTPlm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jul 2022 11:41:42 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBFC22BD7;
+        Wed, 20 Jul 2022 08:41:41 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 34132412D2;
+        Wed, 20 Jul 2022 15:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-transfer-encoding:content-disposition
+        :content-type:content-type:mime-version:references:message-id
+        :subject:subject:from:from:date:date:received:received:received
+        :received; s=mta-01; t=1658331699; x=1660146100; bh=BiGYJAeCpEGQ
+        em6DfQ73uEeCnzcf59XOM101tD6+ZC0=; b=l8yWjs2Yw6IK9hmOTT3aBz66aso7
+        XGGVXSVZMNubkjUgQgs6tWOoLDHRrvMjTh7e29NXxO5t0sXCkZfjK0xa3O63aO1D
+        W6M+3hmLmMJjfKJKSj0tip79xpyZvmCNG+tOZxfFzfNuW+rZVi1/eDWI2In/WaH2
+        VNyY1WSnHnmsRdY=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Kvp7q4TTa0Zl; Wed, 20 Jul 2022 18:41:39 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id C6508412CD;
+        Wed, 20 Jul 2022 18:41:35 +0300 (MSK)
+Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Wed, 20 Jul 2022 18:41:12 +0300
+Received: from yadro.com (10.178.118.226) by T-EXCH-09.corp.yadro.com
+ (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 20 Jul
+ 2022 18:41:11 +0300
+Date:   Wed, 20 Jul 2022 18:41:10 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     Mike Christie <michael.christie@oracle.com>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <target-devel@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        John Youn <John.Youn@synopsys.com>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] target: Implement TMR_ABORT_TASK_SET
+Message-ID: <YtggwBMKgIJqN4mT@yadro.com>
+References: <cover.1658195608.git.Thinh.Nguyen@synopsys.com>
+ <7d31722a7e07bc24ea37b5841a17545003eeddb4.1658195608.git.Thinh.Nguyen@synopsys.com>
+ <74bf1df3-a466-9d78-1a25-7425c89b9fa3@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <74bf1df3-a466-9d78-1a25-7425c89b9fa3@oracle.com>
+X-Originating-IP: [10.178.118.226]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Likewise to the uvcvideo hostside driver, this patch is changing the
-simple workqueue to an async_wq with higher priority. This ensures that
-the worker will not be scheduled away while the video stream is handled.
+On Tue, Jul 19, 2022 at 10:56:07AM -0500, Mike Christie wrote:
+> «Внимание! Данное письмо от внешнего адресата!»
+> 
+> On 7/18/22 9:07 PM, Thinh Nguyen wrote:
+> > Task ABORT TASK SET function is required by SCSI transport protocol
+> 
+> What OS is using this and how do they use it? For the latter, does the
+> OS try an abort for each cmd first, then try an abort task set if the
+> aborts fail (does fail mean get a response that indicates failure and
+> also does a timeout count)? Or does it start with the abort task set?
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
----
-v2 -> v3: - renamed workqueue to "uvcgadget"
-v1 -> v2: - added destroy_workqueue in uvc_function_unbind
-          - reworded comment above allow_workqueue
-
- drivers/usb/gadget/function/f_uvc.c     | 4 ++++
- drivers/usb/gadget/function/uvc.h       | 1 +
- drivers/usb/gadget/function/uvc_v4l2.c  | 2 +-
- drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
- 4 files changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 71669e0e4d0074..241b0de7b4aa52 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -897,10 +897,14 @@ static void uvc_function_unbind(struct usb_configuration *c,
- {
- 	struct usb_composite_dev *cdev = c->cdev;
- 	struct uvc_device *uvc = to_uvc(f);
-+	struct uvc_video *video = &uvc->video;
- 	long wait_ret = 1;
- 
- 	uvcg_info(f, "%s()\n", __func__);
- 
-+	if (video->async_wq)
-+		destroy_workqueue(video->async_wq);
-+
- 	/*
- 	 * If we know we're connected via v4l2, then there should be a cleanup
- 	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 58e383afdd4406..1a31e6c6a5ffb8 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -88,6 +88,7 @@ struct uvc_video {
- 	struct usb_ep *ep;
- 
- 	struct work_struct pump;
-+	struct workqueue_struct *async_wq;
- 
- 	/* Frame parameters */
- 	u8 bpp;
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index fd8f73bb726dd1..fddc392b8ab95d 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -170,7 +170,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
- 		return ret;
- 
- 	if (uvc->state == UVC_STATE_STREAMING)
--		schedule_work(&video->pump);
-+		queue_work(video->async_wq, &video->pump);
- 
- 	return ret;
- }
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index c00ce0e91f5d5c..bb037fcc90e69e 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -277,7 +277,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	spin_unlock_irqrestore(&video->req_lock, flags);
- 
- 	if (uvc->state == UVC_STATE_STREAMING)
--		schedule_work(&video->pump);
-+		queue_work(video->async_wq, &video->pump);
- }
- 
- static int
-@@ -485,7 +485,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- 
- 	video->req_int_count = 0;
- 
--	schedule_work(&video->pump);
-+	queue_work(video->async_wq, &video->pump);
- 
- 	return ret;
- }
-@@ -499,6 +499,11 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 	spin_lock_init(&video->req_lock);
- 	INIT_WORK(&video->pump, uvcg_video_pump);
- 
-+	/* Allocate a work queue for asynchronous video pump handler. */
-+	video->async_wq = alloc_workqueue("uvcgadget", WQ_UNBOUND | WQ_HIGHPRI, 0);
-+	if (!video->async_wq)
-+		return -EINVAL;
-+
- 	video->uvc = uvc;
- 	video->fcc = V4L2_PIX_FMT_YUYV;
- 	video->bpp = 16;
--- 
-2.30.2
-
+AIX IIRC. However, this feature also requires valid bits in one of the
+VPD pages.
