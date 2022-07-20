@@ -2,95 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C25857B715
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Jul 2022 15:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA2D57B8B9
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Jul 2022 16:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240800AbiGTNNE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jul 2022 09:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S234729AbiGTOqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Jul 2022 10:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbiGTNND (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jul 2022 09:13:03 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B579C5A445
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v5so2097187wmj.0
-        for <linux-usb@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
-        b=hZDBwVWDP5UPXoM/26p/r+j251hc2vAqDOCERxSqp1n7sS06JhTWTNUFrAn/iDVTDd
-         sk1s9gAeT8g6iMlidLoC2ByWsp6jDzKjyGiwTrHFM+kSqmhnpOGy27aGmIOCRSPQXtjU
-         iuHcWvpuEBu/GQL3HjFfyH38HWdcfRwpw/QCs8xRs37MzT7Ik+pcHBHS4PQz7Y7kmEGs
-         2zEZT/L22GV5s5xGf/GZOt2FikEOhhfo8etSuo2R+s9KR06g6oLOKoKJ9cp2Devph4aN
-         HYnuH9yadQ7mkeUaGKIxYyw+FFFXzGLODhmRa8DXLmg2/yBLqQ88/ndcWxmAnabBH3H2
-         gPtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
-        b=p3KRUeOndt0hFMLAcKjB9nTSwjClWV1szsPM9f9UtF+ASdF2/BE96/rum/EDiMbjkm
-         uYGfsI3PUsBJW1NGuXfUWYyCAgfnwl3WxM9jTAYilemoA4zYZrKCKrgaRkBOZppy8EiF
-         gJdPeoryaCErtunYvRbL13vSOB7QD3PESaPzG7Z/dTPLO1sAYGSmeE3L7bBnQiGHklIF
-         x4qVXnFt6WnHX+FooBGxXMUhCQpD2DY/qMX3UDWqQx4BpAlWGEuNX16uND+M9Jkw4/2L
-         +uH33rnF3MKwQQXK+tuNqIbZmBNblbS3AeKvud6EWpqZaWzGj8xGiis1QYw1WoeoOVf6
-         BjlA==
-X-Gm-Message-State: AJIora+6bIOnFunO/wCVbJlpYMUkFXld/KV8ozfMeCFKyb295K7bvDOl
-        7444N1o35NeQnELoriicy5zCJw==
-X-Google-Smtp-Source: AGRyM1tHJE+D+NzsNowU+goDfK+LE01p5AmV4nGBMM9nPZVjT15IP9nJaaafPk1bF4qVs2pE8TNv1A==
-X-Received: by 2002:a05:600c:3b91:b0:3a3:1cbe:d531 with SMTP id n17-20020a05600c3b9100b003a31cbed531mr3812400wms.159.1658322779330;
-        Wed, 20 Jul 2022 06:12:59 -0700 (PDT)
-Received: from amjad-ThinkPad-T490.home (2a01cb040613180084408ac44a1fa242.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:8440:8ac4:4a1f:a242])
-        by smtp.googlemail.com with ESMTPSA id y11-20020adfc7cb000000b0021d6924b777sm16853316wrg.115.2022.07.20.06.12.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 06:12:58 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     fparent@baylibre.com
-Cc:     broonie@kernel.org, chaotian.jing@mediatek.com,
-        chunfeng.yun@mediatek.com, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-        matthias.bgg@gmail.com, qii.wang@mediatek.com, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, ulf.hansson@linaro.org,
-        vkoul@kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
-Date:   Wed, 20 Jul 2022 15:12:57 +0200
-Message-Id: <20220720131257.530168-1-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220531135026.238475-17-fparent@baylibre.com>
-References: <20220531135026.238475-17-fparent@baylibre.com>
+        with ESMTP id S234602AbiGTOqu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jul 2022 10:46:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BA34F1A0
+        for <linux-usb@vger.kernel.org>; Wed, 20 Jul 2022 07:46:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oEAyN-0005Od-3G; Wed, 20 Jul 2022 16:46:47 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oEAyM-0028Q7-2e; Wed, 20 Jul 2022 16:46:46 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1oEAyL-00EfDs-H3; Wed, 20 Jul 2022 16:46:45 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
+        paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
+        nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: [PATCH v3] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
+Date:   Wed, 20 Jul 2022 16:46:41 +0200
+Message-Id: <20220720144641.3480432-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Fabien,
+Likewise to the uvcvideo hostside driver, this patch is changing the
+simple workqueue to an async_wq with higher priority. This ensures that
+the worker will not be scheduled away while the video stream is handled.
 
-> +		tzts4: tzts4-thermal {
-> +			polling-delay-passive = <0>;
-> +			polling-delay = <0>;
-> +			thermal-sensors = <&thermal 4>;
-> +			trips {};
-> +			cooling-maps {};
-> +		};
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-AFAIK mt8365 has only 3 thermal sensors, therefore tzts4 should not be
-added.
+---
+v2 -> v3: - renamed workqueue to "uvcgadget"
+v1 -> v2: - added destroy_workqueue in uvc_function_unbind
+          - reworded comment above allow_workqueue
 
-Regards,
-Amjad
+ drivers/usb/gadget/function/f_uvc.c     | 4 ++++
+ drivers/usb/gadget/function/uvc.h       | 1 +
+ drivers/usb/gadget/function/uvc_v4l2.c  | 2 +-
+ drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
+ 4 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 71669e0e4d0074..241b0de7b4aa52 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -897,10 +897,14 @@ static void uvc_function_unbind(struct usb_configuration *c,
+ {
+ 	struct usb_composite_dev *cdev = c->cdev;
+ 	struct uvc_device *uvc = to_uvc(f);
++	struct uvc_video *video = &uvc->video;
+ 	long wait_ret = 1;
+ 
+ 	uvcg_info(f, "%s()\n", __func__);
+ 
++	if (video->async_wq)
++		destroy_workqueue(video->async_wq);
++
+ 	/*
+ 	 * If we know we're connected via v4l2, then there should be a cleanup
+ 	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 58e383afdd4406..1a31e6c6a5ffb8 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -88,6 +88,7 @@ struct uvc_video {
+ 	struct usb_ep *ep;
+ 
+ 	struct work_struct pump;
++	struct workqueue_struct *async_wq;
+ 
+ 	/* Frame parameters */
+ 	u8 bpp;
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index fd8f73bb726dd1..fddc392b8ab95d 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -170,7 +170,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
+ 		return ret;
+ 
+ 	if (uvc->state == UVC_STATE_STREAMING)
+-		schedule_work(&video->pump);
++		queue_work(video->async_wq, &video->pump);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index c00ce0e91f5d5c..bb037fcc90e69e 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -277,7 +277,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 	spin_unlock_irqrestore(&video->req_lock, flags);
+ 
+ 	if (uvc->state == UVC_STATE_STREAMING)
+-		schedule_work(&video->pump);
++		queue_work(video->async_wq, &video->pump);
+ }
+ 
+ static int
+@@ -485,7 +485,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+ 
+ 	video->req_int_count = 0;
+ 
+-	schedule_work(&video->pump);
++	queue_work(video->async_wq, &video->pump);
+ 
+ 	return ret;
+ }
+@@ -499,6 +499,11 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+ 	spin_lock_init(&video->req_lock);
+ 	INIT_WORK(&video->pump, uvcg_video_pump);
+ 
++	/* Allocate a work queue for asynchronous video pump handler. */
++	video->async_wq = alloc_workqueue("uvcgadget", WQ_UNBOUND | WQ_HIGHPRI, 0);
++	if (!video->async_wq)
++		return -EINVAL;
++
+ 	video->uvc = uvc;
+ 	video->fcc = V4L2_PIX_FMT_YUYV;
+ 	video->bpp = 16;
+-- 
+2.30.2
+
