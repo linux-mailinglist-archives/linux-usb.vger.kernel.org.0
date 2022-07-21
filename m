@@ -2,42 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0081B57CED0
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 17:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258F157D05C
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 17:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiGUPYg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jul 2022 11:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
+        id S232435AbiGUPyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jul 2022 11:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiGUPYf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 11:24:35 -0400
-Received: from smtpbg516.qq.com (smtpbg516.qq.com [203.205.250.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0039624B8
-        for <linux-usb@vger.kernel.org>; Thu, 21 Jul 2022 08:24:29 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1658417062tfjqni0v
+        with ESMTP id S233519AbiGUPyE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 11:54:04 -0400
+Received: from smtpbg511.qq.com (smtpbg511.qq.com [203.205.250.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671AD4B0F7
+        for <linux-usb@vger.kernel.org>; Thu, 21 Jul 2022 08:54:00 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1658418834t04gw0na
 Received: from bupt-poweredger310.tendawifi.co ( [223.72.68.172])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 21 Jul 2022 23:24:21 +0800 (CST)
+        id ; Thu, 21 Jul 2022 23:53:53 +0800 (CST)
 X-QQ-SSF: 01400000002000B0V000B00A0000000
-X-QQ-FEAT: +ynUkgUhZJmISFXXJgcf6XRptELTs4eaFM5N1f9J+Hjr8cNKPdLcpC0vmUuVp
-        v1CpJg8kuQIYl5AsDGlv1oUI3UbRdg0dYslilRdgXj6QV8js4Z9jXU16Q/DZ5LYXA6Pe7FT
-        qacxECwoSWF5xwcxzXDcR81S5i+BstsT59kXBsuGOj6j62VeSRO0QNurQZ61gWIP02Z39XR
-        /Q4pOaDUcQ9izmbh8y+q8OaU7O/Gq6nmSPHif+AFq4pP4TtABwlBDkrJd3JpWi+KTmDqEjI
-        RNdBbMYAhLn8EzrezKZopCd1Un7cqT1eiSZAgUTynSvUYnh40iNuolvLrL2UPHzsKg/5omx
-        wXoTHjb92gEuqrerpnRH3gtDp2qY2oWY/B3Y0IPz3w4zS5or8EDSqIy7QIvtw==
+X-QQ-FEAT: GfaJPLQO2RkkCQvYnSYOQtXBqfXmy9HgCPxLWMhivEl+UW1x9ImZNdT1dPm+g
+        BOgn9Rx2ycgYMAXw/sh3HHFDGYm/SrlK1L6lQgJFLygtp3uYb4atRmYy/CUiZdLlcdRG74U
+        nCh+QG5si+OxSmT3rk41pxfei5ZcDZeIA9vEviGCRN2635LWgFHI5EbO2uyTjJWP+cE9ZxC
+        liGLSNy3aMXB5A30IC594NavLFLAT425+GQSLEvxPzKHUl3Z3qkzPl/H6d+HwXgVHJjB+vJ
+        ye+iHX/WhB1RhMpnB1mvfDXC/XAcsqv+Q5uFx2yw/uyRWn1mlNz0e3ny4MsQZVvhUbFxmnq
+        yBr/ZNZQ60Dz/RmFQlALVzMZ7KiqzJsmDq5TCltANgxmlSa5G+lpvDT5wTQKZHFpjfNlLX0
+        sWtC44M+lXea7JTs3Ut06Q==
 X-QQ-GoodBg: 2
-From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
+From:   Yan Xinyu <sdlyyxy@bupt.edu.cn>
 To:     johan@kernel.org, gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sdlyyxy <sdlyyxy@bupt.edu.cn>
-Subject: [PATCH] USB: serial: usb_wwan: replace DTR/RTS magic numbers with macros
-Date:   Thu, 21 Jul 2022 23:23:35 +0800
-Message-Id: <20220721152335.629105-1-sdlyyxy@bupt.edu.cn>
+        Yan Xinyu <sdlyyxy@bupt.edu.cn>
+Subject: [PATCH v2] USB: serial: usb_wwan: replace DTR/RTS magic numbers with macros
+Date:   Thu, 21 Jul 2022 23:52:57 +0800
+Message-Id: <20220721155257.631793-1-sdlyyxy@bupt.edu.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign10
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign9
 X-QQ-Bgrelay: 1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_NONE,T_SPF_HELO_TEMPERROR autolearn=ham
@@ -52,7 +53,10 @@ The usb_wwan_send_setup function generates DTR/RTS signals in compliance
 with CDC ACM standard. This patch changes magic numbers in this function
 to equivalent macros.
 
-Signed-off-by: sdlyyxy <sdlyyxy@bupt.edu.cn>
+Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+---
+v1->v2:
+ * Fix Signed-off-by name.
 ---
  drivers/usb/serial/usb_wwan.c | 13 +++++++++----
  1 file changed, 9 insertions(+), 4 deletions(-)
