@@ -2,145 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6B057C871
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 12:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E06857C89E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 12:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiGUKBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jul 2022 06:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
+        id S233084AbiGUKJ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jul 2022 06:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbiGUKBP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 06:01:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0D927145;
-        Thu, 21 Jul 2022 03:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658397674; x=1689933674;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JoAqtAChf2lbh0GsZ6eAYO48p9sUo2QNR2OeR0SM9Nw=;
-  b=lw36PI1+cAV7mC1MBnFji20MqQNC3JD71QcDWE3BEUYjXj3l+KBtqGiR
-   6n82aCxzADQuG9IBlW6xbV0IlKhtQnTFPb3K3jedNCbylxjlAPkbyH722
-   pZUU6u4UbFH6SmdUYpFxUY/uCa2LgNzY2qdsfFzVscWrDlh4a5JhlVTWl
-   iVqrw7268LMDccKYsWobNfnpyQmrEb1V56sb1iO7vzeR34lXvDzkCpXyW
-   c/Q/N8sasJ8WvIZH6p7oKiyFVz+XIuZFa5uQ7Lh4s+8Qbr8nA7Uotgvx7
-   Cr3vnF+Fg5dWpo9xLD6ys3sDG4ZJncenHNMMniE06i2FXLgfM6raqmmpB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="267402770"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="267402770"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 03:00:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="598406441"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Jul 2022 03:00:52 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oESz8-0001hb-PC;
-        Thu, 21 Jul 2022 10:00:46 +0000
-Date:   Thu, 21 Jul 2022 18:00:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, kishon@ti.com, dianders@chromium.org,
-        s.shtylyov@omp.ru, mka@chromium.org, ming.lei@canonical.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        tonywwang@zhaoxin.com, weitaowang@zhaoxin.com,
-        CobeChen@zhaoxin.com, TimGuo@zhaoxin.com
-Subject: Re: [PATCH] USB: HCD: Fix URB giveback issue in tasklet function
-Message-ID: <202207211752.TObbLhyX-lkp@intel.com>
-References: <20220721060833.4173-1-WeitaoWang-oc@zhaoxin.com>
+        with ESMTP id S232939AbiGUKJy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 06:09:54 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4DA691D2;
+        Thu, 21 Jul 2022 03:09:52 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id w185so1329655pfb.4;
+        Thu, 21 Jul 2022 03:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JsNvQYgS7LcjVv/c6iexGN5Si+fKRd5f5BAbC7QtYk4=;
+        b=eAa08a3+tl/ZofuTfcSSlCIRAq8gzsE5weAOP7UsxCGX7Y3mEwbV149NCokUNAuKe5
+         EN8JAjfmhP9N9CspG2jqaZSyIaGbkZUhDaW7qofKWFu8aKMXKSZIN/OslbLhdpG3vXAe
+         Ur/lyWqy91Q56Es+2f1zy2dzQ+hj8jlo3qE0YiObY2S52rcdXtLGShkNUGJiecJGeLOG
+         GtukmBHV1TgkmoL4837XnIBFnmUr7cQbqEUii+cPTEyr6HZ7158GO1PQ1FREaPNHpO3p
+         +zxpj8UH5CIEkJ0zMqYXxrZuHhPdN0LgPYLVzbKBbdgveUmcPeMuT3v6VXPjNd763lsV
+         k55Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JsNvQYgS7LcjVv/c6iexGN5Si+fKRd5f5BAbC7QtYk4=;
+        b=8NhrzcyPq8vo0eJhwJoQ3PDeYP8gtUM6T0S3PS/2iBRqpZ3WK2j2d02LCAXJWtijR0
+         ZFvkCFt7LxfEH8kXTYAjO0gcI5ex1sCbl9kXXPbGpcCgyVfZF98nBjeLtPCrC8g/S+SO
+         pxurZMjOnsWUN+dNGLSeEGRZiOkednYQcxjbSWD5mkkfGPVGdPTuqiHBSbrGwx/yRqiB
+         wCgknT25M6Brs+Nsf2EWbgIUr+MNm5+v0mfKt96EF+qkLkzV+gfxtAqD+/fp/354Y303
+         xSRxpMLc2M9FfDSGGgaMo6M1TwuVkktvB7K8nrE13H9RnKLNeXTCPaD6xVAorDH+Eu76
+         4Ylw==
+X-Gm-Message-State: AJIora/WFL/93eMT8Q7EgbhNiTf0wbblbTmaLkYxrNNSsd+bq8GvxdwU
+        ygFMao6IanLXTjJ5GnbX6kM=
+X-Google-Smtp-Source: AGRyM1tMdDKZ5ydOiuf36WZNOlcNoDOh7UeG2Wl5nFnV3DeSsvm2YGSyx3q8fnZshmx3L5mTpd0DGQ==
+X-Received: by 2002:a05:6a00:23c9:b0:52a:cedd:3992 with SMTP id g9-20020a056a0023c900b0052acedd3992mr42915651pfc.43.1658398191449;
+        Thu, 21 Jul 2022 03:09:51 -0700 (PDT)
+Received: from cyhuang-hp-elitebook-840-g3.rt ([2402:7500:56a:cec2:d9ce:3b52:7023:4b90])
+        by smtp.gmail.com with ESMTPSA id x187-20020a6286c4000000b0052ac2e23295sm1351501pfd.44.2022.07.21.03.09.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Jul 2022 03:09:50 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 18:09:37 +0800
+From:   ChiYuan Huang <u0084500@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
+ type LED Indicator support
+Message-ID: <20220721100933.GA17618@cyhuang-hp-elitebook-840-g3.rt>
+References: <20220715112607.591-1-peterwu.pub@gmail.com>
+ <20220715112607.591-12-peterwu.pub@gmail.com>
+ <20220717084643.GA14285@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721060833.4173-1-WeitaoWang-oc@zhaoxin.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220717084643.GA14285@duo.ucw.cz>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Weitao,
+On Sun, Jul 17, 2022 at 10:46:43AM +0200, Pavel Machek wrote:
+> Hi!
+> 
+> > The MediaTek MT6370 is a highly-integrated smart power management IC,
+> > which includes a single cell Li-Ion/Li-Polymer switching battery
+> > charger, a USB Type-C & Power Delivery (PD) controller, dual
+> > Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> > a display bias driver and a general LDO for portable devices.
+> > 
+> > In MediaTek MT6370, there are four channel current-sink RGB LEDs that
+> > support hardware pattern for constant current, PWM, and breath mode.
+> > Isink4 channel can also be used as a CHG_VIN power good indicator.
+> > 
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> > index a49979f..71bacb5 100644
+> > --- a/drivers/leds/Kconfig
+> > +++ b/drivers/leds/Kconfig
+> > @@ -244,6 +244,20 @@ config LEDS_MT6323
+> >  	  This option enables support for on-chip LED drivers found on
+> >  	  Mediatek MT6323 PMIC.
+> >  
+> > +config LEDS_MT6370_RGB
+> > +	tristate "LED Support for MediaTek MT6370 PMIC"
+> > +	depends on LEDS_CLASS
+> > +	depends on MFD_MT6370
+> > +	select LINEAR_RANGE
+> > +	help
+> > +	  Say Y here to enable support for MT6370_RGB LED device.
+> > +	  In MT6370, there are four channel current-sink LED drivers that
+> > +	  support hardware pattern for constant current, PWM, and breath mode.
+> > +	  Isink4 channel can also be used as a CHG_VIN power good
+> 
+> Should this go to leds/rgb directory, and should it depend on
+> multicolor framework?
+Yes, and I may also want to change the file name from 'leds-mt6370'
+to 'leds-mt6370-rgb'. Is it ok?
+> 
+> Best regards,
+> 							Pavel
+> -- 
+> People of Russia, stop Putin before his war on Ukraine escalates.
 
-Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on linus/master v5.19-rc7 next-20220720]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Weitao-Wang/USB-HCD-Fix-URB-giveback-issue-in-tasklet-function/20220721-144208
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: hexagon-randconfig-r045-20220718 (https://download.01.org/0day-ci/archive/20220721/202207211752.TObbLhyX-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/302398ba5a76bb39957bad7a6a8cb9d0429cd43a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Weitao-Wang/USB-HCD-Fix-URB-giveback-issue-in-tasklet-function/20220721-144208
-        git checkout 302398ba5a76bb39957bad7a6a8cb9d0429cd43a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/core/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/core/hcd.c:1694:2: warning: unused label 'restart' [-Wunused-label]
-    restart:
-    ^~~~~~~~
-   1 warning generated.
-
-
-vim +/restart +1694 drivers/usb/core/hcd.c
-
-94dfd7edfd5c9b Ming Lei    2013-07-03  1686  
-e71ea55a5b6f91 Allen Pais  2020-08-17  1687  static void usb_giveback_urb_bh(struct tasklet_struct *t)
-94dfd7edfd5c9b Ming Lei    2013-07-03  1688  {
-e71ea55a5b6f91 Allen Pais  2020-08-17  1689  	struct giveback_urb_bh *bh = from_tasklet(bh, t, bh);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1690  	struct list_head local_list;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1691  
-94dfd7edfd5c9b Ming Lei    2013-07-03  1692  	spin_lock_irq(&bh->lock);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1693  	bh->running = true;
-94dfd7edfd5c9b Ming Lei    2013-07-03 @1694   restart:
-94dfd7edfd5c9b Ming Lei    2013-07-03  1695  	list_replace_init(&bh->head, &local_list);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1696  	spin_unlock_irq(&bh->lock);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1697  
-94dfd7edfd5c9b Ming Lei    2013-07-03  1698  	while (!list_empty(&local_list)) {
-94dfd7edfd5c9b Ming Lei    2013-07-03  1699  		struct urb *urb;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1700  
-94dfd7edfd5c9b Ming Lei    2013-07-03  1701  		urb = list_entry(local_list.next, struct urb, urb_list);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1702  		list_del_init(&urb->urb_list);
-c7ccde6eac6d3c Alan Stern  2013-09-03  1703  		bh->completing_ep = urb->ep;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1704  		__usb_hcd_giveback_urb(urb);
-c7ccde6eac6d3c Alan Stern  2013-09-03  1705  		bh->completing_ep = NULL;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1706  	}
-94dfd7edfd5c9b Ming Lei    2013-07-03  1707  
-302398ba5a76bb Weitao Wang 2022-07-21  1708  	/* giveback new URBs next time to prevent this function from
-302398ba5a76bb Weitao Wang 2022-07-21  1709  	 * not exiting for a long time.
-302398ba5a76bb Weitao Wang 2022-07-21  1710  	 */
-94dfd7edfd5c9b Ming Lei    2013-07-03  1711  	spin_lock_irq(&bh->lock);
-302398ba5a76bb Weitao Wang 2022-07-21  1712  	if (!list_empty(&bh->head)) {
-302398ba5a76bb Weitao Wang 2022-07-21  1713  		if (bh->hi_priority)
-302398ba5a76bb Weitao Wang 2022-07-21  1714  			tasklet_hi_schedule(&bh->bh);
-302398ba5a76bb Weitao Wang 2022-07-21  1715  		else
-302398ba5a76bb Weitao Wang 2022-07-21  1716  			tasklet_schedule(&bh->bh);
-302398ba5a76bb Weitao Wang 2022-07-21  1717  	}
-94dfd7edfd5c9b Ming Lei    2013-07-03  1718  	bh->running = false;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1719  	spin_unlock_irq(&bh->lock);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1720  }
-94dfd7edfd5c9b Ming Lei    2013-07-03  1721  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
