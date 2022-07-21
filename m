@@ -2,142 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7E957D069
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 17:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D0757D1BD
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 18:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbiGUP44 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jul 2022 11:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
+        id S230335AbiGUQmF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 21 Jul 2022 12:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiGUP44 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 11:56:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F8D74375;
-        Thu, 21 Jul 2022 08:56:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658419015; x=1689955015;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QwZO/Xjp3zERZ/KdehU+Hfcs6MWLQnHKtr7MnKEit28=;
-  b=AuD0usq02OrfutEXe0VHlx8LDUAHQDMQPc4QBhxTEyhPyV/wf/nwDzrY
-   UDoxOPKuSaPars11zWgRMC6gdqTB8mQp2R8J/CD9yJDcz5bgnT54wtSk2
-   2DVLtfPxyCmvRi+AZSenaSryOmtAU8ol82kGVK9TmozbHzoi4qm+0xd6E
-   9zUxBLaYQhhpItQwp/DyLs90/v7/nRZD+QbOjZ3CUd4cFUfBsDXjSVcTL
-   bXPvqnZLM37jc923RPTporWt9QAhhuZT72kmiMelctrx7DcwkX4Vx6bhS
-   9e0wiQs8un8RWuQv66zOIC+MvlwhSqASyNFmEXSSchJKspkw8zxmlCr0A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="267483757"
-X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
-   d="scan'208";a="267483757"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 08:56:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
-   d="scan'208";a="631221043"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Jul 2022 08:56:38 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oEYXW-0000JK-16;
-        Thu, 21 Jul 2022 15:56:38 +0000
-Date:   Thu, 21 Jul 2022 23:55:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, kishon@ti.com, dianders@chromium.org,
-        s.shtylyov@omp.ru, mka@chromium.org, ming.lei@canonical.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com, CobeChen@zhaoxin.com, TimGuo@zhaoxin.com
-Subject: Re: [PATCH] USB: HCD: Fix URB giveback issue in tasklet function
-Message-ID: <202207212305.50JoL7V2-lkp@intel.com>
-References: <20220721060833.4173-1-WeitaoWang-oc@zhaoxin.com>
+        with ESMTP id S229862AbiGUQmE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 12:42:04 -0400
+X-Greylist: delayed 604 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 09:42:02 PDT
+Received: from sctee1.zsr.sk (sctee1.zsr.sk [217.12.63.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7E3743DC;
+        Thu, 21 Jul 2022 09:42:01 -0700 (PDT)
+Received: from SBAEMBX1.intra.zsr.sk (10.17.102.161) by sctee1.zsr.sk
+ (217.12.63.67) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Thu, 21 Jul
+ 2022 18:27:46 +0200
+Received: from SCTEMBX1.intra.zsr.sk (10.224.64.221) by SBAEMBX1.intra.zsr.sk
+ (10.17.102.161) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 21 Jul
+ 2022 18:27:47 +0200
+Received: from SCTEMBX1.intra.zsr.sk ([fe80::4807:2f49:90bc:6b45]) by
+ SCTEMBX1.intra.zsr.sk ([fe80::4807:2f49:90bc:6b45%12]) with mapi id
+ 15.00.1497.033; Thu, 21 Jul 2022 18:27:47 +0200
+From:   =?iso-8859-2?Q?Fialka_=A5ubom=EDr?= <Fialka.Lubomir@zsr.sk>
+To:     "1@hotmail.com" <1@hotmail.com>
+Subject: proyecto
+Thread-Topic: proyecto
+Thread-Index: AQHYnR6UddlqC6rwDEaziqHqRP3psw==
+Date:   Thu, 21 Jul 2022 16:27:47 +0000
+Message-ID: <1658420799057.11087@zsr.sk>
+Accept-Language: sk-SK, en-US
+Content-Language: sk-SK
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.14.88.7]
+x-kse-serverinfo: SBAEMBX1.intra.zsr.sk, 9
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: Clean, bases: 7/21/2022 2:01:00 PM
+x-kse-attachment-filter-triggered-rules: Clean
+x-kse-attachment-filter-triggered-filters: Clean
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721060833.4173-1-WeitaoWang-oc@zhaoxin.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/21/2022 16:05:35
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 171871 [Jul 21 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: Fialka.Lubomir@zsr.sk
+X-KSE-AntiSpam-Info: LuaCore: 493 493 c80a237886b75a8eec705b487193915475443854
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;www.linkedin.com:7.1.1,5.0.1;www.instagram.com:7.1.1,5.0.1;zsr.sk:7.1.1;127.0.0.199:7.1.2;www.facebook.com:7.1.1,5.0.1
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/21/2022 16:09:00
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Weitao,
+Good day, i have an urgent discussion with you. contact my private e-mail below
 
-Thank you for the patch! Perhaps something to improve:
+E-mail:  tilife27@gmail.com
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on linus/master v5.19-rc7 next-20220721]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Weitao-Wang/USB-HCD-Fix-URB-giveback-issue-in-tasklet-function/20220721-144208
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20220721/202207212305.50JoL7V2-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/302398ba5a76bb39957bad7a6a8cb9d0429cd43a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Weitao-Wang/USB-HCD-Fix-URB-giveback-issue-in-tasklet-function/20220721-144208
-        git checkout 302398ba5a76bb39957bad7a6a8cb9d0429cd43a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/core/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/core/hcd.c: In function 'usb_giveback_urb_bh':
->> drivers/usb/core/hcd.c:1694:2: warning: label 'restart' defined but not used [-Wunused-label]
-    1694 |  restart:
-         |  ^~~~~~~
+for more info.
 
 
-vim +/restart +1694 drivers/usb/core/hcd.c
+?
 
-94dfd7edfd5c9b Ming Lei    2013-07-03  1686  
-e71ea55a5b6f91 Allen Pais  2020-08-17  1687  static void usb_giveback_urb_bh(struct tasklet_struct *t)
-94dfd7edfd5c9b Ming Lei    2013-07-03  1688  {
-e71ea55a5b6f91 Allen Pais  2020-08-17  1689  	struct giveback_urb_bh *bh = from_tasklet(bh, t, bh);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1690  	struct list_head local_list;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1691  
-94dfd7edfd5c9b Ming Lei    2013-07-03  1692  	spin_lock_irq(&bh->lock);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1693  	bh->running = true;
-94dfd7edfd5c9b Ming Lei    2013-07-03 @1694   restart:
-94dfd7edfd5c9b Ming Lei    2013-07-03  1695  	list_replace_init(&bh->head, &local_list);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1696  	spin_unlock_irq(&bh->lock);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1697  
-94dfd7edfd5c9b Ming Lei    2013-07-03  1698  	while (!list_empty(&local_list)) {
-94dfd7edfd5c9b Ming Lei    2013-07-03  1699  		struct urb *urb;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1700  
-94dfd7edfd5c9b Ming Lei    2013-07-03  1701  		urb = list_entry(local_list.next, struct urb, urb_list);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1702  		list_del_init(&urb->urb_list);
-c7ccde6eac6d3c Alan Stern  2013-09-03  1703  		bh->completing_ep = urb->ep;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1704  		__usb_hcd_giveback_urb(urb);
-c7ccde6eac6d3c Alan Stern  2013-09-03  1705  		bh->completing_ep = NULL;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1706  	}
-94dfd7edfd5c9b Ming Lei    2013-07-03  1707  
-302398ba5a76bb Weitao Wang 2022-07-21  1708  	/* giveback new URBs next time to prevent this function from
-302398ba5a76bb Weitao Wang 2022-07-21  1709  	 * not exiting for a long time.
-302398ba5a76bb Weitao Wang 2022-07-21  1710  	 */
-94dfd7edfd5c9b Ming Lei    2013-07-03  1711  	spin_lock_irq(&bh->lock);
-302398ba5a76bb Weitao Wang 2022-07-21  1712  	if (!list_empty(&bh->head)) {
-302398ba5a76bb Weitao Wang 2022-07-21  1713  		if (bh->hi_priority)
-302398ba5a76bb Weitao Wang 2022-07-21  1714  			tasklet_hi_schedule(&bh->bh);
-302398ba5a76bb Weitao Wang 2022-07-21  1715  		else
-302398ba5a76bb Weitao Wang 2022-07-21  1716  			tasklet_schedule(&bh->bh);
-302398ba5a76bb Weitao Wang 2022-07-21  1717  	}
-94dfd7edfd5c9b Ming Lei    2013-07-03  1718  	bh->running = false;
-94dfd7edfd5c9b Ming Lei    2013-07-03  1719  	spin_unlock_irq(&bh->lock);
-94dfd7edfd5c9b Ming Lei    2013-07-03  1720  }
-94dfd7edfd5c9b Ming Lei    2013-07-03  1721  
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==============================================================
+
+Dobrý deò,
+
+prosíme o zaslanie úpravy rozpoètu na úhradu cestovných príkazov z dôvodu nedostatku finanèných prostriedkov.
+
+Ïakujeme.
+
+S pozdravom
+
+[cid:image007.png@01D89AB0.CC001A30]
+
+?Mgr. Mária Hudáková
+Sekcia ekonomiky
+Odbor financovania a rozpoètu
+
++421 2 209 25 699
+maria.hudakova@vlada.gov.sk
+www.vlada.gov.sk
+
+[cid:image003.png@01D89AB0.BF34A690]<https://www.facebook.com/UradVladySR/>
+
+
+[cid:image004.png@01D89AB0.BF34A690]<http://www.instagram.com/uradvladysr>
+
+Úrad vlády Slovenskej republiky
+Námestie slobody 1
+?813 70 Bratislava
+
+[cid:image005.png@01D89AB0.BF34A690]
+
+
+[cid:image006.png@01D89AB0.BF34A690]<http://www.linkedin.com/company/uvsr>
+
+
+
+[eco.jpg]       Pred vytlaèením tohto mailu zvá¾te prosím vplyv na ¾ivotné prostredie. Ïakujeme.
+
+
+?
+
+?
+
