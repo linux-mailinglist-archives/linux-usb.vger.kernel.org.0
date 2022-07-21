@@ -2,61 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244B757C1EF
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 03:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713B757C490
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 08:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiGUBsa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Jul 2022 21:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S230102AbiGUGkN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jul 2022 02:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiGUBs3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Jul 2022 21:48:29 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3648C15A14;
-        Wed, 20 Jul 2022 18:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658368108; x=1689904108;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iXMHw5Asl7oU6fyDe5ffouo+oBUrAhNmZtBQxZRHC/I=;
-  b=BLtGR5rjjCIxVX0Nz7V7djzURA1HCqPBGnQv0/twq2DmpdqDnwSJVSb7
-   xcatyx5VTrBCDWgl/WbBF1NRSe4QKfAlFYpiq9o75rmaG+4YtRMxohGOi
-   AIxULJBrEggXyrHTg3rE0rlzptI9xf4AcXdsi+BQiemYbMnMD6zmDIPTM
-   U=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jul 2022 18:48:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 18:48:27 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 18:48:27 -0700
-Received: from jackp-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 18:48:26 -0700
-From:   Jack Pham <quic_jackp@quicinc.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <3090101217@zju.edu.cn>, <balbi@kernel.org>,
-        <colin.king@intel.com>, <jbrunet@baylibre.com>,
-        <jleng@ambarella.com>, <pavel.hofman@ivitera.com>,
-        <pawell@cadence.com>, <ruslan.bilovol@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Jack Pham <quic_jackp@quicinc.com>
-Subject: [PATCH v5] usb: gadget: f_uac2: fix superspeed transfer
-Date:   Wed, 20 Jul 2022 18:48:15 -0700
-Message-ID: <20220721014815.14453-1-quic_jackp@quicinc.com>
-X-Mailer: git-send-email 2.24.0
+        with ESMTP id S229854AbiGUGkM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 02:40:12 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Jul 2022 23:40:08 PDT
+Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [210.0.225.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BF12DFA;
+        Wed, 20 Jul 2022 23:40:07 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 21 Jul
+ 2022 14:08:34 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Thu, 21 Jul
+ 2022 14:08:34 +0800
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <kishon@ti.com>, <dianders@chromium.org>, <s.shtylyov@omp.ru>,
+        <mka@chromium.org>, <ming.lei@canonical.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>,
+        <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>
+Subject: [PATCH] USB: HCD: Fix URB giveback issue in tasklet function
+Date:   Thu, 21 Jul 2022 14:08:33 +0800
+Message-ID: <20220721060833.4173-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,99 +48,103 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+Usb core introduce the mechanism of giveback of URB in tasklet context to
+reduce hardware interrupt handling time. On some test situation(such as
+FIO with 4KB block size), when tasklet callback function called to
+giveback URB, interrupt handler add URB node to the bh->head list also.
+If check bh->head list again after finish all URB giveback of local_list,
+then it may introduce a "dynamic balance" between giveback URB and add URB
+to bh->head list. This tasklet callback function may not exit for a long
+time, which will cause other tasklet function calls to be delayed. Some
+real-time applications(such as KB and Mouse) will see noticeable lag.
 
-On page 362 of the USB3.2 specification (
-https://usb.org/sites/default/files/usb_32_20210125.zip),
-The 'SuperSpeed Endpoint Companion Descriptor' shall only be returned
-by Enhanced SuperSpeed devices that are operating at Gen X speed.
-Each endpoint described in an interface is followed by a 'SuperSpeed
-Endpoint Companion Descriptor'.
+Fix this issue by taking new URBs giveback in next tasklet function call.
 
-If users use SuperSpeed UDC, host can't recognize the device if endpoint
-doesn't have 'SuperSpeed Endpoint Companion Descriptor' followed.
-
-Currently in the uac2 driver code:
-1. ss_epout_desc_comp follows ss_epout_desc;
-2. ss_epin_fback_desc_comp follows ss_epin_fback_desc;
-3. ss_epin_desc_comp follows ss_epin_desc;
-4. Only ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
-Companion Descriptor' followed, so we should add it.
-
-Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
-Signed-off-by: Jing Leng <jleng@ambarella.com>
-Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
 ---
-v5: Revived from https://lore.kernel.org/linux-usb/20220218095948.4077-1-3090101217@zju.edu.cn/
-    and rebased on Greg's usb-linus
+ drivers/usb/core/hcd.c  | 24 ++++++++++++++----------
+ include/linux/usb/hcd.h |  1 +
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-ChangeLog v3->v4:
-- Add "Fixes:" tag in the changelog area
-ChangeLog v2->v3:
-- Remove static variables which are explicitly initialized to 0
-- Remove redundant modification "case USB_SPEED_SUPER_PLUS:"
-ChangeLog v1->v2:
-- Update more detailed description of the PATCH
-
- drivers/usb/gadget/function/f_uac2.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 1905a8d8e0c9..08726e4c68a5 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -291,6 +291,12 @@ static struct usb_endpoint_descriptor ss_ep_int_desc = {
- 	.bInterval = 4,
- };
- 
-+static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
-+	.bLength = sizeof(ss_ep_int_desc_comp),
-+	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
-+	.wBytesPerInterval = cpu_to_le16(6),
-+};
-+
- /* Audio Streaming OUT Interface - Alt0 */
- static struct usb_interface_descriptor std_as_out_if0_desc = {
- 	.bLength = sizeof std_as_out_if0_desc,
-@@ -604,7 +610,8 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
- 	(struct usb_descriptor_header *)&in_feature_unit_desc,
- 	(struct usb_descriptor_header *)&io_out_ot_desc,
- 
--  (struct usb_descriptor_header *)&ss_ep_int_desc,
-+	(struct usb_descriptor_header *)&ss_ep_int_desc,
-+	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
- 
- 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
- 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
-@@ -800,6 +807,7 @@ static void setup_headers(struct f_uac2_opts *opts,
- 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
- 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
- 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
-+	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
- 	struct usb_endpoint_descriptor *epout_desc;
- 	struct usb_endpoint_descriptor *epin_desc;
- 	struct usb_endpoint_descriptor *epin_fback_desc;
-@@ -827,6 +835,7 @@ static void setup_headers(struct f_uac2_opts *opts,
- 		epin_fback_desc = &ss_epin_fback_desc;
- 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
- 		ep_int_desc = &ss_ep_int_desc;
-+		ep_int_desc_comp = &ss_ep_int_desc_comp;
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 06eea8848ccc..149c045dfdc1 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1705,10 +1705,16 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+ 		bh->completing_ep = NULL;
  	}
  
- 	i = 0;
-@@ -855,8 +864,11 @@ static void setup_headers(struct f_uac2_opts *opts,
- 	if (EPOUT_EN(opts))
- 		headers[i++] = USBDHDR(&io_out_ot_desc);
- 
--	if (FUOUT_EN(opts) || FUIN_EN(opts))
-+	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
- 		headers[i++] = USBDHDR(ep_int_desc);
-+		if (ep_int_desc_comp)
-+			headers[i++] = USBDHDR(ep_int_desc_comp);
+-	/* check if there are new URBs to giveback */
++	/* giveback new URBs next time to prevent this function from
++	 * not exiting for a long time.
++	 */
+ 	spin_lock_irq(&bh->lock);
+-	if (!list_empty(&bh->head))
+-		goto restart;
++	if (!list_empty(&bh->head)) {
++		if (bh->hi_priority)
++			tasklet_hi_schedule(&bh->bh);
++		else
++			tasklet_schedule(&bh->bh);
 +	}
+ 	bh->running = false;
+ 	spin_unlock_irq(&bh->lock);
+ }
+@@ -1737,7 +1743,7 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ {
+ 	struct giveback_urb_bh *bh;
+-	bool running, high_prio_bh;
++	bool running;
  
- 	if (EPOUT_EN(opts)) {
- 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
+ 	/* pass status to tasklet via unlinked */
+ 	if (likely(!urb->unlinked))
+@@ -1748,13 +1754,10 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ 		return;
+ 	}
+ 
+-	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
++	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
+ 		bh = &hcd->high_prio_bh;
+-		high_prio_bh = true;
+-	} else {
++	else
+ 		bh = &hcd->low_prio_bh;
+-		high_prio_bh = false;
+-	}
+ 
+ 	spin_lock(&bh->lock);
+ 	list_add_tail(&urb->urb_list, &bh->head);
+@@ -1763,7 +1766,7 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ 
+ 	if (running)
+ 		;
+-	else if (high_prio_bh)
++	else if (bh->hi_priority)
+ 		tasklet_hi_schedule(&bh->bh);
+ 	else
+ 		tasklet_schedule(&bh->bh);
+@@ -2959,6 +2962,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
+ 
+ 	/* initialize tasklets */
+ 	init_giveback_urb_bh(&hcd->high_prio_bh);
++	hcd->high_prio_bh.hi_priority = 1;
+ 	init_giveback_urb_bh(&hcd->low_prio_bh);
+ 
+ 	/* enable irqs just before we start the controller,
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 2c1fc9212cf2..13d67239c66c 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -66,6 +66,7 @@
+ 
+ struct giveback_urb_bh {
+ 	bool running;
++	bool hi_priority;
+ 	spinlock_t lock;
+ 	struct list_head  head;
+ 	struct tasklet_struct bh;
 -- 
-2.24.0
+2.32.0
 
