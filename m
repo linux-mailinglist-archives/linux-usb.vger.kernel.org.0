@@ -2,35 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D8157CE98
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 17:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0081B57CED0
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Jul 2022 17:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiGUPHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jul 2022 11:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S231274AbiGUPYg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jul 2022 11:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbiGUPHM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 11:07:12 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1275787223
-        for <linux-usb@vger.kernel.org>; Thu, 21 Jul 2022 08:07:10 -0700 (PDT)
-Received: (qmail 233545 invoked by uid 1000); 21 Jul 2022 11:07:10 -0400
-Date:   Thu, 21 Jul 2022 11:07:10 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Subject: [PATCH] USB: gadget: Fix use-after-free Read in usb_udc_uevent()
-Message-ID: <YtlrnhHyrHsSky9m@rowland.harvard.edu>
-References: <YtlbkmVGJyhO4kR6@rowland.harvard.edu>
- <000000000000acc0e905e4517fa0@google.com>
+        with ESMTP id S229640AbiGUPYf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 11:24:35 -0400
+Received: from smtpbg516.qq.com (smtpbg516.qq.com [203.205.250.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0039624B8
+        for <linux-usb@vger.kernel.org>; Thu, 21 Jul 2022 08:24:29 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1658417062tfjqni0v
+Received: from bupt-poweredger310.tendawifi.co ( [223.72.68.172])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 21 Jul 2022 23:24:21 +0800 (CST)
+X-QQ-SSF: 01400000002000B0V000B00A0000000
+X-QQ-FEAT: +ynUkgUhZJmISFXXJgcf6XRptELTs4eaFM5N1f9J+Hjr8cNKPdLcpC0vmUuVp
+        v1CpJg8kuQIYl5AsDGlv1oUI3UbRdg0dYslilRdgXj6QV8js4Z9jXU16Q/DZ5LYXA6Pe7FT
+        qacxECwoSWF5xwcxzXDcR81S5i+BstsT59kXBsuGOj6j62VeSRO0QNurQZ61gWIP02Z39XR
+        /Q4pOaDUcQ9izmbh8y+q8OaU7O/Gq6nmSPHif+AFq4pP4TtABwlBDkrJd3JpWi+KTmDqEjI
+        RNdBbMYAhLn8EzrezKZopCd1Un7cqT1eiSZAgUTynSvUYnh40iNuolvLrL2UPHzsKg/5omx
+        wXoTHjb92gEuqrerpnRH3gtDp2qY2oWY/B3Y0IPz3w4zS5or8EDSqIy7QIvtw==
+X-QQ-GoodBg: 2
+From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sdlyyxy <sdlyyxy@bupt.edu.cn>
+Subject: [PATCH] USB: serial: usb_wwan: replace DTR/RTS magic numbers with macros
+Date:   Thu, 21 Jul 2022 23:23:35 +0800
+Message-Id: <20220721152335.629105-1-sdlyyxy@bupt.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000acc0e905e4517fa0@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_NONE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -38,78 +48,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The syzbot fuzzer found a race between uevent callbacks and gadget
-driver unregistration that can cause a use-after-free bug:
+The usb_wwan_send_setup function generates DTR/RTS signals in compliance
+with CDC ACM standard. This patch changes magic numbers in this function
+to equivalent macros.
 
----------------------------------------------------------------
-BUG: KASAN: use-after-free in usb_udc_uevent+0x11f/0x130
-drivers/usb/gadget/udc/core.c:1732
-Read of size 8 at addr ffff888078ce2050 by task udevd/2968
-
-CPU: 1 PID: 2968 Comm: udevd Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google
-06/29/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
- usb_udc_uevent+0x11f/0x130 drivers/usb/gadget/udc/core.c:1732
- dev_uevent+0x290/0x770 drivers/base/core.c:2424
----------------------------------------------------------------
-
-The bug occurs because usb_udc_uevent() dereferences udc->driver but
-does so without acquiring the udc_lock mutex, which protects this
-field.  If the gadget driver is unbound from the udc concurrently with
-uevent processing, the driver structure may be accessed after it has
-been deallocated.
-
-To prevent the race, we make sure that the routine holds the mutex
-around the racing accesses.
-
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Reported-and-tested-by: syzbot+b0de012ceb1e2a97891b@syzkaller.appspotmail.com
-CC: stable@vger.kernel.org
-Link: <https://lore.kernel.org/all/0000000000004de90405a719c951@google.com>
-
+Signed-off-by: sdlyyxy <sdlyyxy@bupt.edu.cn>
 ---
+ drivers/usb/serial/usb_wwan.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-As far as I can tell, this bug has always been present.  However, the
-udc_lock mutex used by the patch was added in commit fc274c1e9973
-("USB: gadget: Add a new bus for gadgets"), so this patch won't apply
-to trees which don't include that commit or a backport of it.  I don't
-know what tag, if any, can express this requirement.
-
-
-[as1983]
-
-
- drivers/usb/gadget/udc/core.c |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-Index: usb-devel/drivers/usb/gadget/udc/core.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/core.c
-+++ usb-devel/drivers/usb/gadget/udc/core.c
-@@ -1728,13 +1728,14 @@ static int usb_udc_uevent(struct device
- 		return ret;
- 	}
+diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+index dab38b63eaf7..a6bd6144702d 100644
+--- a/drivers/usb/serial/usb_wwan.c
++++ b/drivers/usb/serial/usb_wwan.c
+@@ -29,10 +29,14 @@
+ #include <linux/bitops.h>
+ #include <linux/uaccess.h>
+ #include <linux/usb.h>
++#include <linux/usb/cdc.h>
+ #include <linux/usb/serial.h>
+ #include <linux/serial.h>
+ #include "usb-wwan.h"
  
--	if (udc->driver) {
-+	mutex_lock(&udc_lock);
-+	if (udc->driver)
- 		ret = add_uevent_var(env, "USB_UDC_DRIVER=%s",
- 				udc->driver->function);
--		if (ret) {
--			dev_err(dev, "failed to add uevent USB_UDC_DRIVER\n");
--			return ret;
--		}
-+	mutex_unlock(&udc_lock);
-+	if (ret) {
-+		dev_err(dev, "failed to add uevent USB_UDC_DRIVER\n");
-+		return ret;
- 	}
++#define ACM_CTRL_DTR 0x01
++#define ACM_CTRL_RTS 0x02
++
+ /*
+  * Generate DTR/RTS signals on the port using the SET_CONTROL_LINE_STATE request
+  * in CDC ACM.
+@@ -48,9 +52,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+ 	portdata = usb_get_serial_port_data(port);
  
- 	return 0;
+ 	if (portdata->dtr_state)
+-		val |= 0x01;
++		val |= ACM_CTRL_DTR;
+ 	if (portdata->rts_state)
+-		val |= 0x02;
++		val |= ACM_CTRL_RTS;
+ 
+ 	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
+ 
+@@ -59,8 +63,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+ 		return res;
+ 
+ 	res = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+-				0x22, 0x21, val, ifnum, NULL, 0,
+-				USB_CTRL_SET_TIMEOUT);
++				USB_CDC_REQ_SET_CONTROL_LINE_STATE,
++				USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
++				val, ifnum, NULL, 0, USB_CTRL_SET_TIMEOUT);
+ 
+ 	usb_autopm_put_interface(port->serial->interface);
+ 
+-- 
+2.25.1
+
+
+
