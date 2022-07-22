@@ -2,160 +2,371 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8173D57E301
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 16:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3977057E2FA
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 16:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiGVO0k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jul 2022 10:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S235292AbiGVOTu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jul 2022 10:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiGVO0j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jul 2022 10:26:39 -0400
-X-Greylist: delayed 542 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Jul 2022 07:26:38 PDT
-Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF609D503
-        for <linux-usb@vger.kernel.org>; Fri, 22 Jul 2022 07:26:38 -0700 (PDT)
-Received: by air.basealt.ru (Postfix, from userid 490)
-        id 65351589463; Fri, 22 Jul 2022 14:17:33 +0000 (UTC)
+        with ESMTP id S229959AbiGVOTt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jul 2022 10:19:49 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FE9A6FBB;
+        Fri, 22 Jul 2022 07:19:48 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c6so608041plc.5;
+        Fri, 22 Jul 2022 07:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T1q/5UEvjKnmrGkeFgZRytr5DU5kdabjES1IFoO/gqw=;
+        b=N5b2E48s3MFxEm4zDb2HCPhQHt4Urn8emhJOhYSUlZ5Y57Ig163ukqY7GWAh8urYCS
+         HoNK8KFmrEWeuERbb5IRJDMLkwGWh8d6gFpumktZTx0iitGevy10Z/qaTUWKsPNCQefi
+         tgBpDzACKUqQ3W04Vse8a3Ym5LbgWuccclVvYtR+iXeeBcT8306sbxShnNhR+FkoELQE
+         RgJE3w9ydSuqJoeZ5XqQT8lRdGQe7VOQ9EYrs+whGEOfoUv54IzpxHuvLRMOI+Y7qnjJ
+         0ZTHyjIGqCWUJ4pDWCaeRp19ymx/h7u0u11UzLCg29nhJyqlZ4YsiPxey1skCyps7Zm9
+         f8Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T1q/5UEvjKnmrGkeFgZRytr5DU5kdabjES1IFoO/gqw=;
+        b=MlfIlU20NUsVVV1N6hgkyh9Zqbxk1/HGNG+MfsJ8GetCLkYOvra05Uk3wah+9eH0eq
+         MlYwQMV/hDPQ7TEMNoDc78N+iGfooTBHIa3XbzT1uUhXVorueFkAR9rzPjGviBUV2opX
+         /NXM4sstVqwFn2vi3bZgnUDbsB+y5SJaJJdAE3s9Nutc3vk94+RZnrnHdqnFkk/FHvMv
+         NGHIHwD75pHig5oHWgHhZ3dAFBlyWndZ8TDO52buo6eOty/1zODzkuEXu2nGnF/wmNyg
+         ZZkR6gGFIRS5vgEroNjL8g1GB9hzeGvK9nmgmZ2Z6a3ReW9rw6EpZ4iF1xJpcQtKResS
+         YM/g==
+X-Gm-Message-State: AJIora+s0aIpMf6y+1h/LZta50HaoWBrjODjZTqD012812gdokdfNfgO
+        s5pbW2QkkqyXchirb/qQixw=
+X-Google-Smtp-Source: AGRyM1tXVqYNUy+NFgrAHlDcM01iNexAN7CaAL0uAROXCpeeVwkXmKhPFoUuKttLJzcQ4dpaFH8V7g==
+X-Received: by 2002:a17:903:120f:b0:15f:99f:9597 with SMTP id l15-20020a170903120f00b0015f099f9597mr651270plh.45.1658499587396;
+        Fri, 22 Jul 2022 07:19:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa79aec000000b005252a06750esm3913898pfp.182.2022.07.22.07.19.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 07:19:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d0c94078-eec5-5924-a2c1-8c94c06364b8@roeck-us.net>
+Date:   Fri, 22 Jul 2022 07:19:42 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 08/13] usb: typec: tcpci_mt6370: Add MediaTek MT6370
+ tcpci driver
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        andy.shevchenko@gmail.com
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20220722102407.2205-1-peterwu.pub@gmail.com>
+ <20220722102407.2205-9-peterwu.pub@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220722102407.2205-9-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from asheplyakov-rocket.smb.basealt.ru (unknown [193.43.9.250])
-        by air.basealt.ru (Postfix) with ESMTPSA id 6ADB358942E;
-        Fri, 22 Jul 2022 14:17:28 +0000 (UTC)
-From:   Alexey Sheplyakov <asheplyakov@basealt.ru>
-To:     linux-usb@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Alexey Sheplyakov <asheplyakov@basealt.ru>
-Subject: [PATCH] usb: xhci_plat_remove: avoid NULL dereference
-Date:   Fri, 22 Jul 2022 18:17:00 +0400
-Message-Id: <20220722141700.1271439-1-asheplyakov@basealt.ru>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since commit 4736ebd7fcaff1eb8481c140ba494962847d6e0a ("usb: host:
-xhci-plat: omit shared hcd if either root hub has no ports")
-xhci->shared_hcd can be NULL, which causes the following Oops
-on reboot:
+On 7/22/22 03:24, ChiaEn Wu wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> The MediaTek MT6370 is a highly-integrated smart power management IC,
+> which includes a single cell Li-Ion/Li-Polymer switching battery
+> charger, a USB Type-C & Power Delivery (PD) controller, dual
+> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> a display bias driver and a general LDO for portable devices.
+> 
+> Add support for the Type-C & Power Delivery controller in
+> MediaTek MT6370 IC.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-[  710.124450] systemd-shutdown[1]: Rebooting.
-[  710.298861] xhci-hcd xhci-hcd.2.auto: remove, state 4
-[  710.304217] usb usb3: USB disconnect, device number 1
-[  710.317441] xhci-hcd xhci-hcd.2.auto: USB bus 3 deregistered
-[  710.323280] xhci-hcd xhci-hcd.2.auto: remove, state 1
-[  710.328401] usb usb2: USB disconnect, device number 1
-[  710.333515] usb 2-3: USB disconnect, device number 2
-[  710.467649] xhci-hcd xhci-hcd.2.auto: USB bus 2 deregistered
-[  710.475450] Unable to handle kernel NULL pointer dereference at virtual address 00000000000003b8
-[  710.484425] Mem abort info:
-[  710.487265]   ESR = 0x0000000096000004
-[  710.491060]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  710.496427]   SET = 0, FnV = 0
-[  710.499525]   EA = 0, S1PTW = 0
-[  710.502716]   FSC = 0x04: level 0 translation fault
-[  710.507648] Data abort info:
-[  710.510577]   ISV = 0, ISS = 0x00000004
-[  710.514462]   CM = 0, WnR = 0
-[  710.517480] user pgtable: 4k pages, 48-bit VAs, pgdp=00000008b0050000
-[  710.523976] [00000000000003b8] pgd=0000000000000000, p4d=0000000000000000
-[  710.530961] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[  710.536551] Modules linked in: rfkill input_leds snd_soc_simple_card snd_soc_simple_card_utils snd_soc_nau8822 designware_i2s snd_soc_core dw_hdmi_ahb_audio snd_pcm_dmaengine arm_ccn panfrost ac97_bus gpu_sched snd_pcm at24 fuse configfs sdhci_of_dwcmshc sdhci_pltfm sdhci nvme led_class mmc_core nvme_core bt1_pvt polynomial tp_serio snd_seq_midi snd_seq_midi_event snd_seq snd_timer snd_rawmidi snd_seq_device snd soundcore efivarfs ipv6
-[  710.575286] CPU: 7 PID: 1 Comm: systemd-shutdow Not tainted 5.19.0-rc7-00043-gfd8619f4fd54 #1
-[  710.583822] Hardware name: T-Platforms TF307-MB/BM1BM1-A, BIOS 5.6 07/06/2022
-[  710.590972] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  710.597949] pc : usb_remove_hcd+0x34/0x1e4
-[  710.602067] lr : xhci_plat_remove+0x74/0x140
-[  710.606351] sp : ffff800009f3b7c0
-[  710.609674] x29: ffff800009f3b7c0 x28: ffff000800960040 x27: 0000000000000000
-[  710.616833] x26: ffff800008dc22a0 x25: 0000000000000000 x24: 0000000000000000
-[  710.623992] x23: 0000000000000000 x22: ffff000805465810 x21: ffff000805465800
-[  710.631149] x20: ffff000800f80000 x19: 0000000000000000 x18: ffffffffffffffff
-[  710.638307] x17: ffff000805096000 x16: ffff00080633b800 x15: ffff000806537a1c
-[  710.645465] x14: 0000000000000001 x13: 0000000000000000 x12: ffff00080378d6f0
-[  710.652621] x11: ffff00080041a900 x10: ffff800009b204e8 x9 : ffff8000088abaa4
-[  710.659779] x8 : ffff000800960040 x7 : ffff800009409000 x6 : 0000000000000001
-[  710.666936] x5 : ffff800009241000 x4 : ffff800009241440 x3 : 0000000000000000
-[  710.674094] x2 : ffff000800960040 x1 : ffff000800960040 x0 : 0000000000000000
-[  710.681251] Call trace:
-[  710.683704]  usb_remove_hcd+0x34/0x1e4
-[  710.687467]  xhci_plat_remove+0x74/0x140
-[  710.691400]  platform_remove+0x34/0x70
-[  710.695165]  device_remove+0x54/0x90
-[  710.698753]  device_release_driver_internal+0x200/0x270
-[  710.703992]  device_release_driver+0x24/0x30
-[  710.708273]  bus_remove_device+0xe0/0x16c
-[  710.712293]  device_del+0x178/0x390
-[  710.715797]  platform_device_del.part.0+0x24/0x90
-[  710.720514]  platform_device_unregister+0x30/0x50
-[  710.725232]  dwc3_host_exit+0x20/0x30
-[  710.728907]  dwc3_remove+0x174/0x1b0
-[  710.732494]  platform_remove+0x34/0x70
-[  710.736254]  device_remove+0x54/0x90
-[  710.739840]  device_release_driver_internal+0x200/0x270
-[  710.745078]  device_release_driver+0x24/0x30
-[  710.749359]  bus_remove_device+0xe0/0x16c
-[  710.753380]  device_del+0x178/0x390
-[  710.756881]  platform_device_del.part.0+0x24/0x90
-[  710.761598]  platform_device_unregister+0x30/0x50
-[  710.766314]  of_platform_device_destroy+0xe8/0x100
-[  710.771119]  device_for_each_child_reverse+0x70/0xc0
-[  710.776099]  of_platform_depopulate+0x48/0x90
-[  710.780468]  __dwc3_of_simple_teardown+0x28/0xe0
-[  710.785099]  dwc3_of_simple_shutdown+0x20/0x30
-[  710.789555]  platform_shutdown+0x30/0x40
-[  710.793490]  device_shutdown+0x138/0x32c
-[  710.797425]  __do_sys_reboot+0x1c4/0x2ac
-[  710.801362]  __arm64_sys_reboot+0x30/0x40
-[  710.805383]  invoke_syscall+0x50/0x120
-[  710.809146]  el0_svc_common.constprop.0+0x68/0x124
-[  710.813950]  do_el0_svc+0x3c/0xcc
-[  710.817275]  el0_svc+0x60/0x12c
-[  710.820428]  el0t_64_sync_handler+0xc0/0x13c
-[  710.824710]  el0t_64_sync+0x18c/0x190
-[  710.828386] Code: a9025bf5 f942c420 f9001fe0 d2800000 (b943ba62)
-[  710.834498] ---[ end trace 0000000000000000 ]---
-[  710.875958] pstore: crypto_comp_compress failed, ret = -22!
-[  710.895047] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-[  710.902757] Kernel Offset: disabled
-[  710.906255] CPU features: 0x800,00004811,00001082
-[  710.910971] Memory Limit: none
-[  710.927474] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-To avoid the problem check for NULL in usb_remove_hcd.
-
-Signed-off-by: Alexey Sheplyakov <asheplyakov@basealt.ru>
-Fixes: 4736ebd7fcaf ("usb: host: xhci-plat: omit shared hcd if either root hub has no ports")
----
- drivers/usb/core/hcd.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 06eea8848ccc..41dcd41e550c 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -3033,9 +3033,15 @@ EXPORT_SYMBOL_GPL(usb_add_hcd);
-  */
- void usb_remove_hcd(struct usb_hcd *hcd)
- {
--	struct usb_device *rhdev = hcd->self.root_hub;
-+	struct usb_device *rhdev;
- 	bool rh_registered;
- 
-+	if (!hcd) {
-+		pr_debug("%s: hcd is NULL\n", __func__);
-+		return;
-+	}
-+	rhdev = hcd->self.root_hub;
-+
- 	dev_info(hcd->self.controller, "remove, state %x\n", hcd->state);
- 
- 	usb_get_dev(rhdev);
--- 
-2.32.0
+> ---
+> 
+> v6
+> - Convert tcpci as device resource managed with 'devm_add_action_or_reset' API.
+> - Refine remvoe callback.
+> - Refine the commit text from 'This commit add' to 'Add'.
+> ---
+>   drivers/usb/typec/tcpm/Kconfig        |  11 ++
+>   drivers/usb/typec/tcpm/Makefile       |   1 +
+>   drivers/usb/typec/tcpm/tcpci_mt6370.c | 208 ++++++++++++++++++++++++++++++++++
+>   3 files changed, 220 insertions(+)
+>   create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6370.c
+> 
+> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> index 073fd2e..e6b88ca 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -35,6 +35,17 @@ config TYPEC_MT6360
+>   	  USB Type-C. It works with Type-C Port Controller Manager
+>   	  to provide USB PD and USB Type-C functionalities.
+>   
+> +config TYPEC_TCPCI_MT6370
+> +	tristate "MediaTek MT6370 Type-C driver"
+> +	depends on MFD_MT6370
+> +	help
+> +	  MediaTek MT6370 is a multi-functional IC that includes
+> +	  USB Type-C. It works with Type-C Port Controller Manager
+> +	  to provide USB PD and USB Type-C functionalities.
+> +
+> +	  This driver can also be built as a module. The module
+> +	  will be called "tcpci_mt6370".
+> +
+>   config TYPEC_TCPCI_MAXIM
+>   	tristate "Maxim TCPCI based Type-C chip driver"
+>   	help
+> diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
+> index 7d499f3..906d9dc 100644
+> --- a/drivers/usb/typec/tcpm/Makefile
+> +++ b/drivers/usb/typec/tcpm/Makefile
+> @@ -6,4 +6,5 @@ typec_wcove-y				:= wcove.o
+>   obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
+>   obj-$(CONFIG_TYPEC_RT1711H)		+= tcpci_rt1711h.o
+>   obj-$(CONFIG_TYPEC_MT6360)		+= tcpci_mt6360.o
+> +obj-$(CONFIG_TYPEC_TCPCI_MT6370)	+= tcpci_mt6370.o
+>   obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o
+> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6370.c b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> new file mode 100644
+> index 0000000..4f53319
+> --- /dev/null
+> +++ b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> @@ -0,0 +1,208 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Richtek Technology Corp.
+> + *
+> + * Author: ChiYuan Huang <cy_huang@richtek.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_wakeup.h>
+> +#include <linux/pm_wakeirq.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/usb/tcpm.h>
+> +#include "tcpci.h"
+> +
+> +#define MT6370_REG_SYSCTRL8	0x9B
+> +
+> +#define MT6370_AUTOIDLE_MASK	BIT(3)
+> +
+> +#define MT6370_VENDOR_ID	0x29CF
+> +#define MT6370_TCPC_DID_A	0x2170
+> +
+> +struct mt6370_priv {
+> +	struct device *dev;
+> +	struct regulator *vbus;
+> +	struct tcpci *tcpci;
+> +	struct tcpci_data tcpci_data;
+> +};
+> +
+> +static const struct reg_sequence mt6370_reg_init[] = {
+> +	REG_SEQ(0xA0, 0x1, 1000),
+> +	REG_SEQ(0x81, 0x38, 0),
+> +	REG_SEQ(0x82, 0x82, 0),
+> +	REG_SEQ(0xBA, 0xFC, 0),
+> +	REG_SEQ(0xBB, 0x50, 0),
+> +	REG_SEQ(0x9E, 0x8F, 0),
+> +	REG_SEQ(0xA1, 0x5, 0),
+> +	REG_SEQ(0xA2, 0x4, 0),
+> +	REG_SEQ(0xA3, 0x4A, 0),
+> +	REG_SEQ(0xA4, 0x01, 0),
+> +	REG_SEQ(0x95, 0x01, 0),
+> +	REG_SEQ(0x80, 0x71, 0),
+> +	REG_SEQ(0x9B, 0x3A, 1000),
+> +};
+> +
+> +static int mt6370_tcpc_init(struct tcpci *tcpci, struct tcpci_data *data)
+> +{
+> +	u16 did;
+> +	int ret;
+> +
+> +	ret = regmap_register_patch(data->regmap, mt6370_reg_init,
+> +				    ARRAY_SIZE(mt6370_reg_init));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_raw_read(data->regmap, TCPC_BCD_DEV, &did, sizeof(u16));
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (did == MT6370_TCPC_DID_A)
+> +		return regmap_write(data->regmap, TCPC_FAULT_CTRL, 0x80);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6370_tcpc_set_vconn(struct tcpci *tcpci, struct tcpci_data *data,
+> +				 bool enable)
+> +{
+> +	return regmap_update_bits(data->regmap, MT6370_REG_SYSCTRL8,
+> +				  MT6370_AUTOIDLE_MASK,
+> +				  !enable ? MT6370_AUTOIDLE_MASK : 0);
+> +}
+> +
+> +static int mt6370_tcpc_set_vbus(struct tcpci *tcpci, struct tcpci_data *data,
+> +				bool source, bool sink)
+> +{
+> +	struct mt6370_priv *priv = container_of(data, struct mt6370_priv,
+> +						tcpci_data);
+> +	int ret;
+> +
+> +	ret = regulator_is_enabled(priv->vbus);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret && !source)
+> +		return regulator_disable(priv->vbus);
+> +
+> +	if (!ret && source)
+> +		return regulator_enable(priv->vbus);
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t mt6370_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct mt6370_priv *priv = dev_id;
+> +
+> +	return tcpci_irq(priv->tcpci);
+> +}
+> +
+> +static int mt6370_check_vendor_info(struct mt6370_priv *priv)
+> +{
+> +	struct regmap *regmap = priv->tcpci_data.regmap;
+> +	u16 vid;
+> +	int ret;
+> +
+> +	ret = regmap_raw_read(regmap, TCPC_VENDOR_ID, &vid, sizeof(u16));
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (vid != MT6370_VENDOR_ID)
+> +		return dev_err_probe(priv->dev, -ENODEV,
+> +				     "Vendor ID not correct 0x%02x\n", vid);
+> +
+> +	return 0;
+> +}
+> +
+> +static void mt6370_unregister_tcpci_port(void *tcpci)
+> +{
+> +	tcpci_unregister_port(tcpci);
+> +}
+> +
+> +static int mt6370_tcpc_probe(struct platform_device *pdev)
+> +{
+> +	struct mt6370_priv *priv;
+> +	struct device *dev = &pdev->dev;
+> +	int irq, ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->dev = dev;
+> +
+> +	priv->tcpci_data.regmap = dev_get_regmap(dev->parent, NULL);
+> +	if (!priv->tcpci_data.regmap)
+> +		return dev_err_probe(dev, -ENODEV, "Failed to init regmap\n");
+> +
+> +	ret = mt6370_check_vendor_info(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return dev_err_probe(dev, irq, "Failed to get irq\n");
+> +
+> +	/* Assign TCPCI feature and ops */
+> +	priv->tcpci_data.auto_discharge_disconnect = 1;
+> +	priv->tcpci_data.init = mt6370_tcpc_init;
+> +	priv->tcpci_data.set_vconn = mt6370_tcpc_set_vconn;
+> +
+> +	priv->vbus = devm_regulator_get_optional(dev, "vbus");
+> +	if (!IS_ERR(priv->vbus))
+> +		priv->tcpci_data.set_vbus = mt6370_tcpc_set_vbus;
+> +
+> +	priv->tcpci = tcpci_register_port(dev, &priv->tcpci_data);
+> +	if (IS_ERR(priv->tcpci))
+> +		return dev_err_probe(dev, PTR_ERR(priv->tcpci),
+> +				     "Failed to register tcpci port\n");
+> +
+> +	ret = devm_add_action_or_reset(dev, mt6370_unregister_tcpci_port,
+> +				       priv->tcpci);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_request_threaded_irq(dev, irq, NULL, mt6370_irq_handler,
+> +					IRQF_ONESHOT, dev_name(dev), priv);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to allocate irq\n");
+> +
+> +	device_init_wakeup(dev, true);
+> +	dev_pm_set_wake_irq(dev, irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6370_tcpc_remove(struct platform_device *pdev)
+> +{
+> +	dev_pm_clear_wake_irq(&pdev->dev);
+> +	device_init_wakeup(&pdev->dev, false);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mt6370_tcpc_devid_table[] = {
+> +	{ .compatible = "mediatek,mt6370-tcpc" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mt6370_tcpc_devid_table);
+> +
+> +static struct platform_driver mt6370_tcpc_driver = {
+> +	.driver = {
+> +		.name = "mt6370-tcpc",
+> +		.of_match_table = mt6370_tcpc_devid_table,
+> +	},
+> +	.probe = mt6370_tcpc_probe,
+> +	.remove = mt6370_tcpc_remove,
+> +};
+> +module_platform_driver(mt6370_tcpc_driver);
+> +
+> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
+> +MODULE_DESCRIPTION("MT6370 USB Type-C Port Controller Interface Driver");
+> +MODULE_LICENSE("GPL v2");
 
