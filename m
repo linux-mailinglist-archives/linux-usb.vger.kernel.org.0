@@ -2,181 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4922257DAA8
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 09:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C68A57DB25
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 09:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbiGVHNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jul 2022 03:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
+        id S234587AbiGVHRL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jul 2022 03:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiGVHNJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jul 2022 03:13:09 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7CE8E6D9;
-        Fri, 22 Jul 2022 00:13:08 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10dc1b16c12so229085fac.6;
-        Fri, 22 Jul 2022 00:13:08 -0700 (PDT)
+        with ESMTP id S234612AbiGVHQ7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jul 2022 03:16:59 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2097.outbound.protection.outlook.com [40.107.243.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1FE30F4F;
+        Fri, 22 Jul 2022 00:15:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ib1oVOBeQVMvV+ZXk6kSRRH1K7Swp1sHMTLEFyHWjfkRwE0HbClpKh7wv2/xnQFCj5EAcJN7XDSFfeV+D0LGGfR7Zo/z5BIuJPb1U/h1zUygqr24RrgGEATiM0BzzcJ5S+F81JR/jRF8bsDQBNAlyKzRF+o8Q5BD6XedOzsEFyPmrZz4O0rWv7P1pogAVlL9HYYiy4QeMhRGZ0P6kR69Ki1NWirnEpQMMgwsmfg/33lRTiGiY2esw+9qIzQocecNoPz903A/+bw9pIeBDIC2UgbQx0B3uOVHt2YGcRT6hMgfloXN39QyC7Qo6MXZy5nlkIWPg9N6jyi2AVFew/Fp5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8EHc2B1Ci57DmkghA4NiRu/G3AsMC/+NKO12V9TFuVM=;
+ b=ARewLZm9Cxqh8+o90rD/j3KVmHMgVTMVB8y338xgBi9Ed2B4c9OQ1BPK+cN0D8G/XnQHPBZxZagXqeRa/9n70dToKKBMMSVoqjQDvRD2C5ToJjGKbLvz32zVK31g0ReHrqkqpxF4dfZtNkXZuUlztBEtkDU8B7qXLEYkKzWNGKNwnjYEPaVz9h33zVVoDn76hJbOxjwLXb9AwR9Cr6fnCUTIjlgJEoGnWw1Nr2Rz+zsHu7n6I3vSUfEyfryK8BemdR/R+1pcOFSXFkNZv1g2cDcqtESfFtlTwGM/vunPR03HDHo5ZCgKAUGNhKWOfpPN1nAKUzSB+NhQpnv9FBqRmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/5eFAcvX/CKlTrR9jX/d2mPTDiNp5/R1cusUbd4zITc=;
-        b=IAE445tfsoJF+oNXdF/zD/o+xl+j5zuke/2oHbLDrDDG1eK7oMFwzquA9owKIC0akd
-         2wtRxONNq8jxitQ3T9C67se9Vr1rSoQvwlaTscjFzLW1c2a/5F4E5KboDfICs93jZTil
-         0E0IoLVKrsMnxnyYFFQKW2lpHILH6KLPtlg5fey8OufecN3TWNT5SnjkNDpHr+rHZ429
-         3eFW2gX7jaRz0bAt5mhSlzF7pJIgABlYhgd/Y8SaNIi4idYTIuB1mcImAJXFeFE0BWNd
-         CWsx4ux7HI+RoXokQX7/HR+dhEWUyNFu3OZbjpPvIxHLJnUXvkBc4tE4d62xfHQgP7ck
-         4zhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/5eFAcvX/CKlTrR9jX/d2mPTDiNp5/R1cusUbd4zITc=;
-        b=Y/3lGgvkKxgsDRBc4EIHfo+tkFuJRKGvuZqYIINfBRo7D4bh6RvdwngogX2EUvjPgv
-         jsIRq1JH9h3lqu1Zem14HXOgBPJC1+riJJmDMLLUzwqWTWKg+ox6o+Zk1O5QW7oE2NoJ
-         tQtZin4ENd8cu1+A0LWXZEMuVF3ebuSt2mAPrXiWhIq3+O2yzTaxcJuIhl5/L1HK1+9y
-         XSw5QVJ2U8g6kEKdARF11DomjWIk1lbShDz7SNVudLWJme6XtsQmFDXkaeRLsDlLqpBv
-         Q2zPDcYgfZ+zZ5nXEA6pkuGf626Mz4uJtX+Ml8cjISESFq/jUtxuS+SSuCXSVVo87DP+
-         iufg==
-X-Gm-Message-State: AJIora9zhecv0+loBcKD2kyuG1FJ8qb4AeVMxtZiSDPDqtEAZz3WKs7w
-        F/yMT57OVl6qOnp1XGAQERzfcfrwMQB9UETHVXeQU3aF
-X-Google-Smtp-Source: AGRyM1sZbAQqRFGT4zktXxYOhlpCSHAdyV2KhO65mrh0zep3NPJ8L+wFTa+SoqqdeFP8ZeriFFgE8FEPylj7lDy66+k=
-X-Received: by 2002:a05:6870:2323:b0:10d:2b6:3519 with SMTP id
- w35-20020a056870232300b0010d02b63519mr6962462oao.215.1658473987695; Fri, 22
- Jul 2022 00:13:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
- <20220721061144.35139-4-gene.chen.richtek@gmail.com> <0675b483-9d51-30bc-a51d-9b9f2a0acb51@roeck-us.net>
-In-Reply-To: <0675b483-9d51-30bc-a51d-9b9f2a0acb51@roeck-us.net>
-From:   Gene Chen <gene.chen.richtek@gmail.com>
-Date:   Fri, 22 Jul 2022 15:12:55 +0800
-Message-ID: <CAE+NS340V5+-QqnO8WAFT3Z2U77P+-hejFUbpCbxieORaPJ2Dw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/6] usb: typec: tcpci_rt1711h: Add regulator support
- when source vbus
-To:     Guenter Roeck <linux@roeck-us.net>
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8EHc2B1Ci57DmkghA4NiRu/G3AsMC/+NKO12V9TFuVM=;
+ b=Stk5m8Bl2ZIo08Lodl6twN3eouHej2lbFCcZZKCUsnZUUDwMNSS5kkZY1hbidAOBtCpjfsO/zKnmjM23nMAZao8OTMW/OUy+3Z1ZF/xUjspXZUvL7w36VOqdh/bJd9RdTNCwtCitRl+vAzPnUjGXB+nwqMDnO502b845GxsRTWI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by DM5PR04MB0218.namprd04.prod.outlook.com (2603:10b6:3:77::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5438.21; Fri, 22 Jul 2022 07:15:11 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::f02d:f2e:cba9:223b%6]) with mapi id 15.20.5458.018; Fri, 22 Jul 2022
+ 07:15:10 +0000
+Date:   Fri, 22 Jul 2022 15:15:02 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
 Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Gene Chen <gene_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: typec: anx7411: Fix an array out of bounds
+Message-ID: <20220722071502.GA2853704@anxtwsw-Precision-3640-Tower>
+References: <YtpC5s4/AD8vFz+X@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtpC5s4/AD8vFz+X@kili>
+X-ClientProxiedBy: TYCP286CA0099.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:2b4::17) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 534c7fdb-f9e0-4248-3114-08da6bb1e9f5
+X-MS-TrafficTypeDiagnostic: DM5PR04MB0218:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZGmBEkG5sBu/XAew9Y/GsfaXzrbQIlc0tw/Ar2scr1a+hCizlwUdv1eycF70/HWQ/N+LbKzeYZ7RiOXHVcAAvc6aKoRZDuKp9pjN4Al2a0IIwNDNHmmCEeLflLu2i6QD78P5tShpq+QFW+U8kcIdi422+34wqIn7rtPR7035rjov9Fg9TfIg2FMeUuKwYg7J8lEWK8EY86OJx54X368xSiaDondzaivMSm1NDdTmglA04FQjuW95vwRQVr0P/FNaHs5cxBwFG1aQpijr8cTEvshGuEMT9ZKj0TKjT73bp8JmObIm6WHWtxGe33aIi4yYXswILijM3vFcPJC/7CFmZMHRltVHOjnGg79RErU2r6Q4isPRZhhbwGBALUTF6Pz3pAMLq1oH5hXwc59hyD/U9nOnSR1TwHZxbjSjyH77z4ic3HwNQCrcDIOVTCM3aLWbwjOmXeAb5y0Z/E/G2CC8QY4jIt+6dwH+dQ3igLk0eDcV8nNVkaIJqiGQYv/yofQYIbxgTvfp8s5iL0MsAROD3WenXV6MPI+zoYwJngACtVby+0Fd7WZ7pGLMNvWfrpgvC7NMIbEvwacna4g7gKDT7mXf+LoUkdI9W3hJtaaC9NalEhM1MigcEYtpTkuMCTVtpJsxD/cCGmGdEScFmzuYCtDUqBUsOlj3Gkh0ten/N94OI+VsYff2ZKzBE5V0Qk32E2FEs5OD3PEyNNOYVg0CTNps6xXlAq2+R581A2dOuwbLT8cTtppSh25Qeh6MZ7VYihgzSAVCcaYMFckMCKJljdPzxcSbkVMl1IGzQn2bGc4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(346002)(376002)(136003)(39850400004)(366004)(33656002)(6666004)(6916009)(5660300002)(8936002)(316002)(86362001)(66476007)(2906002)(38350700002)(38100700002)(41300700001)(33716001)(8676002)(6512007)(478600001)(66946007)(6486002)(9686003)(4326008)(6506007)(52116002)(186003)(54906003)(83380400001)(26005)(1076003)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a3rLRRxd6L0e7LsTmGZLltbK0Jui2vWnWmACTvaRkSMbfVzyo6RS1JHVhGPy?=
+ =?us-ascii?Q?kp0EUKC4thLLK5656XIeyr/d3b4/lrQ1IoN4ZoH+3Rashwzp8vlzE/E7UNTM?=
+ =?us-ascii?Q?g+rjCbKCs6UQggUAUHNmw2I7kCHmfwmKtpUurL7RF/S7Z3PWFmwJe310Gb2z?=
+ =?us-ascii?Q?2sUdlV2V0LjhY4UKcH77Ov5c6BgvC4CPLjJ3/aRODDUjYe/os0jp0pg3xqe0?=
+ =?us-ascii?Q?xqvcUSMpeVZEVXMpTlNsG+qQN0nWsvmfcRXhLzngcFQzyYOa7SXV3QarL85h?=
+ =?us-ascii?Q?ApFFlkrj3zFxtZKg9tqmNQGZyFlZyPmRfDBrawaCGflRbRj03rZv6/evGnrs?=
+ =?us-ascii?Q?u/h16MZbyK/W9rhehwaW0752CETHGbTCbzI0hWd76cLFhD7wq5o1nnIaER6z?=
+ =?us-ascii?Q?tz/U2O1pU5I3QIA7onZs2FyUCkokY/8wrXQflYsdVDymbuVGAJ2lx/Oggqib?=
+ =?us-ascii?Q?+tjlyRcRd5tSlw6+q4reM2hi9gI35E4mf3iH/Juf1S8RazZf6mh3p4rKbbGq?=
+ =?us-ascii?Q?l4BQxLY+DegkkyD2D5L4V6A2OhKhkvXP8aC36/CsKs5+30asKXUvK2dkBlU3?=
+ =?us-ascii?Q?f4brGV8SM1pkFg0eLO/ulsO/kqZfo2Hha9JIcIsB62IIVkUITVjY1rjOjRgb?=
+ =?us-ascii?Q?4N5unXqOSmZTFSo0aEt0qUaU3KZPSoNDut0GucCdpsnOvAMlSLulffBULJwl?=
+ =?us-ascii?Q?5rxPyJvV1CJJWQhVA+Tuz3u9lGyYS4jJWLDOnw3L8ojEHJuDz6DJ3J5dMrzw?=
+ =?us-ascii?Q?qmhx6/2WP4Hpzsu20WYK7Ds+CVnOhlbC/lfKTDge+4naZv79mpNY1N/+9nsl?=
+ =?us-ascii?Q?zYErTE96aq+ZYR2wDRrwfNfZneBjYwI8w5d9lJuCIxtKgDfNMw3zANOsYP3D?=
+ =?us-ascii?Q?vxd0m67pEHHL7WdO/+sKpBEUU3cIv5GGDAEEfzjVO6aWa8I8FwgzLrjgp6+B?=
+ =?us-ascii?Q?rwu2LUWtTgjoJH7601O6787nY3JcLpiH4hdr6+zLGhi6OKSN6+OF9MZFIHB8?=
+ =?us-ascii?Q?myFQmBa67NcQ4RjI68Cnrgr8M3XKMDOV7yHWVUuX4fEVKH+yKjkutkLs07ch?=
+ =?us-ascii?Q?F+DuXprmKHn5HJFhQbys8WpK54X+HS+VprwH32vOhcZN1EhTfiKl3kk8JF5V?=
+ =?us-ascii?Q?4jfpd3ZmqV98PYbuRKc5fE/uO0OTkLVv6akCIqp9bs+oMR4o7cQhso+1U6ln?=
+ =?us-ascii?Q?Q+Bl+ABKUQs4B07AVCe2BCj2PXR9/nW89mCLSPmsTa4skpE/fSj1oylVECsQ?=
+ =?us-ascii?Q?0xmlPm2B6sQGCmNmROVPSdrRdBWTYOCqxDbJH8+TjPX2PUwwY/OcxT4KwW4G?=
+ =?us-ascii?Q?kqk2LQygTqQycVdMA1Er/4tniEXxD9CxPf1eGZbdBEzgMUojhPjexk1tqDEy?=
+ =?us-ascii?Q?OOB4JixiytdtNIGxTUbTVYS9i155VoiU7kT8ylDZniwn5cGfvNxFoX6snsre?=
+ =?us-ascii?Q?PcMJy4oXyTOi/ejlfQ67ACnQt1WJBh6xjkzy0xjJqMrriuZHkKM0nbjX5et6?=
+ =?us-ascii?Q?RMd/zBlJao0EqM7uNj3yIpt/ynNxLFHhZwstVmuBppUGK6vorLfVih8SYaAo?=
+ =?us-ascii?Q?lE3DROKxetIKrwJB3mhuKvl3SFToAlIThJx2nU1u?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 534c7fdb-f9e0-4248-3114-08da6bb1e9f5
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2022 07:15:10.7233
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S3XyX1oT3viegxPIJVzMH3CIO7VfQhG0Jfjq2oajDhQgx2yf52a9+PXNww9aKGawstJkmwth178BBK2H/F7xDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0218
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2022=E5=B9=B47=E6=9C=8821=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A10:28=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> On 7/20/22 23:11, Gene Chen wrote:
-> > From: Gene Chen <gene_chen@richtek.com>
-> >
-> > Add regulator support when source vbus
-> >
-> > Signed-off-by: Gene Chen <gene_chen@richtek.com>
-> > ---
-> >   drivers/usb/typec/tcpm/tcpci_rt1711h.c | 28 +++++++++++++++++++++++++=
-+
-> >   1 file changed, 28 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec=
-/tcpm/tcpci_rt1711h.c
-> > index 3309ceace2b2..52c9594e531d 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > @@ -10,6 +10,7 @@
-> >   #include <linux/i2c.h>
-> >   #include <linux/interrupt.h>
-> >   #include <linux/gpio/consumer.h>
-> > +#include <linux/regulator/consumer.h>
-> >   #include <linux/usb/tcpm.h>
-> >   #include <linux/regmap.h>
-> >   #include "tcpci.h"
-> > @@ -40,6 +41,8 @@ struct rt1711h_chip {
-> >       struct tcpci_data data;
-> >       struct tcpci *tcpci;
-> >       struct device *dev;
-> > +     struct regulator *vbus;
-> > +     bool src_en;
-> >   };
-> >
-> >   static int rt1711h_read16(struct rt1711h_chip *chip, unsigned int reg=
-, u16 *val)
-> > @@ -103,6 +106,26 @@ static int rt1711h_init(struct tcpci *tcpci, struc=
-t tcpci_data *tdata)
-> >
-> >       /* dcSRC.DRP : 33% */
-> >       return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-> > +
-> > +}
-> > +
-> > +static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *td=
-ata,
-> > +                         bool src, bool snk)
-> > +{
-> > +     struct rt1711h_chip *chip =3D tdata_to_rt1711h(tdata);
-> > +     int ret;
-> > +
-> > +     if (chip->src_en =3D=3D src)
-> > +             return 1;
-> > +
-> > +     if (src)
-> > +             ret =3D regulator_enable(chip->vbus);
-> > +     else
-> > +             ret =3D regulator_disable(chip->vbus);
-> > +
-> > +     if (!ret)
-> > +             chip->src_en =3D src;
-> > +     return ret ? ret : 1;
->
-> Are you sure this is what you want ? Returning 1 bypasses the code settin=
-g
-> the vbus registers in tcpci.c. If that is on purpose it might make sense
-> to explain it.
->
+On Fri, Jul 22, 2022 at 09:25:42AM +0300, Dan Carpenter wrote:
+> This should be ARRAY_SIZE() instead of sizeof().  ARRAY_SIZE is
+> 4 and  sizeof is 8.
+Hi Dan Carpenter, thanks for your patch.
 
-ACK, return 0 is more compatible with next generation chip,
-and writing tcpci vbus command won't affect to ic if not supported.
+Reviewed-by: Xin Ji <xji@analogixsemi.com>
 
-> >   }
-> >
-> >   static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *=
-tdata,
-> > @@ -246,7 +269,12 @@ static int rt1711h_probe(struct i2c_client *client=
-,
-> >       if (ret < 0)
-> >               return ret;
-> >
-> > +     chip->vbus =3D devm_regulator_get(&client->dev, "vbus");
-> > +     if (IS_ERR(chip->vbus))
-> > +             return PTR_ERR(chip->vbus);
-> > +
->
-> This makes regulator support mandatory, which so far was not the case.
-> That warrants an explanation why it is not a problem for existing users.
->
-
-We verified ic behavior as SNK only, because we couldn't add tcpci set
-vbus callback and external boost otg vbus.
-And we use our own type-c state machine and pd policy engine for mass
-production to user.
-
-> Thanks,
-> Guenter
->
-> >       chip->data.init =3D rt1711h_init;
-> > +     chip->data.set_vbus =3D rt1711h_set_vbus;
-> >       chip->data.set_vconn =3D rt1711h_set_vconn;
-> >       chip->data.start_drp_toggling =3D rt1711h_start_drp_toggling;
-> >       chip->tcpci =3D tcpci_register_port(chip->dev, &chip->data);
->
+Thanks,
+Xi
+> 
+> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/usb/typec/anx7411.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+> index b990376991f8..4f7a5cc968d0 100644
+> --- a/drivers/usb/typec/anx7411.c
+> +++ b/drivers/usb/typec/anx7411.c
+> @@ -992,7 +992,7 @@ static int anx7411_register_i2c_dummy_clients(struct anx7411_data *ctx,
+>  	int i;
+>  	u8 spi_addr;
+>  
+> -	for (i = 0; i < sizeof(anx7411_i2c_addr); i++) {
+> +	for (i = 0; i < ARRAY_SIZE(anx7411_i2c_addr); i++) {
+>  		if (client->addr == (anx7411_i2c_addr[i].tcpc_address >> 1)) {
+>  			spi_addr = anx7411_i2c_addr[i].spi_address >> 1;
+>  			ctx->spi_client = i2c_new_dummy_device(client->adapter,
+> -- 
+> 2.35.1
