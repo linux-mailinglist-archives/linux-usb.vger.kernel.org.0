@@ -2,217 +2,238 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB1E57D794
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 02:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A140257D79F
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 02:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiGVAEr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jul 2022 20:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S233463AbiGVANy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jul 2022 20:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGVAEq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 20:04:46 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E8018374;
-        Thu, 21 Jul 2022 17:04:45 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26M00Cv0000361;
-        Fri, 22 Jul 2022 00:04:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=YQSnXFjnVnUtIC6vAkW2iOogDZHtPRkNMYTT5X/COyw=;
- b=H20JSMV7K/yd7grFLtpe1030/bAOx/447gXI3R+50Gs+oN+6ixlEe9xF4eYmiobqlmWq
- Mrucpi4tT4q3xp+vgEjcRWtI5DT9zLsL8flz194CDnFOebiYBhCfVw+61XXzdAiynF8B
- 6FWIyhIRosHyKUJsER7y5BDU8OkWV7IeeazKgb+QFCI0ygb4TqMwRb/SQxgqyvUsQ/16
- sV2SynyGp+aw740kJMijF9dR4tIHFXvBFsH4sbuzzwpey0CwW/85qJQBE0IJZUHq1jzb
- 0yH7pPnZNmUZmbNK/kncpy4BJ8mfECj2HZp5Vudj88v45q3p1oG78VAjRMqfokrECohw zQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3heue338w2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 00:04:41 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26M04er5007644
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 00:04:40 GMT
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 21 Jul 2022 17:04:39 -0700
-Received: from [10.110.106.175] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 21 Jul
- 2022 17:04:39 -0700
-Message-ID: <b431cfd5-65b8-aa31-ca13-a813a1ad2e10@quicinc.com>
-Date:   Thu, 21 Jul 2022 17:04:38 -0700
+        with ESMTP id S229739AbiGVANx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 20:13:53 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77B712AAC;
+        Thu, 21 Jul 2022 17:13:52 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gq7so3026826pjb.1;
+        Thu, 21 Jul 2022 17:13:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=4QRKHLiRN5hnDUcvUHn8lxSQcuIBW2UAZEYmbp1CN+Q=;
+        b=OfetnpZDqRZLzXYCGLHxw7bg0lrX3cenLaetCse44qssBxtm/MtLTviJNP+smm+VMA
+         CpFn8b1q3rJn7Vw//UcGG+VgpXgz/evMlj6qWoWumI2Lc5yeHgVDTBH4KF1ZoBCoWr+5
+         g87fIBaH2pD/CZj5O0m+oK8J/cDRk671wSBpXGBxi3UlaKaSI/sVCv0B6+iWLxD2y+yQ
+         Lvi9+H2NFAX+oJ453VOgw455wm0bruvB3f2rn0gRWb5s390v5rIW1wcPqHUy/KDqrwjg
+         slylHXdNO9x1epKh+M4L17tzKzmHvrgWtiU603kJoPitCZjOVuOcE101WYXaAhDESz5e
+         n0xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=4QRKHLiRN5hnDUcvUHn8lxSQcuIBW2UAZEYmbp1CN+Q=;
+        b=CQCWwfoIiV5yaTsW6AJOVN+KMWIGMe4cwvwNV0I7agPHJfv15Fg73Mc2GTTrmtM/WF
+         X1geuaQapHQpm/4YxnE4fDgaIaFaV3V6basvLXC1qZw1dRwUFe5rp6IVeySc3IkynFy8
+         q3jqLU5DvBPuVbaNpBGsS5avVC02wS2APVI/Ii+vVIhJdlTViZCKU3s7Uz7kL5IhWcEl
+         gnZMEtCb7S5SL/gTDDOcJz8mIWceWO9AZbdtZpQFMnMXWE9Ts991eS2iLiVQS4yJymYb
+         0gxz91X7DME3sjEnobo2Ujg7THMzIyzx0YzMaFVZgRQNe5t/gjeetIOjrG6IHHejMLsB
+         N8LA==
+X-Gm-Message-State: AJIora84++NDkUs5SCTceEZZltdhgMDjUNanhVY9hRFlmGsQYZJVJXZd
+        HeSet18TCOmeujkeQzrACOQ=
+X-Google-Smtp-Source: AGRyM1ukKWFMOVxg2naXZKQ2UXBumBrVmkITXxliBrfjsoZ/J4pPROaMkMUT6KC3sNXUDygDD19PmA==
+X-Received: by 2002:a17:90b:3949:b0:1f2:1729:aa47 with SMTP id oe9-20020a17090b394900b001f21729aa47mr14349445pjb.153.1658448832082;
+        Thu, 21 Jul 2022 17:13:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 186-20020a6215c3000000b0052536c695c0sm2413857pfv.170.2022.07.21.17.13.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 17:13:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <238e7c41-4ad2-5725-fa71-7ca63020194b@roeck-us.net>
+Date:   Thu, 21 Jul 2022 17:13:50 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2 4/5] usb: dwc3: Allow end transfer commands to be sent
- during soft disconnect
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
- <20220713003523.29309-5-quic_wcheng@quicinc.com>
- <d8d26ce3-6773-bd9c-e227-0924f239eae0@synopsys.com>
- <98623d02-cde4-b036-a85c-9325b58c7eab@quicinc.com>
- <5d0cf380-e045-fcec-639f-ac2f6a187ca8@synopsys.com>
- <5a57d5b9-b81e-bb09-998b-2915d9ab6b2f@quicinc.com>
- <fa172e2c-eff6-002e-3687-d87a2986fd42@synopsys.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <fa172e2c-eff6-002e-3687-d87a2986fd42@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: esfhC2GFSb7ExkrzHCqOcYxwmheXekZc
-X-Proofpoint-ORIG-GUID: esfhC2GFSb7ExkrzHCqOcYxwmheXekZc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-21_28,2022-07-21_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- adultscore=0 mlxscore=0 phishscore=0 priorityscore=1501 suspectscore=0
- bulkscore=0 impostorscore=0 mlxlogscore=999 clxscore=1011
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207210098
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Gene Chen <gene.chen.richtek@gmail.com>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, gene_chen@richtek.com,
+        cy_huang@richtek.com
+References: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
+ <20220721061144.35139-7-gene.chen.richtek@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 6/6] usb: typec: tcpci_rt1711h: Fix CC PHY noise filter
+ of voltage level
+In-Reply-To: <20220721061144.35139-7-gene.chen.richtek@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
-
-On 7/21/2022 5:00 PM, Thinh Nguyen wrote:
-> On 7/21/2022, Wesley Cheng wrote:
->> Hi Thinh,
->>
->> On 7/21/2022 3:20 PM, Thinh Nguyen wrote:
->>> On 7/21/2022, Wesley Cheng wrote:
->>>> Hi Thinh,
->>>>
->>>> On 7/21/2022 3:08 PM, Thinh Nguyen wrote:
->>>>> Hi Wesley,
->>>>>
->>>>> On 7/12/2022, Wesley Cheng wrote:
->>>>>> If soft disconnect is in progress, allow the endxfer command to be
->>>>>> sent,
->>>>>> without this, there is an issue where the stop active transfer call
->>>>>> (during pullup disable) wouldn't actually issue the endxfer command,
->>>>>> while clearing the DEP flag.
->>>>>>
->>>>>> In addition, if the DWC3_EP_DELAY_STOP flag was set before soft
->>>>>> disconnect
->>>>>> started (i.e. from the dequeue path), ensure that when the EP0
->>>>>> transaction
->>>>>> completes during soft disconnect, to issue the endxfer with the force
->>>>>> parameter set, as it does not expect a command complete event.
->>>>>>
->>>>>> Fixes: e4cf6580ac740 ("usb: dwc3: gadget: Wait for ep0 xfers to
->>>>>> complete during dequeue")
->>>>>> Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>>>>> ---
->>>>>> Link:
->>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/1a1a5485-790e-79ce-f5a6-1e96d9b49a47@synopsys.com/__;!!A4F2R9G_pg!cXW2TlALYWnXNPg-NoMFUrQ8K1egEZiQizZ5CA1DOM1Gcw4tfOULy-_2eMGvL8pQPte5dScFON-0wxH2eXu8ijEQUbs$
->>>>>>
->>>>>>
->>>>>>      drivers/usb/dwc3/ep0.c    | 3 +--
->>>>>>      drivers/usb/dwc3/gadget.c | 5 ++++-
->>>>>>      2 files changed, 5 insertions(+), 3 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->>>>>> index 506ef717fdc0..5851b0e9db0a 100644
->>>>>> --- a/drivers/usb/dwc3/ep0.c
->>>>>> +++ b/drivers/usb/dwc3/ep0.c
->>>>>> @@ -290,8 +290,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
->>>>>>              if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
->>>>>>                  continue;
->>>>>>      -        dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
->>>>>
->>>>> If we don't clear this flag here,
->>>>>
->>>>
->>>> This is why I added the dwc->connected argument to control the
->>>> "interrupt" argument.
->>>>
->>>>>> - dwc3_stop_active_transfer(dwc3_ep, true, true);
->>>>>> +        dwc3_stop_active_transfer(dwc3_ep, true, dwc->connected);
->>>>>>          }
->>>>>>      }
->>>>>>      diff --git a/drivers/usb/dwc3/gadget.c
->>>>>> b/drivers/usb/dwc3/gadget.c
->>>>>> index ee85b773e3fe..41b7007358de 100644
->>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>> @@ -1693,6 +1693,7 @@ static int __dwc3_stop_active_transfer(struct
->>>>>> dwc3_ep *dep, bool force, bool int
->>>>>>              dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
->>>>>>          else if (!ret)
->>>>>>              dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
->>>>>> +    dep->flags &= ~DWC3_EP_DELAY_STOP;
->>>>>>             return ret;
->>>>>>      }
->>>>>> @@ -3686,8 +3687,10 @@ void dwc3_stop_active_transfer(struct dwc3_ep
->>>>>> *dep, bool force,
->>>>>>          if (dep->number <= 1 && dwc->ep0state != EP0_DATA_PHASE)
->>>>>>              return;
->>>>>>      +    if (interrupt && (dep->flags & DWC3_EP_DELAY_STOP))
->>>>>> +        return;
->>>>>> +
->>>>>
->>>>> then it may not go through here. I think I made this same mistake
->>>>> in my
->>>>> previous suggestion.
->>>>>
->>>>
->>>> Since dwc->connected is set to FALSE before we call stop active
->>>> transfers, if we ever run into a situation where delayed stop is set
->>>> already, then it should go through.
->>>>
->>>
->>> Then the check for request dequeue that we did previously will not work
->>> anymore.
->>>
->>
->> Could you help clarify?  The pullup refactor kind of shifted some of
->> the previous checks we had in the dequeue path, and combined with with
->> the stop active transfer checks.
->>
->> I think there was an issue w/ the patch I submitted though.  the above
->> snippet should be replacing what is there:
->>
->> void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
->>      bool interrupt)
->> {
->> ...
->>      if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
->>          /* Following should be removed --- (dep->flags &
->> DWC3_EP_DELAY_STOP) || */
->>          (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
->>          return;
->>
+On 7/20/22 23:11, Gene Chen wrote:
+> From: Gene Chen <gene_chen@richtek.com>
 > 
-> Request dequeue can occur while the device is connected. The
-> DWC3_EP_DELAY_STOP intention is to delay sending the End Transfer
-> command until the SETUP stage is prepared. If we don't clear the flag
-> before the flag check, then the End Transfer command will not go through.
+> Fix CC PHY noise filter of voltage level according to
+> current cc voltage level
 > 
+> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpci_rt1711h.c | 83 +++++++++++++++++++++++++-
+>   1 file changed, 81 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index 3316dfaeee0d..f0c46bf7f00b 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -22,8 +22,11 @@
+>   #define RT1711H_PHYCTRL1	0x80
+>   #define RT1711H_PHYCTRL2	0x81
+>   
+> -#define RT1711H_RTCTRL8		0x9B
+> +#define RT1711H_RTCTRL4		0x93
+> +/* rx threshold of rd/rp: 1b0 for level 0.4V/0.7V, 1b1 for 0.35V/0.75V */
+> +#define RT1711H_BMCIO_RXDZSEL	BIT(0)
+>   
+> +#define RT1711H_RTCTRL8		0x9B
+>   /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
+>   #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
+>   			    (((ck300) << 7) | ((ship_off) << 5) | \
+> @@ -32,7 +35,6 @@
+>   #define RT1711H_ENEXTMSG_MASK	BIT(4)
+>   
+>   #define RT1711H_RTCTRL11	0x9E
+> -
+>   /* I2C timeout = (tout + 1) * 12.5ms */
+>   #define RT1711H_RTCTRL11_SET(en, tout) \
+>   			     (((en) << 7) | ((tout) & 0x0F))
+> @@ -42,6 +44,10 @@
+>   #define RT1711H_RTCTRL15	0xA2
+>   #define RT1711H_RTCTRL16	0xA3
+>   
+> +#define RT1711H_RTCTRL18	0xAF
+> +/* 1b0 as fixed rx threshold of rd/rp 0.55V, 1b1 depends on RTCRTL4[0] */
+> +#define BMCIO_RXDZEN_MASK	BIT(0)
 
-Thanks, got it.  Understand what you mean now.  Let me think about how 
-to go about it.  I probably don't see any issues as of now, because my 
-test does the soft disconnect, which will do the stop active transfers 
-forcefully.
+I really dislike the use of _MASK for register bit values.
 
-Thanks
-Wesley Cheng
+> +
+>   struct rt1711h_chip {
+>   	struct tcpci_data data;
+>   	struct tcpci *tcpci;
+> @@ -162,6 +168,77 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
+>   				  RT1711H_AUTOIDLEEN_MASK, enable ? 0 : 0xFF);
+>   }
+>   
+> +#define tcpc_presenting_rd(reg, cc) \
+> +	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> +	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
+> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
+> +
+> +static enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
+> +{
+> +	switch (cc) {
+> +	case 0x1:
+> +		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
+> +	case 0x2:
+> +		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
+> +	case 0x3:
+> +		if (sink)
+> +			return TYPEC_CC_RP_3_0;
+> +		fallthrough;
+> +	case 0x0:
+> +	default:
+> +		return TYPEC_CC_OPEN;
+> +	}
+> +}
+> +
+The above is a straight copy from tcpci.c. Can it be moved to
+include/linux/usb/tcpci.h ?
+
+> +/*
+> + * Selects the CC PHY noise filter voltage level according to the current
+> + * CC voltage level.
+> + *
+> + * @param cc_level The CC voltage level for the port's current role
+
+I seem to be missing that parameter.
+
+> + * @return 0 if writes succeed; failure code otherwise
+> + */
+> +static inline int rt1711h_init_cc_params(struct rt1711h_chip *chip, u8 status)
+> +{
+> +	int ret, cc1, cc2;
+> +	u8 role = 0;
+> +	u32 rxdz_en = 0, rxdz_sel = 0;
+
+Those variables are always set and thus do not need to be initialized.
+> +
+> +	ret = rt1711h_read8(chip, TCPC_ROLE_CTRL, &role);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	cc1 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC1_SHIFT) &
+> +				TCPC_CC_STATUS_CC1_MASK,
+> +				status & TCPC_CC_STATUS_TERM ||
+> +				tcpc_presenting_rd(role, CC1));
+> +	cc2 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC2_SHIFT) &
+> +				TCPC_CC_STATUS_CC2_MASK,
+> +				status & TCPC_CC_STATUS_TERM ||
+> +				tcpc_presenting_rd(role, CC2));
+> +
+> +	if ((cc1 >= TYPEC_CC_RP_1_5 && cc2 < TYPEC_CC_RP_DEF) ||
+> +	    (cc2 >= TYPEC_CC_RP_1_5 && cc1 < TYPEC_CC_RP_DEF)) {
+> +		if (chip->did == RT1715_DID) {
+> +			rxdz_en = 1;
+
+This should be
+			rxdz_en = BMCIO_RXDZEN;
+
+> +			rxdz_sel = 1;
+
+This should be
+			rxdz_sel = RT1711H_BMCIO_RXDZSEL;
+
+> +		} else {
+> +			rxdz_en = 1;
+> +			rxdz_sel = 0;
+> +		}
+
+The assignment of rxdz_en can be moved outside the if/else block.
+
+> +	} else {
+> +		rxdz_en = 0;
+> +		rxdz_sel = 1;
+> +	}
+> +
+> +	ret = regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL18,
+> +				 BMCIO_RXDZEN_MASK, rxdz_en);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL4,
+> +				  RT1711H_BMCIO_RXDZSEL, rxdz_sel);
+> +}
+> +
+>   static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
+>   				      struct tcpci_data *tdata,
+>   				      enum typec_cc_status cc)
+> @@ -222,6 +299,8 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
+>   		/* Clear cc change event triggered by starting toggling */
+>   		if (status & TCPC_CC_STATUS_TOGGLING)
+>   			rt1711h_write8(chip, TCPC_ALERT, TCPC_ALERT_CC_STATUS);
+> +		else
+> +			rt1711h_init_cc_params(chip, status);
+>   	}
+>   
+>   out:
+
