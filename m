@@ -2,238 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A140257D79F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 02:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B1E57D7B2
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 02:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiGVANy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Jul 2022 20:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S230388AbiGVAZu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Jul 2022 20:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGVANx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 20:13:53 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77B712AAC;
-        Thu, 21 Jul 2022 17:13:52 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id gq7so3026826pjb.1;
-        Thu, 21 Jul 2022 17:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=4QRKHLiRN5hnDUcvUHn8lxSQcuIBW2UAZEYmbp1CN+Q=;
-        b=OfetnpZDqRZLzXYCGLHxw7bg0lrX3cenLaetCse44qssBxtm/MtLTviJNP+smm+VMA
-         CpFn8b1q3rJn7Vw//UcGG+VgpXgz/evMlj6qWoWumI2Lc5yeHgVDTBH4KF1ZoBCoWr+5
-         g87fIBaH2pD/CZj5O0m+oK8J/cDRk671wSBpXGBxi3UlaKaSI/sVCv0B6+iWLxD2y+yQ
-         Lvi9+H2NFAX+oJ453VOgw455wm0bruvB3f2rn0gRWb5s390v5rIW1wcPqHUy/KDqrwjg
-         slylHXdNO9x1epKh+M4L17tzKzmHvrgWtiU603kJoPitCZjOVuOcE101WYXaAhDESz5e
-         n0xw==
+        with ESMTP id S229701AbiGVAZt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Jul 2022 20:25:49 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BA3774B2;
+        Thu, 21 Jul 2022 17:25:49 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id y197so1785891iof.12;
+        Thu, 21 Jul 2022 17:25:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=4QRKHLiRN5hnDUcvUHn8lxSQcuIBW2UAZEYmbp1CN+Q=;
-        b=CQCWwfoIiV5yaTsW6AJOVN+KMWIGMe4cwvwNV0I7agPHJfv15Fg73Mc2GTTrmtM/WF
-         X1geuaQapHQpm/4YxnE4fDgaIaFaV3V6basvLXC1qZw1dRwUFe5rp6IVeySc3IkynFy8
-         q3jqLU5DvBPuVbaNpBGsS5avVC02wS2APVI/Ii+vVIhJdlTViZCKU3s7Uz7kL5IhWcEl
-         gnZMEtCb7S5SL/gTDDOcJz8mIWceWO9AZbdtZpQFMnMXWE9Ts991eS2iLiVQS4yJymYb
-         0gxz91X7DME3sjEnobo2Ujg7THMzIyzx0YzMaFVZgRQNe5t/gjeetIOjrG6IHHejMLsB
-         N8LA==
-X-Gm-Message-State: AJIora84++NDkUs5SCTceEZZltdhgMDjUNanhVY9hRFlmGsQYZJVJXZd
-        HeSet18TCOmeujkeQzrACOQ=
-X-Google-Smtp-Source: AGRyM1ukKWFMOVxg2naXZKQ2UXBumBrVmkITXxliBrfjsoZ/J4pPROaMkMUT6KC3sNXUDygDD19PmA==
-X-Received: by 2002:a17:90b:3949:b0:1f2:1729:aa47 with SMTP id oe9-20020a17090b394900b001f21729aa47mr14349445pjb.153.1658448832082;
-        Thu, 21 Jul 2022 17:13:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 186-20020a6215c3000000b0052536c695c0sm2413857pfv.170.2022.07.21.17.13.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 17:13:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <238e7c41-4ad2-5725-fa71-7ca63020194b@roeck-us.net>
-Date:   Thu, 21 Jul 2022 17:13:50 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5rm4BFsSvYv37lsR3SyeGRLmP7dFOqjTJ+9txhzXmzk=;
+        b=VF78yF4xK5RjpGPKhLcpS/da7sjELiLqGNK/grj3Qkbk7zt6VXEBGDCNxQc8ypj0oK
+         syw0FjHIHAyjz65pJOSp+T5yrYkeXksI6Nx/DTfpbhA+2qFmX/0VQUZP2WlHNzwikVcv
+         MSbS2rS4yoYVMc+2BgCy6s0DNihULmTi/PmnXiZwCe75hZ5RMhZZ1PqUrcSHUIhDUtDz
+         9Zk6Iva1ShdfLu4/pPAxxfPo65ZzlA5OQhKPmOXdG7XvthZ4qOK5qML4e/GSjI+/VXKO
+         cxj+4R3DsnWIZgapINGdBJdDzh9Jnn/nSrnTypoXYOMSeeJyG3tbJvDu7A+lJ0WcdVEs
+         1dtQ==
+X-Gm-Message-State: AJIora9+8/hMbPdpIM1y/NH9UlYFyKpiqHGsj5KIbll6Gt8BSyanAgQ2
+        1YkzynBaWJS3miTX3grW/g==
+X-Google-Smtp-Source: AGRyM1sU8bwcGjBEm0B3fkhvJdN7Glv0yQo9ZDLlq0aLwwezKmTVfOOZZ4cOs/i+bFBJvmc/Hb+Lgg==
+X-Received: by 2002:a6b:fe13:0:b0:67c:3ed1:3cd0 with SMTP id x19-20020a6bfe13000000b0067c3ed13cd0mr381193ioh.53.1658449548266;
+        Thu, 21 Jul 2022 17:25:48 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id k83-20020a6bba56000000b0067beb49f801sm1498462iof.2.2022.07.21.17.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 17:25:47 -0700 (PDT)
+Received: (nullmailer pid 2240200 invoked by uid 1000);
+        Fri, 22 Jul 2022 00:25:46 -0000
+Date:   Thu, 21 Jul 2022 18:25:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     christophe.jaillet@wanadoo.fr, krzysztof.kozlowski+dt@linaro.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        amelie.delaunay@foss.st.com, linux-kernel@vger.kernel.org,
+        alexandre.torgue@foss.st.com, heikki.krogerus@linux.intel.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: usb: typec: add bindings for stm32g0
+ controller
+Message-ID: <20220722002546.GA2240166-robh@kernel.org>
+References: <20220713120842.560902-1-fabrice.gasnier@foss.st.com>
+ <20220713120842.560902-2-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Gene Chen <gene.chen.richtek@gmail.com>,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, gene_chen@richtek.com,
-        cy_huang@richtek.com
-References: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
- <20220721061144.35139-7-gene.chen.richtek@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 6/6] usb: typec: tcpci_rt1711h: Fix CC PHY noise filter
- of voltage level
-In-Reply-To: <20220721061144.35139-7-gene.chen.richtek@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713120842.560902-2-fabrice.gasnier@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/20/22 23:11, Gene Chen wrote:
-> From: Gene Chen <gene_chen@richtek.com>
+On Wed, 13 Jul 2022 14:08:40 +0200, Fabrice Gasnier wrote:
+> Add DT schema documentation for the STM32G0 Type-C PD (Power Delivery)
+> controller.
+> STM32G0 provides an integrated USB Type-C and power delivery interface.
+> It can be programmed with a firmware to handle UCSI protocol over I2C
+> interface. A GPIO is used as an interrupt line.
+> It may be used as a wakeup source, so use optional "wakeup-source" and
+> "power-domains" properties to support wakeup.
+> The firmware itself may be flashed or later updated (optional). Choice is
+> let to the application to allow firmware update. A default firmware could
+> be already programmed in production and be customized (to not allow it).
+> So the firmware-name is made optional to represent this option.
 > 
-> Fix CC PHY noise filter of voltage level according to
-> current cc voltage level
-> 
-> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 > ---
->   drivers/usb/typec/tcpm/tcpci_rt1711h.c | 83 +++++++++++++++++++++++++-
->   1 file changed, 81 insertions(+), 2 deletions(-)
+> Changes in v3:
+> - Add connector to the required properties as pointed out by Krzysztof.
+>   Update commit message to explain why the firmware-name is optional.
+> Changes in v2:
+> - Krzysztof's review comments: update commit message, use ports, use
+>   unevaluatedProperties: false for usb-connector schema, define maxItems
+>   for power-domains, adopt generic node names, remove quotes
+> ---
+>  .../bindings/usb/st,typec-stm32g0.yaml        | 91 +++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index 3316dfaeee0d..f0c46bf7f00b 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -22,8 +22,11 @@
->   #define RT1711H_PHYCTRL1	0x80
->   #define RT1711H_PHYCTRL2	0x81
->   
-> -#define RT1711H_RTCTRL8		0x9B
-> +#define RT1711H_RTCTRL4		0x93
-> +/* rx threshold of rd/rp: 1b0 for level 0.4V/0.7V, 1b1 for 0.35V/0.75V */
-> +#define RT1711H_BMCIO_RXDZSEL	BIT(0)
->   
-> +#define RT1711H_RTCTRL8		0x9B
->   /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
->   #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
->   			    (((ck300) << 7) | ((ship_off) << 5) | \
-> @@ -32,7 +35,6 @@
->   #define RT1711H_ENEXTMSG_MASK	BIT(4)
->   
->   #define RT1711H_RTCTRL11	0x9E
-> -
->   /* I2C timeout = (tout + 1) * 12.5ms */
->   #define RT1711H_RTCTRL11_SET(en, tout) \
->   			     (((en) << 7) | ((tout) & 0x0F))
-> @@ -42,6 +44,10 @@
->   #define RT1711H_RTCTRL15	0xA2
->   #define RT1711H_RTCTRL16	0xA3
->   
-> +#define RT1711H_RTCTRL18	0xAF
-> +/* 1b0 as fixed rx threshold of rd/rp 0.55V, 1b1 depends on RTCRTL4[0] */
-> +#define BMCIO_RXDZEN_MASK	BIT(0)
 
-I really dislike the use of _MASK for register bit values.
-
-> +
->   struct rt1711h_chip {
->   	struct tcpci_data data;
->   	struct tcpci *tcpci;
-> @@ -162,6 +168,77 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
->   				  RT1711H_AUTOIDLEEN_MASK, enable ? 0 : 0xFF);
->   }
->   
-> +#define tcpc_presenting_rd(reg, cc) \
-> +	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-> +	 (((reg) & (TCPC_ROLE_CTRL_## cc ##_MASK << TCPC_ROLE_CTRL_## cc ##_SHIFT)) == \
-> +	  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_## cc ##_SHIFT)))
-> +
-> +static enum typec_cc_status tcpci_to_typec_cc(unsigned int cc, bool sink)
-> +{
-> +	switch (cc) {
-> +	case 0x1:
-> +		return sink ? TYPEC_CC_RP_DEF : TYPEC_CC_RA;
-> +	case 0x2:
-> +		return sink ? TYPEC_CC_RP_1_5 : TYPEC_CC_RD;
-> +	case 0x3:
-> +		if (sink)
-> +			return TYPEC_CC_RP_3_0;
-> +		fallthrough;
-> +	case 0x0:
-> +	default:
-> +		return TYPEC_CC_OPEN;
-> +	}
-> +}
-> +
-The above is a straight copy from tcpci.c. Can it be moved to
-include/linux/usb/tcpci.h ?
-
-> +/*
-> + * Selects the CC PHY noise filter voltage level according to the current
-> + * CC voltage level.
-> + *
-> + * @param cc_level The CC voltage level for the port's current role
-
-I seem to be missing that parameter.
-
-> + * @return 0 if writes succeed; failure code otherwise
-> + */
-> +static inline int rt1711h_init_cc_params(struct rt1711h_chip *chip, u8 status)
-> +{
-> +	int ret, cc1, cc2;
-> +	u8 role = 0;
-> +	u32 rxdz_en = 0, rxdz_sel = 0;
-
-Those variables are always set and thus do not need to be initialized.
-> +
-> +	ret = rt1711h_read8(chip, TCPC_ROLE_CTRL, &role);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	cc1 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC1_SHIFT) &
-> +				TCPC_CC_STATUS_CC1_MASK,
-> +				status & TCPC_CC_STATUS_TERM ||
-> +				tcpc_presenting_rd(role, CC1));
-> +	cc2 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC2_SHIFT) &
-> +				TCPC_CC_STATUS_CC2_MASK,
-> +				status & TCPC_CC_STATUS_TERM ||
-> +				tcpc_presenting_rd(role, CC2));
-> +
-> +	if ((cc1 >= TYPEC_CC_RP_1_5 && cc2 < TYPEC_CC_RP_DEF) ||
-> +	    (cc2 >= TYPEC_CC_RP_1_5 && cc1 < TYPEC_CC_RP_DEF)) {
-> +		if (chip->did == RT1715_DID) {
-> +			rxdz_en = 1;
-
-This should be
-			rxdz_en = BMCIO_RXDZEN;
-
-> +			rxdz_sel = 1;
-
-This should be
-			rxdz_sel = RT1711H_BMCIO_RXDZSEL;
-
-> +		} else {
-> +			rxdz_en = 1;
-> +			rxdz_sel = 0;
-> +		}
-
-The assignment of rxdz_en can be moved outside the if/else block.
-
-> +	} else {
-> +		rxdz_en = 0;
-> +		rxdz_sel = 1;
-> +	}
-> +
-> +	ret = regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL18,
-> +				 BMCIO_RXDZEN_MASK, rxdz_en);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL4,
-> +				  RT1711H_BMCIO_RXDZSEL, rxdz_sel);
-> +}
-> +
->   static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
->   				      struct tcpci_data *tdata,
->   				      enum typec_cc_status cc)
-> @@ -222,6 +299,8 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
->   		/* Clear cc change event triggered by starting toggling */
->   		if (status & TCPC_CC_STATUS_TOGGLING)
->   			rt1711h_write8(chip, TCPC_ALERT, TCPC_ALERT_CC_STATUS);
-> +		else
-> +			rt1711h_init_cc_params(chip, status);
->   	}
->   
->   out:
-
+Reviewed-by: Rob Herring <robh@kernel.org>
