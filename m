@@ -2,199 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1649657E3DA
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 17:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B3857E400
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Jul 2022 18:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiGVPiw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Jul 2022 11:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
+        id S233520AbiGVQAL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Jul 2022 12:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbiGVPip (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jul 2022 11:38:45 -0400
-Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB92692846
-        for <linux-usb@vger.kernel.org>; Fri, 22 Jul 2022 08:38:43 -0700 (PDT)
-Received: by air.basealt.ru (Postfix, from userid 490)
-        id 275D4589463; Fri, 22 Jul 2022 15:38:41 +0000 (UTC)
+        with ESMTP id S229778AbiGVQAK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Jul 2022 12:00:10 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6962616
+        for <linux-usb@vger.kernel.org>; Fri, 22 Jul 2022 09:00:09 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id o18so4763786pgu.9
+        for <linux-usb@vger.kernel.org>; Fri, 22 Jul 2022 09:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=J4ZhqBj8u5Lze6oGnxKkGLM9ZzOx9hvE2Nh2ZpNRSvs=;
+        b=PNAs3OZ09qihfaX1VzQXYD1QM9ufbRcbZ0A7jLPsa8U0QP5IfyNo0NPx+uM8wVPe/7
+         +gbJMpuWRyWDX+lLCV5IEmDU/J9OKGqvMFmXqU+lJzMJQbtCvVocYMCV6VsMdglmqnEn
+         NSzwUcEX8HWL8I3rmxmr6Tqk8cQhAKLw7JZ5U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=J4ZhqBj8u5Lze6oGnxKkGLM9ZzOx9hvE2Nh2ZpNRSvs=;
+        b=4gNmJnRd4GdS+Iw5VQLGBKt3eLamD3JQw/QCpP34Y9iCEH4M5dLSTPpGjnX1813beI
+         Q97k9s2M2s9vVuQdJRIfUXdnm/dUA25fHIoqrIuvVoOyLNu/QMqDfakdFhsN9XMkAKbo
+         /6Kxhx7y4dIWZ+Nhz7xbuwN73TWAGhh0LTjRZo7zH07fzHKvFaeI4RPgWgfr7IuMtzdj
+         Zj4yoDf8yunUgEVJAjSbEkR6fwF4YtqyT6J+FUjKFfB6+jGHiYe/0PVayyHugJdaYJCi
+         ws/xNWBxWd3bDKFAbglBL62eCmCdFc9aSWGX5E84QGBY0NFjTkU1f97JWydK2l9pJ/z4
+         R8BA==
+X-Gm-Message-State: AJIora/FyV+Ix2+GHClN8D8Zlmmh+2ogHAtrAuGwgWMMCmif3Doukdha
+        E8xJaRILs8rKf5eQ0hqZCUmMDA==
+X-Google-Smtp-Source: AGRyM1tgKqIrMyj2L4X/1T63jTUda2P7qFegf2dygZBc2HK52m3PF385tbAOmbv7b8/r5kyI3xdmcg==
+X-Received: by 2002:a05:6a00:1703:b0:52b:39a4:4632 with SMTP id h3-20020a056a00170300b0052b39a44632mr450427pfc.29.1658505607778;
+        Fri, 22 Jul 2022 09:00:07 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:42b0:2897:3725:985a])
+        by smtp.gmail.com with UTF8SMTPSA id j13-20020a170902da8d00b0015e8d4eb285sm3995951plx.207.2022.07.22.09.00.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 09:00:07 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 09:00:05 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alexandre.torgue@foss.st.com,
+        arnd@arndb.de, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, amelie.delaunay@foss.st.com
+Subject: Re: [PATCH 2/4] usb: misc: onboard-hub: add support for Microchip
+ USB2514B USB 2.0 hub
+Message-ID: <YtrJhQD2FbqhS+5e@google.com>
+References: <20220722130554.236925-1-fabrice.gasnier@foss.st.com>
+ <20220722130554.236925-3-fabrice.gasnier@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220722130554.236925-3-fabrice.gasnier@foss.st.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from localhost (unknown [193.43.9.250])
-        by air.basealt.ru (Postfix) with ESMTPSA id B076458942E;
-        Fri, 22 Jul 2022 15:38:38 +0000 (UTC)
-Date:   Fri, 22 Jul 2022 19:38:34 +0400
-From:   Alexey Sheplyakov <asheplyakov@basealt.ru>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Subject: Re: [PATCH] usb: xhci_plat_remove: avoid NULL dereference
-Message-ID: <YtrEPC7vsaMaffN5@asheplyakov-rocket>
-References: <20220722141700.1271439-1-asheplyakov@basealt.ru>
- <Ytq+xiPgH64fnCnh@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ytq+xiPgH64fnCnh@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Fabrice
 
-On Fri, Jul 22, 2022 at 05:14:14PM +0200, Greg KH wrote:
-> On Fri, Jul 22, 2022 at 06:17:00PM +0400, Alexey Sheplyakov wrote:
-> > Since commit 4736ebd7fcaff1eb8481c140ba494962847d6e0a ("usb: host:
-> > xhci-plat: omit shared hcd if either root hub has no ports")
-> > xhci->shared_hcd can be NULL, which causes the following Oops
-> > on reboot:
-> > 
-> > [  710.124450] systemd-shutdown[1]: Rebooting.
-> > [  710.298861] xhci-hcd xhci-hcd.2.auto: remove, state 4
-> > [  710.304217] usb usb3: USB disconnect, device number 1
-> > [  710.317441] xhci-hcd xhci-hcd.2.auto: USB bus 3 deregistered
-> > [  710.323280] xhci-hcd xhci-hcd.2.auto: remove, state 1
-> > [  710.328401] usb usb2: USB disconnect, device number 1
-> > [  710.333515] usb 2-3: USB disconnect, device number 2
-> > [  710.467649] xhci-hcd xhci-hcd.2.auto: USB bus 2 deregistered
-> > [  710.475450] Unable to handle kernel NULL pointer dereference at virtual address 00000000000003b8
-> > [  710.484425] Mem abort info:
-> > [  710.487265]   ESR = 0x0000000096000004
-> > [  710.491060]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [  710.496427]   SET = 0, FnV = 0
-> > [  710.499525]   EA = 0, S1PTW = 0
-> > [  710.502716]   FSC = 0x04: level 0 translation fault
-> > [  710.507648] Data abort info:
-> > [  710.510577]   ISV = 0, ISS = 0x00000004
-> > [  710.514462]   CM = 0, WnR = 0
-> > [  710.517480] user pgtable: 4k pages, 48-bit VAs, pgdp=00000008b0050000
-> > [  710.523976] [00000000000003b8] pgd=0000000000000000, p4d=0000000000000000
-> > [  710.530961] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> > [  710.536551] Modules linked in: rfkill input_leds snd_soc_simple_card snd_soc_simple_card_utils snd_soc_nau8822 designware_i2s snd_soc_core dw_hdmi_ahb_audio snd_pcm_dmaengine arm_ccn panfrost ac97_bus gpu_sched snd_pcm at24 fuse configfs sdhci_of_dwcmshc sdhci_pltfm sdhci nvme led_class mmc_core nvme_core bt1_pvt polynomial tp_serio snd_seq_midi snd_seq_midi_event snd_seq snd_timer snd_rawmidi snd_seq_device snd soundcore efivarfs ipv6
-> > [  710.575286] CPU: 7 PID: 1 Comm: systemd-shutdow Not tainted 5.19.0-rc7-00043-gfd8619f4fd54 #1
-> > [  710.583822] Hardware name: T-Platforms TF307-MB/BM1BM1-A, BIOS 5.6 07/06/2022
-> > [  710.590972] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [  710.597949] pc : usb_remove_hcd+0x34/0x1e4
-> > [  710.602067] lr : xhci_plat_remove+0x74/0x140
-> > [  710.606351] sp : ffff800009f3b7c0
-> > [  710.609674] x29: ffff800009f3b7c0 x28: ffff000800960040 x27: 0000000000000000
-> > [  710.616833] x26: ffff800008dc22a0 x25: 0000000000000000 x24: 0000000000000000
-> > [  710.623992] x23: 0000000000000000 x22: ffff000805465810 x21: ffff000805465800
-> > [  710.631149] x20: ffff000800f80000 x19: 0000000000000000 x18: ffffffffffffffff
-> > [  710.638307] x17: ffff000805096000 x16: ffff00080633b800 x15: ffff000806537a1c
-> > [  710.645465] x14: 0000000000000001 x13: 0000000000000000 x12: ffff00080378d6f0
-> > [  710.652621] x11: ffff00080041a900 x10: ffff800009b204e8 x9 : ffff8000088abaa4
-> > [  710.659779] x8 : ffff000800960040 x7 : ffff800009409000 x6 : 0000000000000001
-> > [  710.666936] x5 : ffff800009241000 x4 : ffff800009241440 x3 : 0000000000000000
-> > [  710.674094] x2 : ffff000800960040 x1 : ffff000800960040 x0 : 0000000000000000
-> > [  710.681251] Call trace:
-> > [  710.683704]  usb_remove_hcd+0x34/0x1e4
-> > [  710.687467]  xhci_plat_remove+0x74/0x140
-> > [  710.691400]  platform_remove+0x34/0x70
-> > [  710.695165]  device_remove+0x54/0x90
-> > [  710.698753]  device_release_driver_internal+0x200/0x270
-> > [  710.703992]  device_release_driver+0x24/0x30
-> > [  710.708273]  bus_remove_device+0xe0/0x16c
-> > [  710.712293]  device_del+0x178/0x390
-> > [  710.715797]  platform_device_del.part.0+0x24/0x90
-> > [  710.720514]  platform_device_unregister+0x30/0x50
-> > [  710.725232]  dwc3_host_exit+0x20/0x30
-> > [  710.728907]  dwc3_remove+0x174/0x1b0
-> > [  710.732494]  platform_remove+0x34/0x70
-> > [  710.736254]  device_remove+0x54/0x90
-> > [  710.739840]  device_release_driver_internal+0x200/0x270
-> > [  710.745078]  device_release_driver+0x24/0x30
-> > [  710.749359]  bus_remove_device+0xe0/0x16c
-> > [  710.753380]  device_del+0x178/0x390
-> > [  710.756881]  platform_device_del.part.0+0x24/0x90
-> > [  710.761598]  platform_device_unregister+0x30/0x50
-> > [  710.766314]  of_platform_device_destroy+0xe8/0x100
-> > [  710.771119]  device_for_each_child_reverse+0x70/0xc0
-> > [  710.776099]  of_platform_depopulate+0x48/0x90
-> > [  710.780468]  __dwc3_of_simple_teardown+0x28/0xe0
-> > [  710.785099]  dwc3_of_simple_shutdown+0x20/0x30
-> > [  710.789555]  platform_shutdown+0x30/0x40
-> > [  710.793490]  device_shutdown+0x138/0x32c
-> > [  710.797425]  __do_sys_reboot+0x1c4/0x2ac
-> > [  710.801362]  __arm64_sys_reboot+0x30/0x40
-> > [  710.805383]  invoke_syscall+0x50/0x120
-> > [  710.809146]  el0_svc_common.constprop.0+0x68/0x124
-> > [  710.813950]  do_el0_svc+0x3c/0xcc
-> > [  710.817275]  el0_svc+0x60/0x12c
-> > [  710.820428]  el0t_64_sync_handler+0xc0/0x13c
-> > [  710.824710]  el0t_64_sync+0x18c/0x190
-> > [  710.828386] Code: a9025bf5 f942c420 f9001fe0 d2800000 (b943ba62)
-> > [  710.834498] ---[ end trace 0000000000000000 ]---
-> > [  710.875958] pstore: crypto_comp_compress failed, ret = -22!
-> > [  710.895047] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> > [  710.902757] Kernel Offset: disabled
-> > [  710.906255] CPU features: 0x800,00004811,00001082
-> > [  710.910971] Memory Limit: none
-> > [  710.927474] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-> > 
-> > To avoid the problem check for NULL in usb_remove_hcd.
-> > 
-> > Signed-off-by: Alexey Sheplyakov <asheplyakov@basealt.ru>
-> > Fixes: 4736ebd7fcaf ("usb: host: xhci-plat: omit shared hcd if either root hub has no ports")
-> > ---
-> >  drivers/usb/core/hcd.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > index 06eea8848ccc..41dcd41e550c 100644
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -3033,9 +3033,15 @@ EXPORT_SYMBOL_GPL(usb_add_hcd);
-> >   */
-> >  void usb_remove_hcd(struct usb_hcd *hcd)
-> >  {
-> > -	struct usb_device *rhdev = hcd->self.root_hub;
-> > +	struct usb_device *rhdev;
-> >  	bool rh_registered;
-> >  
-> > +	if (!hcd) {
-> > +		pr_debug("%s: hcd is NULL\n", __func__);
+On Fri, Jul 22, 2022 at 03:05:52PM +0200, Fabrice Gasnier wrote:
+> Add support for Microchip USB2514B USB 2.0 hub to the onboard usb hub
+> driver. Adopt the generic usb-device compatible ("usbVID,PID") as
+> discussed with Matthias in [1].
+
+The reference isn't really relevant in the commit message.
+
+> Some STM32MP1 boards have this hub on-board, with a supply that needs to
+> be enabled for proper operation.
 > 
-> This is a device, you should always use dev_dbg(), but yes, you don't
-> have a pointer here.
+> [1] https://lore.kernel.org/lkml/YW9CUabfA0HrtTAq@google.com/
 > 
-> But, you never need a __func__ for dev_dbg() or pr_debug(), it is there
-> automatically if you need it.
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+>  drivers/usb/misc/onboard_usb_hub.c | 2 ++
+>  drivers/usb/misc/onboard_usb_hub.h | 1 +
+>  2 files changed, 3 insertions(+)
 > 
-> But really, why is hcd NULL at all?
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index 6b9b949d17d30..929a4e724ec12 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -310,6 +310,7 @@ static struct platform_driver onboard_hub_driver = {
+>  /************************** USB driver **************************/
+>  
+>  #define VENDOR_ID_REALTEK	0x0bda
+> +#define VENDOR_ID_MICROCHIP	0x0424
 
-xhci_plat_remove does this:
+nit: let's sort the vendor ids alphabetically
 
-396	    struct usb_hcd *shared_hcd = xhci->shared_hcd;
-397
-398         pm_runtime_get_sync(&dev->dev);
-399         xhci->xhc_state |= XHCI_STATE_REMOVING;
-400
-401         usb_remove_hcd(shared_hcd);
-402         xhci->shared_hcd = NULL;
+>  
+>  /*
+>   * Returns the onboard_hub platform device that is associated with the USB
+> @@ -387,6 +388,7 @@ static const struct usb_device_id onboard_hub_id_table[] = {
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0414) }, /* RTS5414 USB 3.2 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
+> +	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
 
-However with e0fe986972f5 ("usb: host: xhci-plat: prepare operation w/o
-shared hcd") and 4736ebd7fcaf ("usb: host: xhci-plat: omit shared hcd
-if either root hub has no ports") it's OK to have no shared hcd, and
-xhci->shared_hcd is NULL in this case.
+ditto
 
-So one should check for NULL either in xhci_plat_remove (and possibly
-other users of usb_remove_hcd), or in usb_remove_hcd itself.
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(usb, onboard_hub_id_table);
+> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> index d3a5b6938582e..43d6af4230dfd 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.h
+> +++ b/drivers/usb/misc/onboard_usb_hub.h
+> @@ -11,6 +11,7 @@ static const struct of_device_id onboard_hub_match[] = {
+>  	{ .compatible = "usbbda,5411" },
+>  	{ .compatible = "usbbda,414" },
+>  	{ .compatible = "usbbda,5414" },
+> +	{ .compatible = "usb424,2514" },
 
-> Are you sure that is allowed here?
-
-Yes. 
-
-1. With e0fe986972f5 ("usb: host: xhci-plat: prepare operation w/o shared hcd")
-   and 4736ebd7fcaf ("usb: host: xhci-plat: omit shared hcd if either root
-   hub has no ports") it's OK to have no shared hcd, and
-   xhci->shared_hcd is NULL in this case.
-
-2. A similar bug has been already fixed by commit 802dcafc420a ("xhci:
-   Fix null pointer dereference in resume if xhci has only one roothub").
-   Here the commit message clearly states that it's OK for
-   xhci->shared_hcd to be NULL.
-
-Best regards,
-	Alexey
-
+Let's also sort the vendor ids alphanumerically (not necessarily applicable for
+the product ids, here it makes sense to group the PIDs of the same hub chip
+together).
