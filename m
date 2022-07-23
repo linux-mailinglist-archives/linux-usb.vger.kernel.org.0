@@ -2,127 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734FB57EEE3
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Jul 2022 12:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3A757EEE8
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Jul 2022 12:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237174AbiGWKyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jul 2022 06:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S237288AbiGWK5B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Jul 2022 06:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiGWKyL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jul 2022 06:54:11 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCD621AB
-        for <linux-usb@vger.kernel.org>; Sat, 23 Jul 2022 03:54:10 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id 125so6429590vsx.7
-        for <linux-usb@vger.kernel.org>; Sat, 23 Jul 2022 03:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=IOEh+bGB6OPK0FtUJ0WJwcWYyeF+VSgg/kxtMIHFNmE=;
-        b=Q/VHzE5Zz/wN5o7hkwkZOaDK0a8sNLOkN6tjWNobQI8zgDJmOsFNWwmf9TDw0HgDLp
-         K3sf6ezhMtKwxvKh2wIfrsmwMSXz1kS2uNrIXqHyiJWzv0DDXPR9VS1VAF2CzExwQ/yN
-         nwj58Qi1KKilgmPgFMHPDaP6+Vu+xwtrFC5eso8P8t6gPQNQT1Ciq38eUoEkHkA5uXGi
-         T+Clda8LbrgGZ+CAUarE8RHTly8rB4MELaT7StsyKSrp72Sxs4eadf1LUEThNscW2OX0
-         yp74BqDzVkpY8aUFSn65Ls3Ogg5BbLfueuW0yWilliWx2bLfxrQqKvfUoyPXOoJGZDQp
-         i57A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=IOEh+bGB6OPK0FtUJ0WJwcWYyeF+VSgg/kxtMIHFNmE=;
-        b=K1Wn4ignZ7B6zirBcp18tpvb156HBuLgrxXn5gWxbwFGJux7BdwjxNx1+ju6xwkBnQ
-         tSz5sfeHugKQiME7IgZaphAijeHef+/rS9aLukEGEM8vLdJ8aSAgCmD/tof0TzG9QQSW
-         e1aVeFIoNh0wblF2xvh+1z7E3MzOD81TcW9pFpMoYLNkMiWhs7RzndCF19HyXD4IP0KH
-         00Hy5lMlzH7DTozKv35exdXi6doGmJuD6J9Q9uIBFRnK6gEt7+UtlP5TZehAAjVSvQX4
-         v4lkO/CJAYQfZBw6RtQH1DgsuVnUVto4JAyKQzAtvYpI6Obh56x0bQpQ94NYZOXEppcT
-         bAug==
-X-Gm-Message-State: AJIora/uu7ANT5uKzjAU8g9wgE4eIepQ3r71oLVQDZOeb8vFxZFd6Vc+
-        vRuFwZSvlqMnIEcx+4dTaXjHs0IuZC/2XrBGR9s=
-X-Google-Smtp-Source: AGRyM1s0MXWdQ2wacSA1x6IeIgbjatyIfMu6hSuucJ+hyD52lw22OCXryLEIOMsWrNEh7+GX1Mtzd3PwQZ+WmckT0Jk=
-X-Received: by 2002:a67:b246:0:b0:357:c2e8:480e with SMTP id
- s6-20020a67b246000000b00357c2e8480emr1246948vsh.9.1658573649183; Sat, 23 Jul
- 2022 03:54:09 -0700 (PDT)
+        with ESMTP id S230399AbiGWK5A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jul 2022 06:57:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910C61CFC0;
+        Sat, 23 Jul 2022 03:56:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BFB761452;
+        Sat, 23 Jul 2022 10:56:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE6FC341C0;
+        Sat, 23 Jul 2022 10:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658573818;
+        bh=Bof95L078ymoWmkaWti13lIBN2DjIGWgHlz5Uvmuf8g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YSCdXmENcBYjWdlf6e3lSWyuhQyVpj/FgD6aBYnwoVj4mzB/dA7mZddKv5Q+mjlMk
+         Plh4QNQ4/Stw/FPgXz6IEQnGGH4iu2NdIyzXhJmfoJhUV+azg1hJC/E5pAlDRXjo5L
+         h/lqJ84fDG4ycfy7eJ4azb0TfaCNzQGU89eGptoWrs174UxFsb1fqPyuG44HeTMQTY
+         8fjxNUwWofjVww9fBCVafM/YRiZOM8AqY1kd3pe7sL6X3bJkOylfpAXNbDaTLdugtf
+         4jSp5F3TlUjKm3uOlzEYOo3wJBaS082jVGTg7lwoOTd3u6wVBWKYZY503j8fi0+JIT
+         cOYPHDG/GkfzA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oFCoh-0001Mf-Qe; Sat, 23 Jul 2022 12:57:03 +0200
+Date:   Sat, 23 Jul 2022 12:57:03 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Jonathan Woithe <jwoithe@just42.net>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Aidan Thornton <makosoft@gmail.com>,
+        Grigori Goronzy <greg@chown.ath.cx>,
+        Michael Hanselmann <public@hansmi.ch>
+Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
+ chunks
+Message-ID: <YtvT/6DqPjUumpsl@hovoldconsulting.com>
+References: <Ys1sfRyL6El7go94@kroah.com>
+ <Ys2nEmkvz2dfAKkU@hovoldconsulting.com>
+ <Ys4QOgNF0pJDwRCJ@marvin.atrad.com.au>
+ <YtUfcSOTl/ia+ahL@hovoldconsulting.com>
+ <YtYsFVCShDeVCeis@marvin.atrad.com.au>
+ <YtZG5vFNpXCXIMf0@hovoldconsulting.com>
+ <YtZQjcUMYZEky+Ta@marvin.atrad.com.au>
+ <YtZbWhGx/nqgAIX7@hovoldconsulting.com>
+ <YtZlwLoDO9CVt9RO@marvin.atrad.com.au>
+ <YtahM9hyrPVATchX@marvin.atrad.com.au>
 MIME-Version: 1.0
-Sender: jesusada306@gmail.com
-Received: by 2002:a05:6102:207:0:0:0:0 with HTTP; Sat, 23 Jul 2022 03:54:08
- -0700 (PDT)
-From:   Hannah Wilson <hannahdavid147@gmail.com>
-Date:   Sat, 23 Jul 2022 10:54:08 +0000
-X-Google-Sender-Auth: 3cZQhmY5dhFGy3KUky8FW3RGwJ4
-Message-ID: <CAFpsEpHU9Y2Lp8bAu3=cXOQ2UZHBAvAdXbBdpEvc-86QzVfz_w@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.4 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e33 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jesusada306[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jesusada306[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtahM9hyrPVATchX@marvin.atrad.com.au>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings My Dear,
-  I am glad to know you, but God knows you better and he knows why he
-has directed me to you at this point in time so do not be surprised at
-all. My name is Mrs.Hannah  Wilson David, a widow, i have been
-suffering from ovarian cancer disease. At this moment i am about to
-end the race like this because the illness has gotten to a very bad
-stage, without any family members and no child. I hope that you will
-not expose or betray this trust and confidence that I am about to
-entrust to you for the mutual benefit of the orphans and the less
-privileged ones. I have some funds I inherited from my late
-husband,the sum of ($12,000.000,) deposited in the Bank.  Having known
-my present health status, I decided to entrust this fund to you
-believing that you will utilize it the way i am going to instruct
-herein.
-Therefore I need you to assist me and reclaim this money and use it
-for Charity works, for orphanages and giving justice and help to the
-poor, needy and to promote the words of God and the effort that the
-house of God will be maintained says The Lord." Jeremiah 22:15-16.=E2=80=9C
-It will be my great pleasure to compensate you with 35 % percent of
-the total money for your personal use, 5 % percent for any expenses
-that may occur during the international transfer process while 60% of
-the money will go to the charity project.
-All I require from you is sincerity and the ability to complete God's
-task without any failure. It will be my pleasure to see that the bank
-has finally released and transferred the fund into your bank account
-therein your country even before I die here in the hospital, because
-of my present health status everything needs to be processed rapidly
-as soon as possible. Please I am waiting for your immediate reply on
-my email for further details of the transaction and execution of this
-charitable project.
-Best Regards.
-Mrs.  Wilson David Hannah.
+On Tue, Jul 19, 2022 at 09:48:59PM +0930, Jonathan Woithe wrote:
+> On Tue, Jul 19, 2022 at 05:35:22PM +0930, Jonathan Woithe wrote:
+> > > Can you try the below patch and see if that still triggers the lost
+> > > character after probe and line settings changes? Please also try to
+> > > confirm that LCR can be updated this way at all.
+> > 
+> > :
+> > Of course all testing to this point has been with a loopback adapter which
+> > means there's no indication whether line speed (or any other LCR parameters)
+> > have really changed.  For complicated reasons I can't easily test using the
+> > programmer hardware right now.  I will see if I can work out a way to verify
+> > speed and LCR changes with the hardware I have available.  Hacking up a
+> > null-modem cable and connecting to a PC which happens to have a real
+> > hardware serial port may be the easiest.
+> 
+> I have done further testing with the patch below in place.  Unfortunately
+> the PC with the real serial port decided not to boot, so instead I'm testing
+> with a 3-wire null modem cable into a PL2303-based USB-serial converter on
+> another box running a 5.15.38 kernel.  Flow control was turned off since the
+> cable wasn't wired for that.
+> 
+> Tests done in minicom:
+> 
+>  * Speed: change from 115200 to 38400 and back again.
+> 
+>    The speed setting of the CH341 appears to work correctly.
+> 
+>  * Data length: change from 8 to 7 bits in minicom on both adapters
+> 
+>    CH341 = 8 bits, PL2303 = 8 bits
+>     - Data delivered correctly in both directions.
+> 
+>    CH341 = 8 bits, PL2303 = 7 bits
+>     - Data sent by the CH341 received correctly by the PL2303
+>     - Data sent by the PL2303 not received correctly by the CH341
+> 
+>    CH341 = 7 bits, PL2303 = 7 bits
+>     - Data sent by the CH341 received correctly by the PL2303
+>     - Data sent by the PL2303 not received correctly by the CH341
+> 
+>    CH341 = 7 bits, PL2303 = 8 bits
+>     - Data delivered correctly in both directions.
+>
+>    There are too many variables in play to know what to make of this given
+>    that the response of the PL2303 driver to these changes is unknown.  At
+>    first glance the results appear to be rather inconsistent.  Maybe the
+>    data length setting is not always affecting tx and rx on one or both of
+>    the adapters.
+
+Thanks for testing this. The above observations appear consistent with
+LCR updates for your CH341 not taking effect (e.g. stuck at 8N1 unlike
+the PL2303).
+
+An easy way to test this is to send the letter 'q' (0x71) from CH341 to
+PL2303 (in 8N1 mode). This should be received as 0xf1 if the CH341 is in
+7N1 mode as the stop bit is interpreted as MSB, or as 0x71 if still in
+8N1 mode.
+
+> I'm not sure what this proves: most of these settings don't appear to be
+> having any effect on either adapter.  In the end, 8N1 works and this is,
+> after all, what most people would be using.  The situation with the patch is
+> clearly better than it was without the patch because the CH341 is now
+> delivering data in a timely manner - just like it did under 4.4.14.
+> 
+> The behaviour of the LCR setting on version 0x27 may not be a new thing: all
+> my applications use 8N1, so if any of the other combinations were faulty
+> under 4.4.14 I wouldn't know.  I may look into testing the LCR settings
+> under 4.4.14 if you think there's value in it.  I expect it will show that
+> the patch below restores the 4.4.14 behaviour for hardware version 0x27, and
+> that the LCR issues were present in 4.4.14 but masked due to the almost
+> universal use of 8N1).  I can also try to work out an alternative way to
+> get a real hardware serial port if that would help: I'm thinking it would
+> remove any doubt about the LCR setting at one end of the link.
+
+Actually, LCR configuration wasn't supported before 4.10 either so the
+only question would be if LCR control works at all with your chip
+(except for the lost character).
+
+I found this thread where Micahel provides some details after apparently
+having disassembled the vendor driver:
+
+	https://lore.kernel.org/all/2e80916d-1be8-dc0f-abf9-adc0feea1803@msgid.hansmi.ch/
+
+Based on that (and the comment that made it into the driver), chips
+before version 0x30 uses a different protocol for updating LCR so that
+anything but 8N1 has indeed likely never worked for these chips. 
+
+Could you try the patch below, which simply disables LCR updates for
+older chips and which I believe you already confirmed works.
+
+And then as a follow up, see if enabling the LCR update again has any
+effect on the word size (e.g. rerun the test you did above, or the "q"
+test I mentioned).
+
+This may give an indication of how far we are from being able to support
+LCR updates on older chips even this is not something we need to
+implement now.
+
+Johan
+
+
+From 4d12bb8ba4fe760cd5893b7c5f981524e16536fc Mon Sep 17 00:00:00 2001
+From: Johan Hovold <johan@kernel.org>
+Date: Mon, 18 Jul 2022 10:21:41 +0200
+Subject: [PATCH] USB: serial: ch341: fix disabled rx timer on older devices
+
+At least one older CH341 appears to have the RX timer enable bit
+inverted so that setting it disables the RX timer and prevents the FIFO
+from emptying until it is full.
+
+Only set the RX timer enable bit for devices with version newer than
+0x27 (even though this probably affects all pre-0x30 devices).
+
+Also disable LCR updates for pre-0x30 devices which use a different
+protocol and where the current register write causes the next received
+character to be lost.
+
+FIXME: split in two patches
+
+Reported-by: Jonathan Woithe <jwoithe@just42.net>
+Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
+Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
+Fixes: 55fa15b5987d ("USB: serial: ch341: fix baud rate and line-control handling")
+Not-Signed-off-yet-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/ch341.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index 2798fca71261..af01a462cc43 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -97,7 +97,10 @@ struct ch341_private {
+ 	u8 mcr;
+ 	u8 msr;
+ 	u8 lcr;
++
+ 	unsigned long quirks;
++	u8 version;
++
+ 	unsigned long break_end;
+ };
+ 
+@@ -250,8 +253,12 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+ 	/*
+ 	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
+ 	 * has been received unless bit 7 is set.
++	 *
++	 * At least one device with version 0x27 appears to have this bit
++	 * inverted.
+ 	 */
+-	val |= BIT(7);
++	if (priv->version > 0x27)
++		val |= BIT(7);
+ 
+ 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
+ 			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
+@@ -265,6 +272,9 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+ 	 * (stop bits, parity and word length). Version 0x30 and above use
+ 	 * CH341_REG_LCR only and CH341_REG_LCR2 is always set to zero.
+ 	 */
++	if (priv->version < 0x30)
++		return 0;
++
+ 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
+ 			      CH341_REG_LCR2 << 8 | CH341_REG_LCR, lcr);
+ 	if (r)
+@@ -308,7 +318,9 @@ static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
+ 	r = ch341_control_in(dev, CH341_REQ_READ_VERSION, 0, 0, buffer, size);
+ 	if (r)
+ 		return r;
+-	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", buffer[0]);
++
++	priv->version = buffer[0];
++	dev_dbg(&dev->dev, "Chip version: 0x%02x\n", priv->version);
+ 
+ 	r = ch341_control_out(dev, CH341_REQ_SERIAL_INIT, 0, 0);
+ 	if (r < 0)
+-- 
+2.35.1
+
+
+
