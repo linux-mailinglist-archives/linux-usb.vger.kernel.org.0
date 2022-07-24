@@ -2,56 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB8D57F57F
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jul 2022 16:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DE857F586
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jul 2022 16:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiGXO0A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Jul 2022 10:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S230321AbiGXOq4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Jul 2022 10:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiGXOZ7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jul 2022 10:25:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAEE6454;
-        Sun, 24 Jul 2022 07:25:57 -0700 (PDT)
+        with ESMTP id S230072AbiGXOqz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jul 2022 10:46:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C7810562;
+        Sun, 24 Jul 2022 07:46:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 335FC6110F;
-        Sun, 24 Jul 2022 14:25:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D046C3411E;
-        Sun, 24 Jul 2022 14:25:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B9E6B80D2E;
+        Sun, 24 Jul 2022 14:46:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5EC5C3411E;
+        Sun, 24 Jul 2022 14:46:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658672756;
-        bh=h7jrZwkYGrnkhPbTECXqkK1Cud9+sZlYjkmb2gYk2Yk=;
+        s=k20201202; t=1658674011;
+        bh=puU8YqjFpRQ/Pdae2Mkw+tfbNoOrVhW9hFqKqO1Zng0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N13+dGlh8AXdIr0uj1qUKJA5DlnjcKUHWS6Pz6jZCRYggluzcNDzec7yul/PkjfiC
-         hmF0S/fb9V3LvRgv9oggbG77BhLc2LMbKQ9tbRo+B2KmtGOYhc1eLLum6hYODqqSpD
-         UHgmMt7SwOPcWENFFaLtBh7cX4+HBuPBUCO2pw8KE8ICSSprnbiorOc0LGFXzh66TL
-         xpTQyGs/ybb15pWK/Kqg+r4NQHDOAIKbirzmIZdutZW0/1dZ9e0BUov7TnFWtwnt1S
-         iYOoQcOSoUTAuxFAODDMsEZCojSakFxUMgvWDmYYnu2+mWSY6EoHEu2LQ+aL6eNLxE
-         VvmoYkEiyLZYA==
+        b=GvycWdcVWM2u3eH6ngQ/JqSS8VK6I3+6JxgX+lpKiaJbpAi4dvq3R+DuicDFxlPH0
+         TP5czSa7NvrrMVkpDyxvBZ/qV2s4ftezAZGA/0QQVa//Igmo/8JVctvQof0Wm7YsGW
+         ENq6j5Gix7R/Gkuy0G10IaKm1midWjXUfMlTONpfQR/FENrL8pIYxQvv0oOh6agpZo
+         2C/mZG2wR3NwqScZ+6J9cnhUDqUubU8omPckvRHU1Y8o+6iPu6/4rrr6Qd8bdRJUJC
+         lRP43RB083wJ1/Q//AgnUgp9GNC6C7LSOWwewKuGzWLPvsw6djWgl0OHWvkhprHjAn
+         VE1T+pX8DkPyw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1oFcYX-0003JW-Ab; Sun, 24 Jul 2022 16:26:05 +0200
-Date:   Sun, 24 Jul 2022 16:26:05 +0200
+        id 1oFcsl-0003O4-Rd; Sun, 24 Jul 2022 16:47:00 +0200
+Date:   Sun, 24 Jul 2022 16:46:59 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Reinhard Speyerer <rspmn@arcor.de>, sdlyyxy <sdlyyxy@bupt.edu.cn>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
-Message-ID: <Yt1WfSZk03Plpnan@hovoldconsulting.com>
-References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
- <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
- <YtKrbucYNulPEKUp@arcor.de>
- <YtRtswctFMLxeglu@kroah.com>
- <YtXG3EVrRKAG7WVx@arcor.de>
- <YtwjiWG5ZFBvCZ1M@hovoldconsulting.com>
- <Yt1QhCIiUf97Dl3D@kroah.com>
+Cc:     Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: usb_wwan: replace DTR/RTS magic numbers
+ with macros
+Message-ID: <Yt1bY74PirDyuYcu@hovoldconsulting.com>
+References: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
+ <Yt0MfqQQTwe4ztuN@hovoldconsulting.com>
+ <Yt1OPKNlWZuMrZv4@kroah.com>
+ <Yt1SFXlwbW1JCohE@hovoldconsulting.com>
+ <Yt1UG058Qjsngps6@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yt1QhCIiUf97Dl3D@kroah.com>
+In-Reply-To: <Yt1UG058Qjsngps6@kroah.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,48 +60,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 04:00:36PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Jul 23, 2022 at 06:36:25PM +0200, Johan Hovold wrote:
-> > On Mon, Jul 18, 2022 at 10:47:24PM +0200, Reinhard Speyerer wrote:
+On Sun, Jul 24, 2022 at 04:15:55PM +0200, Greg Kroah-Hartman wrote:
+> On Sun, Jul 24, 2022 at 04:07:17PM +0200, Johan Hovold wrote:
+> > On Sun, Jul 24, 2022 at 03:50:52PM +0200, Greg Kroah-Hartman wrote:
 
-> > > Please don't give the OPPO R11 diag port on Linux a bad name by letting
-> > > the usb-serial-simple driver handle it.
+> > > I think Yan should write a patch series to unify these and make it
+> > > right, instead of just papering over it all.
 > > 
-> > So while I'm not sure bandwidth is really a problem, I still tend to
-> > agree that we should add this one to the option driver for now as that
-> > is how we handle (non-GOBI) Qualcomm modems and their QCDM ports.
+> > Ok, I just fear it will be more work for us since that involves
+> > decisions like whether it should be added to the uapi header, and then
+> > we get into naming, etc. But we're in no rush.
+> > 
+> > > Also this "../" stuff in a
+> > > #include directive is not ok, I wouldn't recommend this change be taken
+> > > as-is.
+> > 
+> > That was never an option, but I'd be ok with taking the v2 which added
+> > defines for the constants directly in the driver.
 > 
-> If you want it to stay on the option driver, that's fine, but I still
-> think it feels odd as it obviously does not follow the vendor-specific
-> protocol that the option driver supports.
+> These are global defines, in a public spec, and they should all just be
+> in one place in the kernel.  What's wrong with include/uapi/linux/cdc.h
+> which is where the other ACM defined values are at?
 
-But we've been dumping modem device-id entries in there since forever.
+Nothing. We'd just need to figure out how best to name them if they're
+going to become UAPI, that's all (e.g. at least use a USB_CDC_ prefix to
+match the other defines).
 
-The entries added to option have been for devices whose interfaces did
-not follow any particular pattern (e.g. unlike the old GOBI modems).
+And the in-tree users would need to be updated to match.
 
-And as Reinhard mentioned, the line-control requests (which follow CDC)
-are actually required by some Qualcomm modems so moving things out would
-need to be done carefully.
+And it's not just the control lines. We have the state notification bits
+as well. Someone would need to dig out the spec.
 
-On the other hand, that request likely isn't needed for any QCDM/DIAG
-ports, but who knows for sure.
-
-> To be fair, loads of the ids in that driver could move to the simple
-> driver as they probably do not also support the line setting protocol
-> that this driver was originally written for, so what's a few more ids
-> added :)
-
-Not sure about the simple driver, unless we want to handle say NMEA and
-MODEM ports using different drivers. But either way, for now I think we
-can add a few more to option.
-
-If we start seeing patterns regarding the Qualcomm interface
-descriptors, like the QCDM interface using 0xff/0xff/0x30, we could
-implement something more generic in qcserial too.
-
-But the lack of documentation and unification is just a pain to deal
-with. So someone would need to be motivated enough to try to organise
-this mess.
+So we go from accepting a small clean-up patch to some non-trivial
+tree-wide work and review. But sure, bring it on.
 
 Johan
