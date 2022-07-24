@@ -2,50 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4213457F427
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jul 2022 10:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5539957F44B
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jul 2022 11:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiGXIk7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Jul 2022 04:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S229453AbiGXJKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Jul 2022 05:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXIk6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jul 2022 04:40:58 -0400
+        with ESMTP id S229825AbiGXJKS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jul 2022 05:10:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D27140D5;
-        Sun, 24 Jul 2022 01:40:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90354E0;
+        Sun, 24 Jul 2022 02:10:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 619CFB80D17;
-        Sun, 24 Jul 2022 08:40:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1022AC3411E;
-        Sun, 24 Jul 2022 08:40:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45BE6B80D47;
+        Sun, 24 Jul 2022 09:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89F0C3411E;
+        Sun, 24 Jul 2022 09:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658652054;
-        bh=geZDnhQN0JqHvu8hmttukiCncgxnvnvKVBmeNXsnVnU=;
+        s=k20201202; t=1658653814;
+        bh=89M89dfnkToEcgLfJ1AqZkSAL9rrseeGP4EToMudOEs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JOgwtLNBWGM1vPT4bySBecq9IwdfGY5cmzBxD14i05KWjZUcBAyLOhp52jwXgidA9
-         /1hn9FRw1A6AYx5htACyj/r6AChc03kRcyJu6P+uQXvlCNNF3mih9IVvIMfugA64yz
-         QDTTzjivjQ7b6FQdj+VIijMbcP35yO2051N9iSI99Nvrq+sJvAPFBylaVGvw9/REIr
-         rVfMV8loSr3vKdCYvji1013xA7Jf9HbmGLCegECLD4fGgQqERIvMAIfDdqI6V1B3ny
-         1sudJqKB6Olbj33YjRaYDe2OES5DaBsP2NcUvEX+n813gKy11rj4vUmOqNa5XdujVx
-         7FDu45Sscm7PQ==
+        b=I/Z7Ws5HTMSzhQcqS6mi+man7/Ww4lmw9Y1pxNsHH8JwA5kM6BVD0BluSupLjX5CR
+         zq8Edxx5sDPmAY2qUbCbBtOviNND9OntjCngyRheSLTB0Zo1usi2T8y3TwwEUvWnJx
+         1a+k+wGi0UxOMVQKBcBUxf2/gXm70A10x1FZX/0exOqdTNlYU8j7EBapeay+R2/9cw
+         NO6E1gKIUS7TZipdZD3+SV734ysfhM9bCQMJjv9y3AvU4xdWVg4kENr86ehZ890YKF
+         BBP7QrZAmhN/AgvgkNNXb8FKhkVzj4wyOB85i9DklWLN1tlM/3S2Ei+oI2NOGd+qvA
+         Xwl2E2ISOpLQw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1oFXAc-0000mZ-6v; Sun, 24 Jul 2022 10:41:02 +0200
-Date:   Sun, 24 Jul 2022 10:41:02 +0200
+        id 1oFXd0-00013C-TP; Sun, 24 Jul 2022 11:10:22 +0200
+Date:   Sun, 24 Jul 2022 11:10:22 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Yonglin Tan <yonglin.tan@outlook.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel EM060K modem
-Message-ID: <Yt0FnnVh47y8aMtn@hovoldconsulting.com>
-References: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+To:     Yan Xinyu <sdlyyxy@bupt.edu.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: usb_wwan: replace DTR/RTS magic numbers
+ with macros
+Message-ID: <Yt0MfqQQTwe4ztuN@hovoldconsulting.com>
+References: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+In-Reply-To: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,43 +56,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 07:28:00PM +0800, Yonglin Tan wrote:
-> Add usb product id entry for the Quectel EM060K module.
+On Fri, Jul 22, 2022 at 04:50:40PM +0800, Yan Xinyu wrote:
+> The usb_wwan_send_setup function generates DTR/RTS signals in compliance
+> with CDC ACM standard. This patch changes magic numbers in this function
+> to equivalent macros.
 > 
-> "MBIM mode": DIAG + NMEA + AT + MODEM + MBIM
+> Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+> ---
+> v1->v2:
+>  * Fix Signed-off-by name.
+> v2->v3:
+>  * Use already defined ACM_CTRL_DTR and ACM_CTRL_RTS in drivers/usb/class/cdc-acm.h
+> ---
+>  drivers/usb/serial/usb_wwan.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 > 
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=030b Rev= 5.04
-> S:  Manufacturer=Quectel
-> S:  Product=EM060K-GL
-> S:  SerialNumber=89fb57db
-> C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
-> A:  FirstIf#= 8 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 8 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 9 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> I:* If#= 9 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#=12 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+> index dab38b63eaf7..5c8303bd3676 100644
+> --- a/drivers/usb/serial/usb_wwan.c
+> +++ b/drivers/usb/serial/usb_wwan.c
+> @@ -29,8 +29,10 @@
+>  #include <linux/bitops.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/usb.h>
+> +#include <linux/usb/cdc.h>
+>  #include <linux/usb/serial.h>
+>  #include <linux/serial.h>
+> +#include "../class/cdc-acm.h"
 
-What's this last interface used for?
+If we are to use common defines, these would need to be added to
+linux/usb/cdc.h first (parts of which are exposed to user space).
+
+Note that we already have at least three copies of these defines in the
+tree.
+
+I'm fine with adding another copy for now and not have to deal with with
+naming and cross driver updates. What do you think, Greg?
+
+>  #include "usb-wwan.h"
+>  
+>  /*
+> @@ -48,9 +50,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+>  	portdata = usb_get_serial_port_data(port);
+>  
+>  	if (portdata->dtr_state)
+> -		val |= 0x01;
+> +		val |= ACM_CTRL_DTR;
+>  	if (portdata->rts_state)
+> -		val |= 0x02;
+> +		val |= ACM_CTRL_RTS;
+>  
+>  	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
+>  
+> @@ -59,8 +61,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+>  		return res;
+>  
+>  	res = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+> -				0x22, 0x21, val, ifnum, NULL, 0,
+> -				USB_CTRL_SET_TIMEOUT);
+> +				USB_CDC_REQ_SET_CONTROL_LINE_STATE,
+> +				USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
+> +				val, ifnum, NULL, 0, USB_CTRL_SET_TIMEOUT);
+>  
+>  	usb_autopm_put_interface(port->serial->interface);
+
+Looks good otherwise.
 
 Johan
