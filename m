@@ -2,98 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C422357F2B4
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jul 2022 04:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4213457F427
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Jul 2022 10:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbiGXCtk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Jul 2022 22:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S230422AbiGXIk7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Jul 2022 04:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXCtj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Jul 2022 22:49:39 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB7139B;
-        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y9so7534768pff.12;
-        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
-        b=JpptwV03fN+pOYghJzEYoh4JLL/XC8Ly3sK+VAc2fYzO9PLQ5aWJUp31mjVV9FqupM
-         33uZjBtqtSBi/98glrdRi2L3R1j+cI5YqMUMWUo0K6Zm01IgQPbn5UL8fIMgRhLpqZLk
-         d76O9uR8bDjfrNgvSoKaxk+QLT1TD0LUFxzq9DHurAq5zVQavTyqSgrW1VMpXDQ6i3Gr
-         NoEPi0xun6zF+LZCDSVyNHwiuYIMQ38ot0X959afjv88i4mByuNumOfJbieL0MDHQ2dx
-         LN0kphXd2WxeAvmYyIMyPFuSf8KbdqdWj+6Irtm0BPlJcSrxw+oYLGUtT+Dn0ur6psSU
-         dDUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
-        b=KF5ykfctosdrnLdPTUEG+R0xomxdK1a/+ahtBkuc0l2ctwxurXPtnPSIuq3lGxHEEQ
-         mk9NHq/kU+Vft/6R9AX2kp8t//ckQo8yUcfpQfT94RqHDTUQcRxRUTYzzbPg2D6gZ6R4
-         0xcsgQwO6TYoWS2HzO9ut/iXaVfFhgaT23FYGBv6wusIYD6ymAqoDw/c+MDfGMRotv39
-         4Zo2D26pxs42ZT0ij7X/31udvpOfiaoEGjApgvfmR+DPmyRKO27c0QTaALeQ9SiPWBRP
-         fquABb1+nM7jDK4gendiikEZ8dHYBe9qNiW/WfwNhWTtAcHYDWXnlq8uBeyyX1EvjcZB
-         9D3w==
-X-Gm-Message-State: AJIora9VIAmnAQYnubOFfGIM9WSdBH4yn27UQsOzpUl65hA6IsORDqbv
-        yE6LnaSuC+R+63TWAIbhtew=
-X-Google-Smtp-Source: AGRyM1soUkXAdCXAvC/wf3HF5Sb42PzXzKJdqZxcowDy2J3LxksJuS4HfcKY1yxdZlNZoo/Ul4XJGw==
-X-Received: by 2002:a63:4b62:0:b0:41a:e5be:fe23 with SMTP id k34-20020a634b62000000b0041ae5befe23mr1290555pgl.140.1658630978263;
-        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-16.three.co.id. [180.214.233.16])
-        by smtp.gmail.com with ESMTPSA id o42-20020a17090a0a2d00b001f21f0f6d7csm7819116pjo.25.2022.07.23.19.49.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 19:49:37 -0700 (PDT)
-Message-ID: <5e13ade3-10a5-4eaf-2d9c-aa03fc23a374@gmail.com>
-Date:   Sun, 24 Jul 2022 09:49:33 +0700
+        with ESMTP id S229602AbiGXIk6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jul 2022 04:40:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D27140D5;
+        Sun, 24 Jul 2022 01:40:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 619CFB80D17;
+        Sun, 24 Jul 2022 08:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1022AC3411E;
+        Sun, 24 Jul 2022 08:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658652054;
+        bh=geZDnhQN0JqHvu8hmttukiCncgxnvnvKVBmeNXsnVnU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JOgwtLNBWGM1vPT4bySBecq9IwdfGY5cmzBxD14i05KWjZUcBAyLOhp52jwXgidA9
+         /1hn9FRw1A6AYx5htACyj/r6AChc03kRcyJu6P+uQXvlCNNF3mih9IVvIMfugA64yz
+         QDTTzjivjQ7b6FQdj+VIijMbcP35yO2051N9iSI99Nvrq+sJvAPFBylaVGvw9/REIr
+         rVfMV8loSr3vKdCYvji1013xA7Jf9HbmGLCegECLD4fGgQqERIvMAIfDdqI6V1B3ny
+         1sudJqKB6Olbj33YjRaYDe2OES5DaBsP2NcUvEX+n813gKy11rj4vUmOqNa5XdujVx
+         7FDu45Sscm7PQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oFXAc-0000mZ-6v; Sun, 24 Jul 2022 10:41:02 +0200
+Date:   Sun, 24 Jul 2022 10:41:02 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Yonglin Tan <yonglin.tan@outlook.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Quectel EM060K modem
+Message-ID: <Yt0FnnVh47y8aMtn@hovoldconsulting.com>
+References: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] docs: fixed table margin in
- configfs-usb-gadget-mass-storage
-Content-Language: en-US
-To:     Maxim Devaev <mdevaev@gmail.com>, linux-doc@vger.kernel.org
-Cc:     linux-next@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, sfr@canb.auug.org.au
-References: <20220723101432.72178-1-mdevaev@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220723101432.72178-1-mdevaev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/23/22 17:14, Maxim Devaev wrote:
-> After merging forced_eject patch, there was a broken margin
-> in the configfs parameters table in the ABI documentation.
-> This patch fixes it.
+On Tue, Jul 19, 2022 at 07:28:00PM +0800, Yonglin Tan wrote:
+> Add usb product id entry for the Quectel EM060K module.
 > 
+> "MBIM mode": DIAG + NMEA + AT + MODEM + MBIM
+> 
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=030b Rev= 5.04
+> S:  Manufacturer=Quectel
+> S:  Product=EM060K-GL
+> S:  SerialNumber=89fb57db
+> C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
+> A:  FirstIf#= 8 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 8 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+> E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+> I:  If#= 9 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:* If#= 9 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#=12 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
+> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Hi Maxim,
+What's this last interface used for?
 
-I think the patch message can be improved, like:
-
-"Commit 421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
- adds force_eject entry to config-usb-gadget-mass-storage table.
- However, the table border for attribute name is short by one `=`,
- which triggers Sphinx warning.
-
- Extend the border to cover the now-longest entry."
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+Johan
