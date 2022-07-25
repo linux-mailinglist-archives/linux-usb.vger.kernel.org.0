@@ -2,109 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BBF5800DD
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 16:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F946580517
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 22:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbiGYOjC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 10:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S236517AbiGYUL4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 16:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbiGYOjB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 10:39:01 -0400
-Received: from smtpproxy21.qq.com (smtpbg703.qq.com [203.205.195.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF94213E97
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 07:38:57 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1658759925tes7hwx1
-Received: from smtpclient.apple ( [111.193.9.146])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 25 Jul 2022 22:38:43 +0800 (CST)
-X-QQ-SSF: 01400000002000B0V000B00A0000000
-X-QQ-FEAT: DQ0OCu3gog1JVD1aMWAG4Hzd0HB957q6ScZb3/kq17UDFTyfwdmQb/6ecqjF8
-        eE5OIYywqAy6jzuY4FIO9RM5B1GETLurAPOVmaicr7eAxKNEew43TCCsKF17vEim+KlGrqq
-        TeaZwBauxmOkQGu2+lIYIdxZiG6lJiwhMgYvNmkKCbjn4fAPvX7KGAqFtyAluaodXwWAEPi
-        sMg5MSAXAGwcpOo1g21x2MeU6IUZun5GbFkFq3muAvTkWg8R9f9iIlSjggT+YzW1bYaPsG8
-        j1NsDD1kWdoxotEBrFfUTZakTQaJv7Q1USHOOcbkLbZwEhnx7DQ6ps5BSsvI2u//KJsoT4H
-        QF6kVQVltNmGV5X2QjhK31quG5gxNfYaaWU2z2MoZolb8af71hdQWnWSbBvlUEkeTqPPuvL
-X-QQ-GoodBg: 2
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH 0/7] USB: cdc: add control and state defines
-From:   Yan Xinyu <sdlyyxy@bupt.edu.cn>
-In-Reply-To: <20220725075841.1187-1-johan@kernel.org>
-Date:   Mon, 25 Jul 2022 22:38:42 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <5964CFE8-1B65-4FE2-9154-0F1C079CE916@bupt.edu.cn>
-References: <20220725075841.1187-1-johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign4
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229491AbiGYULz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 16:11:55 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1ED21261;
+        Mon, 25 Jul 2022 13:11:54 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PDoV24011837;
+        Mon, 25 Jul 2022 20:11:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=JRUjPEurBMiGerl4lNxBbOJ00uBxrV76UTHGFIC2iqE=;
+ b=U+4FbFd5d7fCj49TIIHI4LF4LmcIEiNH8rn8zRHJ5pidDzjEA1uyuAfgNqgUVQcSOY18
+ yDx1cSQ4b4sDJy4VXmkTzIN3ZDjw1oSUSvU5Su8i8/ieaRyUXcz/Y9SxMsoY/9bXAkxd
+ y3rA/DcNY+9kh+IH67PafmYZDU6umzKHYB0T7upDXS0UnttKEDzIrYJyD3h4WMz4oqY1
+ XY5nhi90oSWd388gwqmq2voCuhM32CSO0Dm2zWhM0lLDBUXTUUX2yaD/nqFx/n+v9ooQ
+ EEUIQiaZS3q7sjKm4ViC+KIGZeuCCffGjkL6z1imToxOeogXXjf9dw3cSApBcfVzyrdf oA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hg7xyntdv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 20:11:49 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26PKBmtt000509
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 20:11:49 GMT
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Jul 2022 13:11:48 -0700
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Jul 2022 13:11:47 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_mrana@quicinc.com>,
+        <Thinh.Nguyen@synopsys.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop
+Date:   Mon, 25 Jul 2022 13:11:36 -0700
+Message-ID: <20220725201136.7989-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: f1xwcrjx0dq8n-Nojnd00x63yqHG1why
+X-Proofpoint-GUID: f1xwcrjx0dq8n-Nojnd00x63yqHG1why
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-25_12,2022-07-25_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=820 adultscore=0 clxscore=1015 phishscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207250083
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On Jul 25, 2022, at 15:58, Johan Hovold <johan@kernel.org> wrote:
-> 
-> Several drivers use the control-line and serial-state bitmap values from
-> the CDC spec, but there were no matching defines in the global CDC
-> (UAPI) header.
-> 
-> This series adds the missing defines and converts cdc-acm and f_acm to
-> use them.
-> 
-> One staging driver also had an unused set of CDC defines which are
-> removed.
-> 
-> The final patch by Yan Xinyu, which triggered this work, converts the
-> usb_wwan driver to use CDC defines instead of hardcoded values in its
-> line-control handling.
-> 
-> Greg, are you ok with me taking these through USB serial (where there
-> are a few more drivers that could potentially use them) or do you want
-> to take the lot through your tree directly?
-> 
-> Johan
-> 
-> 
-> Johan Hovold (6):
->  USB: cdc: add control-signal defines
->  USB: cdc: add serial-state defines
->  USB: cdc-acm: use CDC control-line defines
->  USB: cdc-acm: use CDC serial-state defines
->  staging: gdm724x: drop unused CDC defines
->  USB: gadget: f_acm: use CDC defines
-> 
-> Yan Xinyu (1):
->  USB: serial: usb_wwan: replace DTR/RTS magic numbers with macros
-> 
-> drivers/staging/gdm724x/gdm_tty.c   |  6 -----
-> drivers/usb/class/cdc-acm.c         | 42 ++++++++++++++---------------
-> drivers/usb/class/cdc-acm.h         | 20 --------------
-> drivers/usb/gadget/function/f_acm.c | 20 ++++----------
-> drivers/usb/serial/usb_wwan.c       | 10 ++++---
-> include/uapi/linux/usb/cdc.h        | 13 +++++++++
-> 6 files changed, 45 insertions(+), 66 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+Relocate the pullups_connected check until after it is ensured that there
+are no runtime PM transitions.  If another context triggered the DWC3
+core's runtime resume, it may have already enabled the Run/Stop.  Do not
+re-run the entire pullup sequence again, as it may issue a core soft
+reset while Run/Stop is already set.
 
-Thank you so much for spending your time to write this patch series!
-And thank you and Greg for your reviews, they are very informative
-and educational!
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+ drivers/usb/dwc3/gadget.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-sdlyyxy
-
-
-
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index aeeec751c53c..67b1039c664c 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2539,9 +2539,6 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 
+ 	is_on = !!is_on;
+ 
+-	if (dwc->pullups_connected == is_on)
+-		return 0;
+-
+ 	dwc->softconnect = is_on;
+ 
+ 	/*
+@@ -2566,6 +2563,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 		return 0;
+ 	}
+ 
++	if (dwc->pullups_connected == is_on)
++		return 0;
++
+ 	if (!is_on) {
+ 		ret = dwc3_gadget_soft_disconnect(dwc);
+ 	} else {
