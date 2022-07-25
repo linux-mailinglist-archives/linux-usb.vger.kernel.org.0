@@ -2,96 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DE857F586
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Jul 2022 16:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA25057F851
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 04:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiGXOq4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Jul 2022 10:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S230213AbiGYCoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Jul 2022 22:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiGXOqz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jul 2022 10:46:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C7810562;
-        Sun, 24 Jul 2022 07:46:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B9E6B80D2E;
-        Sun, 24 Jul 2022 14:46:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5EC5C3411E;
-        Sun, 24 Jul 2022 14:46:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658674011;
-        bh=puU8YqjFpRQ/Pdae2Mkw+tfbNoOrVhW9hFqKqO1Zng0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GvycWdcVWM2u3eH6ngQ/JqSS8VK6I3+6JxgX+lpKiaJbpAi4dvq3R+DuicDFxlPH0
-         TP5czSa7NvrrMVkpDyxvBZ/qV2s4ftezAZGA/0QQVa//Igmo/8JVctvQof0Wm7YsGW
-         ENq6j5Gix7R/Gkuy0G10IaKm1midWjXUfMlTONpfQR/FENrL8pIYxQvv0oOh6agpZo
-         2C/mZG2wR3NwqScZ+6J9cnhUDqUubU8omPckvRHU1Y8o+6iPu6/4rrr6Qd8bdRJUJC
-         lRP43RB083wJ1/Q//AgnUgp9GNC6C7LSOWwewKuGzWLPvsw6djWgl0OHWvkhprHjAn
-         VE1T+pX8DkPyw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oFcsl-0003O4-Rd; Sun, 24 Jul 2022 16:47:00 +0200
-Date:   Sun, 24 Jul 2022 16:46:59 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] USB: serial: usb_wwan: replace DTR/RTS magic numbers
- with macros
-Message-ID: <Yt1bY74PirDyuYcu@hovoldconsulting.com>
-References: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
- <Yt0MfqQQTwe4ztuN@hovoldconsulting.com>
- <Yt1OPKNlWZuMrZv4@kroah.com>
- <Yt1SFXlwbW1JCohE@hovoldconsulting.com>
- <Yt1UG058Qjsngps6@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yt1UG058Qjsngps6@kroah.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229436AbiGYCoc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Jul 2022 22:44:32 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4139CBC1F;
+        Sun, 24 Jul 2022 19:44:30 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id e132so9138482pgc.5;
+        Sun, 24 Jul 2022 19:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=a4smhlXQRPY08uZFYWaREPplMOTenvaPYfLKafzeLgY=;
+        b=g8KdayopTfm0rTuvVjbGJF0Fqri1hOHJ/P7xPCvZngTKUJJRFvxIFwtm4xvy66lOY/
+         rN9J+SMwCFGJsTl3BVGUMeV73vqf31Re/WlsTKu379ZcSCC9Y1h4jOW3ncRNByVqmkez
+         MdxlJCeeaJdco+5DGtXkME913JgG2SsLalxAjvJmNy8Tbd43s/YDGpjZIA3nveVzPKzz
+         rmsdtGb7EEnaIs8ao+apTqcERdbSXcb0TiWX10+r0lsApqogIaYgoDOEoI6Vf8TMJlk3
+         4jYCWywSmwZFHEXeChB2wtKaBxuStT7APFTcQu7zVWr/tjFFHsOmMi625vu1VcmnVRnm
+         /JdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=a4smhlXQRPY08uZFYWaREPplMOTenvaPYfLKafzeLgY=;
+        b=AwwVzd3FoXjuAqZfj3RTyRmjVr8PQaMyuMA2/RE4o1ndEgfgIeGimKMMjiwAvcu5iu
+         AArYPguBMs4QHX/ejSDmLu6KumROgiaFeASw5jEqm157n8qW8YEI4bOzRHua8B05ZcM3
+         kVCOHeESbwiogpVhcbGdbG2+LzzaIWWtUlDnhJMgZXbbDxSl3m/QXneswAgeoXreaszw
+         /MTmKJldtUwqQKPTWPbKGqSumVOnVSHPPuERvA6TRADgFqiKuwO9lxfa8+luX2Uls+fW
+         m8ARnh8aZzEmhFn1JlPKG1KwW+WhKJVHR/UU/E4Wl0bpBExDwa6doxFga1oC25hSEPhA
+         I1wA==
+X-Gm-Message-State: AJIora/AJt3m4qu24b0K8+8uG3nDBRjYGrQGpTaA9eWwb9yaCmmk6L2e
+        jUCbEDYIMI6biqsL70dTcrg=
+X-Google-Smtp-Source: AGRyM1skOhwsZ2B83o1MkEB/dH4BEcN0rbxltYzHhPOlyRIyTD6z+FBB9Pa0FkSEUY0x65BA++W/rA==
+X-Received: by 2002:a62:1508:0:b0:528:be70:2f69 with SMTP id 8-20020a621508000000b00528be702f69mr10846563pfv.42.1658717070380;
+        Sun, 24 Jul 2022 19:44:30 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id u13-20020a170903124d00b0016d1b197914sm7983304plh.90.2022.07.24.19.44.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 24 Jul 2022 19:44:30 -0700 (PDT)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v5 0/2] Add USB2.0 phy driver for Sunplus SP7021
+Date:   Mon, 25 Jul 2022 10:44:10 +0800
+Message-Id: <1658717052-26142-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 04:15:55PM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Jul 24, 2022 at 04:07:17PM +0200, Johan Hovold wrote:
-> > On Sun, Jul 24, 2022 at 03:50:52PM +0200, Greg Kroah-Hartman wrote:
+This is a patch series for USB2.0 phy driver for Sunplus SP7021 SoC.
 
-> > > I think Yan should write a patch series to unify these and make it
-> > > right, instead of just papering over it all.
-> > 
-> > Ok, I just fear it will be more work for us since that involves
-> > decisions like whether it should be added to the uapi header, and then
-> > we get into naming, etc. But we're in no rush.
-> > 
-> > > Also this "../" stuff in a
-> > > #include directive is not ok, I wouldn't recommend this change be taken
-> > > as-is.
-> > 
-> > That was never an option, but I'd be ok with taking the v2 which added
-> > defines for the constants directly in the driver.
-> 
-> These are global defines, in a public spec, and they should all just be
-> in one place in the kernel.  What's wrong with include/uapi/linux/cdc.h
-> which is where the other ACM defined values are at?
+Sunplus SP7021 is an ARM Coretex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
-Nothing. We'd just need to figure out how best to name them if they're
-going to become UAPI, that's all (e.g. at least use a USB_CDC_ prefix to
-match the other defines).
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-And the in-tree users would need to be updated to match.
+Vincent Shih (2):
+  phy: usb: Add USB2.0 phy driver for Sunplus SP7021
+  dt-bindings: phy: Add bindings doc for Sunplus USB2
 
-And it's not just the control lines. We have the state notification bits
-as well. Someone would need to dig out the spec.
+ .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      |  73 +++++
+ MAINTAINERS                                        |   9 +
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/sunplus/Kconfig                        |  12 +
+ drivers/phy/sunplus/Makefile                       |   2 +
+ drivers/phy/sunplus/phy-sunplus-usb2.c             | 297 +++++++++++++++++++++
+ 7 files changed, 395 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+ create mode 100644 drivers/phy/sunplus/Kconfig
+ create mode 100644 drivers/phy/sunplus/Makefile
+ create mode 100644 drivers/phy/sunplus/phy-sunplus-usb2.c
 
-So we go from accepting a small clean-up patch to some non-trivial
-tree-wide work and review. But sure, bring it on.
+-- 
+2.7.4
 
-Johan
