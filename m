@@ -2,55 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18445805A6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 22:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C165806EA
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 23:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237117AbiGYUbi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 16:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S234916AbiGYVrN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 17:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236580AbiGYUbh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 16:31:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3908C559D;
-        Mon, 25 Jul 2022 13:31:36 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C4F616601B06;
-        Mon, 25 Jul 2022 21:31:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658781093;
-        bh=W9DZSzPqzjJhWL01AORUmAgCTKm7R4Z6jqzXRhJ6p8k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mgLtyfjmxYamFkm0NIFFBO3WvTNhryYyRZZRfwEtyhlaBaAtHEiXXp9ZQLoLy81u7
-         HrPMgjH3ij0kg5sCxQsN1iwAQhSxRcSd0YvfF1S6e/zhJysobbiqVH1oFwZYZfoBU0
-         o3ScnCOQs5eAeIzlvAboZRLo20Go7myIHghXYaMdumMH83Q59E8LqFgY5os84PfVcT
-         4XNI5lZh61oNjAZwdCqFnN7/MrU6e+VaksXFUwPQBID47YE8eyjh104PY4pJNN2FPs
-         TNSGaHM2lH+UM0VNozY+NEuXlhqr9XWOPEp3RIgw4OncR13x2gs3Yjsbn/ScKeXEHq
-         COV/hZR/wCQ1g==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: retimer: Add missing id check in match callback
-Date:   Mon, 25 Jul 2022 16:31:29 -0400
-Message-Id: <20220725203129.1973260-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.37.0
+        with ESMTP id S229739AbiGYVrL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 17:47:11 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D8911821
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 14:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658785631; x=1690321631;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qSNyJLnE+tgP95CDZwA3GRRNF0DnpCPGk9aBUfC0S7Q=;
+  b=DWXKsZdwr4n8Sx6ixS+XVj9Wcv2L557dZb1fvnOOl5rTricmgUmz1Wih
+   ce9/VsRkUfM7buHOVp8ER9imZoTYfGDfa0NGjJ3j+qtdqRdM9kQ+3uaqB
+   6ulp/54N4EHd5Gi6HNJL65H0BgCQ+XONIpQx3BmJ8LdKb0IGLlj9sVuDY
+   +ysB1GadFpXPVeGymJoQEjbmedPZOEDSDvQ7ZS0GhMFI/DJIzIUOFYeG4
+   3wEcmGJPsJxYWp9u6cCLDOMoqUtGreINu3z8cVIP3o0WX0rsh1QZ0d2Wb
+   +wQUFMnXpejmBmUN1OJKkck65b7j5VVkKJeUPJTNm49ZCyVh8e6wqSfM6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="288559002"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="288559002"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 14:47:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="741975468"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Jul 2022 14:47:09 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oG5uu-0005b2-1c;
+        Mon, 25 Jul 2022 21:47:08 +0000
+Date:   Tue, 26 Jul 2022 05:46:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ b6de1f901039cfcbd605842d454bd80c589105d8
+Message-ID: <62df0f21.ftv0oCNCsKXaO6BY%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,48 +62,97 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The fwnode_connection_find_match() function handles two cases: named
-references and graph endpoints. In the second case, the match function
-passed in is called with the id to check for the match. However, the
-match function for the recently added type-c retimer class assumes the
-connection has already been matched (which is only true for the first
-case).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: b6de1f901039cfcbd605842d454bd80c589105d8  Merge tag 'usb-serial-5.20-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
 
-The result is that with that change, all type-c nodes with graph
-endpoints defer probe indefinitely, independently of having a retimer
-connection or not.
+elapsed time: 721m
 
-Add the missing check, like is done by the type-c mux and usb role
-switch code, to fix the issue.
+configs tested: 76
+configs skipped: 3
 
-Fixes: ddaf8d96f93b ("usb: typec: Add support for retimers")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
----
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+powerpc              randconfig-c003-20220724
+i386                          randconfig-c001
+arm                        clps711x_defconfig
+powerpc                 mpc85xx_cds_defconfig
+parisc64                         alldefconfig
+powerpc                    amigaone_defconfig
+arm                        cerfcube_defconfig
+arc                          axs101_defconfig
+arm                        shmobile_defconfig
+m68k                           virt_defconfig
+arm                            lart_defconfig
+xtensa                generic_kc705_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+sh                               allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+m68k                             allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+m68k                             allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a016
+i386                          randconfig-a012
+i386                          randconfig-a014
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+s390                 randconfig-r044-20220724
+riscv                randconfig-r042-20220724
+arc                  randconfig-r043-20220724
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-kvm
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
 
- drivers/usb/typec/retimer.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+clang tested configs:
+arm                         hackkit_defconfig
+mips                         tb0219_defconfig
+arm                        mvebu_v5_defconfig
+mips                   sb1250_swarm_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a015
+i386                          randconfig-a013
+i386                          randconfig-a011
+hexagon              randconfig-r041-20220724
+hexagon              randconfig-r045-20220724
 
-diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
-index 051eaa7d2899..2003731f1bee 100644
---- a/drivers/usb/typec/retimer.c
-+++ b/drivers/usb/typec/retimer.c
-@@ -36,8 +36,13 @@ static int retimer_fwnode_match(struct device *dev, const void *fwnode)
- 
- static void *typec_retimer_match(struct fwnode_handle *fwnode, const char *id, void *data)
- {
--	struct device *dev  = class_find_device(&retimer_class, NULL, fwnode,
--						retimer_fwnode_match);
-+	struct device *dev;
-+
-+	if (id && !fwnode_property_present(fwnode, id))
-+		return NULL;
-+
-+	dev = class_find_device(&retimer_class, NULL, fwnode,
-+				retimer_fwnode_match);
- 
- 	return dev ? to_typec_retimer(dev) : ERR_PTR(-EPROBE_DEFER);
- }
 -- 
-2.37.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
