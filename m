@@ -2,154 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA0157FD84
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 12:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E84580044
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 15:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiGYKbg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 06:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S235049AbiGYN6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 09:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234334AbiGYKbe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 06:31:34 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803FABCA1
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 03:31:32 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id z13so15304824wro.13
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 03:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QR4thViojhLm7m3iVqTAzOPrEuZ+oboQVEbkcRYR7U0=;
-        b=hcY3ebDhxmUgKAKSOPUOX7d/LMYdV3cijN2N6OfC0kvVYjMwOvmOolx+2NETIKYqUp
-         GPy3YFMR7smmOlatz8CKT+4p2UQ+6lI9Ejv06f+y6zEFBSmLUPFbbscFbBBsOCvH434Q
-         ke8WXFQ+uXl36Kdevvs6uhTIaQQgtIFRovUfQ/RDq3AHQ469OhSceGOKRnPmFWjpxVnH
-         VERQ2rtptnToPx6leEXxAAby7RDypiZaQady2IbBpsvPlsYJ0uSwLW6l0adFiFhqOZ8D
-         XJZDsGiJcpWWsVtF7ngMWVpb9VQHwHEkKK2RVLip5CsQWVUMkj1jqMMhHMjq3wvU4bke
-         J0IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QR4thViojhLm7m3iVqTAzOPrEuZ+oboQVEbkcRYR7U0=;
-        b=1sAq2Pw0EYcyg/g+9T0HuzJodGcCzUsqB35MLgdyAYX4epBXol+TsrHSu/liCKvFYJ
-         SuBKVHPtuHadqaKa9QxA3a9JY1UcYWI+X9RtgsUUHIjmRghp6/DVkrFKvNd6qXTeIJoS
-         BnpV6pGkqZlwADLHFplnyjLuhvW9VX9/Irf16AsVIAX+y6p2LTsxb0tWSnUqIVph74eC
-         01aV/y/NxmfJkfhS65N02wVO8cv3EKAilu1D0LDPlZxhSaAcCGdEIsPFQhk95qKltcGs
-         CsktqCrSGheHqnbBWTsgwmoSk+TfZzWpmfZfyWNJtwO8tkgwlY4DwmVOxD8D/N9w2hFt
-         E8UA==
-X-Gm-Message-State: AJIora/WgmhrPs3y4p38DTDzdZfWvCRDswlI+vz893t+TqcPxCpf4DiP
-        mRlTaQ68J6dKWtCB6BL66xQ3Gg==
-X-Google-Smtp-Source: AGRyM1uhInd5p9lSRbYGnaq9oTNYSYBtNWlkq9wyaVzmMkSkg4hYhWboyJgYIo9QbRHYBeJSc2cjCg==
-X-Received: by 2002:a5d:584c:0:b0:21e:7f48:bf19 with SMTP id i12-20020a5d584c000000b0021e7f48bf19mr5190179wrf.474.1658745090915;
-        Mon, 25 Jul 2022 03:31:30 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05600c1d1200b003a04d19dab3sm29367538wms.3.2022.07.25.03.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 03:31:30 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 11:31:28 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370
- support
-Message-ID: <20220725103128.xtaw2c4y5fobowg7@maple.lan>
-References: <20220722102407.2205-1-peterwu.pub@gmail.com>
- <20220722102407.2205-14-peterwu.pub@gmail.com>
+        with ESMTP id S233521AbiGYN6I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 09:58:08 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EB9EA13CC0
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 06:58:02 -0700 (PDT)
+Received: (qmail 351518 invoked by uid 1000); 25 Jul 2022 09:58:01 -0400
+Date:   Mon, 25 Jul 2022 09:58:01 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+Cc:     gregkh@linuxfoundation.org, kishon@ti.com, dianders@chromium.org,
+        s.shtylyov@omp.ru, mka@chromium.org, ming.lei@canonical.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+Subject: Re: [PATCH v2] USB: HCD: Fix URB giveback issue in tasklet function
+Message-ID: <Yt6haeQBseJOEx1r@rowland.harvard.edu>
+References: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722102407.2205-14-peterwu.pub@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 06:24:07PM +0800, ChiaEn Wu wrote:
-> diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-> index a003e02..846dbe7 100644
-> --- a/drivers/video/backlight/Kconfig
-> +++ b/drivers/video/backlight/Kconfig
-> @@ -268,6 +268,18 @@ config BACKLIGHT_MAX8925
->  	  If you have a LCD backlight connected to the WLED output of MAX8925
->  	  WLED output, say Y here to enable this driver.
->
-> +config BACKLIGHT_MT6370
-> +	tristate "MediaTek MT6370 Backlight Driver"
-> +	depends on MFD_MT6370
-> +	help
-> +	  This enables support for Mediatek MT6370 Backlight driver.
-> +	  It's commonly used to drive the display WLED. There are 4 channels
-> +	  inside, and each channel supports up to 30mA of current capability
-> +	  with 2048 current steps in exponential or linear mapping curves.
+On Mon, Jul 25, 2022 at 02:52:51PM +0800, Weitao Wang wrote:
 
-Does the MT6372 support more steps than this? In other words does it use
-a fourteen bit scale or does it use an 11-bit scale at a different
-register location?
+This is basically okay.  Just a couple of small comments...
 
+> Usb core introduce the mechanism of giveback of URB in tasklet context to
+> reduce hardware interrupt handling time. On some test situation(such as
+> FIO with 4KB block size), when tasklet callback function called to
+> giveback URB, interrupt handler add URB node to the bh->head list also.
+> If check bh->head list again after finish all URB giveback of local_list,
+> then it may introduce a "dynamic balance" between giveback URB and add URB
+> to bh->head list. This tasklet callback function may not exit for a long
+> time, which will cause other tasklet function calls to be delayed. Some
+> real-time applications(such as KB and Mouse) will see noticeable lag.
+> 
+> Fix this issue by taking new URBs giveback in next tasklet function call.
+> Add a member high_prio for structure giveback_urb_bh and replace the local
+> high_prio_bh variable with this structure member in usb_hcd_giveback_urb.
 
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called "mt6370-backlight".
-> +
-> [...]
-> diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
-> new file mode 100644
-> index 0000000..ba00a8f
-> --- /dev/null
-> +++ b/drivers/video/backlight/mt6370-backlight.c
-> [...]
-> +static int mt6370_bl_update_status(struct backlight_device *bl_dev)
-> +{
-> +	struct mt6370_priv *priv = bl_get_data(bl_dev);
-> +	int brightness = backlight_get_brightness(bl_dev);
-> +	unsigned int enable_val;
-> +	u8 brightness_val[2];
-> +	int ret;
-> +
-> +	if (brightness) {
-> +		brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
-> +		brightness_val[1] = (brightness - 1) >> fls(MT6370_BL_DIM2_MASK);
-> +
-> +		/*
-> +		 * To make MT6372 using 14 bits to control the brightness
-> +		 * backward compatible with 11 bits brightness control
-> +		 * (like MT6370 and MT6371 do), we left shift the value
-> +		 * and pad with 1 to remaining bits. Hence, the MT6372's
-> +		 * backlight brightness will be almost the same as MT6370's
-> +		 * and MT6371's.
-> +		 */
-> +		if (priv->vid_type == MT6370_VID_6372) {
-> +			brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
-> +			brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
-> +		}
+The patch description should do more than say what the new code _is_ -- 
+we can see that easily enough by reading the patch.  The description 
+should explain _why_ the code was changed.
 
-This somewhat depends on the answer to the first question above, but
-what is the point of this shifting? If the range is 14-bit then the
-driver should set max_brightness to 16384 and present the full range of
-the MT6372 to the user.
+> Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
+> v1->v2:
+>  - Fix compile warning by remove label "restart".
+>  - Modify the patch description info.
+>  - Change structure member from hi_priority to high_prio.
+> 
+>  drivers/usb/core/hcd.c  | 25 ++++++++++++++-----------
+>  include/linux/usb/hcd.h |  1 +
+>  2 files changed, 15 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 06eea8848ccc..1feb9a604380 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1691,7 +1691,6 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+>  
+>  	spin_lock_irq(&bh->lock);
+>  	bh->running = true;
+> - restart:
+>  	list_replace_init(&bh->head, &local_list);
+>  	spin_unlock_irq(&bh->lock);
+>  
+> @@ -1705,10 +1704,16 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+>  		bh->completing_ep = NULL;
+>  	}
+>  
+> -	/* check if there are new URBs to giveback */
+> +	/* giveback new URBs next time to prevent this function from
+> +	 * not exiting for a long time.
+> +	 */
 
-Especially when using linear mappings (which are a totally pointless
-scale to use for a backlight) the extra steps are useful for backlight
-animation.
+Minor stylistic issue: The currently accepted format for multi-line 
+comments is like this:
 
+	/*
+	 * Blah blah blah
+	 * Blah blah blah
+	 */
 
-Daniel.
+Alan Stern
