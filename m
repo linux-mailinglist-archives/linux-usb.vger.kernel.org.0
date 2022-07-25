@@ -2,128 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0599F5807B5
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 00:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72B65807E2
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 00:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237707AbiGYWmu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 18:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
+        id S231249AbiGYW7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 18:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbiGYWmf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 18:42:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC5524BFD
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 15:40:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52BB5B8110A
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 22:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 001F2C341CD
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 22:39:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658788742;
-        bh=PezZx4jHryZZrRWp3/fCiB/uaOMl5IFNia8PvjE6Yjk=;
-        h=From:To:Subject:Date:From;
-        b=Q6+7pDmb2pm66BIyEdw4yTb0YTQzRCyfBtnsdUMxjac2FL4eSePgd6J3mA33N4THi
-         ZihksFWAPBoVF/MtqR4NmgdRZwqxnOwKWjNjmXqNyaUjn+cV+OK2bQ3iQEsg68nvpN
-         aDJhHjXFfITzlVwF+1SEBfo9bURxSP3lXJvCQVQ1f2kV0vgPsNhX83SJjzXNgykQbP
-         a/BLCYM+j8ajz+uD5t8TYAf0ULFkhmIdPxbOj86j1PULi7zUPm3nd6I9xT9cfjxR0Q
-         Xk2IhtDXyOuA6fRc7yQx2eTFZLpYsRqOVDVijbHN2uEkcE7wT/FenACW9hNL/8BaE5
-         1OcYvCiBzoJrQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C1D60C05FD6; Mon, 25 Jul 2022 22:39:01 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216282] New: usb-mass storage
-Date:   Mon, 25 Jul 2022 22:39:01 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: audioprof2001@yahoo.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-216282-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229764AbiGYW7q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 18:59:46 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EECD1F2D5;
+        Mon, 25 Jul 2022 15:59:45 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id p132so15228774oif.9;
+        Mon, 25 Jul 2022 15:59:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eQye6nMifcFI6l5sNG6/+UqjksBPtUeGdHzPhsRcWME=;
+        b=KQjiSYug/vGHtHb90Wk8o7L0infEhpx97AvYLGGdP630WDA0576cEttz7wyLXMk5zI
+         Aa6kD3G/TGzJhHjwxEpQqzCyeREyWQJoCyQaeXh/Egsr54g0b+F7nht42W9bc/r7km7h
+         nM+UI8n/vpueZwp30YU90oAIek79vQuPeUb2UlNYkAFvH4VXqkX7CfEbEBN7ehqRNF/b
+         qMHd9tHzgNDrJaeQizLdXV5ejQ6K7MuGgztRV6hpyUNNVoGAhm3iS/UILX8EiuVEgN5z
+         81YWMmZnm4nadC3ppERt9lDc5f4bKt2iO8g9XU9M5XpxNdrDJRkuBHIH7jjnkZbwi4aa
+         Jf6w==
+X-Gm-Message-State: AJIora/u5IAebJiRU2EHdQOAY9/5rzqunPRy5riqxwWAbxYF7n6q5Cvg
+        HVbe5MiKW/3tWtqAWYrG6A==
+X-Google-Smtp-Source: AGRyM1sOcviGyD2gIuK2p0c+uQ6+5qTpFqgE2Yzw8FlCovXBIQLSsdbF7CuA/OUYyKT2cui56djPUw==
+X-Received: by 2002:a05:6808:170b:b0:335:1807:e4a2 with SMTP id bc11-20020a056808170b00b003351807e4a2mr6346991oib.89.1658789984465;
+        Mon, 25 Jul 2022 15:59:44 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r20-20020a05687080d400b0010d677cb630sm6791935oab.6.2022.07.25.15.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 15:59:44 -0700 (PDT)
+Received: (nullmailer pid 2909288 invoked by uid 1000);
+        Mon, 25 Jul 2022 22:59:42 -0000
+Date:   Mon, 25 Jul 2022 16:59:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Phil Edworthy <phil.edworthy@renesas.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: renesas, usb3-peri: Document
+ RZ/V2M r9a09g011 support
+Message-ID: <20220725225942.GA2905299-robh@kernel.org>
+References: <20220722123107.34122-1-phil.edworthy@renesas.com>
+ <20220722123107.34122-2-phil.edworthy@renesas.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722123107.34122-2-phil.edworthy@renesas.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
+On Fri, Jul 22, 2022 at 01:31:06PM +0100, Phil Edworthy wrote:
+> Document the RZ/V2M SoC bindings.
+> The RZ/V2M SoC is a little different to the R-Car implementations.
+> A few DRD related registers and bits have moved, there is a separate
+> interrupt for DRD, an additional clock for register access and reset
+> lines for DRD and USBP.
+> 
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v2:
+>  - SoCs other than rz/v2m must limit the number of clock/interrupt names
+>  - Add "Battery Charging" and "Global Purpose Input" interrupts
+> ---
+>  .../bindings/usb/renesas,usb3-peri.yaml       | 91 ++++++++++++++++---
+>  1 file changed, 76 insertions(+), 15 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+> index 9fcf54b10b07..b1a3b32139c5 100644
+> --- a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+> +++ b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+> @@ -11,27 +11,55 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    items:
+> -      - enum:
+> -          - renesas,r8a774a1-usb3-peri # RZ/G2M
+> -          - renesas,r8a774b1-usb3-peri # RZ/G2N
+> -          - renesas,r8a774c0-usb3-peri # RZ/G2E
+> -          - renesas,r8a774e1-usb3-peri # RZ/G2H
+> -          - renesas,r8a7795-usb3-peri  # R-Car H3
+> -          - renesas,r8a7796-usb3-peri  # R-Car M3-W
+> -          - renesas,r8a77961-usb3-peri # R-Car M3-W+
+> -          - renesas,r8a77965-usb3-peri # R-Car M3-N
+> -          - renesas,r8a77990-usb3-peri # R-Car E3
+> -      - const: renesas,rcar-gen3-usb3-peri
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - renesas,r8a774a1-usb3-peri # RZ/G2M
+> +              - renesas,r8a774b1-usb3-peri # RZ/G2N
+> +              - renesas,r8a774c0-usb3-peri # RZ/G2E
+> +              - renesas,r8a774e1-usb3-peri # RZ/G2H
+> +              - renesas,r8a7795-usb3-peri  # R-Car H3
+> +              - renesas,r8a7796-usb3-peri  # R-Car M3-W
+> +              - renesas,r8a77961-usb3-peri # R-Car M3-W+
+> +              - renesas,r8a77965-usb3-peri # R-Car M3-N
+> +              - renesas,r8a77990-usb3-peri # R-Car E3
+> +          - const: renesas,rcar-gen3-usb3-peri
+> +
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a09g011-usb3-peri # RZ/V2M
+> +          - const: renesas,rzv2m-usb3-peri
+>  
+>    reg:
+>      maxItems: 1
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    minItems: 1
+> +    items:
+> +      - description: Combined interrupt for DMA, SYS and ERR
+> +      - description: Dual Role Device (DRD)
+> +      - description: Battery Charging
+> +      - description: Global Purpose Input
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: all_p
+> +      - const: drd
+> +      - const: bc
+> +      - const: gpi
+>  
+>    clocks:
+> -    maxItems: 1
+> +    minItems: 1
+> +    items:
+> +      - description: Main clock
+> +      - description: Register access clock
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: aclk
+> +      - const: reg
+>  
+>    phys:
+>      maxItems: 1
+> @@ -43,7 +71,15 @@ properties:
+>      maxItems: 1
+>  
+>    resets:
+> -    maxItems: 1
+> +    minItems: 1
+> +    items:
+> +      - description: Peripheral reset
+> +      - description: DRD reset
+> +
+> +  reset-names:
+> +    items:
+> +      - const: aresetn_p
+> +      - const: drd_reset
+>  
+>    usb-role-switch:
+>      $ref: /schemas/types.yaml#/definitions/flag
+> @@ -78,6 +114,31 @@ required:
+>    - interrupts
+>    - clocks
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,rzv2m-usb3-peri
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +        clock-names:
+> +          minItems: 2
+> +        interrupts:
+> +          minItems: 4
+> +        interrupt-names:
+> +          minItems: 4
+> +        resets:
+> +          minItems: 2
+> +      required:
+> +        - clock-names
+> +        - interrupt-names
+> +        - resets
+> +        - reset-names
+> +
 
-            Bug ID: 216282
-           Summary: usb-mass storage
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.15.0-41-generic
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: high
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: audioprof2001@yahoo.com
-        Regression: No
+Needs an 'else' clause with 'maxItems: 1' on various properties to keep 
+the existing constraints.
 
-since Groovy Gorilla, maybe older...
-
-problem #1.
- usb mass storage,
-delay time is too fast, and there is No .conf in /modprobe.d
-i have to unplug and plug again the external usb hdd cable turned-on
-so Linux can detect the HDD and mount.
-
-ASM1051 is detected with $ lsusb
-when i turn-on,=20
-but the HDD is Not Detected, because delay time is too fast/short.
-its like turning-on without a HDD.
-
-upgraded the firmware of the external USB IC controller to latest.
-https://github.com/juanpc2018/Asmedia-AS2105-sata-to-USB-3
-
-because large HDDs "over 2TB" was Not working,
-Now works ok exept that problem in Linux.
-Windows8.1x64 works OK.
-
-problem #2.
-Linux detects a different speed?.
-$ lsusb
-Bus 002 Device 004: ID 174c:5106 ASMedia Technology Inc. ASM1051 SATA 3Gb/s
-bridge
-
-is Not 3Gb/s =3D 375MB/s.
-is 5Gb/s =3D 550MB/s
-when used with SSD,
-large 18TB HDD are 250MB/s.
-
-there is something strange going on with usb-mass-storage.
-
-https://support.apple.com/kb/SP710?locale=3Den_US
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Rob
