@@ -2,157 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C165806EA
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 23:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2D5580774
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 00:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbiGYVrN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 17:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S237178AbiGYWgS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 18:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGYVrL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 17:47:11 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D8911821
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 14:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658785631; x=1690321631;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qSNyJLnE+tgP95CDZwA3GRRNF0DnpCPGk9aBUfC0S7Q=;
-  b=DWXKsZdwr4n8Sx6ixS+XVj9Wcv2L557dZb1fvnOOl5rTricmgUmz1Wih
-   ce9/VsRkUfM7buHOVp8ER9imZoTYfGDfa0NGjJ3j+qtdqRdM9kQ+3uaqB
-   6ulp/54N4EHd5Gi6HNJL65H0BgCQ+XONIpQx3BmJ8LdKb0IGLlj9sVuDY
-   +ysB1GadFpXPVeGymJoQEjbmedPZOEDSDvQ7ZS0GhMFI/DJIzIUOFYeG4
-   3wEcmGJPsJxYWp9u6cCLDOMoqUtGreINu3z8cVIP3o0WX0rsh1QZ0d2Wb
-   +wQUFMnXpejmBmUN1OJKkck65b7j5VVkKJeUPJTNm49ZCyVh8e6wqSfM6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="288559002"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="288559002"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 14:47:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="741975468"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Jul 2022 14:47:09 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oG5uu-0005b2-1c;
-        Mon, 25 Jul 2022 21:47:08 +0000
-Date:   Tue, 26 Jul 2022 05:46:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- b6de1f901039cfcbd605842d454bd80c589105d8
-Message-ID: <62df0f21.ftv0oCNCsKXaO6BY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229784AbiGYWgR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 18:36:17 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3728D22BDD;
+        Mon, 25 Jul 2022 15:36:17 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id y10-20020a9d634a000000b006167f7ce0c5so9740990otk.0;
+        Mon, 25 Jul 2022 15:36:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Eyu1crtWTSJ/wKktKn2bCD4mtqeJsq4ok+GmCcS2Uj8=;
+        b=ZqNS4FeTfJCGeDjFyWEkfhBvXfKsiyxMOxekUrwpDIW6AtZGwRo2OwGpGARqjdCZ64
+         mTAJZBbK/7Ezjlb2XPQmRiak1f/aN3g4uCEzO2PQvCw0mIeFlPOZAGGMt79T6bbqa+I+
+         nQo5KA1N5GbIKV923HLPJd1V79lR/VrrlnQ5w9OOXOmYZ5hf/nbzbRZskztv/xHidWkg
+         Wyjc2Od4UNKfLC6lHFaIV7EJCgn4Kaydm2yEfEpbwjRo9BoyWcfvjxlYbMgsswGWn0K3
+         tVKDqFMxdMirFjk5DZCIcSN5dri7XBMh4HHeHbZMFWgmLU5gKTOfTOiy3bO6I7dMINHo
+         U0AA==
+X-Gm-Message-State: AJIora/h7/jFBxZh32RPHf0FxGJ8bxAqUsxpydWgc6HyyfP/4nTMSHvw
+        /fFm4kDfY3lvnhYacg84EYFoSPVe8g==
+X-Google-Smtp-Source: AGRyM1u0StGZDbuF9HoXEonCaBjVakg5NTUPPyrimmOjlELkzV3g/A4DSewECV8OF0DROTxFxF9t7Q==
+X-Received: by 2002:a05:6830:1e77:b0:61c:80d2:1a66 with SMTP id m23-20020a0568301e7700b0061c80d21a66mr5456908otr.214.1658788576431;
+        Mon, 25 Jul 2022 15:36:16 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id n8-20020a056870240800b0010d7242b623sm6597056oap.21.2022.07.25.15.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 15:36:16 -0700 (PDT)
+Received: (nullmailer pid 2871903 invoked by uid 1000);
+        Mon, 25 Jul 2022 22:36:14 -0000
+Date:   Mon, 25 Jul 2022 16:36:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Gene Chen <gene.chen.richtek@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, cy_huang@richtek.com,
+        linux-usb@vger.kernel.org, gene_chen@richtek.com,
+        heikki.krogerus@linux.intel.com, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org
+Subject: Re: [PATCH v2 1/6] dt-bindings usb: typec: rt1711h: Add binding for
+ Richtek RT1711H
+Message-ID: <20220725223614.GA2871870-robh@kernel.org>
+References: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
+ <20220721061144.35139-2-gene.chen.richtek@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220721061144.35139-2-gene.chen.richtek@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: b6de1f901039cfcbd605842d454bd80c589105d8  Merge tag 'usb-serial-5.20-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
+On Thu, 21 Jul 2022 14:11:39 +0800, Gene Chen wrote:
+> From: Gene Chen <gene_chen@richtek.com>
+> 
+> Add binding for Richtek RT1711H
+> 
+> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> ---
+>  .../bindings/usb/richtek,rt1711h.yaml         | 100 ++++++++++++++++++
+>  1 file changed, 100 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+> 
 
-elapsed time: 721m
-
-configs tested: 76
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc              randconfig-c003-20220724
-i386                          randconfig-c001
-arm                        clps711x_defconfig
-powerpc                 mpc85xx_cds_defconfig
-parisc64                         alldefconfig
-powerpc                    amigaone_defconfig
-arm                        cerfcube_defconfig
-arc                          axs101_defconfig
-arm                        shmobile_defconfig
-m68k                           virt_defconfig
-arm                            lart_defconfig
-xtensa                generic_kc705_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-ia64                             allmodconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-sh                               allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-m68k                             allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a016
-i386                          randconfig-a012
-i386                          randconfig-a014
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-s390                 randconfig-r044-20220724
-riscv                randconfig-r042-20220724
-arc                  randconfig-r043-20220724
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-kvm
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-
-clang tested configs:
-arm                         hackkit_defconfig
-mips                         tb0219_defconfig
-arm                        mvebu_v5_defconfig
-mips                   sb1250_swarm_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a015
-i386                          randconfig-a013
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Rob Herring <robh@kernel.org>
