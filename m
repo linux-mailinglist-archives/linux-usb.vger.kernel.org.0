@@ -2,91 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5BD57FB3D
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 10:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD4C57FB58
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 10:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbiGYIZs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 04:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S233963AbiGYI3r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 04:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiGYIZq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 04:25:46 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A1E13E9B;
-        Mon, 25 Jul 2022 01:25:45 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id tk8so19173658ejc.7;
-        Mon, 25 Jul 2022 01:25:45 -0700 (PDT)
+        with ESMTP id S233858AbiGYI3k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 04:29:40 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62D813FBE;
+        Mon, 25 Jul 2022 01:29:37 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id p21so4602566ljh.12;
+        Mon, 25 Jul 2022 01:29:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J5rSRKJzZCEe75lE89H4BacTqhlHPMQzJe7RV2ORfWI=;
-        b=BNlVjsxRro5TG97838xZbVcQ/pG/LD+g/7G/AjwrIrlPvPS37j9HRk59ZPvQZFMbo9
-         MnOMniee2k168J7vlVevltwedsYw1fwJcNYMweUNuLPFL7JEp9m9CEssAgQLNBEXPpLX
-         65np3ghAZ/JI0ou7IY+VAdXdeEM9Dx5l6K3VMtdxVw5MaZ+JcN9Mz6qTKX+a72GlbThf
-         YgqMy4pPKGjxlN3v8ojq6p7cX1h0ysW9lnKZ5pLCEPb56UCWlozkB+OoACaoaIIUBRbZ
-         /V/wW4p+YYsXXLnpTvXofuXoBPwxmOEVHWVRTZH6OK6PGjSYJaBn82vKtB7a1B3eaVvy
-         gAUg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bSa24RkLGOVb9mqXyzx5nIyXZhJRiDANt8v3RVr4jNw=;
+        b=NZEnL/5HwwpZkPsB4qWr1n9TlyT8CGVdbUGeyp3B+6OTVvXVjq94R/vWnIP5/sivRD
+         Ur1DfxHDTUN1v7ujHMDWo/yb6BCdUPIf1m/zfO8QuYDcC7haEbJxRDF7Pn649G9cYR+K
+         JqWOmH5SrK9pSbrKnnnKY+5Rb455r2EiMZ2PR0EY1Cx0z4T3U1FnXQNPQFSd825728uw
+         +drQyj53j2SVztE1TZ9M0aEQJzN44LwBeE34w0/6YVcpxkM57UXuw5VNJc/X4l2s8VZB
+         Y0XpHoJyLsGrQh3w7hbtBlmgC0kW2biVf5WF3HrDkjgtD7/HRt7maXTL4/d/vyL2Dn6a
+         GA0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J5rSRKJzZCEe75lE89H4BacTqhlHPMQzJe7RV2ORfWI=;
-        b=KmLawa8UXbcqBjf0QeFvLCZ0gZkepy9msxh2TcI45J0/AKstyDM2vjS0jhEAhMMHcC
-         XINhzzdIYVcgr/l48JvCkbsxVjj7kCBVvm8pju+RoZsEEyuUtcuCpYdfwDZcQigmYPRI
-         7cflqhlNiNtCzGshQnufoaJoVY8PeAQr/5sonhpTcD4hCt8GwwjsLrZbP5Es3OdbsNqR
-         BEyW4qunCBOr9c4YGiDmIRuC8Metmp/9wifmWsDyLzBeg781ZGF7VSTjkC3i4CE6kj35
-         S5I0eRZsw2MAO2G+FinrnraRM0k1vuHs0IDIIfWGgq55Z5a4+4yqqfkGD4YEkTrIjMJT
-         QC1w==
-X-Gm-Message-State: AJIora+hU7VC0LcDSE7wGV5cpWcVpLHCTv4zPhAEsYsFqMl0u7nfMIIr
-        BawBilq4Fe/pPdBgumbhzhronxEJSql//Xjj4ks=
-X-Google-Smtp-Source: AGRyM1tb8lf0258KwCgCSc1j2TNtucrsLChWD53/F5ZAYHmenBBMp0FJqJ/Hs5trX2iqStdOTyF6IVkbw5ytFnaOucM=
-X-Received: by 2002:a17:906:8a4a:b0:72b:5b23:3065 with SMTP id
- gx10-20020a1709068a4a00b0072b5b233065mr9396194ejc.557.1658737543426; Mon, 25
- Jul 2022 01:25:43 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bSa24RkLGOVb9mqXyzx5nIyXZhJRiDANt8v3RVr4jNw=;
+        b=F3BTFi7YRVLASz1jhKphBDXgxj0OWvnQ5GKuZUVx5TcghkRn1XJj5Bkn+rX0/1E54v
+         aS9hJKVnqmwiTEElVsy1p0me11XAZzmSsDGk7Ht6KEtXQM+fJoWuizRVhPlyeQHKLQp9
+         YdN7K0H4yhNXF5QaiA7ThuGn10xYdbHxANypxW5jydGOk+SNnrT7ruysQDLn4y/BCk5U
+         QhSct/8VGHlos0IVPx0FcaR1jiNHK/0npXgAOUvP8y+xUzEeKdGz2pg9E9xvF6ZYKNYW
+         V5V5DSGncfr/bU+S0ByGZuQl8h2pPoff4D9Ivif4k9XyCwqoGQybuVuboJD01vDBqTxB
+         hQsw==
+X-Gm-Message-State: AJIora//h3blu0QXrK2dkiCI4MmXD7tSx2Fgfw/yRCb1FYMfZ1956xXK
+        XKJkLz5Om40oB1W+WEDr/Ak=
+X-Google-Smtp-Source: AGRyM1sL8dXypJNjduwiqiel7ZINjQ4gH90GfP8zpYz+wdc3KAC/BR7gkYlI7ebg3aFeuA3y5CnZQA==
+X-Received: by 2002:a2e:908:0:b0:25d:e37b:2cbb with SMTP id 8-20020a2e0908000000b0025de37b2cbbmr3763221ljj.401.1658737775869;
+        Mon, 25 Jul 2022 01:29:35 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.82.139])
+        by smtp.gmail.com with ESMTPSA id p13-20020a2ea4cd000000b0025e0396786dsm715578ljm.93.2022.07.25.01.29.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 01:29:35 -0700 (PDT)
+Subject: Re: [PATCH v2] USB: HCD: Fix URB giveback issue in tasklet function
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org, kishon@ti.com, dianders@chromium.org,
+        s.shtylyov@omp.ru, mka@chromium.org, ming.lei@canonical.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+References: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <3b9a3fec-7716-3e9d-1e91-cfdac46845f7@gmail.com>
+Date:   Mon, 25 Jul 2022 11:29:33 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-11-peterwu.pub@gmail.com>
-In-Reply-To: <20220722102407.2205-11-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Jul 2022 10:25:06 +0200
-Message-ID: <CAHp75VeafmppD=Ge-kGZ7ab8=P9p5wmZXi_1fKFf+1uVA-SNog@mail.gmail.com>
-Subject: Re: [PATCH v6 10/13] power: supply: mt6370: Add MediaTek MT6370
- charger driver
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,82 +75,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:25 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
->
-> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
-> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
-> driver, display bias voltage supply, one general purpose LDO, and the
-> USB Type-C & PD controller complies with the latest USB Type-C and PD
-> standards.
->
-> This adds MediaTek MT6370 Charger driver support. The charger module
-> of MT6370 supports High-Accuracy Voltage/Current Regulation,
-> Average Input Current Regulation, Battery Temperature Sensing,
-> Over-Temperature Protection, DPDM Detection for BC1.2.
+Hello!
 
-...
+On 7/25/22 9:52 AM, Weitao Wang wrote:
 
-> +static inline void mt6370_chg_enable_irq(struct mt6370_priv *priv,
-> +                                        const char *irq_name, bool en)
-> +{
-> +       int irq_num;
-> +       struct platform_device *pdev = to_platform_device(priv->dev);
-> +
-> +       irq_num = platform_get_irq_byname(pdev, irq_name);
+> Usb core introduce the mechanism of giveback of URB in tasklet context to
+> reduce hardware interrupt handling time. On some test situation(such as
+> FIO with 4KB block size), when tasklet callback function called to
+> giveback URB, interrupt handler add URB node to the bh->head list also.
+> If check bh->head list again after finish all URB giveback of local_list,
+> then it may introduce a "dynamic balance" between giveback URB and add URB
+> to bh->head list. This tasklet callback function may not exit for a long
+> time, which will cause other tasklet function calls to be delayed. Some
+> real-time applications(such as KB and Mouse) will see noticeable lag.
+> 
+> Fix this issue by taking new URBs giveback in next tasklet function call.
+> Add a member high_prio for structure giveback_urb_bh and replace the local
+> high_prio_bh variable with this structure member in usb_hcd_giveback_urb.
+> 
+> Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
+> v1->v2:
+>  - Fix compile warning by remove label "restart".
+>  - Modify the patch description info.
+>  - Change structure member from hi_priority to high_prio.
+> 
+>  drivers/usb/core/hcd.c  | 25 ++++++++++++++-----------
+>  include/linux/usb/hcd.h |  1 +
+>  2 files changed, 15 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 06eea8848ccc..1feb9a604380 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+[...]
+> @@ -2959,6 +2961,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
+>  
+>  	/* initialize tasklets */
+>  	init_giveback_urb_bh(&hcd->high_prio_bh);
+> +	hcd->high_prio_bh.high_prio = 1;
 
-Every time the IRQ is not found you will get an error message printed here.
-1) Is IRQ optional?
-2) If not, can't you do validation only once?
+   s/1/true/?
 
-> +       if (irq_num < 0)
-> +               return;
-> +
-> +       if (en)
-> +               enable_irq(irq_num);
-> +       else
-> +               disable_irq_nosync(irq_num);
-> +}
+>  	init_giveback_urb_bh(&hcd->low_prio_bh);
+>  
+>  	/* enable irqs just before we start the controller,
+> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+> index 2c1fc9212cf2..98d1921f02b1 100644
+> --- a/include/linux/usb/hcd.h
+> +++ b/include/linux/usb/hcd.h
+> @@ -66,6 +66,7 @@
+>  
+>  struct giveback_urb_bh {
+>  	bool running;
+> +	bool high_prio;
+>  	spinlock_t lock;
+>  	struct list_head  head;
+>  	struct tasklet_struct bh;
 
-
-...
-
-> +       ret = mt6370_chg_field_set(priv, F_USBCHGEN, 0);
-> +       if (ret < 0) {
-
-> +       ret = mt6370_chg_field_set(priv, F_ICHG, 900000);
-> +       if (ret < 0) {
-
-> +       ret = mt6370_chg_field_set(priv, F_IINLMTSEL, 3);
-> +       if (ret < 0) {
-
-Do all these ' < 0' parts make sense?
-(Not only these cases, but in many in the entire driver)
-
-...
-
-> +       /* Check in otg mode or not */
-
-OTG
-
-...
-
-> +               ret = devm_request_threaded_irq(priv->dev, ret, NULL,
-> +                                               mt6370_chg_irqs[i].handler,
-> +                                               IRQF_TRIGGER_FALLING,
-> +                                               dev_name(priv->dev), priv);
-
-> +
-
-Redundant blank line.
-
-> +               if (ret < 0)
-> +                       return dev_err_probe(priv->dev, ret,
-> +                                            "Failed to request irq %s\n",
-> +                                            mt6370_chg_irqs[i].name);
-> +       }
-
--- 
-With Best Regards,
-Andy Shevchenko
+MBR, Sergey
