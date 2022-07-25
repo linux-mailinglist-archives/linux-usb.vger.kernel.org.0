@@ -2,61 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F45957FC6A
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 11:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA0157FD84
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Jul 2022 12:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbiGYJap (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 05:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S230036AbiGYKbg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 06:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiGYJao (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 05:30:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4D213E8A;
-        Mon, 25 Jul 2022 02:30:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B52C061277;
-        Mon, 25 Jul 2022 09:30:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F577C341C6;
-        Mon, 25 Jul 2022 09:30:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658741443;
-        bh=Zk+gKxWUkOi8wRytnYj22Y4hBUOdSQ9wVN26/kVSE8g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZPcpB7wAuxyTywDu8cveEWpSHzIZJs/i7/vsUf2hKBWe+rSjS12CPQkIKM0WUQRvm
-         7R/YaZnl4Y3lFh9UU+VpUvS6pauk4WXoEkf9/Ks382mh7nmT8usMHGsxNxdB5UaeRN
-         ASAvOQP5VvnqYpmt+gM/k3QKSUiMvGezzi4HLlEM=
-Date:   Mon, 25 Jul 2022 11:30:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial updates for 5.20-rc1
-Message-ID: <Yt5iupcHj8S6CLQV@kroah.com>
-References: <Yt5fhOsVMClQhuti@hovoldconsulting.com>
+        with ESMTP id S234334AbiGYKbe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 06:31:34 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803FABCA1
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 03:31:32 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id z13so15304824wro.13
+        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 03:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QR4thViojhLm7m3iVqTAzOPrEuZ+oboQVEbkcRYR7U0=;
+        b=hcY3ebDhxmUgKAKSOPUOX7d/LMYdV3cijN2N6OfC0kvVYjMwOvmOolx+2NETIKYqUp
+         GPy3YFMR7smmOlatz8CKT+4p2UQ+6lI9Ejv06f+y6zEFBSmLUPFbbscFbBBsOCvH434Q
+         ke8WXFQ+uXl36Kdevvs6uhTIaQQgtIFRovUfQ/RDq3AHQ469OhSceGOKRnPmFWjpxVnH
+         VERQ2rtptnToPx6leEXxAAby7RDypiZaQady2IbBpsvPlsYJ0uSwLW6l0adFiFhqOZ8D
+         XJZDsGiJcpWWsVtF7ngMWVpb9VQHwHEkKK2RVLip5CsQWVUMkj1jqMMhHMjq3wvU4bke
+         J0IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QR4thViojhLm7m3iVqTAzOPrEuZ+oboQVEbkcRYR7U0=;
+        b=1sAq2Pw0EYcyg/g+9T0HuzJodGcCzUsqB35MLgdyAYX4epBXol+TsrHSu/liCKvFYJ
+         SuBKVHPtuHadqaKa9QxA3a9JY1UcYWI+X9RtgsUUHIjmRghp6/DVkrFKvNd6qXTeIJoS
+         BnpV6pGkqZlwADLHFplnyjLuhvW9VX9/Irf16AsVIAX+y6p2LTsxb0tWSnUqIVph74eC
+         01aV/y/NxmfJkfhS65N02wVO8cv3EKAilu1D0LDPlZxhSaAcCGdEIsPFQhk95qKltcGs
+         CsktqCrSGheHqnbBWTsgwmoSk+TfZzWpmfZfyWNJtwO8tkgwlY4DwmVOxD8D/N9w2hFt
+         E8UA==
+X-Gm-Message-State: AJIora/WgmhrPs3y4p38DTDzdZfWvCRDswlI+vz893t+TqcPxCpf4DiP
+        mRlTaQ68J6dKWtCB6BL66xQ3Gg==
+X-Google-Smtp-Source: AGRyM1uhInd5p9lSRbYGnaq9oTNYSYBtNWlkq9wyaVzmMkSkg4hYhWboyJgYIo9QbRHYBeJSc2cjCg==
+X-Received: by 2002:a5d:584c:0:b0:21e:7f48:bf19 with SMTP id i12-20020a5d584c000000b0021e7f48bf19mr5190179wrf.474.1658745090915;
+        Mon, 25 Jul 2022 03:31:30 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600c1d1200b003a04d19dab3sm29367538wms.3.2022.07.25.03.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 03:31:30 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 11:31:28 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370
+ support
+Message-ID: <20220725103128.xtaw2c4y5fobowg7@maple.lan>
+References: <20220722102407.2205-1-peterwu.pub@gmail.com>
+ <20220722102407.2205-14-peterwu.pub@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yt5fhOsVMClQhuti@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220722102407.2205-14-peterwu.pub@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 11:16:52AM +0200, Johan Hovold wrote:
-> The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
-> 
->   Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.20-rc1
+On Fri, Jul 22, 2022 at 06:24:07PM +0800, ChiaEn Wu wrote:
+> diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
+> index a003e02..846dbe7 100644
+> --- a/drivers/video/backlight/Kconfig
+> +++ b/drivers/video/backlight/Kconfig
+> @@ -268,6 +268,18 @@ config BACKLIGHT_MAX8925
+>  	  If you have a LCD backlight connected to the WLED output of MAX8925
+>  	  WLED output, say Y here to enable this driver.
+>
+> +config BACKLIGHT_MT6370
+> +	tristate "MediaTek MT6370 Backlight Driver"
+> +	depends on MFD_MT6370
+> +	help
+> +	  This enables support for Mediatek MT6370 Backlight driver.
+> +	  It's commonly used to drive the display WLED. There are 4 channels
+> +	  inside, and each channel supports up to 30mA of current capability
+> +	  with 2048 current steps in exponential or linear mapping curves.
 
-Pulled and pushed out, thanks.
+Does the MT6372 support more steps than this? In other words does it use
+a fourteen bit scale or does it use an 11-bit scale at a different
+register location?
 
-greg k-h
+
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called "mt6370-backlight".
+> +
+> [...]
+> diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
+> new file mode 100644
+> index 0000000..ba00a8f
+> --- /dev/null
+> +++ b/drivers/video/backlight/mt6370-backlight.c
+> [...]
+> +static int mt6370_bl_update_status(struct backlight_device *bl_dev)
+> +{
+> +	struct mt6370_priv *priv = bl_get_data(bl_dev);
+> +	int brightness = backlight_get_brightness(bl_dev);
+> +	unsigned int enable_val;
+> +	u8 brightness_val[2];
+> +	int ret;
+> +
+> +	if (brightness) {
+> +		brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
+> +		brightness_val[1] = (brightness - 1) >> fls(MT6370_BL_DIM2_MASK);
+> +
+> +		/*
+> +		 * To make MT6372 using 14 bits to control the brightness
+> +		 * backward compatible with 11 bits brightness control
+> +		 * (like MT6370 and MT6371 do), we left shift the value
+> +		 * and pad with 1 to remaining bits. Hence, the MT6372's
+> +		 * backlight brightness will be almost the same as MT6370's
+> +		 * and MT6371's.
+> +		 */
+> +		if (priv->vid_type == MT6370_VID_6372) {
+> +			brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
+> +			brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
+> +		}
+
+This somewhat depends on the answer to the first question above, but
+what is the point of this shifting? If the range is 14-bit then the
+driver should set max_brightness to 16384 and present the full range of
+the MT6372 to the user.
+
+Especially when using linear mappings (which are a totally pointless
+scale to use for a backlight) the extra steps are useful for backlight
+animation.
+
+
+Daniel.
