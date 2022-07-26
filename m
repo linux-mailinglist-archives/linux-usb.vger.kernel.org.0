@@ -2,222 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5368A580A36
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 06:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C701580A44
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 06:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237162AbiGZEFE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 00:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S236998AbiGZEPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 00:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiGZEFD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 00:05:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D851F2A402
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 21:05:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A179B81109
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 04:05:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D844C341C0
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 04:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658808299;
-        bh=sKVjzyqDF8A4TIWj9f8q85fJejGfM9PDnEP3MXhxizg=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=axGcNdFMqm9+bzcYsMuY9ut+wrYnO/wVzN5+SqhyDR1P9m33EgQwPc7lhsbKmR1ob
-         ZuJ4pFpy6JGb44Da9BjPr9GPzSCuvDcKURORjbejdtejkNnYfy880zSKyo+1Osjdxk
-         Kb83oPlrdZmtIBPKzYmlTjs6safoD8rfWaG5dW9A0ALPsACLWgkhEGY+41Sk3TlKe7
-         WRmAUmTZaHkr9egaEc/aJEk5nLPMoGeDyQXDzp8f9zEuvQJjKWLIUYTcVuRyBy0sBA
-         yD4+5ctAE7nA9BpgIxMp2tp8IYkZqop1HsthF48FD39NMxbHpy9tlX5ZpOAcpJ0xow
-         lFYn/JNdlDq9g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 2D283C05FD2; Tue, 26 Jul 2022 04:04:59 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216282] usb-mass storage
-Date:   Tue, 26 Jul 2022 04:04:58 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: audioprof2001@yahoo.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216282-208809-ptQiY9mFM4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216282-208809@https.bugzilla.kernel.org/>
-References: <bug-216282-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231440AbiGZEPr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 00:15:47 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6BA240AA;
+        Mon, 25 Jul 2022 21:15:46 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id j195so4093224ybj.11;
+        Mon, 25 Jul 2022 21:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lL85hlJEWNpWq8aoVq7T9RPrHigl/wy3kQyoeNe4Sas=;
+        b=hCdS8QSsYIw6gGaV0XS9IAV/+XD+Kk0QE5hzusxmOf5d2dTDTQQcL3NhqMYKbFY0Tn
+         ALB21R/6DazMYeCAAzfSZS7P0Z41gJsw+nZjWX6PlQXwXANm3LVAqrB5PFsMuqAHqXem
+         Mqmm3Ih1NTwtWzQhnAzSzRXXrf5yfCoFcjkmFFPLCmRVp2siIg3AfNjuCMTK2YESptid
+         eeP9tz5wTm7qe3sotMpBO4iTSI2DKFf7D3YatBVRT/PbkAZVFycO+siEvHp7i27pNctb
+         TonIMjdDnr0jjVWHRnLmYyT6Iqx8oAClUtlkGASQ6CkTyN1ePQ9WOQPU8smSEzTDkemD
+         7GYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lL85hlJEWNpWq8aoVq7T9RPrHigl/wy3kQyoeNe4Sas=;
+        b=PC6hw7zeLjOXjofpJO1WG7vc5dzxEG2re2M9lU+dBoq7396PI+/H0o18wCV6FXP3HL
+         DVWLfwjhxo6IEwiWKCpIpEPlKmux4/qzcM4DZhZCNbMd7X6p1kvG3YPC3yJskwL6q4mR
+         bnZe0hw9n0J+Xi3G9eMJsaUYwL6S1ZKD9cX+Q6y8lNrxlQKZnLMfAoWykBI5j3AX9D2S
+         9z2iIrahKCgnt+rZdzI/GVljdaBVN7YBa+n7iN2NH4LCEJgPaqB+wIKMkiopEFMVCIym
+         DJeu1Nz5F5UxTziRTH1aPfl7zngy8kqLsJxYAKxVhaM/Amqw9AgFMiycnhTrO/p03qGt
+         lKJA==
+X-Gm-Message-State: AJIora+Ml0B1VxZDIMEoOtToMqvbHpdtILIeE9WZF99630HmB0dl3Up+
+        GiwbnPIJXues3K50dfQsbBjTROsPpFGg5HH8f1w=
+X-Google-Smtp-Source: AGRyM1uSqvDW6wRuMm0lak5Iwbp5WAlFUJEhBzOij+tqweUKRMo5toAZUB++pRBDQrYJNbxll8cTRP6sKMvIiCj1/Dk=
+X-Received: by 2002:a05:6902:10c2:b0:671:73dd:e67e with SMTP id
+ w2-20020a05690210c200b0067173dde67emr484158ybu.16.1658808945685; Mon, 25 Jul
+ 2022 21:15:45 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-13-peterwu.pub@gmail.com>
+ <CAHp75VfgiK87VwWu2bTJ_mR0=g0sa0LPJ+H16OGcUdARmzFRSA@mail.gmail.com>
+In-Reply-To: <CAHp75VfgiK87VwWu2bTJ_mR0=g0sa0LPJ+H16OGcUdARmzFRSA@mail.gmail.com>
+From:   szuni chen <szunichen@gmail.com>
+Date:   Tue, 26 Jul 2022 12:15:34 +0800
+Message-ID: <CA+hk2fYpDRw+DRRU3m=EDOP6UEQNpJLyNBHe8Zi0qOfUObTb4Q@mail.gmail.com>
+Subject: Re: [PATCH v6 12/13] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
+Hi Andy,
 
---- Comment #6 from audioprof2001@yahoo.com ---
-Similar:
-https://superuser.com/questions/1206664/disable-mtp-udev-rules-for-specific=
--device-so-it-can-be-mount-as-a-usb-mass-stor
+>
+> > +#define MT6370_ITORCH_MIN_UA           25000
+> > +#define MT6370_ITORCH_STEP_UA          12500
+> > +#define MT6370_ITORCH_MAX_UA           400000
+> > +#define MT6370_ITORCH_DOUBLE_MAX_UA    800000
+> > +#define MT6370_ISTRB_MIN_UA            50000
+> > +#define MT6370_ISTRB_STEP_UA           12500
+> > +#define MT6370_ISTRB_MAX_UA            1500000
+> > +#define MT6370_ISTRB_DOUBLE_MAX_UA     3000000
+>
+> Perhaps _uA would be better and consistent across your series
+> regarding current units.
+>
 
-No HDD:
+Yes, _uA will be more consistent, but in general, using upper case in
+the define macro is a convention, doesn't it?
 
-$ journalctl -fe
+>
+> > +       /*
+> > +        * For the flash to turn on/off, need to wait for HW ramping up/down time
+>
+> we need
+>
+> > +        * 5ms/500us to prevent the unexpected problem.
+> > +        */
+> > +       if (!prev && curr)
+> > +               usleep_range(5000, 6000);
+> > +       else if (prev && !curr)
+> > +               udelay(500);
+>
+> This still remains unanswered, why in the first place we allow
+> switching, and a busy loop in the other place?
 
-Jul 25 22:52:29 P- kernel: usb 2-4: new SuperSpeed USB device number 11 usi=
-ng
-xhci_hcd
-Jul 25 22:52:29 P- kernel: usb 2-4: New USB device found, idVendor=3D174c,
-idProduct=3D5106, bcdDevice=3D 1.00
-Jul 25 22:52:29 P- kernel: usb 2-4: New USB device strings: Mfr=3D2, Produc=
-t=3D3,
-SerialNumber=3D1
-Jul 25 22:52:29 P- kernel: usb 2-4: Product: BlacX
-Jul 25 22:52:29 P- kernel: usb 2-4: Manufacturer: Thermaltake
-Jul 25 22:52:29 P- kernel: usb 2-4: SerialNumber: 000000000002
-Jul 25 22:52:29 P- kernel: usb-storage 2-4:1.0: USB Mass Storage device
-detected
-Jul 25 22:52:29 P- kernel: scsi host2: usb-storage 2-4:1.0
-Jul 25 22:52:29 P- mtp-probe[247971]: checking bus 2, device 11:
-"/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4"
-Jul 25 22:52:29 P- mtp-probe[247971]: bus: 2, device: 11 was not an MTP dev=
-ice
-Jul 25 22:52:29 P- systemd-udevd[247970]: 2-4:1.0: Process
-'/usr/lib/snapd/snap-device-helper bind snap_remmina_remmina
-/devices/pci0000:00/0000:00:14.0/usb2/2-4/2-4:1.0 0:0' failed with exit cod=
-e 1.
-Jul 25 22:52:29 P- mtp-probe[247990]: checking bus 2, device 11:
-"/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4"
-Jul 25 22:52:29 P- mtp-probe[247990]: bus: 2, device: 11 was not an MTP dev=
-ice
-Jul 25 22:52:29 P- systemd-udevd[247970]: 2-4: Process
-'/usr/lib/snapd/snap-device-helper bind snap_remmina_remmina
-/devices/pci0000:00/0000:00:14.0/usb2/2-4 189:138' failed with exit code 1.
-
-Jul 25 22:52:36 P- smartd[1378]: Device: /dev/sda [SAT], SMART Usage Attrib=
-ute:
-190 Airflow_Temperature_Cel changed from 71 to 72
-Jul 25 22:52:36 P- smartd[1378]: Device: /dev/sdb [SAT], SMART Usage Attrib=
-ute:
-194 Temperature_Celsius changed from 73 to 75
-
-Jul 25 22:52:44 P- NetworkManager[1318]: <info>  [1658807564.5537] dhcp4
-(enp3s0f0): state changed new lease, address=3D192.168.0.00
-
-Jul 25 22:52:54 P- kernel: usb 2-4: reset SuperSpeed USB device number 11 u=
-sing
-xhci_hcd
-Jul 25 22:52:58 P- rtkit-daemon[2222]: Supervising 7 threads of 5 processes=
- of
-1 users.
-Jul 25 22:52:58 P- rtkit-daemon[2222]: Supervising 7 threads of 5 processes=
- of
-1 users.
+If I refine the description to
+"For the flash to turn on/off, need to wait for 5ms/500us analog settling time.
+If any flash led is already used, then the analog is settled done, we
+don't need to wait again."
+is it answer the question?
 
 
-HDD OK:
-
-Jul 25 22:59:42 P- kernel: usb 2-4: USB disconnect, device number 11
-Jul 25 22:59:42 P- systemd-udevd[249165]: 2-4:1.0: Process
-'/usr/lib/snapd/snap-device-helper unbind snap_remmina_remmina
-/devices/pci0000:00/0000:00:14.0/usb2/2-4/2-4:1.0 0:0' failed with exit cod=
-e 1.
-Jul 25 22:59:42 P- systemd-udevd[249159]: 2-4: Process
-'/usr/lib/snapd/snap-device-helper unbind snap_remmina_remmina
-/devices/pci0000:00/0000:00:14.0/usb2/2-4 189:138' failed with exit code 1.
-
-Jul 25 22:59:46 P- kernel: usb 2-4: new SuperSpeed USB device number 12 usi=
-ng
-xhci_hcd
-Jul 25 22:59:46 P- kernel: usb 2-4: New USB device found, idVendor=3D174c,
-idProduct=3D5106, bcdDevice=3D 1.00
-Jul 25 22:59:46 P- kernel: usb 2-4: New USB device strings: Mfr=3D2, Produc=
-t=3D3,
-SerialNumber=3D1
-Jul 25 22:59:46 P- kernel: usb 2-4: Product: BlacX
-Jul 25 22:59:46 P- kernel: usb 2-4: Manufacturer: Thermaltake
-Jul 25 22:59:46 P- kernel: usb 2-4: SerialNumber: 000000000002
-Jul 25 22:59:46 P- kernel: usb-storage 2-4:1.0: USB Mass Storage device
-detected
-Jul 25 22:59:46 P- kernel: scsi host2: usb-storage 2-4:1.0
-Jul 25 22:59:46 P- mtp-probe[249185]: checking bus 2, device 12:
-"/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4"
-Jul 25 22:59:46 P- mtp-probe[249185]: bus: 2, device: 12 was not an MTP dev=
-ice
-Jul 25 22:59:46 P- systemd-udevd[249180]: 2-4:1.0: Process
-'/usr/lib/snapd/snap-device-helper bind snap_remmina_remmina
-/devices/pci0000:00/0000:00:14.0/usb2/2-4/2-4:1.0 0:0' failed with exit cod=
-e 1.
-Jul 25 22:59:46 P- mtp-probe[249205]: checking bus 2, device 12:
-"/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4"
-Jul 25 22:59:46 P- mtp-probe[249205]: bus: 2, device: 12 was not an MTP dev=
-ice
-Jul 25 22:59:46 P- systemd-udevd[249180]: 2-4: Process
-'/usr/lib/snapd/snap-device-helper bind snap_remmina_remmina
-/devices/pci0000:00/0000:00:14.0/usb2/2-4 189:139' failed with exit code 1.
-Jul 25 22:59:47 P- kernel: scsi 2:0:0:0: Direct-Access     ST18000N M013J=
-=20=20=20=20=20=20
-     GH02 PQ: 0 ANSI: 5
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: Attached scsi generic sg2 type 0
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: [sdc] Very big device. Trying to use
-READ CAPACITY(16).
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: [sdc] 35156656128 512-byte logical
-blocks: (18.0 TB/16.4 TiB)
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: [sdc] Write Protect is off
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: [sdc] Mode Sense: 23 00 00 00
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: [sdc] No Caching mode page found
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: [sdc] Assuming drive cache: write
-through
-Jul 25 22:59:47 P- kernel:  sdc: sdc1 sdc2
-Jul 25 22:59:47 P- kernel: sd 2:0:0:0: [sdc] Attached SCSI disk
-Jul 25 22:59:47 P- systemd-udevd[249180]: sdc: Process '/usr/bin/unshare -m
-/usr/bin/snap auto-import --mount=3D/dev/sdc' failed with exit code 1.
-Jul 25 22:59:47 P- dbus-daemon[1317]: [system] Activating service
-name=3D'org.kde.kded.smart' requested by ':1.52' (uid=3D1000 pid=3D2607
-comm=3D"/usr/bin/kded5 " label=3D"unconfined") (using servicehelper)
-Jul 25 22:59:47 P- dbus-daemon[1317]: [system] Successfully activated servi=
-ce
-'org.kde.kded.smart'
-Jul 25 22:59:48 P- systemd-udevd[249180]: sdc1: Process '/usr/bin/unshare -m
-/usr/bin/snap auto-import --mount=3D/dev/sdc1' failed with exit code 1.
-Jul 25 22:59:48 P- systemd-udevd[249184]: sdc2: Process '/usr/bin/unshare -m
-/usr/bin/snap auto-import --mount=3D/dev/sdc2' failed with exit code 1.
-Jul 25 22:59:48 P- kernel: ntfs3: Unknown parameter 'windows_names'
-
-
-Jul 25 22:59:49 P- ntfs-3g[249239]: Version 2021.8.22 integrated FUSE 28
-Jul 25 22:59:49 P- ntfs-3g[249239]: Mounted /dev/sdc2 (Read-Write, label
-"18-TB-1", NTFS 3.1)
-Jul 25 22:59:49 P- ntfs-3g[249239]: Cmdline options:
-rw,nodev,nosuid,uid=3D1000,gid=3D1000,windows_names,uhelper=3Dudisks2
-Jul 25 22:59:49 P- ntfs-3g[249239]: Mount options:
-nodev,nosuid,uhelper=3Dudisks2,allow_other,nonempty,relatime,rw,default_per=
-missions,fsname=3D/dev/sdc2,blkdev,blksize=3D4096
-Jul 25 22:59:49 P- ntfs-3g[249239]: Global ownership and permissions enforc=
-ed,
-configuration type 7
-Jul 25 22:59:49 P- udisksd[1404]: Mounted /dev/sdc2 at /media/mama/18-TB-1 =
-on
-behalf of uid 1000
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Best regards,
+Alice
