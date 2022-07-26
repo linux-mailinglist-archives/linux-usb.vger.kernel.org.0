@@ -2,45 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5806C5817EE
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 18:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EC3581824
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 19:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239594AbiGZQvr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 12:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
+        id S230214AbiGZRLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 13:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239587AbiGZQvp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 12:51:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDF3D68;
-        Tue, 26 Jul 2022 09:51:44 -0700 (PDT)
+        with ESMTP id S229576AbiGZRLp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 13:11:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE3F13E1D;
+        Tue, 26 Jul 2022 10:11:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E732B80C63;
-        Tue, 26 Jul 2022 16:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE143C433D6;
-        Tue, 26 Jul 2022 16:51:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACE9DB81893;
+        Tue, 26 Jul 2022 17:11:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78AFC433D6;
+        Tue, 26 Jul 2022 17:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658854302;
-        bh=HxwGMgHUC7SNxnI0lilNnOei/RhRQmPwyZwsZSODdDQ=;
+        s=korg; t=1658855502;
+        bh=oB/9YXDllqHNaPx+0+OoJRyg6nWhXunKlacQATTrCVA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bxFwo72ijEa+JY94NWPGk6+4nO55MQ3HVb96s8cM20v/18dyCfHVakLss2zkwazWX
-         VBjzPR54yhnDgcyKW4TAzCzTw1elXEo+fNUXqLvGzfSMvAbVI7DAIdfdbMq2OIg9Ld
-         3CWHdd+K/TXXqggm+sLrg+2z8eiLuJ95kCxb+H34=
-Date:   Tue, 26 Jul 2022 18:51:39 +0200
+        b=2G3pA4DjMcfYujd4B3AX7B602Rdd3zhyaC9iQ7GgaXEr5kW+nJhEvGMVyt6hZaNhZ
+         +7D8OoWYNOSDLjZyv3aa2UyaqrhLFcPatxkXXvxKtYO9vxb9YLjXJnH//UoYakXv8L
+         6bjHVWagMvR8rRx11oaI1d6QhGzYWu6f7+95xkyk=
+Date:   Tue, 26 Jul 2022 19:11:39 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chen Xingdi <chenxingdi@huawei.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chunkeey@googlemail.com
-Subject: Re: [PATCH -next] usb: renesas-xhci: Use pr_info while fw verify
- success
-Message-ID: <YuAbm09hv4ZGXIw5@kroah.com>
-References: <20220726060509.20748-1-chenxingdi@huawei.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     balbi@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, cristian.birsan@microchip.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: gadget: at91_udc: stop using legacy pm ops
+Message-ID: <YuAgSxsJufJoIfCP@kroah.com>
+References: <20220726095948.1809038-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220726060509.20748-1-chenxingdi@huawei.com>
+In-Reply-To: <20220726095948.1809038-1-claudiu.beznea@microchip.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,30 +51,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 02:05:09PM +0800, Chen Xingdi wrote:
-> While fw verify success, it is confused to print an error
-> log which is actually not an error, so use pr_info to print
-> firmware version instead of pr_err.
-> 
-> Signed-off-by: Chen Xingdi <chenxingdi@huawei.com>
-> ---
->  drivers/usb/host/xhci-pci-renesas.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
-> index 52599d96634f..1eb1d863d545 100644
-> --- a/drivers/usb/host/xhci-pci-renesas.c
-> +++ b/drivers/usb/host/xhci-pci-renesas.c
-> @@ -151,7 +151,7 @@ static int renesas_fw_verify(const void *fw_data,
->  	}
->  
->  	fw_version = get_unaligned_le16(fw_data + fw_version_pointer);
-> -	pr_err("got firmware version: %02x.", fw_version);
-> +	pr_info("got firmware version: %02x.", fw_version);
+On Tue, Jul 26, 2022 at 12:59:47PM +0300, Claudiu Beznea wrote:
+> Stop using legacy PM ops and switch using dev_pm_ops.
 
-Why print anything at all?  When drivers are working properly, they
-should be quiet.  Who relies on this message being sent to the kernel
-log?
+That says what you did, but not why you are doing this.
+
+Please read the kernel documentation for how to write a good kernel
+changelog and resubmit.
 
 thanks,
 
