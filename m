@@ -2,168 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D23580E41
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 09:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E78B580E98
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 10:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbiGZHvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 03:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
+        id S238237AbiGZIIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 04:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237911AbiGZHu7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 03:50:59 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [210.0.225.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7241EAFF;
-        Tue, 26 Jul 2022 00:50:57 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Tue, 26 Jul
- 2022 15:49:19 +0800
-Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Tue, 26 Jul
- 2022 15:49:19 +0800
-From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <kishon@ti.com>, <dianders@chromium.org>, <s.shtylyov@omp.ru>,
-        <mka@chromium.org>, <ming.lei@canonical.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
-Subject: [PATCH v3] USB: HCD: Fix URB giveback issue in tasklet function
-Date:   Tue, 26 Jul 2022 15:49:18 +0800
-Message-ID: <20220726074918.5114-1-WeitaoWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S238099AbiGZIIB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 04:08:01 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E3D2B1A8;
+        Tue, 26 Jul 2022 01:07:59 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q6Zgok008998;
+        Tue, 26 Jul 2022 10:07:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=HVvobxygxJWw+3L3+H2mjH9wVwihqtM6fjUpIWckSr0=;
+ b=0eOSvSD6ZebQSx5nuxxu2Cd4cqj9q4mxGTMdkLuLCclGcNRaBRSUdr43ifPf4PGk/8+d
+ +JOtYZzj+J9gwlpDceC8PvPisoPpJBw/RSeb3k8l2Qcc/1N6PFLuMJ9KKgQaLnYG6q/T
+ /fc2cxrUZjbUQCFKP3D4+1KPqZj/gRTrz2rL6bhQCGVKpts6Sdg0kB66XCmHApIo6rR/
+ PCaDdu/gpUtQIdH9f/ub85PFjrGyYR0kX9wbM79/6EU19mw2heOSA6PNQdTxWVlrYj8R
+ q32Rj3r7UfP7NrWkShitdpwASfYEoCkQXeuNVFzLC7PsePsGM0WYuwh4CIRSNlv/vmid 3g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hg7vhen7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Jul 2022 10:07:33 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8ED1610002A;
+        Tue, 26 Jul 2022 10:07:30 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C55412128A3;
+        Tue, 26 Jul 2022 10:07:30 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 26 Jul
+ 2022 10:07:29 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <mka@chromium.org>, <alexandre.torgue@foss.st.com>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <arnd@arndb.de>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <amelie.delaunay@foss.st.com>, <fabrice.gasnier@foss.st.com>
+Subject: [PATCH v2 0/4] usb: misc: adopt onboard hub support on stm32mp1 boards
+Date:   Tue, 26 Jul 2022 10:07:04 +0200
+Message-ID: <20220726080708.162547-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-26_02,2022-07-25_03,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Usb core introduce the mechanism of giveback of URB in tasklet context to
-reduce hardware interrupt handling time. On some test situation(such as
-FIO with 4KB block size), when tasklet callback function called to
-giveback URB, interrupt handler add URB node to the bh->head list also.
-If check bh->head list again after finish all URB giveback of local_list,
-then it may introduce a "dynamic balance" between giveback URB and add URB
-to bh->head list. This tasklet callback function may not exit for a long
-time, which will cause other tasklet function calls to be delayed. Some
-real-time applications(such as KB and Mouse) will see noticeable lag.
+Add support for USB2514B HUB found on stm32mp1 boards:
+- Extend the ehci-generic dt-binding to fully use the usb-hcd.yaml, and so
+  the usb-device.yaml.
+- Add usb-device compatible ("usbVID,PID") for the USB2514B USB2.0 HUB to
+  the onboard_usb_hub driver.
+- Add relevant device tree node to stm32mp15 DK boards.
+- Enable the onboard_usb_hub driver on multi_v7 platforms.
 
-In order to prevent the tasklet function from occupying the cpu for a long
-time at a time, new URBS will not be added to the local_list even though
-the bh->head list is not empty. But also need to ensure the left URB
-giveback to be processed in time, so add a member high_prio for structure
-giveback_urb_bh to prioritize tasklet and schelule this tasklet again if
-bh->head list is not empty.
+Changes in v2:
+- Follow Matthias review comments
+- dt-bindings reviewed by Rob
 
-At the same time, we are able to prioritize tasklet through structure
-member high_prio. So, replace the local high_prio_bh variable with this
-structure member in usb_hcd_giveback_urb.
+Fabrice Gasnier (4):
+  dt-bindings: usb: generic-ehci: allow usb-hcd schema properties
+  usb: misc: onboard-hub: add support for Microchip USB2514B USB 2.0 hub
+  ARM: dts: stm32: add support for USB2514B onboard hub on
+    stm32mp15xx-dkx
+  ARM: multi_v7_defconfig: enable USB onboard HUB driver
 
-Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-v2->v3
- - Add more detail info about how to patch this issue.
- - Change initial value of boolean variable high_prio from 1 to true.
+ Documentation/devicetree/bindings/usb/generic-ehci.yaml | 7 +------
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                  | 8 ++++++++
+ arch/arm/configs/multi_v7_defconfig                     | 1 +
+ drivers/usb/misc/onboard_usb_hub.c                      | 2 ++
+ drivers/usb/misc/onboard_usb_hub.h                      | 1 +
+ 5 files changed, 13 insertions(+), 6 deletions(-)
 
- drivers/usb/core/hcd.c  | 26 +++++++++++++++-----------
- include/linux/usb/hcd.h |  1 +
- 2 files changed, 16 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 06eea8848ccc..11c8ea0cccc8 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1691,7 +1691,6 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
- 
- 	spin_lock_irq(&bh->lock);
- 	bh->running = true;
-- restart:
- 	list_replace_init(&bh->head, &local_list);
- 	spin_unlock_irq(&bh->lock);
- 
-@@ -1705,10 +1704,17 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
- 		bh->completing_ep = NULL;
- 	}
- 
--	/* check if there are new URBs to giveback */
-+	/*
-+	 * giveback new URBs next time to prevent this function
-+	 * from not exiting for a long time.
-+	 */
- 	spin_lock_irq(&bh->lock);
--	if (!list_empty(&bh->head))
--		goto restart;
-+	if (!list_empty(&bh->head)) {
-+		if (bh->high_prio)
-+			tasklet_hi_schedule(&bh->bh);
-+		else
-+			tasklet_schedule(&bh->bh);
-+	}
- 	bh->running = false;
- 	spin_unlock_irq(&bh->lock);
- }
-@@ -1737,7 +1743,7 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
- void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
- {
- 	struct giveback_urb_bh *bh;
--	bool running, high_prio_bh;
-+	bool running;
- 
- 	/* pass status to tasklet via unlinked */
- 	if (likely(!urb->unlinked))
-@@ -1748,13 +1754,10 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
- 		return;
- 	}
- 
--	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
-+	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
- 		bh = &hcd->high_prio_bh;
--		high_prio_bh = true;
--	} else {
-+	else
- 		bh = &hcd->low_prio_bh;
--		high_prio_bh = false;
--	}
- 
- 	spin_lock(&bh->lock);
- 	list_add_tail(&urb->urb_list, &bh->head);
-@@ -1763,7 +1766,7 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
- 
- 	if (running)
- 		;
--	else if (high_prio_bh)
-+	else if (bh->high_prio)
- 		tasklet_hi_schedule(&bh->bh);
- 	else
- 		tasklet_schedule(&bh->bh);
-@@ -2959,6 +2962,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
- 
- 	/* initialize tasklets */
- 	init_giveback_urb_bh(&hcd->high_prio_bh);
-+	hcd->high_prio_bh.high_prio = true;
- 	init_giveback_urb_bh(&hcd->low_prio_bh);
- 
- 	/* enable irqs just before we start the controller,
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 2c1fc9212cf2..98d1921f02b1 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -66,6 +66,7 @@
- 
- struct giveback_urb_bh {
- 	bool running;
-+	bool high_prio;
- 	spinlock_t lock;
- 	struct list_head  head;
- 	struct tasklet_struct bh;
 -- 
-2.32.0
+2.25.1
+
