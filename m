@@ -2,64 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CA9580905
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 03:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65489580967
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 04:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237162AbiGZBbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Jul 2022 21:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S236994AbiGZCUm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Jul 2022 22:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiGZBbW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 21:31:22 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7AC2611E;
-        Mon, 25 Jul 2022 18:31:20 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id t22so14181238lfg.1;
-        Mon, 25 Jul 2022 18:31:20 -0700 (PDT)
+        with ESMTP id S230404AbiGZCUk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Jul 2022 22:20:40 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8181719C33;
+        Mon, 25 Jul 2022 19:20:39 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id b25so10060091qka.11;
+        Mon, 25 Jul 2022 19:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=E1zjMXNQOLjWcDy+k9ctEQL0foXM1RR7LLaAi4daajY=;
-        b=kYqF92Qu06cjGb4YPrzBNcyM2NUjxgCW16kGdr8I+fnA05c8wgd+ltzaJ99vfsrUob
-         7qNC+bNgmgvHSjLRgzixxGh/INhJ0f++4eWh5rjfvid9PeN3g5fGysiIXUgLSbmDNrw3
-         N7lfVaxVzxiWxmKuTgabBiUJU5yZke0GP/6h/7AgQ3ZkrT9pvCkeOj9M8nfK0ab8hIUK
-         DkTDTyEN+JN9SS+XpnuB4/JEHUxekmvZMYZ+2BrJT/0ONEGC88uxGbcgr7OgDK77Pk7n
-         qTJV52LKp47D4jakZQ1rzMMt2GK7R4rtFwD3obcl058HjrMsbN0SAgWl+6gpFzNjObhh
-         2q7w==
+        bh=W0xMOzx9xkEwYcg4IC9rpOdFz/8JFTGOz3GpQHY8CyA=;
+        b=bQNzSCTQTDj5oJAikkEBCR3Q/tLaWKw4sj3Vy9sXwlvn8sYyxYtkIYLMGJHXeTnchw
+         taB+Q9JNgrphDka9FLEaK8Qsw28p9ed1+CizwomW4uNr80I+wP1Lqo9LTTYwNWb3V89V
+         GIklfwwZ1L8oQOXN4gS6QzAtgFIiB62NAp+81WQ1VPf3ZNTslXRqVWiUfEk+RoW/cY8f
+         fDSw5bn9W+8qRxPD/H7Me+Tk8/fC32oiFqKIMjraRmMb5Kapx2uuyolL4AP030DYsD1r
+         9zbtprQkDJeDZWr8JDzg2hRZyzyKu9MOyRP/v2uOlFD2v7biNRKTj8XzA8Co9eYGKCHI
+         FE9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=E1zjMXNQOLjWcDy+k9ctEQL0foXM1RR7LLaAi4daajY=;
-        b=pmcg1JvZCeqC/Igail03wQxUqe+AEQ4igghF7OlaHTB0ccH4lMHGfiAQ+kK5cp+Xnt
-         ZvBysy7CWmdt6Y5kXrOR+cDMTxa2Ukzbw5Do1kkm3NXuG3oNGNww0iFt+BhSt28At5OF
-         L6BgCYA3s8be4WW6t1LT67UIS/E4csdeG4T4uHNkUFlr+0xVi/Gv5df/vPhXIecXeO7E
-         85Vkj/DMxeP1vJSZP32uo/uibzkH6niv3Y4R7bWCQIeQBzc9rGUChmZ2zCmwIo0yTJXG
-         zt/s737H4JEDQE1X5Xsc2J7ECZGFpkkYbgjaEmOJDsIlyRbuqYeEvBZy/V8UWkaLaqgG
-         swXA==
-X-Gm-Message-State: AJIora/RUVLVVWEW5IX4wYtmREIYygKMcxlxU25bwMmYhZwm7mCWoWpi
-        8eKKnm2UKVSy0q4dvvsUL92gFCdPS/u+r1eeN54=
-X-Google-Smtp-Source: AGRyM1tCVnoLdGbaKUINoMiM3djVOfeq0chBKHqp9L5vOFxQUBCrgVR8NZwKHm1V5cUwizNE0xh83AJDsBJcBSV+xtU=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr5818171lfr.647.1658799078975; Mon, 25
- Jul 2022 18:31:18 -0700 (PDT)
+        bh=W0xMOzx9xkEwYcg4IC9rpOdFz/8JFTGOz3GpQHY8CyA=;
+        b=zZxFPvF85NxcUR5aY7nHc5ayUtGnK4+ZeTpK+EdMBydg6k+I+4M9d7LcWpfAQ2/487
+         PrcVkbn2nPm/8g5c0Uj2TI0+AbQloeemzW2GUkaIxorTR6JuEdQiognX4jraRo4tgjYu
+         i1In1BndCnBIj4KsEq0PyKdRYAEmtP5O33a7Gh+h5JNJCey2LR3qYe3rMu3BRd58+iYw
+         CfGjS+fO4MQRnYYp3ypkBr6EyjOoKz9QQPPhUgw+oyIkAtlGi0SOY+Wjk3S/kF0CM382
+         QcIYFYC/vGVkwOiDsEGwAZbQxfSuvLu5hhTtLs6KW0xPVC4DfW7jraDydyQ0SahjKcMM
+         WZCw==
+X-Gm-Message-State: AJIora/9gFK7EfbGxqMtTcbxC9m0ah4uE01h6ijhTm5ddeVRK36taA8U
+        YKvnErN8jl7TngFrh7OQGLfKQRYd8vaSLbyBf9w=
+X-Google-Smtp-Source: AGRyM1tZpCYcrI4GEenV5sl4ffLbB3S1w73dtE0jE5MocjhBVejW7P4d8PE22YJ6HvnYEZBNm5FpvyKW1Z34FzM/KzI=
+X-Received: by 2002:a37:80c2:0:b0:6b5:e9e4:c4c1 with SMTP id
+ b185-20020a3780c2000000b006b5e9e4c4c1mr11082627qkd.129.1658802038657; Mon, 25
+ Jul 2022 19:20:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220725030605.1808710-1-klimov.linux@gmail.com> <573466e4-e836-d053-d1b9-dc04c6a046e5@roeck-us.net>
-In-Reply-To: <573466e4-e836-d053-d1b9-dc04c6a046e5@roeck-us.net>
-From:   Alexey Klimov <klimov.linux@gmail.com>
-Date:   Tue, 26 Jul 2022 02:31:07 +0100
-Message-ID: <CALW4P+JjO5zxEP4aLGzzcvK2QO0Ea_uYACjuOV6GZEMfh3Q5RA@mail.gmail.com>
-Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        USB list <linux-usb@vger.kernel.org>,
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-14-peterwu.pub@gmail.com>
+ <20220725103128.xtaw2c4y5fobowg7@maple.lan>
+In-Reply-To: <20220725103128.xtaw2c4y5fobowg7@maple.lan>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Tue, 26 Jul 2022 10:20:02 +0800
+Message-ID: <CABtFH5LUKTZenTktq3v1JZ9xe-yJFsMvCZuwDhmxdT87k0O-zA@mail.gmail.com>
+Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370 support
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        atishp@rivosinc.com, atishp@atishpatra.org,
-        Yury Norov <yury.norov@gmail.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Aaron Tomlin <atomlin@redhat.com>
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,341 +95,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 3:02 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Mon, Jul 25, 2022 at 6:31 PM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
 >
-> On 7/24/22 20:06, Alexey Klimov wrote:
-
-[...]
-
-> > + * one buffer is used for communication, however transmitted message is only
-> > + * 32 bytes long
-> > + */
-> > +#define BUFFER_TRANSFER_LENGTH       32
-> > +#define BUFFER_LENGTH                64
-> > +#define USB_TIMEOUT          350
-> > +
-> Comment about the unit (ms) might be useful.
-
-Yes. I'll add it.
-
-> > +#define STREAMLABS_CMD_START 0xaacc
-> > +#define STREAMLABS_CMD_STOP  0xbbff
-> > +
-> > +/* timeout values are taken from windows program */
-> > +#define STREAMLABS_WDT_MIN_TIMEOUT   1
-> > +#define STREAMLABS_WDT_MAX_TIMEOUT   46
-> > +
-> > +struct streamlabs_wdt {
-> > +     struct watchdog_device wdt_dev;
-> > +     struct usb_interface *intf;
-> > +     /* Serialises usb communication with a device */
-> > +     struct mutex lock;
-> > +     __le16 *buffer;
-> > +};
-> > +
-> > +static bool nowayout = WATCHDOG_NOWAYOUT;
-> > +module_param(nowayout, bool, 0);
-> > +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-> > +                     __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> > +
-> > +/* USB call wrappers to send and receive messages to/from the device. */
-> > +static int usb_streamlabs_send_msg(struct usb_device *usbdev, __le16 *buf)
-> > +{
-> > +     int retval;
-> > +     int size;
-> > +
-> > +     retval = usb_interrupt_msg(usbdev, usb_sndintpipe(usbdev, 0x02),
-> > +                                buf, BUFFER_TRANSFER_LENGTH,
-> > +                                &size, USB_TIMEOUT);
-> > +
-> > +     if (size != BUFFER_TRANSFER_LENGTH)
-> > +             return -EIO;
-> > +
+> On Fri, Jul 22, 2022 at 06:24:07PM +0800, ChiaEn Wu wrote:
+> > diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
+> > index a003e02..846dbe7 100644
+> > --- a/drivers/video/backlight/Kconfig
+> > +++ b/drivers/video/backlight/Kconfig
+> > @@ -268,6 +268,18 @@ config BACKLIGHT_MAX8925
+> >         If you have a LCD backlight connected to the WLED output of MAX8925
+> >         WLED output, say Y here to enable this driver.
+> >
+> > +config BACKLIGHT_MT6370
+> > +     tristate "MediaTek MT6370 Backlight Driver"
+> > +     depends on MFD_MT6370
+> > +     help
+> > +       This enables support for Mediatek MT6370 Backlight driver.
+> > +       It's commonly used to drive the display WLED. There are 4 channels
+> > +       inside, and each channel supports up to 30mA of current capability
+> > +       with 2048 current steps in exponential or linear mapping curves.
 >
-> If usb_interrupt_msg() returns an error, it will likely not set size,
-> which may result in a random -EIO. I think this should be something like
+> Does the MT6372 support more steps than this? In other words does it use
+> a fourteen bit scale or does it use an 11-bit scale at a different
+> register location?
+
+Hi Daniel,
+
+Thanks for your reply.
+Yes, MT6372 can support 16384 steps and uses a 14-bit scale register
+location. But the maximum current of each
+channel of MT6372 is the same as MT6370 and MT6371, both 30mA.
+The main reason why MT6372 is designed this way is that one of the
+customers asked for a more delicate
+adjustment of the backlight brightness. But other customers actually
+do not have such requirements.
+Therefore, we designed it this way for maximum compatibility in software.
+
 >
->         if (retval)
->                 return retval;
->         if (size != BUFFER_TRANSFER_LENGTH)
->                 return -EIO;
 >
->         return 0;
-
-Good point. I'll change it.
-
-
-> > +     return retval;
-> > +}
 > > +
-> > +static int usb_streamlabs_get_msg(struct usb_device *usbdev, __le16 *buf)
+> > +       This driver can also be built as a module. If so, the module
+> > +       will be called "mt6370-backlight".
+> > +
+> > [...]
+> > diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
+> > new file mode 100644
+> > index 0000000..ba00a8f
+> > --- /dev/null
+> > +++ b/drivers/video/backlight/mt6370-backlight.c
+> > [...]
+> > +static int mt6370_bl_update_status(struct backlight_device *bl_dev)
 > > +{
-> > +     int retval;
-> > +     int size;
+> > +     struct mt6370_priv *priv = bl_get_data(bl_dev);
+> > +     int brightness = backlight_get_brightness(bl_dev);
+> > +     unsigned int enable_val;
+> > +     u8 brightness_val[2];
+> > +     int ret;
 > > +
-> > +     retval = usb_interrupt_msg(usbdev, usb_rcvintpipe(usbdev, 0x81),
-> > +                                buf, BUFFER_LENGTH,
-> > +                                &size, USB_TIMEOUT);
+> > +     if (brightness) {
+> > +             brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
+> > +             brightness_val[1] = (brightness - 1) >> fls(MT6370_BL_DIM2_MASK);
 > > +
-> > +     if (size != BUFFER_LENGTH)
-> > +             return -EIO;
-> > +
-> Same here.
+> > +             /*
+> > +              * To make MT6372 using 14 bits to control the brightness
+> > +              * backward compatible with 11 bits brightness control
+> > +              * (like MT6370 and MT6371 do), we left shift the value
+> > +              * and pad with 1 to remaining bits. Hence, the MT6372's
+> > +              * backlight brightness will be almost the same as MT6370's
+> > +              * and MT6371's.
+> > +              */
+> > +             if (priv->vid_type == MT6370_VID_6372) {
+> > +                     brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
+> > +                     brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
+> > +             }
 >
-> > +     return retval;
-> > +}
-> > +
-> > +/*
-> > + * This function is used to check if watchdog timeout in the received buffer
-> > + * matches the timeout passed from watchdog subsystem.
-> > + */
-> > +static int usb_streamlabs_wdt_check_timeout(__le16 *buf, unsigned long timeout)
-> > +{
-> > +     if (buf[3] != cpu_to_le16(timeout))
-> > +             return -EPROTO;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int usb_streamlabs_wdt_check_response(u8 *buf)
-> > +{
-> > +     /*
-> > +      * If watchdog device understood the command it will acknowledge
-> > +      * with values 1,2,3,4 at indexes 10, 11, 12, 13 in response message
-> > +      * when response treated as 8bit message.
-> > +      */
-> > +     if (buf[10] != 1 || buf[11] != 2 || buf[12] != 3 || buf[13] != 4)
-> > +             return -EPROTO;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +/*
-> > + * This function is used to check if watchdog command in the received buffer
-> > + * matches the command passed to the device.
-> > + */
-> > +static int usb_streamlabs_wdt_check_command(__le16 *buf, u16 cmd)
-> > +{
-> > +     if (buf[0] != cpu_to_le16(cmd))
-> > +             return -EPROTO;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int usb_streamlabs_wdt_validate_response(__le16 *buf, u16 cmd,
-> > +                                             unsigned long timeout_msec)
-> > +{
-> > +     int retval;
-> > +
-> > +     retval = usb_streamlabs_wdt_check_response((u8 *)buf);
-> > +     if (retval)
-> > +             return retval;
-> > +
-> > +     retval = usb_streamlabs_wdt_check_command(buf, cmd);
-> > +     if (retval)
-> > +             return retval;
-> > +
-> > +     retval = usb_streamlabs_wdt_check_timeout(buf, timeout_msec);
-> > +     return retval;
+> This somewhat depends on the answer to the first question above, but
+> what is the point of this shifting? If the range is 14-bit then the
+> driver should set max_brightness to 16384 and present the full range of
+> the MT6372 to the user.
+
+So should we make all 16384 steps of MT6372 available to users?
+Does that mean the DTS needs to be modified as well?
+Or, for the reasons, I have just explained (just one customer has this
+requirement), then we do not make any changes for compatibility
+reasons?
+Thanks.
+
 >
->         assignment to retval is unnecessary.
-
-Ok.
-
-> > +}
-> > +
-> > +static void usb_streamlabs_wdt_prepare_buf(__le16 *buf, u16 cmd,
-> > +                                        unsigned long timeout_msec)
-> > +{
-> > +     /*
-> > +      * remaining elements expected to be zero everytime during
-> > +      * communication
-> > +      */
-> > +     buf[0] = cpu_to_le16(cmd);
-> > +     buf[1] = cpu_to_le16(0x8000);
-> > +     buf[3] = cpu_to_le16(timeout_msec);
+> Especially when using linear mappings (which are a totally pointless
+> scale to use for a backlight) the extra steps are useful for backlight
+> animation.
 >
-> Not setting buf[2] and buf[4] contradicts the comment above. Maybe
-> those offsets are not _expected_ to be set by the device, but that
-> is not guaranteed. It may be safer to just use memset() at the
-> beginning of the function to clear the buffer.
-
-Sure. I guess it makes sense to zero the buffer before reading the
-message from the device too?
-Before usb_streamlabs_get_msg(usbdev, wdt->buffer).
-
-> > +     buf[5] = 0x0;
-> > +     buf[6] = 0x0;
-> > +}
-> > +
-> > +static int __usb_streamlabs_wdt_cmd(struct streamlabs_wdt *wdt, u16 cmd)
-> > +{
-> > +     struct usb_device *usbdev;
-> > +     unsigned long timeout_msec;
-> > +     /* how many times to re-try getting the state of the device */
-> > +     unsigned int retry_counter = 10;
-> > +     int retval;
-> > +
-> > +     if (unlikely(!wdt->intf))
-> > +             return -ENODEV;
-> > +
-> > +     usbdev = interface_to_usbdev(wdt->intf);
-> > +     timeout_msec = wdt->wdt_dev.timeout * MSEC_PER_SEC;
-> > +
-> > +     usb_streamlabs_wdt_prepare_buf(wdt->buffer, cmd, timeout_msec);
-> > +
-> > +     /* send command to watchdog */
-> > +     retval = usb_streamlabs_send_msg(usbdev, wdt->buffer);
-> > +     if (retval)
-> > +             return retval;
-> > +
-> > +     /*
-> > +      * Transition from one state to another in this device
-> > +      * doesn't happen immediately, especially stopping the device
-> > +      * is not observed on the first reading of the response.
-> > +      * Plus to avoid potentially stale response message in the device
-> > +      * we keep reading the state of the device until we see:
-> > +      * -- that device recognised the sent command;
-> > +      * -- the received state (started or stopped) matches the state
-> > +      * that was requested;
-> > +      * -- the timeout passed matches the timeout value read from
-> > +      * the device.
-> > +      * Keep retrying 10 times and if watchdog device doesn't respond
-> > +      * correctly as expected we bail out and return an error.
-> > +      */
-> > +     do {
-> > +             retval = usb_streamlabs_get_msg(usbdev, wdt->buffer);
-> > +             if (retval)
-> > +                     break;
-> > +
-> > +             retval = usb_streamlabs_wdt_validate_response(wdt->buffer, cmd,
-> > +                                                           timeout_msec);
-> > +     } while (retval && retry_counter--);
-> > +
-> > +     return retry_counter ? retval : -EIO;
-> > +}
-> > +
-> > +static int usb_streamlabs_wdt_cmd(struct streamlabs_wdt *streamlabs_wdt, u16 cmd)
-> > +{
-> > +     int retval;
-> > +
-> > +     mutex_lock(&streamlabs_wdt->lock);
-> > +     retval = __usb_streamlabs_wdt_cmd(streamlabs_wdt, cmd);
-> > +     mutex_unlock(&streamlabs_wdt->lock);
-> > +
-> > +     return retval;
-> > +}
-> > +
-> > +static int usb_streamlabs_wdt_start(struct watchdog_device *wdt_dev)
-> > +{
-> > +     struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-> > +
-> > +     return usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_START);
-> > +}
-> > +
-> > +static int usb_streamlabs_wdt_stop(struct watchdog_device *wdt_dev)
-> > +{
-> > +     struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-> > +
-> > +     return usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_STOP);
-> > +}
-> > +
-> > +static const struct watchdog_info streamlabs_wdt_ident = {
-> > +     .options        = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-> > +     .identity       = DRIVER_NAME,
-> > +};
-> > +
-> > +static const struct watchdog_ops usb_streamlabs_wdt_ops = {
-> > +     .owner  = THIS_MODULE,
-> > +     .start  = usb_streamlabs_wdt_start,
-> > +     .stop   = usb_streamlabs_wdt_stop,
-> > +};
-> > +
-> > +static int usb_streamlabs_wdt_probe(struct usb_interface *intf,
-> > +                                 const struct usb_device_id *id)
-> > +{
-> > +     struct usb_device *usbdev = interface_to_usbdev(intf);
-> > +     struct streamlabs_wdt *streamlabs_wdt;
-> > +     int retval;
-> > +
-> > +     /*
-> > +      * USB IDs of this device appear to be weird/unregistered. Hence, do
-> > +      * an additional check on product and manufacturer.
-> > +      * If there is similar device in the field with same values then
-> > +      * there is stop command in probe() below that checks if the device
-> > +      * behaves as a watchdog.
-> > +      */
-> > +     if (!usbdev->product || !usbdev->manufacturer ||
-> > +         strncmp(usbdev->product, "USBkit", 6) ||
-> > +         strncmp(usbdev->manufacturer, "STREAM LABS", 11))
-> > +             return -ENODEV;
-> > +
-> > +     streamlabs_wdt = devm_kzalloc(&intf->dev, sizeof(struct streamlabs_wdt),
-> > +                                   GFP_KERNEL);
-> > +     if (!streamlabs_wdt)
-> > +             return -ENOMEM;
-> > +
-> > +     streamlabs_wdt->buffer = devm_kzalloc(&intf->dev, BUFFER_LENGTH,
-> > +                                           GFP_KERNEL);
-> > +     if (!streamlabs_wdt->buffer)
-> > +             return -ENOMEM;
-> > +
 >
-> Nit: buffer could be made part of struct streamlabs_wdt and be tagged with
-> ____cacheline_aligned to avoid the double allocation.
+> Daniel.
 
-It was discussed in the past.
-https://lore.kernel.org/linux-watchdog/5714E7D3.4030809@roeck-us.net/
-https://lore.kernel.org/linux-watchdog/1460988518.25119.28.camel@suse.com/
-
-The conclusion there was that with separate allocation it is
-guaranteed to not share a cacheline with mutex lock.
-Do we know for sure that it is safe with ____cacheline_aligned attribute?
-
-Oliver, thoughts?
-
-I see that a lot of drivers use cacheline alignment for buffers, so I
-guess that should be okay nowadays and I can change it back to initial
-version with cacheline alignment.
-
-> > +     mutex_init(&streamlabs_wdt->lock);
-> > +
-> > +     streamlabs_wdt->wdt_dev.info = &streamlabs_wdt_ident;
-> > +     streamlabs_wdt->wdt_dev.ops = &usb_streamlabs_wdt_ops;
-> > +     streamlabs_wdt->wdt_dev.timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-> > +     streamlabs_wdt->wdt_dev.max_timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-> > +     streamlabs_wdt->wdt_dev.min_timeout = STREAMLABS_WDT_MIN_TIMEOUT;
-> > +     streamlabs_wdt->wdt_dev.parent = &intf->dev;
-> > +
-> > +     streamlabs_wdt->intf = intf;
-> > +     usb_set_intfdata(intf, &streamlabs_wdt->wdt_dev);
-> > +     watchdog_set_drvdata(&streamlabs_wdt->wdt_dev, streamlabs_wdt);
-> > +     watchdog_set_nowayout(&streamlabs_wdt->wdt_dev, nowayout);
-> > +
-> > +     retval = usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
-> > +     if (retval)
-> > +             return -ENODEV;
-> > +
->
-> A comment explaining why the watchdog is explicitly stopped when running
-> might be useful.
-
-What do you mean by saying "when running"?
-Everytime during my testing the initial state is "stopped" on
-boot/power on/after reset, so not sure what you mean by saying "when
-running".
-There is a comment above that explains the stop command but I will
-add/change comments that explain things better.
-The point of executing "stop" command here is to check that device
-being probed behaves like we expect it to. This is a bit paranoid
-check since I am a not 100% sure that all devices with such USB ids
-are watchdogs -- that's why additional checks for usbdev->product and
-usbdev->manufacturer and this stop command that doesn't change the
-initial state. In theory, I can remove this stop command at all.
-
-Thank you for the review.
-
-[...]
-
-Best regards,
-Alexey
+-- 
+Best Regards,
+ChiaEn Wu
