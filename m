@@ -2,66 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D0C580A7D
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 06:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811DA580AEF
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 08:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiGZEZV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 00:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        id S231191AbiGZGFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 02:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiGZEZT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 00:25:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DD211C1B
-        for <linux-usb@vger.kernel.org>; Mon, 25 Jul 2022 21:25:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E85CF61147
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 04:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 40872C341C0
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 04:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658809515;
-        bh=8U2jdIsJ7eUGxIluIMCsE8yw3IUa7X1yuYdyfKxAgog=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=IN7PdYsZYtwUm+XXWGC6vrwJRokQ734uKz+Q9F9AITXX9KeH5e8c8wKbNZ+akO17i
-         fwh3KyZ4/jC2zLz/xtuLv3t2MGBwepbEP2XmPoCjP+t9gyEYjCVz6lqEHvfaLgvPYh
-         WV1xRiiJm+uOHbAPDinZvYR9RH+vzkrnpF3UoB/mKo7oJ/QwK2+l+ksNuhqWnbnOSP
-         /6fH59BqX+h+ePBDHfcBd4Fe/FQArQFPJjmRt90yY/ITeafGVdzioKl9VRf0fbGrk+
-         uhZVDo69EV8FB1PzloW/QWiOaYgW4gFH21m+W0uhQksumGXftpVMEDG//NCWNh3SfP
-         6sXemnpX9SCKg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 220C2C05FD2; Tue, 26 Jul 2022 04:25:15 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216282] usb-mass storage
-Date:   Tue, 26 Jul 2022 04:25:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: audioprof2001@yahoo.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216282-208809-KbE3nsmmBJ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216282-208809@https.bugzilla.kernel.org/>
-References: <bug-216282-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229749AbiGZGFb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 02:05:31 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30412614E;
+        Mon, 25 Jul 2022 23:05:29 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LsRBy4WlNz1M8M4;
+        Tue, 26 Jul 2022 14:02:18 +0800 (CST)
+Received: from dggpeml500005.china.huawei.com (7.185.36.59) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Jul 2022 14:05:10 +0800
+Received: from huawei.com (10.247.19.50) by dggpeml500005.china.huawei.com
+ (7.185.36.59) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Jul
+ 2022 14:05:09 +0800
+From:   Chen Xingdi <chenxingdi@huawei.com>
+To:     <mathias.nyman@intel.com>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <chunkeey@googlemail.com>,
+        <chenxingdi@huawei.com>
+Subject: [PATCH -next] usb: renesas-xhci: Use pr_info while fw verify success
+Date:   Tue, 26 Jul 2022 14:05:09 +0800
+Message-ID: <20220726060509.20748-1-chenxingdi@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.247.19.50]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500005.china.huawei.com (7.185.36.59)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,14 +48,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
+While fw verify success, it is confused to print an error
+log which is actually not an error, so use pr_info to print
+firmware version instead of pr_err.
 
---- Comment #7 from audioprof2001@yahoo.com ---
-https://github.com/torvalds/linux/blob/master/drivers/usb/storage/uas-detec=
-t.h
+Signed-off-by: Chen Xingdi <chenxingdi@huawei.com>
+---
+ drivers/usb/host/xhci-pci-renesas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-You may reply to this email to add a comment.
+diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+index 52599d96634f..1eb1d863d545 100644
+--- a/drivers/usb/host/xhci-pci-renesas.c
++++ b/drivers/usb/host/xhci-pci-renesas.c
+@@ -151,7 +151,7 @@ static int renesas_fw_verify(const void *fw_data,
+ 	}
+ 
+ 	fw_version = get_unaligned_le16(fw_data + fw_version_pointer);
+-	pr_err("got firmware version: %02x.", fw_version);
++	pr_info("got firmware version: %02x.", fw_version);
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
