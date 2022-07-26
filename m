@@ -2,66 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64427581A33
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 21:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4BC581A60
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 21:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234205AbiGZTUf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 15:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S231280AbiGZTlT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 15:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbiGZTUd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 15:20:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2781E63D6
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 12:20:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2D37B80D63
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 19:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C467C433D7
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 19:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658863230;
-        bh=5sdLAzNHR3aZDzVp35YLUv9oGIMAnFbMu8t4ce5OPZM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=j0bN7/LFU8t56Foc4dvJAUQO/9JuYhhbn5k2E1odzN4IxWtrZqDK0vqaTvil4uitw
-         e7oZiLhwRMAhYOscYkGz6ETVAPhEyk6o5VA0GCKzT0UhwLLRm7oPE02g4QwbOCL9AI
-         cLop91P+b7bjLx6PiaHUt1lnks9lXl67HN8bwO54yeJkR7yb966U2pC8F4bSOqgcnO
-         jJnA9x+JAO46IfLe9RxCxyGuW3Vo9F7RiCvFshvlln/k0SGFmGgrdXnU2j/gz7kn9Y
-         IYfdYaZSjIVTzqTR38aslLdfyfLHbPD8IjXRbxaJAnDv5LWwMqs9fJUFNg5a0uen3Z
-         H+HrfFs8Q0uaw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 28F5FC433E6; Tue, 26 Jul 2022 19:20:30 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216282] usb-mass storage
-Date:   Tue, 26 Jul 2022 19:20:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: audioprof2001@yahoo.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216282-208809-yDT75zqZS2@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216282-208809@https.bugzilla.kernel.org/>
-References: <bug-216282-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229658AbiGZTlS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 15:41:18 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753AF18E04;
+        Tue, 26 Jul 2022 12:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658864477; x=1690400477;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QM1qI4jvZ4MmCTihomGrSnf3ybTgIby/ouZeQYS93l0=;
+  b=Vb2Q1qJtZBpdqGCdCR4zJSg6LBDYNKhmX/tXkVljKpyMwAtVmeqaaZGQ
+   aZXZMUSxL/F7NYJYG1qDBRNK2rjAqTDM70ofzV1uwH9GoruqYRZeP6+bn
+   y76Do58ITwqZdB77c7KrmTjnL3C9G800/kJ2u8iekzoEVXDKsQ3XKV6lX
+   o=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jul 2022 12:41:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 12:41:17 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Jul 2022 12:41:16 -0700
+Received: from [10.110.103.19] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
+ 2022 12:41:16 -0700
+Message-ID: <b9e2474a-4323-daa4-a421-1d897726f7f9@quicinc.com>
+Date:   Tue, 26 Jul 2022 12:41:08 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: gadget: Avoid duplicate requests to enable
+ Run/Stop
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <balbi@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_mrana@quicinc.com>, <Thinh.Nguyen@synopsys.com>
+References: <20220725201136.7989-1-quic_wcheng@quicinc.com>
+ <YuALjN8o/XNS7RE2@kroah.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <YuALjN8o/XNS7RE2@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,16 +67,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
+Hi Greg,
 
---- Comment #11 from audioprof2001@yahoo.com ---
-$ sudo mount -t debugfs none /sys/kernel/debug
-[sudo] password:=20
-mount: /sys/kernel/debug: none already mounted on
-/run/credentials/systemd-sysusers.service.
+On 7/26/2022 8:43 AM, Greg KH wrote:
+> On Mon, Jul 25, 2022 at 01:11:36PM -0700, Wesley Cheng wrote:
+>> Relocate the pullups_connected check until after it is ensured that there
+>> are no runtime PM transitions.  If another context triggered the DWC3
+>> core's runtime resume, it may have already enabled the Run/Stop.  Do not
+>> re-run the entire pullup sequence again, as it may issue a core soft
+>> reset while Run/Stop is already set.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> 
+> What commit does this fix?
+> 
+> How far back should it go to stable kernels?
+> 
+Let met add a fixes tag and resubmit.  Thanks!
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks
+Wesley Cheng
