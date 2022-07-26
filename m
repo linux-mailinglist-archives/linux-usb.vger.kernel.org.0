@@ -2,218 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCC7580FF1
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 11:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB7A581059
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 11:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238207AbiGZJbJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 05:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S238551AbiGZJvo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 05:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiGZJbE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 05:31:04 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6762248D0
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 02:31:02 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id b26so19342131wrc.2
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 02:31:02 -0700 (PDT)
+        with ESMTP id S238332AbiGZJvn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 05:51:43 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE62BB18
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 02:51:42 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id b26so19413708wrc.2
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 02:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6DKLKhCuv0oTIK2mIKjow1hORCEme2MquQ5buN/wlGc=;
-        b=vwxd0FJzG20ErAwFpJwytDA+XPSph7dO2hF3++04iGbvWolycV3nT1x50PhyF4yHVv
-         t1GLnxbnwGZ+FzFIlfK797RF6mQyiWslVMWv1aGlCeqirOa69WQl16hKksjuQVfFBH02
-         f5piNzeRWcNmB1Tskni+qHzA/ciJm1Nhz77bR7dqguiDaWeWbf4VGMiBpKBfhuOnl6Nu
-         VHMCRnErCFSCik4l0zZGsC6NRnN7/mU95iBQp/fRhvvTk0HgHXm+PjCUenlLDLOJL3dZ
-         iGRwb4BOjNyYMLApd/GQSMApO5uqSogxp5chUadtE3p2WwR/0f3m4A0tA6FeBBrLQJJw
-         PyxQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CFJh1pB+ymgIq6GeGFOOVA6qv78+UxaRhPhcrZuqOqU=;
+        b=JRM7CAtp+UwBv6xirreQyVWPayuxDOFSLKTKVckKbx7Rx+KxLEVNXmSGqMzSdp2Z6q
+         YO9iucZWje5pL3fmVS3etsFYmwx5vafZzTlQbsTUcqLXjtwczZXnqZd4s3ywN1iat7lr
+         TPAmABLjLhO4r8+l6SJfP08HswQGQZG7rxvXY5I4z88q/Yb2IcYs7FvtugqjoV69AOpt
+         69/jEjxh+33gP1xOkzEya0B2Y3nzGyLZrJ8dVBi3xdssaFRfLqslePjsIzVlTQl5Obrb
+         Qlc0tVj1ZpCxKoREQqCJ3Cho6klYomRdH4WGGyEyXoDNCpIANTVnP61sCo1bay5i5yxk
+         djmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6DKLKhCuv0oTIK2mIKjow1hORCEme2MquQ5buN/wlGc=;
-        b=ZH36Hep2xte+7bH1Aa0x+S5GUWa4W0WOJchJ1zKNSKJa0NUpuv2RaRjPNmhSP6FWuw
-         Hqgqef7mxvYFTxyXvfdDCU1BPTds4q/2cEURoX74r4EVmldBwJB9PPWBPtfDILkvPXOn
-         kyGAIdOBq30dvIletJYikH45MubO3w+L2paCVZWGNkCuGMaRfVCtBxEMj5UDm3qoIo1Z
-         qlSC3y6HaIMzueVS4jjrDs01C+k9ZTPyh7jwtSTa0ww70WmvaCuesI7yWkZIS+PnVsXR
-         KjCVtHIo3Xl0EeVT3sJq10QsRjmXl50Fa3FCWmR9I25iHirl+KEmKy+q7I3sfBt0AZ7J
-         i+OA==
-X-Gm-Message-State: AJIora8Z77obhqowluqxc1OKhpLyvKnLljGrHDTMDFFg2FTiPL3uSNVm
-        TGyqD9sOWLBaeCa+KyvJBZ5gtQ==
-X-Google-Smtp-Source: AGRyM1upJ6Koxcaxp7uEGgh1VKOfPB35WonHb+9rPNcP2pyI1+sRFKmJXTmiMFmK1V6L3XLfn6REKg==
-X-Received: by 2002:adf:db8e:0:b0:21e:3fff:6bae with SMTP id u14-20020adfdb8e000000b0021e3fff6baemr9890443wri.184.1658827861173;
-        Tue, 26 Jul 2022 02:31:01 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003a30fbde91dsm23407540wms.20.2022.07.26.02.30.59
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CFJh1pB+ymgIq6GeGFOOVA6qv78+UxaRhPhcrZuqOqU=;
+        b=MtMWe4Ud9Pe0HGzksxzLXFcjE9RU1eXAwm/h8mQvGGUMIbYbbZ7cjZeNt5rDSM0MK/
+         /UK3E5eSQQ38/+PGQVVmAbYXTEyCO7huqvCYyQRoL4cdO0seJD1Rcuiyqf2+ju+/EJpP
+         9UNGGlHka5aDdq1xZI2w0mlLuVHXJcD5GFrgm7COluwFK3w3VM366mlJtbJ7ZxBj/Hnj
+         oqJIoEzORxofNUCLaAfGYti90iUBAnaNilEqV7ccPkpdgjdBdEl4uaNpgRDziF+e2wPl
+         +z+KOl4660E+79I7du4cIWCDubqa+Nsi2Xj4xgLofUkxlGCptIsVA6hzt03vILMgEx7W
+         NIXg==
+X-Gm-Message-State: AJIora+zP1etbBL0PIc4YafvwcLUK7zHMV8fXUyoeysTwINf6mLpvydH
+        9ZljHOYVGZzzV5Jh8MDgSOAcr9itUWZXWA==
+X-Google-Smtp-Source: AGRyM1v0KwOCdsUxtNtLm+e2GHcbmZ0Tq7SMk0xGd3Zx0SWiqHBUMx51jxKV6s76qWXAUaNwb85xEQ==
+X-Received: by 2002:a05:6000:1acf:b0:21d:b410:59b2 with SMTP id i15-20020a0560001acf00b0021db41059b2mr10687875wry.31.1658829100544;
+        Tue, 26 Jul 2022 02:51:40 -0700 (PDT)
+Received: from reki (62-44-238.netrun.cytanet.com.cy. [62.228.44.238])
+        by smtp.gmail.com with ESMTPSA id j13-20020a5d448d000000b002167efdd549sm13726616wrq.38.2022.07.26.02.51.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 02:31:00 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 10:30:58 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Tue, 26 Jul 2022 02:51:39 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 12:51:37 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Vicki Pfau <vi@endrift.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370
- support
-Message-ID: <20220726093058.2fz2p2vg7xpfsnfe@maple.lan>
-References: <20220722102407.2205-1-peterwu.pub@gmail.com>
- <20220722102407.2205-14-peterwu.pub@gmail.com>
- <20220725103128.xtaw2c4y5fobowg7@maple.lan>
- <CABtFH5LUKTZenTktq3v1JZ9xe-yJFsMvCZuwDhmxdT87k0O-zA@mail.gmail.com>
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] USB: gadget: f_hid: Add Set-Feature report
+Message-ID: <20220726125137.7d3757c7@reki>
+In-Reply-To: <20220726005824.2817646-2-vi@endrift.com>
+References: <20220726005824.2817646-1-vi@endrift.com>
+        <20220726005824.2817646-2-vi@endrift.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABtFH5LUKTZenTktq3v1JZ9xe-yJFsMvCZuwDhmxdT87k0O-zA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 10:20:02AM +0800, ChiaEn Wu wrote:
-> On Mon, Jul 25, 2022 at 6:31 PM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> >
-> > On Fri, Jul 22, 2022 at 06:24:07PM +0800, ChiaEn Wu wrote:
-> > > diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
-> > > index a003e02..846dbe7 100644
-> > > --- a/drivers/video/backlight/Kconfig
-> > > +++ b/drivers/video/backlight/Kconfig
-> > > @@ -268,6 +268,18 @@ config BACKLIGHT_MAX8925
-> > >         If you have a LCD backlight connected to the WLED output of MAX8925
-> > >         WLED output, say Y here to enable this driver.
-> > >
-> > > +config BACKLIGHT_MT6370
-> > > +     tristate "MediaTek MT6370 Backlight Driver"
-> > > +     depends on MFD_MT6370
-> > > +     help
-> > > +       This enables support for Mediatek MT6370 Backlight driver.
-> > > +       It's commonly used to drive the display WLED. There are 4 channels
-> > > +       inside, and each channel supports up to 30mA of current capability
-> > > +       with 2048 current steps in exponential or linear mapping curves.
-> >
-> > Does the MT6372 support more steps than this? In other words does it use
-> > a fourteen bit scale or does it use an 11-bit scale at a different
-> > register location?
->
-> Hi Daniel,
->
-> Thanks for your reply.
-> Yes, MT6372 can support 16384 steps and uses a 14-bit scale register
-> location. But the maximum current of each
-> channel of MT6372 is the same as MT6370 and MT6371, both 30mA.
-> The main reason why MT6372 is designed this way is that one of the
-> customers asked for a more delicate
-> adjustment of the backlight brightness. But other customers actually
-> do not have such requirements.
-> Therefore, we designed it this way for maximum compatibility in software.
+=D0=92 Mon, 25 Jul 2022 17:58:26 -0700
+Vicki Pfau <vi@endrift.com> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
 
-I don't think that is an acceptable approach for the upstream kernel.
+> While the HID gadget implementation has been sufficient for devices that =
+only
+> use INTERRUPT transfers, the USB HID standard includes provisions for Set=
+- and
+> Get-Feature report CONTROL transfers that go over endpoint 0. These were
+> previously impossible with the existing implementation, and would either =
+send
+> an empty reply, or stall out.
+>=20
+> As the feature is a standard part of USB HID, it stands to reason that de=
+vices
+> would use it, and that the HID gadget should support it. This patch adds
+> support for host-to-device Set-Feature reports through a new ioctl
+> interface to the hidg class dev nodes.
+>=20
+> Signed-off-by: Vicki Pfau <vi@endrift.com>
 
-To be "compatible" with (broken) software this driver ends up reducing
-the capability of the upstream kernel to the point it becomes unable to
-meet requirements for delicate adjustment (requirements that were
-sufficiently important to change the hardware design so you could meet
-them).
+Won't it break the logic of the existing software that works with /dev/hidg=
+X?
+Will it work if I want my gadget to work the old way?
+It is important that the old behavior is the default without having to use
+the new ioctls. As for these ioctls, since this is an addition to the new A=
+PI,
+they should be documented. I think it's also worth adding these ioctls
+to the userspace example:
+  - Documentation/usb/gadget_hid.rst
+  - Documentation/usb/gadget-testing.rst
 
-
-> > > +
-> > > +       This driver can also be built as a module. If so, the module
-> > > +       will be called "mt6370-backlight".
-> > > +
-> > > [...]
-> > > diff --git a/drivers/video/backlight/mt6370-backlight.c b/drivers/video/backlight/mt6370-backlight.c
-> > > new file mode 100644
-> > > index 0000000..ba00a8f
-> > > --- /dev/null
-> > > +++ b/drivers/video/backlight/mt6370-backlight.c
-> > > [...]
-> > > +static int mt6370_bl_update_status(struct backlight_device *bl_dev)
-> > > +{
-> > > +     struct mt6370_priv *priv = bl_get_data(bl_dev);
-> > > +     int brightness = backlight_get_brightness(bl_dev);
-> > > +     unsigned int enable_val;
-> > > +     u8 brightness_val[2];
-> > > +     int ret;
-> > > +
-> > > +     if (brightness) {
-> > > +             brightness_val[0] = (brightness - 1) & MT6370_BL_DIM2_MASK;
-> > > +             brightness_val[1] = (brightness - 1) >> fls(MT6370_BL_DIM2_MASK);
-> > > +
-> > > +             /*
-> > > +              * To make MT6372 using 14 bits to control the brightness
-> > > +              * backward compatible with 11 bits brightness control
-> > > +              * (like MT6370 and MT6371 do), we left shift the value
-> > > +              * and pad with 1 to remaining bits. Hence, the MT6372's
-> > > +              * backlight brightness will be almost the same as MT6370's
-> > > +              * and MT6371's.
-> > > +              */
-> > > +             if (priv->vid_type == MT6370_VID_6372) {
-> > > +                     brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
-> > > +                     brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
-> > > +             }
-> >
-> > This somewhat depends on the answer to the first question above, but
-> > what is the point of this shifting? If the range is 14-bit then the
-> > driver should set max_brightness to 16384 and present the full range of
-> > the MT6372 to the user.
->
-> So should we make all 16384 steps of MT6372 available to users?
-
-Yes.
-
-
-> Does that mean the DTS needs to be modified as well?
-
-Yes... the property to set initial brightness needs a 14-bit range.
-
-It would also be a good idea to discuss with the DT maintainers whether
-you should introduce a second compatible string (ending 6372) in order
-to allow the DT validation checks to detect accidental use of MT6372
-ranges on MT6370 hardware.
-
-
-> Or, for the reasons, I have just explained (just one customer has this
-> requirement), then we do not make any changes for compatibility
-> reasons?
-
-I'd be curious what the compatiblity reasons are. In other words what
-software breaks?
-
-Normally the userspace backlight code reads the max_brightness property
-and configures things accordingly (and therefore if you the component
-that breaks is something like an Android HAL then fix the HAL instead).
-
-
-Daniel.
+But it seems to me that extending the HID functionality to meet
+the specifications is definitely a good idea :)
