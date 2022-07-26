@@ -2,164 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28755814BA
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 16:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F225814E7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 16:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbiGZOCG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 10:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S233807AbiGZOPa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 10:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233426AbiGZOCF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 10:02:05 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF05264E5
-        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 07:02:03 -0700 (PDT)
-Received: (qmail 386446 invoked by uid 1000); 26 Jul 2022 10:02:02 -0400
-Date:   Tue, 26 Jul 2022 10:02:02 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Cc:     gregkh@linuxfoundation.org, kishon@ti.com, dianders@chromium.org,
-        s.shtylyov@omp.ru, mka@chromium.org, ming.lei@canonical.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Subject: Re: [PATCH v3] USB: HCD: Fix URB giveback issue in tasklet function
-Message-ID: <Yt/z2upnvoWGhkQO@rowland.harvard.edu>
-References: <20220726074918.5114-1-WeitaoWang-oc@zhaoxin.com>
+        with ESMTP id S233594AbiGZOP3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 10:15:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C08DFEC
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 07:15:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFCD2B8166E
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 14:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7049AC433D7
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 14:15:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658844925;
+        bh=Ug/D8G6amUZHytCAwfJ9/if/iHgHD6mzXLE7Jm02SEI=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=GB3aeIqaiE1xWQOkuM2zqfnNM1+pJU8Z+FyJFAjX9CBjKjpHFqf497gsrguSerUZP
+         koNb0UweEqa9BZKrflhpaxmzIWlnVCHYeLKHNmEdGDh96p62Ct3dic8Kc+AgRZcNq2
+         IfShoJ/FrmD1L6SbJGNaBb3FI+KuqH/9mwuvYOsrZn7++GURJih5a6Ol1b4heGDAKh
+         5IUGsS72rG4bbqtccIRHiLsE7Fb+9g3Ol5wt/lhNP7iN8+TngaZPGmpowRAgjyiQyI
+         EujrRN1mIkfiH1U9+v0UfDE1wlnEbogEDnwZ9QNA69xhSyF0v86Yl6D3VN9hzo/sQX
+         VqZ/3LMpGYTHg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 4D5E2C433E6; Tue, 26 Jul 2022 14:15:25 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216282] usb-mass storage
+Date:   Tue, 26 Jul 2022 14:15:25 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-216282-208809-JoSXzSlyJb@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216282-208809@https.bugzilla.kernel.org/>
+References: <bug-216282-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726074918.5114-1-WeitaoWang-oc@zhaoxin.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 03:49:18PM +0800, Weitao Wang wrote:
-> Usb core introduce the mechanism of giveback of URB in tasklet context to
-> reduce hardware interrupt handling time. On some test situation(such as
-> FIO with 4KB block size), when tasklet callback function called to
-> giveback URB, interrupt handler add URB node to the bh->head list also.
-> If check bh->head list again after finish all URB giveback of local_list,
-> then it may introduce a "dynamic balance" between giveback URB and add URB
-> to bh->head list. This tasklet callback function may not exit for a long
-> time, which will cause other tasklet function calls to be delayed. Some
-> real-time applications(such as KB and Mouse) will see noticeable lag.
-> 
-> In order to prevent the tasklet function from occupying the cpu for a long
-> time at a time, new URBS will not be added to the local_list even though
-> the bh->head list is not empty. But also need to ensure the left URB
-> giveback to be processed in time, so add a member high_prio for structure
-> giveback_urb_bh to prioritize tasklet and schelule this tasklet again if
-> bh->head list is not empty.
-> 
-> At the same time, we are able to prioritize tasklet through structure
-> member high_prio. So, replace the local high_prio_bh variable with this
-> structure member in usb_hcd_giveback_urb.
-> 
-> Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-> ---
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+--- Comment #8 from Alan Stern (stern@rowland.harvard.edu) ---
+Some of the things you wrote above are not correct.  "When you Turn-on the
+USB3.0 to SATA controller, electrons travel near the speed of light."  Not =
+true
+at all; electric waves travel near the speed of light but the electrons
+themselves move at only a few centimeters per second (bulk motion).
 
-> v2->v3
->  - Add more detail info about how to patch this issue.
->  - Change initial value of boolean variable high_prio from 1 to true.
-> 
->  drivers/usb/core/hcd.c  | 26 +++++++++++++++-----------
->  include/linux/usb/hcd.h |  1 +
->  2 files changed, 16 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 06eea8848ccc..11c8ea0cccc8 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -1691,7 +1691,6 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
->  
->  	spin_lock_irq(&bh->lock);
->  	bh->running = true;
-> - restart:
->  	list_replace_init(&bh->head, &local_list);
->  	spin_unlock_irq(&bh->lock);
->  
-> @@ -1705,10 +1704,17 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
->  		bh->completing_ep = NULL;
->  	}
->  
-> -	/* check if there are new URBs to giveback */
-> +	/*
-> +	 * giveback new URBs next time to prevent this function
-> +	 * from not exiting for a long time.
-> +	 */
->  	spin_lock_irq(&bh->lock);
-> -	if (!list_empty(&bh->head))
-> -		goto restart;
-> +	if (!list_empty(&bh->head)) {
-> +		if (bh->high_prio)
-> +			tasklet_hi_schedule(&bh->bh);
-> +		else
-> +			tasklet_schedule(&bh->bh);
-> +	}
->  	bh->running = false;
->  	spin_unlock_irq(&bh->lock);
->  }
-> @@ -1737,7 +1743,7 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
->  void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
->  {
->  	struct giveback_urb_bh *bh;
-> -	bool running, high_prio_bh;
-> +	bool running;
->  
->  	/* pass status to tasklet via unlinked */
->  	if (likely(!urb->unlinked))
-> @@ -1748,13 +1754,10 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
->  		return;
->  	}
->  
-> -	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
-> +	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
->  		bh = &hcd->high_prio_bh;
-> -		high_prio_bh = true;
-> -	} else {
-> +	else
->  		bh = &hcd->low_prio_bh;
-> -		high_prio_bh = false;
-> -	}
->  
->  	spin_lock(&bh->lock);
->  	list_add_tail(&urb->urb_list, &bh->head);
-> @@ -1763,7 +1766,7 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
->  
->  	if (running)
->  		;
-> -	else if (high_prio_bh)
-> +	else if (bh->high_prio)
->  		tasklet_hi_schedule(&bh->bh);
->  	else
->  		tasklet_schedule(&bh->bh);
-> @@ -2959,6 +2962,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
->  
->  	/* initialize tasklets */
->  	init_giveback_urb_bh(&hcd->high_prio_bh);
-> +	hcd->high_prio_bh.high_prio = true;
->  	init_giveback_urb_bh(&hcd->low_prio_bh);
->  
->  	/* enable irqs just before we start the controller,
-> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-> index 2c1fc9212cf2..98d1921f02b1 100644
-> --- a/include/linux/usb/hcd.h
-> +++ b/include/linux/usb/hcd.h
-> @@ -66,6 +66,7 @@
->  
->  struct giveback_urb_bh {
->  	bool running;
-> +	bool high_prio;
->  	spinlock_t lock;
->  	struct list_head  head;
->  	struct tasklet_struct bh;
-> -- 
-> 2.32.0
+Anyway, the information you reported doesn't indicate what's going wrong.  I
+don't think it's simply a matter of waiting for the disk to spin up; the
+commands sent by the kernel have a 30-second timeout and that should be ple=
+nty
+of time.
+
+A usbmon trace of a non-working connection should help.  Before you plug in=
+ the
+USB cable, do:
+
+   cat /sys/kernel/debug/usb/usbmon/2u >mon.out
+
+Then after the drive has been plugged in and the drive has failed to appear,
+kill the "cat" process with ^C and attach the mon.out file to this bug repo=
+rt.
+
+In fact, you might want to do this twice: once where the drive doesn't work,
+and once where it does work, for comparison.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
