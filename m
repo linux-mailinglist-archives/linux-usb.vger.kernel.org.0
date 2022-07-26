@@ -2,93 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3ED581308
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 14:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28755814BA
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 16:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbiGZMS0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 08:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S238840AbiGZOCG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 10:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbiGZMSZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 08:18:25 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D142E13F9E;
-        Tue, 26 Jul 2022 05:18:22 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id i13so8372689edj.11;
-        Tue, 26 Jul 2022 05:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uFNBuksRAUHG8SQKGfIMoqHF0ZeQIQql/Pes//0/1FE=;
-        b=p25ViQRAGjIzoqbyw32XacT85JsM0ATOnc/aJ7f4OQUM+aio/Y993fmTKcDeocHCd9
-         Ip6z+1IDcK1emNmby8GCnHh8nTAZJOit+jilIBMN3MN8BHArbq5Y7jX0AdPoo5PJRGP+
-         qBAvo4C0uBT25Q/8kqgwUa9AThgrYs6OVHHMaOpyea8oHPpg79QNvmgM1Uz/oDBPwnAl
-         AufVZdMZG9DZBf3rhJ84O3aYj5LM94YzLZW6y/dSBdJHdO6Du6+eIPe3NFTEc8T9fHX5
-         OTqmGMZhfJaXrcwzJtTP8MEOT5b0nUwAv/+Z19lTei3pSAbzl6AU10dk5npcBMsgvF/p
-         dQxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uFNBuksRAUHG8SQKGfIMoqHF0ZeQIQql/Pes//0/1FE=;
-        b=cNPpWFqrhdUYHBqsgEaKSBbbCWj+L+Ph7rG5Vg/7tJqlHs9dmJPxGmZAUZLAI3R4Ik
-         LQNHuKIA+fNSCbYisXlsazusZ18iTXASS+Xw0fUFivYKXPm3I5ESHF3u6pVcO+Dqs5DX
-         EzKjBjWvyXHgqqHff8Kqt5vRgEv0s93RtydqdX4/F7wWDygs95G/ytCu2dTC8J8sREI0
-         iWWz1brG+cEbncvzjLJ1Ep5lEVqRdHDDLlgqgiJdRBgxqSO9cB9XmoLOCPCc6NOFIjsJ
-         eRBoOct2RcXQE9Rlb6hZQQt6x03vQpSpYdZWNXIw8wc49M3/zyIGiYbhFsGwcmWK84Ku
-         GnEQ==
-X-Gm-Message-State: AJIora9udDXmKi0XUWumhr7oTYzH83T+bzAVHWjLznKPMo+0lGED8+7i
-        KnuVjbACRyRoSw2A6Eg3XQwXUwwa4f0Au59k6rY=
-X-Google-Smtp-Source: AGRyM1uzT38suKCsbCmFfyzBHLwwuulTdOWUnr3cD4+NYEDfZRxNjDpqwVCvJTRb6rCtiz3um/F+ZSKguXrhc6flE20=
-X-Received: by 2002:a05:6402:50c9:b0:43c:163a:4d5f with SMTP id
- h9-20020a05640250c900b0043c163a4d5fmr7812854edb.386.1658837901255; Tue, 26
- Jul 2022 05:18:21 -0700 (PDT)
+        with ESMTP id S233426AbiGZOCF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 10:02:05 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF05264E5
+        for <linux-usb@vger.kernel.org>; Tue, 26 Jul 2022 07:02:03 -0700 (PDT)
+Received: (qmail 386446 invoked by uid 1000); 26 Jul 2022 10:02:02 -0400
+Date:   Tue, 26 Jul 2022 10:02:02 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+Cc:     gregkh@linuxfoundation.org, kishon@ti.com, dianders@chromium.org,
+        s.shtylyov@omp.ru, mka@chromium.org, ming.lei@canonical.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+Subject: Re: [PATCH v3] USB: HCD: Fix URB giveback issue in tasklet function
+Message-ID: <Yt/z2upnvoWGhkQO@rowland.harvard.edu>
+References: <20220726074918.5114-1-WeitaoWang-oc@zhaoxin.com>
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
- <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com> <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
-In-Reply-To: <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 26 Jul 2022 14:17:44 +0200
-Message-ID: <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
-Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
- sink type LED Indicator support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726074918.5114-1-WeitaoWang-oc@zhaoxin.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,39 +38,128 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 1:46 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> On Mon, Jul 25, 2022 at 4:41 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
+On Tue, Jul 26, 2022 at 03:49:18PM +0800, Weitao Wang wrote:
+> Usb core introduce the mechanism of giveback of URB in tasklet context to
+> reduce hardware interrupt handling time. On some test situation(such as
+> FIO with 4KB block size), when tasklet callback function called to
+> giveback URB, interrupt handler add URB node to the bh->head list also.
+> If check bh->head list again after finish all URB giveback of local_list,
+> then it may introduce a "dynamic balance" between giveback URB and add URB
+> to bh->head list. This tasklet callback function may not exit for a long
+> time, which will cause other tasklet function calls to be delayed. Some
+> real-time applications(such as KB and Mouse) will see noticeable lag.
+> 
+> In order to prevent the tasklet function from occupying the cpu for a long
+> time at a time, new URBS will not be added to the local_list even though
+> the bh->head list is not empty. But also need to ensure the left URB
+> giveback to be processed in time, so add a member high_prio for structure
+> giveback_urb_bh to prioritize tasklet and schelule this tasklet again if
+> bh->head list is not empty.
+> 
+> At the same time, we are able to prioritize tasklet through structure
+> member high_prio. So, replace the local high_prio_bh variable with this
+> structure member in usb_hcd_giveback_urb.
+> 
+> Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
 
-...
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-> > > +struct mt6370_led {
-> > > +       union {
-> > > +               struct led_classdev isink;
-> > > +               struct led_classdev_mc mc;
-> > > +       };
-> >
-> > Where is the field that makes union work?
->
-> Just for saving memory space.
-> Because these led_classdevs do not be used at the same time.
-> Or do you think it would be better to rewrite it as follows?
-> -------------------------------------------------------------------------------------
-> struct mt6370_led {
->        struct led_classdev isink;
->        struct led_classdev_mc mc;
->        struct mt6370_priv *priv;
->        u32 default_state;
->        u32 index;
-> };
-> -------------------------------------------------------------------------------------
-
-You obviously didn't get what I'm talking about...
-Each union to work properly should have an associated variable that
-holds the information of which field of the union is in use. Do you
-have such a variable? If not, how does your code know which one to
-use? If yes, add a proper comment there.
-
--- 
-With Best Regards,
-Andy Shevchenko
+> v2->v3
+>  - Add more detail info about how to patch this issue.
+>  - Change initial value of boolean variable high_prio from 1 to true.
+> 
+>  drivers/usb/core/hcd.c  | 26 +++++++++++++++-----------
+>  include/linux/usb/hcd.h |  1 +
+>  2 files changed, 16 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 06eea8848ccc..11c8ea0cccc8 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1691,7 +1691,6 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+>  
+>  	spin_lock_irq(&bh->lock);
+>  	bh->running = true;
+> - restart:
+>  	list_replace_init(&bh->head, &local_list);
+>  	spin_unlock_irq(&bh->lock);
+>  
+> @@ -1705,10 +1704,17 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+>  		bh->completing_ep = NULL;
+>  	}
+>  
+> -	/* check if there are new URBs to giveback */
+> +	/*
+> +	 * giveback new URBs next time to prevent this function
+> +	 * from not exiting for a long time.
+> +	 */
+>  	spin_lock_irq(&bh->lock);
+> -	if (!list_empty(&bh->head))
+> -		goto restart;
+> +	if (!list_empty(&bh->head)) {
+> +		if (bh->high_prio)
+> +			tasklet_hi_schedule(&bh->bh);
+> +		else
+> +			tasklet_schedule(&bh->bh);
+> +	}
+>  	bh->running = false;
+>  	spin_unlock_irq(&bh->lock);
+>  }
+> @@ -1737,7 +1743,7 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+>  void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+>  {
+>  	struct giveback_urb_bh *bh;
+> -	bool running, high_prio_bh;
+> +	bool running;
+>  
+>  	/* pass status to tasklet via unlinked */
+>  	if (likely(!urb->unlinked))
+> @@ -1748,13 +1754,10 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+>  		return;
+>  	}
+>  
+> -	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
+> +	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
+>  		bh = &hcd->high_prio_bh;
+> -		high_prio_bh = true;
+> -	} else {
+> +	else
+>  		bh = &hcd->low_prio_bh;
+> -		high_prio_bh = false;
+> -	}
+>  
+>  	spin_lock(&bh->lock);
+>  	list_add_tail(&urb->urb_list, &bh->head);
+> @@ -1763,7 +1766,7 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+>  
+>  	if (running)
+>  		;
+> -	else if (high_prio_bh)
+> +	else if (bh->high_prio)
+>  		tasklet_hi_schedule(&bh->bh);
+>  	else
+>  		tasklet_schedule(&bh->bh);
+> @@ -2959,6 +2962,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
+>  
+>  	/* initialize tasklets */
+>  	init_giveback_urb_bh(&hcd->high_prio_bh);
+> +	hcd->high_prio_bh.high_prio = true;
+>  	init_giveback_urb_bh(&hcd->low_prio_bh);
+>  
+>  	/* enable irqs just before we start the controller,
+> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+> index 2c1fc9212cf2..98d1921f02b1 100644
+> --- a/include/linux/usb/hcd.h
+> +++ b/include/linux/usb/hcd.h
+> @@ -66,6 +66,7 @@
+>  
+>  struct giveback_urb_bh {
+>  	bool running;
+> +	bool high_prio;
+>  	spinlock_t lock;
+>  	struct list_head  head;
+>  	struct tasklet_struct bh;
+> -- 
+> 2.32.0
