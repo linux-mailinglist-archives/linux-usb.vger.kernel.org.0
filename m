@@ -2,97 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BFB580BD5
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 08:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BB7580BDE
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Jul 2022 08:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237774AbiGZGqE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Jul 2022 02:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S237934AbiGZGrb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Jul 2022 02:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237863AbiGZGp6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 02:45:58 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011BD21253;
-        Mon, 25 Jul 2022 23:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658817957; x=1690353957;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sJTf3AJoEE0c1OYNZJV14wvr0FYVG9lw9EJa1bA1O5Y=;
-  b=du76/kFRG6hTqC6/zS92HjhIcl+4+LIIK3YQHVQfx4Tg1lztKudOX+HA
-   QfCMpRx3RL7OxDqz+mM7H0SMKDKrDc4JxNuMG6jzkHvA+aKiiaMD578wP
-   Xlpxk9JH6Vz0lQfGFalrWiLRMdVWufRSQNpNfaUGT2pw+gA/7h2qtfhwR
-   Y=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 25 Jul 2022 23:45:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 23:45:56 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Jul 2022 23:45:56 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Jul 2022 23:45:54 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jack Pham <quic_jackp@quicinc.com>
-CC:     <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH] usb: typec: ucsi: Acknowledge the GET_ERROR_STATUS command completion
-Date:   Tue, 26 Jul 2022 14:45:49 +0800
-Message-ID: <1658817949-4632-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S232263AbiGZGr3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Jul 2022 02:47:29 -0400
+Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [210.0.225.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D909A1EAFE;
+        Mon, 25 Jul 2022 23:47:26 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Tue, 26 Jul
+ 2022 14:47:00 +0800
+Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Tue, 26 Jul
+ 2022 14:46:59 +0800
+Message-ID: <3f2c941b-94cd-8357-13de-8656486e8cbd@zhaoxin.com>
+Date:   Tue, 26 Jul 2022 14:46:57 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] USB: HCD: Fix URB giveback issue in tasklet function
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <kishon@ti.com>,
+        <dianders@chromium.org>, <s.shtylyov@omp.ru>, <mka@chromium.org>,
+        <ming.lei@canonical.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tonywwang@zhaoxin.com>,
+        <weitaowang@zhaoxin.com>, <CobeChen@zhaoxin.com>
+References: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
+ <Yt6haeQBseJOEx1r@rowland.harvard.edu>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <Yt6haeQBseJOEx1r@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We found PPM will not send any notification after it report error status
-and OPM issue GET_ERROR_STATUS command to read the details about error.
+On 2022/7/25 21:58, Alan Stern wrote:
+> On Mon, Jul 25, 2022 at 02:52:51PM +0800, Weitao Wang wrote:
+> 
+> This is basically okay.  Just a couple of small comments...
+> 
+>> Usb core introduce the mechanism of giveback of URB in tasklet context to
+>> reduce hardware interrupt handling time. On some test situation(such as
+>> FIO with 4KB block size), when tasklet callback function called to
+>> giveback URB, interrupt handler add URB node to the bh->head list also.
+>> If check bh->head list again after finish all URB giveback of local_list,
+>> then it may introduce a "dynamic balance" between giveback URB and add URB
+>> to bh->head list. This tasklet callback function may not exit for a long
+>> time, which will cause other tasklet function calls to be delayed. Some
+>> real-time applications(such as KB and Mouse) will see noticeable lag.
+>>
+>> Fix this issue by taking new URBs giveback in next tasklet function call.
+>> Add a member high_prio for structure giveback_urb_bh and replace the local
+>> high_prio_bh variable with this structure member in usb_hcd_giveback_urb.
+> 
+> The patch description should do more than say what the new code _is_ --
+> we can see that easily enough by reading the patch.  The description
+> should explain _why_ the code was changed.
+> 
+Okay, I will improve this patch description.
 
-According UCSI spec, PPM may clear the Error Status Data after the OPM
-has acknowledged the command completion.
+>> -	/* check if there are new URBs to giveback */
+>> +	/* giveback new URBs next time to prevent this function from
+>> +	 * not exiting for a long time.
+>> +	 */
+> 
+> Minor stylistic issue: The currently accepted format for multi-line
+> comments is like this:
+> 
+This notes will be improved in next patch version also.
+Thanks for your suggestion.
 
-This change add operation to acknowledge the command completion from PPM.
-
-Fixes: bdc62f2bae8f (usb: typec: ucsi: Simplified registration and I/O API)
-Cc: <stable@vger.kernel.org> # 5.10
-Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index cbd862f..1aea464 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -76,6 +76,10 @@ static int ucsi_read_error(struct ucsi *ucsi)
- 	if (ret)
- 		return ret;
- 
-+	ret = ucsi_acknowledge_command(ucsi);
-+	if (ret)
-+		return ret;
-+
- 	switch (error) {
- 	case UCSI_ERROR_INCOMPATIBLE_PARTNER:
- 		return -EOPNOTSUPP;
--- 
-2.7.4
-
+weitao
+> 	/*
+> 	 * Blah blah blah
+> 	 * Blah blah blah
+> 	 */
+> 
+> Alan Stern
+> .
