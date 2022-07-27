@@ -2,47 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE0458230A
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 11:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE66058232E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 11:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiG0JZr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 05:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S230404AbiG0JeV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 05:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiG0JZp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 05:25:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCF75F93;
-        Wed, 27 Jul 2022 02:25:44 -0700 (PDT)
+        with ESMTP id S231214AbiG0JeO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 05:34:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B2033E37;
+        Wed, 27 Jul 2022 02:34:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D7B461793;
-        Wed, 27 Jul 2022 09:25:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A8AC433D7;
-        Wed, 27 Jul 2022 09:25:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FA516178F;
+        Wed, 27 Jul 2022 09:34:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33584C433D6;
+        Wed, 27 Jul 2022 09:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658913943;
-        bh=7plC1FNzgarZx4ZMqwPL4bhSO98RGTgZpyEfnpz5Q1E=;
+        s=korg; t=1658914452;
+        bh=6JmACeP5ozhHq4rfyR4QydvrbyG2gSDUNRgLQiHN5mo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hmkfXNhRKNzesoJN+XiQKkHlxf4fmPVTapaLIkbnxxvm1KWK/h59bOK86XRLApzCc
-         b58k+4Vrhx8tB5EE/HEK54x52YVbNlj9NgKDKXs9uUvW0O/CMOc4nq+SLwPZ2IgCis
-         Q5aXCAIjMpOlU9YlFjyHS5mJjJfDz2NLPTax2SSQ=
-Date:   Wed, 27 Jul 2022 11:25:40 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Andy Guo =?utf-8?B?KOmDreWNq+aWjCk=?= <guoweibin@inspur.com>
-Cc:     "b-liu@ti.com" <b-liu@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: musb: Fix musb_gadget.c rxstate may cause
- request->buf overflow problems
-Message-ID: <YuEElC563HN5ldMu@kroah.com>
-References: <200f38d3e3eb44ec8ec8f8e9f210f131@inspur.com>
+        b=Qc1SBcSTBva8z84KNsURkaAhFrDPd1tPb8VbjXJXdhuA54t5SFhzcH7ZF0IsuhzEZ
+         h0fsbSCw02rGrQ8+EWVKk7B+xZhUjY5FnrLXl6Ud8iwq5hjVPBPt36Yeoc1E2pI759
+         peDyI6yC3oH2WZO9EmLuLllkC2kSH35kKBERzKNU=
+Date:   Wed, 27 Jul 2022 11:34:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
+ probed properly
+Message-ID: <YuEGkkWV5s+q4hbf@kroah.com>
+References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
+ <YtAv8R7QlTZCjvRO@kroah.com>
+ <YtA78UfeibaQW4pf@google.com>
+ <b491bb80-aef5-f90b-4763-68fa5435b6d9@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <200f38d3e3eb44ec8ec8f8e9f210f131@inspur.com>
+In-Reply-To: <b491bb80-aef5-f90b-4763-68fa5435b6d9@quicinc.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,51 +59,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 08:43:34AM +0000, Andy Guo (郭卫斌) wrote:
-> From: guoweibin <guoweibin@inspur.com>
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-Your From: in your email has your real name, why not use that instead of
-just putting your email alias here?
+A: No.
+Q: Should I include quotations after my reply?
 
+http://daringfireball.net/2007/07/on_top
+
+On Wed, Jul 27, 2022 at 02:56:06PM +0530, Krishna Kurapati PSSNV wrote:
+> Hi Greg,
 > 
-> when the rxstate function executes the 'goto buffer_aint_mapped' code
-> branch, it will always copy the fifocnt bytes data to request->buf,
-> which may cause request->buf out of bounds. for Ethernet-over-USB will
-> cause skb_over_panic when a packet larger than mtu is recived.
+> � As Mathias pointed out in another thread, no issue was seen so far on
+> present QC targets as wakeup-source property was added recently and only for
+> SC7180 and SC7280. We ran into some issues like wakeup from system suspend
+> in host mode wasn't happening although we enabled wakeup-source in SC7180
+> that eventually led us to this bug. But i tried to add debug prints to
+> follow the code flow and see that the issue is present on SM8350 as well :
+> *"supplier 88e9000.phy-wrapper not ready" *and deferring dwc3 probe.**This
+> doesn't seem to be specific to SC7180.
 
-How can we get a bigger packet than mtu?
+I have no context here at all, sorry.
 
-> 
-> Fix it by add the length check :
-> fifocnt = min_t(unsigned, request->length - request->actual, fifocnt);
-> 
-> Signed-off-by: guoweibin <guoweibin@inspur.com>
+Remember, some of us get thousands of emails a week to handle and
+review.  I don't know what other thread you are talking about, nor what
+the issue here is at all, nor even what the patch is.
 
-Same here.
-
-> ---
->  v2:
-> -fix format error
->  drivers/usb/musb/musb_gadget.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-> index 51274b87f46c..4ad5a1f31d7e 100644
-> --- a/drivers/usb/musb/musb_gadget.c
-> +++ b/drivers/usb/musb/musb_gadget.c
-> @@ -760,6 +760,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
->  			musb_writew(epio, MUSB_RXCSR, csr);
->  
->  buffer_aint_mapped:
-> +			fifo_count = min_t(unsigned, request->length - request->actual, fifo_count);
-
-Why the case to "unsigned"?
-
-And if we get a too big packet, shouldn't we drop it?
-
-And what does this have to do with a usb-ethernet device, this is in the
-generic musb code, not an ethernet driver.
-
-thanks,
+totally confused,
 
 greg k-h
