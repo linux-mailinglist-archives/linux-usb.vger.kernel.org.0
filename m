@@ -2,93 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE66058232E
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 11:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB4858234E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 11:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiG0JeV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 05:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S231202AbiG0JiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 05:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiG0JeO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 05:34:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B2033E37;
-        Wed, 27 Jul 2022 02:34:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231629AbiG0JiO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 05:38:14 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8014247B9A;
+        Wed, 27 Jul 2022 02:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1658914691; x=1690450691;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OzYJ1HAiwxCqKstvTbidtou/YL9g88MGig64r0nWnVw=;
+  b=aNeaQNmmHY29thqsSw8GOw0fDq4B7lw7J82QrtKTYrrOAh2JYmbVmL9a
+   7vNU9VAiS0rrx5fwKKxx+bUg3C2UdtOoj+ovqVQfPbusblPhQIXy4ryE5
+   37BIKQp3Z4+Y58GxCAR2gUTeDIqw9XoREOAZrfHYFC1k2qTvZOV9psKPs
+   G1Y/YPzUAYa1Cz7qjWCYOlrK8c1i/fWZvSHVdUXFFENqyBSekxTc1D8Eo
+   ZOD62a9MhX73woMFLEguwyQEjZbqdxX9C8OR7iN+BWs2AlQVMNXxQxvrS
+   uRAu0J95LNl7dTu4YF3/RSwPtPKZ07l44O8JojNIUWf1y6arRUs4g5j94
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,195,1654552800"; 
+   d="scan'208";a="25289990"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 27 Jul 2022 11:38:05 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 27 Jul 2022 11:38:05 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 27 Jul 2022 11:38:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1658914685; x=1690450685;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OzYJ1HAiwxCqKstvTbidtou/YL9g88MGig64r0nWnVw=;
+  b=FlSgKtPatqXzQybeO1M5i+vW3M+lts1fznYqlX/bnsNyvfB4OV0vG/gZ
+   dvkO3dIVeqtle4Jb7OwQw4Ld6yPWTyNiXtG2SY/2mG8IoNLpXpbX2dd4r
+   H6mczfS2/S75oqVfA3vV75nFy95v5WP8ohJ3rA4MUdM6G78zvbbyTlruz
+   HvPiD2v7W4fnpgBDQbaezisQ8Vws835x3iHIKsjmr13KBg5l50fwYZgEO
+   ZBs+h2KLtc22TUkSVrmMrv7jUE88HPWi5+nw5zW4gbKSrwsdzB+vifFX9
+   KGWaHaKEsIzdmpNiS7A/cBeuetxbWPU1qBKmO8FEIfaRQKtJxRqkporsO
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,195,1654552800"; 
+   d="scan'208";a="25289987"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 27 Jul 2022 11:38:04 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FA516178F;
-        Wed, 27 Jul 2022 09:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33584C433D6;
-        Wed, 27 Jul 2022 09:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658914452;
-        bh=6JmACeP5ozhHq4rfyR4QydvrbyG2gSDUNRgLQiHN5mo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qc1SBcSTBva8z84KNsURkaAhFrDPd1tPb8VbjXJXdhuA54t5SFhzcH7ZF0IsuhzEZ
-         h0fsbSCw02rGrQ8+EWVKk7B+xZhUjY5FnrLXl6Ud8iwq5hjVPBPt36Yeoc1E2pI759
-         peDyI6yC3oH2WZO9EmLuLllkC2kSH35kKBERzKNU=
-Date:   Wed, 27 Jul 2022 11:34:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
- probed properly
-Message-ID: <YuEGkkWV5s+q4hbf@kroah.com>
-References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
- <YtAv8R7QlTZCjvRO@kroah.com>
- <YtA78UfeibaQW4pf@google.com>
- <b491bb80-aef5-f90b-4763-68fa5435b6d9@quicinc.com>
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C6C12280056;
+        Wed, 27 Jul 2022 11:38:04 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v3 1/3] dt-bindings: usb: Add binding for TI USB8041 hub controller
+Date:   Wed, 27 Jul 2022 11:37:59 +0200
+Message-Id: <20220727093801.687361-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b491bb80-aef5-f90b-4763-68fa5435b6d9@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+The TI USB8041 is a USB 3.0 hub controller with 4 ports.
 
-A: No.
-Q: Should I include quotations after my reply?
+This initial version of the binding only describes USB related aspects
+of the USB8041, it does not cover the option of connecting the controller
+as an i2c slave.
 
-http://daringfireball.net/2007/07/on_top
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+Thanks Matthias for your review.
 
-On Wed, Jul 27, 2022 at 02:56:06PM +0530, Krishna Kurapati PSSNV wrote:
-> Hi Greg,
-> 
->   As Mathias pointed out in another thread, no issue was seen so far on
-> present QC targets as wakeup-source property was added recently and only for
-> SC7180 and SC7280. We ran into some issues like wakeup from system suspend
-> in host mode wasn't happening although we enabled wakeup-source in SC7180
-> that eventually led us to this bug. But i tried to add debug prints to
-> follow the code flow and see that the issue is present on SM8350 as well :
-> *"supplier 88e9000.phy-wrapper not ready" *and deferring dwc3 probe.**This
-> doesn't seem to be specific to SC7180.
+Changes in v3:
+* Put myself as maintainer
+* Removed quotes around description
 
-I have no context here at all, sorry.
+Changes in v2:
+* Removed 'items' from compatible, it's just en enum now
+* Rename reset-gpio to reset-gpios
+* Use 'items' for reset-gpios
+* Adjust description of vdd-supply
+* Sorted required list
+* Adjusted example
 
-Remember, some of us get thousands of emails a week to handle and
-review.  I don't know what other thread you are talking about, nor what
-the issue here is at all, nor even what the patch is.
+.../devicetree/bindings/usb/ti,usb8041.yaml   | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,usb8041.yaml
 
-totally confused,
+diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+new file mode 100644
+index 000000000000..e04fbd8ab0b7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/ti,usb8041.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Binding for the TI USB8041 USB 3.0 hub controller
++
++maintainers:
++  - Alexander Stein <alexander.stein@ew.tq-group.com>
++
++allOf:
++  - $ref: usb-device.yaml#
++
++properties:
++  compatible:
++    enum:
++      - usb451,8140
++      - usb451,8142
++
++  reg: true
++
++  reset-gpios:
++    items:
++      - description: GPIO specifier for GRST# pin.
++
++  vdd-supply:
++    description:
++      VDD power supply to the hub
++
++  peer-hub:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle to the peer hub on the controller.
++
++required:
++  - compatible
++  - reg
++  - peer-hub
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    usb {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        /* 2.0 hub on port 1 */
++        hub_2_0: hub@1 {
++          compatible = "usb451,8142";
++          reg = <1>;
++          peer-hub = <&hub_3_0>;
++          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++        };
++
++        /* 3.0 hub on port 2 */
++        hub_3_0: hub@2 {
++          compatible = "usb451,8140";
++          reg = <2>;
++          peer-hub = <&hub_2_0>;
++          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++        };
++    };
+-- 
+2.25.1
 
-greg k-h
