@@ -2,106 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFE55832E1
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 21:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA69583415
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 22:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiG0TGU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 15:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S233637AbiG0U2l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 16:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiG0TGH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 15:06:07 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743B052DC0;
-        Wed, 27 Jul 2022 11:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=xQPcyNqfjHCOhqiEMs+qhBn/AdkzJIW6wtElPE1gWHM=; b=cyhYqOPO9mtziI7kmxVZW7y977
-        pinsDTaUIrnXw8icTKZ68o4V8bERQlroAocunCsFNJ2uEwoHJbk7mJe1k33I+pm6O/GCqElVfroLs
-        D5PJn/gNp50Om6qDmtnTnHqZsMW+YJhc0iW5gW+40sV4wh7aQAVemNSAlUl+tlmXKNGg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oGlre-00Bi3v-0D; Wed, 27 Jul 2022 20:34:34 +0200
-Date:   Wed, 27 Jul 2022 20:34:33 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Hayes Wang <hayeswang@realtek.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: handling MAC set by user space in reset_resume() of r8152
-Message-ID: <YuGFOU7oKlAGZjTa@lunn.ch>
-References: <2397d98d-e373-1740-eb5f-8fe795a0352a@suse.com>
+        with ESMTP id S229669AbiG0U2f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 16:28:35 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6266501A1
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 13:28:34 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id w7so16980496ply.12
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 13:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XvciCU2AYsWe5MRwhd2wBflTqlUl2ihwI9A0kzIcY+c=;
+        b=MeVdO4IUegy5Bajb8c9ArRN1S99Z2vAWNDzHzQ5kSjaQZLakofVSxUKrdAz7PXNDdB
+         +NBceYGM4SeyT3TRCNEGE+mHfBexu6T4X3xteDM9FGFtaWKFaTV3r6mSc4xiT8KxxGkq
+         sHKp/gQturtMAnw6R0BDj1xLY8N7YFCnSChqg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XvciCU2AYsWe5MRwhd2wBflTqlUl2ihwI9A0kzIcY+c=;
+        b=lcyiTqCd6uYx6FR7iGVB7/58mz550uzZjVfvAEtSzI8ZbEXhYJfC+T4wWexl2Mxzds
+         sP3nfPQkDAM8aUyaAWPhMzlXRvouYBeBSMS/MBliwSb/AmeZMCGAmAKimZGDGbBrRqee
+         9Fzv37po/WMA3h+9HX3yJEae1JcUgmguFRSDVuACa1Mje5fbj8kZjc8WBNuhAEpPdVZD
+         YQIIw8OL/vTS66Ct7XzgClywr+zPiz+s4xAYAcaC0DVTuQPgKb8YbMqo0UW81VEX0T2y
+         WQTnXJCRyloKWLW0pZ5yvzLAE5yt35wqFvXoqEG6OZb20Lbo+yxFP+qBODpCNr6CKvRW
+         sCDw==
+X-Gm-Message-State: AJIora/UstOUtJS1S4EezhIciwvMXLhtpD+hdF5Dv95GnDjgUYtZQpkS
+        Y2l0Jfii867VFaJ0D6doEETpUw==
+X-Google-Smtp-Source: AGRyM1uTuunb9fRvJraTJHxm5+wbgxHDPckpbi1E/dm4a6K47mogRY79H0wWQOrfmN0nyVlAfp4W8w==
+X-Received: by 2002:a17:902:7442:b0:16d:b480:31eb with SMTP id e2-20020a170902744200b0016db48031ebmr3961943plt.157.1658953714191;
+        Wed, 27 Jul 2022 13:28:34 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:472c:7351:bacf:5228])
+        by smtp.gmail.com with UTF8SMTPSA id y12-20020aa79aec000000b005252a06750esm14239779pfp.182.2022.07.27.13.28.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 13:28:33 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 13:28:32 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: usb: Add binding for TI USB8041 hub
+ controller
+Message-ID: <YuGf8KDhvPDzggZk@google.com>
+References: <20220727093801.687361-1-alexander.stein@ew.tq-group.com>
+ <5d442d08-0991-9912-d5f7-cb2092c3c0f3@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2397d98d-e373-1740-eb5f-8fe795a0352a@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5d442d08-0991-9912-d5f7-cb2092c3c0f3@linaro.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 01:39:43PM +0200, Oliver Neukum wrote:
-> Hi,
-> 
-> looking at the driver it looks to me like the address
-> provided to ndo_set_mac_address() is thrown away after use.
-> That looks problematic to me, because reset_resume()
-> should redo the operation.
-> What do you think?
-> 
-> 	Regards
-> 		Oliver
+Hi Alexander,
 
-> From 19fc972a5cc98197bc81a7c56dd5d68e3fdfc36b Mon Sep 17 00:00:00 2001
-> From: Oliver Neukum <oneukum@suse.com>
-> Date: Wed, 27 Jul 2022 13:29:42 +0200
-> Subject: [PATCH] r8152: restore external MAC in reset_resume
+On Wed, Jul 27, 2022 at 11:56:55AM +0200, Krzysztof Kozlowski wrote:
+> On 27/07/2022 11:37, Alexander Stein wrote:
+> > The TI USB8041 is a USB 3.0 hub controller with 4 ports.
+> > 
+> > This initial version of the binding only describes USB related aspects
+> > of the USB8041, it does not cover the option of connecting the controller
+> > as an i2c slave.
+> > 
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 > 
-> If user space has set the MAC of the interface,
-> reset_resume() must restore that setting rather
-> than redetermine the MAC like if te interface
-> is probed regularly.
 > 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/net/usb/r8152.c | 34 +++++++++++++++++++++++++---------
->  1 file changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 0f6efaabaa32..5cf74b984655 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -923,6 +923,7 @@ struct r8152 {
->  	atomic_t rx_count;
->  
->  	bool eee_en;
-> +	bool external_mac;
->  	int intr_interval;
->  	u32 saved_wolopts;
->  	u32 msg_enable;
-> @@ -933,6 +934,8 @@ struct r8152 {
->  	u32 rx_copybreak;
->  	u32 rx_pending;
->  	u32 fc_pause_on, fc_pause_off;
-> +	/* for reset_resume */
-> +	struct sockaddr saved_addr;
->  
->  	unsigned int pipe_in, pipe_out, pipe_intr, pipe_ctrl_in, pipe_ctrl_out;
->  
-> @@ -1574,6 +1577,7 @@ static int __rtl8152_set_mac_address(struct net_device *netdev, void *p,
->  	mutex_lock(&tp->control);
->  
->  	eth_hw_addr_set(netdev, addr->sa_data);
-> +	memcpy(&tp->saved_addr, addr, sizeof(tp->saved_addr));
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Do you need a copy in tp? I would expect the MAC address stored in
-netdev by eth_hw_addr_set() is still there after the resume?
+I noticed that you didn't include the binding changes in v4. Please
+make sure to include them until the patch has landed in a maintainer
+tree.
 
-       Andrew
+Thanks
+
+Matthias
