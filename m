@@ -2,42 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C914B5827EC
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 15:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7748A582823
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 16:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbiG0Npd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 09:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
+        id S232374AbiG0OB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 10:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbiG0Npc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 09:45:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144DCE02B
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 06:45:31 -0700 (PDT)
+        with ESMTP id S231716AbiG0OB1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 10:01:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F282DB03
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 07:01:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6DAA0CE2225
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 13:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3FF4C43142
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 13:45:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63916B81F66
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 14:01:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 220B8C433D7
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 14:01:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658929527;
-        bh=araBk3oM1hm3ry3Yv1QQo96xQCd0ojkmkzQaf/O+Z9Q=;
+        s=k20201202; t=1658930484;
+        bh=+F1pARcMEB83xS/n++hBOPeYrr/fz7YdxwHeY/p+2qM=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=LnT35AvqIfLURm9irbSWhBT/n6JtY8sVzDqR2h0AzDWi82zLOht/ZveGKU21JZ+aY
-         3hFe9bDypupt/qHQacH6Lnq6qerGEeG2wDbiI83UzXQJ0WczROYTNCRuqmWnAGq1ax
-         a4Jcp5w6OnyKcY2dSvOEQOqu6L5ODAQQZGAazdaLeONBVTvfRtjjC12DEVGrPxghlh
-         +kHDntr4it+psKtJoPR8H3hIaanFTJLma9Tal3wGGMwkWotZ30AqCdQ2XFkExwxF5p
-         8LYWZGKVarx+oBt2HKsPKZl0aIOCL0g+scMXLheNeoZsgqg1HaunCs4LvY/wJLxNy+
-         5oVqSKFpVLxng==
+        b=ta3l9kcwSGEl+bDAC20JLrkvBy3JfflCOwuoEmAGQPsV+E+6LDh2xma7waib+sbFR
+         vhSm2yCTazb7og4387C7768YpUOgC+qVWKSpx0DKGMCrWcKtx4O1iP3ZBi/DhKxwBZ
+         XkWOUsCfbFzp4KiOOJAkMyv3H08NHGtbv6FwBCX3jMWmlLTi33RXbWajbJCz5AdspQ
+         1uIk5W9v/1EseVcE0DZoPD83Y40DVops86h5duaHrMgmJRL71wwONcw4O9RTo05+1P
+         bmT2hDquvwu4IOq34Tq2Ak5keMr0fHuGSqOqEvUfzO7g9hYm7lcizljr1erZT1aZ41
+         CNKJ6rb7F00kg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id A4019C433E6; Wed, 27 Jul 2022 13:45:27 +0000 (UTC)
+        id 09FAEC433E6; Wed, 27 Jul 2022 14:01:24 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Wed, 27 Jul 2022 13:45:27 +0000
+Subject: [Bug 216282] usb-mass storage
+Date:   Wed, 27 Jul 2022 14:01:23 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -45,17 +44,17 @@ X-Bugzilla-Product: Drivers
 X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: andrew.co@free.fr
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stern@rowland.harvard.edu
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-1xCTApuBg8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216282-208809-hhW3EdNHQ6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216282-208809@https.bugzilla.kernel.org/>
+References: <bug-216282-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -70,12 +69,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
 
---- Comment #20 from Adrien (andrew.co@free.fr) ---
-I recently switched to slackware current with kernel 5.18.14 and the proble=
-m is
-still present
+Alan Stern (stern@rowland.harvard.edu) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|stern@rowland.harvard.edu   |
+
+--- Comment #16 from Alan Stern (stern@rowland.harvard.edu) ---
+The question is which directory or file on that path is missing.  From comm=
+ent
+13, it looks like /sys/kernel/debug/usb should exist.  Maybe it doesn't hav=
+e a
+usbmon subdirectory because the usbmon module hasn't been loaded.  If you d=
+o:
+
+   modprobe usbmon
+
+it should create that directory and the 2u file within it.
 
 --=20
 You may reply to this email to add a comment.
