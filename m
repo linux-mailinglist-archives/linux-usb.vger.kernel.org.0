@@ -2,49 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92B8582630
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 14:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C51582637
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 14:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbiG0MON (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 08:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S232814AbiG0MRS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 08:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbiG0MON (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 08:14:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB6C4B0CF;
-        Wed, 27 Jul 2022 05:14:11 -0700 (PDT)
+        with ESMTP id S229489AbiG0MRQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 08:17:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7261E48CBE
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 05:17:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6857D60B8F;
-        Wed, 27 Jul 2022 12:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445A1C433C1;
-        Wed, 27 Jul 2022 12:14:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34AD9B82049
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 12:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB65C433D6;
+        Wed, 27 Jul 2022 12:17:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658924050;
-        bh=kq4PGN6FO5ju1m+LZGy88ckRUdYAbjus9z6ZNANXHmk=;
+        s=korg; t=1658924233;
+        bh=nFnFY0DspxKWuoD+PgsNRVfsc5CEHnKnrb9+nYCKhQo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S2nhAuYSjGRfv4l+97f+9WKvkkRc3KGeRCVAuP/wn9/7FD0gaacks5VirYOTcwZb5
-         XPxfML2vTfZ6R+jFZFN+7z8v6gHoNGKKuFTtv4Yj5hDv3xouSLpRT5Y5KD8Ez4rILo
-         0izjvZIJjoJkhYElmiNzgnMrRYbML9yELrljegrc=
-Date:   Wed, 27 Jul 2022 14:14:08 +0200
+        b=FujG9sFgoxJLU5KuoaLvVbBYtvSoWlfuTvx3FIsgA7U3Sv3N6t0mVbdmlS4ySn2/H
+         gQwJYjKyUPFMxTtof+XW4nz0NXdB/c0f/Cyqr+tDBiJAhtYpt3I/Z3nlwUEgGj7tfB
+         rmaUvfh27lP/ZVqvER+SbpbDCc/S8rWjiSuy3S8g=
+Date:   Wed, 27 Jul 2022 14:17:09 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jack Pham <quic_jackp@quicinc.com>
-Cc:     3090101217@zju.edu.cn, balbi@kernel.org, colin.king@intel.com,
-        jbrunet@baylibre.com, jleng@ambarella.com,
-        pavel.hofman@ivitera.com, pawell@cadence.com,
-        ruslan.bilovol@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4] usb: gadget: f_uac2: fix superspeed transfer
-Message-ID: <YuEsEKA3+4rmbYB+@kroah.com>
-References: <Yg5onoldRY3ygW7v@kroah.com>
- <20220218095948.4077-1-3090101217@zju.edu.cn>
- <20220720230425.GA8843@jackp-linux.qualcomm.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] USB: gadget: Fix use-after-free Read in usb_udc_uevent()
+Message-ID: <YuEsxV+qTEqiE38N@kroah.com>
+References: <YtlbkmVGJyhO4kR6@rowland.harvard.edu>
+ <000000000000acc0e905e4517fa0@google.com>
+ <YtlrnhHyrHsSky9m@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220720230425.GA8843@jackp-linux.qualcomm.com>
+In-Reply-To: <YtlrnhHyrHsSky9m@rowland.harvard.edu>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,48 +52,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 05:26:59PM -0700, Jack Pham wrote:
-> Hi Greg,
+On Thu, Jul 21, 2022 at 11:07:10AM -0400, Alan Stern wrote:
+> The syzbot fuzzer found a race between uevent callbacks and gadget
+> driver unregistration that can cause a use-after-free bug:
 > 
-> On Fri, Feb 18, 2022 at 05:59:48PM +0800, 3090101217@zju.edu.cn wrote:
-> > From: Jing Leng <jleng@ambarella.com>
-> > 
-> > On page 362 of the USB3.2 specification (
-> > https://usb.org/sites/default/files/usb_32_20210125.zip),
-> > The 'SuperSpeed Endpoint Companion Descriptor' shall only be returned
-> > by Enhanced SuperSpeed devices that are operating at Gen X speed.
-> > Each endpoint described in an interface is followed by a 'SuperSpeed
-> > Endpoint Companion Descriptor'.
-> > 
-> > If users use SuperSpeed UDC, host can't recognize the device if endpoint
-> > doesn't have 'SuperSpeed Endpoint Companion Descriptor' followed.
-> > 
-> > Currently in the uac2 driver code:
-> > 1. ss_epout_desc_comp follows ss_epout_desc;
-> > 2. ss_epin_fback_desc_comp follows ss_epin_fback_desc;
-> > 3. ss_epin_desc_comp follows ss_epin_desc;
-> > 4. Only ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
-> > Companion Descriptor' followed, so we should add it.
-> > 
-> > Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
-> > Signed-off-by: Jing Leng <jleng@ambarella.com>
-> > ---
-> > ChangeLog v3->v4:
-> > - Add "Fixes:" tag in the changelog area
-> > ChangeLog v2->v3:
-> > - Remove static variables which are explicitly initialized to 0
-> > - Remove redundant modification "case USB_SPEED_SUPER_PLUS:"
-> > ChangeLog v1->v2:
-> > - Update more detailed description of the PATCH
+> ---------------------------------------------------------------
+> BUG: KASAN: use-after-free in usb_udc_uevent+0x11f/0x130
+> drivers/usb/gadget/udc/core.c:1732
+> Read of size 8 at addr ffff888078ce2050 by task udevd/2968
 > 
-> I don't see this patch in any of your trees, so I'm assuming it must not
-> have made it into your inbox.  If that's the case I would like to
-> resubmit on Jing's behalf as it does fix a legitimate issue with
-> enabling the UAC2 gadget in SuperSpeed.
+> CPU: 1 PID: 2968 Comm: udevd Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google
+> 06/29/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:317 [inline]
+>  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+>  kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
+>  usb_udc_uevent+0x11f/0x130 drivers/usb/gadget/udc/core.c:1732
+>  dev_uevent+0x290/0x770 drivers/base/core.c:2424
+> ---------------------------------------------------------------
+> 
+> The bug occurs because usb_udc_uevent() dereferences udc->driver but
+> does so without acquiring the udc_lock mutex, which protects this
+> field.  If the gadget driver is unbound from the udc concurrently with
+> uevent processing, the driver structure may be accessed after it has
+> been deallocated.
+> 
+> To prevent the race, we make sure that the routine holds the mutex
+> around the racing accesses.
+> 
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Reported-and-tested-by: syzbot+b0de012ceb1e2a97891b@syzkaller.appspotmail.com
+> CC: stable@vger.kernel.org
+> Link: <https://lore.kernel.org/all/0000000000004de90405a719c951@google.com>
+> 
+> ---
+> 
+> As far as I can tell, this bug has always been present.  However, the
+> udc_lock mutex used by the patch was added in commit fc274c1e9973
+> ("USB: gadget: Add a new bus for gadgets"), so this patch won't apply
+> to trees which don't include that commit or a backport of it.  I don't
+> know what tag, if any, can express this requirement.
 
-Thank you.  Reviewing the other patches sent by this author would also
-be greatly appreciated as I have not accepted them due to them no one
-else speaking up.
+As per the stable_kernel_rules document, you can say:
+	cc: stable@vger.kernel.org	# fc274c1e9973
+
+and I should hopefully figure it out :)
+
+I'll add that here and see how well it works...
 
 thanks,
 
