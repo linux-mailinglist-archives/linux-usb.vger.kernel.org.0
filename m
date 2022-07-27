@@ -2,114 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D8958211F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 09:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C30582140
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 09:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiG0HdM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 03:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S230387AbiG0Hhk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 03:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiG0HdL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 03:33:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41E213F24;
-        Wed, 27 Jul 2022 00:33:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6712E615E0;
-        Wed, 27 Jul 2022 07:33:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255B2C433D6;
-        Wed, 27 Jul 2022 07:33:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658907189;
-        bh=98UvVK1hQ5nxz3e59OpZYvviPSmMObiqhZm0riCYgm0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=umd2TjCpVeA8NoflpwamOYbEhjZGSoco4pRNEr6mO9vwE5ItP7vFXKZAyULUS9z7g
-         9/+7TS6hvNXI0Vw7fDLfoanAsabQJYly5dt9byn1Cw+bLsagH0C5jeVZBq14t/a+hA
-         1DmO0NklCZRy08FHbyk7Teby2+LVOLJsF9xbyykg=
-Date:   Wed, 27 Jul 2022 09:33:06 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Andy Guo =?utf-8?B?KOmDreWNq+aWjCk=?= <guoweibin@inspur.com>
-Cc:     "b-liu@ti.com" <b-liu@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: musb: Fix musb_gadget.c rxstate may cause
- request->buf overflow problems
-Message-ID: <YuDqMpDBb27FbG3B@kroah.com>
-References: <7acfffb210974cff959d056ef88221de@inspur.com>
+        with ESMTP id S229680AbiG0Hhh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 03:37:37 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D63B950;
+        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id y9so12106192qtv.5;
+        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
+        b=JrXv07SnypKXIiO9c1hDaO1ve2XFoCQh3YJA9N0xzJ8VKdcy+NOWbVByEfE93yA1bT
+         Tl79vU21bY1Riyh5vdmQjiXNRM6Y+lisVzjlFGA12N5TkfsJVvBTZVM+DXhLMCRLgtAT
+         CWazI0B5gaYgTPfT/LBhBjVu7eM5hrdl/RUhg4FDmsUWR19oAbFy6HoE9edFHPyenD8T
+         Qf2WPKI/e5SPnIeUMPrpopEK3VVMRKkcz81I6LE01vsC+va5BFGobzRlWIltgg+x4gCQ
+         EHVJv70L2zauSaiZEF5yiD6RME26xNIBHXc93G+wfeZxZyIdgW4ZKl6QFkorqrFDfTKD
+         6LhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
+        b=6Jat2MyN2X/bCcy4KChsFEgToktjw+TM2nIp1GsWV6ZzmD6Rvuyrj1WVCZLEay7Yy8
+         q74Yij3pzdIaz/b3Dx1814Y7F7SZ4G/HV33u1NUwo1HFCib9KKUGzmTEDTFzeUjfU0Bs
+         QX31Xn8Ix8XeXydaf8AcdSF3TvwfwPs2BaLCmimOEG8poqkdfChiJgGU3sbSMzaEOAPp
+         tjrZy4no79UXKPkp/eBai9E81Hw5Bzcf2HNvuOYOYl0cPXcPSChnTM9IDK5Jn7McZXoP
+         xHO/bCA9YNSGqGzehOVJ5hVsFJnBC1xruUQWUOhNGDVuRflhxLBmPlRaFHVf97VUhQHe
+         GsuA==
+X-Gm-Message-State: AJIora+ycXd0R3vO91GJKaKDVU9HJPaB0TnRR6u89peGwkCT5WgXMS1m
+        XRVpcxeT3Rf2n10XEOj8napxn7O9AWFngkOo0UeP0b2UjH0=
+X-Google-Smtp-Source: AGRyM1sXpKQZrYG0IbOgoxNKanSErlzr5LcY9lrHn4FGhRFmisG96yuJDLZQZGtegCOB6F8ydUZqqM5XWqwFIZtxfFQ=
+X-Received: by 2002:a05:622a:6098:b0:2f0:f0d2:b5f0 with SMTP id
+ hf24-20020a05622a609800b002f0f0d2b5f0mr17361865qtb.583.1658907456035; Wed, 27
+ Jul 2022 00:37:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7acfffb210974cff959d056ef88221de@inspur.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
+ <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com>
+ <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com> <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
+In-Reply-To: <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Wed, 27 Jul 2022 15:36:59 +0800
+Message-ID: <CABtFH5+bQx5ym5jOzCPJWbZ23WtGYYwS7cMRt2g3ipEEqTb3JA@mail.gmail.com>
+Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
+ sink type LED Indicator support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 07:21:39AM +0000, Andy Guo (郭卫斌) wrote:
-> when the rxstate function executes the 'goto buffer_aint_mapped' code
-> branch, it will always copy the fifocnt bytes data to request->buf,
-> which may cause request->buf out of bounds. for Ethernet-over-USB will
-> cause skb_over_panic when a packet larger than mtu is recived.
-> 
-> Fix it by add the length check :
-> fifocnt = min_t(unsigned, request->length - request->actual, fifocnt);
-> 
-> Signed-off-by: guoweibin <guoweibin@inspur.com>
-> ---
->  drivers/usb/musb/musb_gadget.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-> index 51274b87f46c..4ad5a1f31d7e 100644
-> --- a/drivers/usb/musb/musb_gadget.c
-> +++ b/drivers/usb/musb/musb_gadget.c
-> @@ -760,6 +760,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
->  			musb_writew(epio, MUSB_RXCSR, csr);
->  
->  buffer_aint_mapped:
-> +			fifo_count = min_t(unsigned, request->length - request->actual, fifo_count);
->  			musb_read_fifo(musb_ep->hw_ep, fifo_count, (u8 *)
->  					(request->buf + request->actual));
->  			request->actual += fifo_count;
-> 
+On Tue, Jul 26, 2022 at 8:18 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 
+...
 
-Hi,
+> > Just for saving memory space.
+> > Because these led_classdevs do not be used at the same time.
+> > Or do you think it would be better to rewrite it as follows?
+> > -------------------------------------------------------------------------------------
+> > struct mt6370_led {
+> >        struct led_classdev isink;
+> >        struct led_classdev_mc mc;
+> >        struct mt6370_priv *priv;
+> >        u32 default_state;
+> >        u32 index;
+> > };
+> > -------------------------------------------------------------------------------------
+>
+> You obviously didn't get what I'm talking about...
+> Each union to work properly should have an associated variable that
+> holds the information of which field of the union is in use. Do you
+> have such a variable? If not, how does your code know which one to
+> use? If yes, add a proper comment there.
+>
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Ummm... from my understanding,
+if the colors of these four LEDs are set to 'LED_COLOR_ID_RGB' or
+'LED_COLOR_ID_MULTI' in DT,
+their 'led->index' will be set to 'MT6370_VIRTUAL_MULTICOLOR' in
+'mt6370_leds_probe()'.
+If so, these led devices will be set as 'struct led_classdev_mc' and
+use related ops functions in 'mt6370_init_led_properties()'.
+Instead, they whose 'led->index' is not 'MT6370_VIRTUAL_MULTICOLOR'
+will be set as 'struct led_classdev'.
+So, maybe the member 'index' of the 'struct mt6370_led' is what you
+describe the information of which field of the union is in use?
+I will add the proper comment here to describe this thing. I'm so
+sorry for misunderstanding your mean last time.
+Thanks again for your review.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file, Documentation/SubmittingPatches
-  for how to do this correctly.
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+-- 
+Best Regards,
+ChiaEn Wu
