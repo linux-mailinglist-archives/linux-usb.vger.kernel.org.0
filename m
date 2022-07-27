@@ -2,55 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAE4582254
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 10:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD575822A9
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Jul 2022 11:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiG0Inp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 04:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S231330AbiG0JDu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 05:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiG0Ino (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 04:43:44 -0400
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E9C45F45;
-        Wed, 27 Jul 2022 01:43:40 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id WHT00133;
-        Wed, 27 Jul 2022 16:43:33 +0800
-Received: from Jtjnmail201613.home.langchao.com (10.100.2.13) by
- Jtjnmail201617.home.langchao.com (10.100.2.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Wed, 27 Jul 2022 16:43:34 +0800
-Received: from Jtjnmail201613.home.langchao.com ([fe80::b8bf:393:bebe:1197])
- by Jtjnmail201613.home.langchao.com ([fe80::b8bf:393:bebe:1197%12]) with mapi
- id 15.01.2507.009; Wed, 27 Jul 2022 16:43:34 +0800
-From:   =?gb2312?B?QW5keSBHdW8gKLn5zsCx8yk=?= <guoweibin@inspur.com>
-To:     "b-liu@ti.com" <b-liu@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?gb2312?B?QW5keSBHdW8gKLn5zsCx8yk=?= <guoweibin@inspur.com>
-Subject: [PATCH v2] usb: musb: Fix musb_gadget.c rxstate may cause
- request->buf overflow problems
-Thread-Topic: [PATCH v2] usb: musb: Fix musb_gadget.c rxstate may cause
- request->buf overflow problems
-Thread-Index: AdihlK58/c/eW9hwTTW0SyWnHPS6PQ==
-Date:   Wed, 27 Jul 2022 08:43:34 +0000
-Message-ID: <200f38d3e3eb44ec8ec8f8e9f210f131@inspur.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.180.162.69]
-Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-        micalg=SHA1; boundary="----=_NextPart_000_009A_01D8A1D8.01C168D0"
+        with ESMTP id S231233AbiG0JDr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 05:03:47 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEB1474C4;
+        Wed, 27 Jul 2022 02:03:45 -0700 (PDT)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 940BF40737D5;
+        Wed, 27 Jul 2022 09:03:38 +0000 (UTC)
+Subject: Re: [ldv-project] [PATCH v2] usb: cdns3: change place of 'priv_ep'
+ assignment in cdns3_gadget_ep_dequeue(), cdns3_gadget_ep_enable()
+To:     Peter Chen <peter.chen@kernel.org>,
+        Andrey Strachuk <strochuk@ispras.ru>
+Cc:     ldv-project@linuxtesting.org, Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>
+References: <20220718160052.4188-1-strochuk@ispras.ru>
+ <20220727083956.GA269370@nchen-desktop>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <370caacd-6e03-8c8c-1ea6-0beef763fee6@ispras.ru>
+Date:   Wed, 27 Jul 2022 12:03:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-tUid:   20227271643336f712e09a47c5a0103143d9517a653c2
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <20220727083956.GA269370@nchen-desktop>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,112 +89,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-------=_NextPart_000_009A_01D8A1D8.01C168D0
-Content-Type: text/plain;
-	charset="gb2312"
-Content-Transfer-Encoding: 7bit
+On 27.07.2022 11:39, Peter Chen wrote:
+> On 22-07-18 19:00:52, Andrey Strachuk wrote:
+>> If 'ep' is NULL, result of ep_to_cdns3_ep(ep) is invalid pointer
+>> and its dereference with priv_ep->cdns3_dev may cause panic.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>
+>> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
+>> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+>> ---
+>>  drivers/usb/cdns3/cdns3-gadget.c | 9 ++++++---
+>>  1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+>> index 5c15c48952a6..aea5db0ec72d 100644
+>> --- a/drivers/usb/cdns3/cdns3-gadget.c
+>> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+>> @@ -2285,13 +2285,14 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
+>>  	int val;
+>>
+>>  	priv_ep = ep_to_cdns3_ep(ep);
+>> -	priv_dev = priv_ep->cdns3_dev;
+>> -	comp_desc = priv_ep->endpoint.comp_desc;
+>>  
+>>  	if (!ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
+>>  		dev_dbg(priv_dev->dev, "usbss: invalid parameters\n");
+>>  		return -EINVAL;
+>>  	}
+>> +
+>> +	comp_desc = priv_ep->endpoint.comp_desc;
+>> +	priv_dev = priv_ep->cdns3_dev;
+>>
+>>  	if (!desc->wMaxPacketSize) {
+>>  		dev_err(priv_dev->dev, "usbss: missing wMaxPacketSize\n");
+>> @@ -2600,7 +2601,7 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+>>  			    struct usb_request *request)
+>>  {
+>>  	struct cdns3_endpoint *priv_ep = ep_to_cdns3_ep(ep);
+>> -	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
+>> +	struct cdns3_device *priv_dev;
+>>  	struct usb_request *req, *req_temp;
+>>  	struct cdns3_request *priv_req;
+>>  	struct cdns3_trb *link_trb;
+>> @@ -2610,6 +2611,8 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+>>  
+>>  	if (!ep || !request || !ep->desc)
+>>  		return -EINVAL;
+>> +
+>> +	priv_dev = priv_ep->cdns3_dev;
+>>
+>>  	spin_lock_irqsave(&priv_dev->lock, flags);
+>>
+>> -- 
+> 
+> Acked-by: Peter Chen <peter.chen@kernel.org>
+> 
 
-From: guoweibin <guoweibin@inspur.com>
+Looks good, but I would suggest to move
 
-when the rxstate function executes the 'goto buffer_aint_mapped' code
-branch, it will always copy the fifocnt bytes data to request->buf,
-which may cause request->buf out of bounds. for Ethernet-over-USB will
-cause skb_over_panic when a packet larger than mtu is recived.
+  priv_ep = ep_to_cdns3_ep(ep);
 
-Fix it by add the length check :
-fifocnt = min_t(unsigned, request->length - request->actual, fifocnt);
+below the check of 'ep' as well.
 
-Signed-off-by: guoweibin <guoweibin@inspur.com>
----
- v2:
--fix format error
- drivers/usb/musb/musb_gadget.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-index 51274b87f46c..4ad5a1f31d7e 100644
---- a/drivers/usb/musb/musb_gadget.c
-+++ b/drivers/usb/musb/musb_gadget.c
-@@ -760,6 +760,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
- 			musb_writew(epio, MUSB_RXCSR, csr);
- 
- buffer_aint_mapped:
-+			fifo_count = min_t(unsigned, request->length - request->actual, fifo_count);
- 			musb_read_fifo(musb_ep->hw_ep, fifo_count, (u8 *)
- 					(request->buf + request->actual));
- 			request->actual += fifo_count;
-
-------=_NextPart_000_009A_01D8A1D8.01C168D0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-
-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
-hkiG9w0BCQ8ENzA1MA4GCCqGSIb3DQMCAgIAgDAOBggqhkiG9w0DBAICAIAwBwYFKw4DAgcwCgYI
-KoZIhvcNAwcwHQYDVR0OBBYEFMQsrLB+sPkRXpck2/e+v3MbZSVSMB8GA1UdIwQYMBaAFF5ZA6a0
-TFhgkU72HrWlOaYywTVqMIIBDwYDVR0fBIIBBjCCAQIwgf+ggfyggfmGgbpsZGFwOi8vL0NOPUlO
-U1BVUi1DQSxDTj1KVENBMjAxMixDTj1DRFAsQ049UHVibGljJTIwS2V5JTIwU2VydmljZXMsQ049
-U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1ob21lLERDPWxhbmdjaGFvLERDPWNvbT9jZXJ0
-aWZpY2F0ZVJldm9jYXRpb25MaXN0P2Jhc2U/b2JqZWN0Q2xhc3M9Y1JMRGlzdHJpYnV0aW9uUG9p
-bnSGOmh0dHA6Ly9KVENBMjAxMi5ob21lLmxhbmdjaGFvLmNvbS9DZXJ0RW5yb2xsL0lOU1BVUi1D
-QS5jcmwwggEpBggrBgEFBQcBAQSCARswggEXMIGxBggrBgEFBQcwAoaBpGxkYXA6Ly8vQ049SU5T
-UFVSLUNBLENOPUFJQSxDTj1QdWJsaWMlMjBLZXklMjBTZXJ2aWNlcyxDTj1TZXJ2aWNlcyxDTj1D
-b25maWd1cmF0aW9uLERDPWhvbWUsREM9bGFuZ2NoYW8sREM9Y29tP2NBQ2VydGlmaWNhdGU/YmFz
-ZT9vYmplY3RDbGFzcz1jZXJ0aWZpY2F0aW9uQXV0aG9yaXR5MGEGCCsGAQUFBzAChlVodHRwOi8v
-SlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb20vQ2VydEVucm9sbC9KVENBMjAxMi5ob21lLmxhbmdj
-aGFvLmNvbV9JTlNQVVItQ0EuY3J0MEUGA1UdEQQ+MDygJAYKKwYBBAGCNxQCA6AWDBRndW93ZWli
-aW5AaW5zcHVyLmNvbYEUZ3Vvd2VpYmluQGluc3B1ci5jb20wDQYJKoZIhvcNAQELBQADggEBAHG7
-MvBCm6jp8r5MutquLYG4kFy61gH6nCfHLdgFgSdPXMb+SHfeQ8chc28iTJdnvSx7qEsqiD0iCuyr
-dodbNBNHatGxzreWr8C9U3in46Zf2kQKnZJBrOKNYPWlg9jM9Gr/ZboUAFiQBMN1aJ/C/xK3jUQ+
-B8JVuvcIV6eO6Unvrwl3UXM6CeP6ovP5zDZhdjR4pR6UgRNHz/93aaOQGD/T76yUiUBBZYCa4Uh9
-xmPoVLmBUxuRNc4K+QvpwrjVCMheCepElkZwm/qz8Sya6P5sGag+6rfh4RSYXN+74I2ZgUqjBgaL
-MK4Z24DkB4aQBR7GABtrt8mia7MQWw6Vg/oxggOTMIIDjwIBATBwMFkxEzARBgoJkiaJk/IsZAEZ
-FgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQ
-BgNVBAMTCUlOU1BVUi1DQQITfgABHTcueW3y8AfeyAAAAAEdNzAJBgUrDgMCGgUAoIIB+DAYBgkq
-hkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3MjcwODQzMzJaMCMGCSqG
-SIb3DQEJBDEWBBTV/fqZ/n0FCgI46XupMBGXE93RCDB/BgkrBgEEAYI3EAQxcjBwMFkxEzARBgoJ
-kiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkW
-BGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgABHTcueW3y8AfeyAAAAAEdNzCBgQYLKoZIhvcN
-AQkQAgsxcqBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hh
-bzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgABHTcueW3y8Afe
-yAAAAAEdNzCBkwYJKoZIhvcNAQkPMYGFMIGCMAoGCCqGSIb3DQMHMAsGCWCGSAFlAwQBKjALBglg
-hkgBZQMEARYwCwYJYIZIAWUDBAECMA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUr
-DgMCGjALBglghkgBZQMEAgMwCwYJYIZIAWUDBAICMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
-AASCAQA1HipVIMFfbT/2xYiZkEiE8DujUYcopv5bBYWBRmTszLONdpl+QtQxjcA0HgnrtrKcdMIl
-FX67JqSYNQoXoty0Ou7sp1tB8a+sJhfhNOB+y+4mCGY1mv3z7xldRD10gEPsfTA0m9hECvbgW9k/
-3FAt0yng7jf60vsiRn6gh/Q9WK9mLKnn8IbxZjlQYcZANCg+jLuZolhuZ0fhI9XGi/IlNinWSkTI
-Ji1Wm5uMvnTbkNKM0IxQQsK+O5clan1FnJMSwO1km8h1ahUuX7U8B/IyYIWciG/fywnFcdby9HX4
-E8a4b3ewdLCfSEn2vhmIRZQZNWP/5N/dKABhy/iyPWEBAAAAAAAA
-
-------=_NextPart_000_009A_01D8A1D8.01C168D0--
+--
+Alexey
