@@ -2,198 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9615844E4
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 19:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C07258456F
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 20:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiG1RRw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jul 2022 13:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S232022AbiG1SHZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jul 2022 14:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiG1RRv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 13:17:51 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948006D2F9
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 10:17:50 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sz17so4247530ejc.9
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 10:17:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tMoHWXX+e2RAv7RrY62aiE7oVbNRc9ru/p8taXHwHRA=;
-        b=XJZdTU+ZvHTFX+0TSvaEJZAs5Oz8o3xixubfj6cVWfHBbUFcnr81Cyq6oX6nnBCysV
-         oZkn+5KZaXVoqB3MI5u7mJ+0m9WML7z4Vr3iVtncoltvRvbe2MtGONijEU0fwsG8v49/
-         8PEMnMPLMp/CCHLv8ha7EoWWMtrLklfbyAqj6huHAfjBRnHTH7SkpbHxNrc8P/27WQBf
-         ef0bekb/B1aYyjd4+8EuE0LQHoPUaTYp89t8S+Nzl6d8W4NTVJrYQlTNPUBHwWHVrO/j
-         2IkyJUdQUJjBI/0rQDgBpjTQ4DIJngTg8qUhQ4DFqzSlI5Tdbnn2GKpCVpjItBMepvL9
-         l3uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tMoHWXX+e2RAv7RrY62aiE7oVbNRc9ru/p8taXHwHRA=;
-        b=0KE0AuBUEjXYQUSrmxUur3SsWUaj4q6MNxUx+7WB0p8HHIqz5UsYi19xYj3psacnEb
-         cZAwF1nE2Sp25lUOCnppu3uqdmGR5tHYlM0nkNteYW8e+MR2duyM0EaHRInsugO6XNlO
-         ziQb1t/FN/t+Ds91PzP2HYBh9l6+m70UOJH6jX5lAcQo0rbizyN/nD7kqufhhZCj02Pa
-         L5oid+utDMCsw0pfyTQUekyynpzcOvVaTIg5hNn0btFxFRPaIMKqaojUekfnIKHTRd9m
-         Rx2mS/k5GdlpLrqZMqOkcHRZgyrYWp5oK8wqyTSG+3Dj9nY7Id5YNwY+WcjGVaBxFbW9
-         vn1w==
-X-Gm-Message-State: AJIora+lBfpStLWtdSLYaOK/CXiH6XQW7l8qzuo75JDdv5McKjEPalGK
-        RHE/yIpmfaMNM6Mo963iMIRd8cY4e/y2lrD6SfEN
-X-Google-Smtp-Source: AGRyM1uxSDn3n6/fUmd4kic44cEHUQ/vhZ2zzz6pSRTcJtVxwXAe70eJnRTjAR9vuAuIUpkv661gF7necGQ6p5OrP3c=
-X-Received: by 2002:a17:907:75c6:b0:72b:496c:77c7 with SMTP id
- jl6-20020a17090775c600b0072b496c77c7mr21678085ejc.47.1659028668975; Thu, 28
- Jul 2022 10:17:48 -0700 (PDT)
+        with ESMTP id S229728AbiG1SHX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 14:07:23 -0400
+Received: from endrift.com (endrift.com [173.255.198.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA1052E64
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 11:07:22 -0700 (PDT)
+Received: from [192.168.1.141] (c-73-100-220-23.hsd1.ma.comcast.net [73.100.220.23])
+        by endrift.com (Postfix) with ESMTPSA id D94B4A05B;
+        Thu, 28 Jul 2022 11:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=endrift.com; s=2020;
+        t=1659031642; bh=XUkwFAqs8KyWosKAgIq2ERV4Jxxqpex7rrt2N7gc9QY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BMHXx63VdETWgic55vMoYzWN+q5bhB9T1lUQB60PHhfPwjQOe++cVqus5fUbMd7eH
+         /LR/N4UeJXh6CeSGHJo99PbJVB785Wo+HSkeBi/MFRn7QCxHLqiPrHWzXT82TClneo
+         f1Xmmun+Tx1krdZ5w6R/tm+Rc/DQhbxtgYopaza9EHNOfH0ruFvJZo0z6+mqEZlTMp
+         5WTwUsP3YsOw5U+FeOIxRu/AALF7yUOFGBZVJjV4qqifGia975LV224ahhTUNIVqbn
+         Ypeg+qHtjqiaAxrtmS7ogli4eguebiSQbmMSmN/Guae+T1YsIyEeC+gIOxQxwiwN6o
+         u3+QZeAPRXOcQ==
+Message-ID: <012961c6-8910-cee6-e479-2ad8261ddd72@endrift.com>
+Date:   Thu, 28 Jul 2022 11:07:20 -0700
 MIME-Version: 1.0
-References: <20220728131608.31901-1-lukasz.bartosik@semihalf.com>
- <YuKOERUVa1/mPX9j@kroah.com> <CAK8Bye+PPeGxvELUH41BG8n=E1DaGTNWtMz+wis7n-VOL57aSA@mail.gmail.com>
- <YuK/awQVEZHxYk6e@kroah.com>
-In-Reply-To: <YuK/awQVEZHxYk6e@kroah.com>
-From:   =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>
-Date:   Thu, 28 Jul 2022 19:17:37 +0200
-Message-ID: <CAK8ByeKZ2BdpdjBCA+WF1RAFqGD9swsekw7ez_S-5q3SGP+rcg@mail.gmail.com>
-Subject: Re: [PATCH v1] thunderbolt: fix PCI device class after powering up
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] USB: gadget: f_hid: Add Get-Feature report
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, Maxim Devaev <mdevaev@gmail.com>,
+        linux-usb@vger.kernel.org
+References: <20220726005824.2817646-1-vi@endrift.com>
+ <YuJD7Xp3Ue86Y+I+@kroah.com>
+From:   Vicki Pfau <vi@endrift.com>
+In-Reply-To: <YuJD7Xp3Ue86Y+I+@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
-> On Thu, Jul 28, 2022 at 06:31:47PM +0200, =C5=81ukasz Bartosik wrote:
-> > >
-> > > On Thu, Jul 28, 2022 at 03:16:08PM +0200, Lukasz Bartosik wrote:
-> > > > From: =C5=81ukasz Bartosik <lb@semihalf.com>
-> > > >
-> > > > A thunderbolt
-> > > > lspci -d 8086:9a1b -vmmknn
-> > > > Slot: 00:0d.2
-> > > > Class:        System peripheral [0880]
-> > > > Vendor:       Intel Corporation [8086]
-> > > > Device:       Tiger Lake-LP Thunderbolt 4 NHI #0 [9a1b]
-> > > >
-> > > > presents itself with PCI class 0x088000 after Chromebook boots.
-> > > > lspci -s 00:0d.2 -xxx
-> > > > 00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderb=
-olt 4
-> > > > NHI #0 (rev 01)
-> > > > 00: 86 80 1b 9a 00 00 10 00 01 00 80 08 00 00 00 00
-> > > > ...
-> > > >
-> > > > However after thunderbolt is powered up in nhi_probe()
-> > > > its class changes to 0x0c0340
-> > > > lspci -s 00:0d.2 -xxx
-> > > > 00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderb=
-olt 4
-> > > > NHI #0 (rev 01)
-> > > > 00: 86 80 1b 9a 06 04 10 00 01 40 03 0c 00 00 00 00
-> > > > ...
-> > > >
-> > > > which leaves pci_dev structure with old class value
-> > > > cat /sys/bus/pci/devices/0000:00:0d.2/class
-> > > > 0x088000
-> > > >
-> > > > This fix updates PCI device class in pci_dev structure after
-> > > > thunderbolt is powered up.
-> > > >
-> > > > Fixes: 3cdb9446a117 ("thunderbolt: Add support for Intel Ice Lake")
-> > > > Signed-off-by: =C5=81ukasz Bartosik <lb@semihalf.com>
-> > > > ---
-> > > >  drivers/thunderbolt/nhi_ops.c | 5 +++++
-> > > >  1 file changed, 5 insertions(+)
-> > > >
-> > > > diff --git a/drivers/thunderbolt/nhi_ops.c b/drivers/thunderbolt/nh=
-i_ops.c
-> > > > index 96da07e88c52..6a343d7e3f90 100644
-> > > > --- a/drivers/thunderbolt/nhi_ops.c
-> > > > +++ b/drivers/thunderbolt/nhi_ops.c
-> > > > @@ -160,12 +160,17 @@ static int icl_nhi_suspend_noirq(struct tb_nh=
-i *nhi, bool wakeup)
-> > > >
-> > > >  static int icl_nhi_resume(struct tb_nhi *nhi)
-> > > >  {
-> > > > +     u32 class;
-> > > >       int ret;
-> > > >
-> > > >       ret =3D icl_nhi_force_power(nhi, true);
-> > > >       if (ret)
-> > > >               return ret;
-> > > >
-> > > > +     /* Set device class code as it might have changed after power=
-ing up */
-> > > > +     pci_read_config_dword(nhi->pdev, PCI_CLASS_REVISION, &class);
-> > > > +     nhi->pdev->class =3D class >> 8;
-> > >
-> > > What about the revision field, why not set that as well:
-> > >         nhi->pdev->revision =3D class & 0xff;
-> > >
-> > > If the value is overwritten for 3 of the bytes, why not the 4th?
-> >
-> > Fair point but I observed class change, revision stayed the same.
-> > I read class and revision before and after icl_nhi_force_power() with
-> > pci_read_config_dword(nhi->pdev, PCI_CLASS_REVISION, &class);
-> > It changed from 0x8800001 -> 0xc034001
-> >
-> > > Also this feels odd, what is changing the bytes here?  Why only the
-> > > class?  What else changed and what caused it?
-> >
-> > I compared 64 bytes of config space before and after modprobing
-> > thunderbolt module
-> > Before modprobe
-> > lspci -s 00:0d.2 -x
-> > 00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt
-> > 4 NHI #0 (rev 01)
-> > 00: 86 80 1b 9a 00 00 10 00 01 00 80 08 00 00 00 00
-> > 10: 04 00 a0 80 02 00 00 00 04 80 a4 80 02 00 00 00
-> > 20: 00 00 00 00 00 00 00 00 00 00 00 00 22 22 11 11
-> > 30: 00 00 00 00 80 00 00 00 00 00 00 00 ff 01 00 00
-> >
-> > After modprobe
-> > lspci -s 00:0d.2 -x
-> > 00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt
-> > 4 NHI #0 (rev 01)
-> > 00: 86 80 1b 9a 06 04 10 00 01 40 03 0c 00 00 00 00
-> > 10: 04 00 a0 80 02 00 00 00 04 80 a4 80 02 00 00 00
-> > 20: 00 00 00 00 00 00 00 00 00 00 00 00 22 22 11 11
-> > 30: 00 00 00 00 80 00 00 00 00 00 00 00 ff 01 00 00
-> >
-> > The diff is in class 00 80 08 -> 40 03 0c
-> > and command 00 00 -> 06 04
-> >
-> > The value 40 03 0c is defined as PCI_CLASS_SERIAL_USB_USB4 in
-> > drivers/thunderbolt/nhi.h
-> >
-> > I think the device itself changed the class because I tried to change
-> > class value with setpci command and it seems to be read-only.
->
-> Wait huh?  You can't change the class of a device in the configuration,
-> that is read-only.
 
-Sorry my statement might have been confusing. I tried to change class
-value with setpci
-as an experiment to make sure it is read-only and it is ro.
 
-> So this is working properly without this patch, right?
+On 7/28/22 01:08, Greg Kroah-Hartman wrote:
+> On Mon, Jul 25, 2022 at 05:58:25PM -0700, Vicki Pfau wrote:
+>> --- /dev/null
+>> +++ b/include/uapi/linux/usb/g_hid.h
+>> @@ -0,0 +1,38 @@
+>> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+>> +/*
+>> + * g_hid.h -- Header file for USB HID gadget driver
+>> + *
+>> + * Copyright (C) 2022 Valve Software
+>> + *
+>> + * This program is free software; you can redistribute it and/or modify
+>> + * it under the terms of the GNU General Public License as published by
+>> + * the Free Software Foundation; either version 2 of the License, or
+>> + * (at your option) any later version.
+>> + *
+>> + * This program is distributed in the hope that it will be useful,
+>> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+>> + * GNU General Public License for more details.
+>> + *
+>> + * You should have received a copy of the GNU General Public License
+>> + * along with this program; if not, write to the Free Software
+>> + * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+> 
+> This whole license "boilerplate" is not needed, and should be removed
+> (especially things like addresses, that's crazy).
+> 
+> Only thing that is needed is the SPDX line.
 
-After thunderbolt is probed its class changes from  00 80 08 -> 40 03 0c
-and without this patch thunderbolt's pci_dev struct is left holding
-old class value 00 80 08
-which is not correct.
+I was just copying the header from g_printer.h and changing as needed. It hasn't been touched since 2017, so if that's no longer the convention you might want to update it too.
 
-Thanks,
-Lukasz
+> 
+>> + */
+>> +
+>> +#ifndef __UAPI_LINUX_USB_G_HID_H
+>> +#define __UAPI_LINUX_USB_G_HID_H
+>> +
+>> +#include <linux/types.h>
+>> +
+>> +struct usb_hidg_report {
+>> +	__u16 length;
+>> +	__u8 data[512];
+> 
+> Why 512?
 
+I was reading the specs and one of them said the maximum report length for USB 3 (I believe) was 512 bytes (in contrast with USB 2's 64). I can try to find where it said this, or add a define for max report length.
+
+> 
+>> +};
+>> +
+>> +/* The 'g' code is also used by gadgetfs and hid gadget ioctl requests.
+>> + * Don't add any colliding codes to either driver, and keep
+>> + * them in unique ranges (size 0x20 for now).
+>> + */
+>> +#define GADGET_HID_WRITE_GET_REPORT	_IOW('g', 0x42, struct usb_hidg_report)
+> 
+> This should be in the same .h file so that we don't get confused and
+> accidentally use the same ioctl.
+
+The same .h file as which? g_printer.h and gadgetfs.h are separate files.
+
+> 
+>> +
+>> +#endif /* __UAPI_LINUX_USB_G_HID_H */
+>> diff --git a/include/uapi/linux/usb/gadgetfs.h b/include/uapi/linux/usb/gadgetfs.h
+>> index 835473910a49..9754822b2a40 100644
+>> --- a/include/uapi/linux/usb/gadgetfs.h
+>> +++ b/include/uapi/linux/usb/gadgetfs.h
+>> @@ -62,7 +62,7 @@ struct usb_gadgetfs_event {
+>>  };
+>>  
+>>  
+>> -/* The 'g' code is also used by printer gadget ioctl requests.
+>> +/* The 'g' code is also used by printer and hid gadget ioctl requests.
+> 
+> Yeah, put the definition here.
+
+Should I move the g_printer.h definitions here at the same time? Maybe stub out g_printer.h and make it include gadgetfs.h?
+
+> 
 > thanks,
->
+> 
 > greg k-h
