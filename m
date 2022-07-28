@@ -2,121 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B4A583A0B
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 10:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45258583A79
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 10:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbiG1IIV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jul 2022 04:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S235213AbiG1Ik3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 28 Jul 2022 04:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiG1IIT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 04:08:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8644061D72
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 01:08:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DCD6B82284
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 08:08:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B0AC433C1;
-        Thu, 28 Jul 2022 08:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658995695;
-        bh=fVvnBQzo3+KCjldp7w4ekvg/si6EwLheoel9u13XFnU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MOUOZvuxK749282sx1ZcAEM/vSxFl1cNAt8PCbGwvnrdZk09J8n731dsTMaC22dsF
-         Uxh4o9bqiBtdulD+ZfAdRSJ2rjqFg58gLfmE0sysGVeeVBUMmjALAm12PWXC3L7rWX
-         nsmBuoX0SJuekCj6R+48w/Hu2o1LoQVr384vAso0=
-Date:   Thu, 28 Jul 2022 10:08:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vicki Pfau <vi@endrift.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, Maxim Devaev <mdevaev@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] USB: gadget: f_hid: Add Get-Feature report
-Message-ID: <YuJD7Xp3Ue86Y+I+@kroah.com>
-References: <20220726005824.2817646-1-vi@endrift.com>
+        with ESMTP id S235153AbiG1Ik1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 04:40:27 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F88646DB4;
+        Thu, 28 Jul 2022 01:40:25 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26S8eAIR1020624, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26S8eAIR1020624
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 28 Jul 2022 16:40:10 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 28 Jul 2022 16:40:17 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 28 Jul 2022 16:40:16 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600]) by
+ RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600%5]) with mapi id
+ 15.01.2308.027; Thu, 28 Jul 2022 16:40:16 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Oliver Neukum <oneukum@suse.com>
+CC:     USB list <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: handling MAC set by user space in reset_resume() of r8152
+Thread-Topic: handling MAC set by user space in reset_resume() of r8152
+Thread-Index: AQHYoa2Y9Pz4/O8XDEKFeUHGHHdeq62SBZCAgAFrpBA=
+Date:   Thu, 28 Jul 2022 08:40:16 +0000
+Message-ID: <353a10d11f2345c8acff717be4ade74a@realtek.com>
+References: <2397d98d-e373-1740-eb5f-8fe795a0352a@suse.com>
+ <YuGFOU7oKlAGZjTa@lunn.ch>
+In-Reply-To: <YuGFOU7oKlAGZjTa@lunn.ch>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/7/28_=3F=3F_06:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726005824.2817646-1-vi@endrift.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 05:58:25PM -0700, Vicki Pfau wrote:
-> --- /dev/null
-> +++ b/include/uapi/linux/usb/g_hid.h
-> @@ -0,0 +1,38 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> +/*
-> + * g_hid.h -- Header file for USB HID gadget driver
-> + *
-> + * Copyright (C) 2022 Valve Software
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> + * GNU General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU General Public License
-> + * along with this program; if not, write to the Free Software
-> + * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+Oliver Neukum <oneukum@suse.com>
+> > Date: Wed, 27 Jul 2022 13:29:42 +0200
+> > Subject: [PATCH] r8152: restore external MAC in reset_resume
+> >
+> > If user space has set the MAC of the interface,
+> > reset_resume() must restore that setting rather
+> > than redetermine the MAC like if te interface
+> > is probed regularly.
 
-This whole license "boilerplate" is not needed, and should be removed
-(especially things like addresses, that's crazy).
+I think this patch conflicts with commit 25766271e42f ("r8152: Refresh
+MAC address during USBDEVFS_RESET"). The results would be changed.
 
-Only thing that is needed is the SPDX line.
+Besides, I don't understand why you set tp->external_mac = false
+in rtl8152_down().
 
-> + */
-> +
-> +#ifndef __UAPI_LINUX_USB_G_HID_H
-> +#define __UAPI_LINUX_USB_G_HID_H
-> +
-> +#include <linux/types.h>
-> +
-> +struct usb_hidg_report {
-> +	__u16 length;
-> +	__u8 data[512];
+Best Regards,
+Hayes
 
-Why 512?
 
-> +};
-> +
-> +/* The 'g' code is also used by gadgetfs and hid gadget ioctl requests.
-> + * Don't add any colliding codes to either driver, and keep
-> + * them in unique ranges (size 0x20 for now).
-> + */
-> +#define GADGET_HID_WRITE_GET_REPORT	_IOW('g', 0x42, struct usb_hidg_report)
-
-This should be in the same .h file so that we don't get confused and
-accidentally use the same ioctl.
-
-> +
-> +#endif /* __UAPI_LINUX_USB_G_HID_H */
-> diff --git a/include/uapi/linux/usb/gadgetfs.h b/include/uapi/linux/usb/gadgetfs.h
-> index 835473910a49..9754822b2a40 100644
-> --- a/include/uapi/linux/usb/gadgetfs.h
-> +++ b/include/uapi/linux/usb/gadgetfs.h
-> @@ -62,7 +62,7 @@ struct usb_gadgetfs_event {
->  };
->  
->  
-> -/* The 'g' code is also used by printer gadget ioctl requests.
-> +/* The 'g' code is also used by printer and hid gadget ioctl requests.
-
-Yeah, put the definition here.
-
-thanks,
-
-greg k-h
