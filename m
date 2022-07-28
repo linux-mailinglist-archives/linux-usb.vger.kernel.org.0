@@ -2,132 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300AD583AD5
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 10:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC353583B6F
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 11:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiG1I76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jul 2022 04:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        id S235699AbiG1Jl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jul 2022 05:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbiG1I74 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 04:59:56 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED768655AC
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 01:59:54 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id l4so1302834wrm.13
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 01:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0iuyBrlr5rV2IIp/qJPIrFbdJQAUmvQxHNRNBBjl8fM=;
-        b=pWliU7VUnHnPvM2eNbgznBYRSjQJe1CJ1/TB3a4cmeS/Co2FhfmzWBKnz7a5fUZpr0
-         hJddkpGv8F8uDmCFfUHXeElLw9u0d6gFWmElWh7Tuk+IMmlf89kuqlXJ0lPRBuIcTGLE
-         25Gfpmh4pukwiax1NUsyB/xlQzFtqsIkdBCFOx5Rqa2wSiYhH6JxVoQLfu+/wMdgMB46
-         8F7iaO4PMSUORS0s2rpJCeEX6gITJSn9ub0zFKSkwgoNIFnuA2lKPdmevT/FxytNTr5T
-         fIEbuKUkKc9PguX1AkalXcfRXE1DSkh4vaiT0yA5MvWRTcEEHlQ2j4UElMaWXUSk94ST
-         eRdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0iuyBrlr5rV2IIp/qJPIrFbdJQAUmvQxHNRNBBjl8fM=;
-        b=KX0625B7y1rhmCSHCAwYIe6R66sgRx0KL91FgCeZBSRTxvauoVbl3rVdJQnmRypSuh
-         7N0euAUypUwuDD1p1FyHo8paWCES2Oo9QIIPnGuydYcl0xqH3m0xc2rxFeE7JyAlPJJE
-         zywYnAUc8UkCSL2PODdM7ZeObF9HHhlkGsKh5TcGoXQorTrZBtAVHmUHHL0JhcdlgiMc
-         aAZ9ICawnGhjPr6w+LZEl2a/eB+/sj6AEgYARfpoNmIJ43OE/1vy3EO4UjayoY2n6pZF
-         JQ0uO8vrmbjIbDHRgFAVq9kjQ0ouv2SXsHf1ypXNItwAYNi+VOygfWVyjNBXzANKFz/r
-         1sxQ==
-X-Gm-Message-State: AJIora+aWeUwWEuOO972mD5PgEk0C0bEFpiTGhokGqVFRLLUBGF/6RkS
-        e6xuvZYnE2kKNwLbNcZBpE4=
-X-Google-Smtp-Source: AGRyM1uvJBL7vy/6tP5jfm0l97ed6ggShPC/Gd+FB8QxYuh5+4FKLmv4qUHoJNiHB6re3ebIRnzgaw==
-X-Received: by 2002:a05:6000:2aa:b0:21d:ac4f:587c with SMTP id l10-20020a05600002aa00b0021dac4f587cmr17269883wry.675.1658998793374;
-        Thu, 28 Jul 2022 01:59:53 -0700 (PDT)
-Received: from reki (83-44-165.netrun.cytanet.com.cy. [83.168.44.165])
-        by smtp.gmail.com with ESMTPSA id g15-20020a5d46cf000000b0021e47386eb8sm420768wrs.2.2022.07.28.01.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 01:59:52 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 11:59:50 +0300
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     Vicki Pfau <vi@endrift.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] USB: gadget: f_hid: Add Set-Feature report
-Message-ID: <20220728115950.4c1707a9@reki>
-In-Reply-To: <d19bad31-dc18-a7a7-6084-dfab8aeec498@endrift.com>
-References: <20220726005824.2817646-1-vi@endrift.com>
-        <20220726005824.2817646-2-vi@endrift.com>
-        <20220726125137.7d3757c7@reki>
-        <d19bad31-dc18-a7a7-6084-dfab8aeec498@endrift.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        with ESMTP id S235295AbiG1Jl2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 05:41:28 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2795365D54;
+        Thu, 28 Jul 2022 02:41:27 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26S9fA9j9023028, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26S9fA9j9023028
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 28 Jul 2022 17:41:10 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 28 Jul 2022 17:41:17 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 28 Jul 2022 17:41:17 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600]) by
+ RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600%5]) with mapi id
+ 15.01.2308.027; Thu, 28 Jul 2022 17:41:17 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Oliver Neukum <oneukum@suse.com>
+CC:     USB list <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: handling MAC set by user space in reset_resume() of r8152
+Thread-Topic: handling MAC set by user space in reset_resume() of r8152
+Thread-Index: AQHYoa2Y9Pz4/O8XDEKFeUHGHHdeq62SBZCAgAFrpBD//4SgAIAAjZXw
+Date:   Thu, 28 Jul 2022 09:41:16 +0000
+Message-ID: <6ed729b080c04fc8b93b43b09cf42be0@realtek.com>
+References: <2397d98d-e373-1740-eb5f-8fe795a0352a@suse.com>
+ <YuGFOU7oKlAGZjTa@lunn.ch> <353a10d11f2345c8acff717be4ade74a@realtek.com>
+ <4dfebefb-b4a4-ccdb-d0f7-015273710076@suse.com>
+In-Reply-To: <4dfebefb-b4a4-ccdb-d0f7-015273710076@suse.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzcvMjgg5LiK5Y2IIDA2OjAwOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=D0=92 Tue, 26 Jul 2022 21:26:05 -0700
-Vicki Pfau <vi@endrift.com> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-
-> On 7/26/22 02:51, Maxim Devaev wrote:
-> > =D0=92 Mon, 25 Jul 2022 17:58:26 -0700
-> > Vicki Pfau <vi@endrift.com> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >  =20
-> >> While the HID gadget implementation has been sufficient for devices th=
-at only
-> >> use INTERRUPT transfers, the USB HID standard includes provisions for =
-Set- and
-> >> Get-Feature report CONTROL transfers that go over endpoint 0. These we=
-re
-> >> previously impossible with the existing implementation, and would eith=
-er send
-> >> an empty reply, or stall out.
-> >>
-> >> As the feature is a standard part of USB HID, it stands to reason that=
- devices
-> >> would use it, and that the HID gadget should support it. This patch ad=
-ds
-> >> support for host-to-device Set-Feature reports through a new ioctl
-> >> interface to the hidg class dev nodes.
-> >>
-> >> Signed-off-by: Vicki Pfau <vi@endrift.com> =20
-> >=20
-> > Won't it break the logic of the existing software that works with /dev/=
-hidgX?
-> > Will it work if I want my gadget to work the old way? =20
->=20
-> For existing software to use SET_FEATURE at all it has to use an alternat=
-ive mode, which seems to have only been added somewhat recently. That mode =
-also appears to preclude use of INTERRUPT transfers at all, unless there's =
-some way to set up two hidg nodes that map to the same interface, with one =
-for INTERRUPT and one for SET_FEATURE. If this breaks that, I suppose that'=
-s a regression, but this is meant to augment the original, long-standing mo=
-de so you can mix INTERRUPT and SET/GET_FEATURE transfers, as there is no w=
-ay to do that yet. Honestly, the alternate mode seems more like a workaroun=
-d, as far as I can tell, and not an ideal implementation. I'm not sure when=
- it was added, but as I was originally authoring this against 5.13 and didn=
-'t see it until I went to rebase onto master, it can't have been that long =
-ago. So if it breaks any software (which I don't believe it does), it would=
- only affect very new software.
->=20
-> As I alluded to, I'd thought about perhaps adding a second node per inter=
-face so one would act as INTERRUPT transfers and the other as SET/GET_FEATU=
-RE transfers, but I already had this code half written and wanted to get fe=
-edback first, especially since what I have now works (although it's not wel=
-l-tested after rebasing).
-
-I'm a little confused here about what you call an alternative mode.
-Are we talking about use_out_ep=3D1 (default behavior with INTERRUPT)
-or use_out_ep=3D0 (SETUP/SET_REPORT)? The last mode was added by me
-to ensure strict compatibility with Apple UEFI and strange BIOS,
-and this mode is actually actively used. It is important to me
-that it is not broken, but unfortunately I cannot test your patch
-on my kernel, as I temporarily do not have access to testing equipment.
+T2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4NClsuLi5dDQo+IE9LLCB0aGFuayB5b3Uu
+IERvIHlvdSBhZ3JlZSB0aGF0IGEgbWFudWFsbHkgc2V0IE1BQyBuZWVkcyB0byBiZSBrZXB0DQo+
+IGV2ZW4gdGhyb3VnaCBhIHByZS9wb3N0X3Jlc2V0KCkgYW5kIHJlc2V0X3Jlc3VtZSgpLCB3aGls
+ZSBhIE1BQyBwYXNzZWQNCj4gdGhyb3VnaCBuZWVkcyB0byBiZSByZWV2YWx1YXRlZCBhdCBwcmUv
+cG9zdF9yZXNldCgpIGJ1dCBub3QgYXQNCj4gcmVzZXRfcmVzdW1lKCkNCg0KWWVzLiBJIHRoaW5r
+IGEgdXNlciB3aXNoZXMgdG8ga2VlcCBpdC4NCg0KPiA+IEJlc2lkZXMsIEkgZG9uJ3QgdW5kZXJz
+dGFuZCB3aHkgeW91IHNldCB0cC0+ZXh0ZXJuYWxfbWFjID0gZmFsc2UNCj4gPiBpbiBydGw4MTUy
+X2Rvd24oKS4NCj4gDQo+IEZyYW5rbHkgSSBuZWVkIHRvIHVuZG8gdGhlIGVmZmVjdCBvZiBuZG9f
+c2V0X21hY19hZGRyZXNzKCkNCj4gYXQgc29tZSB0aW1lLCBidXQgaXQgaXMgdW5jbGVhciB0byBt
+ZSBob3cgdG8gcmV0dXJuIGEgbmV0d29yaw0KPiBpbnRlcmZhY2UgdG8gaXRzICJuYXRpdmUiIE1B
+Qy4NCj4gQW55IGlkZWFzPw0KDQpJIGFtIG5vdCBzdXJlLiBJcyBpdCBuZWNlc3Nhcnk/DQpJZiBJ
+IGNoYW5nZSB0aGUgTUFDIGFkZHJlc3MsIEkgZG9uJ3QgaG9wZSBpdCBpcyByZWNvdmVyZWQgdW5l
+eHBlY3RlZGx5DQp1bmxlc3MgdGhlIHN5c3RlbSBpcyByZWJvb3RlZCBvciBzaHV0ZG93bi4NCg0K
+QmVzdCBSZWdhcmRzLA0KSGF5ZXMNCg0KDQo=
