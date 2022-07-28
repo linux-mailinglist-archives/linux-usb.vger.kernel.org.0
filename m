@@ -2,220 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1852583633
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 03:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D36B58366E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 03:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbiG1BO0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 21:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S234576AbiG1BiO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Jul 2022 21:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiG1BOZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 21:14:25 -0400
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FD319C25;
-        Wed, 27 Jul 2022 18:14:22 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id WYQ00016;
-        Thu, 28 Jul 2022 09:14:16 +0800
-Received: from Jtjnmail201613.home.langchao.com (10.100.2.13) by
- Jtjnmail201613.home.langchao.com (10.100.2.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Thu, 28 Jul 2022 09:14:17 +0800
-Received: from Jtjnmail201613.home.langchao.com ([fe80::b8bf:393:bebe:1197])
- by Jtjnmail201613.home.langchao.com ([fe80::b8bf:393:bebe:1197%12]) with mapi
- id 15.01.2507.009; Thu, 28 Jul 2022 09:14:17 +0800
-From:   =?gb2312?B?QW5keSBHdW8gKLn5zsCx8yk=?= <guoweibin@inspur.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "b-liu@ti.com" <b-liu@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW3ZnZXIua2VybmVsLm9yZ7T6t6JdUmU6IFtQQVRDSCB2Ml0gdXNi?=
- =?gb2312?B?OiBtdXNiOiBGaXggbXVzYl9nYWRnZXQuYyByeHN0YXRlIG1heSBjYXVzZSBy?=
- =?gb2312?Q?equest->buf_overflow_problems?=
-Thread-Topic: =?gb2312?B?W3ZnZXIua2VybmVsLm9yZ7T6t6JdUmU6IFtQQVRDSCB2Ml0gdXNiOiBtdXNi?=
- =?gb2312?B?OiBGaXggbXVzYl9nYWRnZXQuYyByeHN0YXRlIG1heSBjYXVzZSByZXF1ZXN0?=
- =?gb2312?Q?->buf_overflow_problems?=
-Thread-Index: AdihlK58/c/eW9hwTTW0SyWnHPS6Pf//hjMA//94hRA=
-Date:   Thu, 28 Jul 2022 01:14:17 +0000
-Message-ID: <2c234d13d7274763b0102b83ce65b8ff@inspur.com>
-References: <28d16ec3ed25603cdda2c5fb3fbf1470@sslemail.net>
- <YuEElC563HN5ldMu@kroah.com>
-In-Reply-To: <YuEElC563HN5ldMu@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.180.162.69]
-Content-Type: application/pkcs7-mime; smime-type=signed-data;
-        name="smime.p7m"
-Content-Disposition: attachment; filename="smime.p7m"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-tUid:   2022728091416d24144a042b8dbc3b54daa7e34114ed9
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,ENCRYPTED_MESSAGE,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229446AbiG1BiN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 21:38:13 -0400
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4E14D175
+        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 18:38:12 -0700 (PDT)
+Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
+        by mx0b-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26RJBqHk007287;
+        Wed, 27 Jul 2022 18:38:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
+ from : subject : to; s=pfptdkimsnps;
+ bh=AITmAF2r7AE+o5w6lgweIIl6CBS+TczKsniNQAl2Do4=;
+ b=U7JGtGDL1llqSH/lKkJiHiE0pK3iiCqDOKKL+x+UrIpcnqsTb75GCycuvlquKn+9eoQS
+ v31+Y60rXAbfVUb/fEj2dl61z6gFAskyGZOxfO5mtBI/UXiMEKlytfPoZCkUZ4GqnLoZ
+ BJuNj2KEg1QCdCKiVZ4IShfk/Wpj4JePvBCa/vZCNSGQBbWV3SanRSWMeztIR6Ca+j3d
+ 5i0dvFPG1ri5gac8HosL1AUfh8CAgK6I0VfWzPMqy+q30YlnojWxLW6hXWfdr59FuLM5
+ Xc/7zWgGtQy2We0FJbDaXiKI9slFnFpMQdKUnHqrHviBr391H/WmuQK/0bLHG0sy9LKh Pg== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3hgfmfx67u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Jul 2022 18:38:04 -0700
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id BF91E40052;
+        Thu, 28 Jul 2022 01:38:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1658972284; bh=F96/Vg0QdHfhpYT6vwo1WbFbOs+6ACuSU1PTzA4jct4=;
+        h=Date:From:Subject:To:From;
+        b=SSQgoBrHkVX4w+uKJGh1RDu309zQpJhWplCNq5Q0LAUAeYAX+F0/l7Q1gnd6UxHY3
+         p32WzKke7hz38ObUjC7J2CLdePj4gq733uUhCZf3080z+MlpXppEY8eoPoVx4OTT1V
+         b6dIgkPHl0i4QxpSoQ8Xaesc8nPM46EetfivvtObrmbXUJjPtjGwhjtvwXQC65ugwC
+         1tmDK2nW5YAFdCipW/w/eIvg7onLW3PRaXFcg5dQHN2MrkE2Q/Ox4+KxM8hLhS41p2
+         ZHnXevJpvtvTaLoW0V3AZbMyJJ4Kx+XEOAt0pcZtyTreWgpJhl81hHiLJhBTOPBlfA
+         XUiWAGmMnslYg==
+Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id ED15BA0099;
+        Thu, 28 Jul 2022 01:38:01 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Wed, 27 Jul 2022 18:38:01 -0700
+Date:   Wed, 27 Jul 2022 18:38:01 -0700
+Message-Id: <8d6a30f2f2f953eff833a5bc5aac640a4cc2fc9f.1658971571.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: common: debug: Check non-standard control requests
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+X-Proofpoint-GUID: Dfo_AtjipbR7BDSAOUKzEumREtsZK5HK
+X-Proofpoint-ORIG-GUID: Dfo_AtjipbR7BDSAOUKzEumREtsZK5HK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-27_08,2022-07-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 bulkscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207280004
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAaCAJIAEUUNvbnRl
-bnQtVHlwZTogdGV4dC9wbGFpbjsNCgljaGFyc2V0PSJnYjIzMTIiDQpDb250ZW50LVRyYW5zZmVy
-LUVuY29kaW5nOiA4Yml0DQoNCgSCEABUaGFua3MgZm9yIHlvdXIgcmVwbHmhow0KDQpROiBZb3Vy
-IEZyb206IGluIHlvdXIgZW1haWwgaGFzIHlvdXIgcmVhbCBuYW1lLCB3aHkgbm90IHVzZSB0aGF0
-IGluc3RlYWQgb2YganVzdCBwdXR0aW5nIHlvdXIgZW1haWwgYWxpYXMgaGVyZT8NCkE6IEkgYW0g
-dXNpbmcgYSBidXNpbmVzcyBtYWlsYm94IGFuZCBkbyBub3QgaGF2ZSBwZXJtaXNzaW9uIHRvIG1v
-ZGlmeSB0aGUgbWFpbGJveCBuYW1lLCBJIHdpbGwgdHJ5IHRvIG1vZGlmeSB0aGUgbWFpbGJveCBu
-YW1lIGxhdGVyLg0KDQpROiBIb3cgY2FuIHdlIGdldCBhIGJpZ2dlciBwYWNrZXQgdGhhbiBtdHU/
-DQpBOiBTb21lIHBsYXRmb3JtcyAoc3VjaCBhcyBCSU9TKSB1c2UgaW5jb21wbGV0ZSBuZXR3b3Jr
-IHByb3RvY29sIHN0YWNrcyBvciBoYXZlIHNvbWUgYnVncywgYW5kIHdpbGwgc2VuZCBwYWNrZXRz
-IGxhcmdlciB0aGFuIE1UVS4gYW5kIA0KSSBjYW4gY2hhbmdlIHRoZSBNVFUgYnkgaWZjb25maWcu
-IEl0IGRlcGVuZHMgb24gdGhlIGltcGxlbWVudGF0aW9uIG9mIHRoZSBob3N0LiBBbmQgdGhlIGRl
-dmljZSBzaG91bGRuJ3QgcGFuaWMgd2hlbiBpdCBoYXBwZW5zoaMNCg0KUTogQW5kIHdoYXQgZG9l
-cyB0aGlzIGhhdmUgdG8gZG8gd2l0aCBhIHVzYi1ldGhlcm5ldCBkZXZpY2UsIHRoaXMgaXMgaW4g
-dGhlIGdlbmVyaWMgbXVzYiBjb2RlLCBub3QgYW4gZXRoZXJuZXQgZHJpdmVyLg0KQTogTWF5YmUg
-SSBkaWRuJ3QgZGVzY3JpYmUgY2xlYXJseS4gVGhlIHByb2JsZW0gaXMgdGhhdCB3ZSBtYXkgcmVj
-ZWl2ZSBkYXRhIGxhcmdlciB0aGFuIHJlcXVlc3QtPmJ1ZiBhbmQgbWF5IGNhdXNlIG91dCBvZiBi
-b3VuZHMuDQogIEkgaGFkIGltcGxlbWVudGVkIGEgQ0RDLUVDTSBuZXR3b3JrIGRldmljZSB1c2lu
-ZyBVU0IsIHRoZSBkZXZpY2UncyBNVFUgaXMgMTUwMCBieSBkZWZhdWx0LCBhbmQgSSBjaGFuZ2Ug
-dGhlIGhvc3QncyBNVFUgdG8gMTYwMCwgdGhlbiANCkkgdXNlIHBpbmcgLVMgMTU0MA0KICBzZW5k
-IHBhY2tnZSBmb3IgaG9zdCB0byBkZXZpY2UuIEkgZ290IGEgZGV2aWNlIHBhbmljLg0KDQpROiBB
-bmQgaWYgd2UgZ2V0IGEgdG9vIGJpZyBwYWNrZXQsIHNob3VsZG4ndCB3ZSBkcm9wIGl0Pw0KQaO6
-eWVzLCB3ZSBzaG91bGQgZHJvcCBpdC4gSXQgaXMgZGVjaWRlIHdoZXRoZXIgdG8gZGlzY2FyZCBv
-ciBub3QgYnkgbmV0d29yayBsYXllci4gSG93ZXZlciwgZHVlIHRvIHRoZSBvdXQgb2YgYm91bmRz
-IGluIHRoZSB1c2IgY29yZSwgDQp0aGUgZGF0YSBjYW5ub3QgYmUgY29ycmVjdGx5IHBhc3NlZCB0
-byB0aGUgbmV0d29yayBsYXllcg0KDQpROiBXaHkgdGhlIGNhc2UgdG8gInVuc2lnbmVkIj8NCkGj
-ukluIG11c2JfZ2FkZ2V0LmM6cnhzdGF0ZSgpLCB0aGUga2VybmVsIGhhcyBkb25lIHRoZSBjb3Jy
-ZWN0IGxlbmd0aCBjaGVjayBmb3IgdGhlIHVzYiBtZXNzYWdlIHRoYXQgcmVjZWl2ZWQgYSByZXF1
-ZXN0IGZvciB0aGUgZmlyc3QgDQp0aW1lLCBidXQgdGhlIGxlbmd0aCBjaGVjayB3YXMgb21pdHRl
-ZCB3aGVuIHRoZSBzdWJzZXF1ZW50IGRhdGEgb2YgdGhlIHJlcXVlc3Qgd2FzIHJlY2VpdmVkLiBJ
-biB0aGUgZXhpc3RpbmcgY29kZSB0aGUgZGF0YSB0eXBlIGlzIA0KZGVmaW5lZCBhcyB1bnNpZ25l
-ZCwgc28gSSB1c2VkIHVuc2lnbmVkIGhlcmUNCnN0YXRpYyB2b2lkIHJ4c3RhdGUoc3RydWN0IG11
-c2IgKm11c2IsIHN0cnVjdCBtdXNiX3JlcXVlc3QgKnJlcSkNCnsNCgkuLi4NCglpZiAoY3NyICYg
-TVVTQl9SWENTUl9SWFBLVFJEWSkgew0KCQlmaWZvX2NvdW50ID0gbXVzYl9yZWFkdyhlcGlvLCBN
-VVNCX1JYQ09VTlQpOw0KCQkuLi4NCgkJaWYgKHJlcXVlc3QtPmFjdHVhbCA8IHJlcXVlc3QtPmxl
-bmd0aCkgew0KCQkJaWYgKCFpc19idWZmZXJfbWFwcGVkKHJlcSkpDQoJCQkJZ290byBidWZmZXJf
-YWludF9tYXBwZWQ7ICAgICAgICAgICAgICAgLy8gdGhpcyBicmFuY2ggbm90IGNoZWNrIGxlbmd0
-aA0KCQkJLi4uDQoJCQlsZW4gPSByZXF1ZXN0LT5sZW5ndGggLSByZXF1ZXN0LT5hY3R1YWw7DQoJ
-CQlmaWZvX2NvdW50ID0gbWluX3QodW5zaWduZWQsIGxlbiwgZmlmb19jb3VudCk7ICAgIC8vZmly
-c3QgdGltZSwgY2hlY2sgbGVuZ3RoDQoJCQkuLi4NCgkJCXVubWFwX2RtYV9idWZmZXIocmVxLCBt
-dXNiKTsNCgkJCWNzciAmPSB+KE1VU0JfUlhDU1JfRE1BRU5BQiB8IE1VU0JfUlhDU1JfQVVUT0NM
-RUFSKTsNCgkJCW11c2Jfd3JpdGV3KGVwaW8sIE1VU0JfUlhDU1IsIGNzcik7DQoNCmJ1ZmZlcl9h
-aW50X21hcHBlZDoNCisJCQlmaWZvX2NvdW50ID0gbWluX3QodW5zaWduZWQsIHJlcXVlc3QtPmxl
-bmd0aCAtIHJlcXVlc3QtPmFjdHVhbCwgZmlmb19jb3VudCk7ICAvLyBhZGQgbGVuZ3RoIGNoZWNr
-DQoJCQltdXNiX3JlYWRfZmlmbyhtdXNiX2VwLT5od19lcCwgZmlmb19jb3VudCwgKHU4ICopDQoJ
-CQkJCShyZXF1ZXN0LT5idWYgKyByZXF1ZXN0LT5hY3R1YWwpKTsNCgkJCXJlcXVlc3QtPmFjdHVh
-bCArPSBmaWZvX2NvdW50Ow0KDQoJCQkvKiBSRVZJU0lUIGlmIHdlIGxlZnQgYW55dGhpbmcgaW4g
-dGhlIGZpZm8sIGZsdXNoDQoJCQkgKiBpdCBhbmQgcmVwb3J0IC1FT1ZFUkZMT1cNCgkJCSAqLw0K
-DQoJCQkvKiBhY2sgdGhlIHJlYWQhICovDQoJCQljc3IgfD0gTVVTQl9SWENTUl9QX1daQ19CSVRT
-Ow0KCQkJY3NyICY9IH5NVVNCX1JYQ1NSX1JYUEtUUkRZOw0KCQkJbXVzYl93cml0ZXcoZXBpbywg
-TVVTQl9SWENTUiwgY3NyKTsNCgkJfQ0KCX0NCg0KCS8qIHJlYWNoIHRoZSBlbmQgb3Igc2hvcnQg
-cGFja2V0IGRldGVjdGVkICovDQoJaWYgKHJlcXVlc3QtPmFjdHVhbCA9PSByZXF1ZXN0LT5sZW5n
-dGggfHwNCgkgICAgZmlmb19jb3VudCA8IG11c2JfZXAtPnBhY2tldF9zeikNCgkJbXVzYl9nX2dp
-dmViYWNrKG11c2JfZXAsIHJlcXVlc3QsIDApOw0KfQ0KDQpUaGFua3MNCg0KZ3Vvd2VpYmluDQot
-LS0tLdPKvP7Urbz+LS0tLS0NCreivP7IyzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmcgPGdy
-ZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0Kt6LLzcqxvOQ6IDIwMjLE6jfUwjI3yNUgMTc6MjYN
-CsrVvP7IyzogQW5keSBHdW8gKLn5zsCx8ykgPGd1b3dlaWJpbkBpbnNwdXIuY29tPg0Ks63LzTog
-Yi1saXVAdGkuY29tOyBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdl
-ci5rZXJuZWwub3JnDQrW98ziOiBbdmdlci5rZXJuZWwub3JntPq3ol1SZTogW1BBVENIIHYyXSB1
-c2I6IG11c2I6IEZpeCBtdXNiX2dhZGdldC5jIHJ4c3RhdGUgbWF5IGNhdXNlIHJlcXVlc3QtPmJ1
-ZiBvdmVyZmxvdyBwcm9ibGVtcw0KDQpPbiBXZWQsIEp1bCAyNywgMjAyMiBhdCAwODo0MzozNEFN
-ICswMDAwLCBBbmR5IEd1byAoufnOwLHzKSB3cm90ZToNCj4gRnJvbTogZ3Vvd2VpYmluIDxndW93
-ZWliaW5AaW5zcHVyLmNvbT4NCg0KWW91ciBGcm9tOiBpbiB5b3VyIGVtYWlsIGhhcyB5b3VyIHJl
-YWwgbmFtZSwgd2h5IG5vdCB1c2UgdGhhdCBpbnN0ZWFkIG9mDQpqdXN0IHB1dHRpbmcgeW91ciBl
-bWFpbCBhbGlhcyBoZXJlPw0KDQo+DQo+IHdoZW4gdGhlIHJ4c3RhdGUgZnVuY3Rpb24gZXhlY3V0
-ZXMgdGhlICdnb3RvIGJ1ZmZlcl9haW50X21hcHBlZCcgY29kZQ0KPiBicmFuY2gsIGl0IHdpbGwg
-YWx3YXlzIGNvcHkgdGhlIGZpZm9jbnQgYnl0ZXMgZGF0YSB0byByZXF1ZXN0LT5idWYsDQo+IHdo
-aWNoIG1heSBjYXVzZSByZXF1ZXN0LT5idWYgb3V0IG9mIGJvdW5kcy4gZm9yIEV0aGVybmV0LW92
-ZXItVVNCIHdpbGwNCj4gY2F1c2Ugc2tiX292ZXJfcGFuaWMgd2hlbiBhIHBhY2tldCBsYXJnZXIg
-dGhhbiBtdHUgaXMgcmVjaXZlZC4NCg0KSG93IGNhbiB3ZSBnZXQgYSBiaWdnZXIgcGFja2V0IHRo
-YW4gbXR1Pw0KDQo+DQo+IEZpeCBpdCBieSBhZGQgdGhlIGxlbmd0aCBjaGVjayA6DQo+IGZpZm9j
-bnQgPSBtaW5fdCh1bnNpZ25lZCwgcmVxdWVzdC0+bGVuZ3RoIC0gcmVxdWVzdC0+YWN0dWFsLCBm
-aWZvY250KTsNCj4NCj4gU2lnbmVkLW9mZi1ieTogZ3Vvd2VpYmluIDxndW93ZWliaW5AaW5zcHVy
-LmNvbT4NCg0KU2FtZSBoZXJlLg0KDQo+IC0tLQ0KPiAgdjI6DQo+IC1maXggZm9ybWF0IGVycm9y
-DQo+ICBkcml2ZXJzL3VzBIIC5mIvbXVzYi9tdXNiX2dhZGdldC5jIHwgMSArDQo+ICAxIGZpbGUg
-Y2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL211
-c2IvbXVzYl9nYWRnZXQuYyBiL2RyaXZlcnMvdXNiL211c2IvbXVzYl9nYWRnZXQuYw0KPiBpbmRl
-eCA1MTI3NGI4N2Y0NmMuLjRhZDVhMWYzMWQ3ZSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2Iv
-bXVzYi9tdXNiX2dhZGdldC5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL211c2IvbXVzYl9nYWRnZXQu
-Yw0KPiBAQCAtNzYwLDYgKzc2MCw3IEBAIHN0YXRpYyB2b2lkIHJ4c3RhdGUoc3RydWN0IG11c2Ig
-Km11c2IsIHN0cnVjdCBtdXNiX3JlcXVlc3QgKnJlcSkNCj4gIAkJCW11c2Jfd3JpdGV3KGVwaW8s
-IE1VU0JfUlhDU1IsIGNzcik7DQo+DQo+ICBidWZmZXJfYWludF9tYXBwZWQ6DQo+ICsJCQlmaWZv
-X2NvdW50ID0gbWluX3QodW5zaWduZWQsIHJlcXVlc3QtPmxlbmd0aCAtIHJlcXVlc3QtPmFjdHVh
-bCwgZmlmb19jb3VudCk7DQoNCldoeSB0aGUgY2FzZSB0byAidW5zaWduZWQiPw0KDQpBbmQgaWYg
-d2UgZ2V0IGEgdG9vIGJpZyBwYWNrZXQsIHNob3VsZG4ndCB3ZSBkcm9wIGl0Pw0KDQpBbmQgd2hh
-dCBkb2VzIHRoaXMgaGF2ZSB0byBkbyB3aXRoIGEgdXNiLWV0aGVybmV0IGRldmljZSwgdGhpcyBp
-cyBpbiB0aGUNCmdlbmVyaWMgbXVzYiBjb2RlLCBub3QgYW4gZXRoZXJuZXQgZHJpdmVyLg0KDQp0
-aGFua3MsDQoNCmdyZWcgay1oDQoAAAAAAACgggsIMIIDojCCAoqgAwIBAgIQY8pSLFM4dppNwhLk
-OtBW6jANBgkqhkiG9w0BAQsFADBZMRMwEQYKCZImiZPyLGQBGRYDY29tMRgwFgYKCZImiZPyLGQB
-GRYIbGFuZ2NoYW8xFDASBgoJkiaJk/IsZAEZFgRob21lMRIwEAYDVQQDEwlJTlNQVVItQ0EwHhcN
-MTcwMTA5MDkyODMwWhcNMjcwMTA5MDkzODI5WjBZMRMwEQYKCZImiZPyLGQBGRYDY29tMRgwFgYK
-CZImiZPyLGQBGRYIbGFuZ2NoYW8xFDASBgoJkiaJk/IsZAEZFgRob21lMRIwEAYDVQQDEwlJTlNQ
-VVItQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCr5DXvG2MkvKnmGBcOJ7WvgN42
-PvpVS9tk1LLBZTnOHH57Qu7STBxnRPcqdxl2B1bKpi9EkxD9VWpfeBLhXG0vDfMGuD2Qa4PQt+kf
-RwDZvRkenFGHlZqk/Xh+VxKH+WdrCKDb3PjjB9QSDjfJNk6U588qiz8ObrDKsm1o+YPoAXvDj68V
-kfTMxh+NCRI3/EaBLc48E0AHw9MczaxX58WaeeVMWnJGDQ4ggDZ+gAtm+MiM11R+nyQwZKH9lUx8
-epMfh6j4Vxk9n632dNolDP1xLKXDfr4iDoUZkcD9mr7R9jJULFHVktQsZLrCxV6nyPTvnOVKKetW
-kxp2C45wCtOHAgMBAAGjZjBkMBMGCSsGAQQBgjcUAgQGHgQAQwBBMAsGA1UdDwQEAwIBhjAPBgNV
-HRMBAf8EBTADAQH/MB0GA1UdDgQWBBReWQOmtExYYJFO9h61pTmmMsE1ajAQBgkrBgEEAYI3FQEE
-AwIBADANBgkqhkiG9w0BAQsFAAOCAQEASsTfu+11K7aJhVcW+auDkJ7hjk3ITK9pOHmtMa38J4OO
-4VLmTBikdUu3dQVgnEs9OUC4Eo0HAm5BMNemcQ6QGNPC6QLRVnjTZqDdu8X8BDzUVXJwpnq2zxwD
-N3YY6NGtDKVgHBlv8feJN8SwB/msP95gUE1Lprhwnbs5Dexjg3dnIJdVGWiCwf51dXw2frwGwehj
-vpO+BZtrFWwh6mtN1JlTM0KxxvmvHjqr5+cTQV4crTWKIoDGWIevIOiSy4ImgeEpjFBO5LzYD2vk
-QYAtN2ZHGFIsv+S+vYzefdZmZUvpS6UEWw1Iole4jNN7b4OYyvkNhyybRl81sM4BWss+dTCCB14w
-ggZGoAMCAQICE34AAR03Lnlt8vAH3sgAAAABHTcwDQYJKoZIhvcNAQELBQAwWTETMBEGCgmSJomT
-8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9t
-ZTESMBAGA1UEAxMJSU5TUFVSLUNBMB4XDTIxMDkyODAyMzcyNVoXDTI2MDkyNzAyMzcyNVowgbYx
-EzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT
-8ixkARkWBGhvbWUxNjA0BgNVBAsMLeWxseS4nOa1qua9ruS6uuW3peaZuuiDveeglOeptumZouac
-iemZkOWFrOWPuDESMBAGA1UEAwwJ6YOt5Y2r5paMMSMwIQYJKoZIhvcNAQkBFhRndW93ZWliaW5A
-aW5zcHVyLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKN1kpWcEFprxAKE8FNL
-+AJNR9+ooGd0WOUsK7Mp02bTN0uSAs7HzvQPbXzLylGDj2EyI/g1hhustIl7qQQ9RJeEIcwQyHVZ
-Fh+KUoEuMX3duzsrLhIp89b+yCP6T5+g7m4Pp+/Mw+3ClBY7cAF0Ps3SeWFCv+h4aA2VeN8jsMpq
-G/p9/Le/+cO2v3q9AiLhc5lnG/drzDSfqU6rtaoBtoZaIJg+L+AQ4yCqFvWqUnGEGdJbNj+r8Hzb
-mx59kZlEnwooocutyEcZbwkC4x4/0ejHcvpaFmvxKld13vzXGw0ux2J9dqJkJF57423QoGOOD571
-LTYKGMs3jI28NZdwm7ECAwEAAaOCA78wggO7MD0GCSsGAQQBgjcVBwQwMC4GJisGAQQBgjcVCILy
-qR+Egdd6hqmRPYaA9xWD2I9cgUr9iyaBlKdNAgFkAgFhMCkGA1UdJQQiMCAGCCsGAQUFBwMCBggr
-BgEFBQcDBAYKKwYBBAGCNwoDBDALBgNVHQ8EBAMCBaAwNQYJKwYBBAGCNxUKBCgwJjAKBggrBgEF
-BQcDAjAKBggrBgEFBQcDBDAMBgorBgEEAYI3CgMEMEQGCSqGSIb3DQEJDwQ3MDUwDgYIKoZIhvcN
-AwICAgCAMA4GCCqGSIb3DQMEAgIAgDAHBgUrDgMCBzAKBggqhkiG9w0DBzAdBgNVHQ4EFgQUxCys
-sH6w+RFelyTb976/cxtlJVIwHwYDVR0jBBgwFoAUXlkDprRMWGCRTvYetaU5pjLBNWowggEPBgNV
-HR8EggEGMIIBAjCB/6CB/KCB+YaBumxkYXA6Ly8vQ049SU5TUFVSLUNBLENOPUpUQ0EyMDEyLENO
-PUNEUCxDTj1QdWJsaWMlMjBLZXklMjBTZXJ2aWNlcyxDTj1TZXJ2aWNlcyxDTj1Db25maWd1cmF0
-aW9uLERDPWhvbWUsREM9bGFuZ2NoYW8sREM9Y29tP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/
-YmFzZT9vYmplY3RDbGFzcz1jUkxEaXN0cmlidXRpb25Qb2ludIY6aHR0cDovL0pUQ0EyMDEyLmhv
-bWUubGFuZ2NoYW8uY29tL0NlcnRFbnJvbGwvSU5TUFVSLUNBLmNybDCCASkGCCsGAQUFBwEBBIIB
-GzCCARcwgbEGCCsGAQUFBzAChoGkbGRhcDovLy9DTj1JTlNQVVItQ0EsQ049QUlBLENOPVB1Ymxp
-YyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9aG9tZSxE
-Qz1sYW5nY2hhbyxEQz1jb20/Y0FDZXJ0aWZpY2F0ZT9iYXNlP29iamVjdENsYXNzPWNlcnRpZmlj
-YXRpb25BdXRob3JpdHkwYQYIKwYBBQUHMAKGVWh0dHA6Ly9KVENBMjAxMi5ob21lLmxhbmdjaGFv
-LmNvbS9DZXJ0RW5yb2xsL0pUQ0EyMDEyLmhvbWUubGFuZ2NoYW8uY29tX0lOU1BVUi1DQS5jcnQw
-RQYDVR0RBD4wPKAkBgorBgEEAYI3FAIDoBYMFGd1b3dlaWJpbkBpbnNwdXIuY29tgRRndW93ZWli
-aW5AaW5zcHVyLmNvbTANBgkqhkiG9w0BAQsFAAOCAQEAcbsy8EKbqOnyvky62q4tgbiQXLrWAfqc
-J8ct2AWBJ09cxv5Id95DxyFzbyJMl2e9LHuoSyqIPSIK7Kt2h1s0E0dq0bHOt5avwL1TeKfjpl/a
-RAqdkkGs4o1g9aWD2Mz0av9luhQAWJAEw3Von8L/EreNRD4HwlW69whXp47pSe+vCXdRczoJ4/qi
-8/nMNmF2NHilHpSBE0fP/3dpo5AYP9PvrJSJQEFlgJrhSH3GY+hUuYFTG5E1zgr5C+nCuNUIyF4J
-6kSWRnCb+rPxLJro/mwZqD7qt+HhFJhc37vgjZmBSqMGBoswrhnbgOQHhpAFHsYAG2u3yaJrsxBb
-DpWD+jGCA5MwggOPAgEBMHAwWTETMBEGCgmSJomT8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkW
-CGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9tZTESMBAGA1UEAxMJSU5TUFVSLUNBAhN+AAEd
-Ny55bfLwB97IAAAAAR03MAkGBSsOAwIaBQCgggH4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
-HAYJKoZIhvcNAQkFMQ8XDTIyMDcyODAxMTQxNFowIwYJKoZIhvcNAQkEMRYEFDHNCzz+W1PXHoUw
-OPQR208SJ5L2MH8GCSsGAQQBgjcQBDFyMHAwWTETMBEGCgmSJomT8ixkARkWA2NvbTEYMBYGCgmS
-JomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9tZTESMBAGA1UEAxMJSU5TUFVS
-LUNBAhN+AAEdNy55bfLwB97IAAAAAR03MIGBBgsqhkiG9w0BCRACCzFyoHAwWTETMBEGCgmSJomT
-8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9t
-ZTESMBAGA1UEAxMJSU5TUFVSLUNBAhN+AAEdNy55bfLwB97IAAAAAR03MIGTBgkqhkiG9w0BCQ8x
-gYUwgYIwCgYIKoZIhvcNAwcwCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIw
-DgYIKoZIhvcNAwICAgCAMA0GCCqGSIb3DQMCAgFAMAcGBSsOAwIaMAsGCWCGSAFlAwQCAzALBglg
-hkgBZQMEAgIwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBABDBnrHdBuPB+fxeJ4jMCcGy
-RqYSzLkolHW9PvDMb1EFelpwnw1xt8XfV+MZPEYMt96qVyOLRWpUj1vH76fLhin84D0VoNBx5Ca+
-4hGsRQjSsethdQASQIb5GDGJm4Xq0WKtEYOKqIfG1Dbzap68HeJeNp+Fq7HNSACPtAcT6RqUkxeW
-OgqtfeD9QSSJGGEMdVyaef9SsrNvx1O9Q1FwFcSPGwzVDJZqIH9bLz4C+En+w6Zsk/e2N19t7xtU
-/1aVbSVEsdwb7I48rw4vdndOb/ia52kMuThwOcC1f8nbCgzr1Op/FgSEnso2gYc+oMxEsCFuf3P1
-jQAkrd26dhY9ai0AAAAAAAA=
+Previously usb_decode_ctrl() only decodes standard control requests, but
+it was used for non-standard requests also. If it's non-standard or
+unknown standard bRequest, print the Setup data values.
+
+Fixes: af32423a2d86 ("usb: dwc3: trace: decode ctrl request")
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+New patch from previous feedback:
+https://lore.kernel.org/linux-usb/bf1e225b660d0bb68ccdb3ce1bd7bd2d33edb817.1648253632.git.Thinh.Nguyen@synopsys.com/
+
+
+ drivers/usb/common/debug.c | 96 +++++++++++++++++++++++++-------------
+ 1 file changed, 64 insertions(+), 32 deletions(-)
+
+diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
+index 075f6b1b2a1a..f204cec8d380 100644
+--- a/drivers/usb/common/debug.c
++++ b/drivers/usb/common/debug.c
+@@ -208,30 +208,28 @@ static void usb_decode_set_isoch_delay(__u8 wValue, char *str, size_t size)
+ 	snprintf(str, size, "Set Isochronous Delay(Delay = %d ns)", wValue);
+ }
+ 
+-/**
+- * usb_decode_ctrl - Returns human readable representation of control request.
+- * @str: buffer to return a human-readable representation of control request.
+- *       This buffer should have about 200 bytes.
+- * @size: size of str buffer.
+- * @bRequestType: matches the USB bmRequestType field
+- * @bRequest: matches the USB bRequest field
+- * @wValue: matches the USB wValue field (CPU byte order)
+- * @wIndex: matches the USB wIndex field (CPU byte order)
+- * @wLength: matches the USB wLength field (CPU byte order)
+- *
+- * Function returns decoded, formatted and human-readable description of
+- * control request packet.
+- *
+- * The usage scenario for this is for tracepoints, so function as a return
+- * use the same value as in parameters. This approach allows to use this
+- * function in TP_printk
+- *
+- * Important: wValue, wIndex, wLength parameters before invoking this function
+- * should be processed by le16_to_cpu macro.
+- */
+-const char *usb_decode_ctrl(char *str, size_t size, __u8 bRequestType,
+-			    __u8 bRequest, __u16 wValue, __u16 wIndex,
+-			    __u16 wLength)
++static void usb_decode_ctrl_generic(char *str, size_t size, __u8 bRequestType,
++				    __u8 bRequest, __u16 wValue, __u16 wIndex,
++				    __u16 wLength)
++{
++	u8 recip = bRequestType & USB_RECIP_MASK;
++	u8 type = bRequestType & USB_TYPE_MASK;
++
++	snprintf(str, size,
++		 "Type=%s Recipient=%s Dir=%s bRequest=%u wValue=%u wIndex=%u wLength=%u",
++		 (type == USB_TYPE_STANDARD)    ? "Standard" :
++		 (type == USB_TYPE_VENDOR)      ? "Vendor" :
++		 (type == USB_TYPE_CLASS)       ? "Class" : "Unknown",
++		 (recip == USB_RECIP_DEVICE)    ? "Device" :
++		 (recip == USB_RECIP_INTERFACE) ? "Interface" :
++		 (recip == USB_RECIP_ENDPOINT)  ? "Endpoint" : "Unknown",
++		 (bRequestType & USB_DIR_IN)    ? "IN" : "OUT",
++		 bRequest, wValue, wIndex, wLength);
++}
++
++static void usb_decode_ctrl_standard(char *str, size_t size, __u8 bRequestType,
++				     __u8 bRequest, __u16 wValue, __u16 wIndex,
++				     __u16 wLength)
+ {
+ 	switch (bRequest) {
+ 	case USB_REQ_GET_STATUS:
+@@ -272,14 +270,48 @@ const char *usb_decode_ctrl(char *str, size_t size, __u8 bRequestType,
+ 		usb_decode_set_isoch_delay(wValue, str, size);
+ 		break;
+ 	default:
+-		snprintf(str, size, "%02x %02x %02x %02x %02x %02x %02x %02x",
+-			 bRequestType, bRequest,
+-			 (u8)(cpu_to_le16(wValue) & 0xff),
+-			 (u8)(cpu_to_le16(wValue) >> 8),
+-			 (u8)(cpu_to_le16(wIndex) & 0xff),
+-			 (u8)(cpu_to_le16(wIndex) >> 8),
+-			 (u8)(cpu_to_le16(wLength) & 0xff),
+-			 (u8)(cpu_to_le16(wLength) >> 8));
++		usb_decode_ctrl_generic(str, size, bRequestType, bRequest,
++					wValue, wIndex, wLength);
++		break;
++	}
++}
++
++/**
++ * usb_decode_ctrl - Returns human readable representation of control request.
++ * @str: buffer to return a human-readable representation of control request.
++ *       This buffer should have about 200 bytes.
++ * @size: size of str buffer.
++ * @bRequestType: matches the USB bmRequestType field
++ * @bRequest: matches the USB bRequest field
++ * @wValue: matches the USB wValue field (CPU byte order)
++ * @wIndex: matches the USB wIndex field (CPU byte order)
++ * @wLength: matches the USB wLength field (CPU byte order)
++ *
++ * Function returns decoded, formatted and human-readable description of
++ * control request packet.
++ *
++ * The usage scenario for this is for tracepoints, so function as a return
++ * use the same value as in parameters. This approach allows to use this
++ * function in TP_printk
++ *
++ * Important: wValue, wIndex, wLength parameters before invoking this function
++ * should be processed by le16_to_cpu macro.
++ */
++const char *usb_decode_ctrl(char *str, size_t size, __u8 bRequestType,
++			    __u8 bRequest, __u16 wValue, __u16 wIndex,
++			    __u16 wLength)
++{
++	switch (bRequestType & USB_TYPE_MASK) {
++	case USB_TYPE_STANDARD:
++		usb_decode_ctrl_standard(str, size, bRequestType, bRequest,
++					 wValue, wIndex, wLength);
++		break;
++	case USB_TYPE_VENDOR:
++	case USB_TYPE_CLASS:
++	default:
++		usb_decode_ctrl_generic(str, size, bRequestType, bRequest,
++					wValue, wIndex, wLength);
++		break;
+ 	}
+ 
+ 	return str;
+
+base-commit: ed92f4353ef53e544db5311fd8efa0cd7fdc4e08
+-- 
+2.28.0
+
