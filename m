@@ -2,85 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC353583B6F
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 11:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D67583D71
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 13:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235699AbiG1Jl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jul 2022 05:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
+        id S236237AbiG1LbW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jul 2022 07:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235295AbiG1Jl2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 05:41:28 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2795365D54;
-        Thu, 28 Jul 2022 02:41:27 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26S9fA9j9023028, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26S9fA9j9023028
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 28 Jul 2022 17:41:10 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 28 Jul 2022 17:41:17 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 28 Jul 2022 17:41:17 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600]) by
- RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600%5]) with mapi id
- 15.01.2308.027; Thu, 28 Jul 2022 17:41:17 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Oliver Neukum <oneukum@suse.com>
-CC:     USB list <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: handling MAC set by user space in reset_resume() of r8152
-Thread-Topic: handling MAC set by user space in reset_resume() of r8152
-Thread-Index: AQHYoa2Y9Pz4/O8XDEKFeUHGHHdeq62SBZCAgAFrpBD//4SgAIAAjZXw
-Date:   Thu, 28 Jul 2022 09:41:16 +0000
-Message-ID: <6ed729b080c04fc8b93b43b09cf42be0@realtek.com>
-References: <2397d98d-e373-1740-eb5f-8fe795a0352a@suse.com>
- <YuGFOU7oKlAGZjTa@lunn.ch> <353a10d11f2345c8acff717be4ade74a@realtek.com>
- <4dfebefb-b4a4-ccdb-d0f7-015273710076@suse.com>
-In-Reply-To: <4dfebefb-b4a4-ccdb-d0f7-015273710076@suse.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzcvMjgg5LiK5Y2IIDA2OjAwOjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S235458AbiG1LbS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 07:31:18 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0022F29C8B
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 04:31:14 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso3072917wmq.1
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 04:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=SMC59iUGEUeIWikaYVLjy2odSUsf6J1BxrN5JwfwEpY=;
+        b=I2LvfwRSLT0FBLkzKL97tXa0j3AxOgqK4JwBDMsSM+Z8HGBr1Hsl+SUU8HPYMLz66e
+         8uwZd7/fPyOTDqCE8CpYD1EB4BMYrqBICeOrQcRtAgtcyK1eE/L39avZt/VLlWPC4Uor
+         LoRGhJiBQNR/hDNsANtNPDEqnDWOhfwEJTmwgA0Cv1jj23KAfdmGOY1sasEYVFjLX/YX
+         ZlPZ2zhQiq7NYJ6LHAqKNcChUNlEupakqOtGb+CZPupdBgaFq1mBMgBamPwT1GZ2CiGh
+         Xxn5YMmbVopGqmz+InpOVGDvq/m/bhIDEUtdkMhmWHk2Kp5mn0bff3ZHplSxHO3nCLJd
+         f6Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=SMC59iUGEUeIWikaYVLjy2odSUsf6J1BxrN5JwfwEpY=;
+        b=fNFvvzLV3Syme3VnWNq/0GgAbw5vu8rjNPFLb/17zHpziuOstGzuAerK6e0KG49XZB
+         zp2k9Ce04v1HK2ncPo3dQsAx4b5KWPDyIQe6h3wV//tFbS8QlXv6wCQ4c1raJqpOM7Gs
+         aWjg9GgICbhN4MRXaPjXgHySI3QVPPkTSZjBSxgAKgj1fRf8NkJMyIzKc/ou+BjlNexI
+         /6vbkxFG9YmUD5rwwgOYaGEyoEoZmKQR7NbiscSFDWSk8S7o6iDmo0l6LigkphDzTEWl
+         z9a6unS/cQ/X70BUAe4Pk+C8kzL6pXIX/Ahg4QlDBTNMQfNnlfgJl8X9sk+4+s03f/N2
+         L3nQ==
+X-Gm-Message-State: AJIora8tm/DdCQy0kC/TOlz8njalJAvajPYBqEBDiS6W7bRDu1hem6DH
+        mwRLg3jmR1LnfUUisnTXi9uwOw==
+X-Google-Smtp-Source: AGRyM1vjIPgxwYbMk8BsnZlSouB9NDyINH+vUJA52rfBsJa1/epNS6uEmdrCNjJkZQ9qNZQU8kklUA==
+X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr6221269wmq.58.1659007873312;
+        Thu, 28 Jul 2022 04:31:13 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id z22-20020a1cf416000000b003a35516ccc3sm937306wma.26.2022.07.28.04.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 04:31:12 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 12:31:09 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370
+ support
+Message-ID: <20220728113109.7gf3b36mqjxlhcq3@maple.lan>
+References: <20220722102407.2205-1-peterwu.pub@gmail.com>
+ <20220722102407.2205-14-peterwu.pub@gmail.com>
+ <20220725103128.xtaw2c4y5fobowg7@maple.lan>
+ <CABtFH5LUKTZenTktq3v1JZ9xe-yJFsMvCZuwDhmxdT87k0O-zA@mail.gmail.com>
+ <20220726093058.2fz2p2vg7xpfsnfe@maple.lan>
+ <CABtFH5+in-+=6r3wOvQ8-78DT9CXaMursJukhx+kdwMvvP3djw@mail.gmail.com>
+ <20220726115954.kpkmidrk3zo3dpbq@maple.lan>
+ <CABtFH5K3LLw9ZqY0Qrrx_8xs+3ioJpzP0=_HptmoDY6tvu2JVg@mail.gmail.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABtFH5K3LLw9ZqY0Qrrx_8xs+3ioJpzP0=_HptmoDY6tvu2JVg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4NClsuLi5dDQo+IE9LLCB0aGFuayB5b3Uu
-IERvIHlvdSBhZ3JlZSB0aGF0IGEgbWFudWFsbHkgc2V0IE1BQyBuZWVkcyB0byBiZSBrZXB0DQo+
-IGV2ZW4gdGhyb3VnaCBhIHByZS9wb3N0X3Jlc2V0KCkgYW5kIHJlc2V0X3Jlc3VtZSgpLCB3aGls
-ZSBhIE1BQyBwYXNzZWQNCj4gdGhyb3VnaCBuZWVkcyB0byBiZSByZWV2YWx1YXRlZCBhdCBwcmUv
-cG9zdF9yZXNldCgpIGJ1dCBub3QgYXQNCj4gcmVzZXRfcmVzdW1lKCkNCg0KWWVzLiBJIHRoaW5r
-IGEgdXNlciB3aXNoZXMgdG8ga2VlcCBpdC4NCg0KPiA+IEJlc2lkZXMsIEkgZG9uJ3QgdW5kZXJz
-dGFuZCB3aHkgeW91IHNldCB0cC0+ZXh0ZXJuYWxfbWFjID0gZmFsc2UNCj4gPiBpbiBydGw4MTUy
-X2Rvd24oKS4NCj4gDQo+IEZyYW5rbHkgSSBuZWVkIHRvIHVuZG8gdGhlIGVmZmVjdCBvZiBuZG9f
-c2V0X21hY19hZGRyZXNzKCkNCj4gYXQgc29tZSB0aW1lLCBidXQgaXQgaXMgdW5jbGVhciB0byBt
-ZSBob3cgdG8gcmV0dXJuIGEgbmV0d29yaw0KPiBpbnRlcmZhY2UgdG8gaXRzICJuYXRpdmUiIE1B
-Qy4NCj4gQW55IGlkZWFzPw0KDQpJIGFtIG5vdCBzdXJlLiBJcyBpdCBuZWNlc3Nhcnk/DQpJZiBJ
-IGNoYW5nZSB0aGUgTUFDIGFkZHJlc3MsIEkgZG9uJ3QgaG9wZSBpdCBpcyByZWNvdmVyZWQgdW5l
-eHBlY3RlZGx5DQp1bmxlc3MgdGhlIHN5c3RlbSBpcyByZWJvb3RlZCBvciBzaHV0ZG93bi4NCg0K
-QmVzdCBSZWdhcmRzLA0KSGF5ZXMNCg0KDQo=
+On Wed, Jul 27, 2022 at 02:24:46PM +0800, ChiaEn Wu wrote:
+> On Tue, Jul 26, 2022 at 7:59 PM Daniel Thompson
+> <daniel.thompson@linaro.org> wrote:
+> > > > > So should we make all 16384 steps of MT6372 available to users?
+> > > >
+> > > > Yes.
+> > > >
+> > > >
+> > > > > Does that mean the DTS needs to be modified as well?
+> > > >
+> > > > Yes... the property to set initial brightness needs a 14-bit range.
+> > > >
+> > > > It would also be a good idea to discuss with the DT maintainers whether
+> > > > you should introduce a second compatible string (ending 6372) in order
+> > > > to allow the DT validation checks to detect accidental use of MT6372
+> > > > ranges on MT6370 hardware.
+
+[snip]
+
+> > > > I'd be curious what the compatiblity reasons are. In other words what
+> > > > software breaks?
+> > >
+> > > The reason is as above. We just hope the users who use this series SubPMIC can
+> > > directly apply this driver to drive the backlight device without
+> > > knowing the underlying hardware.
+> > > Not software breaks.
+> >
+> > As above, ignoring the max_brightness property is a bug in the
+> > userspace. I'm still unclear why sending faked ranges to userspace
+> > it a better solution than fixing the userspace.
+>
+> Ok, I got it!
+> If I add a second compatible string (like 'mediatek,mt6372-backlight')
+> in the DT section,
+> and append 'if-then-else' to determine the correct maximum value of
+> 'default-brightness' and 'max-brightness',
+> Also, I will append 'bled exponential mode' to make user control using
+> linear or exponential mode.
+
+I'd be very pleased to see support for exponential mode added: it's a
+much better way to control LEDs and backlights.
+
+
+> These changes I will explain to DT's maintainer again.
+
+Excellent. I know DT maintainers are copied into this thread but they
+will probably not be following this patch's thread so it is better to
+discuss in the mail thread for the DT bindings!
+
+
+> Back to the driver section,
+> do I still need to use the register to confirm again whether this
+> SubPMIC used now is MT6372 and record this information? (using
+> 'mt6370_check_vendor_info()')
+> I am afraid that the user who uses the MT6370 hardware, but the DT
+> compatible string is set to 'mediatek,mt6372-backlight'.
+> This may cause errors when update/get brightness values.
+> So I hope the driver here can check again to make sure the
+> 'default-brightness', 'max-brightness', can be updated/got correctly.
+> I don't know if this will make you feel redundant if I do this??
+
+Yes, it's good idea to check the hardware model during probe. I'd
+suggest just reporting this as an error ("Buggy DT, wrong compatible
+string") rather than trying to re-intepret the parameters.
+
+
+Daniel.
