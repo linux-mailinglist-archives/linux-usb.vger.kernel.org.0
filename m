@@ -2,113 +2,239 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B285837B7
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 05:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FE25838B3
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 08:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbiG1DuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Jul 2022 23:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S232555AbiG1GUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jul 2022 02:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiG1DuQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Jul 2022 23:50:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1CF267F
-        for <linux-usb@vger.kernel.org>; Wed, 27 Jul 2022 20:50:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231926AbiG1GUX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 02:20:23 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1442230F57;
+        Wed, 27 Jul 2022 23:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1658989219; x=1690525219;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=77z4OSLcpLQHGmEKgErSafXR9441+COqyJNi8XBEHhg=;
+  b=gHiC2poa9t1Ye/oPhqkAIMry7cGakKFqzl1yK60FCC1rhRCfBf2oa+RY
+   8lun/EMXwY4Q5A67qTAXK/uey6MCtC8SrELBmQQnnh5HYwuFAwZ064Pue
+   dafXNUw5GmE+jXBJInF+e/zV0xKHL/sFdH4Jjyw7Yu1T7EOLnVUTkUdLC
+   Glcs/fwCr1fLz1NgFly6kpxsiJ049dxJsCqqI1AZ3oFvz3ysT+Mc5NpF5
+   oj0r00d7Fsg/SeCr7HBMvob+ZUMUBnjP/ZnmS9E0LiPQZTTKGCoJahiko
+   dGLm8RS1ojG8FV1aI9BFKkeZfFLX3TNUP9hhnNUI2xVrHiOZy4l3ThM1u
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,196,1654552800"; 
+   d="scan'208";a="25307345"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 28 Jul 2022 08:20:16 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 28 Jul 2022 08:20:16 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 28 Jul 2022 08:20:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1658989216; x=1690525216;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=77z4OSLcpLQHGmEKgErSafXR9441+COqyJNi8XBEHhg=;
+  b=EwzegZZg+IkjEKkBUpjaBmlRMuXVmS1CQik1b53Ny6DxXW6Qkz+kmuLM
+   SWy1EDyqqADLI7iSg/quj9zVMBWWDzCL3HnZ7rLVWsVTj2pukRArJQO9b
+   bqdIleEwyXoKHRnw0AGvfGoPlYZsMTqJQcG3OZXX9b/diYOyVUrYgAQBp
+   Bpo0loqzI7dgaO2uhAaF9Jacoi5sLTDp+sIA6P/EOG8sg/zXqpCvJsWpI
+   DPoHlPtvBbjGg3JTPxLrP7/BztQ1WH0bdNDc6tNwsgQDJDp6jfvTreBI+
+   L4U0RrDrRpetnIILblNILnwDY3rJvGWWj+Mb3ZY7pPLkEE5h26oAzDYcB
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,196,1654552800"; 
+   d="scan'208";a="25307344"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 28 Jul 2022 08:20:16 +0200
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7192B8231B
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 03:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EAD6C433D6
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 03:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658980212;
-        bh=oPh+oAjwW1uEek+nhNX3tiATKP+N+Od3qg+J++Qp39s=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=JwDGq8Y+McoW0upGy5ZZakjvfZKnJ+Ck8i/4joqE5nGxykd6gWbpLJIy5oT57mWyO
-         0WXYpYj18fr2aaPyihNW9pR1vwZvpwY10IfTJQ9rjy125soGSginZloEVHzSflnYkz
-         XtbZBMg8UzoP8mOOvQtKwfCY1C/HlbKoJbS2OIrPy5YsV+leZov1cRWBygpcJekxR9
-         ZzRF3Q+0FI4Cf/FH7GRqqbCxW3rZ5ZSZxsgkFs2nBtLT+nCy7DesH/pFka6PwMnvq5
-         /aHazyF0nRRg87FUGFV3reP1zK7GXAMMPppd0qUl5rWG2wHa2UaVc/uSm4qVKi2mQu
-         TDGn2KinPzErw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6EE24C433E4; Thu, 28 Jul 2022 03:50:12 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216282] usb-mass storage
-Date:   Thu, 28 Jul 2022 03:50:12 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: audioprof2001@yahoo.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-216282-208809-2F8iutEZc2@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216282-208809@https.bugzilla.kernel.org/>
-References: <bug-216282-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 35837280056;
+        Thu, 28 Jul 2022 08:20:16 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] usb: misc: onboard_usb_hub: Add reset-gpio support
+Date:   Thu, 28 Jul 2022 08:20:13 +0200
+Message-ID: <2191669.iZASKD2KPV@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <YuFykRtbvxGssSVs@google.com>
+References: <20220727141117.909361-1-alexander.stein@ew.tq-group.com> <YuFykRtbvxGssSVs@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
+Hello Matthias,
 
---- Comment #18 from audioprof2001@yahoo.com ---
-$ neofetch
+Am Mittwoch, 27. Juli 2022, 19:14:57 CEST schrieb Matthias Kaehlcke:
+> Hi Alexander,
+> 
+> (copying my comments from v3 to keep the discussion on the latest version)
+> 
+> On Wed, Jul 27, 2022 at 04:11:16PM +0200, Alexander Stein wrote:
+> > Despite default reset upon probe, release reset line after powering up
+> > the hub and assert reset again before powering down.
+> > 
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> > * Patch 1 dropped as it already applied
+> > 
+> > Changes in v4:
+> > * Rebased to [1] commit e0c6b1f3d757 ("USB: usbsevseg: convert sysfs
+> > snprintf to sysfs_emit") * Added platform data for usb424
+> > 
+> >   Reset pulse length taken from [2], Table 3-2 Symbol RESET_N
+> >   Completely untested
+> > 
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git Branch
+> > usb-testing [2]
+> > http://ww1.microchip.com/downloads/en/devicedoc/00001692c.pdf
+> > 
+> >  drivers/usb/misc/onboard_usb_hub.c | 28 ++++++++++++++++++++++++++++
+> >  drivers/usb/misc/onboard_usb_hub.h | 22 +++++++++++++++++-----
+> >  2 files changed, 45 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.c
+> > b/drivers/usb/misc/onboard_usb_hub.c index de3627af3c84..0c81417dd9a7
+> > 100644
+> > --- a/drivers/usb/misc/onboard_usb_hub.c
+> > +++ b/drivers/usb/misc/onboard_usb_hub.c
+> > @@ -7,6 +7,7 @@
+> > 
+> >  #include <linux/device.h>
+> >  #include <linux/export.h>
+> > 
+> > +#include <linux/gpio/consumer.h>
+> > 
+> >  #include <linux/init.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/list.h>
+> > 
+> > @@ -38,6 +39,8 @@ struct usbdev_node {
+> > 
+> >  struct onboard_hub {
+> >  
+> >  	struct regulator *vdd;
+> >  	struct device *dev;
+> > 
+> > +	const struct onboard_hub_pdata *pdata;
+> > +	struct gpio_desc *reset_gpio;
+> > 
+> >  	bool always_powered_in_suspend;
+> >  	bool is_powered_on;
+> >  	bool going_away;
+> > 
+> > @@ -56,6 +59,9 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
+> > 
+> >  		return err;
+> >  	
+> >  	}
+> > 
+> > +	fsleep(hub->pdata->reset_us);
+> > +	gpiod_set_value_cansleep(hub->reset_gpio, 0);
+> > +
+> > 
+> >  	hub->is_powered_on = true;
+> >  	
+> >  	return 0;
+> > 
+> > @@ -65,6 +71,11 @@ static int onboard_hub_power_off(struct onboard_hub
+> > *hub)> 
+> >  {
+> >  
+> >  	int err;
+> > 
+> > +	if (hub->reset_gpio) {
+> > +		gpiod_set_value_cansleep(hub->reset_gpio, 1);
+> > +		fsleep(hub->pdata->reset_us);
+> 
+> Is this delay here actually needed? There is a delay in
+> onboard_hub_power_on(), before de-asserting the reset, isn't that enough?
 
-                  .+yh                   mac@macmini71=20
-                 sMMMo                   ------------------=20
-                sMMN+                    OS: pearOS Monterey Beta x86_64=20
-                +o:                      Host: Macmini7,1 1.0=20
-           ./oyyys+.                     Kernel: 5.14.0-1036-oem=20
-         :dMMMMMMMMMm/                   Uptime: 2 hours, 48 mins=20
-        :MMMMMMMMMMMMMy                  Resolution: 1920x1080 @ 60.00Hz=20
-        yMMMMMMMMMMMMMN                  CPU: Intel i5-4308U (4) @ 3.300GHz
-[49.0=C2=B0C]=20
-        mMMMMMMMMMMMMs`                  GPU: Intel Haswell-ULT=20
-       yMMMMMMMMMMMMo=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20
-     -mMMMMMMMMMMMMM`                    Packages: 2789 (dpkg), 17 (snap)=20
-    oMMMMMMMMMMMMMMM`                    Shell: bash 5.0.17=20
-   oMMMMMMMMMMMMMMMMy                    Terminal: konsole=20
-  .MMMMMMMMMMMMMMMMMMy`=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20
-  +MMMMMMMMMMMMMMMMMMMMy/`               Memory: 4290MiB / 7832MiB
-[--------=3D=3D=3D=3D=3D=3D=3D]=20
-  /MMMMMMMMMMMMMMMMMMMMMMMNds            CPU Usage: 13% [-=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D]=20
-  `mMMMMMMMMMMMMMMMMMMMMMMMM/            Disk (/): 58G / 103G (60%)
-[---------=3D=3D=3D=3D=3D=3D]=20
-   .mMMMMMMMMMMMMMMMMMMMMMM+=20=20
-    `oNMMMMMMMMMMMMMMMMMMd-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-      `+hMMMMMMMMMMMMMms-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
-          -/osyhhyso:.=20
-                                         Copyright =C2=A9 2021 Alexandru Ba=
-lan w/
-axtlos
+If you see both delays together you are right, but I tend to think in that way 
+it is to ensure whenever we apply a reset it is long enough.
+As said before the powering on delay is to ensure the pulse length delay even 
+if there is no reset GPIO but it is controlled by hardware.
 
---=20
-You may reply to this email to add a comment.
+> > +	}
+> > +
+> > 
+> >  	err = regulator_disable(hub->vdd);
+> >  	if (err) {
+> >  	
+> >  		dev_err(hub->dev, "failed to disable regulator: %d\n", 
+err);
+> > 
+> > @@ -219,6 +230,7 @@ static void onboard_hub_attach_usb_driver(struct
+> > work_struct *work)> 
+> >  static int onboard_hub_probe(struct platform_device *pdev)
+> >  {
+> > 
+> > +	const struct of_device_id *of_id;
+> > 
+> >  	struct device *dev = &pdev->dev;
+> >  	struct onboard_hub *hub;
+> >  	int err;
+> > 
+> > @@ -227,10 +239,26 @@ static int onboard_hub_probe(struct platform_device
+> > *pdev)> 
+> >  	if (!hub)
+> >  	
+> >  		return -ENOMEM;
+> > 
+> > +	of_id = of_match_device(onboard_hub_match, &pdev->dev);
+> > +	if (!of_id)
+> > +		return -ENODEV;
+> > +
+> > +	hub->pdata = of_id->data;
+> > +	if (!hub->pdata)
+> > +		return -EINVAL;
+> > +
+> > 
+> >  	hub->vdd = devm_regulator_get(dev, "vdd");
+> >  	if (IS_ERR(hub->vdd))
+> >  	
+> >  		return PTR_ERR(hub->vdd);
+> > 
+> > +	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+> > +						  
+GPIOD_OUT_HIGH);
+> > +	if (IS_ERR(hub->reset_gpio))
+> > +		return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), 
+"failed to get
+> > reset GPIO\n"); +
+> > +	if (hub->reset_gpio)
+> > +		fsleep(hub->pdata->reset_us);
+> 
+> Same question here: onboard_hub_power_on() is called a few lines below and
+> has a delay before de-asserting the reset. Is the delay here really needed?
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+This actually looks like the delay is duplicated here. I agree with removing 
+this.
+How shall we proceed now that the whole series (incl. the bindings patch 1/3 
+from v3) has landed in usb-testing? I can create a patch on top of this if 
+this is the way to go.
+
+Best regards,
+Alexander
+
+
+
