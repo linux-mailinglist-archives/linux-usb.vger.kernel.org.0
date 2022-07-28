@@ -2,103 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8895841E1
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 16:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B9A584206
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Jul 2022 16:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbiG1OjL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Jul 2022 10:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
+        id S232909AbiG1Om6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Jul 2022 10:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiG1Ois (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 10:38:48 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0434F6D2F1
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 07:36:54 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id o3so1971900ple.5
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 07:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=kCSqCOP5NnmgqzMKAvoC+xj8lkHVueu0SPSEqGKA1Ew=;
-        b=Skf9kVOD3dwdpe4eu6U/64PTm/f35OkpoxGX7wyHsqjoW0uN+QMTbqPY5qcFxV3L7o
-         1o0hHSPzSuWEBWlGxlTf0yiOofEvoXo4rPWVcUFydbo9rSp30LYhwNKYTVpUfWgygF3r
-         6SZT8YA/NL8KBfjKgF9JVJOWWI0ILBYgRdTAxhuLOWouNHWK+xyinxdPc4dfmXr7lHAd
-         yJpl3DEI9cFCFn0wI1DQGxBfaeq+jikl1E7FHP/7Zdp7f/nDKHfye+trRS4fNouljrIT
-         ndabKf8oyFtjdBs3xMMaxbNV8G3NWMbW4qCFP3qWp7l0pzeRPWWn8QHKfgkGmNYuP2Qc
-         hQAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=kCSqCOP5NnmgqzMKAvoC+xj8lkHVueu0SPSEqGKA1Ew=;
-        b=qWew87TWwgeBNtd8Jfjuutlflc7skka02DFcxANTA/zL4/2thTtOKUIUZFnrs8l8DV
-         QG16Bn0CO2Gw2M6mu+27lU7xYKjgl8JnQ8/IAbGa0XDdleaL+cYZB57R+uMhtQv3lafj
-         1yu/dSR/s6dq2tHRXi1ZznjMBfxZG7Q8hPmI2g0WNS3ODX6NNIoAxfvMfWvnWcH0gVvA
-         XeXYl0GNtHfK/lo2zlamQenLET+LYmgQcxyQrkz196LX6t4GR3AbDyfpxU+6WC/oxys1
-         YgHiPoKgj/HikBXHx/dy6is6HmTFPr5Oxf75LjUSfH8MupUH9qxyqacFHLJhLT2kFJE0
-         dvOw==
-X-Gm-Message-State: AJIora/j2lN4Ll8I2Qa19SaGLw/21/dlhcAye/5ARCDaHtvY4Qofmokg
-        g/yr8Mp3Kq7jhe5yhFiTyRSL/wuoN2Dozhzn2sU=
-X-Google-Smtp-Source: AGRyM1tA+CQ0WK6C4nB1IRc278P+MdnXH0A7f4dYaj4qt4xBiRsc9gsz99akFCW0uJNzkHSDr8vBsHe6ga1rtv5fj6Y=
-X-Received: by 2002:a17:90b:38cf:b0:1f2:fb9c:6003 with SMTP id
- nn15-20020a17090b38cf00b001f2fb9c6003mr10507438pjb.214.1659019013293; Thu, 28
- Jul 2022 07:36:53 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a17:90a:678e:0:0:0:0 with HTTP; Thu, 28 Jul 2022 07:36:52
- -0700 (PDT)
-Reply-To: lisarobinsongift02@gmail.com
-From:   Lisa Robinson <benjaminkitavi49@gmail.com>
-Date:   Thu, 28 Jul 2022 17:36:52 +0300
-Message-ID: <CAEwLOJV3yXz6RvH83+bjp5V=1G7=uc5FgobvAi_CobCciHsrSA@mail.gmail.com>
-Subject: Donation
-To:     undisclosed-recipients:;
+        with ESMTP id S233182AbiG1Omj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Jul 2022 10:42:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CF62CCB9
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 07:42:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E9EA619A5
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 14:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A3BDCC43470
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 14:42:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659019339;
+        bh=NZgRR9WjY0KMpvSTSWwPnOatHWinKQKnBv25jNxheO8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Yl4w/QKUdcHmFc6sylTmS/wv7yfvZyf+o2FLgSUsDwCXnqqmVaPXnl+acoaa3MuRd
+         gqI0YuCaoPXNRy/tnZ9iH7aVmLbWW8J+/0mPF97o3jmfhFwJaBAqXO/p2LlONIpEoO
+         YPryjQOKi1HZu/HUG6kLXHN2TpTdyIL/y5iJ4bBF/6yw+B3VpUe1nq3Ph/+LswdxM2
+         waCCtGLELCJdg9UJriKcatZtQqMcVsd7YPCI1pn+vL0+ZFQHzqn/DR957NcagWPjlH
+         atlgwrVOljrbeK/fPjCm+ybOmdfjUCRLqn6Cj599iePYZ9jMvAeaEfkxOcpcux3eUG
+         TXfXRQgkq87lg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 814ABC433E6; Thu, 28 Jul 2022 14:42:19 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216282] usb-mass storage
+Date:   Thu, 28 Jul 2022 14:42:19 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-216282-208809-GFQTzhN3xS@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216282-208809@https.bugzilla.kernel.org/>
+References: <bug-216282-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:644 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5002]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [benjaminkitavi49[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lisarobinsongift02[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [benjaminkitavi49[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216282
+
+--- Comment #19 from Alan Stern (stern@rowland.harvard.edu) ---
+Make sure your current directory is something regular, like your home
+directory. Not something under /sys/ -- those directories aren't writeable.
+
+It's normal for the files under /sys to show up as 0 bytes long in an "ls -=
+l"
+listing.  They aren't real files, but interfaces to the kernel.  As long as
+they do show up at all they should be okay.
+
+While the "cat" process is running, any activity on the USB bus (such as
+activity caused by plugging in the drive) will get copied to the "mon.out"
+file.
+
+(By the way, the output from neofetch is not really useful.  You might as w=
+ell
+stop including it.)
+
 --=20
-You were chosen by God to receive my Grant Donation of 1.200.000,00 =E2=82=
-=AC
-Please contact: Mrs Lisa Robinson via email:
-lisarobinsongift02@gmail.com
-Surname:
-Country:
-WhatsApp phone number:
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
