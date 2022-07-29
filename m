@@ -2,135 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EA9584E50
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 11:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860F0584EE1
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 12:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235971AbiG2Jlo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Jul 2022 05:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S235933AbiG2KfI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Jul 2022 06:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235959AbiG2JlQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 05:41:16 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53DED43
-        for <linux-usb@vger.kernel.org>; Fri, 29 Jul 2022 02:40:47 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id p10so6498677lfd.9
-        for <linux-usb@vger.kernel.org>; Fri, 29 Jul 2022 02:40:47 -0700 (PDT)
+        with ESMTP id S235889AbiG2Ke4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 06:34:56 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA7677545;
+        Fri, 29 Jul 2022 03:34:54 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id c12so5304982ede.3;
+        Fri, 29 Jul 2022 03:34:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HlB1PLMmBO5wAZp/rJ+t55Wo1Wb7Hb1/K7W0E1/Rthw=;
-        b=owaroN/fkxCxX0BPlaLmjO/TuS96J559mTUOcbtnZXvyf9FJZo3jWXpHutOKSdO33K
-         Eko/qJKAlPVvUUPXbiOyApkXBkaSqqsexwjgV62hdHi9N7zEYCM6XaGpa1OCzXQFZSBg
-         wXLQfxjtnmVt8tbEwWyEvb40HiOEzswljdkfZgU0CwwAbEXoP4qdUT6ZgKXWPk6pAmG7
-         w4ErymoUT0BBUW7MMVFIEZ0z9bPbkjETIcKjOguqu3z9NOo2hYiHOiY7R8z/M7op+5q5
-         Ms9n+P2e2vapAU9CmCkSf2hzwa+WeP5iwjprm9z9wfbziEx5OTL65JSjddpqKZTKZGBH
-         4jbw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=Zk6yHET57f/wYXBe4yiexZ1AAMItVqOz1Jv1kut5E8E=;
+        b=IsM5N0dJ2jSYwlQl9rbwt+OLNPEKaCRVIniuh9/fK2UA5cEWqol8qEt2eY1KAFImh0
+         xgKtFlDvRwmal8EgGb4Op+XBno/E/HH8Bxy8BPnkUU2nIxz44g1exMkT0mBgnzczAkOM
+         jEEdvopg/k2e5S3/4OLDkdml7fNMgGZXJmK2pxORFJYNKUIs9dcrZpTPKP/PyTRRiDnU
+         4AbNyblEPeQVwrctPIK+zUGSC8WmuyEHQXK0TllYSTMZqHtKbYQ+rO3pNAksc0uoqvC9
+         H7uLLtXO9go/uW0Ye5nZLjgde4OuJHwsb257PiiTAEQZboCcDlee7NJuUdg+WQoQdZGF
+         8sKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HlB1PLMmBO5wAZp/rJ+t55Wo1Wb7Hb1/K7W0E1/Rthw=;
-        b=t8Uaa+cFMQa7o27SynJalgMYsKNofZD6sB6VxAGT4uocMMh9gH1K7BXos3kX1hqPqF
-         zTLc7wdxl/CcLNpaR7ZOHIEgZT3+ClaVjInF0MlFnsPFndJjwtHmfhSKQge2nGiTiqVs
-         wulkS+Lmgvib/BaqFLzQgnoTOAZ0Pgek2DSvZZQMNwVeJoN3q3c1nBh/XP6O0BzmhfnE
-         2vAbYjOqaQhT1H227l04sN9nsuNQ3mpA6hXBC8KYzyVshs9tFUVieR/1xo17GwaLAP8T
-         fG2JZrjOEYPML1avMF3exlOu/6B+frzbP0VWB7HhVI2luB1LOgN/SKuix3N3DEehUxX8
-         dkYg==
-X-Gm-Message-State: AJIora/mz469dODFWjorytIh3Sjg0YVSX8S1hbnbddgKrssim3GlS1MG
-        FyRFbvjZ96g8trj4zLsnc8fp
-X-Google-Smtp-Source: AGRyM1vSJjiuAn45yth8P4zLPuiAPreiQ7XzNaJmg+F+OejWHoSxhKrHjd+rRwvFJlpSSvqQxzDP2g==
-X-Received: by 2002:a05:6512:2025:b0:48a:a653:fe31 with SMTP id s5-20020a056512202500b0048aa653fe31mr1013843lfs.166.1659087637291;
-        Fri, 29 Jul 2022 02:40:37 -0700 (PDT)
-Received: from ukaszb-l.wifi.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id f22-20020a2e6a16000000b0025e343c4929sm218503ljc.92.2022.07.29.02.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 02:40:36 -0700 (PDT)
-From:   =?UTF-8?q?=C5=81ukasz=20Bartosik?= <lb@semihalf.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc:     linux-usb@vger.kernel.org, upstream@semihalf.com
-Subject: [PATCH v2] thunderbolt: fix PCI device class after powering up
-Date:   Fri, 29 Jul 2022 11:40:22 +0200
-Message-Id: <20220729094022.186496-1-lb@semihalf.com>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=Zk6yHET57f/wYXBe4yiexZ1AAMItVqOz1Jv1kut5E8E=;
+        b=QV3GjVqcXmZkzYvOvw6OgT3i4XSD7Gfdy313J3JcSvuqH0c+EYx/ZOsdwC2ux5OW58
+         2tN1M7mF5DZYbELP0pwzMG/Pa2RuKLZAzhW+OlyYRvr0Rg2aaoqsbkxzOdw1QPztnc8l
+         KPkkL0D0qpWL9goqpbA5LaGeBEoPvCvTWTjz/7lRZQdBd+Zvx4F7A/cgHoH54/uiranJ
+         cE3PY7JtbB5HhpOtnKluTtn18C5Bj72TI1j1OCB2pJkrXa42kmZPURPQeTiQko+AQjHB
+         Gg/9S5LyLbL89/gOPWwJMmY5HnLamveXxTLeQG9poE5pDU23LBUXRUHxl2adb7g0BtVK
+         wH1Q==
+X-Gm-Message-State: AJIora90pI00yBVTJwuF7e7ebXlM+Me5FQxFoyqIf0VRtl9Qi19H3SCa
+        vpYjgYQdjSa8C1sVboZqseomTPcUf/IqlribDhE=
+X-Google-Smtp-Source: AGRyM1thJcc6VzDaeaE+EySViKuCRpu348iS7jC1QI3PpaFzkcmRpNMn9JsAnkR2MfsFuw188nD7QnVuUJohoFdGXiU=
+X-Received: by 2002:a05:6402:501d:b0:437:e000:a898 with SMTP id
+ p29-20020a056402501d00b00437e000a898mr2923947eda.265.1659090892398; Fri, 29
+ Jul 2022 03:34:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-13-peterwu.pub@gmail.com>
+ <CAHp75Vf85_uzA9fRxTizbPJxODcXFpM4wuU6DxP2j9UA47B_2g@mail.gmail.com> <CA+hk2fYcw0szJ7bBvfEjtyUE_Z61_A1vFWmPSdhe-gmd5jbC6g@mail.gmail.com>
+In-Reply-To: <CA+hk2fYcw0szJ7bBvfEjtyUE_Z61_A1vFWmPSdhe-gmd5jbC6g@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 29 Jul 2022 12:34:14 +0200
+Message-ID: <CAHp75VctFBkPYumu-4+iGNATt=zE7HJ3n0kRSdDduJZ=h6FDEQ@mail.gmail.com>
+Subject: Re: [PATCH v6 12/13] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+To:     szuni chen <szunichen@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A thunderbolt
-lspci -d 8086:9a1b -vmmknn
-Slot:	00:0d.2
-Class:	System peripheral [0880]
-Vendor:	Intel Corporation [8086]
-Device:	Tiger Lake-LP Thunderbolt 4 NHI #0 [9a1b]
+On Fri, Jul 29, 2022 at 8:17 AM szuni chen <szunichen@gmail.com> wrote:
+> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=
+=9C=8825=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=884:51=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > On Fri, Jul 22, 2022 at 12:25 PM ChiaEn Wu <peterwu.pub@gmail.com> wrot=
+e:
+> > >
+> > > From: Alice Chen <alice_chen@richtek.com>
 
-presents itself with PCI class 0x088000 after Chromebook boots.
-lspci -s 00:0d.2 -xxx
-00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt 4
-NHI #0 (rev 01)
-00: 86 80 1b 9a 00 00 10 00 01 00 80 08 00 00 00 00
 ...
 
-However after thunderbolt is powered up in nhi_probe()
-its class changes to 0x0c0340
-lspci -s 00:0d.2 -xxx
-00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt 4
-NHI #0 (rev 01)
-00: 86 80 1b 9a 06 04 10 00 01 40 03 0c 00 00 00 00
-...
+> > > Signed-off-by: Alice Chen <alice_chen@richtek.com>
+> >
+> > This SoB chain is wrong. Prioritize and read Submitting Patches!
+>
+> After reading the Submitted Patches,
+> ChiaEn Wu wasn't involved in the development but he submitted the patch,
+> So, ChiaEn Wu <chiaen_wu@richtek.com> should be the last SoB, right?
 
-which leaves pci_dev structure with old class value
-cat /sys/bus/pci/devices/0000:00:0d.2/class
-0x088000
+Right. Submitter's SoB is the last SoB in the chain.
 
-This fix updates PCI device class in pci_dev structure after
-thunderbolt is powered up.
+> I will revise SoB to
+>
+> Signed-off-by: SzuNi Chen <alice_chen@richtek.com>
 
-Fixes: 3cdb9446a117 ("thunderbolt: Add support for Intel Ice Lake")
-Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
----
-Changelog v1->v2
-* Add restoration of PCI revision id
----
- drivers/thunderbolt/nhi_ops.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Not sure I understand the SzuNi <--> Alice transformation...
 
-diff --git a/drivers/thunderbolt/nhi_ops.c b/drivers/thunderbolt/nhi_ops.c
-index 96da07e88c52..7aba47e5b3bd 100644
---- a/drivers/thunderbolt/nhi_ops.c
-+++ b/drivers/thunderbolt/nhi_ops.c
-@@ -160,12 +160,18 @@ static int icl_nhi_suspend_noirq(struct tb_nhi *nhi, bool wakeup)
- 
- static int icl_nhi_resume(struct tb_nhi *nhi)
- {
-+	u32 class;
- 	int ret;
- 
- 	ret = icl_nhi_force_power(nhi, true);
- 	if (ret)
- 		return ret;
- 
-+	/* Set device class & rev as it might have changed after powering up */
-+	pci_read_config_dword(nhi->pdev, PCI_CLASS_REVISION, &class);
-+	nhi->pdev->class = class >> 8;
-+	nhi->pdev->revision = class & 0xff;
-+
- 	icl_nhi_set_ltr(nhi);
- 	return 0;
- }
--- 
-2.37.1.455.g008518b4e5-goog
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+>
+> If there is anything else I need to fix, please let me know. Thank you.
 
+--=20
+With Best Regards,
+Andy Shevchenko
