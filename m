@@ -2,86 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24B1584AEB
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 07:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16329584B78
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 08:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbiG2FAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Jul 2022 01:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S234140AbiG2GOO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Jul 2022 02:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234028AbiG2FAT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 01:00:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CC815810;
-        Thu, 28 Jul 2022 22:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C583661E87;
-        Fri, 29 Jul 2022 05:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19C1FC43141;
-        Fri, 29 Jul 2022 05:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659070816;
-        bh=ts9QX6bXkNSNzxmknYoMkbHGOEsg8CSxlvBpXlATtG0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iv3nBghkUxD3kFnMBstYk6NrotY/DTZ+Lb4ED1XqKfbFtzXTe27yAt2h6jIn+YaCQ
-         JxfBJBPAMWbiNga17LIfHgPSYkyhwhuh7Pw6v++/nDdzkCPdge4KgUlwPu1du2h7sE
-         ihskoOi3dM7XCmMWUbeAY3KvVyikt6cy5GDCEsAppLzA9HHnGr8Pq5PWP+XlJ/B9Z1
-         5cnHxuPr9yHxRgq2hJ64qyhZnZ9Dc9rdQl3u8ZjBqF1os05ygSX5b9pbnCiJjE+NS4
-         Cmv8EzxXjgu7cgs+sDND0fH724MyiZrHJyvYQ3mvLWd36pFkuqZh8u6QP1cKIAjMKp
-         M3n7bCDNw4Cpg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE530C43144;
-        Fri, 29 Jul 2022 05:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: usb: delete extra space and tab in blank line
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165907081597.3346.16848018508250716743.git-patchwork-notify@kernel.org>
-Date:   Fri, 29 Jul 2022 05:00:15 +0000
-References: <20220727081253.3043941-1-studentxswpy@163.com>
-In-Reply-To: <20220727081253.3043941-1-studentxswpy@163.com>
-To:     None <studentxswpy@163.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, oliver@neukum.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229973AbiG2GOO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 02:14:14 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A982A7C1B5
+        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 23:14:10 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1659075238t28h5q6i
+Received: from smtpclient.apple ( [111.193.9.146])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 29 Jul 2022 14:13:57 +0800 (CST)
+X-QQ-SSF: 01400000000000B0V000000A0000000
+X-QQ-FEAT: XSXWadnVjOQ/cwvcZHolvRFzZWW29l/wu70fdE/ClqLW2tUxKIdarmnhLiAym
+        45Vfoa8BO113Z6/mLCwvQB+Qb4EmlfM1JpLk/aPP6fkRZEIQC0P1WaxnKx4hQvU4oaiEjGy
+        PejTiJr6+RB/9+vN2ux62GbC8eUfDMQR3rY7WzaQGDIbWunGd0d9SPjJ6koo1PvB6QjRszX
+        dZ2o677DDYc4S1+qY6kx9KivFx4OjCdOA8YyaVyiJ+EaXDxWHkIeRq4m+XOfRNVgdOE7D/Q
+        xGF0FtRbyUV7By1nPG7k0UB375oDLwtz0t49vSaCln06cQVh7A76pA+cZ9gUCtyywIFs4AM
+        +isLKFlipIOCVvMNY60E02Z58R4IKZ6WNvxWfX4hiu2ssruYTyrCCIW5gjr+w==
+X-QQ-GoodBg: 2
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
+From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
+In-Reply-To: <Yt1WfSZk03Plpnan@hovoldconsulting.com>
+Date:   Fri, 29 Jul 2022 14:13:56 +0800
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Reinhard Speyerer <rspmn@arcor.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <B47DDA3C-3CE2-4E25-B764-1744A4AA04A0@bupt.edu.cn>
+References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+ <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
+ <YtKrbucYNulPEKUp@arcor.de> <YtRtswctFMLxeglu@kroah.com>
+ <YtXG3EVrRKAG7WVx@arcor.de> <YtwjiWG5ZFBvCZ1M@hovoldconsulting.com>
+ <Yt1QhCIiUf97Dl3D@kroah.com> <Yt1WfSZk03Plpnan@hovoldconsulting.com>
+To:     Johan Hovold <johan@kernel.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign8
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 27 Jul 2022 16:12:53 +0800 you wrote:
-> From: Xie Shaowen <studentxswpy@163.com>
+> On Jul 24, 2022, at 22:26, Johan Hovold <johan@kernel.org> wrote:
 > 
-> delete extra space and tab in blank line, there is no functional change.
+> On Sun, Jul 24, 2022 at 04:00:36PM +0200, Greg Kroah-Hartman wrote:
+>> On Sat, Jul 23, 2022 at 06:36:25PM +0200, Johan Hovold wrote:
+>>> On Mon, Jul 18, 2022 at 10:47:24PM +0200, Reinhard Speyerer wrote:
 > 
-> Signed-off-by: Xie Shaowen <studentxswpy@163.com>
-> ---
->  drivers/net/usb/catc.c       | 44 ++++++++++++++++++------------------
->  drivers/net/usb/cdc_subset.c | 10 ++++----
->  drivers/net/usb/kaweth.c     |  2 +-
->  drivers/net/usb/plusb.c      |  2 +-
->  drivers/net/usb/usbnet.c     |  2 +-
->  5 files changed, 30 insertions(+), 30 deletions(-)
+>>>> Please don't give the OPPO R11 diag port on Linux a bad name by letting
+>>>> the usb-serial-simple driver handle it.
+>>> 
+>>> So while I'm not sure bandwidth is really a problem, I still tend to
+>>> agree that we should add this one to the option driver for now as that
+>>> is how we handle (non-GOBI) Qualcomm modems and their QCDM ports.
+>> 
+>> If you want it to stay on the option driver, that's fine, but I still
+>> think it feels odd as it obviously does not follow the vendor-specific
+>> protocol that the option driver supports.
+> 
+> But we've been dumping modem device-id entries in there since forever.
+> 
+> The entries added to option have been for devices whose interfaces did
+> not follow any particular pattern (e.g. unlike the old GOBI modems).
+> 
+> And as Reinhard mentioned, the line-control requests (which follow CDC)
+> are actually required by some Qualcomm modems so moving things out would
+> need to be done carefully.
+> 
+> On the other hand, that request likely isn't needed for any QCDM/DIAG
+> ports, but who knows for sure.
 
-Here is the summary with links:
-  - [net-next] net: usb: delete extra space and tab in blank line
-    https://git.kernel.org/netdev/net-next/c/efe3e6b5aeef
+Test result for bandwidth problem:
+Sending 0x1f mask (diag command: 0x7d0500001f000000) and running LTE
+speedtest on the device, both option and simple can dump more than 80Mbps.
+The CRC of diag packets is OK at this high speed, so it seems that
+there is no message loss. I think this bandwidth is enough.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+For the flow control problem, it seems the SetControlLineState request
+send by option (usb_wwan) has no effect on the device. Both with and
+without this request the diag port works the same.
+
+Hope this can help you decide which driver to choose :)
+
+Thanks,
+sdlyyxy
 
 
