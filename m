@@ -2,64 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FBB584DDD
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 11:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EA9584E50
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 11:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbiG2JKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Jul 2022 05:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S235971AbiG2Jlo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Jul 2022 05:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235368AbiG2JJ6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 05:09:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351D785F80;
-        Fri, 29 Jul 2022 02:09:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7CB061D43;
-        Fri, 29 Jul 2022 09:09:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36713C433C1;
-        Fri, 29 Jul 2022 09:09:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659085797;
-        bh=Yall9tUMFhT+qHLY2CQ4RSosUaj/51DCndyhqSodfwQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EDhl5tT7SbJkV/HJQ0XFnAcSYYRAxBs6zIbsygfA5WSuGuiOZaeznd7/59bqcDTyx
-         KOoJWtjbBNoY92yz5vT/FgNSCKaSb2IhhJ7ouXcX3gBJAWsCLDN69M5bCZthSGzHas
-         loHhPQeZxlhfLimqXbA4ri4Aingn/LxrjJS1ZYLmRXQbwF+4sTPKqtDA9FQKF1lypt
-         okdBjHL7BjdG+VRDFnN6BsdJAhJmTS+cya7KYfPZu1J4fA6yo8+yXT0RWF3QYiqW4O
-         OpYdNzi3+KC1DOAB585ncflhNHeCyXXoo/Q1v8jhA2QIbjQuk+E9/vxp0kRL+NtUN5
-         uTUBcks7tzLtg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oHM0a-0000fD-Gd; Fri, 29 Jul 2022 11:10:13 +0200
-Date:   Fri, 29 Jul 2022 11:10:12 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jonathan Woithe <jwoithe@just42.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Aidan Thornton <makosoft@gmail.com>,
-        Grigori Goronzy <greg@chown.ath.cx>,
-        Michael Hanselmann <public@hansmi.ch>
-Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
- chunks
-Message-ID: <YuOj9EHckqzR1/KF@hovoldconsulting.com>
-References: <Ys4QOgNF0pJDwRCJ@marvin.atrad.com.au>
- <YtUfcSOTl/ia+ahL@hovoldconsulting.com>
- <YtYsFVCShDeVCeis@marvin.atrad.com.au>
- <YtZG5vFNpXCXIMf0@hovoldconsulting.com>
- <YtZQjcUMYZEky+Ta@marvin.atrad.com.au>
- <YtZbWhGx/nqgAIX7@hovoldconsulting.com>
- <YtZlwLoDO9CVt9RO@marvin.atrad.com.au>
- <YtahM9hyrPVATchX@marvin.atrad.com.au>
- <YtvT/6DqPjUumpsl@hovoldconsulting.com>
- <Yt8rJWGKdfhkIBBY@marvin.atrad.com.au>
+        with ESMTP id S235959AbiG2JlQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 05:41:16 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53DED43
+        for <linux-usb@vger.kernel.org>; Fri, 29 Jul 2022 02:40:47 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p10so6498677lfd.9
+        for <linux-usb@vger.kernel.org>; Fri, 29 Jul 2022 02:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HlB1PLMmBO5wAZp/rJ+t55Wo1Wb7Hb1/K7W0E1/Rthw=;
+        b=owaroN/fkxCxX0BPlaLmjO/TuS96J559mTUOcbtnZXvyf9FJZo3jWXpHutOKSdO33K
+         Eko/qJKAlPVvUUPXbiOyApkXBkaSqqsexwjgV62hdHi9N7zEYCM6XaGpa1OCzXQFZSBg
+         wXLQfxjtnmVt8tbEwWyEvb40HiOEzswljdkfZgU0CwwAbEXoP4qdUT6ZgKXWPk6pAmG7
+         w4ErymoUT0BBUW7MMVFIEZ0z9bPbkjETIcKjOguqu3z9NOo2hYiHOiY7R8z/M7op+5q5
+         Ms9n+P2e2vapAU9CmCkSf2hzwa+WeP5iwjprm9z9wfbziEx5OTL65JSjddpqKZTKZGBH
+         4jbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HlB1PLMmBO5wAZp/rJ+t55Wo1Wb7Hb1/K7W0E1/Rthw=;
+        b=t8Uaa+cFMQa7o27SynJalgMYsKNofZD6sB6VxAGT4uocMMh9gH1K7BXos3kX1hqPqF
+         zTLc7wdxl/CcLNpaR7ZOHIEgZT3+ClaVjInF0MlFnsPFndJjwtHmfhSKQge2nGiTiqVs
+         wulkS+Lmgvib/BaqFLzQgnoTOAZ0Pgek2DSvZZQMNwVeJoN3q3c1nBh/XP6O0BzmhfnE
+         2vAbYjOqaQhT1H227l04sN9nsuNQ3mpA6hXBC8KYzyVshs9tFUVieR/1xo17GwaLAP8T
+         fG2JZrjOEYPML1avMF3exlOu/6B+frzbP0VWB7HhVI2luB1LOgN/SKuix3N3DEehUxX8
+         dkYg==
+X-Gm-Message-State: AJIora/mz469dODFWjorytIh3Sjg0YVSX8S1hbnbddgKrssim3GlS1MG
+        FyRFbvjZ96g8trj4zLsnc8fp
+X-Google-Smtp-Source: AGRyM1vSJjiuAn45yth8P4zLPuiAPreiQ7XzNaJmg+F+OejWHoSxhKrHjd+rRwvFJlpSSvqQxzDP2g==
+X-Received: by 2002:a05:6512:2025:b0:48a:a653:fe31 with SMTP id s5-20020a056512202500b0048aa653fe31mr1013843lfs.166.1659087637291;
+        Fri, 29 Jul 2022 02:40:37 -0700 (PDT)
+Received: from ukaszb-l.wifi.semihalf.net ([83.142.187.85])
+        by smtp.gmail.com with ESMTPSA id f22-20020a2e6a16000000b0025e343c4929sm218503ljc.92.2022.07.29.02.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 02:40:36 -0700 (PDT)
+From:   =?UTF-8?q?=C5=81ukasz=20Bartosik?= <lb@semihalf.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc:     linux-usb@vger.kernel.org, upstream@semihalf.com
+Subject: [PATCH v2] thunderbolt: fix PCI device class after powering up
+Date:   Fri, 29 Jul 2022 11:40:22 +0200
+Message-Id: <20220729094022.186496-1-lb@semihalf.com>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yt8rJWGKdfhkIBBY@marvin.atrad.com.au>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,84 +70,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 09:15:41AM +0930, Jonathan Woithe wrote:
-> On Sat, Jul 23, 2022 at 12:57:03PM +0200, Johan Hovold wrote:
+A thunderbolt
+lspci -d 8086:9a1b -vmmknn
+Slot:	00:0d.2
+Class:	System peripheral [0880]
+Vendor:	Intel Corporation [8086]
+Device:	Tiger Lake-LP Thunderbolt 4 NHI #0 [9a1b]
 
-> > Thanks for testing this. The above observations appear consistent with
-> > LCR updates for your CH341 not taking effect (e.g. stuck at 8N1 unlike
-> > the PL2303).
-> > 
-> > An easy way to test this is to send the letter 'q' (0x71) from CH341 to
-> > PL2303 (in 8N1 mode). This should be received as 0xf1 if the CH341 is in
-> > 7N1 mode as the stop bit is interpreted as MSB, or as 0x71 if still in
-> > 8N1 mode.
-> 
-> Apologies for the delayed response to your requests.
-> 
-> The result of the above test:
-> 
->  1. With both the PL2303 and CH341 in 8N1, "q" is received correctly by
->     both ends.
-> 
->  2. With the CH341 configured for 7N1 in minicom and the PL2303 left in
->     8N1, a "q" sent by the CH341 system is received as "q" by the PL2303.
-> 
-> Thus your suspicion seems to be correct: the LCR changes are not taking
-> effect on the CH341.
+presents itself with PCI class 0x088000 after Chromebook boots.
+lspci -s 00:0d.2 -xxx
+00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt 4
+NHI #0 (rev 01)
+00: 86 80 1b 9a 00 00 10 00 01 00 80 08 00 00 00 00
+...
 
-Thanks for confirming.
+However after thunderbolt is powered up in nhi_probe()
+its class changes to 0x0c0340
+lspci -s 00:0d.2 -xxx
+00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt 4
+NHI #0 (rev 01)
+00: 86 80 1b 9a 06 04 10 00 01 40 03 0c 00 00 00 00
+...
 
-> > Actually, LCR configuration wasn't supported before 4.10 either so the
-> > only question would be if LCR control works at all with your chip
-> > (except for the lost character).
-> > 
-> > I found this thread where Micahel provides some details after apparently
-> > having disassembled the vendor driver:
-> > 
-> > 	https://lore.kernel.org/all/2e80916d-1be8-dc0f-abf9-adc0feea1803@msgid.hansmi.ch/
-> > 
-> > Based on that (and the comment that made it into the driver), chips
-> > before version 0x30 uses a different protocol for updating LCR so that
-> > anything but 8N1 has indeed likely never worked for these chips. 
-> > 
-> > Could you try the patch below, which simply disables LCR updates for
-> > older chips and which I believe you already confirmed works.
-> 
-> A you expected, I can confirm that with the most recent patch in place as
-> sent:
-> 
->  1. There are no delays sending or receiving characters on the CH341.
-> 
->  2. There is no loss of the first character sent or received by the CH341.
-> 
->  3. With both the PL2303 and CH341 in 8N1, "q" is received correctly by
->     both ends.
-> 
->  4. With the CH341 configured for 7N1 in minicom and the PL2303 left in
->     8N1, a "q" sent by the CH341 system is received as "q" by the PL2303.
-> 
-> That is, it seems to work (notwithstanding the LCR issue).
-> 
-> > And then as a follow up, see if enabling the LCR update again has any
-> > effect on the word size (e.g. rerun the test you did above, or the "q"
-> > test I mentioned).
-> 
-> I commented out the "priv->version < 0x30" conditional to re-enable the LCR
-> update and repeated the above test.  The result was the same: with the
-> PL2303 in 8N1 and the CH341 supposedly in 7N1, both ends received a "q" as
-> "q".
-> 
-> > This may give an indication of how far we are from being able to support
-> > LCR updates on older chips even this is not something we need to
-> > implement now.
-> 
-> It seems there are still some mysteries left to solve surrounding the
-> earlier chips.  At least they seem to work in 8N1 through, which is what
-> most things would be using these days.
+which leaves pci_dev structure with old class value
+cat /sys/bus/pci/devices/0000:00:0d.2/class
+0x088000
 
-Thanks for confirming, and for all your careful testing so far.
+This fix updates PCI device class in pci_dev structure after
+thunderbolt is powered up.
 
-I'll wrap this this up in the next few weeks (merge window) and get this
-fixed in 5.20-rc and backported to stable. I'll keep you on CC.
+Fixes: 3cdb9446a117 ("thunderbolt: Add support for Intel Ice Lake")
+Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
+---
+Changelog v1->v2
+* Add restoration of PCI revision id
+---
+ drivers/thunderbolt/nhi_ops.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Johan
+diff --git a/drivers/thunderbolt/nhi_ops.c b/drivers/thunderbolt/nhi_ops.c
+index 96da07e88c52..7aba47e5b3bd 100644
+--- a/drivers/thunderbolt/nhi_ops.c
++++ b/drivers/thunderbolt/nhi_ops.c
+@@ -160,12 +160,18 @@ static int icl_nhi_suspend_noirq(struct tb_nhi *nhi, bool wakeup)
+ 
+ static int icl_nhi_resume(struct tb_nhi *nhi)
+ {
++	u32 class;
+ 	int ret;
+ 
+ 	ret = icl_nhi_force_power(nhi, true);
+ 	if (ret)
+ 		return ret;
+ 
++	/* Set device class & rev as it might have changed after powering up */
++	pci_read_config_dword(nhi->pdev, PCI_CLASS_REVISION, &class);
++	nhi->pdev->class = class >> 8;
++	nhi->pdev->revision = class & 0xff;
++
+ 	icl_nhi_set_ltr(nhi);
+ 	return 0;
+ }
+-- 
+2.37.1.455.g008518b4e5-goog
+
