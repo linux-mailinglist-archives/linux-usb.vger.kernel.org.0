@@ -2,54 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16329584B78
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 08:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649E7584B90
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Jul 2022 08:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234140AbiG2GOO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Jul 2022 02:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
+        id S234513AbiG2GR0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Jul 2022 02:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiG2GOO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 02:14:14 -0400
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A982A7C1B5
-        for <linux-usb@vger.kernel.org>; Thu, 28 Jul 2022 23:14:10 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1659075238t28h5q6i
-Received: from smtpclient.apple ( [111.193.9.146])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 29 Jul 2022 14:13:57 +0800 (CST)
-X-QQ-SSF: 01400000000000B0V000000A0000000
-X-QQ-FEAT: XSXWadnVjOQ/cwvcZHolvRFzZWW29l/wu70fdE/ClqLW2tUxKIdarmnhLiAym
-        45Vfoa8BO113Z6/mLCwvQB+Qb4EmlfM1JpLk/aPP6fkRZEIQC0P1WaxnKx4hQvU4oaiEjGy
-        PejTiJr6+RB/9+vN2ux62GbC8eUfDMQR3rY7WzaQGDIbWunGd0d9SPjJ6koo1PvB6QjRszX
-        dZ2o677DDYc4S1+qY6kx9KivFx4OjCdOA8YyaVyiJ+EaXDxWHkIeRq4m+XOfRNVgdOE7D/Q
-        xGF0FtRbyUV7By1nPG7k0UB375oDLwtz0t49vSaCln06cQVh7A76pA+cZ9gUCtyywIFs4AM
-        +isLKFlipIOCVvMNY60E02Z58R4IKZ6WNvxWfX4hiu2ssruYTyrCCIW5gjr+w==
-X-QQ-GoodBg: 2
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
-From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
-In-Reply-To: <Yt1WfSZk03Plpnan@hovoldconsulting.com>
-Date:   Fri, 29 Jul 2022 14:13:56 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Reinhard Speyerer <rspmn@arcor.de>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <B47DDA3C-3CE2-4E25-B764-1744A4AA04A0@bupt.edu.cn>
-References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
- <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
- <YtKrbucYNulPEKUp@arcor.de> <YtRtswctFMLxeglu@kroah.com>
- <YtXG3EVrRKAG7WVx@arcor.de> <YtwjiWG5ZFBvCZ1M@hovoldconsulting.com>
- <Yt1QhCIiUf97Dl3D@kroah.com> <Yt1WfSZk03Plpnan@hovoldconsulting.com>
-To:     Johan Hovold <johan@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign8
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        with ESMTP id S234402AbiG2GRZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Jul 2022 02:17:25 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49822BEC;
+        Thu, 28 Jul 2022 23:17:24 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id f7so4038983pjp.0;
+        Thu, 28 Jul 2022 23:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EW499GBzYHaTH/WArZ0WtZvIkRlpsncxTw1RlPqz+v8=;
+        b=bBJrwZNNbNwZOSdpiHnZjxTBlhq5e5F5z/aB01/7Rhm7XVlQWB/jv1YB3Yg3stPpPN
+         SmPojYXgxob/8myvBqE/AYKB3hUIDzGgtgzp4td+2Rutu5SZSMSBz+TEPl7HNs7Bb9MW
+         W7TCxTINNO2IXJYHAUFDEo60ceS/hW+jhm95xlptfVEjnS/+i/uxEzpBJqVXlteEWYKP
+         MLSVJZ2NRzFuZR5K2IulKBp8EOOR/C3KOurSc/13nA+jBRKeS6G6Ni3gVaAmjbINYeTP
+         Y/exdADOpBiQOL0wbDkY7ixd3HtrsRWGX3QW7Rcr/xwq05d0Ejbdfk37De6Lis+ytz3+
+         Mzvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EW499GBzYHaTH/WArZ0WtZvIkRlpsncxTw1RlPqz+v8=;
+        b=cPmxhGU7MgqV4EBa4XWT5LuS360COaAYZ6cDzOzjw8SmwjaJ1rTeBi3L+mFbxZE6vS
+         DZZBOxxfbSv13xQrsElyP7O1Ee8NmkOjgT+KiyavRF84YVFLxHPqwX0oNdyCBIG7wcQP
+         4HXBZy/2TPS+Uk1Ml+ct/Snyc/3TJ9F8rJQifEr6WKMhhGqucrFEkMt36QSE4PzbQPn0
+         y9iYeBZtcA4w+D7ztS40tlnNGpTEbDTctwEXrisw9PDPucuw10AUC2P6TFhs+JzvOX47
+         nd2s87rEcXApCbW+oQd16cUPfixPX7jNKY6LS7gQHVbb5Ul/+HuTO5IeEu67SDSfXrHd
+         ggJQ==
+X-Gm-Message-State: ACgBeo17wSnN1z33QLUnK4eooIxonOjnmRpB2YaxDgyDCEzcj0SBt3Qc
+        9lTKE01qpSBls2DN+3OTgBcrpewOZyFK1U10NVc=
+X-Google-Smtp-Source: AA6agR5CfpBYT1/n0Fz3b0mpL30Y1BQpcR5ZJ1q53vOkI+o8r7h1QJKT9bGnP/JXhqgwA8TQcF5sWeEJfeZ5+jaoGc0=
+X-Received: by 2002:a17:902:f646:b0:168:e2da:8931 with SMTP id
+ m6-20020a170902f64600b00168e2da8931mr2450692plg.84.1659075444381; Thu, 28 Jul
+ 2022 23:17:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-13-peterwu.pub@gmail.com>
+ <CAHp75Vf85_uzA9fRxTizbPJxODcXFpM4wuU6DxP2j9UA47B_2g@mail.gmail.com>
+In-Reply-To: <CAHp75Vf85_uzA9fRxTizbPJxODcXFpM4wuU6DxP2j9UA47B_2g@mail.gmail.com>
+From:   szuni chen <szunichen@gmail.com>
+Date:   Fri, 29 Jul 2022 14:17:13 +0800
+Message-ID: <CA+hk2fYcw0szJ7bBvfEjtyUE_Z61_A1vFWmPSdhe-gmd5jbC6g@mail.gmail.com>
+Subject: Re: [PATCH v6 12/13] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,49 +97,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
+=8825=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=884:51=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On Fri, Jul 22, 2022 at 12:25 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> >
+> > From: Alice Chen <alice_chen@richtek.com>
+> >
+> > The MediaTek MT6370 is a highly-integrated smart power management IC,
+> > which includes a single cell Li-Ion/Li-Polymer switching battery
+> > charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
+> > LED current sources, a RGB LED driver, a backlight WLED driver,
+> > a display bias driver and a general LDO for portable devices.
+> >
+> > The Flash LED in MT6370 has 2 channels and support torch/strobe mode.
+> > Add the support of MT6370 FLASH LED.
+> >
+> > Signed-off-by: Alice Chen <alice_chen@richtek.com>
+>
+> This SoB chain is wrong. Prioritize and read Submitting Patches!
+>
+Hi Andy,
 
-> On Jul 24, 2022, at 22:26, Johan Hovold <johan@kernel.org> wrote:
-> 
-> On Sun, Jul 24, 2022 at 04:00:36PM +0200, Greg Kroah-Hartman wrote:
->> On Sat, Jul 23, 2022 at 06:36:25PM +0200, Johan Hovold wrote:
->>> On Mon, Jul 18, 2022 at 10:47:24PM +0200, Reinhard Speyerer wrote:
-> 
->>>> Please don't give the OPPO R11 diag port on Linux a bad name by letting
->>>> the usb-serial-simple driver handle it.
->>> 
->>> So while I'm not sure bandwidth is really a problem, I still tend to
->>> agree that we should add this one to the option driver for now as that
->>> is how we handle (non-GOBI) Qualcomm modems and their QCDM ports.
->> 
->> If you want it to stay on the option driver, that's fine, but I still
->> think it feels odd as it obviously does not follow the vendor-specific
->> protocol that the option driver supports.
-> 
-> But we've been dumping modem device-id entries in there since forever.
-> 
-> The entries added to option have been for devices whose interfaces did
-> not follow any particular pattern (e.g. unlike the old GOBI modems).
-> 
-> And as Reinhard mentioned, the line-control requests (which follow CDC)
-> are actually required by some Qualcomm modems so moving things out would
-> need to be done carefully.
-> 
-> On the other hand, that request likely isn't needed for any QCDM/DIAG
-> ports, but who knows for sure.
+After reading the Submitted Patches,
+ChiaEn Wu wasn't involved in the development but he submitted the patch,
+So, ChiaEn Wu <chiaen_wu@richtek.com> should be the last SoB, right?
+I will revise SoB to
 
-Test result for bandwidth problem:
-Sending 0x1f mask (diag command: 0x7d0500001f000000) and running LTE
-speedtest on the device, both option and simple can dump more than 80Mbps.
-The CRC of diag packets is OK at this high speed, so it seems that
-there is no message loss. I think this bandwidth is enough.
+Signed-off-by: SzuNi Chen <alice_chen@richtek.com>
+Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 
-For the flow control problem, it seems the SetControlLineState request
-send by option (usb_wwan) has no effect on the device. Both with and
-without this request the diag port works the same.
-
-Hope this can help you decide which driver to choose :)
-
-Thanks,
-sdlyyxy
+If there is anything else I need to fix, please let me know. Thank you.
 
 
+Best Regards,
+Szuni Chen
