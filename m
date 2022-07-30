@@ -2,64 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0639585C1E
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Jul 2022 22:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC642585C23
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Jul 2022 22:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235929AbiG3Uje (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 Jul 2022 16:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
+        id S231281AbiG3Ute (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 Jul 2022 16:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235695AbiG3Ujd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Jul 2022 16:39:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DBC140CF
-        for <linux-usb@vger.kernel.org>; Sat, 30 Jul 2022 13:39:31 -0700 (PDT)
+        with ESMTP id S230045AbiG3Utd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 Jul 2022 16:49:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77BD140B4
+        for <linux-usb@vger.kernel.org>; Sat, 30 Jul 2022 13:49:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659213572; x=1690749572;
+  t=1659214171; x=1690750171;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=M8Nbvm/fMsYkHfEtWbdeuuq4twtw5gBZPrSupAwgaxk=;
-  b=kHkb9GUHmvSLBl55MPMUbGfzCt8k0ZVeKx0hxQnge2UvEOQoMc8Zm7pE
-   9PQqcfvKKIUM87n7xZbTDtA0cawpEn/f9BF0diep8xDTYOEyjmvOSFtET
-   TfZgr4cirrC2eR/73hcReFIbghCq10pwsx4il4mSWS6eP4vOym4xMqBtg
-   VwiuT/RqoiCGGnMmqQLMK0AqMZGJCfAovLvO4z8ZxzRQQtYUCAx/VhrSo
-   p1HQCicsn3EUSh1pqBFbin5jBfegjismk3BDlLGUs6O7ids8mYLJ4i604
-   RNZZDfXnCzcJAmoteqdqyHC3oXyqZEAsAuABqUjn7xDxRRrVkfNVyxllD
+  bh=evrYxs/wyfrdmJFqzAXFVDdWlI2FT6f1sro5mPlxtas=;
+  b=FdX1Cze8LxlNcxFFryH3vIQlh2rPtOchhUK9LBTZf8a6WAvHfmeRHhgJ
+   S+9U3jlZVqHxz+HnKBB/K5ew87XMVr4aU/3jsNf6j/b6vX0qfyE/JyUY4
+   vu1dNPQJtE4oRU3XoIcm+zqi9CVI6hNVTbbS29YexpanfmRdYVvL8vohz
+   sD1uctyw3dgjC6OhdxmO4rC+StcFMYy7dChl8b7d/xLmkciP52qaxmqSU
+   IWo3d02CXtxCH/2j2k82+hUlgHJSVr1nsUcvoaO62kaDOMXihxYWcmv0X
+   gTwpDh/v7Xis9UWQ4Vwo2uHRr/zTzEy//SrekB8N99wfCetYTcuzSOcfn
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="288959566"
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="271988001"
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="288959566"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 13:39:31 -0700
+   d="scan'208";a="271988001"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 13:49:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="777850985"
+   d="scan'208";a="552094257"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 30 Jul 2022 13:39:29 -0700
+  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 13:49:29 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oHtFA-000DJU-1t;
-        Sat, 30 Jul 2022 20:39:28 +0000
-Date:   Sun, 31 Jul 2022 04:39:01 +0800
+        id 1oHtOq-000DK3-39;
+        Sat, 30 Jul 2022 20:49:28 +0000
+Date:   Sun, 31 Jul 2022 04:49:18 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Marek Vasut <marex@denx.de>, linux-usb@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Marek Vasut <marex@denx.de>,
+Cc:     kbuild-all@lists.01.org, Marek Vasut <marex@denx.de>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Yassine Oudjana <y.oudjana@protonmail.com>
 Subject: Re: [PATCH 2/2] extcon: usbc-tusb320: Add USB TYPE-C support
-Message-ID: <202207310431.Rtpq2bqx-lkp@intel.com>
+Message-ID: <202207310423.4ybeL2WB-lkp@intel.com>
 References: <20220730180500.152004-2-marex@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220730180500.152004-2-marex@denx.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,8 +77,8 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/extcon-usbc-tusb320-Factor-out-extcon-into-dedicated-functions/20220731-020545
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220731/202207310431.Rtpq2bqx-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+config: sparc-randconfig-r031-20220731 (https://download.01.org/0day-ci/archive/20220731/202207310423.4ybeL2WB-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -89,7 +88,7 @@ reproduce (this is a W=1 build):
         git checkout 7bce9c0377f5e41fa29f57af40f436a48e2260b1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/extcon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/extcon/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
