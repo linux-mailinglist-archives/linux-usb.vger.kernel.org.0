@@ -2,156 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162A1585DED
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Jul 2022 09:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB610585E0E
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Jul 2022 10:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiGaHWY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Jul 2022 03:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S229674AbiGaIO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Jul 2022 04:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiGaHWW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jul 2022 03:22:22 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9294112D23;
-        Sun, 31 Jul 2022 00:22:21 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 40647425AB;
-        Sun, 31 Jul 2022 07:22:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1659252137; bh=+03uZQ7uzhbq0R4Yb43G4uX1y6g8wuj6rIgz/M6Bstc=;
-        h=From:To:Cc:Subject:Date;
-        b=txgEk3u9hmfDoCoqGbfOjrXORWysKtgF0zVxygqq26lGWXIeD8cFw/CLJ3T0eG63r
-         xNIq1ULd9weZJQY+vxvg+nQbPEDLfWxE3qfOzUeFUl9UobAUpYSHRytZeR8xe/Idik
-         db5tMVzcCdNzuoGHP52z18f0FZrrQKj/vSi6R18guBMR0uHzNMgHzUpAZQyrlZiy2h
-         RCW/CgzUF6P3gvsMe8bgPsuFv4UPVZ4WDe1W15I5EAEQE8g8Bk1o6G7r+7CgQgcjLa
-         hdiYC1JMzZP6JqwqXocxey50svOrkthrW9iV4Hs3WejoVW/gvBYrJJLXq9aKkjxYpD
-         l3drvgEuBEXbg==
-From:   Hector Martin <marcan@marcan.st>
-To:     Jacky Chou <jackychou@asix.com.tw>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [PATCH v4] net: usb: ax88179_178a: Bind only to vendor-specific interface
-Date:   Sun, 31 Jul 2022 16:22:09 +0900
-Message-Id: <20220731072209.45504-1-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229456AbiGaIO2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jul 2022 04:14:28 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AFF764F
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jul 2022 01:14:25 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id m13so6616388wrq.6
+        for <linux-usb@vger.kernel.org>; Sun, 31 Jul 2022 01:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=MZmiqkrDVM/1ANVaZ3TW+kZDvgKePAtlIXsMvBnwc/A=;
+        b=KYJ1XIWgdGbpJ1kE85rTuYlGfQFBB4sVKY90C8PpMdiYgL9E7MDZI8C957A00WAiUk
+         KNvSUh2BVenWHj1cSHe0vZz9aO4kcORtowCLgYyn9eBl1Yem9UEEXc1BYlikgQAIqNB5
+         vPESloXMVXCUWqNE7EUvpPpF38IALH47vqUodVOVA/vnl27NKH3TJLKe4GmKPIDscxS4
+         lT9eME128VZceVf2Uibrm8NetNrw2EfO1CFI72vHxHuoelZ0EElEQiN9Hw5n2awNeNrv
+         SRJHs1maUmE18AfTHScQLJsdvt+GOHf9hEcToOpqN6kvHonINsT6ox1zmxE01XRNqurz
+         acAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MZmiqkrDVM/1ANVaZ3TW+kZDvgKePAtlIXsMvBnwc/A=;
+        b=J7FPsqgzpJ0tp5uhotO5/UBXCdyql4iK8sXKuWmbWtJWQjtAWwJfB9YCI87uQHvYrS
+         +CPJZHTVgVCR7bDcRMlMLOJFPhi/TBNywFju2vTkhnvn6nmFjgMPSY6aLinoo2BejYzb
+         IbrawEleh/3gn1WZIoNZc6iw7ERXK5F1sqVAy+9iM6voR8k9cT9xp9lh74Wx8ib6fdi8
+         93sxUJgw1dBPq2q1ocBSqq8JONp6jHjo5D6feWRjXOGtqBkyopOr8LkCKqnLlGrGFJ2f
+         NDdGwDmkChKp3i3tops3+FMsfZ1sVkEoPEpugUT0rWj4L7RFAAo1axjXE21BQ/4+eOgX
+         05lA==
+X-Gm-Message-State: ACgBeo3Gg6xaSB2Y3ux692dD4FkuKnUX/dTQQt/m/BsqseP7Qmf0GNWd
+        ylU4UpPDrKQuR6JXKM+2hf/cAM0BWFQ=
+X-Google-Smtp-Source: AA6agR7lhETvIJ7bTzxWdvixkDEiARJlnsCqZ59AsPjpcvAzXZP7Hd5luBJL901EfczEd/G0yA/KkA==
+X-Received: by 2002:a05:6000:1a87:b0:21d:b5b9:7666 with SMTP id f7-20020a0560001a8700b0021db5b97666mr7096585wry.1.1659255263954;
+        Sun, 31 Jul 2022 01:14:23 -0700 (PDT)
+Received: from reki (83-44-165.netrun.cytanet.com.cy. [83.168.44.165])
+        by smtp.gmail.com with ESMTPSA id bg26-20020a05600c3c9a00b003a3279b9037sm15512565wmb.16.2022.07.31.01.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 01:14:23 -0700 (PDT)
+Date:   Sun, 31 Jul 2022 11:14:21 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Vicki Pfau <vi@endrift.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] USB: gadget: f_hid: Add Set-Feature report
+Message-ID: <20220731111421.3f69e963@reki>
+In-Reply-To: <9ad81143-0876-e6d7-2fc1-95dd82abe4a7@endrift.com>
+References: <20220726005824.2817646-1-vi@endrift.com>
+        <20220726005824.2817646-2-vi@endrift.com>
+        <20220726125137.7d3757c7@reki>
+        <d19bad31-dc18-a7a7-6084-dfab8aeec498@endrift.com>
+        <20220728115950.4c1707a9@reki>
+        <9ad81143-0876-e6d7-2fc1-95dd82abe4a7@endrift.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
-chipset, but exposes CDC Ethernet configurations as well as the
-vendor specific one. This driver tries to bind by PID:VID
-unconditionally and ends up picking up the CDC configuration, which
-is supposed to be handled by the class driver. To make things even
-more confusing, it sees both of the CDC class interfaces and tries
-to bind twice, resulting in two broken Ethernet devices.
+=D0=92 Thu, 28 Jul 2022 11:11:31 -0700
+Vicki Pfau <vi@endrift.com> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
 
-Change all the ID matches to specifically match the vendor-specific
-interface. By default the device comes up in CDC mode and is bound by
-that driver (which works fine); users may switch it to the vendor
-interface using sysfs to set bConfigurationValue, at which point the
-device actually goes through a reconnect cycle and comes back as a
-vendor specific only device, and then this driver binds and works too.
+> On 7/28/22 01:59, Maxim Devaev wrote:
+> > =D0=92 Tue, 26 Jul 2022 21:26:05 -0700
+> > Vicki Pfau <vi@endrift.com> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >  =20
+> >> On 7/26/22 02:51, Maxim Devaev wrote: =20
+> >>> =D0=92 Mon, 25 Jul 2022 17:58:26 -0700
+> >>> Vicki Pfau <vi@endrift.com> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >>>    =20
+> >>>> While the HID gadget implementation has been sufficient for devices =
+that only
+> >>>> use INTERRUPT transfers, the USB HID standard includes provisions fo=
+r Set- and
+> >>>> Get-Feature report CONTROL transfers that go over endpoint 0. These =
+were
+> >>>> previously impossible with the existing implementation, and would ei=
+ther send
+> >>>> an empty reply, or stall out.
+> >>>>
+> >>>> As the feature is a standard part of USB HID, it stands to reason th=
+at devices
+> >>>> would use it, and that the HID gadget should support it. This patch =
+adds
+> >>>> support for host-to-device Set-Feature reports through a new ioctl
+> >>>> interface to the hidg class dev nodes.
+> >>>>
+> >>>> Signed-off-by: Vicki Pfau <vi@endrift.com>   =20
+> >>>
+> >>> Won't it break the logic of the existing software that works with /de=
+v/hidgX?
+> >>> Will it work if I want my gadget to work the old way?   =20
+> >>
+> >> For existing software to use SET_FEATURE at all it has to use an alter=
+native mode, which seems to have only been added somewhat recently. That mo=
+de also appears to preclude use of INTERRUPT transfers at all, unless there=
+'s some way to set up two hidg nodes that map to the same interface, with o=
+ne for INTERRUPT and one for SET_FEATURE. If this breaks that, I suppose th=
+at's a regression, but this is meant to augment the original, long-standing=
+ mode so you can mix INTERRUPT and SET/GET_FEATURE transfers, as there is n=
+o way to do that yet. Honestly, the alternate mode seems more like a workar=
+ound, as far as I can tell, and not an ideal implementation. I'm not sure w=
+hen it was added, but as I was originally authoring this against 5.13 and d=
+idn't see it until I went to rebase onto master, it can't have been that lo=
+ng ago. So if it breaks any software (which I don't believe it does), it wo=
+uld only affect very new software.
+> >>
+> >> As I alluded to, I'd thought about perhaps adding a second node per in=
+terface so one would act as INTERRUPT transfers and the other as SET/GET_FE=
+ATURE transfers, but I already had this code half written and wanted to get=
+ feedback first, especially since what I have now works (although it's not =
+well-tested after rebasing). =20
+> >=20
+> > I'm a little confused here about what you call an alternative mode.
+> > Are we talking about use_out_ep=3D1 (default behavior with INTERRUPT)
+> > or use_out_ep=3D0 (SETUP/SET_REPORT)? The last mode was added by me
+> > to ensure strict compatibility with Apple UEFI and strange BIOS,
+> > and this mode is actually actively used. It is important to me
+> > that it is not broken, but unfortunately I cannot test your patch
+> > on my kernel, as I temporarily do not have access to testing equipment.=
+ =20
+>=20
+> use_out_ep=3D0 is the alternate mode I was talking about. It didn't exist=
+ in 5.13, so as I said I wasn't aware of it until I rebased. As the device =
+I'm using is still stuck on that old kernel (for now) and I don't know if I=
+ have any USB gadget capable devices on new kernels, I was unable to test i=
+t, and would very much like to make sure it doesn't regress before a patch =
+is merged. I wasn't intending to break it, but I figured I'd get feedback I=
+'d need to change before this was merged so if you could test it to ensure =
+it doesn't regress any behavior that would be much appreciated and help me =
+out. I will probably wait until then before submitting a v2.
 
-The affected device uses VID/PID 0b95:1790, but we might as well change
-all of them for good measure, since there is no good reason for this
-driver to bind to standard CDC Ethernet interfaces.
-
-v3: Added VID/PID info to commit message
-
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index e2fa56b92685..7c7c2f31d9f1 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1914,55 +1914,55 @@ static const struct driver_info at_umc2000sp_info = {
- static const struct usb_device_id products[] = {
- {
- 	/* ASIX AX88179 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x1790),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88179_info,
- }, {
- 	/* ASIX AX88178A 10/100/1000 */
--	USB_DEVICE(0x0b95, 0x178a),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x178a, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&ax88178a_info,
- }, {
- 	/* Cypress GX3 SuperSpeed to Gigabit Ethernet Bridge Controller */
--	USB_DEVICE(0x04b4, 0x3610),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04b4, 0x3610, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&cypress_GX3_info,
- }, {
- 	/* D-Link DUB-1312 USB 3.0 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x2001, 0x4a00),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x2001, 0x4a00, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&dlink_dub1312_info,
- }, {
- 	/* Sitecom USB 3.0 to Gigabit Adapter */
--	USB_DEVICE(0x0df6, 0x0072),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0df6, 0x0072, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&sitecom_info,
- }, {
- 	/* Samsung USB Ethernet Adapter */
--	USB_DEVICE(0x04e8, 0xa100),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x04e8, 0xa100, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&samsung_info,
- }, {
- 	/* Lenovo OneLinkDock Gigabit LAN */
--	USB_DEVICE(0x17ef, 0x304b),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x17ef, 0x304b, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&lenovo_info,
- }, {
- 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
--	USB_DEVICE(0x050d, 0x0128),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x050d, 0x0128, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&belkin_info,
- }, {
- 	/* Toshiba USB 3.0 GBit Ethernet Adapter */
--	USB_DEVICE(0x0930, 0x0a13),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0930, 0x0a13, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&toshiba_info,
- }, {
- 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
--	USB_DEVICE(0x0711, 0x0179),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x0711, 0x0179, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&mct_info,
- }, {
- 	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000e),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000e, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000_info,
- }, {
- 	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x000f),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000f, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc200_info,
- }, {
- 	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
--	USB_DEVICE(0x07c9, 0x0010),
-+	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x0010, 0xff, 0xff, 0),
- 	.driver_info = (unsigned long)&at_umc2000sp_info,
- },
- 	{ },
--- 
-2.35.1
-
+I will get access to the USB analyzer and test environment in about a month,
+if that suits you. You can write directly to my email after a month,
+I will help you with testing.
