@@ -2,106 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B977585F39
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Jul 2022 16:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969FF586080
+	for <lists+linux-usb@lfdr.de>; Sun, 31 Jul 2022 21:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiGaORN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Jul 2022 10:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
+        id S237697AbiGaTEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Jul 2022 15:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbiGaORL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jul 2022 10:17:11 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 91B49DEF2
-        for <linux-usb@vger.kernel.org>; Sun, 31 Jul 2022 07:17:09 -0700 (PDT)
-Received: (qmail 544533 invoked by uid 1000); 31 Jul 2022 10:17:08 -0400
-Date:   Sun, 31 Jul 2022 10:17:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alexey Klimov <klimov.linux@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        atishp@rivosinc.com, atishp@atishpatra.org,
-        Yury Norov <yury.norov@gmail.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Aaron Tomlin <atomlin@redhat.com>
-Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog
- device
-Message-ID: <YuaO5Gx84zonjq7X@rowland.harvard.edu>
-References: <20220725030605.1808710-1-klimov.linux@gmail.com>
- <Yt5Zn9cXDe9/F9RJ@kroah.com>
- <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
- <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com>
- <CALW4P++5ahRdK6WvghPgpPcTuoJyezU_=s6MG2nn4OBRWZYGXQ@mail.gmail.com>
- <20220731082055.GA4008925@roeck-us.net>
+        with ESMTP id S230114AbiGaTEf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jul 2022 15:04:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33143EE0E;
+        Sun, 31 Jul 2022 12:04:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A44A461031;
+        Sun, 31 Jul 2022 19:04:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F59BC433D7;
+        Sun, 31 Jul 2022 19:04:33 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1oIEEq-007G2B-0I;
+        Sun, 31 Jul 2022 15:04:32 -0400
+Message-ID: <20220731190431.934571546@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Sun, 31 Jul 2022 15:03:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [for-next][PATCH 01/21] USB: mtu3: tracing: Use the new __vstring() helper
+References: <20220731190329.641602282@goodmis.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731082055.GA4008925@roeck-us.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 01:20:55AM -0700, Guenter Roeck wrote:
-> On Sun, Jul 31, 2022 at 03:34:16AM +0100, Alexey Klimov wrote:
-> > On Tue, Jul 26, 2022 at 8:48 AM Oliver Neukum <oneukum@suse.com> wrote:
-> > >
-> > > On 26.07.22 02:21, Alexey Klimov wrote:
-> > > > On Mon, Jul 25, 2022 at 9:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >>
-> > > >> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
-> > > >
-> > > > [..]
-> > > >
-> > > >> Anyway, driver looks good to me, nice work!
-> > > >>
-> > > >> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > >
-> > > > Thanks, Greg. If you don't mind I'll use your tag in next version
-> > > > after making changes suggested by Guenter since there will be no
-> > > > significant functional changes. If code will change a lot, then the
-> > > > process (Documentation/process/submitting-patches.rst) will require me
-> > > > to drop the tag.
-> > >
-> > > Hi,
-> > >
-> > > while thinking about this a question arose. How does this
-> > > device react to a USB reset? A watchdog that can be disabled
-> > > by a simple reset does not like very reliable to me.
-> > > Do you need to implement pre/post_reset() ?
-> > 
-> > You're right. Upon reset the watchdog is disabled even if it was active before.
-> > Adding empty ->pre_reset() and ->post_reset() helps to avoid that, but
-> > looking at Documentation and other drivers it seems that I need to do:
-> > in pre_reset():
-> > mutex_lock() to block any other I/O to the usb device;
-> > __usb_streamlabs_wdt_cmd(STOP) to stop the watchdog;
-> > and do not unlock the mutex;
-> > 
-> > in post_reset():
-> > if (watchdog_active())
-> >         __usb_streamlabs_wdt_cmd(START);
-> > mutex_unlock() to allow other's I/O to the usb deivce.
-> > 
-> > Seems right?
-> > 
-> Not necessarily. Is other code doing something similar ?
-> Using a mutex like this creates the risk for hung tasks.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Are mutexes intended to be used in situations where one function 
-acquires the lock, then returns, and then a different function releases 
-the lock?  I'm not sure about this.
+Instead of open coding a __dynamic_array() with a fixed length (which
+defeats the purpose of the dynamic array in the first place). Use the new
+__vstring() helper that will use a va_list and only write enough of the
+string into the ring buffer that is needed.
 
-Perhaps a good old semaphore would be more appropriate.  But it's clear 
-that I/O to the device does need to be mutually exclusive with resets, 
-one way or another.
+Link: https://lkml.kernel.org/r/20220719112719.17e796c6@gandalf.local.home
 
-Alan Stern
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ drivers/usb/mtu3/mtu3_trace.h | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/mtu3/mtu3_trace.h b/drivers/usb/mtu3/mtu3_trace.h
+index 1b897636daf2..a98fa012b729 100644
+--- a/drivers/usb/mtu3/mtu3_trace.h
++++ b/drivers/usb/mtu3/mtu3_trace.h
+@@ -18,18 +18,16 @@
+ 
+ #include "mtu3.h"
+ 
+-#define MTU3_MSG_MAX	256
+-
+ TRACE_EVENT(mtu3_log,
+ 	TP_PROTO(struct device *dev, struct va_format *vaf),
+ 	TP_ARGS(dev, vaf),
+ 	TP_STRUCT__entry(
+ 		__string(name, dev_name(dev))
+-		__dynamic_array(char, msg, MTU3_MSG_MAX)
++		__vstring(msg, vaf->fmt, vaf->va)
+ 	),
+ 	TP_fast_assign(
+ 		__assign_str(name, dev_name(dev));
+-		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf->va);
++		__assign_vstr(msg, vaf->fmt, vaf->va);
+ 	),
+ 	TP_printk("%s: %s", __get_str(name), __get_str(msg))
+ );
+-- 
+2.35.1
