@@ -2,98 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969FF586080
-	for <lists+linux-usb@lfdr.de>; Sun, 31 Jul 2022 21:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9F95862DF
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 04:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237697AbiGaTEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 Jul 2022 15:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S239430AbiHAC6n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 Jul 2022 22:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiGaTEf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jul 2022 15:04:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33143EE0E;
-        Sun, 31 Jul 2022 12:04:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A44A461031;
-        Sun, 31 Jul 2022 19:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F59BC433D7;
-        Sun, 31 Jul 2022 19:04:33 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oIEEq-007G2B-0I;
-        Sun, 31 Jul 2022 15:04:32 -0400
-Message-ID: <20220731190431.934571546@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Sun, 31 Jul 2022 15:03:30 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [for-next][PATCH 01/21] USB: mtu3: tracing: Use the new __vstring() helper
-References: <20220731190329.641602282@goodmis.org>
+        with ESMTP id S238241AbiHAC6m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 Jul 2022 22:58:42 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964FCDEFC;
+        Sun, 31 Jul 2022 19:58:41 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bq11so10184777lfb.5;
+        Sun, 31 Jul 2022 19:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=4PUW35Z98Oz3GKgcOUm+Y7kv0FX17sX3vwCDCp2HW74=;
+        b=XiXlx6p8Um99lzIHizjEqBOBY3WY5XMxC2b6+HjzF4cozzUWdTyzmK2AHSD6K6S+7I
+         0047Tv6qHYK2KCJ1a8ke1ALewQ/Rv/scuGG4b4gxCzzdKjx8MP3akB0coQg/gerxqmzU
+         OSC8e5CEbR1NxTUNFFhmKvnxBoG+kMBpZwDapX0Jr6TGriN5GGRa2p7ShQcL+8EPjrOx
+         LmJNQDmFQ8iomSKarCsys/XZqZOXUwRvXxfeLISBVZrmLNi1bzS5iDOyzAlAOu7gZtPE
+         1oJTkThe0sWsLoUA1fjeCt4d9C0eR5gtfQuLAMl7SlkvnSBV+gvnPeXlFjqKm9PGwT3R
+         VKYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=4PUW35Z98Oz3GKgcOUm+Y7kv0FX17sX3vwCDCp2HW74=;
+        b=6ipEtFxtHLjsuLasq4wGqIRPVTFoHTc54yr7vcuQbrybzs7xlVexcOuW1KdNv4/iuj
+         9RR4RK8mLT3DrO/0V0kloEvHLjDzpveJqH66WQALvOqL4o2oVgYW6EWfDomZXaH7TaJs
+         GIb+mLKMFl2/Ddl/jZ28KTHLEg+yTbllEANH2Ae8hJKat5TSpYt16Ot5RogrB3/xUrOW
+         quh96BA0KroI7t9LgDpJZ35rkyoWTHa+zl8Zgte17r94dNm8yNHqXxdLrkDBqoMuADk3
+         iR0pScgKCSKvn1JKO6Dt0/jcyj10MExe8kZf4bjM0d29LLGafuvYgOOfotuW/aLykjGd
+         7CZQ==
+X-Gm-Message-State: AJIora9/E9KPUkYIAfMB25wlF9qxK7qGEppI6T/XLZDtw/huuwB9GGBC
+        20xp52OcwKa0xFzNuR7WI7bGtwlCvwpURBJkdrk=
+X-Google-Smtp-Source: AGRyM1uc8D+MSD46tu2Un7YpdehzU3bq/0FFaNSuxHlDhg0Je/WlITUI5E/e59ZGLRo0vmXUJ+RGnzaDdEIGpaXgnKk=
+X-Received: by 2002:a05:6512:1319:b0:482:b8ce:a278 with SMTP id
+ x25-20020a056512131900b00482b8cea278mr5121005lfu.8.1659322719820; Sun, 31 Jul
+ 2022 19:58:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725030605.1808710-1-klimov.linux@gmail.com>
+ <573466e4-e836-d053-d1b9-dc04c6a046e5@roeck-us.net> <CALW4P+JjO5zxEP4aLGzzcvK2QO0Ea_uYACjuOV6GZEMfh3Q5RA@mail.gmail.com>
+ <20220726032425.GA1331080@roeck-us.net>
+In-Reply-To: <20220726032425.GA1331080@roeck-us.net>
+From:   Alexey Klimov <klimov.linux@gmail.com>
+Date:   Mon, 1 Aug 2022 03:58:28 +0100
+Message-ID: <CALW4P+LmMJAm=3PWQfiEgYS7d_q0M0rdSJVhpZw9x9w3fQQMRA@mail.gmail.com>
+Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        atishp@rivosinc.com, atishp@atishpatra.org,
+        Yury Norov <yury.norov@gmail.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Aaron Tomlin <atomlin@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Tue, Jul 26, 2022 at 4:24 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
 
-Instead of open coding a __dynamic_array() with a fixed length (which
-defeats the purpose of the dynamic array in the first place). Use the new
-__vstring() helper that will use a va_list and only write enough of the
-string into the ring buffer that is needed.
+[...]
 
-Link: https://lkml.kernel.org/r/20220719112719.17e796c6@gandalf.local.home
+> > > > +
+> > > > +     streamlabs_wdt->intf = intf;
+> > > > +     usb_set_intfdata(intf, &streamlabs_wdt->wdt_dev);
+> > > > +     watchdog_set_drvdata(&streamlabs_wdt->wdt_dev, streamlabs_wdt);
+> > > > +     watchdog_set_nowayout(&streamlabs_wdt->wdt_dev, nowayout);
+> > > > +
+> > > > +     retval = usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
+> > > > +     if (retval)
+> > > > +             return -ENODEV;
+> > > > +
+> > >
+> > > A comment explaining why the watchdog is explicitly stopped when running
+> > > might be useful.
+> >
+> > What do you mean by saying "when running"?
+> > Everytime during my testing the initial state is "stopped" on
+> > boot/power on/after reset, so not sure what you mean by saying "when
+> > running".
+>
+> Should I have used the term "active" ? "started" ?
+>
+> > There is a comment above that explains the stop command but I will
+> > add/change comments that explain things better.
+> > The point of executing "stop" command here is to check that device
+> > being probed behaves like we expect it to. This is a bit paranoid
+> > check since I am a not 100% sure that all devices with such USB ids
+> > are watchdogs -- that's why additional checks for usbdev->product and
+> > usbdev->manufacturer and this stop command that doesn't change the
+> > initial state. In theory, I can remove this stop command at all.
+> >
+>
+> Normally one does not want a watchdog to stop if it is running (started ?
+> active ? pick your term) when the device is instantiated to avoid gaps
+> in watchdog coverage. The watchdog core provides a flag, WDOG_HW_RUNNING,
+> for this purpose (sorry, there is the 'running' term again). It is used
+> by many drivers, and ensures that the time from loading the Linux kernel
+> to opening the watchdog device is protected by the watchdog.
+>
+> Calling the stop function during probe suggests that you at least
+> considered the possibility that the watchdog may be running/started/active.
+> Per your explanation, you still want it to stop explicitly if/when that
+> happens.  All I am asking you is to add a comment explaining why this is
+> not needed/wanted/relevant/supported for this driver. One explanation
+> might, for example, be that the state can not be detected reliably.
 
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Tested-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/usb/mtu3/mtu3_trace.h | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Thanks for the explanation. I was confused initially by the phrase
+"explicitly stopped when running" since in reality it is "explicitly
+stopped when stopped" (or not active, not running).
+On the second thought, I can issue a start command and indicate to the
+watchdog core via set_bit(WDOG_HW_RUNNING, &wdd->status) that it is
+running or return -ENODEV if the start fails instead of stopping the
+watchdog. I just would like to have a command sent to the device in
+->probe() that checks that the device behaves like expected. If there
+are no objects I'll change it like this.
 
-diff --git a/drivers/usb/mtu3/mtu3_trace.h b/drivers/usb/mtu3/mtu3_trace.h
-index 1b897636daf2..a98fa012b729 100644
---- a/drivers/usb/mtu3/mtu3_trace.h
-+++ b/drivers/usb/mtu3/mtu3_trace.h
-@@ -18,18 +18,16 @@
- 
- #include "mtu3.h"
- 
--#define MTU3_MSG_MAX	256
--
- TRACE_EVENT(mtu3_log,
- 	TP_PROTO(struct device *dev, struct va_format *vaf),
- 	TP_ARGS(dev, vaf),
- 	TP_STRUCT__entry(
- 		__string(name, dev_name(dev))
--		__dynamic_array(char, msg, MTU3_MSG_MAX)
-+		__vstring(msg, vaf->fmt, vaf->va)
- 	),
- 	TP_fast_assign(
- 		__assign_str(name, dev_name(dev));
--		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf->va);
-+		__assign_vstr(msg, vaf->fmt, vaf->va);
- 	),
- 	TP_printk("%s: %s", __get_str(name), __get_str(msg))
- );
--- 
-2.35.1
+Best regards,
+Alexey
