@@ -2,111 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BDE5871C0
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 21:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED445871F1
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 22:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235171AbiHATuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Aug 2022 15:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S233425AbiHAUDJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Aug 2022 16:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbiHATun (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 15:50:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA1F3DF07
-        for <linux-usb@vger.kernel.org>; Mon,  1 Aug 2022 12:50:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 332A761348
-        for <linux-usb@vger.kernel.org>; Mon,  1 Aug 2022 19:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CD8C433D6;
-        Mon,  1 Aug 2022 19:50:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659383436;
-        bh=OmLA8/wpaKgGceYc2X7JRbv6QpW3se8xb4K/OUCvMlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PY9wGh7uEywSCRnPAX3u0ex3vKeBkZVx4LmV5OB8F+08xzBMN5YXg2D1djRM/lQkT
-         h79JkP+OZHjt5N4mtSFv+ZJdWu8niZZwPRli7pwSzM/ZB1hoFVFYXhhBZChl32KmoI
-         CWXFAZAmbat/cbi7OZrM5BRusXophxEzINKjX8uaSK79XFphdezMkwyT/ddaXNVe59
-         s80PcLJbecBe+XwhWFWkTAxBKqI7dfbU2EKzQhduoPejpmc7VXeolCkyOQi9ciUxJd
-         /d77rc5CQ7Pxw7yuY73zLIShu7/ABkbT6+SsptHmHPuvYeHlUNeWzjo2j1ylQ3lT1H
-         Nwnga4Xh7/Wgw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oIbRC-00009n-KJ; Mon, 01 Aug 2022 21:50:50 +0200
-Date:   Mon, 1 Aug 2022 21:50:50 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Pere Blay <pereblay@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Fwd: PL2303 unknown device type in kernel
-Message-ID: <Yuguml8UHAJLkrwc@hovoldconsulting.com>
-References: <CANyrUpxawx0iba88N6g=w_sOwF9Nepe4UgQbWTpVsWjN7oiKrw@mail.gmail.com>
- <CANyrUpwZCHQTgoo-8vQxqcnnmETVchiZjfKXOnbTYHKWBra0nw@mail.gmail.com>
+        with ESMTP id S229787AbiHAUDJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 16:03:09 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2301A3A5
+        for <linux-usb@vger.kernel.org>; Mon,  1 Aug 2022 13:03:07 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id Ibd2oiUWV0DonIbd2oUBZk; Mon, 01 Aug 2022 22:03:05 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 01 Aug 2022 22:03:05 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: qcom: Fox some error handling path in dwc3_qcom_probe()
+Date:   Mon,  1 Aug 2022 22:03:03 +0200
+Message-Id: <baf14163148998215eca3eb7d754cc63e1e376dd.1659384164.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANyrUpwZCHQTgoo-8vQxqcnnmETVchiZjfKXOnbTYHKWBra0nw@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 07:19:01PM +0200, Pere Blay wrote:
-> Hi and thanks,
-> 
-> I get this message when plugin a usb device wich uses a usb-serial converter:
-> 
-> [ 5097.161310] usb 1-3.4.1: New USB device found, idVendor=067b,
-> idProduct=23d3, bcdDevice= 4.00
-> [ 5097.161326] usb 1-3.4.1: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=3
-> [ 5097.161332] usb 1-3.4.1: Product: USB-Serial Controller
-> [ 5097.161336] usb 1-3.4.1: Manufacturer: Prolific Technology Inc.
-> [ 5097.161340] usb 1-3.4.1: SerialNumber: DGARb193428
-> [ 5097.170447] pl2303 1-3.4.1:1.0: pl2303 converter detected
-> [ 5097.170470] pl2303 1-3.4.1:1.0: unknown device type, please report
-> to linux-usb@vger.kerne.org
-> 
-> Then, I'm reporting.
+Replace some direct return with goto to the existing error handling path.
+Also release 'parent_res', if needed.
 
-Thanks for the report.
 
-> My system:
-> 
-> $ uname -r
-> 5.17.5-051705-generic
-> 
-> Output of lsusb:
-> $lsusb -d 067b:23d3 -v
-> 
-> Bus 001 Device 017: ID 067b:23d3 Prolific Technology, Inc. USB-Serial Controller
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x067b Prolific Technology, Inc.
->   idProduct          0x23d3
->   bcdDevice            4.00
->   iManufacturer           1 Prolific Technology Inc.
->   iProduct                2 USB-Serial Controller
->   iSerial                 3 DGARb193428
->   bNumConfigurations      1
+In the remove function, handle the case where 'np' is set or not, to call
+the right function as already done in the error handling path of the probe.
 
-> Anything to make it work? thanks a lot.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+The patch looks not complete and dwc3_qcom_create_urs_usb_platdev() (and
+its acpi_create_platform_device() call) still need undone in the error
+handling path, right?
 
-This has been fixed by commit ae60aac59a9a ("USB: serial: pl2303: add
-support for more HXN (G) types") which has also been backported to the
-5.18.8 and 5.15.51 stable kernels about a month ago.
+This looks more tricky to me, so I just point it out and leave it to
+anyone who cares.
 
-5.17 is no longer supported by the stable team so you may need to get
-your distro to update their kernel or backport the fix.
+The remove function is also likely incomplete (for example 'parent_res'
+leaks if !np).
 
-Johan
+Even if not perfect, this patch makes code already "better" :)
+
+Comments and follow-up by others welcomed.
+
+
+Finally, I've not searched for Fixes tag because it is likely that these
+issues have been added in several patches. I have the courage to dig into
+this log history.
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index c5e482f53e9d..1fe83fd51947 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -815,9 +815,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 		parent_res = res;
+ 	} else {
+ 		parent_res = kmemdup(res, sizeof(struct resource), GFP_KERNEL);
+-		if (!parent_res)
+-			return -ENOMEM;
+-
++		if (!parent_res) {
++			ret = -ENOMEM;
++			goto clk_disable;
++		}
+ 		parent_res->start = res->start +
+ 			qcom->acpi_pdata->qscratch_base_offset;
+ 		parent_res->end = parent_res->start +
+@@ -828,9 +829,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
+ 				dev_err(dev, "failed to create URS USB platdev\n");
+ 				if (!qcom->urs_usb)
+-					return -ENODEV;
++					ret = -ENODEV;
+ 				else
+-					return PTR_ERR(qcom->urs_usb);
++					ret = PTR_ERR(qcom->urs_usb);
++				goto free_parent_res;
+ 			}
+ 		}
+ 	}
+@@ -838,13 +840,13 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	qcom->qscratch_base = devm_ioremap_resource(dev, parent_res);
+ 	if (IS_ERR(qcom->qscratch_base)) {
+ 		ret = PTR_ERR(qcom->qscratch_base);
+-		goto clk_disable;
++		goto free_parent_res;
+ 	}
+ 
+ 	ret = dwc3_qcom_setup_irq(pdev);
+ 	if (ret) {
+ 		dev_err(dev, "failed to setup IRQs, err=%d\n", ret);
+-		goto clk_disable;
++		goto free_parent_res;
+ 	}
+ 
+ 	/*
+@@ -906,6 +908,9 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 		of_platform_depopulate(&pdev->dev);
+ 	else
+ 		platform_device_put(pdev);
++free_parent_res:
++	if (!np)
++		kfree(parent_res);
+ clk_disable:
+ 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
+ 		clk_disable_unprepare(qcom->clks[i]);
+@@ -920,11 +925,15 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ static int dwc3_qcom_remove(struct platform_device *pdev)
+ {
+ 	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
++	struct device_node *np = pdev->dev.of_node;
+ 	struct device *dev = &pdev->dev;
+ 	int i;
+ 
+ 	device_remove_software_node(&qcom->dwc3->dev);
+-	of_platform_depopulate(dev);
++	if (np)
++		of_platform_depopulate(&pdev->dev);
++	else
++		platform_device_put(pdev);
+ 
+ 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
+ 		clk_disable_unprepare(qcom->clks[i]);
+-- 
+2.34.1
+
