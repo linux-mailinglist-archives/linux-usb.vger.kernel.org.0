@@ -2,177 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E679586773
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 12:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C342A586754
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 12:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiHAK2B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Aug 2022 06:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S230042AbiHAKYj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Aug 2022 06:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiHAK1l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 06:27:41 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86093B95B;
-        Mon,  1 Aug 2022 03:27:34 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id v18so10031754plo.8;
-        Mon, 01 Aug 2022 03:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=56/QJjULF7AfhC6vcAuv9Bly6Dkpm9meWtKBdCbDI90=;
-        b=dCOo1FunfTVLFeGxeKtOmWYLZCwAVx/HuA8tXZY5lJnHrME/Hj8XXx2MnuAJNAddbq
-         HkVSSdNXTBOn2cZgxRihFz5B7W9OvtFD76g76TiO4tYCeCkCXa2LB2iG9+xDgUVem4k8
-         peaevhqX6B0MxW0njkE5X3gzrn1a+bmYtj3z8eaZdrENnexDbOQXuT8CkNAbycy7jfXg
-         HXjUPSj0TNM9U4JIBQuJvycAyIFSYVbouvanEfRUkmcVXLmQkkgwAL7psrb/X06H0IEb
-         guc1x4GwPJ/7FVmOEtcfkYj60ii9o+142ioyeYs8Q7uc8W8h+vAoZwi6K+AG6On9UOPX
-         fZrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=56/QJjULF7AfhC6vcAuv9Bly6Dkpm9meWtKBdCbDI90=;
-        b=Db8VOWwCntLS5HZjIr/5Yl3MSTMuT2z0frxaSsGr2rZdoG+JYVbbSaqEJsg4TWAum1
-         kdyVm70giLN1ah0eD5VWQjG00khncj2QvHts6QknfO6369hZnsQyKxYMQQnyK9q9EUIP
-         YqmTLfX4XeqdA0CoFy9dEjTivvDDgMfpapfu3RiygVtsp6Ddkf3sgf/bph+QGmXf9C7l
-         YPPrkyufLKvfK194tqB6m4Lzh0+WfppPQNull6naD8ZB/jV1S/RlsfPMZPtjFam/KfF6
-         WJmHaVKeFt+hFURot1hW5hp2NpjDtrrh4OvJbS+0iCA8iCSfzw5vfohQD7W08yhyMMhq
-         97mw==
-X-Gm-Message-State: ACgBeo0cGwGBdHFr24ETulL4O4ALHhK0nh2kBPQaMeRbYntfbCgNQNdp
-        jM3FYKGT5F8Ctnj3HFqtIsA=
-X-Google-Smtp-Source: AA6agR6eVx8+14LniTe55nM7Nmy9BGY51yMgSjQnu/IXnM2mbJT04adOamzI3yk5kjDdW47CwxL2Ew==
-X-Received: by 2002:a17:902:8302:b0:16d:d74f:e5cc with SMTP id bd2-20020a170902830200b0016dd74fe5ccmr13541293plb.6.1659349653572;
-        Mon, 01 Aug 2022 03:27:33 -0700 (PDT)
-Received: from genechen-System-Product-Name.richtek.com ([2402:7500:579:6a6f:8d46:b2ef:57e3:7c30])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902a3cc00b0016c6a6d8967sm9199302plb.83.2022.08.01.03.27.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 03:27:33 -0700 (PDT)
-From:   Gene Chen <gene.chen.richtek@gmail.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, gene_chen@richtek.com,
-        cy_huang@richtek.com
-Subject: [PATCH v3 7/7] usb: typec: tcpci_rt1711h: Fix CC PHY noise filter of voltage level
-Date:   Mon,  1 Aug 2022 18:14:47 +0800
-Message-Id: <20220801101447.86207-8-gene.chen.richtek@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801101447.86207-1-gene.chen.richtek@gmail.com>
-References: <20220801101447.86207-1-gene.chen.richtek@gmail.com>
+        with ESMTP id S229664AbiHAKYi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 06:24:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F2B13DD4
+        for <linux-usb@vger.kernel.org>; Mon,  1 Aug 2022 03:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659349477; x=1690885477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ewKvWC6uM9foVGyJs49gyXcTgY6YgcXAYu7ys+DCO+Y=;
+  b=Ny0AUY0r/fzB9xmFqAxrHqE4yt2xxJr5Jqb0BJL/jpWEngvXFoYcjUo2
+   Z4NvtufB81fHl8ltiYmEJRl2ir5e0JK3uZB60ncp5qGtWF8VAZpmWQYFc
+   PPZwsOiVysXle7IpJUVw+G7wwe8IzEr72HPI5tKZdI4ZEAW5hO5ZJZ9um
+   jiXuNnP4Os1p4M+UKKhk1AEtoKjumERYXguwxQAvlEuPj79b9wSlUH+qK
+   6kgl1X5hzgqEH3LbS+DwgndzwWNMoctthv5nhxcQabFT4Ph5qjkED+Y1L
+   lvpz9H38OEJy820tMKRasSBg+9ej9u5mVgzUOXGjvcaNHagLrKmKPHl07
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="290321648"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="290321648"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 03:24:37 -0700
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="598894797"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 03:24:32 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 01 Aug 2022 13:24:30 +0300
+Date:   Mon, 1 Aug 2022 13:24:30 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, upstream@semihalf.com
+Subject: Re: [PATCH v2] thunderbolt: fix PCI device class after powering up
+Message-ID: <Yuep3lpI02gWiJY9@lahna>
+References: <20220729094022.186496-1-lb@semihalf.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220729094022.186496-1-lb@semihalf.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Gene Chen <gene_chen@richtek.com>
+Hi,
 
-Fix CC PHY noise filter of voltage level according to
-current cc voltage level
+On Fri, Jul 29, 2022 at 11:40:22AM +0200, Łukasz Bartosik wrote:
+> A thunderbolt
+> lspci -d 8086:9a1b -vmmknn
+> Slot:	00:0d.2
+> Class:	System peripheral [0880]
+> Vendor:	Intel Corporation [8086]
+> Device:	Tiger Lake-LP Thunderbolt 4 NHI #0 [9a1b]
+> 
+> presents itself with PCI class 0x088000 after Chromebook boots.
+> lspci -s 00:0d.2 -xxx
+> 00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt 4
+> NHI #0 (rev 01)
+> 00: 86 80 1b 9a 00 00 10 00 01 00 80 08 00 00 00 00
+> ...
+> 
+> However after thunderbolt is powered up in nhi_probe()
+> its class changes to 0x0c0340
+> lspci -s 00:0d.2 -xxx
+> 00:0d.2 System peripheral: Intel Corporation Tiger Lake-LP Thunderbolt 4
+> NHI #0 (rev 01)
+> 00: 86 80 1b 9a 06 04 10 00 01 40 03 0c 00 00 00 00
+> ...
+> 
+> which leaves pci_dev structure with old class value
+> cat /sys/bus/pci/devices/0000:00:0d.2/class
+> 0x088000
 
-Signed-off-by: Gene Chen <gene_chen@richtek.com>
----
- drivers/usb/typec/tcpm/tcpci_rt1711h.c | 58 +++++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+This is completely unexpected. Which Chromebook this is and have you
+tried to upgrade it to the latest?
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index da35dd3e8a59..6d2568de553b 100644
---- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-+++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -25,8 +25,11 @@
- #define RT1711H_PHYCTRL1	0x80
- #define RT1711H_PHYCTRL2	0x81
- 
--#define RT1711H_RTCTRL8		0x9B
-+#define RT1711H_RTCTRL4		0x93
-+/* rx threshold of rd/rp: 1b0 for level 0.4V/0.7V, 1b1 for 0.35V/0.75V */
-+#define RT1711H_BMCIO_RXDZSEL	BIT(0)
- 
-+#define RT1711H_RTCTRL8		0x9B
- /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
- #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
- 			    (((ck300) << 7) | ((ship_off) << 5) | \
-@@ -45,6 +48,10 @@
- #define RT1711H_RTCTRL15	0xA2
- #define RT1711H_RTCTRL16	0xA3
- 
-+#define RT1711H_RTCTRL18	0xAF
-+/* 1b0 as fixed rx threshold of rd/rp 0.55V, 1b1 depends on RTCRTL4[0] */
-+#define BMCIO_RXDZEN	BIT(0)
-+
- struct rt1711h_chip {
- 	struct tcpci_data data;
- 	struct tcpci *tcpci;
-@@ -165,6 +172,53 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
- 				  RT1711H_AUTOIDLEEN, enable ? 0 : RT1711H_AUTOIDLEEN);
- }
- 
-+/*
-+ * Selects the CC PHY noise filter voltage level according to the remote current
-+ * CC voltage level.
-+ *
-+ * @status: The port's current cc status read from IC
-+ * Return 0 if writes succeed; failure code otherwise
-+ */
-+static inline int rt1711h_init_cc_params(struct rt1711h_chip *chip, u8 status)
-+{
-+	int ret, cc1, cc2;
-+	u8 role = 0;
-+	u32 rxdz_en, rxdz_sel;
-+
-+	ret = rt1711h_read8(chip, TCPC_ROLE_CTRL, &role);
-+	if (ret < 0)
-+		return ret;
-+
-+	cc1 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC1_SHIFT) &
-+				TCPC_CC_STATUS_CC1_MASK,
-+				status & TCPC_CC_STATUS_TERM ||
-+				tcpc_presenting_rd(role, CC1));
-+	cc2 = tcpci_to_typec_cc((status >> TCPC_CC_STATUS_CC2_SHIFT) &
-+				TCPC_CC_STATUS_CC2_MASK,
-+				status & TCPC_CC_STATUS_TERM ||
-+				tcpc_presenting_rd(role, CC2));
-+
-+	if ((cc1 >= TYPEC_CC_RP_1_5 && cc2 < TYPEC_CC_RP_DEF) ||
-+	    (cc2 >= TYPEC_CC_RP_1_5 && cc1 < TYPEC_CC_RP_DEF)) {
-+		rxdz_en = BMCIO_RXDZEN;
-+		if (chip->did == RT1715_DID)
-+			rxdz_sel = RT1711H_BMCIO_RXDZSEL;
-+		else
-+			rxdz_sel = 0;
-+	} else {
-+		rxdz_en = 0;
-+		rxdz_sel = RT1711H_BMCIO_RXDZSEL;
-+	}
-+
-+	ret = regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL18,
-+				 BMCIO_RXDZEN, rxdz_en);
-+	if (ret < 0)
-+		return ret;
-+
-+	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL4,
-+				  RT1711H_BMCIO_RXDZSEL, rxdz_sel);
-+}
-+
- static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
- 				      struct tcpci_data *tdata,
- 				      enum typec_cc_status cc)
-@@ -225,6 +279,8 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
- 		/* Clear cc change event triggered by starting toggling */
- 		if (status & TCPC_CC_STATUS_TOGGLING)
- 			rt1711h_write8(chip, TCPC_ALERT, TCPC_ALERT_CC_STATUS);
-+		else
-+			rt1711h_init_cc_params(chip, status);
- 	}
- 
- out:
--- 
-2.25.1
+> This fix updates PCI device class in pci_dev structure after
+> thunderbolt is powered up.
 
+I think we need to understand why this happens in the first place before
+doing anything else.
