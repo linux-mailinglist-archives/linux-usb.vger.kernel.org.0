@@ -2,59 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706F1586F71
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 19:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB47A586FAE
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 19:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiHARTQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Aug 2022 13:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S232441AbiHARmO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Aug 2022 13:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiHARTP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 13:19:15 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98611D51
-        for <linux-usb@vger.kernel.org>; Mon,  1 Aug 2022 10:19:14 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id w129so5886182vkg.10
-        for <linux-usb@vger.kernel.org>; Mon, 01 Aug 2022 10:19:14 -0700 (PDT)
+        with ESMTP id S230298AbiHARmM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 13:42:12 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890D11AF01
+        for <linux-usb@vger.kernel.org>; Mon,  1 Aug 2022 10:42:11 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10bd4812c29so14496465fac.11
+        for <linux-usb@vger.kernel.org>; Mon, 01 Aug 2022 10:42:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc;
-        bh=gpzqa5OMVXfNjZUV5orlHGJKmuaftnx7tvm4Eh1NXpQ=;
-        b=Qr/XClYeudNFRzR+TwOrqATKwRr7WajjNXtME843z7qn1Mf7n37kSoSGfl3mZU3spy
-         wJ5D/70qNAakGTKSQv5xkj2W+busBRqiDAYuUXXP5WZCJ8F0xrizUI2Vn1gIfOjwzqFZ
-         Tc7Ib+jaHf4L24OnQ0HVk/CKxY281k3OnH86hVbETRw/jE7JM6S77Jk0X/e3A2HMODuP
-         LIp4nijNwc7EKI5QAle7bRi4k0HhYGSZZHYLlY6bowVcXB63tqOSfEXccCgx6W6MaCLc
-         NmWhlMhnkJYycaEpTro3vZ1alg9DrIEy6O93Kd7HisMqbMY9EcHZzckIPzYQF33Rd0J4
-         +x4w==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EyD03pfVpeH7iUsN9cfO7bixQfRvh2HMA3MIy+9mnb0=;
+        b=EaLDBYXF7PwQExk638enSBzIYCz8w4YKgHmhUFAfi9ydUT1miL2FJI6k/ArR6MYWTB
+         jngIFoOEMAqtfGdwHuTP/Qf8bILm+LtLE/HVrwm80VShbHiCMx9M6YeuqPSEao3uw17R
+         6lonxzRiNV6/uzlVDe5Jk5YUSZm7zCH8lxBq4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=gpzqa5OMVXfNjZUV5orlHGJKmuaftnx7tvm4Eh1NXpQ=;
-        b=6eoxYCuYy9Q61CV0wE2hvSU2KAzaqk9/B7MtgJi5d+CDF3XYjqEzluf5myIEflNaxp
-         yI2SU5WSDMUEx5ClLG2pGJ1u+5A8xj21kanqoNnk9d9lPtadRZR3En67DGOj/H3uwHoR
-         ADZvow/sy2UVP4hQ9hW60TlRmSPo48fx4B5nBw5i9TvAFwYX0/qj2E+AC4j//JZdWEUm
-         ffscsfvyqQgDp0xi5wnXFiO7ZQjx8HLvvsECKCyOrGQ+glFLXH+nrjRTYzdjJXX5+02O
-         Jz7mtZLDrMT5SJHXryN41kbOTL9I0SR9AN3REfBh0tYIwgZGC02cN8d/w+o24mTufWen
-         QqcQ==
-X-Gm-Message-State: ACgBeo0k7i3GLGW6r5pawTiSGvb/XS8g4vJDhD6n4hx/nFzM4FIBlsUw
-        2/LG3QVp871FNknZi0Smm09LXL/v2OEFk2E2FEPAU9KN
-X-Google-Smtp-Source: AA6agR6Nf7vt52TM25EMYoXY1rL5xC+0+eKCSVq1h0fkOmBan51ihZBTWK9wqmEEk6rV2bMM7H0XNO+8oTR0sWQbxcs=
-X-Received: by 2002:a1f:1bd1:0:b0:377:b693:bb39 with SMTP id
- b200-20020a1f1bd1000000b00377b693bb39mr215439vkb.22.1659374353353; Mon, 01
- Aug 2022 10:19:13 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EyD03pfVpeH7iUsN9cfO7bixQfRvh2HMA3MIy+9mnb0=;
+        b=51MaYFGK955GIojDNlU8Ej0sQZ8sNsKby9Rf8/k/mFOZA18G3ZuxoLPbdcX3NJGo7Y
+         LyMewVWCcewd3KIisWqVixZgXI9chdBZaZKbOHdiL+HfkpEAcynY0Yt1ogYTi+SjcpWH
+         3+8AeTYOzNc2KC5YcFfza2blcnSaDOYAqIxErZWMAfNpHfGAvX33SmyYVJguSuNhU/Gh
+         bHnFoj5y757QuJ0p/WrI8mzzo83XuGh3JOW63zvAzyrLgwVc0ITprA33gnzDtz1+UCI+
+         PcpxMFcwe2qJDQBYjZ3snjVka5d877L4XQzLivqU8r0ISMztn/nuZlxaX8YhzHDHB5mX
+         SJaQ==
+X-Gm-Message-State: AJIora9zWNH57z54L6IYirvkROUSFoFn4fMBDy4iTN0lVcgZjKFdWavX
+        b1PG5e6m86kppondGQNrjCtLYA==
+X-Google-Smtp-Source: AGRyM1sISZF/mWnQtd1spLElr1rjiH1whX16vTUR5jYHPvLPwUzLz1srSaeEOE3J8LSR+OxOZyw1FA==
+X-Received: by 2002:a05:6870:61ca:b0:10c:1358:4eaf with SMTP id b10-20020a05687061ca00b0010c13584eafmr8025002oah.111.1659375730489;
+        Mon, 01 Aug 2022 10:42:10 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id j8-20020a9d7d88000000b0061c3753c30dsm2876274otn.17.2022.08.01.10.42.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 10:42:09 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Hongren Zenithal Zheng <i@zenithal.me>
+Cc:     Rhett Aultman <rhett.aultman@samsara.com>,
+        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
+ <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
+ <YrXNltWSYbplstPx@rowland.harvard.edu>
+ <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
+ <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
+ <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
+ <Yrpa1zpwfauSMoTi@rowland.harvard.edu>
+ <b18313ab-c408-83dc-ee96-a64a432fbfcb@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <07e82270-cc75-d346-72cf-0a60ffba06dc@linuxfoundation.org>
+Date:   Mon, 1 Aug 2022 11:42:07 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <CANyrUpxawx0iba88N6g=w_sOwF9Nepe4UgQbWTpVsWjN7oiKrw@mail.gmail.com>
-In-Reply-To: <CANyrUpxawx0iba88N6g=w_sOwF9Nepe4UgQbWTpVsWjN7oiKrw@mail.gmail.com>
-From:   Pere Blay <pereblay@gmail.com>
-Date:   Mon, 1 Aug 2022 19:19:01 +0200
-Message-ID: <CANyrUpwZCHQTgoo-8vQxqcnnmETVchiZjfKXOnbTYHKWBra0nw@mail.gmail.com>
-Subject: Fwd: PL2303 unknown device type in kernel
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <b18313ab-c408-83dc-ee96-a64a432fbfcb@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,100 +86,69 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi and thanks,
+On 6/30/22 8:10 PM, Shuah Khan wrote:
+> On 6/27/22 7:35 PM, Alan Stern wrote:
+>> On Mon, Jun 27, 2022 at 04:54:17PM -0600, Shuah Khan wrote:
+>>> On 6/24/22 12:07 PM, Alan Stern wrote:
+>>>> In the future people will want to make other changes to
+>>>> include/linux/usb.h and they will not be aware that those changes will
+>>>> adversely affect usbip, because there is no documentation saying that
+>>>> the values defined in usb.h are part of a user API.  That will be a
+>>>> problem, because those changes may be serious and important ones, not
+>>>> just decorative or stylistic as in this case.
+>>>>
+>>>
+>>> How often do these values change based on our past experience with these
+>>> fields?
+>>
+>> I don't know.  You could check the git history to find out for certain.
+>> My guess would be every eight or ten years.
+>>
+>>>> I agree with Hongren that values defined in include/linux/ should not be
+>>>> part of a user API.  There are two choices:
+>>>>
+>>>
+>>> I agree with this in general. I don't think this is an explicit decision
+>>> to make them part of API. It is a consequence of simply copying the
+>>> transfer_flags. I am with you both on not being able to recognize the
+>>> impact until as this is rather obscure usage hidden away in the packets.
+>>> These defines aren't directly referenced.
+>>>
+>>>>     Move the definitions into include/uapi/linux/, or
+>>>>
+>>>
+>>> Wouldn't this be easier way to handle the change? With this option
+>>> the uapi will be well documented.
+>>>
+>>>>     Add code to translate the values between the numbers used in
+>>>>     userspace and the numbers used in the kernel.  (This is what
+>>>>     was done for urb->transfer_flags in devio.c:proc_do_submiturb()
+>>>>     near line 1862.)
+>>>>
+>>>
+>>> I looked at the code and looks simple enough. I am okay going this route
+>>> if we see issues with the option 1.
+>>
+>> It's up to you; either approach is okay with me.  However, I do think
+>> that the second option is a little better; I don't see any good reason
+>> why the kernel should be forced to use the same numeric values for these
+>> flags forever.  Especially since the only user program that needs to
+>> know them is usbip, which is fairly closely tied to the kernel; if there
+>> were more programs using those values then they would constitute a good
+>> reason for choosing the first option.
+>>
+> 
+> Thank you Alan and Hongren for your help with this problem. Since there
+> are no changes to the flags for the time being, I am comfortable going
+> with the second option.
+> 
+> I will send a patch soon.
+> 
 
-I get this message when plugin a usb device wich uses a usb-serial converter:
+Patch is almost ready to be sent out. Changes aren't bad at all. Hoping to
+get this done sooner - summer vacations didn't cooperate.
 
-[ 5097.161310] usb 1-3.4.1: New USB device found, idVendor=067b,
-idProduct=23d3, bcdDevice= 4.00
-[ 5097.161326] usb 1-3.4.1: New USB device strings: Mfr=1, Product=2,
-SerialNumber=3
-[ 5097.161332] usb 1-3.4.1: Product: USB-Serial Controller
-[ 5097.161336] usb 1-3.4.1: Manufacturer: Prolific Technology Inc.
-[ 5097.161340] usb 1-3.4.1: SerialNumber: DGARb193428
-[ 5097.170447] pl2303 1-3.4.1:1.0: pl2303 converter detected
-[ 5097.170470] pl2303 1-3.4.1:1.0: unknown device type, please report
-to linux-usb@vger.kerne.org
+Just an update that I haven't forgotten and it will taken care of.
+thanks,
+-- Shuah
 
-Then, I'm reporting.
-
-My system:
-
-$ uname -r
-5.17.5-051705-generic
-
-Output of lsusb:
-$lsusb -d 067b:23d3 -v
-
-Bus 001 Device 017: ID 067b:23d3 Prolific Technology, Inc. USB-Serial Controller
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x067b Prolific Technology, Inc.
-  idProduct          0x23d3
-  bcdDevice            4.00
-  iManufacturer           1 Prolific Technology Inc.
-  iProduct                2 USB-Serial Controller
-  iSerial                 3 DGARb193428
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0027
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xa0
-      (Bus Powered)
-      Remote Wakeup
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-Device Status:     0x0000
-  (Bus Powered)
-
-Anything to make it work? thanks a lot.
-Pere Blay
