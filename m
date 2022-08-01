@@ -2,189 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D536D586560
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 08:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88273586572
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Aug 2022 09:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbiHAGsw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Aug 2022 02:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S229594AbiHAHAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Aug 2022 03:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234727AbiHAGsW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 02:48:22 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F96A13F49;
-        Sun, 31 Jul 2022 23:48:13 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id o1so7734990qkg.9;
-        Sun, 31 Jul 2022 23:48:13 -0700 (PDT)
+        with ESMTP id S229546AbiHAHAj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Aug 2022 03:00:39 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647766476;
+        Mon,  1 Aug 2022 00:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0pCQwRUtQqbmZSwhlAYKv7D+OaWBuV6jzuOG3pLiqnE=;
-        b=ln2eP881w+pJWsnC+kYg6rYGAd3maj9S7mJ+gV/lLUoTHa07yJ7pdTT1iddtkvut7G
-         wCE3Vn0TT0sSu2CGZvq/wm0E+8dX8DAzc0wcrTU8f68Bf945HKsgWEqdxw/iLewJID2+
-         U3xISuK9fbiy0BRYeJ5aJIV0S+Q+NI5ty1LBv5VOtK4++uo7wdiHC9lGtmGhCbrpNouT
-         poWweP7l/AaVWeIy/2bVG85dC0G/EueHZA6lUebLElpHSoCxf4b25lXpFCUPSvI2lhdW
-         7jc02DOr4iyObq+BZvCMVIS2hbqCqgw3xx0epY1nfMPIBNYZpFTwGEBUDoh2MKMua6y2
-         T4rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0pCQwRUtQqbmZSwhlAYKv7D+OaWBuV6jzuOG3pLiqnE=;
-        b=Y97cQMDQsqGK7AYWLfOKdA8pvvi9aEfceRVlMf3wL/m6lPqs47koW/+OhY9eyN1wkg
-         pK0cDrMXcIjTVa0EyQHvpuPLThUewNvCcuBk8viNdK4geO0JfT8x4FlZzB9ijjvsafqL
-         KGZz8LoxAzCVh4uFSLaGXCpBwaP9mVp1/VDGlXRyxduwr86NbL2cfvnGeSwXnQ1OZiNa
-         HxWPTomC4xKawKmjBpHtdNs1+5OKJir14AtnUFQTOiA7Q+mM7Kfb/oymAm4JETnVZ/9Q
-         RMw9vjpUaqQZ/AmqmQMHBTVIpccUTDMeLAFEpq1PPbX1LDJTcD1ghg4EnpiBZVuPmAsA
-         hzXw==
-X-Gm-Message-State: AJIora8FopjwlP1rSx/ZiX8GU9Ml6sQ5dwYKhNl+ABKNwpljS/SabVTB
-        3yFUopDMAgRVTFtAi/wOQsmnzKvv9Rzze5tpm3k=
-X-Google-Smtp-Source: AGRyM1vi8vD3grhYbZ/WLviZ2IFccZbjNO75ItldTtC+nPOI6OOaG7LKKV2FJNQbFGfWSid26gTwustg4ausWvfIn5M=
-X-Received: by 2002:a05:620a:1706:b0:6b8:705a:c61e with SMTP id
- az6-20020a05620a170600b006b8705ac61emr8915998qkb.129.1659336492750; Sun, 31
- Jul 2022 23:48:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-6-peterwu.pub@gmail.com>
-In-Reply-To: <20220722102407.2205-6-peterwu.pub@gmail.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Mon, 1 Aug 2022 14:47:36 +0800
-Message-ID: <CABtFH5L83d5Di6O9TC-L3UX2ma5J3PE47ihfJFfPD5YGJ43NxQ@mail.gmail.com>
-Subject: Re: [PATCH v6 05/13] dt-bindings: backlight: Add MediaTek MT6370 backlight
-To:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659337233; x=1690873233;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=0jeXv1E33L+gQVIAcgQyUPgnH9VJughBxAQmW6iNU4g=;
+  b=aRocMJtRb2fLkCq0bafAn4jmJw0Yd3ANc5w7JpufDt8cj+xnxRCnBnmM
+   Yv/+ivdMP1jdt1vLLaeq9IBR0+isPBvyV3c3iveMjKfxxMBvusuq7FvrF
+   Gz9/F5UMNMXZS9gtr2dfxtoJ41sC2ZHmgl0cE0fozU5WVBHMKis1MaLCi
+   o=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Aug 2022 00:00:31 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 00:00:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 1 Aug 2022 00:00:29 -0700
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 1 Aug 2022 00:00:25 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v2] usb: dwc3: qcom: Provide stubs for dwc3_qcom_read_usb2_speed function
+Date:   Mon, 1 Aug 2022 12:30:15 +0530
+Message-ID: <1659337215-20421-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 6:24 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
+Dwc3 Qcom driver makes use of usb_hub_find_child API in its efforts
+to get speed of connected devices (HS/LS/FS) and enable interrupts
+accordingly. usb_hub_find_child API is a part of usb core compiled
+either into the kernel or as a module (CONFIG_USB= Y or M). In some
+builds (make randconfig for i386) CONFIG_USB is not enabled and the
+usb core is not compiled resulting in linking errors.
 
-[snip]
+Provide stubs for dwc3_qcom_read_usb2_speed function to use
+usb_hub_find_child API only if CONFIG_USB is enabled. Else return
+USB_SPEED_UNKNOWN.
 
-> +  compatible:
-> +    const: mediatek,mt6370-backlight
-> +
-> +  default-brightness:
-> +    minimum: 0
-> +    maximum: 2048
-> +
-> +  max-brightness:
-> +    minimum: 0
-> +    maximum: 2048
-> +
+Fixes: 6895ea55c385 (usb: dwc3: qcom: Configure wakeup interrupts during suspend)
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Suggested-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+---
+v2: Updated commit text to include cases when CONFIG_USB=m as well.
 
-Hi Rob, Krzysztof,
+ drivers/usb/dwc3/dwc3-qcom.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-First, I'm so sorry for our SoB writing wrong, I'll fix it in the next patch.
-Because of this mail thread
-(https://lore.kernel.org/all/20220728113109.7gf3b36mqjxlhcq3@maple.lan/),
-I would like to discuss with you that I may change the following in
-this DT document, I am not sure whether you agree or not.
-
-1. Add some descriptions about MT6372, which supports 16384 steps (14
-bits) and is different from MT6370/MT6371 (2048 steps, 11 bits)
-2. Modify the format of 'compatible' as follows to distinguish between
-MT6370/MT6371 or MT6372
-------------------------------------------
-properties:
-  compatible:
-    enum:
-      - mediatek,mt6370-backlight
-      - mediatek,mt6372-backlight
-------------------------------------------
-
-3. Remove the 'maximum' value of 'default-brightness' and
-'max-brightness', and add "if-else" to determine the "maximum" value
-as follows
-------------------------------------------
-  default-brightness:
-    minimum: 0
-
-  max-brightness:
-    minimum: 0
-
-...
-
-if:
-  properties:
-    compatible:
-      contains:
-        const: mediatek,mt6372-backlight
-
-then:
-  properties:
-    default-brightness:
-      maximum: 16384
-
-    max-brightness:
-      maximum: 16384
-
-else:
-  properties:
-    default-brightness:
-      maximum: 2048
-
-    max-brightness:
-      maximum: 2048
-------------------------------------------
-
-4. Add a new boolean property to allow the user to determine whether
-to enable the exponential mode of backlight brightness or not. Like
-this,
-------------------------------------------
-  mediatek,bled-exponential-mode-enable:
-    description: |
-      Enable the exponential mode of backlight brightness. If this property
-      is not enabled, the default is to use linear mode.
-    type: boolean
-------------------------------------------
-
-I hope these changes I have added will meet your expectations.
-And I'm not sure if I should remove 'Reviewed-By' first until it
-passes your review.
-Thanks.
-
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index c5e482f..bd8dc5a 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -299,6 +299,7 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+ 	icc_put(qcom->icc_path_apps);
+ }
+ 
++#ifdef CONFIG_USB
+ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+ {
+ 	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+@@ -318,6 +319,12 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+ 
+ 	return udev->speed;
+ }
++#else
++static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
++{
++	return USB_SPEED_UNKNOWN;
++}
++#endif
+ 
+ static void dwc3_qcom_enable_wakeup_irq(int irq, unsigned int polarity)
+ {
 -- 
-Best Regards,
-ChiaEn Wu
+2.7.4
+
