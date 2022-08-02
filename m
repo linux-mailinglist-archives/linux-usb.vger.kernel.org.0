@@ -2,58 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EC75877AD
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 09:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195A55877B2
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 09:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235693AbiHBHRL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Aug 2022 03:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S235781AbiHBHSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Aug 2022 03:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiHBHRK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 03:17:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE73145F63;
-        Tue,  2 Aug 2022 00:17:08 -0700 (PDT)
+        with ESMTP id S233231AbiHBHSy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 03:18:54 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9672FD13A;
+        Tue,  2 Aug 2022 00:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659424628; x=1690960628;
+  t=1659424733; x=1690960733;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EkQEdaF0PKFeFCAcHrRmmKAHg3afrB865tGwaTuNQFw=;
-  b=dQIXi92KBkqcm29UFTAfQ68HcMrDyRjG0TVVgruiZKcKPw+1JhrkAxi0
-   T07AJDfhDuqDCfuSqxgclnTK5ENIpW2wyUO6jLvzai+VJOSzOha5k2ztr
-   8iZxfuACgiuXlSGnsqHOFNxb5kVzIFvB+NRC1cKR09oVBwdLk/ZwmQGf6
-   6KaSjVC/5Afbc43JP4SEb/PSTdBE7RPw7b2ITtNb68WLnkZ6H0QuO/ITK
-   8jf4Twj7P2qXuPc0tyFup784CIkVDrNYEK+uKukoCxMEuJPbhHTwagC0m
-   yK+jcjW4T08RrU7hbX6GVvaft7lpf7JGYkODgFqBEebnce5Cvz9E3zxTL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="269110346"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RvwmFxwP70eYQJZ3Lq3ZhuetbGK49H2H5zbw48rU8xs=;
+  b=Y7Q4YQdvYVQIsH26gPsT6zMDwNBRGv0rsa5OhXUOUqzL1BoUwFIIWQcN
+   FDFceFKr2gbE3EMC12YAagdZ66xeYtyh53jZpjMqG+FdgW87e7bl2QT2A
+   QIY1pDyPipC6KqYWPjMZY3lUfEBRw5xCeo5JuueRtfCxjV/fpyaFhGrDh
+   hmNA5sS8Lip0sHHaui8ZxWDEtp1mp7gMc7Y9m1zH0HNkJnjBmndAKeeqp
+   j6vdHeVqR++mEFjv/YzPHeRIwAg8OuYCAAiCPyYZTdJFNlBTf7j7b79XC
+   Hs3hq4v8dcyXJ4zoQ/p6BrRjBEZ+1NXUIUZ5xaPX2YlvD5rWeDCauwLhg
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="353346621"
 X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="269110346"
+   d="scan'208";a="353346621"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 00:17:08 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 00:18:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="744570639"
+   d="scan'208";a="744571129"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 00:17:06 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 10:17:05 +0300
-Date:   Tue, 2 Aug 2022 10:17:05 +0300
+  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 00:18:47 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 10:18:46 +0300
+Date:   Tue, 2 Aug 2022 10:18:46 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Acknowledge the GET_ERROR_STATUS
- command completion
-Message-ID: <YujPcTrt7wZuM0LF@kuha.fi.intel.com>
-References: <1658817949-4632-1-git-send-email-quic_linyyuan@quicinc.com>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: retimer: Add missing id check in match
+ callback
+Message-ID: <YujP1oOHojuB9iXa@kuha.fi.intel.com>
+References: <20220725203129.1973260-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1658817949-4632-1-git-send-email-quic_linyyuan@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220725203129.1973260-1-nfraprado@collabora.com>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,41 +66,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 02:45:49PM +0800, Linyu Yuan wrote:
-> We found PPM will not send any notification after it report error status
-> and OPM issue GET_ERROR_STATUS command to read the details about error.
+On Mon, Jul 25, 2022 at 04:31:29PM -0400, Nícolas F. R. A. Prado wrote:
+> The fwnode_connection_find_match() function handles two cases: named
+> references and graph endpoints. In the second case, the match function
+> passed in is called with the id to check for the match. However, the
+> match function for the recently added type-c retimer class assumes the
+> connection has already been matched (which is only true for the first
+> case).
 > 
-> According UCSI spec, PPM may clear the Error Status Data after the OPM
-> has acknowledged the command completion.
+> The result is that with that change, all type-c nodes with graph
+> endpoints defer probe indefinitely, independently of having a retimer
+> connection or not.
 > 
-> This change add operation to acknowledge the command completion from PPM.
+> Add the missing check, like is done by the type-c mux and usb role
+> switch code, to fix the issue.
 > 
-> Fixes: bdc62f2bae8f (usb: typec: ucsi: Simplified registration and I/O API)
-> Cc: <stable@vger.kernel.org> # 5.10
-> Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> Fixes: ddaf8d96f93b ("usb: typec: Add support for retimers")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 4 ++++
->  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index cbd862f..1aea464 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -76,6 +76,10 @@ static int ucsi_read_error(struct ucsi *ucsi)
->  	if (ret)
->  		return ret;
+>  drivers/usb/typec/retimer.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
+> index 051eaa7d2899..2003731f1bee 100644
+> --- a/drivers/usb/typec/retimer.c
+> +++ b/drivers/usb/typec/retimer.c
+> @@ -36,8 +36,13 @@ static int retimer_fwnode_match(struct device *dev, const void *fwnode)
 >  
-> +	ret = ucsi_acknowledge_command(ucsi);
-> +	if (ret)
-> +		return ret;
+>  static void *typec_retimer_match(struct fwnode_handle *fwnode, const char *id, void *data)
+>  {
+> -	struct device *dev  = class_find_device(&retimer_class, NULL, fwnode,
+> -						retimer_fwnode_match);
+> +	struct device *dev;
 > +
->  	switch (error) {
->  	case UCSI_ERROR_INCOMPATIBLE_PARTNER:
->  		return -EOPNOTSUPP;
+> +	if (id && !fwnode_property_present(fwnode, id))
+> +		return NULL;
+> +
+> +	dev = class_find_device(&retimer_class, NULL, fwnode,
+> +				retimer_fwnode_match);
+>  
+>  	return dev ? to_typec_retimer(dev) : ERR_PTR(-EPROBE_DEFER);
+>  }
 
 thanks,
 
