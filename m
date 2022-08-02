@@ -2,66 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C404587DA1
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 15:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC990587BF8
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 14:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237078AbiHBNyw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Aug 2022 09:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S236605AbiHBMIV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Aug 2022 08:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237065AbiHBNyc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 09:54:32 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFC631395
-        for <linux-usb@vger.kernel.org>; Tue,  2 Aug 2022 06:54:03 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id b81so7125255vkf.1
-        for <linux-usb@vger.kernel.org>; Tue, 02 Aug 2022 06:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=Xy7orwXJ5fXtQs/TJmbcrHAO7BE1JVxTvodtnVVywPnS/v8QsaKvmqg+J5kHz65eT/
-         VPpzZixz5YdDwDHGKRUuR9H4+IjmhRP+9KW2RonOGCi5aPOzyFM1+pI6yiitvK+jR7cH
-         d+sOdzJkieuxfyB3F40gO+Ic8vUvRBqKpROEGHZLfp8F1X6PDMtpXTyss/WDbtnYltAM
-         kNmWW2yMVfLq2KG1hGY5QCFDZNSrsR+e+fK9eoo/QCcit0S7IQhrzFQupNWyWJqU8ivH
-         sRM9+KzjE3/tBSb9VC2W8NC/j8Bmrpg9sfJB6p0VNK1sjfqwwhov1/CkGIYkEmLvjTr9
-         XAJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=f+Y67a7lA9EaTBG5dt5H5Im4gNcMcMuCdFVNxwzax7YCssHWfwydOUzEigsauiOL8S
-         mm/YhSA32cnzi+T6tAxon6BnI+HJJ8CGqpX+T/qdM941yoiw6R9KBKjjnnhHnkPpSJVI
-         dBMNZaexcFeNzwgYPqXmr9j6YwUWXtyohASAMn83YCqmqncQdb4/Gx7PIrChjYMd57C4
-         arFHxOEbTqWAsQePmEt/tNHvemGtltE7Ogd/d+DmXbvKy/uB0oQ8OjgZJ9QOFkErdRZD
-         f9OuVPx8/b6E7kUS5Lo5vgPtnCk6yyvI6xS0Fo9RvMRZSesH1zbgji5rhPVdMOYE3YqP
-         R6uA==
-X-Gm-Message-State: AJIora9mmTzZnPY4gFipfbOo8xfxalJLR60mJ1EDQ1/C/20fiYjAxCLB
-        ocMiWCk++doxy5q3SqGdxASg9oqItNuoKjTMXac=
-X-Google-Smtp-Source: AGRyM1vKIXKHWM8YG9PKQ1FuIUVj/pgFTIUIHKgbUYu4u96foiBR1kgQNOB1cv9i5YkMg3FaWVGgJ2EpXAgQ4jkbdgk=
-X-Received: by 2002:ac5:c38b:0:b0:374:e94e:5454 with SMTP id
- s11-20020ac5c38b000000b00374e94e5454mr7796310vkk.39.1659448441506; Tue, 02
- Aug 2022 06:54:01 -0700 (PDT)
+        with ESMTP id S233831AbiHBMIU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 08:08:20 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A7D32ED6;
+        Tue,  2 Aug 2022 05:08:15 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1659442089tv8fvdlz
+Received: from kali.lan ( [125.69.43.47])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 02 Aug 2022 20:08:08 +0800 (CST)
+X-QQ-SSF: 01000000002000F0U000B00A0000020
+X-QQ-FEAT: VbOeDQvtdXPzdTP540OXr2V8VXFh4s5efJtqO5kWj/hNmf2ooXxX1+7947pz6
+        VamZqYSKESmawH3SIx1Ch7V1vbbMLRuVTzK9PODPxJF+uadV0CjX36lKjIagP4XmsAJtbjp
+        FEE5aWcay6CI25BylkhrOX/MaKvprpy2Y4+BKHseu/4okcR+HGjyPxFR3AUpOaVBFnrskJh
+        VCpY/+I+H+dVNDDnfsp5OZ5oEW/WDpPK1d18h7wSNB/f7Ob6gzQ2p2rYZ7HS0a2InmziH7k
+        nX5VLRDuluDWuSbE0jt1T1mI4zjp5CwKQcq5rla1tgB8esG7rNrMi51Q7rLwBiJeAd7217n
+        G1nzgLytdbwX0fcG2+MgPG4MK8XBd/HtggMP3/wdLefLfjbFyVij6ldQN2eN3bunIoJyEnU
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] USB: UHCI: Fix comment typo
+Date:   Wed,  3 Aug 2022 04:08:06 +0800
+Message-Id: <20220802200806.5902-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a59:cdb0:0:b0:2d7:4033:2c5e with HTTP; Tue, 2 Aug 2022
- 06:54:01 -0700 (PDT)
-Reply-To: lken58124@gmail.com
-From:   Ken Lawson <engrmorganwalter@gmail.com>
-Date:   Tue, 2 Aug 2022 13:54:01 +0000
-Message-ID: <CAM5a-p_o-hvgwyMZZPTRuBBGLVgCG1NFPQGSYfLKn0GWdQ2xQQ@mail.gmail.com>
-Subject: Did you receive the email I sent for you?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The second `then' might be a typo, replace it to `the'.
+
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ drivers/usb/host/uhci-q.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/uhci-q.c b/drivers/usb/host/uhci-q.c
+index 35fcb826152c..09b721336b23 100644
+--- a/drivers/usb/host/uhci-q.c
++++ b/drivers/usb/host/uhci-q.c
+@@ -345,7 +345,7 @@ static int uhci_cleanup_queue(struct uhci_hcd *uhci, struct uhci_qh *qh,
+ 		goto done;
+ 	}
+ 
+-	/* If the QH element pointer is UHCI_PTR_TERM then then currently
++	/* If the QH element pointer is UHCI_PTR_TERM then the currently
+ 	 * executing URB has already been unlinked, so this one isn't it. */
+ 	if (qh_element(qh) == UHCI_PTR_TERM(uhci))
+ 		goto done;
+-- 
+2.35.1
 
