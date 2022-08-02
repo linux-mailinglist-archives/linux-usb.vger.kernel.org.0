@@ -2,134 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00D058787B
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 09:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB3F587888
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 09:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236121AbiHBH6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Aug 2022 03:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
+        id S236257AbiHBH75 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Aug 2022 03:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbiHBH6A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 03:58:00 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EF12F38A;
-        Tue,  2 Aug 2022 00:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659427078; x=1690963078;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o8494un4vXRlvd50TpzXogqNJizswoyXDmZmi+TkmX0=;
-  b=ZTQAEWjCp/Dcra2LEUEQzLviGCfMOuxzX/GVZaDEJzpRP4lQIZcLYgUD
-   qK7i9MfGADx6BWxMEqfmAEE2cWtc56/5azOw6+5N9AxCMCdU95REixyjN
-   egOtBFxuUCHjCNqEKefju3hrnDco9u+YbeKHzOODDhxv4nZXirJv58kCl
-   M6ndhghoqqG5SaGGpBjdnvduTv+lUktS/F3gbt1O5xs1HiKOEj4T43pN5
-   08o0Yjztw/lW+JGwP+IugXaQPe5MWEUgYuxc9H5hlRna06BDf55wqAf1s
-   6VDQjCuYJzcCk19c7jcLqwZLhF+1Yl57k1qCScO0QOpeDSCAqVsEP/PFt
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="290563300"
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="290563300"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 00:57:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="744580849"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 00:57:54 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 10:57:53 +0300
-Date:   Tue, 2 Aug 2022 10:57:53 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Gene Chen <gene.chen.richtek@gmail.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        gene_chen@richtek.com, cy_huang@richtek.com
-Subject: Re: [PATCH v3 2/7] usb: typec: tcpci_rt1711h: Fix vendor setting
- when set vconn
-Message-ID: <YujZATquqh0srgHm@kuha.fi.intel.com>
-References: <20220801101447.86207-1-gene.chen.richtek@gmail.com>
- <20220801101447.86207-3-gene.chen.richtek@gmail.com>
+        with ESMTP id S235970AbiHBH74 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 03:59:56 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0FE33365;
+        Tue,  2 Aug 2022 00:59:55 -0700 (PDT)
+X-UUID: 9fdc315bf4254b0b86472469c4c9cccb-20220802
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:4712fee9-55b9-424d-9bbf-015faad59c95,OB:0,LO
+        B:20,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:95
+X-CID-INFO: VERSION:1.1.8,REQID:4712fee9-55b9-424d-9bbf-015faad59c95,OB:0,LOB:
+        20,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:95
+X-CID-META: VersionHash:0f94e32,CLOUDID:c7280ed0-a6cf-4fb6-be1b-c60094821ca2,C
+        OID:bc25cb97a914,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9fdc315bf4254b0b86472469c4c9cccb-20220802
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1585560171; Tue, 02 Aug 2022 15:59:50 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 2 Aug 2022 15:59:49 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 2 Aug 2022 15:59:48 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Ikjoon Jang" <ikjn@chromium.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] usb: xhci-mtk: relax TT periodic bandwidth allocation
+Date:   Tue, 2 Aug 2022 15:59:45 +0800
+Message-ID: <20220802075946.18168-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801101447.86207-3-gene.chen.richtek@gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Gene,
+Currently uses the worst case byte budgets on full-speed bus bandwidth,
+for example, for an isochronos IN endpoint with 192 bytes budget, it
+will consume the whole 5 u-frames(188 * 5) while the actual full-speed
+bus budget should be just 192 bytes.
 
-On Mon, Aug 01, 2022 at 06:14:42PM +0800, Gene Chen wrote:
-> From: Gene Chen <gene_chen@richtek.com>
-> 
-> replace overwrite whole register with update bits
-> 
-> Signed-off-by: Gene Chen <gene_chen@richtek.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index b56a0880a044..6197d9a05d36 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -5,13 +5,15 @@
->   * Richtek RT1711H Type-C Chip Driver
->   */
->  
-> -#include <linux/kernel.h>
-> -#include <linux/module.h>
-> +#include <linux/bits.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
-> -#include <linux/gpio/consumer.h>
-> -#include <linux/usb/tcpm.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
->  #include <linux/regmap.h>
-> +#include <linux/usb/tcpm.h>
+This patch changes the low/full-speed bandwidth allocation logic to use
+"approximate" best case budget for lower speed bandwidth management.
+For the same endpoint from the above example, the approximate best case
+budget is now reduced to (188 * 2) bytes.
 
-That header reshuffling is not necessary for this change - at least you
-are not giving any reason for it in your commit message.
+Without this patch, many usb audio headsets with 3 interfaces (audio
+input, audio output, and HID) cannot be configured on xhci-mtk.
 
-If there is no real need for that in this patch, then please leave the
-headers as they are. You can propose changing the order of the headers
-in a separate patch. Though, I would not bother with it unless there
-is some real benefit in doing so, and I'm pretty sure there isn't any.
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/host/xhci-mtk-sch.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
->  #include "tcpci.h"
->  
->  #define RT1711H_VID		0x29CF
-> @@ -23,6 +25,7 @@
->  #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
->  			    (((ck300) << 7) | ((ship_off) << 5) | \
->  			    ((auto_idle) << 3) | ((tout) & 0x07))
-> +#define RT1711H_AUTOIDLEEN	BIT(3)
->  
->  #define RT1711H_RTCTRL11	0x9E
->  
-> @@ -109,8 +112,8 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
->  {
->  	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
->  
-> -	return rt1711h_write8(chip, RT1711H_RTCTRL8,
-> -			      RT1711H_RTCTRL8_SET(0, 1, !enable, 2));
-> +	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL8,
-> +				  RT1711H_AUTOIDLEEN, enable ? 0 : RT1711H_AUTOIDLEEN);
->  }
->  
->  static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
-> -- 
-> 2.25.1
-
-thanks,
-
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 06a6b19acaae..a17bc584ee99 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -425,7 +425,6 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
+ 
+ static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
+ {
+-	u32 extra_cs_count;
+ 	u32 start_ss, last_ss;
+ 	u32 start_cs, last_cs;
+ 
+@@ -461,18 +460,12 @@ static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
+ 		if (last_cs > 7)
+ 			return -ESCH_CS_OVERFLOW;
+ 
+-		if (sch_ep->ep_type == ISOC_IN_EP)
+-			extra_cs_count = (last_cs == 7) ? 1 : 2;
+-		else /*  ep_type : INTR IN / INTR OUT */
+-			extra_cs_count = 1;
+-
+-		cs_count += extra_cs_count;
+ 		if (cs_count > 7)
+ 			cs_count = 7; /* HW limit */
+ 
+ 		sch_ep->cs_count = cs_count;
+-		/* one for ss, the other for idle */
+-		sch_ep->num_budget_microframes = cs_count + 2;
++		/* ss, idle are ignored */
++		sch_ep->num_budget_microframes = cs_count;
+ 
+ 		/*
+ 		 * if interval=1, maxp >752, num_budge_micoframe is larger
 -- 
-heikki
+2.18.0
+
