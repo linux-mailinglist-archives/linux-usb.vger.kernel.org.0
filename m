@@ -2,138 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF92587974
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 10:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA02858797A
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 10:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235915AbiHBI64 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Aug 2022 04:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S235811AbiHBI7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Aug 2022 04:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbiHBI6y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 04:58:54 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477524D83F;
-        Tue,  2 Aug 2022 01:58:52 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id z19so12884153plb.1;
-        Tue, 02 Aug 2022 01:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=nWqh6KG5a1Ft7mZyLnhDTkUYadJU0/RKzxkHOlg+eQk=;
-        b=dqtssUq3NP8S6rOLiBW510fa535GnJ1INIodTRrzqZ8N5ar+LkDdXfLF5juIgDLCra
-         DwLb0QLd4EMhapQbXv6qPwaDTt3iElMs33rthDr5DWVbjtTA2Z9zpQNfPDyrzZFN+rrs
-         Hpw02es/Zivahi/5Lwfb/CBjncGhK8sykPeY70edIEXWkDAyc2KEVAa5akzBA8ImDoCe
-         eDEAzAcGhhebYYdj1EG+CVuFihRxzeCaCaDnEARWjUeS8pwcYdY5/bak0kewnwY7TYyW
-         U7clUrt+dEt2VDWStq7AX7F1CmC5lVZhErU8Z55MwAxUKdroclCSU8pJZYRIoXC3x3l0
-         khgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=nWqh6KG5a1Ft7mZyLnhDTkUYadJU0/RKzxkHOlg+eQk=;
-        b=kJY00mSeFMDF1vgg/CBgwyvRJNfIEm/GrO11zHyN2NVNTl3l18kylIOcTGVbHl9l2E
-         WJhyZzWFYUUzAlX6YEqmzP5xSCdPhxj6hT0Gn0LMqtDKZKbeJecxgUq5bsMSg11IKYOv
-         GnNAcNRQCej/35BvIy0k7k8SNIOvBCJwW1i+YrYb6XzdHjfW76iHNzk+pGLX65FIQWCy
-         bDpbb79Qxgyg1FSicI0+5XaNEk9Vw/GhuPa+szXPlwjrl8HDlqWsUTGyk3DAKxp//bxz
-         DGi5V9Vb/i0xCq9QP4stRCjUjgZQZvyyCvyYmGbGh+ZVazHW6HDJwrK7VKeQphzkxlat
-         GkYw==
-X-Gm-Message-State: ACgBeo2IRRE+PG1zlEbWlVOMQ14DTSLPOaMyecwg3XGaE3LyfUALUFuF
-        4F07Pu+4Xf+D8OhPbLJ9sw0=
-X-Google-Smtp-Source: AA6agR6P8z2E8EFi66AxmUjTPwBg/ty9OUo6EdUPvZB6uqRlwYESXq8ZiAlIRhTsegZxVs3eXQwJ+A==
-X-Received: by 2002:a17:90a:e2cc:b0:1f3:1151:e0ff with SMTP id fr12-20020a17090ae2cc00b001f31151e0ffmr23828121pjb.50.1659430731586;
-        Tue, 02 Aug 2022 01:58:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l9-20020a170903244900b0016dc307aef4sm11277071pls.36.2022.08.02.01.58.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 01:58:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 2 Aug 2022 01:58:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Gene Chen <gene.chen.richtek@gmail.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        gene_chen@richtek.com, cy_huang@richtek.com
-Subject: Re: [PATCH v3 4/7] usb: typec: tcpci_rt1711h: Add initial phy setting
-Message-ID: <20220802085848.GA3096405@roeck-us.net>
-References: <20220801101447.86207-1-gene.chen.richtek@gmail.com>
- <20220801101447.86207-5-gene.chen.richtek@gmail.com>
- <YujeA2pHG2WnZjaF@kuha.fi.intel.com>
+        with ESMTP id S233867AbiHBI7h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 04:59:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36B2E81;
+        Tue,  2 Aug 2022 01:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659430776; x=1690966776;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rhx2mjzECQhwFJuSSVWaFi/hh3YiP+uH0x/KGzMUvpo=;
+  b=RLLqlDlQ3fdJe4ESHaHv8tlbSHK9WEajXcBCmOOSDLOzi5xYvQ14xVXy
+   SiqZ9oKN2IZQMKUkvgigBf4vrmaXgYCvXgas7NnB9oQ1skPerZeoK7Z+i
+   78rWiG4VFhRInd7HwNzF/Et9bCibRT8IwqSUyQqLVPgMfPChcI7NQwG/x
+   YaZaoNg9ivaZw4S7thn8PFEwKdXhWbVBstPd2GBr4p/6yDAdHyHSVXfs7
+   wdnJGktx+anyxVIRIhYYIAFtFw/ZwFiaJCWc2GGWNOwY/LxGMT2DVxeQa
+   BxF3niZ2xtn26/jimNtD+1cHnO4Pl4A3B5NW9BGYUQX0nUGIoanDqU0rJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="286920956"
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="286920956"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 01:59:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="744596705"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 01:59:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 11:59:32 +0300
+Date:   Tue, 2 Aug 2022 11:59:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rajmohan.mani@intel.com
+Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor
+ Lake IOM device
+Message-ID: <YujndMdpS+4L0AiL@kuha.fi.intel.com>
+References: <20220729003033.771761-1-utkarsh.h.patel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YujeA2pHG2WnZjaF@kuha.fi.intel.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220729003033.771761-1-utkarsh.h.patel@intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 11:19:15AM +0300, Heikki Krogerus wrote:
-> Hi Gene,
-> 
-> On Mon, Aug 01, 2022 at 06:14:44PM +0800, Gene Chen wrote:
-> > From: Gene Chen <gene_chen@richtek.com>
-> > 
-> > Add initial phy setting about phy dicard retry,
-> > rx filter deglitech time and BMC-encoded wait time
-> 
-> I'm sorry, but what does "deglitech" mean? Is it just a typo?
-> 
+Hi Utkarsh,
 
-deglitch ?
+On Thu, Jul 28, 2022 at 05:30:33PM -0700, Utkarsh Patel wrote:
+> Intel Meteor Lake IOM uses 64bit IOM BASE address than previous Intel
+> Generations which use 32bit.
+> 
+> Added code to support 64bit IOM BASE address change with necessary ACPI
+> resource extraction support.
+> 
+> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index 47b733f78fb0..a8e273fe204a 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -571,9 +571,11 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
+>  
+>  static int is_memory(struct acpi_resource *res, void *data)
+>  {
+> -	struct resource r;
+> +	struct resource_win win = {};
+> +	struct resource *r = &win.res;
+>  
+> -	return !acpi_dev_resource_memory(res, &r);
+> +	return !(acpi_dev_resource_memory(res, r) ||
+> +		 acpi_dev_resource_address_space(res, &win));
+>  }
 
-> > Signed-off-by: Gene Chen <gene_chen@richtek.com>
-> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 15 ++++++++++++++-
-> >  1 file changed, 14 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > index df7bfe299987..33d8ea95b7c1 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> > @@ -20,6 +20,9 @@
-> >  #define RT1711H_VID		0x29CF
-> >  #define RT1711H_PID		0x1711
-> >  
-> > +#define RT1711H_PHYCTRL1	0x80
-> > +#define RT1711H_PHYCTRL2	0x81
-> > +
-> >  #define RT1711H_RTCTRL8		0x9B
-> >  
-> >  /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
-> > @@ -107,8 +110,18 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
-> >  		return ret;
-> >  
-> >  	/* dcSRC.DRP : 33% */
-> > -	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-> > +	ret = rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	/* Enable phy discard retry, retry count 7, rx filter deglitech 100 us */
-> > +	ret = rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
-> > +	if (ret < 0)
-> > +		return ret;
-> >  
-> > +	/* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us */
-> > +	/* wait time : (val * .4167) us */
-> > +	return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
-> >  }
-> >  
-> >  static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
-> > -- 
-> > 2.25.1
-> 
-> thanks,
-> 
+I realised that now that is_memory() function is basically just a copy
+of the is_memory() function that's in drivers/acpi/resources.c, so I
+think we need to handle this a bit differently. There are a few places
+in kernel that have that same check.
+
+One way would be to just export the is_memory() function that's in
+drivers/acpi/resources.c, but since we have already a wrapper function
+acpi_dev_get_dma_resources() for DMA resouces, I think we could have a
+similar wrapper for common memory resources.
+
+I'll prepare a patch(s) where I'll propose a new wrapper function
+acpi_dev_get_memory_resources() that will take care of the is_memory()
+check, and then convert the users (including this driver). After that,
+this patch only needs to add the ID.
+
+
+thanks,
+
+
+>  /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
+> @@ -583,6 +585,9 @@ static const struct acpi_device_id iom_acpi_ids[] = {
+>  
+>  	/* AlderLake */
+>  	{ "INTC1079", 0x160, },
+> +
+> +	/* Meteor Lake */
+> +	{ "INTC107A", 0x160, },
+>  	{}
+>  };
+>  
 > -- 
-> heikki
+> 2.25.1
+
+-- 
+heikki
