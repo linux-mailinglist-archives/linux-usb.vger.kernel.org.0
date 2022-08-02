@@ -2,128 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA02858797A
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 10:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823BD587B2D
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 13:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235811AbiHBI7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Aug 2022 04:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S236658AbiHBLAh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Aug 2022 07:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbiHBI7h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 04:59:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36B2E81;
-        Tue,  2 Aug 2022 01:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659430776; x=1690966776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rhx2mjzECQhwFJuSSVWaFi/hh3YiP+uH0x/KGzMUvpo=;
-  b=RLLqlDlQ3fdJe4ESHaHv8tlbSHK9WEajXcBCmOOSDLOzi5xYvQ14xVXy
-   SiqZ9oKN2IZQMKUkvgigBf4vrmaXgYCvXgas7NnB9oQ1skPerZeoK7Z+i
-   78rWiG4VFhRInd7HwNzF/Et9bCibRT8IwqSUyQqLVPgMfPChcI7NQwG/x
-   YaZaoNg9ivaZw4S7thn8PFEwKdXhWbVBstPd2GBr4p/6yDAdHyHSVXfs7
-   wdnJGktx+anyxVIRIhYYIAFtFw/ZwFiaJCWc2GGWNOwY/LxGMT2DVxeQa
-   BxF3niZ2xtn26/jimNtD+1cHnO4Pl4A3B5NW9BGYUQX0nUGIoanDqU0rJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="286920956"
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="286920956"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 01:59:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="744596705"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 01:59:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 11:59:32 +0300
-Date:   Tue, 2 Aug 2022 11:59:32 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        rajmohan.mani@intel.com
-Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor
- Lake IOM device
-Message-ID: <YujndMdpS+4L0AiL@kuha.fi.intel.com>
-References: <20220729003033.771761-1-utkarsh.h.patel@intel.com>
+        with ESMTP id S236656AbiHBLAU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 07:00:20 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE38272B;
+        Tue,  2 Aug 2022 04:00:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6C08DCE1C40;
+        Tue,  2 Aug 2022 11:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB801C433D7;
+        Tue,  2 Aug 2022 11:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659438013;
+        bh=0ASmGze/PTUrX6y2Ztjb7HH/oEgrz8ukg+sZwDf7hGk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GZptDqETzwQOf5E7/MyhTrC2bLncMioK3JtTQ6JTSZjnjbTC+n4Dsmj4912TlguAF
+         tP4YmhCv5qn6f8KP1Ir8llO0hkMmEm7y5Cg82VCJHP54o1HUiAizalhz1L5cXQ70Tv
+         7uBmwPJZGpQYffrELWAp+I6DUdAYQkgCqHUkQVO6EB302UcFPzgYwj6lNRwlYmyyZL
+         BKSmqbiL5UVjH9yxWmcN1UnvNxhSjRLF8urRRI5/S97S73dd6VqZpbYSivUOTfiBbI
+         cShpcE0E0t8WUvEcZSMzWi/MzoZKLZtR3sFpHa/RjlRN9G/3DWNG4mD5ZODr6+yHPW
+         EVU4IUZIjE1SA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C361C43143;
+        Tue,  2 Aug 2022 11:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220729003033.771761-1-utkarsh.h.patel@intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4] net: usb: ax88179_178a: Bind only to vendor-specific
+ interface
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165943801356.21664.8346442629133964190.git-patchwork-notify@kernel.org>
+Date:   Tue, 02 Aug 2022 11:00:13 +0000
+References: <20220731072209.45504-1-marcan@marcan.st>
+In-Reply-To: <20220731072209.45504-1-marcan@marcan.st>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     jackychou@asix.com.tw, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Utkarsh,
+Hello:
 
-On Thu, Jul 28, 2022 at 05:30:33PM -0700, Utkarsh Patel wrote:
-> Intel Meteor Lake IOM uses 64bit IOM BASE address than previous Intel
-> Generations which use 32bit.
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Sun, 31 Jul 2022 16:22:09 +0900 you wrote:
+> The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
+> chipset, but exposes CDC Ethernet configurations as well as the
+> vendor specific one. This driver tries to bind by PID:VID
+> unconditionally and ends up picking up the CDC configuration, which
+> is supposed to be handled by the class driver. To make things even
+> more confusing, it sees both of the CDC class interfaces and tries
+> to bind twice, resulting in two broken Ethernet devices.
 > 
-> Added code to support 64bit IOM BASE address change with necessary ACPI
-> resource extraction support.
-> 
-> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 47b733f78fb0..a8e273fe204a 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -571,9 +571,11 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
->  
->  static int is_memory(struct acpi_resource *res, void *data)
->  {
-> -	struct resource r;
-> +	struct resource_win win = {};
-> +	struct resource *r = &win.res;
->  
-> -	return !acpi_dev_resource_memory(res, &r);
-> +	return !(acpi_dev_resource_memory(res, r) ||
-> +		 acpi_dev_resource_address_space(res, &win));
->  }
+> [...]
 
-I realised that now that is_memory() function is basically just a copy
-of the is_memory() function that's in drivers/acpi/resources.c, so I
-think we need to handle this a bit differently. There are a few places
-in kernel that have that same check.
+Here is the summary with links:
+  - [v4] net: usb: ax88179_178a: Bind only to vendor-specific interface
+    https://git.kernel.org/netdev/net/c/c67cc4315a8e
 
-One way would be to just export the is_memory() function that's in
-drivers/acpi/resources.c, but since we have already a wrapper function
-acpi_dev_get_dma_resources() for DMA resouces, I think we could have a
-similar wrapper for common memory resources.
-
-I'll prepare a patch(s) where I'll propose a new wrapper function
-acpi_dev_get_memory_resources() that will take care of the is_memory()
-check, and then convert the users (including this driver). After that,
-this patch only needs to add the ID.
-
-
-thanks,
-
-
->  /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
-> @@ -583,6 +585,9 @@ static const struct acpi_device_id iom_acpi_ids[] = {
->  
->  	/* AlderLake */
->  	{ "INTC1079", 0x160, },
-> +
-> +	/* Meteor Lake */
-> +	{ "INTC107A", 0x160, },
->  	{}
->  };
->  
-> -- 
-> 2.25.1
-
+You are awesome, thank you!
 -- 
-heikki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
