@@ -2,62 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3F55877CF
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 09:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F44587801
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Aug 2022 09:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235895AbiHBH3A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Aug 2022 03:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S232158AbiHBHj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Aug 2022 03:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiHBH27 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 03:28:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFBC491C2;
-        Tue,  2 Aug 2022 00:28:58 -0700 (PDT)
+        with ESMTP id S235884AbiHBHjY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Aug 2022 03:39:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215F6BCA0
+        for <linux-usb@vger.kernel.org>; Tue,  2 Aug 2022 00:39:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659425338; x=1690961338;
+  t=1659425963; x=1690961963;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MY1UeVCmTorLiElTkcmSLQfpDa7PBuZ+KvAyO3eFpnw=;
-  b=b2WXikC4CPW209uc0F7t4IsWTHPKOw2su0cQKfAX/fVO8AEzH6H/Z9Gt
-   Cw+M9C1XnqEbmg2zxwbvd/OMgfwyPXxlVRGzkFbChSJRB4vCwc1hPRbRb
-   6h3SvddCPvRhbmTQv01Gpcjp6+Lpcs+6mNYah1X9qEE2YFeo4cMs+uFOK
-   ZRsYr3uEFo1RNm2qFA855/q0SJvsSzNoFHU/DaZDNB5KafaV33eTTSHkA
-   IikcTJyqODnTjaR7NkV1QWaGa5o5Il3RfM2rE8VlfrOAJgihvyDc84qpa
-   XKTfvPnleyLhVEF7i9nhE3qTcHloRuV3sQhnhLKSxtI0zW98fSiznb9Ek
+  bh=G+h1Kxy9uECFEk20Z5RoX0uLUf6xAFGvk0gy0eZvTJI=;
+  b=gDNT8pVn1MrXJhRksKskOVqdNTeURxPoXUhFa88AVoY0MfCjO4lH3BEI
+   OwIycInFvgnPlP0zCCUkn2lFm76jstNqh5QRRP+TrMulymh6En7Gh8LNR
+   WMRH+f0RIP/xm8ZnEgvnUxoqCHnBCY+uZqSSlY2Iy5MjaTgfMbzwBfl+f
+   AO+bylV8pEsYMdFS+dXCmKsO+IJMz1nallia+CzdJ8aG0R/NhGaNN+9tP
+   O6iNk7pl6JjGegzKYKHpLX0Mav9X+1d0YQo0ORD3v9nnWXOHT1hLGlTHq
+   Tg6z9vx+653wD1l8Yu64Fgw44xzazyuOopFweuVjr+0bLK11jAq1paQqt
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="353348423"
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="375647579"
 X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="353348423"
+   d="scan'208";a="375647579"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 00:28:57 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 00:39:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="744573684"
+   d="scan'208";a="744576210"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 00:28:53 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 10:28:52 +0300
-Date:   Tue, 2 Aug 2022 10:28:52 +0300
+  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 00:39:20 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 10:39:19 +0300
+Date:   Tue, 2 Aug 2022 10:39:19 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Bear Wang <bear.wang@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: altmodes/displayport: correct pin assignment
- for UFP receptacles
-Message-ID: <YujSNEGm2ikg3j8a@kuha.fi.intel.com>
-References: <20220727110503.5260-1-macpaul.lin@mediatek.com>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-usb@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: Re: [PATCH 1/2] extcon: usbc-tusb320: Factor out extcon into
+ dedicated functions
+Message-ID: <YujUpym5ldiUU3Jv@kuha.fi.intel.com>
+References: <20220730180500.152004-1-marex@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220727110503.5260-1-macpaul.lin@mediatek.com>
+In-Reply-To: <20220730180500.152004-1-marex@denx.de>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,89 +61,150 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi guys,
+On Sat, Jul 30, 2022 at 08:04:59PM +0200, Marek Vasut wrote:
+> Move extcon code into separate functions in preparation for addition of
+> USB TYPE-C support. No functional change.
+> 
+> Signed-off-by: Marek Vasut <marex@denx.de>
 
-On Wed, Jul 27, 2022 at 07:05:03PM +0800, Macpaul Lin wrote:
-> From: Pablo Sun <pablo.sun@mediatek.com>
-> 
-> From: Pablo Sun <pablo.sun@mediatek.com>
-
-Looks like there's something wrong with the formating of the patch
-here?
-
-> Fix incorrect pin assignment values when connecting to a monitor with
-> Type-C receptacle instead of a plug.
-> 
-> According to specification, an UFP_D receptacle's pin assignment
-> should came from the UFP_D pin assignments field (bit 23:16), while
-> an UFP_D plug's assignments are described in the DFP_D pin assignments
-> (bit 15:8) during Mode Discovery.
-> 
-> For example the LG 27 UL850-W is a monitor with Type-C receptacle.
-> The monitor responds to MODE DISCOVERY command with following
-> DisplayPort Capability flag:
-> 
->         dp->alt->vdo=0x140045
-> 
-> The existing logic only take cares of UPF_D plug case,
-> and would take the bit 15:8 for this 0x140045 case.
-> 
-> This results in an non-existing pin assignment 0x0 in
-> dp_altmode_configure.
-> 
-> To fix this problem a new set of macros are introduced
-> to take plug/receptacle differences into consideration.
-> 
-> Co-developed-by: Pablo Sun <pablo.sun@mediatek.com>
-> Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
-> Co-developed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Reviewed-by: Guillaume Ranquet <granquet@baylibre.com>
-> Cc: stable@vger.kernel.org
-
-If this is a fix, then you need to have the "Fixes" tag that tells
-which commit the patch is fixing.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/altmodes/displayport.c | 4 ++--
->  include/linux/usb/typec_dp.h             | 5 +++++
->  2 files changed, 7 insertions(+), 2 deletions(-)
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Yassine Oudjana <y.oudjana@protonmail.com>
+> To: linux-usb@vger.kernel.org
+> ---
+>  drivers/extcon/extcon-usbc-tusb320.c | 75 +++++++++++++++++-----------
+>  1 file changed, 46 insertions(+), 29 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 9360ca177c7d..8dd0e505ef99 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -98,8 +98,8 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
->  	case DP_STATUS_CON_UFP_D:
->  	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
->  		conf |= DP_CONF_UFP_U_AS_UFP_D;
-> -		pin_assign = DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo) &
-> -			     DP_CAP_UFP_D_PIN_ASSIGN(dp->port->vdo);
-> +		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
-> +				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
->  		break;
->  	default:
->  		break;
-> diff --git a/include/linux/usb/typec_dp.h b/include/linux/usb/typec_dp.h
-> index cfb916cccd31..8d09c2f0a9b8 100644
-> --- a/include/linux/usb/typec_dp.h
-> +++ b/include/linux/usb/typec_dp.h
-> @@ -73,6 +73,11 @@ enum {
->  #define DP_CAP_USB			BIT(7)
->  #define DP_CAP_DFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(15, 8)) >> 8)
->  #define DP_CAP_UFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(23, 16)) >> 16)
-> +/* Get pin assignment taking plug & receptacle into consideration */
-> +#define DP_CAP_PIN_ASSIGN_UFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-> +			DP_CAP_UFP_D_PIN_ASSIGN(_cap_) : DP_CAP_DFP_D_PIN_ASSIGN(_cap_))
-> +#define DP_CAP_PIN_ASSIGN_DFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-> +			DP_CAP_DFP_D_PIN_ASSIGN(_cap_) : DP_CAP_UFP_D_PIN_ASSIGN(_cap_))
+> diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+> index 6ba3d89b106d0..aced4bbb455dc 100644
+> --- a/drivers/extcon/extcon-usbc-tusb320.c
+> +++ b/drivers/extcon/extcon-usbc-tusb320.c
+> @@ -184,19 +184,9 @@ static struct tusb320_ops tusb320l_ops = {
+>  	.get_revision = tusb320l_get_revision,
+>  };
 >  
->  /* DisplayPort Status Update VDO bits */
->  #define DP_STATUS_CONNECTION(_status_)	((_status_) & 3)
+> -static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+> +static void tusb320_extcon_irq_handler(struct tusb320_priv *priv, u8 reg)
+>  {
+> -	struct tusb320_priv *priv = dev_id;
+>  	int state, polarity;
+> -	unsigned reg;
+> -
+> -	if (regmap_read(priv->regmap, TUSB320_REG9, &reg)) {
+> -		dev_err(priv->dev, "error during i2c read!\n");
+> -		return IRQ_NONE;
+> -	}
+> -
+> -	if (!(reg & TUSB320_REG9_INTERRUPT_STATUS))
+> -		return IRQ_NONE;
+>  
+>  	state = (reg >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
+>  		TUSB320_REG9_ATTACHED_STATE_MASK;
+> @@ -219,6 +209,22 @@ static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+>  	extcon_sync(priv->edev, EXTCON_USB_HOST);
+>  
+>  	priv->state = state;
+> +}
+> +
+> +static irqreturn_t tusb320_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct tusb320_priv *priv = dev_id;
+> +	unsigned int reg;
+> +
+> +	if (regmap_read(priv->regmap, TUSB320_REG9, &reg)) {
+> +		dev_err(priv->dev, "error during i2c read!\n");
+> +		return IRQ_NONE;
+> +	}
+> +
+> +	if (!(reg & TUSB320_REG9_INTERRUPT_STATUS))
+> +		return IRQ_NONE;
+> +
+> +	tusb320_extcon_irq_handler(priv, reg);
+>  
+>  	regmap_write(priv->regmap, TUSB320_REG9, reg);
+>  
+> @@ -230,8 +236,32 @@ static const struct regmap_config tusb320_regmap_config = {
+>  	.val_bits = 8,
+>  };
+>  
+> -static int tusb320_extcon_probe(struct i2c_client *client,
+> -				const struct i2c_device_id *id)
+> +static int tusb320_extcon_probe(struct tusb320_priv *priv)
+> +{
+> +	int ret;
+> +
+> +	priv->edev = devm_extcon_dev_allocate(priv->dev, tusb320_extcon_cable);
+> +	if (IS_ERR(priv->edev)) {
+> +		dev_err(priv->dev, "failed to allocate extcon device\n");
+> +		return PTR_ERR(priv->edev);
+> +	}
+> +
+> +	ret = devm_extcon_dev_register(priv->dev, priv->edev);
+> +	if (ret < 0) {
+> +		dev_err(priv->dev, "failed to register extcon device\n");
+> +		return ret;
+> +	}
+> +
+> +	extcon_set_property_capability(priv->edev, EXTCON_USB,
+> +				       EXTCON_PROP_USB_TYPEC_POLARITY);
+> +	extcon_set_property_capability(priv->edev, EXTCON_USB_HOST,
+> +				       EXTCON_PROP_USB_TYPEC_POLARITY);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tusb320_probe(struct i2c_client *client,
+> +			 const struct i2c_device_id *id)
+>  {
+>  	struct tusb320_priv *priv;
+>  	const void *match_data;
+> @@ -257,12 +287,6 @@ static int tusb320_extcon_probe(struct i2c_client *client,
+>  
+>  	priv->ops = (struct tusb320_ops*)match_data;
+>  
+> -	priv->edev = devm_extcon_dev_allocate(priv->dev, tusb320_extcon_cable);
+> -	if (IS_ERR(priv->edev)) {
+> -		dev_err(priv->dev, "failed to allocate extcon device\n");
+> -		return PTR_ERR(priv->edev);
+> -	}
+> -
+>  	if (priv->ops->get_revision) {
+>  		ret = priv->ops->get_revision(priv, &revision);
+>  		if (ret)
+> @@ -272,16 +296,9 @@ static int tusb320_extcon_probe(struct i2c_client *client,
+>  			dev_info(priv->dev, "chip revision %d\n", revision);
+>  	}
+>  
+> -	ret = devm_extcon_dev_register(priv->dev, priv->edev);
+> -	if (ret < 0) {
+> -		dev_err(priv->dev, "failed to register extcon device\n");
+> +	ret = tusb320_extcon_probe(priv);
+> +	if (ret)
+>  		return ret;
+> -	}
+> -
+> -	extcon_set_property_capability(priv->edev, EXTCON_USB,
+> -				       EXTCON_PROP_USB_TYPEC_POLARITY);
+> -	extcon_set_property_capability(priv->edev, EXTCON_USB_HOST,
+> -				       EXTCON_PROP_USB_TYPEC_POLARITY);
+>  
+>  	/* update initial state */
+>  	tusb320_irq_handler(client->irq, priv);
+> @@ -313,7 +330,7 @@ static const struct of_device_id tusb320_extcon_dt_match[] = {
+>  MODULE_DEVICE_TABLE(of, tusb320_extcon_dt_match);
+>  
+>  static struct i2c_driver tusb320_extcon_driver = {
+> -	.probe		= tusb320_extcon_probe,
+> +	.probe		= tusb320_probe,
+>  	.driver		= {
+>  		.name	= "extcon-tusb320",
+>  		.of_match_table = tusb320_extcon_dt_match,
 > -- 
-> 2.18.0
-
-thanks,
+> 2.35.1
 
 -- 
 heikki
