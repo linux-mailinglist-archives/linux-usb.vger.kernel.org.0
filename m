@@ -2,59 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA71588C08
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 14:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB27588C1C
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 14:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237975AbiHCM0y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Aug 2022 08:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S238006AbiHCMaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Aug 2022 08:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238010AbiHCM0n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 08:26:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308DF57270;
-        Wed,  3 Aug 2022 05:26:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8F05B82258;
-        Wed,  3 Aug 2022 12:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53D99C433C1;
-        Wed,  3 Aug 2022 12:26:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659529590;
-        bh=gXkbbL4x75dYnAlYPQxV4R73v+dDewWOi3hfCByvglA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fTb3dMV3xzjVw9uQh/dzT3YBMj9dBGOASR3wI23mUayd0u/WyD++aZMSkce4NCBva
-         XeeqN10A7Mc/YF/LUtcyK7Ciu8iewuG70MmexYsxioHJZ2dpKQTW4OQlpmI5IsO4t2
-         zt1A4Xwxg5h8p9aUmxzaLon8ZRzC4IScyMgl3kdL4D2WtFaa7un+r4x/aS8Mj4P0fg
-         yDThmbcgZQWqy3ZJJ9WkyGU7sXYoOazPve5D4M+aQb1v2llEFqEYfGCGHvnvw5sV8H
-         mowrktM87ntrpdtUVXhhGsa8UES1tVq61VDFSt3iFnzbiAJqdRAI41qZilsVZp87nu
-         KqmRvg/DwE7nA==
-Message-ID: <0404b476-ce96-0c01-1380-4b6873e79a08@kernel.org>
-Date:   Wed, 3 Aug 2022 15:26:25 +0300
+        with ESMTP id S236240AbiHCMaW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 08:30:22 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA585A478;
+        Wed,  3 Aug 2022 05:30:21 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so802003wmm.4;
+        Wed, 03 Aug 2022 05:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g9heR4TjDoATr+7jD8mL256mkC9k3Sq6Q/fNFgtLRcY=;
+        b=ZWCrDmJsaF5rjaaPFXOCezlG5Hrqxmd82nrthFSbU7rDxjbViSCm0+ug895yBlMx6Y
+         O0jzll/IIgV/E6VOt0upI8VMeu3aRPr41B0d6MxNWKDOz95WJwkedTKRWVCu4OIPg2qH
+         hlMN/3G9NQjJkpU4uT1048gpDStaZ3joVuzb9O72zv7+YB+WOheB3YY/2cOoA1BSA8Fr
+         zFpQcmqnzsnaE6wttEL/FK4F9VGcaqOuSCjeyFZNiUvsW3f0mXc7iUssweq9FB16uB7w
+         4SahDV4gENBpOo3hiz8NiYUnYSTbNA5MKlWNTlSwDH1InQDzKgOQL6+bCSGoJX5vSdeg
+         3sxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g9heR4TjDoATr+7jD8mL256mkC9k3Sq6Q/fNFgtLRcY=;
+        b=DvaEUHqlVhMooU7YQcX1JCEBAL++DF25xhlnX4sIFyfO9Fd/93XGxWUb0UndXvC6Gh
+         dFKRX0vxwe7IwchtgjTr5T4eli7X9IZSaOwIP7JqTM1AZLBhdZ0Nhtnq3S9pJSelOWqN
+         0yN1ROorQnusVh7HwX2RbuSt5X5YkESZvTeaF1hmPH1un0c5zkyxb682a08TbQRP0Rpp
+         NK4/FNKumzWxDeOwJ4bRIiXLq6AXnzthlgC/A0Xs+eTPrvaB4zNePH7ukxbbsbYc/4Nf
+         GUOCLkslb3ya4wQ5hPFsJ5duHZP5uEd2WlCg6P6NER2qJaghNYBdLnfFKkbhtzTBHgCH
+         G33w==
+X-Gm-Message-State: ACgBeo03MS/teHlEuda8pnT1heqLi1sF9FRBuox8zzc9miCQnP7v9EJU
+        yGdizrS5UrtH+aD+ZQOVF7k=
+X-Google-Smtp-Source: AA6agR7wc8Pn+zYiaa70OFAL33BgIf99foNkbLKIHZ+NKhsuREFIuv3RbzZoZ7tixwIznPMyvCeHdA==
+X-Received: by 2002:a05:600c:511f:b0:3a3:254c:b079 with SMTP id o31-20020a05600c511f00b003a3254cb079mr2898294wms.68.1659529820167;
+        Wed, 03 Aug 2022 05:30:20 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id k18-20020a5d6292000000b0021ec32d130asm18346111wru.74.2022.08.03.05.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 05:30:19 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        linux-usb@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: typec: ucsi: stm32g0: Fix spelling mistake "booloader" -> "bootloader"
+Date:   Wed,  3 Aug 2022 13:30:18 +0100
+Message-Id: <20220803123018.913710-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] usb: cdns3: change place of NULL check in
- cdns3_gadget_ep_enable()
-Content-Language: en-US
-To:     Andrey Strachuk <strochuk@ispras.ru>,
-        Peter Chen <peter.chen@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-References: <20220728163014.247082-1-strochuk@ispras.ru>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20220728163014.247082-1-strochuk@ispras.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,18 +74,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+There is a spelling mistake in a dev_err_probe message. Fix it.
 
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 28/07/2022 19:30, Andrey Strachuk wrote:
-> If 'ep' is NULL, result of ep_to_cdns3_ep(ep) is invalid and
-> priv_ep->cdns3_dev causes panic.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
-> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+index 061551d464f1..6ced49e4d208 100644
+--- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
++++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+@@ -599,7 +599,7 @@ static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
+ 		g0->i2c_bl = i2c_new_dummy_device(g0->client->adapter, STM32G0_I2C_BL_ADDR);
+ 		if (IS_ERR(g0->i2c_bl)) {
+ 			ret = dev_err_probe(g0->dev, PTR_ERR(g0->i2c_bl),
+-					    "Failed to register booloader I2C address\n");
++					    "Failed to register bootloader I2C address\n");
+ 			return ret;
+ 		}
+ 	}
+-- 
+2.35.3
 
-Acked-by: Roger Quadros <rogerq@kernel.org>
-
-cheers,
--roger
