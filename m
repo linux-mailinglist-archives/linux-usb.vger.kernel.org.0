@@ -2,68 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB27588C1C
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 14:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5D6588C7F
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 14:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238006AbiHCMaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Aug 2022 08:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
+        id S237566AbiHCM4O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Aug 2022 08:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236240AbiHCMaW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 08:30:22 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA585A478;
-        Wed,  3 Aug 2022 05:30:21 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so802003wmm.4;
-        Wed, 03 Aug 2022 05:30:21 -0700 (PDT)
+        with ESMTP id S237550AbiHCM4L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 08:56:11 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751E15587;
+        Wed,  3 Aug 2022 05:56:10 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-32269d60830so170522757b3.2;
+        Wed, 03 Aug 2022 05:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g9heR4TjDoATr+7jD8mL256mkC9k3Sq6Q/fNFgtLRcY=;
-        b=ZWCrDmJsaF5rjaaPFXOCezlG5Hrqxmd82nrthFSbU7rDxjbViSCm0+ug895yBlMx6Y
-         O0jzll/IIgV/E6VOt0upI8VMeu3aRPr41B0d6MxNWKDOz95WJwkedTKRWVCu4OIPg2qH
-         hlMN/3G9NQjJkpU4uT1048gpDStaZ3joVuzb9O72zv7+YB+WOheB3YY/2cOoA1BSA8Fr
-         zFpQcmqnzsnaE6wttEL/FK4F9VGcaqOuSCjeyFZNiUvsW3f0mXc7iUssweq9FB16uB7w
-         4SahDV4gENBpOo3hiz8NiYUnYSTbNA5MKlWNTlSwDH1InQDzKgOQL6+bCSGoJX5vSdeg
-         3sxA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SWhjdMPdPPg7+dOLGXKMH2CRK7zvgPgcjni/UiTUnR0=;
+        b=B1KkRxiz4Q4K/gShbyOzuKKvvY2U/eaX4Rjgr94MRF9bcHDz85vYabWR2Aqbm3iIzr
+         Lrt/NlS+EwTni+1DWU+Z9vW+V9t7QpCG4cyjgVzik3rPZWvZDzz9guyoK26zhyFJXJeA
+         LeQiU8LOS/zlVMkd5+8AmuzLmL4UK2F6izkYoAYb2vzCco0rz5sUazXYjDyNwvCjrvc2
+         aBj63GUdvpIS7Kbh4mT5xf7ZVz1TZC3KJLwzfwHvONtYiqGXHIeMfQlI8uIi0WpdUtxB
+         6kjRbwlXO0Sg7neWndaATYU5mNmfc86Wv0HLBupXjHOMZ5/jOb/VunU5z8Olw5XdSHQY
+         9Oqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g9heR4TjDoATr+7jD8mL256mkC9k3Sq6Q/fNFgtLRcY=;
-        b=DvaEUHqlVhMooU7YQcX1JCEBAL++DF25xhlnX4sIFyfO9Fd/93XGxWUb0UndXvC6Gh
-         dFKRX0vxwe7IwchtgjTr5T4eli7X9IZSaOwIP7JqTM1AZLBhdZ0Nhtnq3S9pJSelOWqN
-         0yN1ROorQnusVh7HwX2RbuSt5X5YkESZvTeaF1hmPH1un0c5zkyxb682a08TbQRP0Rpp
-         NK4/FNKumzWxDeOwJ4bRIiXLq6AXnzthlgC/A0Xs+eTPrvaB4zNePH7ukxbbsbYc/4Nf
-         GUOCLkslb3ya4wQ5hPFsJ5duHZP5uEd2WlCg6P6NER2qJaghNYBdLnfFKkbhtzTBHgCH
-         G33w==
-X-Gm-Message-State: ACgBeo03MS/teHlEuda8pnT1heqLi1sF9FRBuox8zzc9miCQnP7v9EJU
-        yGdizrS5UrtH+aD+ZQOVF7k=
-X-Google-Smtp-Source: AA6agR7wc8Pn+zYiaa70OFAL33BgIf99foNkbLKIHZ+NKhsuREFIuv3RbzZoZ7tixwIznPMyvCeHdA==
-X-Received: by 2002:a05:600c:511f:b0:3a3:254c:b079 with SMTP id o31-20020a05600c511f00b003a3254cb079mr2898294wms.68.1659529820167;
-        Wed, 03 Aug 2022 05:30:20 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id k18-20020a5d6292000000b0021ec32d130asm18346111wru.74.2022.08.03.05.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 05:30:19 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        linux-usb@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: typec: ucsi: stm32g0: Fix spelling mistake "booloader" -> "bootloader"
-Date:   Wed,  3 Aug 2022 13:30:18 +0100
-Message-Id: <20220803123018.913710-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SWhjdMPdPPg7+dOLGXKMH2CRK7zvgPgcjni/UiTUnR0=;
+        b=ubWBuNw/OeMmxj8j494ngemwwOjR/GPw2WeXQiZTD6tnMeMTB9X+UHox/J0PV0EEnM
+         pr60HK1BHwhbgjuS6UQEJkXVQ3BDh9VN0N2tnQ4gGJ1aoR2vBdlzORPpUlRECirWffJ4
+         UIjP8DsXoZnX6iDSwYn7A0ap+2Szng6nFXlVXYXrQLinPIujggCqxZNtqoPGhhJXpbg3
+         511w61jeWZ3BitJxvyZ/NlhXp7QKbtQD4JG5Nan7BtVqkrDfRJij93Q+wJJgaKV7Zo31
+         UNRfidjwqNw13Qv8yM1zvWH6fN/bdxjwgc0NkN8GwyiCYzJeHuhsxSaFd+yPtSQDwB+h
+         S5yg==
+X-Gm-Message-State: ACgBeo1DUs9inlfEXVmd6faDBNXGTod7FTf6TXWZo1AfHpNUUVfG3VTg
+        ssV5SeLEj8qGQuQbxfT1rzo1VSuNcFpra4rsAq8=
+X-Google-Smtp-Source: AA6agR7QCwuOx0mRewVuL38vo2FhSf7btS7xxtpWdD2Gdxxg2Yy+nGuCmJCDVDMAbuKFuOLevQ3V2jtlembhMvR3Mc4=
+X-Received: by 2002:a81:7d84:0:b0:31f:55ef:efde with SMTP id
+ y126-20020a817d84000000b0031f55efefdemr23008727ywc.273.1659531369414; Wed, 03
+ Aug 2022 05:56:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20220803090218.1313187-1-kkamagui@gmail.com> <CAGRyCJHX1X238TkiTaML3WJ+rdc1-m82_d3Ut4jCVDmuQ=cMOQ@mail.gmail.com>
+In-Reply-To: <CAGRyCJHX1X238TkiTaML3WJ+rdc1-m82_d3Ut4jCVDmuQ=cMOQ@mail.gmail.com>
+From:   Seunghun Han <kkamagui@gmail.com>
+Date:   Wed, 3 Aug 2022 21:55:58 +0900
+Message-ID: <CAHjaAcT2fzpfJ563Jx5n3eYyrZD0vHNLr713qTZ=trrDjPaU=A@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: cdc_mbim: adding Microsoft mobile broadband modem
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     Oliver Neukum <oliver@neukum.org>,
+        David Miller <davem@davemloft.net>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,26 +67,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is a spelling mistake in a dev_err_probe message. Fix it.
+Hello Daniele,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/typec/ucsi/ucsi_stm32g0.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Aug 3, 2022 at 7:58 PM Daniele Palmas <dnlplm@gmail.com> wrote:
+>
+> Just for reference, are you allowed to disclose which chipsets these
+> modems are based on?
+>
+> Thanks,
+> Daniele
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-index 061551d464f1..6ced49e4d208 100644
---- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-+++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
-@@ -599,7 +599,7 @@ static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
- 		g0->i2c_bl = i2c_new_dummy_device(g0->client->adapter, STM32G0_I2C_BL_ADDR);
- 		if (IS_ERR(g0->i2c_bl)) {
- 			ret = dev_err_probe(g0->dev, PTR_ERR(g0->i2c_bl),
--					    "Failed to register booloader I2C address\n");
-+					    "Failed to register bootloader I2C address\n");
- 			return ret;
- 		}
- 	}
--- 
-2.35.3
+I'm not sure which chipsets are used for them. In the Windows
+environment, the information that I could find was Microsoft Surface
+Mobile Broadband Modem. Some people guess they are based on Qualcomm
+Snapdragon X16 and successors, but I could find no evidence about
+them.
 
+If you know the way, would you tell me how I can find or confirm it?
+
+Best regards,
+Seunghun
