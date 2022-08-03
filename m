@@ -2,55 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0742858901E
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 18:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A71458917A
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 19:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237119AbiHCQYj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Aug 2022 12:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
+        id S238167AbiHCRdh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Aug 2022 13:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbiHCQYi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 12:24:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476A12A276;
-        Wed,  3 Aug 2022 09:24:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A7AD3CE23C6;
-        Wed,  3 Aug 2022 16:24:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD03C433D6;
-        Wed,  3 Aug 2022 16:24:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659543873;
-        bh=xGHHD9/3TQpqNCp6NqNDfgu8k1f28r0DEMxhdQ88hOI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oITW05rFffyqdh7e6veJZcEZfV1CIVOUxJWMZFFKDvFdPoUziqnVn//ysYqGp/WQ5
-         wCmKTz88cTXDKXSA0ksMruU06mWXKKUmpZKl+z8fmLTX37H1HuOkiYI6IX2pcCBnUi
-         hOZ+h43ZRTHeSLTXGPrnVa/pBQ/KDKjb3KiC3TKVG0/RDncJdvqCTA/Zpdm/yhEQ/x
-         eNQKJJi57GkmY2nErxiL3dBnVwJiRVf4sxUUdpfnNQ0YP1wRC2uldHhXN8KDg2nXF4
-         6/89YFggI0uNNW0QisvotjQNrsK6dgaOUthGyb2lx52KsECK6SGIJKaUhnSVMvUxwx
-         6DGibLvAfkJgg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Andrey Strachuk <strochuk@ispras.ru>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] usb: cdns3: Don't use priv_dev uninitialized in cdns3_gadget_ep_enable()
-Date:   Wed,  3 Aug 2022 09:24:22 -0700
-Message-Id: <20220803162422.2981308-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S237639AbiHCRdg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 13:33:36 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A115723E
+        for <linux-usb@vger.kernel.org>; Wed,  3 Aug 2022 10:33:32 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id b4so7000379pji.4
+        for <linux-usb@vger.kernel.org>; Wed, 03 Aug 2022 10:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Dy6IYhyMjLV91h2ReHssZ9zYJNgTd/qtSQuKQsaMXrc=;
+        b=Nfb88RfP6LTCuL8dBDqDdh5UI6nFNU8KegwOL3F3TogolrjKRmHfAk7/BKpHwdDW5O
+         K1GxOxMdZmzLEJXC82fmsI0F07sfzJrrrrl+50+7vp4n2xdF1yKh7sf1hL4udl/GKUrs
+         r7wF/sNJAba2N0BzIvwwiQCmir5APDQxjGvxg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dy6IYhyMjLV91h2ReHssZ9zYJNgTd/qtSQuKQsaMXrc=;
+        b=nKNUC0aKj95KdsWP8rDAMb06eEEF+2gIxJc3IAvJSIRdY+UZ7U7M6JzNw1fnXJPvNB
+         QkkPPDsPNdqh/7445RllrECPPRT5zocqZBoutsUYYj84YrG8PBdH9i4HBXfTPOqtIpNr
+         YTyP4Z19sdfw8pPUULzCT5F6INYSL/afdyBocAT3A74rzRJXh+C8chstVTl9w/iQV3+2
+         vxcmWywTxxnjcxg59nt8kfHl4VBna/s24MKRxMt8jWdoMuqndliFO08oBeZrAjv0RCt3
+         ggi2x4EIEyPzyKAfUDpB7+4Xjrn86WSEAXan+1UrRqOZ9IbKDqq/q08nh7ia+TGvZG8o
+         Mh0A==
+X-Gm-Message-State: ACgBeo0s0ogU5yinjI/A1tQj4ZTsfhypx+GDgIgu/Q/Zj3w6LPG3Ma+L
+        AVPlNjpHmRunzUaB//qpUj40MQ==
+X-Google-Smtp-Source: AA6agR4OTofGOrxUeI0Yz5ovXwcIJgH+wgxqCKULul0vj1fASevyAdjtsOHPEKEqbnSejux4ft0vvA==
+X-Received: by 2002:a17:90b:4b91:b0:1f4:e116:8f1 with SMTP id lr17-20020a17090b4b9100b001f4e11608f1mr6031640pjb.121.1659548012211;
+        Wed, 03 Aug 2022 10:33:32 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:238b:c074:f5f8:56d0])
+        by smtp.gmail.com with UTF8SMTPSA id e6-20020a17090a728600b001f31468f2f4sm1883181pjg.46.2022.08.03.10.33.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 10:33:31 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 10:33:29 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/8] usb: dwc3: fix PHY disable sequence
+Message-ID: <Yuqxaf2nvegDyLtp@google.com>
+References: <20220802151404.1797-1-johan+linaro@kernel.org>
+ <20220802151404.1797-2-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220802151404.1797-2-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,75 +80,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Clang warns:
+On Tue, Aug 02, 2022 at 05:13:57PM +0200, Johan Hovold wrote:
+> Generic PHYs must be powered-off before they can be tore down.
+> 
+> Similarly, suspending legacy PHYs after having powered them off makes no
+> sense.
+> 
+> Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
+> dwc3_probe() error-path sequences that got this wrong.
+> 
+> Note that this makes dwc3_core_exit() match the dwc3_core_init() error
+> path with respect to powering off the PHYs.
+> 
+> Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
+> Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
+> Cc: stable@vger.kernel.org      # 4.8
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-  drivers/usb/cdns3/cdns3-gadget.c:2290:11: error: variable 'priv_dev' is uninitialized when used here [-Werror,-Wuninitialized]
-                  dev_dbg(priv_dev->dev, "usbss: invalid parameters\n");
-                          ^~~~~~~~
-  include/linux/dev_printk.h:155:18: note: expanded from macro 'dev_dbg'
-          dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                          ^~~
-  include/linux/dynamic_debug.h:167:7: note: expanded from macro 'dynamic_dev_dbg'
-                          dev, fmt, ##__VA_ARGS__)
-                          ^~~
-  include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
-          __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-  include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
-                  func(&id, ##__VA_ARGS__);               \
-                              ^~~~~~~~~~~
-  drivers/usb/cdns3/cdns3-gadget.c:2278:31: note: initialize the variable 'priv_dev' to silence this warning
-          struct cdns3_device *priv_dev;
-                                      ^
-                                      = NULL
-  1 error generated.
+I also wondered about this earlier, but didn't take action.
 
-The priv_dev assignment was moved below the if statement to avoid
-potentially dereferencing ep before it was checked but priv_dev is used
-in the dev_dbg() call.
-
-To fix this, move the priv_dev and comp_desc assignments back to their
-original spot and hoist the ep check above those assignments with a call
-to pr_debug() instead of dev_dbg().
-
-Fixes: c3ffc9c4ca44 ("usb: cdns3: change place of 'priv_ep' assignment in cdns3_gadget_ep_dequeue(), cdns3_gadget_ep_enable()")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1680
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/usb/cdns3/cdns3-gadget.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index 9ac7d0a8c5da..d21b69997e75 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -2284,16 +2284,20 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
- 	int ret = 0;
- 	int val;
- 
-+	if (!ep) {
-+		pr_debug("usbss: ep not configured?\n");
-+		return -EINVAL;
-+	}
-+
- 	priv_ep = ep_to_cdns3_ep(ep);
-+	priv_dev = priv_ep->cdns3_dev;
-+	comp_desc = priv_ep->endpoint.comp_desc;
- 
--	if (!ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
-+	if (!desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
- 		dev_dbg(priv_dev->dev, "usbss: invalid parameters\n");
- 		return -EINVAL;
- 	}
- 
--	comp_desc = priv_ep->endpoint.comp_desc;
--	priv_dev = priv_ep->cdns3_dev;
--
- 	if (!desc->wMaxPacketSize) {
- 		dev_err(priv_dev->dev, "usbss: missing wMaxPacketSize\n");
- 		return -EINVAL;
-
-base-commit: 8288c99fc263bcafc5df5fa8c278b2eb8106364e
--- 
-2.37.1
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
