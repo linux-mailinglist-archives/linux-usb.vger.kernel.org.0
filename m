@@ -2,112 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9638B58897A
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 11:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E4258899F
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Aug 2022 11:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237463AbiHCJad (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Aug 2022 05:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S235651AbiHCJqm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Aug 2022 05:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237500AbiHCJaY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 05:30:24 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85FE9FFA
-        for <linux-usb@vger.kernel.org>; Wed,  3 Aug 2022 02:30:22 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id b96so10386813edf.0
-        for <linux-usb@vger.kernel.org>; Wed, 03 Aug 2022 02:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KrnWA+m7eC5Vxxo7f+O2kCzvEbdewH6uC/C9Pi3LoXc=;
-        b=cwD7M7z53QidxQGoctwZZalIRIW/QV2eCTPCbRsk4LTUepV6RXRsGI5xIlGcw7+mYh
-         MANNckRS+YJlT7rWLV0YPCMgUyqs91AAz2Et2wpp/HcN70y08f9QCYoUcqCo1w1rP6gW
-         kl+o4qp3Ojg+un0BX4Wb1NCf7i9YaC+1XJGDm1QJqbQVf5+j2zhizj5wNtU891pa2Enm
-         OmlkVRVetPwNNlbE3NK7e69BVbmeZ6Ck0G0HH9DxdRG73l1FH+/LpS2oNllCqHIelu0w
-         sgQ9Rr+R9nfCr+g+wmccJUxd72OlOPOTM14V9JeAnKmmPYEn1Rw7qMiOmqgoRC3JEyIG
-         9DUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KrnWA+m7eC5Vxxo7f+O2kCzvEbdewH6uC/C9Pi3LoXc=;
-        b=5I1wIs4+SsW0b32LW8/wtNWkTdYffPH6f7DXoEcRf6e6VEC0yMg8ZG6g6+u7+bN0cP
-         GAZR7E4R/8EXnHNmA6NwIlZvK1pYw69K27BwWP4W+8ZbHprK61iUnlYyhoNwM1dN5Gaf
-         u0mgjhvZTumZsQWpuMY6H+YLunuZh8VtN7O/F2jWL/MrLkbywR+GNxwAw6qiHyxEHXPw
-         fZPZndv0pC26skEmHTa1Rr7LiyEAtk3d789iARcV02wLXN2vCe534ePqgm6XqMG3pigz
-         we1LcDpJgoUw6NzLEiu6xVs2gVAn+EfuZB9ue+9qCtDvFf2D6dqbT8mHaqvifsfYOzRt
-         7lKg==
-X-Gm-Message-State: AJIora+z2YYFNL6ybRisBtJneEqzBZJFmH13PV/j43NFu5ABRWsrk9yN
-        8U/dxCTdYVSQ0DpgCozd3TVNMlhoAyiQqkDEIGGgCV4G/Y48
-X-Google-Smtp-Source: AGRyM1vouH4cGHk/eL3ZFGgkiGNjpwzaauG2zrOzUNoKyPe914spsCnXEB0quWUQcwz+vhJEC2T8BYjBAaZrtODLTec=
-X-Received: by 2002:a05:6402:2405:b0:43a:86c6:862 with SMTP id
- t5-20020a056402240500b0043a86c60862mr25123172eda.210.1659519020865; Wed, 03
- Aug 2022 02:30:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220729094022.186496-1-lb@semihalf.com> <Yuep3lpI02gWiJY9@lahna>
- <CAK8ByeL4AJoXndO02Os0UPYZRiMeLmBjB-00VaEe-8KJF0tWzQ@mail.gmail.com>
- <YukhjOo4CteuM8q9@lahna> <CAK8ByeJ0=rbGr5+GZ_dDhMRnHjYxuCO9_cZONuXSz2tyL+QLzw@mail.gmail.com>
- <YuoyBf20gNLNqYdC@lahna>
-In-Reply-To: <YuoyBf20gNLNqYdC@lahna>
-From:   =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>
-Date:   Wed, 3 Aug 2022 11:30:09 +0200
-Message-ID: <CAK8ByeK=xOGshi9Yk2C3eVVNYprYFejX53OQzAztuxrKNK7F9A@mail.gmail.com>
-Subject: Re: [PATCH v2] thunderbolt: fix PCI device class after powering up
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+        with ESMTP id S232303AbiHCJqk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Aug 2022 05:46:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808991CB12
+        for <linux-usb@vger.kernel.org>; Wed,  3 Aug 2022 02:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659519999; x=1691055999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=uvO14lXJwDC7GUDuP1K6HIWmZxesnGipb+DU+aFRpo0=;
+  b=RpYkIs6O6Og5nJ4p4Z0zFYS2V2Yrnl0GDmWG+nb9c4PgMMqAxz8UjMTi
+   lWDjBKDK468v/dq3eLy6PVmhyqWM4nGqs8ey3WkVKkWpvhfqW3yaPHZuS
+   AqflMJQKT4y4Q8pEThOZzWsioedLG431ufwAVKjziXxlqVVqUeOVXDv0g
+   6kFeyzo1PrNQ6pNI3gx0XseysRooRWEtxhB8APTPiqE0vPEND3KEUamPt
+   eUR50rDQ2jlWXhGWXDILJf8IBasj1bcXpICmYzWcXArBcvcdGJM4CO1GN
+   bM0kxxMzxuTtoR5412+AcxSsqDp0atcFT1DLD7L0J9mL57OOhapiG+WnW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="287191896"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="287191896"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 02:46:39 -0700
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="778928311"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 02:46:35 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 03 Aug 2022 12:46:33 +0300
+Date:   Wed, 3 Aug 2022 12:46:33 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
         Yehezkel Bernat <YehezkelShB@gmail.com>,
         linux-usb@vger.kernel.org, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] thunderbolt: fix PCI device class after powering up
+Message-ID: <YupD+YoRc4pYTdaQ@lahna>
+References: <20220729094022.186496-1-lb@semihalf.com>
+ <Yuep3lpI02gWiJY9@lahna>
+ <CAK8ByeL4AJoXndO02Os0UPYZRiMeLmBjB-00VaEe-8KJF0tWzQ@mail.gmail.com>
+ <YukhjOo4CteuM8q9@lahna>
+ <CAK8ByeJ0=rbGr5+GZ_dDhMRnHjYxuCO9_cZONuXSz2tyL+QLzw@mail.gmail.com>
+ <YuoyBf20gNLNqYdC@lahna>
+ <CAK8ByeK=xOGshi9Yk2C3eVVNYprYFejX53OQzAztuxrKNK7F9A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8ByeK=xOGshi9Yk2C3eVVNYprYFejX53OQzAztuxrKNK7F9A@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
-> Hi,
->
-> On Tue, Aug 02, 2022 at 05:06:40PM +0200, =C5=81ukasz Bartosik wrote:
-> > > Is this something available for purchase? I'm asking because I have A=
-cer
-> > > Tiger Lake based Chromebook (740 spin or something) here and the TBT
-> > > controller class is "USB controller" all the time, and this is what i=
-s
-> > > expected. It should not change the class at any point.
+On Wed, Aug 03, 2022 at 11:30:09AM +0200, Łukasz Bartosik wrote:
 > >
-> > Sorry this platform is not available on the market.
->
-> I don't think the mainline Linux needs to have this kind of a quirk for
-> a device that is not available for general public.
->
+> > Hi,
+> >
+> > On Tue, Aug 02, 2022 at 05:06:40PM +0200, Łukasz Bartosik wrote:
+> > > > Is this something available for purchase? I'm asking because I have Acer
+> > > > Tiger Lake based Chromebook (740 spin or something) here and the TBT
+> > > > controller class is "USB controller" all the time, and this is what is
+> > > > expected. It should not change the class at any point.
+> > >
+> > > Sorry this platform is not available on the market.
+> >
+> > I don't think the mainline Linux needs to have this kind of a quirk for
+> > a device that is not available for general public.
+> >
+> 
+> The reference Chromebook platform is not available on the market now
+> however there will be Chromebooks based on that platform available for
+> purchase in the future.
 
-The reference Chromebook platform is not available on the market now
-however there will be Chromebooks based on that platform available for
-purchase in the future.
-We'd prefer not to carry a private patch for this issue.
-
-Thanks,
-Lukasz
-
-> > I compared the platform where I see the issue with another platform
-> > where thunderbolt is "usb controller" all the time
-> > and I noticed one difference in function icl_nhi_force_power() in
-> > drivers/thunderbolt/nhi_ops.c I observed the value of VS_CAP_22
-> > after being read and before being written again with additional bits
-> > set. And on the platform where thunderbolt is "usb controller" all the
-> > time
-> > this value was 0x22061002 after reading and 0x22061002 before being
-> > written. The value has not changed
-> > which suggest that thunderbolt was already powered up during probe.
->
-> It is being set also if you boot with device connected but in any case
-> the class code should not change ever. It may be that this is some older
-> spin of the Tiger Lake silicon that still had the wrong class but it got
-> fixed in later spins (or firmware, I don't remember which).
+Right, and do you know if those have this issue? Like I said my
+Chromebook, that is also based on the reference Chromebook, does not
+have this problem so probably something firmware/hardware related that
+does not appear when the production systems are ready. And this really
+should not happen at all. I also suggest to contact the Intel TBT folks
+(assuming your company is making these Chromebooks to make sure you have
+the latest silicon/firmwares).
