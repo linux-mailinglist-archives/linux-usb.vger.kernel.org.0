@@ -2,55 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9373E58A1A9
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 22:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D465058A2C8
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 23:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234993AbiHDUAr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 16:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S235224AbiHDVir (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 17:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiHDUAj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 16:00:39 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285836AA12
-        for <linux-usb@vger.kernel.org>; Thu,  4 Aug 2022 13:00:38 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id pm17so756375pjb.3
-        for <linux-usb@vger.kernel.org>; Thu, 04 Aug 2022 13:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uPKzNE7zSTqAILSSyuQ5RS5DAOTT4hKdjbxnUqUAfI4=;
-        b=I0H9xhAFu8B0PsZ2wzzp9dtRhFmaNDy2JgRcar6ZmKjHC/c5ykMQ8R40A5dsr2y0/B
-         V2x0ZFDTcqJvx0FgcTPvj7uCgEvLEg80RKdgaL6hDHSSlnD2dhNgXezAdxki/NMJQcXt
-         i52PCJT3NtE8YdPWCZWd2C6QsxqTzIEDIItv8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uPKzNE7zSTqAILSSyuQ5RS5DAOTT4hKdjbxnUqUAfI4=;
-        b=y78ELx13iuCDWwSuK7MZq7eFZpIcll1OvquNfLV6YTyS2pD7E5lx5BjzJzP9RjPxNM
-         EA5UpAJfvuzJA7ZWHh5NAqFjPNwhF9c1N6KdD1xXkHWZ/n2K3M4P3r8Dj76l7sYk0gm4
-         QaQ6cyui7t1HE2+7FiraHDMJ5AEbbf4fdusi+AxegjnGLwuhGilFvX7RQpLeHL/qmrD/
-         2Jzm5+a1vRkndl8Z8c/82sn2qx681sOE2HP7YcTc2kGF7pseMct4dOBOWPmhBbJbOyEX
-         dhl51eqddXUnhwAxDIKt+4jQwodJVulV1uVBetWczr3wE5sL9+ubfaIWhaVAvuclIXBk
-         zmnQ==
-X-Gm-Message-State: ACgBeo08c55+auwkNAuVpscr1XPhtOz+HXgyZ+islIgl4/2VzD13qevS
-        SS2E384ml1gZz3dTmEjyZBplWg==
-X-Google-Smtp-Source: AA6agR7XAhmDcGQM/wvX7qqgr70EsoFmAqGZ++uJh7cLd6Ebn25QM1du7Mx7NuF3B2s4Oa4Axp1WrA==
-X-Received: by 2002:a17:902:ce8c:b0:16c:4be6:254d with SMTP id f12-20020a170902ce8c00b0016c4be6254dmr3306258plg.51.1659643237649;
-        Thu, 04 Aug 2022 13:00:37 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:87c4:32ca:84b6:e942])
-        by smtp.gmail.com with UTF8SMTPSA id z5-20020aa79e45000000b0051bc5f4df1csm1364362pfq.154.2022.08.04.13.00.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 13:00:37 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 13:00:34 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S234587AbiHDVip (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 17:38:45 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307B56E891;
+        Thu,  4 Aug 2022 14:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659649121; x=1691185121;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7V7nahT9XjNpAFfGKFhNDUbQQAH1G6z336pao7dnqlM=;
+  b=ZZ7FUJ5XVQGAbp6SzaZDrtwUxunSYus8PbNB0GqiTMiwv0kDyU9srbc7
+   pTTds5DCE0gzVRMJfWAMwhmrUrUEr0aVQhFBdGtYFqwUPoHWFQV6a/qU8
+   7rqTgquS9nxRfQOK2Dg+T4n3IpJaAbI+bprTOJ3WHe5eV9sbBrO9xW5Lk
+   De5GaBW4LhwHxdLtFsQ/ieYkWLrsj35SB5tuN3nVAHXUREb1UNJLLrgHm
+   QZbYlMLhheSBVsPXHBMIaNv4wHygg/uWX7b+dsB4gOW6hRFpLnCCwcKp2
+   J07ZVXlcVyc3X/sB3QnMEXYiQX1z6Nl4EBymyxiLWYyWuMsAGDDG3qmxE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10429"; a="288810594"
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="288810594"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 14:38:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,216,1654585200"; 
+   d="scan'208";a="692782608"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Aug 2022 14:38:36 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJiY7-000IsJ-2b;
+        Thu, 04 Aug 2022 21:38:35 +0000
+Date:   Fri, 5 Aug 2022 05:38:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
@@ -58,34 +55,97 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krishna Kurapati <quic_kriskura@quicinc.com>,
         Stephen Boyd <swboyd@chromium.org>,
         Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
         Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
         quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/9] usb: dwc3: qcom: fix runtime PM wakeup
-Message-ID: <YuwlYh7b1oBoMuBT@google.com>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-6-johan+linaro@kernel.org>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v2 6/9] usb: dwc3: qcom: fix peripheral and OTG suspend
+Message-ID: <202208050544.ijUhoUyB-lkp@intel.com>
+References: <20220804151001.23612-7-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220804151001.23612-6-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220804151001.23612-7-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 05:09:57PM +0200, Johan Hovold wrote:
-> A device must enable wakeups during runtime suspend regardless of
-> whether it is capable and allowed to wake the system up from system
-> suspend.
-> 
-> Fixes: 2664deb09306 ("usb: dwc3: qcom: Honor wakeup enabled/disabled state")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Hi Johan,
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on linus/master next-20220804]
+[cannot apply to robh/for-next v5.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: arc-randconfig-r002-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050544.ijUhoUyB-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f3778ca026b16474e49c5e0188a0eb91d73eef2f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
+        git checkout f3778ca026b16474e49c5e0188a0eb91d73eef2f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/dwc3/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
+>> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
+     313 |         struct usb_hcd *hcd;
+         |                         ^~~
+
+
+vim +/hcd +313 drivers/usb/dwc3/dwc3-qcom.c
+
+   308	
+   309	static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+   310	{
+   311		struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+   312		struct usb_device *udev;
+ > 313		struct usb_hcd *hcd;
+   314	
+   315		/*
+   316		 * FIXME: Fix this layering violation.
+   317		 */
+   318		hcd = platform_get_drvdata(dwc->xhci);
+   319	
+   320		/*
+   321		 * It is possible to query the speed of all children of
+   322		 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+   323		 * currently supports only 1 port per controller. So
+   324		 * this is sufficient.
+   325		 */
+   326	#ifdef CONFIG_USB
+   327		udev = usb_hub_find_child(hcd->self.root_hub, 1);
+   328	#else
+   329		udev = NULL;
+   330	#endif
+   331		if (!udev)
+   332			return USB_SPEED_UNKNOWN;
+   333	
+   334		return udev->speed;
+   335	}
+   336	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
