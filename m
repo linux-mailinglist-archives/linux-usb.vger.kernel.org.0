@@ -2,106 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFAD589E89
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 17:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E086589EC2
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 17:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239784AbiHDPUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 11:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S239954AbiHDPfU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 11:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239801AbiHDPT4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 11:19:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADE914014;
-        Thu,  4 Aug 2022 08:19:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 345C4B8253A;
-        Thu,  4 Aug 2022 15:19:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2BBC433D6;
-        Thu,  4 Aug 2022 15:19:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659626390;
-        bh=Cu6FHB7K1kKiwVXKsKCOzpDMnAIi4ddydINp3RF8EHw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=phEQR9x4rkn1g3XBENrcFKCOqrxbb9OzkzxI2o/0O69xV7QGiEm0G249ztU01rj6C
-         7LpiVUKbVkWrqtZz4cznEzDDtj7T8MgaI85EkzU1VIP0STVe7rDjMG9h2dFBXIqjtr
-         wNc2iIf6dvL8gwzMHDmYGqGFpH8e1l9uG7981nqjZNdbhm4hg9dTTWk7Vx+f/BXAjb
-         QdIf4ZrrSZkdAcmpSvrhfdGTpE+/TAr/DN/MHlHucivK2QZvKdRmihOiBS+DFaRf8q
-         yI2CAbDdZ5+LknTc6S287c6fHIhQJ2giqUwHaiQGWpzbP+LjlRcOxlgptMYt+9v6ss
-         FA3NxwjiO8U/A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJcdw-0006KI-SM; Thu, 04 Aug 2022 17:20:12 +0200
-Date:   Thu, 4 Aug 2022 17:20:12 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S235088AbiHDPfQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 11:35:16 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0193BE
+        for <linux-usb@vger.kernel.org>; Thu,  4 Aug 2022 08:35:14 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so81704pjf.5
+        for <linux-usb@vger.kernel.org>; Thu, 04 Aug 2022 08:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YMwmJ3SYguFGWEp4hAm2rBYWGtLtJTCvpovU/AIVn0A=;
+        b=Qtnq39uHyzvlwnd38DbC3LwcEUpjMXF+hgHHimscG103l15xTzdeAhdQsEhHrCXXc6
+         jZmcYvbCNSHRH02uVnFirKaBpXJB1Nt7yHmZSmHLABRrEcxUe/GNWK5CbueaHG9IMAfR
+         6mm9ZApgk6ZbXDRVcrk6xsfiBn9g5yH+QxTSw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YMwmJ3SYguFGWEp4hAm2rBYWGtLtJTCvpovU/AIVn0A=;
+        b=klm2udZNrPWgqpz3bid1rXAVN8NqD8TguiqKMuf0xPC6VFBiBDnrwQInZ3jHWJGhyB
+         lL/V4L+LLNwVjeckaE/Fw1GccKVvYM/9Wkj2i8XPToCEuvrgNw8+Fh6ZbAM1UOpvMlu0
+         ogU4iTJLkzVVIsiB/53I+5o2wRvyAskqUwnIyapB9R2O284z9Y1DdTxA130gy/68PkYM
+         5yZsAf1Bl3M82/GFiWe93pvtHli0YK7IZ2eFcP2KH2aP6Re5CMLTRuZAo39uszAF2HmG
+         z7QESRR0CXU1tuMEaBV3zfr+Gw6/+Kte2FrY1DwwMsJr9Q3WyZdYvOU2XXf3yYDKRD8U
+         aoog==
+X-Gm-Message-State: ACgBeo1ZTwh4xYFx09Ji62o/nyH7/sOigp3+N4eZtkDFhHF+Wi8R8HYI
+        qm5Sl6B6NGNiMJQJPUsqwC2r7Q==
+X-Google-Smtp-Source: AA6agR5eBcmtuswpC9ZyuRauPZ9fC4Eka3LZy92marD/sOH7rjs76EIMqw+kflXgFAwfE3jtieqwBA==
+X-Received: by 2002:a17:902:a418:b0:16c:9ee2:8a02 with SMTP id p24-20020a170902a41800b0016c9ee28a02mr2453212plq.46.1659627313991;
+        Thu, 04 Aug 2022 08:35:13 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:87c4:32ca:84b6:e942])
+        by smtp.gmail.com with UTF8SMTPSA id j9-20020a17090a31c900b001ef7c7564fdsm3870037pjf.21.2022.08.04.08.35.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 08:35:13 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 08:35:10 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: qcom: Provide stubs for
- dwc3_qcom_read_usb2_speed function
-Message-ID: <YuvjrAUorQdC7U2k@hovoldconsulting.com>
-References: <1659337215-20421-1-git-send-email-quic_kriskura@quicinc.com>
- <YulR31pEq9wjCBg8@hovoldconsulting.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] usb: dwc3: qcom: fix runtime PM wakeup
+Message-ID: <YuvnLliIKLK71wx0@google.com>
+References: <20220802151404.1797-1-johan+linaro@kernel.org>
+ <20220802151404.1797-5-johan+linaro@kernel.org>
+ <YurviWfzut9sursr@google.com>
+ <Yut2tLqGfu82xcDs@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YulR31pEq9wjCBg8@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yut2tLqGfu82xcDs@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:33:36PM +0200, Johan Hovold wrote:
-> On Mon, Aug 01, 2022 at 12:30:15PM +0530, Krishna Kurapati wrote:
-> > Dwc3 Qcom driver makes use of usb_hub_find_child API in its efforts
-> > to get speed of connected devices (HS/LS/FS) and enable interrupts
-> > accordingly.
+On Thu, Aug 04, 2022 at 09:35:16AM +0200, Johan Hovold wrote:
+> On Wed, Aug 03, 2022 at 02:58:33PM -0700, Matthias Kaehlcke wrote:
+> > On Tue, Aug 02, 2022 at 05:14:00PM +0200, Johan Hovold wrote:
+> > > A device must enable wakeups during runtime suspend regardless of
+> > > whether it is capable and allowed to wake the system up from system
+> > > suspend.
+> > > 
+> > > Fixes: 2664deb09306 ("usb: dwc3: qcom: Honor wakeup enabled/disabled state")
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > 
+> > Ah, I wasn't aware that the same wakeup mechanism is used in runtime suspend.
+> > 
+> > In how far is runtime PM actually supported/used by this driver? The device is
+> > set 'active' in _probe(), and there are no other pm_runtime_* calls, except
+> > in dwc3_qcom_remove() and qcom_dwc3_resume_irq(). How does the device get from
+> > 'active' into 'suspended'?
 > 
-> > usb_hub_find_child API is a part of usb core compiled
-> > either into the kernel or as a module (CONFIG_USB= Y or M). In some
-> > builds (make randconfig for i386) CONFIG_USB is not enabled and the
-> > usb core is not compiled resulting in linking errors.
-> 
-> Please replace the above with something more succinct. Whether USB core
-> is built as a module or not is completely irrelevant. The problem is
-> that the qcom dwc3 driver can be built and used without host support. 
-> 
-> > Provide stubs for dwc3_qcom_read_usb2_speed function to use
-> > usb_hub_find_child API only if CONFIG_USB is enabled. Else return
-> > USB_SPEED_UNKNOWN.
-> 
-> The fact that you need to do this is an indication that something is
-> wrong with the current implementation. The glue driver shouldn't be
-> touching the host driver internal state directly like this.
-> 
-> As pointed out here:
-> 
-> 	https://lore.kernel.org/all/20220802151404.1797-4-johan+linaro@kernel.org/
-> 
-> dwc3_qcom_read_usb2_speed() is indeed broken and currently triggers a
-> NULL-pointer dereference when the controller is used in peripheral mode.
-> 
-> But for now I guess something like this is needed even if we try to
-> avoid stubs in implementation files.
+> It will be runtime suspended when the child (core) device suspends, but
+> you need to enable runtime PM through sysfs first.
 
-This is how I think this should be fixed instead:
+Thanks for the clarification.
 
-	https://lore.kernel.org/all/20220804151001.23612-4-johan+linaro@kernel.org/
+After enabling runtime suspend for the dwc3 core, dwc3 glue and the xHCI
+the dwc3-qcom enters autosuspend when the delay expires.
 
-and which keeps the ifdeffery minimal. I included the patch in v2 of the
-series that addresses the other problems with this code.
+> And the controller is resumed in the wakeup-interrupt handler for the
+> runtime PM case.
+>
+> It seems to work ok, and it looks like the driver has supported this
+> since it was first merged.
 
-Johan
+With and without your patch dwc3-qcom enters autosuspend and stays there.
+USB devices like a mouse or a USB to Ethernet adapter keep working while
+the glue is suspended.
+
+How is the runtime resume triggered for the dwc3 glue?
+
+Sorry if my questions are very basic, so far I haven't dealt much with
+autosuspend and I'm trying to get a better understanding in the context
+of the dwc3 and why it is currently broken.
