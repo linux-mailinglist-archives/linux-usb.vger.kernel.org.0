@@ -2,83 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F9258A0D5
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 20:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B5158A11B
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 21:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239895AbiHDSvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 14:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
+        id S234193AbiHDTMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 15:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240144AbiHDSvG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 14:51:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77846D9FE;
-        Thu,  4 Aug 2022 11:50:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B235661625;
-        Thu,  4 Aug 2022 18:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CCFC433D7;
-        Thu,  4 Aug 2022 18:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659639055;
-        bh=m7gbpioiTTpHCUtP6HqOQngY+wqQ8d/zSfbprVPAx5o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Im1+lXQev4xyjoSV38vPLfOXUFCosL5ywaLbu27oFTIVywVSXxOQ6zvTEzdDinSUa
-         /N+jN4r8JenLnPancbu6l11L2O3FSLWNikp12DA5gErV5aJFiDyrb2qzPT064PLVO3
-         r1Me40iXc5PoM3auNDflNrU+mkkZNP3t5GmivKmP1Wcu8aKkGDcccse+CplV5j8zu8
-         h29qalG4x3tupfDlv38ftw6L7FkIH7VZTp5VCSnEBsUcXXvXjDFlyjr717N2hPsg+7
-         LjY8JiM7X07SQNt2vtPuW2VqQzqg8g5iSUZ/8mDcCa2OGjFnlSuGA7Nhf2uLWBEfZB
-         p1ead9hCes0pQ==
-Date:   Thu, 4 Aug 2022 11:50:52 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Andrey Strachuk <strochuk@ispras.ru>
-Subject: Re: [GIT PULL] USB / Thunderbolt driver changes for 6.0-rc1
-Message-ID: <YuwVDE94jZVMMyX6@dev-arch.thelio-3990X>
-References: <YuqB0tl2hjT3x7a4@kroah.com>
- <YuqXtcaUPflINBd6@dev-arch.thelio-3990X>
- <CAHk-=wjdoqmF4fC8orFv0pRZBUfgyQMGM8yS136_vZ=9=8uQ3Q@mail.gmail.com>
+        with ESMTP id S231248AbiHDTMY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 15:12:24 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4B99E5244E
+        for <linux-usb@vger.kernel.org>; Thu,  4 Aug 2022 12:12:22 -0700 (PDT)
+Received: (qmail 674506 invoked by uid 1000); 4 Aug 2022 15:12:21 -0400
+Date:   Thu, 4 Aug 2022 15:12:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Subject: Re: [RFC v2] USB: core: add a way to revoke access to open USB
+ devices
+Message-ID: <YuwaFbxckLfnqhyv@rowland.harvard.edu>
+References: <20220804160306.134014-1-hadess@hadess.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjdoqmF4fC8orFv0pRZBUfgyQMGM8yS136_vZ=9=8uQ3Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220804160306.134014-1-hadess@hadess.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 11:45:25AM -0700, Linus Torvalds wrote:
-> On Wed, Aug 3, 2022 at 8:43 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > For the record, this breaks allmodconfig with clang (I haven't seen a
-> > formal report on it anywhere and this missed -next coverage because
-> > Stephen is on vacation):
+On Thu, Aug 04, 2022 at 06:03:04PM +0200, Bastien Nocera wrote:
+> Hey,
 > 
-> Hmm. It passes my own internal clang testing, but that's for a more
-> limited config.
+> This is a follow-up to "[RFC v1] USB: core: add USBDEVFS_REVOKE ioctl" from April.
+> 
+> The end-goal is being able to cut-off access to USB devices for
+> applications/programs that open raw USB devices using, in most cases,
+> libusb.
+> 
+> I've implemented this using BPF, so we don't need to add new ioctls.
 
-I figured that would be the case. It appears that allmodconfig is now
-broken for other reasons though (I missed the errors in -next amongst
-some other breakage, I only caught it this morning around the same time
-as Sudip):
+I'm not sure that's a good reason for using BPF.
 
-https://lore.kernel.org/YuwRyQYPCb1FD+mr@debian/
+> The presence or absence of that feature can be evaluated at runtime,
+> and can be used to implement revoke support on session switching,
+> in logind for example:
+> https://github.com/hadess/usb-revoke-userspace/
 
-> So I've merged this in my tree, but would appreciate a fixup patch if
-> you have one.
+This isn't clear.  Are you talking about having the kernel automatically 
+do this when certain conditions are met?  Or do you mean that logind 
+could invoke the BPF program at the appropriate times?
 
-I CC'd you on https://lore.kernel.org/20220803162422.2981308-1-nathan@kernel.org/,
-let me know if you don't see it for some reason or if there is a better
-fix.
+Left unsaid here is that logind generally won't have a file descriptor 
+for any of the open USB devices that it wants to revoke access to.  
+That's a good reason to use BPF instead of ioctl.
 
-Cheers,
-Nathan
+If you're going to revoke access to devices upon session switching, 
+shouldn't the mechanism be more general?  I mean, shouldn't it apply to 
+all sorts of devices, not just those that happen to be USB?
+
+Also, if you're going to use session switching as your criterion for 
+revoking access to USB devices then what will you do to restore access 
+when the session switches back?
+
+> I have some notes and questions on the API as it is exposed.
+> 
+> - I didn't see a point in having multiple kernel functions as entry
+>   points as I was going to use a single BPF program as an entry point,
+>   which can check the arguments. Can I rely on the BPF program checking
+>   those arguments, or should I re-check them again in the kernel
+>   implementation?
+
+What is there to check?
+
+> - Are my UID checks correct if I expect revoking to be called outside
+>   namespaces, on the effective UID of the user. Is there a way to assert
+>   that?
+
+We're probably not the right people to ask.  You could try Eric 
+Biederman.
+
+> - Is there a good "errno" error for ENOSUCHUSER for using in the
+>   usb_revoke() loop if we couldn't find any USB device matching the
+>   requested user?
+
+Why do you want that to be an error?  If you tell the kernel "Remove all 
+access to USB devices for user X", why should it be an error if X doesn't 
+have any open file descriptors for USB devices?
+
+For that matter, are you certain that basing this on the UID is the right 
+way to go?  What if there are two different login sessions both using the 
+same UID?
+
+Alan Stern
+
+> 
+> Cheers
+> 
+> Bastien Nocera (2):
+>   USB: core: add a way to revoke access to open USB devices
+>   usb: Implement usb_revoke() BPF function
+> 
+>  drivers/usb/core/devio.c | 105 ++++++++++++++++++++++++++++++++++++---
+>  drivers/usb/core/usb.c   |  51 +++++++++++++++++++
+>  drivers/usb/core/usb.h   |   8 +++
+>  3 files changed, 158 insertions(+), 6 deletions(-)
+> 
+> -- 
+> 2.36.1
+> 
