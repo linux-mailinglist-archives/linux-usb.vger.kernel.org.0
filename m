@@ -2,122 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6692A58988F
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 09:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC945898AC
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 09:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239147AbiHDHka (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 03:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S239248AbiHDHve (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 03:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiHDHk2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 03:40:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ED422B3B;
-        Thu,  4 Aug 2022 00:40:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D294B82245;
-        Thu,  4 Aug 2022 07:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C7ADC433C1;
-        Thu,  4 Aug 2022 07:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659598824;
-        bh=Ah06rLZ4P9R/uZ+rl/z6T5V8R+Zu0TXa61Ms+9cM+e4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n6Zy3n5vwolf1+DFA4lW+ulv1MkhFPGNi5yg2HtakmJBeXRq/SLpxEX8gz4wSmVIs
-         goi0xzpQ7jM5uE+3IKwF66oxwe0hUqycy619LVWITrAR/E8hLRdLNFAW+d2/MahrV4
-         Yz3SckBbkiYTiJuhv9QstOmIKZH/iBplZ/S5s3jIZK1pIC6Jgot6zjJwnUeN5wyxPe
-         YR+EhOJAuhc74CXFrWmh24WSKnsUi/ESVopK5V03O03sBxlwxJAnjW1MoncLOncZmT
-         +PsI0kCuJ7ndTQAk4tNg8jqY+HfPxrbi8jvC9MNE3GWj6HLUEuiHesY0gBksmj+wNT
-         tpLIRqjd5I9dQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJVTI-00038p-QO; Thu, 04 Aug 2022 09:40:44 +0200
-Date:   Thu, 4 Aug 2022 09:40:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/8] Revert "dt-bindings: usb: dwc3: Add wakeup-source
- property support"
-Message-ID: <Yut3/PA/ClacgJsw@hovoldconsulting.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-6-johan+linaro@kernel.org>
- <CAL_JsqL5ZCzfd06rxOdQodFjk4G3QpDCsxA5heM71x0q5d-hCw@mail.gmail.com>
- <YuokOn0KHEqv/CR4@hovoldconsulting.com>
- <20220803232644.GA2806113-robh@kernel.org>
- <Yutdd7kWx2sc1yQu@hovoldconsulting.com>
+        with ESMTP id S229884AbiHDHvd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 03:51:33 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37E22AC5A;
+        Thu,  4 Aug 2022 00:51:31 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 274617BL010780;
+        Thu, 4 Aug 2022 09:51:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=AxEhqXR+BgMHTMXYkqN7E9/KUwMbMhiGx5L1azHvekM=;
+ b=gVZl+Codjvn3W6tj1e9+gRsG66KyTRecb6Lv9ckZCyzAXKrGlxmGxLRmx0yhcBFeN5DQ
+ mVFjR9hZBCZccuiIfZ7JnsxkX20TZoCFtO8QlQSZ/6X4x83Wx0xkwPTIOmbXYgw8jo2F
+ d9nKEvSQpVrSsMie5gR2Na73SmFGIPCiethGzCax7O/0H6Q+YWbM6PBl81zaU3XnpqgL
+ ceY36dxqodiP7O8OJ13Obo6yQpqQ3oErEjl0k/STcyOCm5JOILfbkXVAWHoXslSoBHrZ
+ iFF7M/fpG4hOHYk13p3mx3Gi1b64+c4dhLBhW+ssJr+m4JT6own7TWlQA8ECpmcod1vE XQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hqs8awnkp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Aug 2022 09:51:09 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9BDEF10002A;
+        Thu,  4 Aug 2022 09:51:07 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 948C2216EE1;
+        Thu,  4 Aug 2022 09:51:07 +0200 (CEST)
+Received: from [10.252.10.254] (10.75.127.45) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 4 Aug
+ 2022 09:51:04 +0200
+Message-ID: <d38963a7-0263-cbc5-3f3a-8e5d65381f9e@foss.st.com>
+Date:   Thu, 4 Aug 2022 09:51:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yutdd7kWx2sc1yQu@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH][next] usb: typec: ucsi: stm32g0: Fix spelling mistake
+ "booloader" -> "bootloader"
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220803123018.913710-1-colin.i.king@gmail.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20220803123018.913710-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-04_01,2022-08-02_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 07:47:35AM +0200, Johan Hovold wrote:
-> On Wed, Aug 03, 2022 at 05:26:44PM -0600, Rob Herring wrote:
-> > On Wed, Aug 03, 2022 at 09:31:06AM +0200, Johan Hovold wrote:
-> > > On Tue, Aug 02, 2022 at 11:17:22AM -0600, Rob Herring wrote:
-> > > > On Tue, Aug 2, 2022 at 9:14 AM Johan Hovold <johan+linaro@kernel.org> wrote:
-> > > 
-> > > > > It should also not be used to
-> > > > > work around Linux driver implementation issues such as how to coordinate
-> > > > > the glue and core dwc3 drivers.
-> > > > >
-> > > > > For the Qualcomm dwc3 controllers, it is the glue device that manages
-> > > > > the wakeup interrupts, which may or may not be able to wake the system
-> > > > > up from system suspend.
-> > > > 
-> > > > While the reasoning to add this may have been for QCom, having this
-> > > > property for other users makes sense. On some platforms, 'snps,dwc3'
-> > > > is the only node (i.e. there's no wrapper node). So I don't think this
-> > > > should be reverted.
-> > > 
-> > > Fair enough. Let's keep it in the core child node then where we can
-> > > still retrieve from the glue parent directly.
-> > > 
-> > > (I assume you're not suggesting also adding 'wakeup-source' to the qcom
-> > > glue node, which is where the actual wakeup interrupts live.)
-> > 
-> > 'wakeup-source' belongs wherever the interrupt that causes wakeup is 
-> > defined.
+On 8/3/22 14:30, Colin Ian King wrote:
+> There is a spelling mistake in a dev_err_probe message. Fix it.
 > 
-> Thanks for clarifying. That was my understanding as well, but I
-> misinterpreted your wish to keep the 'wakeup-source' property also in
-> the core node.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+
+Hi Colin,
+
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+
+Thanks,
+Fabrice
+
+>  drivers/usb/typec/ucsi/ucsi_stm32g0.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> My thought was that if it turns out that there are systems that do not
-> use a glue node but that do indeed support wakeup, then such a property
-> could be added back later.
-> 
-> But let's keep it in the binding then.
-
-I realise it may not have been clear that the patch I suggested to
-revert was first merged for 6.0-rc1, in case that makes any difference.
-
-But I'll drop the revert unless I hear otherwise.
-
-Johan
+> diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> index 061551d464f1..6ced49e4d208 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+> @@ -599,7 +599,7 @@ static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
+>  		g0->i2c_bl = i2c_new_dummy_device(g0->client->adapter, STM32G0_I2C_BL_ADDR);
+>  		if (IS_ERR(g0->i2c_bl)) {
+>  			ret = dev_err_probe(g0->dev, PTR_ERR(g0->i2c_bl),
+> -					    "Failed to register booloader I2C address\n");
+> +					    "Failed to register bootloader I2C address\n");
+>  			return ret;
+>  		}
+>  	}
