@@ -2,77 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E0C589826
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 09:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30CC58981A
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 09:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238997AbiHDHIP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 03:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S239072AbiHDHHl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 03:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiHDHIO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 03:08:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12F861D5D
-        for <linux-usb@vger.kernel.org>; Thu,  4 Aug 2022 00:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659596893; x=1691132893;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jij6uqEbSZiCIELlG0NLopdorqcATkUF2LZZUQACsBE=;
-  b=GU9Usot9xlxqXWDa15rsrOeWxdQPWImKOAO2E+NBKsNzYJ86cJA/sFAK
-   wCJoDO5qxCCjPZvaTV7Qbfem2PefnNRsgzXWyQg9iBGhOhDd/7RnhGVHn
-   EUVWvp9Ue/e1x5i4N3oZPgAawp04pXLpKhmDZcMlDmxRcBr2US8Xuziif
-   2oxnOjU/e/lhU9MtCwhmJc5imHMX0PNdiGd7yzPxB2k4UdzHQTAbBoygR
-   rJiUMtisiXoJDg+3OUacD4pfw46RBjigvYXOza9LzBso06esK2vtjGAMx
-   zme43nDSY0omaVp/8SBHAV5YVIJRsmzCD/asDDSW9D/qOxu4cS/xXgztS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="272904214"
-X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="272904214"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 00:08:13 -0700
-X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
-   d="scan'208";a="745355221"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2022 00:08:10 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 04 Aug 2022 10:08:08 +0300
-Date:   Thu, 4 Aug 2022 10:08:08 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Sanjay R Mehta <sanmehta@amd.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
-        mario.limonciello@amd.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] thunderbolt: Add DP out resource when DP tunnel is
- discovered.
-Message-ID: <YutwWI8xENDkAtg9@lahna>
-References: <1659587394-115256-1-git-send-email-Sanju.Mehta@amd.com>
- <Yutnjq64OO07QbAR@lahna>
- <a5b6e0a1-a334-1bc5-46fa-b9ee5f53688f@amd.com>
+        with ESMTP id S239078AbiHDHHk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 03:07:40 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA0661B3E;
+        Thu,  4 Aug 2022 00:07:38 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id dc19so12515274ejb.12;
+        Thu, 04 Aug 2022 00:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6tNYjvdH86S2UFNUtFTO0Ym4RZvNgdxqohXRh3u17y0=;
+        b=iISBakQM+KhpORSAdwWKu6+Oq3YQYY+hKhzjxD+MjvvIeZVHWb5j3C9ax/7Y4lagKL
+         H7qStbRFh2yhGRMe1E8pf8GEkzmcS53fIg3/pUrd1fkoR8lyuZYot6uV2Yb/jK0TUYoz
+         zY0J2ZjiwHZl0oaRdlA2cFV7mId9QLrKkU5CjrEiLW0zbFFdczgxmeIl8XsenBqly0mT
+         CvyZHGcWJS9vw32k/7uEmKdb3esAjwBoe7NUmpj1SYqjgKXkRrrRBj+ayYT1h7YFB66u
+         VI1pEi9W0tx80CiNSBbc1H78nvAShAGJLIDyF68+ipFfwi9L98BAAeoOhDS3OC9DebZ2
+         S85w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6tNYjvdH86S2UFNUtFTO0Ym4RZvNgdxqohXRh3u17y0=;
+        b=oHrBGiYEDwvDhODtNxfDSAIMU5hzooK0zCf9zzVnH6NfyufzY4k+rBM7w1lIG1B5oZ
+         xBHyfaFINDjyGbQwSS75bcmOYXncX4S8Nc7Z7hJS0AoWaEPD3G3i6Gf8dTnDgZw5WqcK
+         RKDxFMNLpCgQYLms1YR9e5wSsxD6wj3u83ZLkDZ/U+Qk4gtpNADcQuNenGtghdIkLlil
+         c9g/XDZBREuTr6SXXb8PC90pHGvqMgZVmmHpS+AP2yVBgm7S5eBMpOeudGQEXelIN1W1
+         ARFPZ57Ovkw6oT/ezZKYDHG9hv8OuJSwlMhyNfejxRSxyWg61n1MzkPZOd+QUDoY8wc5
+         iKSg==
+X-Gm-Message-State: ACgBeo1gZyfOD5gZvW7b7YiMA8Bw1RQEOb4EzIvmdvwstuPrShMv8jZV
+        28qr1LM3Z2o5+Zve5WtHrcyEjULlsBXlVjyC+rKoruR0AE0=
+X-Google-Smtp-Source: AA6agR7YMNcfmKToFJf89LOx3azGb6RKBSee7DlUdqWqPn6KEUH7do4CfBR02eYBaYxueKug3aCy/tWr+ksjMZNKZkM=
+X-Received: by 2002:a17:907:75d5:b0:730:b051:d93f with SMTP id
+ jl21-20020a17090775d500b00730b051d93fmr376508ejc.568.1659596857030; Thu, 04
+ Aug 2022 00:07:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a5b6e0a1-a334-1bc5-46fa-b9ee5f53688f@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220803090218.1313187-1-kkamagui@gmail.com> <CAGRyCJHX1X238TkiTaML3WJ+rdc1-m82_d3Ut4jCVDmuQ=cMOQ@mail.gmail.com>
+ <CAHjaAcT2fzpfJ563Jx5n3eYyrZD0vHNLr713qTZ=trrDjPaU=A@mail.gmail.com>
+In-Reply-To: <CAHjaAcT2fzpfJ563Jx5n3eYyrZD0vHNLr713qTZ=trrDjPaU=A@mail.gmail.com>
+From:   Daniele Palmas <dnlplm@gmail.com>
+Date:   Thu, 4 Aug 2022 09:08:24 +0200
+Message-ID: <CAGRyCJGTXWNPmF6ZgTJuxzy++rbpS_irJAhv7Jrhg0BMqqwA3w@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: cdc_mbim: adding Microsoft mobile broadband modem
+To:     Seunghun Han <kkamagui@gmail.com>
+Cc:     Oliver Neukum <oliver@neukum.org>,
+        David Miller <davem@davemloft.net>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 12:34:09PM +0530, Sanjay R Mehta wrote:
-> >>  			tunnel = tb_tunnel_discover_dp(tb, port, alloc_hopids);
-> > 
-> > Here tunnel can be NULL...
-> > 
-> >> +			tb_dp_resource_available_discovered(tb, tunnel->dst_port);
-> > 
-> > ... so this will crash and burn.
-> 
-> Thanks. Agree, I will add check here and resend the patch.
+Hello Seunghun,
 
-Please don't add the check here but move this to tb_start() as I
-suggested.
+Il giorno mer 3 ago 2022 alle ore 14:56 Seunghun Han
+<kkamagui@gmail.com> ha scritto:
+>
+> Hello Daniele,
+>
+> On Wed, Aug 3, 2022 at 7:58 PM Daniele Palmas <dnlplm@gmail.com> wrote:
+> >
+> > Just for reference, are you allowed to disclose which chipsets these
+> > modems are based on?
+> >
+> > Thanks,
+> > Daniele
+>
+> I'm not sure which chipsets are used for them. In the Windows
+> environment, the information that I could find was Microsoft Surface
+> Mobile Broadband Modem. Some people guess they are based on Qualcomm
+> Snapdragon X16 and successors, but I could find no evidence about
+> them.
+>
+> If you know the way, would you tell me how I can find or confirm it?
+>
+
+Unfortunately I'm not aware of any specific place for that: I wrongly
+thought that you were involved in the development of the modem and you
+knew the chipset.
+
+However, sometimes the name of the chipset is left in the firmware
+revision: you can try looking if there's any hint in the output of the
+device caps request. If it's a Qualcomm modem it should probably also
+support QMI-over-MBIM service, so maybe you can also try a few DMS
+requests (--dms-get-software-version, --dms-get-revision...).
+
+Sometimes also the USB descriptors can be useful.
+
+Regards,
+Daniele
+
+> Best regards,
+> Seunghun
