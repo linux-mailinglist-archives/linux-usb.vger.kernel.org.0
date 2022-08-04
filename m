@@ -2,120 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B5158A11B
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 21:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3913758A125
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 21:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiHDTMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 15:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S237134AbiHDTWe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 15:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiHDTMY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 15:12:24 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4B99E5244E
-        for <linux-usb@vger.kernel.org>; Thu,  4 Aug 2022 12:12:22 -0700 (PDT)
-Received: (qmail 674506 invoked by uid 1000); 4 Aug 2022 15:12:21 -0400
-Date:   Thu, 4 Aug 2022 15:12:21 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org,
+        with ESMTP id S234352AbiHDTWd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 15:22:33 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D78DD37FA9;
+        Thu,  4 Aug 2022 12:22:31 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,216,1654527600"; 
+   d="scan'208";a="130360453"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 05 Aug 2022 04:22:31 +0900
+Received: from localhost.localdomain (unknown [10.226.92.63])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5D792408FB8D;
+        Fri,  5 Aug 2022 04:22:27 +0900 (JST)
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
-Subject: Re: [RFC v2] USB: core: add a way to revoke access to open USB
- devices
-Message-ID: <YuwaFbxckLfnqhyv@rowland.harvard.edu>
-References: <20220804160306.134014-1-hadess@hadess.net>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Adam Ford <aford173@gmail.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v3 0/2] Add usb gadget support for RZ/V2M
+Date:   Thu,  4 Aug 2022 20:22:18 +0100
+Message-Id: <20220804192220.128601-1-phil.edworthy@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804160306.134014-1-hadess@hadess.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 06:03:04PM +0200, Bastien Nocera wrote:
-> Hey,
-> 
-> This is a follow-up to "[RFC v1] USB: core: add USBDEVFS_REVOKE ioctl" from April.
-> 
-> The end-goal is being able to cut-off access to USB devices for
-> applications/programs that open raw USB devices using, in most cases,
-> libusb.
-> 
-> I've implemented this using BPF, so we don't need to add new ioctls.
+Hi,
 
-I'm not sure that's a good reason for using BPF.
+The RZ/V2M SoC is very similar to the R-Car implementation.
+The differences are that a few DRD related registers and bits have
+moved, there is a separate interrupt for DRD, an additional clock for
+register access and reset lines for DRD and USBP.
 
-> The presence or absence of that feature can be evaluated at runtime,
-> and can be used to implement revoke support on session switching,
-> in logind for example:
-> https://github.com/hadess/usb-revoke-userspace/
+Thanks
+Phil
 
-This isn't clear.  Are you talking about having the kernel automatically 
-do this when certain conditions are met?  Or do you mean that logind 
-could invoke the BPF program at the appropriate times?
+v3:
+bindings:
+ - Keep the existing constraints by adding an 'else' clause with
+   'maxItems: 1' for various properties.
+driver:
+ - The ramsize_per_ramif specifies the amount of ram for
+   IN _or_ OUT pipes, not combined, so it should be 16KB.
+ - When changing role, ensure only one of host/perip reset is deasserted
+ - Correct number of pipes to 16. The driver will calculate the nr
+   of pipes to use based on the available ram and ramsize_per_pipe.
 
-Left unsaid here is that logind generally won't have a file descriptor 
-for any of the open USB devices that it wants to revoke access to.  
-That's a good reason to use BPF instead of ioctl.
+v2:
+bindings:
+ - SoCs other than rz/v2m must limit the number of clock/interrupt names
+ - Add "Battery Charging" and "Global Purpose Input" interrupts
+driver:
+ - Rename r9a09g011 feature to is_rzv2m; use rzv2m compat string
+ - Pass pointer into macros that access is_rzv2m member
 
-If you're going to revoke access to devices upon session switching, 
-shouldn't the mechanism be more general?  I mean, shouldn't it apply to 
-all sorts of devices, not just those that happen to be USB?
+Phil Edworthy (2):
+  dt-bindings: usb: renesas, usb3-peri: Document RZ/V2M r9a09g011
+    support
+  usb: gadget: udc: renesas_usb3: Add support for RZ/V2M
 
-Also, if you're going to use session switching as your criterion for 
-revoking access to USB devices then what will you do to restore access 
-when the session switches back?
+ .../bindings/usb/renesas,usb3-peri.yaml       |  99 +++++++++++--
+ drivers/usb/gadget/udc/renesas_usb3.c         | 131 ++++++++++++++----
+ 2 files changed, 188 insertions(+), 42 deletions(-)
 
-> I have some notes and questions on the API as it is exposed.
-> 
-> - I didn't see a point in having multiple kernel functions as entry
->   points as I was going to use a single BPF program as an entry point,
->   which can check the arguments. Can I rely on the BPF program checking
->   those arguments, or should I re-check them again in the kernel
->   implementation?
+-- 
+2.34.1
 
-What is there to check?
-
-> - Are my UID checks correct if I expect revoking to be called outside
->   namespaces, on the effective UID of the user. Is there a way to assert
->   that?
-
-We're probably not the right people to ask.  You could try Eric 
-Biederman.
-
-> - Is there a good "errno" error for ENOSUCHUSER for using in the
->   usb_revoke() loop if we couldn't find any USB device matching the
->   requested user?
-
-Why do you want that to be an error?  If you tell the kernel "Remove all 
-access to USB devices for user X", why should it be an error if X doesn't 
-have any open file descriptors for USB devices?
-
-For that matter, are you certain that basing this on the UID is the right 
-way to go?  What if there are two different login sessions both using the 
-same UID?
-
-Alan Stern
-
-> 
-> Cheers
-> 
-> Bastien Nocera (2):
->   USB: core: add a way to revoke access to open USB devices
->   usb: Implement usb_revoke() BPF function
-> 
->  drivers/usb/core/devio.c | 105 ++++++++++++++++++++++++++++++++++++---
->  drivers/usb/core/usb.c   |  51 +++++++++++++++++++
->  drivers/usb/core/usb.h   |   8 +++
->  3 files changed, 158 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.36.1
-> 
