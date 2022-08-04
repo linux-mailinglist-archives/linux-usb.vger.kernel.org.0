@@ -2,142 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CDB5897AA
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 08:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F9F5897C4
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 08:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238975AbiHDGLx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 02:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S230001AbiHDGar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 02:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbiHDGLw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 02:11:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE5661125;
-        Wed,  3 Aug 2022 23:11:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0B69B8249A;
-        Thu,  4 Aug 2022 06:11:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D482C433D6;
-        Thu,  4 Aug 2022 06:11:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659593508;
-        bh=PivNYhd22ovz+3c6fY+dmZ86T6hM9cCpwWw+EopqWP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=myg4Gp10acovpgRnnfSKryNqfyVKKViZXK1u0deeL6F4aa6LZ1N8UL9QvwaJ28yo6
-         Fygt4uhFxm94uQ3uytn+h5rZBQrvX42egEhWguL0i4eMWtdzmxUUVbcFpe8j/kuHUE
-         GxhRYhdEqCmH5o4J4UNNMJMesufhU34SS+FV2S775wjtDUa9bYfFG4oIwZL/2EzXgk
-         zIAUZ1SOLoAqvsPvV6TeFTUTrzCXk4mOxCnKH8rXVzbAKbUEOzgh/yyKbwY/TsdMSq
-         M8vIZwBt0mweADhcme2s4WcaM++IClUfe1aX+HC24qXMFnMGINPsjFZsElpDisrr0L
-         xzgTkGurmr1/g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJU5Y-0003e7-4q; Thu, 04 Aug 2022 08:12:08 +0200
-Date:   Thu, 4 Aug 2022 08:12:08 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] usb: dwc3: qcom: fix broken non-host-mode suspend
-Message-ID: <YutjOESZRD+4mr3Z@hovoldconsulting.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-4-johan+linaro@kernel.org>
- <YurIbcXHPF6K3oPa@google.com>
+        with ESMTP id S229534AbiHDGap (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 02:30:45 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDCCCE22
+        for <linux-usb@vger.kernel.org>; Wed,  3 Aug 2022 23:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659594644; x=1691130644;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x9Bg0HL1eRsejUAzk2xesEUeHtmLjWJuk8uFjAREOxw=;
+  b=ST4gbLTI09q0DiEZdzZUiUIV0+EPnX3f+L4MFbogiqMG5arFxpzSRdW4
+   nsnOwDulYHEXTUPKnzX5hL4KBF3PdgI9B7XAVSHY/lWqFYs1TwE8cbENj
+   I8HfshNddMlgIzKt3fKS9NRpeQ5T+DYgT3W6rB+oy6AHB8ayitQswZ0+l
+   8XeVAjkI4CMAiQgBeavl5xEl/aIGmEOPJ32gGH0B3uS5E0e9xngun4tVw
+   qGpevwBIL4DryiOmJGjuXp4CqS40ERlYeE3MGwlDCLV2RaBMU47dnGem/
+   EyJsNKKDGi+BgiA3VgiYthNVf3ZudZX7SQ2DM0JgxheU6/kbjqeRGUN9z
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="269626085"
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="269626085"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 23:30:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,215,1654585200"; 
+   d="scan'208";a="553603622"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 23:30:40 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 04 Aug 2022 09:30:38 +0300
+Date:   Thu, 4 Aug 2022 09:30:38 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
+        mario.limonciello@amd.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] thunderbolt: Add DP out resource when DP tunnel is
+ discovered.
+Message-ID: <Yutnjq64OO07QbAR@lahna>
+References: <1659587394-115256-1-git-send-email-Sanju.Mehta@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YurIbcXHPF6K3oPa@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1659587394-115256-1-git-send-email-Sanju.Mehta@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 12:11:41PM -0700, Matthias Kaehlcke wrote:
-> On Tue, Aug 02, 2022 at 05:13:59PM +0200, Johan Hovold wrote:
-> > A recent commit implementing wakeup support in host mode instead broke
-> > suspend for peripheral and OTG mode.
-> > 
-> > The hack that was added in the suspend path to determine the speed of
-> > any device connected to the USB2 bus not only accesses internal driver
-> > data for a child device, but also dereferences a NULL pointer when not
-> > in host mode and there is no HCD.
-> > 
-> > As the controller can switch role at any time when in OTG mode, there's
-> > no quick fix to this, and since reverting would leave us with broken
-> > suspend in host-mode (wakeup triggers immediately), keep the hack for
-> > now and only fix the NULL-pointer dereference.
-> > 
-> > Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  drivers/usb/dwc3/dwc3-qcom.c | 11 ++++++++++-
-> >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index be2e3dd36440..b75ff40f75a2 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -301,8 +301,17 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
-> >  static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> >  {
-> >  	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> > -	struct usb_hcd *hcd = platform_get_drvdata(dwc->xhci);
-> >  	struct usb_device *udev;
-> > +	struct usb_hcd *hcd;
-> > +
-> > +	if (qcom->mode != USB_DR_MODE_HOST)
-> > +		return USB_SPEED_UNKNOWN;
+On Wed, Aug 03, 2022 at 11:29:54PM -0500, Sanjay R Mehta wrote:
+> From: Sanjay R Mehta <sanju.mehta@amd.com>
 > 
-> Couldn't instead the below block in dwc3_qcom_suspend() be conditional on
-> the controller being in host mode?
+> If the boot firmware implements a connection manager of its
+> own it may create a DP tunnel and will be handed off to Linux
+> CM, but the DP out resource is not saved in the dp_resource
+> list.
 > 
-> 	if (device_may_wakeup(qcom->dev)) {
-> 		qcom->usb2_speed = dwc3_qcom_read_usb2_speed(qcom);
-> 		dwc3_qcom_enable_interrupts(qcom);
-> 	}
+> This patch adds tunnelled DP out port to the dp_resource list
+> once the DP tunnel is discovered.
+> 
+> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> 
+> ---
+> v3: make tb_dp_resource_available_discovered as static function.
 
-Yeah, the authors clearly didn't consider non-host mode when
-implementing this and keeping wakeups disabled in that case probably
-doesn't break anything that was ever working.
+Hmm, I suggested this:
 
-> I see, the problem is that the role switch could happen at any time as the
-> commit message says. With this patch there is also a race though, the role
-> switch could happen just after the check and before obtaining 'hcd'.
+  Please call this tb_discover_dp_resources() make it static and call it
+  right after tb_discover_tunnels() in tb_start() or in
+  tb_discover_tunnels().      
 
-No, there's no race here as I'm checking the static configuration that
-comes from DT. Specifically, I'm not trying to add support for wakeup in
-OTG mode, but just prevent suspend from crashing.
+Anything preventing you to do that? Or you missed my comment?
 
-I may be possible address also the host-role in OTG mode, but that means
-continuing to build on this layer violation.
+> v2: Re-ordering the function declaration as per Greg's comment.
+> ---
+>  drivers/thunderbolt/tb.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> index 9a3214f..53abce3 100644
+> --- a/drivers/thunderbolt/tb.c
+> +++ b/drivers/thunderbolt/tb.c
+> @@ -105,6 +105,21 @@ static void tb_remove_dp_resources(struct tb_switch *sw)
+>  	}
+>  }
+>  
+> +static void tb_dp_resource_available_discovered(struct tb *tb, struct tb_port *port)
+> +{
+> +	struct tb_cm *tcm = tb_priv(tb);
+> +	struct tb_port *p;
+> +
+> +	list_for_each_entry(p, &tcm->dp_resources, list) {
+> +		if (p == port)
+> +			return;
+> +	}
+> +
+> +	tb_port_dbg(port, "DP %s resource available discovered\n",
+> +		    tb_port_is_dpin(port) ? "IN" : "OUT");
+> +	list_add_tail(&port->list, &tcm->dp_resources);
+> +}
+> +
+>  static void tb_switch_discover_tunnels(struct tb_switch *sw,
+>  				       struct list_head *list,
+>  				       bool alloc_hopids)
+> @@ -118,6 +133,7 @@ static void tb_switch_discover_tunnels(struct tb_switch *sw,
+>  		switch (port->config.type) {
+>  		case TB_TYPE_DP_HDMI_IN:
+>  			tunnel = tb_tunnel_discover_dp(tb, port, alloc_hopids);
 
-Note that we're in the suspend callback of the parent so as long as the
-drivers for the descendant devices has disabled role switching at this
-stage during suspend, we should be good.
+Here tunnel can be NULL...
 
-But I'm torn about simply ripping this patch out and trying to fix it
-up. I want the feature, but the patch adding this clearly wasn't ready
-for merging.
+> +			tb_dp_resource_available_discovered(tb, tunnel->dst_port);
 
-I'll take another look at this.
-
-Johan
+... so this will crash and burn.
