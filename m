@@ -2,53 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E086589EC2
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 17:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132F6589EF0
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 17:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239954AbiHDPfU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 11:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
+        id S235394AbiHDPx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 11:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbiHDPfQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 11:35:16 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0193BE
-        for <linux-usb@vger.kernel.org>; Thu,  4 Aug 2022 08:35:14 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so81704pjf.5
-        for <linux-usb@vger.kernel.org>; Thu, 04 Aug 2022 08:35:14 -0700 (PDT)
+        with ESMTP id S232677AbiHDPxz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 11:53:55 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50155A8AE
+        for <linux-usb@vger.kernel.org>; Thu,  4 Aug 2022 08:53:53 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id u133so13047428pfc.10
+        for <linux-usb@vger.kernel.org>; Thu, 04 Aug 2022 08:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=YMwmJ3SYguFGWEp4hAm2rBYWGtLtJTCvpovU/AIVn0A=;
-        b=Qtnq39uHyzvlwnd38DbC3LwcEUpjMXF+hgHHimscG103l15xTzdeAhdQsEhHrCXXc6
-         jZmcYvbCNSHRH02uVnFirKaBpXJB1Nt7yHmZSmHLABRrEcxUe/GNWK5CbueaHG9IMAfR
-         6mm9ZApgk6ZbXDRVcrk6xsfiBn9g5yH+QxTSw=
+        bh=/lWKffvqFTZzWNvWNNSDXm/V8mIImGxuIj1VjPME2ZY=;
+        b=NfOvEKCUxs6P9aNhsj9GYYrhce29fZRIbZ+dmaJyONYfurBJVch0FTP3Sg6hlViV3H
+         97Q8fSj6HcYhOxx82VSlSrhfWHFsJ3xI1T07JRID3TFjaj4V5HCaCRs8SpYqHx65oBSB
+         aqLNJNB6yxUbp0TO06McTKk92+sgvkz6guu3o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YMwmJ3SYguFGWEp4hAm2rBYWGtLtJTCvpovU/AIVn0A=;
-        b=klm2udZNrPWgqpz3bid1rXAVN8NqD8TguiqKMuf0xPC6VFBiBDnrwQInZ3jHWJGhyB
-         lL/V4L+LLNwVjeckaE/Fw1GccKVvYM/9Wkj2i8XPToCEuvrgNw8+Fh6ZbAM1UOpvMlu0
-         ogU4iTJLkzVVIsiB/53I+5o2wRvyAskqUwnIyapB9R2O284z9Y1DdTxA130gy/68PkYM
-         5yZsAf1Bl3M82/GFiWe93pvtHli0YK7IZ2eFcP2KH2aP6Re5CMLTRuZAo39uszAF2HmG
-         z7QESRR0CXU1tuMEaBV3zfr+Gw6/+Kte2FrY1DwwMsJr9Q3WyZdYvOU2XXf3yYDKRD8U
-         aoog==
-X-Gm-Message-State: ACgBeo1ZTwh4xYFx09Ji62o/nyH7/sOigp3+N4eZtkDFhHF+Wi8R8HYI
-        qm5Sl6B6NGNiMJQJPUsqwC2r7Q==
-X-Google-Smtp-Source: AA6agR5eBcmtuswpC9ZyuRauPZ9fC4Eka3LZy92marD/sOH7rjs76EIMqw+kflXgFAwfE3jtieqwBA==
-X-Received: by 2002:a17:902:a418:b0:16c:9ee2:8a02 with SMTP id p24-20020a170902a41800b0016c9ee28a02mr2453212plq.46.1659627313991;
-        Thu, 04 Aug 2022 08:35:13 -0700 (PDT)
+        bh=/lWKffvqFTZzWNvWNNSDXm/V8mIImGxuIj1VjPME2ZY=;
+        b=kiYXxtpdD+kN7acTQCecc4ofi1dcys6rt1cUQ4ftHZlX5ZBRdTjOR84omelriEyIXD
+         /OjVtDX5NdnRHUeKzGTyeAeo91apqYrvtEJpmwSEfbwr33yYr7SlnANGKL1+9N4g94xr
+         UkobcYtLag63z9JwtbW4MLELe3Mrd/qAEghuZYspfvzJ8S8ZmpbikenKFdLYlb95Aq+x
+         sYmogWMgE9WIsQ++DDn6Azu6eYGVNidApUAdMXea7I1oiXKz4w5ag+te/Y5IIQtu6Yxb
+         czLwB5spQEDt/sMWgx+TeMJwEWRI/y0WccqdsLxnT91ZjZCB8fVHu463uwItUMY5/Suy
+         iDOQ==
+X-Gm-Message-State: ACgBeo3lUmdBVisiJ+GuoreOgrL4AGImXii24NuPb8zi2C3koC74/C/i
+        KKu5bgfOOUyLINA+7es848v6hw==
+X-Google-Smtp-Source: AA6agR5qcXxKWPEX8FfLxwsYpaewLTQb6e4vF2dRLmx+JgmWw5oN6PgotTdcXx0I57HR3SVVGmO7jA==
+X-Received: by 2002:a62:7bd6:0:b0:52d:4773:a3de with SMTP id w205-20020a627bd6000000b0052d4773a3demr2297138pfc.70.1659628433198;
+        Thu, 04 Aug 2022 08:53:53 -0700 (PDT)
 Received: from localhost ([2620:15c:11a:202:87c4:32ca:84b6:e942])
-        by smtp.gmail.com with UTF8SMTPSA id j9-20020a17090a31c900b001ef7c7564fdsm3870037pjf.21.2022.08.04.08.35.11
+        by smtp.gmail.com with UTF8SMTPSA id x14-20020aa7956e000000b0052ad49292f0sm1154698pfq.48.2022.08.04.08.53.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 08:35:13 -0700 (PDT)
-Date:   Thu, 4 Aug 2022 08:35:10 -0700
+        Thu, 04 Aug 2022 08:53:52 -0700 (PDT)
+Date:   Thu, 4 Aug 2022 08:53:50 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -62,17 +61,17 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
         quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] usb: dwc3: qcom: fix runtime PM wakeup
-Message-ID: <YuvnLliIKLK71wx0@google.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-5-johan+linaro@kernel.org>
- <YurviWfzut9sursr@google.com>
- <Yut2tLqGfu82xcDs@hovoldconsulting.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] usb: dwc3: qcom: fix use-after-free on runtime-PM
+ wakeup
+Message-ID: <YuvrjqSz8XGlm04l@google.com>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-5-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yut2tLqGfu82xcDs@hovoldconsulting.com>
+In-Reply-To: <20220804151001.23612-5-johan+linaro@kernel.org>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -83,43 +82,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 09:35:16AM +0200, Johan Hovold wrote:
-> On Wed, Aug 03, 2022 at 02:58:33PM -0700, Matthias Kaehlcke wrote:
-> > On Tue, Aug 02, 2022 at 05:14:00PM +0200, Johan Hovold wrote:
-> > > A device must enable wakeups during runtime suspend regardless of
-> > > whether it is capable and allowed to wake the system up from system
-> > > suspend.
-> > > 
-> > > Fixes: 2664deb09306 ("usb: dwc3: qcom: Honor wakeup enabled/disabled state")
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > 
-> > Ah, I wasn't aware that the same wakeup mechanism is used in runtime suspend.
-> > 
-> > In how far is runtime PM actually supported/used by this driver? The device is
-> > set 'active' in _probe(), and there are no other pm_runtime_* calls, except
-> > in dwc3_qcom_remove() and qcom_dwc3_resume_irq(). How does the device get from
-> > 'active' into 'suspended'?
+On Thu, Aug 04, 2022 at 05:09:56PM +0200, Johan Hovold wrote:
+> The Qualcomm dwc3 runtime-PM implementation checks the xhci
+> platform-device pointer in the wakeup-interrupt handler to determine
+> whether the controller is in host mode and if so triggers a resume.
 > 
-> It will be runtime suspended when the child (core) device suspends, but
-> you need to enable runtime PM through sysfs first.
+> After a role switch in OTG mode the xhci platform-device would have been
+> freed and the next wakeup from runtime suspend would access the freed
+> memory.
+> 
+> Note that role switching is executed from a freezable workqueue, which
+> guarantees that the pointer is stable during suspend.
+> 
+> Also note that runtime PM has been broken since commit 2664deb09306
+> ("usb: dwc3: qcom: Honor wakeup enabled/disabled state"), which
+> incidentally also prevents this issue from being triggered.
+> 
+> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+> Cc: stable@vger.kernel.org      # 4.18
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Thanks for the clarification.
-
-After enabling runtime suspend for the dwc3 core, dwc3 glue and the xHCI
-the dwc3-qcom enters autosuspend when the delay expires.
-
-> And the controller is resumed in the wakeup-interrupt handler for the
-> runtime PM case.
->
-> It seems to work ok, and it looks like the driver has supported this
-> since it was first merged.
-
-With and without your patch dwc3-qcom enters autosuspend and stays there.
-USB devices like a mouse or a USB to Ethernet adapter keep working while
-the glue is suspended.
-
-How is the runtime resume triggered for the dwc3 glue?
-
-Sorry if my questions are very basic, so far I haven't dealt much with
-autosuspend and I'm trying to get a better understanding in the context
-of the dwc3 and why it is currently broken.
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
