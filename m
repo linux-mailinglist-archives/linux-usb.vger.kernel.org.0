@@ -2,62 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D9F589ABB
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 13:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51737589AC1
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Aug 2022 13:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239251AbiHDLEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Aug 2022 07:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
+        id S239497AbiHDLI5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Aug 2022 07:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiHDLEw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 07:04:52 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDF4220E4;
-        Thu,  4 Aug 2022 04:04:51 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id g5so8129050ybg.11;
-        Thu, 04 Aug 2022 04:04:51 -0700 (PDT)
+        with ESMTP id S233704AbiHDLI4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Aug 2022 07:08:56 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EEE5A3C7;
+        Thu,  4 Aug 2022 04:08:55 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so5208533pjk.1;
+        Thu, 04 Aug 2022 04:08:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gysVTSxQqMdkwoifqxUC3E1zXkQL4nIgjNjawW+8ZSQ=;
-        b=LP+DYq6Kb8krzFXzvrmob5KAAW1sAgpXSHYvHzraItsSVyURm+FPTJWQnpuMuRiVav
-         t4YrCxSvFs/BAC3JRrymqOzVAK3Ug1q8IC37mZfPycJh0PVMXmBDB4T32iumirikoZfB
-         TEVIO4GxUso9IGxEVpsUne3WA+4enS1R/RrsKkT4raVXZxbiPWe/xQkBC24SzKZiME6S
-         9y6oJ1RLXnkWN3qjKuf8jHWZi3eSeVAht45XpCGJDD4cOJRWT3VsPExCdXJqCUJm41Ds
-         mkRXYcqhBqo06pxt2/YohPJo8xb7l35hjAsueegZ6gKrI24NhM61PrthBHSDK75mNvpL
-         cGhg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=1WTUJxXNd4y9VxJgSQhRnUUALsKU3r7nbFNOlA+9JoE=;
+        b=Qi7Dus/hcqb+JCiHf9wHXwdlyHzthQwqzMA8vIHvCzY2PttDTMWqbaoeBBz0BXAbz3
+         v2aQe2Zw9v1vPb3tbFIHb69ccz78MA92QJXV7Ww/3DzFWepm9UfwcTlP6UOAOBPab0AC
+         e3Y1a6oU4LqCz49LhcOlvzCZS7VqTxbs7UEZnSkImPK0arfpp3nq4d20DBHW4/ghKfiL
+         5xl6/H6CEiHkktLRMYy2fDei393r4Hu78IN02U+RchEcV6oWoxqe2wTS6dr1ogfigHMJ
+         F7MkLxwALSdq5f4b3tumRbG8scKReOAx40T3s0H4reCuYYwoHINtMAxpxMAVXv300wfK
+         6Xjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gysVTSxQqMdkwoifqxUC3E1zXkQL4nIgjNjawW+8ZSQ=;
-        b=DeRy8OH4mptYXu0ruynT74C6PBlC5zQpiTGXYpw3nbHq5kFqicjtL9ibVvlB5T4s9X
-         YiRoNkO8lV5TrwDuGESPNC2MAocjVhirLFX640JdC8t04qRt20MpGef6DbENpALMduoD
-         KwSdAa39AneI327RN6XmoqbtUDo9gzto4b/xsuzxOPZ+S78EovQqmzHxMlikFtDzc6kQ
-         9JaRfxPfIPPGTny/4cucg2NZdG71xtlKMnwSD+FCQUvSMxtRMJfUp3OP9clCz5Yi3ooF
-         DEopbec5st6w6W56C7CoRjRNWirFoMs4bS2xGbBGjGW2DwbUP7bNGDIVQeDOCK2hCdai
-         nEyA==
-X-Gm-Message-State: ACgBeo3YznIUVH5mPP3thkO7+yqKEhPnhbHqf8Rn0ILpAtXCygfNdj1r
-        U1mc1p//olMyrS1egQZRdr+ZRmMtHyaSFhsrzAezoCTR
-X-Google-Smtp-Source: AA6agR6qbd/l6X7jvynx2FtDmilcCBTJ2yQU5CKBw4tJTANfglDZqUp0W8rQHK2q6kF5nfGmrz5kkj+5WRnMkoubPtI=
-X-Received: by 2002:a05:6902:701:b0:678:9bcc:e8c6 with SMTP id
- k1-20020a056902070100b006789bcce8c6mr993922ybt.120.1659611090080; Thu, 04 Aug
- 2022 04:04:50 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=1WTUJxXNd4y9VxJgSQhRnUUALsKU3r7nbFNOlA+9JoE=;
+        b=OjoaalkmC5MM6kYh2WTVFH5pWmW8E4BYPnKjq2LhcZeapZZlhGiBIaYvcfXba0poBG
+         IsuEKIFHJtTMJAHaCY0e7g+Px60R0QXTfJaB1UMWJqBHLv8bROufPxVcKy2wBv19VPtW
+         /4U7dDOEgIHCdyKRPfQzc3BSA/Dpg8ma8/MAPgObigVIWlhhEoHBnpwWXFWvW+7VLehf
+         uw19ABlvcnDMWqM3t7ONY4wIuLItdZkDfBKoLi/2aMjgguBAQjDCwjE5zWZVbXihTFKA
+         t2dlEmVao5kBhHjtqWyfeYecJC5H/YHEfUF3PKLZElebF8zWd/6WnMZziVK6SabZfPoC
+         BwOw==
+X-Gm-Message-State: ACgBeo1ycKs2zJ0+yaJYy/KdfKdU3Rl2kllpYfURXQy1yCtDrbSy73zw
+        4HYY1sjyq9TCumvOo/M21Rs=
+X-Google-Smtp-Source: AA6agR4IhTi7XNuBZ1Z0cjBXlSnZandgi+5VyiGJvb6w0ZxjCuvduibLeNHjE7AvsZXbTMs+FrxNSg==
+X-Received: by 2002:a17:903:2684:b0:16f:846c:7a36 with SMTP id jf4-20020a170903268400b0016f846c7a36mr829627plb.84.1659611335223;
+        Thu, 04 Aug 2022 04:08:55 -0700 (PDT)
+Received: from rayhung-virtual-machine.localdomain (220-135-237-176.hinet-ip.hinet.net. [220.135.237.176])
+        by smtp.gmail.com with ESMTPSA id f71-20020a62384a000000b0052d96d86836sm668127pfa.50.2022.08.04.04.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 04:08:54 -0700 (PDT)
+From:   Ray Hung <tw.rayhung@gmail.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        tw.rayhung@gmail.com, dh10.jung@samsung.com,
+        songmuchun@bytedance.com, dan.carpenter@oracle.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: rndis: use %u instead of %d to print u32 values
+Date:   Thu,  4 Aug 2022 19:08:36 +0800
+Message-Id: <20220804110836.138614-1-tw.rayhung@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220803090218.1313187-1-kkamagui@gmail.com> <CAGRyCJHX1X238TkiTaML3WJ+rdc1-m82_d3Ut4jCVDmuQ=cMOQ@mail.gmail.com>
- <CAHjaAcT2fzpfJ563Jx5n3eYyrZD0vHNLr713qTZ=trrDjPaU=A@mail.gmail.com> <CAGRyCJGTXWNPmF6ZgTJuxzy++rbpS_irJAhv7Jrhg0BMqqwA3w@mail.gmail.com>
-In-Reply-To: <CAGRyCJGTXWNPmF6ZgTJuxzy++rbpS_irJAhv7Jrhg0BMqqwA3w@mail.gmail.com>
-From:   Seunghun Han <kkamagui@gmail.com>
-Date:   Thu, 4 Aug 2022 20:04:39 +0900
-Message-ID: <CAHjaAcQXfNOdK7b=bx1qLwgqm5jg5N+PRbrn4OJjEYJSqwrvNw@mail.gmail.com>
-Subject: Re: [PATCH] net: usb: cdc_mbim: adding Microsoft mobile broadband modem
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     Oliver Neukum <oliver@neukum.org>,
-        David Miller <davem@davemloft.net>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,76 +69,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Daniele,
+The driver uses the %d format to print u32 values. The correct
+format is %u. Fix it.
 
-On Thu, Aug 4, 2022 at 4:07 PM Daniele Palmas <dnlplm@gmail.com> wrote:
->
-> Unfortunately I'm not aware of any specific place for that: I wrongly
-> thought that you were involved in the development of the modem and you
-> knew the chipset.
+Signed-off-by: Ray Hung <tw.rayhung@gmail.com>
+---
+ drivers/usb/gadget/function/rndis.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you for thinking like that. However, I'm just a Linux lover and
-a Microsoft Surface user.
+diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+index 713efd9aefde..10ba339bcea4 100644
+--- a/drivers/usb/gadget/function/rndis.c
++++ b/drivers/usb/gadget/function/rndis.c
+@@ -1105,7 +1105,7 @@ static int rndis_proc_show(struct seq_file *m, void *v)
+ 			 "used      : %s\n"
+ 			 "state     : %s\n"
+ 			 "medium    : 0x%08X\n"
+-			 "speed     : %d\n"
++			 "speed     : %u\n"
+ 			 "cable     : %s\n"
+ 			 "vendor ID : 0x%08X\n"
+ 			 "vendor    : %s\n",
+-- 
+2.25.1
 
-> However, sometimes the name of the chipset is left in the firmware
-> revision: you can try looking if there's any hint in the output of the
-> device caps request. If it's a Qualcomm modem it should probably also
-> support QMI-over-MBIM service, so maybe you can also try a few DMS
-> requests (--dms-get-software-version, --dms-get-revision...).
->
-> Sometimes also the USB descriptors can be useful.
-
-According to your guides, I did get some useful information from my
-Surface Go 3 modem. Finally, it was based on a Qualcomm chip, and
-other Microsoft mobile broadband modems should be based on the
-Qualcomm chip. The test results on my Surface Go 3 are below.
-
-==== Start of test results ====
- $> lsusb
-Bus 002 Device 004: ID 045e:09a5 Microsoft Corp. Surface
-
-$> lsbusb -t
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-    |__ Port 1: Dev 5, If 0, Class=Hub, Driver=hub/4p, 5000M
-        |__ Port 4: Dev 6, If 0, Class=Vendor Specific Class,
-Driver=r8152, 5000M
-    |__ Port 3: Dev 4, If 0, Class=Communications, Driver=cdc_mbim, 5000M
-    |__ Port 3: Dev 4, If 1, Class=CDC Data, Driver=cdc_mbim, 5000M
-    |__ Port 3: Dev 4, If 2, Class=Vendor Specific Class, Driver=, 5000M
-
-$> qmicli --device=/dev/cdc-wdm3 --dms-get-manufacturer
-[/dev/cdc-wdm3] Device manufacturer retrieved:
-Manufacturer: 'QUALCOMM INCORPORATED'
-
-$> qmicli --device=/dev/cdc-wdm3 --dms-get-revision
-[/dev/cdc-wdm3] Device revision retrieved:
-Revision: '2140-e88e4b-c8-00004.36  1  [May 17 2021 01:00:00]'
-
-$> qmicli --device=/dev/cdc-wdm3 --dms-get-software-version
-[/dev/cdc-wdm3] Software version: 655_GEN_PACK-1.362573.1.400078.2
-
-$> qmicli --device=/dev/cdc-wdm3 --dms-get-band-capabilities
-[/dev/cdc-wdm3] Device band capabilities retrieved:
-Bands: 'wcdma-2100, wcdma-pcs-1900, wcdma-850-us, wcdma-800, wcdma-900'
-LTE bands: '1, 2, 3, 4, 5, 7, 8, 12, 13, 14, 19, 20, 25, 26, 28, 29,
-30, 38, 39, 40, 41'
-LTE bands (extended): '1, 2, 3, 4, 5, 7, 8, 12, 13, 14, 19, 20, 25,
-26, 28, 29, 30, 38, 39, 40, 41, 66'
-
-$> qmicli --device=/dev/cdc-wdm3 --dms-get-capabilities
-[/dev/cdc-wdm3] Device capabilities retrieved:
-Max TX channel rate: '50000000'
-Max RX channel rate: '100000000'
-       Data Service: 'non-simultaneous-cs-ps'
-                SIM: 'supported'
-           Networks: 'umts, lte'
-==== End of test results ====
-
-Thank you for your help.
-
-Best regards,
-Seunghun
-
-> Regards,
-> Daniele
->
