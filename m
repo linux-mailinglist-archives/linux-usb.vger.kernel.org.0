@@ -2,71 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC3058B063
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 21:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4482158B090
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 21:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241449AbiHET0w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Aug 2022 15:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S238584AbiHET4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Aug 2022 15:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiHET0v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 15:26:51 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75815BD3
-        for <linux-usb@vger.kernel.org>; Fri,  5 Aug 2022 12:26:50 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a7so6691764ejp.2
-        for <linux-usb@vger.kernel.org>; Fri, 05 Aug 2022 12:26:50 -0700 (PDT)
+        with ESMTP id S230098AbiHET4i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 15:56:38 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB5310567
+        for <linux-usb@vger.kernel.org>; Fri,  5 Aug 2022 12:56:38 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso9213430pjo.1
+        for <linux-usb@vger.kernel.org>; Fri, 05 Aug 2022 12:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Q2Atz4bVyAaEAuIsyG/t1IjdMr6gjS4rHeEEvGYCK80=;
-        b=SzqiKjJQVFvyrvD+UjbFI0Ijsovl6BCQd/CLmNRlJa3i2aK70f2+hXL2IHvjChohS4
-         KGPfEGmAAe5+0KNQCp+rOTDHpFSvH/xGA8WDw7bdgEKzfpW+bFVHztcSYyHLEhcneKnA
-         QD4dRFMtvRmUZ5s68j6JUBEhofP2VOPPTpJIk=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/xQgp4opYOG0vmRMTReD0uWzh7NbyzqbCzsK8/nQYSo=;
+        b=R9jZhtKbUQnEneEQjJ8jLw7PLvhRt45Tl67KG4Od/o0c44dIGta/DDx3Pzl+fNbna4
+         A8dY1W1Ak++zvNw88n7hf6sLx11tz1KhsCFKwfnyes7mGI9ZDqMqNKMrvmjjfju1ismb
+         4fQpfjC14tIAIjPv6QfpQRYlYQdhc1oy8l4+Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Q2Atz4bVyAaEAuIsyG/t1IjdMr6gjS4rHeEEvGYCK80=;
-        b=3/aUbtziXy41icvk8eml8l4/G/ak9QV2Z1+KU9adOro+O/34Ewkzm04O0Hu4PBx4/D
-         5eCnsej0+vxjMimhkmoeqg18pC2U6yfCzmg2b4cR9jTIZdBcsEhzImjvZB+8S/taC7yv
-         2HWIkPbYVPe+fpajI4rapTSN8w/31vJ1eeDKEQKG38EC+3zCRC+4zDIx3vj0s7YefTg1
-         xJJbgsXXCvmIo+HbBP0qf2ZI4Si4ks+mVbacGOVHht/BaUsR1a2MG6IuBn/NG5fZh3NG
-         Xesv29GXxBM2nzAPdT0EeekT0RKrzh9Tk6K/QtfMf8eD9WiWe4h+4Oas+7byDmVlCcrt
-         uXSA==
-X-Gm-Message-State: ACgBeo1YIkWzbcREkWLMsVj6s78v5w9YPX+wZevHQUwW+DlmxC6L75PJ
-        +5WtpVXWiA/RWDG/FObQYvIxr1LtzFgDlrgZ
-X-Google-Smtp-Source: AA6agR4gk8d33t5pqRyfJ0sWJQ6LqqGEQjmwI09HPyim/GU7rsygt4jt7UlTlL8bKFa6WJVYEjbLgQ==
-X-Received: by 2002:a17:906:7309:b0:731:5c2:a9a6 with SMTP id di9-20020a170906730900b0073105c2a9a6mr2280442ejc.486.1659727608834;
-        Fri, 05 Aug 2022 12:26:48 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id z19-20020aa7d413000000b0043ce97fe4f7sm338852edq.44.2022.08.05.12.26.47
-        for <linux-usb@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/xQgp4opYOG0vmRMTReD0uWzh7NbyzqbCzsK8/nQYSo=;
+        b=BbfToOtmMfzAEFhUH+7E2ZiWbcCFWEFLf9FN8LLoZL32sBUori7vNScDn8k5KBzIRQ
+         UQPvsKk2oJ19CIDHp/K8NtT/Wc2zbF8D5fE1Nopc+TjILQStAOuNAux3gCJGod34N5S5
+         6VKMpC5ZmvklKHxHBUiHJphf8IIZC8JPpL/qyEjb1HQItO1sX+F+v1d4Q6yeD4Ejti3b
+         abLKBxrnDVK5uPVj8vl/fK2Mc6nOrPgdX1mIHBUeQTWFxtSsKr8VFhnx6NRGHltKK4oG
+         MzDRZX4kTmWntsc88Tda65vlS3qkOFtzLunmm7+mjGTRRgX/cJyJ2ktbb/YmdDadg/8T
+         4azw==
+X-Gm-Message-State: ACgBeo1Fh1OSorIDANb8iX7PC6jCE1EJ5xghVm1AodVTozg/cwCzae0D
+        7L+FysEOnxV7faImWl/T9C9SlQ==
+X-Google-Smtp-Source: AA6agR7K8LcP635a8rB8xE9ZBlfwu99pVvBL/VC185RKUOzC5U67ib7PnUOjVI0QLKGrxY38sD5J2g==
+X-Received: by 2002:a17:902:db12:b0:16e:e5fc:56db with SMTP id m18-20020a170902db1200b0016ee5fc56dbmr8545810plx.46.1659729396437;
+        Fri, 05 Aug 2022 12:56:36 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:c59c:1680:614c:3338])
+        by smtp.gmail.com with UTF8SMTPSA id h10-20020a170902680a00b0016dd1e8c1ddsm3326736plk.247.2022.08.05.12.56.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 12:26:48 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id bv3so4267593wrb.5
-        for <linux-usb@vger.kernel.org>; Fri, 05 Aug 2022 12:26:47 -0700 (PDT)
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
- c18-20020adffb12000000b0020c79b2a200mr5240692wrr.617.1659727606852; Fri, 05
- Aug 2022 12:26:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220805111836.1.Id5a4dc0a2c046236116693aa55672295513a0f2a@changeid>
-In-Reply-To: <20220805111836.1.Id5a4dc0a2c046236116693aa55672295513a0f2a@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 5 Aug 2022 12:26:35 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W9VWbvWqdEEY9=OnNSsAnQ+CgQPRifbAu2ixrgPQd54A@mail.gmail.com>
-Message-ID: <CAD=FV=W9VWbvWqdEEY9=OnNSsAnQ+CgQPRifbAu2ixrgPQd54A@mail.gmail.com>
-Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Drop reset delay in onboard_hub_power_off()
-To:     Matthias Kaehlcke <mka@chromium.org>
+        Fri, 05 Aug 2022 12:56:36 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 12:56:34 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Linux USB List <linux-usb@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Drop reset delay in
+ onboard_hub_power_off()
+Message-ID: <Yu118qfzoYcHgJs3@google.com>
+References: <20220805111836.1.Id5a4dc0a2c046236116693aa55672295513a0f2a@changeid>
+ <CAD=FV=W9VWbvWqdEEY9=OnNSsAnQ+CgQPRifbAu2ixrgPQd54A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=W9VWbvWqdEEY9=OnNSsAnQ+CgQPRifbAu2ixrgPQd54A@mail.gmail.com>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +70,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Doug,
 
-On Fri, Aug 5, 2022 at 11:19 AM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> onboard_hub_power_off() currently has a delay after asserting the
-> reset of the hub. There is already a delay in onboard_hub_power_on()
-> before de-asserting the reset, which ensures that the reset is
-> asserted for the required time, so the delay in _power_off() is not
-> needed.
->
-> Skip the reset GPIO check before calling gpiod_set_value_cansleep(),
-> the function returns early when the GPIO descriptor is NULL.
->
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->
->  drivers/usb/misc/onboard_usb_hub.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+On Fri, Aug 05, 2022 at 12:26:35PM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Aug 5, 2022 at 11:19 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > onboard_hub_power_off() currently has a delay after asserting the
+> > reset of the hub. There is already a delay in onboard_hub_power_on()
+> > before de-asserting the reset, which ensures that the reset is
+> > asserted for the required time, so the delay in _power_off() is not
+> > needed.
+> >
+> > Skip the reset GPIO check before calling gpiod_set_value_cansleep(),
+> > the function returns early when the GPIO descriptor is NULL.
+> >
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> >
+> >  drivers/usb/misc/onboard_usb_hub.c | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> I was trying to figure out what this "reset" was defined to do and I
+> looked for the device tree bindings. They don't seem to exist. Was
+> that an oversight?
 
-I was trying to figure out what this "reset" was defined to do and I
-looked for the device tree bindings. They don't seem to exist. Was
-that an oversight?
+It's not in the binding of the RTS5411 which I guess you looked at,
+because that hub doesn't have a reset line.
 
-In any case, I'm not convinced that your patch is correct. Timing
-diagrams often show a needed delay between adjusting a reset GPIO and
-turning on/off the power. The timing diagrams can sometimes show a
-required delay on both sides. I guess at the moment the only user of
-this reset GPIO has a symmetric delay, but I can totally expect that
-someone could come along and say that they needed 10 ms on one side
-and 1 ms on the other side...
+The reset functionality was initially added for the TI USB8041, the
+binding has the reset, but I found it hasn't landed yet:
+
+https://patchwork.kernel.org/project/linux-usb/patch/20220727093801.687361-1-alexander.stein@ew.tq-group.com/
+
+> In any case, I'm not convinced that your patch is correct. Timing
+> diagrams often show a needed delay between adjusting a reset GPIO and
+> turning on/off the power. The timing diagrams can sometimes show a
+> required delay on both sides. I guess at the moment the only user of
+> this reset GPIO has a symmetric delay, but I can totally expect that
+> someone could come along and say that they needed 10 ms on one side
+> and 1 ms on the other side...
+
+As of now none of the supported hubs (there are only two of them) has
+an asymmetric delay. The RTS5411 doesn't have a reset line, and the
+TI USB8041 only specifies a power on delay (in my interpretation).
+
+[1] has some discussion between Alexander and me about this second
+reset. The patch that added the delay was merged before this
+discussion concluded.
+
+If the driver is going to support a hub that needs an additional
+reset delay when the hub is powered off I'm totally in favor of
+adding that delay, however that isn't currently the case in my
+understanding. If you draw a different conclusion from the TI
+USB8041 datasheet please let me know.
+
+[1] https://patchwork.kernel.org/project/linux-usb/patch/20220727141117.909361-1-alexander.stein@ew.tq-group.com/
