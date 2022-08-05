@@ -2,23 +2,23 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15EA58AAED
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 14:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A92358AAEE
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 14:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237681AbiHEMiU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Aug 2022 08:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
+        id S240554AbiHEMiW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 5 Aug 2022 08:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiHEMiT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 08:38:19 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4960465645
-        for <linux-usb@vger.kernel.org>; Fri,  5 Aug 2022 05:38:17 -0700 (PDT)
+        with ESMTP id S229829AbiHEMiV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 08:38:21 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDAD65645
+        for <linux-usb@vger.kernel.org>; Fri,  5 Aug 2022 05:38:20 -0700 (PDT)
 Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id BF88F4000D;
-        Fri,  5 Aug 2022 12:38:14 +0000 (UTC)
-Message-ID: <b53642751c7bcf313f57eec54a455f579004828d.camel@hadess.net>
-Subject: Re: [RFC v2 1/2] USB: core: add a way to revoke access to open USB
+        by mail.gandi.net (Postfix) with ESMTPSA id 93E74200011;
+        Fri,  5 Aug 2022 12:38:17 +0000 (UTC)
+Message-ID: <b050e5b9f3ff1ff6da77483557e014f3e5ed4ece.camel@hadess.net>
+Subject: Re: [RFC v2] USB: core: add a way to revoke access to open USB
  devices
 From:   Bastien Nocera <hadess@hadess.net>
 To:     Alan Stern <stern@rowland.harvard.edu>
@@ -26,13 +26,12 @@ Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Peter Hutterer <peter.hutterer@who-t.net>
-Date:   Fri, 05 Aug 2022 14:38:13 +0200
-In-Reply-To: <YuwdR19MtO+xzJjk@rowland.harvard.edu>
+Date:   Fri, 05 Aug 2022 14:38:16 +0200
+In-Reply-To: <YuwaFbxckLfnqhyv@rowland.harvard.edu>
 References: <20220804160306.134014-1-hadess@hadess.net>
-         <20220804160306.134014-2-hadess@hadess.net>
-         <YuwdR19MtO+xzJjk@rowland.harvard.edu>
+         <YuwaFbxckLfnqhyv@rowland.harvard.edu>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
@@ -44,227 +43,140 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTA4LTA0IGF0IDE1OjI1IC0wNDAwLCBBbGFuIFN0ZXJuIHdyb3RlOgo+IE9u
-IFRodSwgQXVnIDA0LCAyMDIyIGF0IDA2OjAzOjA1UE0gKzAyMDAsIEJhc3RpZW4gTm9jZXJhIHdy
-b3RlOgo+ID4gVGhlcmUgaXMgYSBuZWVkIGZvciB1c2Vyc3BhY2UgYXBwbGljYXRpb25zIHRvIG9w
-ZW4gVVNCIGRldmljZXMKPiA+IGRpcmVjdGx5LAo+ID4gZm9yIGFsbCB0aGUgVVNCIGRldmljZXMg
-d2l0aG91dCBhIGtlcm5lbC1sZXZlbCBjbGFzcyBkcml2ZXJbMV0sIGFuZAo+ID4gaW1wbGVtZW50
-ZWQgaW4gdXNlci1zcGFjZS4KPiA+IAo+ID4gQXMgbm90IGFsbCBkZXZpY2VzIGFyZSBidWlsdCBl
-cXVhbCwgd2Ugd2FudCB0byBiZSBhYmxlIHRvIHJldm9rZQo+ID4gYWNjZXNzIHRvIHRob3NlIGRl
-dmljZXMgd2hldGhlciBpdCdzIGJlY2F1c2UgdGhlIHVzZXIgaXNuJ3QgYXQgdGhlCj4gPiBjb25z
-b2xlIGFueW1vcmUsIG9yIGJlY2F1c2UgdGhlIHdlYiBicm93c2VyLCBvciBzYW5kYm94IGRvZXNu
-J3QKPiA+IHdhbnQKPiA+IHRvIGFsbG93IGFjY2VzcyB0byB0aGF0IGRldmljZS4KPiA+IAo+ID4g
-VGhpcyBjb21taXQgaW1wbGVtZW50cyB0aGUgaW50ZXJuYWwgQVBJIHVzZWQgdG8gcmV2b2tlIGFj
-Y2VzcyB0bwo+ID4gVVNCCj4gPiBkZXZpY2VzLCBnaXZlbiBlaXRoZXIgYnVzIGFuZCBkZXZpY2Ug
-bnVtYmVycywgb3IvYW5kIGEgdXNlcidzCj4gPiBlZmZlY3RpdmUgVUlELgo+ID4gCj4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBCYXN0aWVuIE5vY2VyYSA8aGFkZXNzQGhhZGVzcy5uZXQ+Cj4gPiAKPiA+IFsx
-XToKPiA+IE5vbiBleGhhdXN0aXZlIGxpc3Qgb2YgZGV2aWNlcyBhbmQgZGV2aWNlIHR5cGVzIHRo
-YXQgbmVlZCByYXcgVVNCCj4gPiBhY2Nlc3M6Cj4gPiAtIGFsbCBtYW5uZXJzIG9mIHNpbmdsZS1i
-b2FyZCBjb21wdXRlcnMgYW5kIHByb2dyYW1tYWJsZSBjaGlwcyBhbmQKPiA+IGRldmljZXMgKGF2
-cmR1ZGUsIFNUTGluaywgc3VueGkgYm9vdGxvYWRlciwgZmxhc2hyb20sIGV0Yy4pCj4gPiAtIDNE
-IHByaW50ZXJzCj4gPiAtIHNjYW5uZXJzCj4gPiAtIExDRCAiZGlzcGxheXMiCj4gPiAtIHVzZXIt
-c3BhY2Ugd2ViY2FtIGFuZCBzdGlsbCBjYW1lcmFzCj4gPiAtIGdhbWUgY29udHJvbGxlcnMKPiA+
-IC0gdmlkZW8vYXVkaW8gY2FwdHVyZSBkZXZpY2VzCj4gPiAtIHNlbnNvcnMKPiA+IC0gc29mdHdh
-cmUtZGVmaW5lZCByYWRpb3MKPiA+IC0gREovbXVzaWMgZXF1aXBtZW50Cj4gPiAtIHByb3RvY29s
-IGFuYWx5c2Vycwo+ID4gLSBSaW8gNTAwIG11c2ljIHBsYXllcgo+ID4gLS0tCj4gPiDCoGRyaXZl
-cnMvdXNiL2NvcmUvZGV2aW8uYyB8IDEwNQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrLS0tCj4gPiDCoGRyaXZlcnMvdXNiL2NvcmUvdXNiLmjCoMKgIHzCoMKgIDggKysr
-Cj4gPiDCoDIgZmlsZXMgY2hhbmdlZCwgMTA3IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0p
-Cj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jb3JlL2RldmlvLmMgYi9kcml2ZXJz
-L3VzYi9jb3JlL2RldmlvLmMKPiA+IGluZGV4IGI1Yjg1YmY4MDMyOS4uYTg3ZmVkMTJlMzA3IDEw
-MDY0NAo+ID4gLS0tIGEvZHJpdmVycy91c2IvY29yZS9kZXZpby5jCj4gPiArKysgYi9kcml2ZXJz
-L3VzYi9jb3JlL2RldmlvLmMKPiA+IEBAIC03OCw2ICs3OCw3IEBAIHN0cnVjdCB1c2JfZGV2X3N0
-YXRlIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqBpbnQgbm90X3lldF9yZXN1bWVkOwo+ID4gwqDCoMKg
-wqDCoMKgwqDCoGJvb2wgc3VzcGVuZF9hbGxvd2VkOwo+ID4gwqDCoMKgwqDCoMKgwqDCoGJvb2wg
-cHJpdmlsZWdlc19kcm9wcGVkOwo+ID4gK8KgwqDCoMKgwqDCoMKgYm9vbCByZXZva2VkOwo+ID4g
-wqB9Owo+IAo+IEhhdmUgeW91IGNvbnNpZGVyZWQgd2hhdCBzaG91bGQgaGFwcGVuIGlmIHR3byBw
-cm9jZXNzZXMgc2hhcmUgdGhlCj4gc2FtZSAKPiBmaWxlIGRlc2NyaXB0b3IgKGFuZCBoZW5jZSB0
-aGUgc2FtZSB1c2JfZGV2X3N0YXRlIHN0cnVjdHVyZSkgYW5kIHlvdQo+IHdhbnQgCj4gdG8gcmV2
-b2tlIGFjY2VzcyBmb3Igb25lIG9mIHRoZSBwcm9jZXNzZXMgYnV0IG5vdCB0aGUgb3RoZXI/CgpO
-bywgYmVjYXVzZSB0aGlzIGlzbid0IHNvbWV0aGluZyB0aGF0IGhhcHBlbnMgaW4gcHJhY3RpY2Us
-IGFzIGl0J3MKc2ltcGxlciBmb3IgZWFjaCBwcm9ncmFtbWUgdG8gb3BlbiB0aGVpciBvd24gZmls
-ZSBkZXNjcmlwdG9yIGFuZCBjbGFpbQp0aGUgaW50ZXJmYWNlcyB0aGV5IG5lZWQgb24gdGhlaXIg
-b3duLgoKPiA+IMKgc3RydWN0IHVzYl9tZW1vcnkgewo+ID4gQEAgLTIzNyw2ICsyMzgsMTMgQEAg
-c3RhdGljIGludCB1c2JkZXZfbW1hcChzdHJ1Y3QgZmlsZSAqZmlsZSwKPiA+IHN0cnVjdCB2bV9h
-cmVhX3N0cnVjdCAqdm1hKQo+ID4gwqDCoMKgwqDCoMKgwqDCoGRtYV9hZGRyX3QgZG1hX2hhbmRs
-ZTsKPiA+IMKgwqDCoMKgwqDCoMKgwqBpbnQgcmV0Owo+ID4gwqAKPiA+ICvCoMKgwqDCoMKgwqDC
-oHVzYl9sb2NrX2RldmljZShwcy0+ZGV2KTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmICghY29ubmVj
-dGVkKHBzKSB8fCBwcy0+cmV2b2tlZCkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoHVzYl91bmxvY2tfZGV2aWNlKHBzLT5kZXYpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoHJldHVybiAtRU5PREVWOwo+ID4gK8KgwqDCoMKgwqDCoMKgfQo+ID4gK8KgwqDC
-oMKgwqDCoMKgdXNiX3VubG9ja19kZXZpY2UocHMtPmRldik7Cj4gCj4gSSdtIG5vdCBjZXJ0YWlu
-IHRoaXMgY2hlY2sgaXMgbmVlZGVkIGF0IGFsbC7CoCBCdXQgaWYgeW91IHdhbnQgdG8gYWRkCj4g
-aXQsIAo+IEkgZG9uJ3Qgc2VlIGFueSByZWFzb24gZm9yIGdyYWIgdGhlIGxvY2suCgpPSywgcmVt
-b3ZlZC4KCj4gQWxzbywgaGVyZSBhbmQgaW4gYWxsIHRoZSBvdGhlciBwbGFjZXMsIGluc3RlYWQg
-b2YgbWFudWFsbHkgYWRkaW5nCj4gInx8IAo+IHBzX3Jldm9rZWQiIHRvIGFsbCB0aGUgIiFjb25u
-ZWN0ZWQocHMpIiBjaGVja3MsIHdoeSBub3QganVzdCBjaGFuZ2UKPiB0aGUgCj4gZGVmaW5pdGlv
-biBvZiBjb25uZWN0ZWQocHMpPwoKSSB3YXNuJ3Qgc3VyZSB0aGF0IGFsbCB0aGUgZW50cnkgcG9p
-bnRzIHRoYXQgdXNlZCBjb25uZWN0ZWQoKSB3b3VsZApuZWVkIHRvIGNoZWNrIHJldm9jYXRpb24s
-IGJ1dCBJJ20gc2ltcGxpZmllZCB0aGlzIG5vdy4KCj4gCj4gPiArCj4gPiDCoMKgwqDCoMKgwqDC
-oMKgcmV0ID0gdXNiZnNfaW5jcmVhc2VfbWVtb3J5X3VzYWdlKHNpemUgKyBzaXplb2Yoc3RydWN0
-Cj4gPiB1c2JfbWVtb3J5KSk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkKPiA+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBlcnJvcjsKPiA+IEBAIC0yOTgsNiArMzA2
-LDE1IEBAIHN0YXRpYyBpbnQgdXNiZGV2X21tYXAoc3RydWN0IGZpbGUgKmZpbGUsCj4gPiBzdHJ1
-Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSkKPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0Owo+
-ID4gwqB9Cj4gPiDCoAo+ID4gK3N0YXRpYyBsb2ZmX3QgdXNiZGV2X2xsc2VlayhzdHJ1Y3QgZmls
-ZSAqZmlsZSwgbG9mZl90IG9mZnNldCwgaW50Cj4gPiB3aGVuY2UpCj4gPiArewo+ID4gK8KgwqDC
-oMKgwqDCoMKgc3RydWN0IHVzYl9kZXZfc3RhdGUgKnBzID0gZmlsZS0+cHJpdmF0ZV9kYXRhOwo+
-ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKCFjb25uZWN0ZWQocHMpIHx8IHBzLT5yZXZva2Vk
-KQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PREVWOwo+IAo+
-IExpa2UgdGhlIGNhc2UgYWJvdmUsIHRoaXMgY2hlY2sgaXMgbm90IHByZXNlbnQgaW4gdGhlIGN1
-cnJlbnQgY29kZSBzbwo+IGl0J3Mgbm90IGNsZWFyIHdoeSBpdCBuZWVkcyB0byBiZSBhZGRlZCBu
-b3cuCgpPSywgcmVtb3ZlZC4KCj4gCj4gPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gbm9fc2Vla19l
-bmRfbGxzZWVrKGZpbGUsIG9mZnNldCwgd2hlbmNlKTsKPiA+ICt9Cj4gPiArCj4gPiDCoHN0YXRp
-YyBzc2l6ZV90IHVzYmRldl9yZWFkKHN0cnVjdCBmaWxlICpmaWxlLCBjaGFyIF9fdXNlciAqYnVm
-LAo+ID4gc2l6ZV90IG5ieXRlcywKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgbG9mZl90ICpwcG9zKQo+ID4gwqB7Cj4gPiBAQCAtMzEwLDcg
-KzMyNyw3IEBAIHN0YXRpYyBzc2l6ZV90IHVzYmRldl9yZWFkKHN0cnVjdCBmaWxlICpmaWxlLAo+
-ID4gY2hhciBfX3VzZXIgKmJ1Ziwgc2l6ZV90IG5ieXRlcywKPiA+IMKgCj4gPiDCoMKgwqDCoMKg
-wqDCoMKgcG9zID0gKnBwb3M7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgdXNiX2xvY2tfZGV2aWNlKGRl
-dik7Cj4gPiAtwqDCoMKgwqDCoMKgwqBpZiAoIWNvbm5lY3RlZChwcykpIHsKPiA+ICvCoMKgwqDC
-oMKgwqDCoGlmICghY29ubmVjdGVkKHBzKSB8fCBwcy0+cmV2b2tlZCkgewo+ID4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSAtRU5PREVWOwo+ID4gwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBnb3RvIGVycjsKPiA+IMKgwqDCoMKgwqDCoMKgwqB9IGVsc2UgaWYg
-KHBvcyA8IDApIHsKPiA+IEBAIC0yMTE3LDcgKzIxMzQsNyBAQCBzdGF0aWMgaW50IHByb2NfcmVh
-cHVyYm5vbmJsb2NrKHN0cnVjdAo+ID4gdXNiX2Rldl9zdGF0ZSAqcHMsIHZvaWQgX191c2VyICph
-cmcpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHZhbCA9IHByb2Nlc3Nj
-b21wbChhcywgKHZvaWQgX191c2VyICogX191c2VyCj4gPiAqKWFyZyk7Cj4gPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGZyZWVfYXN5bmMoYXMpOwo+ID4gwqDCoMKgwqDCoMKgwqDC
-oH0gZWxzZSB7Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dmFsID0gKGNv
-bm5lY3RlZChwcykgPyAtRUFHQUlOIDogLUVOT0RFVik7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgcmV0dmFsID0gKGNvbm5lY3RlZChwcykgJiYgIXBzLT5yZXZva2VkID8gLUVB
-R0FJTiA6Cj4gPiAtRU5PREVWKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiDCoMKgwqDCoMKg
-wqDCoMKgcmV0dXJuIHJldHZhbDsKPiA+IMKgfQo+ID4gQEAgLTIyNjIsNyArMjI3OSw3IEBAIHN0
-YXRpYyBpbnQgcHJvY19yZWFwdXJibm9uYmxvY2tfY29tcGF0KHN0cnVjdAo+ID4gdXNiX2Rldl9z
-dGF0ZSAqcHMsIHZvaWQgX191c2VyICphcgo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqByZXR2YWwgPSBwcm9jZXNzY29tcGxfY29tcGF0KGFzLCAodm9pZCBfX3VzZXIgKgo+ID4g
-X191c2VyICopYXJnKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZnJlZV9h
-c3luYyhhcyk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfSBlbHNlIHsKPiA+IC3CoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqByZXR2YWwgPSAoY29ubmVjdGVkKHBzKSA/IC1FQUdBSU4gOiAtRU5P
-REVWKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR2YWwgPSAoY29ubmVj
-dGVkKHBzKSAmJiAhcHMtPnJldm9rZWQgPyAtRUFHQUlOIDoKPiA+IC1FTk9ERVYpOwo+ID4gwqDC
-oMKgwqDCoMKgwqDCoH0KPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0dmFsOwo+ID4gwqB9
-Cj4gPiBAQCAtMjU4MCw2ICsyNTk3LDgyIEBAIHN0YXRpYyBpbnQgcHJvY193YWl0X2Zvcl9yZXN1
-bWUoc3RydWN0Cj4gPiB1c2JfZGV2X3N0YXRlICpwcykKPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1
-cm4gcHJvY19mb3JiaWRfc3VzcGVuZChwcyk7Cj4gPiDCoH0KPiA+IMKgCj4gPiArc3RhdGljIGlu
-dCB1c2JkZXZfcmV2b2tlKHN0cnVjdCB1c2JfZGV2X3N0YXRlICpwcykKPiA+ICt7Cj4gPiArwqDC
-oMKgwqDCoMKgwqBzdHJ1Y3QgdXNiX2RldmljZSAqZGV2ID0gcHMtPmRldjsKPiA+ICvCoMKgwqDC
-oMKgwqDCoHVuc2lnbmVkIGludCBpZm51bTsKPiA+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBhc3lu
-YyAqYXM7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBpZiAocHMtPnJldm9rZWQpIHsKPiA+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB1c2JfdW5sb2NrX2RldmljZShkZXYpOwo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PREVWOwo+ID4gK8KgwqDC
-oMKgwqDCoMKgfQo+ID4gK8KgwqDCoMKgwqDCoMKgcHMtPnJldm9rZWQgPSB0cnVlOwo+ID4gKwo+
-ID4gK8KgwqDCoMKgwqDCoMKgZm9yIChpZm51bSA9IDA7IHBzLT5pZmNsYWltZWQgJiYgaWZudW0g
-PCA4KnNpemVvZihwcy0KPiA+ID5pZmNsYWltZWQpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZm51bSsrKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgaWYgKHRlc3RfYml0KGlmbnVtLCAmcHMtPmlmY2xhaW1lZCkpCj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlbGVhc2VpbnRm
-KHBzLCBpZm51bSk7Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqBkZXN0
-cm95X2FsbF9hc3luYyhwcyk7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBhcyA9IGFzeW5jX2dl
-dGNvbXBsZXRlZChwcyk7Cj4gPiArwqDCoMKgwqDCoMKgwqB3aGlsZSAoYXMpIHsKPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBmcmVlX2FzeW5jKGFzKTsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBhcyA9IGFzeW5jX2dldGNvbXBsZXRlZChwcyk7Cj4gPiArwqDC
-oMKgwqDCoMKgwqB9Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqB3YWtlX3VwKCZwcy0+d2FpdCk7
-Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBzbm9vcCgmZGV2LT5kZXYsICIlczogUkVWT0tFIGJ5
-IFBJRCAlZDogJXNcbiIsIF9fZnVuY19fLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0
-YXNrX3BpZF9ucihjdXJyZW50KSwgY3VycmVudC0+Y29tbSk7Cj4gCj4gSSB3b3VsZCBwdXQgdGhp
-cyBzbm9vcCBjYWxsIGJlZm9yZSBhbGwgdGhlIG90aGVyIGFjdGl2aXRpZXMsIHNvIHRoYXQKPiBh
-bnkgCj4gZGVidWdnaW5nIG91dHB1dCB0aGV5IGdlbmVyYXRlIHdpbGwgY29tZSBhZnRlciB0aGUg
-UkVWT0tFIGVudHJ5IGluCj4gdGhlIAo+IGtlcm5lbCBsb2cuCgpEb25lLgoKPiAKPiA+ICsKPiA+
-ICvCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+ID4gK30KPiA+ICsKPiA+ICtpbnQgdXNiX3Jldm9r
-ZShzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBzdHJ1Y3QgdXNiX3Jldm9rZV9tYXRjaCAqbWF0Y2gpCj4gPiArewo+ID4gK8KgwqDCoMKg
-wqDCoMKgc3RydWN0IHVzYl9kZXZfc3RhdGUgKnBzOwo+ID4gK8KgwqDCoMKgwqDCoMKgaW50IHJl
-dCA9IC1FTk9FTlQ7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqB1c2JfbG9ja19kZXZpY2UodWRl
-dik7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBpZiAobWF0Y2gtPmRldm51bSA+PSAwICYmCj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqAgbWF0Y2gtPmJ1c251bSA+PSAwKSB7Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50IGRldm51bSwgYnVzbnVtOwo+ID4gKwo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRldm51bSA9IHVkZXYtPmRldm51bTsKPiA+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBidXNudW0gPSB1ZGV2LT5idXMtPmJ1c251bTsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAobWF0Y2gtPmJ1c251bSAhPSBi
-dXNudW0gfHwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbWF0Y2gt
-PmRldm51bSAhPSBkZXZudW0pIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgcmV0ID0gLUVOT0RFVjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBvdXQ7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgfQo+ID4gK8KgwqDCoMKgwqDCoMKgfQo+IAo+IEkgaGF2ZSB0aGUgZmVlbGlu
-ZyB0aGF0IHRoaXMgcGFydCBvZiB0aGUgZnVuY3Rpb24gKG1hdGNoaW5nIHRoZQo+IGJ1c251bSAK
-PiBhbmQgZGV2bnVtIHZhbHVlcykgZG9lc24ndCBiZWxvbmcgaGVyZSBidXQgcmF0aGVyIHdpdGgg
-dGhlIGl0ZXJhdGlvbiAKPiByb3V0aW5lcyBpbiB5b3VyIDIvMiBwYXRjaC7CoCBGaWx0ZXJpbmcg
-b2YgZGV2aWNlcyBnZW5lcmFsbHkgaXMgZG9uZQo+IGFzIAo+IHBhcnQgb2YgdGhlIGl0ZXJhdGlv
-bi7CoCBBcyBhbiBhZGRlZCBib251cywgZG9pbmcgaXQgdGhhdCB3YXkgbWVhbnMKPiB5b3UgCj4g
-ZG9uJ3QgbmVlZCB0byBwYXNzIGFyb3VuZCBwb2ludGVycyB0byB1c2JfcmV2b2tlX21hdGNoIHN0
-cnVjdHVyZXMuCgpJIGZlbHQgaXQgYmV0dGVyIHRvIGhhdmUgdGhlIGZpbHRlcmluZyBkb25lIGlu
-IG9uZSBwbGFjZSwgdG8gYXZvaWQKcGFzc2luZyBqdXN0IGEgdWlkIHRvIGNoZWNrIHRvIHRoYXQg
-ZnVuY3Rpb24uCgpTaG91bGQgSSByZW5hbWUgdGhlIGZ1bmN0aW9uIHNvbWV0aGluZyBsaWtlIHVz
-Yl9yZXZva2VfZm9yX3VpZCgpID8KCj4gCj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqBsaXN0X2Zv
-cl9lYWNoX2VudHJ5KHBzLCAmdWRldi0+ZmlsZWxpc3QsIGxpc3QpIHsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAobWF0Y2gtPmV1aWQgPj0gMCkgewo+ID4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBrdWlkX3Qga3VpZDsKPiA+ICsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKCFw
-cyB8fCAhcHMtPmNyZWQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb250aW51ZTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKga3VpZCA9IHBzLT5jcmVkLT5ldWlkOwo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoa3VpZC52
-YWwgIT0gbWF0Y2gtPmV1aWQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb250aW51ZTsKPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgaWYgKHJldCA9PSAwKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqB1c2JkZXZfcmV2b2tlKHBzKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBlbHNlCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHJldCA9IHVzYmRldl9yZXZva2UocHMpOwo+IAo+IFlvdSBwcm9iYWJseSBkb24ndCBu
-ZWVkIHRoaXMgZWxhYm9yYXRlIGhhbmRsaW5nIG9mIHJldHVybiBjb2Rlcy7CoCBJbiAKPiBmYWN0
-LCB5b3UgcHJvYmFibHkgZG9uJ3QgbmVlZCBlaXRoZXIgb2YgdGhlc2UgZnVuY3Rpb25zIHRvIHJl
-dHVybiAKPiBhbnl0aGluZy4KCk9LLgoKPiAKPiBBbGFuIFN0ZXJuCj4gCj4gPiArwqDCoMKgwqDC
-oMKgwqB9Cj4gPiArCj4gPiArb3V0Ogo+ID4gK8KgwqDCoMKgwqDCoMKgdXNiX3VubG9ja19kZXZp
-Y2UodWRldik7Cj4gPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0Owo+ID4gK30KPiA+ICsKPiA+
-IMKgLyoKPiA+IMKgICogTk9URTrCoCBBbGwgcmVxdWVzdHMgaGVyZSB0aGF0IGhhdmUgaW50ZXJm
-YWNlIG51bWJlcnMgYXMKPiA+IHBhcmFtZXRlcnMKPiA+IMKgICogYXJlIGFzc3VtaW5nIHRoYXQg
-c29tZWhvdyB0aGUgY29uZmlndXJhdGlvbiBoYXMgYmVlbiBwcmV2ZW50ZWQKPiA+IGZyb20KPiA+
-IEBAIC0yNjIzLDcgKzI3MTYsNyBAQCBzdGF0aWMgbG9uZyB1c2JkZXZfZG9faW9jdGwoc3RydWN0
-IGZpbGUKPiA+ICpmaWxlLCB1bnNpZ25lZCBpbnQgY21kLAo+ID4gwqAjZW5kaWYKPiA+IMKgwqDC
-oMKgwqDCoMKgwqB9Cj4gPiDCoAo+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKCFjb25uZWN0ZWQocHMp
-KSB7Cj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoIWNvbm5lY3RlZChwcykgfHwgcHMtPnJldm9rZWQp
-IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdXNiX3VubG9ja19kZXZpY2Uo
-ZGV2KTsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FTk9ERVY7
-Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gQEAgLTI4MTksNyArMjkxMiw3IEBAIHN0YXRpYyBf
-X3BvbGxfdCB1c2JkZXZfcG9sbChzdHJ1Y3QgZmlsZQo+ID4gKmZpbGUsCj4gPiDCoMKgwqDCoMKg
-wqDCoMKgcG9sbF93YWl0KGZpbGUsICZwcy0+d2FpdCwgd2FpdCk7Cj4gPiDCoMKgwqDCoMKgwqDC
-oMKgaWYgKGZpbGUtPmZfbW9kZSAmIEZNT0RFX1dSSVRFICYmICFsaXN0X2VtcHR5KCZwcy0KPiA+
-ID5hc3luY19jb21wbGV0ZWQpKQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBt
-YXNrIHw9IEVQT0xMT1VUIHwgRVBPTExXUk5PUk07Cj4gPiAtwqDCoMKgwqDCoMKgwqBpZiAoIWNv
-bm5lY3RlZChwcykpCj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoIWNvbm5lY3RlZChwcykgfHwgcHMt
-PnJldm9rZWQpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1hc2sgfD0gRVBP
-TExIVVA7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKGxpc3RfZW1wdHkoJnBzLT5saXN0KSkKPiA+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWFzayB8PSBFUE9MTEVSUjsKPiA+IEBA
-IC0yODI4LDcgKzI5MjEsNyBAQCBzdGF0aWMgX19wb2xsX3QgdXNiZGV2X3BvbGwoc3RydWN0IGZp
-bGUKPiA+ICpmaWxlLAo+ID4gwqAKPiA+IMKgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyB1
-c2JkZXZfZmlsZV9vcGVyYXRpb25zID0gewo+ID4gwqDCoMKgwqDCoMKgwqDCoC5vd25lciA9wqDC
-oMKgwqDCoMKgwqDCoMKgIFRISVNfTU9EVUxFLAo+ID4gLcKgwqDCoMKgwqDCoMKgLmxsc2VlayA9
-wqDCoMKgwqDCoMKgwqDCoCBub19zZWVrX2VuZF9sbHNlZWssCj4gPiArwqDCoMKgwqDCoMKgwqAu
-bGxzZWVrID3CoMKgwqDCoMKgwqDCoMKgIHVzYmRldl9sbHNlZWssCj4gPiDCoMKgwqDCoMKgwqDC
-oMKgLnJlYWQgPcKgwqDCoMKgwqDCoMKgwqDCoMKgIHVzYmRldl9yZWFkLAo+ID4gwqDCoMKgwqDC
-oMKgwqDCoC5wb2xsID3CoMKgwqDCoMKgwqDCoMKgwqDCoCB1c2JkZXZfcG9sbCwKPiA+IMKgwqDC
-oMKgwqDCoMKgwqAudW5sb2NrZWRfaW9jdGwgPSB1c2JkZXZfaW9jdGwsCj4gPiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy91c2IvY29yZS91c2IuaCBiL2RyaXZlcnMvdXNiL2NvcmUvdXNiLmgKPiA+IGlu
-ZGV4IDgyNTM4ZGFhYzhiOC4uYjEyYzM1Mjg2OWYwIDEwMDY0NAo+ID4gLS0tIGEvZHJpdmVycy91
-c2IvY29yZS91c2IuaAo+ID4gKysrIGIvZHJpdmVycy91c2IvY29yZS91c2IuaAo+ID4gQEAgLTks
-NiArOSwxMSBAQAo+ID4gwqBzdHJ1Y3QgdXNiX2h1Yl9kZXNjcmlwdG9yOwo+ID4gwqBzdHJ1Y3Qg
-dXNiX2Rldl9zdGF0ZTsKPiA+IMKgCj4gPiArc3RydWN0IHVzYl9yZXZva2VfbWF0Y2ggewo+ID4g
-K8KgwqDCoMKgwqDCoMKgaW50IGJ1c251bSwgZGV2bnVtOyAvKiAtMSB0byBtYXRjaCBhbGwgZGV2
-aWNlcyAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgaW50IGV1aWQ7IC8qIC0xIHRvIG1hdGNoIGFsbCB1
-c2VycyAqLwo+ID4gK307Cj4gPiArCj4gPiDCoC8qIEZ1bmN0aW9ucyBsb2NhbCB0byBkcml2ZXJz
-L3VzYi9jb3JlLyAqLwo+ID4gwqAKPiA+IMKgZXh0ZXJuIGludCB1c2JfY3JlYXRlX3N5c2ZzX2Rl
-dl9maWxlcyhzdHJ1Y3QgdXNiX2RldmljZSAqZGV2KTsKPiA+IEBAIC0zNCw2ICszOSw5IEBAIGV4
-dGVybiBpbnQgdXNiX2RlYXV0aG9yaXplX2RldmljZShzdHJ1Y3QKPiA+IHVzYl9kZXZpY2UgKik7
-Cj4gPiDCoGV4dGVybiBpbnQgdXNiX2F1dGhvcml6ZV9kZXZpY2Uoc3RydWN0IHVzYl9kZXZpY2Ug
-Kik7Cj4gPiDCoGV4dGVybiB2b2lkIHVzYl9kZWF1dGhvcml6ZV9pbnRlcmZhY2Uoc3RydWN0IHVz
-Yl9pbnRlcmZhY2UgKik7Cj4gPiDCoGV4dGVybiB2b2lkIHVzYl9hdXRob3JpemVfaW50ZXJmYWNl
-KHN0cnVjdCB1c2JfaW50ZXJmYWNlICopOwo+ID4gK2V4dGVybiBpbnQgdXNiX3Jldm9rZShzdHJ1
-Y3QgdXNiX2RldmljZSAqdWRldiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBz
-dHJ1Y3QgdXNiX3Jldm9rZV9tYXRjaCAqbWF0Y2gpOwo+ID4gK2V4dGVybiBpbnQgdXNiZGV2X2dl
-dF91aWQoc3RydWN0IHVzYl9kZXZfc3RhdGUgKnBzKTsKPiA+IMKgZXh0ZXJuIHZvaWQgdXNiX2Rl
-dGVjdF9xdWlya3Moc3RydWN0IHVzYl9kZXZpY2UgKnVkZXYpOwo+ID4gwqBleHRlcm4gdm9pZCB1
-c2JfZGV0ZWN0X2ludGVyZmFjZV9xdWlya3Moc3RydWN0IHVzYl9kZXZpY2UgKnVkZXYpOwo+ID4g
-wqBleHRlcm4gdm9pZCB1c2JfcmVsZWFzZV9xdWlya19saXN0KHZvaWQpOwo+ID4gLS0gCj4gPiAy
-LjM2LjEKPiA+IAoK
+On Thu, 2022-08-04 at 15:12 -0400, Alan Stern wrote:
+> On Thu, Aug 04, 2022 at 06:03:04PM +0200, Bastien Nocera wrote:
+> > Hey,
+> > 
+> > This is a follow-up to "[RFC v1] USB: core: add USBDEVFS_REVOKE
+> > ioctl" from April.
+> > 
+> > The end-goal is being able to cut-off access to USB devices for
+> > applications/programs that open raw USB devices using, in most
+> > cases,
+> > libusb.
+> > 
+> > I've implemented this using BPF, so we don't need to add new
+> > ioctls.
+> 
+> I'm not sure that's a good reason for using BPF.
+> 
+> > The presence or absence of that feature can be evaluated at
+> > runtime,
+> > and can be used to implement revoke support on session switching,
+> > in logind for example:
+> > https://github.com/hadess/usb-revoke-userspace/
+> 
+> This isn't clear.  Are you talking about having the kernel
+> automatically 
+> do this when certain conditions are met?  Or do you mean that logind 
+> could invoke the BPF program at the appropriate times?
+
+logind would be the one loading and executing the BPF program. I've
+slightly reworded the first paragraph in the 2nd patch, but it's pretty
+clear there that the functionality is implemented in user-space, and
+the BPF acts as a bridge.
+
+> Left unsaid here is that logind generally won't have a file
+> descriptor 
+> for any of the open USB devices that it wants to revoke access to.  
+> That's a good reason to use BPF instead of ioctl.
+
+That's right. I've make a note of this in the BPF patch.
+
+> If you're going to revoke access to devices upon session switching, 
+> shouldn't the mechanism be more general?  I mean, shouldn't it apply
+> to 
+> all sorts of devices, not just those that happen to be USB?
+
+I don't see how that could be done in a generic way without causing
+problems for devices accessed by multiple different parts of the OS.
+
+Revoking doesn't invalidate the file descriptor (whether in the
+existing evdev revoke ioctl, or this USB function), and as you can see
+in the patch, there are still things that can be done on the device
+even when revoked.
+
+> Also, if you're going to use session switching as your criterion for 
+> revoking access to USB devices then what will you do to restore
+> access 
+> when the session switches back?
+
+It's up to the application to do that. This is, for example, what
+compositors do when accessing input devices which already have their
+own revoke ioctl.
+
+> > I have some notes and questions on the API as it is exposed.
+> > 
+> > - I didn't see a point in having multiple kernel functions as entry
+> >   points as I was going to use a single BPF program as an entry
+> > point,
+> >   which can check the arguments. Can I rely on the BPF program
+> > checking
+> >   those arguments, or should I re-check them again in the kernel
+> >   implementation?
+> 
+> What is there to check?
+
+Whether either busnum and devnum were passed, or a valid UID.
+
+> > - Are my UID checks correct if I expect revoking to be called
+> > outside
+> >   namespaces, on the effective UID of the user. Is there a way to
+> > assert
+> >   that?
+> 
+> We're probably not the right people to ask.  You could try Eric 
+> Biederman.
+> 
+
+I'll CC: Eric on the next patch then.
+
+> > - Is there a good "errno" error for ENOSUCHUSER for using in the
+> >   usb_revoke() loop if we couldn't find any USB device matching the
+> >   requested user?
+> 
+> Why do you want that to be an error?  If you tell the kernel "Remove
+> all 
+> access to USB devices for user X", why should it be an error if X
+> doesn't 
+> have any open file descriptors for USB devices?
+
+I imagined that it would be useful to know whether any devices were
+found, or any users matched, but I guess this isn't strictly necessary.
+I'll remove it.
+
+> 
+> For that matter, are you certain that basing this on the UID is the
+> right 
+> way to go?  What if there are two different login sessions both using
+> the 
+> same UID?
+
+Do you know another identifier that's not kernel internal, or relying
+on logind knowing the fd that we could use to differentiate those 2
+users?
+
+Is there a use case for a USB device being opened, two separate
+interfaces being claimed, by two different user sessions of the same
+user?
+
+> 
+> Alan Stern
+> 
+> > 
+> > Cheers
+> > 
+> > Bastien Nocera (2):
+> >   USB: core: add a way to revoke access to open USB devices
+> >   usb: Implement usb_revoke() BPF function
+> > 
+> >  drivers/usb/core/devio.c | 105
+> > ++++++++++++++++++++++++++++++++++++---
+> >  drivers/usb/core/usb.c   |  51 +++++++++++++++++++
+> >  drivers/usb/core/usb.h   |   8 +++
+> >  3 files changed, 158 insertions(+), 6 deletions(-)
+> > 
+> > -- 
+> > 2.36.1
+> > 
 
