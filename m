@@ -2,117 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E29258A6C2
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 09:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C1058A6DD
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 09:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240384AbiHEHK6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Aug 2022 03:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S240240AbiHEHRt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Aug 2022 03:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240199AbiHEHKj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 03:10:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1038474E22;
-        Fri,  5 Aug 2022 00:09:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8989FB80DE4;
-        Fri,  5 Aug 2022 07:09:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10733C433D6;
-        Fri,  5 Aug 2022 07:09:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659683377;
-        bh=QY/xj/dmLrpvXEfYnnD6E0lu77VY+niG/pRPN+FTJRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Swju3PYz3cB3wLhsGTed8uo46PsMXQ6CUeuXyHwbAK/hPulOHWHst5X18xBc+A23i
-         Jqn+enSqJ8QCdi+bmdRk4vcgGvzdzrblA6AesOvDCAV8XspD7P6Qk4hyoMWnODFTFS
-         A+DrwSD+UjYtyy2r8vne0fr8FMf3NkHFqrbpGqfNygtiQN3Tf7hwQrFYuO0rr4IsXz
-         0yC+LzJ79cuJ4ZoRP+ad71FcdjWi1vy9go+q25DQT60J4ZNU3WZW6VcS/3D0vFfJir
-         hDAb2LQ4wWZZZSJ+FAa+xcwRhpR3MOOKNokZSnodck4A7K0dNL6oHtSGO60bOoZ8qd
-         gy+Zubvlu3BmQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oJrT6-0007hp-1M; Fri, 05 Aug 2022 09:10:00 +0200
-Date:   Fri, 5 Aug 2022 09:10:00 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, kbuild-all@lists.01.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/9] usb: dwc3: qcom: fix peripheral and OTG suspend
-Message-ID: <YuzCSCr2fkTLxvAs@hovoldconsulting.com>
-References: <20220804151001.23612-7-johan+linaro@kernel.org>
- <202208050544.ijUhoUyB-lkp@intel.com>
- <Yuy/eM1Wo+gDAJPQ@hovoldconsulting.com>
+        with ESMTP id S230441AbiHEHRs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 03:17:48 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C70B10E3;
+        Fri,  5 Aug 2022 00:17:48 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id f30so1153056pfq.4;
+        Fri, 05 Aug 2022 00:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VFXvqXWuizqTpdBLbyESGII1eVMtZqfMsQFHKhGg+1k=;
+        b=XQf9dqVTFmz13HUGeiLAH1G26g87e+Mc4YCTFoKb4qct+L6qSGNLbOl5VTi04nT00m
+         R1zAXn2foMABuLBuMLEl/71hCRT+KnuUtvC4BBgxGpKiOjUr0eEj2ys1nE1ia2dNdH0a
+         nXif8ZZX0rAIIut4n9jfRXtU/UAcsR7+ZXqmoBQDt12DSCiqBVhvRGuZhSgNNWJ+w0Ha
+         H2RUvqP8yLRiwVAviFQJd4wqfMaYDWgmWNGQptivy0NI773b5WJF80Spwp99yHzi2YxL
+         cwkqZ7JzZnw/2iahSyy6OXuDZJOSTPuT/MsomlUuTRxVNv+JrLJGBVJRLx4k5nKNmp7Y
+         ZAwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VFXvqXWuizqTpdBLbyESGII1eVMtZqfMsQFHKhGg+1k=;
+        b=dLtGpJps/Ne2LVPjx1UabJ0ce4kSc7IR4FrUxhX7ztEInwVE8+qc/Bps9/V9AgpMi7
+         So3LT325FtEgG0vcMCnQLWfbE6BcDyWcMWr+N+3sj2waoQl/Cx7ceg28ynS+qR2sOSYA
+         M/MJI19eVJ4b1REnUi5UgdIudc5orwJI2rjJZMMchCA0oTrVL2dqQqn2EKm+rlZ3m6Ul
+         SiJcZlEihrSqaBOxv8q3rgfXhfPhy17PM/u968VM98Wo7U/sTsgskGodqIotMeXaCkOO
+         SGqr6XifIgY38xCU3TJ7hvG1VgEO5tC4yqxN05f8PtgRe+RsQkkQ74Jnz1m7NPD10535
+         tZow==
+X-Gm-Message-State: ACgBeo2UKVKFpvofWAkvUWLYPqUYL6pypm5G5rGRCaeeePNoxmyMU0we
+        5YD7gDLXPZvjzSwxJonyc6w=
+X-Google-Smtp-Source: AA6agR5Uinecy8xRTpSjGSViqI14CB3j4arBg8VlcU0pm01Y6jx/x2HVDMeN6CKWXhujognBwlt2Sw==
+X-Received: by 2002:a63:18a:0:b0:41b:475c:6c08 with SMTP id 132-20020a63018a000000b0041b475c6c08mr4876130pgb.77.1659683867547;
+        Fri, 05 Aug 2022 00:17:47 -0700 (PDT)
+Received: from genechen-System-Product-Name.richtek.com ([2402:7500:579:6a6f:254a:2074:501f:264b])
+        by smtp.gmail.com with ESMTPSA id z23-20020aa79597000000b00528c066678csm2226147pfj.72.2022.08.05.00.17.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 00:17:47 -0700 (PDT)
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, gene_chen@richtek.com,
+        cy_huang@richtek.com
+Subject: [PATCH v4 0/7] usb: typec: tcpci_rt1711h: Add compatible with rt1715
+Date:   Fri,  5 Aug 2022 15:17:06 +0800
+Message-Id: <20220805071714.150882-1-gene.chen.richtek@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yuy/eM1Wo+gDAJPQ@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 08:58:00AM +0200, Johan Hovold wrote:
-> On Fri, Aug 05, 2022 at 05:38:30AM +0800, kernel test robot wrote:
-> > Hi Johan,
-> > 
-> > I love your patch! Perhaps something to improve:
-> > 
-> > [auto build test WARNING on usb/usb-testing]
-> > [also build test WARNING on linus/master next-20220804]
-> > [cannot apply to robh/for-next v5.19]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > config: arc-randconfig-r002-20220804 (https://download.01.org/0day-ci/archive/20220805/202208050544.ijUhoUyB-lkp@intel.com/config)
-> > compiler: arc-elf-gcc (GCC) 12.1.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/f3778ca026b16474e49c5e0188a0eb91d73eef2f
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Johan-Hovold/usb-dwc3-qcom-fix-wakeup-implementation/20220804-231122
-> >         git checkout f3778ca026b16474e49c5e0188a0eb91d73eef2f
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/dwc3/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >    drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
-> > >> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
-> >      313 |         struct usb_hcd *hcd;
-> >          |                         ^~~> 
-> 
-> I'm not seeing this one with gcc-10.3.0, but I'll slap a __maybe_unused
-> in there to keep your robot's W=1 builds quiet.
+This patch series add binding document for rt1711h and compatible driver with
+rt1715. Also add different remote rp workaround and initial phy setting.
 
-Correction: of course I'm seeing it in the affected build configuration...
+Gene Chen (7)
+ - dt-bindings usb: typec: rt1711h: Add binding for Richtek RT1711H
+ - usb: typec: tcpci_rt1711h: Fix vendor setting when set vconn
+ - usb: typec: tcpci_rt1711h: Add regulator support when source vbus
+ - usb: typec: tcpci_rt1711h: Add initial phy setting
+ - usb: typec: tcpci_rt1711h: Add compatible id with rt1715
+ - usb: typec: tcpci: Move function "tcpci_to_typec_cc" to common
+ - usb: typec: tcpci_rt1711h: Fix CC PHY noise filter of voltage level
 
-Johan
+ Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml |  100 ++++++++
+ drivers/usb/typec/tcpm/tcpci.c                             |   22 -
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c                     |  150 +++++++++++--
+ include/linux/usb/tcpci.h                                  |   22 +
+ 4 files changed, 259 insertions(+), 35 deletions(-)
+
+changelogs between v3 & v4
+ - remove reshuffling header
+ - fix commit message typo
+ 
+changelogs between v2 & v3
+ - binding compatible name with did to validate chip
+ - remove postfix name "_mask"
+ - move get cc status macro to header
+
+changelogs between v1 & v2
+ - Seperate patch by specific purpose
+ - Fix binding document error
+ - Set cc change woakaround without using tcpci ops callback
+
+
