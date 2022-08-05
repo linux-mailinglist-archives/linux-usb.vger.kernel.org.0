@@ -2,141 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB0C58AB5A
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 15:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7234D58AC67
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Aug 2022 16:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbiHENKY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Aug 2022 09:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S236804AbiHEObJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Aug 2022 10:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiHENKS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 09:10:18 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF9F74;
-        Fri,  5 Aug 2022 06:10:16 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id 17so1779884qky.8;
-        Fri, 05 Aug 2022 06:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=9J24cDKKqsOduTS9UUyGj2I+dc2JXq9COm3ho1bp/NE=;
-        b=NZ/lhCyR9M4uoWmE11gXdKIY5QHCgnKHevuKo4TMG1DjXmtxuHL9IGeJwZ4LfPJ5Sx
-         An9X10WyEwlH6gobWrRkcQrihAvfFo/NEkJHppMNCjVysFpqBcUQppBPmmWv/gJlRwNJ
-         AJ5R5hBz/6Z6zt3zcMCzNBlOWAFcgddiIbDO26176idaVxtdAeLEwOB83fyRhNgFshT0
-         PgEvwdsJAJBc7N5GmC3tSOdTGVFK5PY33vJvxUo6aKPI13T8ZPWktLxzYyY8DyD7/CRd
-         N6n68KF39/cpPvRO/LCj/Zk8AkuXDm7CeFfWTupOMgC5Oh24O5OoP7ydY1qxP317WUAG
-         zV8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9J24cDKKqsOduTS9UUyGj2I+dc2JXq9COm3ho1bp/NE=;
-        b=imnwJFAhn0BzI6QmhPhz1U4EMSdkH2oU/MKgzSijN8NrAZvqPsT3SmYCIPaydWTw+W
-         C+GMV4zm+HDbL8yAK3bSXfIH9oCI0N8yLoDGYmil4Wz8nyLAwgQdvPUp0jcy4bCGFVWn
-         M/eCqLghhNqljBSHXy4itcoo9c0RP1CgGUlmLphYsDdQO4cXNKhwpaQGabHvlwHAeyBx
-         nqUHJQV6SGlz35n7NIvlJDDRfxc7pUPy/trsCkmVsxROIUbJKLs1Ry6Rd7oQCbRkWj7I
-         Sv5ATnTjtpPvfwg466Lk7ZGrOlpkE6+NswsjwEE5nYft3EmyxTiMBW2yWaYvaslAAtR2
-         jlrw==
-X-Gm-Message-State: ACgBeo0lApKLBx6Q3ehTsBJXbCCufPGZVxhm/wC5XpLUsJG5WoMhWrea
-        UYfQFHa2ttEgoUSEE/4r8eEwjRgXfaslLWLEAcI=
-X-Google-Smtp-Source: AA6agR6KCeqnEoqyKUTU9bwzHJxmJAXoC1uA/8jBqjS4KNKKgC3bBRK/UzGUzHpzrq29/PrSFNdU8y5czcT3jzWXnGE=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr5054205qko.383.1659705015729; Fri, 05
- Aug 2022 06:10:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-13-peterwu.pub@gmail.com>
-In-Reply-To: <20220805070610.3516-13-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 5 Aug 2022 15:09:39 +0200
-Message-ID: <CAHp75VcdU6AVdksuhsHkzvD6mOBJ6G=yrmuHA9zAXLroXDFAjg@mail.gmail.com>
-Subject: Re: [PATCH v7 12/13] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        with ESMTP id S230363AbiHEObJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Aug 2022 10:31:09 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9C631DF99
+        for <linux-usb@vger.kernel.org>; Fri,  5 Aug 2022 07:31:05 -0700 (PDT)
+Received: (qmail 698160 invoked by uid 1000); 5 Aug 2022 10:31:04 -0400
+Date:   Fri, 5 Aug 2022 10:31:04 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Subject: Re: [RFC v2] USB: core: add a way to revoke access to open USB
+ devices
+Message-ID: <Yu0pqAYRfS46pte3@rowland.harvard.edu>
+References: <20220804160306.134014-1-hadess@hadess.net>
+ <YuwaFbxckLfnqhyv@rowland.harvard.edu>
+ <b050e5b9f3ff1ff6da77483557e014f3e5ed4ece.camel@hadess.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b050e5b9f3ff1ff6da77483557e014f3e5ed4ece.camel@hadess.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 5, 2022 at 9:07 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: Alice Chen <alice_chen@richtek.com>
->
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
->
-> Add a support for the MT6370 Flash LED driver. Flash LED in MT6370
-> has 2 channels and support torch/strobe mode.
+On Fri, Aug 05, 2022 at 02:38:16PM +0200, Bastien Nocera wrote:
+> On Thu, 2022-08-04 at 15:12 -0400, Alan Stern wrote:
+> > If you're going to revoke access to devices upon session switching, 
+> > shouldn't the mechanism be more general?  I mean, shouldn't it apply
+> > to 
+> > all sorts of devices, not just those that happen to be USB?
+> 
+> I don't see how that could be done in a generic way without causing
+> problems for devices accessed by multiple different parts of the OS.
 
-Same comments as per previous LED related patch.
+I don't know enough about the issues involved to help much.  Still, 
+doesn't it make more sense to offer logind a single API for revoking a 
+session's access to all appropriate devices, rather than one API for 
+revoking access to USB devices, another API for revoking access to HID 
+devices, another API for revoking access to serial devices, another API 
+for... etc.?
 
-...
+This sounds a lot like the old BSD concept of "foreground" and 
+"background" ttys.  It didn't rely on revoking access to anything; maybe 
+you should try to follow that example instead.
 
-> +       /*
-> +        * For the flash to turn on/off, we need to wait HW ramping up/down time
-> +        * 5ms/500us to prevent the unexpected problem.
-> +        */
-> +       if (!priv->fled_strobe_used && curr)
-> +               usleep_range(5000, 6000);
-> +       else if (priv->fled_strobe_used && !curr)
-> +               usleep_range(500, 600);
+Why would multiple different parts of the OS cause problems?
 
-Now it's much better!
+> Revoking doesn't invalidate the file descriptor (whether in the
+> existing evdev revoke ioctl, or this USB function), and as you can see
+> in the patch, there are still things that can be done on the device
+> even when revoked.
 
-...
+I didn't notice anything that can still be done.  You might be able, for 
+instance, to do an lseek on the device file descriptor, but that doesn't 
+affect the device.
 
-> +       /*
-> +        * Always configure as min level when off to
-> +        * prevent flash current spike
+> > Also, if you're going to use session switching as your criterion for 
+> > revoking access to USB devices then what will you do to restore
+> > access 
+> > when the session switches back?
+> 
+> It's up to the application to do that. This is, for example, what
+> compositors do when accessing input devices which already have their
+> own revoke ioctl.
 
-/*
- * You need to check the style
- * of multi-line comments like
- * this one.
- */
+Okay, I'll take your word for it.  I'm not sure it's a good idea.
 
-> +        */
+> > > I have some notes and questions on the API as it is exposed.
+> > > 
+> > > - I didn't see a point in having multiple kernel functions as entry
+> > >   points as I was going to use a single BPF program as an entry
+> > > point,
+> > >   which can check the arguments. Can I rely on the BPF program
+> > > checking
+> > >   those arguments, or should I re-check them again in the kernel
+> > >   implementation?
+> > 
+> > What is there to check?
+> 
+> Whether either busnum and devnum were passed, or a valid UID.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Does it really matter if none of them are valid values?  The call will 
+end up doing nothing, but that's not really an error.
+
+For that matter, how do you define whether a UID is valid?  As far as I 
+know, the kernel doesn't keep track of valid UIDs; userspace does (in the 
+/etc/passwd file or equivalent).
+
+> > For that matter, are you certain that basing this on the UID is the
+> > right 
+> > way to go?  What if there are two different login sessions both using
+> > the 
+> > same UID?
+> 
+> Do you know another identifier that's not kernel internal, or relying
+> on logind knowing the fd that we could use to differentiate those 2
+> users?
+
+Process or session ID, perhaps?  But I don't have a clear idea of how all 
+this is meant to fit together.
+
+> Is there a use case for a USB device being opened, two separate
+> interfaces being claimed, by two different user sessions of the same
+> user?
+
+Well, you can ssh into the same machine from two different windows at the 
+same time, and each of those ssh sessions could claim a different 
+interface in the same USB device.  (In theory, that is; but maybe you 
+don't want to allow ssh sessions to access USB devices at all.)
+
+Alan Stern
