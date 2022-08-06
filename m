@@ -2,39 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0B058B3EB
-	for <lists+linux-usb@lfdr.de>; Sat,  6 Aug 2022 07:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F059958B5BE
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Aug 2022 15:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiHFFT7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 6 Aug 2022 01:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S230392AbiHFNsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 6 Aug 2022 09:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237074AbiHFFT6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Aug 2022 01:19:58 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E342313F77
-        for <linux-usb@vger.kernel.org>; Fri,  5 Aug 2022 22:19:55 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id KCE2oIRdG0UP7KCE2ofqLM; Sat, 06 Aug 2022 07:19:53 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 06 Aug 2022 07:19:53 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: common: usb-conn-gpio: Simplify some error message
-Date:   Sat,  6 Aug 2022 07:19:49 +0200
-Message-Id: <7705a9dff8e097070c492d6f4f8aafaaa890f049.1659763173.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229852AbiHFNsX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 6 Aug 2022 09:48:23 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F98DFDA
+        for <linux-usb@vger.kernel.org>; Sat,  6 Aug 2022 06:48:22 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 12so4885637pga.1
+        for <linux-usb@vger.kernel.org>; Sat, 06 Aug 2022 06:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=TvgStXa3vG7bi+uh32sGsPJgv8LsfCjRHZ5xxTji6lE=;
+        b=ES3bR2McfzepqYPSSNZOJNByBNU66z7MPhvQimFx/YBeXozBQ6nqrnDlDbGbWmPwSk
+         jF4AdnNySCbx+TDceM4oFR52qxYMPnSx7jmX/XQKO+sY0PuyxqAVZNmRGnyIU2wmdkx7
+         hDVIJPE6RdXG2SN+O3oftHsK2uHvwrAkTXmGdD20/1QNRd9WyipNhksqSZ0YVj4sZvKc
+         zfmAFbEB72Bj1nhfml0x1z0w5AI3814EtRv3vMPdgDfroYP1WYcjTt7rJ/WMwrUduNfQ
+         p5X7GKIr3sWEGAxQkhqNKUBnhB8H8OoPuHLACJWTsPT6lYwUdt7LBWYI9DGGiZaMrI0a
+         FOLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=TvgStXa3vG7bi+uh32sGsPJgv8LsfCjRHZ5xxTji6lE=;
+        b=SsGn6XLVpwA9AAuWfmfNCyWicmUcJrLjotOIjXG1CeAMw3bc4MsGpBuG3Lndohaq3m
+         4wW9XFvh54b8tH+iqL+avebQ32wg2hX07UyT0zGHNo0WkW/RuoR2AQBKt28jhQKTeg3j
+         Qh+9OalbWBQ7w2BoEDozGssP+/VVytGMqe/NeMCANwe4BfDMFw+qwhfGcAts4WDnrjwE
+         H6OzKpMmLVltRcbYd7YBuEnYQFkV1ItU3IJWCovAZiMLOQQ+T2yj2IV/W3UbnYMBbjGr
+         HkZEsv0uqRdsm0IPYEA/6GbpAii5iUhH1THVWwDY5F32QZpShGW5FUQqq9WKfNZLBSAM
+         gC8w==
+X-Gm-Message-State: ACgBeo2CbYjD7NbgWuA/kkoIhWXi0oWzuPEZhjJslNO8qFtPDEEPsRTS
+        11Wls/G/GkmvqKOe8uzWsLoa
+X-Google-Smtp-Source: AA6agR4fxjllwhUaGWVmBM/fFPtDlHG357VCe4ud9OsIE0eNpij3HDe+s37YBQUhgIivve2UUInYvQ==
+X-Received: by 2002:a63:85c8:0:b0:41b:f27f:5a7e with SMTP id u191-20020a6385c8000000b0041bf27f5a7emr9588798pgd.590.1659793701451;
+        Sat, 06 Aug 2022 06:48:21 -0700 (PDT)
+Received: from thinkpad ([117.202.188.20])
+        by smtp.gmail.com with ESMTPSA id k92-20020a17090a4ce500b001f506804af3sm3276667pjh.52.2022.08.06.06.48.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Aug 2022 06:48:21 -0700 (PDT)
+Date:   Sat, 6 Aug 2022 19:18:10 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>
+Subject: Re: [PATCH v2 1/9] usb: dwc3: fix PHY disable sequence
+Message-ID: <20220806134810.GB14384@thinkpad>
+References: <20220804151001.23612-1-johan+linaro@kernel.org>
+ <20220804151001.23612-2-johan+linaro@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220804151001.23612-2-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,34 +86,84 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-dev_err_probe() already prints the error code in a human readable way, so
-there is no need to duplicate it as a numerical value at the end of the
-message.
+On Thu, Aug 04, 2022 at 05:09:53PM +0200, Johan Hovold wrote:
+> Generic PHYs must be powered-off before they can be tore down.
+> 
+> Similarly, suspending legacy PHYs after having powered them off makes no
+> sense.
+> 
+> Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
+> dwc3_probe() error-path sequences that got this wrong.
+> 
+> Note that this makes dwc3_core_exit() match the dwc3_core_init() error
+> path with respect to powering off the PHYs.
+> 
+> Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
+> Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
+> Cc: stable@vger.kernel.org      # 4.8
+> Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Fixes: ddaf0d6dc467 ("usb: common: usb-conn-gpio: use dev_err_probe() to print log")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/common/usb-conn-gpio.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index b39c9f1c375d..44c5127175b7 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -208,10 +208,9 @@ static int usb_conn_probe(struct platform_device *pdev)
- 	if (PTR_ERR(info->vbus) == -ENODEV)
- 		info->vbus = NULL;
- 
--	if (IS_ERR(info->vbus)) {
--		ret = PTR_ERR(info->vbus);
--		return dev_err_probe(dev, ret, "failed to get vbus :%d\n", ret);
--	}
-+	if (IS_ERR(info->vbus))
-+		return dev_err_probe(dev, PTR_ERR(info->vbus),
-+				     "failed to get vbus\n");
- 
- 	info->role_sw = usb_role_switch_get(dev);
- 	if (IS_ERR(info->role_sw))
+Thanks,
+Mani
+
+> ---
+>  drivers/usb/dwc3/core.c | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index c5c238ab3083..16d1f328775f 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -833,15 +833,16 @@ static void dwc3_core_exit(struct dwc3 *dwc)
+>  {
+>  	dwc3_event_buffers_cleanup(dwc);
+>  
+> +	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> +	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> +	phy_power_off(dwc->usb2_generic_phy);
+> +	phy_power_off(dwc->usb3_generic_phy);
+> +
+>  	usb_phy_shutdown(dwc->usb2_phy);
+>  	usb_phy_shutdown(dwc->usb3_phy);
+>  	phy_exit(dwc->usb2_generic_phy);
+>  	phy_exit(dwc->usb3_generic_phy);
+>  
+> -	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> -	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> -	phy_power_off(dwc->usb2_generic_phy);
+> -	phy_power_off(dwc->usb3_generic_phy);
+>  	dwc3_clk_disable(dwc);
+>  	reset_control_assert(dwc->reset);
+>  }
+> @@ -1879,16 +1880,16 @@ static int dwc3_probe(struct platform_device *pdev)
+>  	dwc3_debugfs_exit(dwc);
+>  	dwc3_event_buffers_cleanup(dwc);
+>  
+> -	usb_phy_shutdown(dwc->usb2_phy);
+> -	usb_phy_shutdown(dwc->usb3_phy);
+> -	phy_exit(dwc->usb2_generic_phy);
+> -	phy_exit(dwc->usb3_generic_phy);
+> -
+>  	usb_phy_set_suspend(dwc->usb2_phy, 1);
+>  	usb_phy_set_suspend(dwc->usb3_phy, 1);
+>  	phy_power_off(dwc->usb2_generic_phy);
+>  	phy_power_off(dwc->usb3_generic_phy);
+>  
+> +	usb_phy_shutdown(dwc->usb2_phy);
+> +	usb_phy_shutdown(dwc->usb3_phy);
+> +	phy_exit(dwc->usb2_generic_phy);
+> +	phy_exit(dwc->usb3_generic_phy);
+> +
+>  	dwc3_ulpi_exit(dwc);
+>  
+>  err4:
+> -- 
+> 2.35.1
+> 
+
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்
