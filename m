@@ -2,89 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF59B58C49A
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 10:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC52658C4F1
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 10:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242072AbiHHIFo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Aug 2022 04:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
+        id S232192AbiHHIfX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Aug 2022 04:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242062AbiHHIFh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 04:05:37 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37822D10B
-        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 01:05:31 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id 13so6435735plo.12
-        for <linux-usb@vger.kernel.org>; Mon, 08 Aug 2022 01:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=O+SVGz/QwwQDImSPbxMLknJVY6/6roIp/5evt7khqi8=;
-        b=TVmki4I1dSb+1aSt1UwuAmwywPp5Ykpxef49+Z58uTNcDh8SGKkS9NuaKfCpkNQcDO
-         0tjc/PD0zoncnQ47Jw/ZZ5EiC+1o/ngsmXCZkFoMpDlUu9vs0UBSQdH2xtSn0CpPJfMw
-         jA4cTlIU+7xx7PB0Q9QLrJP+fiB6IIHkBNwiO05czQmuFbVquBEAu8MIVFeBGNvdEqfP
-         FLPihOKNSZpCyWseKw9wa4vwhHg+NAwf7KjuSC2xJmCbxX4c5+Y2ozps/QCvwnqB4ULE
-         6TMWUGzT4Obt/kknCXCQLMf0rs0AM0Qsven6S6lvmv/CEE7CcIAU/O/V3cPCBs3wwPeV
-         Ljrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=O+SVGz/QwwQDImSPbxMLknJVY6/6roIp/5evt7khqi8=;
-        b=NKyMovJ7/XMhOXOlcVKLsHgu6RG1Zouxx6/JmkIIiL7Bpvwi5M02+ZLhyNTPriJu7U
-         0PS/RMt68IovoSdHuTaf6PkOMbCwB9Kl3WP7zkTs+hV/lwzuFMJWrlpnTgbMbBpu3x6j
-         1A7ux8CNyOLmLU0I0UR8DwWysdKOU8WbkxvnX18nZGZiruAd8KWusNnhHDDKQ5xWg9Er
-         y6Zhxrvfpl/GcFomAljJzvbZu1+e76LvFCLjJRv0y5UoJxkN0VetwFwi/1VZkRi/3z/X
-         PYoSqIxOIMwHrKUjpWG8/3Z3aczuQkyABZLFJOpCm+gvskxllRiNeCvXn8yONghTFi9m
-         ABIg==
-X-Gm-Message-State: ACgBeo38CI2NrFuGGVwj7Bdq88RVHljqgaWm3EjObOgFg3dowUhdEdx4
-        7NbjXuRILrAbypraMdHcuhcx
-X-Google-Smtp-Source: AA6agR6PMY+p1aipPNjyAQdBqThMo10eyPly8Z14382u1rTR3VO8S+wL5KHwN9bEEiP3taFf2dKwOg==
-X-Received: by 2002:a17:902:aa89:b0:16b:e514:54d2 with SMTP id d9-20020a170902aa8900b0016be51454d2mr17993521plr.127.1659945930573;
-        Mon, 08 Aug 2022 01:05:30 -0700 (PDT)
-Received: from thinkpad ([117.193.212.254])
-        by smtp.gmail.com with ESMTPSA id l21-20020a17090a599500b001f4d4a1b494sm7516034pji.7.2022.08.08.01.05.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 01:05:30 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 13:35:22 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 7/9] dt-bindings: usb: qcom,dwc3: add wakeup-source
- property
-Message-ID: <20220808080522.GB7601@thinkpad>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-8-johan+linaro@kernel.org>
- <20220806150848.GH14384@thinkpad>
- <Yu6ZwePzzkl7tewV@hovoldconsulting.com>
- <20220806165238.GM14384@thinkpad>
- <Yu6gWHt5BphADaNR@hovoldconsulting.com>
+        with ESMTP id S230127AbiHHIfU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 04:35:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48735263D;
+        Mon,  8 Aug 2022 01:35:18 -0700 (PDT)
+X-UUID: e00517e4fe0c42c5a04c3cb478211a06-20220808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=H1gH13JIdDwMN199QhmpDW0yWKPk/chPlNXobtyICTY=;
+        b=SPMsn3u410SY/PNOGAwVFmZknwYkIS1bxwfPQDcF/nL8jbhHvXARFes1EoMOvqtc2hv6BpP8yWtSKR2f1VFFrLywsPTovgtrJx+FFcqH8sNFtC2uUfQNMAGIRa23JNsRY0mQV1CxppQMIYMvRwLULA5ZyRQtyK/zXgzmy/i+rVo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:abfee422-2053-4124-b0f4-d4c54eb7abf0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:133135ae-9535-44a6-aa9b-7f62b79b6ff6,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e00517e4fe0c42c5a04c3cb478211a06-20220808
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1657741834; Mon, 08 Aug 2022 16:35:12 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 8 Aug 2022 16:35:11 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 8 Aug 2022 16:35:11 +0800
+Message-ID: <63920b2ae09e8f82a9b866cd01ddb63b958fb4e8.camel@mediatek.com>
+Subject: Re: [PATCH] usb: common: usb-conn-gpio: Simplify some error message
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Date:   Mon, 8 Aug 2022 16:35:11 +0800
+In-Reply-To: <7705a9dff8e097070c492d6f4f8aafaaa890f049.1659763173.git.christophe.jaillet@wanadoo.fr>
+References: <7705a9dff8e097070c492d6f4f8aafaaa890f049.1659763173.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yu6gWHt5BphADaNR@hovoldconsulting.com>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,76 +62,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 06, 2022 at 07:09:44PM +0200, Johan Hovold wrote:
-> On Sat, Aug 06, 2022 at 10:22:38PM +0530, Manivannan Sadhasivam wrote:
-> > On Sat, Aug 06, 2022 at 06:41:37PM +0200, Johan Hovold wrote:
-> > > On Sat, Aug 06, 2022 at 08:38:48PM +0530, Manivannan Sadhasivam wrote:
-> > > > On Thu, Aug 04, 2022 at 05:09:59PM +0200, Johan Hovold wrote:
-> > > > > Add a wakeup-source property to the binding to describe whether the
-> > > > > wakeup interrupts can wake the system from suspend.
-> > > > > 
-> > > > > Acked-by: Rob Herring <robh@kernel.org>
-> > > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > > 
-> > > > So this is based on the fact that Qcom glue wrapper is supplying the wakeup
-> > > > interrupts. But isn't it possible that on other platform, the DWC IP can supply
-> > > > wakeup interrupts?
-> > > 
-> > > Yeah, possibly, and that's why Rob suggested keeping the 'wakeup-source'
-> > > property also in the core node.
-> > > 
-> > > > In the driver, the wakeup-source parsing has been moved to the Qcom glue driver.
-> > > > But this contradicts with the binding.
-> > > 
-> > > That's irrelevant. The core driver does not implement wakeup support. It
-> > > was just added as a hack for the Qualcomm driver, and you won't get
-> > > wakeup-capability for other platforms by just parsing the property in
-> > > the core driver.
-> > > 
-> > > When/if wakeup support for such a platform is added, then the core
-> > > driver may need to look at the property again.
-> > > 
-> > 
-> > My point is, the platform drivers are free to add "wakeup-source" property in
-> > the DWC node. Then in that case, the DWC driver should handle the capability,
-> > isn't it?
+On Sat, 2022-08-06 at 07:19 +0200, Christophe JAILLET wrote:
+> dev_err_probe() already prints the error code in a human readable
+> way, so
+> there is no need to duplicate it as a numerical value at the end of
+> the
+> message.
 > 
-> No, not really. They wouldn't violate the current binding, but it would
-> arguably still be wrong to do so unless that platform actually supports
-> wakeup without involvement from a glue layer.
+> Fixes: ddaf0d6dc467 ("usb: common: usb-conn-gpio: use dev_err_probe()
+> to print log")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/usb/common/usb-conn-gpio.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> Perhaps we should reconsider reverting the binding update adding this
-> property to the core node and only add it selectively for the platforms
-> for which is actually applies (if they even exist).
-> 
+> diff --git a/drivers/usb/common/usb-conn-gpio.c
+> b/drivers/usb/common/usb-conn-gpio.c
+> index b39c9f1c375d..44c5127175b7 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -208,10 +208,9 @@ static int usb_conn_probe(struct platform_device
+> *pdev)
+>  	if (PTR_ERR(info->vbus) == -ENODEV)
+>  		info->vbus = NULL;
+>  
+> -	if (IS_ERR(info->vbus)) {
+> -		ret = PTR_ERR(info->vbus);
+> -		return dev_err_probe(dev, ret, "failed to get vbus
+> :%d\n", ret);
+> -	}
+> +	if (IS_ERR(info->vbus))
+> +		return dev_err_probe(dev, PTR_ERR(info->vbus),
+> +				     "failed to get vbus\n");
+How about putting dev_err_probe() in a single line? it doesn't exceed
+100 chars.
 
-That sounds right to me.
+>  
+>  	info->role_sw = usb_role_switch_get(dev);
+>  	if (IS_ERR(info->role_sw))
 
-> > I know it is broken currently, but moving the wakeup parsing code is not
-> > helping either.
-> 
-> It's not even broken. It has never even been implemented.
-> 
-> Just because someone added a hack that should probably never have been
-> merged in the first place, doesn't mean we should somehow pretend that
-> we support it.
-> 
-> > And... I'm aware of the fact that the binding should describe the hardware and
-> > not the limitation of the driver. So perhaps we should document it in the
-> > driver as a TODO or something?
-> 
-> I'd rather just revert the binding update to avoid having discussions
-> like this. We don't even know if it's possible to support on any
-> platform yet (and remember that none of this has even been in an rc
-> release yet).
-> 
-
-Okay.
-
-Thanks,
-Mani
-
-> Johan
-
--- 
-மணிவண்ணன் சதாசிவம்
