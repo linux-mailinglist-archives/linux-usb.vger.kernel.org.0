@@ -2,72 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5983B58CCA4
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 19:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17C458CDB3
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 20:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239759AbiHHRWt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Aug 2022 13:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S236878AbiHHSf3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Aug 2022 14:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234680AbiHHRWr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 13:22:47 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB42F15A2B
-        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 10:22:45 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q16so9146071pgq.6
-        for <linux-usb@vger.kernel.org>; Mon, 08 Aug 2022 10:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=O28LB3VJeo/kKOVhLcFL4DSdRmxftwkXFxjSliaVTfs=;
-        b=FjG9bAOE/vr4NILstUm98ZTFJcJmpjqoXufk2oowLpRFyjLNjIXWE8xgumyKd09Anw
-         qP4/nIYBvxItWT+RmPjL7Cdei2SABwD9CVWKG8f35SDHehlSlAQWuvxF542PNwDUNWSI
-         5wAxlMj1ml4UdL/wsgMcPqne/RJHi5NgQYwzpHpxkxg/D8bZDqPQgFbqDN5NLxcttcDZ
-         ncWX0Gu1Eoi7CrkiO8wJ+PD40yhkolG6+77TnOTxDSRj2YVOoAd4MFoHqqYURuDCHF4n
-         xRA+Vb3c9ieclrZIGszS/v4bgrG7lfnw+eYP+fcZeyyLZIz8vG2nBID91fn4v0o9v2pV
-         343Q==
+        with ESMTP id S229516AbiHHSf1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 14:35:27 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B1DEE
+        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 11:35:26 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so5072012iob.21
+        for <linux-usb@vger.kernel.org>; Mon, 08 Aug 2022 11:35:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=O28LB3VJeo/kKOVhLcFL4DSdRmxftwkXFxjSliaVTfs=;
-        b=VPyhmC66oboCY+EJJBhfBYjhT5/1r/KjYcdo25ADs12YJSyDE+88PZ/O1PCR8m/kX+
-         yzmb2SH2SGWPf0+Y6sjEs6vf3X7XUVpgtpDZmY08JtWTGPpx0ee5q5E9MXM6ROZwLICn
-         2wW5xKJEC6YoRvEvKxDauWQRogEcRc8tsEUZ+PX/nnWh3rPpDSovUL20vF31OI+l9Z7T
-         ShugKoFqITVgmt+r32uBLSWYVB8lx9UuiDFYHJS7vfduz5JFFoqsxUhrC/qWhhFfDDW5
-         r0PZfa8ElkOyFnH+FTRKn20+ZTDYKDJoMAmMfEPtekSUuBNcm0AIOhUGMHaZl9zcq0it
-         qlLQ==
-X-Gm-Message-State: ACgBeo3vSsGNmpDqDeUaiuOu6CwYJVxyqJlafGLFRoEuWI8xSIFxlGLe
-        EwL1NmJ2PJ6nlgSJ4uA3BUM88kSvaMWBUlGOVdQ=
-X-Google-Smtp-Source: AA6agR593c95O0DZq1RiwM0bxAJNNM5d/Y54tfZOSUP4vEY+a2Yy9N4Yd33HagemUwPm1j15Zb3AZk4FiK47vyQxC+s=
-X-Received: by 2002:a65:6d98:0:b0:41d:d9:a338 with SMTP id bc24-20020a656d98000000b0041d00d9a338mr13436835pgb.421.1659979365366;
- Mon, 08 Aug 2022 10:22:45 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=ogaPJSHpPjbMUvj6KD5YIrjyZ1VPcpx2+/D7i1DP9RY=;
+        b=G9IzRmQJHGAhrjbL6htHRATR9ucp6BuC6JS2Aj//2YdHXqx7iKrIt+EnK3k1MND+gv
+         FZyjdrlWxmDfWjLWWGNSq2o9ArMdgcJ9ZqYg5JnydIUh+zKgCNOPt6Mh8qlJOeZzJ8eV
+         FaTCKfLxZqvr7Bf3DTb7T04nE1npW7HY0Anxa58wdDB7qfxoIn/hLkFAZvV1mKKlgKXj
+         AG7oYjaBwJKu9GJ6Aaiu71Yq7kaFbG1dsiescIa+b3ypJhIxo34zwB5+GFLPmc+ZN4Z/
+         l5hIw6ix6zgfgmmCTb/mAdJ9Spl40dAKyzFsOTmGF8HQg5N0Wpu2CqZrm9Bw6lKyP9oD
+         4bEw==
+X-Gm-Message-State: ACgBeo2tzraQHglM9k7lpY1D2bsgiBUYJhes5lJzyC8J0MCWYhX+MFxh
+        W7o4HJQQnKDIcaTorB3ZPXZRXrDLSwFkY9Sfn9yIc129Kwhy
+X-Google-Smtp-Source: AA6agR6MsYsBxoMw+TyGgl9Bu4S0Z6Upv7JHcK3PUkLYZQeQ/nB3cZrk/E4RYLrDVirutxCWNaPmg7hRRMFMiWj37IgW/ejikviN
 MIME-Version: 1.0
-Received: by 2002:a05:7022:4398:b0:43:8161:c4b3 with HTTP; Mon, 8 Aug 2022
- 10:22:44 -0700 (PDT)
-Reply-To: keenjr73@gmail.com
-From:   "Keen J. Richardson" <kuntemrjoshua@gmail.com>
-Date:   Mon, 8 Aug 2022 17:22:44 +0000
-Message-ID: <CAFhr1xDq7Oweo5pq+QBwS5TinAZ7r1Tvsio9gMfNw9i8nxOi2Q@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
+X-Received: by 2002:a6b:640a:0:b0:684:b422:eaa with SMTP id
+ t10-20020a6b640a000000b00684b4220eaamr2299464iog.205.1659983725580; Mon, 08
+ Aug 2022 11:35:25 -0700 (PDT)
+Date:   Mon, 08 Aug 2022 11:35:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004bda3505e5bf143e@google.com>
+Subject: [syzbot] WARNING: locking bug in vtime_task_switch_generic
+From:   syzbot <syzbot+0d5283dca94c28f7d52d@syzkaller.appspotmail.com>
+To:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-A mail was sent to you sometime last week with the expectation of
-having a return mail from you but to my surprise you never bothered to replied.
-Kindly reply for further explanations.
+Hello,
 
-Respectfully yours,
-Keen J. Richardson
+syzbot found the following issue on:
+
+HEAD commit:    8288c99fc263 usb: misc: onboard_usb_hub: Remove duplicated..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=14679fb1080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6749cc6053521b55
+dashboard link: https://syzkaller.appspot.com/bug?extid=0d5283dca94c28f7d52d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0d5283dca94c28f7d52d@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(chain_key != INITIAL_CHAIN_KEY)
+WARNING: CPU: 0 PID: 3855 at kernel/locking/lockdep.c:5031 __lock_acquire+0x1a0f/0x5660 kernel/locking/lockdep.c:5031
+Modules linked in:
+CPU: 0 PID: 3855 Comm: syz-executor.2 Not tainted 5.19.0-rc7-syzkaller-00199-g8288c99fc263 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:__lock_acquire+0x1a0f/0x5660 kernel/locking/lockdep.c:5031
+Code: d2 0f 85 d4 28 00 00 44 8b 35 55 f2 b3 07 45 85 f6 0f 85 32 f4 ff ff 48 c7 c6 40 cc 47 86 48 c7 c7 e0 9b 47 86 e8 ac 94 96 04 <0f> 0b e9 1b f4 ff ff 48 c7 c2 00 96 91 8b 48 b8 00 00 00 00 00 fc
+RSP: 0018:ffffc900016cf858 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: 000000000000002c RCX: 0000000000000000
+RDX: ffff888110643900 RSI: ffffffff812c21e8 RDI: fffff520002d9efd
+RBP: ffff88811064431a R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000002 R11: 0000000000000001 R12: ffff8881106442f8
+R13: ffff888110643900 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f1c31d7f700(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f5c285b4d60 CR3: 00000001104c6000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
+ do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
+ vtime_task_switch_generic+0xb5/0x5a0 kernel/sched/cputime.c:768
+ vtime_task_switch include/linux/vtime.h:95 [inline]
+ finish_task_switch.isra.0+0x4e3/0xa10 kernel/sched/core.c:5020
+ context_switch kernel/sched/core.c:5149 [inline]
+ __schedule+0x947/0x2630 kernel/sched/core.c:6458
+ schedule+0xd2/0x1f0 kernel/sched/core.c:6530
+ schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
+ ___down_common kernel/locking/semaphore.c:225 [inline]
+ __down_common+0x363/0x770 kernel/locking/semaphore.c:246
+ down_interruptible+0x7b/0xa0 kernel/locking/semaphore.c:87
+ raw_event_queue_fetch drivers/usb/gadget/legacy/raw_gadget.c:99 [inline]
+ raw_ioctl_event_fetch drivers/usb/gadget/legacy/raw_gadget.c:588 [inline]
+ raw_ioctl+0x1010/0x2780 drivers/usb/gadget/legacy/raw_gadget.c:1256
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1c32608fc7
+Code: 3c 1c 48 f7 d8 49 39 c4 72 b8 e8 34 54 02 00 85 c0 78 bd 48 83 c4 08 4c 89 e0 5b 41 5c c3 0f 1f 44 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1c31d7d098 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f1c31d7e110 RCX: 00007f1c32608fc7
+RDX: 00007f1c31d7e110 RSI: 0000000080085502 RDI: 0000000000000003
+RBP: 0000000000000003 R08: 000000000000ffff R09: 000000000000000b
+R10: 00007f1c31d7d140 R11: 0000000000000246 R12: 0000000800000000
+R13: 0000000000000000 R14: 0000000020000000 R15: 00007f1c3266ecd5
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
