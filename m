@@ -2,500 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802B458C2D6
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 07:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E3558C362
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 08:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234784AbiHHF3C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Aug 2022 01:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
+        id S236709AbiHHGic (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Aug 2022 02:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiHHF3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 01:29:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB90E0EC
-        for <linux-usb@vger.kernel.org>; Sun,  7 Aug 2022 22:28:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D5B1ACE0B33
-        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 05:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EBEDC433D6
-        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 05:28:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659936535;
-        bh=IAHipI3KmqNurtXfA0NNGJ3Dy8SaW4Ggrw7bMJQkeqM=;
-        h=From:To:Subject:Date:From;
-        b=Ea6OriPZPlj0yVp8OqGGwLy6x2S2hMe1VBVTjjCHgT+eLNlwFwablnhZuDm4Bac3k
-         BwoapUginfLDt4hENgyEeHz2CkXthTHvIsBuqyrOGPbaNHxi8lER7KVCIYJYd7n58p
-         vQPLn12eJaWbQpU/Y+Uz6IAv2MG+MUgvywUcHyNK6tGjy8PhKaVoUTaJ6qSNKl2GzL
-         3+LIb3xzADD7/JL45llb8dNp+IW4Uz25jDgnNnHEUgTbhzKCVDVMFtqrCGnfVq4V0L
-         ELgdVGyAZQ3hfNtBxPxCsrOaJIJzTSeKrlUWYIMO8fLkB+U1+OyG2VAoXKX9IDeJ0+
-         J9Ycq64NL3qpA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 03350C433E4; Mon,  8 Aug 2022 05:28:54 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216336] New: 3G USB Modem Huawei k4203 stop working on kernel >
- 4.X
-Date:   Mon, 08 Aug 2022 05:28:54 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: socratesdevel@protonmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-216336-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S236421AbiHHGia (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 02:38:30 -0400
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2162.outbound.protection.outlook.com [40.92.63.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D988B11C10;
+        Sun,  7 Aug 2022 23:38:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hnP0W7mEXasexPP6P1T2ueDpyEljgGjwTSEDTNMD6ry1PPuOjIQKrl/7vLIp3qfbteeEr/gZx4YLfnT7J0ASIUOrOcBpuTrVLggHMy2Cysm3nMg3mRsNFd/leQDarVoS70PzdE+yhQErZhu36+/hqq5tF9loWw2I/zjRLeklngkYtecsYPFkp5tUM6tPs2L85QJ2OrmWV4RmbdTH8tZioDf9xFDfBLUnwAthzk8py/65We9OzI2k4880xJ+YZ0lEgG3FI7ZOhuYXhTiac83C8cBIS2Z6zk+zIxATIcz/oE8WaltxDLhL6k9ozZSnoX1ygAHIR9MYr5DujxFlpgwVjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vLPiZg1lSA9UNpv6Qk6ETk/zumj0PN+/hrwSbvlTJbw=;
+ b=SK0hxAtImUxwwtkBAjEv3oEJNE+Mt8uSTAsxn330/bKqFhPd9lULeJixQG6HeK8yeFH40PDNcWyDnwpetDT15fBBHSWVTt1tHCksc1oAGv2zTkuMo1IXfzUCmD3yj4348yH+MSJ7dzl1q9PcEELa0rExdpnAkMIoqA2Bsy21Jq49P0v+ViBGj2tzU7+Tss2E6krOIq1TSjEP5UunK5AqRoqVZfnhTpQsdoP2RFPVIIvufnM8W51hhB0mwIq6ohoUFJOXueTv1ycrT0sny41iYdLRkNl3bZmGwNIhsqI+XUgdEeuNx8JBmYJbrjNKPEISBDFfeqMuaqGm1uTFLuDZCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vLPiZg1lSA9UNpv6Qk6ETk/zumj0PN+/hrwSbvlTJbw=;
+ b=dbNI/DosqVRnrD0JFn96GU4iXu9N+SJ+TIrtFz2XPLAEx2+saySGgClJ08+NKvlx32j1WlPO2/xDgIoE1MXFnyng2dpCB8YSE+gVyLPymEXAiqrwYW7xwc6VwcMoSxsMQ+Tf7ov04e44L8M/8JS+WOqgB9gFcI1QrNd7DSGLsWMj6djAN5Ml4Js3kIyjm5aFF1W8M+lFBXWPJ/woGaY6s34VVna62gYL6iF0qvO4OCHHFtNwtWvGWPXi/M4bSvOe4PemsYM/R30jltny70rzBO1iXbyYvPIF4NjScGbra+LhSSSpYCIsfS0ma1oWbHhSicfHLLuoKzhhRrtOU1k4mQ==
+Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:113::14)
+ by MEAP282MB0501.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:6f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Mon, 8 Aug
+ 2022 06:38:25 +0000
+Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::c41b:d5b5:34ae:589e]) by MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::c41b:d5b5:34ae:589e%7]) with mapi id 15.20.5504.020; Mon, 8 Aug 2022
+ 06:38:25 +0000
+From:   =?utf-8?B?6LCtIOawuOaelw==?= <yonglin.tan@outlook.com>
+To:     Johan Hovold <johan@kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?utf-8?B?5Zue5aSNOiDlm57lpI06IFtQQVRDSF0gVVNCOiBzZXJpYWw6IG9wdGlvbjog?=
+ =?utf-8?Q?add_Quectel_EM060K_modem?=
+Thread-Topic: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIFVTQjogc2VyaWFsOiBvcHRpb246IGFkZCBRdWVj?=
+ =?utf-8?Q?tel_EM060K_modem?=
+Thread-Index: AQHYm2KhAS3C3XZt+EKChgLsF2Qvi62NO3AAgAlYx8CABljJgIAHvbHg
+Date:   Mon, 8 Aug 2022 06:38:25 +0000
+Message-ID: <MEYP282MB237442B77909EB1FEC56AA2BFD639@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+References: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+ <Yt0FnnVh47y8aMtn@hovoldconsulting.com>
+ <MEYP282MB237488A1AB2C7A9B4DA7B880FD989@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+ <Yuovy5ukT9V1ydKS@hovoldconsulting.com>
+In-Reply-To: <Yuovy5ukT9V1ydKS@hovoldconsulting.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-tmn:  [FT9r37dDq/aTbjfXYzg4TueRSkCm4Ope]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0121fbd9-f2bb-4c5d-b441-08da7908989c
+x-ms-traffictypediagnostic: MEAP282MB0501:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OZIPiMayQ/bfzE4BE+RN1fu+Q8pX+E4a+wEiCrGqS34YwBMFmGCbDf1hdAlYM0exDc4IVipVZcZRzRSg4Ybfc2OhL4vBgfjZ3vKMrGu8rqMGAc7FiBA6KAAhh+Xwj8beTliIiRRf6JqcoPKyCh3Kl7CwRYzMRY2i+NOTa+fNYMuJ5Uh5DdNRsdqjFlK8lLGiU1PkdKuinAy+eQIZEW42i4oiB+zFxdJr0CsLscCbFBIt+ryKNhOBRtbH2CLaWj5WftfqBdPOlwH1Az4UyE4/gSNveu4SgHSN0iKbY9vrNZCLrq7GNT1AaOgUhFjAY9k1Ck79sJp6gecYzWsyfqaql1oODi/0gV/ncY+sX71IDEdhpvaK7qZiBo5nNEQ7ZHfZ3tPacl++1d1vl0ordsyfTF2UC1h+jWCrG537Ra7gZZlNRmVlk2zWVq7TwR26Akg0x6FW4plAwzlBBEUy20Ftd5M0ytfKlzGPdf2BbJz8XQQxKYX1D8OP8NfVjmEUPURRe7bRSixhOImda5OHu6yPUrWbQ+SWwcJaQuyHQTU8QWxqG9wwJnw/lElQlaukivgc+7151FTDLLIbYc7GmYF0vc2DDgkswFGdPVDQIUrHvdXjs5vHobqnoHHUm0fbZ1aKifLCqIBa6Vtt5C1FN76GGw==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U1ZEK2FxNFltZ1JHbFRuNUtoOHU3RytmL0Q1cDJ1THF1RVB6V3lEeU1SQTJq?=
+ =?utf-8?B?cXIzRlJkUWZsT09hOFRWZzdTZWZJOEI5RVRnMjNJS2trVU14RHA2b0hFYjRR?=
+ =?utf-8?B?K1MvMkprRkdKb0hUZGMxV3hiV3lwQUxEcVpiSVVZUGFIbCt4bi9nOE96NytH?=
+ =?utf-8?B?VHRmQ2JmZHV2MEVyUDdQSWl5ZWZkUmNCaEs3eDFrOTlnNTRsVnhQY01Ndnoy?=
+ =?utf-8?B?bzVXRVZtTmRIRXB0blo5Q0VmMkZ5cmJiNFZhUlhZWWVoeHdaNzBIUFc1S3I1?=
+ =?utf-8?B?aHk4MUJmOE84WVRicnI2RzNzaTVsS25vQ2EveUIvVVJteFFYSDhvRjY0cXZE?=
+ =?utf-8?B?YU0vemZ4WnJpTkUrNVQvSFZuS1M4N0hneDE4MlJEbGsvSXFFbVVsVGFtQUhv?=
+ =?utf-8?B?aG55ZkJDaVg1WWZBZXN1QzFlY2Y1YjRBYTJFMUZCK09yTW91a0hhUk82WUNW?=
+ =?utf-8?B?K3l5b3AyZlUvUEdCNDhEVWJmc1kyMXdRRFFjM1NqYllOWnZuY3R2eC9PWGY0?=
+ =?utf-8?B?U1BHUWQ4aWs5a2hYd01UNzMrNzlTU1RJWVNXMHlNeWQ4SkEvNDY2Y0x2cWk4?=
+ =?utf-8?B?YnJnL3lBaWY5MC9IRXN1SUQ2RUVzczRtZm9HckhsYXZ3M0Y3bXR5VURCUGpS?=
+ =?utf-8?B?MHJrMHp6UUEzcmU2c3RSNlkvRmhBaHJnT2tjRVJSbmUwMkhja0NsTFZMZFFV?=
+ =?utf-8?B?SWZrdFIwdVdMZEllRW5zSHF5RDRjS0NiajluRldmWS9kTWs3Y0xrSVFkNkdP?=
+ =?utf-8?B?dTlPZ1hSVU80Q1VISXVOOENuczRNUEE5aXhwWFVkd0NDenB1YkVwUjJnTDR0?=
+ =?utf-8?B?b2tLSmFIUDRUM1Y3MWh4ZEpUbU0xdFQzRlduME9tL1JXRHhRN1hCMHcxOThN?=
+ =?utf-8?B?d2FBT1JQK0xDR08zQ0xMNEdWUDBPR2I0by9TOEloVGswc0hZbzRyUnFTUzlC?=
+ =?utf-8?B?Tzg2d0NnMTB5WU9jMDY0RlNWVldXeStGTGkxL00wc294UFR6c2J2SmZ4MVJw?=
+ =?utf-8?B?b3JFSVVRK2Mvd0RiY093Z1plamorT2hPZnc3TkowNG1Zai9NMlA2a2d1d3RX?=
+ =?utf-8?B?cE0zWXBOSHpzTk9ZQ21IanZPUHR6TFlFczRYcW9xcUlvQ1NCRG9JRTgrLzdt?=
+ =?utf-8?B?QzJyTHpYNWQ0RW9tVWZvaHAvQWptelZ6Z09qby9aR2xqcnJoWXRkZTN3OW5s?=
+ =?utf-8?B?eTh5SVd4MVY3TlNmL1BHVEhFUlBYS3BVdTluZ1c4eXdWMmhZOFIvaEhpUllW?=
+ =?utf-8?B?Qm4yUXNSbWZySTgvek1LV3pBcEFybDNRcm1CQ1kzYVZWOVJ2aVArY1J1NFdm?=
+ =?utf-8?B?Zkl1OUZheTFad3gxbklXdmgzNkVnYlU4RWJFNWtUWkhGMlk1blpjaXpkVzVX?=
+ =?utf-8?B?a3NYMUdUQ1Nyc1lvZXhHNlNTa0w1dmUvb0Y0UnVkZDlRV0tLYXI1N0IxSE03?=
+ =?utf-8?B?RWhjdzA4RjRaSTYxUnlJK2M0QitYcFl2WmZwN21xeFN0bU9QMm9iWDc4TkFj?=
+ =?utf-8?B?Sk4vQ1NqaWoyalViMHc2NVpObjlZYjhobkt6WjdlRGd0aG9SUUo3Y2pXMm9n?=
+ =?utf-8?B?eWJreU85VWgzamtBdnl5WktCcEN3NDlPcTAzbG0ySnh3NjJTK1N3cDREQmd0?=
+ =?utf-8?B?MENwWlhJU3pPWExXR2VES1dDZ1hmd1hnMFlvYkZ6RjhWSmFHMldhODVsL0o5?=
+ =?utf-8?B?cnYzUG01M0FndFFjN0duQmdXNDNUWUxUWjVnWXMxYmswcDVJcHY2eFl3PT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0121fbd9-f2bb-4c5d-b441-08da7908989c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2022 06:38:25.2827
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEAP282MB0501
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216336
-
-            Bug ID: 216336
-           Summary: 3G USB Modem Huawei k4203 stop working on kernel > 4.X
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.18.13
-          Hardware: Intel
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: high
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: socratesdevel@protonmail.com
-        Regression: No
-
-i am new on kernel development,
-i can successfully use my Huawei vodafone k4203 usb modem with kernel versi=
-on
-4.15(I test it on ubuntu-18.04.1 LTS with kernel 4.15 (i donwlaod this iso =
-on
-2018)) but when i try to use it with the newer 5.x.x kernel i get the error
-"kernel: cdc_mbim 2-1.5:2.0: SET_NTB_FORMAT failed
-kernel: cdc_mbim 2-1.5:2.0: bind() failure"
-
-when I want to use I enter on ubuntu-18.04.1LTS, insert the device and rebo=
-ot
-and enter on fedora-36
-but when I enter the fedora-36 and insert the device,  reboot and enter the
-ubuntu-18.04.1 LTS, the device fails on ubuntu-18.04.1 LTS, just remove and
-insert again and it works
-
-Now i'm use (Fedora_36 kernel 5.18.13-200.x86_64)
-I compiled the kernel-{5.4,4.19} longterm and the problem persist
-But when I access the 4.x.x kernel then reboot the PC and access the 5.x.x
-kernel it works, do you have any idea how I can solve this problem ? :)
-
-Note: the modem has a dhcp server and web server.
-
-My log on fedora-36:
-[  115.571291] usb 2-1.4: new high-speed USB device number 7 using ehci-pci
-[  115.652037] usb 2-1.4: New USB device found, idVendor=3D12d1, idProduct=
-=3D1f1c,
-bcdDevice=3D 1.02
-[  115.652045] usb 2-1.4: New USB device strings: Mfr=3D1, Product=3D2,
-SerialNumber=3D3
-[  115.652049] usb 2-1.4: Product: HUAWEI Mobile
-[  115.652052] usb 2-1.4: Manufacturer: Vodafone(Huawei)
-[  115.652054] usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-[  115.779381] usb-storage 2-1.4:1.0: USB Mass Storage device detected
-[  115.779821] scsi host4: usb-storage 2-1.4:1.0
-[  115.779917] usbcore: registered new interface driver usb-storage
-[  115.787770] usbcore: registered new interface driver uas
-[  116.646327] usbcore: registered new interface driver cdc_ether
-[  116.655897] usbcore: registered new interface driver cdc_ncm
-[  116.665733] usbcore: registered new interface driver cdc_wdm
-[  116.706710] cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-[  116.730917] cdc_mbim 2-1.4:2.0: bind() failure
-[  116.730987] usbcore: registered new interface driver cdc_mbim
-[  116.935660] usb 2-1.4: USB disconnect, device number 7
-[  121.459317] usb 2-1.4: new high-speed USB device number 8 using ehci-pci
-[  121.539511] usb 2-1.4: New USB device found, idVendor=3D12d1, idProduct=
-=3D1f1c,
-bcdDevice=3D 1.02
-[  121.539520] usb 2-1.4: New USB device strings: Mfr=3D1, Product=3D2,
-SerialNumber=3D3
-[  121.539525] usb 2-1.4: Product: HUAWEI Mobile
-[  121.539528] usb 2-1.4: Manufacturer: Vodafone(Huawei)
-[  121.539531] usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-[  121.594546] usb-storage 2-1.4:1.0: USB Mass Storage device detected
-[  121.594911] scsi host4: usb-storage 2-1.4:1.0
-[  122.466808] cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-[  122.490514] cdc_mbim 2-1.4:2.0: bind() failure
-[  122.567541] usb 2-1.4: USB disconnect, device number 8
-[  127.091345] usb 2-1.4: new high-speed USB device number 9 using ehci-pci
-[  127.172930] usb 2-1.4: New USB device found, idVendor=3D12d1, idProduct=
-=3D1f1c,
-bcdDevice=3D 1.02
-[  127.172939] usb 2-1.4: New USB device strings: Mfr=3D1, Product=3D2,
-SerialNumber=3D3
-[  127.172943] usb 2-1.4: Product: HUAWEI Mobile
-[  127.172947] usb 2-1.4: Manufacturer: Vodafone(Huawei)
-[  127.172949] usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-[  127.226234] usb-storage 2-1.4:1.0: USB Mass Storage device detected
-[  127.226706] scsi host4: usb-storage 2-1.4:1.0
-[  128.090497] cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-[  128.114422] cdc_mbim 2-1.4:2.0: bind() failure
-[  128.199565] usb 2-1.4: USB disconnect, device number 9
-
-/var/lib/messages:
-Aug  7 17:59:49 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
-Aug  7 17:59:49 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
-Aug  7 17:59:49 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-Aug  7 17:59:49 localhost mtp-probe[1531]: checking bus 2, device 7:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 17:59:49 localhost mtp-probe[1531]: bus: 2, device: 7 was not an MTP
-device
-Aug  7 17:59:49 localhost systemd[1]: Created slice system-usb_modeswitch.s=
-lice
-- Slice /system/usb_modeswitch.
-Aug  7 17:59:49 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.ser=
-vice
-- USB_ModeSwitch_2-1.4:1.0...
-Aug  7 17:59:49 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage
-device detected
-Aug  7 17:59:49 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
-Aug  7 17:59:49 localhost kernel: usbcore: registered new interface driver
-usb-storage
-Aug  7 17:59:49 localhost kernel: usbcore: registered new interface driver =
-uas
-Aug  7 17:59:49 localhost mtp-probe[1546]: checking bus 2, device 7:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 17:59:49 localhost mtp-probe[1546]: bus: 2, device: 7 was not an MTP
-device
-Aug  7 17:59:50 localhost usb_modeswitch[1551]: switch device 12d1:1f1c on
-002/007
-Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver
-cdc_ether
-Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver
-cdc_ncm
-Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver
-cdc_wdm
-Aug  7 17:59:50 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-Aug  7 17:59:50 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
-Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver
-cdc_mbim
-Aug  7 17:59:50 localhost kernel: usb 2-1.4: USB disconnect, device number 7
-Aug  7 17:59:55 localhost kernel: usb 2-1.4: new high-speed USB device numb=
-er 8
-using ehci-pci
-Aug  7 17:59:55 localhost kernel: usb 2-1.4: New USB device found,
-idVendor=3D12d1, idProduct=3D1f1c, bcdDevice=3D 1.02
-Aug  7 17:59:55 localhost kernel: usb 2-1.4: New USB device strings: Mfr=3D=
-1,
-Product=3D2, SerialNumber=3D3
-Aug  7 17:59:55 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
-Aug  7 17:59:55 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
-Aug  7 17:59:55 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-Aug  7 17:59:55 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage
-device detected
-Aug  7 17:59:55 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
-Aug  7 17:59:55 localhost mtp-probe[1565]: checking bus 2, device 8:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 17:59:55 localhost mtp-probe[1565]: bus: 2, device: 8 was not an MTP
-device
-Aug  7 17:59:55 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main
-process exited, code=3Dkilled, status=3D15/TERM
-Aug  7 17:59:55 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Fai=
-led
-with result 'signal'.
-Aug  7 17:59:55 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.serv=
-ice
-- USB_ModeSwitch_2-1.4:1.0.
-Aug  7 17:59:55 localhost audit[1]: SERVICE_START pid=3D1 uid=3D0 auid=3D42=
-94967295
-ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dusb_modeswitch@2-1.4:1.0 comm=3D"systemd"
-exe=3D"/usr/lib/systemd/systemd" hostname=3D? addr=3D? terminal=3D? res=3Df=
-ailed'
-Aug  7 17:59:55 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.ser=
-vice
-- USB_ModeSwitch_2-1.4:1.0...
-Aug  7 17:59:55 localhost mtp-probe[1575]: checking bus 2, device 8:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 17:59:55 localhost mtp-probe[1575]: bus: 2, device: 8 was not an MTP
-device
-Aug  7 17:59:55 localhost usb_modeswitch[1579]: switch device 12d1:1f1c on
-002/008
-Aug  7 17:59:56 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-Aug  7 17:59:56 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
-Aug  7 17:59:56 localhost kernel: usb 2-1.4: USB disconnect, device number 8
-Aug  7 18:00:00 localhost kernel: usb 2-1.4: new high-speed USB device numb=
-er 9
-using ehci-pci
-Aug  7 18:00:00 localhost kernel: usb 2-1.4: New USB device found,
-idVendor=3D12d1, idProduct=3D1f1c, bcdDevice=3D 1.02
-Aug  7 18:00:00 localhost kernel: usb 2-1.4: New USB device strings: Mfr=3D=
-1,
-Product=3D2, SerialNumber=3D3
-Aug  7 18:00:00 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
-Aug  7 18:00:00 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
-Aug  7 18:00:00 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-Aug  7 18:00:01 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage
-device detected
-Aug  7 18:00:01 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
-Aug  7 18:00:01 localhost mtp-probe[1586]: checking bus 2, device 9:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:01 localhost mtp-probe[1586]: bus: 2, device: 9 was not an MTP
-device
-Aug  7 18:00:01 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main
-process exited, code=3Dkilled, status=3D15/TERM
-Aug  7 18:00:01 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Fai=
-led
-with result 'signal'.
-Aug  7 18:00:01 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.serv=
-ice
-- USB_ModeSwitch_2-1.4:1.0.
-Aug  7 18:00:01 localhost audit[1]: SERVICE_START pid=3D1 uid=3D0 auid=3D42=
-94967295
-ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dusb_modeswitch@2-1.4:1.0 comm=3D"systemd"
-exe=3D"/usr/lib/systemd/systemd" hostname=3D? addr=3D? terminal=3D? res=3Df=
-ailed'
-Aug  7 18:00:01 localhost mtp-probe[1594]: checking bus 2, device 9:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:01 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.ser=
-vice
-- USB_ModeSwitch_2-1.4:1.0...
-Aug  7 18:00:01 localhost mtp-probe[1594]: bus: 2, device: 9 was not an MTP
-device
-Aug  7 18:00:01 localhost usb_modeswitch[1601]: switch device 12d1:1f1c on
-002/009
-Aug  7 18:00:01 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-Aug  7 18:00:01 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
-Aug  7 18:00:01 localhost kernel: usb 2-1.4: USB disconnect, device number 9
-Aug  7 18:00:06 localhost kernel: usb 2-1.4: new high-speed USB device numb=
-er
-10 using ehci-pci
-Aug  7 18:00:06 localhost kernel: usb 2-1.4: New USB device found,
-idVendor=3D12d1, idProduct=3D1f1c, bcdDevice=3D 1.02
-Aug  7 18:00:06 localhost kernel: usb 2-1.4: New USB device strings: Mfr=3D=
-1,
-Product=3D2, SerialNumber=3D3
-Aug  7 18:00:06 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
-Aug  7 18:00:06 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
-Aug  7 18:00:06 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-Aug  7 18:00:06 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage
-device detected
-Aug  7 18:00:06 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
-Aug  7 18:00:06 localhost mtp-probe[1611]: checking bus 2, device 10:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:06 localhost mtp-probe[1611]: bus: 2, device: 10 was not an MTP
-device
-Aug  7 18:00:06 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main
-process exited, code=3Dkilled, status=3D15/TERM
-Aug  7 18:00:06 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Fai=
-led
-with result 'signal'.
-Aug  7 18:00:06 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.serv=
-ice
-- USB_ModeSwitch_2-1.4:1.0.
-Aug  7 18:00:06 localhost audit[1]: SERVICE_START pid=3D1 uid=3D0 auid=3D42=
-94967295
-ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dusb_modeswitch@2-1.4:1.0 comm=3D"systemd"
-exe=3D"/usr/lib/systemd/systemd" hostname=3D? addr=3D? terminal=3D? res=3Df=
-ailed'
-Aug  7 18:00:06 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.ser=
-vice
-- USB_ModeSwitch_2-1.4:1.0...
-Aug  7 18:00:06 localhost mtp-probe[1620]: checking bus 2, device 10:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:06 localhost mtp-probe[1620]: bus: 2, device: 10 was not an MTP
-device
-Aug  7 18:00:07 localhost usb_modeswitch[1625]: switch device 12d1:1f1c on
-002/010
-Aug  7 18:00:07 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-Aug  7 18:00:07 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
-Aug  7 18:00:07 localhost kernel: usb 2-1.4: USB disconnect, device number =
-10
-Aug  7 18:00:12 localhost kernel: usb 2-1.4: new high-speed USB device numb=
-er
-11 using ehci-pci
-Aug  7 18:00:12 localhost kernel: usb 2-1.4: New USB device found,
-idVendor=3D12d1, idProduct=3D1f1c, bcdDevice=3D 1.02
-Aug  7 18:00:12 localhost kernel: usb 2-1.4: New USB device strings: Mfr=3D=
-1,
-Product=3D2, SerialNumber=3D3
-Aug  7 18:00:12 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
-Aug  7 18:00:12 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
-Aug  7 18:00:12 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-Aug  7 18:00:12 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage
-device detected
-Aug  7 18:00:12 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
-Aug  7 18:00:12 localhost mtp-probe[1633]: checking bus 2, device 11:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:12 localhost mtp-probe[1633]: bus: 2, device: 11 was not an MTP
-device
-Aug  7 18:00:12 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main
-process exited, code=3Dkilled, status=3D15/TERM
-Aug  7 18:00:12 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Fai=
-led
-with result 'signal'.
-Aug  7 18:00:12 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.serv=
-ice
-- USB_ModeSwitch_2-1.4:1.0.
-Aug  7 18:00:12 localhost audit[1]: SERVICE_START pid=3D1 uid=3D0 auid=3D42=
-94967295
-ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dusb_modeswitch@2-1.4:1.0 comm=3D"systemd"
-exe=3D"/usr/lib/systemd/systemd" hostname=3D? addr=3D? terminal=3D? res=3Df=
-ailed'
-Aug  7 18:00:12 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.ser=
-vice
-- USB_ModeSwitch_2-1.4:1.0...
-Aug  7 18:00:12 localhost mtp-probe[1643]: checking bus 2, device 11:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:12 localhost mtp-probe[1643]: bus: 2, device: 11 was not an MTP
-device
-Aug  7 18:00:12 localhost usb_modeswitch[1647]: switch device 12d1:1f1c on
-002/011
-Aug  7 18:00:13 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-Aug  7 18:00:13 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
-Aug  7 18:00:13 localhost kernel: usb 2-1.4: USB disconnect, device number =
-11
-Aug  7 18:00:17 localhost kernel: usb 2-1.4: new high-speed USB device numb=
-er
-12 using ehci-pci
-Aug  7 18:00:17 localhost kernel: usb 2-1.4: New USB device found,
-idVendor=3D12d1, idProduct=3D1f1c, bcdDevice=3D 1.02
-Aug  7 18:00:17 localhost kernel: usb 2-1.4: New USB device strings: Mfr=3D=
-1,
-Product=3D2, SerialNumber=3D3
-Aug  7 18:00:17 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
-Aug  7 18:00:17 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
-Aug  7 18:00:17 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
-Aug  7 18:00:17 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage
-device detected
-Aug  7 18:00:17 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
-Aug  7 18:00:17 localhost mtp-probe[1654]: checking bus 2, device 12:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:17 localhost mtp-probe[1654]: bus: 2, device: 12 was not an MTP
-device
-Aug  7 18:00:17 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main
-process exited, code=3Dkilled, status=3D15/TERM
-Aug  7 18:00:17 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Fai=
-led
-with result 'signal'.
-Aug  7 18:00:17 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.serv=
-ice
-- USB_ModeSwitch_2-1.4:1.0.
-Aug  7 18:00:17 localhost audit[1]: SERVICE_START pid=3D1 uid=3D0 auid=3D42=
-94967295
-ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dusb_modeswitch@2-1.4:1.0 comm=3D"systemd"
-exe=3D"/usr/lib/systemd/systemd" hostname=3D? addr=3D? terminal=3D? res=3Df=
-ailed'
-Aug  7 18:00:17 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.ser=
-vice
-- USB_ModeSwitch_2-1.4:1.0...
-Aug  7 18:00:17 localhost mtp-probe[1663]: checking bus 2, device 12:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:17 localhost mtp-probe[1663]: bus: 2, device: 12 was not an MTP
-device
-Aug  7 18:00:18 localhost usb_modeswitch[1668]: switch device 12d1:1f1c on
-002/012
-Aug  7 18:00:18 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
-Aug  7 18:00:18 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
-Aug  7 18:00:18 localhost kernel: usb 2-1.4: USB disconnect, device number =
-12
-Aug  7 18:00:25 localhost kernel: usb 2-1.4: new high-speed USB device numb=
-er
-13 using ehci-pci
-Aug  7 18:00:25 localhost kernel: usb 2-1.4: New USB device found,
-idVendor=3D12d1, idProduct=3D14fb, bcdDevice=3D 1.02
-Aug  7 18:00:25 localhost kernel: usb 2-1.4: New USB device strings: Mfr=3D=
-2,
-Product=3D1, SerialNumber=3D0
-Aug  7 18:00:25 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
-Aug  7 18:00:25 localhost kernel: usb 2-1.4: Manufacturer: HUAWEI Technology
-Aug  7 18:00:25 localhost mtp-probe[1672]: checking bus 2, device 13:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:25 localhost mtp-probe[1672]: bus: 2, device: 13 was not an MTP
-device
-Aug  7 18:00:25 localhost kernel: usbcore: registered new interface driver
-option
-Aug  7 18:00:25 localhost kernel: usbserial: USB Serial support registered =
-for
-GSM modem (1-port)
-Aug  7 18:00:25 localhost kernel: option 2-1.4:1.0: GSM modem (1-port)
-converter detected
-Aug  7 18:00:25 localhost kernel: usb 2-1.4: GSM modem (1-port) converter n=
-ow
-attached to ttyUSB0
-Aug  7 18:00:25 localhost kernel: option 2-1.4:1.1: GSM modem (1-port)
-converter detected
-Aug  7 18:00:25 localhost kernel: usb 2-1.4: GSM modem (1-port) converter n=
-ow
-attached to ttyUSB1
-Aug  7 18:00:25 localhost mtp-probe[1679]: checking bus 2, device 13:
-"/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
-Aug  7 18:00:25 localhost mtp-probe[1679]: bus: 2, device: 13 was not an MTP
-device
-Aug  7 18:00:38 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service:
-Deactivated successfully.
-Aug  7 18:00:38 localhost systemd[1]: Finished usb_modeswitch@2-1.4:1.0.ser=
-vice
-- USB_ModeSwitch_2-1.4:1.0.
-Aug  7 18:00:38 localhost audit[1]: SERVICE_START pid=3D1 uid=3D0 auid=3D42=
-94967295
-ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dusb_modeswitch@2-1.4:1.0 comm=3D"systemd"
-exe=3D"/usr/lib/systemd/systemd" hostname=3D? addr=3D? terminal=3D? res=3Ds=
-uccess'
-Aug  7 18:00:38 localhost audit[1]: SERVICE_STOP pid=3D1 uid=3D0 auid=3D429=
-4967295
-ses=3D4294967295 subj=3Dsystem_u:system_r:init_t:s0
-msg=3D'unit=3Dusb_modeswitch@2-1.4:1.0 comm=3D"systemd"
-exe=3D"/usr/lib/systemd/systemd" hostname=3D? addr=3D? terminal=3D? res=3Ds=
-uccess'
-Aug  7 18:00:48 localhost systemd[1149]: Starting grub-boot-success.service=
- -
-Mark boot as successful...
-Aug  7 18:00:48 localhost systemd[1149]: Finished grub-boot-success.service=
- -
-Mark boot as successful.
-Aug  7 18:00:57 localhost ModemManager[936]: <info>  [device
-/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4] creating modem with pl=
-ugin
-'huawei' and '2' ports
-Aug  7 18:00:57 localhost ModemManager[936]: <warn>  [plugin/huawei] could =
-not
-grab port ttyUSB0: Cannot add port 'tty/ttyUSB0', unhandled port type
-Aug  7 18:00:57 localhost ModemManager[936]: <warn>  [plugin/huawei] could =
-not
-grab port ttyUSB1: Cannot add port 'tty/ttyUSB1', unhandled port type
-Aug  7 18:00:57 localhost ModemManager[936]: <warn>  [base-manager] couldn't
-create modem for device '/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.=
-4':
-Failed to find primary AT port
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+RGVhciBKb2hhbiwNCg0KVGhlIFFEU1MgcG9ydCBvbmx5IGJlIHVzZWQgZm9yIGNhcHR1cmluZyBt
+b2RlbSdzIGxvZy4gVGhlIHVzZXIgYXBwbGljYXRpb24gYWNxdWlyZXMgdGhlIG1vZGVtJ3MgbG9n
+IGJ5IGFjY2Vzc2luZyB0aGUgQlVMS19JTiBFUC4gQW5kIG5vIG90aGVyIG9wZXJhdGlvbiByZXF1
+aXJlbWVudHMgb24gdGhpcyBpbnRlcmZhY2UuIA0KDQpCZXN0IFJlZ2FyZHMuDQoNCi0tLS0t6YKu
+5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7tuS6ujogSm9oYW4gSG92b2xkIDxqb2hhbkBrZXJuZWwub3Jn
+PiANCuWPkemAgeaXtumXtDogMjAyMuW5tDjmnIgz5pelIDE2OjIwDQrmlLbku7bkuro6IOiwrSDm
+sLjmnpcgPHlvbmdsaW4udGFuQG91dGxvb2suY29tPg0K5oqE6YCBOiBncmVna2hAbGludXhmb3Vu
+ZGF0aW9uLm9yZzsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZw0K5Li76aKYOiBSZTog5Zue5aSNOiBbUEFUQ0hdIFVTQjogc2VyaWFsOiBvcHRp
+b246IGFkZCBRdWVjdGVsIEVNMDYwSyBtb2RlbQ0KDQpPbiBTYXQsIEp1bCAzMCwgMjAyMiBhdCAw
+NzozMjo0N0FNICswMDAwLCDosK0g5rC45p6XIHdyb3RlOg0KDQo+IFRoZSBsYXN0IGludGVyZmFj
+ZSBpcyB1c2VkIGZvciBRdWFsY29tbSBXV0FOIG1vZHVsZSdzIFFEU1MoUXVhbGNvbW0gDQo+IERl
+YnVnIFN1Yi1TeXN0ZW0pIHBvcnQuIFVzZXJzIHVzZSB0aGUgUURTUyBpbnRlcmZhY2UgdG8gYWNx
+dWlyZSBNb2RlbSANCj4gc3Vic3lzdGVtIGxvZy4gSXQgaXMgdXNlZCB0byB3b3JrIHdpdGggRElB
+RyBwb3J0LiBUaGVyZWZvcmUsIHdlIGRvbid0IA0KPiBoYXZlIHRvIGJpbmQgdGhpcyBpbnRlcmZh
+Y2Ugd2l0aCBhbnkgZHJpdmVyLg0KDQpUaGFua3MgZm9yIHRoZSBkZXRhaWxzIChJIGNhbiBhZGQg
+UURTUyB0byB0aGUgc3VtbWFyeSBvZiB0aGUgaW50ZXJmYWNlIGxheW91dCBpbiB0aGUgY29tbWl0
+IG1lc3NhZ2Ugd2hlbiBhcHBseWluZykuDQoNCkJ1dCBhcmUgeW91IHNheWluZyB0aGF0IGl0J3Mg
+bm90IG5lZWRlZCBiZWNhdXNlIHRoYXQgZGF0YSBpcyBhdmFpbGFibGUgYWxzbyBvdmVyIHRoZSBE
+SUFHIHBvcnQ/IE9yIGlzIHRoZXJlIHNvbWUgbGlidXNiIGRyaXZlciB0aGF0IHNob3VsZCBiZSB1
+c2VkIHRvIGFjY2VzcyB0aGUgUURTUyBwb3J0Pw0KDQpKb2hhbg0K
