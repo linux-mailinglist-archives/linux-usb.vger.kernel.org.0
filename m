@@ -2,135 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17C458CDB3
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 20:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE1558CF15
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 22:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236878AbiHHSf3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Aug 2022 14:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S244312AbiHHU06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Aug 2022 16:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiHHSf1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 14:35:27 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B1DEE
-        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 11:35:26 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so5072012iob.21
-        for <linux-usb@vger.kernel.org>; Mon, 08 Aug 2022 11:35:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=ogaPJSHpPjbMUvj6KD5YIrjyZ1VPcpx2+/D7i1DP9RY=;
-        b=G9IzRmQJHGAhrjbL6htHRATR9ucp6BuC6JS2Aj//2YdHXqx7iKrIt+EnK3k1MND+gv
-         FZyjdrlWxmDfWjLWWGNSq2o9ArMdgcJ9ZqYg5JnydIUh+zKgCNOPt6Mh8qlJOeZzJ8eV
-         FaTCKfLxZqvr7Bf3DTb7T04nE1npW7HY0Anxa58wdDB7qfxoIn/hLkFAZvV1mKKlgKXj
-         AG7oYjaBwJKu9GJ6Aaiu71Yq7kaFbG1dsiescIa+b3ypJhIxo34zwB5+GFLPmc+ZN4Z/
-         l5hIw6ix6zgfgmmCTb/mAdJ9Spl40dAKyzFsOTmGF8HQg5N0Wpu2CqZrm9Bw6lKyP9oD
-         4bEw==
-X-Gm-Message-State: ACgBeo2tzraQHglM9k7lpY1D2bsgiBUYJhes5lJzyC8J0MCWYhX+MFxh
-        W7o4HJQQnKDIcaTorB3ZPXZRXrDLSwFkY9Sfn9yIc129Kwhy
-X-Google-Smtp-Source: AA6agR6MsYsBxoMw+TyGgl9Bu4S0Z6Upv7JHcK3PUkLYZQeQ/nB3cZrk/E4RYLrDVirutxCWNaPmg7hRRMFMiWj37IgW/ejikviN
-MIME-Version: 1.0
-X-Received: by 2002:a6b:640a:0:b0:684:b422:eaa with SMTP id
- t10-20020a6b640a000000b00684b4220eaamr2299464iog.205.1659983725580; Mon, 08
- Aug 2022 11:35:25 -0700 (PDT)
-Date:   Mon, 08 Aug 2022 11:35:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004bda3505e5bf143e@google.com>
-Subject: [syzbot] WARNING: locking bug in vtime_task_switch_generic
-From:   syzbot <syzbot+0d5283dca94c28f7d52d@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        with ESMTP id S244334AbiHHU0z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 16:26:55 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C78DC1A81C
+        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 13:26:50 -0700 (PDT)
+Received: (qmail 785745 invoked by uid 1000); 8 Aug 2022 16:26:49 -0400
+Date:   Mon, 8 Aug 2022 16:26:49 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
         syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] USB: gadget: Fix use-after-free Read in usb_udc_uevent()
+Message-ID: <YvFxiXmPlJc9wLZT@rowland.harvard.edu>
+References: <YtlbkmVGJyhO4kR6@rowland.harvard.edu>
+ <000000000000acc0e905e4517fa0@google.com>
+ <YtlrnhHyrHsSky9m@rowland.harvard.edu>
+ <CGME20220808145736eucas1p234e56422bd7973d7f0676e74f03ba405@eucas1p2.samsung.com>
+ <b2ba4245-9917-e399-94c8-03a383e7070e@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b2ba4245-9917-e399-94c8-03a383e7070e@samsung.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Aug 08, 2022 at 04:57:35PM +0200, Marek Szyprowski wrote:
+> Hi Alan,
 
-syzbot found the following issue on:
+Hi.
 
-HEAD commit:    8288c99fc263 usb: misc: onboard_usb_hub: Remove duplicated..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=14679fb1080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6749cc6053521b55
-dashboard link: https://syzkaller.appspot.com/bug?extid=0d5283dca94c28f7d52d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> This patch landed recently in linux-next as commit 2191c00855b0 ("USB: 
+> gadget: Fix use-after-free Read in usb_udc_uevent()"). Unfortunately it 
+> fixes the issue by introducing another one. It doesn't look very 
+> probable, but it would be nice to fix it to make the lock dependency 
+> checker happy.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Indeed.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0d5283dca94c28f7d52d@syzkaller.appspotmail.com
+> ======================================================
+> WARNING: possible circular locking dependency detected
+> 5.19.0-rc7+ #12510 Not tainted
+> ------------------------------------------------------
+> udevadm/312 is trying to acquire lock:
+> ffff80000aae1058 (udc_lock){+.+.}-{3:3}, at: usb_udc_uevent+0x54/0xe0
+> 
+> but task is already holding lock:
+> ffff000002277548 (kn->active#4){++++}-{0:0}, at: kernfs_seq_start+0x34/0xe0
+> 
+> which lock already depends on the new lock.
+> 
+> 
+> the existing dependency chain (in reverse order) is:
+> 
+> -> #3 (kn->active#4){++++}-{0:0}:
+>         lock_acquire+0x68/0x84
+>         __kernfs_remove+0x268/0x380
+>         kernfs_remove_by_name_ns+0x58/0xac
+>         sysfs_remove_file_ns+0x18/0x24
+>         device_del+0x15c/0x440
+>         device_link_drop_managed+0xa8/0xe0
+>         device_links_driver_bound+0x1b8/0x230
+>         driver_bound+0x68/0xc0
+>         really_probe.part.0+0x1f8/0x2ac
+>         __driver_probe_device+0x98/0x144
+>         driver_probe_device+0xac/0x14c
+>         __driver_attach+0x104/0x1b0
+>         bus_for_each_dev+0x70/0xd0
+>         driver_attach+0x24/0x30
+>         bus_add_driver+0x154/0x204
+>         driver_register+0x78/0x130
+>         __platform_driver_register+0x28/0x34
+>         simple_pm_bus_driver_init+0x1c/0x28
+>         do_one_initcall+0x74/0x400
+>         kernel_init_freeable+0x2f4/0x37c
+>         kernel_init+0x28/0x130
+>         ret_from_fork+0x10/0x20
+> 
+> -> #2 (device_links_lock){+.+.}-{3:3}:
+>         lock_acquire+0x68/0x84
+>         __mutex_lock+0x9c/0x430
+>         mutex_lock_nested+0x38/0x64
+>         device_link_remove+0x3c/0xa0
+>         _regulator_put.part.0+0x168/0x190
+>         regulator_put+0x3c/0x54
+>         devm_regulator_release+0x14/0x20
+>         release_nodes+0x5c/0x90
+>         devres_release_all+0x8c/0xe0
+>         device_unbind_cleanup+0x18/0x70
+>         really_probe.part.0+0x174/0x2ac
+>         __driver_probe_device+0x98/0x144
+>         driver_probe_device+0xac/0x14c
+>         __device_attach_driver+0xb8/0x120
+>         bus_for_each_drv+0x78/0xd0
+>         __device_attach_async_helper+0xb0/0xd4
+>         async_run_entry_fn+0x34/0xd0
+>         process_one_work+0x288/0x6bc
+>         worker_thread+0x74/0x450
+>         kthread+0x118/0x11c
+>         ret_from_fork+0x10/0x20
+> 
+> -> #1 (regulator_list_mutex){+.+.}-{3:3}:
+>         lock_acquire+0x68/0x84
+>         __mutex_lock+0x9c/0x430
+>         mutex_lock_nested+0x38/0x64
+>         regulator_lock_dependent+0x54/0x284
+>         regulator_enable+0x34/0x80
+>         phy_power_on+0x24/0x130
+>         __dwc2_lowlevel_hw_enable+0x100/0x130
+>         dwc2_lowlevel_hw_enable+0x18/0x40
+>         dwc2_hsotg_udc_start+0x6c/0x2f0
+>         gadget_bind_driver+0x124/0x1f4
+>         really_probe.part.0+0x9c/0x2ac
+>         __driver_probe_device+0x98/0x144
+>         driver_probe_device+0xac/0x14c
+>         __device_attach_driver+0xb8/0x120
+>         bus_for_each_drv+0x78/0xd0
+>         __device_attach+0xa8/0x1c0
+>         device_initial_probe+0x14/0x20
+>         bus_probe_device+0x9c/0xa4
+>         device_add+0x3a0/0x890
+>         usb_add_gadget+0x170/0x200
+>         usb_add_gadget_udc+0x94/0xd4
+>         dwc2_driver_probe+0x580/0x78c
+>         platform_probe+0x68/0xe0
+>         really_probe.part.0+0x9c/0x2ac
+>         __driver_probe_device+0x98/0x144
+>         driver_probe_device+0xac/0x14c
+>         __device_attach_driver+0xb8/0x120
+>         bus_for_each_drv+0x78/0xd0
+>         __device_attach+0xa8/0x1c0
+>         device_initial_probe+0x14/0x20
+>         bus_probe_device+0x9c/0xa4
+>         device_add+0x3a0/0x890
+>         of_device_add+0x48/0x6c
+>         of_platform_device_create_pdata+0x98/0x100
+>         of_platform_bus_create+0x17c/0x37c
+>         of_platform_populate+0x58/0xec
+>         dwc3_meson_g12a_probe+0x314/0x5d0
+>         platform_probe+0x68/0xe0
+>         really_probe.part.0+0x9c/0x2ac
+>         __driver_probe_device+0x98/0x144
+>         driver_probe_device+0xac/0x14c
+>         __device_attach_driver+0xb8/0x120
+>         bus_for_each_drv+0x78/0xd0
+>         __device_attach+0xa8/0x1c0
+>         device_initial_probe+0x14/0x20
+>         bus_probe_device+0x9c/0xa4
+>         deferred_probe_work_func+0x88/0xc4
+>         process_one_work+0x288/0x6bc
+>         worker_thread+0x74/0x450
+>         kthread+0x118/0x11c
+>         ret_from_fork+0x10/0x20
+> 
+> -> #0 (udc_lock){+.+.}-{3:3}:
+>         __lock_acquire+0x1298/0x20cc
+>         lock_acquire.part.0+0xe0/0x230
+>         lock_acquire+0x68/0x84
+>         __mutex_lock+0x9c/0x430
+>         mutex_lock_nested+0x38/0x64
+>         usb_udc_uevent+0x54/0xe0
+>         dev_uevent+0xb8/0x1ec
+>         uevent_show+0x8c/0x114
+>         dev_attr_show+0x20/0x60
+>         sysfs_kf_seq_show+0xa8/0x120
+>         kernfs_seq_show+0x2c/0x40
+>         seq_read_iter+0x1bc/0x4b0
+>         kernfs_fop_read_iter+0x140/0x1d0
+>         new_sync_read+0xd4/0x150
+>         vfs_read+0x190/0x1dc
+>         ksys_read+0x68/0xfc
+>         __arm64_sys_read+0x20/0x30
+>         invoke_syscall+0x48/0x114
+>         el0_svc_common.constprop.0+0x60/0x11c
+>         do_el0_svc_compat+0x1c/0x50
+>         el0_svc_compat+0x58/0x100
+>         el0t_32_sync_handler+0x90/0x140
+>         el0t_32_sync+0x190/0x194
+> 
+> other info that might help us debug this:
+> 
+> Chain exists of:
+>    udc_lock --> device_links_lock --> kn->active#4
 
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(chain_key != INITIAL_CHAIN_KEY)
-WARNING: CPU: 0 PID: 3855 at kernel/locking/lockdep.c:5031 __lock_acquire+0x1a0f/0x5660 kernel/locking/lockdep.c:5031
-Modules linked in:
-CPU: 0 PID: 3855 Comm: syz-executor.2 Not tainted 5.19.0-rc7-syzkaller-00199-g8288c99fc263 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:__lock_acquire+0x1a0f/0x5660 kernel/locking/lockdep.c:5031
-Code: d2 0f 85 d4 28 00 00 44 8b 35 55 f2 b3 07 45 85 f6 0f 85 32 f4 ff ff 48 c7 c6 40 cc 47 86 48 c7 c7 e0 9b 47 86 e8 ac 94 96 04 <0f> 0b e9 1b f4 ff ff 48 c7 c2 00 96 91 8b 48 b8 00 00 00 00 00 fc
-RSP: 0018:ffffc900016cf858 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: 000000000000002c RCX: 0000000000000000
-RDX: ffff888110643900 RSI: ffffffff812c21e8 RDI: fffff520002d9efd
-RBP: ffff88811064431a R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000002 R11: 0000000000000001 R12: ffff8881106442f8
-R13: ffff888110643900 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f1c31d7f700(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5c285b4d60 CR3: 00000001104c6000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- do_write_seqcount_begin_nested include/linux/seqlock.h:516 [inline]
- do_write_seqcount_begin include/linux/seqlock.h:541 [inline]
- vtime_task_switch_generic+0xb5/0x5a0 kernel/sched/cputime.c:768
- vtime_task_switch include/linux/vtime.h:95 [inline]
- finish_task_switch.isra.0+0x4e3/0xa10 kernel/sched/core.c:5020
- context_switch kernel/sched/core.c:5149 [inline]
- __schedule+0x947/0x2630 kernel/sched/core.c:6458
- schedule+0xd2/0x1f0 kernel/sched/core.c:6530
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- ___down_common kernel/locking/semaphore.c:225 [inline]
- __down_common+0x363/0x770 kernel/locking/semaphore.c:246
- down_interruptible+0x7b/0xa0 kernel/locking/semaphore.c:87
- raw_event_queue_fetch drivers/usb/gadget/legacy/raw_gadget.c:99 [inline]
- raw_ioctl_event_fetch drivers/usb/gadget/legacy/raw_gadget.c:588 [inline]
- raw_ioctl+0x1010/0x2780 drivers/usb/gadget/legacy/raw_gadget.c:1256
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1c32608fc7
-Code: 3c 1c 48 f7 d8 49 39 c4 72 b8 e8 34 54 02 00 85 c0 78 bd 48 83 c4 08 4c 89 e0 5b 41 5c c3 0f 1f 44 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1c31d7d098 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f1c31d7e110 RCX: 00007f1c32608fc7
-RDX: 00007f1c31d7e110 RSI: 0000000080085502 RDI: 0000000000000003
-RBP: 0000000000000003 R08: 000000000000ffff R09: 000000000000000b
-R10: 00007f1c31d7d140 R11: 0000000000000246 R12: 0000000800000000
-R13: 0000000000000000 R14: 0000000020000000 R15: 00007f1c3266ecd5
- </TASK>
+Peter, shouldn't this say:
 
+   udc_lock --> regulator_list_mutex --> device_links_lock --> kn->active#4
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+?  Is that a bug in the lockdep reporting?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+It looks like this is a bad interaction between the udc_lock and the 
+sysfs/kernfs locking.  If a lock such as udc_lock is held (or is part of 
+a chain) while a sysfs file is removed, the file's ->show or ->store 
+routine better not acquire that lock.
+
+I suspect the problem is that udc_lock is held for too long.  Probably it 
+should be released during the calls to udc->driver->bind and 
+udc->driver->unbind.
+
+Getting this right will require some careful study.  Marek, if I send you 
+a patch later, will you be able to test it?
+
+Alan Stern
