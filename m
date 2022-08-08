@@ -2,141 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA6B58C98E
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 15:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9D758C9E1
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Aug 2022 15:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243186AbiHHNeR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Aug 2022 09:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S243228AbiHHN4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Aug 2022 09:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242958AbiHHNeQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 09:34:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93E62EE;
-        Mon,  8 Aug 2022 06:34:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5732A61238;
-        Mon,  8 Aug 2022 13:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF151C433D7;
-        Mon,  8 Aug 2022 13:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659965654;
-        bh=LBRn0PznnW2ya4z0sPhw5JpQP8WyMUBJTDHeeK7woag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PNifi5K7Jm7FwC1RVc1vW5qDVCs/ySS9i+m27qTGqtkfGcc4xz6VIhzlEmRxwe8Q3
-         nAg/U8GrgNY/rVdyJ2vsNi3bAeQMsMgP0GvmjvZLo/KRbG/B2c6prdd1fINYg9Q5/b
-         hljRnV2sqAH2kzmrBMezphZqMNo48qm5m+bxOb928n4i2+dSpwP0wyB/8/DSvMU0DJ
-         xa0/qRasW0LXk+hLUkfB7FH5h0xMIW9zV+/Vp65qzeTziTKSC4e63dc0JVZY392KAI
-         4ETCV+JK93RyZWT0usaBxXV+lnZGzZKSrr8jxKzKisF6MG69DNA0ff/uu6q62eWWBK
-         ommQpb0xEGG+Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oL2tW-0000vp-Iv; Mon, 08 Aug 2022 15:34:11 +0200
-Date:   Mon, 8 Aug 2022 15:34:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 3/9] usb: dwc3: qcom: fix gadget-only builds
-Message-ID: <YvEQ0hpTRvAPStHU@hovoldconsulting.com>
-References: <20220804151001.23612-1-johan+linaro@kernel.org>
- <20220804151001.23612-4-johan+linaro@kernel.org>
- <YvEKIJ+GujHt7XvT@kroah.com>
+        with ESMTP id S243318AbiHHN4b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 8 Aug 2022 09:56:31 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C75FDEE7
+        for <linux-usb@vger.kernel.org>; Mon,  8 Aug 2022 06:56:30 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id m2so8641715pls.4
+        for <linux-usb@vger.kernel.org>; Mon, 08 Aug 2022 06:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=6iEDymzMhI7eCfGp+igOcCdMbfQR4m/fJauFtkRFERM=;
+        b=h/9SYXuMEvzV3u/bAT8hgwxD+Dz3uEzqjYItx+eVfJouwpfTDHxhG0yrE+8sRSxJvh
+         9csMZQ7PPJoHIxM1RmbIad1K0egGjyRmXyPztrz3tNYN7JL682YCYkMQa95wkNHiKU3n
+         K8q7DHbywhLjlasVmaj3uUodPPpvyOQrTlIOhCmqHzMNZlMwTpiTp3vX1x+d7FkK3Zky
+         8xDBLULfjw3EFMnPMr/hCaYpr3IOV3N78HnYPTCTfXX2nfh8Kqh5TRgmptrH4z/j1ven
+         Gz4uOr/w5ZIOJ+57ZAoaLNF4J8k2cfvHVzIpNutpC1DnS01AFnoSLwoQ1c9LW+1Zv7jW
+         6GXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=6iEDymzMhI7eCfGp+igOcCdMbfQR4m/fJauFtkRFERM=;
+        b=NqKzJnSQ7dJA8lMC5eCSbfwShABc6OcATUcriNm6NNkS0FLx3N3BRTGxO7R9p/p20n
+         9KqS3Vi4lARYnIgxeL9G987Oj32TVVyie7t9/zeQnHRsZJ59pzH2LOzAMAIBYzigFqRV
+         +4c8Lc5lhfWneRhvvMtWTMmJV6r8gqSJjCo0Za+HvWYAPbH50Q0QLM+hpur1/SIuMBoY
+         +x7iMUNKUATAzHcHKh4VebnvgZOMJBMx+amRrAfmSROwCQo3fcsVyA0cfUmqsgHN4C3I
+         Hzz2uYvexrI1knMOsvMFK0ToSYJmVqXtczDJD93Ul8LgzL+q2AkQ0PPsXF2ukwMRgxJG
+         j5xA==
+X-Gm-Message-State: ACgBeo1os80SxrBn4SKx20caGPJMkJHp4zaR9e3n+bXzOBCgYA5ZgD/l
+        cvZk7wNOLq4rWLr4t+QUc7qSHjLIFmwdclS9LM8=
+X-Google-Smtp-Source: AA6agR6BNKki4rjUEadzejdQnvZmU0CJkc5gI5FbuJBXoPoViT7Z/ONO+tkvA5YLgPYuv3D4xe9zEE1xCzWENOogzP4=
+X-Received: by 2002:a17:90a:317:b0:1f3:8ad:52aa with SMTP id
+ 23-20020a17090a031700b001f308ad52aamr21044314pje.106.1659966989350; Mon, 08
+ Aug 2022 06:56:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvEKIJ+GujHt7XvT@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:689b:b0:43:7d4d:d7a5 with HTTP; Mon, 8 Aug 2022
+ 06:56:28 -0700 (PDT)
+From:   "From:Mrs Reb" <msc6824@gmail.com>
+Date:   Mon, 8 Aug 2022 06:56:28 -0700
+Message-ID: <CAOXcEZNSHbAtEgr93hAQJJMWidWwbGL8o3Byi93V+zQ5ru+mTQ@mail.gmail.com>
+Subject: From:Mrs Reb
+To:     undisclosed-recipients:;
+Content-Type: multipart/mixed; boundary="000000000000bd550505e5bb2e52"
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_FREEMAIL_DOC_PDF,T_FREEMAIL_DOC_PDF_BCC,T_HK_NAME_FM_FROM,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 03:05:36PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Aug 04, 2022 at 05:09:55PM +0200, Johan Hovold wrote:
-> > A recent change added a dependency to the USB host stack and broke
-> > gadget-only builds of the driver.
-> > 
-> > Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> > 
-> > Changes in v2
-> >  - new patch
-> > 
-> >  drivers/usb/dwc3/dwc3-qcom.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index be2e3dd36440..e9364141661b 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -310,8 +310,11 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-> >  	 * currently supports only 1 port per controller. So
-> >  	 * this is sufficient.
-> >  	 */
-> > +#ifdef CONFIG_USB
-> >  	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-> 
-> If a gadget driver needs this for some reason, then the #ifdef should be
-> put in a .h file, not in a .c file.
+--000000000000bd550505e5bb2e52
+Content-Type: text/plain; charset="UTF-8"
 
-Yeah, if we're keeping this long-term then yes, and possibly also
-otherwise.
+-- 
+My Dear,
+I  Have A Mutual Confidential Offer For You .
+Please Kindly Open The Attached File Meanwhile Your Positive Response is Needed.
+E-mail : rebeccaschieble111major@gmail.com
+Best Regards,
+Major: Rebecca Schieble.
+US Army Baghdad Iraq.
 
-> But step back a minute and ask why a host-config-only function is being
-> called when a device is in gadget-only mode?  This feels like a
-> design/logic issue in this file, NOT something to paper over with a
-> #ifdef in a .c file
+--000000000000bd550505e5bb2e52
+Content-Type: application/pdf; name="FROM.MRS_SCHIEBLE (1).pdf"
+Content-Disposition: attachment; filename="FROM.MRS_SCHIEBLE (1).pdf"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: file0
 
-We're not as I'm fixing that bug in later in the series. I should
-probably have put this one after that fix, but figured fixing the build
-was more important than a harder-to-hit NULL-deref due to non-host mode
-not being considered when the offending series was merged.
-
-> This implies that if this device is NOT in a host configuration, then
-> the suspend path of it is not configured properly at all, as why would
-> it be checking or caring about this at all if this is in gadget-only
-> mode?
-
-Right, so see path 6/9 which addresses this by only calling this hack
-when in host mode:
-
-	https://lore.kernel.org/all/20220804151001.23612-7-johan+linaro@kernel.org/
-
-> Something else is wrong here, let's fix the root problem please.  Maybe
-> this driver should just never be built in gadget-only mode, as it is
-> never intended to support that option?
-
-The problem is commit 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup
-interrupts during suspend"), which I considered simply reverting but as
-that breaks suspend completely on some boards I decided to try and fix
-it up while we work on a proper long-term solution (i.e. for how the
-dwc/xhci layers should be communicating to implement this).
-
-Remember that it took two years and 21 revisions to get to the state
-we're at now after you merged the wakeup series in June.
-
-Johan
+JVBERi0xLjUKJeLjz9MKMSAwIG9iago8PCAKICAgL1R5cGUgL0NhdGFsb2cKICAgL1BhZ2VzIDIg
+MCBSCiAgIC9QYWdlTGF5b3V0IC9PbmVDb2x1bW4KICAgL1BhZ2VNb2RlIC9Vc2VOb25lCiAgIC9P
+Q1Byb3BlcnRpZXMgPDwgCiAgIC9EIDw8IAogICAvT3JkZXIgW10KICAgL0FTIFs8PCAKICAgL0V2
+ZW50IC9WaWV3CiAgIC9DYXRlZ29yeSBbL1ZpZXcgXQo+PiA8PCAKICAgL0V2ZW50IC9QcmludAog
+ICAvQ2F0ZWdvcnkgWy9QcmludCBdCj4+IDw8IAogICAvRXZlbnQgL0V4cG9ydAogICAvQ2F0ZWdv
+cnkgWy9FeHBvcnQgXQo+PiBdCj4+Cj4+Cj4+CmVuZG9iagoyIDAgb2JqCjw8IAogICAvVHlwZSAv
+UGFnZXMKICAgL0tpZHMgWzMgMCBSIF0KICAgL0NvdW50IDEKPj4KZW5kb2JqCjMgMCBvYmoKPDwg
+CiAgIC9UeXBlIC9QYWdlCiAgIC9QYXJlbnQgMiAwIFIKICAgL1Jlc291cmNlcyA8PCAKICAgL1By
+b2NTZXQgWy9QREYgL1RleHQgXQogICAvRm9udCA8PCAKICAgL0YxIDYgMCBSCiAgIC9GMiA5IDAg
+UgogICAvRjMgMTIgMCBSCj4+Cj4+CiAgIC9NZWRpYUJveCBbMCAwIDYxMiA3OTJdCiAgIC9Db250
+ZW50cyA0IDAgUgo+PgplbmRvYmoKNCAwIG9iago8PCAKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUK
+ICAgL0xlbmd0aCA0MjAyCj4+CnN0cmVhbQp4Xq1c244ctxF936+YhwDeBjytIZt9Ux4SO1FgBbFj
+S/JDEATBaHa0kkdardUrB8pn5IvDKrIu7NtqNYQw2tluNlms66li9f568euF2cC/D9cXrd20u27T
+2tK6jcH/PxwvXl385Ad9++Li0V/8uF1ZN5sXry52pamqapP+8HPsyr7vzGbn/5kNTOifcJsX7y7+
+efl9se0vPxXWXG4Kd/nnYttcHov+cu8/H4pth1f/Umyr8NubYlvj/ZviX5sXf7148uLL6TBVV7pO
+03KVYVLngENq0s35k3qONX1butkZtaCatip7u3G1KyubS1hN28BsM9K6iYJ65+VjUSxwFWU0wDcc
+DQN+gUvvSaS/97fg9jMS9stiayr8djjs4yzPi+by8Nr/wiIPo97Sr2Wc5an/fFVUJlIBl/aoIGGe
+b/w8Ql9UItNeHmATeuAA9OHsV3pVfOLruJZsFn47fKT7+N8xTnbnb+E8zKfhjtjylv/D67zAb3gX
+nr7GXTIfiTrYJY4EEn6NY2x7+cp/7YS1K6rReLk2G+f6ss6nGk1VVk1QDaDwTyDRn+E/oPmH8Jtp
+gqRBok+KhqXyojBAMNCPX7+DQTQAZ/p7UQUd+tZfVY8E7cB1fizCB4biKjzkO5rheRzyNC7lfQnM
+9TdWkK1Rj+HCcB8X/jGSQ3M8wXniKCb4Ge04ERkIHRSY7ALpvSHdgrtHlOOV0vg7VDK4Gu73axL1
+zstVprRdNnHW7LWAAx8K46K6syqTxRDRt0gs6h4o4W/F1lZhg2xFqVbv48NH1mOwon20G+IVWobY
+F3OM6ZjoveY3rfUzqd0mTv0OZBr8CKw4DDxfIjlQtz1T/TpSvGdpiesBIr4qOuUUkHL4nOKUZ3t/
+V9vSNFo4wk2kH7jArIKrJ97N1boGVa7sMFrkU6GqLWOsCBwO0eBOqc6BhAwX38fvgYGiQnqMNqLh
+Y6FdMDwQVCGR9+/8ZeM/Lgqr9j/RnkdO+A3FJW2zRFLkLakoKe8g6peAFL73NGrHQUcXCXEbfnQY
+WGrHQkwqbJl09C7ONrLDAZiy14/D1f943k02uSJ/a8rO+Zhgc8IFiwgIVUDv2tO8Z2klWIF4NK/M
+h9Eu4fGPhYTaN2qjivkwT+DZbYobxM348DnmqgTk6MgAKcBFQgCkjwJy5BtQRMozkCbxurRL0XS4
+EpwVEiAgAy5pJ3uHmyYzSCQ+Xp0cgzgscb/88IpG7Lqy8y6hsQAWcmmEwSCFGsECDwwOHPJMFqtP
+Hay7/B/cfne+GzUVDtfEZIDm/iLgcj3rrZbRsIwKE93fs+ReRy0agt5y6NuTMsEgnv+QukyJlkHs
+Z+/Pdm25c7m5Zru+bLpk1uAXIpDwBkI+3hspWiHsB9OIFBQgj4Ej4PbhFoca5kKKskZcj9aKDPxI
+Tx0YwJCZBUcWfQpBCJrhLvoF+H44jT2FOPElo6v7Grjh6iaj0dV9V+4ib8kXwecEtCmXiETTNmHL
+KX9T8DZ1zuJmBVaF3XrBqXBE3EBuKwHTyk+jCOknXBtF7MQSyKSI2+T3ieMpisBAe8BtDsMrDiHR
+nDgO3A8/sBJB0YdUSjACBesUlszkbl+vK0RnyxbS+B0UKHIpRFeXxopC6G0JS/S+JLasZ7q2E6e2
+IHI2NPRZK7geE6tx7CaBz7tOUBctAoqVcA/SGOVZgnXDdEEArKOzsfWhXFpAX36RFAdxZjQccAh6
+e73o+6AZiQRra0EZtBRXFKjpy9Yn+w0OzqVALeYhuPQaNh7es7O8Se8B+8hQr3lQMBq4Nw8ABTES
+PBBXczjJiCQZBKW4T9dY2Ege4xEgWgMQAeyq9EMD2e8zFE09ZrIluKBqXXvmX5T+iAc0R1gWo6Bk
+pORqUtUKdraoFj7C1KEG1OYLNHUHYUslphRqyEJEgAzlZzh1YAHhl/+Sk9GWqBOiqd15/oxSuxsI
+NLIExcEp3z4Plq4FtWlicFcotw9zD6miBBXSQCK4FbpClqI1L10/7ta0c/zUm53LFmdczK6Fap4W
+aOoCF/XKVWWzsbUrs50Q1C5SME6X+ntjTWJyaalmzE4n+HyhXDVjjlNJH3lKBp5jaBGgx1708Xg+
+iq5sBbVcZlWZY8rGy5BnzAD1QZY+R9rde3ZR70Jl2ithqGj6aJeqkVVL++Vc1Vv/o61tP7uqkXAV
+IQI4WzxJMpeHQuI63nklZcQt4IetOId3OOCGLn2aMuUBlJm2hiMaTd3j87ls2h64pmfNIzvXizNY
+lp3zm/JZsGt2+SqJrm2hOKXklx40Jah94hsShBi8eBp8yEGs4dsQko40KvgbxjkKxmFCM8rCJWiM
+qBH0kq74lv2JDnOEnHXFkcvyVCtQGMIxL3iFqOOm4lubYpyjPMeSN4y5KqjcTfyGAvewIvwGbTWW
+qXNJv3FQiELpvy/UwRwQK1lBmsJKPY54jcc6eOWkQeDZlmEaEwC2ULnNMWsNAVjPOnvud3+iTloj
+dShUcS37WwZAPP8ImvQUZRuJd1zODEHV0RBtGPccd3rt/bLjzvnKAZp8ou9sQwJHV7Q3HIi6poFy
+SS7trQ04eT4GmeSLZN0jzgnRLDjtRoLnYB8HNhtGw3SAdLB9AgQdDFvMe0wESS5gmbMV1zrsThhv
++47XH8beWxsx7nW+dDLGWutOf3TcMAK95NyIH+lEoohS69OoMqWLI4csOUpC1xGzq7CnwvYIBnJp
+XdVB2Sits2uyQtxYPJa9IV4KB4Bfn+i+XNa1rkSfB576IMewD2IoJknBLLQCBHbC6BX5h+mQhOAI
+Mnj6yvtk2yW8zYGzmxYbddSsK8piscsC6sP5yoHO1hDBcGmMkmlKM3JMclLP4iYzI81hXRCnf2QV
+41g9MerlpBV0D75Tifcl00DaJtUZIigNOJ9IV2VHuorwh3jnB6o5wi+Tg0MCg8NihEwOeiUPPBGH
+gIJb3uJq54KK2kEWp9lSIDauaQmuKI+BtgFTuZzgzM8T8UngKhE+X32/i1pyIlaKOCbJO0mMeROL
+OUktZjjfAO0Oc2e1kwxWbXcNcFlNmicJq/qeU6FlSVehT8+ZNmPRt2rFQ0EDFNs1ugaSsGr7OQJC
+I//N5SoYGOx3AGc9cSIzRsElVvLqXgVU6jNrjdRZSAVS+ATLe+y/PYofihuBtAGA00ukz0etklYu
+o+Ge4AnrvzwqttpLPiqkMLutOWti/vy7kCwMATHN0/tPhzR1RehQqfG3Oi6aI2i5bgfS18LLcILu
+uh40S8+aSb+bz/FklUOVdt775XNllXNl40ZhUKBLCntSt6b08ppDk8J+rPwcRa+LfuzKyB3qwJfi
+5Pj0TLPKpKgbIiXVCQTvU4RMYpwCacvRGcket5ORqRJ6+1xQfhDUrTe3InHbB+yF+XAuiVcGTttR
+4qPuxZcFG3CVdCBM3FNS1yWAMgT+3n9GoMMloxZBCCky3sfB32JHptQw6ASEJp87kgpzwP+BIkyf
+cRKRKYGvQHYzpZqh+VSpRE/O9wPOYv1IiyeDdwGQtHPJrMJelS9wCwQZJbesi70JMjyuq63BWoKr
+W1gzl9oaBH0xucOWqC2RQ0fSLLqkn2yhSiOuLanpiJ94QFvEivnLfOSXkJfoD8ZnszCCH5wA8SRF
+3RSjitHz2AT+MzeBf0dd2dAEgI0bz+AKt29/E9tMFEfIArm0qxplVOkpwR6HFUXwINPYvA221a4G
+4Ip6IJXk60JnWtLuR8dfo9A2c4TxUFKMw95RTU4Gc4XXZ0abTCJc0CKQOWjHBGbutRHMebgZnMnu
+TUfIJDBwbZ+R3rwdEGnTMJd69LH1SIQk69GOCf9nJkTlTxpXiGiZN8h4ekyapscwnousmOLCI3Ja
+H1m0pN2232G246qMryDY3uITIPkxn6b9N1FuJNOg7fCb0vfwrKoBor3r/P0pS0a0iAIpXJ1pdgm6
+Qu7iwMcQyGUCDmdbg22xG/cLeKK3N4KNom2EH5F6UU8BfrQY+buRt4yuvJCOie3ay1Ojvnigggw5
+TL6oaC28UwBetM6G+23bl80EBALNSccu0stomcfo1BV+zriHCK/JL2iBhOZ+7cCIORxy90WfOJrQ
+wEiIjFgfRInL6kouxylYglSDdpO6ooXALWFjWy0EenFwevaZl/HSlxzm1WpR8k04VM73doJtGnqL
+ZsasE1dJ7USs9epdloUMQEGtZs7jMtIauRapUp7GsU0XLtmkiJMz7J4cZfvrJCFcftr+hmqK1Co9
+1oFThYojyy1hgNYBSRPo6RSBzvCFvZCkUNdRt1W2PFMJhUpbp4U6w9RF5aoNpgaNyXgGY+uK39NN
+ffXZ0aDDZFgvwIKaHvIsVcimLmAcUbJAc3HxdOIWlqHQIwsV1Hmf5rbpWlfJg5+DpgQGT2Hx2ZKA
+ty695mhRZKgeuwpf3tazZtAa0Em349RxxRwMvn4AR1L5XvS3pk9eEBYvsACyxo12gm0JlaaeI8XZ
+AQ1XSQFaUmSOnxOvuwqRgVI+ywl6J4mBOF7SQ3RZ9x5Vr54CSSjv196gRJv8jG3Me1Mxy8DjRb3Y
+wcF+l7ECB8ckjqrSJD6AHJC/E6eAOHEukQvESnJtNBB+D4PlzI5jCgwYR6CkVXiEu05T3syqp+Dk
+FMbqjAR+U31imGsm0FomSZ027U7qjQs1xcT16oP7sz2Ha3zA0cJKqkoB9lP6+bFg+E/sUZq5pFqm
+Rz/qXDZ/Y3pxngQxU4VPUAyngZMCAA/7hSDbQbpZpsKTkDRKn4ldo5dQcXGtvZS9rY+FqSktGBiT
+weKf1pQKhw86BMrCSWUXZ0kWPk2fmg+/tOairEM7p7M5X3Iz4Zzry8HQuJ9eY/60m4iUgxREYEb6
+moNy6QlCTt8oke4G8R8wH3mQmTTgtVwJdcu3eisC1e9xdazaSTWTmUcrsQJrXRH/Ni57EXGLL62m
+219UktD56Kqcrx+bpuW3TIlOijJoRJ7A6StsY3zyQIedepNUlaTU8J7YM37PxF2Oa/x0D9ffn+/d
+bR9eAlLMoS1Imvg53mv53GnhJDOepIgRqju3HMBixE9OKM7edL2z2OWpNp0BuNc7h+qqZl1R8dAj
+CT2+4RR78prDQ5fHSR1XCL+hLg02+AP7JNE8YTRFnmORgEsSHkKWDC0JpgunYYrSDNmN6XG4njW1
+taRldnqGfns+CdaF+oEiIaayDLYFrp6/mleyJjcXbRteNFazPskxKzYF61kz9MjbDt8xUZOOolhU
++7MXgsO7KmV1iPZ+satCRcchw+F35UKRUy32eBIpceYHvGpUudDTnmhm6JV/WcSXmQ744TQrXsHX
+n94wkn15FhnO9IDyNRlvY6Qx+IHV4ZsXpA1/k+2XIr6VBfT+sdhC64zp1IA3GLZD0/sBg4kfPNPi
+pMksd7Z1G/5hgeSJK6+wg2/ZvhJXXoEqtjnrJf56me80tQ19MzLnP+J7VFxvw6CLZ+NsPwR05GRJ
+okmWc+PQnihEfZ1h0hrzgEXuJVIzmIgYk/MP4Rkricj383/18HHEUs/O+KuH5zOqi4UcITcDAII8
+vk6ZsML/HXbcGb9EvpISvDVKr5gmf/Vt6e/YLf2JN93dNHoJ6Xw2dbuE0BnOV4lb9f+mc+CJh55G
+s/qni/8DUNsoGQplbmRzdHJlYW0KZW5kb2JqCjUgMCBvYmoKPDwgCiAgIC9Qcm9kdWNlciA8RkVG
+RjAwNjQwMDZGMDA1MDAwNDQwMDQ2MDAyMDAwNTYwMDY1MDA3MjAwMjAwMDM3MDAyRTAwMzIwMDIw
+MDA0MjAwNzUwMDY5MDA2QzAwNjQwMDIwMDAzMzAwMzcwMDM2MDAyMDAwMjgwMDc1MDA2RTAwNkIw
+MDZFMDA2RjAwNzcwMDZFMDAyMDAwNTcwMDY5MDA2RTAwNjQwMDZGMDA3NzAwNzMwMDIwMDA3NjAw
+NjUwMDcyMDA3MzAwNjkwMDZGMDA2RTAwMjAwMDJEMDAyMDAwNTYwMDY1MDA3MjAwNzMwMDY5MDA2
+RjAwNkUwMDNBMDAyMDAwMzEwMDMwMDAyRTAwMzAwMDJFMDAzMTAwMzkwMDMwMDAzNDAwMzMwMDIw
+MDAyODAwNzgwMDM2MDAzNDAwMjkwMDI5PgogICAvQ3JlYXRpb25EYXRlIChEOjIwMjExMTIzMTQy
+MDA0KzAzJzAwJykKPj4KZW5kb2JqCjYgMCBvYmoKPDwgCiAgIC9UeXBlIC9Gb250CiAgIC9TdWJ0
+eXBlIC9UcnVlVHlwZQogICAvRm9udERlc2NyaXB0b3IgNyAwIFIKICAgL0Jhc2VGb250IC9Bcmlh
+bE1UCiAgIC9GaXJzdENoYXIgMAogICAvTGFzdENoYXIgMjU1CiAgIC9XaWR0aHMgOCAwIFIKICAg
+L0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKPj4KZW5kb2JqCjcgMCBvYmoKPDwgCiAgIC9UeXBl
+IC9Gb250RGVzY3JpcHRvcgogICAvRm9udE5hbWUgL0FyaWFsTVQKICAgL0FzY2VudCA3MjgKICAg
+L0NhcEhlaWdodCA3MTYKICAgL0Rlc2NlbnQgLTIxMAogICAvRmxhZ3MgMzIKICAgL0ZvbnRCQm94
+IFstNjY1IC0zMjUgMjAwMCAxMDQwXQogICAvSXRhbGljQW5nbGUgMAogICAvU3RlbVYgODcKICAg
+L1hIZWlnaHQgNTE5Cj4+CmVuZG9iago4IDAgb2JqCls3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3
+NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1
+MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDI3OCAyNzggMzU1
+IDU1NiA1NTYgODg5IDY2NyAxOTEgMzMzIDMzMyAzODkgNTg0IDI3OCAzMzMgMjc4IDI3OCA1NTYg
+NTU2IDU1NiA1NTYgNTU2IDU1NiA1NTYgNTU2IDU1NiA1NTYgMjc4IDI3OCA1ODQgNTg0IDU4NCA1
+NTYgMTAxNSA2NjcgNjY3IDcyMiA3MjIgNjY3IDYxMSA3NzggNzIyIDI3OCA1MDAgNjY3IDU1NiA4
+MzMgNzIyIDc3OCA2NjcgNzc4IDcyMiA2NjcgNjExIDcyMiA2NjcgOTQ0IDY2NyA2NjcgNjExIDI3
+OCAyNzggMjc4IDQ2OSA1NTYgMzMzIDU1NiA1NTYgNTAwIDU1NiA1NTYgMjc4IDU1NiA1NTYgMjIy
+IDIyMiA1MDAgMjIyIDgzMyA1NTYgNTU2IDU1NiA1NTYgMzMzIDUwMCAyNzggNTU2IDUwMCA3MjIg
+NTAwIDUwMCA1MDAgMzM0IDI2MCAzMzQgNTg0IDM1MCA1NTYgMzUwIDIyMiA1NTYgMzMzIDEwMDAg
+NTU2IDU1NiAzMzMgMTAwMCA2NjcgMzMzIDEwMDAgMzUwIDYxMSAzNTAgMzUwIDIyMiAyMjIgMzMz
+IDMzMyAzNTAgNTU2IDEwMDAgMzMzIDEwMDAgNTAwIDMzMyA5NDQgMzUwIDUwMCA2NjcgMjc4IDMz
+MyA1NTYgNTU2IDU1NiA1NTYgMjYwIDU1NiAzMzMgNzM3IDM3MCA1NTYgNTg0IDMzMyA3MzcgNTUy
+IDQwMCA1NDkgMzMzIDMzMyAzMzMgNTc2IDUzNyAzMzMgMzMzIDMzMyAzNjUgNTU2IDgzNCA4MzQg
+ODM0IDYxMSA2NjcgNjY3IDY2NyA2NjcgNjY3IDY2NyAxMDAwIDcyMiA2NjcgNjY3IDY2NyA2Njcg
+Mjc4IDI3OCAyNzggMjc4IDcyMiA3MjIgNzc4IDc3OCA3NzggNzc4IDc3OCA1ODQgNzc4IDcyMiA3
+MjIgNzIyIDcyMiA2NjcgNjY3IDYxMSA1NTYgNTU2IDU1NiA1NTYgNTU2IDU1NiA4ODkgNTAwIDU1
+NiA1NTYgNTU2IDU1NiAyNzggMjc4IDI3OCAyNzggNTU2IDU1NiA1NTYgNTU2IDU1NiA1NTYgNTU2
+IDU0OSA2MTEgNTU2IDU1NiA1NTYgNTU2IDUwMCA1NTYgNTAwIF0KZW5kb2JqCjkgMCBvYmoKPDwg
+CiAgIC9UeXBlIC9Gb250CiAgIC9TdWJ0eXBlIC9UcnVlVHlwZQogICAvRm9udERlc2NyaXB0b3Ig
+MTAgMCBSCiAgIC9CYXNlRm9udCAvQXJpYWwtQm9sZE1UCiAgIC9GaXJzdENoYXIgMAogICAvTGFz
+dENoYXIgMjU1CiAgIC9XaWR0aHMgMTEgMCBSCiAgIC9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5n
+Cj4+CmVuZG9iagoxMCAwIG9iago8PCAKICAgL1R5cGUgL0ZvbnREZXNjcmlwdG9yCiAgIC9Gb250
+TmFtZSAvQXJpYWwtQm9sZE1UCiAgIC9Bc2NlbnQgNzI4CiAgIC9DYXBIZWlnaHQgNzE2CiAgIC9E
+ZXNjZW50IC0yMTAKICAgL0ZsYWdzIDI2MjE3NgogICAvRm9udEJCb3ggWy02MjggLTM3NiAyMDAw
+IDEwNTZdCiAgIC9JdGFsaWNBbmdsZSAwCiAgIC9TdGVtViAxNjUKICAgL1hIZWlnaHQgNTE5Cj4+
+CmVuZG9iagoxMSAwIG9iagpbNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUw
+IDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAg
+NzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCAyNzggMzMzIDQ3NCA1NTYgNTU2IDg4OSA3
+MjIgMjM4IDMzMyAzMzMgMzg5IDU4NCAyNzggMzMzIDI3OCAyNzggNTU2IDU1NiA1NTYgNTU2IDU1
+NiA1NTYgNTU2IDU1NiA1NTYgNTU2IDMzMyAzMzMgNTg0IDU4NCA1ODQgNjExIDk3NSA3MjIgNzIy
+IDcyMiA3MjIgNjY3IDYxMSA3NzggNzIyIDI3OCA1NTYgNzIyIDYxMSA4MzMgNzIyIDc3OCA2Njcg
+Nzc4IDcyMiA2NjcgNjExIDcyMiA2NjcgOTQ0IDY2NyA2NjcgNjExIDMzMyAyNzggMzMzIDU4NCA1
+NTYgMzMzIDU1NiA2MTEgNTU2IDYxMSA1NTYgMzMzIDYxMSA2MTEgMjc4IDI3OCA1NTYgMjc4IDg4
+OSA2MTEgNjExIDYxMSA2MTEgMzg5IDU1NiAzMzMgNjExIDU1NiA3NzggNTU2IDU1NiA1MDAgMzg5
+IDI4MCAzODkgNTg0IDM1MCA1NTYgMzUwIDI3OCA1NTYgNTAwIDEwMDAgNTU2IDU1NiAzMzMgMTAw
+MCA2NjcgMzMzIDEwMDAgMzUwIDYxMSAzNTAgMzUwIDI3OCAyNzggNTAwIDUwMCAzNTAgNTU2IDEw
+MDAgMzMzIDEwMDAgNTU2IDMzMyA5NDQgMzUwIDUwMCA2NjcgMjc4IDMzMyA1NTYgNTU2IDU1NiA1
+NTYgMjgwIDU1NiAzMzMgNzM3IDM3MCA1NTYgNTg0IDMzMyA3MzcgNTUyIDQwMCA1NDkgMzMzIDMz
+MyAzMzMgNTc2IDU1NiAzMzMgMzMzIDMzMyAzNjUgNTU2IDgzNCA4MzQgODM0IDYxMSA3MjIgNzIy
+IDcyMiA3MjIgNzIyIDcyMiAxMDAwIDcyMiA2NjcgNjY3IDY2NyA2NjcgMjc4IDI3OCAyNzggMjc4
+IDcyMiA3MjIgNzc4IDc3OCA3NzggNzc4IDc3OCA1ODQgNzc4IDcyMiA3MjIgNzIyIDcyMiA2Njcg
+NjY3IDYxMSA1NTYgNTU2IDU1NiA1NTYgNTU2IDU1NiA4ODkgNTU2IDU1NiA1NTYgNTU2IDU1NiAy
+NzggMjc4IDI3OCAyNzggNjExIDYxMSA2MTEgNjExIDYxMSA2MTEgNjExIDU0OSA2MTEgNjExIDYx
+MSA2MTEgNjExIDU1NiA2MTEgNTU2IF0KZW5kb2JqCjEyIDAgb2JqCjw8IAogICAvVHlwZSAvRm9u
+dAogICAvU3VidHlwZSAvVHJ1ZVR5cGUKICAgL0ZvbnREZXNjcmlwdG9yIDEzIDAgUgogICAvQmFz
+ZUZvbnQgL0NhbGlicmkKICAgL0ZpcnN0Q2hhciAwCiAgIC9MYXN0Q2hhciAyNTUKICAgL1dpZHRo
+cyAxNCAwIFIKICAgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKPj4KZW5kb2JqCjEzIDAgb2Jq
+Cjw8IAogICAvVHlwZSAvRm9udERlc2NyaXB0b3IKICAgL0ZvbnROYW1lIC9DYWxpYnJpCiAgIC9B
+c2NlbnQgNzUwCiAgIC9DYXBIZWlnaHQgNjMyCiAgIC9EZXNjZW50IC0yNTAKICAgL0ZsYWdzIDMy
+CiAgIC9Gb250QkJveCBbLTUwMyAtMzEzIDEyNDAgMTAyNl0KICAgL0l0YWxpY0FuZ2xlIDAKICAg
+L1N0ZW1WIDg3CiAgIC9YSGVpZ2h0IDQ2NAo+PgplbmRvYmoKMTQgMCBvYmoKWzUwNyA1MDcgNTA3
+IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcg
+NTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1
+MDcgMjI2IDMyNiA0MDEgNDk4IDUwNyA3MTUgNjgyIDIyMSAzMDMgMzAzIDQ5OCA0OTggMjUwIDMw
+NiAyNTIgMzg2IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyAyNjggMjY4
+IDQ5OCA0OTggNDk4IDQ2MyA4OTQgNTc5IDU0NCA1MzMgNjE1IDQ4OCA0NTkgNjMxIDYyMyAyNTIg
+MzE5IDUyMCA0MjAgODU1IDY0NiA2NjIgNTE3IDY3MyA1NDMgNDU5IDQ4NyA2NDIgNTY3IDg5MCA1
+MTkgNDg3IDQ2OCAzMDcgMzg2IDMwNyA0OTggNDk4IDI5MSA0NzkgNTI1IDQyMyA1MjUgNDk4IDMw
+NSA0NzEgNTI1IDIyOSAyMzkgNDU1IDIyOSA3OTkgNTI1IDUyNyA1MjUgNTI1IDM0OSAzOTEgMzM1
+IDUyNSA0NTIgNzE1IDQzMyA0NTMgMzk1IDMxNCA0NjAgMzE0IDQ5OCA0OTggNTA3IDQ5OCAyNTAg
+MzA1IDQxOCA2OTAgNDk4IDQ5OCAzOTUgMTAzOCA0NTkgMzM5IDg2NyA0OTggNDY4IDQ5OCA0OTgg
+MjUwIDI1MCA0MTggNDE4IDQ5OCA0OTggOTA1IDQ1MCA3MDUgMzkxIDMzOSA4NTAgNDk4IDM5NSA0
+ODcgMjI2IDMyNiA0OTggNTA3IDQ5OCA1MDcgNDk4IDQ5OCAzOTMgODM0IDQwMiA1MTIgNDk4IDMw
+NiA1MDcgMzk0IDMzOSA0OTggMzM2IDMzNCAyOTIgNTUwIDU4NiAyNTIgMzA3IDI0NiA0MjIgNTEy
+IDYzNiA2NzEgNjc1IDQ2MyA1NzkgNTc5IDU3OSA1NzkgNTc5IDU3OSA3NjMgNTMzIDQ4OCA0ODgg
+NDg4IDQ4OCAyNTIgMjUyIDI1MiAyNTIgNjI1IDY0NiA2NjIgNjYyIDY2MiA2NjIgNjYyIDQ5OCA2
+NjQgNjQyIDY0MiA2NDIgNjQyIDQ4NyA1MTcgNTI3IDQ3OSA0NzkgNDc5IDQ3OSA0NzkgNDc5IDc3
+MyA0MjMgNDk4IDQ5OCA0OTggNDk4IDIyOSAyMjkgMjI5IDIyOSA1MjUgNTI1IDUyNyA1MjcgNTI3
+IDUyNyA1MjcgNDk4IDUyOSA1MjUgNTI1IDUyNSA1MjUgNDUzIDUyNSA0NTMgXQplbmRvYmoKeHJl
+ZgowIDE1IAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDMy
+MCAwMDAwMCBuIAowMDAwMDAwMzg4IDAwMDAwIG4gCjAwMDAwMDA1OTEgMDAwMDAgbiAKMDAwMDAw
+NDg3MyAwMDAwMCBuIAowMDAwMDA1MjY2IDAwMDAwIG4gCjAwMDAwMDU0NTIgMDAwMDAgbiAKMDAw
+MDAwNTY2NiAwMDAwMCBuIAowMDAwMDA2NzE1IDAwMDAwIG4gCjAwMDAwMDY5MDggMDAwMDAgbiAK
+MDAwMDAwNzEzMyAwMDAwMCBuIAowMDAwMDA4MTgyIDAwMDAwIG4gCjAwMDAwMDgzNzEgMDAwMDAg
+biAKMDAwMDAwODU4NiAwMDAwMCBuIAp0cmFpbGVyCjw8IAogICAvUm9vdCAxIDAgUgogICAvSW5m
+byA1IDAgUgogICAvU2l6ZSAxNQo+PgpzdGFydHhyZWYKOTYzMAolJUVPRgo=
+--000000000000bd550505e5bb2e52--
