@@ -2,40 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E50558D86B
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 13:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F6D58D89D
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 14:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242934AbiHILx6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 9 Aug 2022 07:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S232311AbiHIMJS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 9 Aug 2022 08:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiHILx4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 07:53:56 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6C24975;
-        Tue,  9 Aug 2022 04:53:55 -0700 (PDT)
+        with ESMTP id S231717AbiHIMJR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 08:09:17 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DAC24954
+        for <linux-usb@vger.kernel.org>; Tue,  9 Aug 2022 05:09:16 -0700 (PDT)
 Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id E660820000C;
-        Tue,  9 Aug 2022 11:53:51 +0000 (UTC)
-Message-ID: <9aa57b8cc303becc6cc5c161935ff0540559db80.camel@hadess.net>
-Subject: Re: [PATCH 1/2] USB: core: add a way to revoke access to open USB
+        by mail.gandi.net (Postfix) with ESMTPSA id 60B09C0004;
+        Tue,  9 Aug 2022 12:09:12 +0000 (UTC)
+Message-ID: <0d09c2106c86cb8fe7f715f3acd17ea84c7f224e.camel@hadess.net>
+Subject: Re: [RFC v2] USB: core: add a way to revoke access to open USB
  devices
 From:   Bastien Nocera <hadess@hadess.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Date:   Tue, 09 Aug 2022 13:53:51 +0200
-In-Reply-To: <YvJFUWOw6vyU3tc4@kroah.com>
-References: <20220809094300.83116-1-hadess@hadess.net>
-         <20220809094300.83116-2-hadess@hadess.net> <YvI3rUTs/axBANHm@kroah.com>
-         <8512a37ce2e54f2c44a4fe10b475d61334498c4f.camel@hadess.net>
-         <YvJFUWOw6vyU3tc4@kroah.com>
+        Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Tue, 09 Aug 2022 14:09:12 +0200
+In-Reply-To: <f193c5efbcca6d6577c93ec62559f81db35a11db.camel@hadess.net>
+References: <20220804160306.134014-1-hadess@hadess.net>
+         <YuwaFbxckLfnqhyv@rowland.harvard.edu>
+         <b050e5b9f3ff1ff6da77483557e014f3e5ed4ece.camel@hadess.net>
+         <Yu0pqAYRfS46pte3@rowland.harvard.edu>
+         <f193c5efbcca6d6577c93ec62559f81db35a11db.camel@hadess.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
@@ -49,10 +46,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-08-09 at 13:30 +0200, Greg Kroah-Hartman wrote:
-> > checkpatch.pl doesn't warn about it.
+On Tue, 2022-08-09 at 11:10 +0200, Bastien Nocera wrote:
+> The process goes something like:
+> - change permissions on the device node so user A can't access it
+> - revoke access so that the device is effectively "muted"
+> - change permissions on the device node so user B can access it
 > 
-> Odd, it should.  Send a patch for that?  :)
+> It's already what exists for input devices.
 
-I haven't written any Perl in 20-odd years, and sold my 1999 Perl
-Cookbook years ago, so probably not.
+Correction, it does:
+- change ACL on device from user A to user B:
+https://github.com/systemd/systemd/blob/main/src/shared/devnode-acl.c#L139
+- revoke access for user A:
+https://github.com/systemd/systemd/blob/main/src/login/logind-session-device.c#L116
+
