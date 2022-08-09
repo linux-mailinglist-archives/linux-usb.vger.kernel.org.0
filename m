@@ -2,41 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F1358DCCE
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 19:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CB158DCF0
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 19:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245227AbiHIRIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Aug 2022 13:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S244540AbiHIRQg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 9 Aug 2022 13:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiHIRIJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 13:08:09 -0400
+        with ESMTP id S242610AbiHIRQe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 13:16:34 -0400
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E644813E26;
-        Tue,  9 Aug 2022 10:08:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3A32668;
+        Tue,  9 Aug 2022 10:16:33 -0700 (PDT)
 Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5E20D100006;
-        Tue,  9 Aug 2022 17:08:01 +0000 (UTC)
-Message-ID: <67583452598f7ceacf5f7f5cee0f53373ea76689.camel@hadess.net>
+        by mail.gandi.net (Postfix) with ESMTPSA id B0FEC100007;
+        Tue,  9 Aug 2022 17:16:29 +0000 (UTC)
+Message-ID: <6f3fa6727e14f39a8c7c32fffb8c3e92cf95b5d5.camel@hadess.net>
 Subject: Re: [PATCH 1/2] USB: core: add a way to revoke access to open USB
  devices
 From:   Bastien Nocera <hadess@hadess.net>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Peter Hutterer <peter.hutterer@who-t.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
-Date:   Tue, 09 Aug 2022 19:08:01 +0200
-In-Reply-To: <87y1vx2wmk.fsf@email.froward.int.ebiederm.org>
+Date:   Tue, 09 Aug 2022 19:16:29 +0200
+In-Reply-To: <YvKL79C4k7EpRaKh@kroah.com>
 References: <20220809094300.83116-1-hadess@hadess.net>
-         <20220809094300.83116-2-hadess@hadess.net>
-         <87y1vx2wmk.fsf@email.froward.int.ebiederm.org>
+         <20220809094300.83116-2-hadess@hadess.net> <YvI4em9fCdZgRPnY@kroah.com>
+         <d2dc546d771060b0a95d663fb77158d63b75bb9b.camel@hadess.net>
+         <YvJYmG/upX2NWRJJ@kroah.com>
+         <b1af087bc41a47bc29a7192a5c268243ef54ad26.camel@hadess.net>
+         <YvKL79C4k7EpRaKh@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
@@ -48,23 +51,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTA4LTA5IGF0IDExOjQ2IC0wNTAwLCBFcmljIFcuIEJpZWRlcm1hbiB3cm90
-ZToKPiBCYXN0aWVuIE5vY2VyYSA8aGFkZXNzQGhhZGVzcy5uZXQ+IHdyaXRlczoKPiAKPiA+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKga3VpZF90IGt1aWQ7
-Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGlmICghcHMgfHwgIXBzLT5jcmVkKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29udGludWU7Cj4gPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGt1aWQgPSBwcy0+Y3JlZC0+ZXVp
-ZDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYg
-KGt1aWQudmFsICE9IGV1aWQpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBeXl5eXl5eXl5eXl5eXl5eXl5eXl4KPiBUaGF0IHRlc3Qgc2hvdWxkIGJlIGlm
-ICghdWlkX2VxKHBzLT5jcmVkLT5ldWlkLCBldWlkKSkKPiAKPiAKPiBUaGUgcG9pbnQgaXMgdGhh
-dCBpbnNpZGUgdGhlIGtlcm5lbCBhbGwgdWlkIGRhdGEgc2hvdWxkIGJlIGRlYWx0IHdpdGgKPiBp
-biB0aGUga3VpZF90IGRhdGEgdHlwZS7CoCBTbyBhcyB0byBhdm9pZCBjb25mdXNpbmcgdWlkcyB3
-aXRoIHNvbWUKPiBvdGhlcgo+IGtpbmQgb2YgaW50ZWdlciBkYXRhLgoKVGhhdCB1aWQgY29tZXMg
-ZnJvbSB1c2VyLXNwYWNlLCBzZWUgcGF0Y2ggMi8yLgoKRG8geW91IGhhdmUgZXhhbXBsZXMgb2Yg
-YWNjZXB0aW5nIGV1aWRzIGZyb20gdXNlci1zcGFjZSBhbmQgc3Rhc2hpbmcKdGhlbSBpbnRvIGt1
-aWRfdD8KCklmIHlvdSBhbHNvIGhhdmUgYW55IGlkZWEgYWJvdXQgdXNlciBuYW1lc3BhY2VzIGFz
-IG1lbnRpb25lZCBpbiB0aGUKY292ZXIgbGV0dGVyIGZvciB0aGlzIHBhdGNoIHNldCwgSSB3b3Vs
-ZCBhcHByZWNpYXRlLgo=
+On Tue, 2022-08-09 at 18:31 +0200, Greg Kroah-Hartman wrote:
+> On Tue, Aug 09, 2022 at 03:27:16PM +0200, Bastien Nocera wrote:
+> > The link to the user-space programme is in the "RFC v2" version of
+> > the
+> > patch from last week. It calls into the kernel through that
+> > function
+> > which is exported through BPF.
+> > 
+> > > 
+> > > > > Again, just revoke the file descriptor, like the BSDs do for
+> > > > > a
+> > > > > tiny
+> > > > > subset of device drivers.
+> > > > > 
+> > > > > This comes up ever so often, why does someone not just add
+> > > > > real
+> > > > > revoke(2) support to Linux to handle it if they really really
+> > > > > want it
+> > > > > (I
+> > > > > tried a long time ago, but didn't have it in me as I had no
+> > > > > real
+> > > > > users
+> > > > > for it...)
+> > > > 
+> > > > This was already explained twice,
+> > > 
+> > > Explained where?
+> > 
+> > https://www.spinics.net/lists/linux-usb/msg225448.html
+> > https://www.spinics.net/lists/linux-usb/msg229753.html
+> 
+> Please use lore.kernel.org.
 
+Would be great if it showed up when somebody searches for "linux-usb
+mailing-list".
+
+> Anyway, pointing to random old submissions of an RFC series does not
+> mean that you do not have to document and justify this design
+> decision
+> in this patch submission.
+
+I guess me repeatedly asking for guidance as to what information I
+should add to the commit message while I was being yelled at didn't get
+through.
+
+> Assume that reviewers have NO knowlege of previous submissions of
+> your
+> patch series.  Because we usually do not, given how many changes we
+> review all the time.
+> 
+> Please resend this, as a v4, and update the changelog descriptions
+> based
+> on the comments so far on this series and I will be glad to review it
+> sometime after -rc1 is out, as there's nothing I can do with it right
+> now.
+
+Sure.
