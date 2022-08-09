@@ -2,25 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532B158DA52
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 16:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D6A58DC1B
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 18:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbiHIObM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 9 Aug 2022 10:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S245037AbiHIQbw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Aug 2022 12:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiHIObK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 10:31:10 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0207917AA3;
-        Tue,  9 Aug 2022 07:31:08 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id AEBB3E0004;
-        Tue,  9 Aug 2022 14:31:04 +0000 (UTC)
-Message-ID: <2cde406b4d59ddfe71a7cdc11a76913a0a168595.camel@hadess.net>
-Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        with ESMTP id S231409AbiHIQbu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 12:31:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6634B192B4;
+        Tue,  9 Aug 2022 09:31:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9B1C61309;
+        Tue,  9 Aug 2022 16:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8352C433C1;
+        Tue,  9 Aug 2022 16:31:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660062706;
+        bh=uNw29mK1Mlh1KL7vZnOgkUs3nNrDx8EMzA3mp87viYI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hr/NbRIS/Xbd65eaZlULA3ymti/BEggZHSLNg8HxAPiqm8xul7KcBoOqJV/ICgucg
+         SjD3kUrrZx+kXwYmqaZ6X1QVdiagkmGVgz3IVDpd/zwVTSlNvlpsuTPidsrdUoXXCP
+         sG0BUzQ4pxP5TOqjD2UKJqf2agXHblbQE0IDOLJY=
+Date:   Tue, 9 Aug 2022 18:31:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bastien Nocera <hadess@hadess.net>
 Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
         Alan Stern <stern@rowland.harvard.edu>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
@@ -29,44 +39,69 @@ Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
-Date:   Tue, 09 Aug 2022 16:31:04 +0200
-In-Reply-To: <YvI5DJnOjhJbNnNO@kroah.com>
+Subject: Re: [PATCH 1/2] USB: core: add a way to revoke access to open USB
+ devices
+Message-ID: <YvKL79C4k7EpRaKh@kroah.com>
 References: <20220809094300.83116-1-hadess@hadess.net>
-         <20220809094300.83116-3-hadess@hadess.net> <YvI5DJnOjhJbNnNO@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+ <20220809094300.83116-2-hadess@hadess.net>
+ <YvI4em9fCdZgRPnY@kroah.com>
+ <d2dc546d771060b0a95d663fb77158d63b75bb9b.camel@hadess.net>
+ <YvJYmG/upX2NWRJJ@kroah.com>
+ <b1af087bc41a47bc29a7192a5c268243ef54ad26.camel@hadess.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1af087bc41a47bc29a7192a5c268243ef54ad26.camel@hadess.net>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-08-09 at 12:38 +0200, Greg Kroah-Hartman wrote:
-> Now if you really really want to disable a device from under a user,
-> without the file handle present, you can do that today, as root, by
-> doing the 'unbind' hack through userspace and sysfs.  It's so common
-> that this seems to be how virtual device managers handle virtual
-> machines, so it should be well tested by now.
+On Tue, Aug 09, 2022 at 03:27:16PM +0200, Bastien Nocera wrote:
+> The link to the user-space programme is in the "RFC v2" version of the
+> patch from last week. It calls into the kernel through that function
+> which is exported through BPF.
+> 
+> > 
+> > > > Again, just revoke the file descriptor, like the BSDs do for a
+> > > > tiny
+> > > > subset of device drivers.
+> > > > 
+> > > > This comes up ever so often, why does someone not just add real
+> > > > revoke(2) support to Linux to handle it if they really really
+> > > > want it
+> > > > (I
+> > > > tried a long time ago, but didn't have it in me as I had no real
+> > > > users
+> > > > for it...)
+> > > 
+> > > This was already explained twice,
+> > 
+> > Explained where?
+> 
+> https://www.spinics.net/lists/linux-usb/msg225448.html
+> https://www.spinics.net/lists/linux-usb/msg229753.html
 
-The only thing I know that works that way is usbip, and it requires
-unbinding each of the interfaces:
+Please use lore.kernel.org.
 
-https://sourceforge.net/p/usbip/git-windows/ci/master/tree/trunk/userspace/src/bind-driver.c#l157
+Anyway, pointing to random old submissions of an RFC series does not
+mean that you do not have to document and justify this design decision
+in this patch submission.
 
-That means that, for example, revoking access to the raw USB device
-that OpenRGB used to blink colours across a keyboard would disconnect
-the keyboard from the HID device.
+Assume that reviewers have NO knowlege of previous submissions of your
+patch series.  Because we usually do not, given how many changes we
+review all the time.
 
-Can you show me any other users of that "trick" that would keep the
-"hid" keyboard driver working while access to the /dev/bus/usb/* device
-node is revoked/closed/yanked/unbound?
+Please resend this, as a v4, and update the changelog descriptions based
+on the comments so far on this series and I will be glad to review it
+sometime after -rc1 is out, as there's nothing I can do with it right
+now.
 
-And if you can't, I would appreciate some efforts being made trying to
-understand the use case, along with the limitations we're working
-against, so we can find a good solution to the problem, instead of
-retreading discussion points.
+thanks,
+
+greg k-h
