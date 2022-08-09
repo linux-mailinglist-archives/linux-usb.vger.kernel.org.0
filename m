@@ -2,82 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230DE58DD28
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 19:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5571358DFB8
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 21:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245336AbiHIR1b convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 9 Aug 2022 13:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
+        id S1344824AbiHITEf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Aug 2022 15:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245302AbiHIR1Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 13:27:16 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E679A25589;
-        Tue,  9 Aug 2022 10:27:15 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id F2297FF802;
-        Tue,  9 Aug 2022 17:27:11 +0000 (UTC)
-Message-ID: <fae7e35a920239fe2a35b6b967bd17e04af1e1b7.camel@hadess.net>
-Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Date:   Tue, 09 Aug 2022 19:27:11 +0200
-In-Reply-To: <YvKMVjl6x38Hud6I@kroah.com>
-References: <20220809094300.83116-1-hadess@hadess.net>
-         <20220809094300.83116-3-hadess@hadess.net> <YvI5DJnOjhJbNnNO@kroah.com>
-         <2cde406b4d59ddfe71a7cdc11a76913a0a168595.camel@hadess.net>
-         <YvKMVjl6x38Hud6I@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        with ESMTP id S1345194AbiHITD1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 15:03:27 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A77E2BB31;
+        Tue,  9 Aug 2022 11:39:14 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id g15so3797491iob.0;
+        Tue, 09 Aug 2022 11:39:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=SuWYyY6FLpLU46Wx1gcpqGvWzzlpUZIByk+F+Yykvn8=;
+        b=K8Xp89EauEKiLEmH+dDDAnQ7WN7WGwybQbbOcQfnD3SY39/8xjMQ/72n8/TEVKxTEy
+         TmWIkkygcUTDK/HUFLu+Kw6lvhObx/FvYd7Wt/qIvzcw8oo6fDveaTqqh47LUMNaoJAr
+         Wh4l3pMCzNJ0zweukCbKuTH34sETppG8NhLnm030KOcVqxIE6Irh9A2gevndHolUqosa
+         CJ+JtEZl7wALbMOYUbJDcL1bsM4qC4rXmboijQbH3xpA8bs86rpZ5FCgcbAtsdeVo2bU
+         wTUi/1MtDb/nXcJ2Sh+q3vhib+rfOSoV7y0zx2ueGGgEPb6rI1/SrXyMzON6/17o0nvA
+         RfpA==
+X-Gm-Message-State: ACgBeo3IfPVQBJDXpHpUMFa7uGmWl0xYY/n4vSfrOT3khfhBGdf1qExc
+        gsdcDBNjnvInwZSIUMxu5g==
+X-Google-Smtp-Source: AA6agR4SP5urZseXrfmtmeV9TutP+v12NyiCtUMhcLLfP92o+Ux6IKkwqe0kvOx2FuhOtVw1A3Qseg==
+X-Received: by 2002:a05:6638:41a9:b0:342:e3ac:b242 with SMTP id az41-20020a05663841a900b00342e3acb242mr6385591jab.295.1660070353406;
+        Tue, 09 Aug 2022 11:39:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id k8-20020a056e02156800b002dc100ab6fdsm1321280ilu.35.2022.08.09.11.39.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 11:39:13 -0700 (PDT)
+Received: (nullmailer pid 2166652 invoked by uid 1000);
+        Tue, 09 Aug 2022 18:39:11 -0000
+Date:   Tue, 9 Aug 2022 12:39:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Phil Edworthy <phil.edworthy@renesas.com>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: renesas, usb3-peri: Document
+ RZ/V2M r9a09g011 support
+Message-ID: <20220809183911.GA2166589-robh@kernel.org>
+References: <20220804192220.128601-1-phil.edworthy@renesas.com>
+ <20220804192220.128601-2-phil.edworthy@renesas.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804192220.128601-2-phil.edworthy@renesas.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-08-09 at 18:33 +0200, Greg Kroah-Hartman wrote:
-> On Tue, Aug 09, 2022 at 04:31:04PM +0200, Bastien Nocera wrote:
-> > On Tue, 2022-08-09 at 12:38 +0200, Greg Kroah-Hartman wrote:
-> > > Now if you really really want to disable a device from under a
-> > > user,
-> > > without the file handle present, you can do that today, as root,
-> > > by
-> > > doing the 'unbind' hack through userspace and sysfs.  It's so
-> > > common
-> > > that this seems to be how virtual device managers handle virtual
-> > > machines, so it should be well tested by now.
-> > 
-> > The only thing I know that works that way is usbip, and it requires
-> > unbinding each of the interfaces:
-> > 
-> > https://sourceforge.net/p/usbip/git-windows/ci/master/tree/trunk/userspace/src/bind-driver.c#l157
+On Thu, 04 Aug 2022 20:22:19 +0100, Phil Edworthy wrote:
+> Document the RZ/V2M SoC bindings.
+> The RZ/V2M SoC is a little different to the R-Car implementations.
+> A few DRD related registers and bits have moved, there is a separate
+> interrupt for DRD, an additional clock for register access and reset
+> lines for DRD and USBP.
 > 
-> virtio devices also use the api from what I recall.
-
-I can't find any code that would reference
-/sys/bus/usb/drivers/usbfs/unbind or /sys/bus/usb/drivers/usbfs wrt
-virtio. Where's the host side code for that?
-
-> > That means that, for example, revoking access to the raw USB device
-> > that OpenRGB used to blink colours across a keyboard would
-> > disconnect
-> > the keyboard from the HID device.
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v3:
+>  - Keep the existing constraints by adding an 'else' clause with
+>    'maxItems: 1' for various properties.
+> v2:
+>  - SoCs other than rz/v2m must limit the number of clock/interrupt names
+>  - Add "Battery Charging" and "Global Purpose Input" interrupts
+> ---
+>  .../bindings/usb/renesas,usb3-peri.yaml       | 99 ++++++++++++++++---
+>  1 file changed, 84 insertions(+), 15 deletions(-)
 > 
-> No, you unbind the usbfs driver, not the hid driver.
 
-Honestly, I don't understand how this is supposed to work. The USB
-device is bound to the usb_generic driver, usbfs doesn't have a link to
-the devices it's supposed to handle.
+Reviewed-by: Rob Herring <robh@kernel.org>
