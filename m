@@ -2,289 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA28C58D8F4
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 14:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA1558D931
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 15:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243253AbiHIMwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Aug 2022 08:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S243677AbiHINOX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Aug 2022 09:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242937AbiHIMws (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 08:52:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AC212D28;
-        Tue,  9 Aug 2022 05:52:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 37BE2CE16E4;
-        Tue,  9 Aug 2022 12:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0923C433D7;
-        Tue,  9 Aug 2022 12:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660049563;
-        bh=SCi4simgGxgv/o4uumtGdKWS8F2ZsM5Q0PdjH8DfmHo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ULHEjbz8o/KcBeSnnwS95MtH1wPx0/UsduLTiaEpgQ4FSr/jMCeHgODamCv5jRP7H
-         8Dkl5wXSkxqi/KXwtEPued3v1eDlajCpqiLrVBku+fxbSS60uiHTEaGUab+bJFtdCj
-         74i3yjY7NOXGBDkmWaMMkx3gcDB8hsyDP5x+fXqY=
-Date:   Tue, 9 Aug 2022 14:52:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 1/2] USB: core: add a way to revoke access to open USB
- devices
-Message-ID: <YvJYmG/upX2NWRJJ@kroah.com>
-References: <20220809094300.83116-1-hadess@hadess.net>
- <20220809094300.83116-2-hadess@hadess.net>
- <YvI4em9fCdZgRPnY@kroah.com>
- <d2dc546d771060b0a95d663fb77158d63b75bb9b.camel@hadess.net>
+        with ESMTP id S243679AbiHINOU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 09:14:20 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF062193E5
+        for <linux-usb@vger.kernel.org>; Tue,  9 Aug 2022 06:14:18 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id s11-20020a1cf20b000000b003a52a0945e8so4098654wmc.1
+        for <linux-usb@vger.kernel.org>; Tue, 09 Aug 2022 06:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=YbYq10AH7DFyPthSKrztZodwwushB5t/2Y6IpnigFO4=;
+        b=Z7YPedDXnLSgBPd9OMsLK57MpNaQ+Vcno0m+BuDTk72qpO7Aul44JeaGBXTzylLRf6
+         nLlLx0AAopKc9yoMFkj+Q54hadriFobDH/c4+X0sfC9AHuazANM0RuLRgl7aIbp7cuqZ
+         GuqgXlEc4WGquTmSK1cBzJuaCX2BX2TNLtrn0hY9FZo6tj0eSfsrMRlv0hloKxBdqAxe
+         HzL7oWPVQvc9jYePBqrd3jAmn1hhsql6nZA98xDcQZHIrlEoh2Q1hNjtZQezpUCmpo7M
+         blu04r+nOiSHk4MsGO4DyfiRnWD0AV/92wFDYDkXqtnn2T/ooJhtO/5AZzhil2k4tdEF
+         DqKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YbYq10AH7DFyPthSKrztZodwwushB5t/2Y6IpnigFO4=;
+        b=i7684pW76F0APCAxITT7j7rycIx+TL5pv5ZB6dmylgD4YcX33wmVyAPiBBG4eFKPj7
+         m+7yApXzbt4A+NIhscEgl22nufeCWBaTzxCYTFpQIHiR7R3/BMG5+92R+S0FZEaIeY+5
+         oy0ib3tSjYcUzQMeIjcmctgQPs8wY36+d8lzgOGp7xAWpZ+yUCnlaeT2PakPKtn3iAsR
+         EP4236wcE73L39Jw4f34nmT1hnjo2T//ld3j8CcikhtmNRkuRiBbbScC2GFxH/Md+Ew4
+         Z0qFiqHe5boxSV1O/Se3z7WAX2kdN6ucgJYq4djT4uhucPHz9WuOyjh8D77aAHXT+rzm
+         4P6w==
+X-Gm-Message-State: ACgBeo0z4r+RRU+DTNFUbjPdoM5ykJmketLPwlW1QUjX28qTncSY2T+V
+        YYv7zetKtbeoo9eIrF7SzXN9vA==
+X-Google-Smtp-Source: AA6agR4/lo60i+WLJVLsgEtDWzhjrmVdxnP64JGuV05zhH+S6LHtffAoI85nP9uDE8F/o6OlDzl8sg==
+X-Received: by 2002:a7b:c848:0:b0:3a5:41f6:4d37 with SMTP id c8-20020a7bc848000000b003a541f64d37mr5721352wml.23.1660050857317;
+        Tue, 09 Aug 2022 06:14:17 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n2-20020a05600c4f8200b003a1980d55c4sm22561795wmq.47.2022.08.09.06.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 06:14:16 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 14:14:14 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v7 06/13] dt-bindings: mfd: Add MediaTek MT6370
+Message-ID: <YvJdpq0MWNPQZw5c@google.com>
+References: <20220805070610.3516-1-peterwu.pub@gmail.com>
+ <20220805070610.3516-7-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d2dc546d771060b0a95d663fb77158d63b75bb9b.camel@hadess.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220805070610.3516-7-peterwu.pub@gmail.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 01:18:43PM +0200, Bastien Nocera wrote:
-> On Tue, 2022-08-09 at 12:35 +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Aug 09, 2022 at 11:42:59AM +0200, Bastien Nocera wrote:
-> > > There is a need for userspace applications to open USB devices
-> > > directly,
-> > > for all the USB devices without a kernel-level class driver[1], and
-> > > implemented in user-space.
-> > > 
-> > > As not all devices are built equal, we want to be able to revoke
-> > > access to those devices whether it's because the user isn't at the
-> > > console anymore, or because the web browser, or sandbox doesn't
-> > > want
-> > > to allow access to that device.
-> > > 
-> > > This commit implements the internal API used to revoke access to
-> > > USB
-> > > devices, given either bus and device numbers, or/and a user's
-> > > effective UID.
-> > 
-> > Revoke what exactly?
+On Fri, 05 Aug 2022, ChiaEn Wu wrote:
+
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> Access.
-
-Access from what?
-
-> >   You should be revoking the file descriptor that is
-> > open, not anything else as those are all transient and not uniquely
-> > identified and racy.
+> Add MediaTek MT6370 binding documentation.
 > 
-> They're "unique enough" (tm). The 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
+>  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
+>  2 files changed, 298 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+>  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
 
-Are you sure?
+Applied, thanks.
 
-They are racy from what I can tell, especially as you have no locking in
-the patch that I noticed.
-
-> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > > 
-> > > [1]:
-> > > Non exhaustive list of devices and device types that need raw USB
-> > > access:
-> > > - all manners of single-board computers and programmable chips and
-> > > devices (avrdude, STLink, sunxi bootloader, flashrom, etc.)
-> > > - 3D printers
-> > > - scanners
-> > > - LCD "displays"
-> > > - user-space webcam and still cameras
-> > > - game controllers
-> > > - video/audio capture devices
-> > > - sensors
-> > > - software-defined radios
-> > > - DJ/music equipment
-> > > - protocol analysers
-> > > - Rio 500 music player
-> > > ---
-> > >  drivers/usb/core/devio.c | 79
-> > > ++++++++++++++++++++++++++++++++++++++--
-> > >  drivers/usb/core/usb.h   |  2 +
-> > >  2 files changed, 77 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> > > index b5b85bf80329..d8d212ef581f 100644
-> > > --- a/drivers/usb/core/devio.c
-> > > +++ b/drivers/usb/core/devio.c
-> > > @@ -78,6 +78,7 @@ struct usb_dev_state {
-> > >         int not_yet_resumed;
-> > >         bool suspend_allowed;
-> > >         bool privileges_dropped;
-> > > +       bool revoked;
-> > >  };
-> > >  
-> > >  struct usb_memory {
-> > > @@ -183,6 +184,13 @@ static int connected(struct usb_dev_state *ps)
-> > >                         ps->dev->state != USB_STATE_NOTATTACHED);
-> > >  }
-> > >  
-> > > +static int disconnected_or_revoked(struct usb_dev_state *ps)
-> > > +{
-> > > +       return (list_empty(&ps->list) ||
-> > > +                       ps->dev->state == USB_STATE_NOTATTACHED ||
-> > > +                       ps->revoked);
-> > > +}
-> > > +
-> > >  static void dec_usb_memory_use_count(struct usb_memory *usbm, int
-> > > *count)
-> > >  {
-> > >         struct usb_dev_state *ps = usbm->ps;
-> > > @@ -237,6 +245,9 @@ static int usbdev_mmap(struct file *file,
-> > > struct vm_area_struct *vma)
-> > >         dma_addr_t dma_handle;
-> > >         int ret;
-> > >  
-> > > +       if (disconnected_or_revoked(ps))
-> > > +               return -ENODEV;
-> > > +
-> > >         ret = usbfs_increase_memory_usage(size + sizeof(struct
-> > > usb_memory));
-> > >         if (ret)
-> > >                 goto error;
-> > > @@ -310,7 +321,7 @@ static ssize_t usbdev_read(struct file *file,
-> > > char __user *buf, size_t nbytes,
-> > >  
-> > >         pos = *ppos;
-> > >         usb_lock_device(dev);
-> > > -       if (!connected(ps)) {
-> > > +       if (disconnected_or_revoked(ps)) {
-> > >                 ret = -ENODEV;
-> > >                 goto err;
-> > >         } else if (pos < 0) {
-> > > @@ -2315,7 +2326,7 @@ static int proc_ioctl(struct usb_dev_state
-> > > *ps, struct usbdevfs_ioctl *ctl)
-> > >         if (ps->privileges_dropped)
-> > >                 return -EACCES;
-> > >  
-> > > -       if (!connected(ps))
-> > > +       if (disconnected_or_revoked(ps))
-> > >                 return -ENODEV;
-> > >  
-> > >         /* alloc buffer */
-> > > @@ -2555,7 +2566,7 @@ static int proc_forbid_suspend(struct
-> > > usb_dev_state *ps)
-> > >  
-> > >  static int proc_allow_suspend(struct usb_dev_state *ps)
-> > >  {
-> > > -       if (!connected(ps))
-> > > +       if (disconnected_or_revoked(ps))
-> > >                 return -ENODEV;
-> > >  
-> > >         WRITE_ONCE(ps->not_yet_resumed, 1);
-> > > @@ -2580,6 +2591,66 @@ static int proc_wait_for_resume(struct
-> > > usb_dev_state *ps)
-> > >         return proc_forbid_suspend(ps);
-> > >  }
-> > >  
-> > > +static int usbdev_revoke(struct usb_dev_state *ps)
-> > > +{
-> > > +       struct usb_device *dev = ps->dev;
-> > > +       unsigned int ifnum;
-> > > +       struct async *as;
-> > > +
-> > > +       if (ps->revoked) {
-> > > +               usb_unlock_device(dev);
-> > > +               return -ENODEV;
-> > > +       }
-> > > +
-> > > +       snoop(&dev->dev, "%s: REVOKE by PID %d: %s\n", __func__,
-> > > +             task_pid_nr(current), current->comm);
-> > > +
-> > > +       ps->revoked = true;
-> > > +
-> > > +       for (ifnum = 0; ps->ifclaimed && ifnum < 8*sizeof(ps-
-> > > >ifclaimed);
-> > > +                       ifnum++) {
-> > > +               if (test_bit(ifnum, &ps->ifclaimed))
-> > > +                       releaseintf(ps, ifnum);
-> > > +       }
-> > > +       destroy_all_async(ps);
-> > > +
-> > > +       as = async_getcompleted(ps);
-> > > +       while (as) {
-> > > +               free_async(as);
-> > > +               as = async_getcompleted(ps);
-> > > +       }
-> > > +
-> > > +       wake_up(&ps->wait);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +int usb_revoke_for_euid(struct usb_device *udev,
-> > > +               int euid)
-> > > +{
-> > > +       struct usb_dev_state *ps;
-> > > +
-> > > +       usb_lock_device(udev);
-> > > +
-> > > +       list_for_each_entry(ps, &udev->filelist, list) {
-> > > +               if (euid >= 0) {
-> > > +                       kuid_t kuid;
-> > > +
-> > > +                       if (!ps || !ps->cred)
-> > > +                               continue;
-> > > +                       kuid = ps->cred->euid;
-> > 
-> > How is this handling uid namespaces?
-> 
-> The caller is supposed to be outside namespaces. It's a BPF programme,
-> so must be loaded by a privileged caller.
-
-Where is "outside namespaces" defined anywhere?
-
-And how is this tied to any bpf program?  I don't see that interface
-anywhere in this series, where did I miss that?
-
-> > Again, just revoke the file descriptor, like the BSDs do for a tiny
-> > subset of device drivers.
-> > 
-> > This comes up ever so often, why does someone not just add real
-> > revoke(2) support to Linux to handle it if they really really want it
-> > (I
-> > tried a long time ago, but didn't have it in me as I had no real
-> > users
-> > for it...)
-> 
-> This was already explained twice,
-
-Explained where?
-
-> there's nothing to "hand out" those file descriptors,
-
-The kernel already handed out one when the device was opened using
-usbfs.
-
-> so no one but
-> the kernel and the programme itself
-> have that file descriptor, so it can't be used as an identifier.
-
-That's the only unique identifier that you want to revoke and "know" it
-is the device you are referring to.
-
-That's why I recommend creating revoke(2), not just an odd "pause the
-data to this device" api like this seems.  That's just going to confuse
-lots of people as to "why did my device stop working?"
-
-thanks,
-
-greg k-h
+-- 
+DEPRECATED: Please use lee@kernel.org
