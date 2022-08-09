@@ -2,92 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5571358DFB8
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 21:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA6758E02D
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Aug 2022 21:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344824AbiHITEf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Aug 2022 15:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        id S1343567AbiHIT2h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Aug 2022 15:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345194AbiHITD1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 15:03:27 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A77E2BB31;
-        Tue,  9 Aug 2022 11:39:14 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id g15so3797491iob.0;
-        Tue, 09 Aug 2022 11:39:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=SuWYyY6FLpLU46Wx1gcpqGvWzzlpUZIByk+F+Yykvn8=;
-        b=K8Xp89EauEKiLEmH+dDDAnQ7WN7WGwybQbbOcQfnD3SY39/8xjMQ/72n8/TEVKxTEy
-         TmWIkkygcUTDK/HUFLu+Kw6lvhObx/FvYd7Wt/qIvzcw8oo6fDveaTqqh47LUMNaoJAr
-         Wh4l3pMCzNJ0zweukCbKuTH34sETppG8NhLnm030KOcVqxIE6Irh9A2gevndHolUqosa
-         CJ+JtEZl7wALbMOYUbJDcL1bsM4qC4rXmboijQbH3xpA8bs86rpZ5FCgcbAtsdeVo2bU
-         wTUi/1MtDb/nXcJ2Sh+q3vhib+rfOSoV7y0zx2ueGGgEPb6rI1/SrXyMzON6/17o0nvA
-         RfpA==
-X-Gm-Message-State: ACgBeo3IfPVQBJDXpHpUMFa7uGmWl0xYY/n4vSfrOT3khfhBGdf1qExc
-        gsdcDBNjnvInwZSIUMxu5g==
-X-Google-Smtp-Source: AA6agR4SP5urZseXrfmtmeV9TutP+v12NyiCtUMhcLLfP92o+Ux6IKkwqe0kvOx2FuhOtVw1A3Qseg==
-X-Received: by 2002:a05:6638:41a9:b0:342:e3ac:b242 with SMTP id az41-20020a05663841a900b00342e3acb242mr6385591jab.295.1660070353406;
-        Tue, 09 Aug 2022 11:39:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id k8-20020a056e02156800b002dc100ab6fdsm1321280ilu.35.2022.08.09.11.39.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 11:39:13 -0700 (PDT)
-Received: (nullmailer pid 2166652 invoked by uid 1000);
-        Tue, 09 Aug 2022 18:39:11 -0000
-Date:   Tue, 9 Aug 2022 12:39:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Phil Edworthy <phil.edworthy@renesas.com>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: renesas, usb3-peri: Document
- RZ/V2M r9a09g011 support
-Message-ID: <20220809183911.GA2166589-robh@kernel.org>
-References: <20220804192220.128601-1-phil.edworthy@renesas.com>
- <20220804192220.128601-2-phil.edworthy@renesas.com>
+        with ESMTP id S1343698AbiHIT2d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 15:28:33 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 160B911803
+        for <linux-usb@vger.kernel.org>; Tue,  9 Aug 2022 12:28:29 -0700 (PDT)
+Received: (qmail 815456 invoked by uid 1000); 9 Aug 2022 15:28:29 -0400
+Date:   Tue, 9 Aug 2022 15:28:29 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Witold Lipieta <witold.lipieta@thaumatec.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     USB development list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb-storage: Add ignore-residue quirk for NXP PN7462AU
+Message-ID: <YvK1Xcl4154R4ujm@rowland.harvard.edu>
+References: <20220809112911.462776-1-witold.lipieta@thaumatec.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220804192220.128601-2-phil.edworthy@renesas.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220809112911.462776-1-witold.lipieta@thaumatec.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 04 Aug 2022 20:22:19 +0100, Phil Edworthy wrote:
-> Document the RZ/V2M SoC bindings.
-> The RZ/V2M SoC is a little different to the R-Car implementations.
-> A few DRD related registers and bits have moved, there is a separate
-> interrupt for DRD, an additional clock for register access and reset
-> lines for DRD and USBP.
+On Tue, Aug 09, 2022 at 01:29:11PM +0200, Witold Lipieta wrote:
+> This is USB mass storage primary boot loader for code download on
+> NXP PN7462AU.
 > 
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v3:
->  - Keep the existing constraints by adding an 'else' clause with
->    'maxItems: 1' for various properties.
-> v2:
->  - SoCs other than rz/v2m must limit the number of clock/interrupt names
->  - Add "Battery Charging" and "Global Purpose Input" interrupts
-> ---
->  .../bindings/usb/renesas,usb3-peri.yaml       | 99 ++++++++++++++++---
->  1 file changed, 84 insertions(+), 15 deletions(-)
+> Without the quirk it is impossible to write whole memory at once as
+> device restarts during the write due to bogus residue values reported.
 > 
+> Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
+> ---
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+> Output from /sys/kernel/debug/usb/devices:
+> T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=12   MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=1fc9 ProdID=0117 Rev= 1.00
+> S:  Manufacturer=NXP
+> S:  Product=PN7462AU
+> C:* #Ifs= 1 Cfg#= 1 Atr=c0 MxPwr=100mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
+> E:  Ad=81(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+>  drivers/usb/storage/unusual_devs.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+> index b6a9a7451620..ee6923b6ab31 100644
+> --- a/drivers/usb/storage/unusual_devs.h
+> +++ b/drivers/usb/storage/unusual_devs.h
+> @@ -2265,6 +2265,13 @@ UNUSUAL_DEV( 0x1e74, 0x4621, 0x0000, 0x0000,
+>  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>  		US_FL_BULK_IGNORE_TAG | US_FL_MAX_SECTORS_64 ),
+>  
+> +/* Reported by Witold Lipieta <witold.lipieta@thaumatec.com> */
+> +UNUSUAL_DEV( 0x1fc9, 0x0117, 0x0100, 0x0100,
+> +		"NXP Semiconductors",
+> +		"PN7462AU",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_IGNORE_RESIDUE ),
+> +
+>  /* Supplied with some Castlewood ORB removable drives */
+>  UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
+>  		"Double-H Technology",
+> -- 
+> 2.34.1
+> 
