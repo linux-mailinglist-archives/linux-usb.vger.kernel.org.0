@@ -2,107 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD7558E79E
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 09:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B9958EA05
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 11:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiHJHI6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Aug 2022 03:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
+        id S230055AbiHJJrQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Aug 2022 05:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiHJHI5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 03:08:57 -0400
-X-Greylist: delayed 746 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 Aug 2022 00:08:55 PDT
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2986796A0;
-        Wed, 10 Aug 2022 00:08:55 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 27A6tsd3588953
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Wed, 10 Aug 2022 07:55:56 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 27A6tlsr604953
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Wed, 10 Aug 2022 08:55:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1660114549; bh=jreNYZmBDW3E+iK6TgCwzCr9t13dtx1ddnlZG0dgdC8=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=iQ08mWYQIEtRxjLzdutxpMyanUUgfpzkWKbR81TWZnCNiVdSycBOgYrOxDgh/LIJp
-         AqEj6Q3NNxVRXjhdu+Cm099gPinGDml9MILsZtMJnRUJxCk3xC/ie2JF+xsqMSnnKP
-         yJtrhf0ogIe1wnnXbKE5WmA418PpzNhcRKT473w0=
-Received: (nullmailer pid 478119 invoked by uid 1000);
-        Wed, 10 Aug 2022 06:55:42 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Slark Xiao <slark_xiao@163.com>
+        with ESMTP id S231429AbiHJJrD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 05:47:03 -0400
+Received: from m13114.mail.163.com (m13114.mail.163.com [220.181.13.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A74EB46
+        for <linux-usb@vger.kernel.org>; Wed, 10 Aug 2022 02:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=FryoR
+        m8qpMRZLvSSer5jc0v+pkFjWZPVOxn3ZzDbYKI=; b=Qcaadhu4KilUZ30mBk9f3
+        W61jbN0r328GpeBmJSMSCCr1FN1bYaqFSDlSqRrcdM5Et47JDwHwu+E84UzRWxzt
+        Rmlvt0mSzaf0+azEknTGQUWo6g1Wa4orS8WsUbfmyXB+qDr01O+ySKPyU6GKSsR5
+        WGAieDadViqaLLRspsG1FQ=
+Received: from slark_xiao$163.com ( [112.97.48.210] ) by
+ ajax-webmail-wmsvr114 (Coremail) ; Wed, 10 Aug 2022 17:28:51 +0800 (CST)
+X-Originating-IP: [112.97.48.210]
+Date:   Wed, 10 Aug 2022 17:28:51 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
 Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
-Organization: m
+Subject: Re:Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <8735e4mvtd.fsf@miraculix.mork.no>
 References: <20220810014521.9383-1-slark_xiao@163.com>
-Date:   Wed, 10 Aug 2022 08:55:42 +0200
-In-Reply-To: <20220810014521.9383-1-slark_xiao@163.com> (Slark Xiao's message
-        of "Wed, 10 Aug 2022 09:45:21 +0800")
-Message-ID: <8735e4mvtd.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ <8735e4mvtd.fsf@miraculix.mork.no>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.6 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <e7fdcfc.30e7.1828715d7af.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: csGowACHv9JTevNihIgsAA--.29964W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDQJZZFaEKSJRGQABsi
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Slark Xiao <slark_xiao@163.com> writes:
-
-> There are 2 models for MV32 serials. MV32-W-A is designed
-> based on Qualcomm SDX62 chip, and MV32-W-B is designed based
-> on Qualcomm SDX65 chip. So we use 2 different PID to separate it.
->
-> Test evidence as below:
-> T:  Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D02 Cnt=3D03 Dev#=3D  3 Spd=3D480 M=
-xCh=3D 0
-> D:  Ver=3D 2.10 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-> P:  Vendor=3D1e2d ProdID=3D00f3 Rev=3D05.04
-> S:  Manufacturer=3DCinterion
-> S:  Product=3DCinterion PID 0x00F3 USB Mobile Broadband
-> S:  SerialNumber=3Dd7b4be8d
-> C:  #Ifs=3D 4 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-> I:  If#=3D0x0 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D50 Drive=
-r=3Dqmi_wwan
-> I:  If#=3D0x1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Drive=
-r=3Doption
-> I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Drive=
-r=3Doption
-> I:  If#=3D0x3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Drive=
-r=3Doption
-
-The patch looks nice, but I have a couple of questions since you're one
-of the first pushing one of these SDX6x modems.
-
-Is that protocol pattern fixed on this generation of Qualcomm chips?  It
-looks like an extension of what they started with the SDX55 generation,
-where the DIAG port was identified by ff/ff/30 across multiple vendors.
-
-Specifically wrt this driver and patch, I wonder if we can/should match
-on ff/ff/50 instead of interface number here?  I note that the interface
-numbers are allocated sequentionally. Probably in the order these
-function are enabled by the firmware? If so, are we sure this is static?
-Or could we risk config variants where the RMNET/QMI function have a
-different interface number for the same PIDs?
-
-And another possibility you might consider.  Assuming that ff/ff/50
-uniquely identifies RMNET/QMI functions regardless of PID, would you
-consider a VID+class match to catch all of them?  This would not only
-support both the PIDs of this patch in one go, but also any future PIDs
-without the need for further driver patches.
-
-
-Bj=C3=B8rn
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDgtMTAgMTQ6NTU6NDIsICJCasO4cm4gTW9yayIgPGJq
+b3JuQG1vcmsubm8+IHdyb3RlOgo+U2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMuY29tPiB3cml0
+ZXM6Cj4KPj4gVGhlcmUgYXJlIDIgbW9kZWxzIGZvciBNVjMyIHNlcmlhbHMuIE1WMzItVy1BIGlz
+IGRlc2lnbmVkCj4+IGJhc2VkIG9uIFF1YWxjb21tIFNEWDYyIGNoaXAsIGFuZCBNVjMyLVctQiBp
+cyBkZXNpZ25lZCBiYXNlZAo+PiBvbiBRdWFsY29tbSBTRFg2NSBjaGlwLiBTbyB3ZSB1c2UgMiBk
+aWZmZXJlbnQgUElEIHRvIHNlcGFyYXRlIGl0Lgo+Pgo+PiBUZXN0IGV2aWRlbmNlIGFzIGJlbG93
+Ogo+PiBUOiAgQnVzPTAzIExldj0wMSBQcm50PTAxIFBvcnQ9MDIgQ250PTAzIERldiM9ICAzIFNw
+ZD00ODAgTXhDaD0gMAo+PiBEOiAgVmVyPSAyLjEwIENscz1lZihtaXNjICkgU3ViPTAyIFByb3Q9
+MDEgTXhQUz02NCAjQ2Zncz0gIDEKPj4gUDogIFZlbmRvcj0xZTJkIFByb2RJRD0wMGYzIFJldj0w
+NS4wNAo+PiBTOiAgTWFudWZhY3R1cmVyPUNpbnRlcmlvbgo+PiBTOiAgUHJvZHVjdD1DaW50ZXJp
+b24gUElEIDB4MDBGMyBVU0IgTW9iaWxlIEJyb2FkYmFuZAo+PiBTOiAgU2VyaWFsTnVtYmVyPWQ3
+YjRiZThkCj4+IEM6ICAjSWZzPSA0IENmZyM9IDEgQXRyPWEwIE14UHdyPTUwMG1BCj4+IEk6ICBJ
+ZiM9MHgwIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9NTAgRHJpdmVy
+PXFtaV93d2FuCj4+IEk6ICBJZiM9MHgxIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3Vi
+PWZmIFByb3Q9NDAgRHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYjPTB4MiBBbHQ9IDAgI0VQcz0gMyBD
+bHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PTQwIERyaXZlcj1vcHRpb24KPj4gSTogIElmIz0weDMg
+QWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD0zMCBEcml2ZXI9b3B0aW9u
+Cj4KPlRoZSBwYXRjaCBsb29rcyBuaWNlLCBidXQgSSBoYXZlIGEgY291cGxlIG9mIHF1ZXN0aW9u
+cyBzaW5jZSB5b3UncmUgb25lCj5vZiB0aGUgZmlyc3QgcHVzaGluZyBvbmUgb2YgdGhlc2UgU0RY
+NnggbW9kZW1zLgo+Cj5JcyB0aGF0IHByb3RvY29sIHBhdHRlcm4gZml4ZWQgb24gdGhpcyBnZW5l
+cmF0aW9uIG9mIFF1YWxjb21tIGNoaXBzPyAgSXQKPmxvb2tzIGxpa2UgYW4gZXh0ZW5zaW9uIG9m
+IHdoYXQgdGhleSBzdGFydGVkIHdpdGggdGhlIFNEWDU1IGdlbmVyYXRpb24sCj53aGVyZSB0aGUg
+RElBRyBwb3J0IHdhcyBpZGVudGlmaWVkIGJ5IGZmL2ZmLzMwIGFjcm9zcyBtdWx0aXBsZSB2ZW5k
+b3JzLgo+CiBTZWVtcyB5ZXMuIEkgY2hlY2tlZCBzb21lIGRpZmZlcmVudCB1c2JfY29tcG9zaXRp
+b25zIGFuZCBmb3VuZCB0aGF0CiBkaWFnIHBvcnQgaXMgdXNpbmcgcHJvdG9jb2wgJzMwJyBhbHdh
+eXMuCgo+U3BlY2lmaWNhbGx5IHdydCB0aGlzIGRyaXZlciBhbmQgcGF0Y2gsIEkgd29uZGVyIGlm
+IHdlIGNhbi9zaG91bGQgbWF0Y2gKPm9uIGZmL2ZmLzUwIGluc3RlYWQgb2YgaW50ZXJmYWNlIG51
+bWJlciBoZXJlPyAgSSBub3RlIHRoYXQgdGhlIGludGVyZmFjZQoKSSBjaGVja2VkIGFsbCBvdXIg
+ZWRpdGVkIHVzYl9jb21wb3NpdGlvbnMgYW5kIGFsbCBRQyBkZWZhdWx0IHVzYiAKY29tcG9zaXRp
+b25zKDkwMjUsIDkwZGIsIDkwNjcsOTBkNSw5MDg0LDkwOTEsOTBhZCw5MGI4LDkwZTUpLCAKZmYv
+ZmYvNTAgaXMgcm1uZXQgdXNlZCBvbmx5LiAKCj5udW1iZXJzIGFyZSBhbGxvY2F0ZWQgc2VxdWVu
+dGlvbmFsbHkuIFByb2JhYmx5IGluIHRoZSBvcmRlciB0aGVzZQo+ZnVuY3Rpb24gYXJlIGVuYWJs
+ZWQgYnkgdGhlIGZpcm13YXJlPyBJZiBzbywgYXJlIHdlIHN1cmUgdGhpcyBpcyBzdGF0aWM/CgpU
+aGlzIG5lZWRzIG1vcmUgdGltZSB0byBjb25maXJtLiBJIHdpbGwga2VlcCB5b3UgdXBkYXRlZC4K
+Cj5PciBjb3VsZCB3ZSByaXNrIGNvbmZpZyB2YXJpYW50cyB3aGVyZSB0aGUgUk1ORVQvUU1JIGZ1
+bmN0aW9uIGhhdmUgYQo+ZGlmZmVyZW50IGludGVyZmFjZSBudW1iZXIgZm9yIHRoZSBzYW1lIFBJ
+RHM/Cj4KPkFuZCBhbm90aGVyIHBvc3NpYmlsaXR5IHlvdSBtaWdodCBjb25zaWRlci4gIEFzc3Vt
+aW5nIHRoYXQgZmYvZmYvNTAKPnVuaXF1ZWx5IGlkZW50aWZpZXMgUk1ORVQvUU1JIGZ1bmN0aW9u
+cyByZWdhcmRsZXNzIG9mIFBJRCwgd291bGQgeW91Cj5jb25zaWRlciBhIFZJRCtjbGFzcyBtYXRj
+aCB0byBjYXRjaCBhbGwgb2YgdGhlbT8gIFRoaXMgd291bGQgbm90IG9ubHkKPnN1cHBvcnQgYm90
+aCB0aGUgUElEcyBvZiB0aGlzIHBhdGNoIGluIG9uZSBnbywgYnV0IGFsc28gYW55IGZ1dHVyZSBQ
+SURzCj53aXRob3V0IHRoZSBuZWVkIGZvciBmdXJ0aGVyIGRyaXZlciBwYXRjaGVzLgo+Cj4KPkJq
+w7hybgoKSSBoYXZlIGEgY29uY2VybiwgaWYgQ2ludGVyaW9uIG9yIG90aGVyIFZlbmRvcnMsIGxp
+a2UgUXVlY3RlbCwgdXNlIG90aGVyIApjaGlwIChzdWNoIGFzIGludGVsLCBtZWRpYXRlY2sgYW5k
+IHNvIG9uKSwgdGhpcyBtZXRob2RzIG1heSB3b24ndCB3b3JrLApiZWNhdXNlICB0aGV5IHNoYXJl
+IGEgc2FtZSBWSUQuIEFsc28gdGhpcyBtYXkgYmUgY2hhbmdlZCBvbmNlIFF1YWxjb21tIAp1cGRh
+dGUgdGhlIHByb3RvY29sIHBhdHRlcm5zIGZvciBmdXR1cmUgY2hpcC4=
