@@ -2,58 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B3F58E4AA
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 03:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3F358E582
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 05:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiHJBqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Aug 2022 21:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S229869AbiHJDbM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Aug 2022 23:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiHJBqW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 21:46:22 -0400
-Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C99871BD3;
-        Tue,  9 Aug 2022 18:46:17 -0700 (PDT)
+        with ESMTP id S229637AbiHJDbL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Aug 2022 23:31:11 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CB88647D5;
+        Tue,  9 Aug 2022 20:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8MRYF
-        ldPybwLhKaNKSgBUpNJSUoLCQgtJ23xLo7LXjE=; b=pCP/FnQqlZW+ilvbm5f5c
-        6hZKAr+AeYS04BEHgvUxiMFP3fL82P1+vD63sobfJ+QBTFjrLPT+eR1tnjk0DVb/
-        aANviXuINk8qv6ON6FCV9cJhwJrm38cVpzzEIAVeFSODQIOWjO/clOaERA+VVKyv
-        9OBiQtCG20vRT0IgLCgIOg=
-Received: from localhost.localdomain (unknown [223.160.228.216])
-        by smtp13 (Coremail) with SMTP id EcCowAB3WDq0DfNi2tD4Tg--.21550S2;
-        Wed, 10 Aug 2022 09:45:26 +0800 (CST)
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hutXp
+        zbz3ycXiFVFW359iTdKNjzIv+tMrHdsrJdOXBw=; b=Wx2HCOZkO4WzqPP+VuMnf
+        6PtowGyBWWHdtM++5+BdHp48hco31IXljf3xQzhKdJQFfT+oDyEMlZ0Wf8FGT6/J
+        89PIRGeXDSWWnALU4nOy/+xzAlRpIOAafXzR+AqEmlV6k8NPHyZqv9+gJ2oNhFlW
+        loFt8jtR5Jt2HRoDT/dbHc=
+Received: from localhost.localdomain (unknown [112.97.63.65])
+        by smtp4 (Coremail) with SMTP id HNxpCgB34tJvJvNiL3QhUQ--.1365S2;
+        Wed, 10 Aug 2022 11:30:57 +0800 (CST)
 From:   Slark Xiao <slark_xiao@163.com>
-To:     bjorn@mork.no, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
-Date:   Wed, 10 Aug 2022 09:45:21 +0800
-Message-Id: <20220810014521.9383-1-slark_xiao@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] USB: serial: option: add support for Cinterion MV32-WA/WB RmNet mode
+Date:   Wed, 10 Aug 2022 11:30:50 +0800
+Message-Id: <20220810033050.3117-1-slark_xiao@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EcCowAB3WDq0DfNi2tD4Tg--.21550S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr4DCF18GFyrWr4UWw4fAFb_yoW5JFyfp3
-        yjkr12yF18XF4jvFyDAF1furWFv3ZIg3sFka47Aan7WFWIyrn2grW3tFWxZ3Z7Kr4fKF4j
-        qFs0q347Jas5JFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUbAwcUUUUU=
-X-Originating-IP: [223.160.228.216]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiGRdZZFyPd27UAAAAst
+X-CM-TRANSID: HNxpCgB34tJvJvNiL3QhUQ--.1365S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWF4Uuw4rCF1UtFyxJr1UKFg_yoW5XF1xpF
+        WYyFW3ZFWUXwsxXF1DtFn3ZF95uwsrK3yI93ZrAanIvFyxArnFg34Ut3yxZF12gw1SgrsF
+        vrs8K34UGa98J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zKXdrbUUUUU=
+X-Originating-IP: [112.97.63.65]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiGRFZZFyPd3BYawAAsS
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are 2 models for MV32 serials. MV32-W-A is designed
-based on Qualcomm SDX62 chip, and MV32-W-B is designed based
-on Qualcomm SDX65 chip. So we use 2 different PID to separate it.
+We added PIDs for MV32-WA/WB MBIM mode before, now we need to add
+support for RmNet mode.
 
 Test evidence as below:
 T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=03 Dev#=  3 Spd=480 MxCh= 0
@@ -82,22 +80,33 @@ I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
 Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- drivers/net/usb/qmi_wwan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/serial/option.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 571a399c195d..709e3c59e340 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1390,6 +1390,8 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
- 	{QMI_FIXED_INTF(0x1e2d, 0x00b7, 0)},	/* Cinterion MV31 RmNet */
- 	{QMI_FIXED_INTF(0x1e2d, 0x00b9, 0)},	/* Cinterion MV31 RmNet based on new baseline */
-+	{QMI_FIXED_INTF(0x1e2d, 0x00f3, 0)},	/* Cinterion MV32-W-A RmNet */
-+	{QMI_FIXED_INTF(0x1e2d, 0x00f4, 0)},	/* Cinterion MV32-W-B RmNet */
- 	{QMI_FIXED_INTF(0x413c, 0x81a2, 8)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
- 	{QMI_FIXED_INTF(0x413c, 0x81a3, 8)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
- 	{QMI_FIXED_INTF(0x413c, 0x81a4, 8)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index de59fa919540..63af8b48831a 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -438,6 +438,8 @@ static void option_instat_callback(struct urb *urb);
+ #define CINTERION_PRODUCT_MV31_2_RMNET		0x00b9
+ #define CINTERION_PRODUCT_MV32_WA		0x00f1
+ #define CINTERION_PRODUCT_MV32_WB		0x00f2
++#define CINTERION_PRODUCT_MV32_WA_RMNET		0x00f3
++#define CINTERION_PRODUCT_MV32_WB_RMNET		0x00f4
+ 
+ /* Olivetti products */
+ #define OLIVETTI_VENDOR_ID			0x0b3c
+@@ -1995,6 +1997,10 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(3)},
+ 	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
+ 	  .driver_info = RSVD(3)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA_RMNET, 0xff),
++	  .driver_info = RSVD(0)},
++	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB_RMNET, 0xff),
++	  .driver_info = RSVD(0)},
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
 -- 
 2.25.1
 
