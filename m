@@ -2,64 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D5758EBF0
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 14:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740D458EC19
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 14:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiHJM1C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Aug 2022 08:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S231771AbiHJMgZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Aug 2022 08:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiHJM1B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 08:27:01 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DB36E8B1
-        for <linux-usb@vger.kernel.org>; Wed, 10 Aug 2022 05:27:00 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-10ea9ef5838so17600054fac.3
-        for <linux-usb@vger.kernel.org>; Wed, 10 Aug 2022 05:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc;
-        bh=7CJ2H+mwqwi3qTSuDIQlMPG5AfOpvwm6RnkGrDapEZ4=;
-        b=BaeRHttG85xFxPSRnbqQ6P9DTrn+nrrIbXa6r7YgigBfwgNuvkSeThf02eXaLgz5HH
-         yTPKMfDvGuM90LG0RVnklZ5J5xmqbmxXddTgSKjX4S00Wu7z42S4scOsl5mIZOgeN6j1
-         qqdDOd7Zgtmp85pXGC8YhQNClXIlXQDd62qbDkbtoMlCpi335lJ+kMCIV9NbuTvmtHG+
-         x/TdQsZFvG7SLsX3nJ1w9eYi58MCq/6b7DB3C44qXkRvzW08tvRplZNLwugIsMFFu+wR
-         iOScdHlKVqTx0M2/zqOveF8hd2chxdSNLKHz9fiuv6SV4nsZoF3evAGDm2scIYBJnSaX
-         /6jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=7CJ2H+mwqwi3qTSuDIQlMPG5AfOpvwm6RnkGrDapEZ4=;
-        b=etvCZXSkv45SEZBenpj6Zf3pt6n6hzLet705gDX07QCVkWgKxuFimF+/03Laa2MpsF
-         vLKB3xyyeA2wKHfMN37jqofLTOgK6ZsVzohl7MyqydmiFN0Zsu8LfZ/ld4141EjJUnu4
-         pSZ6+nXBLjtiGImiFRauY8p6IMSswldti3adJLe30dEGMeWjsXObI+mz0NoCBUO8mn1I
-         JSunPy+rAjcco3DCUdqo66KdMcFUKYQyIfpUpQZPKzOXLlydZcXQE52D9ELohRpHnk2f
-         UO/46seCqJAdm1Bbm6FiV1+J6NhW6+mOmyVTTuRzAN+LLDMzWb0MvaIIZbE4dMdzph3V
-         sTAw==
-X-Gm-Message-State: ACgBeo0Vmunr732lSdLVvPpuFBE9UqVbm0E02V7o0iTdZAroO+ihFDf3
-        7LVFQv4Vln9LUdg7+RYME1K5AFwAMqFXgsn4/fc=
-X-Google-Smtp-Source: AA6agR6FdqpP46+uSxo5Dqj0xJoBbzQAkM7jopC9jtegeGHlXJ5/s+hLX1YAlx1KkIrsf5UmcgVe5xyTinYz7kO4SWo=
-X-Received: by 2002:a05:6870:968d:b0:113:610d:67b with SMTP id
- o13-20020a056870968d00b00113610d067bmr1317556oaq.30.1660134419902; Wed, 10
- Aug 2022 05:26:59 -0700 (PDT)
+        with ESMTP id S230366AbiHJMgY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 08:36:24 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4CB8053B;
+        Wed, 10 Aug 2022 05:36:23 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 27ACZa9F599307
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 10 Aug 2022 13:35:37 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 27ACZUMD651068
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 10 Aug 2022 14:35:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1660134931; bh=PNPycATN8VpMrxdiigaDnAXZauhanlnMGxj1GP+uRdM=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=PAC5HFFSC/gd+dZIaXRmoAFqL8ui+F8zwmFf1sfSxzuenJRbPb7hV1EtUvNQygvJt
+         UKAI5BbDcNYOVLxt2P5EOnT5J93FFQLFSwNONfcSh/+UMmAvGiYUK2RLIPcqqcB7Rr
+         8pcS7xo9RLU4tQqIbvw80+oqww5eSCX/67UdVa1E=
+Received: (nullmailer pid 484366 invoked by uid 1000);
+        Wed, 10 Aug 2022 12:35:25 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
+Organization: m
+References: <20220810014521.9383-1-slark_xiao@163.com>
+        <8735e4mvtd.fsf@miraculix.mork.no>
+        <e7fdcfc.30e7.1828715d7af.Coremail.slark_xiao@163.com>
+        <61ca0e63.3207.18287214d7a.Coremail.slark_xiao@163.com>
+Date:   Wed, 10 Aug 2022 14:35:24 +0200
+In-Reply-To: <61ca0e63.3207.18287214d7a.Coremail.slark_xiao@163.com> (Slark
+        Xiao's message of "Wed, 10 Aug 2022 17:41:22 +0800 (CST)")
+Message-ID: <87mtccl1ir.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Reply-To: sgtkaylama@gmail.com
-Sender: yakoubougourou90@gmail.com
-Received: by 2002:a05:6358:2115:b0:ab:8d56:1c23 with HTTP; Wed, 10 Aug 2022
- 05:26:59 -0700 (PDT)
-From:   sgtkaylama <sgtkaylama@gmail.com>
-Date:   Wed, 10 Aug 2022 12:26:59 +0000
-X-Google-Sender-Auth: jHx2eckfveWkkarCup5CZObvAM8
-Message-ID: <CANcDhOC4jWmqBT3QAtmdXjYv_19rz1w-hfoV6Ce-Ca8Z03Wzpw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.6 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,6 +62,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-16nXnNeV150sINeU15DXnSDXp9eZ15HXnNeqINeQ16og16nXqteZINeU15TXldeT16LXldeqINeU
-16fXldeT157XldeqINep15zXmT8g15HXkden16nXlCDXqteR15PXldenINeV16rXoteg15Qg15zX
-mQ0K
+"Slark Xiao" <slark_xiao@163.com> writes:
+> At 2022-08-10 17:28:51, "Slark Xiao" <slark_xiao@163.com> wrote:
+>
+>>I have a concern, if Cinterion or other Vendors, like Quectel, use other=
+=20
+>>chip (such as intel, mediateck and so on), this methods may won't work,
+>
+> My bad. QMI_WWAN driver is designed for Qualcomm based chips only,
+> =C2=A0right?=20
+
+Yes, but your concern is still valid if any of them re-use ff/ff/50 for
+something which is not RMNET/QMI.  We do not want this driver to start
+matching a non-Qualcomm based device.
+
+>>because  they share a same VID. Also this may be changed once Qualcomm=20
+>>update the protocol patterns for future chip.
+
+Yes, that' a risk since we have no knowledge of Qualcomm's plans or
+thoughts around this. It's all pure guesswork from my side.  But as
+such, it doesn't differ from the rest of this driver :-) Qualcomm can
+change whatever they want and we'll just have to follow up with whatever
+is required. Like what happened when raw-ip became mandatory.
+
+I do find it unlikely that Qualcomm will ever change the meaning of this
+pattern now that they've started using it.  That would not make any
+sense. If they need to create a new vendor specific function type, then
+they can just use one of the "free" protocol numbers (and also subclass
+if they run out of protocol numbers).
+
+But it's your call.  If you want to play it safe and keep the VID+PID
+matching, then I'm fine with that too.
+
+
+Bj=C3=B8rn
