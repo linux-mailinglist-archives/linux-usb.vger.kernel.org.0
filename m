@@ -2,97 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740D458EC19
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 14:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98FA58EC1B
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 14:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbiHJMgZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Aug 2022 08:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S231810AbiHJMhF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Aug 2022 08:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiHJMgY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 08:36:24 -0400
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4CB8053B;
-        Wed, 10 Aug 2022 05:36:23 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 27ACZa9F599307
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Wed, 10 Aug 2022 13:35:37 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 27ACZUMD651068
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Wed, 10 Aug 2022 14:35:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1660134931; bh=PNPycATN8VpMrxdiigaDnAXZauhanlnMGxj1GP+uRdM=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=PAC5HFFSC/gd+dZIaXRmoAFqL8ui+F8zwmFf1sfSxzuenJRbPb7hV1EtUvNQygvJt
-         UKAI5BbDcNYOVLxt2P5EOnT5J93FFQLFSwNONfcSh/+UMmAvGiYUK2RLIPcqqcB7Rr
-         8pcS7xo9RLU4tQqIbvw80+oqww5eSCX/67UdVa1E=
-Received: (nullmailer pid 484366 invoked by uid 1000);
-        Wed, 10 Aug 2022 12:35:25 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
-Organization: m
-References: <20220810014521.9383-1-slark_xiao@163.com>
-        <8735e4mvtd.fsf@miraculix.mork.no>
-        <e7fdcfc.30e7.1828715d7af.Coremail.slark_xiao@163.com>
-        <61ca0e63.3207.18287214d7a.Coremail.slark_xiao@163.com>
-Date:   Wed, 10 Aug 2022 14:35:24 +0200
-In-Reply-To: <61ca0e63.3207.18287214d7a.Coremail.slark_xiao@163.com> (Slark
-        Xiao's message of "Wed, 10 Aug 2022 17:41:22 +0800 (CST)")
-Message-ID: <87mtccl1ir.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S231804AbiHJMhE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 08:37:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12117756F
+        for <linux-usb@vger.kernel.org>; Wed, 10 Aug 2022 05:37:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DD8A61347
+        for <linux-usb@vger.kernel.org>; Wed, 10 Aug 2022 12:37:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563FCC433C1;
+        Wed, 10 Aug 2022 12:37:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660135022;
+        bh=52k7omSbM/GfKfWbTu80+Qj+Cf0A16QJHfyKHY+cA6g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=w5pe8waRvVvcDi0E3ZBFNBsGqtKK80QKdp7bTZASf7wo7b7ItnNeKqWrnt4G052gj
+         LCLaQWNPxgE9vIm9pQnQmZIHVD6oy3HsvLFDso6A7nBQUv4UpSHFumfdA/jEL3a8v/
+         diDYr5jxXsN9RBGGzOmOKD0DM/ppV5ElOXXbWG/E=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Maxim Devaev <mdevaev@gmail.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Roger Quadros <roger.quadros@nokia.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>
+Subject: [PATCH] USB: gadget: f_mass_storage: get rid of DEVICE_ATTR() usage
+Date:   Wed, 10 Aug 2022 14:36:56 +0200
+Message-Id: <20220810123656.3637104-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.6 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1747; i=gregkh@linuxfoundation.org; h=from:subject; bh=52k7omSbM/GfKfWbTu80+Qj+Cf0A16QJHfyKHY+cA6g=; b=owGbwMvMwCRo6H6F97bub03G02pJDEmflyU7mxzZKrFLYjvnp+3XJpYqTrY5p/bIbd6DX+3r1p8L uHSquCOWhUGQiUFWTJHlyzaeo/srDil6GdqehpnDygQyhIGLUwAmMuMew4JZQZw362bsWsFVxzP10P Gi+RPn/NRkWLDpd2tXQGTdPxVtLx7HjKkab49+FQMA
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-"Slark Xiao" <slark_xiao@163.com> writes:
-> At 2022-08-10 17:28:51, "Slark Xiao" <slark_xiao@163.com> wrote:
->
->>I have a concern, if Cinterion or other Vendors, like Quectel, use other=
-=20
->>chip (such as intel, mediateck and so on), this methods may won't work,
->
-> My bad. QMI_WWAN driver is designed for Qualcomm based chips only,
-> =C2=A0right?=20
+The last holdout in the drivers/usb/* tree using DEVICE_ATTR() is the
+f_mass_storage driver, so move it to use DEVICE_ATTR_RW() instead.  The
+mode is overridden in the is_visible callback to set it properly
+depending on if this is a cdrom or removable device.
 
-Yes, but your concern is still valid if any of them re-use ff/ff/50 for
-something which is not RMNET/QMI.  We do not want this driver to start
-matching a non-Qualcomm based device.
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Maxim Devaev <mdevaev@gmail.com>
+Cc: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Neal Liu <neal_liu@aspeedtech.com>
+Cc: Roger Quadros <roger.quadros@nokia.com>
+Cc: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc: Cai Huoqing <cai.huoqing@linux.dev>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
->>because  they share a same VID. Also this may be changed once Qualcomm=20
->>update the protocol patterns for future chip.
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 925e99f9775c..3abf7f586e2a 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -2662,11 +2662,16 @@ static ssize_t forced_eject_store(struct device *dev,
+ }
+ 
+ static DEVICE_ATTR_RW(nofua);
+-/* mode wil be set in fsg_lun_attr_is_visible() */
+-static DEVICE_ATTR(ro, 0, ro_show, ro_store);
+-static DEVICE_ATTR(file, 0, file_show, file_store);
+ static DEVICE_ATTR_WO(forced_eject);
+ 
++/*
++ * Mode of the ro and file attribute files will be overridden in
++ * fsg_lun_dev_is_visible() depending on if this is a cdrom, or if it is a
++ * removable device.
++ */
++static DEVICE_ATTR_RW(ro);
++static DEVICE_ATTR_RW(file);
++
+ /****************************** FSG COMMON ******************************/
+ 
+ static void fsg_lun_release(struct device *dev)
+-- 
+2.37.1
 
-Yes, that' a risk since we have no knowledge of Qualcomm's plans or
-thoughts around this. It's all pure guesswork from my side.  But as
-such, it doesn't differ from the rest of this driver :-) Qualcomm can
-change whatever they want and we'll just have to follow up with whatever
-is required. Like what happened when raw-ip became mandatory.
-
-I do find it unlikely that Qualcomm will ever change the meaning of this
-pattern now that they've started using it.  That would not make any
-sense. If they need to create a new vendor specific function type, then
-they can just use one of the "free" protocol numbers (and also subclass
-if they run out of protocol numbers).
-
-But it's your call.  If you want to play it safe and keep the VID+PID
-matching, then I'm fine with that too.
-
-
-Bj=C3=B8rn
