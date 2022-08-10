@@ -2,130 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C3358F20E
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 20:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C0458F337
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Aug 2022 21:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiHJSAF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Aug 2022 14:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
+        id S233160AbiHJTdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Aug 2022 15:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiHJSAE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 14:00:04 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0974E6C113;
-        Wed, 10 Aug 2022 11:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660154404; x=1691690404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fyz/5NQriJw7zDpiMUgJgMy7EUYhj2aqcm/VIEiNRmc=;
-  b=jg7jXsNr2m2fO+5y6BjhMJLroBReUgH81xCI8nQaxnGOAKyP5b6eSYLC
-   0sggZjJNmjmSs7O6/Bl0dj8UzKIAKBBotUQ9P/YXx9k2JQcdceZM5fUpD
-   zOkTyCoK7B1TfddZJ18auzE6kQ+cN8DG/a+iAgFClzd4BUfjmnbjSiVH1
-   YrnKAZBYZ9CmaoBP+7h5mwTv94GDIUHDDIYogNo1L0AGRH38UoCwaJGTI
-   quZGXN3SFY9ORNkAseNunPNVqxGYAbN2l2zWye7jMbcsRIFKr/Uh0ve0S
-   9sUDjGLgeeLYDbyksYxmk3SR6wYsnA5LYlAgJgHyTrGbF2C7kHIugB7au
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="271538747"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="271538747"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 11:00:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="747523447"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Aug 2022 11:00:00 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLpzr-0000Z3-1x;
-        Wed, 10 Aug 2022 17:59:59 +0000
-Date:   Thu, 11 Aug 2022 01:59:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>
-Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-Message-ID: <202208110101.rbONyPek-lkp@intel.com>
-References: <20220809094300.83116-3-hadess@hadess.net>
+        with ESMTP id S232960AbiHJTdD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 15:33:03 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E75627539A
+        for <linux-usb@vger.kernel.org>; Wed, 10 Aug 2022 12:33:01 -0700 (PDT)
+Received: (qmail 849138 invoked by uid 1000); 10 Aug 2022 15:33:00 -0400
+Date:   Wed, 10 Aug 2022 15:33:00 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] USB: gadget: Fix use-after-free Read in usb_udc_uevent()
+Message-ID: <YvQH7IMTIFO0OCnG@rowland.harvard.edu>
+References: <YtlbkmVGJyhO4kR6@rowland.harvard.edu>
+ <000000000000acc0e905e4517fa0@google.com>
+ <YtlrnhHyrHsSky9m@rowland.harvard.edu>
+ <CGME20220808145736eucas1p234e56422bd7973d7f0676e74f03ba405@eucas1p2.samsung.com>
+ <b2ba4245-9917-e399-94c8-03a383e7070e@samsung.com>
+ <YvFxiXmPlJc9wLZT@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809094300.83116-3-hadess@hadess.net>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YvFxiXmPlJc9wLZT@rowland.harvard.edu>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bastien,
+On Mon, Aug 08, 2022 at 04:26:49PM -0400, Alan Stern wrote:
+> On Mon, Aug 08, 2022 at 04:57:35PM +0200, Marek Szyprowski wrote:
+> > Hi Alan,
+> 
+> Hi.
+> 
+> > This patch landed recently in linux-next as commit 2191c00855b0 ("USB: 
+> > gadget: Fix use-after-free Read in usb_udc_uevent()"). Unfortunately it 
+> > fixes the issue by introducing another one. It doesn't look very 
+> > probable, but it would be nice to fix it to make the lock dependency 
+> > checker happy.
+> 
+> Indeed.
 
-I love your patch! Yet something to improve:
+> I suspect the problem is that udc_lock is held for too long.  Probably it 
+> should be released during the calls to udc->driver->bind and 
+> udc->driver->unbind.
+> 
+> Getting this right will require some careful study.  Marek, if I send you 
+> a patch later, will you be able to test it?
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on balbi-usb/testing/next peter-chen-usb/for-usb-next linus/master v5.19 next-20220810]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Here's a patch for you to try, when you have the chance.  It reduces the 
+scope of udc_lock to cover only the fields it's supposed to protect and 
+changes the locking in a few other places.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/USB-core-add-a-way-to-revoke-access-to-open-USB-devices/20220809-174609
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: arm64-randconfig-r001-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110101.rbONyPek-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b8d37bab24eee13dfbbb947c6a44f5f363c6bb7a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bastien-Nocera/USB-core-add-a-way-to-revoke-access-to-open-USB-devices/20220809-174609
-        git checkout b8d37bab24eee13dfbbb947c6a44f5f363c6bb7a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/core/
+There's still the possibility of a locking cycle, because udc_lock is 
+held in the ->disconnect pathway.  It's very hard to know whether that 
+might cause any trouble; it depends on how the function drivers handle 
+disconnections.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/usb/core/usb.c:465:1: warning: no previous prototype for function 'usb_revoke_device' [-Wmissing-prototypes]
-   usb_revoke_device(int busnum, int devnum, unsigned int euid)
-   ^
-   drivers/usb/core/usb.c:464:10: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinline int
-            ^
-            static 
->> drivers/usb/core/usb.c:1050:3: error: field designator 'check_set' does not refer to any field in type 'const struct btf_kfunc_id_set'
-           .check_set = &usbdev_kfunc_ids,
-            ^
-   1 warning and 1 error generated.
+Alan Stern
 
 
-vim +1050 drivers/usb/core/usb.c
 
-  1047	
-  1048	static const struct btf_kfunc_id_set usbdev_kfunc_set = {
-  1049		.owner     = THIS_MODULE,
-> 1050		.check_set = &usbdev_kfunc_ids,
-  1051	};
-  1052	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Index: usb-devel/drivers/usb/gadget/udc/core.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/udc/core.c
++++ usb-devel/drivers/usb/gadget/udc/core.c
+@@ -736,7 +736,10 @@ int usb_gadget_disconnect(struct usb_gad
+ 	ret = gadget->ops->pullup(gadget, 0);
+ 	if (!ret) {
+ 		gadget->connected = 0;
+-		gadget->udc->driver->disconnect(gadget);
++		mutex_lock(&udc_lock);
++		if (gadget->udc->driver)
++			gadget->udc->driver->disconnect(gadget);
++		mutex_unlock(&udc_lock);
+ 	}
+ 
+ out:
+@@ -1489,7 +1492,6 @@ static int gadget_bind_driver(struct dev
+ 
+ 	usb_gadget_udc_set_speed(udc, driver->max_speed);
+ 
+-	mutex_lock(&udc_lock);
+ 	ret = driver->bind(udc->gadget, driver);
+ 	if (ret)
+ 		goto err_bind;
+@@ -1499,7 +1501,6 @@ static int gadget_bind_driver(struct dev
+ 		goto err_start;
+ 	usb_gadget_enable_async_callbacks(udc);
+ 	usb_udc_connect_control(udc);
+-	mutex_unlock(&udc_lock);
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 	return 0;
+@@ -1512,6 +1513,7 @@ static int gadget_bind_driver(struct dev
+ 		dev_err(&udc->dev, "failed to start %s: %d\n",
+ 			driver->function, ret);
+ 
++	mutex_lock(&udc_lock);
+ 	udc->driver = NULL;
+ 	driver->is_bound = false;
+ 	mutex_unlock(&udc_lock);
+@@ -1529,7 +1531,6 @@ static void gadget_unbind_driver(struct
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 
+-	mutex_lock(&udc_lock);
+ 	usb_gadget_disconnect(gadget);
+ 	usb_gadget_disable_async_callbacks(udc);
+ 	if (gadget->irq)
+@@ -1537,6 +1538,7 @@ static void gadget_unbind_driver(struct
+ 	udc->driver->unbind(gadget);
+ 	usb_gadget_udc_stop(udc);
+ 
++	mutex_lock(&udc_lock);
+ 	driver->is_bound = false;
+ 	udc->driver = NULL;
+ 	mutex_unlock(&udc_lock);
+@@ -1612,7 +1614,7 @@ static ssize_t soft_connect_store(struct
+ 	struct usb_udc		*udc = container_of(dev, struct usb_udc, dev);
+ 	ssize_t			ret;
+ 
+-	mutex_lock(&udc_lock);
++	device_lock(&udc->gadget->dev);
+ 	if (!udc->driver) {
+ 		dev_err(dev, "soft-connect without a gadget driver\n");
+ 		ret = -EOPNOTSUPP;
+@@ -1633,7 +1635,7 @@ static ssize_t soft_connect_store(struct
+ 
+ 	ret = n;
+ out:
+-	mutex_unlock(&udc_lock);
++	device_unlock(&udc->gadget->dev);
+ 	return ret;
+ }
+ static DEVICE_ATTR_WO(soft_connect);
+@@ -1652,11 +1654,15 @@ static ssize_t function_show(struct devi
+ 			     char *buf)
+ {
+ 	struct usb_udc		*udc = container_of(dev, struct usb_udc, dev);
+-	struct usb_gadget_driver *drv = udc->driver;
++	struct usb_gadget_driver *drv;
++	int			rc = 0;
+ 
+-	if (!drv || !drv->function)
+-		return 0;
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", drv->function);
++	mutex_lock(&udc_lock);
++	drv = udc->driver;
++	if (drv && drv->function)
++		rc = scnprintf(buf, PAGE_SIZE, "%s\n", drv->function);
++	mutex_unlock(&udc_lock);
++	return rc;
+ }
+ static DEVICE_ATTR_RO(function);
+ 
