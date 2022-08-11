@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A199258F5AC
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 04:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358C558F5B2
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 04:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbiHKCCm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Aug 2022 22:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S233643AbiHKCFW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Aug 2022 22:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiHKCCl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 22:02:41 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FE5550AE;
-        Wed, 10 Aug 2022 19:02:40 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id d126so12708971vsd.13;
-        Wed, 10 Aug 2022 19:02:40 -0700 (PDT)
+        with ESMTP id S233517AbiHKCFT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Aug 2022 22:05:19 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEC01114C;
+        Wed, 10 Aug 2022 19:05:17 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id c3so16990426vsc.6;
+        Wed, 10 Aug 2022 19:05:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=Nxc6HpQPkKpwjHiY4PCyqpP39+h41vDJgqZmkMmJ6Bw=;
-        b=DZsvcicL7D6eG5PtgWrmj4uF3jhwd+EkuPRT0qGq77YlG4Iu3sPr5lF4jdwlG7B8cM
-         MQkheUb2MuyQ65lTBJTmBo48HuyrJ7P81OojqkN032fk1WW+Yit5r5j3Swv4AoFcW7dy
-         gxAbJogAWqfXNFaJIKRcVzDukIsSU6xKn4vHtoUXHO2H0h6i2ppm5w1Dqf5HoYgIfNVj
-         mmthaZEa1+zoIEo+O2/2T1hsb6iZ4l9sAzvT4ygK1m+DyDsYveMrk2Q/Jv5O/fxO8aTN
-         +K1S8vYjWg7VgjZIQZd0B1SQ0sZl7d1pvDKlSCLW+bHKt+WEJptQxWTTGNbGYPQm3JUT
-         3iYg==
+        bh=vLxr2bQK3g/gwesvzUPWXFQq5fWzWxBoO1b59V1Nd+U=;
+        b=NIhfrobHuK4vGWIMBY3FGau7ECbC5r8vGBt8w0Ldu4wdEcvnuVta1gwXPSrQ2LmjI6
+         nkn8YaSzhJhl1N3z8Rk5AbrdCqEb8Yj6qQZbrZroF67/QA8LdpFnnG22RJRpdOA6LzJD
+         TzNAJklq8yq2gfQuMHG7YEoUfaIY/z8+piJ1j/FNkDVZMH3brnxnPm73cj58tvf+ltjg
+         PO1aqPseJBx4XNgP1yyft/tDL8Y+dndx6Qzivk8HXoH/bqTMUK8LGZVJAXnoRQRIGklG
+         9r2dNrKSHa6hYKPGiEu2hTuwh7KqVuUFIYZGAxPbyzqSEAeoqY4PTtHNT+MCFsdMV0hV
+         tWMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=Nxc6HpQPkKpwjHiY4PCyqpP39+h41vDJgqZmkMmJ6Bw=;
-        b=0Dskh4aSpQQLTRq/1Pkp2FGGGyOlCDETf4V4cTvQCkjZFCvCVeCT/38nVwW00XSvUi
-         RU0Hc5bO7jUKoe+wCtZyN1sy3RWtlwbhVSdl0vlTNy60ztJ+03DdvROgkphiS+Y2CmC0
-         AS9qtOQ/45c3t6h1bBrR3u1wGU1VLpa964ThOxCrBed+kW/FV44d4J0YQ3MDWId3CH06
-         3lMRHCahIAnTN6LuCigbaiqn0sewAPw4sC7neySDv5L9nDduyfPJQzicbChQBPAE5jvB
-         QmvNK0gQlfW5FjHfblAhQw0SUHgGkwheVBAwzt8m1uXaq1wR6bC4q6ELTlCTIliJKmkb
-         RWhg==
-X-Gm-Message-State: ACgBeo07WZw9Hoai39QihHeBngBaZyOsrEg9gSlwKeI5RVpTBgaA3jos
-        s2MqI7tJrgPRWxIrl+C0PRza+ZvsY3Cx4bsr8Q2CipNOX1H69I1ZHTY=
-X-Google-Smtp-Source: AA6agR5fUMUJ07/ZFYxEiDCw7oN2pkyScl7qA7b/VXVP7HOup8m5RQwqG0VkodJ5AYDI0qJr1uceAL2CvNxnWzpqCsA=
-X-Received: by 2002:a67:f607:0:b0:388:ac13:af19 with SMTP id
- k7-20020a67f607000000b00388ac13af19mr7774530vso.19.1660183359882; Wed, 10 Aug
- 2022 19:02:39 -0700 (PDT)
+        bh=vLxr2bQK3g/gwesvzUPWXFQq5fWzWxBoO1b59V1Nd+U=;
+        b=ciBQ3MtRCP6hDtnBUqoGjGy0vqhVYiJXbpbkoQocvZ/XjtrSyTaRTtMZTAWxLTrLkl
+         DnpP9fT66EJtOnTxmEKJCjJ2VIJeL2ANmpuv07vvT1kQk0q8F95IFcefJmOS4mTGM7H/
+         hlSKs4ocrl3kENi8y9fgdiJlJebNvNEb4v4cfbwx1UFIFJ0/6tR5dNRnM2BBcyGhRHij
+         BNMfziJg7lUAfJu45J1LQkU93gQhiJEG4t4O5u9D/tm0nXt/cR+enTbpz4SMDvMI+3Nb
+         DC3ytCHe+jDBpMCvEMdnJdLaupZ933Z4ylH+28dJh/1g+CTX87DfBgazMlJ453HZKYz+
+         yiyg==
+X-Gm-Message-State: ACgBeo0I44CCyFSR05U3R5vOQAurojGqMrVFMzaY9MIQaTBlEy7gVIHv
+        ZQIx6zPAoZ5h4LA+t9OBoBzb++1hv2DWrD9HYhGHkamIJHhSk7YTB2c=
+X-Google-Smtp-Source: AA6agR6GHGkEVikkoNpNcsV83bd7tr9VZn9T9GATj6NCxGevsx6q32Jj3C2s7zTC6lKy8ftjjn4KX0ZSAcrh9r/sICE=
+X-Received: by 2002:a67:e0cf:0:b0:386:d6fc:cf19 with SMTP id
+ m15-20020a67e0cf000000b00386d6fccf19mr12620346vsl.49.1660183516481; Wed, 10
+ Aug 2022 19:05:16 -0700 (PDT)
 MIME-Version: 1.0
 From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Thu, 11 Aug 2022 10:02:26 +0800
-Message-ID: <CAB7eexLLApHJwZfMQ=X-PtRhw0BgO+5KcSMS05FNUYejJXqtSA@mail.gmail.com>
-Subject: kernel v5.19 warn in usb_composite_setup_continue
+Date:   Thu, 11 Aug 2022 10:05:05 +0800
+Message-ID: <CAB7eexLk-XM=-x_dtKSiSdR6RsTkR4bsXQTL=Mz1HArast6vkg@mail.gmail.com>
+Subject: kernel v5.18 warn in usb_stor_msg_common
 To:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -63,93 +63,62 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hello,
 
-When fuzzing the Linux kernel driver 5.19.0-rc4-00208-g69cb6c6556ad,
-the following crash was triggered.
+When fuzzing the Linux kernel driver v5.18.0, the following crash was triggered.
 
 HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f (HEAD, tag: v5.18)
 git tree: upstream
 
 kernel config: https://pastebin.com/KecL2gaG
-C reproducer: https://pastebin.com/gTWJQwsh
-console output: https://pastebin.com/iHzBVP3B
+C reproducer: https://pastebin.com/KcSa8fCB
+console output: https://pastebin.com/zcM1f6ra
 
 Basically, in the c reproducer, we use the gadget module to emulate
-the process of attaching a usb device (vendor id: 0x45e, product id:
-0x6d, with function: loopback_null).
+the process of attaching a usb device (vendor id: 0xcf2, product id:
+0x6250, with function: phonet_null and ms_null).
 To reproduce this crash, we utilize a third-party library to emulate
 the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
 Just clone this repository, make install it, and compile the c
 reproducer with ``` gcc crash.c -lusbgx -o crash ``` will do the
 trick.
 
-It seems that an error state in struct usb_device trigger such kernel warning.
+It seems that when function usb_stor_msg_common tries to call
+usb_submit_urb, the value in current_urb on struct us_data cause
+usb_submit_urb return a error, which makes the kernel panic on warn
 
 The crash report is as follow:
 
 ```
-input: Media Center Ed. eHome Infrared Remote Transceiver (045e:006d)
-as /devices/platform/dummy_hcd.5/usb6/6-1/6-1:1.0/rc/rc0/input4
 ------------[ cut here ]------------
-usb 6-1: BOGUS control dir, pipe 80000380 doesn't match bRequestType 40
-WARNING: CPU: 0 PID: 2465 at drivers/usb/core/urb.c:410
-usb_submit_urb+0x1326/0x1820 drivers/usb/core/urb.c:410
+URB ffff888111cb3700 submitted while active
+WARNING: CPU: 0 PID: 1204 at drivers/usb/core/urb.c:378
+usb_submit_urb+0x136b/0x1820 drivers/usb/core/urb.c:378
 Modules linked in:
-CPU: 0 PID: 2465 Comm: kworker/0:2 Not tainted 5.19.0-rc4-00208-g69cb6c6556ad #1
+CPU: 0 PID: 1204 Comm: kworker/0:2 Not tainted 5.18.0 #3
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
 1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0x1326/0x1820 drivers/usb/core/urb.c:410
-Code: 7c 24 40 e8 ac 23 91 fd 48 8b 7c 24 40 e8 b2 70 1b ff 45 89 e8
-44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 a0 30 a9 86 e8 48 07 11 02 <0f> 0b
-e9 1c f0 ff ff e8 7e 23 91 fd 0f b6 1d 63 22 83 05 31 ff 41
-RSP: 0018:ffffc900032becf0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff8881100f3058 RCX: 0000000000000000
-RDX: ffffc90004961000 RSI: ffff888114c6d580 RDI: fffff52000657d90
-RBP: ffff888105ad90f0 R08: ffffffff812c3638 R09: 0000000000000000
-R10: 0000000000000005 R11: ffffed1023504ef1 R12: ffff888105ad9000
-R13: 0000000000000040 R14: 0000000080000380 R15: ffff88810ba96500
+Workqueue: events_freezable usb_stor_scan_dwork
+RIP: 0010:usb_submit_urb+0x136b/0x1820 drivers/usb/core/urb.c:378
+Code: 89 de e8 18 94 95 fd 84 db 0f 85 21 f5 ff ff e8 eb 92 95 fd 4c
+89 fe 48 c7 c7 60 9d a7 86 c6 05 c8 6c 86 05 01 e8 16 0e 10 02 <0f> 0b
+e9 ff f4 ff ff 41 be ed ff ff ff e9 f4 f4 ff ff e8 be 92 95
+RSP: 0018:ffffc90000527ad8 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffff88810d6c3900 RDI: fffff520000a4f4d
+RBP: 1ffff920000a4f6d R08: ffffffff812beb18 R09: 0000000000000000
+R10: 0000000000000005 R11: ffffed1023504f09 R12: ffffc90000527b88
+R13: ffff88810b970e00 R14: 00000000fffffff0 R15: ffff888111cb3700
 FS: 0000000000000000(0000) GS:ffff88811a800000(0000) knlGS:0000000000000000
 CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe810bda58 CR3: 000000010b720000 CR4: 0000000000350ef0
+CR2: 0000558d2f1c9338 CR3: 000000010c890000 CR4: 0000000000350ef0
 Call Trace:
 <TASK>
-usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
-usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
-usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
-mceusb_gen1_init drivers/media/rc/mceusb.c:1431 [inline]
-mceusb_dev_probe+0x258e/0x33f0 drivers/media/rc/mceusb.c:1807
-usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:396
-call_driver_probe drivers/base/dd.c:555 [inline]
-really_probe drivers/base/dd.c:634 [inline]
-really_probe+0x23e/0xa80 drivers/base/dd.c:579
-__driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
-driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
-__device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
-bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
-__device_attach+0x283/0x490 drivers/base/dd.c:989
-bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
-device_add+0xc9b/0x1da0 drivers/base/core.c:3417
-usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
-usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:238
-usb_probe_device+0xd9/0x2a0 drivers/usb/core/driver.c:293
-call_driver_probe drivers/base/dd.c:555 [inline]
-really_probe drivers/base/dd.c:634 [inline]
-really_probe+0x23e/0xa80 drivers/base/dd.c:579
-__driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
-driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
-__device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
-bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
-__device_attach+0x283/0x490 drivers/base/dd.c:989
-bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
-device_add+0xc9b/0x1da0 drivers/base/core.c:3417
-usb_new_device.cold+0x4b8/0x10ca drivers/usb/core/hub.c:2566
-hub_port_connect drivers/usb/core/hub.c:5363 [inline]
-hub_port_connect_change drivers/usb/core/hub.c:5507 [inline]
-port_event drivers/usb/core/hub.c:5663 [inline]
-hub_event+0x232d/0x4180 drivers/usb/core/hub.c:5745
+usb_stor_msg_common+0x233/0x550 drivers/usb/storage/transport.c:143
+usb_stor_control_msg+0x377/0x4f0 drivers/usb/storage/transport.c:205
+usb_stor_Bulk_max_lun+0xfa/0x1e0 drivers/usb/storage/transport.c:1081
+usb_stor_scan_dwork+0x19f/0x270 drivers/usb/storage/usb.c:906
 process_one_work+0x9cc/0x1650 kernel/workqueue.c:2289
 worker_thread+0x623/0x1070 kernel/workqueue.c:2436
-kthread+0x2ef/0x3a0 kernel/kthread.c:376
+kthread+0x2ef/0x3a0 kernel/kthread.c:346
 ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
 </TASK>
 
