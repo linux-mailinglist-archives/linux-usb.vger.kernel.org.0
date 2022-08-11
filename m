@@ -2,92 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD4E58F98D
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 10:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488DE58F999
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 10:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbiHKIv2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 04:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S234791AbiHKI5n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 04:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbiHKIv1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 04:51:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CE2915E7;
-        Thu, 11 Aug 2022 01:51:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ACC36157E;
-        Thu, 11 Aug 2022 08:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A0A4C433C1;
-        Thu, 11 Aug 2022 08:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660207885;
-        bh=uQkZF6eElSFOuf/W02ThY5e86BESvP+3QMOE/cj00+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R5GIz0wdAiUHw6uYUIeEsCM/ZJgYQ++ov7QdTV62iaFt6Po/2LdDtcmD9MqHK3dW7
-         tCCLuqebbyRhJ7ePJm/e7eZGJwq0gRPCqhElqahSIC0OvXVksqofnBrmNOwkCshRau
-         kCW7Qg6+HtHzvcVTMnU7DvVoUbCBEEVm5IfJthwQ=
-Date:   Thu, 11 Aug 2022 10:51:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhou jie <zhoujie@nfschina.com>
-Cc:     johan@kernel.org, kernel@nfschina.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb/serial:Repair function return value
-Message-ID: <YvTDCpjrqxxK46Us@kroah.com>
-References: <YvS8AK9apa7tnYOz@kroah.com>
- <20220811084237.6651-1-zhoujie@nfschina.com>
- <20220811084237.6651-2-zhoujie@nfschina.com>
+        with ESMTP id S233839AbiHKI5l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 04:57:41 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50984915CB;
+        Thu, 11 Aug 2022 01:57:38 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id w19so32370715ejc.7;
+        Thu, 11 Aug 2022 01:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=GIdfx5iQy+A2DaHJNThxqBSnLUKgCDXbbKynfdxrqiM=;
+        b=X1xDw/uh1XUAYFy3mb8Id8swYy6nYRTh87F8Vgp7GFbMqUet/PmYAIUSmRdeDROQUO
+         S2m3ZhB6KafFUdePobAP7De/XFb+wP9UjI1Lg0VhmBcc+NywoNdkMO74KAP7tjva8idy
+         WkY8TsK74uaau7g6nDHgDJ6TRTTcGzEAi8Qm/RQ+Ez+fCtTcZT4L7ZumK74siwwxlZb1
+         q2ELLHY3Hh2EmnIUZOPvPwxfA167SrzgHkzEK1S/QOJ1blgEYcAZreddQjMZTH6FEbEf
+         vWcuCxQRuYbFIQ9giPSa5tRdP2VzIKwtf7YJuwnkTD4sY5ibHDyQQ02OU9DMgcbxUTKM
+         kE5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=GIdfx5iQy+A2DaHJNThxqBSnLUKgCDXbbKynfdxrqiM=;
+        b=auQQzIc+GlU0oDQV57a4WVIWurLJ1XtIuJFsrfdScE80S/ySQpNCA5IdlXza2L13K2
+         2uDMmTBin98WiGFAQIJIZBAgkPvJZGcVuglkzDYHqJfh8e5pxnSRPlcBiNnVMutY3rNM
+         NH18TZJETyVUHqRjXmK7aUutCX7BvPho2UXsItcx+E3TT9fc8174dxqs71UrMK2Rrz5X
+         GGX6JuTn/1DeYcIWuK8syl+5VSeJioWd3I491RcDiHQKRpYHwqexiQrCt6igBUFZz+VQ
+         JGyNs2yebYDkIgEnEso6O+VfIj0gitb/atNEvO1Pebky6ydT3aeKkNjEzCcy8vlK4Oc5
+         kDHQ==
+X-Gm-Message-State: ACgBeo3UhdfRiJrRiaIDCZ//PcuQKysv4tHmuwKu/0+7ZjB49Vbin+du
+        ud4wN0rszn/Lh1lUJmlBrz/2LMdi2wpFuDvdm86FL4lpYNk=
+X-Google-Smtp-Source: AA6agR6flTDJLRGrlqd+EwYfrdtb23mJTMpAnsxHTjlX31u87fAqIzGn6+9Eobc+Lldi15nlwleMb5Qsq8pTIBnEF9s=
+X-Received: by 2002:a17:906:a089:b0:72f:826b:e084 with SMTP id
+ q9-20020a170906a08900b0072f826be084mr24056669ejy.708.1660208256904; Thu, 11
+ Aug 2022 01:57:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811084237.6651-2-zhoujie@nfschina.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220811025346.113199-1-dzm91@hust.edu.cn> <20220811025346.113199-2-dzm91@hust.edu.cn>
+ <e959ac7c-7e74-b84c-ffff-ea0069634eb4@omp.ru>
+In-Reply-To: <e959ac7c-7e74-b84c-ffff-ea0069634eb4@omp.ru>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Thu, 11 Aug 2022 16:57:10 +0800
+Message-ID: <CAD-N9QWwz6RaQ5-E5XiWGHOmHZUABYuQVuKY_7ThgQGpNFNwcQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] USB: ncevibrator: simplify tv_probe
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 04:42:37PM +0800, Zhou jie wrote:
-> Repair function return value,The previous return value did not work.
-> 
-> v2:
->   Modifying function return value type does not work.
+On Thu, Aug 11, 2022 at 4:34 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+>
+> Hello!
+>
+>    Your subject is broken now. :-)
 
-Please put this below the --- line as the documentation asks for.
+Yes, thanks for your reminder. Will send a v2 patch.
 
-> 
-> Signed-off-by: Zhou jie <zhoujie@nfschina.com>
-> ---
->  drivers/usb/serial/mos7720.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
-> index 1e12b5f30dcc..215b1c87fa07 100644
-> --- a/drivers/usb/serial/mos7720.c
-> +++ b/drivers/usb/serial/mos7720.c
-> @@ -243,9 +243,8 @@ static inline int mos7715_change_mode(struct mos7715_parport *mos_parport,
->  				      enum mos7715_pp_modes mode)
->  {
->  	mos_parport->shadowECR = mode;
-> -	write_mos_reg(mos_parport->serial, dummy, MOS7720_ECR,
-> +	return write_mos_reg(mos_parport->serial, dummy, MOS7720_ECR,
->  		      mos_parport->shadowECR);
-> -	return 0;
-
-Are you sure that this change does what you think it does?
-
-Hint, what does write_mos_reg() return if all goes well?
-
-Also the indentation of the second line is now incorrect.
-
-This is going to take more work to get correct, please take your time
-and think about it and test your changes before resending.
-
-thanks,
-
-greg k-h
+>
+> MBR, Sergey
