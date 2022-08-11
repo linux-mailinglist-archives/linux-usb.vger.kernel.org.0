@@ -2,108 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007BD58F90B
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 10:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183DF58F925
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 10:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbiHKI2h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 04:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S234122AbiHKIfE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 04:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbiHKI2U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 04:28:20 -0400
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF429083A;
-        Thu, 11 Aug 2022 01:28:15 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 27B8RhGh635424
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Thu, 11 Aug 2022 09:27:44 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 27B8RbPu798373
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Thu, 11 Aug 2022 10:27:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1660206458; bh=DVAcRpjHUD6SC/z94VyNoM8QbNmGcb9r0L8yrNq9za8=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=IqfPse84meJiD6rat7y8q0Fvr5+4dM8VBVy0T6cEFEIf/vQLJTozD8GEFESt9wR25
-         w/zhVGfWNLne5aPP0/TFdP/MI/wUnuyQN2zyGrACzZfdrZo2JaxhakQvwLyY0xkS/1
-         FU5GEkNh9NWjfvU36NsfGl318FOklJkjFcrqoFu0=
-Received: (nullmailer pid 510642 invoked by uid 1000);
-        Thu, 11 Aug 2022 08:27:32 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
-Organization: m
-References: <20220810014521.9383-1-slark_xiao@163.com>
-Date:   Thu, 11 Aug 2022 10:27:32 +0200
-In-Reply-To: <20220810014521.9383-1-slark_xiao@163.com> (Slark Xiao's message
-        of "Wed, 10 Aug 2022 09:45:21 +0800")
-Message-ID: <87y1vvjibv.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S233535AbiHKIfC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 04:35:02 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A018A7F1;
+        Thu, 11 Aug 2022 01:35:00 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.83.30) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 11 Aug
+ 2022 11:34:49 +0300
+Subject: Re: [PATCH 2/2] USB: ncevibrator: simplify tv_probe
+To:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220811025346.113199-1-dzm91@hust.edu.cn>
+ <20220811025346.113199-2-dzm91@hust.edu.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <e959ac7c-7e74-b84c-ffff-ea0069634eb4@omp.ru>
+Date:   Thu, 11 Aug 2022 11:34:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.6 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220811025346.113199-2-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.83.30]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 08/11/2022 08:19:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 172170 [Aug 11 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 495 495 bb4e71e2e9e23696ab912b286436360a94c9b107
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.83.30 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.83.30
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 08/11/2022 08:22:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 8/11/2022 7:08:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Slark Xiao <slark_xiao@163.com> writes:
+Hello!
 
-> There are 2 models for MV32 serials. MV32-W-A is designed
-> based on Qualcomm SDX62 chip, and MV32-W-B is designed based
-> on Qualcomm SDX65 chip. So we use 2 different PID to separate it.
->
-> Test evidence as below:
-> T:  Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D02 Cnt=3D03 Dev#=3D  3 Spd=3D480 M=
-xCh=3D 0
-> D:  Ver=3D 2.10 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-> P:  Vendor=3D1e2d ProdID=3D00f3 Rev=3D05.04
-> S:  Manufacturer=3DCinterion
-> S:  Product=3DCinterion PID 0x00F3 USB Mobile Broadband
-> S:  SerialNumber=3Dd7b4be8d
-> C:  #Ifs=3D 4 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-> I:  If#=3D0x0 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D50 Drive=
-r=3Dqmi_wwan
-> I:  If#=3D0x1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Drive=
-r=3Doption
-> I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Drive=
-r=3Doption
-> I:  If#=3D0x3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Drive=
-r=3Doption
->
-> T:  Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D02 Cnt=3D03 Dev#=3D 10 Spd=3D480 M=
-xCh=3D 0
-> D:  Ver=3D 2.10 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-> P:  Vendor=3D1e2d ProdID=3D00f4 Rev=3D05.04
-> S:  Manufacturer=3DCinterion
-> S:  Product=3DCinterion PID 0x00F4 USB Mobile Broadband
-> S:  SerialNumber=3Dd095087d
-> C:  #Ifs=3D 4 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-> I:  If#=3D0x0 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D50 Drive=
-r=3Dqmi_wwan
-> I:  If#=3D0x1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Drive=
-r=3Doption
-> I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3D40 Drive=
-r=3Doption
-> I:  If#=3D0x3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Drive=
-r=3Doption
->
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+   Your subject is broken now. :-)
 
-Thanks for answering all my questions so fast. This patch looks very
-good to me
-
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
-
+MBR, Sergey
