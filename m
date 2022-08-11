@@ -2,47 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA125590346
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 18:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3295903B3
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 18:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237748AbiHKQV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 12:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S238198AbiHKQ1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 12:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237916AbiHKQU7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 12:20:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA48EB02B3;
-        Thu, 11 Aug 2022 09:03:16 -0700 (PDT)
+        with ESMTP id S238040AbiHKQ0b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 12:26:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F2A9A952;
+        Thu, 11 Aug 2022 09:07:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BC64B82182;
-        Thu, 11 Aug 2022 16:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA56C433D6;
-        Thu, 11 Aug 2022 16:03:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C82F6141C;
+        Thu, 11 Aug 2022 16:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 430F5C433B5;
+        Thu, 11 Aug 2022 16:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660233794;
-        bh=dfGDc5y7t1OJDZv5DDOhjgv3vAFicA7oBOPSO6VEFVg=;
+        s=k20201202; t=1660234076;
+        bh=mdnpCeHlv68NdTHAHexetYHZMr80HP5Rn5SNtefedMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ue5BWd73wF3zzmgULqka0NNmbdwuECVo1I59zAbslPKkD36R/z9fvEK580HnCXfmE
-         gMiWk7Y/A3JCy7svM4QFz7otUb9ydQ621cO04d7hMBaUH5GuTRdEYJnITQLZUG1ifO
-         KkQ82rYvBqF7GUy8g6ZanNwQW18p306iODEDmIL8Xl/6CVAsdzxaAFxL5Qh0HfWeMW
-         flHnKPyxGdL/0fjcFrxXdzvA0tWkso4WxnxYSdzm4rLY1MiEbRs3y1jd2tVy6t7+7l
-         vvU5/kRMrQusCwkevgFmQMJb0RFGXZmyyv6e9eZ9N68u2jrBAmLBQcda4pY0MD7lgh
-         PpkkJBW4BoY/w==
+        b=RUp2O8RiRlv5+pAG7xlVmWT+bxOVpjNjnIQ2TeiOSI29n85SKJpLAxgs1Xq6dwMUu
+         O05i5RzO7vy116W10YhDrjWGJ7XnooChoWoQrhwYj/j8iDK7aJ6ajK254lrR6c0JqE
+         BqKFob5yVVQjVAPEDpjIBpc/aP6UBUhYlTS7bA54Ot1RZmAeBk9jQ+h8FYR0rIwjyh
+         hOPbSa/7/Xw2jEhgXzH+OJa25s+2q/XUmE1dlCwb88tDkWtJRWYR5FvD6oGJ9c2jd7
+         NFqAT95Cnn3g0o45HOiMo24hLgUedj3Fd7nmU+zvJnJVwY41IcxyiVihngfuZIkCHf
+         EbmUlbelBAt3Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?=C5=81ukasz=20Spintzyk?= <lukasz.spintzyk@synaptics.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 56/69] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
-Date:   Thu, 11 Aug 2022 11:56:05 -0400
-Message-Id: <20220811155632.1536867-56-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 37/46] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
+Date:   Thu, 11 Aug 2022 12:04:01 -0400
+Message-Id: <20220811160421.1539956-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811155632.1536867-1-sashal@kernel.org>
-References: <20220811155632.1536867-1-sashal@kernel.org>
+In-Reply-To: <20220811160421.1539956-1-sashal@kernel.org>
+References: <20220811160421.1539956-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -118,7 +118,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
-index f7cb3ddce7fb..2d207cb4837d 100644
+index 0ce4377545f8..20a8ab9272d8 100644
 --- a/include/linux/usb/cdc_ncm.h
 +++ b/include/linux/usb/cdc_ncm.h
 @@ -53,8 +53,8 @@
