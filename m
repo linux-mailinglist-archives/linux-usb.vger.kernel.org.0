@@ -2,112 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2300258F893
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 09:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFE358F8D6
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 10:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiHKHtn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 03:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S234269AbiHKIID (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 04:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbiHKHtb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 03:49:31 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB0B8E9B2;
-        Thu, 11 Aug 2022 00:49:22 -0700 (PDT)
-X-UUID: 2c24c874b51f4c8389e6af48ac0d47ca-20220811
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=61XhcT8p7U2ythcRq1ZKIH+rMJLYKYuleNkS3KVnsl4=;
-        b=FI8Xk3i7iekGIRyWN03AH3pJQ7yzl0IX/GfTz9JjJ23zx29hGGX8yJPt1hFmdmi9wN3rJ9pc9l4qT2k9sq+uIfpJmEHD28ACUBwreFXjNaG3WYJTmlhzfuKiPwUsvJuKmvc5CJu0y99ZSWhtgHnNcSZTJlI2mk0tQGtDyR7ZAcs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:385dcd3b-2422-426b-ab46-f61ac596c3c8,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:5
-X-CID-META: VersionHash:3d8acc9,CLOUDID:67715d9c-da39-4e3b-a854-56c7d2111b46,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 2c24c874b51f4c8389e6af48ac0d47ca-20220811
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 169198960; Thu, 11 Aug 2022 15:49:15 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 11 Aug 2022 15:49:14 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 11 Aug 2022 15:49:13 +0800
-Message-ID: <267e2c23f488756ab3256f787750ef4979398279.camel@mediatek.com>
-Subject: Re: [PATCH v2] usb: common: usb-conn-gpio: Simplify some error
- message
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Thu, 11 Aug 2022 15:49:13 +0800
-In-Reply-To: <7505a9dfa1e097070c492d6f6f84afa2a490b040.1659763173.git.christophe.jaillet@wanadoo.fr>
-References: <7505a9dfa1e097070c492d6f6f84afa2a490b040.1659763173.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S234335AbiHKIH7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 04:07:59 -0400
+Received: from m13129.mail.163.com (m13129.mail.163.com [220.181.13.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6705790190;
+        Thu, 11 Aug 2022 01:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=DqL70
+        9qGTyMTAS88M8XemPiyKQgYQ9IwBJHmTNCyxig=; b=MT8L0AC1vo7FWiGkNWg+Y
+        WW/aSxswah+eSJVATmHNMbZRdOttIbmyF4+ANdmQvcLtndeYrWhsx0iAVXLT6TJP
+        eBlCNWyqrVBcAfi+iWVFn4Qvn5q/5bq8hiPnwAuoJsrSgtyz0jORQgQ73Cit2I8t
+        RDrOEuZogJAPdwHTISy9vE=
+Received: from slark_xiao$163.com ( [223.104.66.109] ) by
+ ajax-webmail-wmsvr129 (Coremail) ; Thu, 11 Aug 2022 16:07:06 +0800 (CST)
+X-Originating-IP: [223.104.66.109]
+Date:   Thu, 11 Aug 2022 16:07:06 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <87mtccl1ir.fsf@miraculix.mork.no>
+References: <20220810014521.9383-1-slark_xiao@163.com>
+ <8735e4mvtd.fsf@miraculix.mork.no>
+ <e7fdcfc.30e7.1828715d7af.Coremail.slark_xiao@163.com>
+ <61ca0e63.3207.18287214d7a.Coremail.slark_xiao@163.com>
+ <87mtccl1ir.fsf@miraculix.mork.no>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
-        autolearn_force=no version=3.4.6
+Message-ID: <6775a759.2696.1828bf15897.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: gcGowAD3FpOquPRid3smAA--.1559W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQ5aZGBbEtQVOwABsX
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-08-09 at 22:28 +0200, Christophe JAILLET wrote:
-> dev_err_probe() already prints the error code in a human readable
-> way, so
-> there is no need to duplicate it as a numerical value at the end of
-> the
-> message.
-> 
-> Fixes: ddaf0d6dc467 ("usb: common: usb-conn-gpio: use dev_err_probe()
-> to print log")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Change in v2:
->   * keep the message on the same line of dev_err_probe() because the
-> line is
->     still < 100 char   [Chunfeng Yun <chunfeng.yun@mediatek.com>]
-> ---
->  drivers/usb/common/usb-conn-gpio.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/common/usb-conn-gpio.c
-> b/drivers/usb/common/usb-conn-gpio.c
-> index b39c9f1c375d..44c5127175b7 100644
-> --- a/drivers/usb/common/usb-conn-gpio.c
-> +++ b/drivers/usb/common/usb-conn-gpio.c
-> @@ -208,10 +208,8 @@ static int usb_conn_probe(struct platform_device
-> *pdev)
->  	if (PTR_ERR(info->vbus) == -ENODEV)
->  		info->vbus = NULL;
->  
-> -	if (IS_ERR(info->vbus)) {
-> -		ret = PTR_ERR(info->vbus);
-> -		return dev_err_probe(dev, ret, "failed to get vbus
-> :%d\n", ret);
-> -	}
-> +	if (IS_ERR(info->vbus))
-> +		return dev_err_probe(dev, PTR_ERR(info->vbus), "failed
-> to get vbus\n");
->  
->  	info->role_sw = usb_role_switch_get(dev);
->  	if (IS_ERR(info->role_sw))
-Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-
-Thanks
-
-
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDgtMTAgMjA6MzU6MjQsICJCasO4cm4gTW9yayIgPGJq
+b3JuQG1vcmsubm8+IHdyb3RlOgo+IlNsYXJrIFhpYW8iIDxzbGFya194aWFvQDE2My5jb20+IHdy
+aXRlczoKPj4gQXQgMjAyMi0wOC0xMCAxNzoyODo1MSwgIlNsYXJrIFhpYW8iIDxzbGFya194aWFv
+QDE2My5jb20+IHdyb3RlOgo+Pgo+Pj5JIGhhdmUgYSBjb25jZXJuLCBpZiBDaW50ZXJpb24gb3Ig
+b3RoZXIgVmVuZG9ycywgbGlrZSBRdWVjdGVsLCB1c2Ugb3RoZXIgCj4+PmNoaXAgKHN1Y2ggYXMg
+aW50ZWwsIG1lZGlhdGVjayBhbmQgc28gb24pLCB0aGlzIG1ldGhvZHMgbWF5IHdvbid0IHdvcmss
+Cj4+Cj4+IE15IGJhZC4gUU1JX1dXQU4gZHJpdmVyIGlzIGRlc2lnbmVkIGZvciBRdWFsY29tbSBi
+YXNlZCBjaGlwcyBvbmx5LAo+PiDCoHJpZ2h0PyAKPgo+WWVzLCBidXQgeW91ciBjb25jZXJuIGlz
+IHN0aWxsIHZhbGlkIGlmIGFueSBvZiB0aGVtIHJlLXVzZSBmZi9mZi81MCBmb3IKPnNvbWV0aGlu
+ZyB3aGljaCBpcyBub3QgUk1ORVQvUU1JLiAgV2UgZG8gbm90IHdhbnQgdGhpcyBkcml2ZXIgdG8g
+c3RhcnQKPm1hdGNoaW5nIGEgbm9uLVF1YWxjb21tIGJhc2VkIGRldmljZS4KPgo+Pj5iZWNhdXNl
+ICB0aGV5IHNoYXJlIGEgc2FtZSBWSUQuIEFsc28gdGhpcyBtYXkgYmUgY2hhbmdlZCBvbmNlIFF1
+YWxjb21tIAo+Pj51cGRhdGUgdGhlIHByb3RvY29sIHBhdHRlcm5zIGZvciBmdXR1cmUgY2hpcC4K
+Pgo+WWVzLCB0aGF0JyBhIHJpc2sgc2luY2Ugd2UgaGF2ZSBubyBrbm93bGVkZ2Ugb2YgUXVhbGNv
+bW0ncyBwbGFucyBvcgo+dGhvdWdodHMgYXJvdW5kIHRoaXMuIEl0J3MgYWxsIHB1cmUgZ3Vlc3N3
+b3JrIGZyb20gbXkgc2lkZS4gIEJ1dCBhcwo+c3VjaCwgaXQgZG9lc24ndCBkaWZmZXIgZnJvbSB0
+aGUgcmVzdCBvZiB0aGlzIGRyaXZlciA6LSkgUXVhbGNvbW0gY2FuCj5jaGFuZ2Ugd2hhdGV2ZXIg
+dGhleSB3YW50IGFuZCB3ZSdsbCBqdXN0IGhhdmUgdG8gZm9sbG93IHVwIHdpdGggd2hhdGV2ZXIK
+PmlzIHJlcXVpcmVkLiBMaWtlIHdoYXQgaGFwcGVuZWQgd2hlbiByYXctaXAgYmVjYW1lIG1hbmRh
+dG9yeS4KPgo+SSBkbyBmaW5kIGl0IHVubGlrZWx5IHRoYXQgUXVhbGNvbW0gd2lsbCBldmVyIGNo
+YW5nZSB0aGUgbWVhbmluZyBvZiB0aGlzCj5wYXR0ZXJuIG5vdyB0aGF0IHRoZXkndmUgc3RhcnRl
+ZCB1c2luZyBpdC4gIFRoYXQgd291bGQgbm90IG1ha2UgYW55Cj5zZW5zZS4gSWYgdGhleSBuZWVk
+IHRvIGNyZWF0ZSBhIG5ldyB2ZW5kb3Igc3BlY2lmaWMgZnVuY3Rpb24gdHlwZSwgdGhlbgo+dGhl
+eSBjYW4ganVzdCB1c2Ugb25lIG9mIHRoZSAiZnJlZSIgcHJvdG9jb2wgbnVtYmVycyAoYW5kIGFs
+c28gc3ViY2xhc3MKPmlmIHRoZXkgcnVuIG91dCBvZiBwcm90b2NvbCBudW1iZXJzKS4KPgo+QnV0
+IGl0J3MgeW91ciBjYWxsLiAgSWYgeW91IHdhbnQgdG8gcGxheSBpdCBzYWZlIGFuZCBrZWVwIHRo
+ZSBWSUQrUElECj5tYXRjaGluZywgdGhlbiBJJ20gZmluZSB3aXRoIHRoYXQgdG9vLgo+Cj4KPkJq
+w7hybgoKVGhlbiBwbGVhc2UgaGVscCBtZSBhcHBseSBpdCBkaXJlY3RseS4gVGhlcmUgaXMgbm8g
+bW9yZSBjb21taXQgCnJlcXVlc3QgZm9yIE1WMzIgc2VyaWFscyBpZiB0aGV5IGRvbid0IHVwZGF0
+ZSBiYXNlIGxpbmUuCgpUaGFua3MuCg==
