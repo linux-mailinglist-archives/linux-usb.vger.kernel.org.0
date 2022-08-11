@@ -2,136 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3295903B3
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 18:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1525903AB
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 18:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238198AbiHKQ1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 12:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S238117AbiHKQZW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 12:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238040AbiHKQ0b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 12:26:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F2A9A952;
-        Thu, 11 Aug 2022 09:07:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C82F6141C;
-        Thu, 11 Aug 2022 16:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 430F5C433B5;
-        Thu, 11 Aug 2022 16:07:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234076;
-        bh=mdnpCeHlv68NdTHAHexetYHZMr80HP5Rn5SNtefedMk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RUp2O8RiRlv5+pAG7xlVmWT+bxOVpjNjnIQ2TeiOSI29n85SKJpLAxgs1Xq6dwMUu
-         O05i5RzO7vy116W10YhDrjWGJ7XnooChoWoQrhwYj/j8iDK7aJ6ajK254lrR6c0JqE
-         BqKFob5yVVQjVAPEDpjIBpc/aP6UBUhYlTS7bA54Ot1RZmAeBk9jQ+h8FYR0rIwjyh
-         hOPbSa/7/Xw2jEhgXzH+OJa25s+2q/XUmE1dlCwb88tDkWtJRWYR5FvD6oGJ9c2jd7
-         NFqAT95Cnn3g0o45HOiMo24hLgUedj3Fd7nmU+zvJnJVwY41IcxyiVihngfuZIkCHf
-         EbmUlbelBAt3Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?=C5=81ukasz=20Spintzyk?= <lukasz.spintzyk@synaptics.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 37/46] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
-Date:   Thu, 11 Aug 2022 12:04:01 -0400
-Message-Id: <20220811160421.1539956-37-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811160421.1539956-1-sashal@kernel.org>
-References: <20220811160421.1539956-1-sashal@kernel.org>
+        with ESMTP id S237714AbiHKQY0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 12:24:26 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D04F31AF25
+        for <linux-usb@vger.kernel.org>; Thu, 11 Aug 2022 09:06:07 -0700 (PDT)
+Received: (qmail 8212 invoked by uid 1000); 11 Aug 2022 12:06:06 -0400
+Date:   Thu, 11 Aug 2022 12:06:06 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] USB: gadget: Fix use-after-free Read in usb_udc_uevent()
+Message-ID: <YvUo7ukc8xKxKLZt@rowland.harvard.edu>
+References: <YtlbkmVGJyhO4kR6@rowland.harvard.edu>
+ <000000000000acc0e905e4517fa0@google.com>
+ <YtlrnhHyrHsSky9m@rowland.harvard.edu>
+ <CGME20220808145736eucas1p234e56422bd7973d7f0676e74f03ba405@eucas1p2.samsung.com>
+ <b2ba4245-9917-e399-94c8-03a383e7070e@samsung.com>
+ <YvFxiXmPlJc9wLZT@rowland.harvard.edu>
+ <YvQH7IMTIFO0OCnG@rowland.harvard.edu>
+ <febf579a-6451-1dc6-b583-0ba1a76344a6@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <febf579a-6451-1dc6-b583-0ba1a76344a6@samsung.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
+On Thu, Aug 11, 2022 at 09:31:34AM +0200, Marek Szyprowski wrote:
+> Hi Alan,
+> 
+> On 10.08.2022 21:33, Alan Stern wrote:
+> > On Mon, Aug 08, 2022 at 04:26:49PM -0400, Alan Stern wrote:
+> >> On Mon, Aug 08, 2022 at 04:57:35PM +0200, Marek Szyprowski wrote:
+> >>> This patch landed recently in linux-next as commit 2191c00855b0 ("USB:
+> >>> gadget: Fix use-after-free Read in usb_udc_uevent()"). Unfortunately it
+> >>> fixes the issue by introducing another one. It doesn't look very
+> >>> probable, but it would be nice to fix it to make the lock dependency
+> >>> checker happy.
+> >> Indeed.
+> >> I suspect the problem is that udc_lock is held for too long.  Probably it
+> >> should be released during the calls to udc->driver->bind and
+> >> udc->driver->unbind.
+> >>
+> >> Getting this right will require some careful study.  Marek, if I send you
+> >> a patch later, will you be able to test it?
+> > Here's a patch for you to try, when you have the chance.  It reduces the
+> > scope of udc_lock to cover only the fields it's supposed to protect and
+> > changes the locking in a few other places.
+> >
+> > There's still the possibility of a locking cycle, because udc_lock is
+> > held in the ->disconnect pathway.  It's very hard to know whether that
+> > might cause any trouble; it depends on how the function drivers handle
+> > disconnections.
+> 
+> It looks this fixed the issue I've reported. I've checked it on all my 
+> test systems and none reported any issue related to the udc.
+> 
+> Feel free to add:
+> 
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> 
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-[ Upstream commit 5588d628027092e66195097bdf6835ddf64418b3 ]
+Thanks for the quick testing.  I'll submit the patch when the current 
+merge window ends.
 
-DisplayLink ethernet devices require NTB buffers larger then 32kb
-in order to run with highest performance.
-
-This patch is changing upper limit of the rx and tx buffers.
-Those buffers are initialized with CDC_NCM_NTB_DEF_SIZE_RX and
-CDC_NCM_NTB_DEF_SIZE_TX which is 16kb so by default no device is
-affected by increased limit.
-
-Rx and tx buffer is increased under two conditions:
- - Device need to advertise that it supports higher buffer size in
-   dwNtbMaxInMaxSize and dwNtbMaxOutMaxSize.
- - cdc_ncm/rx_max and cdc_ncm/tx_max driver parameters must be adjusted
-   with udev rule or ethtool.
-
-Summary of testing and performance results:
-Tests were performed on following devices:
- - DisplayLink DL-3xxx family device
- - DisplayLink DL-6xxx family device
- - ASUS USB-C2500 2.5G USB3 ethernet adapter
- - Plugable USB3 1G USB3 ethernet adapter
- - EDIMAX EU-4307 USB-C ethernet adapter
- - Dell DBQBCBC064 USB-C ethernet adapter
-
-Performance measurements were done with:
- - iperf3 between two linux boxes
- - http://openspeedtest.com/ instance running on local test machine
-
-Insights from tests results:
- - All except one from third party usb adapters were not affected by
-   increased buffer size to their advertised dwNtbOutMaxSize and
-   dwNtbInMaxSize.
-   Devices were generally reaching 912-940Mbps both download and upload.
-
-   Only EDIMAX adapter experienced decreased download size from
-   929Mbps to 827Mbps with iper3, with openspeedtest decrease was from
-   968Mbps to 886Mbps.
-
- - DisplayLink DL-3xxx family devices experienced performance increase
-   with iperf3 download from 300Mbps to 870Mbps and
-   upload from 782Mbps to 844Mbps.
-   With openspeedtest download increased from 556Mbps to 873Mbps
-   and upload from 727Mbps to 973Mbps
-
- - DiplayLink DL-6xxx family devices are not affected by
-   increased buffer size.
-
-Signed-off-by: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20220720060518.541-2-lukasz.spintzyk@synaptics.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/usb/cdc_ncm.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
-index 0ce4377545f8..20a8ab9272d8 100644
---- a/include/linux/usb/cdc_ncm.h
-+++ b/include/linux/usb/cdc_ncm.h
-@@ -53,8 +53,8 @@
- #define USB_CDC_NCM_NDP32_LENGTH_MIN		0x20
- 
- /* Maximum NTB length */
--#define	CDC_NCM_NTB_MAX_SIZE_TX			32768	/* bytes */
--#define	CDC_NCM_NTB_MAX_SIZE_RX			32768	/* bytes */
-+#define	CDC_NCM_NTB_MAX_SIZE_TX			65536	/* bytes */
-+#define	CDC_NCM_NTB_MAX_SIZE_RX			65536	/* bytes */
- 
- /* Initial NTB length */
- #define	CDC_NCM_NTB_DEF_SIZE_TX			16384	/* bytes */
--- 
-2.35.1
-
+Alan Stern
