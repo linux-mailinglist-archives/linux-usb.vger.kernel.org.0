@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C581A59075A
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 22:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7245907A8
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 23:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbiHKUbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 16:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S236111AbiHKVDg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 17:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiHKUbS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 16:31:18 -0400
+        with ESMTP id S234075AbiHKVDf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 17:03:35 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C137E839;
-        Thu, 11 Aug 2022 13:31:16 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BK8SpI029328;
-        Thu, 11 Aug 2022 20:31:12 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C5D85AB2;
+        Thu, 11 Aug 2022 14:03:33 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BKQ11i002040;
+        Thu, 11 Aug 2022 21:03:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UWDFD8TSH66KVY2bdHLlGDmTC6rbJhgu1cOYlPwGYNY=;
- b=iUa8479YS8DVUWvl5FKsFEFL/roFM6IbfwpqiqJIsZXbuSmeBcg+PEpdbTRr/tTDSwTw
- mf3M8zAoSDyG2EEQBBMRyqWEYlh/KoNv/A2Rg446IWJoG6MP0Cd0ArsOcSRNeQ/u6phU
- rl0sEa831QIoApW5gKVFT39KjsSDirLY9jTdDOPYSdyDIcBUMMt81mIwlEtWCZcd+Ekr
- YYXSDQlTGoUp565LJ+tiDk6p72wOJKSwc2gQI+EhlYIpwfCzdKtkw6xbZ50bxpQ1YB+K
- dv70riGilHG1MMPeqtdkSZhVRu18pYqyUzre9ijCXyJOJFy79aCegBx8h4PiYd9Oah08 gA== 
+ bh=sgJVhzdM7qnYrGoNs56lS57dHNZPC9GAjp/HN+ehElU=;
+ b=dr7rX5m8GR/gLlYfT0CazfEZBtu7mMW2fNj+RWiyG/2CQKlN7jgIhz2VzyFI8zRMz2jI
+ D5rTP7G/0WEEP+I5vfUTaxqbqrzJQFY8fes1GxjFWEh0X2TM8kwXjcReapx1n+k+1VB2
+ zBHOsJac5FYOg7qHdDzZivNEJHUrYZz/0KeAMYZ3LivAhkkFA2I7ceR+GWUPKglHKNBG
+ diYEhfBDCQuMvWxMM8J2s6GUPibecAAaB6VZ1WpLd5KZxpUM2vpfRkatikAjIHB4epKf
+ qZHXjtmnH/iXAZfHTcIfJEJK0pRAQ74Z9jXbCXns5hDQCv1hDMFrhVzc/plZXmk7Pmh4 Yg== 
 Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hw8ht81cw-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hv95ywu1p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 20:31:12 +0000
+        Thu, 11 Aug 2022 21:03:29 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27BKVBpH000777
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27BL3S26000400
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 20:31:11 GMT
+        Thu, 11 Aug 2022 21:03:28 GMT
 Received: from [10.71.115.139] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 11 Aug
- 2022 13:31:10 -0700
-Message-ID: <b123b543-6c82-2787-9730-addd3e6e70a3@quicinc.com>
-Date:   Thu, 11 Aug 2022 13:31:10 -0700
+ 2022 14:03:27 -0700
+Message-ID: <19a7f8da-b655-b21d-8bcb-a60e30a8d5f8@quicinc.com>
+Date:   Thu, 11 Aug 2022 14:03:27 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
@@ -69,16 +69,16 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SJXzBGNyFikPscDSCaMIf6a3htmKuaIk
-X-Proofpoint-ORIG-GUID: SJXzBGNyFikPscDSCaMIf6a3htmKuaIk
+X-Proofpoint-ORIG-GUID: rzJTF_ahxAaN6Xvx_2Ht9W0mokt40kiE
+X-Proofpoint-GUID: rzJTF_ahxAaN6Xvx_2Ht9W0mokt40kiE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-11_13,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 spamscore=0 clxscore=1015 malwarescore=0 mlxscore=0
- impostorscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208110062
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 adultscore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208110063
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -212,11 +212,6 @@ On 8/9/2022 6:08 PM, Thinh Nguyen wrote:
 > However, the important point here is that the host only arms for remote
 > wakeup _if_ the device is remote wakeup capable. That needs to be checked.
 > 
-Yes. The device would have advertised its remote wakeup capability 
-during enumeration stage itself based on which host sets 
-SET_FEATURE(FUNCTION_SUSPEND) RW option.
-
-
 >>
 >> So in my current implementation when the host sends a function suspend
 >> SET_FEATURE(FUNCTION_SUSPEND),
@@ -243,14 +238,6 @@ SET_FEATURE(FUNCTION_SUSPEND) RW option.
 > notification for all the functions armed with remote wakeup after device
 > wakeup?
 > 
-
-That task is delegated to function driver. In patch#5 the 
-function/composite layer sends wakeup notification only if it is armed 
-for func remote wakeup.
-func_wakeup_allowed flag serves this purpose for f_ecm function driver. 
-This flag is set based on SET_FEATURE(FUNCTION_SUSPEND) packet (which in 
-turn depends on the remote wakeup capability advertised by the device in 
-bmAttributes like mentioned above).
 > 
 >> U0 event has occurred. If the device is not in suspend then it directly
 >> sends function wake notification
@@ -293,37 +280,6 @@ bmAttributes like mentioned above).
 > device remote wakeup and function remote wakeup. If it only meant for
 > function remote wakeup, then rename it. But I think you can use the same
 > flag for both scenarios.
-
-The flag is_remote_wakeup_enabled is only meant for device remote wakeup 
-and is only used in High Speed. In my implementation function remote 
-wakeup flag is at function level which is set in the function driver 
-based on whether the function is armed for remote wakeup. The 
-function/composite layer would send wakeup notification only if it is 
-armed for remote wakeup.
-
-Below snippet from patch#5
-
-Set the function_wakeup_allowed flag based on USB_INTRF_FUNC_SUSPEND_RW 
-option
-
-+static int ecm_func_suspend(struct usb_function *f, u8 options)
-+{
-+	bool func_wakeup_allowed;
-+	struct f_ecm *ecm = func_to_ecm(f);
-+	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
-+
-+	DBG(cdev, "func susp %u cmd\n", options);
-+
-+	func_wakeup_allowed = !!(options & (USB_INTRF_FUNC_SUSPEND_RW >> 8));
-
-Send wakeup notification only if func_wakeup_allowed flag is set.
-
-+		if (!port->func_wakeup_allowed) {
-+			DBG(port->ioport, "Function wakeup not allowed\n");
-+			return -EOPNOTSUPP;
-+		}
-+		ret = usb_func_wakeup(func);
-
 > 
 > 
 >> +    if (g->speed < USB_SPEED_SUPER && !dwc->is_remote_wakeup_enabled)
@@ -331,9 +287,6 @@ Send wakeup notification only if func_wakeup_allowed flag is set.
 >> +        ret =  -EPERM;
 > 
 > Also, don't use -EPERM. Use -EINVAL.
-
-Done.
-
 > 
 >> +        goto out;
 >> +    }
@@ -357,6 +310,15 @@ Done.
 > wakeup, the device will also send device notification function wake for
 > all the interfaces armed with remote wakeup.
 > 
+
+I am not clear on why device notification function wake should be sent 
+for ALL interfaces armed with remote wakeup. Since function 
+suspend/wakeup of an interface is independent of other functions in a 
+composite device only the interface in which a remote wakeup event 
+occurred should send the wake notification right? The other functions 
+will continue to remain
+in function suspend state.
+
 > 4) If the device is not in suspend, the device can send device
 > notification function wake if it's in U0.
 > 
@@ -367,110 +329,6 @@ Done.
 > intf_id) for the device notification. What you did was combining both
 > operations in usb_gadget_ops->func_wakeup(). That may only work for
 > point 4) (assuming you fix the U0 check), but not point 3).
-
-Thank you for your feedback and summary. I will rename func_wakeup to
-send_wakeup_notification to better align with the approach. The reason I 
-have combined remote_wakeup and function wake notification in 
-usb_gadget_ops->func_wakeup() is because since the implementation is at 
-function/composite level it has no knowledge on the link state. So I 
-have delegated that task to controller driver to handle the notification 
-accordingly. That is do a LFPS handshake first if the device is 
-suspended and then send notification (explained below). But we can 
-definitely separate this by adding an additional flag in the composite 
-layer to set the link state based on the gadget suspend callback called 
-when U3 SUSPEND interrupt is received. Let me know if you feel 
-separating the two is a better approach.
-
-I have explained below, how the 4 points you mentioned are handled in my 
-current implementation.
-
-The function driver will send a wakeup notification only if it is armed 
-for remote wakeup.
-
-patch#5
-+		if (!port->func_wakeup_allowed) {
-+			DBG(port->ioport, "Function wakeup not allowed\n");
-+			return -EOPNOTSUPP;
-+		}
-+		ret = usb_func_wakeup(func);
-+		if (ret)
-+			port->is_wakeup_pending = true;
-
-If the device is in suspend, we do a LFPS handshake first and return 
--EAGAIN to composite layer which will set the is_wakeup_pending flag.
-
-Patch#3
-+static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int interface_id)
-+{
-+	int	ret = 0;
-+	u32	reg;
-+	struct	dwc3 *dwc = gadget_to_dwc(g);
-+
-+	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-+
-+	/*
-+	 * If the link is in LPM, first bring the link to U0
-+	 * before triggering function wakeup. Ideally this
-+	 * needs to be expanded to other LPMs as well in
-+	 * addition to U3
-+	 */
-+	if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U3) {
-+		dwc3_gadget_wakeup(g);
-+		return -EAGAIN;
-+	}
-
-The above should take care of Point 2.
-
-After triggering a remote wakeup in Point 2, if the link transitions to 
-U0 then we will receive a U0 link state event for the same and that 
-would trigger a gadget_resume callback to inform the composite layer 
-that device has resumed. As soon as the function/composite layer gets 
-this info it will re-send the wakeup notification to the controller 
-driver based on the is_wakeup_pending flag
-
-linksts_change_interrupt() in Patch#1
-+	case DWC3_LINK_STATE_U0:
-+		if (dwc->is_gadget_wakeup) {
-+			linksts_change_events_set(dwc, false);
-+			dwc3_resume_gadget(dwc);
-+			dwc->is_gadget_wakeup = false;
-+		}
-+		break;
-
-
-u_ether resume callback in Patch#5
-+	if (func_suspend) {
-+		if (link->is_wakeup_pending) {
-+			usb_func_wakeup(func);
-+			link->is_wakeup_pending = false;
-+		}
-
-The above should take care of Point 3.
-
-For Point 4 like you mentioned I will add U0 check instead of U3 check.
-
-Point 1 would have resolved in enumeration stage itself (bmAttributes in 
-config descriptor) based on which the host sets the 
-USB_INTRF_FUNC_SUSPEND_RW option in the SET_FEATURE(FUNCTION_SUSPEND) 
-packet. Based on this option the function/composite driver will set 
-func_wakeup_allowed flag arming it for remote_wakeup
-
-+static int ecm_func_suspend(struct usb_function *f, u8 options)
-+{
-+	bool func_wakeup_allowed;
-+	struct f_ecm *ecm = func_to_ecm(f);
-+	struct usb_composite_dev *cdev = ecm->port.func.config->cdev;
-+
-+	DBG(cdev, "func susp %u cmd\n", options);
-+
-+	func_wakeup_allowed = !!(options & (USB_INTRF_FUNC_SUSPEND_RW >> 8));
-
-Do we need any additional checks for Point 1 ? Please let me know if my 
-understanding is incorrect here.
-
-
-
-
 > 
 > To be able to do 3), you can teach the composite layer _when_ to send
 > device notification function wake and for what functions. This can be
@@ -483,13 +341,8 @@ understanding is incorrect here.
 > Now that I think about it again, it maybe better to do it in the
 > composite driver for the long run. If you want to handle this in the
 > composite layer, please document and design the mechanism to handle all
-> the points above. >
+> the points above.
+> 
 > Thanks,
 > Thinh
 > 
-
-Please let me know if this implementation fails to cover the 4 points 
-you mentioned or any other rectification needed to handle these points.
-
-Thanks & Regards
-Elson
