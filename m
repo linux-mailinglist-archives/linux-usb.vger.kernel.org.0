@@ -2,47 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5EF59025A
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 18:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA125590346
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 18:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237273AbiHKQJH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 12:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S237748AbiHKQV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 12:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237088AbiHKQIi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 12:08:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6E35E326;
-        Thu, 11 Aug 2022 08:54:32 -0700 (PDT)
+        with ESMTP id S237916AbiHKQU7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 12:20:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA48EB02B3;
+        Thu, 11 Aug 2022 09:03:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D9C260F92;
-        Thu, 11 Aug 2022 15:54:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C36B3C433C1;
-        Thu, 11 Aug 2022 15:54:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BC64B82182;
+        Thu, 11 Aug 2022 16:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA56C433D6;
+        Thu, 11 Aug 2022 16:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660233271;
+        s=k20201202; t=1660233794;
         bh=dfGDc5y7t1OJDZv5DDOhjgv3vAFicA7oBOPSO6VEFVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bfBEMRtXnNG7rMwJvS3+Itg9czosQ0VqY6QGkP28e1isBbLEKIqrJUmp/bL40OYdN
-         qV/+Zu1k0qc93tEoz0s8aCE042MkDT9GV8N+15yrlgvGOEzm3IBOQd7mNJhzzAbg9O
-         p7aUA/EduoP64h/exbKsqd2jmxQkM3ozPz0mY5MgoWzdfL7Nrgt+scnuGqYvhdX4Y8
-         peC8Xtw8f6W2u+oIkPGSQjMiptZOZqKli7mbaKqSHnUEceJw+srpxFetfLB0T6kkgY
-         zX+LNdHeUtr7qFcc5FEKH5LPGTY/6EIF3cM9U7SSMOhcHzBq7w/taLp+cvCr+g8RBb
-         K9m2cu/+sqPLA==
+        b=Ue5BWd73wF3zzmgULqka0NNmbdwuECVo1I59zAbslPKkD36R/z9fvEK580HnCXfmE
+         gMiWk7Y/A3JCy7svM4QFz7otUb9ydQ621cO04d7hMBaUH5GuTRdEYJnITQLZUG1ifO
+         KkQ82rYvBqF7GUy8g6ZanNwQW18p306iODEDmIL8Xl/6CVAsdzxaAFxL5Qh0HfWeMW
+         flHnKPyxGdL/0fjcFrxXdzvA0tWkso4WxnxYSdzm4rLY1MiEbRs3y1jd2tVy6t7+7l
+         vvU5/kRMrQusCwkevgFmQMJb0RFGXZmyyv6e9eZ9N68u2jrBAmLBQcda4pY0MD7lgh
+         PpkkJBW4BoY/w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?=C5=81ukasz=20Spintzyk?= <lukasz.spintzyk@synaptics.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 72/93] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
-Date:   Thu, 11 Aug 2022 11:42:06 -0400
-Message-Id: <20220811154237.1531313-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 56/69] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
+Date:   Thu, 11 Aug 2022 11:56:05 -0400
+Message-Id: <20220811155632.1536867-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811154237.1531313-1-sashal@kernel.org>
-References: <20220811154237.1531313-1-sashal@kernel.org>
+In-Reply-To: <20220811155632.1536867-1-sashal@kernel.org>
+References: <20220811155632.1536867-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
