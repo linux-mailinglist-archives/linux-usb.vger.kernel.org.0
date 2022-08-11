@@ -2,191 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8AD58FCA3
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 14:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901B558FDB1
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 15:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235369AbiHKMoD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Aug 2022 08:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S235099AbiHKNtp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 11 Aug 2022 09:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235349AbiHKMoC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 08:44:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C244A89938
-        for <linux-usb@vger.kernel.org>; Thu, 11 Aug 2022 05:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660221839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=519IfCfIaIEiaBspR8OgsiWe3H9s5RpR3pee6j3OXrw=;
-        b=g+ZTs6ZPy/a5C7OyZlN6TWOcVBxwV2RmpQk/ok2X6onlSjHx10DX87sgRz27xhA10y5yCN
-        gvkggNiIcUSAvS4pzbDicyGXJ+JT62xx7GneP4WkrN07ndNunEG47PL8UjnCLQoKuONjih
-        jOda440BBUaBJc+0Zu+eB0B+cUYXCRk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-211-sCQXcy5wPPiceY_5vTKkXQ-1; Thu, 11 Aug 2022 08:43:58 -0400
-X-MC-Unique: sCQXcy5wPPiceY_5vTKkXQ-1
-Received: by mail-ed1-f72.google.com with SMTP id y14-20020a056402440e00b0044301c7ccd9so851525eda.19
-        for <linux-usb@vger.kernel.org>; Thu, 11 Aug 2022 05:43:58 -0700 (PDT)
+        with ESMTP id S234179AbiHKNto (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 09:49:44 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A558991F;
+        Thu, 11 Aug 2022 06:49:40 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id j17so8735072qtp.12;
+        Thu, 11 Aug 2022 06:49:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=519IfCfIaIEiaBspR8OgsiWe3H9s5RpR3pee6j3OXrw=;
-        b=y1lVp7CDq9F5WVjAP5f7yzcL6AzSXKosDShBHQDGRl9kmh61Q1COPSwRYo7VKBQauA
-         qlmxS3O7KmZ7s4nvcxJQKh7OiAlRD2loxbn74LbtjNL5HXuKDPfWnK6cXrSVrULX8gVA
-         8o3RlG22/Du8NlVUMoldZ32Y0mX4BE90Z+FzoV0+8tTaVFlJhbsSqb8OaT4nWLzLqtHt
-         +FurWAD6t7t32qYc8izivjK+CN1a+k8yNuf5kY9Y2Jf91B4HLjQQ3KfxdPPeH/xVZmIn
-         EDvHAEPVTWtbKaZ3gx9CKYoa5pCtXiO9kr1OVxxHNJo6W+0BeubdOHqwdp/nPhS9nCrC
-         pgaQ==
-X-Gm-Message-State: ACgBeo2krBcO6QhARDgYB5kVoC68ECofhrpHucfcLTm1JPlLxc+Rkfkp
-        09JsAlmlP9T4SbqnHDAQGMDaG8JaA9hd0ZUDRPjz3F0wgeWwA1iJoS9Ylxn5X49zTAvEjuiLHO9
-        z49NqAEYMIBETfPP5qFC0m593BZzjXDLdopae
-X-Received: by 2002:a05:6402:1bcf:b0:443:1c7:cd07 with SMTP id ch15-20020a0564021bcf00b0044301c7cd07mr2483202edb.365.1660221837694;
-        Thu, 11 Aug 2022 05:43:57 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6BQ+ukW/OILBIVEwiikKu/2YOrsmB3Jm4hsmMTKAYd3aASj+Rk+GDlOpfAOZmzBVAP2EOFOJLG7HamTc3wDdw=
-X-Received: by 2002:a05:6402:1bcf:b0:443:1c7:cd07 with SMTP id
- ch15-20020a0564021bcf00b0044301c7cd07mr2483172edb.365.1660221837436; Thu, 11
- Aug 2022 05:43:57 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=ycqVFDjjlSz4BGsRWhX/Rm6K2hCv5ji5U2hZQvy6Esw=;
+        b=rdTmpAtSbVqgjs7BL6+pYO71qCb07PF3eKpK9Xcde33GSCllN8DiAJcAYGpbOGDCJd
+         iO8eQCxNtG1hCHecLGy0AODrN9pG1Tf2wkByKk0mOoHIKjpFPjQmvXP2C0H5QZpAXSlo
+         8H+YUsnBWTzDMZ3EvxG7dIEigspeAZAVim4QVOtmCWLiM4HICzhY8McGj3ccFgNb+EAL
+         T45HZFn3ehYWj/CxtWZohdC1zjGPDRsBCfzj2uhRMHtPpL4/vHGX6s+3IsbnvbAcWcK2
+         FmQ9ez9NgymGf8BeIMPVk7d24F7oVTPc2qFrsv45YO7DqY6SqXDxg9nERJpI7bmofz+Y
+         i/gA==
+X-Gm-Message-State: ACgBeo32bsNXkFSP5DTAB7fQx19s0DHzGUFTSjuLgHXt/N4cs72zU95Z
+        DnwVE9QkQ7i2ruMOSSq7DX17svTLx8c35yGK
+X-Google-Smtp-Source: AA6agR6EtPk/iSBVvIUf8DzYPk9WT8oBxLen5jNg2mg7iMH72mSxbyDni0DNUKfPGFFgt2vLMeUQ1g==
+X-Received: by 2002:ac8:57c7:0:b0:341:8a19:aa28 with SMTP id w7-20020ac857c7000000b003418a19aa28mr29712066qta.395.1660225779790;
+        Thu, 11 Aug 2022 06:49:39 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05622a041000b0033e51aea00esm1815409qtx.25.2022.08.11.06.49.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 06:49:38 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id o15so28268801yba.10;
+        Thu, 11 Aug 2022 06:49:38 -0700 (PDT)
+X-Received: by 2002:a25:da0b:0:b0:67a:7fb6:8ae with SMTP id
+ n11-20020a25da0b000000b0067a7fb608aemr29654576ybf.89.1660225777780; Thu, 11
+ Aug 2022 06:49:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220810234056.2494993-1-npache@redhat.com> <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
-In-Reply-To: <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
-From:   Nico Pache <npache@redhat.com>
-Date:   Thu, 11 Aug 2022 08:43:30 -0400
-Message-ID: <CAA1CXcBjf411E7gCbTfowpOmas-ykuVCyn1B4oAua_VKxMkOCg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
-To:     David Gow <davidgow@google.com>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+References: <20220709032001.819487-1-davidgow@google.com> <20220709032001.819487-2-davidgow@google.com>
+In-Reply-To: <20220709032001.819487-2-davidgow@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 Aug 2022 15:49:26 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
+Message-ID: <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] kunit: unify module and builtin suite definitions
+To:     David Gow <davidgow@google.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
         Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
-        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
-        YehezkelShB@gmail.com,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        michael.jamet@intel.com, andreas.noever@gmail.com
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 8:20 PM David Gow <davidgow@google.com> wrote:
->
-> On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
-> >
-> > Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
-> > if KUNIT is compiled as a module. This leads to issues if KUNIT is being
-> > packaged separately from the core kernel and when KUNIT is run baremetal
-> > without the required driver compiled into the kernel.
-> >
-> > Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
-> > Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
-> > Signed-off-by: Nico Pache <npache@redhat.com>
-> > ---
->
-> Hmm... I'm not quite sure I understand the case that's broken here. Is it:
-> - KUnit is built as a module (CONFIG_KUNIT=m)
-> - USB4/nitro_enclaves are also built as modules, with the test enabled.
-> - The kunit module is not available at runtime, so neither driver
-> module can load (due to missing kunit dependencies)
-Exactly, except the issue is also when the USB/NE=y not just when they
-are modules. This is currently creating an issue with our build system
-during the depmod stage and has been preventing us from generating
-Fedora builds.
->
-> If so, that's not a case (i.e., the kunit.ko module being unavailable
-> if it was built) we've tried to support thus far. I guess a de-facto
-> rule for supporting it would be to depend on KUNIT=y for any KUnit
-> tests which are built into the same module as the driver they're
-> testing.
-Yeah, although it's not been a case you've been trying to support, it
-has been working so far :) This has been the case (built-in tests
-utilizing 'depends on KUNIT=y') since we began supporting KUNIT in our
-testing infrastructure and it would be nice to keep that as a de-facto
-rule :)
->
-> Alternatively, maybe we could do some horrible hacks to compile stub
-> versions of various KUnit assertion symbols in unconditionally, which
-> forward to the real ones if KUnit is available.
->
-> (Personally, I'd love it if we could get rid of CONFIG_KUNIT=m
-> altogether, and it's actually broken right at the moment[1]. There are
-> still some cases (unloading / reloading KUnit with different filter
-> options) which require it, though.)
-Personally I'd hate to see KUNIT=m go as that is how we have been able
-to support running Kunit tests so far.
+Hi David, Jeremy,
 
-A little background on how we utilize Kunit. We build with KUNIT=m and
-KUNIT_ALL_TESTS=m and run the tests baremetal.
-Our build system creates 3 packages (kernel, kernel-modules, and
-kernel-modules-internal), this allows us to ship the kernel and its
-modules, while also isolating packages that we dont want to ship
-outside of QE and developers. We then have our own infrastructure in
-place to run and collect the output of these tests in our pipelined
-environments. We dont utilize UML because we dont support that feature
-in RHEL.
+On Sat, Jul 9, 2022 at 5:21 AM David Gow <davidgow@google.com> wrote:
+> From: Jeremy Kerr <jk@codeconstruct.com.au>
+>
+> Currently, KUnit runs built-in tests and tests loaded from modules
+> differently. For built-in tests, the kunit_test_suite{,s}() macro adds a
+> list of suites in the .kunit_test_suites linker section. However, for
+> kernel modules, a module_init() function is used to run the test suites.
+>
+> This causes problems if tests are included in a module which already
+> defines module_init/exit_module functions, as they'll conflict with the
+> kunit-provided ones.
+>
+> This change removes the kunit-defined module inits, and instead parses
+> the kunit tests from their own section in the module. After module init,
+> we call __kunit_test_suites_init() on the contents of that section,
+> which prepares and runs the suite.
+>
+> This essentially unifies the module- and non-module kunit init formats.
+>
+> Tested-by: Maíra Canal <maira.canal@usp.br>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Fedora uses this same methodology for running KUNIT, so we are
-frequently running kunit on an 'upstream' variant.
+Thanks for your patch, which is now commit 3d6e44623841c8b8 ("kunit:
+unify module and builtin suite definitions") upstream.
 
-I'm not sure how many organizations are supporting continuous KUNIT
-testing, or how they are achieving it, but dropping module support
-would prevent us from doing the CI testing we have in place.
+Since this commit, modular kunit tests are no longer run at all.
 
-Cheers!
--- Nico
->
-> Cheers,
-> -- David
->
-> [1]: https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1926290-1-davidgow@google.com/
->
-> >  drivers/thunderbolt/Kconfig         | 3 +--
-> >  drivers/virt/nitro_enclaves/Kconfig | 2 +-
-> >  2 files changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
-> > index e76a6c173637..f12d0a3ee3e2 100644
-> > --- a/drivers/thunderbolt/Kconfig
-> > +++ b/drivers/thunderbolt/Kconfig
-> > @@ -29,8 +29,7 @@ config USB4_DEBUGFS_WRITE
-> >
-> >  config USB4_KUNIT_TEST
-> >         bool "KUnit tests" if !KUNIT_ALL_TESTS
-> > -       depends on (USB4=m || KUNIT=y)
-> > -       depends on KUNIT
-> > +       depends on USB4 && KUNIT=y
->
-> This can probably just:
-> depends on KUNIT=y
->
->
-> >         default KUNIT_ALL_TESTS
-> >
-> >  config USB4_DMA_TEST
-> > diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
-> > index ce91add81401..dc4d25c26256 100644
-> > --- a/drivers/virt/nitro_enclaves/Kconfig
-> > +++ b/drivers/virt/nitro_enclaves/Kconfig
-> > @@ -17,7 +17,7 @@ config NITRO_ENCLAVES
-> >
-> >  config NITRO_ENCLAVES_MISC_DEV_TEST
-> >         bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
-> > -       depends on NITRO_ENCLAVES && KUNIT
-> > +       depends on NITRO_ENCLAVES && KUNIT=y
-> >         default KUNIT_ALL_TESTS
-> >         help
-> >           Enable KUnit tests for the misc device functionality of the Nitro
-> > --
-> > 2.36.1
-> >
->
+Before:
 
+    # insmod lib/kunit/kunit.ko
+    # insmod lib/test_hash.ko
+    test_hash: loading test module taints kernel.
+        # Subtest: hash
+        1..2
+        ok 1 - test_string_or
+        ok 2 - test_hash_or
+    # hash: pass:2 fail:0 skip:0 total:2
+    # Totals: pass:2 fail:0 skip:0 total:2
+    ok 1 - hash
+
+After:
+
+    # insmod lib/kunit/kunit.ko
+    # insmod lib/test_hash.ko
+    test_hash: loading test module taints kernel.
+
+The actual test code (and test init code, if it exists) is not run.
+
+Reverting commits e5857d396f35e59e ("kunit: flatten kunit_suite***
+to kunit_suite** in .kunit_test_suites") and 3d6e44623841c8b8 ("kunit:
+unify module and builtin suite definitions") fixes the issue.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
