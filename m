@@ -2,151 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901B558FDB1
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 15:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BB35900BF
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Aug 2022 17:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbiHKNtp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 11 Aug 2022 09:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S236603AbiHKPrQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Aug 2022 11:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbiHKNto (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 09:49:44 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A558991F;
-        Thu, 11 Aug 2022 06:49:40 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id j17so8735072qtp.12;
-        Thu, 11 Aug 2022 06:49:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=ycqVFDjjlSz4BGsRWhX/Rm6K2hCv5ji5U2hZQvy6Esw=;
-        b=rdTmpAtSbVqgjs7BL6+pYO71qCb07PF3eKpK9Xcde33GSCllN8DiAJcAYGpbOGDCJd
-         iO8eQCxNtG1hCHecLGy0AODrN9pG1Tf2wkByKk0mOoHIKjpFPjQmvXP2C0H5QZpAXSlo
-         8H+YUsnBWTzDMZ3EvxG7dIEigspeAZAVim4QVOtmCWLiM4HICzhY8McGj3ccFgNb+EAL
-         T45HZFn3ehYWj/CxtWZohdC1zjGPDRsBCfzj2uhRMHtPpL4/vHGX6s+3IsbnvbAcWcK2
-         FmQ9ez9NgymGf8BeIMPVk7d24F7oVTPc2qFrsv45YO7DqY6SqXDxg9nERJpI7bmofz+Y
-         i/gA==
-X-Gm-Message-State: ACgBeo32bsNXkFSP5DTAB7fQx19s0DHzGUFTSjuLgHXt/N4cs72zU95Z
-        DnwVE9QkQ7i2ruMOSSq7DX17svTLx8c35yGK
-X-Google-Smtp-Source: AA6agR6EtPk/iSBVvIUf8DzYPk9WT8oBxLen5jNg2mg7iMH72mSxbyDni0DNUKfPGFFgt2vLMeUQ1g==
-X-Received: by 2002:ac8:57c7:0:b0:341:8a19:aa28 with SMTP id w7-20020ac857c7000000b003418a19aa28mr29712066qta.395.1660225779790;
-        Thu, 11 Aug 2022 06:49:39 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id n16-20020a05622a041000b0033e51aea00esm1815409qtx.25.2022.08.11.06.49.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 06:49:38 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id o15so28268801yba.10;
-        Thu, 11 Aug 2022 06:49:38 -0700 (PDT)
-X-Received: by 2002:a25:da0b:0:b0:67a:7fb6:8ae with SMTP id
- n11-20020a25da0b000000b0067a7fb608aemr29654576ybf.89.1660225777780; Thu, 11
- Aug 2022 06:49:37 -0700 (PDT)
+        with ESMTP id S236804AbiHKPqU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Aug 2022 11:46:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620756BD73;
+        Thu, 11 Aug 2022 08:40:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA5FA616CA;
+        Thu, 11 Aug 2022 15:40:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91652C433B5;
+        Thu, 11 Aug 2022 15:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660232443;
+        bh=dfGDc5y7t1OJDZv5DDOhjgv3vAFicA7oBOPSO6VEFVg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mY3Tlk4NEVVsXEvT3zripS6bqnGImRdl9Ez3uV3+VNTZTWvpEqsNe+VvaRcWU4H+T
+         5hj+THrGQh5LEcU3cmEgzGvwnsWn3swl2rVBIfqF+Tma2spwMSuEsso09CPskcFiWf
+         p02mVpVljepDhXUoAbtGTGJMttIaG4WCFr0M44x4qe3uO5qfB7fLhykb1nxq6OlHFr
+         ZnaCoVl6IYTRKPpSogxVtiOF5sJ7p1ow9/T8BPA/ExWBATrPzg+/vLyvxGvDWDGykF
+         STH2pqzRr3a6yFIbcS404ZZWtpFsf+MsLwVncFdfA4VaiYGHpliG+qImJYL3jCSFV9
+         YvlzQwIgkWFug==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?=C5=81ukasz=20Spintzyk?= <lukasz.spintzyk@synaptics.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 080/105] net/cdc_ncm: Increase NTB max RX/TX values to 64kb
+Date:   Thu, 11 Aug 2022 11:28:04 -0400
+Message-Id: <20220811152851.1520029-80-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220811152851.1520029-1-sashal@kernel.org>
+References: <20220811152851.1520029-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20220709032001.819487-1-davidgow@google.com> <20220709032001.819487-2-davidgow@google.com>
-In-Reply-To: <20220709032001.819487-2-davidgow@google.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 Aug 2022 15:49:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
-Message-ID: <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] kunit: unify module and builtin suite definitions
-To:     David Gow <davidgow@google.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi David, Jeremy,
+From: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
 
-On Sat, Jul 9, 2022 at 5:21 AM David Gow <davidgow@google.com> wrote:
-> From: Jeremy Kerr <jk@codeconstruct.com.au>
->
-> Currently, KUnit runs built-in tests and tests loaded from modules
-> differently. For built-in tests, the kunit_test_suite{,s}() macro adds a
-> list of suites in the .kunit_test_suites linker section. However, for
-> kernel modules, a module_init() function is used to run the test suites.
->
-> This causes problems if tests are included in a module which already
-> defines module_init/exit_module functions, as they'll conflict with the
-> kunit-provided ones.
->
-> This change removes the kunit-defined module inits, and instead parses
-> the kunit tests from their own section in the module. After module init,
-> we call __kunit_test_suites_init() on the contents of that section,
-> which prepares and runs the suite.
->
-> This essentially unifies the module- and non-module kunit init formats.
->
-> Tested-by: Maíra Canal <maira.canal@usp.br>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
+[ Upstream commit 5588d628027092e66195097bdf6835ddf64418b3 ]
 
-Thanks for your patch, which is now commit 3d6e44623841c8b8 ("kunit:
-unify module and builtin suite definitions") upstream.
+DisplayLink ethernet devices require NTB buffers larger then 32kb
+in order to run with highest performance.
 
-Since this commit, modular kunit tests are no longer run at all.
+This patch is changing upper limit of the rx and tx buffers.
+Those buffers are initialized with CDC_NCM_NTB_DEF_SIZE_RX and
+CDC_NCM_NTB_DEF_SIZE_TX which is 16kb so by default no device is
+affected by increased limit.
 
-Before:
+Rx and tx buffer is increased under two conditions:
+ - Device need to advertise that it supports higher buffer size in
+   dwNtbMaxInMaxSize and dwNtbMaxOutMaxSize.
+ - cdc_ncm/rx_max and cdc_ncm/tx_max driver parameters must be adjusted
+   with udev rule or ethtool.
 
-    # insmod lib/kunit/kunit.ko
-    # insmod lib/test_hash.ko
-    test_hash: loading test module taints kernel.
-        # Subtest: hash
-        1..2
-        ok 1 - test_string_or
-        ok 2 - test_hash_or
-    # hash: pass:2 fail:0 skip:0 total:2
-    # Totals: pass:2 fail:0 skip:0 total:2
-    ok 1 - hash
+Summary of testing and performance results:
+Tests were performed on following devices:
+ - DisplayLink DL-3xxx family device
+ - DisplayLink DL-6xxx family device
+ - ASUS USB-C2500 2.5G USB3 ethernet adapter
+ - Plugable USB3 1G USB3 ethernet adapter
+ - EDIMAX EU-4307 USB-C ethernet adapter
+ - Dell DBQBCBC064 USB-C ethernet adapter
 
-After:
+Performance measurements were done with:
+ - iperf3 between two linux boxes
+ - http://openspeedtest.com/ instance running on local test machine
 
-    # insmod lib/kunit/kunit.ko
-    # insmod lib/test_hash.ko
-    test_hash: loading test module taints kernel.
+Insights from tests results:
+ - All except one from third party usb adapters were not affected by
+   increased buffer size to their advertised dwNtbOutMaxSize and
+   dwNtbInMaxSize.
+   Devices were generally reaching 912-940Mbps both download and upload.
 
-The actual test code (and test init code, if it exists) is not run.
+   Only EDIMAX adapter experienced decreased download size from
+   929Mbps to 827Mbps with iper3, with openspeedtest decrease was from
+   968Mbps to 886Mbps.
 
-Reverting commits e5857d396f35e59e ("kunit: flatten kunit_suite***
-to kunit_suite** in .kunit_test_suites") and 3d6e44623841c8b8 ("kunit:
-unify module and builtin suite definitions") fixes the issue.
+ - DisplayLink DL-3xxx family devices experienced performance increase
+   with iperf3 download from 300Mbps to 870Mbps and
+   upload from 782Mbps to 844Mbps.
+   With openspeedtest download increased from 556Mbps to 873Mbps
+   and upload from 727Mbps to 973Mbps
 
-Gr{oetje,eeting}s,
+ - DiplayLink DL-6xxx family devices are not affected by
+   increased buffer size.
 
-                        Geert
+Signed-off-by: Łukasz Spintzyk <lukasz.spintzyk@synaptics.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220720060518.541-2-lukasz.spintzyk@synaptics.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/linux/usb/cdc_ncm.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
+index f7cb3ddce7fb..2d207cb4837d 100644
+--- a/include/linux/usb/cdc_ncm.h
++++ b/include/linux/usb/cdc_ncm.h
+@@ -53,8 +53,8 @@
+ #define USB_CDC_NCM_NDP32_LENGTH_MIN		0x20
+ 
+ /* Maximum NTB length */
+-#define	CDC_NCM_NTB_MAX_SIZE_TX			32768	/* bytes */
+-#define	CDC_NCM_NTB_MAX_SIZE_RX			32768	/* bytes */
++#define	CDC_NCM_NTB_MAX_SIZE_TX			65536	/* bytes */
++#define	CDC_NCM_NTB_MAX_SIZE_RX			65536	/* bytes */
+ 
+ /* Initial NTB length */
+ #define	CDC_NCM_NTB_DEF_SIZE_TX			16384	/* bytes */
+-- 
+2.35.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
