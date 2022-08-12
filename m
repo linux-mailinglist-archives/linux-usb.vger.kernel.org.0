@@ -2,106 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239615912D2
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Aug 2022 17:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F145913C6
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Aug 2022 18:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbiHLPPG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Aug 2022 11:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S239142AbiHLQQA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Aug 2022 12:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239189AbiHLPO6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Aug 2022 11:14:58 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D67A7A81;
-        Fri, 12 Aug 2022 08:14:57 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id l22so1522314wrz.7;
-        Fri, 12 Aug 2022 08:14:57 -0700 (PDT)
+        with ESMTP id S239304AbiHLQPs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Aug 2022 12:15:48 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0A474E00
+        for <linux-usb@vger.kernel.org>; Fri, 12 Aug 2022 09:15:47 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id bb16so1626336oib.11
+        for <linux-usb@vger.kernel.org>; Fri, 12 Aug 2022 09:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iq2hcZPHI3Hrq/fm3tMLVtBr5GF48yxMqfYK/cB1PhY=;
+        b=o0dj5FntgMy+byGnZkkNQ4sg4gY/lBnmYFWtidXFfMA4zZQFoBd2U9uzlWnRuwG2OQ
+         A9f+Irj4kgZXD8+zKqcfNrI3V+3/5Js9Hsa57VknTD59tNzfUcSe8HXZtPZQJo7nuqo6
+         rpZ3vZlDvcxlA3r9iCX//xIzsYuL4RDcBOLKUTa9yV85xERBYql+3l5HqBh64pSXmC5P
+         yfpJdyYqdSjEKXjVpnzkCPwM76RXYAlLwq9iebjvfMquYQrvzwpAHvLqJCmNdB0amXVL
+         JvCpbwnhnvFLLiXSSuL/KMiYGHsodN/EwyOr9tjSrikdiMxXE/wM3oPDOj8+el4Lads1
+         HFKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=EoiVDV1BpkQyac6N0M+0zVwSj3WK1AdJP/ntOJZkbiI=;
-        b=y+C6TXoGy+311Sk25HndUdD8oAFpkGvgecJybzjCxB2DZEJQOrZkmUmsuPiqCI7MYK
-         nSygq/qCXeJkAetWuNZmVuqOLpfhIkZiyi0PUksGqaPvRgPGMfD10an0EY1LnHsiXQo3
-         O3MX5M+fD8ovdchs7GRBFr/RjXfv9rE6CclRf8ZPdwZZaUuagAc1rHUclt2hzaABqtgV
-         0DxTl0Fku6UTlBwX4KzWQb/yr0gAf2i6NiI1nzzKmlpxYe/1XLlsSFgdZ9rMt22tu9qo
-         66s+eu6aVCvbHc7D2a0LxigsTFTjugt752viL8GosJrhBi95OmTwhQLQb8GaCWykYqH+
-         4V5w==
-X-Gm-Message-State: ACgBeo3nSzT4v8Au/HSgM27ms/en+vyPUdFXUwwqxZ0TRMQD9/M4YbuF
-        uRzVSSMdxMhAvLRLVTR7DZDdfh1pZ9g=
-X-Google-Smtp-Source: AA6agR67pF4bd0Gg+R7FFH9Fs1c0QAkU7YjmSu0wWkZPvc1aU+z3yNTU4l0akoiHi1cnVXOTwkrsNw==
-X-Received: by 2002:a05:6000:18a3:b0:21f:d6a4:1aec with SMTP id b3-20020a05600018a300b0021fd6a41aecmr2444780wri.468.1660317296338;
-        Fri, 12 Aug 2022 08:14:56 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id h41-20020a05600c49a900b003a5260b8392sm3938969wmp.23.2022.08.12.08.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 08:14:56 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 15:14:54 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 5/5][RFT] ACPI: Drop parent field from struct
- acpi_device
-Message-ID: <20220812151454.fqt2gknsoqjco4mz@liuwe-devbox-debian-v2>
-References: <12036348.O9o76ZdvQC@kreacher>
- <2196460.iZASKD2KPV@kreacher>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iq2hcZPHI3Hrq/fm3tMLVtBr5GF48yxMqfYK/cB1PhY=;
+        b=a2RIHgjv3NDofLxPAeaFu7k0VXXUh8jukf4nkikFmcMuOvUjoMqlGECp59LsMw/q7I
+         RDxOlepVV8NXYBU1Sngu0vTNHPonARFuIVr77gDEMkXlUXI5rH+oN6Zwpx2/EMMZOkB9
+         XxReYg5rh8Sc4D1XBxYbXFYOAM7I/dnkmCUKlAq+2wTFQSUJ8AJivECGE7EDNG1GsJGb
+         a8CHaj+ARkpZv1GiprZo2tuMKh9OoKco0PWwEI4k93gk4g73RH6kNMCOQwIlzmnWUPdA
+         vzzn2WjgqeThca2xPDlE3TnKQ7K3BKQsd5ASI62dihLxsmrEBWQSrRpB8GYve41MedcW
+         NNCw==
+X-Gm-Message-State: ACgBeo0jtarbe8XdvGEzbHoKuZORmJVKcjCREYlFVSyBAg22Frgwppt/
+        2EFTDc8H7kEf3JI1aaeFDAvg9D26g97HhwDy/ZIM
+X-Google-Smtp-Source: AA6agR7JBAm4uU28EoNN//quCJhB+KgCD82SUYyenq9RiWi0bW+37wZy7HlsM79TxASMbUP+1L34v6ZaShZSd0/q8eE=
+X-Received: by 2002:a05:6808:10d4:b0:33a:baf0:338c with SMTP id
+ s20-20020a05680810d400b0033abaf0338cmr2004967ois.4.1660320946197; Fri, 12 Aug
+ 2022 09:15:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2196460.iZASKD2KPV@kreacher>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220810234056.2494993-1-npache@redhat.com> <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
+ <CAA1CXcBjf411E7gCbTfowpOmas-ykuVCyn1B4oAua_VKxMkOCg@mail.gmail.com> <CABVgOSk74DvJsizPB+=UZ7sgw88_=7D6bBtHCEOWgpgWytKJeQ@mail.gmail.com>
+In-Reply-To: <CABVgOSk74DvJsizPB+=UZ7sgw88_=7D6bBtHCEOWgpgWytKJeQ@mail.gmail.com>
+From:   Joe Fradley <joefradley@google.com>
+Date:   Fri, 12 Aug 2022 09:15:35 -0700
+Message-ID: <CAF-60z3x+4BaSE-K+92hz9MxQ+87i8T1fg6q+7eiD867jPCJwQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
+To:     David Gow <davidgow@google.com>
+Cc:     Nico Pache <npache@redhat.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
+        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
+        YehezkelShB@gmail.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        michael.jamet@intel.com, andreas.noever@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 06:23:05PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The parent field in struct acpi_device is, in fact, redundant,
-> because the dev.parent field in it effectively points to the same
-> object and it is used by the driver core.
-> 
-> Accordingly, the parent field can be dropped from struct acpi_device
-> and for this purpose define acpi_dev_parent() to retrieve the parent
-> struct acpi_device pointer from the dev.parent field in struct
-> acpi_device.  Next, update all of the users of the parent field
-> in struct acpi_device to use acpi_dev_parent() instead of it and
-> drop it.
-> 
-> While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
-> in one place in a confusing way.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> I may have missed some places where adev->parent is used directly, so
-> if that's happened, please let me know (I'm assuming that 0-day will
-> pick up this patch and run it through all of the relevant configs
-> anyway).
-> 
-> ---
-[...]
->  drivers/hv/vmbus_drv.c       |    3 ++-
+On Thu, Aug 11, 2022 at 11:43 PM David Gow <davidgow@google.com> wrote:
+>
+> (+joefradley@google.com to comment on what Android is doing here)
+>
+> On Thu, Aug 11, 2022 at 8:44 PM Nico Pache <npache@redhat.com> wrote:
+> >
+> > On Wed, Aug 10, 2022 at 8:20 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
+> > > >
+> > > > Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
+> > > > if KUNIT is compiled as a module. This leads to issues if KUNIT is being
+> > > > packaged separately from the core kernel and when KUNIT is run baremetal
+> > > > without the required driver compiled into the kernel.
+> > > >
+> > > > Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
+> > > > Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
+> > > > Signed-off-by: Nico Pache <npache@redhat.com>
+> > > > ---
+> > >
+> > > Hmm... I'm not quite sure I understand the case that's broken here. Is it:
+> > > - KUnit is built as a module (CONFIG_KUNIT=m)
+> > > - USB4/nitro_enclaves are also built as modules, with the test enabled.
+> > > - The kunit module is not available at runtime, so neither driver
+> > > module can load (due to missing kunit dependencies)
+> > Exactly, except the issue is also when the USB/NE=y not just when they
+> > are modules. This is currently creating an issue with our build system
+> > during the depmod stage and has been preventing us from generating
+> > Fedora builds.
+> .
+> Yeah: there's a nasty tradeoff here in that having these depend on
+> KUNIT=y does (obviously) mean that it's not possible to run these
+> tests with KUNIT=m. I'd agree that being able to ruin some tests is
+> better than none, but there are quite a lot of tests which are doing
+> the same sort of tricks as USB4/nitro_enclaves to embed tests in the
+> same module as the code being tested. In particular, I think apparmor
+> is doing something similar, and the incoming AMDGPU tests also build
+> all of the tests into amdgpu.ko. If we require KUNIT=y for these,
+> we're leaving a lot of tests on the table for KUNIT=m cases, which
+> would otherwise work.
+>
+> The ideal solution would be to split the tests for these systems out
+> into their own separate modules, but that's often quite tricky due to
+> the sheer number of otherwise internal symbols which need exporting.
+>
+> > >
+> > > If so, that's not a case (i.e., the kunit.ko module being unavailable
+> > > if it was built) we've tried to support thus far. I guess a de-facto
+> > > rule for supporting it would be to depend on KUNIT=y for any KUnit
+> > > tests which are built into the same module as the driver they're
+> > > testing.
+> > Yeah, although it's not been a case you've been trying to support, it
+> > has been working so far :) This has been the case (built-in tests
+> > utilizing 'depends on KUNIT=y') since we began supporting KUNIT in our
+> > testing infrastructure and it would be nice to keep that as a de-facto
+> > rule :)
+>
+> Okay: let's try to stick with that for now, then (unless there are any
+> objections from the people working on those particular tests), and
+> look to either reinstate it if we find a better way of dealing with
+> the missing/disabled kunit.ko case, or the tests can be split into a
+> separate module. Personally, I don't expect we'll get either of those
+> working in the short-term, but it's definitely a problem we'll have to
+> confront more eventually.
+>
+> In the meantime, I think the KUnit position on this will be to note
+> this as a consequence of building KUnit tests into bigger modules, and
+> leave the final decision up to the maintainers of those
+> subsystems/tests. This may result in there being some tests you have
+> to explicitly disable (rather than being able to use KUNIT_ALL_TESTS)
+> if an important module decides that they really want their tests to
+> run when KUNIT=m (which may not happen, we'll see...)
+>
+> > >
+> > > Alternatively, maybe we could do some horrible hacks to compile stub
+> > > versions of various KUnit assertion symbols in unconditionally, which
+> > > forward to the real ones if KUnit is available.
+> > >
+> > > (Personally, I'd love it if we could get rid of CONFIG_KUNIT=m
+> > > altogether, and it's actually broken right at the moment[1]. There are
+> > > still some cases (unloading / reloading KUnit with different filter
+> > > options) which require it, though.)
+> > Personally I'd hate to see KUNIT=m go as that is how we have been able
+> > to support running Kunit tests so far.
+> >
+> > A little background on how we utilize Kunit. We build with KUNIT=m and
+> > KUNIT_ALL_TESTS=m and run the tests baremetal.
+> > Our build system creates 3 packages (kernel, kernel-modules, and
+> > kernel-modules-internal), this allows us to ship the kernel and its
+> > modules, while also isolating packages that we dont want to ship
+> > outside of QE and developers. We then have our own infrastructure in
+> > place to run and collect the output of these tests in our pipelined
+> > environments. We dont utilize UML because we dont support that feature
+> > in RHEL.
+> >
+> > Fedora uses this same methodology for running KUNIT, so we are
+> > frequently running kunit on an 'upstream' variant.
+> >
+> > I'm not sure how many organizations are supporting continuous KUNIT
+> > testing, or how they are achieving it, but dropping module support
+> > would prevent us from doing the CI testing we have in place.
+> >
+> > Cheers!
+> > -- Nico
+>
+> Fair enough -- we definitely won't get rid of it unless there's a
+> replacement which works as well if not better.
+>
+> The reason it's tempting to get rid of KUNIT=m is simply that there's
+> a chunk of KUnit code which needs to be built-in, even if the rest of
+> it is in a module. So a kernel with KUNIT=m still has a fair bit of
+> the overhead of KUNIT=y, and this is likely to get more significant as
+> more such features land (e.g., static stubbing:
+> https://lore.kernel.org/lkml/20220318021314.3225240-2-davidgow@google.com/
+> ).
+>
+> Traditionally, our expectation has been that a separate, KUnit-enabled
+> kernel config / build makes sense, as that allows the
+> release/production build to run without any testing-related overheads
+> at all. That being said, I know Android are looking to enable KUnit in
+> all GKI builds, and to implement a separate kunit.enable option to
+> effectively "disable" it at runtime. This doesn't remove all of the
+> overhead, but does allow KUnit to always be present without the risk
+> of compromising the integrity of the running kernel by running tests
+> in production.
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+Like David mentioned, internally for GKI we have KUNIT=y with running
+built-in tests permanently disabled and only allowing module test
+execution if a kernel command line option (kunit.enable) is set. I
+hope to have an upstream patch of this for review soon. If you're
+willing to have the extra KUnit overhead in your production build,
+this could be an option for you as well.
+
+>
+> Regardless of whether any of those seem interesting to you, we won't
+> be getting rid of KUNIT=m in the short-term (and definitely will be
+> supporting individual test modules, even if we later want to have the
+> core executor built-in).
+>
+> One other note is that KUNIT=m is actually broken right at the moment:
+> the fix is here:
+> https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1926290-1-davidgow@google.com/
+>
+> Cheers,
+> -- David
