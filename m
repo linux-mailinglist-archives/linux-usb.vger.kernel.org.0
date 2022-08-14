@@ -2,43 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A508F592099
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 17:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8E75920A0
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 17:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239867AbiHNP3J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Aug 2022 11:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S240382AbiHNP3L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Aug 2022 11:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240031AbiHNP2k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 11:28:40 -0400
+        with ESMTP id S240068AbiHNP2n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 11:28:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B05BC8E;
-        Sun, 14 Aug 2022 08:28:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EA6B1C0;
+        Sun, 14 Aug 2022 08:28:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBF360C13;
-        Sun, 14 Aug 2022 15:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ECB9C433C1;
-        Sun, 14 Aug 2022 15:28:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C74660C13;
+        Sun, 14 Aug 2022 15:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6546C433B5;
+        Sun, 14 Aug 2022 15:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660490918;
-        bh=9krYIMZkWByFYm0Z2MCMjTdo/cKY77hHZASSi3Elm3k=;
+        s=k20201202; t=1660490921;
+        bh=j2KoHzmv7mNAD0mAEpA0x+P63+btGz4TXSLAu6PoG78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OesOOnRag/2Q8agSCo1NL1jCeQm6ISjpTE7whxpyFHBf6XCV8LMip6LD1IuyVfTEA
-         T4Q/arV3lVZQ462Oe+bLlHOgrVGZJPGqlflXcSWAaOg85yGbdjGOjifNf8Vew+eTHu
-         GTnHmVeh7+PhVGmncsVUldyXSvd7QJK66yYIoTv1oAbc3jgjZSrZUXd31ZEpBFY1p9
-         FB3BxPdMj58ZQpttxIzrbymF9ZnUvmhTAJcWojAlx5bhZH/wUw/zmuZzi/+k3dLYry
-         zz8+wcagmZKnMNrHk+Qs2KDYwSkln8BHf0I7YZPxEP5bcJ/uIL4RJTALQYgX5c65jX
-         7jeUJEDqsf6Aw==
+        b=JfWEEGws+dHRa374hpxcwNRq1NhT/Ag66ihQZC5PVcPLgRGg/rtKE/a651WVN0UpC
+         X0mnvEIXIZwsIiae6DfS2kPYD6jo3PnSsHjrZT3EKXMqNOhFAQba/y8uODn2YkhWg2
+         GtRiTpR9c9Pw3cEeAmmsdXOoe3PDtxeQ3qB5f9J8/5OaUKmok3OLmbOX868iDNCoN+
+         cldk10KcAsYyIQmMJMPlCLj/X80SKMcA47xPoI/1k7j5DyE2YWopeqAiXBA2yeOvRg
+         tuxbKY/dF9SpcM8X4NmQ7V08PoTJlUPI/5EPgH+6TWIn80fbYR7f9/55soU/GY/v+t
+         qD6xv5VPleilQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liang He <windhl@126.com>,
+Cc:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 21/64] usb: renesas: Fix refcount leak bug
-Date:   Sun, 14 Aug 2022 11:23:54 -0400
-Message-Id: <20220814152437.2374207-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 23/64] usb: dwc2: gadget: remove D+ pull-up while no vbus with usb-role-switch
+Date:   Sun, 14 Aug 2022 11:23:56 -0400
+Message-Id: <20220814152437.2374207-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220814152437.2374207-1-sashal@kernel.org>
 References: <20220814152437.2374207-1-sashal@kernel.org>
@@ -56,37 +58,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-[ Upstream commit 9d6d5303c39b8bc182475b22f45504106a07f086 ]
+[ Upstream commit db638c6500abaffb8f7770b2a69c40d003d54ae1 ]
 
-In usbhs_rza1_hardware_init(), of_find_node_by_name() will return
-a node pointer with refcount incremented. We should use of_node_put()
-when it is not used anymore.
+When using usb-role-switch, D+ pull-up is set as soon as DTCL_SFTDISCON is
+cleared, whatever the vbus valid signal state is. The pull-up should not
+be set when vbus isn't present (this is determined by the drd controller).
 
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220618023205.4056548-1-windhl@126.com
+This patch ensures that B-Session (so Peripheral role + vbus valid signal)
+is valid before clearing the DCTL_SFTDISCON bit when role switch is used.
+Keep original behavior when usb-role-switch isn't used.
+
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Link: https://lore.kernel.org/r/20220622160717.314580-1-fabrice.gasnier@foss.st.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/renesas_usbhs/rza.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/dwc2/gadget.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/renesas_usbhs/rza.c b/drivers/usb/renesas_usbhs/rza.c
-index 24de64edb674..2d77edefb4b3 100644
---- a/drivers/usb/renesas_usbhs/rza.c
-+++ b/drivers/usb/renesas_usbhs/rza.c
-@@ -23,6 +23,10 @@ static int usbhs_rza1_hardware_init(struct platform_device *pdev)
- 	extal_clk = of_find_node_by_name(NULL, "extal");
- 	of_property_read_u32(usb_x1_clk, "clock-frequency", &freq_usb);
- 	of_property_read_u32(extal_clk, "clock-frequency", &freq_extal);
-+
-+	of_node_put(usb_x1_clk);
-+	of_node_put(extal_clk);
-+
- 	if (freq_usb == 0) {
- 		if (freq_extal == 12000000) {
- 			/* Select 12MHz XTAL */
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index fe2a58c75861..8b15742d9e8a 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3594,7 +3594,8 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
+ {
+ 	/* remove the soft-disconnect and let's go */
+-	dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
++	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD))
++		dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
+ }
+ 
+ /**
 -- 
 2.35.1
 
