@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8E75920A0
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 17:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E995920BA
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 17:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240382AbiHNP3L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Aug 2022 11:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S240455AbiHNP3z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Aug 2022 11:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240068AbiHNP2n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 11:28:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EA6B1C0;
-        Sun, 14 Aug 2022 08:28:42 -0700 (PDT)
+        with ESMTP id S240181AbiHNP25 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 11:28:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCF2AE41;
+        Sun, 14 Aug 2022 08:28:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C74660C13;
-        Sun, 14 Aug 2022 15:28:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6546C433B5;
-        Sun, 14 Aug 2022 15:28:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B64B60C08;
+        Sun, 14 Aug 2022 15:28:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A604C433D6;
+        Sun, 14 Aug 2022 15:28:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660490921;
-        bh=j2KoHzmv7mNAD0mAEpA0x+P63+btGz4TXSLAu6PoG78=;
+        s=k20201202; t=1660490935;
+        bh=QT4ELwD36/p5x2JGWEwyso4qQpwPkC03HMsNuMjrIMQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JfWEEGws+dHRa374hpxcwNRq1NhT/Ag66ihQZC5PVcPLgRGg/rtKE/a651WVN0UpC
-         X0mnvEIXIZwsIiae6DfS2kPYD6jo3PnSsHjrZT3EKXMqNOhFAQba/y8uODn2YkhWg2
-         GtRiTpR9c9Pw3cEeAmmsdXOoe3PDtxeQ3qB5f9J8/5OaUKmok3OLmbOX868iDNCoN+
-         cldk10KcAsYyIQmMJMPlCLj/X80SKMcA47xPoI/1k7j5DyE2YWopeqAiXBA2yeOvRg
-         tuxbKY/dF9SpcM8X4NmQ7V08PoTJlUPI/5EPgH+6TWIn80fbYR7f9/55soU/GY/v+t
-         qD6xv5VPleilQ==
+        b=VnmEO06x98OagPOvh0m8H/mNUfDRhUKOpZwjoYOKfQLR4wcfvOFOkTN18iDFr+Kwj
+         ci1Hfg3oOzZp8m6kwB0Ii2FNb/LBqb9IozHgPYfbXRq0Dfc1IeBv5OHauJB0nYpaTh
+         IpSci+IFKarhucOwYJxYZp3WDQlyjah7MCZ8yyp5/Du6ZvVxgSEzh/urMKCd+8Po52
+         vxhNKgvV9qmMVaTWVXuOS5QnVtW/GE6NeSafwzQDVkFOWrQo09huD0GYH1M9MluKMN
+         lmN21GjBBjNrKWrfuY0ZobRibZuCNrhf+q0xqe8ebOEg60g+ukFRgTD2+6miqaIxcK
+         TkDSbXm8kx2XA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+Cc:     Jozef Martiniak <jomajm@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 23/64] usb: dwc2: gadget: remove D+ pull-up while no vbus with usb-role-switch
-Date:   Sun, 14 Aug 2022 11:23:56 -0400
-Message-Id: <20220814152437.2374207-23-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
+        stern@rowland.harvard.edu, hbh25y@gmail.com, axboe@kernel.dk,
+        mingo@kernel.org, rdunlap@infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 31/64] gadgetfs: ep_io - wait until IRQ finishes
+Date:   Sun, 14 Aug 2022 11:24:04 -0400
+Message-Id: <20220814152437.2374207-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220814152437.2374207-1-sashal@kernel.org>
 References: <20220814152437.2374207-1-sashal@kernel.org>
@@ -58,42 +58,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Jozef Martiniak <jomajm@gmail.com>
 
-[ Upstream commit db638c6500abaffb8f7770b2a69c40d003d54ae1 ]
+[ Upstream commit 04cb742d4d8f30dc2e83b46ac317eec09191c68e ]
 
-When using usb-role-switch, D+ pull-up is set as soon as DTCL_SFTDISCON is
-cleared, whatever the vbus valid signal state is. The pull-up should not
-be set when vbus isn't present (this is determined by the drd controller).
+after usb_ep_queue() if wait_for_completion_interruptible() is
+interrupted we need to wait until IRQ gets finished.
 
-This patch ensures that B-Session (so Peripheral role + vbus valid signal)
-is valid before clearing the DCTL_SFTDISCON bit when role switch is used.
-Keep original behavior when usb-role-switch isn't used.
+Otherwise complete() from epio_complete() can corrupt stack.
 
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Link: https://lore.kernel.org/r/20220622160717.314580-1-fabrice.gasnier@foss.st.com
+Signed-off-by: Jozef Martiniak <jomajm@gmail.com>
+Link: https://lore.kernel.org/r/20220708070645.6130-1-jomajm@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/legacy/inode.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index fe2a58c75861..8b15742d9e8a 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3594,7 +3594,8 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
- void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
- {
- 	/* remove the soft-disconnect and let's go */
--	dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
-+	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD))
-+		dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
- }
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index 79990597c39f..01c3ead7d1b4 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -362,6 +362,7 @@ ep_io (struct ep_data *epdata, void *buf, unsigned len)
+ 				spin_unlock_irq (&epdata->dev->lock);
  
- /**
+ 				DBG (epdata->dev, "endpoint gone\n");
++				wait_for_completion(&done);
+ 				epdata->status = -ENODEV;
+ 			}
+ 		}
 -- 
 2.35.1
 
