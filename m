@@ -2,48 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9694592209
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 17:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6CA592254
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 17:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240821AbiHNPni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Aug 2022 11:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
+        id S241473AbiHNPrP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Aug 2022 11:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiHNPmR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 11:42:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FB31C11E;
-        Sun, 14 Aug 2022 08:33:38 -0700 (PDT)
+        with ESMTP id S241672AbiHNPqG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 11:46:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C1D2528B;
+        Sun, 14 Aug 2022 08:34:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BCA9B80B56;
-        Sun, 14 Aug 2022 15:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A549C433D6;
-        Sun, 14 Aug 2022 15:33:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AE8360DDA;
+        Sun, 14 Aug 2022 15:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5288C433D6;
+        Sun, 14 Aug 2022 15:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660491215;
-        bh=QwleLkPpMUtNrPJ2hpugjtXEVqvUzO1wsjJ02z4FvRk=;
+        s=k20201202; t=1660491276;
+        bh=dyJOthvr6oSUl/doNTPZjgQxVs7NMIJmhIQjnx2L0YU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E0bRmdoI39bRYMLHM0YkUB8cWZ6FPRe6uqfwQ6FrlunRaCtLroV4Ho5VY0tHfFumY
-         dGIdvg0PoWaFN92L0n43ZTxLd+Qx9t9lzsLJx2FdlRUoTyi7ZmhcRVrrCX9VzE6QjW
-         3M6hbdylH5WpZt1PrP66YhmwR6dMpsOLVtKoGg602P3iccIXVf4kPYNZ0fWKsXPyX4
-         Ij89hFcPCHSDGVUkhNv2vPkowGSv+MgspJVQcFoIUsQDH7ca8fM4wZxHk5eWVZS+r1
-         b0IxyyW9qkXh39FyjoKCw6Kxras5Febx37/UqLecY3dTGQc2e1gX7pxJN7zaiSIw4d
-         0PkypofrmbZhg==
+        b=dfONxJwvyMcT8EYJDHe7vPF0QPmsZh1G23gIVDgCbYPtOZbcr3SFVJcZ9Bk1pdcF7
+         0zTVkRrqRHEDptHskeDU6Lgsm9WY9OgUWyNvtuwkPnV+snMfY6wM0x+rUQ1iuL4EOr
+         MqUmFlGAgaSf0dWXPqJA9iXcPoLEyo9tmDgtQfC9J0d/YdfdrU+PTKHgMwPgAQgDmv
+         SQRosDA7DNkPQR2AElDsFP8EnTOUcWZckpRcDWKH83Cc7nrddAl18F4nuJhI52meRc
+         LFTkVj3paDFggt9EZyshsufsBd3yZJBNymn//YmqT8zTsU8iIMTD7xeq5f9Z0+Rnal
+         L6YS/y6zXA87w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jozef Martiniak <jomajm@gmail.com>,
+Cc:     Frank Li <Frank.Li@nxp.com>, Faqiang Zhu <faqiang.zhu@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
-        stern@rowland.harvard.edu, axboe@kernel.dk, hbh25y@gmail.com,
-        mingo@kernel.org, rdunlap@infradead.org, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 23/46] gadgetfs: ep_io - wait until IRQ finishes
-Date:   Sun, 14 Aug 2022 11:32:24 -0400
-Message-Id: <20220814153247.2378312-23-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, peter.chen@kernel.org,
+        pawell@cadence.com, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 03/31] usb: cdns3 fix use-after-free at workaround 2
+Date:   Sun, 14 Aug 2022 11:34:03 -0400
+Message-Id: <20220814153431.2379231-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814153247.2378312-1-sashal@kernel.org>
-References: <20220814153247.2378312-1-sashal@kernel.org>
+In-Reply-To: <20220814153431.2379231-1-sashal@kernel.org>
+References: <20220814153431.2379231-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,35 +57,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jozef Martiniak <jomajm@gmail.com>
+From: Frank Li <Frank.Li@nxp.com>
 
-[ Upstream commit 04cb742d4d8f30dc2e83b46ac317eec09191c68e ]
+[ Upstream commit 7d602f30149a117eea260208b1661bc404c21dfd ]
 
-after usb_ep_queue() if wait_for_completion_interruptible() is
-interrupted we need to wait until IRQ gets finished.
+BUG: KFENCE: use-after-free read in __list_del_entry_valid+0x10/0xac
 
-Otherwise complete() from epio_complete() can corrupt stack.
+cdns3_wa2_remove_old_request()
+{
+	...
+	kfree(priv_req->request.buf);
+	cdns3_gadget_ep_free_request(&priv_ep->endpoint, &priv_req->request);
+	list_del_init(&priv_req->list);
+	^^^ use after free
+	...
+}
 
-Signed-off-by: Jozef Martiniak <jomajm@gmail.com>
-Link: https://lore.kernel.org/r/20220708070645.6130-1-jomajm@gmail.com
+cdns3_gadget_ep_free_request() free the space pointed by priv_req,
+but priv_req is used in the following list_del_init().
+
+This patch move list_del_init() before cdns3_gadget_ep_free_request().
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Signed-off-by: Faqiang Zhu <faqiang.zhu@nxp.com>
+Link: https://lore.kernel.org/r/20220608190430.2814358-1-Frank.Li@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/legacy/inode.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/cdns3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 3279b4767424..9e8b678f0548 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -362,6 +362,7 @@ ep_io (struct ep_data *epdata, void *buf, unsigned len)
- 				spin_unlock_irq (&epdata->dev->lock);
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index d5056cc34974..75bfc039fb7b 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -655,9 +655,9 @@ static void cdns3_wa2_remove_old_request(struct cdns3_endpoint *priv_ep)
+ 		trace_cdns3_wa2(priv_ep, "removes eldest request");
  
- 				DBG (epdata->dev, "endpoint gone\n");
-+				wait_for_completion(&done);
- 				epdata->status = -ENODEV;
- 			}
- 		}
+ 		kfree(priv_req->request.buf);
++		list_del_init(&priv_req->list);
+ 		cdns3_gadget_ep_free_request(&priv_ep->endpoint,
+ 					     &priv_req->request);
+-		list_del_init(&priv_req->list);
+ 		--priv_ep->wa2_counter;
+ 
+ 		if (!chain)
 -- 
 2.35.1
 
