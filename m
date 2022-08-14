@@ -2,48 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C34591FCC
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 14:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3246E592065
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Aug 2022 17:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbiHNM6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Aug 2022 08:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S231458AbiHNPYo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Aug 2022 11:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiHNM6f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 08:58:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0672AE69
-        for <linux-usb@vger.kernel.org>; Sun, 14 Aug 2022 05:58:34 -0700 (PDT)
+        with ESMTP id S229656AbiHNPYn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Aug 2022 11:24:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB0765E7;
+        Sun, 14 Aug 2022 08:24:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 852ADB80B37
-        for <linux-usb@vger.kernel.org>; Sun, 14 Aug 2022 12:58:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF89C433D6;
-        Sun, 14 Aug 2022 12:58:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660481912;
-        bh=deFXasgYxEd0eyBJ3ycHP8kq1oJIlBViv63pUaWDCKY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SsnpvOs7qJlXXhc3QbtUuT3/g7td/ymZa/3wwOsiDHegHZNQkm/cSyhh+l8sQX3Hi
-         eJ6omfXcr5S2HMUspOUANEg7qSS2Tz1GmPVF68nW9uGcw9WfPoFm8MS6Psb4GdNGDI
-         GawtyEQ3H4yN4ZHcaL9n+eamRFSxw2EmMfx2OUJg=
-Date:   Sun, 14 Aug 2022 14:58:29 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Frank Mori Hess <fmh6jj@gmail.com>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>, linux-usb@vger.kernel.org
-Subject: Re: [BUG] usb: dwc2: split interrupt in transactions silently
- dropped due to driver latency
-Message-ID: <YvjxdYDe/SMl1lO+@kroah.com>
-References: <CAJz5Opd7VxpLSdvDCivgKbazG-t8uGcqazMVjs864w-AhviuRw@mail.gmail.com>
- <YvdPr0Hn5eOPehIm@kroah.com>
- <CAJz5OpfDH3kJV5e9UqU6Tcw8NWHK5-iGFJHdkCGBzeNW-fCRUQ@mail.gmail.com>
- <Yve+avK9F4dCnvzB@kroah.com>
- <CAJz5Opfcy-P+HbRQ2LK_-9C8Oz5q=26qZ--ZfYV74YtzhFH1Bw@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 264B260B9F;
+        Sun, 14 Aug 2022 15:24:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCBBC433D6;
+        Sun, 14 Aug 2022 15:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660490680;
+        bh=ebo6kPnfZ6o+Q1fsjAA8jeQY9HT8MUugEfOa0/b02xE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KJl1IjqkM8tIPfkWtU0OdEDNWny/vh2eYKzzLZiyVvgh4K0xbJVJr89Cvk509Rh3v
+         YD+OrKP4rfJJxPx7jzrrwV5ujfPwJMmn+XG4MVymIeH+r7s8ZLSTe8pktcsGTVjmeT
+         vZV74qyvDcIkJ8eIJnmwKLlh6xlTCk+K00O9/8hf7fsfL41LBHsDQxNP0cGYYie9JU
+         huBxztY5T+FXX954T2+bk9iSTBOEyUi0EYRvxslWpFNDezyPjvNfA8jSTiPDjM60Bg
+         W/AKsopd/auyWWuZWI672UdxqfqLsy72haJL9zgF6Cw17zQ/Vti6kRUarHkPHRvGW1
+         lthSqx2t32enw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Gil Fine <gil.fine@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 01/64] thunderbolt: Change downstream router's TMU rate in both TMU uni/bidir mode
+Date:   Sun, 14 Aug 2022 11:23:34 -0400
+Message-Id: <20220814152437.2374207-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJz5Opfcy-P+HbRQ2LK_-9C8Oz5q=26qZ--ZfYV74YtzhFH1Bw@mail.gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,35 +56,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 05:33:09AM -0700, Frank Mori Hess wrote:
-> On Sat, Aug 13, 2022 at 8:08 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > Then please work with your vendor as only they can provide the needed
-> > support that you are already paying for.  Take advantage of that,
-> > nothing we can do about odd vendor kernels, sorry.
-> 
-> I'm not looking for support, I've already fixed the bug for myself.
-> I'm just trying to provide some useful information to the dwc2
-> maintainer in case they care about fixing the bug.  The bug is
-> obviously still present in the current mainline kernel.  From the
-> dwc2_hc_nyet_intr function, they #ifdef out incrementing the
-> error_count (as I tried to explain earlier, even incrementing the
-> error_count is not enough, there needs to be a hard error):
-> 
-> #if 0
-> /*
-> * Todo: Fix system performance so this can
-> * be treated as an error. Right now complete
-> * splits cannot be scheduled precisely enough
-> * due to other system activity, so this error
-> * occurs regularly in Slave mode.
-> */
-> qtd->error_count++;
-> #endif
+From: Gil Fine <gil.fine@intel.com>
 
-If you have a fix, please, send it as a normal patch submission so we
-can review and accept it like normal.  No need to do anything else here
-out-of-the-ordinary.
+[ Upstream commit 5fd6b9a5cbe63fea4c490fee8af34144a139a266 ]
 
-thanks,
+In case of uni-directional time sync, TMU handshake is
+initiated by upstream router. In case of bi-directional
+time sync, TMU handshake is initiated by downstream router.
+In order to handle correctly the case of uni-directional mode,
+we avoid changing the upstream router's rate to off,
+because it might have another downstream router plugged that is set to
+uni-directional mode (and we don't want to change its mode).
+Instead, we always change downstream router's rate.
 
-greg k-h
+Signed-off-by: Gil Fine <gil.fine@intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/thunderbolt/tmu.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
+index e4a07a26f693..93ba1d00335b 100644
+--- a/drivers/thunderbolt/tmu.c
++++ b/drivers/thunderbolt/tmu.c
+@@ -359,13 +359,14 @@ int tb_switch_tmu_disable(struct tb_switch *sw)
+ 		 * In case of uni-directional time sync, TMU handshake is
+ 		 * initiated by upstream router. In case of bi-directional
+ 		 * time sync, TMU handshake is initiated by downstream router.
+-		 * Therefore, we change the rate to off in the respective
+-		 * router.
++		 * We change downstream router's rate to off for both uni/bidir
++		 * cases although it is needed only for the bi-directional mode.
++		 * We avoid changing upstream router's mode since it might
++		 * have another downstream router plugged, that is set to
++		 * uni-directional mode and we don't want to change it's TMU
++		 * mode.
+ 		 */
+-		if (unidirectional)
+-			tb_switch_tmu_rate_write(parent, TB_SWITCH_TMU_RATE_OFF);
+-		else
+-			tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
++		tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
+ 
+ 		tb_port_tmu_time_sync_disable(up);
+ 		ret = tb_port_tmu_time_sync_disable(down);
+-- 
+2.35.1
+
