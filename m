@@ -2,350 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E756592869
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 06:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E84559291B
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 07:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiHOEL5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Aug 2022 00:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S231168AbiHOFg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Aug 2022 01:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiHOEL4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 00:11:56 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752FE13E3C;
-        Sun, 14 Aug 2022 21:11:54 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so11030196pjz.1;
-        Sun, 14 Aug 2022 21:11:54 -0700 (PDT)
+        with ESMTP id S229637AbiHOFg4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 01:36:56 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE35C12A88;
+        Sun, 14 Aug 2022 22:36:52 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id l4so7844939wrm.13;
+        Sun, 14 Aug 2022 22:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=vb8rCsWmHlVJjy/NaTZhvtDXtJh4hqkw3y+FnhmCRJs=;
-        b=AW3HLFVYU3/t661XFQZ9t9Nou2ANccdI2QBF0Fxku4eo395l0KS7FpRHVlJwG/7xy9
-         ZsEs6Z9vP9ZMc/pMUibpNEr5dSl3NO5lcDuUCrfURHBk64APUmdPCJSliGlVqjSInPw/
-         zF4iAeQgdXwNjoHgVts8nKDwCMiw7ydAblUamkXhkVcafTkje6xfXT/7k0xS03wim5f+
-         6vwYQFZHjsysBB9COkbv0HlxYFLSr5Wqlk4pOAyi1l0jNg9XDTLEo/Ety+60qL9lnoTi
-         qXxh+epw3+HBMHbIag5lqz9DSa80LO4Y+glGjqsT4gHinCzShXRZ7BhKej2kszfebjkt
-         1IbQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iwr7XkJX8s+Vxxl+k0pY94n0/ODkYyQntmhI8k+Qn6I=;
+        b=ochcn0nAwaI+uZle8oxq2CMwsp35gCjwnpn4Q/BbMfX+/bVmddN92C70y9YQzJ8bk9
+         3YnkpIGDwNf+olWm8vc3x9RrD+G5wgQGS3MAgJZcxU6YZX1yYOG1exd2hYIaokrfH956
+         Doh55Xz+oDkE4li+WV9kkAnFw41V9U+30TY0TOjXQoGYbM69sLBEpzhqTwYI8mV5fLKW
+         WJRd6GNgOx87Afp83QtX5xz3iCja+EjwBtPFavqCbaH5k75Sbn9DsjVz5fWlEyx4T2Ao
+         CVtuCECiSvCTC8jfwK39UjB58B9BqZ+H5cqPn+MwyU9fzgAhXzV+uxTye3AslKkCpQPX
+         fj2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=vb8rCsWmHlVJjy/NaTZhvtDXtJh4hqkw3y+FnhmCRJs=;
-        b=pGRsNr+AMS2NQltourRUBhEYgZgIWe09B5PRPhpRUNXYzulct07Bemc7dOE5dDGeCQ
-         LiDdoxJ5OdAD2lkPY8n+X0EGi+CtQkk6F/6a1nrV4WWFVfzuX6z9v7LyQSENktR6To1u
-         fvEANe+nkDy+GQd31h893q8XG9YgjC39j4YjgnkRiPGUr/lhyXfxxXjqMQDG55xOtDPw
-         cbGsJUwloI6Dcgq0L/++edwe8Xm88xjihxqkuqflCPtVHnXEjDmgs+2Mj6SfcEIsbDdd
-         2LmbWIYEneryiLN5ZaE9twGSuO2GWZ8HVuzDu9Xus/RH/dzaO9YC3injhW31F7iOuTZK
-         0OHg==
-X-Gm-Message-State: ACgBeo3jFmn/N5GAkVuf3L2FCdKqFPRaBDjNjOSminVAyWeryhnWH7K0
-        f6TtRM68MuJ5pnE5jWOQFO4=
-X-Google-Smtp-Source: AA6agR4i40gIdQOjuAS6d0SkZTZFbOVlDwf8rV6SJr1grot6bURZPxQDxbQI+Mi2h5JBXxRTxUV+5A==
-X-Received: by 2002:a17:902:cf0c:b0:16f:9023:e07b with SMTP id i12-20020a170902cf0c00b0016f9023e07bmr14897839plg.143.1660536713644;
-        Sun, 14 Aug 2022 21:11:53 -0700 (PDT)
-Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b001713f45477asm6092300pli.250.2022.08.14.21.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 21:11:53 -0700 (PDT)
-From:   Szuying Chen <chensiying21@gmail.com>
-To:     gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
-        Richard_Hsu@asmedia.com.tw
-Subject: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
-Date:   Mon, 15 Aug 2022 12:11:45 +0800
-Message-Id: <20220815041145.35629-1-chensiying21@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iwr7XkJX8s+Vxxl+k0pY94n0/ODkYyQntmhI8k+Qn6I=;
+        b=3c27AUdYXzPTdvTlL7rM1hu7WbEcx4yAk2LlhLqJQWdWZsdlXeVHCG4r1o3Au2UOR2
+         BnH3TMtgXDF7XS1K0c1V2dW/MAcGe+3M/rx5TvWVIf6wLWmV0QNfEl/rRj8VMqci1Cap
+         6dVTOFGPzK1e/NoNOzHdwGyvy8Z81WVQU1yfKmg+mrc3xF4s38sxls50uTReU+XnXpIh
+         F6x7Uv+HxXfrsSvC2/SwrMau46CYS1lT51V/eWacbjjIo1eWcIYEsl1yqsotoQy7auki
+         RnDvDGPnoVhcmPEODnlVaDGLHNVA9wGChhxcXyasptz6ZkzCi6I7W5Viq38eUruhxGsD
+         mlPQ==
+X-Gm-Message-State: ACgBeo2ZdrtC657nry4AhpVWiQP5bN6euIZAyFeNs4it4oy3GTuadAW2
+        TwX3mW9OusQdnKlUZY0UovPcBRVgb4I4gpeuXJ4=
+X-Google-Smtp-Source: AA6agR6zEn89cFvufHE8chEgz2jlIkGasvC8tMwTtwMNFTMfHDOM1OkMTmoUyaytKEWPYis+Q6YeOgEF0rN7lxUcm98=
+X-Received: by 2002:a05:6000:178f:b0:221:7dcb:7cbf with SMTP id
+ e15-20020a056000178f00b002217dcb7cbfmr7791842wrg.58.1660541811221; Sun, 14
+ Aug 2022 22:36:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-11-peterwu.pub@gmail.com>
+In-Reply-To: <20220805070610.3516-11-peterwu.pub@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Date:   Mon, 15 Aug 2022 08:36:39 +0300
+Message-ID: <CANhJrGOmFiC42_F+vX9zxg0uP_wdjQbBCPyn6+Zy3DkBycnaGw@mail.gmail.com>
+Subject: Re: [PATCH v7 10/13] power: supply: mt6370: Add MediaTek MT6370
+ charger driver
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, chunfeng.yun@mediatek.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        deller@gmx.de, Andy Shevchenko <andy.shevchenko@gmail.com>,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, szunichen@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+Hi ChiaEn,
 
-The patch add tb_nvm_validate() contain an array that has functions
-pointers to asmedia_nvm_validate().
-And asmedia_nvm_validate() that recognize supported vendor works in one
-of the following cases:
-Case nvm_upgrade: enable nvm's attribute by setting no_nvm_upgrade
-flag to create nvm_authenticate file node.
-Case nvm_add:add active/non-active NVM devices.
-Case nvm_write:update firmware to non-ative NVM device.
+pe 5. elok. 2022 klo 10.09 ChiaEn Wu (peterwu.pub@gmail.com) kirjoitti:
+>
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>
+> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> driver, display bias voltage supply, one general purpose LDO, and the
+> USB Type-C & PD controller complies with the latest USB Type-C and PD
+> standards.
+>
+> Add a support for the MediaTek MT6370 Charger driver. The charger module
+> of MT6370 supports High-Accuracy Voltage/Current Regulation,
+> Average Input Current Regulation, Battery Temperature Sensing,
+> Over-Temperature Protection, DPDM Detection for BC1.2.
+>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>
+> +
+> +#define MT6370_CHG_LINEAR_RANGE(_rfd, _min, _min_sel, _max_sel, _step) \
+> +[_rfd] = {                                                             \
+> +       .min = _min,                                                    \
+> +       .min_sel = _min_sel,                                            \
+> +       .max_sel = _max_sel,                                            \
+> +       .step = _step,                                                  \
+> +}
 
-Our patches were through checkpatch.pl. But the file(switch.c.)
-have existed 13 warning before we patch it.
+Just a minor thing but I think this macro could be useful also for
+other drivers. Do you think you could rename it to LINEAR_RANGE_IDX()
+(or some such) and move it to the linear_range.h? That would allow
+also other drivers to use it instead of reinventing the wheel :)
 
-Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+Best Regards
+  -- Matti Vaittinen
+
+
+
 ---
- drivers/thunderbolt/nvm.c    | 147 +++++++++++++++++++++++++++++++++++
- drivers/thunderbolt/switch.c |  17 ++++
- drivers/thunderbolt/tb.h     |  18 +++++
- 3 files changed, 182 insertions(+)
 
-diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-index b3f310389378..6db2034ec8e5 100644
---- a/drivers/thunderbolt/nvm.c
-+++ b/drivers/thunderbolt/nvm.c
-@@ -9,11 +9,158 @@
- #include <linux/idr.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
-+#include <linux/pm_runtime.h>
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
- #include "tb.h"
-
- static DEFINE_IDA(nvm_ida);
-
-+static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
-+			      size_t bytes)
-+{
-+	struct tb_nvm *nvm = priv;
-+	struct tb_switch *sw = tb_to_switch(nvm->dev);
-+	int ret;
-+
-+	pm_runtime_get_sync(&sw->dev);
-+	if (!mutex_trylock(&sw->tb->lock)) {
-+		ret = restart_syscall();
-+		goto out;
-+	}
-+	ret = usb4_switch_nvm_read(sw, offset, val, bytes);
-+	mutex_unlock(&sw->tb->lock);
-+
-+out:
-+	pm_runtime_mark_last_busy(&sw->dev);
-+	pm_runtime_put_autosuspend(&sw->dev);
-+
-+	return ret;
-+}
-+
-+static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
-+			       size_t bytes)
-+{
-+	struct tb_nvm *nvm = priv;
-+	struct tb_switch *sw = tb_to_switch(nvm->dev);
-+	int ret;
-+
-+	if (!mutex_trylock(&sw->tb->lock))
-+		return restart_syscall();
-+
-+	/*
-+	 * Since writing the NVM image might require some special steps,
-+	 * for example when CSS headers are written, we cache the image
-+	 * locally here and handle the special cases when the user asks
-+	 * us to authenticate the image.
-+	 */
-+	ret = tb_nvm_write_buf(nvm, offset, val, bytes);
-+	mutex_unlock(&sw->tb->lock);
-+
-+	return ret;
-+}
-+
-+static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
-+{
-+	struct tb_nvm *nvm;
-+	u32 val;
-+	u32 nvm_size;
-+	int ret = 0;
-+	unsigned int image_size;
-+	const u8 *buf = sw->nvm->buf;
-+
-+	switch (mode) {
-+	case nvm_upgrade:
-+		if (sw->no_nvm_upgrade)
-+			sw->no_nvm_upgrade = false;
-+
-+		break;
-+
-+	case nvm_add:
-+		nvm = tb_nvm_alloc(&sw->dev);
-+		if (IS_ERR(nvm)) {
-+			ret = PTR_ERR(nvm);
-+			break;
-+		}
-+
-+		ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
-+		if (ret)
-+			break;
-+
-+		nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-+		ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
-+		if (ret)
-+			break;
-+
-+		nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
-+		nvm->nvm_asm.version = (u8)(val >> 0x10);
-+		nvm_size = SZ_512K;
-+		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
-+		if (ret)
-+			break;
-+
-+		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
-+		if (ret)
-+			break;
-+
-+		sw->nvm = nvm;
-+		break;
-+
-+	case nvm_write:
-+		if (!buf) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+		image_size = sw->nvm->buf_data_size;
-+		if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+		ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
-+		if (!ret)
-+			sw->nvm->flushed = true;
-+
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	if ((mode == nvm_add) && (ret != 0))
-+		tb_nvm_free(sw->nvm);
-+
-+	return ret;
-+}
-+
-+struct tb_nvm_id {
-+	u16 hw_vendor_id;
-+	int (*validate)(struct tb_switch *sw, unsigned int handle);
-+};
-+
-+static const struct tb_nvm_id tb_nvm_vendors[] = {
-+	/* ASMedia software CM firmware upgrade */
-+	{ 0x174c, asmedia_nvm_validate },
-+};
-+
-+/**
-+ * tb_nvm_vendor_handle() - support vendor's NVM format
-+ * @sw: Thunderbolt switch
-+ * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
-+ */
-+int tb_nvm_validate(struct tb_switch *sw, unsigned int mode)
-+{
-+	int res, i;
-+
-+	for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
-+		const struct tb_nvm_id *id = &tb_nvm_vendors[i];
-+
-+		if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
-+			continue;
-+
-+		 res = id->validate(sw, mode);
-+	}
-+	return res;
-+}
-+
- /**
-  * tb_nvm_alloc() - Allocate new NVM structure
-  * @dev: Device owning the NVM
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 244f8cd38b25..352e64f3dc92 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -114,6 +114,14 @@ static int nvm_validate_and_write(struct tb_switch *sw)
- 	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
- 		return -EINVAL;
-
-+	/*
-+	 * Vendor's nvm write. If the image has been flushed to the
-+	 * storage are, nvm write is complete.
-+	 */
-+	ret = tb_nvm_validate(sw, nvm_write);
-+	if (sw->nvm->flushed)
-+		return ret;
-+
- 	/*
- 	 * FARB pointer must point inside the image and must at least
- 	 * contain parts of the digital section we will be reading here.
-@@ -390,6 +398,11 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
- 	if (!nvm_readable(sw))
- 		return 0;
-
-+	/* Vendor's NVM formats add */
-+	ret = tb_nvm_validate(sw, nvm_add);
-+	if (ret)
-+		return ret;
-+
- 	/*
- 	 * The NVM format of non-Intel hardware is not known so
- 	 * currently restrict NVM upgrade for Intel hardware. We may
-@@ -1953,6 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
- 		ret = -ENODATA;
- 	else if (!sw->nvm)
- 		ret = -EAGAIN;
-+	/*ASMedia NVM version show format xxxxxx_xxxx_xx */
-+	else if (sw->config.vendor_id == 0x174C)
-+		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
- 	else
- 		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
-
-@@ -2860,6 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
- 		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
-
- 		tb_check_quirks(sw);
-+		tb_nvm_validate(sw, nvm_upgrade);
-
- 		ret = tb_switch_set_uuid(sw);
- 		if (ret) {
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 5db76de40cc1..7f20f10352d9 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -28,6 +28,22 @@
- #define NVM_VERSION		0x08
- #define NVM_FLASH_SIZE		0x45
-
-+/* ASMedia specific NVM offsets */
-+#define NVM_Date	0x1c
-+#define NVM_CUSTOMER_ID	0x28
-+
-+/* ASMedia specific validation mode */
-+#define nvm_upgrade 0
-+#define nvm_add 1
-+#define nvm_write 2
-+
-+struct nvm_asmedia {
-+	u32 date;
-+	u32 customerID:16;
-+	u32 version:8;
-+	u32 reserved:8;
-+};
-+
- /**
-  * struct tb_nvm - Structure holding NVM information
-  * @dev: Owner of the NVM
-@@ -57,6 +73,7 @@ struct tb_nvm {
- 	size_t buf_data_size;
- 	bool authenticating;
- 	bool flushed;
-+	struct nvm_asmedia nvm_asm;
- };
-
- enum tb_nvm_write_ops {
-@@ -736,6 +753,7 @@ static inline void tb_domain_put(struct tb *tb)
- 	put_device(&tb->dev);
- }
-
-+int tb_nvm_validate(struct tb_switch *sw, unsigned int mode);
- struct tb_nvm *tb_nvm_alloc(struct device *dev);
- int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
- int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
---
-2.34.1
-
+~~ When things go utterly wrong vim users can always type :help! ~~
