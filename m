@@ -2,265 +2,467 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E07593360
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 18:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAAC59340A
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 19:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiHOQkd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Aug 2022 12:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
+        id S229785AbiHOR2u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Aug 2022 13:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiHOQkb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 12:40:31 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA7ABE2F
-        for <linux-usb@vger.kernel.org>; Mon, 15 Aug 2022 09:40:29 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id bb13-20020a056602380d00b006849ed2e8a2so4428513iob.0
-        for <linux-usb@vger.kernel.org>; Mon, 15 Aug 2022 09:40:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=Z4LteLU57bSNHxvVT3R1HiDh8KVxcVFhIZWg+AaecIY=;
-        b=SxouaJvIHSDgmzIgSbOPcHOJfFOdj81ARYh4+QQG/S0Skq65OhS8goCNTLTeldWWRy
-         ZT+gNMnBw27cqse2PFRc2JsCXVPJxOT9SQuTGuaNsX+gD7nsLOeZdMOkK9lIYj/V1Ejc
-         2aAMvNcen1Ac0tOteHl6aG/XjH8483PffJmhWb0mfG2f80XQMdXfFGNaEHbTjjnu+Snz
-         R4dJWWMb0cHaS4MWGJg0zW1rz7B3wPjssj0MduBUAtzBCjvZ2KTqoXlkL7EZbZQsK/yN
-         k5Ve5O4WSqxYbf/IEusZ4HMclXCaS7+TSwDCnOnU3PJakOI/TKx8Ks/iXegX7UAjsglt
-         4uTg==
-X-Gm-Message-State: ACgBeo2k0DH28PPAAjPyGUukBDfp7aUoBpFmJqBywEETxWQC97ufFfxe
-        ommB7kvb7+z0UxQDTl9puhaJyZl64XRKLzhn8dVGY3280Vbu
-X-Google-Smtp-Source: AA6agR5ospixN1Nm6jTa5f6sIZEYQMDSRtTlQ06i+Mllx8HofVfF8K7dPblvj9ChF31tS2ulkl/TNwhCX49zIp3bTktaT4xXJ5Bp
+        with ESMTP id S232707AbiHOR2e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 13:28:34 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2054.outbound.protection.outlook.com [40.107.100.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F26101C8;
+        Mon, 15 Aug 2022 10:28:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ofoxVXQOPT4pGqgq19pq8iepkpWGIEFBC9B24iKDFnbBEsPc/rp76sD6kKsLRw1f0GWRoHqHqjYhxb5DMe99pcV020E4k0VRIZS0E9k1rgFl1E9sF+quS5bqVyNylOBi3ndK93uO2zgTwMIZ2YB+UN93enE2eWC3DTTbxNfuS5uTC6KwEkWwrCy0/VtFD2w+wLWQCgJ35wSEbSHamFsGw0aJh5TWU2j5uQni/p49mMYSyzxHHKsUSi/qInyWg1wVUB9PJuXkd0IU78IhcTD8NZPxWg20VkKJ7ToLr1rZzBw7kxgFmhQuHy0k+SwJboufbSrdh62sAMZI+D+B1cLZQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cF/StlZs/DsHfc59JAafoUieuieC/PDniMaHDHSPLo0=;
+ b=WWAC5emLnh8YMm3ySmGBQnI1jI+hRBR5dTgdTfWQpt5bn78LC/OBjyZFOI6HSKi/d3q0IPRBBDRlVSuBKIXxaABX4DoiL5VOjHqhJkY3MSy0S6+W93USp+uO6ppNpn27w0+k01SAl0AI4gjsEX9kkyNvtYHqRWw/jC15BGY5B5Pt1ZvEzAT21yaM859+XLKFtAcdweOtAxL9LzqVL24dcrRx+G+DgdJ2niMmg53nLAabnhbKfdG27XI/Xk+sayt/0wmBAYl3pDX4muiOL/PDYzM4l6pGA3Gg41uREKQ38q3RbJjTaUtRs9HRmYvT0cc/SksCT4Vagd5F/TS4wDgljg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cF/StlZs/DsHfc59JAafoUieuieC/PDniMaHDHSPLo0=;
+ b=QKX3yJxVZtUnlFfN7L364bYMPAGUNduDPoRfFBQ1iMlk9khY87XErhvbnazXsZs4wDarteyIC//J2q8KUUOMmhRGT5tlFnHuijcEeNmOXOE/QrP7EdIuRAiPK/BTJ/U9NIMWB5fe8+xUPirdNWp/YqjtKJtHpTw3elLF9MTvGQw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by MW3PR12MB4409.namprd12.prod.outlook.com (2603:10b6:303:2d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.23; Mon, 15 Aug
+ 2022 17:28:16 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::4489:9a98:ef82:6c67]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::4489:9a98:ef82:6c67%3]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
+ 17:28:16 +0000
+Message-ID: <e49679b9-7b5a-5d97-c63f-a6004af0aaaa@amd.com>
+Date:   Mon, 15 Aug 2022 12:28:13 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
+Content-Language: en-US
+To:     Szuying Chen <chensiying21@gmail.com>, gregkh@linuxfoundation.org,
+        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw, Richard Hughes <rhughes@redhat.com>
+References: <20220815041145.35629-1-chensiying21@gmail.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20220815041145.35629-1-chensiying21@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0396.namprd03.prod.outlook.com
+ (2603:10b6:610:11b::16) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aaf:b0:2df:9b36:cf34 with SMTP id
- l15-20020a056e021aaf00b002df9b36cf34mr7476932ilv.45.1660581628664; Mon, 15
- Aug 2022 09:40:28 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 09:40:28 -0700
-In-Reply-To: <000000000000c5ea3505e52e44bb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000018e33705e64a4a23@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in send_packet
-From:   syzbot <syzbot+f1a69784f6efe748c3bf@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c4c00961-bf1d-4a50-63be-08da7ee389a8
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4409:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: myeg+WzrQV5dQ9utzaNemav3Nhp4k8OZL9xHuq5mAzYa+VFweG3niTy0PBjYYTZ4sgwqR6RHb58RDKLxmf90aQ9Tl9ljBAK+poJLgH5uAaL0y0uTdlfHwVOlCGWaEKtyikttZhaGIzedQwFtcAFkNVFFNMyyd9sel/lmGlsW0zXfhg67SS5uiUKXCLcCfCLEhesY7pd0FBj4YjmDetS6thGIpw4l9QVvLcvRJ05A4yYVT7Yrr6KyTNIBA7/cjLrInshbDyoyS3Lvxo7+X/aa52sX9Xo76O/G7n6cll03RcCdaAqDPZfmGqdQGwY5QMxP6nN0TGaZYhrqnaKHI8yHKoICgDG2cNkQOJSBSDunHVLz4xgKzImoXlQspJ131Fomxo0tS7oR9idvKVLdp1/fi2kz6kO5HZEb3cldLeKEYJgj0GSVSqrM4rJCEoojl6ptv7L3qhfKcNoheMRD234OQWh+2ixMULjiyJR+zP3RfbSouFK+pqvDNCTB5TVuqHltkz2EO5I1mbcKqrSmyiNBRDkXBiBeWaO+SvH7ZU410XJAqgBbVYBHPw3RKOwTOk8pVJ/zQkvUhDqWPLgZld4LT8ai1bIoSWaXr9uIZGKhm62GWuAiy/YUZh+nrOcd1il5mzeYpGC6YD8K/0CoGmQhdilphXI7SkKr7eZuNmpt3a/PsV/IDtM/lghbT/tdRpFDK9OYeDV+A9jE9JT8YSujOWRmWvY7crM0PL4MZeXiEyboGVKZ08Y/xZlM3aw9CiFYWOusCTMZNsYWmoH2+DadhczmV+R+LfKEVRF/LHaU1BEQ7cEKOCzFuPc/al8iRLlsd7O2VUiwEtTw4yK1tPbIeQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(396003)(366004)(136003)(31696002)(83380400001)(86362001)(38100700002)(66946007)(8676002)(4326008)(66556008)(66476007)(316002)(2906002)(8936002)(5660300002)(7416002)(26005)(6512007)(6666004)(53546011)(6506007)(2616005)(186003)(41300700001)(478600001)(6486002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUJIVDFzV0MyUExDZmhkMGxraTJ3QW92NE5NT1FONlFYK25XYVdDa2xPR0Rt?=
+ =?utf-8?B?OGpPbUt2KzNoOVUrLzRYNitzRmNmVllibUJJa08rNWlIZnV5K2F3NXdOcVR2?=
+ =?utf-8?B?VzduZnFxWmRWakwzdUhhbDg3STFjZUVSTFlnNFZSRlJJMFRiYWdGZzUrcHZT?=
+ =?utf-8?B?YmZpdnd3YnQ0NUp2bFZTSktBSjNjU0ZLOXQzeGFmQTliQS94UkZaOFh6Q1B3?=
+ =?utf-8?B?TVFLMWVSL1g3ekl4a09oRVF4V3pDU0hzT0VqOHp0NTZwVnFYWXJFQVY0WHlK?=
+ =?utf-8?B?aVNIS0F3QXJxeU0wM0FRREp3ZE93TFJpQUZSUCt1ZEM5bzBFV0dibUNpQ2cz?=
+ =?utf-8?B?YmkrT3VaakM2V0pmNUpEY2Z4WWxFd0RleCtSeEN4SWE5SW5OVWdCVkVQU0d4?=
+ =?utf-8?B?SW5wUkxtcWZ0SWsvaDFsV1hTRmwxcnBUVlZXVm5HTzlha2YySWgzaVBJbE1l?=
+ =?utf-8?B?ZXgwbGIramM0RHkvL00yd21nb0tzd3RWZFZTcXdneGRwZEU4cWE1ZDh1d2to?=
+ =?utf-8?B?bitRblYrYXQzZFo1bU9RN1ZEZGo5Yk9uWEYxelE0ZStuM3lpS0VNZVF6aUkx?=
+ =?utf-8?B?dStoTmk3dXk1Q2NvWHVxRWNidGVSM3BNdVpDbXlDN0pGQVkyU3F1YnNSSEow?=
+ =?utf-8?B?Ym1nOG4vMDVhREdkRzhNZkpBcmpvMnNmNHpyTTIzdjJTRHR2cGpLYzFZcXRm?=
+ =?utf-8?B?cjFpOXJqaFE1YkpqZUlGQjkwakQvWmJUVWN6RjB5UFFPS2xhTEdaL2xlQU5r?=
+ =?utf-8?B?cDFIT1IraWEvM0F3aC9yUUFVTm1YaFhHUit1ZVNyRHdXbFl4dG53WDZNRFFG?=
+ =?utf-8?B?TDAyMmxVVGJtaGdtbWoveEtieGtVWDJwdmR3YWh3K09KZVFhYzVRZWdnZ2lT?=
+ =?utf-8?B?dmNZWXZBakVRU0VOZWhydktNRUkwRWplbnJsSmllM1dkR0xLanNrd1kxYWtX?=
+ =?utf-8?B?VlF2RG9nRnBtNE02N05jMTlvS3ppWVZldEtINEtyZFJTMWt6WFVyS3pCRmdD?=
+ =?utf-8?B?eWx6ZGNsVk0yWSt0a1FxV0pySFVxYkRiMWd3eHhBV1B2QnBIMmlhMnBqWTB6?=
+ =?utf-8?B?djhKaG84Z0VPRXZ3ZUNUMVF0bHg0NkV2dEpDN3ZwOExuOTJLVTBYUzVMVGRu?=
+ =?utf-8?B?SFkzS244Y2hyUUJZMEc5T0ZzejRJdnJwc3phbTgwSTV0ZkRhbDZPS1VURm1i?=
+ =?utf-8?B?dGdSTllmMGJQNVpmWWs2VXczSjJoZ1c2Sktic3JCVjdqSzF5OURsUHVZSGVp?=
+ =?utf-8?B?aE80RUFxVFcrYnVDNUl5ekpyd2MvdWRXd2tjV014L3I2S1FSNVoyczJicGh4?=
+ =?utf-8?B?MENHNzlLK1lCOGVRcW5XRE9kcXpXMnBCMk5hejdLQ3BFQVVHY0RyREVNNTdj?=
+ =?utf-8?B?dDM3c1BocXVzdGl6M3NpZEFlM3FzdnZPUzlzUmk5MmlLQ25adi9QMTU0a25a?=
+ =?utf-8?B?cUxORllXS3A5VEtjUjZ6enRmbkFVdmRTWlBpSEQ5emdmVnBIdi9rVWo4UFVi?=
+ =?utf-8?B?ZzRTM3B1VGVLMVNNY2RlQmtQYzB6WmMzcE16VTNMT0NGMmkzdnAwWE1tRmpq?=
+ =?utf-8?B?WTJ6empGR2lyVitNVk83TDU1V2g0VWN3N0dBbmJoY2RldEFrLytDanRIalBq?=
+ =?utf-8?B?UlVldzhSNEhqNGdnZ2hiSDJZdW1KckJyc0RBZENDY2loUXNMV0Q1bytSdnd0?=
+ =?utf-8?B?U0RXUnZVWGU3SGF2N0RTaVdjOTJCUm1aL1VQcys3eWNrQkRFSk54WEh0RXEv?=
+ =?utf-8?B?THR3ZTQzNXZkK2NFMlRRZWVnenVUUDNyWGgwaXJFbjJtV3EzbVM1RmNpQ01F?=
+ =?utf-8?B?NXBlMVZwck5IVTQxOUdJQUprMC85Q3I4RzNMTStVV0lEclVBV2lZRDM3TFh2?=
+ =?utf-8?B?Smd4anpncEtWMWF6NUxZbWVqbG40QXRjVk5MWWZkNUZoK1ZZMGpaSGNhMGVp?=
+ =?utf-8?B?Zk5EYnN2VXhYU1JLd3RLdUFoeHVUamNSU1dWNnJJblFoZllQNGRjZGs3M291?=
+ =?utf-8?B?Y0liMTFTWmt2cDUxRlFLUmJtS2VFNHcvNWZUNkxCZGVMS1hiU25Mc3lZNWZ4?=
+ =?utf-8?B?Mi9BVENoVUdjUEJhYlYzRzQ5a1lDeXBVOFBwSUFnOERjY1lTdzgvV0t3ekJO?=
+ =?utf-8?Q?ugvaAPjZPFgUZqkla8GoWWJwg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4c00961-bf1d-4a50-63be-08da7ee389a8
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 17:28:16.0098
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iQA7xuKhjga/D2bRAZiQcHr8jgJdVgCpD6C+jNaJhJSxNdGe1mnSMd0n6QTq5jHP1VyQjcCUWqNQfPUU8j7J8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4409
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
++hughsie for additional comments
 
-HEAD commit:    568035b01cfb Linux 6.0-rc1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=156286a5080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e706e91b2a433db
-dashboard link: https://syzkaller.appspot.com/bug?extid=f1a69784f6efe748c3bf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e5b2f3080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12550915080000
+Various inline comments below.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f1a69784f6efe748c3bf@syzkaller.appspotmail.com
+On 8/14/2022 23:11, Szuying Chen wrote:
+> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> 
+> The patch add tb_nvm_validate() contain an array that has functions
+> pointers to asmedia_nvm_validate().
+> And asmedia_nvm_validate() that recognize supported vendor works in one
+> of the following cases:
+> Case nvm_upgrade: enable nvm's attribute by setting no_nvm_upgrade
+> flag to create nvm_authenticate file node.
+> Case nvm_add:add active/non-active NVM devices.
+> Case nvm_write:update firmware to non-ative NVM device.
+> 
+> Our patches were through checkpatch.pl. But the file(switch.c.)
+> have existed 13 warning before we patch it.
 
-==================================================================
-BUG: KASAN: use-after-free in __create_pipe include/linux/usb.h:1945 [inline]
-BUG: KASAN: use-after-free in send_packet+0xa2d/0xbc0 drivers/media/rc/imon.c:627
-Read of size 4 at addr ffff8880256fb000 by task syz-executor314/4465
+Please feel free to add other patches to the series to clean up 
+warnings.  Just because you didn't introduce them doesn't mean you can't 
+fix them =)
 
-CPU: 2 PID: 4465 Comm: syz-executor314 Not tainted 6.0.0-rc1-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x6e9 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- __create_pipe include/linux/usb.h:1945 [inline]
- send_packet+0xa2d/0xbc0 drivers/media/rc/imon.c:627
- vfd_write+0x2d9/0x550 drivers/media/rc/imon.c:991
- vfs_write+0x2d7/0xdd0 fs/read_write.c:576
- ksys_write+0x127/0x250 fs/read_write.c:631
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7590342b49
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f75902cd308 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f75903c74d8 RCX: 00007f7590342b49
-RDX: 0000000000000001 RSI: 0000000020001000 RDI: 0000000000000004
-RBP: 00007f75903c74d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f75903c74dc
-R13: 00007f7590394328 R14: 0b8b0509005504e1 R15: 0000000000022000
- </TASK>
+> 
+> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> ---
+>   drivers/thunderbolt/nvm.c    | 147 +++++++++++++++++++++++++++++++++++
+>   drivers/thunderbolt/switch.c |  17 ++++
+>   drivers/thunderbolt/tb.h     |  18 +++++
+>   3 files changed, 182 insertions(+)
+> 
+> diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
+> index b3f310389378..6db2034ec8e5 100644
+> --- a/drivers/thunderbolt/nvm.c
+> +++ b/drivers/thunderbolt/nvm.c
+> @@ -9,11 +9,158 @@
+>   #include <linux/idr.h>
+>   #include <linux/slab.h>
+>   #include <linux/vmalloc.h>
+> +#include <linux/pm_runtime.h>
+> 
+>   #include "tb.h"
+> 
+>   static DEFINE_IDA(nvm_ida);
+> 
+> +static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
+> +			      size_t bytes)
+> +{
+> +	struct tb_nvm *nvm = priv;
+> +	struct tb_switch *sw = tb_to_switch(nvm->dev);
+> +	int ret;
+> +
+> +	pm_runtime_get_sync(&sw->dev);
+> +	if (!mutex_trylock(&sw->tb->lock)) {
+> +		ret = restart_syscall();
+> +		goto out;
+> +	}
+> +	ret = usb4_switch_nvm_read(sw, offset, val, bytes);
+> +	mutex_unlock(&sw->tb->lock);
+> +
+> +out:
+> +	pm_runtime_mark_last_busy(&sw->dev);
+> +	pm_runtime_put_autosuspend(&sw->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
+> +			       size_t bytes)
+> +{
+> +	struct tb_nvm *nvm = priv;
+> +	struct tb_switch *sw = tb_to_switch(nvm->dev);
+> +	int ret;
+> +
+> +	if (!mutex_trylock(&sw->tb->lock))
+> +		return restart_syscall();
+> +
+> +	/*
+> +	 * Since writing the NVM image might require some special steps,
+> +	 * for example when CSS headers are written, we cache the image
+> +	 * locally here and handle the special cases when the user asks
+> +	 * us to authenticate the image.
+> +	 */
+> +	ret = tb_nvm_write_buf(nvm, offset, val, bytes);
+> +	mutex_unlock(&sw->tb->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
+> +{
+> +	struct tb_nvm *nvm;
+> +	u32 val;
+> +	u32 nvm_size;
+> +	int ret = 0;
+> +	unsigned int image_size;
+> +	const u8 *buf = sw->nvm->buf;
+> +
+> +	switch (mode) {
+> +	case nvm_upgrade:
+> +		if (sw->no_nvm_upgrade)
+> +			sw->no_nvm_upgrade = false;
+> +
+> +		break;
+> +
+> +	case nvm_add:
+> +		nvm = tb_nvm_alloc(&sw->dev);
+> +		if (IS_ERR(nvm)) {
+> +			ret = PTR_ERR(nvm);
+> +			break;
+> +		}
+> +
+> +		ret = usb4_switch_nvm_read(sw, NVM_Date, &val, sizeof(val));
+> +		if (ret)
+> +			break;
+> +
+> +		nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+> +		ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
+> +		if (ret)
+> +			break;
+> +
+> +		nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+> +		nvm->nvm_asm.version = (u8)(val >> 0x10);
+> +		nvm_size = SZ_512K;
+> +		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+> +		if (ret)
+> +			break;
+> +
+> +		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+> +		if (ret)
+> +			break;
+> +
+> +		sw->nvm = nvm;
+> +		break;
+> +
+> +	case nvm_write:
+> +		if (!buf) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +		image_size = sw->nvm->buf_data_size;
+> +		if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +		ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
+> +		if (!ret)
+> +			sw->nvm->flushed = true;
+> +
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
+> +	if ((mode == nvm_add) && (ret != 0))
+> +		tb_nvm_free(sw->nvm);
+> +
+> +	return ret;
+> +}
+> +
+> +struct tb_nvm_id {
+> +	u16 hw_vendor_id;
+> +	int (*validate)(struct tb_switch *sw, unsigned int handle);
+> +};
+> +
+> +static const struct tb_nvm_id tb_nvm_vendors[] = {
+> +	/* ASMedia software CM firmware upgrade */
+> +	{ 0x174c, asmedia_nvm_validate },
+> +};
+> +
+> +/**
+> + * tb_nvm_vendor_handle() - support vendor's NVM format
+> + * @sw: Thunderbolt switch
+> + * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
+> + */
+> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode)
+> +{
+> +	int res, i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
+> +		const struct tb_nvm_id *id = &tb_nvm_vendors[i];
+> +
+> +		if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
+> +			continue;
+> +
+> +		 res = id->validate(sw, mode);
+> +	}
+> +	return res;
+> +}
+> +
+>   /**
+>    * tb_nvm_alloc() - Allocate new NVM structure
+>    * @dev: Device owning the NVM
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index 244f8cd38b25..352e64f3dc92 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -114,6 +114,14 @@ static int nvm_validate_and_write(struct tb_switch *sw)
+>   	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+>   		return -EINVAL;
+> 
+> +	/*
+> +	 * Vendor's nvm write. If the image has been flushed to the
+> +	 * storage are, nvm write is complete.
+> +	 */
+> +	ret = tb_nvm_validate(sw, nvm_write);
+> +	if (sw->nvm->flushed)
+> +		return ret;
+> +
+>   	/*
+>   	 * FARB pointer must point inside the image and must at least
+>   	 * contain parts of the digital section we will be reading here.
+> @@ -390,6 +398,11 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+>   	if (!nvm_readable(sw))
+>   		return 0;
+> 
+> +	/* Vendor's NVM formats add */
+> +	ret = tb_nvm_validate(sw, nvm_add);
+> +	if (ret)
+> +		return ret;
+> +
+>   	/*
+>   	 * The NVM format of non-Intel hardware is not known so
+>   	 * currently restrict NVM upgrade for Intel hardware. We may
 
-Allocated by task 3757:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:525
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- kmem_cache_alloc_trace+0x25a/0x460 mm/slab.c:3559
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- usb_alloc_dev+0x51/0xf00 drivers/usb/core/usb.c:582
- hub_port_connect drivers/usb/core/hub.c:5255 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x214a/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+This comment should be adjusted as after your patch lands both Intel and 
+ASMedia formats are known and included.
 
-Freed by task 3737:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x13d/0x1a0 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- __cache_free mm/slab.c:3418 [inline]
- kfree+0x173/0x390 mm/slab.c:3786
- device_release+0x9f/0x240 drivers/base/core.c:2330
- kobject_cleanup lib/kobject.c:673 [inline]
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1be/0x4c0 lib/kobject.c:721
- put_device+0x1b/0x30 drivers/base/core.c:3624
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> @@ -1953,6 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
+>   		ret = -ENODATA;
+>   	else if (!sw->nvm)
+>   		ret = -EAGAIN;
+> +	/*ASMedia NVM version show format xxxxxx_xxxx_xx */
+> +	else if (sw->config.vendor_id == 0x174C)
+> +		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
 
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
- kvfree_call_rcu+0x74/0x940 kernel/rcu/tree.c:3322
- free_imon_context+0x15b/0x1f0 drivers/media/rc/imon.c:503
- imon_disconnect+0x4b9/0x660 drivers/media/rc/imon.c:2543
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:520 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:512
- __device_release_driver drivers/base/dd.c:1209 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1235
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3704
- usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+Are you hard-pressed to use this specific format for the string?  I feel 
+like it's overloading the definition of a version string quite a bit.
 
-Second to last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
- call_rcu+0x99/0x790 kernel/rcu/tree.c:2793
- netlink_release+0xeff/0x1db0 net/netlink/af_netlink.c:815
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1365
- __fput+0x277/0x9d0 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xad5/0x29b0 kernel/exit.c:795
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I also worry that userspace has come to expect "major.minor" for this 
+and making your string use 2 decimals may mean more deviations for 
+userspace too.
 
-The buggy address belongs to the object at ffff8880256fb000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 0 bytes inside of
- 2048-byte region [ffff8880256fb000, ffff8880256fb800)
+Perhaps should you just export it instead as:
 
-The buggy address belongs to the physical page:
-page:ffffea000095bec0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x256fb
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea000089bb88 ffffea0000727fc8 ffff888011840800
-raw: 0000000000000000 ffff8880256fb000 0000000100000001 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 3133, tgid 3133 (udevd), ts 116180599550, free_ts 116180286761
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
- __alloc_pages_node include/linux/gfp.h:243 [inline]
- kmem_getpages mm/slab.c:1363 [inline]
- cache_grow_begin+0x75/0x360 mm/slab.c:2569
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
- ____cache_alloc mm/slab.c:3018 [inline]
- ____cache_alloc mm/slab.c:3001 [inline]
- __do_cache_alloc mm/slab.c:3246 [inline]
- slab_alloc mm/slab.c:3287 [inline]
- __do_kmalloc mm/slab.c:3684 [inline]
- __kmalloc+0x3a1/0x4a0 mm/slab.c:3695
- kmalloc include/linux/slab.h:605 [inline]
- sk_prot_alloc+0x143/0x290 net/core/sock.c:1976
- sk_alloc+0x36/0x770 net/core/sock.c:2029
- __netlink_create+0x63/0x380 net/netlink/af_netlink.c:647
- netlink_create+0x3ad/0x5e0 net/netlink/af_netlink.c:710
- __sock_create+0x355/0x790 net/socket.c:1515
- sock_create net/socket.c:1566 [inline]
- __sys_socket_create net/socket.c:1603 [inline]
- __sys_socket_create net/socket.c:1588 [inline]
- __sys_socket+0x12f/0x240 net/socket.c:1636
- __do_sys_socket net/socket.c:1649 [inline]
- __se_sys_socket net/socket.c:1647 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1647
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x19/0x4d0 mm/page_alloc.c:3476
- mm_free_pgd kernel/fork.c:737 [inline]
- __mmdrop+0xcb/0x3f0 kernel/fork.c:788
- mmdrop include/linux/sched/mm.h:50 [inline]
- mmdrop_sched include/linux/sched/mm.h:78 [inline]
- finish_task_switch.isra.0+0x6cc/0xc70 kernel/sched/core.c:5087
- context_switch kernel/sched/core.c:5185 [inline]
- __schedule+0xae7/0x52b0 kernel/sched/core.c:6494
- schedule+0xda/0x1b0 kernel/sched/core.c:6570
- schedule_hrtimeout_range_clock+0x343/0x390 kernel/time/hrtimer.c:2296
- ep_poll fs/eventpoll.c:1878 [inline]
- do_epoll_wait+0x12ba/0x1950 fs/eventpoll.c:2256
- __do_sys_epoll_wait fs/eventpoll.c:2268 [inline]
- __se_sys_epoll_wait fs/eventpoll.c:2263 [inline]
- __x64_sys_epoll_wait+0x158/0x270 fs/eventpoll.c:2263
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+"%02x.%06x", sw->nvm->nvm_asm.version, sw->nvm->nvm_asm.date
 
-Memory state around the buggy address:
- ffff8880256faf00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880256faf80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8880256fb000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff8880256fb080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880256fb100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+And move the customer ID into another sysfs file?  I would think this 
+fits pretty well with the existing "vendor" or "device" sysfs file 
+depending upon it's meaning.
+
+If you do end up having a strong reason for deviating the version string 
+format, then I think you should document both what the Intel format is 
+(major.minor) and your format explicitly in 
+Documentation/admin-guide/thunderbolt.rst.
+
+>   	else
+>   		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
+> 
+> @@ -2860,6 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
+>   		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
+> 
+>   		tb_check_quirks(sw);
+> +		tb_nvm_validate(sw, nvm_upgrade);
+> 
+>   		ret = tb_switch_set_uuid(sw);
+>   		if (ret) {
+> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> index 5db76de40cc1..7f20f10352d9 100644
+> --- a/drivers/thunderbolt/tb.h
+> +++ b/drivers/thunderbolt/tb.h
+> @@ -28,6 +28,22 @@
+>   #define NVM_VERSION		0x08
+>   #define NVM_FLASH_SIZE		0x45
+> 
+> +/* ASMedia specific NVM offsets */
+> +#define NVM_Date	0x1c
+> +#define NVM_CUSTOMER_ID	0x28
+> +
+> +/* ASMedia specific validation mode */
+> +#define nvm_upgrade 0
+> +#define nvm_add 1
+> +#define nvm_write 2
+
+As all of these values are ASMedia specific, I think the #defines should 
+have ASMEDIA in the name.  I know Greg mentioned to roll into an enum, 
+and I think you still can but make it something like:
+
+#define ASMEDIA_NVM_DATE	0x1c
+#define ASMEDIA_NVM_CUSTOMER_ID	0x28
+enum asmeda_nvm_ops {
+	ASMEDIA_NVM_UPGRADE = 0,
+	ASMEDIA_NVM_ADD = 1,
+	ASMEDIA_NVM_WRITE = 2,
+};
+
+> +
+> +struct nvm_asmedia {
+> +	u32 date;
+> +	u32 customerID:16;
+> +	u32 version:8;
+> +	u32 reserved:8;
+> +};
+> +
+>   /**
+>    * struct tb_nvm - Structure holding NVM information
+>    * @dev: Owner of the NVM
+> @@ -57,6 +73,7 @@ struct tb_nvm {
+>   	size_t buf_data_size;
+>   	bool authenticating;
+>   	bool flushed;
+> +	struct nvm_asmedia nvm_asm;
+
+Furthermore if you follow my suggestion on how to encode the version you 
+can re-use the 'major' and 'minor' members from this struct and don't 
+need to deviate in any way from it for your data.
+
+* Major would map to your "version".
+* Minor would map to "date".
+
+You could instead then store the customer ID into the switches vendor ID 
+or device ID member (whichever makes more sense).
+
+>   };
+> 
+>   enum tb_nvm_write_ops {
+> @@ -736,6 +753,7 @@ static inline void tb_domain_put(struct tb *tb)
+>   	put_device(&tb->dev);
+>   }
+> 
+> +int tb_nvm_validate(struct tb_switch *sw, unsigned int mode);
+>   struct tb_nvm *tb_nvm_alloc(struct device *dev);
+>   int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+>   int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+> --
+> 2.34.1
+> 
+> 
 
