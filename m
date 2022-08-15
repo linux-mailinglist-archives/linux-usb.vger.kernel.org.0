@@ -2,136 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E84559291B
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 07:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E90592928
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 07:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiHOFg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Aug 2022 01:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S240377AbiHOFpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Aug 2022 01:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiHOFg4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 01:36:56 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE35C12A88;
-        Sun, 14 Aug 2022 22:36:52 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id l4so7844939wrm.13;
-        Sun, 14 Aug 2022 22:36:52 -0700 (PDT)
+        with ESMTP id S230153AbiHOFpX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 01:45:23 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5D55FCE;
+        Sun, 14 Aug 2022 22:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=iwr7XkJX8s+Vxxl+k0pY94n0/ODkYyQntmhI8k+Qn6I=;
-        b=ochcn0nAwaI+uZle8oxq2CMwsp35gCjwnpn4Q/BbMfX+/bVmddN92C70y9YQzJ8bk9
-         3YnkpIGDwNf+olWm8vc3x9RrD+G5wgQGS3MAgJZcxU6YZX1yYOG1exd2hYIaokrfH956
-         Doh55Xz+oDkE4li+WV9kkAnFw41V9U+30TY0TOjXQoGYbM69sLBEpzhqTwYI8mV5fLKW
-         WJRd6GNgOx87Afp83QtX5xz3iCja+EjwBtPFavqCbaH5k75Sbn9DsjVz5fWlEyx4T2Ao
-         CVtuCECiSvCTC8jfwK39UjB58B9BqZ+H5cqPn+MwyU9fzgAhXzV+uxTye3AslKkCpQPX
-         fj2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=iwr7XkJX8s+Vxxl+k0pY94n0/ODkYyQntmhI8k+Qn6I=;
-        b=3c27AUdYXzPTdvTlL7rM1hu7WbEcx4yAk2LlhLqJQWdWZsdlXeVHCG4r1o3Au2UOR2
-         BnH3TMtgXDF7XS1K0c1V2dW/MAcGe+3M/rx5TvWVIf6wLWmV0QNfEl/rRj8VMqci1Cap
-         6dVTOFGPzK1e/NoNOzHdwGyvy8Z81WVQU1yfKmg+mrc3xF4s38sxls50uTReU+XnXpIh
-         F6x7Uv+HxXfrsSvC2/SwrMau46CYS1lT51V/eWacbjjIo1eWcIYEsl1yqsotoQy7auki
-         RnDvDGPnoVhcmPEODnlVaDGLHNVA9wGChhxcXyasptz6ZkzCi6I7W5Viq38eUruhxGsD
-         mlPQ==
-X-Gm-Message-State: ACgBeo2ZdrtC657nry4AhpVWiQP5bN6euIZAyFeNs4it4oy3GTuadAW2
-        TwX3mW9OusQdnKlUZY0UovPcBRVgb4I4gpeuXJ4=
-X-Google-Smtp-Source: AA6agR6zEn89cFvufHE8chEgz2jlIkGasvC8tMwTtwMNFTMfHDOM1OkMTmoUyaytKEWPYis+Q6YeOgEF0rN7lxUcm98=
-X-Received: by 2002:a05:6000:178f:b0:221:7dcb:7cbf with SMTP id
- e15-20020a056000178f00b002217dcb7cbfmr7791842wrg.58.1660541811221; Sun, 14
- Aug 2022 22:36:51 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660542323; x=1692078323;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MN6DZzBy9X27OEYsKBr2tzzbyxhyziDucda9ItSouK4=;
+  b=ZRmm7FzeriUOpGDeBI1QopzXyEZx2E0Jxb2n9awAhxSjhmMUo9Yw3u7l
+   ejSyT8kqUpPMB/ieWUH+v1KsQfW7rRh3C5lSV7hbCJ8rQ+Yvwc355IOfx
+   BlbgYZ54J7fDpuPHk/TAP/BJIwtgcyHd6w/qr+2j7wV12eG0HIPB4kiI9
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.93,237,1654560000"; 
+   d="scan'208";a="119102256"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 05:45:03 +0000
+Received: from EX13D16EUB003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com (Postfix) with ESMTPS id F32032011F5;
+        Mon, 15 Aug 2022 05:44:58 +0000 (UTC)
+Received: from [192.168.12.137] (10.43.162.134) by
+ EX13D16EUB003.ant.amazon.com (10.43.166.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 15 Aug 2022 05:44:52 +0000
+Message-ID: <05dbdf57-e990-465d-e4cc-e83e7f2b697a@amazon.com>
+Date:   Mon, 15 Aug 2022 08:44:42 +0300
 MIME-Version: 1.0
-References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-11-peterwu.pub@gmail.com>
-In-Reply-To: <20220805070610.3516-11-peterwu.pub@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Date:   Mon, 15 Aug 2022 08:36:39 +0300
-Message-ID: <CANhJrGOmFiC42_F+vX9zxg0uP_wdjQbBCPyn6+Zy3DkBycnaGw@mail.gmail.com>
-Subject: Re: [PATCH v7 10/13] power: supply: mt6370: Add MediaTek MT6370
- charger driver
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>, chunfeng.yun@mediatek.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        deller@gmx.de, Andy Shevchenko <andy.shevchenko@gmail.com>,
-        chiaen_wu@richtek.com, alice_chen@richtek.com,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, szunichen@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro
+ Enclaves
+To:     Nico Pache <npache@redhat.com>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <davidgow@google.com>
+CC:     <skhan@linuxfoundation.org>, <dlatypov@google.com>,
+        <brendan.higgins@linux.dev>, <alcioa@amazon.com>,
+        <lexnv@amazon.com>, <YehezkelShB@gmail.com>,
+        <mika.westerberg@linux.intel.com>, <michael.jamet@intel.com>,
+        <andreas.noever@gmail.com>
+References: <20220810234056.2494993-1-npache@redhat.com>
+Content-Language: en-US
+From:   "Paraschiv, Andra-Irina" <andraprs@amazon.com>
+In-Reply-To: <20220810234056.2494993-1-npache@redhat.com>
+X-Originating-IP: [10.43.162.134]
+X-ClientProxiedBy: EX13D18UWC002.ant.amazon.com (10.43.162.88) To
+ EX13D16EUB003.ant.amazon.com (10.43.166.99)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi ChiaEn,
+CgpPbiAxMS4wOC4yMDIyIDAyOjQwLCBOaWNvIFBhY2hlIHdyb3RlOgo+IAo+IEJvdGggdGhlIFVT
+QjQgYW5kIE5pdHJvIEVuY2xhdmVzIEtVTklUIHRlc3RzIGFyZSBub3cgYWJsZSB0byBiZSBjb21w
+aWxlZAo+IGlmIEtVTklUIGlzIGNvbXBpbGVkIGFzIGEgbW9kdWxlLiBUaGlzIGxlYWRzIHRvIGlz
+c3VlcyBpZiBLVU5JVCBpcyBiZWluZwo+IHBhY2thZ2VkIHNlcGFyYXRlbHkgZnJvbSB0aGUgY29y
+ZSBrZXJuZWwgYW5kIHdoZW4gS1VOSVQgaXMgcnVuIGJhcmVtZXRhbAo+IHdpdGhvdXQgdGhlIHJl
+cXVpcmVkIGRyaXZlciBjb21waWxlZCBpbnRvIHRoZSBrZXJuZWwuCj4gCj4gRml4ZXM6IDYzNWRj
+ZDE2ODQ0YiAoInRodW5kZXJib2x0OiB0ZXN0OiBVc2Uga3VuaXRfdGVzdF9zdWl0ZSgpIG1hY3Jv
+IikKPiBGaXhlczogZmU1YmU4MDhmYTZjICgibml0cm9fZW5jbGF2ZXM6IHRlc3Q6IFVzZSBrdW5p
+dF90ZXN0X3N1aXRlKCkgbWFjcm8iKQo+IFNpZ25lZC1vZmYtYnk6IE5pY28gUGFjaGUgPG5wYWNo
+ZUByZWRoYXQuY29tPgo+IC0tLQo+ICAgZHJpdmVycy90aHVuZGVyYm9sdC9LY29uZmlnICAgICAg
+ICAgfCAzICstLQo+ICAgZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL0tjb25maWcgfCAyICst
+Cj4gICAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiAK
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aHVuZGVyYm9sdC9LY29uZmlnIGIvZHJpdmVycy90aHVu
+ZGVyYm9sdC9LY29uZmlnCj4gaW5kZXggZTc2YTZjMTczNjM3Li5mMTJkMGEzZWUzZTIgMTAwNjQ0
+Cj4gLS0tIGEvZHJpdmVycy90aHVuZGVyYm9sdC9LY29uZmlnCj4gKysrIGIvZHJpdmVycy90aHVu
+ZGVyYm9sdC9LY29uZmlnCj4gQEAgLTI5LDggKzI5LDcgQEAgY29uZmlnIFVTQjRfREVCVUdGU19X
+UklURQo+IAo+ICAgY29uZmlnIFVTQjRfS1VOSVRfVEVTVAo+ICAgICAgICAgIGJvb2wgIktVbml0
+IHRlc3RzIiBpZiAhS1VOSVRfQUxMX1RFU1RTCj4gLSAgICAgICBkZXBlbmRzIG9uIChVU0I0PW0g
+fHwgS1VOSVQ9eSkKPiAtICAgICAgIGRlcGVuZHMgb24gS1VOSVQKPiArICAgICAgIGRlcGVuZHMg
+b24gVVNCNCAmJiBLVU5JVD15Cj4gICAgICAgICAgZGVmYXVsdCBLVU5JVF9BTExfVEVTVFMKPiAK
+PiAgIGNvbmZpZyBVU0I0X0RNQV9URVNUCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmlydC9uaXRy
+b19lbmNsYXZlcy9LY29uZmlnIGIvZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL0tjb25maWcK
+PiBpbmRleCBjZTkxYWRkODE0MDEuLmRjNGQyNWMyNjI1NiAxMDA2NDQKPiAtLS0gYS9kcml2ZXJz
+L3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZwo+ICsrKyBiL2RyaXZlcnMvdmlydC9uaXRyb19l
+bmNsYXZlcy9LY29uZmlnCj4gQEAgLTE3LDcgKzE3LDcgQEAgY29uZmlnIE5JVFJPX0VOQ0xBVkVT
+Cj4gCj4gICBjb25maWcgTklUUk9fRU5DTEFWRVNfTUlTQ19ERVZfVEVTVAo+ICAgICAgICAgIGJv
+b2wgIlRlc3RzIGZvciB0aGUgbWlzYyBkZXZpY2UgZnVuY3Rpb25hbGl0eSBvZiB0aGUgTml0cm8g
+RW5jbGF2ZXMiIGlmICFLVU5JVF9BTExfVEVTVFMKPiAtICAgICAgIGRlcGVuZHMgb24gTklUUk9f
+RU5DTEFWRVMgJiYgS1VOSVQKPiArICAgICAgIGRlcGVuZHMgb24gTklUUk9fRU5DTEFWRVMgJiYg
+S1VOSVQ9eQo+ICAgICAgICAgIGRlZmF1bHQgS1VOSVRfQUxMX1RFU1RTCj4gICAgICAgICAgaGVs
+cAo+ICAgICAgICAgICAgRW5hYmxlIEtVbml0IHRlc3RzIGZvciB0aGUgbWlzYyBkZXZpY2UgZnVu
+Y3Rpb25hbGl0eSBvZiB0aGUgTml0cm8KCgpGb3IgdGhlIE5pdHJvIEVuY2xhdmVzIHBhcnQ6CgpS
+ZXZpZXdlZC1ieTogQW5kcmEgUGFyYXNjaGl2IDxhbmRyYXByc0BhbWF6b24uY29tPgoKVGhhbmsg
+eW91LgoKQW5kcmEKCj4gLS0KPiAyLjM2LjEKPiAKCgoKQW1hem9uIERldmVsb3BtZW50IENlbnRl
+ciAoUm9tYW5pYSkgUy5SLkwuIHJlZ2lzdGVyZWQgb2ZmaWNlOiAyN0EgU2YuIExhemFyIFN0cmVl
+dCwgVUJDNSwgZmxvb3IgMiwgSWFzaSwgSWFzaSBDb3VudHksIDcwMDA0NSwgUm9tYW5pYS4gUmVn
+aXN0ZXJlZCBpbiBSb21hbmlhLiBSZWdpc3RyYXRpb24gbnVtYmVyIEoyMi8yNjIxLzIwMDUuCg==
 
-pe 5. elok. 2022 klo 10.09 ChiaEn Wu (peterwu.pub@gmail.com) kirjoitti:
->
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
->
-> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
-> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
-> driver, display bias voltage supply, one general purpose LDO, and the
-> USB Type-C & PD controller complies with the latest USB Type-C and PD
-> standards.
->
-> Add a support for the MediaTek MT6370 Charger driver. The charger module
-> of MT6370 supports High-Accuracy Voltage/Current Regulation,
-> Average Input Current Regulation, Battery Temperature Sensing,
-> Over-Temperature Protection, DPDM Detection for BC1.2.
->
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
->
-> +
-> +#define MT6370_CHG_LINEAR_RANGE(_rfd, _min, _min_sel, _max_sel, _step) \
-> +[_rfd] = {                                                             \
-> +       .min = _min,                                                    \
-> +       .min_sel = _min_sel,                                            \
-> +       .max_sel = _max_sel,                                            \
-> +       .step = _step,                                                  \
-> +}
-
-Just a minor thing but I think this macro could be useful also for
-other drivers. Do you think you could rename it to LINEAR_RANGE_IDX()
-(or some such) and move it to the linear_range.h? That would allow
-also other drivers to use it instead of reinventing the wheel :)
-
-Best Regards
-  -- Matti Vaittinen
-
-
-
----
-
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
