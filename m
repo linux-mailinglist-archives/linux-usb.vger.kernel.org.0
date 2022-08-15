@@ -2,128 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53937592F7D
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 15:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444D059303D
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 15:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242720AbiHONMn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Aug 2022 09:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S229770AbiHONuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Aug 2022 09:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242703AbiHONMk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 09:12:40 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E3713F5A;
-        Mon, 15 Aug 2022 06:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660569157; x=1692105157;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gq/fej4FBaML6o3xDYJDCSHN5i7ykUWDL6Znr89C5Yo=;
-  b=U4qq/P8r+xZyrt7QgDuO/WFeOFVKWKoE07vvbB/zb+JN71Br8cAMK+/2
-   q2dNRkHiNYb+pJG71WZTGctQcxswaARUnPjRq+Cy68OSWW+lag6bUpIcJ
-   MWpq22GCtoS/TV2+HxI/CMLNLgOo9QX701fPkSsqjZ0OKEEPVbLjbSqqk
-   s4jR7jhiPy9crvxkNdBakAijJJTs+pbM5mIPn0mFle0yE5fPDvg/gVW7/
-   VDlahXIeC1OFMpchXW/aEbMPaV4/xg0bA8qImblT5Pjv5r5Qb5fhsJaSy
-   tWsW7NIc91qlJHCf2vuW54BODRJ19kRt2++kR5SWw8E9VEgrRfHUSuNpk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="271725523"
-X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
-   d="scan'208";a="271725523"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 06:12:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
-   d="scan'208";a="609901893"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Aug 2022 06:12:34 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNZtR-00010z-28;
-        Mon, 15 Aug 2022 13:12:33 +0000
-Date:   Mon, 15 Aug 2022 21:12:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Szuying Chen <chensiying21@gmail.com>, gregkh@linuxfoundation.org,
-        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Yd_Tseng@asmedia.com.tw,
-        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
-Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
-Message-ID: <202208152107.P6jLM6te-lkp@intel.com>
-References: <20220815041145.35629-1-chensiying21@gmail.com>
+        with ESMTP id S242693AbiHONuq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 09:50:46 -0400
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 Aug 2022 06:50:42 PDT
+Received: from so254-38.mailgun.net (so254-38.mailgun.net [198.61.254.38])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 5159D64F9
+        for <linux-usb@vger.kernel.org>; Mon, 15 Aug 2022 06:50:41 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=novakom.com.ua; q=dns/txt;
+ s=k1; t=1660571441; x=1660780241; h=Content-Transfer-Encoding:
+ Content-Type: MIME-Version: Message-ID: Date: Subject: Subject: To: To:
+ From: From: Reply-To: Sender: Sender;
+ bh=KzEfijimmTgf/Idw28owWpX3KdmNgHVsmvH1HFKgOuA=; b=qE0Y536UfJWNv0g1H+5UmQnEMEAfGscp2y+5+hAmAM8LlHVQbH4pZM8kT3vCPkUzj3qwt9ko
+ QENW+Qa7rdTaF/iTygR0VFzgOmqOV9LriqwXbm2G/MjYYcPdWa6vhV8vM24kAouS/7IrfBf7
+ Um0OH0P2oDruYqplT3iNRmZt9P8=
+X-Mailgun-Sending-Ip: 198.61.254.38
+X-Mailgun-Sid: WyIwNDczNiIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgIjA5YmRkYyJd
+Received: from qisap.novakom.com.ua (163.94.199.104.bc.googleusercontent.com
+ [104.199.94.163]) by 8ae5b4e8cd00 with SMTP id 62fa4e031406336f29762899
+ (version=TLS1.2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 15 Aug
+ 2022 13:45:39 GMT
+Sender: robert_turner0=johnlewis.com@novakom.com.ua
+Received: from johnlewis.com (ec2-18-130-41-140.eu-west-2.compute.amazonaws.com [18.130.41.140])
+        by qisap.novakom.com.ua (Postfix) with ESMTPSA id A07F51FD90C
+        for <linux-usb@vger.kernel.org>; Mon, 15 Aug 2022 16:23:20 +0300 (EEST)
+Reply-To: robert_turner@johnlewis-trades.com
+From:   John Lewis & Partners <robert_turner0@johnlewis.com>
+To:     linux-usb@vger.kernel.org
+Subject: Procurement  (8/15/2022)
+Date:   15 Aug 2022 23:23:22 +1000
+Message-ID: <20220815223254.51FF8DAE5426F054@johnlewis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815041145.35629-1-chensiying21@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Szuying,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.0-rc1 next-20220815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220815-121330
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220815/202208152107.P6jLM6te-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/de39c1897bc8c08ddfa4d3019c95314e697b7256
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Szuying-Chen/thunderbolt-thunderbolt-add-vendor-s-NVM-formats/20220815-121330
-        git checkout de39c1897bc8c08ddfa4d3019c95314e697b7256
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/thunderbolt/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/thunderbolt/nvm.c:150: warning: Function parameter or member 'mode' not described in 'tb_nvm_validate'
->> drivers/thunderbolt/nvm.c:150: warning: expecting prototype for tb_nvm_vendor_handle(). Prototype was for tb_nvm_validate() instead
+Dear linux-usb
 
 
-vim +150 drivers/thunderbolt/nvm.c
 
-   143	
-   144	/**
-   145	 * tb_nvm_vendor_handle() - support vendor's NVM format
-   146	 * @sw: Thunderbolt switch
-   147	 * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
-   148	 */
-   149	int tb_nvm_validate(struct tb_switch *sw, unsigned int mode)
- > 150	{
-   151		int res, i;
-   152	
-   153		for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
-   154			const struct tb_nvm_id *id = &tb_nvm_vendors[i];
-   155	
-   156			if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
-   157				continue;
-   158	
-   159			 res = id->validate(sw, mode);
-   160		}
-   161		return res;
-   162	}
-   163	
+The world famous brand John Lewis & Partners, is UK's largest=20
+multi-channel retailer with over 126 shops and multiple expansion=20
+in Africa furnished by European/Asian/American products. We are=20
+sourcing new products to attract new customers and also retain=20
+our existing ones, create new partnerships with companies dealing=20
+with different kinds of goods globally.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Your company's products are of interest to our market as we have=20
+an amazing market for your products.Provide us your current=20
+catalog through email to review more. We hope to be able to order=20
+with you and start a long-term friendly, respectable and solid=20
+business partnership. Please we would appreciate it if you could=20
+send us your stock availability via email if any.
+
+
+Our payment terms are 15 days net in Europe, 30 days Net in UK=20
+and 30 days net in Asia/USA as we have operated with over 5297=20
+suppliers around the globe for the past 50 years now. For=20
+immediate response Send your reply to "robert_turner@johnlewis-
+trades.com" for us to be able to treat with care and urgency.
+
+
+Best Regards
+Rob Turner
+Head Of Procurement Operations
+John Lewis & Partners.
+robert_turner@johnlewis-trades.com
+Tel: +44-7451-274090
+WhatsApp: +447497483925
+www.johnlewis.com
+REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN
