@@ -2,131 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48E7593153
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 17:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBD859334B
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Aug 2022 18:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiHOPKx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Aug 2022 11:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S231342AbiHOQc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Aug 2022 12:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241804AbiHOPKg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 11:10:36 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id ECF2B13D6E
-        for <linux-usb@vger.kernel.org>; Mon, 15 Aug 2022 08:10:34 -0700 (PDT)
-Received: (qmail 103944 invoked by uid 1000); 15 Aug 2022 11:10:33 -0400
-Date:   Mon, 15 Aug 2022 11:10:33 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Rondreis <linhaoguo86@gmail.com>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: possible recursive locking detected in kernel v5.18
-Message-ID: <Yvph6XfdLXN/6XCQ@rowland.harvard.edu>
-References: <CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com>
- <YvU1HSa6ipoWc4BA@rowland.harvard.edu>
- <CAB7eexK5EcNsSUJVwE0hfZ4bM6qMnsKAZSnz6QGdyFZGwVK3VQ@mail.gmail.com>
+        with ESMTP id S229770AbiHOQcz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Aug 2022 12:32:55 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DC71658B
+        for <linux-usb@vger.kernel.org>; Mon, 15 Aug 2022 09:32:54 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-32269d60830so86081107b3.2
+        for <linux-usb@vger.kernel.org>; Mon, 15 Aug 2022 09:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=nHtY/kfAASxM/yBQE+FWm+dR1lD5RcqE0eO6UIVa5ewWXWFLYL8k8Mo+YqHLqMeAoE
+         SgW5tNg+5aIbX3J0k+uu3PyU6JgTcAL/RUlutfFaskSG9qyHdKB8Dn1W8V/kxsgvTAGa
+         ejXbhO7QndCz4+bUXVB/ZY2QM3+6bEKFMukbVMhWO/z/oZX7jnk0+S341n/I2XRN7ifR
+         6TtpcfvZoiVwc1XdNx/ALugyF3Nfs/DozJLgALPCgImVMoaIVzZld+iYkBCPwBAHWFFi
+         3qy+uu9EkLdHG059Bx1MXkof7Z3b8uv3NGrsYmqzu5POwnIL7pmbxrkuuq2+50u31/GS
+         Oybg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=xgkV9UoqnHk+fELdjrCWnN6NtrC3yPn7moUbezR7vool9GdW5UrvXRT3IjEBrAXaKd
+         0xob7cbG3M9z+dYXUyChT8KbeQmQu/SriodEtaRR/VIM4LorrYVVxjoHa82GPsoxQJgm
+         jbDwewy2cjY03KkbxEI0+blC5IlNH2Pk3UwLfPS2/8ecQh1hWw9iGVPwo93livo2bp2x
+         dBGH2Ukw62V5b0AslbeKWCwlGQ3avpD7D3oXLFUJZcMpL9B4W6KXEgp+U/fDOnYcS1qQ
+         AMYxT0ZWI7343EXc0KcSQsBqDwaZ0v+kLMCesJ+zjBDSDptbI/Arkh7WSyHoJA0Sp5fu
+         qfsA==
+X-Gm-Message-State: ACgBeo0+PO3e/9/jdX1+pWpFARnO2aXdV3N1z9evXn/CgzKy2LgMOQRd
+        UZvjvdsREknMTaHS25T2KHR9iVlyMEyoBQWVILc=
+X-Google-Smtp-Source: AA6agR5mxJjotp7y9zNBAjq8Z0JWVz2etij++W3V91TUrHK6n8hnCceOc64ZYFIymewIYvtxHtzi5Wk/IL+R9kMO5sE=
+X-Received: by 2002:a25:d0c:0:b0:687:d754:28d0 with SMTP id
+ 12-20020a250d0c000000b00687d75428d0mr5462235ybn.206.1660581173862; Mon, 15
+ Aug 2022 09:32:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB7eexK5EcNsSUJVwE0hfZ4bM6qMnsKAZSnz6QGdyFZGwVK3VQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6919:258a:b0:ce:9327:4617 with HTTP; Mon, 15 Aug 2022
+ 09:32:53 -0700 (PDT)
+Reply-To: kl145177@gmail.com
+From:   Ken Lawson <tannermichael605@gmail.com>
+Date:   Mon, 15 Aug 2022 16:32:53 +0000
+Message-ID: <CA+DEpxkWhqq6tu5pvK+Nq3Cq5yq_00ZqJ20hy2Rvo0GyRdOK1Q@mail.gmail.com>
+Subject: Did you receive the email I sent for you yesterday morning,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1130 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4997]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [kl145177[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tannermichael605[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [tannermichael605[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 10:56:08AM +0800, Rondreis wrote:
-> Hi, after adding the patch, this bug seems unfixed, with the following
-> console output: https://pastebin.com/pUUitSJ8
-> 
-> Alan Stern <stern@rowland.harvard.edu> 于2022年8月12日周五 00:58写道：
-> >
-> > On Thu, Aug 11, 2022 at 10:06:37AM +0800, Rondreis wrote:
-> > > Hello,
-> > >
-> > > When fuzzing the Linux kernel driver v5.18.0, the following crash was triggered.
-
-> > > It seems that there is a deadlock happened in function usb_stor_post_reset
-> > >
-> > > The crash report is as follow:
-> > >
-> > > ```
-> > > usb 7-1: r8712u: Loading firmware from "rtlwifi/rtl8712u.bin"
-> > > ============================================
-> > > WARNING: possible recursive locking detected
-> > > 5.18.0 #3 Not tainted
-> > > --------------------------------------------
-> > > kworker/1:3/1205 is trying to acquire lock:
-> > > ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
-> > > usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
-> > >
-> > > but task is already holding lock:
-> > > ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
-> > > usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
-
-Rondreis, can you please try testing the patch below instead of the one 
-I sent you last week?
-
-Alan Stern
-
-
-
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -6048,6 +6048,11 @@ re_enumerate:
-  * the reset is over (using their post_reset method).
-  *
-  * Return: The same as for usb_reset_and_verify_device().
-+ * However, if a reset is already in progress (for instance, if a
-+ * driver doesn't have pre_ or post_reset() callbacks, and while
-+ * being unbound or re-bound during the ongoing reset its disconnect()
-+ * or probe() routine tries to perform a second, nested reset), the
-+ * routine returns -EINPROGRESS.
-  *
-  * Note:
-  * The caller must own the device lock.  For example, it's safe to use
-@@ -6081,6 +6086,10 @@ int usb_reset_device(struct usb_device *
- 		return -EISDIR;
- 	}
- 
-+	if (udev->reset_in_progress)
-+		return -EINPROGRESS;
-+	udev->reset_in_progress = 1;
-+
- 	port_dev = hub->ports[udev->portnum - 1];
- 
- 	/*
-@@ -6145,6 +6154,7 @@ int usb_reset_device(struct usb_device *
- 
- 	usb_autosuspend_device(udev);
- 	memalloc_noio_restore(noio_flag);
-+	udev->reset_in_progress = 0;
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(usb_reset_device);
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -575,6 +575,7 @@ struct usb3_lpm_parameters {
-  * @devaddr: device address, XHCI: assigned by HW, others: same as devnum
-  * @can_submit: URBs may be submitted
-  * @persist_enabled:  USB_PERSIST enabled for this device
-+ * @reset_in_progress: the device is being reset
-  * @have_langid: whether string_langid is valid
-  * @authorized: policy has said we can use it;
-  *	(user space) policy determines if we authorize this device to be
-@@ -661,6 +662,7 @@ struct usb_device {
- 
- 	unsigned can_submit:1;
- 	unsigned persist_enabled:1;
-+	unsigned reset_in_progress:1;
- 	unsigned have_langid:1;
- 	unsigned authorized:1;
- 	unsigned authenticated:1;
 
