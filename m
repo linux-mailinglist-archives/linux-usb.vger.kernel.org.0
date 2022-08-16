@@ -2,53 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBF059588D
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Aug 2022 12:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0583595867
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Aug 2022 12:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiHPKh5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Aug 2022 06:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S234767AbiHPKdt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Aug 2022 06:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234832AbiHPKhF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Aug 2022 06:37:05 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0288FF47
-        for <linux-usb@vger.kernel.org>; Tue, 16 Aug 2022 01:39:01 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3238ce833beso97038657b3.11
-        for <linux-usb@vger.kernel.org>; Tue, 16 Aug 2022 01:39:00 -0700 (PDT)
+        with ESMTP id S234456AbiHPKdX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Aug 2022 06:33:23 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B38B33419
+        for <linux-usb@vger.kernel.org>; Tue, 16 Aug 2022 01:39:13 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id z32-20020a631920000000b0042903cb8dfcso1983134pgl.5
+        for <linux-usb@vger.kernel.org>; Tue, 16 Aug 2022 01:39:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=EOnmlL6LsfTodQR77oJXoAN0zndUFH29ZZQq5z6fShA=;
-        b=ksnZOtVsQpnTNhmqOOPXxrs5IqXuxFIcTmOFlk76hKpPDUtlleKXGAwWUDkdGaCN9e
-         4cwxOGqLMomyIFchTf6OCwasMmAYp7f+rYosLs3c8G68lm1jauSK9+6mk0jyBSq7LtRt
-         MkCqC2uIgKfaj9345ubs0HF72kvhC9yf4ee9prhuWM/J9ydPqweIchGBL7z6CWavmDRg
-         WZTUFEmHFFL/MudmIYZ2YD8LOPSN04hvOCwAPrfLNcCep7Z+BVZ6mcrg6zdgJL/hS+Zl
-         LNaobAblgKvpd01LAhNJRnRpbfxpSfI59fdkEFpWCYJE/+jbDmN5uzgBowPXQMTVLKQd
-         qsNw==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc;
+        bh=bB93z6epEEktgqWPKqCS2yAkD9gaQQnHEzx7X0wo89k=;
+        b=LBUekVZbKwjYB6iREXgnr6/dM7aUHkeeUVgIKavekxJRHMpaR5GmbH36Wo7f35PhMr
+         qFed3KzKfZEhK6wbXZCuUJg0wj88/OsxPnGsu7Mx+2hcwgoKib/YEaqtlEdOJRIXaQ6N
+         ujLmjUERqv4Xqmb0I3ospKzIO6NkBRgvK1ufjI/hB9DWc3yFWOKtGv1lGx7R2QFL7xmT
+         hwx9srMqjWHG4F+T+cXDyL6WffHLHty/vt9nTIa/c7DQuVGJsXphgdSSK5ebrBEIB9Ve
+         FCnGXHkRgYzC8TNkBtKXABrWNZYQE69QH2JUsIBGNuav6Ow3IKnI7JLSCIPZSgmNi9e5
+         FtQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=EOnmlL6LsfTodQR77oJXoAN0zndUFH29ZZQq5z6fShA=;
-        b=EUmngXHZqwXPz4BQsWxuMpTSILCE4SHFcTVyljJqvQhKu1c8fjQqP4e/iZDlX+NExK
-         XoAgWH5+k63C8BHfi5POX5L36GeYXC7T9VVCtqzLPfXnKnGdzse3GckTTot5BYW9f1OX
-         QTGgrihTRMhrGmQe3hnu2edNWECiTX+KRo1Cf3tRXaoLCCs2SeEAEljcpMCo5trBGwTv
-         FwsXbclyOCo70XUOD4TKCfC/QCHxHh39R/7UUw0daNYL0LXKhbk5U3LZLb0zLUxjpTPN
-         MsOsSpEs9tuZ6PzI35NOyH5N8IQ5cnxqJirAT0ZydUXADdcZCCFcyQcVStl3/32ckWmJ
-         oYqg==
-X-Gm-Message-State: ACgBeo2t2uSn+W+ADhiwiXV7uGJ8ktMpcLZSaQuLPwo+4hAmEfbIcEEG
-        Bd0JPgplDNJ7WHi9vUebmz/6c6aAgvA=
-X-Google-Smtp-Source: AA6agR66iqEt6akaam8vWCgoFbvY0jmRCa/rYuE7K5o6nnTQZ9Aic9AaluOidN0pnHQF8W3edRxwLGTTlNo=
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=bB93z6epEEktgqWPKqCS2yAkD9gaQQnHEzx7X0wo89k=;
+        b=CISxbLn9bixvHL2Bwf0EzHibd/CjL2aYsG/awkROQpfAfKStH8HtTo0ocueP5mRqgu
+         3ODg14r4W/T31pwFVIGQFeL8j/WLOOUxLJdLHo9QXv+cuIou52RmAVbwGRl+LDQVTklm
+         cNyvwNX8P5t5hTUOW3Rgn3+n6j5EChWGvWqthB8/llujC+zlPagtvhtNRFZR64QD+XPu
+         9QAndbDv6yyBXRPqS6nwX2k2hbWruQMYODx/dtxQ5cX4+qDWc19ZNKosV21zkoF069wJ
+         7NtHQnJ/ZJpj9ajBwayEohe+wJcTvORLb0vIGmDV680ECzn2pFAb3dWaO5Cn3iLJzRgK
+         CMKQ==
+X-Gm-Message-State: ACgBeo0X/dA5Kgmq/+lVv/L251xV6CownJ3cN+r/jzCuPWn8qKh20kq+
+        InLxDXAo3n8p9S4qtEDIl5GWG60xWl0=
+X-Google-Smtp-Source: AA6agR54uF8KKRbV8DX/kPh89GDgFvO2Xmrnjc3ibq1RSfDiZt18v2MUXc+jMD8Q35DJXDMBoxLKFfJ0VuM=
 X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:5bfb:2ce6:1e1b:f496])
- (user=raychi job=sendgmr) by 2002:a81:ae55:0:b0:31f:6630:9736 with SMTP id
- g21-20020a81ae55000000b0031f66309736mr16694413ywk.346.1660639140284; Tue, 16
- Aug 2022 01:39:00 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 16:38:52 +0800
-Message-Id: <20220816083854.1491886-1-raychi@google.com>
+ (user=raychi job=sendgmr) by 2002:a05:6a00:10ca:b0:4f7:5af4:47b6 with SMTP id
+ d10-20020a056a0010ca00b004f75af447b6mr20152772pfu.6.1660639152696; Tue, 16
+ Aug 2022 01:39:12 -0700 (PDT)
+Date:   Tue, 16 Aug 2022 16:38:54 +0800
+In-Reply-To: <20220816083854.1491886-1-raychi@google.com>
+Message-Id: <20220816083854.1491886-3-raychi@google.com>
 Mime-Version: 1.0
+References: <20220816083854.1491886-1-raychi@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 0/2] Provide a hook to check port init status
+Subject: [PATCH 2/2] usb: xhci: add check_init_status hook support
 From:   Ray Chi <raychi@google.com>
 To:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
         stern@rowland.harvard.edu
@@ -66,21 +69,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently, only usbcore knows port init status even if the result
-is bad, so it will keep doing USB enumeration and other drivers can't
-do anything. Add the hook to let other drivers know the status and do
-error handling.
+In general, xHCI didn't do anything for port initialization. However,
+there are some requirement or limitation on various platforms, so
+vendors need to do some error handlings if the device connected to a
+broken USB accessory.
 
-Ray Chi (2):
-  usb: core: add a hook to check port init status
-  usb: xhci: add check_init_status hook support
+This patch also add the hook to xhci_driver_overrides so that vendors
+can add their specific protection easily if needed.
 
- drivers/usb/core/hub.c  | 14 ++++++++++++++
+Signed-off-by: Ray Chi <raychi@google.com>
+---
  drivers/usb/host/xhci.c | 17 +++++++++++++++++
  drivers/usb/host/xhci.h |  1 +
- include/linux/usb/hcd.h |  8 ++++++++
- 4 files changed, 40 insertions(+)
+ 2 files changed, 18 insertions(+)
 
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 65858f607437..f237af9d6e2e 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4358,6 +4358,20 @@ static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
+ 	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
+ }
+ 
++/*
++ * The function could get the status of port initialization.
++ */
++static int xhci_check_init_status(struct usb_hcd *hcd, struct usb_device *udev, int r)
++{
++	/*
++	 * In general, this function is not necessory. Some platforms may
++	 * need doing error handling when the port initialization takes a
++	 * long time to do. The device can use the override callback to
++	 * do specific handlings.
++	 */
++	return 0;
++}
++
+ /*
+  * Transfer the port index into real index in the HW port status
+  * registers. Caculate offset between the port's PORTSC register
+@@ -5455,6 +5469,7 @@ static const struct hc_driver xhci_hc_driver = {
+ 	.enable_device =	xhci_enable_device,
+ 	.update_hub_device =	xhci_update_hub_device,
+ 	.reset_device =		xhci_discover_or_reset_device,
++	.check_init_status =	xhci_check_init_status,
+ 
+ 	/*
+ 	 * scheduling support
+@@ -5503,6 +5518,8 @@ void xhci_init_driver(struct hc_driver *drv,
+ 			drv->check_bandwidth = over->check_bandwidth;
+ 		if (over->reset_bandwidth)
+ 			drv->reset_bandwidth = over->reset_bandwidth;
++		if (over->check_init_status)
++			drv->check_init_status = over->check_init_status;
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(xhci_init_driver);
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 1960b47acfb2..33ce873236e9 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1944,6 +1944,7 @@ struct xhci_driver_overrides {
+ 			     struct usb_host_endpoint *ep);
+ 	int (*check_bandwidth)(struct usb_hcd *, struct usb_device *);
+ 	void (*reset_bandwidth)(struct usb_hcd *, struct usb_device *);
++	int (*check_init_status)(struct usb_hcd *hcd, struct usb_device *udev, int r);
+ };
+ 
+ #define	XHCI_CFC_DELAY		10
 -- 
 2.37.1.595.g718a3a8f04-goog
 
