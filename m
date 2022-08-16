@@ -2,155 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1854595F75
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Aug 2022 17:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D5A595FF8
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Aug 2022 18:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236284AbiHPPjH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Aug 2022 11:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S235993AbiHPQPJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Aug 2022 12:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236119AbiHPPiU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Aug 2022 11:38:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4276514034;
-        Tue, 16 Aug 2022 08:37:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE22C611EB;
-        Tue, 16 Aug 2022 15:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10ACCC433C1;
-        Tue, 16 Aug 2022 15:37:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660664272;
-        bh=V49dgqu/RAkWRS3001yah3EjBpkjCkpA7y5OPLHrM9Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HM6nA176MfOgvwM4aYzgxrXtkZNsyPzieWFtOM7wfa7Y6HbUs11ekwRDWDVFGGXGw
-         27V34YIPzdRIqrOl8k53roAb4tMeD5UDDV3RvxJs4/nEufjpEz3ytpRzUlb75UoX7f
-         SROELHAJ8Mbne9KSmP6mgvraDA/lHVPnonXJXTuB2h/9bkscGKgJ5nrdhIZtDpIjEo
-         kBNP11wnL1imt6wjN99dVad9lNWWj9FE1BCqH6GH4kVXnOR+yujHEy4YqWd9AVAx0H
-         WxHwbprxicMp3T+ovVm4DD6URYmFQxUHfQ68vJnbup2ojgM6/H6z1HwLET+nn0RO97
-         fcXe1fZzFaopQ==
-Received: by mail-ua1-f41.google.com with SMTP id s18so4160730uac.10;
-        Tue, 16 Aug 2022 08:37:51 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0ajzHlMuRIr+AeGlSE5R8WgtFK0ktXaZCMoN2zXAc19FX9wQp2
-        +PVs+UzAGu/wzazL6+zG2WxB/szrdxviIa7vtw==
-X-Google-Smtp-Source: AA6agR6P6tx9Y0Tb4qmdIdqjNQDONt+9JZtqem7UsItHKI1hbGP9NpYbZ5qL4HTr0AbwT9oos2Tvh2M0MtkHzHMsHgQ=
-X-Received: by 2002:ab0:2b06:0:b0:384:c4af:107c with SMTP id
- e6-20020ab02b06000000b00384c4af107cmr8599136uar.77.1660664270971; Tue, 16 Aug
- 2022 08:37:50 -0700 (PDT)
+        with ESMTP id S235888AbiHPQPE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Aug 2022 12:15:04 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC5B606B6
+        for <linux-usb@vger.kernel.org>; Tue, 16 Aug 2022 09:14:59 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z20so14100909edb.9
+        for <linux-usb@vger.kernel.org>; Tue, 16 Aug 2022 09:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=croix-rouge-fr.20210112.gappssmtp.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=IwJY805e5ibf53/jFjH/AJK2o+b+iwdmUySYuPRA6GM=;
+        b=EphVtzQnNbhIRnuGeq6wu/LKICtxVFAUeBkHWk1cy8I1K6QRsiv3jowJvIlvdazPuI
+         eV/osyzmuyhjtzbtZ/1LojP1GkITm9i/XTsm5Py2+IV1hSIHO6sblclSjnhA9TU098OT
+         VjTLNGahfxvUcF5hNY/lz4DsyHLgrSNqCpC+7VA1W+ZAMn1iusHKR8YTQQW5dmuGfFyv
+         1KQuXDb9VJTS1GUS4nO9nC7Lm8nSmItr2+xwt9FiV3TkA7+gPW06x6kVCtJjGoFLeeF3
+         1T0zxb636Z2Zecn40Oi5jA9Fp29/dGGuJKjs/LWMOh9CMwdIYb6o30152w8lXsWU2BVS
+         /mvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=IwJY805e5ibf53/jFjH/AJK2o+b+iwdmUySYuPRA6GM=;
+        b=hDHT2l17+yn29hNn+XicK9TOpNaRg2GY/HBKIB/jUWrFqs3PZfxS37Out/aNG1PhxK
+         hub77SHYQQbfWnxR7Kep5GnJoD2eIANrLwdyVl8yMVG6MiD5RCsakQ5+F0Uw8wHF7Orq
+         y/wkXIq3x3USMrt9Er1AHceREpFthmkJHlxsbXs3XryYPl/zd16726/DZQVN/ICY3rUN
+         geJ2cF9wyIfjvaUupOho5NtCa8Mw6CMx42xt4UMEa/sVntwlrh3tmNu9+8UY9M+7B2lV
+         VRzwWiDI7RHT3By6fkDNLBRGbemAYst6SZ/lLSNZU72akMY04WeWS9kgleLOYGH1rehS
+         /xvA==
+X-Gm-Message-State: ACgBeo3j6R2bNn1VQlOq266hJ8gn1wRdSce6NZTG9vpNdH8SW60BVFHw
+        EP77+5YXUGWFJ63LzKRa0qwFt/Nb3G5RSsIiGTsc+G51b1O+gw==
+X-Google-Smtp-Source: AA6agR4cmH6Q5qQoe8xQRk5OG/S/RKElwaNLwm91GCslsF+cVkm2TAHofppf+4+zQ8FqXvKGutd/8Q1CW07ih7n40pM=
+X-Received: by 2002:a05:6402:293:b0:43d:3936:66b0 with SMTP id
+ l19-20020a056402029300b0043d393666b0mr19081057edv.404.1660666497863; Tue, 16
+ Aug 2022 09:14:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220805070610.3516-1-peterwu.pub@gmail.com> <20220805070610.3516-7-peterwu.pub@gmail.com>
- <YvJdpq0MWNPQZw5c@google.com>
-In-Reply-To: <YvJdpq0MWNPQZw5c@google.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 16 Aug 2022 09:37:39 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJriSbJvejCi7n50T-NaOW+GF8yb6Fi4m-GvUkggf-9kw@mail.gmail.com>
-Message-ID: <CAL_JsqJriSbJvejCi7n50T-NaOW+GF8yb6Fi4m-GvUkggf-9kw@mail.gmail.com>
-Subject: Re: [PATCH v7 06/13] dt-bindings: mfd: Add MediaTek MT6370
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee@kernel.org>
+From:   Thierry Guibert <thierry.guibert@croix-rouge.fr>
+Date:   Tue, 16 Aug 2022 18:14:21 +0200
+Message-ID: <CAEzRux_E+EAEkdr8RVGq4BTJ87G75fwXf4gveLTmk_P3nxizvw@mail.gmail.com>
+Subject: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
+To:     oneukum@suse.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 7:14 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Fri, 05 Aug 2022, ChiaEn Wu wrote:
->
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add MediaTek MT6370 binding documentation.
-> >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > ---
-> >  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
-> >  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
-> >  2 files changed, 298 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
->
-> Applied, thanks.
+From cf6471caeee7ac7d92bfa4ceaaa16ab461846e65 Mon Sep 17 00:00:00 2001
+From: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Date: Tue, 16 Aug 2022 00:46:01 +0200
+Subject: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
 
-Without the backlight schema applied, this is the result:
+Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
+enabling the AT serial port.
+The Vendor Id is 0x0C26
+The Product ID is 0x0020
 
-./Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml: Unable
-to find schema file matching $id:
-http://devicetree.org/schemas/leds/backlight/mediatek,mt6370-backlight.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: backlight: False schema does not allow {'compatible':
-['mediatek,mt6370-backlight'], 'mediatek,bled-channel-use': b'\x0f'}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: charger: False schema does not allow {'compatible':
-['mediatek,mt6370-charger'], 'interrupts': [[48], [68], [6]],
-'interrupt-names': ['attach_i', 'uvp_d_evt', 'mivr'], 'io-channels':
-[[1, 5]], 'usb-otg-vbus-regulator': {'regulator-name':
-['mt6370-usb-otg-vbus'], 'regulator-min-microvolt': [[4350000]],
-'regulator-max-microvolt': [[5800000]], 'regulator-min-microamp':
-[[500000]], 'regulator-max-microamp': [[3000000]], 'phandle': [[2]]}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: tcpc: False schema does not allow {'compatible':
-['mediatek,mt6370-tcpc'], 'interrupts-extended': [[4294967295, 4, 8]],
-'connector': {'compatible': ['usb-c-connector'], 'label': ['USB-C'],
-'vbus-supply': [[2]], 'data-role': ['dual'], 'power-role': ['dual'],
-'try-power-role': ['sink'], 'source-pdos': [[570527844]], 'sink-pdos':
-[[570527944]], 'op-sink-microwatt': [[10000000]], 'ports':
-{'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg':
-[[0]], 'endpoint': {'remote-endpoint': [[4294967295]]}}, 'port@1':
-{'reg': [[1]], 'endpoint': {'remote-endpoint': [[4294967295]]}},
-'port@2': {'reg': [[2]], 'endpoint': {'remote-endpoint':
-[[4294967295]]}}}}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: indicator: False schema does not allow {'compatible':
-['mediatek,mt6370-indicator'], '#address-cells': [[1]], '#size-cells':
-[[0]], 'multi-led@0': {'reg': [[0]], 'function': ['indicator'],
-'color': [[9]], 'led-max-microamp': [[24000]], '#address-cells':
-[[1]], '#size-cells': [[0]], 'led@0': {'reg': [[0]], 'color': [[1]]},
-'led@1': {'reg': [[1]], 'color': [[2]]}, 'led@2': {'reg': [[2]],
-'color': [[3]]}}, 'led@3': {'reg': [[3]], 'function': ['indicator'],
-'color': [[0]], 'led-max-microamp': [[6000]]}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-pmic@34: flashlight: False schema does not allow {'compatible':
-['mediatek,mt6370-flashlight'], '#address-cells': [[1]],
-'#size-cells': [[0]], 'led@0': {'reg': [[0]], 'led-sources': [[0]],
-'function': ['flash'], 'color': [[0]], 'function-enumerator': [[1]],
-'led-max-microamp': [[200000]], 'flash-max-microamp': [[500000]],
-'flash-max-timeout-us': [[1248000]]}, 'led@1': {'reg': [[1]],
-'led-sources': [[1]], 'function': ['flash'], 'color': [[0]],
-'function-enumerator': [[2]], 'led-max-microamp': [[200000]],
-'flash-max-microamp': [[500000]], 'flash-max-timeout-us':
-[[1248000]]}}
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
-backlight: mediatek,bled-channel-use: b'\x0f' is not of type 'object',
-'array', 'boolean', 'null'
- From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
+Output of lsusb :
+Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
+Couldn't open device, some information will be missing
+Device Descriptor:
+ bLength                18
+ bDescriptorType         1
+ bcdUSB               2.00
+ bDeviceClass            2 Communications
+ bDeviceSubClass         0
+ bDeviceProtocol         0
+ bMaxPacketSize0        64
+ idVendor           0x0c26 Prolific Technology Inc.
+ idProduct          0x0020
+ bcdDevice            0.00
+ iManufacturer           1 ICOM Inc.
+ iProduct                2 ICOM Radio
+ iSerial                 3 *obfuscated*
+ bNumConfigurations      1
+ Configuration Descriptor:
+   bLength                 9
+   bDescriptorType         2
+   wTotalLength       0x0030
+   bNumInterfaces          2
+   bConfigurationValue     1
+   iConfiguration          0
+   bmAttributes         0xc0
+     Self Powered
+   MaxPower                0mA
+   Interface Descriptor:
+     bLength                 9
+     bDescriptorType         4
+     bInterfaceNumber        0
+     bAlternateSetting       0
+     bNumEndpoints           1
+     bInterfaceClass         2 Communications
+     bInterfaceSubClass      2 Abstract (modem)
+     bInterfaceProtocol      1 AT-commands (v.25ter)
+     iInterface              0
+     Endpoint Descriptor:
+       bLength                 7
+       bDescriptorType         5
+       bEndpointAddress     0x83  EP 3 IN
+       bmAttributes            3
+         Transfer Type            Interrupt
+         Synch Type               None
+         Usage Type               Data
+       wMaxPacketSize     0x0040  1x 64 bytes
+       bInterval              12
+   Interface Descriptor:
+     bLength                 9
+     bDescriptorType         4
+     bInterfaceNumber        1
+     bAlternateSetting       0
+     bNumEndpoints           2
+     bInterfaceClass        10 CDC Data
+     bInterfaceSubClass      0
+     bInterfaceProtocol      0
+     iInterface              0
+     Endpoint Descriptor:
+       bLength                 7
+       bDescriptorType         5
+       bEndpointAddress     0x82  EP 2 IN
+       bmAttributes            2
+         Transfer Type            Bulk
+         Synch Type               None
+         Usage Type               Data
+       wMaxPacketSize     0x0200  1x 512 bytes
+       bInterval               0
+     Endpoint Descriptor:
+       bLength                 7
+       bDescriptorType         5
+       bEndpointAddress     0x02  EP 2 OUT
+       bmAttributes            2
+         Transfer Type            Bulk
+         Synch Type               None
+         Usage Type               Data
+       wMaxPacketSize     0x0200  1x 512 bytes
+       bInterval               0
+
+Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+---
+drivers/usb/class/cdc-acm.c | 4 ++++
+1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 9b9aea24d58c..091fcfac3717 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1813,6 +1813,10 @@ static const struct usb_device_id acm_ids[] = {
+       { USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
+       .driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
+       },
++       { USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
++       .driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
++       },
++
+
+       { USB_DEVICE(0x2912, 0x0001), /* ATOL FPrint */
+       .driver_info = CLEAR_HALT_CONDITIONS,
+--
+2.37.2
