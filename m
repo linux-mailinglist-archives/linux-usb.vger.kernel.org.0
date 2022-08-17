@@ -2,88 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E907A5978FA
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Aug 2022 23:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3691C597952
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Aug 2022 23:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241533AbiHQVep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Aug 2022 17:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        id S242360AbiHQVwY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Aug 2022 17:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiHQVeo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Aug 2022 17:34:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18876C762
-        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 14:34:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DEA76160D
-        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 21:34:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EE81AC43143
-        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 21:34:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660772083;
-        bh=m05/y0bTWwbwuNS5HI4Vfx0zw5ThonssAfkMxGbclJU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=KZ0LcZxhI5Ec+FyzCIY/W1IuR/Amsq7wqoHbGzpk/rMK8Q5yNHd3q+dBmsK/Wl6NH
-         oK7zKqignniYZd212YhTEtsrRWCVayx3OvxKo1wldgBI6HBEFg6uVipRK8rE/lgiBd
-         enBrqqkdlVqOjyycohISeWbwiahCwGQh40oBvbuJ+0iE64HuqEVBUZ1Ql3lCHrReIB
-         Po755mQRlVkV0MkmIjzThs6poM1Z7xw8yXVuYGdeKhq1yN8olFL4JJmsOgDe1L/4G6
-         zSPVD7AnckDpk6qlKz5GbOoiAgeH6gUGKRgYX2oB9aMVyqB3ZaNxXuW+gb01yl+MHc
-         VEo0KK5iGu+CA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id DD38FC433E4; Wed, 17 Aug 2022 21:34:42 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Wed, 17 Aug 2022 21:34:42 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: grzegorz.alibozek@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-KUEqsQw68x@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S233592AbiHQVwX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Aug 2022 17:52:23 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1996531EE9
+        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 14:52:21 -0700 (PDT)
+Received: (qmail 174949 invoked by uid 1000); 17 Aug 2022 17:52:21 -0400
+Date:   Wed, 17 Aug 2022 17:52:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [USB] 3a2b1036e8: WARNING:possible_recursive_locking_detected
+Message-ID: <Yv1jFcPocWBkgL4v@rowland.harvard.edu>
+References: <20220817070712.GA78093@inn2.lkp.intel.com>
+ <113d66dd-b2b5-fa2e-fbd3-53c5a5666867@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <113d66dd-b2b5-fa2e-fbd3-53c5a5666867@intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+On Wed, Aug 17, 2022 at 04:43:01PM +0800, kernel test robot wrote:
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-11):
+> 
+> commit: 3a2b1036e8951328b7e59517408897c700a74871 ("USB: gadget: Fix use-after-free Read in usb_udc_uevent()")
+> https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
 
---- Comment #21 from grzegorz.alibozek@gmail.com ---
-I don't know if it's related:
+How did you come by that combination?  The "USB: gadget: Fix 
+use-after-free Read in usb_udc_uevent()" patch is not supposed to be 
+applied to the 5.4.y kernel series.  It is only supposed to be applied 
+to kernels which have [a backported version of] commit fc274c1e9973 
+("USB: gadget: Add a new bus for gadgets").
 
-sie 17 18:06:54 kernel: ucsi_acpi USBC000:00: ucsi_handle_connector_change:
-GET_CONNECTOR_STATUS failed (-110)
-sie 17 18:06:54 kernel: ucsi_acpi USBC000:00: PPM init failed (-110)
+It's not surprising that you found an issue, applying that patch to a 
+kernel where it doesn't belong.
 
-on 5.19.2-arch1-1
+Alan Stern
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> 
+> in testcase: boot
+> 
+> on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> 
+> 
+> [   11.163772][    T1] WARNING: possible recursive locking detected
+> [   11.163947][    T1] 5.4.210-00049-g3a2b1036e895 #2 Not tainted
+> [   11.163947][    T1] --------------------------------------------
+> [   11.163947][    T1] swapper/1 is trying to acquire lock:
+> [ 11.163947][ T1] c1d981d8 (udc_lock){+.+.}, at: usb_udc_uevent (core.c:?)
+> [   11.163947][    T1]
+> [   11.163947][    T1] but task is already holding lock:
+> [ 11.163947][ T1] c1d981d8 (udc_lock){+.+.}, at: usb_add_gadget_udc_release (??:?)
+> [   11.163947][    T1]
+> [   11.163947][    T1] other info that might help us debug this:
+> [   11.163947][    T1]  Possible unsafe locking scenario:
+> [   11.163947][    T1]
+> [   11.163947][    T1]        CPU0
+> [   11.163947][    T1]        ----
+> [   11.163947][    T1]   lock(udc_lock);
+> [   11.163947][    T1]
+> [   11.163947][    T1]  *** DEADLOCK ***
+> [   11.163947][    T1]
+> [   11.163947][    T1]  May be due to missing lock nesting notation
+> [   11.163947][    T1]
+> [   11.163947][    T1] 2 locks held by swapper/1:
+> [ 11.163947][ T1] #0: ee5440d8 (&dev->mutex){....}, at: device_lock (pci-sysfs.c:?)
+> [ 11.163947][ T1] #1: c1d981d8 (udc_lock){+.+.}, at: usb_add_gadget_udc_release (??:?)
+> [   11.163947][    T1]
+> [   11.163947][    T1] stack backtrace:
+> [   11.163947][    T1] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.210-00049-g3a2b1036e895 #2
+> [   11.163947][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> [   11.163947][    T1] Call Trace:
+> [ 11.163947][ T1] dump_stack (??:?)
+> [ 11.163947][ T1] __lock_acquire (lockdep.c:?)
+> [ 11.163947][ T1] lock_acquire (??:?)
+> [ 11.163947][ T1] ? usb_udc_uevent (core.c:?)
+> [ 11.163947][ T1] __mutex_lock (mutex.c:?)
+> [ 11.163947][ T1] ? usb_udc_uevent (core.c:?)
+> [ 11.163947][ T1] ? add_uevent_var (??:?)
+> [ 11.163947][ T1] mutex_lock_nested (??:?)
+> [ 11.163947][ T1] ? usb_udc_uevent (core.c:?)
+> [ 11.163947][ T1] usb_udc_uevent (core.c:?)
+> [ 11.163947][ T1] dev_uevent (core.c:?)
+> [ 11.163947][ T1] ? device_get_devnode (core.c:?)
+> [ 11.163947][ T1] kobject_uevent_env (??:?)
+> [ 11.163947][ T1] kobject_uevent (??:?)
+> [ 11.163947][ T1] device_add (??:?)
+> [ 11.163947][ T1] usb_add_gadget_udc_release (??:?)
+> [ 11.163947][ T1] usb_add_gadget_udc (??:?)
+> [ 11.163947][ T1] dummy_udc_probe (dummy_hcd.c:?)
