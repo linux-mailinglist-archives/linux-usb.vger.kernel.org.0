@@ -2,229 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3965979DF
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 01:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFAE597CD5
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 06:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241953AbiHQXAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Aug 2022 19:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
+        id S243010AbiHRERU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 00:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241904AbiHQXAM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Aug 2022 19:00:12 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B1EAB1BF
-        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 16:00:10 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id w28so3491qtc.7
-        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 16:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=KmcDPCTn5Uzlzd24cj71xEvkhoV/UHar1ZZ8d/hlYtw=;
-        b=UXGJYiIfxhnj/i4hpUL58NerxcbgE4DPs09FN2Bp1xIgmF7zfmwl6sp0oBJ6i9tRXR
-         apjEyQ33bUqxLV7phYZCuNREmUTAtNpbDir3oWp5HE8X4cZRcXVvHlukIAU8NUFppWP7
-         k4hX9AEB7gxfRIIa+efvFdUxTzRMfMO2PyQ7G+4c4SK5SvaI6/oMKboQbIMM9cmxUIYs
-         b+1gmyLLc/MuVTSTQ07PPn39NPzbQdk2Usuv64g4pcXXshP7X2TMAeS6ZMfhcTjsPV2t
-         ahu5m+NtFUaiCgtN2NOTamEZIyIHhHixKdynuMDcJ5kvLS89882lYBN7hrisv1/mzsiE
-         NPhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=KmcDPCTn5Uzlzd24cj71xEvkhoV/UHar1ZZ8d/hlYtw=;
-        b=H3mKcXRviZBynekVNErGbozCbceXMatN5swPkfn66opmIN30tyTUDn2xImv9sm51WX
-         sS54cFOoxMku5xvkaYHJ2mayVBfn47UXr0rvnnO07pfsV2SDL9sJ3vqVNNQMgbT5Y/gq
-         /BETLZGVdiVr/l7pgI35uJb7HoGOKisHR9XfSiMdTjPDrdlvzSxJVHYj+WEbuiuRfMLN
-         lGMC9oIoexw3MWgU8f25aDYgTH2bwc7RSVebD+aw3kwb/ojETy+CcB+SdyEmcE4l8IKJ
-         ypG5sZH5rLxiZzl6F6bJSZqpUnYl7Mws9DnMcGcGA4i1x6iAfM6Wh5IvzRPbkViw/C+H
-         Ea2w==
-X-Gm-Message-State: ACgBeo2eqFa/69iXqRIG6iQLgDeafPO2jT5QWibEujFmsntiUyyGeJio
-        jzJvwhKM9wVBqVZzF6NvaYpebQ==
-X-Google-Smtp-Source: AA6agR7zkcNjo5wCvzg1zEw4M2g5sH48XKxof4jlgqH5nSn6g2uQsUSOv+Ai5LsMqinWj19C6hDm+A==
-X-Received: by 2002:a05:622a:447:b0:31e:ea5d:34c2 with SMTP id o7-20020a05622a044700b0031eea5d34c2mr441099qtx.604.1660777209319;
-        Wed, 17 Aug 2022 16:00:09 -0700 (PDT)
-Received: from baldur ([2600:380:7852:c2c2:200:ff:fe00:0])
-        by smtp.gmail.com with ESMTPSA id u7-20020a37ab07000000b006b9bf03d9c6sm78625qke.104.2022.08.17.16.00.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 16:00:08 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 18:00:05 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Prashant Malani <pmalani@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-Message-ID: <Yv1y9Wjp16CstJvK@baldur>
-References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
- <20220810204750.3672362-2-bjorn.andersson@linaro.org>
- <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
- <20220814210104.GA690892-robh@kernel.org>
+        with ESMTP id S242956AbiHRERN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 00:17:13 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCC80513;
+        Wed, 17 Aug 2022 21:17:12 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27I1uh3l008456;
+        Thu, 18 Aug 2022 04:17:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=noabOEHneJxCBrb7N/ft+t1do/5udp+DULkSI6s3pC4=;
+ b=oi8/iXF7oj9nuMvzpHxsgOzueMej0yTyFProoqlPXNN7A/X6pUHvVcBBtWMeaFIipsdY
+ VIz91VE0XY8T4187eQ7X8HeEV//8hjHlstjyY2jLqkrczr3kqTJlk7wO32AaJ+egtbO3
+ gpuFwvm7Ejei7kEO9SMLqwOlhxqoQ8iibMVTPglb1Si/p7QUzctlcEkY6Ll1XFLRCKy0
+ TakX+fYfqNj8rgYv3ERB79TEM8K7OMc0HeJiWWuQg8wiicrdFMMsS9cCTByNIy5gUrMY
+ /8gqBtScY8HAet+nrq5JWBhpNH5TK/LLrFKTVkotCxum66pgGP3tfFR+XBZ25BT4mHPb Yw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j0w7hm3pn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 04:17:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27I4GxVQ017882
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 04:17:01 GMT
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 17 Aug 2022 19:24:09 -0700
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 17 Aug 2022 11:24:10 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v4 0/9] Fix controller halt and endxfer timeout issues
+Date:   Wed, 17 Aug 2022 11:23:50 -0700
+Message-ID: <20220817182359.13550-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220814210104.GA690892-robh@kernel.org>
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: RGYTwiUgEyk_fZI-ikbjtKxPk0ULRQC4
+X-Proofpoint-GUID: RGYTwiUgEyk_fZI-ikbjtKxPk0ULRQC4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_02,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ mlxlogscore=483 suspectscore=0 spamscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180014
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun 14 Aug 16:01 CDT 2022, Rob Herring wrote:
+Changes in v4:
+- Split the increase timeout patch into separate patches. #1 for the
+gadget suspend/resume locking changes #2 for the increased timeout
+- Modified msleep to usleep_range w/ an interval of 1-2ms and a max
+timeout of 4s.
 
-> On Thu, Aug 11, 2022 at 12:14:48PM +0300, Krzysztof Kozlowski wrote:
-> > On 10/08/2022 23:47, Bjorn Andersson wrote:
-> > > Introduce a binding for GPIO-based mux hardware used for connecting,
-> > > disconnecting and switching orientation of the SBU lines in USB Type-C
-> > > applications.
-> > > 
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > >  .../devicetree/bindings/usb/gpio-sbu-mux.yaml | 77 +++++++++++++++++++
-> > >  1 file changed, 77 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> > > new file mode 100644
-> > > index 000000000000..7d8aca40c7ca
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-> > > @@ -0,0 +1,77 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: "http://devicetree.org/schemas/usb/gpio-sbu-mux.yaml#"
-> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: GPIO-based SBU mux
-> > > +
-> > > +maintainers:
-> > > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > +
-> > > +description:
-> > > +  In USB Type-C applications the SBU lines needs to be connected, disconnected
-> > > +  and swapped depending on the altmode and orientation. This binding describes
-> > > +  a family of hardware which perform this based on GPIO controls.
-> > 
-> > +Cc few folks.
-> > 
-> > This looks familiar to:
-> > 
-> > https://lore.kernel.org/linux-devicetree/eaf2fda8-0cd6-b518-10cb-4e21b5f8c909@linaro.org/T/#m39254b7f8970b3e1264f9d1a979557bb46ab162c
-> > 
-> > Rob and Stephen had several concerns about that approach.
-> 
-> My overall concern is a bunch of one-off bindings with no one thinking 
-> about a variety of USB-C h/w. I need h/w diagrams and corresponding 
-> bindings. The key part being more than 1. I'm not all that familiar with 
-> the former to help on the bindings.
-> 
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
 
-This is the setup that we're dealing with:
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
 
-                     +------------- - -
- USB connector       | SoC
- +-+                 |
- | |                 |   +-----+
- |*|<------- HS -----|-->| HS  |
- |*|<------- HS -----|-->| phy |<-+   +--------+
- | |                 |   +-----+   \->|        |
- | |                 |                |  dwc3  |
- | |                 |   +-----+   /->|        |
- |*|<------- SS -----|-->|     |<-+   +--------+
- |*|<------- SS -----|-->| QMP |
- |*|<------- SS -----|-->| phy |
- |*|<------- SS -----|-->|     |<-\   +------------+
- | |                 |   +-----+   \->|            |
- | |                 |                |     DP     |
- | |    +-----+      |                | controller |
- |*|<-->| SBU |<-----|--------------->|            |
- |*|<-->| mux |<-----|--------------->|            |
- | |    +----+       |                +------------+
- +-+                 |
-                     +------------- - -
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
 
-The dwc3 controller is connected to the HS phy for HighSpeed signals and
-QMP phy to be muxed out on 0, 2 or 4 of the SuperSpeed pins (for
-DP-only, USB/DP combo or USB-only mode).
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
 
-The DisplayPort controller is connected to the same QMP phy, for and is
-muxed onto the same 0, 2 or 4 of the SuperSpeed pins (for USB-only,
-USB/DP combo or DP-only mode).
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
 
-The SuperSpeed pins can be switched around within the QMP phy, to handle
-the case where the USB Type-C cable is flipped around.
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
+
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
 
 
-The AUX pins of the DP controller are connected to the SBU pins in the
-connector. These signals needs to be disconnected while DP mode is not
-negotiated with the remote. The DP controller does not support swapping
-the two lines.
-The disconnecting and swapping thereby needs to be performed by an
-external entity. For which we have a few examples already, such as
-fcs,fsa4480.
+Wesley Cheng (9):
+  usb: dwc3: Do not service EP0 and conndone events if soft disconnected
+  usb: dwc3: gadget: Force sending delayed status during soft disconnect
+  usb: dwc3: gadget: Synchronize IRQ between soft connect/disconnect
+  usb: dwc3: gadget: Continue handling EP0 xfercomplete events
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Remove DWC3 locking during gadget suspend/resume
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
 
-Lastly, in USB Power Delivery, the hot-plug signal found in a physical
-DisplayPort or HDMI cable is communicated as a message. So the USB
-Type-C controller must be able to pass this onto the DP controller.
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  3 +++
+ drivers/usb/dwc3/ep0.c    | 11 ++++++---
+ drivers/usb/dwc3/gadget.c | 48 +++++++++++++++++++++++++++++++++------
+ 4 files changed, 52 insertions(+), 14 deletions(-)
 
-
-I model the usb-c-connector as a child of the USB Type-C controller,
-with the following representation of the connections:
-
-connector {
-  compatible = "usb-c-connector";
-
-  ports {
-    port@0 {
-      reg = <0>;
-      endpoint {
-        remote-endpoint = <&dwc3>;
-      };
-    };
-
-    port@1 {
-      reg = <1>;
-      endpoint@0 {
-        reg = <0>;
-        remote-endpoint = <&qmp_phy>;
-      };
-      endpoint@1 {
-        reg = <1>;
-        remote-endpoint = <&dp_controller>;
-    };
-
-    port@2 {
-      reg = <2>;
-      endpoint {
-        remote-endpoint = <&sbu_mux>;
-      };
-    };
-  };
-};
-
-This allows the USB Type-C controller to:
-1) Perform USB role switching in the dwc3 on port@0
-2) Orientation and muxing of the SuperSpeed lines in the QMP phy on
-   port@1:0, implement a drm_bridge for signalling HPD back to the DP
-   controller on port@1:1
-3) Orientation and muxing (connecting/disconnecting) the SBU/AUX lines
-   in the SBU mux on port@2.
-
-The SBU mux in several of these designs is a component that takes a
-power supply and two GPIOs, for enabling/disabling the connection and
-flip the switch (which is used to swap the lines).
-
-I hope this helps with the bigger picture.
-
-Regards,
-Bjorn
