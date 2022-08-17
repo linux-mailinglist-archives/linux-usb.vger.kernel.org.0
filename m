@@ -2,62 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3999596DED
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Aug 2022 14:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCFB5970E0
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Aug 2022 16:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239180AbiHQMEQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Aug 2022 08:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S240087AbiHQOWz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Aug 2022 10:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236580AbiHQMEP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Aug 2022 08:04:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461844C62A;
-        Wed, 17 Aug 2022 05:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660737854; x=1692273854;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sw03qyNAB0MNEYgJP3KDR/9fx3+F8UT/HeVmqYUt2GE=;
-  b=Wip09kIPrY9+dtHdJJ1xkDqJ88AoZCotBUpwVJ1cbc7lXwkHwEStLNWl
-   nA66f1taTPDa/jQk4A2v4piCtZ+MLBFAKWCWfiLlDkvZAjrqeFgA76d7f
-   tiy0r+f0MSK+Qwxb8GO6U258dCYiN5I/tLZpD2q7hjf3fKDZk0c+iaz76
-   yNxgdRD3gkOdCD8jv0rQ/txx0/Bq4dZkoAcShncBn4J9wm5LRmOfoaFP7
-   b7WTS7bthyNuduy+HdmvhRZ0UtvJdNI9gnagQmw53uTriL/lUn2rTXuas
-   ID85G38SR9ScRPX1uUO8aLn4tyxxWULYLOC5c1d0HCycvHZvnf9LttnQA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="356471447"
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="356471447"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:04:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
-   d="scan'208";a="583742759"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2022 05:04:09 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 0BF04235; Wed, 17 Aug 2022 15:04:22 +0300 (EEST)
-Date:   Wed, 17 Aug 2022 15:04:22 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Szuying Chen <chensiying21@gmail.com>
-Cc:     mario.limonciello@amd.com, gregkh@linuxfoundation.org,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
-        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
-Subject: Re: RE: [PATCH v4] thunderbolt: thunderbolt: add vendor's NVM formats
-Message-ID: <YvzZRsyGR/hakhIo@black.fi.intel.com>
-References: <20220817102450.63514-1-chensiying21@gmail.com>
+        with ESMTP id S239728AbiHQOWy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Aug 2022 10:22:54 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CEA9019E
+        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 07:22:51 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id x25so13716119ljm.5
+        for <linux-usb@vger.kernel.org>; Wed, 17 Aug 2022 07:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=hkQw9WN5h+Y42nVQvRSlhfGLJwPyneuk8AABP6NmvEc=;
+        b=ThN7HQwQnLxN7z1iEWQ1VfcAD0RfUVXtrUSy4MD09/e4sb6cSS1yebkFfTnx1fy3Xa
+         gG2aW8EDf1wM00MQxMVBYxEAIWMcxGBFgczmIjoDlF6a+BUbg2a/wQQfVnNcbnjQGpDq
+         jtQ0IcV951fV1AEhlZxcPt7QxJE9FaM+HKeGRyWZe6HFRlEuATR+o5e5I5+hv4c8J6tM
+         ahb5KYI/9nig957x5x7Vq9oeNELyiszjMPApHmy4tW1QdGzE08mFaT9llMAU8J5/0i/Y
+         QNRZfsjwAIbSAvZ45bXVyOt8Yr2Yd+YdOYIdrJ3KhqA+CqQUo5ao6d5rnvSSXZ9R7D/N
+         obfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=hkQw9WN5h+Y42nVQvRSlhfGLJwPyneuk8AABP6NmvEc=;
+        b=XGZXqsLHXp2I2kIDNLeIQH2lWXnLFpWI3j76jp5HA4Xq2uFXiG41jhs74Y2JxwCFA+
+         DnCoyjwQPvuCsNCCRDk1HCPP9U/Fs2tESRUmDYGQUo3is6OmACSHZ0BttjTW8w7GkmA9
+         Hk5PAI42vrlpjwAFUwYbRQ3ebqCiKb7Mch1Tps7bv3Nv4w+W24EURuXtr0imtKj2jNmk
+         W7T0rzxqSTFptYRE4GfENjJYVzbTihvMwVF7juaYRhG9PMGCvyuH5Pv4PiLbJSy1wNS2
+         ELXU4ajd3lJgVcWOEGgu+q2+Wt7IVi1NL33A73ccpUKMciaLG/rEjWU5gaywBLzD9/w4
+         dTXw==
+X-Gm-Message-State: ACgBeo3oxYtWAyVukfH5Xn1bDjd2MdqTDRxFlConDDY7BTNdaOX8Csqc
+        Jf9kLKRfkv04JTWa3IpZ6eyP6A==
+X-Google-Smtp-Source: AA6agR4h8+eFKm2t94hbKt8Hz5VfqgUspsmVJMcyCOhfG+++g9trck+HNcSCsL+pgyahCbEkyXPzuw==
+X-Received: by 2002:a2e:711d:0:b0:25e:4f25:a517 with SMTP id m29-20020a2e711d000000b0025e4f25a517mr7367436ljc.145.1660746170020;
+        Wed, 17 Aug 2022 07:22:50 -0700 (PDT)
+Received: from krzk-bin.. (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
+        by smtp.gmail.com with ESMTPSA id u1-20020ac258c1000000b0047f7722b73csm1704647lfo.142.2022.08.17.07.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 07:22:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yu Chen <chenyu56@huawei.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Carvalho Chehab <mchehab+huawei@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 0/4] mfd/phy/remoteproc: dt-bindings: syscon: be specific
+Date:   Wed, 17 Aug 2022 17:22:42 +0300
+Message-Id: <20220817142246.828762-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817102450.63514-1-chensiying21@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,127 +82,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On Wed, Aug 17, 2022 at 06:24:50PM +0800, Szuying Chen wrote:
-> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> 
-> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> ---
-> Hi,
-> 
-> >> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> >>
-> 
-> >> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
-> >> +{
-> >> +	struct tb_nvm *nvm;
-> >> +	u32 val;
-> >> +	u32 nvm_size;
-> >> +	int ret = 0;
-> >> +	unsigned int image_size;
-> >> +
-> >> +	switch (mode) {
-> >> +	case NVM_UPGRADE:
-> >> +		if (sw->no_nvm_upgrade)
-> >> +			sw->no_nvm_upgrade = false;
-> >> +
-> >> +		break;
-> >> +
-> >> +	case NVM_ADD:
-> >> +		nvm = tb_nvm_alloc(&sw->dev);
-> >
-> >This function does not only "validate" but it also creates the NVMem
-> >devices and whatnot.
-> >
-> >Do you have some public description of the ASMedia format that I could
-> >take a look? Perhaps we can find some simpler way of validating the
-> >thing that works accross different vendors.
-> >
-> 
-> ASMedia NVM format include rom file, firmware and security
-> configuration information. And active firmware depend on this
-> information for processing. We don't need to do any validation during
-> firmware upgrade, so we haven't public description of the ASMedia
-> format.
-> 
-> I think I use "validate" is not fit. This function mainly to create
-> the NVMem devices and write. I will rename in the next patch.
+The last MFD/syscon patch depends on the previous ones to avoid
+dt_binding_check warnings.
 
-So instead what you now do, I suggest that we move all the vendor
-support out to nvm.c, that includes Intel too. What I mean by this is
-that the tb_switch_nvm_add() would then look something like this:
+I propose to take entire set via Rob's DT tree.
 
-tb_switch_nvm_add(sw)
-{
-	if (!nvm_readable(sw))
-		return 0;
+Best regards,
+Krzysztof
 
-	nvm = tb_switch_nvm_alloc(sw);
-	if (IS_ERR(nvm)) {
-		if (PTR_ERR(nvm) == -EOPNOTSUPP) {
-			dev_info(&sw->dev,
-				"NVM format of vendor %#x is not known, disabling NVM upgrade\n",
-				sw->config.vendor_id);
-			return 0;
-		}
+Krzysztof Kozlowski (4):
+  dt-bindings: phy: hisilicon,hi3660-usb3: simplify example
+  dt-bindings: phy: hisilicon,hi3670-usb3: simplify example
+  dt-bindings: remoteproc: qcom,pil-info: add missing imem compatible
+  dt-bindings: mfd: syscon: require specific compatible also for
+    simple-mfd
 
-		return PTR_ERR(nvm);
-	}
+ .../devicetree/bindings/mfd/syscon.yaml       | 14 +++++++++-
+ .../bindings/phy/hisilicon,hi3660-usb3.yaml   | 22 +++++-----------
+ .../bindings/phy/hisilicon,hi3670-usb3.yaml   | 26 ++++++-------------
+ .../bindings/remoteproc/qcom,pil-info.yaml    |  2 +-
+ 4 files changed, 28 insertions(+), 36 deletions(-)
 
-	ret = tb_nvm_add_active(nvm, nvm->size, tb_switch_nvm_read);
-	if (ret)
-		...
+-- 
+2.34.1
 
-	if (!sw->no_nvm_upgrade) {
-		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
-		if (ret)
-			...
-	}
-
-	sw->nvm = nvm;
-	...
-}
-
-And the tb_switch_nvm_alloc() resides in nvm.c and that one goes over an
-array of supported vendors matching sw->config.vendor_id and if it finds
-the match it will set nvm->vops to point the vendor specific operations
-and in addition it will will populate rest of the nvm fields like this:
-
-static const struct {
-	u16 vendor;
-	const struct tb_nvm_vendor_ops *vops;
-} switch_nvm_vendors[] = {
-	{ 0x8086, &intel_switch_nvm_ops },
-	{ 0x8087, &intel_switch_nvm_ops },
-	{ 0x174c, &asmedia_switch_nvm_ops },
-};
-
-tb_switch_nvm_alloc(sw)
-{
-	struct tb_nvm_vendor_ops *ops = NULL;
-	int i;
-
-	for (i = 0; i < ARRAY_SIZE(switch_nvm_vendors); i++) {
-		if (switch_nvm_vendors[i].vendor == sw->config.vendor_id)
-			vops = &switch_nvm_vendors[i].vops;
-			break;
-	}
-
-	if (!vops)
-		return ERR_PTR(-EOPNOTSUPP);
-
-	nvm = tb_nvm_alloc(&sw->dev);
-	if (IS_ERR(nvm))
-		...
-
-	nvm->vops = vops;
-	ret = vops->populate(nvm);
-	if (ret)
-		...
-
-	...
-}
-
-Then we would have all the vendor specific things in
-intel_switch_nvm_ops and asmedia_switch_nvm_ops accordingly and the rest
-of the code is generic USB4 stuff. We need to do the same for retimers
-too at some point.
