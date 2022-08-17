@@ -2,210 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F08596CCE
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Aug 2022 12:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3999596DED
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Aug 2022 14:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238962AbiHQKY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Aug 2022 06:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
+        id S239180AbiHQMEQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Aug 2022 08:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiHQKY5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Aug 2022 06:24:57 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C623D5D0EE;
-        Wed, 17 Aug 2022 03:24:56 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id pm17so12082736pjb.3;
-        Wed, 17 Aug 2022 03:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=qQBgNK2cFBcoQ3FGXUIePsyJ39lKMEasmh4FaP7PQlE=;
-        b=OKIOhq/f4RfOE4ol/M1LSMSoEmgfoOsyS88MJLS7GVNDtRyPTz4T29aQgl1C8dCiFR
-         BcyR7uf60J1Xmw08ekWz2F4KJDw0WIqscWXGey9lyVHCAr4rOqvb3naRBUu36GpiNlb0
-         YnM7pmozxKt9oKLg6q7S/iFXvOAkRR2YGe/+waHQMP8izhSqIj8dVctKzS4PUm1Erwhi
-         Hm8sT19E/fwGSE9MFftHM50ZPnLl/2YiIsPRMtyK79aLlIxj6WytJq2rOMe7umCMCY6i
-         RKlQNuVk2zwZSpm1K7vO6i28F3AxfpdGI4CodXNGGB8RPuZW+tidONpDXh1VIDP+xcBL
-         LW/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=qQBgNK2cFBcoQ3FGXUIePsyJ39lKMEasmh4FaP7PQlE=;
-        b=Wq0m+HwOlx4LJg8o/O8o/32FC53IoRSXffjKdgSDiKOGVPy7eWUaagEi8vJf1I1FWA
-         eUCktBfKmYEQ/HiZFjLOR/XvDxh+3j4u7B2YKDmptz4aW33ZVqt2USq5BJiwdg1aKbZa
-         yZkKk7PjR6N0+V+ZBrQkDoCe9HYMzJDn+N4rzCrTmhe/squaA2a+XBj3x+268kVg0o2F
-         IjX1ISodkIR3ZukOEyQPcPCvJFS2QYgIPjimsWJl+4R1OhxdSAsyHkcJYp5DC7lE97Pe
-         +9PoqPMvZ4UUXArLWkjboMfejFFVpd3JrbQvnc6AjyO3NPc9AACsegFUmtiPZV1Xt6h2
-         aR0w==
-X-Gm-Message-State: ACgBeo2khH3sHANx86rk4L+F/s96bdVS/ABLbwS57gXis9Lq1zjIqisB
-        K3+Cy/X6bbV+bwa+UiNglak=
-X-Google-Smtp-Source: AA6agR5W3y4GfAKTKJLzQV9mvcc6Tz+YKmkHbmqwZAzQVyI38lBL1Bfi6gnYYFyGei/WBjXgBPMDlw==
-X-Received: by 2002:a17:902:b94b:b0:170:c9d6:a06d with SMTP id h11-20020a170902b94b00b00170c9d6a06dmr26121159pls.105.1660731896277;
-        Wed, 17 Aug 2022 03:24:56 -0700 (PDT)
-Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
-        by smtp.gmail.com with ESMTPSA id y18-20020a1709027c9200b001714e7608fdsm1060728pll.256.2022.08.17.03.24.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 03:24:56 -0700 (PDT)
-From:   Szuying Chen <chensiying21@gmail.com>
-To:     mika.westerberg@linux.intel.com, mario.limonciello@amd.com
-Cc:     gregkh@linuxfoundation.org, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
-        Richard_Hsu@asmedia.com.tw
-Subject: RE: RE: [PATCH v4] thunderbolt: thunderbolt: add vendor's NVM formats
-Date:   Wed, 17 Aug 2022 18:24:50 +0800
-Message-Id: <20220817102450.63514-1-chensiying21@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S236580AbiHQMEP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Aug 2022 08:04:15 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461844C62A;
+        Wed, 17 Aug 2022 05:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660737854; x=1692273854;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sw03qyNAB0MNEYgJP3KDR/9fx3+F8UT/HeVmqYUt2GE=;
+  b=Wip09kIPrY9+dtHdJJ1xkDqJ88AoZCotBUpwVJ1cbc7lXwkHwEStLNWl
+   nA66f1taTPDa/jQk4A2v4piCtZ+MLBFAKWCWfiLlDkvZAjrqeFgA76d7f
+   tiy0r+f0MSK+Qwxb8GO6U258dCYiN5I/tLZpD2q7hjf3fKDZk0c+iaz76
+   yNxgdRD3gkOdCD8jv0rQ/txx0/Bq4dZkoAcShncBn4J9wm5LRmOfoaFP7
+   b7WTS7bthyNuduy+HdmvhRZ0UtvJdNI9gnagQmw53uTriL/lUn2rTXuas
+   ID85G38SR9ScRPX1uUO8aLn4tyxxWULYLOC5c1d0HCycvHZvnf9LttnQA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10441"; a="356471447"
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="356471447"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 05:04:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,243,1654585200"; 
+   d="scan'208";a="583742759"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2022 05:04:09 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 0BF04235; Wed, 17 Aug 2022 15:04:22 +0300 (EEST)
+Date:   Wed, 17 Aug 2022 15:04:22 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>
+Cc:     mario.limonciello@amd.com, gregkh@linuxfoundation.org,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
+Subject: Re: RE: [PATCH v4] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <YvzZRsyGR/hakhIo@black.fi.intel.com>
+References: <20220817102450.63514-1-chensiying21@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817102450.63514-1-chensiying21@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-
-Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
----
 Hi,
 
->> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
->>
+On Wed, Aug 17, 2022 at 06:24:50PM +0800, Szuying Chen wrote:
+> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> 
+> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> ---
+> Hi,
+> 
+> >> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> >>
+> 
+> >> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
+> >> +{
+> >> +	struct tb_nvm *nvm;
+> >> +	u32 val;
+> >> +	u32 nvm_size;
+> >> +	int ret = 0;
+> >> +	unsigned int image_size;
+> >> +
+> >> +	switch (mode) {
+> >> +	case NVM_UPGRADE:
+> >> +		if (sw->no_nvm_upgrade)
+> >> +			sw->no_nvm_upgrade = false;
+> >> +
+> >> +		break;
+> >> +
+> >> +	case NVM_ADD:
+> >> +		nvm = tb_nvm_alloc(&sw->dev);
+> >
+> >This function does not only "validate" but it also creates the NVMem
+> >devices and whatnot.
+> >
+> >Do you have some public description of the ASMedia format that I could
+> >take a look? Perhaps we can find some simpler way of validating the
+> >thing that works accross different vendors.
+> >
+> 
+> ASMedia NVM format include rom file, firmware and security
+> configuration information. And active firmware depend on this
+> information for processing. We don't need to do any validation during
+> firmware upgrade, so we haven't public description of the ASMedia
+> format.
+> 
+> I think I use "validate" is not fit. This function mainly to create
+> the NVMem devices and write. I will rename in the next patch.
 
->> +static int asmedia_nvm_validate(struct tb_switch *sw, unsigned int mode)
->> +{
->> +	struct tb_nvm *nvm;
->> +	u32 val;
->> +	u32 nvm_size;
->> +	int ret = 0;
->> +	unsigned int image_size;
->> +
->> +	switch (mode) {
->> +	case NVM_UPGRADE:
->> +		if (sw->no_nvm_upgrade)
->> +			sw->no_nvm_upgrade = false;
->> +
->> +		break;
->> +
->> +	case NVM_ADD:
->> +		nvm = tb_nvm_alloc(&sw->dev);
->
->This function does not only "validate" but it also creates the NVMem
->devices and whatnot.
->
->Do you have some public description of the ASMedia format that I could
->take a look? Perhaps we can find some simpler way of validating the
->thing that works accross different vendors.
->
+So instead what you now do, I suggest that we move all the vendor
+support out to nvm.c, that includes Intel too. What I mean by this is
+that the tb_switch_nvm_add() would then look something like this:
 
-ASMedia NVM format include rom file, firmware and security configuration information. And active firmware depend on this information for processing. We don't need to do any validation during firmware upgrade, so we haven't public description of the ASMedia format.
+tb_switch_nvm_add(sw)
+{
+	if (!nvm_readable(sw))
+		return 0;
 
-I think I use "validate" is not fit. This function mainly to create the NVMem devices and write. I will rename in the next patch.
+	nvm = tb_switch_nvm_alloc(sw);
+	if (IS_ERR(nvm)) {
+		if (PTR_ERR(nvm) == -EOPNOTSUPP) {
+			dev_info(&sw->dev,
+				"NVM format of vendor %#x is not known, disabling NVM upgrade\n",
+				sw->config.vendor_id);
+			return 0;
+		}
 
->> +			ret = PTR_ERR(nvm);
->> +			break;
->> +		}
->> +
->> +		ret = usb4_switch_nvm_read(sw, ASMEDIA_NVM_VERSION, &val, sizeof(val));
->> +		if (ret)
->> +			break;
->> +
->> +		nvm->nvm_asm.major = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
->> +		ret = usb4_switch_nvm_read(sw, ASMEDIA_NVM_DATE, &val, sizeof(val));
->> +		if (ret)
->> +			break;
->> +
->> +		nvm->nvm_asm.minor = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
->> +		nvm_size = SZ_512K;
->> +		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
->> +		if (ret)
->> +			break;
->> +
->> +		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
->> +		if (ret)
->> +			break;
->> +
->> +		sw->nvm = nvm;
->> +		break;
->> +
->> +	case NVM_WRITE:
->> +		const u8 *buf = sw->nvm->buf;
->> +
->> +		if (!buf) {
->> +			ret = -EINVAL;
->> +			break;
->> +		}
->> +		image_size = sw->nvm->buf_data_size;
->> +		if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE) {
->> +			ret = -EINVAL;
->> +			break;
->> +		}
->> +		ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
->> +		if (!ret)
->> +			sw->nvm->flushed = true;
->> +
->> +		break;
->> +
->> +	default:
->> +		break;
->> +	}
->> +
->> +	if ((mode == NVM_ADD) && (ret != 0))
->> +		tb_nvm_free(sw->nvm);
->> +
->> +	return ret;
->> +}
+		return PTR_ERR(nvm);
+	}
 
+	ret = tb_nvm_add_active(nvm, nvm->size, tb_switch_nvm_read);
+	if (ret)
+		...
 
+	if (!sw->no_nvm_upgrade) {
+		ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_switch_nvm_write);
+		if (ret)
+			...
+	}
 
+	sw->nvm = nvm;
+	...
+}
 
->> @@ -1953,6 +1971,9 @@ static ssize_t nvm_version_show(struct device *dev,
->>  		ret = -ENODATA;
->>  	else if (!sw->nvm)
->>  		ret = -EAGAIN;
->> +	/*ASMedia NVM version show format xxxxxx_xxxxxx */
->> +	else if (sw->config.vendor_id == 0x174C)
->> +		ret = sprintf(buf, "%06x.%06x\n", sw->nvm->nvm_asm.major, sw->nvm->nvm_asm.minor);
->
->And yes, we can make the nvm->major/minor to be 32-bit integers too for
->both Intel and ASMedia and continue to use the %x.%x formatting.
->
+And the tb_switch_nvm_alloc() resides in nvm.c and that one goes over an
+array of supported vendors matching sw->config.vendor_id and if it finds
+the match it will set nvm->vops to point the vendor specific operations
+and in addition it will will populate rest of the nvm fields like this:
 
-Thanks to Mika and Mario for the suggestion, I'll fix it in next patch.
+static const struct {
+	u16 vendor;
+	const struct tb_nvm_vendor_ops *vops;
+} switch_nvm_vendors[] = {
+	{ 0x8086, &intel_switch_nvm_ops },
+	{ 0x8087, &intel_switch_nvm_ops },
+	{ 0x174c, &asmedia_switch_nvm_ops },
+};
 
->>  	else
->>  		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
->>
->> @@ -2860,6 +2881,7 @@ int tb_switch_add(struct tb_switch *sw)
->>  		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
->>
->>  		tb_check_quirks(sw);
->> +		tb_nvm_validate(sw, NVM_UPGRADE);
->>
->>  		ret = tb_switch_set_uuid(sw);
->>  		if (ret) {
->> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
->> index 5db76de40cc1..7f5c8ae731a0 100644
->> --- a/drivers/thunderbolt/tb.h
->> +++ b/drivers/thunderbolt/tb.h
->> @@ -28,6 +28,15 @@
->>  #define NVM_VERSION		0x08
->>  #define NVM_FLASH_SIZE		0x45
->>
->> +/* ASMedia specific NVM offsets */
->> +#define ASMEDIA_NVM_VERSION	0x28
->> +#define ASMEDIA_NVM_DATE	0x1c
->
->Didn't I already commented about these? Are my emails somehow lost or
->they just get ignored?
->
+tb_switch_nvm_alloc(sw)
+{
+	struct tb_nvm_vendor_ops *ops = NULL;
+	int i;
 
-Sorry, I miss it. I've checked and I will fix it in next patch.
+	for (i = 0; i < ARRAY_SIZE(switch_nvm_vendors); i++) {
+		if (switch_nvm_vendors[i].vendor == sw->config.vendor_id)
+			vops = &switch_nvm_vendors[i].vops;
+			break;
+	}
 
+	if (!vops)
+		return ERR_PTR(-EOPNOTSUPP);
+
+	nvm = tb_nvm_alloc(&sw->dev);
+	if (IS_ERR(nvm))
+		...
+
+	nvm->vops = vops;
+	ret = vops->populate(nvm);
+	if (ret)
+		...
+
+	...
+}
+
+Then we would have all the vendor specific things in
+intel_switch_nvm_ops and asmedia_switch_nvm_ops accordingly and the rest
+of the code is generic USB4 stuff. We need to do the same for retimers
+too at some point.
