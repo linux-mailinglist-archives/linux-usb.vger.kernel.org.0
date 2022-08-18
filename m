@@ -2,125 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D623598EED
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 23:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F1F598F79
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 23:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346472AbiHRVI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Aug 2022 17:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S1346739AbiHRV0P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 17:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346509AbiHRVIE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 17:08:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FBA9411D
-        for <linux-usb@vger.kernel.org>; Thu, 18 Aug 2022 14:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660856618; x=1692392618;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=czIt9/GjYMkH8ldLVLj9OXo6Mzlzk0geJNRfromC7rY=;
-  b=kKq/RCisNDuVKtcUEkqo1J5W6UOar4kC+O6fbKlq/xh4uqEey4WfuQSY
-   KLyRIavd1rcjRvzSyMO9rMYBXO9D6OJKqM/N8A5l0p1e9B5FKsJlMNCL4
-   6tH2YrsuAr7uSjHTvf16Nm0OG8oxz6cUN9xeGGIGNID9IM/ZEoIr+GI2h
-   oIEiUhwS27f3grLniyW4DxH2Vu01RiXoCn7hFGj/LsRbsc/OTXR8+5u7X
-   iYRzDKUWGhmkUzRlS2ciwmWNBzIodgfY67ElleeWS5XUjzOUjQGwR+Sf4
-   jbHBpUGy1wABVEef4UWjtRKCpdDPSRL9MFOGlYsm3knSjFWD3w9sGBV/P
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="318893171"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="318893171"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 14:03:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="636993124"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 18 Aug 2022 14:03:11 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOmfW-0000br-0c;
-        Thu, 18 Aug 2022 21:03:10 +0000
-Date:   Fri, 19 Aug 2022 05:02:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-linus 9/18] drivers/usb/dwc3/dwc3-qcom.c:313:25: warning:
- variable 'hcd' set but not used
-Message-ID: <202208190411.1lugjsYz-lkp@intel.com>
+        with ESMTP id S1346875AbiHRV0A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 17:26:00 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97BDDEB78
+        for <linux-usb@vger.kernel.org>; Thu, 18 Aug 2022 14:17:44 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id x64so2043493iof.1
+        for <linux-usb@vger.kernel.org>; Thu, 18 Aug 2022 14:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=Vy8D1pkwyXAsiF4MUgRh4hwYH42zrsLDINWKukfqLXo=;
+        b=KQJIUsGaq+atx0WDA+Q6GC29q+wr7kk6ZI9yxsBSeiLJM5vGupunTC77EeaW1K2itz
+         g7MuiArWBexrJrcHWIaeGBh20KkvcIJRQOr/QA0pK/AfTOCXiMm5gTaAZXJHZf3Mpwtl
+         a2jPAtB8rDhvhg5JBX8fi7fZe7+QfKR4PGmPs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=Vy8D1pkwyXAsiF4MUgRh4hwYH42zrsLDINWKukfqLXo=;
+        b=iaSQdpU70fB6utJK2BomoXUfreL9Ivaj5HXSVIBda36orjW59UkUVxi/AG2BoKVVCs
+         Ap2xu7yFlJbMuEb0vx2m7ffdznXFYh4W04QcowsxLVwh9T6TVLt8wJ4phpFToXAMxB8d
+         gyJvYakwQqYy2zxZvRSNE+dGpivyCI3DrlFX4iuig1eLOW61qoZm/aEUYQlzMZkefmtf
+         vl/wlDFD8WyMbUGBlhe52aTydNmtN9MWAERJx243Lg/nx+VCg2P00LGCJ8qmO9omW5wB
+         QS23ZwnqlJjtLTwcfKLEAc8nsO4w/EESXdo8WnbqKXcdvhbBLbegSutHtG0/bSfPFB0u
+         o1RQ==
+X-Gm-Message-State: ACgBeo0fVlfNhRZDKQRMrbcoXwlO0GzOKixC52C4SOhvaRFyf3n16pjV
+        0JsRqDQjJsXKBkpKzosulFQ2Ug==
+X-Google-Smtp-Source: AA6agR4bswICfvXUKfkVpv1Cfozq/7hljLHJfKR0TxubStkAuF2jjINJdZImJp8sQ2e7aRn0HqGZXg==
+X-Received: by 2002:a6b:3ec2:0:b0:67c:6baf:a51f with SMTP id l185-20020a6b3ec2000000b0067c6bafa51fmr2235618ioa.160.1660857461762;
+        Thu, 18 Aug 2022 14:17:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b1-20020a056638388100b003416ac35529sm1022582jav.26.2022.08.18.14.17.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 14:17:41 -0700 (PDT)
+Subject: Re: [PATCH] usb: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Duncan Sands <duncan.sands@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <edda5842-fa82-dfb0-b4b2-14a83673ea6c@linuxfoundation.org>
+Date:   Thu, 18 Aug 2022 15:17:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-head:   aece382251f8fa660d8f621a7f50b0ea0f390178
-commit: c5f14abeb52b0177b940fd734133d383da3521d8 [9/18] usb: dwc3: qcom: fix peripheral and OTG suspend
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220819/202208190411.1lugjsYz-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=c5f14abeb52b0177b940fd734133d383da3521d8
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-linus
-        git checkout c5f14abeb52b0177b940fd734133d383da3521d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/usb/dwc3/
+On 8/18/22 3:01 PM, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Please elaborate and summarize why this change makses sense in the
+commit log? It will be easier for reviewers - saves time checking
+the link.
 
-All warnings (new ones prefixed by >>):
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>   drivers/usb/atm/usbatm.c               | 2 +-
+>   drivers/usb/core/devio.c               | 2 +-
+>   drivers/usb/gadget/function/f_fs.c     | 2 +-
+>   drivers/usb/gadget/function/f_uvc.c    | 2 +-
+>   drivers/usb/gadget/function/u_ether.c  | 8 ++++----
+>   drivers/usb/gadget/function/uvc_v4l2.c | 6 +++---
+>   drivers/usb/gadget/udc/omap_udc.c      | 2 +-
+>   drivers/usb/misc/usb251xb.c            | 6 +++---
+>   drivers/usb/storage/onetouch.c         | 2 +-
+>   drivers/usb/typec/tcpm/fusb302.c       | 2 +-
+>   drivers/usb/usbip/stub_main.c          | 2 +-
 
-   drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
->> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
-     313 |         struct usb_hcd *hcd;
-         |                         ^~~
+I don't have any problems with the change itself. I would ike to
+see the commit log clealrly state why this change is good. With
+that for usbip change:
 
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-vim +/hcd +313 drivers/usb/dwc3/dwc3-qcom.c
-
-   308	
-   309	static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
-   310	{
-   311		struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-   312		struct usb_device *udev;
- > 313		struct usb_hcd *hcd;
-   314	
-   315		/*
-   316		 * FIXME: Fix this layering violation.
-   317		 */
-   318		hcd = platform_get_drvdata(dwc->xhci);
-   319	
-   320		/*
-   321		 * It is possible to query the speed of all children of
-   322		 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
-   323		 * currently supports only 1 port per controller. So
-   324		 * this is sufficient.
-   325		 */
-   326	#ifdef CONFIG_USB
-   327		udev = usb_hub_find_child(hcd->self.root_hub, 1);
-   328	#else
-   329		udev = NULL;
-   330	#endif
-   331		if (!udev)
-   332			return USB_SPEED_UNKNOWN;
-   333	
-   334		return udev->speed;
-   335	}
-   336	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks,
+-- Shuah
