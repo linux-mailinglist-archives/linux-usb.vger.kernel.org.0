@@ -2,56 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEDB5986E6
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 17:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B1359871B
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 17:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344046AbiHRPIR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Aug 2022 11:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S1344097AbiHRPKZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 11:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344008AbiHRPIP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 11:08:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E57A9;
-        Thu, 18 Aug 2022 08:08:10 -0700 (PDT)
+        with ESMTP id S1344008AbiHRPKY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 11:10:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B2FBD4F5;
+        Thu, 18 Aug 2022 08:10:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7196B821DF;
-        Thu, 18 Aug 2022 15:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29975C433C1;
-        Thu, 18 Aug 2022 15:08:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5625A61387;
+        Thu, 18 Aug 2022 15:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C9C6C433D7;
+        Thu, 18 Aug 2022 15:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660835287;
-        bh=Z0E77J+gWISuARNQ99PusSJ/HYf0+M8/ij/rvEJLC3I=;
+        s=korg; t=1660835422;
+        bh=TFT981KA1z88bdfmVM6dWKjQo4+fr9d18AcL6r2aUkU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KI9Hs6XvNK3xMtSeuWpYgExJJFOh9oBS8J5/YJhtndNCUGqklFiD8UiIqxRTHTJQL
-         DdOBBdv2ltu2/mlNEajfZaMK4sbEMdtQYXSePZjbX6rEBWNt/fKWguloPRO4jHg8Om
-         EnSoc3iWtIX2AHVkAiWKydmZwZNNhQQ9cU+8Zrrk=
-Date:   Thu, 18 Aug 2022 17:08:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-Message-ID: <Yv5V1KWOQa5mnktE@kroah.com>
-References: <20220809094300.83116-1-hadess@hadess.net>
- <20220809094300.83116-3-hadess@hadess.net>
- <YvI5DJnOjhJbNnNO@kroah.com>
- <2cde406b4d59ddfe71a7cdc11a76913a0a168595.camel@hadess.net>
- <YvKMVjl6x38Hud6I@kroah.com>
- <fae7e35a920239fe2a35b6b967bd17e04af1e1b7.camel@hadess.net>
+        b=g7mdPuercpoeoSSesI+jL2yDTSLEGB9hSyprievGFNm8dcjGrDOJO+X6y31GciGct
+         BXJzgxjuDMAqZEjdXPwr9RvUhKporhaOLdgt27mRQF118NgfmWSSJZbPOzkO77Yf+A
+         wDuF/Z6CFQzxjNrAQAKrvqIBYTm8VwpdALfFO2wo=
+Date:   Thu, 18 Aug 2022 17:10:19 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     shaomin Deng <dengshaomin@cdjrlc.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: usbtest: Fix typo in comments
+Message-ID: <Yv5WW7vuLskqwP4c@kroah.com>
+References: <20220810103000.8721-1-dengshaomin@cdjrlc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fae7e35a920239fe2a35b6b967bd17e04af1e1b7.camel@hadess.net>
+In-Reply-To: <20220810103000.8721-1-dengshaomin@cdjrlc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -62,33 +49,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 07:27:11PM +0200, Bastien Nocera wrote:
-> On Tue, 2022-08-09 at 18:33 +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Aug 09, 2022 at 04:31:04PM +0200, Bastien Nocera wrote:
-> > > On Tue, 2022-08-09 at 12:38 +0200, Greg Kroah-Hartman wrote:
-> > > > Now if you really really want to disable a device from under a
-> > > > user,
-> > > > without the file handle present, you can do that today, as root,
-> > > > by
-> > > > doing the 'unbind' hack through userspace and sysfs.  It's so
-> > > > common
-> > > > that this seems to be how virtual device managers handle virtual
-> > > > machines, so it should be well tested by now.
-> > > 
-> > > The only thing I know that works that way is usbip, and it requires
-> > > unbinding each of the interfaces:
-> > > 
-> > > https://sourceforge.net/p/usbip/git-windows/ci/master/tree/trunk/userspace/src/bind-driver.c#l157
-> > 
-> > virtio devices also use the api from what I recall.
+On Wed, Aug 10, 2022 at 06:30:00AM -0400, shaomin Deng wrote:
+> Delete the rebundant word "with" in comments.
 > 
-> I can't find any code that would reference
-> /sys/bus/usb/drivers/usbfs/unbind or /sys/bus/usb/drivers/usbfs wrt
-> virtio. Where's the host side code for that?
+> Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
+> ---
+>  drivers/usb/misc/usbtest.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
+> index 150090ee4ec1..ac0d75ac2d2f 100644
+> --- a/drivers/usb/misc/usbtest.c
+> +++ b/drivers/usb/misc/usbtest.c
+> @@ -2638,7 +2638,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
+>   * different busses) to use when testing, and allocate one thread per
+>   * test.  So discovery is simplified, and we have no device naming issues.
+>   *
+> - * Don't use these only as stress/load tests.  Use them along with with
+> + * Don't use these only as stress/load tests.  Use them along with
+>   * other USB bus activity:  plugging, unplugging, mousing, mp3 playback,
+>   * video capture, and so on.  Run different tests at different times, in
+>   * different sequences.  Nothing here should interact with other devices,
+> -- 
+> 2.35.1
+> 
 
-I mean the virtio code uses bind/unbind for it's devices, nothing to do
-with USB other than the userspace interface involved.
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch did not apply to any known trees that Greg is in control
+  of.  Possibly this is because you made it against Linus's tree, not
+  the linux-next tree, which is where all of the development for the
+  next version of the kernel is at.  Please refresh your patch against
+  the linux-next tree, or even better yet, the development tree
+  specified in the MAINTAINERS file for the subsystem you are submitting
+  a patch for, and resend it.
+
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
