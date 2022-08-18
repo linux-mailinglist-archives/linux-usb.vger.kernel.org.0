@@ -2,95 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0848A598729
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 17:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BF8598967
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 18:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245755AbiHRPPz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Aug 2022 11:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S1344391AbiHRQy2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 12:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245120AbiHRPPy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 11:15:54 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D0672EC0;
-        Thu, 18 Aug 2022 08:15:52 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id c39so2323195edf.0;
-        Thu, 18 Aug 2022 08:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5jf2La2WzmcjgUchLTXC01GUtAH46tT26LIoZiQDfzE=;
-        b=iFz46T5OYv3VU1MVMvIauk7AlBXUmu/ghWRT/9G9Rj3OSDgptbP3NrW5ckC4ZGgzNf
-         BpOfmNLi0Dh40chjXk6ZyaElF6oyXIjzU4q+TKl900WkNXiV+D3oZ1/K9knGZ4XxiFyu
-         vPSEApn9CQqttbOc3K+ZahH+nV0DiWIAM8OX8xyyki5Dxi6f1GryLw30OrzIPQsook3p
-         cnCWuNPc/XKFXmgNJk2N+eH1Ojxsb+7q0SvsR9ESF4qxwIOZKCmT6FmxL/LTKiik1VRS
-         FifkNRCqbK5GG/LhZ2rHYRabaSuk1Iaikn3e1ti431pcEKzdnLjHA+3hvhNiFUDlRvfI
-         NdiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5jf2La2WzmcjgUchLTXC01GUtAH46tT26LIoZiQDfzE=;
-        b=r0D9cX6HOnAK58CXWXSbfi4tUKync7mLjV80GChrzMINNkBb6W/uUplJoQ4GlMlXbX
-         bm9as2kjHHqXZXilnBP12dMjvigVBAZyO6W8WLjszaq0asqJdZ1wwdJFPR1s+3KXwz4y
-         27doK63ct3e9lmoamV84UmYWhujXolfeOpyjFDhZZJuOkCfVU8wwCljorDPDK5b3Yt/a
-         ac4fni0Q6ks2J3EDW16iYkPIvNDO60WlmMjqmVtgpQKT9BXJjuR/UlqO8+WJlZbL2Xg+
-         6d6AZcZG1YorSLzluqt10qeOr8xzuTilNSIoVcmOK4CM7yylLSUMBAAM44nrU6THAm2j
-         +oWg==
-X-Gm-Message-State: ACgBeo3XTGej6CChnPPyoBDk5QQISIQA8lZdB1u6SzVwfXfPA0yMfeZI
-        TLVp9CNuBAUmLGBvbuoEMhPt6FRb6yNaKirQiSU=
-X-Google-Smtp-Source: AA6agR4jybmfsZrjc6F3THjZOpgW5ci+P6K1RHkNI3S5ywMtdEWBG/BAQvLDX5aMHXebOnV1wgkdkcy58LKUe4dW6ss=
-X-Received: by 2002:a05:6402:28c8:b0:43e:8622:1c21 with SMTP id
- ef8-20020a05640228c800b0043e86221c21mr2649869edb.135.1660835751169; Thu, 18
- Aug 2022 08:15:51 -0700 (PDT)
+        with ESMTP id S245254AbiHRQyY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 12:54:24 -0400
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB11FB3B3B;
+        Thu, 18 Aug 2022 09:54:22 -0700 (PDT)
+Received: from [IPV6:2a01:cb08:8f65:d300:4b96:ac4c:4229:8341] (unknown [IPv6:2a01:cb08:8f65:d300:4b96:ac4c:4229:8341])
+        (Authenticated sender: thierry.guibert@free.fr)
+        by smtp2-g21.free.fr (Postfix) with ESMTPSA id 26CFF20058B;
+        Thu, 18 Aug 2022 18:54:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1660841660;
+        bh=fNODoRwgMqBmiUR1DtqC90sxQo+eXH53t3BH10G1AUc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OLtzt4Fk62Nw6vgrczyAQ4ugiZWjaWhDyFgUgI9pFYROtn+MbKuIeyr6mFOVUPB29
+         qPyfU6CUgFbMdhCUfDZopG0gvqMt835jisfYcQ/tThOk+ufNmz95LW8lQUxpQegf0f
+         AW9M5hvdnRQRLVbhbcV9h9yY4jz4HEn+96A0Hqv8rDucvZNusZ2G9tdNbu/eQeoFdc
+         Wkc7NsdcYV3FL1NjRnJ1n/Zu6egxISGM3MYomhXNgrBOYsfWhFAhxNrSV8ymvT3htS
+         IUXVcdcCY8/S4uKXQy2NxwKSSaf82nKEXrrCglLrWnI/mR8jXGPlwD9LMy6XDsbJdM
+         I2UTYt58MY6cA==
+Message-ID: <67aa9041-b9c9-435f-f4a2-b453344ba779@free.fr>
+Date:   Thu, 18 Aug 2022 18:54:15 +0200
 MIME-Version: 1.0
-References: <20220812061805.88627-1-dzm91@hust.edu.cn> <20220812061805.88627-2-dzm91@hust.edu.cn>
- <Yv5VkNvk6CDBFgNK@kroah.com>
-In-Reply-To: <Yv5VkNvk6CDBFgNK@kroah.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 18 Aug 2022 23:15:22 +0800
-Message-ID: <CAD-N9QUO9i0rkUGu_buBLSkFaTvvHp69ynkP30kEcmCRDDQg8A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] USB: trancevibrator: simplify tv_probe
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, USB <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220817102440.117640-1-thierry.guibert@croix-rouge.fr>
+ <Yv5U7Xw5gHSY5EH0@kroah.com>
+Content-Language: fr
+From:   Thierry GUIBERT <thierry.guibert@free.fr>
+In-Reply-To: <Yv5U7Xw5gHSY5EH0@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:06 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Aug 12, 2022 at 02:18:02PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > The function tv_probe does not need to invoke kfree when the
-> > allocation fails. So let's simplify the code of tv_probe.
-> >
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > ---
-> > v2->v3: fix the truncated subject of PATCH 2/2.
-> > v1->v2: no change
-> >
-> >  drivers/usb/misc/trancevibrator.c | 11 ++---------
-> >  1 file changed, 2 insertions(+), 9 deletions(-)
->
-> Note, I would recommend you work on basic "clean up" patches in the
-> drivers/staging/ directory so as to get experience on how to submit
-> patches properly before working in other parts of the kernel tree.  That
-> way subsystems that don't normally take "cleanup" patches don't get
-> bogged down in basic patch-process issues like this one did.
+Hi Greg,
 
-I see. Thanks for your suggestion.
+Do you expect me to reorder the whole structure by VendorId / ProductId ?
 
+I can place my node after Castles VEGA 3000, but nodes "MARETRON USB100" 
+"Alcatel OT-I650" and "DATECS FP-2000" are misplaced too in that case.
+
+Regards,
+
+
+On 18/08/2022 17:04, Greg KH wrote:
+> On Wed, Aug 17, 2022 at 12:24:40PM +0200, Thierry GUIBERT wrote:
+>> Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
+>> enabling the AT serial port.
+>> The Vendor Id is 0x0C26
+>> The Product ID is 0x0020
+>>
+>> Output of lsusb :
+>> Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
+>> Couldn't open device, some information will be missing
+>> Device Descriptor:
+>>    bLength                18
+>>    bDescriptorType         1
+>>    bcdUSB               2.00
+>>    bDeviceClass            2 Communications
+>>    bDeviceSubClass         0
+>>    bDeviceProtocol         0
+>>    bMaxPacketSize0        64
+>>    idVendor           0x0c26 Prolific Technology Inc.
+>>    idProduct          0x0020
+>>    bcdDevice            0.00
+>>    iManufacturer           1 ICOM Inc.
+>>    iProduct                2 ICOM Radio
+>>    iSerial                 3 *obfuscated*
+>>    bNumConfigurations      1
+>>    Configuration Descriptor:
+>>      bLength                 9
+>>      bDescriptorType         2
+>>      wTotalLength       0x0030
+>>      bNumInterfaces          2
+>>      bConfigurationValue     1
+>>      iConfiguration          0
+>>      bmAttributes         0xc0
+>>        Self Powered
+>>      MaxPower                0mA
+>>      Interface Descriptor:
+>>        bLength                 9
+>>        bDescriptorType         4
+>>        bInterfaceNumber        0
+>>        bAlternateSetting       0
+>>        bNumEndpoints           1
+>>        bInterfaceClass         2 Communications
+>>        bInterfaceSubClass      2 Abstract (modem)
+>>        bInterfaceProtocol      1 AT-commands (v.25ter)
+>>        iInterface              0
+>>        Endpoint Descriptor:
+>>          bLength                 7
+>>          bDescriptorType         5
+>>          bEndpointAddress     0x83  EP 3 IN
+>>          bmAttributes            3
+>>            Transfer Type            Interrupt
+>>            Synch Type               None
+>>            Usage Type               Data
+>>          wMaxPacketSize     0x0040  1x 64 bytes
+>>          bInterval              12
+>>      Interface Descriptor:
+>>        bLength                 9
+>>        bDescriptorType         4
+>>        bInterfaceNumber        1
+>>        bAlternateSetting       0
+>>        bNumEndpoints           2
+>>        bInterfaceClass        10 CDC Data
+>>        bInterfaceSubClass      0
+>>        bInterfaceProtocol      0
+>>        iInterface              0
+>>        Endpoint Descriptor:
+>>          bLength                 7
+>>          bDescriptorType         5
+>>          bEndpointAddress     0x82  EP 2 IN
+>>          bmAttributes            2
+>>            Transfer Type            Bulk
+>>            Synch Type               None
+>>            Usage Type               Data
+>>          wMaxPacketSize     0x0200  1x 512 bytes
+>>          bInterval               0
+>>        Endpoint Descriptor:
+>>          bLength                 7
+>>          bDescriptorType         5
+>>          bEndpointAddress     0x02  EP 2 OUT
+>>          bmAttributes            2
+>>            Transfer Type            Bulk
+>>            Synch Type               None
+>>            Usage Type               Data
+>>          wMaxPacketSize     0x0200  1x 512 bytes
+>>          bInterval               0
+>>
+>> Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+>> ---
+>>   drivers/usb/class/cdc-acm.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+>> index 9b9aea24d58c..7735c6edce73 100644
+>> --- a/drivers/usb/class/cdc-acm.c
+>> +++ b/drivers/usb/class/cdc-acm.c
+>> @@ -1813,6 +1813,9 @@ static const struct usb_device_id acm_ids[] = {
+>>   	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
+>>   	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
+>>   	},
+>> +	{ USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
+>> +	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
+>> +	},
+> These were all in sorted order, until your entry :(
+>
+> Can you fix this up to be in the correct order and resend a v2?
 >
 > thanks,
 >
