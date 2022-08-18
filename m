@@ -2,44 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ACE5986D3
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 17:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1115986F1
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 17:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344023AbiHRPEY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Aug 2022 11:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S1344084AbiHRPHJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 11:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344033AbiHRPEV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 11:04:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EFA3CBC8;
-        Thu, 18 Aug 2022 08:04:19 -0700 (PDT)
+        with ESMTP id S1344113AbiHRPHG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 11:07:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805D19C53D;
+        Thu, 18 Aug 2022 08:07:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1687DCE20C3;
-        Thu, 18 Aug 2022 15:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12DA1C433B5;
-        Thu, 18 Aug 2022 15:04:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 142526135F;
+        Thu, 18 Aug 2022 15:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20718C433D6;
+        Thu, 18 Aug 2022 15:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660835056;
-        bh=vBhKqDvpAfhoNzcM9gcsVCR1KKZq7v+wp1Li/loUVDw=;
+        s=korg; t=1660835219;
+        bh=WkrNCbKYD3xZKpJJ81qL8Xck1IuTybQeeZNEiImLgSQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DvGMZKAhoCDn2oqCGr++nUr+qzxOYRcBRb6wIfhTu8WZ9gxneHoW4E0e3oJ5MdJRb
-         ESq4tKFiAtwzj7HEzhPKNKkdYZ2bpiWxc9UGtlwLk4kndv5D+5VinOQwRJZ89nfzZ6
-         Khy5GIWLX2HCKmXo58wSG+1RsXjSxwjSVuushzzo=
-Date:   Thu, 18 Aug 2022 17:04:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
-Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thierry.guibert@free.fr
-Subject: Re: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
-Message-ID: <Yv5U7Xw5gHSY5EH0@kroah.com>
-References: <20220817102440.117640-1-thierry.guibert@croix-rouge.fr>
+        b=VMDbJXG35jSoumiaoCsmU82g7/aLhi4RiQpct4YTnPDkJaqqXE4mYRFxCzn4ruLzL
+         8AHcJr1atGYjPOo28gFL4fz2xH6p0aLhE67gJGgVfq87WuDI7EDyhFy6Xe15zvM6Zt
+         esN+nxXBVuQNKf7tqC2jLC7cwwd2qHtT5b+79LKI=
+Date:   Thu, 18 Aug 2022 17:06:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] USB: trancevibrator: simplify tv_probe
+Message-ID: <Yv5VkNvk6CDBFgNK@kroah.com>
+References: <20220812061805.88627-1-dzm91@hust.edu.cn>
+ <20220812061805.88627-2-dzm91@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817102440.117640-1-thierry.guibert@croix-rouge.fr>
+In-Reply-To: <20220812061805.88627-2-dzm91@hust.edu.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -50,111 +51,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:24:40PM +0200, Thierry GUIBERT wrote:
-> Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
-> enabling the AT serial port.
-> The Vendor Id is 0x0C26
-> The Product ID is 0x0020
+On Fri, Aug 12, 2022 at 02:18:02PM +0800, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
 > 
-> Output of lsusb :
-> Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
-> Couldn't open device, some information will be missing
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            2 Communications
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x0c26 Prolific Technology Inc.
->   idProduct          0x0020
->   bcdDevice            0.00
->   iManufacturer           1 ICOM Inc.
->   iProduct                2 ICOM Radio
->   iSerial                 3 *obfuscated*
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0030
->     bNumInterfaces          2
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0xc0
->       Self Powered
->     MaxPower                0mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         2 Communications
->       bInterfaceSubClass      2 Abstract (modem)
->       bInterfaceProtocol      1 AT-commands (v.25ter)
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval              12
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        1
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x82  EP 2 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
+> The function tv_probe does not need to invoke kfree when the
+> allocation fails. So let's simplify the code of tv_probe.
 > 
-> Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 > ---
->  drivers/usb/class/cdc-acm.c | 3 +++
->  1 file changed, 3 insertions(+)
+> v2->v3: fix the truncated subject of PATCH 2/2.
+> v1->v2: no change
 > 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 9b9aea24d58c..7735c6edce73 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -1813,6 +1813,9 @@ static const struct usb_device_id acm_ids[] = {
->  	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
->  	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
->  	},
-> +	{ USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
-> +	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
-> +	},
+>  drivers/usb/misc/trancevibrator.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
 
-These were all in sorted order, until your entry :(
-
-Can you fix this up to be in the correct order and resend a v2?
+Note, I would recommend you work on basic "clean up" patches in the
+drivers/staging/ directory so as to get experience on how to submit
+patches properly before working in other parts of the kernel tree.  That
+way subsystems that don't normally take "cleanup" patches don't get
+bogged down in basic patch-process issues like this one did.
 
 thanks,
 
