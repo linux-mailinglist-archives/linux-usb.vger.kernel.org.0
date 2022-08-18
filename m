@@ -2,92 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D40E598CC4
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 21:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C44598E13
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 22:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345615AbiHRTmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Aug 2022 15:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        id S1344810AbiHRUbc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 16:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiHRTmK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 15:42:10 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49904D022C;
-        Thu, 18 Aug 2022 12:42:09 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IHncIY003371;
-        Thu, 18 Aug 2022 19:42:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Wozy6Im1+BYwMsxpqAwMsftPMqghP6KsBZQfC6UPYu8=;
- b=g+qWRP8Jhc0kBtXwRdw61jbYUia0HCjMZ1CGbNqKWfRF38HSzkLLCEirI6phq45HcYPE
- bkkQKdx8oW2eXwU70i/jVttubn+trP0PCI5m9S2z1AGXQsIyk7OstDKTZWSHYgPgFku/
- eXxpNFotvdLEDjqryIKjR5BiPI9b4+yIndjHhwvuvsAxG5s5KxE+IQd5EZeW5N8P7qlt
- thJJLHNLi9c5P+wQ9CRjnxd+QC8A9lRxPKFhfY2f76cVAISJh45L7neaM2kBtABwcOD5
- u5Wmiuk0kKFODHWX+z4SyzOxpgdWHj7GzfUeQx0fQgaZdOkJKmAmey+S6WTUWe7/WtjC vA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j1rvb0qf6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 19:42:01 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27IJg01e014487
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 19:42:00 GMT
-Received: from [10.110.31.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 18 Aug
- 2022 12:41:59 -0700
-Message-ID: <b3d71d92-a748-4779-1b3d-011a4609d61d@quicinc.com>
-Date:   Thu, 18 Aug 2022 12:41:56 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/5] usb: gadget: Add function wakeup support
-Content-Language: en-US
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        with ESMTP id S1346057AbiHRUb3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 16:31:29 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94496D274E
+        for <linux-usb@vger.kernel.org>; Thu, 18 Aug 2022 13:31:24 -0700 (PDT)
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2104.outbound.protection.outlook.com [104.47.22.104]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-8-GkO82eQWN-SpHsuFT7mYqw-2; Thu, 18 Aug 2022 22:31:21 +0200
+X-MC-Unique: GkO82eQWN-SpHsuFT7mYqw-2
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ ZRAP278MB0577.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3c::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5546.16; Thu, 18 Aug 2022 20:31:18 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::cd78:5df6:612c:455f]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::cd78:5df6:612c:455f%2]) with mapi id 15.20.5546.016; Thu, 18 Aug 2022
+ 20:31:18 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "dev@pschenker.ch" <dev@pschenker.ch>,
+        "frieder.schrempf@kontron.de" <frieder.schrempf@kontron.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_mrana@quicinc.com" <quic_mrana@quicinc.com>
-References: <1659467920-9095-1-git-send-email-quic_eserrao@quicinc.com>
- <1659467920-9095-3-git-send-email-quic_eserrao@quicinc.com>
- <049219f1-8c68-e4cc-7bf9-1e8c214e80aa@synopsys.com>
- <32a0765e-00d9-1a67-bf36-4060c5fcb008@quicinc.com>
- <8705d52e-2181-aebd-43b8-2c8d021339c7@synopsys.com>
- <5ad70f41-622e-2d75-7c53-89aba1255a5f@quicinc.com>
- <ac8e012f-08f3-baed-ead0-231f0527864c@synopsys.com>
- <b123b543-6c82-2787-9730-addd3e6e70a3@quicinc.com>
- <98966b47-0bc5-6ec0-ec80-5eff1d71d9fd@synopsys.com>
- <e3bcfd4c-efdb-c7b0-4e94-1afcd3b8eb73@synopsys.com>
- <1fac4c0f-4e8b-f333-7208-c50353a806f4@synopsys.com>
- <dc5cdba3-fcbc-79a2-797e-2553c727cba5@quicinc.com>
- <6e8de558-7183-d3f1-9ba7-83a612675e17@synopsys.com>
- <e22d4f8e-0ca7-056e-e5ec-4fc97cbaf08b@quicinc.com>
-In-Reply-To: <e22d4f8e-0ca7-056e-e5ec-4fc97cbaf08b@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: E1l_6Vty-PJwBNPkwEb4yzHZXwikoV3-
-X-Proofpoint-GUID: E1l_6Vty-PJwBNPkwEb4yzHZXwikoV3-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_14,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- phishscore=0 adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- impostorscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180071
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "ping.bai@nxp.com" <ping.bai@nxp.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "jun.li@nxp.com" <jun.li@nxp.com>
+Subject: Re: [PATCH] arm64: dts: verdin-imx8mm: add otg2 pd to usbphy
+Thread-Topic: [PATCH] arm64: dts: verdin-imx8mm: add otg2 pd to usbphy
+Thread-Index: AQHYnaCBpxVIgTEi90SaHb3zjZW4/K2aBSwAgAO+9wCAANHiAIAWsamA
+Date:   Thu, 18 Aug 2022 20:31:18 +0000
+Message-ID: <fe4c482aaac64ff59e04d50a2002854c266cca53.camel@toradex.com>
+References: <20220722075600.10943-1-dev@pschenker.ch>
+         <7ef6812e-5732-e8c7-e796-f568de4eef62@kontron.de>
+         <48e83d4f3755ebef722734f65777822529ab08f9.camel@toradex.com>
+         <917495af-96c3-b35c-f5f9-8e244a0d7d0b@kontron.de>
+In-Reply-To: <917495af-96c3-b35c-f5f9-8e244a0d7d0b@kontron.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2e673a6d-a530-4b22-d180-08da81589ae6
+x-ms-traffictypediagnostic: ZRAP278MB0577:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: CEq/YiW0f9uJVb2HZJbF8MkfkWSabHnUidk2dryE2Zpiqo8wPOTU+MKOQpftfX7wbe0T2Bc5dnt65NDk2n1c8Jr4cGXjDJC6STbicxPBvXX18sJdw4giBAimMPLkBeNjSOuL5YSg782B/S+70K0MDRlO+j9BupL83IA3AwGigthdeb4u/+7eYNonTRLnK9nW5yxwie8ve0DhiWxCPaBSP8gCs0p2If7aglfCHLk6URu2Uxxic5qtIpo7cL01BOHoyIbj06E0vdxRAYL2wllaihHT0u7sjJy2gqqwUMOoJvMTty7y3xdf1R5OoDovQ00Gp9Y4ec6IpHdPMFzRA8Ty4f+IxtQA+o8Z3HOKyj7DxMVnxXoAsug7Xe+j+d/U9txpNAiCoQLZJjgxbJr0TUJNjvfTBlOBzKLu31tyUduyzB0PhzZwHKKumLEkYRKOLnLYHZXcO0+lD+Py8+5aO+ton+30k5q5xfPSiqAWw4IY0N9YaGtR4EZlbSBnPAh4on8pM/1s0mroJ9WTD3baAKgoyeoLPBOiElzj41j1bkq6ne2um/xgFkOOKmpDqQNPkQKToQA6Ps6AjhDPTbMjofN/nnKuOmznhz9S5IT5toEMsTUkVn6Ybio/W2LLt7o6KQkSlwNf1uxQZo82kZcgfcmolvGv1bb8btj1vOPuJ9Fuc0V/2JEsuh49Oe/hFT5s0pXwNRvRtk8BB8UudfWGjf4wf2ihWiyJrn05CIfoSL30bAN1zCI0bgnRY+eIz5zfaOHbIV4PU4bnS5hbvICzwHduWcRiN+hY1PcnfwtGQ7v2HfM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(136003)(39850400004)(396003)(44832011)(2906002)(71200400001)(41300700001)(66446008)(64756008)(4326008)(478600001)(8936002)(5660300002)(7416002)(66946007)(76116006)(66476007)(86362001)(66556008)(966005)(6486002)(8676002)(186003)(83380400001)(2616005)(6512007)(6506007)(26005)(38070700005)(122000001)(38100700002)(110136005)(54906003)(316002)(36756003);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MjdveFpsV1B5YzdqaWkzNm5rYUFOZHBadUpTTzJvR1p6dC9mM2p3bmFpdzQr?=
+ =?utf-8?B?Y3I0STlYVlp0ME5OYmg1dS8wTTF4NU9URk54Tkc1Vyt6WnhkTkZPOGZWVXdS?=
+ =?utf-8?B?djFzUVMzUGljT0FiY21TaVlQdWhIU0FabXpCSzhOYlROVCt3YnVXcDIrOEtr?=
+ =?utf-8?B?bCtUSXkzcllOZEhrcElJR1JVdUZUU0Z4TWFqSXhMT0JueUN0QXJlTURmd21z?=
+ =?utf-8?B?Z3NEbmVXVGJNc0V2RDAxZHZVSHlVT2pHSmNGQ3JaK2krN24vdjNOK0JCSHlp?=
+ =?utf-8?B?RFN0TythaGxBekw2RlNYUXYybUpCNC93R2M4bENxbWJzNGI1cUEvQ2JRTWdI?=
+ =?utf-8?B?S0NhejMvV0ZzbzFLb0ZCbGZKc1VBeTV2MHkvMWtScXVTODlxOVVRVDBBY1RG?=
+ =?utf-8?B?WmVhMWdRNXVjOG14NHdsMVZ1bC9kRmZ1TFdVVWYxcWpRVUpVOWNLRE84SjBT?=
+ =?utf-8?B?YldXcmdwdU1mWkVUTjRrQ2xWcGc4eW9CeFpKQXpwQ1NQcW9rWHRIbHpIV1Av?=
+ =?utf-8?B?WGhOWjNCKzhYa2NJa2NsRGlwK21PcHdFRVRmWHlZSWh2YjV0Z29yTDZPeC9m?=
+ =?utf-8?B?MDdyaWZ5eis2dVg2NzJLYzJWaFZ4OHJKeEl6Sjl2RjA0dEJkUG5GOTJySnM1?=
+ =?utf-8?B?YXdPS0NhWkFkWjllNDNQWDhZK1AyNllyZVBLNU5sdmpqY3RZQy9MQmpYdHc0?=
+ =?utf-8?B?REVLaXBjTTF0RkFHNTlFZ0c3ZjVFbDhLSlU2ckFjbEdvN3BGeEYvZ3dodjNG?=
+ =?utf-8?B?R3lmbUNBbDd1ZExycUhQZ1hVTThidWNKbUF0Z1E4UDBLMTlTWnA1WTdRcUN0?=
+ =?utf-8?B?d2tmK0pKOFE2QjlhaU1ZR3NKVHh5TldaVXJuSGxZUjNoTUZMRjFJZnZxSlFU?=
+ =?utf-8?B?UldNT0hGZzVVdUhIcW4vdzVid0picVZqeWJrSEVQY3RqbXUvQ2V5a1N3SlNY?=
+ =?utf-8?B?aEk5dXJmc2YxMUJQT2hKZ2NhS2M4YWtJS0RNaFdBNmlOcWUvSnJWQWM3ZUo0?=
+ =?utf-8?B?cmNFSWQ3dlljZmh4U085REtSKzFUUm50aGJHVEZiVDBnSE4vL05YZUhiY1VK?=
+ =?utf-8?B?RjhwSEZWTWp2KzNzREgxbmg5MWMvbmRBR2hpUEI1V0ZHL0RXWTZEVGgwcEJX?=
+ =?utf-8?B?U0dNOU81MDlvaU8ycUdjMjZSMVBJMEQvLzJ1M1JLaWxwOW5CUWM4cFQvdkFC?=
+ =?utf-8?B?SGQ5WHlTZ2lLVEtOT0oxUHlQQ2xQK0E0UUMzNVRSVEJ2bWViRjc5VmFIMGpX?=
+ =?utf-8?B?L2UxcVEyck95NldIejAxaldXbEo5bisrdHl0QXM0UmMzRE4wamMxcTUxbUZm?=
+ =?utf-8?B?dWdhWmFwVFI0ZEczMlhtT0s4OXJNMXdJd05ReWNIb01ZNDhpQzVqS09kd0NP?=
+ =?utf-8?B?QkFCWEpqKytpWVRyV1JLTWwyOGFIMlBOb243NG16RXBPZEwxWTZxMDdzOXVH?=
+ =?utf-8?B?SjF1cFNET1V0R0VDcHlDelJTb1JKREZSczhwQ1p2aEJTeStLRHlieUtTeWF0?=
+ =?utf-8?B?cVMvM2pwTytCLzRXZTc2d3RLQ2tXakpZeEFhQTFxVXV6emhCWHhVTW9IOVUz?=
+ =?utf-8?B?WHdkaWNOQ1dlQW1STVRNQlVPaWdiWDhqcmNKcmZ1cjdFbjAxTXJwaXVUUHFX?=
+ =?utf-8?B?SlByT25CVDNmSHE1a0pCa2FuYkFNWUVWMldkVzRrSFpvTFZRNWFDZzVwQld4?=
+ =?utf-8?B?dmxxNmtOdml1Z3RJamRZbzJudnlVQjVLa0xDcDljVXVrK2Z2cldhWXJaTmFK?=
+ =?utf-8?B?RWordy9CQk5UeHV3L0NONUtzKzdTeDAycUw1QmM4d1A5ajZoNEtiUVI5L3NC?=
+ =?utf-8?B?U01RRHJkaXNBeXhPOVZlelRoZHk3aDQ2byswSy9JdkNBcVR6NUcvMGFpUWpw?=
+ =?utf-8?B?ZUlsdEh1MXh4U3BTSGVibjVwM2Exbi9GVmc3b0tBZ1JKZzlGYVE4UVRoVmlO?=
+ =?utf-8?B?Ym9pRXg1UUhvRCtOS3ZPN2h2UjhnWnMzNWJSc2xVSU90M1lsTEJQYWJoWlJL?=
+ =?utf-8?B?b0dPcGhiTnFEZjBjVWY3djMzV3N4ZEhwNFIrYVpzcmo5RUVUYUpaaHJOcUt6?=
+ =?utf-8?B?cmEwb2FRZUhacjJUSFNWRXg4ODdIQktocUNpNmpVMkVjTVRoanpDTlBUdFZU?=
+ =?utf-8?B?YlU5UUx4bnlrUXNaRXlrR3pSM0VNVnluY2V0UUVtQ1B3eUhOOWxmL1p5K2l5?=
+ =?utf-8?Q?7RDAx+VwCA66+UBKQMjOKbs=3D?=
+MIME-Version: 1.0
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e673a6d-a530-4b22-d180-08da81589ae6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2022 20:31:18.2114
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OIRCb1Iy6gbCQWwn9NwPAer0REShFgYKTUxb4VOOWPrvj8T15ET+KQHDnHkJiNHkU7ypRabCy2tMVnvFV7VYmyoYrgaplCSjOuPDshbskjE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0577
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <3CECEAAF7C416E44A0053D7835D60463@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,220 +136,153 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+SGkgRnJpZWRlcg0KDQpPbiBUaHUsIDIwMjItMDgtMDQgYXQgMTE6NTcgKzAyMDAsIEZyaWVkZXIg
+U2NocmVtcGYgd3JvdGU6DQo+IEhpIE1hcmNlbCwNCj4gDQo+IEFtIDAzLjA4LjIyIHVtIDIzOjI2
+IHNjaHJpZWIgTWFyY2VsIFppc3dpbGVyOg0KPiA+IEhpIEZyaWVkZXINCj4gPiANCj4gPiBBcyBQ
+aGlsaXBwZSBpcyBhYm91dCB0byBnbyBvbiBoaXMgd2VsbC1kZXNlcnZlZCB2YWNhdGlvbiBoZSBh
+c2tlZCBteSB0byBoZWxwIGFuc3dlcmluZyB5b3VyIHF1ZXN0aW9ucy4gQXMgSQ0KPiA+IHdhcw0K
+PiA+IGFsc28gaW52b2x2ZWQgaW4gdGhlIGluaXRpYWwgYW5hbHlzaXMgb2YgdGhpcyBpc3N1ZSBJ
+IGFtIGhhcHB5IHRvIGhlbHAuDQo+IA0KPiBUaGFua3MgZm9yIGZvbGxvd2luZyB1cCBvbiB0aGlz
+IQ0KDQpXZWxjb21lLg0KDQpQaGlsaXBwZSBub3cgbW9kaWZpZWQgb25lIG9mIG91ciBjYXJyaWVy
+IGJvYXJkcyB0byBqdXN0IHJvdXRlIE9URzIgc3RyYWlnaHQgdG8gYSBVU0ItQSByZWNlcHRhY2xl
+IHJhdGhlciB0aGFuDQpnb2luZyB0aHJvdWdoIGEgVVNCIGh1Yi4gVGhhdCB3YXkgSSB3YXMgbm93
+IGFibGUgdG8gYXQgbGVhc3QgdGVzdCB3aXRob3V0IGFuIGFsd2F5cyBjb25uZWN0ZWQgT1RHMi4N
+Cg0KPiA+IE9uIE1vbiwgMjAyMi0wOC0wMSBhdCAxNDoxNCArMDIwMCwgRnJpZWRlciBTY2hyZW1w
+ZiB3cm90ZToNCj4gPiA+ICtDQzogTGkgSnVuLCBKYWNreSBCYWksIEx1Y2FzIFN0YWNoDQo+ID4g
+PiANCj4gPiA+IEhpIFBoaWxpcHBlLA0KPiA+ID4gDQo+ID4gPiBBbSAyMi4wNy4yMiB1bSAwOTo1
+NSBzY2hyaWViIFBoaWxpcHBlIFNjaGVua2VyOg0KPiA+ID4gPiBGcm9tOiBQaGlsaXBwZSBTY2hl
+bmtlciA8cGhpbGlwcGUuc2NoZW5rZXJAdG9yYWRleC5jb20+DQo+ID4gPiA+IA0KPiA+ID4gPiBU
+aGUgVmVyZGluIGlNWDhNIE1pbmkgU3lzdGVtIG9uIE1vZHVsZSBkb2VzIG5vdCBoYXZlIFZCVVMN
+Cj4gPiANCj4gPiBJdCdzIGFjdHVhbGx5IHRoZSBJRCBwaW4gd2UgYXJlIHRhbGtpbmcgYWJvdXQu
+IFZCVVMgaXMgY29ubmVjdGVkIGp1c3QgZmluZS4NCg0KUGhpbGlwcGUgcG9zdGVkIGFuIHVwZGF0
+ZWQgcGF0Y2ggaGVyZSBbMV0uDQoNCj4gPiA+ID4gc2lnbmFsDQo+ID4gPiA+IGNvbm5lY3RlZCBv
+biBWZXJkaW4gVVNCXzIgKHVzYm90ZzIpLiBPbiBWZXJkaW4gRGV2ZWxvcG1lbnQgYm9hcmQgdGhp
+cyBpcw0KPiA+ID4gPiBubyBwcm9ibGVtLCBhcyB3ZSBoYXZlIGNvbm5lY3RlZCBhIFVTQi1IdWIg
+dGhhdCBpcyBhbHdheXMgY29ubmVjdGVkLg0KPiA+ID4gPiANCj4gPiA+ID4gSG93ZXZlciwgaWYg
+VmVyZGluIFVTQl8yIGlzIGRlc2lyZWQgdG8gYmUgdXNlZCBhcyBhIHNpbmdsZSBVU0ItSG9zdCBw
+b3J0DQo+ID4gPiA+IHRoZSBjaGlwaWRlYSBkcml2ZXIgZG9lcyBub3QgZGV0ZWN0IGlmIGEgVVNC
+IGRldmljZSBpcyBwbHVnZ2VkIGludG8gdGhpcw0KPiA+ID4gPiBwb3J0LCBkdWUgdG8gcnVudGlt
+ZSBwbSBzaHV0dGluZyBkb3duIHRoZSBQSFkuDQo+ID4gPiA+IA0KPiA+ID4gPiBBZGQgdGhlIHBv
+d2VyLWRvbWFpbiAmcGdjX290ZzIgdG8gJnVzYnBoeW5vcDIgaW4gb3JkZXIgdG8gZGV0ZWN0DQo+
+ID4gPiA+IHBsdWdnaW5nIGV2ZW50cyBhbmQgZW51bWVyYXRlIHRoZSB1c2IgZGV2aWNlLg0KPiA+
+ID4gPiANCj4gPiA+ID4gRml4ZXM6IDZhNTdmMjI0ZjczNCAoImFybTY0OiBkdHM6IGZyZWVzY2Fs
+ZTogYWRkIGluaXRpYWwgc3VwcG9ydCBmb3IgdmVyZGluIGlteDhtIG1pbmkiKQ0KPiA+ID4gPiBT
+aWduZWQtb2ZmLWJ5OiBQaGlsaXBwZSBTY2hlbmtlciA8cGhpbGlwcGUuc2NoZW5rZXJAdG9yYWRl
+eC5jb20+DQo+ID4gPiANCj4gPiA+IEknbSBwcm9iYWJseSBoYXZpbmcgdGhlIHNhbWUgaXNzdWUg
+b24gb3VyIGhhcmR3YXJlLg0KPiA+IA0KPiA+IERvZXMgeW91ciBoYXJkd2FyZSBhbHNvIE5PVCBj
+b25uZWN0IHRoZSBJRCBwaW4gKHNvcnJ5LCBQaGlsaXBwZSBpbml0aWFsbHkgY29uZnVzZWQgaXQg
+d2l0aCB0aGUgVkJVUyBwaW4pPw0KPiANCj4gV2UgaGF2ZSBib3RoIChzYW1lIFNvTSk6DQo+IA0K
+PiBLb250cm9uIEJMIGkuTVg4TU06DQo+ICogVVNCMSBjb25uZWN0ZWQgdG8gTWljcm8tQiBQb3J0
+IHdpdGggSUQgcGluIChmdWxsIE9URykNCj4gKiBVU0IyIGNvbm5lY3RlZCB0byBhbHdheXMtb24g
+b25ib2FyZCBFdGhlcm5ldCBhZGFwdGVyDQo+IA0KPiBDdXN0b21lciBCb2FyZDoNCj4gKiBVU0Ix
+IGNvbm5lY3RlZCB0byBVU0ItQSBQb3J0LCBJRC1QaW4gZmxvYXRpbmcgKGhvc3Qgb25seSkNCj4g
+KiBVU0IyIGNvbm5lY3RlZCB0byBhbHdheXMtb24gb25ib2FyZCBIVUINCj4gDQo+ID4gDQo+ID4g
+QlRXOiBBY2NvcmRpbmcgdG8gYSBsZW5ndGh5IGRpc2N1c3Npb24gdW5kZXIgTkRBIHdpdGggTlhQ
+IHRoZSBJRCBwaW4gd291bGQgbmVlZCBjb25uZWN0aW5nIGV2ZW4gZm9yIGhvc3QNCj4gPiBvbmx5
+DQo+ID4gb3BlcmF0aW9uIGJ1dCBvdXIgY3VycmVudCBQQ0IgZG9lcyByZWFsbHkgbm90IGFsbG93
+IGZvciB0aGlzIHRvIGJlIGVhc2lseSBkb25lIGV2ZW4ganVzdCBmb3IgdmVyaWZ5aW5nDQo+ID4g
+TlhQJ3MNCj4gPiBjbGFpbS4NCj4gDQo+IEhtLCB0aGF0J3MgbmV3cyB0byBtZS4gU28gZmFyIEkg
+Y2FuJ3QgcmVtZW1iZXIgaGF2aW5nIHByb2JsZW1zIHdpdGgNCj4gZGVzaWducyB0aGF0IHVzZSB0
+aGUgT1RHIHBvcnQgaW4gaG9zdC1vbmx5IG1vZGUgYW5kIGxlYXZlIHRoZSBJRCBwaW4NCj4gdW5j
+b25uZWN0ZWQuDQoNClllcywgdGhlIHNhbWUgd2l0aCB1cyBhbmQsIHJlbWVtYmVyLCB3ZSBhcmUg
+bm90IGEgaHVuZHJlZCBwZXJjZW50IGNvbnZpbmNlZCB0aGF0IHdoYXQgTlhQIHRvbGQgdXMgaGVy
+ZSBpcw0KcmVhbGx5IHRoZSB0cnV0aC4gSG93ZXZlciwgd2UgYXJlIHVuYWJsZSB0byB2YWxpZGF0
+ZSB0aGF0IGNsYWltIHJpZ2h0IG5vdy4NCg0KPiA+ID4gVGhlcmUgd2FzIGEgcHJldmlvdXMNCj4g
+PiA+IGF0dGVtcHQgdG8gZml4IHRoaXMgZ2xvYmFsbHkgZm9yIGFsbCB0aGUgaS5NWDhNTSBib2Fy
+ZHMgaGVyZTogWzFdLg0KPiA+ID4gDQo+ID4gPiBVbmZvcnR1bmF0ZWx5IHRoaXMgZGlkbid0IHNl
+ZW0gdG8gd29yayBhcyBpbnRlbmRlZCBpbiBteSBjYXNlIChzZWUNCj4gPiA+IGRpc2N1c3Npb24g
+Zm9yIHRoYXQgcGF0Y2gpLiBMb29raW5nIGF0IHlvdXIgcGF0Y2ggSSB3b25kZXIgaWYgbm90IGhh
+dmluZw0KPiA+ID4gdGhlIHZjYy1zdXBwbHkgZm9yIHRoZSB1c2JwaHlub3AgY2F1c2VzIHByb2Js
+ZW1zIGluIG15IGNhc2UuIERvIHlvdQ0KPiA+ID4gaGFwcGVuIHRvIGtub3cgdGhlIGVmZmVjdCBv
+ZiBhZGRpbmcgdGhlIHJlZ3VsYXRvciBoZXJlPyBJIGRvbid0IHNlZSB0aGlzDQo+ID4gPiBpbiBh
+bnkgb3RoZXIgaS5NWDhNTSBib2FyZCBkZXZpY2V0cmVlLg0KPiA+ID4gDQo+ID4gPiBDb3VsZCB5
+b3UgdGVzdCBMaSdzIHBhdGNoIGluc3RlYWQgb2YgdGhpcyBib2FyZCBzcGVjaWZpYyBmaXggYW5k
+IHNlZSBpZg0KPiA+ID4gaXQgd29ya3MgZm9yIHlvdT8NCj4gPiANCj4gPiBJIHJlYWQgdGhhdCBh
+bmQgZG9pbmcgc29tZSBtb3JlIHRlc3RpbmcgSSBqdXN0IHJlYWxpc2VkIHRoYXQgZGV0ZWN0aW9u
+IGRvZXMgaW5kZWVkIG5vdCBzZWVtIHRvIHdvcmsgb24NCj4gPiB1c2JvdGcxDQo+ID4gbmVpdGhl
+ciwgZXZlbiB0aG91Z2ggdGhhdCBvbmUgaGFzIHRoZSBJRCBwaW4gY29ubmVjdGVkIGp1c3QgZmlu
+ZSEgU28gaXQgaW5kZWVkIHNlZW1zIHRvIGJlIGEgbW9yZSBnZW5lcmljDQo+ID4gaXNzdWUuDQo+
+IA0KPiBZZXMsIEkgdGhpbmsgdGhpcyBpcyB1bnJlbGF0ZWQgdG8gdGhlIElEIHBpbi4NCg0KV2l0
+aCB0aGF0IG5ldyBtb2RpZmllZCBjYXJyaWVyIGJvYXJkIEkgY2FuIGNvbmZpcm0gdGhhdCBuZWl0
+aGVyIE9URzEgbm9yIE9URzIgd29yayB1bmxlc3MgYSBVU0IgZGV2aWNlIGlzDQpjb25uZWN0ZWQg
+ZHVyaW5nIGJvb3QuIEFueSBsYXRlciBhdXRvLWRldGVjdGlvbiBmYWlscy4NCg0KPiA+IE9rYXks
+IGZvciBtZSBMaSdzIHBhdGNoIGFjdHVhbGx5IGZpeGVkIHRoYXQgZGV0ZWN0aW9uIGlzc3VlIG9u
+IHVzYm90ZzEuIFllYWghIFRoYXQgaXMgb24gb25lIG9mIG91ciBjYXJyaWVyDQo+ID4gYm9hcmRz
+IGVpdGhlciBEYWhsaWEgb3IgdGhlIFZlcmRpbiBkZXZlbG9wbWVudCBib2FyZCB3aGVyZSB1c2Jv
+dGcxIGdvZXMgdG8gYSByZWd1bGFyIGZ1bGx5IE9URyByZXNwLg0KPiA+IGRldmljZS9ob3N0LXN3
+aXRjaGFibGUgVVNCLUMgcG9ydCAod2l0aCBJRCBhbmQgVkJVUyBwaW5zIGJlaW5nIGNvbm5lY3Rl
+ZCkuIHVzYm90ZzIgY29ubmVjdHMgdG8gYW4gYWx3YXlzDQo+ID4gY29ubmVjdGVkIFVTQiBodWIs
+IHNvIG5vIGRldGVjdGlvbiBpc3N1ZXMgZXZlciB0aGVyZSBhcyB0aGF0IGh1YiBoYW5kbGVzIGl0
+IGp1c3QgZmluZS4NCj4gDQo+IFRoaXMgaXMgc2ltaWxhciB0byB0aGUgaHcgc2V0dXAgb24gb3Vy
+IEJMIGkuTVg4TU0gYm9hcmQgYW5kIHlvdXIgcmVzdWx0cw0KPiBtYXRjaCB3aXRoIG1pbmUgaW4g
+dGhhdCBMaSdzIHBhdGNoICphcHBlYXJzKiB0byBmaXggdGhlIGlzc3VlLiBJbiBmYWN0DQo+IHdo
+ZW4geW91IGRpc2FibGUgdXNib3RnMiAoc3RhdHVzID0gImRpc2FibGVkIikgd2hlcmUgdGhlIGh1
+YiBpcw0KPiBjb25uZWN0ZWQgeW91IHdpbGwgcHJvYmFibHkgc2VlLCB0aGF0IGRldGVjdGlvbiBv
+biB1c2JvdGcxIHN0b3BzIHdvcmtpbmcNCj4gYWdhaW4gd2hpY2ggdGVsbHMgdXMgdGhlcmUncyBz
+b21ldGhpbmcgd3Jvbmcgd2l0aCBhIHJlc291cmNlIHRoYXQgaXMNCj4gc2hhcmVkIGJ5IHRoZSB0
+d28gcG9ydHMgKGNsb2NrLCByZXNldCwgcG93ZXItZG9tYWluLCBldGMuKQ0KDQpZZXMsIEkgYWdy
+ZWUuIERlc3BpdGUgTGkncyBwYXRjaCBhbmQgYWxsIGdlbnBkcyBiZWluZyBvbiBhdXRvLWRldGVj
+dGlvbiBzdGlsbCBmYWlsczoNCg0Kcm9vdEB2ZXJkaW4taW14OG1tLTA3MDI4Mzc4On4jIGNhdCAv
+c3lzL2tlcm5lbC9kZWJ1Zy9wbV9nZW5wZC91c2Itb3RnMS9jdXJyZW50X3N0YXRlDQpvbg0Kcm9v
+dEB2ZXJkaW4taW14OG1tLTA3MDI4Mzc4On4jIGNhdCAvc3lzL2tlcm5lbC9kZWJ1Zy9wbV9nZW5w
+ZC9oc2lvbWl4L2N1cnJlbnRfc3RhdGUNCm9uDQpyb290QHZlcmRpbi1pbXg4bW0tMDcwMjgzNzg6
+fiMgY2F0IC9zeXMva2VybmVsL2RlYnVnL3BtX2dlbnBkL3VzYi1vdGcyL2N1cnJlbnRfc3RhdGUN
+Cm9uDQoNCj4gPiBOb3cgdGhlIGlzc3VlIFBoaWxpcHBlJ3MgcGF0Y2ggYWRkcmVzc2VzIGlzIG9u
+IGEgZGlmZmVyZW50IGN1c3RvbSBjYXJyaWVyIGJvYXJkIHdoZXJlIHVzYm90ZzEgaXMgYSBkZXZp
+Y2UtDQo+ID4gb25seQ0KPiA+IG1pY3JvLVVTQiBwb3J0IHdoaWxlIHVzYm90ZzIgaXMgYSByZWd1
+bGFyIFVTQi1BIGhvc3Qtb25seSBwb3J0LiBUaGVyZSwgdW5mb3J0dW5hdGVseSwgTGkncyBwYXRj
+aCBkb2VzIG5vdA0KPiA+IGZpeA0KPiA+IHRoZSBpc3N1ZS4NCj4gDQo+IEkgdGhpbmsgdGhpcyBp
+cyBkdWUgdG8gdGhlIGZhY3QgdGhhdCBvbiB0aGlzIGh3IHRoZXJlJ3Mgbm8gYWx3YXlzLW9uDQo+
+IGRldmljZSBvbiB0aGUgb3RoZXIgcG9ydC4gU28gd2hhdGV2ZXIgc2hhcmVkIHJlc291cmNlIGlz
+IG5lZWRlZCBmb3INCj4gYXV0b2RldGVjdGlvbiB0byB3b3JrIGdldHMgZGlzYWJsZWQgd2hlbiBh
+bGwgcG9ydHMgYXJlIGF1dG9zdXNwZW5kZWQuDQoNClllcywgZXhhY3RseS4NCg0KPiA+IEhvd2V2
+ZXIsIGFzIHN0YXRlZCBhYm92ZSwgYWNjb3JkaW5nIHRvIE5YUCB0aGF0IElEIHBpbiB3b3VsZCBy
+ZWFsbHkgbmVlZCB0byBiZSBjb25uZWN0ZWQuIFNvDQo+ID4gYmFzaWNhbGx5IHRoaXMgcGF0Y2gg
+aGVyZSBmcm9tIFBoaWxpcHBlIGFkZHJlc3NlcyBhbiBpc3N1ZSB3aXRoIG91ciBicm9rZW4gaGFy
+ZHdhcmUgdG8gbWFrZSBkZXRlY3Rpb24gd29yaw0KPiA+IHJlZ2FyZGxlc3MgKGJ5IGJhc2ljYWxs
+eSBpbmRpcmVjdGx5IGRpc2FibGluZyBhdXRvLXN1c3BlbmQpLg0KPiANCj4gU28gaWYgUGhpbGxp
+cGUncyBwYXRjaCBmaXhlcyB0aGUgaXNzdWUgZm9yIHlvdXIgY3VzdG9tZXIgYm9hcmQsIGJ1dCBM
+aSdzDQo+IHBhdGNoIGRvZXNuJ3QsIHRoaXMgbWVhbnMgdGhhdCB0aGUgSFNJT01JWCBuZWVkcyB0
+byBiZSBrZXB0IGVuYWJsZWQNCj4gd2hpbGUgc3VzcGVuZGluZyB0aGUgcG9ydCE/DQoNClllcywg
+YnV0IGV2ZW4gdGhhdCBzZWVtcyBub3QgZW5vdWdoIChzZWUgYWJvdmUgc3lzZnMgZ2VucGQgc3Rh
+dGUgZHVtcCkuDQoNCg0KPiBUaGlzIGlzIHN0cmFuZ2UgYmVjYXVzZSBJIHRoaW5rIEkgdHJpZWQg
+dGhpcyBvbiBteSBib2FyZCBhbmQgaXQgc3RpbGwNCj4gZmFpbGVkIGFzIHNvb24gYXMgdGhlIG90
+aGVyIHBvcnQgd2FzIG5vdCB1bnN1c3BlbmRlZC9lbmFibGVkIGFueW1vcmUuDQo+IA0KPiBBbmQg
+SSBkb24ndCBzZWUgaG93IGl0J3MgcmVsYXRlZCB0byB0aGUgbWlzc2luZyBJRCBwaW4gY29ubmVj
+dGlvbi4NCg0KWWVhaCwgd2VsbCwgd2UgYWxzbyBkb24ndCByZWFsbHkgc2VlIHRoYXQuDQoNCj4g
+PiA+IE9uIHlvdXIgaGFyZHdhcmUsIGRvIHlvdSBoYXZlIGFuIGFsd2F5cy1vbiBkZXZpY2Ugb24N
+Cj4gPiA+IHRoZSB1c2JvdGcxIHBvcnQ/DQo+ID4gDQo+ID4gTm8sIGFzIG1lbnRpb25lZCBhYm92
+ZSwgb3VyIERhaGxpYSBhbmQgVmVyZGluIGRldmVsb3BtZW50IGJvYXJkIGhhdmUgYSByZWd1bGFy
+IGZ1bGx5IE9URyByZXNwLiBkZXZpY2UvaG9zdC0NCj4gPiBzd2l0Y2hhYmxlIFVTQi1DIHBvcnQu
+IFdoaWxlIHRoYXQgY3VzdG9tIGNhcnJpZXIgYm9hcmQgaGFzIGEgZGV2aWNlIG9ubHkgbWljcm8t
+VVNCIHBvcnQuDQo+IA0KPiBJIHdhcyBhc2tpbmcgYmVjYXVzZSBvZiB3aGF0IEkgZXhwbGFpbmVk
+IGFib3ZlLiBJZiB0aGUgIm90aGVyIiBwb3J0IGlzDQo+IG5vdCBrZXB0IG91dCBvZiBhdXRvc3Vz
+cGVuZCBieSBzb21lIGFsd2F5cy1vbiBkZXZpY2UsIHRoYW4gTGkncyBmaXgNCj4gZG9lc24ndCB3
+b3JrIGZvciBzb21lIHJlYXNvbi4NCg0KQWdyZWVkLg0KDQoNCj4gPiA+IElmIHllcywgZG9lcyB0
+aGUgZGV0ZWN0aW9uIG9uIHRoZSB1c2JvdGcyIHBvcnQgc3RpbGwNCj4gPiA+IHdvcmsgaWYgdGhl
+IHVzYm90ZzEgcG9ydCBpcyBkaXNhYmxlZCBpbiB0aGUgZGV2aWNldHJlZT8NCj4gPiANCj4gPiBJ
+IGJlbGlldmUgdGhpcyBtaWdodCBiZSBhIHNlcGFyYXRlIGlzc3VlIHJlY2VudGx5IGFsc28gcmVw
+b3J0ZWQgdG8gdXMgYnkgYSBjdXN0b21lci4gSG93ZXZlciwgbW9zdCBsaWtlbHkNCj4gPiB0aGF0
+DQo+ID4gaXMvd2FzIG9uIGRvd25zdHJlYW0gYW5kIG1heWJlIGV2ZW4gb24gYSBkaWZmZXJlbnQg
+aS5NWCA4IHNlcmllcyBiYXNlZCBtb2R1bGUsIG5vdCBxdWl0ZSBzdXJlLiBMZXQgbWUNCj4gPiBj
+aGVjay4uLg0KPiANCj4gRm9yIG1lIGl0IGxvb2tzIGxpa2UgdGhpcyBpcyBleGFjdGx5IHdoYXQg
+dGhpcyBpc3N1ZSBpcyBhYm91dCBhbmQgd2hhdA0KPiBwcmV2ZW50cyB1cyBmcm9tIGFwcGx5aW5n
+IExpJ3MgcGF0Y2ggYXMgYSBnbG9iYWwgZml4IGZvciB0aGUNCj4gYXV0b2RldGVjdGlvbiBpc3N1
+ZS4NCg0KWWVzLCBhZ3JlZWQuIEZhY3QgaXMgdGhhdCBzb21laG93IHRoaXMgYWxsIHdvcmtzIGlu
+IE5YUCdzIGRvd25zdHJlYW0gc3R1ZmYgZXZlbiBpbiB0aGVpciBsYXRlc3QgNS4xNS4zMl8yLjAu
+MA0KKHdoaWNoIEJUVyByZXF1aXJlcyBhIGxhdGVyIGRvd25zdHJlYW0gQVRGIHdoZXJlIHRoZXkg
+bGlrZWx5IGhhY2tlZCBzb21ldGhpbmcgaW4sIGF0IGxlYXN0IHdpdGggdGhlIHByZXZpb3VzDQpB
+VEYgdmVyc2lvbiBpdCBqdXN0IGhhbmdzIGF0IFVTQiBpbml0aWFsaXphdGlvbiBkdXJpbmcgYm9v
+dCkgd2UganVzdCB0cmllZC4gU28gcGxlYXNlIE5YUCBjb3VsZCB5b3UgcmV2ZWFsIHdoYXQNCmV4
+YWN0bHkgaXMgZ29pbmcgb24gaGVyZT8gVGhhbmtzIQ0KDQo+ID4gQW55d2F5LCBmb3IgdXMgb24g
+dGhhdCBjdXN0b20gY2FycmllciBib2FyZCBkZXRlY3Rpb24gZG9lcyBub3QgZXZlbiB3b3JrIGlu
+IHRoZSByZWd1bGFyIGNhc2Ugd2l0aCB1c2JvdGcxDQo+ID4gYmVpbmcNCj4gPiBhdmFpbGFibGUg
+KGFsYmVpdCBtaWNyby1VU0IgZGV2aWNlLW1vZGUgb25seSkuIFVuZm9ydHVuYXRlbHksIHdlIGRv
+bid0IGhhdmUgYW55IGNhcnJpZXIgYm9hcmQgd2hlcmUgdGhlDQo+ID4gZnVsbA0KPiA+IHJhbmdl
+IG9mIFVTQiB0ZXN0cyBjb3VsZCBlYXNpbHkgYmUgY29uZHVjdGVkDQoNCkF0IGxlYXN0IHdlIG5v
+dyBoYXZlIG9uZSB3aGVyZSB0aGVyZSBhcmVuJ3QgYW55IGFsd2F5cyBvbiBVU0IgZGV2aWNlcy4g
+QnV0IE9URzIgZG9lcyBuZWl0aGVyIGhhdmUgaXRzIElEIHBpbg0KZXhwb3NlZCBub3IgaXMgaXQg
+cmVhbGx5IGRldmljZS9ob3N0IHN3aXRjaGFibGUuDQoNCj4gVGhhbmtzDQo+IEZyaWVkZXINCg0K
+WzFdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIyMDgxMTE0MDczOC45NjM0OC0xLWRl
+dkBwc2NoZW5rZXIuY2gvDQoNCkNoZWVycw0KDQpNYXJjZWwNCg==
 
-
-On 8/18/2022 11:17 AM, Elson Serrao wrote:
-> 
-> 
-> On 8/16/2022 4:51 PM, Thinh Nguyen wrote:
->> On 8/16/2022, Elson Serrao wrote:
->>>
->>>
->>> On 8/12/2022 5:46 PM, Thinh Nguyen wrote:
->>>> On 8/11/2022, Thinh Nguyen wrote:
->>>>> On 8/11/2022, Thinh Nguyen wrote:
->>>>>> On 8/11/2022, Elson Serrao wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 8/9/2022 6:08 PM, Thinh Nguyen wrote:
->>>>>>
->>>>>> <snip>
->>>>>>
->>>>>>
->>>>>>>> To summarize the points:
->>>>>>>>
->>>>>>>> 1) The host only arms function remote wakeup if the device is
->>>>>>>> capable of
->>>>>>>> remote wakeup (check USB_CONFIG_ATT_WAKEUP in bmAttributes and
->>>>>>>> hardware
->>>>>>>> capability)
->>>>>>>>
->>>>>>>> 2) If the device is in suspend, the device can do remote wakeup
->>>>>>>> (through
->>>>>>>> LFPS handshake) if the function is armed for remote wakeup (through
->>>>>>>> SET_FEATURE(FUNC_SUSPEND)).
->>>>>>>>
->>>>>>>> 3) If the link transitions to U0 after the device triggering a 
->>>>>>>> remote
->>>>>>>> wakeup, the device will also send device notification function
->>>>>>>> wake for
->>>>>>>> all the interfaces armed with remote wakeup.
->>>>>>>>
->>>>>>>> 4) If the device is not in suspend, the device can send device
->>>>>>>> notification function wake if it's in U0.
->>>>>>>>
->>>>>>>>
->>>>>>>> Now, remote wakeup and function wake device notification are 2
->>>>>>>> separate
->>>>>>>> operations. We have the usb_gadget_ops->wakeup() for remote 
->>>>>>>> wakeup. I
->>>>>>>> suggested to maybe add
->>>>>>>> usb_gadget_ops->send_wakeup_notification(gadget,
->>>>>>>> intf_id) for the device notification. What you did was combining 
->>>>>>>> both
->>>>>>>> operations in usb_gadget_ops->func_wakeup(). That may only work for
->>>>>>>> point 4) (assuming you fix the U0 check), but not point 3).
->>>>>>>
->>>>>>> Thank you for your feedback and summary. I will rename 
->>>>>>> func_wakeup to
->>>>>>> send_wakeup_notification to better align with the approach. The
->>>>>>> reason I
->>>>>>> have combined remote_wakeup and function wake notification in
->>>>>>> usb_gadget_ops->func_wakeup() is because since the implementation
->>>>>>> is at
->>>>>>> function/composite level it has no knowledge on the link state. So I
->>>>>>> have delegated that task to controller driver to handle the
->>>>>>> notification
->>>>>>> accordingly. That is do a LFPS handshake first if the device is
->>>>>>> suspended and then send notification (explained below). But we can
->>>>>>> definitely separate this by adding an additional flag in the 
->>>>>>> composite
->>>>>>> layer to set the link state based on the gadget suspend callback
->>>>>>> called
->>>>>>> when U3 SUSPEND interrupt is received. Let me know if you feel
->>>>>>> separating the two is a better approach.
->>>>>>>
->>>>>>
->>>>>> The reason I think we need to separate it is because of point 3. As I
->>>>>> note earlier, the spec states that "If remote wake event occurs in
->>>>>> multiple functions, each function shall send a Function Wake
->>>>>> Notification."
->>>>>>
->>>>>> But if there's no remote wake event, and the host brought the 
->>>>>> device up
->>>>>> instead, then the function suspend state is retained.
->>>>>>
->>>>>> If we separate these 2 operations, the caller can check whether the
->>>>>> operation went through properly. For example, if the wakeup() is
->>>>>> initiated properly, but the function wake device notification 
->>>>>> didn't go
->>>>>> through. We would only need to resend the device notification rather
->>>>>> than initiate remote wakeup again.
->>>>>
->>>>> If we don't have to send device notification for other interfaces, we
->>>>> can combine the operations here as you did.
->>>>>
->>>>
->>>> I still think it's better to split up the operations. The way you're
->>>> handling it now is not clear.
->>>>
->>>> If the func_awake() returns -EAGAIN, I'd expect that the remote wake 
->>>> did
->>>> not go through and expect user to retry again. But here it does 
->>>> initiate
->>>> remote wake, but it just does not send device notification yet. This is
->>>> confusing.
->>>>
->>>> Also, instead of all the function wake handling coming from the 
->>>> function
->>>> driver, now we depend on the controller driver to call function 
->>>> resume()
->>>> on state change to U0, which will trigger device notification. What
->>>> happen if it doesn't call resume(). There's too many dependencies 
->>>> and it
->>>> seems fragile.
->>>>
->>>> I think all this can be handled in the function driver. You can fix the
->>>> dwc3 wakeup() and poll for U0/ON state rather than RECOVERY state, 
->>>> which
->>>> is what it's supposed to poll.
->>>
->>> For transitioning from U3 to U0, the current upstream implementation is
->>> to poll for U0 state when dwc3_gadget_wakeup() is called and it is a
->>> blocking call. (this is a common API for both HS and SS)
->>>
->>>      /* poll until Link State changes to ON */
->>>      retries = 20000;
->>>
->>>      while (retries--) {
->>>          reg = dwc3_readl(dwc->regs, DWC3_DSTS);
->>>
->>>          /* in HS, means ON */
->>>          if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U0)
->>>              break;
->>>      }
->>>
->>> In my experiments I found that certain hosts take longer time to drive
->>> HS resume signalling between the remote wakeup and the resume K and this
->>> time varies across hosts. Hence the above polling timer is not generic
->>> across hosts. So how do we converge on a polling timer value to work
->>> across HS/SS and without blocking the system for a long time?
->>
->> Can't we take the upper limit of both base on experiment? And it
->> shouldn't be blocking the whole system.
-> 
-> On the host I was experimenting with, the time it took was around 110ms 
-> in HS case. That would translate to a retry count of about ~181,000 in 
-> the above polling loop. Wouldn't that be a very large value for polling?
-> And not sure if there are other hosts that take even longer time
-
-Also we may need additional buffer on the retry value to absorb the run 
-to run variation.
-
-Below is the retry count kernel logs from my HS mode experiment when a 
-remote wakeup was triggered
-
-[   83.014458][  T191] Start Polling
-[   83.147318][  T191] End polling. Retry count:223193
-
-
-/* poll until Link State changes to ON */
-#define COUNT 500000
-retries = COUNT;
-pr_err("Start Polling\n");
-while (retries--) {
-		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-
-		/* in HS, means ON */
-		if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U0)
-				break;
-}
-pr_err("End polling. Retry count:%d\n",(COUNT-retries));
-
->>
->>>
->>> Some data layers like TCP/IP hold a TX lock while sending data (that
->>> causes a remote wakeup event) and hence this wakeup() may run in atomic
->>> context.
->>
->> Why hold the lock while waiting for the host to wakeup? The host is
->> still inactive. Also, the usb_gadget_wakeup() API doesn't specify that
->> it may run in atomic context.
->>
-> 
-> The lock might be held by upper layers who are unaware/independent of 
-> underlying transport medium. The above TX lock I was referring to was
-> that held by Linux networking stack. It just pushes out data the same 
-> way it would when USB is active. It is the function/composite layer 
-> being aware of the function suspend would now sense this as a remote 
-> wake event and perform this additional step of bringing out the link 
-> from u3 and then sending device wakeup notification.
-> 
-> In our current upstream implementation of dwc3_gadget_wakeup() API we 
-> hold a spinlock as well. But yeah that can be rectified
-> 
-> static int dwc3_gadget_wakeup(struct usb_gadget *g)
-> {
->      struct dwc3        *dwc = gadget_to_dwc(g);
->      unsigned long        flags;
->      int            ret;
-> 
->      spin_lock_irqsave(&dwc->lock, flags);
->      ret = __dwc3_gadget_wakeup(dwc);
->      spin_unlock_irqrestore(&dwc->lock, flags);
-> 
->      return ret;
-> }
-> 
-> 
->>>
->>> To make this generic across hosts, I had switched to interrupt based
->>> approach, enabling link state events and return error value immediately
->>> from the dwc3_gadget_wakeup() API after doing a LFPS handshake. But
->>> yeah, then we have to rely on the resume callback as an indication that
->>> link is transitioned to ON state.
->>>
->>
->> BR,
->> Thinh
->>
