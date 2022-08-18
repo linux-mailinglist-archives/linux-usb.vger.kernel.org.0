@@ -2,113 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD3B597FAF
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 10:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C64597FCC
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 10:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243992AbiHRIA6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Aug 2022 04:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S244034AbiHRIHa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 04:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243928AbiHRIA5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 04:00:57 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB23BAEDA7;
-        Thu, 18 Aug 2022 01:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660809656; x=1692345656;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eAy8aSdTk5OKQzWybqKrFUdpqxDntwotIfbfSmRhmTA=;
-  b=g5eQIHXjIB9t2q0ujnBvPrbIkft1sS5QTKuqQowNKbHzZ2jdd/mvn0i8
-   g66pwiRsU4n4KgRGxyU+UlUAMxUt0X4vR1OAg6VR0lYfKYqWBNyHJa6B1
-   LAIM9Qfa2wggmTiYL5okJzYkYcNw4isRk4i0v9Q0peBBjjMvhiZskRiS8
-   6QQ/fu3bQzbt1eZacX0teZvq3x4lIscdbJDePBP0RM7diSTUV5v8RvSyj
-   ov16n9F93IwtVnyv8Uq70YiXBo6UU+uPiqGsaQErR2KlMrkdoAmLkHZz7
-   yNVfAKDe/vOdKT+RkJW+hYv0zz6XJ+1b58NTAstuK3ctAhpZJofsgQJQU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="292692798"
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="292692798"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 01:00:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="750014755"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Aug 2022 01:00:40 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Aug 2022 11:00:40 +0300
-Date:   Thu, 18 Aug 2022 11:00:40 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: typec: tcpm: Return ENOTSUPP for power supply
- prop writes
-Message-ID: <Yv3xqCCmIeSnsQDz@kuha.fi.intel.com>
-References: <20220817215410.1807477-1-badhri@google.com>
+        with ESMTP id S243591AbiHRIH2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 04:07:28 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D65426C765;
+        Thu, 18 Aug 2022 01:07:25 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 27I86vMN2021079, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 27I86vMN2021079
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 18 Aug 2022 16:06:57 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 18 Aug 2022 16:07:10 +0800
+Received: from fc34.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 18 Aug
+ 2022 16:07:09 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net 0/2] r8152: fix flow control settings
+Date:   Thu, 18 Aug 2022 16:06:18 +0800
+Message-ID: <20220818080620.14538-392-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817215410.1807477-1-badhri@google.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 08/18/2022 07:48:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzgvMTggpFekyCAwNjowMDowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:54:10PM -0700, Badhri Jagan Sridharan wrote:
-> When the port does not support USB PD, prevent transition to PD
-> only states when power supply property is written. In this case,
-> TCPM transitions to SNK_NEGOTIATE_CAPABILITIES
-> which should not be the case given that the port is not pd_capable.
-> 
-> [   84.308251] state change SNK_READY -> SNK_NEGOTIATE_CAPABILITIES [rev3 NONE_AMS]
-> [   84.308335] Setting usb_comm capable false
-> [   84.323367] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:5000 ret:0
-> [   84.323376] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-> 
-> Fixes: e9e6e164ed8f6 ("usb: typec: tcpm: Support non-PD mode")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+These patches fix the settings of RX FIFO about flow control.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Hayes Wang (2):
+  r8152: fix the units of some registers for RTL8156A
+  r8152: fix the RX FIFO settings when suspending
 
-> ---
-> Changes since v1:
-> - Add Fixes tag.
-> Changes since v2:
-> - CCed stable
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ea5a917c51b1..904c7b4ce2f0 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -6320,6 +6320,13 @@ static int tcpm_psy_set_prop(struct power_supply *psy,
->  	struct tcpm_port *port = power_supply_get_drvdata(psy);
->  	int ret;
->  
-> +	/*
-> +	 * All the properties below are related to USB PD. The check needs to be
-> +	 * property specific when a non-pd related property is added.
-> +	 */
-> +	if (!port->pd_supported)
-> +		return -EOPNOTSUPP;
-> +
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_ONLINE:
->  		ret = tcpm_psy_set_online(port, val);
-> -- 
-> 2.37.1.595.g718a3a8f04-goog
+ drivers/net/usb/r8152.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
 -- 
-heikki
+2.34.3
+
