@@ -2,52 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E60598EE0
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 23:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D623598EED
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Aug 2022 23:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240935AbiHRVJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Aug 2022 17:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S1346472AbiHRVI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Aug 2022 17:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346596AbiHRVIh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 17:08:37 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C5AD4BCC
-        for <linux-usb@vger.kernel.org>; Thu, 18 Aug 2022 14:04:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=3TCZA6St8oRXkMGgqAnRgue6wHi
-        DB4Wwuz8tc8Vdv58=; b=U/Op/ua1e0Yw1jfF+8b5Nmpz4so8O6TD8U2iBbpdPAa
-        BntvkR+8qe033X9pM7ale1PbtRFV3kl1cNBsJF5XlA5dIZAH/Tk7v2DofFQnk2Yj
-        qN+L83Bs0FgIQ/99/oLyutjCQFvpa24utj3OWTJFxGKn/UlGOFm6T871TcyRrmj4
-        =
-Received: (qmail 3961700 invoked from network); 18 Aug 2022 23:01:16 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Aug 2022 23:01:16 +0200
-X-UD-Smtp-Session: l3s3148p1@DLdISIrmdvEucref
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Duncan Sands <duncan.sands@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH] usb: move from strlcpy with unused retval to strscpy
-Date:   Thu, 18 Aug 2022 23:01:15 +0200
-Message-Id: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S1346509AbiHRVIE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Aug 2022 17:08:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FBA9411D
+        for <linux-usb@vger.kernel.org>; Thu, 18 Aug 2022 14:03:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660856618; x=1692392618;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=czIt9/GjYMkH8ldLVLj9OXo6Mzlzk0geJNRfromC7rY=;
+  b=kKq/RCisNDuVKtcUEkqo1J5W6UOar4kC+O6fbKlq/xh4uqEey4WfuQSY
+   KLyRIavd1rcjRvzSyMO9rMYBXO9D6OJKqM/N8A5l0p1e9B5FKsJlMNCL4
+   6tH2YrsuAr7uSjHTvf16Nm0OG8oxz6cUN9xeGGIGNID9IM/ZEoIr+GI2h
+   oIEiUhwS27f3grLniyW4DxH2Vu01RiXoCn7hFGj/LsRbsc/OTXR8+5u7X
+   iYRzDKUWGhmkUzRlS2ciwmWNBzIodgfY67ElleeWS5XUjzOUjQGwR+Sf4
+   jbHBpUGy1wABVEef4UWjtRKCpdDPSRL9MFOGlYsm3knSjFWD3w9sGBV/P
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="318893171"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="318893171"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 14:03:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="636993124"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 18 Aug 2022 14:03:11 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOmfW-0000br-0c;
+        Thu, 18 Aug 2022 21:03:10 +0000
+Date:   Fri, 19 Aug 2022 05:02:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-linus 9/18] drivers/usb/dwc3/dwc3-qcom.c:313:25: warning:
+ variable 'hcd' set but not used
+Message-ID: <202208190411.1lugjsYz-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,197 +62,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Follow the advice of the below link and prefer 'strscpy' in this
-subsystem. Conversion is 1:1 because the return value is not used.
-Generated by a coccinelle script.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+head:   aece382251f8fa660d8f621a7f50b0ea0f390178
+commit: c5f14abeb52b0177b940fd734133d383da3521d8 [9/18] usb: dwc3: qcom: fix peripheral and OTG suspend
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220819/202208190411.1lugjsYz-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=c5f14abeb52b0177b940fd734133d383da3521d8
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch --no-tags usb usb-linus
+        git checkout c5f14abeb52b0177b940fd734133d383da3521d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/usb/dwc3/
 
-Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/usb/atm/usbatm.c               | 2 +-
- drivers/usb/core/devio.c               | 2 +-
- drivers/usb/gadget/function/f_fs.c     | 2 +-
- drivers/usb/gadget/function/f_uvc.c    | 2 +-
- drivers/usb/gadget/function/u_ether.c  | 8 ++++----
- drivers/usb/gadget/function/uvc_v4l2.c | 6 +++---
- drivers/usb/gadget/udc/omap_udc.c      | 2 +-
- drivers/usb/misc/usb251xb.c            | 6 +++---
- drivers/usb/storage/onetouch.c         | 2 +-
- drivers/usb/typec/tcpm/fusb302.c       | 2 +-
- drivers/usb/usbip/stub_main.c          | 2 +-
- 11 files changed, 18 insertions(+), 18 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/usb/atm/usbatm.c b/drivers/usb/atm/usbatm.c
-index 362217189ef3..1cdb8758ae01 100644
---- a/drivers/usb/atm/usbatm.c
-+++ b/drivers/usb/atm/usbatm.c
-@@ -1026,7 +1026,7 @@ int usbatm_usb_probe(struct usb_interface *intf, const struct usb_device_id *id,
- 	/* public fields */
- 
- 	instance->driver = driver;
--	strlcpy(instance->driver_name, driver->driver_name,
-+	strscpy(instance->driver_name, driver->driver_name,
- 		sizeof(instance->driver_name));
- 
- 	instance->usb_dev = usb_dev;
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index b5b85bf80329..837f3e57f580 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -1434,7 +1434,7 @@ static int proc_getdriver(struct usb_dev_state *ps, void __user *arg)
- 	if (!intf || !intf->dev.driver)
- 		ret = -ENODATA;
- 	else {
--		strlcpy(gd.driver, intf->dev.driver->name,
-+		strscpy(gd.driver, intf->dev.driver->name,
- 				sizeof(gd.driver));
- 		ret = (copy_to_user(arg, &gd, sizeof(gd)) ? -EFAULT : 0);
- 	}
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index e0fa4b186ec6..98dc2291e9a1 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -3700,7 +3700,7 @@ int ffs_name_dev(struct ffs_dev *dev, const char *name)
- 
- 	existing = _ffs_do_find_dev(name);
- 	if (!existing)
--		strlcpy(dev->name, name, ARRAY_SIZE(dev->name));
-+		strscpy(dev->name, name, ARRAY_SIZE(dev->name));
- 	else if (existing != dev)
- 		ret = -EBUSY;
- 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 71669e0e4d00..f4f6cf75930b 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -430,7 +430,7 @@ uvc_register_video(struct uvc_device *uvc)
- 	uvc->vdev.vfl_dir = VFL_DIR_TX;
- 	uvc->vdev.lock = &uvc->video.mutex;
- 	uvc->vdev.device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
--	strlcpy(uvc->vdev.name, cdev->gadget->name, sizeof(uvc->vdev.name));
-+	strscpy(uvc->vdev.name, cdev->gadget->name, sizeof(uvc->vdev.name));
- 
- 	video_set_drvdata(&uvc->vdev, uvc);
- 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 7887def05dc2..e06022873df1 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -144,10 +144,10 @@ static void eth_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *p)
- {
- 	struct eth_dev *dev = netdev_priv(net);
- 
--	strlcpy(p->driver, "g_ether", sizeof(p->driver));
--	strlcpy(p->version, UETH__VERSION, sizeof(p->version));
--	strlcpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
--	strlcpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
-+	strscpy(p->driver, "g_ether", sizeof(p->driver));
-+	strscpy(p->version, UETH__VERSION, sizeof(p->version));
-+	strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
-+	strscpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
- }
- 
- /* REVISIT can also support:
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index fd8f73bb726d..511f106f9843 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -67,9 +67,9 @@ uvc_v4l2_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
- 	struct uvc_device *uvc = video_get_drvdata(vdev);
- 	struct usb_composite_dev *cdev = uvc->func.config->cdev;
- 
--	strlcpy(cap->driver, "g_uvc", sizeof(cap->driver));
--	strlcpy(cap->card, cdev->gadget->name, sizeof(cap->card));
--	strlcpy(cap->bus_info, dev_name(&cdev->gadget->dev),
-+	strscpy(cap->driver, "g_uvc", sizeof(cap->driver));
-+	strscpy(cap->card, cdev->gadget->name, sizeof(cap->card));
-+	strscpy(cap->bus_info, dev_name(&cdev->gadget->dev),
- 		sizeof(cap->bus_info));
- 	return 0;
- }
-diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
-index 61cabb9de6ae..b0567c63d754 100644
---- a/drivers/usb/gadget/udc/omap_udc.c
-+++ b/drivers/usb/gadget/udc/omap_udc.c
-@@ -2558,7 +2558,7 @@ omap_ep_setup(char *name, u8 addr, u8 type,
- 
- 	/* set up driver data structures */
- 	BUG_ON(strlen(name) >= sizeof ep->name);
--	strlcpy(ep->name, name, sizeof ep->name);
-+	strscpy(ep->name, name, sizeof(ep->name));
- 	INIT_LIST_HEAD(&ep->queue);
- 	INIT_LIST_HEAD(&ep->iso);
- 	ep->bEndpointAddress = addr;
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index 04c4e3fed094..87035ac09834 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -547,7 +547,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 		hub->boost_up = USB251XB_DEF_BOOST_UP;
- 
- 	cproperty_char = of_get_property(np, "manufacturer", NULL);
--	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
-+	strscpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
- 		sizeof(str));
- 	hub->manufacturer_len = strlen(str) & 0xFF;
- 	memset(hub->manufacturer, 0, USB251XB_STRING_BUFSIZE);
-@@ -557,7 +557,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 			      USB251XB_STRING_BUFSIZE);
- 
- 	cproperty_char = of_get_property(np, "product", NULL);
--	strlcpy(str, cproperty_char ? : data->product_str, sizeof(str));
-+	strscpy(str, cproperty_char ? : data->product_str, sizeof(str));
- 	hub->product_len = strlen(str) & 0xFF;
- 	memset(hub->product, 0, USB251XB_STRING_BUFSIZE);
- 	len = min_t(size_t, USB251XB_STRING_BUFSIZE / 2, strlen(str));
-@@ -566,7 +566,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 			      USB251XB_STRING_BUFSIZE);
- 
- 	cproperty_char = of_get_property(np, "serial", NULL);
--	strlcpy(str, cproperty_char ? : USB251XB_DEF_SERIAL_STRING,
-+	strscpy(str, cproperty_char ? : USB251XB_DEF_SERIAL_STRING,
- 		sizeof(str));
- 	hub->serial_len = strlen(str) & 0xFF;
- 	memset(hub->serial, 0, USB251XB_STRING_BUFSIZE);
-diff --git a/drivers/usb/storage/onetouch.c b/drivers/usb/storage/onetouch.c
-index 1db2eefeea22..01f3c2779ccf 100644
---- a/drivers/usb/storage/onetouch.c
-+++ b/drivers/usb/storage/onetouch.c
-@@ -201,7 +201,7 @@ static int onetouch_connect_input(struct us_data *ss)
- 	onetouch->dev = input_dev;
- 
- 	if (udev->manufacturer)
--		strlcpy(onetouch->name, udev->manufacturer,
-+		strscpy(onetouch->name, udev->manufacturer,
- 			sizeof(onetouch->name));
- 	if (udev->product) {
- 		if (udev->manufacturer)
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 96c55eaf3f80..ab89c014606e 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -151,7 +151,7 @@ static void _fusb302_log(struct fusb302_chip *chip, const char *fmt,
- 
- 	if (fusb302_log_full(chip)) {
- 		chip->logbuffer_head = max(chip->logbuffer_head - 1, 0);
--		strlcpy(tmpbuffer, "overflow", sizeof(tmpbuffer));
-+		strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer));
- 	}
- 
- 	if (chip->logbuffer_head < 0 ||
-diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-index 77a5b3f8736a..e8c3131a8543 100644
---- a/drivers/usb/usbip/stub_main.c
-+++ b/drivers/usb/usbip/stub_main.c
-@@ -100,7 +100,7 @@ static int add_match_busid(char *busid)
- 	for (i = 0; i < MAX_BUSID; i++) {
- 		spin_lock(&busid_table[i].busid_lock);
- 		if (!busid_table[i].name[0]) {
--			strlcpy(busid_table[i].name, busid, BUSID_SIZE);
-+			strscpy(busid_table[i].name, busid, BUSID_SIZE);
- 			if ((busid_table[i].status != STUB_BUSID_ALLOC) &&
- 			    (busid_table[i].status != STUB_BUSID_REMOV))
- 				busid_table[i].status = STUB_BUSID_ADDED;
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/dwc3/dwc3-qcom.c: In function 'dwc3_qcom_read_usb2_speed':
+>> drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
+     313 |         struct usb_hcd *hcd;
+         |                         ^~~
+
+
+vim +/hcd +313 drivers/usb/dwc3/dwc3-qcom.c
+
+   308	
+   309	static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+   310	{
+   311		struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+   312		struct usb_device *udev;
+ > 313		struct usb_hcd *hcd;
+   314	
+   315		/*
+   316		 * FIXME: Fix this layering violation.
+   317		 */
+   318		hcd = platform_get_drvdata(dwc->xhci);
+   319	
+   320		/*
+   321		 * It is possible to query the speed of all children of
+   322		 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+   323		 * currently supports only 1 port per controller. So
+   324		 * this is sufficient.
+   325		 */
+   326	#ifdef CONFIG_USB
+   327		udev = usb_hub_find_child(hcd->self.root_hub, 1);
+   328	#else
+   329		udev = NULL;
+   330	#endif
+   331		if (!udev)
+   332			return USB_SPEED_UNKNOWN;
+   333	
+   334		return udev->speed;
+   335	}
+   336	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
