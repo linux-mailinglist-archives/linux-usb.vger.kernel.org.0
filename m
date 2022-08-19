@@ -2,53 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57896599894
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 11:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFB9599896
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 11:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347974AbiHSJKD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Aug 2022 05:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S1347030AbiHSJMi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Aug 2022 05:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347966AbiHSJJy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 05:09:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA23F14D7;
-        Fri, 19 Aug 2022 02:09:50 -0700 (PDT)
+        with ESMTP id S242959AbiHSJMh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 05:12:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7A7F23E2;
+        Fri, 19 Aug 2022 02:12:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96C78B8264D;
-        Fri, 19 Aug 2022 09:09:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA8E8C433C1;
-        Fri, 19 Aug 2022 09:09:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3005B82733;
+        Fri, 19 Aug 2022 09:12:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B5BC433C1;
+        Fri, 19 Aug 2022 09:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660900188;
-        bh=UUBmmmDR+7st3IGir4vJVCN6kjoBMh2fekZmhviyi3o=;
+        s=korg; t=1660900354;
+        bh=efnz7ZSxmdtNAUgLtC5im9eNjnbCOkKCjkxJDQwSmDs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OYb79BAkxLx0LR8lOjlIvE1K0+bh7Je5QWAUXgrAYhb9VObESoXpqOTKgsVMLDdUX
-         8ou+9BpLZhpUD4+0ft46vAYypI3/oPylizhZ+MkZ/DbvVYELJKZxsOwbtLjHStn6I6
-         xuQ92pOun1X025hRPRwahLWubjQKZ1byIt//7k0w=
-Date:   Fri, 19 Aug 2022 11:09:45 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org, Duncan Sands <duncan.sands@free.fr>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH] usb: move from strlcpy with unused retval to strscpy
-Message-ID: <Yv9TWTnYc4T3tkqA@kroah.com>
-References: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
+        b=bTqtNLWeseKUDCfpTCAL7etDy68BAARPCMf/vm5kYHjXXMGVShi9BjaDCl0T/BytK
+         PmzMkOLUi4wsvNgWrWR8c/HmUsHnjBT6dw9y7nsweGAHXakKmLNueLo82RuklK4pAJ
+         j9TGPlOma6uCSggOmHsrX9u4dGemFgzVnn6+EXfE=
+Date:   Fri, 19 Aug 2022 11:12:32 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thierry.guibert@free.fr
+Subject: Re: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
+Message-ID: <Yv9UACdCPR6P+eIY@kroah.com>
+References: <20220819081702.84118-1-thierry.guibert@croix-rouge.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220819081702.84118-1-thierry.guibert@croix-rouge.fr>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,28 +50,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:01:15PM +0200, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Fri, Aug 19, 2022 at 10:17:02AM +0200, Thierry GUIBERT wrote:
+> Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
+> enabling the AT serial port.
+> The Vendor Id is 0x0C26
+> The Product ID is 0x0020
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Output of lsusb :
+> Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
+> Couldn't open device, some information will be missing
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               2.00
+>   bDeviceClass            2 Communications
+>   bDeviceSubClass         0
+>   bDeviceProtocol         0
+>   bMaxPacketSize0        64
+>   idVendor           0x0c26 Prolific Technology Inc.
+>   idProduct          0x0020
+>   bcdDevice            0.00
+>   iManufacturer           1 ICOM Inc.
+>   iProduct                2 ICOM Radio
+>   iSerial                 3 *obfuscated*
+>   bNumConfigurations      1
+>   Configuration Descriptor:
+>     bLength                 9
+>     bDescriptorType         2
+>     wTotalLength       0x0030
+>     bNumInterfaces          2
+>     bConfigurationValue     1
+>     iConfiguration          0
+>     bmAttributes         0xc0
+>       Self Powered
+>     MaxPower                0mA
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        0
+>       bAlternateSetting       0
+>       bNumEndpoints           1
+>       bInterfaceClass         2 Communications
+>       bInterfaceSubClass      2 Abstract (modem)
+>       bInterfaceProtocol      1 AT-commands (v.25ter)
+>       iInterface              0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x83  EP 3 IN
+>         bmAttributes            3
+>           Transfer Type            Interrupt
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0040  1x 64 bytes
+>         bInterval              12
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        1
+>       bAlternateSetting       0
+>       bNumEndpoints           2
+>       bInterfaceClass        10 CDC Data
+>       bInterfaceSubClass      0
+>       bInterfaceProtocol      0
+>       iInterface              0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x82  EP 2 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x02  EP 2 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0200  1x 512 bytes
+>         bInterval               0
+> 
+> Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+> ---
+>  drivers/usb/class/cdc-acm.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-You might want to fix up your email server, b4 doesn't think it is
-sending out valid emails:
+Note, this is the second version of this patch, so it should have had
+"v2" in the subject area, and below the --- line a description of what
+changed from the previous one, so we can have some context here.
 
-Grabbing thread from lore.kernel.org/all/20220818210116.7517-1-wsa%2Brenesas%40sang-engineering.com/t.mbox.gz
-Analyzing 5 messages in the thread
-Checking attestation on all messages, may take a moment...
----
-  ✗ [PATCH] usb: move from strlcpy with unused retval to strscpy
-    + Reviewed-by: Richard Leitner <richard.leitner@skidata.com> (✓ DKIM/skidata.com)
-    + Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com> (✓ DKIM/ideasonboard.com)
-    + Acked-by: Shuah Khan <skhan@linuxfoundation.org> (✓ DKIM/linuxfoundation.org)
-  ---
-  ✗ BADSIG: DKIM/sang-engineering.com
----
-Total patches: 1
+The kernel documentation on submitting patches explains how to do this
+for your next time, for now, I'll take this as-is, thanks.
 
-
+greg k-h
