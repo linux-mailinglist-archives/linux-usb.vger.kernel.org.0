@@ -2,80 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1711E59A7D2
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 23:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B8459A7FE
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 23:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237711AbiHSVjq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Aug 2022 17:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S237655AbiHSV5Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Aug 2022 17:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234545AbiHSVjn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 17:39:43 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0EB9FD2
-        for <linux-usb@vger.kernel.org>; Fri, 19 Aug 2022 14:39:42 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id h20-20020a056830165400b00638ac7ddba5so3892361otr.4
-        for <linux-usb@vger.kernel.org>; Fri, 19 Aug 2022 14:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=AGzxcMpgy1f3HMy9tWyYqtgpJAs8k+s3vJqDIzylNVA=;
-        b=E51P8ViaWVLX0jvYrxKZAm3vBcmNKWYZW6dAPGUlDQroZS+kgFOq72BAJUIzo0ysnd
-         LMZsX0P1+GPJob6JcSzn/efbznML58TYnNnfcjwV2Xaop0dBkMin0wxlOwhmDsL4Gj++
-         MHI6OKrm2UD2vylNZLgeqOybpNb+JgsMVEokXO79/AMSY19zPlzcKuwmIej34A4jbqic
-         q1FTUX84t5sz77stj2RIeOiPPu8QRceOWkk1mZrIx9kL6878ianqAjRlHHhzEJOG2q6P
-         YCprk/LSMcpkreXgN9oX0ziT8CcPYnogkT6+9WGcxNcl3mx1X80F5fOfBljHN1bhY0Ks
-         IERg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=AGzxcMpgy1f3HMy9tWyYqtgpJAs8k+s3vJqDIzylNVA=;
-        b=vIxGP9qfeq2/7tBKyFkBUDePlUlSY8xVEfarTdKfQIFj9rV71RhLp0+gxAtNYD5Di2
-         D8LkuJ/BFk1dxw7TKjFArT/nTbh0uP7YyllZUBZeoRmq/X7fVf1Cbq/byX4PrqGvVLxe
-         rJBc/YAoZ7gxzuFWT5mhRZ4fF6FH+v/hj/Vu/bkvaoJxn/SI4kGrEBkT4mxvGQ8vGCky
-         UcyUIyACX/eWCnQVZPvcKnniRBWQzxk31NAbxrf/A4aghpaX/31I+bNyQ/Qam8ztPPSG
-         vMi3I2i1kQzLM/SZWCd2fuw4zMHfNG1YYenSfu1ylWRjr97C2snRL01paU46fLCaXRnq
-         /kYQ==
-X-Gm-Message-State: ACgBeo0sC6duYI5zlpRmU0jnicJiZayI4T3z7S5dGKEAVAynzw1v8Ni1
-        ns/CQUyShH3WaJOojBhpxGePRA==
-X-Google-Smtp-Source: AA6agR4fKET4Xlnj9XFWaJpgToogMvlTL7ry/CzHPdCJ2np554jHWijse9yBvrmkpPwz9nynp46fbA==
-X-Received: by 2002:a05:6830:1cc8:b0:618:ebac:c43f with SMTP id p8-20020a0568301cc800b00618ebacc43fmr3728480otg.45.1660945181376;
-        Fri, 19 Aug 2022 14:39:41 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 3-20020a9d0b83000000b0063706889f89sm1409174oth.8.2022.08.19.14.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 14:39:40 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 16:39:38 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-Message-ID: <YwADGgNVwtKacUBR@builder.lan>
-References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
- <20220810204750.3672362-2-bjorn.andersson@linaro.org>
- <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
- <20220814210104.GA690892-robh@kernel.org>
- <Yv1y9Wjp16CstJvK@baldur>
- <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
- <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
- <CAE-0n53C+D=9gdSXKsjr4KZVrb-gpeo_EyuX3DfNKp19FoicXA@mail.gmail.com>
+        with ESMTP id S237450AbiHSV5P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 17:57:15 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BD5B942B
+        for <linux-usb@vger.kernel.org>; Fri, 19 Aug 2022 14:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660946234; x=1692482234;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=idBO4eNutfJtNxAHBdpznjHhcknUnivhY7CClFYqq1Q=;
+  b=YcT38IPe4l3XVm4JnRgJCwGQrMOjQ9yOE7bt8odJArAY0Ghfhv1WMvH6
+   hSE/qARqx+zhLmSvEmJ058zLyp9HN2Ow6nYb5n1Yi3lttdwnsJfDweaE9
+   PMf3IvS97yu26X1S2S4tZkmvqjnBCebtGSunpvJJxsXqMArp5mMcYL6jV
+   rEtMQwe0qVhcAN0f0Wm31Kih8Wwnx0WaY1387qcrQtszDsTabaMJFVQLg
+   oSc4WrxjGiVg5Wnpv+tUB6+75quhkvunhEI7E+4UIikccOqcHqGoBp3LX
+   NxZK3FsbyTgYtrp1BIDhO6o2SG6cLAEUbHBialZbeZa5hxX5jqY1esf6+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="379405095"
+X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
+   d="scan'208";a="379405095"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 14:57:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
+   d="scan'208";a="668756994"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Aug 2022 14:57:13 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oP9zM-0001ql-1w;
+        Fri, 19 Aug 2022 21:57:12 +0000
+Date:   Sat, 20 Aug 2022 05:56:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS WITH WARNING
+ a8c67e27d9e3ed33afadbdf86bbd58e26e0c4357
+Message-ID: <63000709.79x4DAEU+D2F+Dx6%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n53C+D=9gdSXKsjr4KZVrb-gpeo_EyuX3DfNKp19FoicXA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,96 +62,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 19 Aug 15:49 CDT 2022, Stephen Boyd wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: a8c67e27d9e3ed33afadbdf86bbd58e26e0c4357  dt-bindings: usb: mtu3: add compatible for mt8188
 
-> Quoting Prashant Malani (2022-08-19 13:14:25)
-> > > This would do that for us, but when all four lanes are connected from
-> > > the qmp phy directly to the connector we could just as easily have done
-> > > it with one endpoint.
-> > >
-> > >         qmp_phy {
-> > >                 ports {
-> > >                         port@0 {
-> > >                                 reg = <0>;
-> > >                                 endpoint@0 {
-> > >                                         reg = <0>;
-> > >                                         remote-endpoint = <&usb_c_ss>;
-> > >                                         data-lanes = <1 2 3 0>
-> > >                                 };
-> > >                         };
-> > >                 };
-> > >         };
-> > >
-> > > So should we explicitly have two endpoints in the usb-c-connector for
-> > > the two pairs all the time, or should we represent that via data-lanes
-> > > and only split up the connector's endpoint if we need to connect the
-> > > usb-c-connector to two different endpoints?
-> >
-> > I like 2 endpoints to represent the usb-c-connector, but that doesn't seem
-> > to be compatible (without introducing `data-lanes`, at least) with all
-> > the various
-> > combinations on the remote side, if that remote side is a DRM bridge with DP
-> > output capability (like it6505 or anx7625).
-> > That type of DRM bridge supports 1, 2 or 4 lane DP connections.
-> 
-> Why can't the remote side that's a pure DP bridge (it6505) bundle
-> however many lanes it wants into one endpoint? If it's a pure DP bridge
-> we should design the bridge binding to have up to 4 endpoints, but
-> sometimes 2 or 1 and then overlay data-lanes onto that binding so that
-> we can tell the driver how to remap the lanes if it can. If the hardware
-> can't support remapping lanes then data-lanes shouldn't be in the
-> binding.
-> 
+Warning reports:
 
-I don't see why we would want to further complicate the of_graph by
-representing each signal pair between two fixed endpoint as individual
-endpoints.
+https://lore.kernel.org/linux-usb/202208190411.1lugjsYz-lkp@intel.com
 
-Let's describe the connections between the components, not the signals.
+Warning: (recently discovered and may have been fixed)
 
-> >
-> > So, how about 4 endpoints (1 for each SS lane) in the usb-c-connector port@1?
-> > That should support every conceivable configuration and bridge/PHY hardware.
-> > and also allows a way to specify any lane remapping (similar to what
-> > "data lanes" does)
-> > if that is required.
-> > Then we are consistent with what an endpoint represents, regardless of whether
-> > the DRM bridge has a DP panel (1,2 or 4 lane) or Type-C connector  (2
-> > or 4 lane) on its output side.
-> 
-> I'd like to think in terms of the usb-c-connector, where the DP altmode
-> doesn't support one lane of DP and USB is only carried across two SS
-> lanes. Essentially, two SS lanes are always together, hence the idea
-> that we should have two endpoints in the SS port@1. In the simple case
-> above it seems we can get away with only one endpoint in the SS port@1
-> which is probably fine? I just don't know how that is represented in the
-> schema, but I suspect making another endpoint optional in the SS port@1
-> is the way to go.
-> 
-> Will there ever be a time when all 4 usb-c-connector remote-endpoint
-> phandles point to endpoints that are child nodes of different ports
-> (i.e. different qmp_phy nodes) with a 4 endpoint schema? I don't think
-> that is possible, so 4 endpoints is flexible but also verbose. It also
-> means we would have to walk the endpoints to figure out lane remapping,
-> wheres we can simply find the endpoint in the DP bridge ports and look
-> at data-lanes directly.
+drivers/usb/dwc3/dwc3-qcom.c:313:25: warning: variable 'hcd' set but not used [-Wunused-but-set-variable]
 
-The existing implementation provides the interfaces usb_role_switch,
-usb_typec_mux and usb_typec_switch. These works based on the concept
-that the USB Type-C controller will request the endpoints connected to
-the usb-c-connector about changes such as "switch to host mode", "switch
-to 2+2 USB/DP combo" and "switch orientation to reverse". We use this
-same operations to inform any endpoint at any port about these events
-and they all react accordingly.
+Warning ids grouped by kconfigs:
 
-Perhaps I'm misunderstanding your suggestion, but if you start
-representing each individual lane in the SuperSpeed interface I believe
-you would have to just abandon this interface and replace it with
-something like "give me USB on port@1/endpoint@0 and port@1/endpoint@1
-and give me DP on port@1/endpoint@2 and port@1/endpoint@3".
+gcc_recent_errors
+|-- alpha-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:variable-hcd-set-but-not-used
+|-- ia64-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:variable-hcd-set-but-not-used
+|-- m68k-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:variable-hcd-set-but-not-used
+|-- mips-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:variable-hcd-set-but-not-used
+|-- powerpc-allmodconfig
+|   `-- drivers-usb-dwc3-dwc3-qcom.c:warning:variable-hcd-set-but-not-used
+`-- riscv-allmodconfig
+    `-- drivers-usb-dwc3-dwc3-qcom.c:warning:variable-hcd-set-but-not-used
 
-I presume that such an interface would work, but I'm afraid I don't see
-the merits of it and we would have to replace the Linux implementation.
+elapsed time: 720m
 
-Regards,
-Bjorn
+configs tested: 53
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                                defconfig
+arm                                 defconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                              defconfig
+arc                  randconfig-r043-20220819
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+m68k                             allyesconfig
+m68k                             allmodconfig
+i386                          randconfig-a014
+x86_64                        randconfig-a006
+i386                          randconfig-a012
+i386                          randconfig-a016
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+x86_64                    rhel-8.3-kselftests
+arm64                            allyesconfig
+i386                             allyesconfig
+sh                               allmodconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+arm                              allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20220819
+hexagon              randconfig-r041-20220819
+x86_64                        randconfig-a012
+i386                          randconfig-a002
+riscv                randconfig-r042-20220819
+s390                 randconfig-r044-20220819
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+x86_64                        randconfig-a001
+i386                          randconfig-a011
+x86_64                        randconfig-a003
+i386                          randconfig-a015
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
