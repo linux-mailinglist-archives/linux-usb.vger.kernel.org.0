@@ -2,53 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671D7599738
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 10:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60995997AD
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 10:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347095AbiHSIbc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Aug 2022 04:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S1347689AbiHSIgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Aug 2022 04:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346799AbiHSIba (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 04:31:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CF2E97F0;
-        Fri, 19 Aug 2022 01:31:28 -0700 (PDT)
+        with ESMTP id S1346775AbiHSIgN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 04:36:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529CA48E9F;
+        Fri, 19 Aug 2022 01:34:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 655B9B8265F;
-        Fri, 19 Aug 2022 08:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4EDC433D6;
-        Fri, 19 Aug 2022 08:31:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8E2CB82668;
+        Fri, 19 Aug 2022 08:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF334C433D6;
+        Fri, 19 Aug 2022 08:33:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660897886;
-        bh=Q5Be1+hLtbVanl/3s29/HhIQGdBUTkMhqA84NGRkgPA=;
+        s=korg; t=1660898015;
+        bh=+D2Wg1a/O5UimI6at2BG7aW7+TVM/Y73cSP/vFrgmB8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pbIqDyC5m+19uwKDAmIDnMoi+9l9Zyi6X/Yu4gyTdJ8XcLTGvN9OOGqw82yfsaNdW
-         SF1QgzqJRmBzMOm9h/Emw36LgJCWolwwnoIS2Yh3cAPSjjsaiUa3y3b3EarXjFIaMq
-         FKQ/T6hKuttebtgj3WPxwMo9PEW+GZpxyyUWhpMo=
-Date:   Fri, 19 Aug 2022 10:31:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        Nicholas Bellinger <nab@linux-iscsi.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        John Youn <John.Youn@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v2 00/25] usb: gadget: f_tcm: Enhance UASP driver
-Message-ID: <Yv9KWyevXLegwQcK@kroah.com>
-References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+        b=UwEeFS4IVGO+3rmmZa6OoUq+zejprZZz6X/CvooieDDbTnfDm64yw2V5QbgmC5XS1
+         pO8319d3Ew0+1Xc0jECBaGQDRPs09bmpFoEFydNoAIj0CQr8ClLari7FAc+TwLuAW4
+         LQXyxcD68bqDHHLpM17M7dLBmn+vNmeT24SmwMBU=
+Date:   Fri, 19 Aug 2022 10:33:32 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, paul.elder@ideasonboard.com,
+        kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
+        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
+Subject: Re: [PATCH v3] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
+Message-ID: <Yv9K3GPsyw6ZAEMm@kroah.com>
+References: <20220720144641.3480432-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+In-Reply-To: <20220720144641.3480432-1-m.grzeschik@pengutronix.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,30 +52,18 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 06:26:01PM -0700, Thinh Nguyen wrote:
-> The Linux UASP gadget driver is incomplete and remained broken for a long time.
-> It was not implemented for performance either. This series adds some of the
-> required features for the UASP driver to work. It also makes some changes to
-> the target core.
-> 
-> This is tested against UASP CV and DWC_usb3x controller. It still needs some
-> fixes in the target core, which will be separated from this series.
-> 
-> There are still more room for performance improvement and fixes. However, this
-> series should be sufficient to bring up a working UASP device.
-> 
-> 
-> Changes in v2:
->  - Remove most target core changes from this series and only keep the must-have
->    ones
->  - Split the task-management patch to smaller patches
->  - Don't send failure Task Management response to target core, reducing
->    dependency
->  - Add UASP bringup script example in cover page
->  - Make various small updates according to feedbacks
+On Wed, Jul 20, 2022 at 04:46:41PM +0200, Michael Grzeschik wrote:
+> Likewise to the uvcvideo hostside driver, this patch is changing the
 
-I would need a review by the target maintainers before being able to
-take any of the USB gadget changes into the USB tree...
+"Likewise" implies a previous patch being mentioned, which I do not see
+here :(
+
+> simple workqueue to an async_wq with higher priority. This ensures that
+> the worker will not be scheduled away while the video stream is handled.
+
+How will this ensure that?  What happens if yet-another higher priority
+task comes in?  This feels like a race that will just never be won
+without fixing this properly.
 
 thanks,
 
