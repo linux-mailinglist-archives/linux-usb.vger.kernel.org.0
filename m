@@ -2,111 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09017599999
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 12:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85545999D4
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Aug 2022 12:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348260AbiHSKRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Aug 2022 06:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S1347777AbiHSKdY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Aug 2022 06:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347328AbiHSKRs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 06:17:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D0DDAEED;
-        Fri, 19 Aug 2022 03:17:48 -0700 (PDT)
+        with ESMTP id S1348042AbiHSKdW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Aug 2022 06:33:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AB463BB;
+        Fri, 19 Aug 2022 03:33:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B20B4616D7;
-        Fri, 19 Aug 2022 10:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DBBCC43143;
-        Fri, 19 Aug 2022 10:17:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660904267;
-        bh=bBGGs+VaVwa9GZVrl+mfip/PNxqOhyRiV5mtJK9gULA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LSwaVI8rUzMmO/Ct43XNW9RruD+qxBI8tnG2OoF/s63ywpKDgUlWIi/aLX949UKPN
-         jM20X3grcEAWH38fx5/oYHEV7F5sTeuvwCDPVnMMG53ff2UByclp++LklueQkXypFU
-         H7c9/JJp/RjyIB8BwC52gvvAYZIk2WNxpCZz5cJXuJNC06FJis2sLmU6k3EGL09lKc
-         Jb0xsF7kl1AKAIK0xmR/ofWHEdPxStI2V1NvsgZa+z5y1Ow/2cxRWkgNKh/52pgoWK
-         DCt8ZOZFDA7eTYb7MHgMkmQVIDOYTuxR00NmLv1qFt7npxJhkX1i5DzsxxCLPXCGpY
-         yOQjDCPKxSuDQ==
-Received: by mail-ej1-f46.google.com with SMTP id gb36so7910196ejc.10;
-        Fri, 19 Aug 2022 03:17:47 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3V1Hsa3QBjLGdI35DnZzMYK7sNyj2Mkp+8WtQFYukn/rhgCEFm
-        ByD7GnwBR/nTb0IY/PPcL4cNUxMrhXswDraLMTg=
-X-Google-Smtp-Source: AA6agR5J9QREsVSQar6+cAcI+eQkL21ldizqJ/P5eBUIHXbbNTd/IG0qShM+KxoLNU3uFpfrKuXX255VS5DFZKFqEjU=
-X-Received: by 2002:a05:6402:2751:b0:443:d90a:43d4 with SMTP id
- z17-20020a056402275100b00443d90a43d4mr5657123edd.368.1660904254658; Fri, 19
- Aug 2022 03:17:34 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A664616EC;
+        Fri, 19 Aug 2022 10:33:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1841CC433D7;
+        Fri, 19 Aug 2022 10:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660905195;
+        bh=P0ohKSkFshdhJ/jP9vFwkBZFmB+9KCEud3AFiAiMbmQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zjJfROVURJQxCvUOeg4Nkgxqx9luhmsRP5yzv95BZBWKg4eJHf5UGpZQb5Ret5hrk
+         lhdlelPhJ0Ez06/6q+3qZRWsC9vfsWVf123a+7H1SnfCDqDWABG+2Z1naBXTnNuzPH
+         av3xOcUd2jLMnbAe1GsPmTTaBWHErkYy0dNegwt0=
+Date:   Fri, 19 Aug 2022 12:33:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Utkarsh Patel <utkarsh.h.patel@intel.com>,
+        rajmohan.mani@intel.com, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/6] ACPI: New helper function
+ acpi_dev_get_memory_resources() and a new ACPI ID
+Message-ID: <Yv9m6LSGKXvnnBSY@kroah.com>
+References: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
+ <Yv6PLl4aLPzHTJTQ@kroah.com>
+ <Yv9ftg2MVx+okmzC@kuha.fi.intel.com>
 MIME-Version: 1.0
-References: <20220818135522.3143514-1-arnd@kernel.org> <20220818135522.3143514-2-arnd@kernel.org>
- <CAMuHMdXEXQNeOQGnYTQG58nHwB8YwLQ5q1vaje7kPQexrAMsRA@mail.gmail.com>
-In-Reply-To: <CAMuHMdXEXQNeOQGnYTQG58nHwB8YwLQ5q1vaje7kPQexrAMsRA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 19 Aug 2022 12:17:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0kJVLEFqS0E=Lv2=HE9dbmjgA=_T2NX4zhq7EHvk4DBg@mail.gmail.com>
-Message-ID: <CAK8P3a0kJVLEFqS0E=Lv2=HE9dbmjgA=_T2NX4zhq7EHvk4DBg@mail.gmail.com>
-Subject: Re: [PATCH 01/11] ARM: defconfig: reorder defconfig files
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        Peter Chen <peter.chen@nxp.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv9ftg2MVx+okmzC@kuha.fi.intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -117,21 +55,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 11:17 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> This may cause conflicts with the usual refresh I plan to do for
-> v6.0-rc1, which will be very similar to
-> https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?id=517d634d376042ab797d9feeb94236ad4cb03396
-> So it may be better to drop this part.
->
-> However, that decision is up to you, as you will have to handle the
-> conflict when merging renesas-arm-defconfig-for-v6.0-tag1 later ;-)
-> But sfr might complain before...
+On Fri, Aug 19, 2022 at 01:02:30PM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> On Thu, Aug 18, 2022 at 09:12:46PM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Aug 16, 2022 at 01:16:23PM +0300, Heikki Krogerus wrote:
+> > > Hi,
+> > > 
+> > > The helper function returns all memory resources described for a
+> > > device regardless of the ACPI descriptor type (as long as it's
+> > > memory), but the first patch introduces new ACPI ID for the IOM
+> > > controller on Intel Meteor Lake and also separately modifies the
+> > > driver so that it can get the memory resource from Address Space
+> > > Resource Descriptor.
+> > > 
+> > > An alternative would have been to introduce that helper function first
+> > > so we would not need to modify the driver when the new ID is added,
+> > > but then the helper would also need to be applied to the stable kernel
+> > > releases, and that does not feel necessary or appropriate in this
+> > > case, at least not IMO.
+> > > 
+> > > So that's why I'm proposing here that we first add the ID, and only
+> > > after that introduce the helper, and only for mainline. That way the
+> > > patch introducing the ID is the only that goes to the stable releases.
+> > > 
+> > > If that's okay, and these don't have any other problems, I assume it's
+> > > OK if Rafael takes all of these, including the ID?
+> > 
+> > I took the id now, for 6.0-final as it seems to be totally independant
+> > of the other commits (otherwise you would not have tagged it for the
+> > stable tree.)
+> > 
+> > The remainder should probably be resent and send through the acpi tree.
+> 
+> Okay. The last patch depends on that ID patch, so Rafael, you need to
+> handle that conflict with immutable branch I guess. Or should we just
+> skip that patch for now?
 
-I'm not too worried here, if you just do the 'savedefconfig' step, you
-should get
-the same change and the mergetool will figure it out. In case there is a nasty
-context conflict, you could just send that part early so I can resolve it.
+You can wait for -rc3 or so which should have that commit in it.
 
-       Arnd
+thanks,
+
+greg k-h
