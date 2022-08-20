@@ -2,103 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE1E59AF44
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Aug 2022 19:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BB559B045
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Aug 2022 22:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346750AbiHTRqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Aug 2022 13:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
+        id S232707AbiHTUDE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Aug 2022 16:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiHTRqF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Aug 2022 13:46:05 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D518F18348
-        for <linux-usb@vger.kernel.org>; Sat, 20 Aug 2022 10:46:04 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id u15so5483082ejt.6
-        for <linux-usb@vger.kernel.org>; Sat, 20 Aug 2022 10:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=ZEVXl/bgk3l2LIbVLXv+dyViZALGBnGdxluHeWZ/GDA=;
-        b=AKfEw7OlSubnLxoHxG7Tke5drUxWW5apVIM6lSw4JENYuj7owIU+RrYxMg+P5VlCay
-         ZTJ8iXUojPC+NmWICtj/izCXZYvFLB44K+zjvMzLgUdGFCKPkvx9b6dsnmlUAM01xLNF
-         63PMUM5uLzwGr9T2c2y+X5TdxcO2R3oMCocdZG/a59r2CMKPE6Qus9KXgZGSlnyUktM9
-         o9iBlmLcQkZMgj4u0o/JgQMq8N93P3XIMb7qpRiYG55lSW0Dkj3FdKIxn8mMTDgxzAqb
-         QmKBMvS6VDxDJHevBx65q2SgU10UeLLge5de2wZBZYwO0+Dx+mr4q8l33SG9VifRxX2L
-         dBAA==
+        with ESMTP id S233977AbiHTUCq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Aug 2022 16:02:46 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E1F5FC9
+        for <linux-usb@vger.kernel.org>; Sat, 20 Aug 2022 13:02:26 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id l20-20020a056e02067400b002dfa7256498so5427530ilt.4
+        for <linux-usb@vger.kernel.org>; Sat, 20 Aug 2022 13:02:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=ZEVXl/bgk3l2LIbVLXv+dyViZALGBnGdxluHeWZ/GDA=;
-        b=ekmwdK353Ke6ReeLO5oWqhxwG9oEzVQ3T2EmlH4TMRD8HmV6NI/M+F8TRGzj2+Rr6W
-         M3h3OuDLz2r8A7A96f2XvLQslAFDnIml6VE1JyvMRCkegPkfzv2ARVkkiy+y6eUvcPfj
-         4KXgWNVDPTKebSs5+V3mjAIiRDZEgzlh+ejB/vlU9Lsg31QLUneJM+kMssshJiHhYHDC
-         c3tIO1Yfo073gW1KOC83HHyuKxKXWwU+LhaVHX9eoPuYQh7PNXxjdc2Jk80Z2q+1uXdK
-         zWZTSfQvgT9ScUcd6PtaKzhfjI86UMtAKX0OCtKnjRv483EwL9tBn8Dqkj/RX+YxTsc0
-         g1/w==
-X-Gm-Message-State: ACgBeo2f3i2jQmdAf2ZeZ0YfEuFA/HRIauHEtXadYaVMF/uzRKZOmbYv
-        HB+kS/iDlmUN+NzYiXmeDPJMWxBpefw=
-X-Google-Smtp-Source: AA6agR66+3CdEe7tNI4BZR6JftgAp5LydKvu/vwmmMSf599YZ0S9hHUcrn+31Y9OGSC29YidyuC/Ww==
-X-Received: by 2002:a17:907:209c:b0:731:27bb:da8c with SMTP id pv28-20020a170907209c00b0073127bbda8cmr7985070ejb.555.1661017563277;
-        Sat, 20 Aug 2022 10:46:03 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c0bb:f700:3cb6:47a0:41b9:1531? (dynamic-2a01-0c23-c0bb-f700-3cb6-47a0-41b9-1531.c23.pool.telefonica.de. [2a01:c23:c0bb:f700:3cb6:47a0:41b9:1531])
-        by smtp.googlemail.com with ESMTPSA id ky25-20020a170907779900b0073d68db09ecsm808003ejc.23.2022.08.20.10.46.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Aug 2022 10:46:02 -0700 (PDT)
-Message-ID: <f5632bde-0c34-9696-e979-497ef4fc9556@gmail.com>
-Date:   Sat, 20 Aug 2022 19:45:57 +0200
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=0ti6bdWx7eJyJTMvgibKwHk7j3bL4kbd6UHfX1PdkdM=;
+        b=IWLVPhFY0f7HxWmKCo0sfkQuX05YR9jndoyoUFnzL+IpIO/ZjkES+BAvj3v9rYkKQy
+         TUWi7SRsSB/eoX9ZIFbV/HW8XGVh/c3DAUrYjFJCAqSgdBTSxcwa7etRFmszjZ9xXFjL
+         pxRmGoNPCm8QqE07CV2rS6sl2GLyYZOZ58lHasg/bAAIb/VG5Z6iEXEw/vtPzqHCQZHG
+         WDaP2q1cOjfTumKxoYcsEdo5kEuolFgd8HojB89ygqiTfPbyc+LwyeY2czDigRLNUC3Z
+         BTDgSO2fKhTuQ5UWPUQPrWqr0TWU+vi6kkTEaBaZV6nhHsghMGaPPqkKDcUvGmpewVLN
+         rxFg==
+X-Gm-Message-State: ACgBeo0IHxdwyk1bMk6BUeGXER4IshcH+cXOWr8cPIb2BqB5XHQ5QbbR
+        M3IjSPUsPCiw+olaSQryLicpA2X6rjHnMOPYmmaL3Hb0GFO+
+X-Google-Smtp-Source: AA6agR40X3ivhOiMhcBs0aGUPcAZswpztm9Xr9dtno5uKWoy5SpuLtlMJqetyRN7ua6t0OOAZDf7kE3d0XvhK471Slok4MGuS4ay
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] usb: dwc2: fix wrong order of phy_power_on and phy_init
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1c25:b0:2df:21fd:5a6b with SMTP id
+ m5-20020a056e021c2500b002df21fd5a6bmr6302990ilh.128.1661025745851; Sat, 20
+ Aug 2022 13:02:25 -0700 (PDT)
+Date:   Sat, 20 Aug 2022 13:02:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008b5c5405e6b1b158@google.com>
+Subject: [syzbot] usb-testing boot error: general protection fault in getname_kernel
+From:   syzbot <syzbot+ef0cb91001b03cc06610@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since 1599069a62c6 ("phy: core: Warn when phy_power_on is called before
-phy_init") the driver complains. In my case (Amlogic SoC) the warning
-is: phy phy-fe03e000.phy.2: phy_power_on was called before phy_init
-So change the order of the two calls.
+Hello,
 
-Fixes: 09a75e857790 ("usb: dwc2: refactor common low-level hw code to platform.c")
-Cc: stable@vger.kernel.org
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    568035b01cfb Linux 6.0-rc1
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=179f7647080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=ef0cb91001b03cc06610
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ef0cb91001b03cc06610@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
+CPU: 0 PID: 299 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x15d/0x4a0 mm/slub.c:3268
+Code: 51 08 48 8b 01 48 83 79 10 00 48 89 04 24 0f 84 7c 02 00 00 48 85 c0 0f 84 73 02 00 00 49 8b 3c 24 41 8b 4c 24 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 7b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc900017afe50 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: 000000000000000e RCX: 0000000000000800
+RDX: 00000000000007f0 RSI: 0000000000000cc0 RDI: 000000000003e6c0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88810016e500
+R13: 0000000000000cc0 R14: ffffffff8183a35e R15: 0000000000000cc0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ getname_kernel+0x4e/0x370 fs/namei.c:227
+ kernel_execve+0x7a/0x500 fs/exec.c:1970
+ call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x15d/0x4a0 mm/slub.c:3268
+Code: 51 08 48 8b 01 48 83 79 10 00 48 89 04 24 0f 84 7c 02 00 00 48 85 c0 0f 84 73 02 00 00 49 8b 3c 24 41 8b 4c 24 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 7b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc900017afe50 EFLAGS: 00010246
+
+RAX: ffff000000000000 RBX: 000000000000000e RCX: 0000000000000800
+RDX: 00000000000007f0 RSI: 0000000000000cc0 RDI: 000000000003e6c0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88810016e500
+R13: 0000000000000cc0 R14: ffffffff8183a35e R15: 0000000000000cc0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	51                   	push   %rcx
+   1:	08 48 8b             	or     %cl,-0x75(%rax)
+   4:	01 48 83             	add    %ecx,-0x7d(%rax)
+   7:	79 10                	jns    0x19
+   9:	00 48 89             	add    %cl,-0x77(%rax)
+   c:	04 24                	add    $0x24,%al
+   e:	0f 84 7c 02 00 00    	je     0x290
+  14:	48 85 c0             	test   %rax,%rax
+  17:	0f 84 73 02 00 00    	je     0x290
+  1d:	49 8b 3c 24          	mov    (%r12),%rdi
+  21:	41 8b 4c 24 28       	mov    0x28(%r12),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 7b 02 00 00    	jne    0x2af
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
+
+
 ---
- drivers/usb/dwc2/platform.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index c8ba87df7..4db7a18a5 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -154,9 +154,9 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
- 	} else if (hsotg->plat && hsotg->plat->phy_init) {
- 		ret = hsotg->plat->phy_init(pdev, hsotg->plat->phy_type);
- 	} else {
--		ret = phy_power_on(hsotg->phy);
-+		ret = phy_init(hsotg->phy);
- 		if (ret == 0)
--			ret = phy_init(hsotg->phy);
-+			ret = phy_power_on(hsotg->phy);
- 	}
- 
- 	return ret;
--- 
-2.37.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
