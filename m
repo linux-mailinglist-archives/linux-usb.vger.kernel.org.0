@@ -2,51 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00F159B634
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 22:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB25E59B636
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 22:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiHUUAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Aug 2022 16:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
+        id S231621AbiHUUD5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Aug 2022 16:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiHUUAc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 16:00:32 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F9D193CE
-        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 13:00:31 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id k1-20020a92c241000000b002e9caf63a57so211970ilo.20
-        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 13:00:31 -0700 (PDT)
+        with ESMTP id S229924AbiHUUD4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 16:03:56 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12AEBE24
+        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 13:03:54 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-31f445bd486so242919817b3.13
+        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 13:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=one-eyed-alien.net; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=nPHPjzX6iA8Sisu1M26fpGyHV1o2jUgndD/2PkzbqC4=;
+        b=JAcOr1cdfYTsap7V5rbW7hERv5xWXC5h752rfbPQHZAeGZAah1xA1bgVobkcmBmxwz
+         B2D6Te1b/oxWFgEoJjrWA7eH4BhJ/LvFJEW1dGhai1zojIwBQevRwtKivpwITQQ5WHxG
+         D8hiXeo1/aH4wMyikzlyj/ro/G2+ckxQxJkUE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=IgWUTkVD6oDrPjhnDopu5A3rN80gzl2jAUVz0qwuJp0=;
-        b=qfWOG+NFobOdoTJy4b3Jb7IIzeB/AjzXrRsrJdO0Go5ObvuQE2Uls/TL02MRMJAKz1
-         EZOuR0yxL51w1EgfKY+6GTBxFZqiOaxmwTIekqPHdD6s5mY31kbf5mzAPH6P4n+mtVmR
-         Ua/XSudNhfywcabpsRw52Yg7ih924Maebsh8yu6DmKvY65MW2Gx/lLwqla8u7qoDD5Cu
-         EIZvut/PIlpFubv8L66RiDMs8tp58lEYVtbR2ImU8K0ICHEhCRCxyxm9/aLSucQE8LQR
-         129vHqEOD2qNT6B/0uvTK4+YcIpVHtKAzaDuerBGRjTnUXauzM+tYmEoCHKT4qhpBffe
-         vKUg==
-X-Gm-Message-State: ACgBeo0+gaxzDtR161ufAS6EnefY9MDHTO2k4i0E/hPnFQ7ipR9jjM/f
-        z65mzKj0l2qo9elfTRtjB3wWUfqTWXGOPRBc/7BUmo1o3JUR
-X-Google-Smtp-Source: AA6agR5qmAL+GqOoGBG+IBLlxGMzbYOKfWee523dM5cckCyB1ptHkh3/grLRXj630PCaFzoslR/KDCXxLOei0Mh/UjQG2AT2fi7P
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=nPHPjzX6iA8Sisu1M26fpGyHV1o2jUgndD/2PkzbqC4=;
+        b=nPH9iw3inVHes5wPFp8D0zFVhme43SgCCpKNaQNB54VVS8tNWw5/FWLYmWcdzLClYQ
+         ImUVrZbm466YBxNr4WsB6kmogFO1Tl+dCXOaBUiXLwfDMaX/xIkVrUEU5ROxA3FgbEZg
+         PrqCQB4b1y75TzPKBhWW4F2tp1rwbB4R1GZidmW7hZFsJU9w/VzI63qpAoBL33jCbJTB
+         CbzuSLkap0EOeWLn6gF07f6WKLLAsQPavfTC0GQPeAsWT3kCrovKJ4s0YvrXFQnF3seI
+         Fr+OXWQmf8stmXo9GdMpXnnRXVCvhHO2fItdV2hAyIoedDF1pg0jhO2Co/NyVghUO+4R
+         BhJw==
+X-Gm-Message-State: ACgBeo3n9RBRRCKi61suA031IXTC28zXETdcmCEOOCVTBb6hzqBNmOvX
+        s7WT6jLB2p9xuV6ngx3VQ4RWXmcqMVi0p5ehhvJQmFG4EDiaag==
+X-Google-Smtp-Source: AA6agR4+2D3rAxxY+yHMHqdjjDTcRNh0c0oRmT8TvJYOy9qzN/wVp7RGpfqHW+mbR85vkAYfOKAI7FsYFVpO7zxrcfo=
+X-Received: by 2002:a0d:ed05:0:b0:336:dba:4792 with SMTP id
+ w5-20020a0ded05000000b003360dba4792mr17517472ywe.366.1661112234078; Sun, 21
+ Aug 2022 13:03:54 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1cf:b0:5e9:74e7:6b01 with SMTP id
- w15-20020a05660201cf00b005e974e76b01mr6831690iot.127.1661112030480; Sun, 21
- Aug 2022 13:00:30 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 13:00:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000824e3805e6c5c875@google.com>
-Subject: [syzbot] usb-testing boot error: KASAN: out-of-bounds Read in __schedule
-From:   syzbot <syzbot+dc34dd8e1a7a138b88ac@syzkaller.appspotmail.com>
-To:     ebiederm@xmission.com, legion@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <CAAMvbhFJ+jdFPh5dMV+_jjYUYYgWhCpv5E43Bh=Eoo6su80cUA@mail.gmail.com>
+ <YwJFZNUob3BtEM2h@rowland.harvard.edu>
+In-Reply-To: <YwJFZNUob3BtEM2h@rowland.harvard.edu>
+From:   Matthew Dharm <mdharm-usb@one-eyed-alien.net>
+Date:   Sun, 21 Aug 2022 13:03:43 -0700
+Message-ID: <CAA6KcBC+4c9JTAt6=HJOciVW=gJ0KsiRWJeNGx-X2g5s+aafFQ@mail.gmail.com>
+Subject: Re: USB disk disconnect problems
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     James Dutton <james.dutton@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,99 +64,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+(Re-sending, as the first one got blocked by the list for having an HTML pa=
+rt).
 
-syzbot found the following issue on:
+On Sun, Aug 21, 2022 at 7:47 AM Alan Stern <stern@rowland.harvard.edu> wrot=
+e:
+>
+> On Sun, Aug 21, 2022 at 12:17:30PM +0100, James Dutton wrote:
+> > I know my suggested behaviour might be detrimental for some users, in
+> > case one modifies the usb disk in another computer and then comes
+> > back, but I would like an option that assumes it has not been plugged
+> > into anything else.
 
-HEAD commit:    568035b01cfb Linux 6.0-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=10c0a92d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=dc34dd8e1a7a138b88ac
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+In the =E2=80=9Cold days=E2=80=9D (that is, my original design for use-stor=
+age) it
+used to do exactly what you are looking for - based on VID, DID, and
+SerialNumber it would =E2=80=9Cremember=E2=80=9D devices. The SCSI host wou=
+ld never be
+destroyed, and when a device re-appeared it would be re-connected to
+the existing host.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dc34dd8e1a7a138b88ac@syzkaller.appspotmail.com
+That caused all sorts of problems. The SCSI and block layers just
+couldn=E2=80=99t handle it well. A clean umount / mount cycle worked fine, =
+but
+if you unexpectedly disconnected the device all hell broke loose and
+there was no way to recover.
 
-==================================================================
-BUG: KASAN: out-of-bounds in schedule_debug kernel/sched/core.c:5736 [inline]
-BUG: KASAN: out-of-bounds in __schedule+0x2114/0x26f0 kernel/sched/core.c:6388
-Read of size 8 at addr ffffc900015f8000 by task kworker/u4:1/237
+I did it this way because, way back when, there were issues
+dynamically destroying SCSI hosts. The people who worked on those
+other layers found it much, much easier to fix that problem than try
+to make it possible to recover from an unexpected disconnect.
 
-CPU: 1 PID: 237 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x59/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- schedule_debug kernel/sched/core.c:5736 [inline]
- __schedule+0x2114/0x26f0 kernel/sched/core.c:6388
- preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6663
- __cond_resched+0x13/0x20 kernel/sched/core.c:8299
- might_resched include/linux/kernel.h:110 [inline]
- might_alloc include/linux/sched/mm.h:274 [inline]
- slab_pre_alloc_hook mm/slab.h:700 [inline]
- slab_alloc_node mm/slub.c:3157 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
- kmem_cache_alloc+0x2fe/0x4a0 mm/slub.c:3268
- prepare_kernel_cred+0x27/0x890 kernel/cred.c:717
- call_usermodehelper_exec_async+0x10e/0x580 kernel/umh.c:91
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+Honestly, I=E2=80=99m not even sure where you would need to begin to make t=
+his
+work. It would require pretty radical changes is the block I/O layers
+to differentiate different failure modes, keep a lot more data around
+after certain types of failures, allow for specifying which devices
+this new policy (which is assuming reconnected devices really haven=E2=80=
+=99t
+been altered) applies to, etc =E2=80=94 it=E2=80=99s a big lift.
 
-The buggy address belongs to stack of task kworker/u4:1/237
+Matt
+aka =E2=80=9Cthe guy who originally designed how this works=E2=80=9D
 
-The buggy address belongs to the virtual mapping at
- [ffffc900015f8000, ffffc90001601000) created by:
- kernel_clone+0xe7/0xab0 kernel/fork.c:2673
-
-The buggy address belongs to the physical page:
-page:ffffea0004396940 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10e5a5
-flags: 0x200000000000000(node=0|zone=2)
-raw: 0200000000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 26, tgid 26 (kworker/u4:1), ts 6964925972, free_ts 0
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x11cc/0x2a20 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
- __alloc_pages_bulk+0x9a1/0x1400 mm/page_alloc.c:5463
- alloc_pages_bulk_array_mempolicy+0x1b3/0x360 mm/mempolicy.c:2365
- vm_area_alloc_pages mm/vmalloc.c:2930 [inline]
- __vmalloc_area_node mm/vmalloc.c:3026 [inline]
- __vmalloc_node_range+0x576/0x13a0 mm/vmalloc.c:3196
- alloc_thread_stack_node kernel/fork.c:312 [inline]
- dup_task_struct kernel/fork.c:977 [inline]
- copy_process+0x13c0/0x6de0 kernel/fork.c:2087
- kernel_clone+0xe7/0xab0 kernel/fork.c:2673
- user_mode_thread+0xad/0xe0 kernel/fork.c:2742
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffffc900015f7f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc900015f7f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc900015f8000: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                   ^
- ffffc900015f8080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc900015f8100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Matthew Dharm
+Former Maintainer, USB Mass Storage driver for Linux
