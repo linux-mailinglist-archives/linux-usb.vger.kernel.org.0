@@ -2,80 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554C759B586
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 18:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDAB59B5D9
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 20:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiHUQuL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Aug 2022 12:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S231604AbiHUSNV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Aug 2022 14:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHUQuJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 12:50:09 -0400
-Received: from rfvt.org.uk (rfvt.org.uk [37.187.119.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C3B1C91E;
-        Sun, 21 Aug 2022 09:50:07 -0700 (PDT)
-Received: from wylie.me.uk (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by rfvt.org.uk (Postfix) with ESMTPS id CB5FB82CC4;
-        Sun, 21 Aug 2022 17:50:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wylie.me.uk;
-        s=mydkim005; t=1661100601;
-        bh=q+x+Ol4FFP5xOeKSbHjfFQjd4jkWVjDlO4DK5fZcXCM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=n9ilN6+egqrx5676IDM6rRoFeo5RFASYYAMqC3nwoyEPWXvxuVFxbc62BpVkc7jXe
-         nCfMzPFVXsfBAm7IeBkX9Zlh1Pd9Vm3BuTcBsNPMhs05/V71v5wbvLCYgehqK/7mrT
-         fAERmPVg8K9gjVxVH3ahVxHHmKpT7pQbRGljQqiaXy1FA0Cdu6BmpFZQEP60WH2SCv
-         awcO+0Qy4whfipO8XLCyqfyfJtRMJbrAQVGFAzt3rw5W9MlWHqYnpLDg5rIlTPK97D
-         jpxenad8f+GqtFRSzMIs0kUfAkgRqFfr8ZRLsTpBwRR9r60NEwsglOj3v8fACXzf54
-         gd8ChZxE8QCVA==
+        with ESMTP id S231715AbiHUSL3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 14:11:29 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7A151222B7
+        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 11:11:28 -0700 (PDT)
+Received: (qmail 286778 invoked by uid 1000); 21 Aug 2022 14:11:27 -0400
+Date:   Sun, 21 Aug 2022 14:11:27 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     James Dutton <james.dutton@gmail.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: USB disk disconnect problems
+Message-ID: <YwJ1T0ATgngaAEzg@rowland.harvard.edu>
+References: <CAAMvbhFJ+jdFPh5dMV+_jjYUYYgWhCpv5E43Bh=Eoo6su80cUA@mail.gmail.com>
+ <YwJFZNUob3BtEM2h@rowland.harvard.edu>
+ <CAAMvbhFt+_x7a++n3MPPpTza4vfnSj0809pXtzkps9TEVLpDUA@mail.gmail.com>
+ <CAAMvbhFaFF-wJmVLsWY5yTU+Q_NWT9NVTpwwgOe9-+RaCcBE1A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-ID: <25346.25145.488362.162952@wylie.me.uk>
-Date:   Sun, 21 Aug 2022 17:50:01 +0100
-From:   "Alan J. Wylie" <alan@wylie.me.uk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: Regression in 5.19.0: USB errors during boot
-In-Reply-To: <20220821142610.GA2979@lst.de>
-References: <25342.20092.262450.330346@wylie.me.uk>
-        <Yv5Q8gDvVTGOHd8k@kroah.com>
-        <20220821062345.GA26598@lst.de>
-        <25345.60162.942383.502797@wylie.me.uk>
-        <20220821142610.GA2979@lst.de>
-X-Mailer: VM 8.2.0b under 27.2 (x86_64-pc-linux-gnu)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAAMvbhFaFF-wJmVLsWY5yTU+Q_NWT9NVTpwwgOe9-+RaCcBE1A@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-at 16:26 on Sun 21-Aug-2022 Christoph Hellwig (hch@lst.de) wrote:
+On Sun, Aug 21, 2022 at 05:40:23PM +0100, James Dutton wrote:
+> On Sun, 21 Aug 2022 at 17:36, James Dutton <james.dutton@gmail.com> wrote:
+> >
+> > On Sun, 21 Aug 2022 at 15:47, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > > The reason being, I have a system that boots from a USB disk.
+> > > > Due to interference, the USB device disconnects for a second or two
+> > > > and then comes back, but Linux does not see it and I have to reboot
+> > > > Linux to recover. So, in this situation I wish Linux to be able to
+> > > > recover immediately, without needing a reboot.
+> > >
+> > > There is no way to do this.  For example, consider all those failed
+> > > writes that you get error messages about.  Once they have failed, the
+> > > system does not try to remember them in case there's a possibility of
+> > > trying them again later.  They're just lost.
+> > I guess the solution would have to include a "retry in 1 second's
+> > time" type failure mode, instead of just lost.
 
-> Thanks for confirming my suspicion.  I'd still like to fix the issue
-> with CONFIG_GART_IOMMU enabled once I've tracked it down.  Would you
-> be willing to test patches?
+Maybe, in theory.  In your case, I think a better solution would be to 
+eliminate the interference that causes the transient disconnects to 
+occur in the first place.  USB isn't designed to operate reliably in an 
+environment filled with that much noise.
 
-I'll be glad to help.
+> > I.e. differentiate between the disk responding that the media failed,
+> > and the link being down to the disk so the write message could not be
+> > sent.
+> > For example, NFS waits around for the network to return, maybe we
+> > could add that functionality between a filesystem and usb storage.
 
-I've also had a look in the loft and my box of bits for an old
-Athlon64/Opteron/Turion/Sempron processor, but I'm afraid all I've got
-are:
+In theory it could be done.  I suspect the overall benefit would not be 
+very large; I have not heard lots of reports from other people facing 
+the problem you have.  Consider that neither Windows nor Mac OS-X does 
+this.
 
-Phenom II X6 1055T
-Phenom II X2 545
-Athlon 2  x2 270
+Also, doing this would lead to other problems.  For instace, I'm sure 
+some people want to know that a device has stopped working as soon as 
+the problem begins; they would get upset if the system kept trying to 
+reconnect for tens of seconds before finally deciding the device was 
+gone for good.  (Consider the way people have complained a lot over the 
+years about NFS and its extremely long uninterruptible waits.)
 
--- 
-Alan J. Wylie                                          https://www.wylie.me.uk/
+> As a side note, I have seen USB links failing. Normally just to
+> something like a keyboard or mouse, so it just comes back without the
+> user knowing anything was wrong.
 
-Dance like no-one's watching. / Encrypt like everyone is.
-Security is inversely proportional to convenience
+That's different.  When the link to a USB mouse fails and then starts 
+working again, the system doesn't think the mouse has recovered; it 
+regards what happened as a new mouse being plugged in.  (Same with 
+keyboards.)  The user doesn't notice anything because the system treats 
+all mice the same.  In fact, you can even plug in two mice at the same 
+time (that is, without bothering to wait for the first one to fail) and 
+the system will accept input from both of them interchangeably.
+
+> The problem is USB links to disks don't recover currently.
+
+Well, you have to admit that treating disks like mice -- considering all 
+of them to be the same -- would not be a good strategy.  :-)
+
+(On the other hand, sometimes two disks really do get treated as though 
+they are the same.  That's what happens in a RAID-1 (mirroring) setup.  
+If you have mirrored USB disks, you can unplug one of them and the 
+system will continue working.  And when you plug it back it later, the 
+system will repair it as necessary and then go on using it normally 
+without your noticing.  But obviously this isn't what you have in mind.)
+
+Alan Stern
