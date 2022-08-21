@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB6B59B516
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 17:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8ED59B51B
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 17:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiHUPbI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Aug 2022 11:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S230491AbiHUPfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Aug 2022 11:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiHUPbH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 11:31:07 -0400
+        with ESMTP id S229505AbiHUPfM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 11:35:12 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B5B186F2;
-        Sun, 21 Aug 2022 08:31:04 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1661095857t3b4wa63
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7035A188;
+        Sun, 21 Aug 2022 08:35:10 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1661096098t4jd9sr8
 Received: from localhost.localdomain ( [182.148.14.124])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 21 Aug 2022 23:30:55 +0800 (CST)
+        id ; Sun, 21 Aug 2022 23:34:57 +0800 (CST)
 X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: TlxLMsIUBW7wsY5bwhkKYiopo8iGFeUtlU6RqOYncZU7dyn26P6MRE0lOAi2r
-        KVsFPVCidLgeHActBpLjDcIpUD6B83q2d0APzeswOX+gTz+tpa0J1nnHDOqdiztjLKSBwzF
-        3+lBDtLZTU+y6llWjwICDJIIZTn2P/JSZtbcHsFeK7KHtwkYCVfX5QWCGDTgrXP6O+yY/8O
-        NfHF0V5f12E44w/dtT7DqPdXv5pmbtmIXdV7uVBB56v3SFFnXBVF/TWkWvSfYFZloipOYjs
-        bvF6u77gPBoXgL+MABOQxn28nszkgrB4vY+rkg+EIWmGBjuFC0RtIKL2TRroW6CGMa1IqG5
-        BuUjhADZh8g9Ki8W8pDwkijl4ba64QoWOOFFD7TdMFr9hD9EoPiC9Q5l+zV1MHw4RMwYGPP
+X-QQ-FEAT: cIAm9Ti9Z0yZJe7QcNpkLcgBz24pDhmuXbRFaFH5TArxrHTiFUs38fw+uZCQE
+        RcDScZ6Y2aRRJ1BLslL2IV7nYBZby9mDrTEaSPHrUBMWqD1RaLhDmivR+bNSCnnwITTlYVi
+        if+wAVHHpKkzSexMGmwWQQHpQyphJpc+ddBxUQjwXmBra4q4yXpT9QQbE7Oa/M0o0KIFYND
+        hk2F4GXYWeHUrIDxy3k/yD8qHdZvIytLERTUI1+TKA1c9JUpGkOOvGk71OjWkgG1srUsvPd
+        I8VXWCuKebwgmHMKvvKptFIwK3fhRls1Dv/lDjL4FdLj3hXin+2rkz9l7ZuYddtcQ9GbSt2
+        wP8oQphiwMBoCbwdWQQF3jARgl5q/6KnKU/tXqNE594LM8kTfCyJHdEyzV+RWNmZN0CkJXC
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     b-liu@ti.com, gregkh@linuxfoundation.org
+To:     johan@kernel.org, gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] usb/musb: fix repeated words in comments
-Date:   Sun, 21 Aug 2022 23:30:49 +0800
-Message-Id: <20220821153049.3565-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] usb/serial: fix repeated words in comments
+Date:   Sun, 21 Aug 2022 23:34:41 +0800
+Message-Id: <20220821153441.6165-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -41,10 +41,10 @@ Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
 X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
         *      [43.154.54.12 listed in zen.spamhaus.org]
         *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
         * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
         *      [score: 0.0000]
         * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
@@ -59,26 +59,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- Delete the redundant word 'from'.
+ Delete the redundant word 'more'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/usb/musb/musb_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/serial/mct_u232.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index f7b1d5993f8c..6ee7d47141c1 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -960,7 +960,7 @@ static void musb_handle_intr_disconnect(struct musb *musb, u8 devctl)
- 	case OTG_STATE_B_HOST:
- 		/* REVISIT this behaves for "real disconnect"
- 		 * cases; make sure the other transitions from
--		 * from B_HOST act right too.  The B_HOST code
-+		 * B_HOST act right too.  The B_HOST code
- 		 * in hnp_stop() is currently not used...
- 		 */
- 		musb_root_disconnect(musb);
+diff --git a/drivers/usb/serial/mct_u232.h b/drivers/usb/serial/mct_u232.h
+index e3d09a83cab1..f79a1f1b6a98 100644
+--- a/drivers/usb/serial/mct_u232.h
++++ b/drivers/usb/serial/mct_u232.h
+@@ -273,13 +273,13 @@ static int mct_u232_calculate_baud_rate(struct usb_serial *serial,
+  *  Bit 5: Data Set Ready (DSR). Reflects the state of the DSR line on the UART.
+  *  Bit 4: Clear To Send (CTS). Reflects the state of the CTS line on the UART.
+  *  Bit 3: Delta Data Carrier Detect (DDCD). Set to "1" if the -DCD line has
+- *	   changed state one more more times since the last time the MSR was
++ *	   changed state one more times since the last time the MSR was
+  *	   read by the host.
+  *  Bit 2: Trailing Edge Ring Indicator (TERI). Set to "1" if the -RI line has
+  *	   had a low to high transition since the last time the MSR was read by
+  *	   the host.
+  *  Bit 1: Delta Data Set Ready (DDSR). Set to "1" if the -DSR line has changed
+- *	   state one more more times since the last time the MSR was read by the
++ *	   state one more times since the last time the MSR was read by the
+  *	   host.
+  *  Bit 0: Delta Clear To Send (DCTS). Set to "1" if the -CTS line has changed
+  *	   state one more times since the last time the MSR was read by the
 -- 
 2.36.1
 
