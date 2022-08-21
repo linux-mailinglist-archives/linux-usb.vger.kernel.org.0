@@ -2,33 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDAB59B5D9
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 20:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D79C59B616
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 21:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiHUSNV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Aug 2022 14:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S229607AbiHUTDq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Aug 2022 15:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiHUSL3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 14:11:29 -0400
+        with ESMTP id S229505AbiHUTDo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 15:03:44 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7A151222B7
-        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 11:11:28 -0700 (PDT)
-Received: (qmail 286778 invoked by uid 1000); 21 Aug 2022 14:11:27 -0400
-Date:   Sun, 21 Aug 2022 14:11:27 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id ED11A11C21
+        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 12:03:43 -0700 (PDT)
+Received: (qmail 287631 invoked by uid 1000); 21 Aug 2022 15:03:43 -0400
+Date:   Sun, 21 Aug 2022 15:03:43 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     James Dutton <james.dutton@gmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+To:     Matthew Dharm <mdharm-usb@one-eyed-alien.net>
+Cc:     James Dutton <james.dutton@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Subject: Re: USB disk disconnect problems
-Message-ID: <YwJ1T0ATgngaAEzg@rowland.harvard.edu>
+Message-ID: <YwKBj94XtgU70crx@rowland.harvard.edu>
 References: <CAAMvbhFJ+jdFPh5dMV+_jjYUYYgWhCpv5E43Bh=Eoo6su80cUA@mail.gmail.com>
  <YwJFZNUob3BtEM2h@rowland.harvard.edu>
- <CAAMvbhFt+_x7a++n3MPPpTza4vfnSj0809pXtzkps9TEVLpDUA@mail.gmail.com>
- <CAAMvbhFaFF-wJmVLsWY5yTU+Q_NWT9NVTpwwgOe9-+RaCcBE1A@mail.gmail.com>
+ <CAA6KcBC2wEc78fgrMLBfbyEinR3rVUY6z8HeUbE=wtv0c4BP2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAAMvbhFaFF-wJmVLsWY5yTU+Q_NWT9NVTpwwgOe9-+RaCcBE1A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAA6KcBC2wEc78fgrMLBfbyEinR3rVUY6z8HeUbE=wtv0c4BP2Q@mail.gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -38,69 +39,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 05:40:23PM +0100, James Dutton wrote:
-> On Sun, 21 Aug 2022 at 17:36, James Dutton <james.dutton@gmail.com> wrote:
-> >
-> > On Sun, 21 Aug 2022 at 15:47, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > > The reason being, I have a system that boots from a USB disk.
-> > > > Due to interference, the USB device disconnects for a second or two
-> > > > and then comes back, but Linux does not see it and I have to reboot
-> > > > Linux to recover. So, in this situation I wish Linux to be able to
-> > > > recover immediately, without needing a reboot.
-> > >
-> > > There is no way to do this.  For example, consider all those failed
-> > > writes that you get error messages about.  Once they have failed, the
-> > > system does not try to remember them in case there's a possibility of
-> > > trying them again later.  They're just lost.
-> > I guess the solution would have to include a "retry in 1 second's
-> > time" type failure mode, instead of just lost.
+On Sun, Aug 21, 2022 at 11:42:00AM -0700, Matthew Dharm wrote:
+> On Sun, Aug 21, 2022 at 7:47 AM Alan Stern <stern@rowland.harvard.edu>
+> wrote:
+> 
+> > On Sun, Aug 21, 2022 at 12:17:30PM +0100, James Dutton wrote:
+> > > I know my suggested behaviour might be detrimental for some users, in
+> > > case one modifies the usb disk in another computer and then comes
+> > > back, but I would like an option that assumes it has not been plugged
+> > > into anything else.
+> 
+> 
+> In the “old days” (that is, my original design for use-storage) it used to
+> do exactly what you are looking for - based on VID, DID, and SerialNumber
+> it would “remember” devices. The SCSI host would never be destroyed, and
+> when a device re-appeared it would be re-connected to the existing host.
 
-Maybe, in theory.  In your case, I think a better solution would be to 
-eliminate the interference that causes the transient disconnects to 
-occur in the first place.  USB isn't designed to operate reliably in an 
-environment filled with that much noise.
+Ah yes...  I do remember those days, but not very often.  :-)
 
-> > I.e. differentiate between the disk responding that the media failed,
-> > and the link being down to the disk so the write message could not be
-> > sent.
-> > For example, NFS waits around for the network to return, maybe we
-> > could add that functionality between a filesystem and usb storage.
+> That caused all sorts of problems. The SCSI and block layers just couldn’t
+> handle it well. A clean umount / mount cycle worked fine, but if you
+> unexpectedly disconnected the device all hell broke loose and there was no
+> way to recover.
+> 
+> I did it this way because, way back when, there were issues dynamically
+> destroying SCSI hosts. The people who worked on those other layers found it
+> much, much easier to fix that problem than try to make it possible to
+> recover from an unexpected disconnect.
+> 
+> Honestly, I’m not even sure where you would need to begin to make this
+> work. It would require pretty radical changes is the block I/O layers to
+> differentiate different failure modes, keep a lot more data around after
+> certain types of failures, allow for specifying which devices this new
+> policy (which is assuming reconnected devices really haven’t been altered)
+> applies to, etc — it’s a big lift.
 
-In theory it could be done.  I suspect the overall benefit would not be 
-very large; I have not heard lots of reports from other people facing 
-the problem you have.  Consider that neither Windows nor Mac OS-X does 
-this.
-
-Also, doing this would lead to other problems.  For instace, I'm sure 
-some people want to know that a device has stopped working as soon as 
-the problem begins; they would get upset if the system kept trying to 
-reconnect for tens of seconds before finally deciding the device was 
-gone for good.  (Consider the way people have complained a lot over the 
-years about NFS and its extremely long uninterruptible waits.)
-
-> As a side note, I have seen USB links failing. Normally just to
-> something like a keyboard or mouse, so it just comes back without the
-> user knowing anything was wrong.
-
-That's different.  When the link to a USB mouse fails and then starts 
-working again, the system doesn't think the mouse has recovered; it 
-regards what happened as a new mouse being plugged in.  (Same with 
-keyboards.)  The user doesn't notice anything because the system treats 
-all mice the same.  In fact, you can even plug in two mice at the same 
-time (that is, without bothering to wait for the first one to fail) and 
-the system will accept input from both of them interchangeably.
-
-> The problem is USB links to disks don't recover currently.
-
-Well, you have to admit that treating disks like mice -- considering all 
-of them to be the same -- would not be a good strategy.  :-)
-
-(On the other hand, sometimes two disks really do get treated as though 
-they are the same.  That's what happens in a RAID-1 (mirroring) setup.  
-If you have mirrored USB disks, you can unplug one of them and the 
-system will continue working.  And when you plug it back it later, the 
-system will repair it as necessary and then go on using it normally 
-without your noticing.  But obviously this isn't what you have in mind.)
+Provided you don't mind giving up after 30 seconds (the default SCSI 
+timeout), you wouldn't need to change the block or other layers.  All 
+you would have to do is avoid reporting a command failure if the reason 
+for the failure is disconnection, wait for the device to reappear, and 
+then retry the command.  (Yes, there would be a few extra complications 
+but that's the basic idea.)  As far as the SCSI or block layers are 
+concerned, it would look like the I/O succeeded but took an unusually 
+long time to complete.
 
 Alan Stern
