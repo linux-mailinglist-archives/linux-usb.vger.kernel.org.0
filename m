@@ -2,84 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD9759B494
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 16:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E0A59B4AD
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Aug 2022 16:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiHUOrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Aug 2022 10:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S229477AbiHUO6Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Aug 2022 10:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiHUOrC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 10:47:02 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1FC5820F7E
-        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 07:47:00 -0700 (PDT)
-Received: (qmail 283458 invoked by uid 1000); 21 Aug 2022 10:47:00 -0400
-Date:   Sun, 21 Aug 2022 10:47:00 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     James Dutton <james.dutton@gmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: USB disk disconnect problems
-Message-ID: <YwJFZNUob3BtEM2h@rowland.harvard.edu>
-References: <CAAMvbhFJ+jdFPh5dMV+_jjYUYYgWhCpv5E43Bh=Eoo6su80cUA@mail.gmail.com>
+        with ESMTP id S230173AbiHUO6X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Aug 2022 10:58:23 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599795B7
+        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 07:58:21 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id f4so5506152pgc.12
+        for <linux-usb@vger.kernel.org>; Sun, 21 Aug 2022 07:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=iXZWq/V5w/cLz3ymaylcpiXZy1yfoqFHcfvsTxipt7E=;
+        b=Tjc8zLaTMEhubGL2fA5eP1RecFXcgcnx5TK76j7Rq1kjC0aQleNOzmztpfrDilHjMU
+         iMSeelOwrGhejTRnx8j+b1owKOokQh4Z4B2RhfF9iRH9wGfBvP8242p/PZMg4OwQReWS
+         XzYf4TkicdHRFxuM1F1SbJ2KMCLmrajABnvmaLQMQVacv+4wAlCcUdmmZCxvKOAju3Jj
+         pZM9XVY7sIkBSbKN/mJw2AmXYeoheeRj6lVva8/7y3jqUbItqtZ1KZXry2q61NremmZy
+         ZArpMmCMu32KqcbEaa+tAmuw+GrnY3o1t7Bw2VhdKYHdKRNIC2LM1rjYXpsgLb8+WBDl
+         LhQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=iXZWq/V5w/cLz3ymaylcpiXZy1yfoqFHcfvsTxipt7E=;
+        b=tAHDz+XM6mu2zVJkJ1oz4Xh3lYArFh7RRZ+qtsy0wZmeuKGTqfutP8hNIngghebEpZ
+         CrPC44D8sjBbW2+QS/T3sNTqxHCFPKCJY4OmY4eCx6IwPN8dDiw2uo8qCRFIBOy1UlWy
+         VVgy/b2TXETQ8KeSk1VVkLEh5msN0+g7YTSjzr/W4g+yarGcaU/N+qviH1upjTy8fIhW
+         ta/dkMuecz/XAXNfco/WzSHTGDHCN/YSafouKXW52Qvt5LNukRo4+OTz4aNVLuDkAA49
+         NeeolnDMhQFX9mz0rQDnAMYHZ0x+5wFfO0iHKUpke+B00WkNXJSJmtgAqrWWhpu/21J+
+         SSMA==
+X-Gm-Message-State: ACgBeo3qqe+dLe/mYj44K9L3MPOZ/0EscJECsUj4yGHq7Ox29mMhJgPH
+        Vs0AlMLqx5lTjRBd7T1h54I=
+X-Google-Smtp-Source: AA6agR7LGIhPTXri0q9cV2F7XXjm6iH633K8rVWVqSSgmvYbzSYranku0Dh6/bnUgKVh2NBZp1JKvA==
+X-Received: by 2002:a63:147:0:b0:42a:5157:c083 with SMTP id 68-20020a630147000000b0042a5157c083mr8275083pgb.269.1661093901165;
+        Sun, 21 Aug 2022 07:58:21 -0700 (PDT)
+Received: from athina.mtv.corp.google.com ([2620:15c:211:200:6287:c054:b39c:dc2a])
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090a2b4200b001f326c7adb3sm6372153pjc.55.2022.08.21.07.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 07:58:19 -0700 (PDT)
+From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
+To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Brooke Basile <brookebasile@gmail.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lorenzo Colitti <lorenzo@google.com>
+Subject: [PATCH] usb: gadget: f_ncm: noop - remove INIT_NDP{16,32}_OPTS macros
+Date:   Sun, 21 Aug 2022 07:57:45 -0700
+Message-Id: <20220821145745.122587-1-zenczykowski@gmail.com>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAMvbhFJ+jdFPh5dMV+_jjYUYYgWhCpv5E43Bh=Eoo6su80cUA@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 12:17:30PM +0100, James Dutton wrote:
-> Hi,
-> 
-> Say I have mounted a usb disk.
-> I then disconnect the usb device
-> Linux complains about failed writes etc.
-> I then plug the usb device back in
-> Linux still complains about failed writes, and does not recover.
-> 
-> How do I get Linux to recognise the reinserted usb disk and carry on as normal?
+From: Maciej Żenczykowski <maze@google.com>
 
-As far as I know, there's only way way to do it: Go into system suspend 
-before disconnecting the USB drive, and plug the drive back in before 
-waking the system up.
+these are only used in one place, a few lines lower
 
-> I know my suggested behaviour might be detrimental for some users, in
-> case one modifies the usb disk in another computer and then comes
-> back, but I would like an option that assumes it has not been plugged
-> into anything else.
+Cc: Brooke Basile <brookebasile@gmail.com>
+Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Lorenzo Colitti <lorenzo@google.com>
+Signed-off-by: Maciej Żenczykowski <maze@google.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 60 ++++++++++++++---------------
+ 1 file changed, 28 insertions(+), 32 deletions(-)
 
-The resume procedure makes this assumption, if it finds that something 
-has been disconnected and reconnected.
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index dc8f078f918c..c36bcfa0e9b4 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -450,39 +450,35 @@ struct ndp_parser_opts {
+ 	unsigned	next_ndp_index;
+ };
+ 
+-#define INIT_NDP16_OPTS {					\
+-		.nth_sign = USB_CDC_NCM_NTH16_SIGN,		\
+-		.ndp_sign = USB_CDC_NCM_NDP16_NOCRC_SIGN,	\
+-		.nth_size = sizeof(struct usb_cdc_ncm_nth16),	\
+-		.ndp_size = sizeof(struct usb_cdc_ncm_ndp16),	\
+-		.dpe_size = sizeof(struct usb_cdc_ncm_dpe16),	\
+-		.ndplen_align = 4,				\
+-		.dgram_item_len = 1,				\
+-		.block_length = 1,				\
+-		.ndp_index = 1,					\
+-		.reserved1 = 0,					\
+-		.reserved2 = 0,					\
+-		.next_ndp_index = 1,				\
+-	}
+-
+-
+-#define INIT_NDP32_OPTS {					\
+-		.nth_sign = USB_CDC_NCM_NTH32_SIGN,		\
+-		.ndp_sign = USB_CDC_NCM_NDP32_NOCRC_SIGN,	\
+-		.nth_size = sizeof(struct usb_cdc_ncm_nth32),	\
+-		.ndp_size = sizeof(struct usb_cdc_ncm_ndp32),	\
+-		.dpe_size = sizeof(struct usb_cdc_ncm_dpe32),	\
+-		.ndplen_align = 8,				\
+-		.dgram_item_len = 2,				\
+-		.block_length = 2,				\
+-		.ndp_index = 2,					\
+-		.reserved1 = 1,					\
+-		.reserved2 = 2,					\
+-		.next_ndp_index = 2,				\
+-	}
++static const struct ndp_parser_opts ndp16_opts = {
++	.nth_sign = USB_CDC_NCM_NTH16_SIGN,
++	.ndp_sign = USB_CDC_NCM_NDP16_NOCRC_SIGN,
++	.nth_size = sizeof(struct usb_cdc_ncm_nth16),
++	.ndp_size = sizeof(struct usb_cdc_ncm_ndp16),
++	.dpe_size = sizeof(struct usb_cdc_ncm_dpe16),
++	.ndplen_align = 4,
++	.dgram_item_len = 1,
++	.block_length = 1,
++	.ndp_index = 1,
++	.reserved1 = 0,
++	.reserved2 = 0,
++	.next_ndp_index = 1,
++};
+ 
+-static const struct ndp_parser_opts ndp16_opts = INIT_NDP16_OPTS;
+-static const struct ndp_parser_opts ndp32_opts = INIT_NDP32_OPTS;
++static const struct ndp_parser_opts ndp32_opts = {
++	.nth_sign = USB_CDC_NCM_NTH32_SIGN,
++	.ndp_sign = USB_CDC_NCM_NDP32_NOCRC_SIGN,
++	.nth_size = sizeof(struct usb_cdc_ncm_nth32),
++	.ndp_size = sizeof(struct usb_cdc_ncm_ndp32),
++	.dpe_size = sizeof(struct usb_cdc_ncm_dpe32),
++	.ndplen_align = 8,
++	.dgram_item_len = 2,
++	.block_length = 2,
++	.ndp_index = 2,
++	.reserved1 = 1,
++	.reserved2 = 2,
++	.next_ndp_index = 2,
++};
+ 
+ static inline void put_ncm(__le16 **p, unsigned size, unsigned val)
+ {
+-- 
+2.37.1.595.g718a3a8f04-goog
 
-> The reason being, I have a system that boots from a USB disk.
-> Due to interference, the USB device disconnects for a second or two
-> and then comes back, but Linux does not see it and I have to reboot
-> Linux to recover. So, in this situation I wish Linux to be able to
-> recover immediately, without needing a reboot.
-
-There is no way to do this.  For example, consider all those failed 
-writes that you get error messages about.  Once they have failed, the 
-system does not try to remember them in case there's a possibility of 
-trying them again later.  They're just lost.
-
-Similarly with failed reads.  When a program tries to read something 
-from a disk and the read fails, the program generally does not wait for 
-a while and then retry the read, to see if the disk will magically start 
-working again.
-
-> The physical USB device removal then reinserting reproduces the
-> problem I am seeing, so I thought it would be a good example to get
-> working, if we could.
-> 
-> Can anyone give me any pointers as to where to start with fixing this?
-
-Sorry I can't be of any more help.
-
-Alan Stern
