@@ -2,103 +2,533 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CA259BC33
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 11:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969E459BC47
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 11:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiHVJCi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Aug 2022 05:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
+        id S234081AbiHVJHY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Aug 2022 05:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiHVJC3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 05:02:29 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8193A2ED4B
-        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 02:02:28 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id g18so10328651pju.0
-        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 02:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=p9eXFPYaWoUQYd93GZHfKWGzwlV1gqge90LRrpP+sWM=;
-        b=Gn33yOewWkI5C9V6G7ukU0PQo3eyHKxFNaomLXhM1GgS2Wik2x8kBs7GiCNhYnuVMJ
-         l5zgxJUfXzHl9kdXNmbpWSeDvrFpCVDvg3COScbm8Fqb3KS6t8mbt83izyKXXMMW3DbM
-         gcEcFFvc2957bcjT8HwZ4xA9QzEfXhEPE6YB5oYIAsfjBcBd6RhkZS5p04Vi3QJxKLPE
-         9X7GWbLHAK5lbFcDiuw7Hj9py4n+lQyQ+7FA4VxApQfZFKjxFR46pJUH/1Atb+d3jJ9B
-         Ww67XDXVBn2b6XUGUf7Ni7BEkuRUGjk+drOz0OCDuwpc87D0WK2cswe97CQjqyMgU0ZE
-         I4Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=p9eXFPYaWoUQYd93GZHfKWGzwlV1gqge90LRrpP+sWM=;
-        b=Vzgy4BPnPUZvXetVPI4vLKUqp/skJw0YUEM1twxiZ/1N/WYitjCWMCuP+PMcFhFXdO
-         7jB0pcMtcWHdsmKAT0RFpqGV5E9Rm4hjaFJiGMEQzUf8n0dp21A8y0ws7t8V/B1+Ue4P
-         Y8Spl0aamyZ4yPn0vZAIALHvcUYszdWzW7NEF0JzaeJZJxZvT4iv6TfPs17FcQSNb59+
-         gSysrIOzm2F/2m1CrrInGc498rWgQiVAtmDg4ziz5FTmn3snCJj8/lrdHX6iN5pUVPup
-         DOkFqdZEYJOj69hBAO1Ri0w+G/zxfbxB3lN3j4JTBpbX/Srf89t15wUD1dIzfcRFajup
-         D7tQ==
-X-Gm-Message-State: ACgBeo1DWyo7A2I2CVT9SX1AMV39ueXb1OjHH9DTUqfttJ1uX+oOVgbz
-        TRdAMZaBeSt4KkyQS2HSlH7Aw7fb7W5VSfsPWOk=
-X-Google-Smtp-Source: AA6agR7Nk4UytFrFc7xwvZvfm0WFV7sfC/UlPNmKrYzJxGY+sY1csrisCXE88VhWTiCn5Ja3nYvfCDaFoaWeaN2/J4k=
-X-Received: by 2002:a17:90b:1c90:b0:1f8:42dd:9eba with SMTP id
- oo16-20020a17090b1c9000b001f842dd9ebamr28431087pjb.160.1661158947919; Mon, 22
- Aug 2022 02:02:27 -0700 (PDT)
+        with ESMTP id S232041AbiHVJHX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 05:07:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109262ED6D;
+        Mon, 22 Aug 2022 02:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661159242; x=1692695242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NxlODoncKZxTLvFzNkqQ48E06CMT6kFUQtjWExFrLa8=;
+  b=W3oh6T4xBRHyIjRjpIFnNQ4cne3oucYoTHLOu3pWTM6jez5BxJ+m1VJc
+   y6y3HXDEZCDlbh739T8201CkbJv16j93k0qqiE0Q+OqTWL54jm9Pek3lo
+   ItVedgsG8GjtIQ2zvYPhsUZiv45LhNVZdpVcQWNZi8tZHY2p5fNspEy38
+   A9r1KlGmQq4cVbKpmSOu1wThI8jX7hCvUuYNAt+gdBFvZP64E0+MmkAOU
+   x9VNH4nRr7MG46Lt2KXELfVTbE3tJ6ivG1TM36EOrcvmOreHGOXJ2bBZX
+   mVFTGplhbKXNnlnxO4TtKInaA6ivLw4bEGb0RYQhnrLkRjafImERqgAWB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="290919292"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="290919292"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 02:07:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="712104362"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Aug 2022 02:07:19 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id D3059174; Mon, 22 Aug 2022 12:07:32 +0300 (EEST)
+Date:   Mon, 22 Aug 2022 12:07:32 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>
+Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
+Subject: Re: [PATCH v5] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <YwNHVKdEG9deGCcd@black.fi.intel.com>
+References: <20220822073105.10509-1-chensiying21@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7022:4185:b0:43:a6bb:bfcd with HTTP; Mon, 22 Aug 2022
- 02:02:27 -0700 (PDT)
-Reply-To: lindacliford05@yahoo.com
-From:   linsa cliford <linda27cliford@gmail.com>
-Date:   Mon, 22 Aug 2022 06:02:27 -0300
-Message-ID: <CAKYqKb6jwG8jHH-Asi6D2uVinUujTbRgymBFNRbO4rDEzXgh5g@mail.gmail.com>
-Subject: WITH DUE RESPECT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5969]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [linda27cliford[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lindacliford05[at]yahoo.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822073105.10509-1-chensiying21@gmail.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-  Drear Love One,
+Hi,
 
-  Good day dear love one my name is miss Lnda Cliford  from cote
-d'ivoire please i need your help for fund transfer of 2,500 000 us
-dollars  if you  are
-willing please get back to me  for  more information thanks and have a
-good day,
-Waiting to hear from you thanks,
+On Mon, Aug 22, 2022 at 03:31:05PM +0800, Szuying Chen wrote:
+> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> 
+> The patch add tb_switch_nvm_alloc() contain an array that has functions
+> pointers to vendor_ops that vendor to define.
+> And add tb_switch_nvm_upgradable() to enable nvm upgrade for vendors
+> that in switch_nvm_upgrade_vendors[].
+> 
+> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
+> ---
+> v4 -> v5 : Take Mika's suggestion and use nvm->vops to point the vendor
+> specific operations. Moved vendor:intel part of the code to make all
+> the vendors (includes Intel) support it in nvm.c. And add nvm specific
+> operations for ASMedia.
 
-your s Linda Clifford
-Regards
+In addition to what Greg said, please split this into series. First
+patch moves the existing Intel stuff and second patch adds the ASMedia
+stuff on top and please run all them through checkpatch.pl and make
+sure you fix every single warning.
+
+Also please fix the $subject, it now has "thunderbolt: thunderbolt: ..".
+
+> 
+>  drivers/thunderbolt/nvm.c    | 204 +++++++++++++++++++++++++++++++++++
+>  drivers/thunderbolt/switch.c | 100 ++++-------------
+>  drivers/thunderbolt/tb.h     |  19 +++-
+>  3 files changed, 242 insertions(+), 81 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
+> index b3f310389378..6ee048565616 100644
+> --- a/drivers/thunderbolt/nvm.c
+> +++ b/drivers/thunderbolt/nvm.c
+> @@ -12,8 +12,212 @@
+> 
+>  #include "tb.h"
+> 
+> +/* Switch NVM support */
+> +#define NVM_CSS
+> +
+>  static DEFINE_IDA(nvm_ida);
+> 
+> +/* Vendor provides NVM firmware upgrade function */
+> +static const u32 switch_nvm_upgrade_vendors[] = {
+> +	0x174c,
+> +};
+> +
+> +void tb_switch_nvm_upgradable(struct tb_switch *sw)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(switch_nvm_upgrade_vendors); i++) {
+> +		if (switch_nvm_upgrade_vendors[i] == sw->config.vendor_id)
+> +			sw->no_nvm_upgrade = false;
+> +	}
+> +}
+> +
+> +static inline int nvm_read(struct tb_switch *sw, unsigned int address,
+> +			   void *buf, size_t size)
+> +{
+> +	if (tb_switch_is_usb4(sw))
+> +		return usb4_switch_nvm_read(sw, address, buf, size);
+> +	return dma_port_flash_read(sw->dma_port, address, buf, size);
+> +}
+> +
+> +static int  asmedia_nvm_version(struct tb_switch *sw)
+> +{
+> +	struct tb_nvm *nvm = sw->nvm;
+> +	u64 val;
+> +	int ret;
+> +
+> +	ret = nvm_read(sw, 0x1c, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	nvm->major = (((u8)val >> 0x18) << 0x10 | ((u8)(val >> 0x20)) << 0x8 | (u8)(val >> 0x28));
+> +	nvm->minor = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+> +	nvm->nvm_size = SZ_512K;
+> +
+> +	return 0;
+> +}
+> +
+> +static int  intel_nvm_version(struct tb_switch *sw)
+> +{
+> +	struct tb_nvm *nvm = sw->nvm;
+> +	u32 val;
+> +	int ret;
+> +
+> +	/*
+> +	 * If the switch is in safe-mode the only accessible portion of
+> +	 * the NVM is the non-active one where userspace is expected to
+> +	 * write new functional NVM.
+> +	 */
+> +	if (!sw->safe_mode) {
+> +		u32 nvm_size, hdr_size;
+> +
+> +		ret = nvm_read(sw, NVM_FLASH_SIZE, &val, sizeof(val));
+> +		if (ret)
+> +			return ret;
+> +
+> +		hdr_size = sw->generation < 3 ? SZ_8K : SZ_16K;
+> +		nvm_size = (SZ_1M << (val & 7)) / 8;
+> +		nvm_size = (nvm_size - hdr_size) / 2;
+> +
+> +		ret = nvm_read(sw, NVM_VERSION, &val, sizeof(val));
+> +		if (ret)
+> +			return ret;
+> +
+> +		nvm->major = val >> 16;
+> +		nvm->minor = val >> 8;
+> +		nvm->nvm_size = nvm_size;
+> +
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int  intel_nvm_validate(struct tb_switch *sw)
+> +{
+> +	unsigned int image_size, hdr_size;
+> +	const u8 *buf = sw->nvm->buf;
+> +	u16 ds_size;
+> +	int ret;
+> +
+> +	image_size = sw->nvm->buf_data_size;
+> +	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * FARB pointer must point inside the image and must at least
+> +	 * contain parts of the digital section we will be reading here.
+> +	 */
+> +	hdr_size = (*(u32 *)buf) & 0xffffff;
+> +	if (hdr_size + NVM_DEVID + 2 >= image_size)
+> +		return -EINVAL;
+> +
+> +	/* Digital section start should be aligned to 4k page */
+> +	if (!IS_ALIGNED(hdr_size, SZ_4K))
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Read digital section size and check that it also fits inside
+> +	 * the image.
+> +	 */
+> +	ds_size = *(u16 *)(buf + hdr_size);
+> +	if (ds_size >= image_size)
+> +		return -EINVAL;
+> +
+> +	if (!sw->safe_mode) {
+> +		u16 device_id;
+> +
+> +		/*
+> +		 * Make sure the device ID in the image matches the one
+> +		 * we read from the switch config space.
+> +		 */
+> +		device_id = *(u16 *)(buf + hdr_size + NVM_DEVID);
+> +		if (device_id != sw->config.device_id)
+> +			return -EINVAL;
+> +
+> +		if (sw->generation < 3) {
+> +			/* Write CSS headers first */
+> +			ret = dma_port_flash_write(sw->dma_port,
+> +				DMA_PORT_CSS_ADDRESS, buf + NVM_CSS,
+> +				DMA_PORT_CSS_MAX_SIZE);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +
+> +		/* Skip headers in the image */
+> +		buf += hdr_size;
+> +		image_size -= hdr_size;
+> +	}
+> +
+> +	return image_size;
+> +}
+> +
+> +struct tb_nvm_vendor_ops asmedia_switch_nvm_ops = {
+> +	.version = asmedia_nvm_version,
+> +};
+> +
+> +struct tb_nvm_vendor_ops intel_switch_nvm_ops = {
+> +	.version = intel_nvm_version,
+> +	.validate = intel_nvm_validate,
+> +};
+> +
+> +struct switch_nvm_vendor {
+> +	u16 vendor;
+> +	const struct tb_nvm_vendor_ops *vops;
+> +};
+> +
+> +static const struct switch_nvm_vendor switch_nvm_vendors[] = {
+> +	{ 0x8086, &intel_switch_nvm_ops },
+> +	{ 0x8087, &intel_switch_nvm_ops },
+> +	{ 0x174c, &asmedia_switch_nvm_ops },
+
+Only single table is needed, please get rid of
+switch_nvm_upgrade_vendors[] so this one is easy to extend with another
+vendor. Also order these numerically and you can use the PCI_VENDOR_ if
+possible and available.
+
+> +
+> +};
+> +
+> +/**
+> + * tb_switch_nvm_alloc() - alloc nvm and set nvm->vops to point
+> + * the vendor specific operations.
+> + * @sw: thunderbolt switch
+> + *
+
+Extra emtpy line, please get rid of all these before submitting another
+version.
+
+> + */
+> +struct tb_nvm *tb_switch_nvm_alloc(struct tb_switch *sw)
+> +{
+> +	const struct tb_nvm_vendor_ops *vops = NULL;
+> +	struct tb_nvm *nvm;
+> +	int i;
+> +	int ret;
+> +
+> +	/**
+> +	 * If the vendor matches on the array then set nvm->vops to
+> +	 * point the vendor specific operations.
+> +	 */
+> +	for (i = 0; i < ARRAY_SIZE(switch_nvm_vendors); i++) {
+> +		const struct switch_nvm_vendor *v = &switch_nvm_vendors[i];
+> +
+> +		if (v->vendor == sw->config.vendor_id) {
+> +			vops = v->vops;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (!vops)
+> +		return ERR_PTR(-EOPNOTSUPP);
+> +
+> +	nvm = tb_nvm_alloc(&sw->dev);
+> +	if (IS_ERR(nvm))
+> +		return nvm;
+> +
+> +	nvm->vops = vops;
+> +	sw->nvm = nvm;
+> +	ret = vops->version(sw);
+> +	if (ret)
+> +		goto err_nvm;
+> +
+> +	return nvm;
+> +
+> +err_nvm:
+> +	tb_nvm_free(nvm);
+> +	return ERR_PTR(ret);
+> +}
+> +
+>  /**
+>   * tb_nvm_alloc() - Allocate new NVM structure
+>   * @dev: Device owning the NVM
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index 244f8cd38b25..392586641828 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -102,10 +102,10 @@ static void nvm_clear_auth_status(const struct tb_switch *sw)
+> 
+>  static int nvm_validate_and_write(struct tb_switch *sw)
+>  {
+> -	unsigned int image_size, hdr_size;
+> +	unsigned int image_size;
+>  	const u8 *buf = sw->nvm->buf;
+> -	u16 ds_size;
+>  	int ret;
+> +	const struct tb_nvm_vendor_ops *vops = sw->nvm->vops;
+> 
+>  	if (!buf)
+>  		return -EINVAL;
+> @@ -114,49 +114,13 @@ static int nvm_validate_and_write(struct tb_switch *sw)
+>  	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+>  		return -EINVAL;
+> 
+> -	/*
+> -	 * FARB pointer must point inside the image and must at least
+> -	 * contain parts of the digital section we will be reading here.
+> -	 */
+> -	hdr_size = (*(u32 *)buf) & 0xffffff;
+> -	if (hdr_size + NVM_DEVID + 2 >= image_size)
+> -		return -EINVAL;
+> -
+> -	/* Digital section start should be aligned to 4k page */
+> -	if (!IS_ALIGNED(hdr_size, SZ_4K))
+> -		return -EINVAL;
+> -
+> -	/*
+> -	 * Read digital section size and check that it also fits inside
+> -	 * the image.
+> -	 */
+> -	ds_size = *(u16 *)(buf + hdr_size);
+> -	if (ds_size >= image_size)
+> -		return -EINVAL;
+> -
+> -	if (!sw->safe_mode) {
+> -		u16 device_id;
+> -
+> -		/*
+> -		 * Make sure the device ID in the image matches the one
+> -		 * we read from the switch config space.
+> -		 */
+> -		device_id = *(u16 *)(buf + hdr_size + NVM_DEVID);
+> -		if (device_id != sw->config.device_id)
+> -			return -EINVAL;
+> -
+> -		if (sw->generation < 3) {
+> -			/* Write CSS headers first */
+> -			ret = dma_port_flash_write(sw->dma_port,
+> -				DMA_PORT_CSS_ADDRESS, buf + NVM_CSS,
+> -				DMA_PORT_CSS_MAX_SIZE);
+> -			if (ret)
+> -				return ret;
+> -		}
+> +	/*Vendors to validate before write to router NVM*/
+
+And fix this one too, again checkpatch.pl helps use it.
+
+> +	if (vops->validate) {
+> +		ret = vops->validate(sw);
+> +		if (ret < 0)
+> +			return ret;
+> 
+> -		/* Skip headers in the image */
+> -		buf += hdr_size;
+> -		image_size -= hdr_size;
+> +		image_size = ret;
+>  	}
+> 
+>  	if (tb_switch_is_usb4(sw))
+> @@ -384,28 +348,21 @@ static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
+>  static int tb_switch_nvm_add(struct tb_switch *sw)
+>  {
+>  	struct tb_nvm *nvm;
+> -	u32 val;
+>  	int ret;
+> 
+>  	if (!nvm_readable(sw))
+>  		return 0;
+> 
+> -	/*
+> -	 * The NVM format of non-Intel hardware is not known so
+> -	 * currently restrict NVM upgrade for Intel hardware. We may
+> -	 * relax this in the future when we learn other NVM formats.
+> -	 */
+> -	if (sw->config.vendor_id != PCI_VENDOR_ID_INTEL &&
+> -	    sw->config.vendor_id != 0x8087) {
+> -		dev_info(&sw->dev,
+> -			 "NVM format of vendor %#x is not known, disabling NVM upgrade\n",
+> -			 sw->config.vendor_id);
+> -		return 0;
+> -	}
+> -
+> -	nvm = tb_nvm_alloc(&sw->dev);
+> -	if (IS_ERR(nvm))
+> +	nvm = tb_switch_nvm_alloc(sw);
+> +	if (IS_ERR(nvm)) {
+> +		if (PTR_ERR(nvm) == -EOPNOTSUPP) {
+> +			dev_info(&sw->dev,
+> +				"NVM format of vendor %#x is not known, disabling NVM upgrade\n",
+> +				sw->config.vendor_id);
+> +			return 0;
+> +		}
+>  		return PTR_ERR(nvm);
+> +	}
+> 
+>  	/*
+>  	 * If the switch is in safe-mode the only accessible portion of
+> @@ -413,24 +370,7 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+>  	 * write new functional NVM.
+>  	 */
+>  	if (!sw->safe_mode) {
+> -		u32 nvm_size, hdr_size;
+> -
+> -		ret = nvm_read(sw, NVM_FLASH_SIZE, &val, sizeof(val));
+> -		if (ret)
+> -			goto err_nvm;
+> -
+> -		hdr_size = sw->generation < 3 ? SZ_8K : SZ_16K;
+> -		nvm_size = (SZ_1M << (val & 7)) / 8;
+> -		nvm_size = (nvm_size - hdr_size) / 2;
+> -
+> -		ret = nvm_read(sw, NVM_VERSION, &val, sizeof(val));
+> -		if (ret)
+> -			goto err_nvm;
+> -
+> -		nvm->major = val >> 16;
+> -		nvm->minor = val >> 8;
+> -
+> -		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+> +		ret = tb_nvm_add_active(nvm, nvm->nvm_size, tb_switch_nvm_read);
+>  		if (ret)
+>  			goto err_nvm;
+>  	}
+> @@ -442,7 +382,6 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+>  			goto err_nvm;
+>  	}
+> 
+> -	sw->nvm = nvm;
+>  	return 0;
+> 
+>  err_nvm:
+> @@ -2890,6 +2829,9 @@ int tb_switch_add(struct tb_switch *sw)
+>  			return ret;
+>  	}
+> 
+> +	/* Enable the NVM firmware upgrade for specific vendors */
+> +	tb_switch_nvm_upgradable(sw);
+> +
+>  	ret = device_add(&sw->dev);
+>  	if (ret) {
+>  		dev_err(&sw->dev, "failed to add device: %d\n", ret);
+> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> index 5db76de40cc1..24b3db35bd9b 100644
+> --- a/drivers/thunderbolt/tb.h
+> +++ b/drivers/thunderbolt/tb.h
+> @@ -48,8 +48,8 @@
+>   */
+>  struct tb_nvm {
+>  	struct device *dev;
+> -	u8 major;
+> -	u8 minor;
+> +	u32 major;
+> +	u32 minor;
+>  	int id;
+>  	struct nvmem_device *active;
+>  	struct nvmem_device *non_active;
+> @@ -57,6 +57,8 @@ struct tb_nvm {
+>  	size_t buf_data_size;
+>  	bool authenticating;
+>  	bool flushed;
+> +	u32 nvm_size;
+> +	const struct tb_nvm_vendor_ops *vops;
+>  };
+> 
+>  enum tb_nvm_write_ops {
+> @@ -65,6 +67,17 @@ enum tb_nvm_write_ops {
+>  	AUTHENTICATE_ONLY = 3,
+>  };
+> 
+> +/**
+> + * struct tb_nvm_vendor_ops - vendor NVM specific operations
+> + * @version: Used NVM read get Firmware version.
+> + * @validate: Vendors have their validate method before NVM write.
+> + *
+> + */
+> +struct tb_nvm_vendor_ops {
+> +	int (*version)(struct tb_switch *sw);
+> +	int (*validate)(struct tb_switch *sw);
+> +};
+> +
+>  #define TB_SWITCH_KEY_SIZE		32
+>  #define TB_SWITCH_MAX_DEPTH		6
+>  #define USB4_SWITCH_MAX_DEPTH		5
+> @@ -736,6 +749,8 @@ static inline void tb_domain_put(struct tb *tb)
+>  	put_device(&tb->dev);
+>  }
+> 
+> +void tb_switch_nvm_upgradable(struct tb_switch *sw);
+> +struct tb_nvm *tb_switch_nvm_alloc(struct tb_switch *sw);
+>  struct tb_nvm *tb_nvm_alloc(struct device *dev);
+>  int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+>  int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+> --
+> 2.34.1
