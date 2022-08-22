@@ -2,48 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EADD59C939
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 21:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABFA59CA00
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 22:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238009AbiHVTsi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Aug 2022 15:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
+        id S232479AbiHVUbh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Aug 2022 16:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237625AbiHVTsf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 15:48:35 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B607713F2A
-        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 12:48:32 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id q10-20020a056e020c2a00b002dedb497c7fso9062500ilg.16
-        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 12:48:32 -0700 (PDT)
+        with ESMTP id S231466AbiHVUbd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 16:31:33 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A9151A12
+        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 13:31:32 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id w6-20020a056e02190600b002e74e05fdc2so9201888ilu.21
+        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 13:31:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=MalLwQaiGlhzIrxCHC2o/INfRJWqzd8HOJsi21AnIho=;
-        b=G1CDUwDq0JsGEEA7p4DcGoR/eY1JYO7YE9sB1HQLpPO8dlCyUhkrtGCknzf9OmBVxm
-         +9U2s4bxC/5szBmhieCcMnuhggfdRchC5aKTRO9JLxksKei98ofwIb6CuhrODNt6F8Wf
-         siJ30d5HZY/n4u0XIiD0bGyw+yxD1jKW/7hMFDhh0E6iv7dqRBUeQFhbStj21CT4+qTp
-         rjrRWMcDuzYjjpaf5c0yaGF0+GD70c31r63j2HjOchUYYUlCkzj9UH5UCHh5/sAQHuSJ
-         6zEFJcXWiOt4m4XhlYtOS0VNhTfdl2/uGYkDVWW+Cp2K67Jf1IQUrVwtrdUyBLI+BK35
-         rRTQ==
-X-Gm-Message-State: ACgBeo3AWLhzEUYTGFBWsRx6yiH0ZQ3fNnF2rS9xlmRLuxK+QMwkzco7
-        zb/cdLKEPXTniFOhNG0/o29JMta1EysLfMXKaAR9XF3foo1d
-X-Google-Smtp-Source: AA6agR7mUVz1zH8YW88I3sZKwQYF/yWh8IAsjogMXWzV6tuZHBKQB9KU/e59S2iZXuBBVtWDIjdraQTFd0o0JqK8a8NaYRIUjXSF
+        bh=L6rHlb+QVkpCy3JjjTuB9q/wSvRkx3+nKR7iFrZendk=;
+        b=PqhFcRYYQmqTpF0Fq1ZQpPRIB55NzcXRzyOdk4ldBY/Wpm0hTywZV7fFKjW4sNFYJm
+         b7OKUe677o3Ovpbu0cARXJA7Aj915iUg7vVeo8q1oE5SI02gT/+fnqqaxuiK92TQsEcj
+         v5fqD7z4bdD3hDydbbh4hLVVYZI0+nCU0OSmY4gXWFg2Y706fM9aeewa3AnEnTGj5BYZ
+         Gb9NvcrLoOGpwsFkmUUHoFFPhOVTDZ9hq30eY5ePhiTywaynOGCC2F8E1qlTJs57XYfH
+         DjVun9ZGSf7cG6vyO9ogY6Gb/lXAnzWWGhAuEPIEFccEjQVsyIlvl1tW/iwQEqDYtiri
+         zGzg==
+X-Gm-Message-State: ACgBeo3DFEEeMVGUgkt7soeUTLYu2Z9duZEHFTbwq5Gw4B4wUGt9qEZh
+        WvBL1qKY7w7XIz6HLNYPekq2rYFfIQ/jHTmn8UZDNmed+xfS
+X-Google-Smtp-Source: AA6agR49izOrgMlPsJuGLN8uZ3HnpLFPJ7ln25fBjB8Ggo5U1zxw1lxSSKfdBDW85tiE3l1YHK+0RTzMGU3C3tmPMZBAmrm07+OG
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1b83:b0:2e5:b254:69e5 with SMTP id
- h3-20020a056e021b8300b002e5b25469e5mr10654334ili.292.1661197712023; Mon, 22
- Aug 2022 12:48:32 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 12:48:32 -0700
+X-Received: by 2002:a02:bb85:0:b0:349:defb:da42 with SMTP id
+ g5-20020a02bb85000000b00349defbda42mr2729099jan.209.1661200292047; Mon, 22
+ Aug 2022 13:31:32 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 13:31:32 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000086ea5105e6d9bb44@google.com>
-Subject: [syzbot] usb-testing boot error: general protection fault in alloc_bprm
-From:   syzbot <syzbot+b3c801d39e8c3daed0fa@syzkaller.appspotmail.com>
-To:     ebiederm@xmission.com, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Message-ID: <0000000000004ef49705e6da5557@google.com>
+Subject: [syzbot] usb-testing boot error: BUG: unable to handle kernel paging
+ request in put_prev_entity
+From:   syzbot <syzbot+27fb2fab2e8cd029d352@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, ebiederm@xmission.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        oleg@redhat.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -61,84 +62,90 @@ syzbot found the following issue on:
 
 HEAD commit:    ad57410d231d usb: gadget: rndis: use %u instead of %d to p..
 git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=17c13aa5080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=15f8653d080000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=b3c801d39e8c3daed0fa
+dashboard link: https://syzkaller.appspot.com/bug?extid=27fb2fab2e8cd029d352
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b3c801d39e8c3daed0fa@syzkaller.appspotmail.com
+Reported-by: syzbot+27fb2fab2e8cd029d352@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xffff000000000100: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff8200000000800-0xfff8200000000807]
-CPU: 1 PID: 375 Comm: kworker/u4:0 Not tainted 6.0.0-rc1-syzkaller-00005-gad57410d231d #0
+BUG: unable to handle page fault for address: ffffdc0000000001
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 100026067 P4D 100026067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 251 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-syzkaller-00005-gad57410d231d #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x15e/0x3b0 mm/slub.c:3282
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 9d 01 00 00 48 85 c0 0f 84 94 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 a0 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0000:ffffc900018afe28 EFLAGS: 00010246
-RAX: ffff000000000000 RBX: ffff88810eae1100 RCX: 0000000000000100
-RDX: 0000000000001411 RSI: 0000000000000dc0 RDI: 000000000003b380
-RBP: ffff888100041c80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000dc0
-R13: 00000000000001a0 R14: 0000000000000dc0 R15: 0000000000000000
+RIP: 0010:__rb_insert lib/rbtree.c:115 [inline]
+RIP: 0010:rb_insert_color+0x6d/0x7a0 lib/rbtree.c:436
+Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 0f 85 48 05 00 00 48 8b 2b 40 f6 c5 01 0f 85 81 01 00 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 01 05 00 00 4c 8b 75 08 49 39 de 0f 84 6d 01
+RSP: 0000:ffffc9000157fc10 EFLAGS: 00010802
+RAX: 1fffe00000000001 RBX: ffff88810e6e0090 RCX: 1ffff11021cb53a4
+RDX: 1ffff11021cb53a2 RSI: ffff8881f6937bf0 RDI: ffff000000000008
+RBP: ffff000000000000 R08: ffff88810e5a9d10 R09: ffff8881f6937bc0
+R10: ffffffff89ca5057 R11: 0000000000000001 R12: ffff88810e5a9d10
+R13: dffffc0000000000 R14: dffffc0000000000 R15: 000000003aefdc00
 FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
+CR2: ffffdc0000000001 CR3: 0000000007825000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- alloc_bprm+0x51/0x900 fs/exec.c:1514
- kernel_execve+0xab/0x500 fs/exec.c:1974
- call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+ rb_insert_color_cached include/linux/rbtree.h:114 [inline]
+ rb_add_cached include/linux/rbtree.h:183 [inline]
+ __enqueue_entity kernel/sched/fair.c:629 [inline]
+ put_prev_entity+0x1d4/0x4c0 kernel/sched/fair.c:4722
+ pick_next_task_fair+0xa42/0xf80 kernel/sched/fair.c:7443
+ __pick_next_task kernel/sched/core.c:5804 [inline]
+ pick_next_task kernel/sched/core.c:6313 [inline]
+ __schedule+0x3a3/0x26f0 kernel/sched/core.c:6458
+ preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6663
+ __cond_resched+0x13/0x20 kernel/sched/core.c:8299
+ might_resched include/linux/kernel.h:110 [inline]
+ percpu_down_read include/linux/percpu-rwsem.h:49 [inline]
+ cgroup_threadgroup_change_begin include/linux/cgroup-defs.h:740 [inline]
+ exit_signals+0x26/0x8b0 kernel/signal.c:2949
+ do_exit+0x50d/0x2930 kernel/exit.c:751
+ call_usermodehelper_exec_async+0x418/0x580 kernel/umh.c:125
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
 Modules linked in:
-
+CR2: ffffdc0000000001
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x15e/0x3b0 mm/slub.c:3282
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 9d 01 00 00 48 85 c0 0f 84 94 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 a0 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0000:ffffc900018afe28 EFLAGS: 00010246
-
-RAX: ffff000000000000 RBX: ffff88810eae1100 RCX: 0000000000000100
-RDX: 0000000000001411 RSI: 0000000000000dc0 RDI: 000000000003b380
-RBP: ffff888100041c80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000dc0
-R13: 00000000000001a0 R14: 0000000000000dc0 R15: 0000000000000000
+RIP: 0010:__rb_insert lib/rbtree.c:115 [inline]
+RIP: 0010:rb_insert_color+0x6d/0x7a0 lib/rbtree.c:436
+Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 0f 85 48 05 00 00 48 8b 2b 40 f6 c5 01 0f 85 81 01 00 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 01 05 00 00 4c 8b 75 08 49 39 de 0f 84 6d 01
+RSP: 0000:ffffc9000157fc10 EFLAGS: 00010802
+RAX: 1fffe00000000001 RBX: ffff88810e6e0090 RCX: 1ffff11021cb53a4
+RDX: 1ffff11021cb53a2 RSI: ffff8881f6937bf0 RDI: ffff000000000008
+RBP: ffff000000000000 R08: ffff88810e5a9d10 R09: ffff8881f6937bc0
+R10: ffffffff89ca5057 R11: 0000000000000001 R12: ffff88810e5a9d10
+R13: dffffc0000000000 R14: dffffc0000000000 R15: 000000003aefdc00
 FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
+CR2: ffffdc0000000001 CR3: 0000000007825000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	8b 51 08             	mov    0x8(%rcx),%edx
-   3:	48 8b 01             	mov    (%rcx),%rax
-   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
-   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-  10:	0f 84 9d 01 00 00    	je     0x1b3
-  16:	48 85 c0             	test   %rax,%rax
-  19:	0f 84 94 01 00 00    	je     0x1b3
-  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
-  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
-  26:	40 f6 c7 0f          	test   $0xf,%dil
-* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
-  2e:	0f 85 a0 01 00 00    	jne    0x1d4
-  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3d:	0f 94 c0             	sete   %al
+   0:	48 89 d8             	mov    %rbx,%rax
+   3:	48 c1 e8 03          	shr    $0x3,%rax
+   7:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1)
+   c:	0f 85 48 05 00 00    	jne    0x55a
+  12:	48 8b 2b             	mov    (%rbx),%rbp
+  15:	40 f6 c5 01          	test   $0x1,%bpl
+  19:	0f 85 81 01 00 00    	jne    0x1a0
+  1f:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1) <-- trapping instruction
+  2f:	0f 85 01 05 00 00    	jne    0x536
+  35:	4c 8b 75 08          	mov    0x8(%rbp),%r14
+  39:	49 39 de             	cmp    %rbx,%r14
+  3c:	0f                   	.byte 0xf
+  3d:	84 6d 01             	test   %ch,0x1(%rbp)
 
 
 ---
