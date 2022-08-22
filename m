@@ -2,85 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD57659C122
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 16:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E211459C1F2
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 16:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbiHVOAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Aug 2022 10:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        id S235550AbiHVOzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Aug 2022 10:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234427AbiHVOAS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 10:00:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B537C37FA9;
-        Mon, 22 Aug 2022 07:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A890611B4;
-        Mon, 22 Aug 2022 14:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C97BC433D6;
-        Mon, 22 Aug 2022 14:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661176815;
-        bh=ygchDD9pK3y0Nzdc29fCKU0n3nN9ciMhH2E2TIBjbGo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AicG4BqWHqvSkZEt+dyB/y8VkSh6VTgepBeptecuWUrSlyfYDwbk///q06IAda4vn
-         tsGExcBV+ocWncCtEwyHxjTpYRJF/A/sIe7TCpBCFu9UCFmQ1ELspYR9rlYT7Bsj0G
-         v268fs2iAnAPijWh5H0oD2UIvJ/POoSXJ1h6O4E2bM/rWge9nT3azJs93t+hXSFdBl
-         CneuGKnO8hBVBSkdU+qelhoSdFfG/P3QuZ0XktMqTJXyJAiPf/vxBt0LneXfNcDkI8
-         Ukw/H/C+CRX4WCRVvOJ3/9vaQMeawHKjXbBwM1QuTtqrc1n3+HQBXJK+dNIhKJDK1l
-         wXXdvV0l4CRxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F405C04E59;
-        Mon, 22 Aug 2022 14:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S235672AbiHVOz1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 10:55:27 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655C0186E9
+        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 07:55:25 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id d21so2400597eje.3
+        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 07:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=NbCrNY36tARZs/wSlHcWIofsvu23F4N0CrTwm8vtH9U=;
+        b=oThclj6M9n2FysNC45lrjU2bCGH3/KPTx9lxKTe9fugY683mLzLEHrng+va4AgLSZG
+         9fjsarb9N+JrTV9o858XkTwHuYJinMy8+qb/8x2VvohZ3EyShCT0Ik0XZZOQvK3d5gpZ
+         U5gYMaPSlk8z2ei9V1sHTOMhSmbXaX/zqGw5d2BPBPvUTz7G3ERzYOf5ZNQ1P95ty2F8
+         54QG2rGyROajsscTAU09dCC3yRpxOBmXoeJUjkOo3qYU1U8uwZDxA7cxfvjC3pWPr5Gn
+         sf9nj1tvSCaf+5xOJ9mSDWL/WsG6LiXmYhL1Bi5MttkRGnBJKhk19ZoEUpINurqXbfsc
+         o5hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=NbCrNY36tARZs/wSlHcWIofsvu23F4N0CrTwm8vtH9U=;
+        b=vc3WOGWRJA98t73hi1znFqXMHJlVxszkZG3anHY8+tQHAl3hKlaxXGrPO2q4csnNvn
+         0v/hGBAlaWtMPrlVYW1fsLSo2qj7/OKGlQNTjCtiYpn89v+nAQ8/8AZb+841KVCsZLO5
+         lKf17tIfQpujWLZmwnH0h2LsEKDOz1UJ1PyTRb6DMasw8O3AP7K7MZfHHl/dRRwPIPxZ
+         mYn/mG2VCCrBcV93XFe6PK92bGXbu+OxAzwWgcORktTr4WWLiJZBBJDl3Xi2/EKmeM8M
+         z058y5Bifq8dMD1xEerPR5Cqfbx/xsKsBHNg4cPlJP4oW3I1DgxFEpvRZi8VLkTbZgeS
+         +YgQ==
+X-Gm-Message-State: ACgBeo1IY5HWgKhUtBiVnv8CwzEwJ3igYX/rpASy8rL5Vn7X+ZZt5Jul
+        n5okm2wSWLry4JL0jhw07uSkEPymvr8=
+X-Google-Smtp-Source: AA6agR5nacCOZ66hO3ObhKe9uvwU2JSuqzLG9V0yJf+ih9bpF/QUEeFavnprcpcIr34uXKoX6moq9Q==
+X-Received: by 2002:a17:907:1b09:b0:72f:d49e:6924 with SMTP id mp9-20020a1709071b0900b0072fd49e6924mr13167981ejc.15.1661180123842;
+        Mon, 22 Aug 2022 07:55:23 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:954a:8e00:e461:b75b:2aa2:ceb8? (dynamic-2a02-3100-954a-8e00-e461-b75b-2aa2-ceb8.310.pool.telefonica.de. [2a02:3100:954a:8e00:e461:b75b:2aa2:ceb8])
+        by smtp.googlemail.com with ESMTPSA id q9-20020a17090676c900b0073d218af237sm4763921ejn.216.2022.08.22.07.55.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 07:55:23 -0700 (PDT)
+Message-ID: <85ba1e59-de83-e3c9-1025-28b4642f66b3@gmail.com>
+Date:   Mon, 22 Aug 2022 16:55:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] r8152: fix flow control settings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166117681551.22523.4597726864619729966.git-patchwork-notify@kernel.org>
-Date:   Mon, 22 Aug 2022 14:00:15 +0000
-References: <20220818080620.14538-392-nic_swsd@realtek.com>
-In-Reply-To: <20220818080620.14538-392-nic_swsd@realtek.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] usb: dwc2: fix wrong order of phy_power_on and phy_init
+Content-Language: en-US
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+References: <f5632bde-0c34-9696-e979-497ef4fc9556@gmail.com>
+ <f03187fc-59a5-a174-691a-687598c903a5@synopsys.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <f03187fc-59a5-a174-691a-687598c903a5@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 18 Aug 2022 16:06:18 +0800 you wrote:
-> These patches fix the settings of RX FIFO about flow control.
+On 22.08.2022 11:39, Minas Harutyunyan wrote:
+> Hi Heiner,
 > 
-> Hayes Wang (2):
->   r8152: fix the units of some registers for RTL8156A
->   r8152: fix the RX FIFO settings when suspending
+> On 8/20/2022 9:45 PM, Heiner Kallweit wrote:
+>> Since 1599069a62c6 ("phy: core: Warn when phy_power_on is called before
+>> phy_init") the driver complains. In my case (Amlogic SoC) the warning
+>> is: phy phy-fe03e000.phy.2: phy_power_on was called before phy_init
+>> So change the order of the two calls.
+>>
+>> Fixes: 09a75e857790 ("usb: dwc2: refactor common low-level hw code to platform.c")
 > 
->  drivers/net/usb/r8152.c | 27 ++++++++++++---------------
->  1 file changed, 12 insertions(+), 15 deletions(-)
+> Added CC: Marek Szyprowski <m.szyprowski@samsung.com>
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>> ---
+>>   drivers/usb/dwc2/platform.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+>> index c8ba87df7..4db7a18a5 100644
+>> --- a/drivers/usb/dwc2/platform.c
+>> +++ b/drivers/usb/dwc2/platform.c
+>> @@ -154,9 +154,9 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+>>   	} else if (hsotg->plat && hsotg->plat->phy_init) {
+>>   		ret = hsotg->plat->phy_init(pdev, hsotg->plat->phy_type);
+>>   	} else {
+>> -		ret = phy_power_on(hsotg->phy);
+>> +		ret = phy_init(hsotg->phy);
+>>   		if (ret == 0)
+>> -			ret = phy_init(hsotg->phy);
+>> +			ret = phy_power_on(hsotg->phy);
+>>   	}
+>>   
+>>   	return ret;
+> 
+> Shouldn't be updated function __dwc2_lowlevel_hw_disable() similarly, 
+> according: phy_power_off must be called before phy_exit()?
+> 
+Indeed, this should be changed accordingly.
+See kernel doc:
 
-Here is the summary with links:
-  - [net,1/2] r8152: fix the units of some registers for RTL8156A
-    https://git.kernel.org/netdev/net/c/6dc4df12d741
-  - [net,2/2] r8152: fix the RX FIFO settings when suspending
-    https://git.kernel.org/netdev/net/c/b75d61201444
+ * phy_exit - Phy internal un-initialization
+ * @phy: the phy returned by phy_get()
+ *
+ * Must be called after phy_power_off().
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> Thanks,
+> Minas
+> 
 
