@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB1B59BA51
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 09:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E34959BA56
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 09:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbiHVHeR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Aug 2022 03:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S232803AbiHVHeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Aug 2022 03:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbiHVHeP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 03:34:15 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2040.outbound.protection.outlook.com [40.107.21.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18421275F9;
-        Mon, 22 Aug 2022 00:34:14 -0700 (PDT)
+        with ESMTP id S230282AbiHVHeT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 03:34:19 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2086.outbound.protection.outlook.com [40.107.21.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036DB27B05;
+        Mon, 22 Aug 2022 00:34:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QNEMLV1ELWFj63NmdJhioQl2dZbA2+AeNb3Zk542Wl2UqnFpwy6Pxq2n5KDpuI5zv7h71+awTLwQY1H0aN+qYHo/Vf6MoqGHL3XC9CQfVx2T6WjP6sY1pIIX0pD0/jIUrXu4Yf3/dR/lA0sPzFKc45uwR82SMBUliHAX7mzru4CG0LXST8xYA0FjUZgG0QCKcYdZl30/iiftKBI1Mv4nuDKiuwbmVuBJBW92L/FRCSJltR959TFpNsZOTyEsH6M0ITo2b50eGuga/58lCcVr97S0/eeBi34Lt99DG6HIEU1Nd5av5mBrjAHyPMqfajao0rdmAb3I/J0va27tjZ75RQ==
+ b=anmvFsOzpFkhTa5VZZ8CgDlKjmKEcAndkdFjshlpBKStM9nwD9jF10YQ84GNGWb/moPOPE4uLPmugmVkoRb0qZMtkkl724eiQKUSYr7g0F+k+DWh1vVqylcIimryJ+KOQPfchp5qV8qtBvpPoALWV1sLZL6/s5m/06noGH6xP39VW0ct2WgCetJYwsZihOyqefZn71H24sC6WRrww7YToQ82yWDgTzqMSvFBdDs6HJ52qDzmpW72kaML8he9PLLB7dEPiORomaF++IYY08+JHVvqf+No+NX5GVPkhML7hj2Sa/khvbP5nS9keRnu227c9ujXiQRYLQEsL5CYrzvqpA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6BPkup+AUFLBnyGgonKYy29ETmrZi06gMGrzaV87zZs=;
- b=c2JqVRIMqo6ZZPlPrlEVk6NyM1lc4d7vo2jD+F8Hax4TS59a3QF5o/r/ON47F2qIpW67BBAKBeVB60XkCBwO5yhSdb165mlx4UnfHA7EKzTa+QB913rMez+rQszu3HQkP4cVh9BORs0re+9VfEWCEMOC2+iEgQgA4Q1625PNVqz39MHKNcC7V+wd9BEDnwEUaFvP/g3dC9j3lJFaMfcuS1hapbt0M6DMQxzKzrlepU9soihH3pSmV43z2SF/qiR8dEjWXVL8vybLhiz4CyV8L7hCyPQl7oJjgaXWPJxH5zFpbwmpwOIYhI81YrzfK0MeReAEXyXE+5t6TFopZBqvhQ==
+ bh=NawNz05wLOWus+BE7LiI5Ct3FQmQo4T8Q7CntfkZJLU=;
+ b=eXPPrygtFC6wpsZL2/zLbKgCQNyHl+e6BuNRD/rozG47RhJoC5aFuCwn4StFV7LZmJHKL2SQb5fq2FdNMSJOMcCpRKN0AeP4qNG1Kg67AYPEW0EXKDkiHMS6tEkecqey9z73mNAXrGUSROLI82xVJkCmqwsN+OcAFe+3/TgcFrwBhW7crRwHJrL5yI/PUFcTGkEuxt4iRWSfPOeE1/S6qADtUQiWIa0NdMGStD8TXAUfd7ukE9H9dbxY43S4sBnMWBwPVgh7076nOiXBjR78FXt2IKGYw39TuKyGB7hb5m/ummMJWKHvC2v4NrNs/O/toKKgV1jhfaG2ZtIs7WzFiA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6BPkup+AUFLBnyGgonKYy29ETmrZi06gMGrzaV87zZs=;
- b=l0nfCwnw9cqz44ltccZPYlIi9VLT/yHp0Sq+HuKJOWPjPdKF6G1YvRhKIx7rzSFnoOlVZtUaujRYgqz5tlvgjqX1I67BAMDxfcDZY5XwgJyNV5DpKQStdrE+uFWNObhW632z+DMosbPHVdJkbR+OocZ+Te/mz8ogPZ3iUzQBJXA=
+ bh=NawNz05wLOWus+BE7LiI5Ct3FQmQo4T8Q7CntfkZJLU=;
+ b=eF+fCb7wpjPUb1DO4t2lMWxyEO7XHBLZhoAFbN4d8wpNMivtIlp5Ioc9oDNZDLmj+U4MaCOD5ah1zYpcKgfKHziQUKyWrHAmTFIXRtloL//fGKDuOxorKNdMgiEYnZOXstoWstHu8R45xWJqJrGPITQVN/LFuCi8u96Gtavupbg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB8784.eurprd04.prod.outlook.com (2603:10a6:102:20f::23)
  by VI1PR04MB4640.eurprd04.prod.outlook.com (2603:10a6:803:6b::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
- 2022 07:34:11 +0000
+ 2022 07:34:15 +0000
 Received: from PAXPR04MB8784.eurprd04.prod.outlook.com
  ([fe80::60b7:af13:8472:2e8c]) by PAXPR04MB8784.eurprd04.prod.outlook.com
  ([fe80::60b7:af13:8472:2e8c%4]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
- 07:34:11 +0000
+ 07:34:15 +0000
 From:   Xu Yang <xu.yang_2@nxp.com>
 To:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
         peda@axentia.se, shawnguo@kernel.org
 Cc:     gregkh@linuxfoundation.org, linux@roeck-us.net, jun.li@nxp.com,
         xu.yang_2@nxp.com, linux-usb@vger.kernel.org, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 3/4] usb: typec: mux: add typec orientation switch support via mux controller
-Date:   Mon, 22 Aug 2022 23:35:16 +0800
-Message-Id: <20220822153517.3747679-4-xu.yang_2@nxp.com>
+Subject: [PATCH 4/4] arm64: dts: imx8mp-evk: add typec node
+Date:   Mon, 22 Aug 2022 23:35:17 +0800
+Message-Id: <20220822153517.3747679-5-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220822153517.3747679-1-xu.yang_2@nxp.com>
 References: <20220822153517.3747679-1-xu.yang_2@nxp.com>
@@ -58,51 +58,51 @@ X-ClientProxiedBy: SI2PR02CA0033.apcprd02.prod.outlook.com
  (2603:10a6:102:20f::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 511a9908-878d-48b7-550d-08da8410b4c2
+X-MS-Office365-Filtering-Correlation-Id: 6481c363-8ef7-4f07-e4c7-08da8410b6da
 X-MS-TrafficTypeDiagnostic: VI1PR04MB4640:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O7Id1ONBh5KtObNq8TqjbUdtSMwmWyG353vOs5nNxsbhLJgvqxmNyG6FA0kP2aVIAgJwIRVaKfKExDU4NE5AmQKB6gcGQvvPZccuNeTcNa74k1eoLgPbmiDQsvvd3MDYQzErnxZLWLlx4KGXQILs2LX8aTWjyNOStsx/Gr1V4QiUu22KzW2MisSCZzrfIh0qxcD4d/j0adEqS6+MzV0VbhGx4gAY5mohMOOzbaKktHBfRLbHRMXNJYg1dXKZlKeJMW7/mtIli/qlvLWMu6BIejj7t0WpTzL1v3Q/mbPXlylc4xucBlksDAlIMwM+61CKxdridyxnz0O8EW6b1r2OOqZzxo5zBVk4Hpe2mCblZ9K0hjWyPF+he3uYD/adGVlnaaRwZjk3tQHU2TZHAb8NovIuVauGN2hKyp1z1uOiVA3PRcRd5Ghuth2mC1YASyiYMlYfxwmztG4ka36U9tAbVor1tit7WM/sD1FmYAzN2muLStzdXMNyiI5Cn2KFUL6UUc9BAXlOs1SP0pY/bEJQieBatf0oZ/vISTuEodeDjLTqlW7JG4hXRiMAiEh9uRvsXjWEY0fqxmCCZHHixXVUPAyG8CbnHU9uJYtUj0qgs3RnRoDgZlLTh+pXQbqGxneftj/0Ak/7cquCq+g5rZfi8WbnjXOEsTc5whi3FLxTOLsiLMhXH6zDogoxMHbrigZ3Fy21hpuo+BF3MLbUbAxxwc+XI+7xUZRB2xNllS3+7OU9mSO+273CQ9VW58F+KptGrkubt2TwoGD7dC3jAXfCxA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8784.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(376002)(39860400002)(366004)(8676002)(66556008)(66476007)(6486002)(5660300002)(316002)(66946007)(41300700001)(38100700002)(38350700002)(4326008)(36756003)(478600001)(8936002)(2616005)(52116002)(6506007)(26005)(6512007)(2906002)(186003)(1076003)(83380400001)(86362001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0f3aiLLjcTmKjNK8TZV1vLjRrROUnjX6tpTxDSQEAH8DP6q7RGfjMYI3RvJUfG0BA0/+5Y6p82AkgDNjhmmGwzNER6Sd5xqb7hSaKx5Ua7mU/KiFSugdY6wcRQVZsHp4LiUDqWPQUdttLHoXSiJCYME6WqhSoLwftCSRkB9Uo6uLc/BZB67YBCqPMwPE83H0ZduUCikQYluJiH3+b7Rud+0rXdPkUv5gJHlMGrgXR6pHOhTc1VF+vPjTPz8gKnori91snhYT5jrC9BtK4UTXjiFSEtgQmyEGZhvD6SvP/vv9XqCO+V1y8Jztho9C+h2VLgOOATt5l6LekP1pPUrvKu0wPc7asY5kIWnofLEDLufpPNx1kXdoK+V7a15eOuKkMmGLEecfegTxAGoaGPs6k6OKgFQ+c62PYhBfajY0hneKXl8w8hU8Pfog1CA0275pgXEMYscAMzuaIfQxbC5cCFii1PwXOVxrXlNMUnqSmihr4EfXOdPAHEc3tCuaaF9TErdLOClOrQfEMBOfiwF6kp52oCEiL4ohNZ2Texso+rXHvylN/o/JpzmKwS4aTG2frqDPXxDofIgNXO3ENmNxv80YdqJVsjV42CA/iy3/EXXL+o+Atk23H+Z6RklZYyz9gQnR0YvbzgwQ9T2GCjC4psLAtndXbg/+aPH7Zhv1ncVSCJLDiX50GAoH9HD6D/+jaS7R0r1f2nfK1PGnvTAf/sQW0p9ffBTlf+gF6wjdMhSeHID3X0DPhC9+QKPw33yCzuK7TI+1tdrM1tCwccaqYexkuuyQvdUyY8ogtTqEOHTDEyJcBbGHNGrulQ7jShKEvxag738cenMFsED3bTBbfA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8784.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(376002)(39860400002)(366004)(8676002)(66556008)(66476007)(6486002)(5660300002)(316002)(66946007)(41300700001)(38100700002)(38350700002)(4326008)(36756003)(478600001)(8936002)(2616005)(52116002)(6506007)(26005)(6512007)(2906002)(186003)(1076003)(83380400001)(86362001)(32563001)(473944003)(414714003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?auQIHuIlIxR0nifPZu3xvd4I2u9a/jUl/41HWPSmi5Z+enBUQkjO1+eWt6Mb?=
- =?us-ascii?Q?Ge6rvNr3nQtJ15ZRKrfqy5r+/BHV2nATLxsbBASzknR07cnQ73TGZqEefcLB?=
- =?us-ascii?Q?tPxiBQAXNPvjk9TJwxaySS7bem/z56dLYS8Rr1Sx67bXR/iay0eopdTFS1oy?=
- =?us-ascii?Q?eUowJsc50Z8qYAu4VPSzVqgfKz/aIYHHyeqbcjEUCCKP5nqwTP5SjCOJ1q0K?=
- =?us-ascii?Q?UN+8h+DtDe0VsLq5EvOJ/yVAMEG4VTH9rRMcbN+tx6CMKtRxfzJpe0mjHeS9?=
- =?us-ascii?Q?waSkSGFGFjDBG3R5V/cYE2Rf0R4v9Jl+HBqxt7DdwMXEz/sk23TM+qSEZrw2?=
- =?us-ascii?Q?54MUhrQUQAVzCgNKYgkrIeZ22iWomKH++QwMMvrPEWiRDl392fjsz5mU0lGH?=
- =?us-ascii?Q?d5K2wBJCCX2AbtokrOodUzwVvUS/tIGP6d2zpokrWpQ7Z5pS3bUEUJ+zo0AZ?=
- =?us-ascii?Q?DicMUOelGelxTuRg9Y7tVH3HZIj7B003f8hG1/v0/VaxOK0/chIjgaKHmA5j?=
- =?us-ascii?Q?NCSrDMclkV/DuhXEXDE+J6KcWa480iSt7vkBCMyzI3kaZUF4MUZ3TLo4eJr4?=
- =?us-ascii?Q?fJjaG4rB5vuDLAUVEQE9ssPGC/HFFOKe/sC2GUM519exiE+ofKOozISx40LR?=
- =?us-ascii?Q?a6/qVxtcp9l4+nWi2kXzaq4Mq4d96ae4u3LEM6J0RFY4xB6CoCBdhD6qkFAS?=
- =?us-ascii?Q?IW1PHiMSCi4+Om4+upjRxiGx2ZMKpQvQH64OtWHUw8TUrTwUQ+hEkp3nMBO6?=
- =?us-ascii?Q?MTcLQIRzRuIsUWm98gYXZ9G5Y50iwOzzxWCvkh9eOb/+ayOY6F9nK/rvovnD?=
- =?us-ascii?Q?OVlbDFlF9LFZf6gLM69emhY6J4N/2mHFH6ysnSXFFom1efeS/9dLW39rWmG3?=
- =?us-ascii?Q?POUhG8FpjU5wnZF7eqTV5/n0pHCN7SCRTpzCXMPAVFgstrcpRwvNz3Wv+cKl?=
- =?us-ascii?Q?gPvLBoTn8eUOlB+ihaIAsf625M4keb0XDnNGSLxBiZQ8Lhv269iIEtcqphFd?=
- =?us-ascii?Q?sSbrsxY3MaU13lhQj4vxmyl6dIlSXa/eJPUTooaBhN6izdjK2vOFyUnhd8aY?=
- =?us-ascii?Q?h/YjmZjTf4qBNMK1d5z0YLeXpuGkobTPoCGWcUz1hdflzfDHlvrb8gsdkcqD?=
- =?us-ascii?Q?6rFXW5oE5IVeYRdVPWl5jBB2LiPY6/nZ64TwLX0dOLPXP8qUJu7dWP2uPuPE?=
- =?us-ascii?Q?jWznURerfjPIPTOh6rwhhx1f64UBzSUPOHuJ0BW/jJ10btz6ftmVe8BXb8x/?=
- =?us-ascii?Q?pa3tYgHca9K2QhPPP78hzA43aHjma48Nwx+BQSdSSomSyIgE175OWtndvt4Q?=
- =?us-ascii?Q?1Usmasvx6OEujV7m45QuJMxQtv7xFylL3rdNTkrWpmoOaQOJjyvfNTq9g/RF?=
- =?us-ascii?Q?KiRh4O4jTCwQrUxIZePvjBgHZHauZyhHu8uBWkOSdQw1Ucc35DlHr35lNl2/?=
- =?us-ascii?Q?18McvsEAJF9ubhzlpqRQ/R7k4Asncjul6fdBi35+Zymo75R/MzCuBOABpnpp?=
- =?us-ascii?Q?22CTDHRbwjN+WFA9uTCG4y73xbWE7bA76p6y/AHI7j4BJXxJdteIZJKlt3oc?=
- =?us-ascii?Q?OBTHNiGvUl1b0VCDNy7nsO2hHpDX00VhL0J+oNGk?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m0gh5NIzkfZi5naz71zple9GLg5WZJqwXn45GiAl2ei4MrP2SJQ8slbfjeMb?=
+ =?us-ascii?Q?XFdwVlvYst76S0YLSMfwVEWb7VZ7pdnfw7MKJByO9RBIEK3n0veKKsKifcHa?=
+ =?us-ascii?Q?kU5WOR1cPJeFonC+y6cwiiy6OwXv/jNU6Uz4JegG5qwFy3/3WqIfIqM602Z/?=
+ =?us-ascii?Q?IrJ1z2VH2FWpw8F0eltxuP4bXsfl824MgQ1Net5w/iwt3rayKh9TdqqmJMFX?=
+ =?us-ascii?Q?JBjI68AcLjJniGtBEwKCxUCwz68KmQxqND/ghTI3wzxUK6Is/U92pz6Q/djZ?=
+ =?us-ascii?Q?msbazZzIJoC3jPJtP/UOfLNpImVUcqnEByhi7l+m0wrZpnvhzH5WMlJNVoDi?=
+ =?us-ascii?Q?HGVNp1JEtR/vfHOGz8okPlyJtt5mk8c2Asrmcv64IiXq4MBzos7/7q6UWdA9?=
+ =?us-ascii?Q?VNeTzLEwYH3cRYk6OHQ+pYkbUEW7DEO6qHWfhFlEFC2161nEZjT1L7u0yEq5?=
+ =?us-ascii?Q?7hOj30/wulkndh29xGw1Fpdnt2ZMXF7wLFPQBYs5j85/MXLYX9TlaE/iRyHW?=
+ =?us-ascii?Q?WPQi05Ze1lLHDwOKhlfrKLYJxnyNVz6O/3kzqUpwzdTPgL2D6yw17xC/fVDm?=
+ =?us-ascii?Q?8RmV3/EXavAHKDe4hKqSnbbRQu2nKFXWir0qXdXHKwq1wR63RuyBWCbwbxlr?=
+ =?us-ascii?Q?iCAwZh4TXVrik0sc+Z97p4Wln97IFgRhd4hnmCS1oJ9d0d/3bxILhGQKnz4E?=
+ =?us-ascii?Q?t4pNYp7D5As1KAZ5smg5HwwwD/ZkLz1cRIvYSzU86RXENpWqETVPYuRZ38we?=
+ =?us-ascii?Q?gZLvF968toMOiyhO3faywLCdi5nEEI3sovvWxh6g+YdLu5jnVzGww64K3dZo?=
+ =?us-ascii?Q?P7uX4ULqIaMGbmqEhBqemroWnBdTdZs4eCKHhe7XZhIWwAwKekobvtKVABNA?=
+ =?us-ascii?Q?Pl8kuQKW0mSUPhfgi3b6QH3e1P7G5pv6wx2i29tzzBpaWdueeZkfNxjVBIpK?=
+ =?us-ascii?Q?6pv4xk/QN5F43A10KBjqNwC866Uqv2PHtyqFxWs4iFg86mmdPiGcziZODFau?=
+ =?us-ascii?Q?VW30/xv/elkkQAx5I9d3CjhtAIgeUQBn3SUYQj5YQvkw5L8isOv0Op+eAc8A?=
+ =?us-ascii?Q?XykqyIbNXkETTxkW6Ffto4jOtfj6U+T65EG3IOmLacYCdoVc03Ye4Gv0Gh3S?=
+ =?us-ascii?Q?4bWi/HXQjFUuEz51fOtMgFLPDKqT7AnIEN9QmotHXawpcSb1n1UuY6wJNN2j?=
+ =?us-ascii?Q?pQfOazvOJDT2EWCSHbMYmngOxTLMxa+p02jzdn8CaH9wDWGRleBHS7SX+HJt?=
+ =?us-ascii?Q?zWI9lXAJfp1X0RtYdNidJk6t0uYE8hfJzUfkYk9j+n0VkRxKhqIsFYm+wCj8?=
+ =?us-ascii?Q?4AAhayJ2Uh2d/BZTX1WU//PF5NigQZQfklb63tMq4H9uEeY0u22qw9ZiCoM9?=
+ =?us-ascii?Q?oyH33MD4OSf5oavCb4RRz1h7OMIkgoZ8Qj5Kt2Osi2jM1J15osq6P3U97ETD?=
+ =?us-ascii?Q?ZAZvra+mEmnkha4W9uARw1O42koogBIdGZIqFsaIn+PSFg56BeZWFuDW2JHR?=
+ =?us-ascii?Q?ullxY0CwAgOLZyfOYV5zh++2h+7CFBlfLEopwmxoobBxpxQts42IsZ7Y5MLl?=
+ =?us-ascii?Q?uDGJiWpRDLVNH02EHgIboUl9O72xmeiDU7jn2FSQ?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 511a9908-878d-48b7-550d-08da8410b4c2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6481c363-8ef7-4f07-e4c7-08da8410b6da
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8784.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 07:34:11.5042
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 07:34:15.1769
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +IpYqAPtV4cn04pAeZgrbpGj2vhc/v1hMJo+iKmFY9VSHvloWBHxK8/C9R6LJCJ1m22WQUJJwInfHU0po9duKA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: FZ2uU9Gfn4EIRGsWKGACYOs6Q9B0Y5JXv/3M2TjXQG/LdRm2KMf/4giy4CE9DjQj/p0jM8ci5cjAy7QGLLp+7A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4640
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -114,161 +114,181 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some dedicated mux block can use existing mux controller as a mux
-provider, typec port as a consumer to select channel for orientation
-switch, this can be an alternate way to control typec orientation switch.
-Also, one mux controller could cover highspeed, superspeed and sideband
-use case one time in this implementation.
+The first port of USB with type-C connector, which has dual data
+role and dual power role.
 
 Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 ---
- drivers/usb/typec/mux.c       | 74 +++++++++++++++++++++++++++++++++++
- include/linux/usb/typec_mux.h |  7 +---
- 2 files changed, 76 insertions(+), 5 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 120 +++++++++++++++++++
+ 1 file changed, 120 insertions(+)
 
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index 464330776cd6..5ee960fb668d 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -13,6 +13,7 @@
- #include <linux/mutex.h>
- #include <linux/property.h>
- #include <linux/slab.h>
-+#include <linux/mux/consumer.h>
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+index f6b017ab5f53..bf0fc6b18164 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+@@ -5,6 +5,7 @@
  
- #include "class.h"
- #include "mux.h"
-@@ -22,6 +23,11 @@
- struct typec_switch {
- 	struct typec_switch_dev *sw_devs[TYPEC_MUX_MAX_DEVS];
- 	unsigned int num_sw_devs;
+ /dts-v1/;
+ 
++#include <dt-bindings/usb/pd.h>
+ #include "imx8mp.dtsi"
+ 
+ / {
+@@ -65,6 +66,22 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
+ 		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
+ 		enable-active-high;
+ 	};
 +
-+	/* Could handle HighSpeed, SuperSpeed, Sideband switch one time */
-+	struct mux_control *mux_switch;
-+	/* 3 state correspond to NONE, NORMAL, REVERSE for all switches */
-+	int mux_states[3];
++	mux: mux-controller {
++		compatible = "gpio-mux";
++		#mux-control-cells = <0>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_typec_mux>;
++		mux-gpios = <&gpio4 20 GPIO_ACTIVE_HIGH>,
++			    <&gpio2 20 GPIO_ACTIVE_HIGH>;
++		idle-state = <2>;
++
++		port {
++			usb3_data_ss: endpoint {
++				remote-endpoint = <&typec_con_ss>;
++			};
++		};
++	};
  };
  
- static int switch_fwnode_match(struct device *dev, const void *fwnode)
-@@ -117,6 +123,58 @@ struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode)
- }
- EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
- 
-+static struct typec_switch *mux_control_typec_switch_get(struct device *dev)
-+{
-+	struct typec_switch *sw;
-+	struct mux_control *mux;
-+	int ret;
-+
-+	if (!device_property_present(dev, "mux-controls"))
-+		return NULL;
-+
-+	sw = kzalloc(sizeof(*sw), GFP_KERNEL);
-+	if (!sw)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mux = mux_control_get(dev, NULL);
-+	if (!IS_ERR(mux)) {
-+		sw->mux_switch = mux;
-+		ret = device_property_read_u32_array(dev,
-+			"typec-switch-states", sw->mux_states, 3);
-+		if (ret) {
-+			kfree(sw);
-+			return ERR_PTR(ret);
-+		}
-+	} else {
-+		kfree(sw);
-+		return ERR_CAST(mux);
-+	}
-+
-+	return sw;
-+}
-+
-+/**
-+ * typec_switch_get - Find USB Type-C orientation switch
-+ * @dev: The device using switch
-+ *
-+ * Finds a switch used by @dev. Returns a reference to the switch on
-+ * success, NULL if no matching connection was found, or
-+ * ERR_PTR(-EPROBE_DEFER) when a connection was found but the switch
-+ * has not been enumerated yet, or ERR_PTR with a negative errno.
-+ */
-+struct typec_switch *typec_switch_get(struct device *dev)
-+{
-+	struct typec_switch *sw;
-+
-+	sw = fwnode_typec_switch_get(dev_fwnode(dev));
-+	if (!sw)
-+		/* Try get switch based on mux control */
-+		sw = mux_control_typec_switch_get(dev);
-+
-+	return sw;
-+}
-+EXPORT_SYMBOL_GPL(typec_switch_get);
-+
- /**
-  * typec_switch_put - Release USB Type-C orientation switch
-  * @sw: USB Type-C orientation switch
-@@ -137,6 +195,10 @@ void typec_switch_put(struct typec_switch *sw)
- 		module_put(sw_dev->dev.parent->driver->owner);
- 		put_device(&sw_dev->dev);
- 	}
-+
-+	if (sw->mux_switch)
-+		mux_control_put(sw->mux_switch);
-+
- 	kfree(sw);
- }
- EXPORT_SYMBOL_GPL(typec_switch_put);
-@@ -204,6 +266,7 @@ int typec_switch_set(struct typec_switch *sw,
- 		     enum typec_orientation orientation)
- {
- 	struct typec_switch_dev *sw_dev;
-+	struct mux_control *mux;
- 	unsigned int i;
- 	int ret;
- 
-@@ -218,6 +281,17 @@ int typec_switch_set(struct typec_switch *sw,
- 			return ret;
- 	}
- 
-+	mux = sw->mux_switch;
-+	if (mux) {
-+		ret = mux_control_deselect(mux);
-+		if (ret)
-+			return ret;
-+
-+		ret = mux_control_select(mux, sw->mux_states[orientation]);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(typec_switch_set);
-diff --git a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
-index 9292f0e07846..2287e5a5f591 100644
---- a/include/linux/usb/typec_mux.h
-+++ b/include/linux/usb/typec_mux.h
-@@ -24,16 +24,13 @@ struct typec_switch_desc {
- 	void *drvdata;
+ &A53_0 {
+@@ -299,6 +316,56 @@ LDO5 {
+ 	};
  };
  
++&i2c2 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	status = "okay";
 +
-+struct typec_switch *typec_switch_get(struct device *dev);
- struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode);
- void typec_switch_put(struct typec_switch *sw);
- int typec_switch_set(struct typec_switch *sw,
- 		     enum typec_orientation orientation);
++	ptn5110: tcpc@50 {
++		compatible = "nxp,ptn5110";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_typec>;
++		reg = <0x50>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <19 8>;
++
++		port {
++			typec_dr_sw: endpoint {
++				remote-endpoint = <&usb3_drd_sw>;
++			};
++		};
++
++		usb_con: connector {
++			compatible = "usb-c-connector";
++			label = "USB-C";
++			power-role = "dual";
++			data-role = "dual";
++			try-power-role = "sink";
++			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
++			sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
++				     PDO_VAR(5000, 20000, 3000)>;
++			op-sink-microwatt = <15000000>;
++			self-powered;
++
++			mux-controls = <&mux>;
++			typec-switch-states = <2>, <0>, <1>;
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@1 {
++					reg = <1>;
++					typec_con_ss: endpoint {
++						remote-endpoint = <&usb3_data_ss>;
++					};
++				};
++			};
++		};
++	};
++};
++
+ &i2c3 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-names = "default";
+@@ -361,7 +428,41 @@ &uart2 {
+ 	status = "okay";
+ };
  
--static inline struct typec_switch *typec_switch_get(struct device *dev)
--{
--	return fwnode_typec_switch_get(dev_fwnode(dev));
--}
--
- struct typec_switch_dev *
- typec_switch_register(struct device *parent,
- 		      const struct typec_switch_desc *desc);
++&usb3_phy0 {
++	fsl,phy-tx-vref-tune = <0xe>;
++	fsl,phy-tx-preemp-amp-tune = <3>;
++	fsl,phy-tx-vboost-level = <5>;
++	fsl,phy-comp-dis-tune = <7>;
++	fsl,pcs-tx-deemph-3p5db = <0x21>;
++	fsl,phy-pcs-tx-swing-full = <0x7f>;
++	status = "okay";
++};
++
++&usb3_0 {
++	status = "okay";
++};
++
++&usb_dwc3_0 {
++	dr_mode = "otg";
++	hnp-disable;
++	srp-disable;
++	adp-disable;
++	usb-role-switch;
++	role-switch-default-mode = "none";
++	snps,dis-u1-entry-quirk;
++	snps,dis-u2-entry-quirk;
++	status = "okay";
++
++	port {
++		usb3_drd_sw: endpoint {
++			remote-endpoint = <&typec_dr_sw>;
++		};
++	};
++};
++
+ &usb3_phy1 {
++	fsl,phy-tx-preemp-amp-tune = <3>;
++	fsl,phy-tx-vref-tune = <0xb>;
+ 	status = "okay";
+ };
+ 
+@@ -488,6 +589,13 @@ MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c2
+ 		>;
+ 	};
+ 
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL         0x400001c2
++			MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA         0x400001c2
++		>;
++	};
++
+ 	pinctrl_i2c3: i2c3grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c2
+@@ -527,6 +635,18 @@ MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x140
+ 		>;
+ 	};
+ 
++	pinctrl_typec: typec1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19      0x1c4
++		>;
++	};
++
++	pinctrl_typec_mux: typec1muxgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20      0x16
++		>;
++	};
++
+ 	pinctrl_usb1_vbus: usb1grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR	0x10
 -- 
 2.34.1
 
