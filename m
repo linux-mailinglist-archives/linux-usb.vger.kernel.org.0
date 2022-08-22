@@ -2,136 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB7B59C06F
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 15:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD57659C122
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 16:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiHVNYg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Aug 2022 09:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S235156AbiHVOAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Aug 2022 10:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiHVNYf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 09:24:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8E72A271;
-        Mon, 22 Aug 2022 06:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661174674; x=1692710674;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7tH/Ag7lZlQSetX8stDS+iZwQ7vUoY9E4x61qs33aN8=;
-  b=Lzp5sCk/VRDQ4WScoteBFXuFOcGaNRHFhsOs3OfTe2Q0Ct6t+cQ8hKCs
-   Vw2qO4ucf5TyEXQrnq8RYYWGBEAxlC4+lEVjDwTufUR0od07URXOiGXfJ
-   kxpSzfn3mtMf8x6OLt9Fs2Cob/P+kRxFq9xuKOn6X6Mfqg4JlpRTiejfn
-   4fKYq6diW5jk7ZVh0gFFiBSruv2uCeiY/5LWI+zWczuk6R5SjDE/PB1Rg
-   0IQsN0jG2xUNgffxOIRAaFoPFBzDswmFskoQfJ+pu+ow5nYcx2wDUEkUH
-   DeFLhP8yzFr32mDavF0mXBQQYj0h0y6BJCCTi91lBFoV25VGHaHE/lknj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="276440512"
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="276440512"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 06:24:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="751281963"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Aug 2022 06:24:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Aug 2022 16:24:30 +0300
-Date:   Mon, 22 Aug 2022 16:24:30 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION 5.19] NULL dereference by ucsi_acpi driver
-Message-ID: <YwODjnYQD/KjxXdw@kuha.fi.intel.com>
-References: <87r11cmbx0.wl-tiwai@suse.de>
- <YwEqtGB2WldUeiEN@kroah.com>
+        with ESMTP id S234427AbiHVOAS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 10:00:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B537C37FA9;
+        Mon, 22 Aug 2022 07:00:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A890611B4;
+        Mon, 22 Aug 2022 14:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C97BC433D6;
+        Mon, 22 Aug 2022 14:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661176815;
+        bh=ygchDD9pK3y0Nzdc29fCKU0n3nN9ciMhH2E2TIBjbGo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AicG4BqWHqvSkZEt+dyB/y8VkSh6VTgepBeptecuWUrSlyfYDwbk///q06IAda4vn
+         tsGExcBV+ocWncCtEwyHxjTpYRJF/A/sIe7TCpBCFu9UCFmQ1ELspYR9rlYT7Bsj0G
+         v268fs2iAnAPijWh5H0oD2UIvJ/POoSXJ1h6O4E2bM/rWge9nT3azJs93t+hXSFdBl
+         CneuGKnO8hBVBSkdU+qelhoSdFfG/P3QuZ0XktMqTJXyJAiPf/vxBt0LneXfNcDkI8
+         Ukw/H/C+CRX4WCRVvOJ3/9vaQMeawHKjXbBwM1QuTtqrc1n3+HQBXJK+dNIhKJDK1l
+         wXXdvV0l4CRxw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F405C04E59;
+        Mon, 22 Aug 2022 14:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwEqtGB2WldUeiEN@kroah.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] r8152: fix flow control settings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166117681551.22523.4597726864619729966.git-patchwork-notify@kernel.org>
+Date:   Mon, 22 Aug 2022 14:00:15 +0000
+References: <20220818080620.14538-392-nic_swsd@realtek.com>
+In-Reply-To: <20220818080620.14538-392-nic_swsd@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello:
 
-On Sat, Aug 20, 2022 at 08:40:52PM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Aug 19, 2022 at 06:32:43PM +0200, Takashi Iwai wrote:
-> > Hi,
-> > 
-> > we've got multiple reports about 5.19 kernel starting crashing after
-> > some time, and this turned out to be triggered by ucsi_acpi driver.
-> > The details are found in:
-> >   https://bugzilla.suse.com/show_bug.cgi?id=1202386
-> > 
-> > The culprit seems to be the commit 87d0e2f41b8c
-> >     usb: typec: ucsi: add a common function ucsi_unregister_connectors()
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 18 Aug 2022 16:06:18 +0800 you wrote:
+> These patches fix the settings of RX FIFO about flow control.
 > 
-> Adding Heikki to the thread...
+> Hayes Wang (2):
+>   r8152: fix the units of some registers for RTL8156A
+>   r8152: fix the RX FIFO settings when suspending
 > 
-> >     
-> > This commit looks as if it were a harmless cleanup, but this failed in
-> > a subtle way.  Namely, in the error scenario, the driver gets an error
-> > at ucsi_register_altmodes(), and goes to the error handling to release
-> > the resources.  Through this refactoring, the release part was unified
-> > to a funciton ucsi_unregister_connectors().  And there, it has a NULL
-> > check of con->wq, and it bails out the loop if it's NULL. 
-> > Meanwhile, ucsi_register_port() itself still calls destroy_workqueue()
-> > and clear con->wq at its error path.  This ended up in the leftover
-> > power supply device with the uninitialized / cleared device.
-> > 
-> > It was confirmed that the problem could be avoided by a simple
-> > revert.
-> 
-> I'll be glad to revert this now, unless Heikki thinks:
-> 
-> > 
-> > I guess another fix could be removing the part clearing con->wq, i.e.
-> > 
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -1192,11 +1192,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
-> >  out_unlock:
-> >  	mutex_unlock(&con->lock);
-> >  
-> > -	if (ret && con->wq) {
-> > -		destroy_workqueue(con->wq);
-> > -		con->wq = NULL;
-> > -	}
-> > -
-> >  	return ret;
-> >  }
-> >  
-> > 
-> > ... but it's totally untested and I'm not entirely sure whether it's
-> > better.
-> 
-> that is any better?
+>  drivers/net/usb/r8152.c | 27 ++++++++++++---------------
+>  1 file changed, 12 insertions(+), 15 deletions(-)
 
-No, I don't think that's better. Right now I would prefer that we play
-it safe and revert.
+Here is the summary with links:
+  - [net,1/2] r8152: fix the units of some registers for RTL8156A
+    https://git.kernel.org/netdev/net/c/6dc4df12d741
+  - [net,2/2] r8152: fix the RX FIFO settings when suspending
+    https://git.kernel.org/netdev/net/c/b75d61201444
 
-The conditions are different in the two places where the ports are
-unregistered in this driver. Therefore I don't think it makes sense
-to use a function like ucsi_unregister_connectors() that tries to
-cover both cases. It will always be a little bit fragile.
-
-Instead we could introduce a function that can be used to remove a
-single port. That would leave the handling of the conditions to the
-callers of the function, but it would still remove the boilerplate.
-That would be much safer IMO.
-
-But to fix this problem, I think we should revert.
-
-thanks,
-
+You are awesome, thank you!
 -- 
-heikki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
