@@ -2,108 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC9C59C35E
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 17:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E8459C93A
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Aug 2022 21:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbiHVPsh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Aug 2022 11:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S238122AbiHVTsh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Aug 2022 15:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236729AbiHVPs2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 11:48:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4A5D103;
-        Mon, 22 Aug 2022 08:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661183307; x=1692719307;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9v+TRlWSb3Q8gtaQcUjLPA2zaE552ON81kuY+M4qOAI=;
-  b=HtbSYmv8CHXpRWcA5JpoV9bD1NawMUffu9nbe5hsoV2FziYE/UZhsbN9
-   c+prm87Bl63xANst0f1FzBJ1Oo2jLxGilLaNydaaxTOLNQA9kWdvBfFBj
-   IqUbB63nwjVC/KZN+6Hhd7Sd5vYCXV0D+bDVrZC6vy4CSxbn0TbbOZ7bL
-   hhUn9iXSjvofXLxrLfDFThMkRs6i17GICwO9Ks8AYvn0vPNBP7r7/dD4+
-   uXNBAcCV+a6mf5oS+U6IB9Jj5cceg9PWOAx8dHWcIb8vi6LKwAgVBwIs6
-   YGlKzer8EHk0xyvAgnEJYxyNw93SOGoy2NayAP89p5APBI1WVBAJRZ9gs
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294237712"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="294237712"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 08:48:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="559795643"
-Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Aug 2022 08:47:50 -0700
-Received: from kbuild by dd9b29378baa with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQ9eX-0000Pe-2c;
-        Mon, 22 Aug 2022 15:47:49 +0000
-Date:   Mon, 22 Aug 2022 23:46:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com,
-        robh+dt@kernel.org, peda@axentia.se, shawnguo@kernel.org
-Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
-        linux@roeck-us.net, jun.li@nxp.com, xu.yang_2@nxp.com,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/4] usb: typec: mux: add typec orientation switch
- support via mux controller
-Message-ID: <202208222312.IFf74Ze6-lkp@intel.com>
-References: <20220822153517.3747679-4-xu.yang_2@nxp.com>
+        with ESMTP id S237439AbiHVTsd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Aug 2022 15:48:33 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4484FE029
+        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 12:48:32 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id o9-20020a056e0214c900b002dc29c288bfso9039835ilk.3
+        for <linux-usb@vger.kernel.org>; Mon, 22 Aug 2022 12:48:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=pz50IIbxyx33+nWabTiAdIsjgxs4XJ7Q5EWkKJhISNg=;
+        b=TnF0zEUVua+IDgvfSHUuxnAyb+YdoUjuJwwfizf8KwQBwxrv64Z7+bQgZjlaAYerJj
+         gt65C9hMBAvCL5aqmuywqHVGplWFK6yLabcGInOn+LALnyLyZT6G3hFPVDhoEAtI8jMl
+         jIht5NI7HDcxdMlzz5pVqQDX5rpK0KWTJDKChS3Jr9UPLfzEUa/8nKEudQo2XakMKLS9
+         f3lWLMT2apRpi8z7NDFAHWIEgkZWVwQEzhWldg8vhDEh5WvehAIMBC+f5IZzSNulYHBR
+         7McGRIz4PrHtbu8grTIhHFRj0o+Q49E21jzRsbp9/+iHpxGzKtbLkiMWPo4Zu0F+XrR6
+         YBSw==
+X-Gm-Message-State: ACgBeo3TVJRRvnLwYB6TK4chxH2GJC2+TCxaakNMt5ueWnNSPEIVO4U3
+        7rKTkuYOVhJ0Sg3Csr3sVRC6WZihUDKKdEmRUZil5UnQk+W2
+X-Google-Smtp-Source: AA6agR7IyVH/TvQuqqZYaHxZxwdgjhsI1d+Eyhjg2/4/W5pTNpbeW/z7IswKz3Y+9DivWSpJOH43xvPM2ML1YbcajltVJReWzHjQ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822153517.3747679-4-xu.yang_2@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:31c1:b0:33f:2450:46a9 with SMTP id
+ n1-20020a05663831c100b0033f245046a9mr10085585jav.45.1661197711680; Mon, 22
+ Aug 2022 12:48:31 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 12:48:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081a9cc05e6d9bb84@google.com>
+Subject: [syzbot] usb-testing boot error: kernel panic: corrupted stack end in call_usermodehelper_exec_async
+From:   syzbot <syzbot+0d36a7d5e61d057c150d@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, ebiederm@xmission.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Xu,
+Hello,
 
-Thank you for the patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on shawnguo/for-next linus/master v6.0-rc2 next-20220822]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    ad57410d231d usb: gadget: rndis: use %u instead of %d to p..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1294c603080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=0d36a7d5e61d057c150d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Yang/typec-orientation-switch-support-via-mux-controller/20220822-153600
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-config: i386-randconfig-a013-20220822 (https://download.01.org/0day-ci/archive/20220822/202208222312.IFf74Ze6-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/703ba3cfec5b6f9422ac9a859bc6121f7c4a12fd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xu-Yang/typec-orientation-switch-support-via-mux-controller/20220822-153600
-        git checkout 703ba3cfec5b6f9422ac9a859bc6121f7c4a12fd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0d36a7d5e61d057c150d@syzkaller.appspotmail.com
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Kernel panic - not syncing: corrupted stack end detected inside scheduler
+CPU: 0 PID: 243 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller-00005-gad57410d231d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ panic+0x2c8/0x627 kernel/panic.c:274
+ schedule_debug kernel/sched/core.c:5737 [inline]
+ __schedule+0x26dd/0x26f0 kernel/sched/core.c:6388
+ do_task_dead+0xd1/0x100 kernel/sched/core.c:6512
+ do_exit+0x18bd/0x2930 kernel/exit.c:847
+ call_usermodehelper_exec_async+0x418/0x580 kernel/umh.c:125
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-All errors (new ones prefixed by >>):
 
-   ld: drivers/usb/typec/mux.o: in function `typec_switch_put':
->> mux.c:(.text+0x21d): undefined reference to `mux_control_put'
-   ld: drivers/usb/typec/mux.o: in function `typec_switch_set':
->> mux.c:(.text+0x29a): undefined reference to `mux_control_deselect'
->> ld: mux.c:(.text+0x2ab): undefined reference to `mux_control_select_delay'
-   ld: drivers/usb/typec/mux.o: in function `typec_switch_get':
->> mux.c:(.text+0x767): undefined reference to `mux_control_get'
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
