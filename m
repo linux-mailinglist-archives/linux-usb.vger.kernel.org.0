@@ -2,100 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7855A59EC75
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 21:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29A459EC8E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 21:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbiHWTe5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 15:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S232117AbiHWThA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 15:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiHWTeb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 15:34:31 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AE8D4E;
-        Tue, 23 Aug 2022 11:28:17 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id g8so9657781plq.11;
-        Tue, 23 Aug 2022 11:28:17 -0700 (PDT)
+        with ESMTP id S232054AbiHWTgh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 15:36:37 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297C1F1B7A
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 11:33:21 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id m2so13576234pls.4
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 11:33:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=OpAAIbRmUtdooRSc8Rz9ZxA5vB7ijPi1Sxv/YxOpbd0=;
-        b=TQZ7Njj2HSqfRtNonDUamFWpQzengfi3aP/z9bMDz2hgz6sm33sjqV0Moga+WWDBk+
-         XFPKoC//wiiYR2o6XMkiF2qLflgsyBnIiMf1R/t89RCCZ1ovAAF+njoXR+ypU6pK7pO2
-         zXaMP0O3d1HKaKjQkT9xOdTQb7VG+blhBlGW8Ghy59ncG0gVgKmd3UvI97E/5itdCCOw
-         V0SYtynPduFvzwRapuKXwdNX6OpCM4qOZDSA/y7cBYe10BliKEojfntsryU6uCvKox5V
-         dOgjJ/KLnTCM/EL7QBMn+fScGvIlg+AIBWaQXaYXiWXgwhYJK1iAivVZVpOJjd+QLwT2
-         eSng==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=h0fZBa4RIPV1lUQU8KdlmL0X2qjbCYHqc2je/hll2RI=;
+        b=Voh+qKavx7B3jK+RcBLlhE6kqdY9ZA1VYViVd6oI3FoyRAcRgrXOVZKsZstrHGbjQv
+         ZyboF85ngechUBZmkWDQc0vZzdPcYFzrcBGMxHcm+Qdd3QhmZdH48fd1r0xlfWp8vkCE
+         +OMv0KFrlH1rhxqCfNnT76KBStIwiZxNnUM/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=OpAAIbRmUtdooRSc8Rz9ZxA5vB7ijPi1Sxv/YxOpbd0=;
-        b=3FYFNcITePVlD9ZDvlWhqZ8+rk1nSsy0yfqLoPggV4WXrBoqkiFg5+Gh4jSTunD14i
-         6UgOStvGKc0jj5p41tPccN4RRahl7s/bYPvSJY0W7Tqk4MD0fUZBdlGBK2WNSOp30VXb
-         c6USMDJ05zzP1MqhJhPAzlECK7m8LNPwtzD1VymxqblfljTKjJZkp8Ovn5+W35OEnaPZ
-         3hwOFi942etdkZDmbn0WfpjJjw9Y3nAAJf8SQjlDdMhk98BJXM6BPfLq2f0ZVp2CA6sI
-         zJdg+aDboNNDOZNCqEmga+e3pCwsqMLY/cKyzG3Dqt2T1pOOrVZzx/bvSfQWTKtfqPVi
-         JkVw==
-X-Gm-Message-State: ACgBeo1KEXMRB/57sUcU89hftkGJw8rf1cXlii13fmUcGwv8yyQhGBWV
-        LB+PC7o56Pxb8Di0HBicsoc=
-X-Google-Smtp-Source: AA6agR6QUGf4KzNGBA4P7wW4ovQFBCcvNBnlzOkfXTukL8GORqxCa2a2d0ra2N5k2Cn7+H1eRZDzPQ==
-X-Received: by 2002:a17:902:e5d1:b0:16f:15a1:6dbc with SMTP id u17-20020a170902e5d100b0016f15a16dbcmr25391045plf.73.1661279296326;
-        Tue, 23 Aug 2022 11:28:16 -0700 (PDT)
-Received: from fedora.. ([103.159.189.136])
-        by smtp.gmail.com with ESMTPSA id b13-20020a17090a6e0d00b001f2fa09786asm10328798pjk.19.2022.08.23.11.28.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 11:28:15 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Khalid Masum <khalid.masum.92@gmail.com>
-Subject: [PATCH 2/2] usb: ehci: Prevent possible modulo by zero
-Date:   Wed, 24 Aug 2022 00:27:58 +0600
-Message-Id: <20220823182758.13401-3-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220823182758.13401-1-khalid.masum.92@gmail.com>
-References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=h0fZBa4RIPV1lUQU8KdlmL0X2qjbCYHqc2je/hll2RI=;
+        b=78MyD4aMtesDCojW5+7KBJB4pT7xVRDXHzNWBEwnhbxdLNxupwhK1Efhh+oMDxNebO
+         KVerSdUMnK1DXUh7Cjn1tqy3oqVXe00wRlfxwhSfFjff3BhHxv/2j/YIhfcRpRU9Aaju
+         JGET4ZQej9egaCumq0Gy5RpRQnPXvHMCte4dsRfTS9JUQTgm9+LcccFsvfOQed1vQ51B
+         AMBVZ7Tv/CdhpQTd9YYjAswZTAW33+0cQjGw0eAKqfA0qNJmronnKEtYE7+EqWSBwfSU
+         r0MdsmomAow5ARC6/wF8G3ljiH9Gn/OjObYPU++wd0wWbr/b6hBEem3+CChsyRv4vIep
+         q4tw==
+X-Gm-Message-State: ACgBeo2k0LtFsHf946Aefe5eLYQlDK+t/9TDGtvxTtfMR1CY6Oit6tsx
+        x5GtuWLlhUwGjD5Ju0shbybWQg==
+X-Google-Smtp-Source: AA6agR6AKcCS1DcwchHgXQr7Id/ZYfcJPfbgIw53jD4US0Kc8wG1Esq72w3z7Qj7/BA+V5CseIZKaQ==
+X-Received: by 2002:a17:902:d50b:b0:172:d4f4:91aa with SMTP id b11-20020a170902d50b00b00172d4f491aamr16155779plg.53.1661279600756;
+        Tue, 23 Aug 2022 11:33:20 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:fee6:a961:5d1d:553])
+        by smtp.gmail.com with UTF8SMTPSA id x11-20020aa7956b000000b00535da15a252sm10784457pfq.165.2022.08.23.11.33.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 11:33:20 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 11:33:18 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: keep PHYs disabled during suspend
+Message-ID: <YwUdbkyL8GgvLQJA@google.com>
+References: <20220823124047.14634-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220823124047.14634-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb_maxpacket() returns 0 if it fails to fetch the endpoint. This
-value is later used for calculating modulo. Which can cause modulo
-by zero in qtd_fill.
+Hi Johan,
 
-Prevent this breakage by returning if maxpacket is found to be 0.
+On Tue, Aug 23, 2022 at 02:40:47PM +0200, Johan Hovold wrote:
+> Commit 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system
+> suspend") started leaving the PHYs enabled during suspend for
+> wakeup-capable controllers even though it turns out this had nothing to
+> do with wakeup.
+> 
+> Rather, the wakeup capability flag was (ab-)used as a proxy to configure
+> the suspend behaviour in an attempt to reduce power leakage on some
+> platforms.
+> 
+> Stop abusing the wakeup configuration and restore the 5.19 behaviour of
+> keeping the PHYs powered off during suspend. If needed, a dedicated
+> mechanism for configuring the PHY power state during suspend can be
+> added later.
+> 
+> Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
+> Link: https://lore.kernel.org/r/Yuv7AM/5jtO/pgcm@google.com
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/usb/dwc3/core.c      | 4 ++--
+>  drivers/usb/dwc3/dwc3-qcom.c | 1 -
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 8c8e32651473..0cdb6be720e1 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1983,7 +1983,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> +		if (!PMSG_IS_AUTO(msg)) {
 
-Fixes coverity warning: 1487371 ("Division or modulo by zero")
-Fixes: 9841f37a1cca ("usb: ehci: Add support for SINGLE_STEP_SET_FEATURE test of EHSET")
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
----
- drivers/usb/host/ehci-q.c | 2 ++
- 1 file changed, 2 insertions(+)
+My assumption was that the PHYs need to be powered for wakeup to work, but
+apparently that isn't the case, wakeup still works on sc7x80 with this part
+of this patch.
 
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index eb31d13e9ecd..cf2585e9a09f 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -1221,6 +1221,8 @@ static int ehci_submit_single_step_set_feature(
- 	token |= (1 /* "in" */ << 8);  /*This is IN stage*/
- 
- 	maxpacket = usb_maxpacket(urb->dev, urb->pipe);
-+	if (unlikely(!maxpacket))
-+		return -1;
- 
- 	qtd_fill(ehci, qtd, buf, len, token, maxpacket);
- 
--- 
-2.37.1
+>  			dwc3_core_exit(dwc);
+>  			break;
+>  		}
+> @@ -2044,7 +2044,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> +		if (!PMSG_IS_AUTO(msg)) {
+>  			ret = dwc3_core_init_for_resume(dwc);
+>  			if (ret)
+>  				return ret;
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 9a94b1ab8f7a..9995395baa12 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -904,7 +904,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  
+>  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
+>  	device_init_wakeup(&pdev->dev, wakeup_source);
+> -	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
 
+Surprisingly this part breaks wakeup on sc7x80, with the above removal
+of the device_may_wakeup() checks it is not clear to me why wakeup needs
+to be enabled for the core.
