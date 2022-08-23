@@ -2,67 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C235759D2FC
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 10:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC66159D2F7
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 10:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240756AbiHWH7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 03:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S241295AbiHWIDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 04:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241482AbiHWH7h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 03:59:37 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B27465565;
-        Tue, 23 Aug 2022 00:59:36 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id f21so13323709pjt.2;
-        Tue, 23 Aug 2022 00:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=/oDuZqe0b2KjmBgPCKjFHhbxfD08Jpj3NvKcdX1qC3E=;
-        b=qx1Rog2HTMt6AiZwL1P9PDU8yPgw+s8if4IvRERQVJuYnp2Fwc/A4AEphZu1b9ZzGr
-         b5wT6javCf88QT7XX9YOa1F9mYdIE3Zo7n0PdVeF3PERcAJjv4uJPCrkIHPHH5xvtDR0
-         oWwotEdU7vtBeEfYPOyBM5ZcQYlYydcayb764nYsTvPgnghVHopTBoxmp7G4Lg5h/hEv
-         ZfYG5533pFUR9fiCLCjmN6tiq5FaMLbedjnsp4+YORNZyjg/uHLtoCXECN81UiUbbbHO
-         cZEazgZjgWVgRC+knfpnQAv/ukWKvQQuZOyFnhvChzfDMQd8UZU3MbpTj9V+CujWhsR+
-         30xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=/oDuZqe0b2KjmBgPCKjFHhbxfD08Jpj3NvKcdX1qC3E=;
-        b=bC9YWdxEgJpYqnayBzGVF2ngCH9fjlRw6SDSYUh4Qew/5Hq+vwtGI1623FfgNP+Hkk
-         x2njQjOw+1+flGT3z/4t+9afEg3pkBQ584DQhR/aKMnBHNoHtkRxcgz8adX5pFjZHWr9
-         6xtCs61Bn8RNpsfy1J5eAFSbwwcrKCjPY2lJXkLGEnozIt+xfnKv6Jv8wjhqExOPaNff
-         ip9P4+T8pl868WMc54WRBZz6LhJZmOVK2w/SJmQ772fWGp2BnodFYjOELPf5BJjmvPIn
-         iUqMYgOmshaeuaaAnRm1v4n5bCL3krnAZ8F1FtLdC+Rz+FPBHMh+QVnr8t14KHcf0LDD
-         7A2A==
-X-Gm-Message-State: ACgBeo2RpCddWLGETksT+Hz3cblYKxPzVDseD2BvslttQuAwfPxv/Iq2
-        /HrLIIUiqFMlMa59zm/gp/8=
-X-Google-Smtp-Source: AA6agR6+ysAJggz1uJGzttDYSF7Y4LPQ8Q/plePz05mwNcxsIhEpO2FwWtPhN5+UxpgsruY+fpuurQ==
-X-Received: by 2002:a17:90b:1b11:b0:1fb:65ea:59a2 with SMTP id nu17-20020a17090b1b1100b001fb65ea59a2mr1374915pjb.79.1661241575585;
-        Tue, 23 Aug 2022 00:59:35 -0700 (PDT)
-Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
-        by smtp.gmail.com with ESMTPSA id u18-20020a170902e81200b0016edd557412sm5792448plg.201.2022.08.23.00.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 00:59:35 -0700 (PDT)
-From:   Szuying Chen <chensiying21@gmail.com>
-To:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
-        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
-        Richard_Hsu@asmedia.com.tw
-Subject: [PATCH 1/2] thunderbolt: thunderbolt: Add vendor's specific operations of NVM
-Date:   Tue, 23 Aug 2022 15:59:21 +0800
-Message-Id: <20220823075921.18366-1-chensiying21@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S241622AbiHWIDY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 04:03:24 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA0066116
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 01:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661241787; x=1692777787;
+  h=message-id:date:mime-version:to:references:from:subject:
+   in-reply-to:content-transfer-encoding;
+  bh=0IxY+YlLL3VDowsiUttNcqHUeo1TzNO+p0FWU6TFxbk=;
+  b=Mr2zGDeQvcfUB3Z2/cJgufqIkf3BeYmQCiRWtVXogMLsz1NKHMP+l5Cj
+   jXsU/L+PVx2tGVfUssjg+rSQ2q5tLbJ8j0o4SaJSQz7BZ1M8KaRoEgKDj
+   t6VgVvCmxuDPmIlEk06rZt7WqOafIEZcOuew99/3jKzMC6hbaaNesy5n0
+   yIoXDCwdRoVPZnNhl7OLokU/veQALsVBX3KaavvW3IX7c+K5Qc/tGF6Dh
+   97ULtr7aQPMyFnkHFMnBTOXwOcInHfApOpHYuWQrwN9TKYBydwr3tU2QR
+   XoEz/QvmlOjv8ACaIbGEzYqdOVra+4VJ8KyoJ6gGhB0MIlcpCp+Yf0Ggl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="319662954"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="319662954"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 01:03:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="677527671"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2022 01:03:06 -0700
+Message-ID: <0e13b14f-be11-3f00-28b6-fa334667ee35@linux.intel.com>
+Date:   Tue, 23 Aug 2022 11:04:23 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <587e5aa0-63d2-3b0b-4cc5-8c0240a9e8df@redhat.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: 6.0-rc1 new XHCI cacheline tracking EEXIST WARN/oops
+In-Reply-To: <587e5aa0-63d2-3b0b-4cc5-8c0240a9e8df@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,381 +63,150 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-
-The patch add tb_switch_nvm_alloc() contain an array that has functions
-pointers to vendor_ops that vendor to define.
-And moved vendor:intel part of the code to make all the vendors
-(includes Intel) support it in nvm.c.
-
-Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
----
- drivers/thunderbolt/nvm.c    | 162 +++++++++++++++++++++++++++++++++++
- drivers/thunderbolt/switch.c |  97 ++++-----------------
- drivers/thunderbolt/tb.h     |  17 +++-
- 3 files changed, 195 insertions(+), 81 deletions(-)
-
-diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-index b3f310389378..5c7c2a284497 100644
---- a/drivers/thunderbolt/nvm.c
-+++ b/drivers/thunderbolt/nvm.c
-@@ -12,8 +12,170 @@
-
- #include "tb.h"
-
-+/* Switch NVM support */
-+#define NVM_CSS		0x10
-+
- static DEFINE_IDA(nvm_ida);
-
-+static inline int nvm_read(struct tb_switch *sw, unsigned int address,
-+			   void *buf, size_t size)
-+{
-+	if (tb_switch_is_usb4(sw))
-+		return usb4_switch_nvm_read(sw, address, buf, size);
-+	return dma_port_flash_read(sw->dma_port, address, buf, size);
-+}
-+
-+static int intel_nvm_version(struct tb_switch *sw)
-+{
-+	struct tb_nvm *nvm = sw->nvm;
-+	u32 val;
-+	int ret;
-+
-+	/*
-+	 * If the switch is in safe-mode the only accessible portion of
-+	 * the NVM is the non-active one where userspace is expected to
-+	 * write new functional NVM.
-+	 */
-+	if (!sw->safe_mode) {
-+		u32 nvm_size, hdr_size;
-+
-+		ret = nvm_read(sw, NVM_FLASH_SIZE, &val, sizeof(val));
-+		if (ret)
-+			return ret;
-+
-+		hdr_size = sw->generation < 3 ? SZ_8K : SZ_16K;
-+		nvm_size = (SZ_1M << (val & 7)) / 8;
-+		nvm_size = (nvm_size - hdr_size) / 2;
-+
-+		ret = nvm_read(sw, NVM_VERSION, &val, sizeof(val));
-+		if (ret)
-+			return ret;
-+
-+		nvm->major = val >> 16;
-+		nvm->minor = val >> 8;
-+		nvm->nvm_size = nvm_size;
-+	}
-+	return 0;
-+}
-+
-+static int intel_nvm_validate(struct tb_switch *sw)
-+{
-+	unsigned int image_size, hdr_size;
-+	const u8 *buf = sw->nvm->buf;
-+	u16 ds_size;
-+	int ret;
-+
-+	image_size = sw->nvm->buf_data_size;
-+	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
-+		return -EINVAL;
-+
-+	/*
-+	 * FARB pointer must point inside the image and must at least
-+	 * contain parts of the digital section we will be reading here.
-+	 */
-+	hdr_size = (*(u32 *)buf) & 0xffffff;
-+	if (hdr_size + NVM_DEVID + 2 >= image_size)
-+		return -EINVAL;
-+
-+	/* Digital section start should be aligned to 4k page */
-+	if (!IS_ALIGNED(hdr_size, SZ_4K))
-+		return -EINVAL;
-+
-+	/*
-+	 * Read digital section size and check that it also fits inside
-+	 * the image.
-+	 */
-+	ds_size = *(u16 *)(buf + hdr_size);
-+	if (ds_size >= image_size)
-+		return -EINVAL;
-+
-+	if (!sw->safe_mode) {
-+		u16 device_id;
-+
-+		/*
-+		 * Make sure the device ID in the image matches the one
-+		 * we read from the switch config space.
-+		 */
-+		device_id = *(u16 *)(buf + hdr_size + NVM_DEVID);
-+		if (device_id != sw->config.device_id)
-+			return -EINVAL;
-+
-+		if (sw->generation < 3) {
-+			/* Write CSS headers first */
-+			ret = dma_port_flash_write(sw->dma_port,
-+				DMA_PORT_CSS_ADDRESS, buf + NVM_CSS,
-+				DMA_PORT_CSS_MAX_SIZE);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		/* Skip headers in the image */
-+		buf += hdr_size;
-+		image_size -= hdr_size;
-+	}
-+	return image_size;
-+}
-+
-+struct tb_nvm_vendor_ops intel_switch_nvm_ops = {
-+	.version = intel_nvm_version,
-+	.validate = intel_nvm_validate,
-+};
-+
-+struct switch_nvm_vendor {
-+	u16 vendor;
-+	const struct tb_nvm_vendor_ops *vops;
-+};
-+
-+static const struct switch_nvm_vendor switch_nvm_vendors[] = {
-+	{ 0x8086, &intel_switch_nvm_ops },
-+	{ 0x8087, &intel_switch_nvm_ops },
-+};
-+
-+/**
-+ * tb_switch_nvm_alloc() - alloc nvm and set nvm->vops to point
-+ * the vendor specific operations.
-+ * @sw: thunderbolt switch
-+ */
-+struct tb_nvm *tb_switch_nvm_alloc(struct tb_switch *sw)
-+{
-+	const struct tb_nvm_vendor_ops *vops = NULL;
-+	struct tb_nvm *nvm;
-+	int i;
-+	int ret;
-+
-+	/*
-+	 * If the vendor matches on the array then set nvm->vops to
-+	 * point the vendor specific operations.
-+	 */
-+	for (i = 0; i < ARRAY_SIZE(switch_nvm_vendors); i++) {
-+		const struct switch_nvm_vendor *v = &switch_nvm_vendors[i];
-+
-+		if (v->vendor == sw->config.vendor_id) {
-+			vops = v->vops;
-+			break;
-+		}
-+	}
-+
-+	if (!vops)
-+		return ERR_PTR(-EOPNOTSUPP);
-+
-+	nvm = tb_nvm_alloc(&sw->dev);
-+	if (IS_ERR(nvm))
-+		return nvm;
-+
-+	nvm->vops = vops;
-+	sw->nvm = nvm;
-+	ret = vops->version(sw);
-+	if (ret)
-+		goto err_nvm;
-+
-+	return nvm;
-+
-+err_nvm:
-+	tb_nvm_free(nvm);
-+	return ERR_PTR(ret);
-+}
-+
- /**
-  * tb_nvm_alloc() - Allocate new NVM structure
-  * @dev: Device owning the NVM
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 244f8cd38b25..d257219cb66e 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -102,10 +102,10 @@ static void nvm_clear_auth_status(const struct tb_switch *sw)
-
- static int nvm_validate_and_write(struct tb_switch *sw)
- {
--	unsigned int image_size, hdr_size;
-+	unsigned int image_size;
- 	const u8 *buf = sw->nvm->buf;
--	u16 ds_size;
- 	int ret;
-+	const struct tb_nvm_vendor_ops *vops = sw->nvm->vops;
-
- 	if (!buf)
- 		return -EINVAL;
-@@ -114,49 +114,12 @@ static int nvm_validate_and_write(struct tb_switch *sw)
- 	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
- 		return -EINVAL;
-
--	/*
--	 * FARB pointer must point inside the image and must at least
--	 * contain parts of the digital section we will be reading here.
--	 */
--	hdr_size = (*(u32 *)buf) & 0xffffff;
--	if (hdr_size + NVM_DEVID + 2 >= image_size)
--		return -EINVAL;
--
--	/* Digital section start should be aligned to 4k page */
--	if (!IS_ALIGNED(hdr_size, SZ_4K))
--		return -EINVAL;
--
--	/*
--	 * Read digital section size and check that it also fits inside
--	 * the image.
--	 */
--	ds_size = *(u16 *)(buf + hdr_size);
--	if (ds_size >= image_size)
--		return -EINVAL;
--
--	if (!sw->safe_mode) {
--		u16 device_id;
--
--		/*
--		 * Make sure the device ID in the image matches the one
--		 * we read from the switch config space.
--		 */
--		device_id = *(u16 *)(buf + hdr_size + NVM_DEVID);
--		if (device_id != sw->config.device_id)
--			return -EINVAL;
--
--		if (sw->generation < 3) {
--			/* Write CSS headers first */
--			ret = dma_port_flash_write(sw->dma_port,
--				DMA_PORT_CSS_ADDRESS, buf + NVM_CSS,
--				DMA_PORT_CSS_MAX_SIZE);
--			if (ret)
--				return ret;
--		}
--
--		/* Skip headers in the image */
--		buf += hdr_size;
--		image_size -= hdr_size;
-+	/* Vendors to validate before write to router NVM */
-+	if (vops->validate) {
-+		ret = vops->validate(sw);
-+		if (ret < 0)
-+			return ret;
-+		image_size = ret;
- 	}
-
- 	if (tb_switch_is_usb4(sw))
-@@ -384,28 +347,21 @@ static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
- static int tb_switch_nvm_add(struct tb_switch *sw)
- {
- 	struct tb_nvm *nvm;
--	u32 val;
- 	int ret;
-
- 	if (!nvm_readable(sw))
- 		return 0;
-
--	/*
--	 * The NVM format of non-Intel hardware is not known so
--	 * currently restrict NVM upgrade for Intel hardware. We may
--	 * relax this in the future when we learn other NVM formats.
--	 */
--	if (sw->config.vendor_id != PCI_VENDOR_ID_INTEL &&
--	    sw->config.vendor_id != 0x8087) {
--		dev_info(&sw->dev,
--			 "NVM format of vendor %#x is not known, disabling NVM upgrade\n",
--			 sw->config.vendor_id);
--		return 0;
--	}
--
--	nvm = tb_nvm_alloc(&sw->dev);
--	if (IS_ERR(nvm))
-+	nvm = tb_switch_nvm_alloc(sw);
-+	if (IS_ERR(nvm)) {
-+		if (PTR_ERR(nvm) == -EOPNOTSUPP) {
-+			dev_info(&sw->dev,
-+				"NVM format of vendor %#x is not known, disabling NVM upgrade\n",
-+				sw->config.vendor_id);
-+			return 0;
-+		}
- 		return PTR_ERR(nvm);
-+	}
-
- 	/*
- 	 * If the switch is in safe-mode the only accessible portion of
-@@ -413,24 +369,7 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
- 	 * write new functional NVM.
- 	 */
- 	if (!sw->safe_mode) {
--		u32 nvm_size, hdr_size;
--
--		ret = nvm_read(sw, NVM_FLASH_SIZE, &val, sizeof(val));
--		if (ret)
--			goto err_nvm;
--
--		hdr_size = sw->generation < 3 ? SZ_8K : SZ_16K;
--		nvm_size = (SZ_1M << (val & 7)) / 8;
--		nvm_size = (nvm_size - hdr_size) / 2;
--
--		ret = nvm_read(sw, NVM_VERSION, &val, sizeof(val));
--		if (ret)
--			goto err_nvm;
--
--		nvm->major = val >> 16;
--		nvm->minor = val >> 8;
--
--		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
-+		ret = tb_nvm_add_active(nvm, nvm->nvm_size, tb_switch_nvm_read);
- 		if (ret)
- 			goto err_nvm;
- 	}
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 5db76de40cc1..73ae2e093a92 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -48,8 +48,8 @@
-  */
- struct tb_nvm {
- 	struct device *dev;
--	u8 major;
--	u8 minor;
-+	u32 major;
-+	u32 minor;
- 	int id;
- 	struct nvmem_device *active;
- 	struct nvmem_device *non_active;
-@@ -57,6 +57,8 @@ struct tb_nvm {
- 	size_t buf_data_size;
- 	bool authenticating;
- 	bool flushed;
-+	u32 nvm_size;
-+	const struct tb_nvm_vendor_ops *vops;
- };
-
- enum tb_nvm_write_ops {
-@@ -65,6 +67,16 @@ enum tb_nvm_write_ops {
- 	AUTHENTICATE_ONLY = 3,
- };
-
-+/**
-+ * struct tb_nvm_vendor_ops - vendor NVM specific operations
-+ * @version: Used NVM read get Firmware version.
-+ * @validate: Vendors have their validate method before NVM write.
-+ */
-+struct tb_nvm_vendor_ops {
-+	int (*version)(struct tb_switch *sw);
-+	int (*validate)(struct tb_switch *sw);
-+};
-+
- #define TB_SWITCH_KEY_SIZE		32
- #define TB_SWITCH_MAX_DEPTH		6
- #define USB4_SWITCH_MAX_DEPTH		5
-@@ -736,6 +748,7 @@ static inline void tb_domain_put(struct tb *tb)
- 	put_device(&tb->dev);
- }
-
-+struct tb_nvm *tb_switch_nvm_alloc(struct tb_switch *sw);
- struct tb_nvm *tb_nvm_alloc(struct device *dev);
- int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
- int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
---
-2.34.1
-
+T24gMTkuOC4yMDIyIDE1LjA0LCBIYW5zIGRlIEdvZWRlIHdyb3RlOg0KPiBIaSBBbGwsDQo+
+IA0KPiBXaGlsZSBkb2dmb29kaW5nIDYuMC1yYzEgb24gbXkgbWFpbiB3b3Jrc3RhdGlvbiBJ
+IG5vdGljZWQgdGhlIGZvbGxvd2luZw0KPiBuZXcgV0FSTi9vb3BzOg0KPiANCj4gQXVnIDE5
+IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IC0tLS0tLS0tLS0tLVsgY3V0IGhlcmUgXS0tLS0t
+LS0tLS0tLQ0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogRE1BLUFQSTogeGhj
+aV9oY2QgMDAwMDozMDowMC4zOiBjYWNoZWxpbmUgdHJhY2tpbmcgRUVYSVNULCBvdmVybGFw
+cGluZyBtYXBwaW5ncyBhcmVuJ3Qgc3VwcG9ydGVkDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFs
+ZW0ga2VybmVsOiBXQVJOSU5HOiBDUFU6IDE0IFBJRDogODMyMSBhdCBrZXJuZWwvZG1hL2Rl
+YnVnLmM6NTcwIGFkZF9kbWFfZW50cnkrMHgxZWQvMHgyNzANCj4gQXVnIDE5IDEyOjIyOjM5
+IHNoYWxlbSBrZXJuZWw6IE1vZHVsZXMgbGlua2VkIGluOiByZmNvbW0gc25kX3NlcV9kdW1t
+eSBzbmRfaHJ0aW1lciBxcnRyIGJuZXAgdmJveG5ldGFkcChPRSkgdmJveG5ldGZsdChPRSkg
+dmJveGRydihPRSkgYmluZm10X21pc2MgdmZhdCBmYXQgaW50ZWxfcmFwbF9tc3IgaW50ZWxf
+cmFwbF9jb21tb24gaXdsbXZtIHNuZF9oZGFfY29kZWNfcmVhbHRlayBzbmRfaGRhX2NvZGVj
+X2dlbmVyaWMgZWRhY19tY2VfYW1kIG1hYzgwMjExIGxlZHRyaWdfYXVkaW8gc25kX2hkYV9j
+b2RlY19oZG1pIGt2bV9hbWQgc25kX2hkYV9pbnRlbCBzbmRfaW50ZWxfZHNwY2ZnIHNuZF9p
+bnRlbF9zZHdfYWNwaSBsaWJhcmM0IGt2bSBzbmRfaGRhX2NvZGVjIGlycWJ5cGFzcyBpd2x3
+aWZpIHNuZF9oZGFfY29yZSBzbmRfdXNiX2F1ZGlvIGJ0dXNiIHJhcGwgYnRydGwgc25kX3Vz
+Ym1pZGlfbGliIGl3bG1laSBidGJjbSBzbmRfaHdkZXAgYnRpbnRlbCBzbmRfcmF3bWlkaSBz
+bmRfc2VxIG1jIGJ0bXRrIHNuZF9zZXFfZGV2aWNlIGNmZzgwMjExIHdtaV9ibW9mIGJsdWV0
+b290aCBzbmRfcGNtIGpveWRldiBzbmRfdGltZXIgcmZraWxsIG1laSByODE2OSBzbmQgc291
+bmRjb3JlIGkyY19waWl4NCBrMTB0ZW1wIGdwaW9fYW1kcHQgZ3Bpb19nZW5lcmljIHpyYW0g
+ZG1fY3J5cHQgYW1kZ3B1IGRybV90dG1faGVscGVyIHR0bSBpb21tdV92MiBjcmN0MTBkaWZf
+cGNsbXVsIGdwdV9zY2hlZCBjcmMzMl9wY2xtdWwgY3JjMzJjX2ludGVsIGRybV9idWRkeSBo
+aWRfbGdfZzE1IGRybV9kaXNwbGF5X2hlbHBlciBudm1lIGdoYXNoX2NsbXVsbmlfaW50ZWwg
+bnZtZV9jb3JlIGNjcCBjZWMgc3A1MTAwX3RjbyB3bWkgdmlkZW8gaGlkX2xvZ2l0ZWNoX2hp
+ZHBwIHVhcyB1c2Jfc3RvcmFnZSBoaWRfbG9naXRlY2hfZGogaXA2X3RhYmxlcyBpcF90YWJs
+ZXMgZnVzZSBpMmNfZGV2DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBVbmxv
+YWRlZCB0YWludGVkIG1vZHVsZXM6IGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6
+MSBhY3BpX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6MSBw
+Y2NfY3B1ZnJlcSgpOjEgcGNjX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9j
+cHVmcmVxKCk6MSBhY3BpX2NwdWZyZXEoKToxIGFtZDY0X2VkYWMoKToxIGFjcGlfY3B1ZnJl
+cSgpOjEgYW1kNjRfZWRhYygpOjEgYWNwaV9jcHVmcmVxKCk6MSBhbWQ2NF9lZGFjKCk6MSBh
+Y3BpX2NwdWZyZXEoKToxIGFtZDY0X2VkYWMoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYW1kNjRf
+ZWRhYygpOjEgYW1kNjRfZWRhYygpOjEgYWNwaV9jcHVmcmVxKCk6MSBmamVzKCk6MSBhbWQ2
+NF9lZGFjKCk6MSBhY3BpX2NwdWZyZXEoKToxIGZqZXMoKToxIGFtZDY0X2VkYWMoKToxIGFj
+cGlfY3B1ZnJlcSgpOjEgZmplcygpOjEgcGNjX2NwdWZyZXEoKToxIGFtZDY0X2VkYWMoKTox
+IGFjcGlfY3B1ZnJlcSgpOjEgZmplcygpOjEgYW1kNjRfZWRhYygpOjEgYWNwaV9jcHVmcmVx
+KCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9jcHVmcmVxKCk6MSBhbWQ2NF9l
+ZGFjKCk6MSBwY2NfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6MSBmamVzKCk6MSBhbWQ2
+NF9lZGFjKCk6MSBwY2NfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6MSBmamVzKCk6MSBh
+bWQ2NF9lZGFjKCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYW1kNjRfZWRhYygpOjEg
+YWNwaV9jcHVmcmVxKCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYW1kNjRfZWRhYygp
+OjEgYWNwaV9jcHVmcmVxKCk6MSBwY2NfY3B1ZnJlcSgpOjEgYW1kNjRfZWRhYygpOjEgZmpl
+cygpOjEgcGNjX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6
+MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9jcHVmcmVxKCk6MSBwY2NfY3B1ZnJl
+cSgpOjENCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBmamVzKCk6MSBhY3Bp
+X2NwdWZyZXEoKToxIHBjY19jcHVmcmVxKCk6MSBhY3BpX2NwdWZyZXEoKToxIGZqZXMoKTox
+IHBjY19jcHVmcmVxKCk6MSBhY3BpX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgZmpl
+cygpOjEgcGNjX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9j
+cHVmcmVxKCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9jcHVmcmVxKCk6MQ0K
+PiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogQ1BVOiAxNCBQSUQ6IDgzMjEgQ29t
+bToga3dvcmtlci91NjQ6NTcgVGFpbnRlZDogRyAgICAgICAgICAgT0UgICAgIC0tLS0tLS0g
+IC0tLSAgNi4wLjAtMC5yYzEuMjAyMjA4MTdnaXQzY2M0MGE0NDNhMDQuMTQuZmMzOC54ODZf
+NjQgIzENCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IEhhcmR3YXJlIG5hbWU6
+IE1pY3JvLVN0YXIgSW50ZXJuYXRpb25hbCBDby4sIEx0ZC4gTVMtN0M5NS9CNTUwTSBQUk8t
+VkRIIFdJRkkgKE1TLTdDOTUpLCBCSU9TIDIuOTAgMTIvMjMvMjAyMQ0KPiBBdWcgMTkgMTI6
+MjI6Mzkgc2hhbGVtIGtlcm5lbDogV29ya3F1ZXVlOiBldmVudHNfdW5ib3VuZCBhc3luY19y
+dW5fZW50cnlfZm4NCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IFJJUDogMDAx
+MDphZGRfZG1hX2VudHJ5KzB4MWVkLzB4MjcwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0g
+a2VybmVsOiBDb2RlOiBmZiAwZiA4NCA5NyAwMCAwMCAwMCA0OCA4YiA1ZiA1MCA0OCA4NSBk
+YiA3NSAwMyA0OCA4YiAxZiBlOCAxNSA5NiA4NSAwMCA0OCA4OSBjNiA0OCA4OSBkYSA0OCBj
+NyBjNyAzMCBjOSA4NiA4NSBlOCA3MyA5OSBjZSAwMCA8MGY+IDBiIDQ4IDg1IGVkIDBmIDg1
+IGE5IDUwIGNmIDAwIDhiIDA1IGYyIDA5IDIzIDAyIDg1IGMwIDBmIDg1IGNhDQo+IEF1ZyAx
+OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBSU1A6IDAwMTg6ZmZmZmE3OGRjMmMwYmEyMCBF
+RkxBR1M6IDAwMDEwMjgyDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBSQVg6
+IDAwMDAwMDAwMDAwMDAwNjAgUkJYOiBmZmZmOGFjMTg2YTYzNmMwIFJDWDogMDAwMDAwMDAw
+MDAwMDAwMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogUkRYOiAwMDAwMDAw
+MDAwMDAwMDAxIFJTSTogZmZmZmZmZmY4NThkMDdhNCBSREk6IDAwMDAwMDAwZmZmZmZmZmYN
+Cj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IFJCUDogZmZmZjhhYzE4NGYxN2E4
+MCBSMDg6IDAwMDAwMDAwMDAwMDAwMDEgUjA5OiAwMDAwMDAwMDAwMDAwMDAxDQo+IEF1ZyAx
+OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBSMTA6IDAwMDAwMDAwMDAwMDAwMDEgUjExOiAw
+MDAwMDAwMDAwMDAwMDAwIFIxMjogMDAwMDAwMDAwMDAwMDAwMA0KPiBBdWcgMTkgMTI6MjI6
+Mzkgc2hhbGVtIGtlcm5lbDogUjEzOiAwMDAwMDAwMDAwMDAwMDAxIFIxNDogMDAwMDAwMDAw
+MDAwMDIwNiBSMTU6IDAwMDAwMDAwMDQyZjY1YmQNCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxl
+bSBrZXJuZWw6IEZTOiAgMDAwMDAwMDAwMDAwMDAwMCgwMDAwKSBHUzpmZmZmOGFjNDA5YTAw
+MDAwKDAwMDApIGtubEdTOjAwMDAwMDAwMDAwMDAwMDANCj4gQXVnIDE5IDEyOjIyOjM5IHNo
+YWxlbSBrZXJuZWw6IENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAw
+ODAwNTAwMzMNCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IENSMjogMDAwMDAw
+MDAwMDAwMDAwMCBDUjM6IDAwMDAwMDAxNGMwMjgwMDAgQ1I0OiAwMDAwMDAwMDAwNzUwZWUw
+DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBQS1JVOiA1NTU1NTU1NA0KPiBB
+dWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogQ2FsbCBUcmFjZToNCj4gQXVnIDE5IDEy
+OjIyOjM5IHNoYWxlbSBrZXJuZWw6ICA8VEFTSz4NCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxl
+bSBrZXJuZWw6ICBkbWFfbWFwX3BhZ2VfYXR0cnMrMHg4Mi8weDJkMA0KPiBBdWcgMTkgMTI6
+MjI6Mzkgc2hhbGVtIGtlcm5lbDogID8gX3Jhd19zcGluX3VubG9ja19pcnFyZXN0b3JlKzB4
+MzAvMHg2MA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHVzYl9oY2RfbWFw
+X3VyYl9mb3JfZG1hKzB4NDIzLzB4NTAwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2Vy
+bmVsOiAgdXNiX2hjZF9zdWJtaXRfdXJiKzB4OWIvMHhiODANCj4gQXVnIDE5IDEyOjIyOjM5
+IHNoYWxlbSBrZXJuZWw6ICA/IGxvY2tkZXBfaW5pdF9tYXBfdHlwZSsweDYyLzB4MjYwDQo+
+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgdXNiX3N0YXJ0X3dhaXRfdXJiKzB4
+NTUvMHgxNDANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICB1c2JfY29udHJv
+bF9tc2crMHhjOS8weDEyMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIGh1
+Yl9leHRfcG9ydF9zdGF0dXMrMHg4OS8weDExMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVt
+IGtlcm5lbDogIGh1Yl9hY3RpdmF0ZSsweDExYy8weDhiMA0KPiBBdWcgMTkgMTI6MjI6Mzkg
+c2hhbGVtIGtlcm5lbDogID8gdXNiX2Rldl90aGF3KzB4MTAvMHgxMA0KPiBBdWcgMTkgMTI6
+MjI6Mzkgc2hhbGVtIGtlcm5lbDogIGh1Yl9yZXN1bWUrMHgyMy8weGUwDQo+IEF1ZyAxOSAx
+MjoyMjozOSBzaGFsZW0ga2VybmVsOiAgPyB1c2JfZGV2X3RoYXcrMHgxMC8weDEwDQo+IEF1
+ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgdXNiX3Jlc3VtZV9pbnRlcmZhY2UuY29u
+c3Rwcm9wLjAuaXNyYS4wKzB4ODkvMHhkMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtl
+cm5lbDogIHVzYl9yZXN1bWVfYm90aCsweDEwOS8weDE4MA0KPiBBdWcgMTkgMTI6MjI6Mzkg
+c2hhbGVtIGtlcm5lbDogID8gdXNiX2Rldl90aGF3KzB4MTAvMHgxMA0KPiBBdWcgMTkgMTI6
+MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHVzYl9yZXN1bWUrMHgxNS8weDYwDQo+IEF1ZyAxOSAx
+MjoyMjozOSBzaGFsZW0ga2VybmVsOiAgZHBtX3J1bl9jYWxsYmFjaysweDUzLzB4YzANCj4g
+QXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBkZXZpY2VfcmVzdW1lKzB4YTgvMHgy
+MDANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBhc3luY19yZXN1bWUrMHgx
+OS8weDMwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgYXN5bmNfcnVuX2Vu
+dHJ5X2ZuKzB4MzAvMHgxMzANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBw
+cm9jZXNzX29uZV93b3JrKzB4MmEwLzB4NjAwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0g
+a2VybmVsOiAgd29ya2VyX3RocmVhZCsweDRmLzB4M2EwDQo+IEF1ZyAxOSAxMjoyMjozOSBz
+aGFsZW0ga2VybmVsOiAgPyBwcm9jZXNzX29uZV93b3JrKzB4NjAwLzB4NjAwDQo+IEF1ZyAx
+OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAga3RocmVhZCsweGY1LzB4MTIwDQo+IEF1ZyAx
+OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgPyBrdGhyZWFkX2NvbXBsZXRlX2FuZF9leGl0
+KzB4MjAvMHgyMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHJldF9mcm9t
+X2ZvcmsrMHgyMi8weDMwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgPC9U
+QVNLPg0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogaXJxIGV2ZW50IHN0YW1w
+OiAyMTE1DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBoYXJkaXJxcyBsYXN0
+ICBlbmFibGVkIGF0ICgyMTIzKTogWzxmZmZmZmZmZjg0MThmYjUyPl0gdnByaW50a19lbWl0
+KzB4MzQyLzB4MzUwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBoYXJkaXJx
+cyBsYXN0IGRpc2FibGVkIGF0ICgyMTMwKTogWzxmZmZmZmZmZjg0MThmYjAxPl0gdnByaW50
+a19lbWl0KzB4MmYxLzB4MzUwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBz
+b2Z0aXJxcyBsYXN0ICBlbmFibGVkIGF0ICgwKTogWzxmZmZmZmZmZjg0MGY1MDc5Pl0gY29w
+eV9wcm9jZXNzKzB4YTQ5LzB4MWU1MA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5l
+bDogc29mdGlycXMgbGFzdCBkaXNhYmxlZCBhdCAoMCk6IFs8MDAwMDAwMDAwMDAwMDAwMD5d
+IDB4MA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogLS0tWyBlbmQgdHJhY2Ug
+MDAwMDAwMDAwMDAwMDAwMCBdLS0tDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVs
+OiBETUEtQVBJOiBNYXBwZWQgYXQ6DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVs
+OiAgZGVidWdfZG1hX21hcF9wYWdlKzB4NjYvMHgxMDANCj4gQXVnIDE5IDEyOjIyOjM5IHNo
+YWxlbSBrZXJuZWw6ICBkbWFfbWFwX3BhZ2VfYXR0cnMrMHg4Mi8weDJkMA0KPiBBdWcgMTkg
+MTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHVzYl9oY2RfbWFwX3VyYl9mb3JfZG1hKzB4NDIz
+LzB4NTAwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgdXNiX2hjZF9zdWJt
+aXRfdXJiKzB4OWIvMHhiODANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICB1
+c2Jfc3RhcnRfd2FpdF91cmIrMHg1NS8weDE0MA0KPiANCg0KSSdtIGd1ZXNzaW5nIHRoYXQg
+dGhlIGRhdGEgYnVmZmVyIHdoZXJlIGh1YiBkcml2ZXIgc3RvcmVzIHBvcnQgc3RhdHVzIGRh
+dGENCndhcyBhbHJlYWR5IGRtYSBtYXBwZWQgd2hlbiBodWIgZHJpdmVyIHN1Ym1pdHRlZCBh
+IG5ldyBnZXQgcG9ydCBzdGF0dXMgVVJCLg0KdXNiIGNvcmUgdHJpZXMgdG8gbWFwIHRoZSBi
+dWZmZXIgYWdhaW4gYXQgdXJiIHN1Yml0LCB0cmlnZ2VyaW5nIHRoaXMuDQoNCkh1YiBkcml2
+ZXIgYWxsb2NhdGVzIG9uZSBkYXRhIGJ1ZmZlciBvbmNlLCBhbmQgdXNlcyBpdCB0byBzdG9y
+ZSBib3RoDQpodWIgc3RhdHVzIGRhdGEgYW5kIHBvcnQgc3RhdHVzIGRhdGEuICh1bmlvbiAm
+aHViLT5zdGF0dXMtPnBvcnQgYW5kICZodWItPnN0YXR1cy0+aHViKQ0KDQpTbyBwcm9iYWJs
+eSB0aGUgcHJldmlvdXMgVVJCIChnZXQgcG9ydCBzdGF0dXMsIG9yIGdldCBodWIgc3RhdHVz
+KSBuZXZlciBzdWNjZXNzZnVsbHkNCmNvbXBsZXRlZCwgb3IgZm9yIHNvbWUgcmVhc29uIGRp
+ZG4ndCB1bm1hcCBkbWEgYXQgY29tcGxldGlvbi4NCg0KTG9va3MgbGlrZSB0aGlzIGlzc3Vl
+IGlzIGhpdCBpbiByZXN1bWUsIHNvIG1heWJlIHNvbWV0aGluIHdlbnQgd3JvbmcgaW4gY29t
+cGxldGluZyB0aGUNCmh1YiBVUkIgaW4gc3VzcGVuZD8NCg0KV2FzIHRoaXMgZWFzeSB0byBy
+ZXByb2R1Y2U/IGFueSBleHRlcm5hbCBodWJzIGNvbm5lY3RlZD8NCg0KT25lIHRoaW5nIHRv
+IGNoZWNrIHdvdWxkIGJlIGlmIHVzYm1vbiBzaG93cyBhbiB1bmNvbXBsZXRlZCBodWIgVVJC
+IHdoZW4NCmEgbmV3IFVSQiBpcyBzdWJtaXR0ZWQsIHRyaWdnZXJpbmcgdGhpcy4NCg0KVGhh
+bmtzDQotTWF0aGlhcw0K
