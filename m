@@ -2,88 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C8E59E8AE
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 19:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066BA59E843
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 19:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343698AbiHWRLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 13:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S1343787AbiHWREe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 13:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344048AbiHWRKG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 13:10:06 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A54087693
-        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 07:02:18 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id CAF88100B54CE;
-        Tue, 23 Aug 2022 16:02:16 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id A36F636622; Tue, 23 Aug 2022 16:02:16 +0200 (CEST)
-Date:   Tue, 23 Aug 2022 16:02:16 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH 3/4] thunderbolt: Add helpers to check if CL states are
- enabled on port
-Message-ID: <20220823140216.GA28421@wunner.de>
-References: <20220823105352.56306-1-mika.westerberg@linux.intel.com>
- <20220823105352.56306-4-mika.westerberg@linux.intel.com>
+        with ESMTP id S1343879AbiHWRDk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 13:03:40 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9919B4B5
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 07:07:57 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 6EDD183010;
+        Tue, 23 Aug 2022 16:07:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1661263674;
+        bh=83qdoxjskF6G6BfAM0qAcnGp3aH0Uow3QytggceuTbM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F1HyMgEBc5UxOMBrLFoXafjXf1/O8IFDoMlqp7rlGBwU3RtgAUgrQr4dEksNCMJBK
+         vG6jCfJj+4+y2Ry/xizUDzDHnYwWbYJi2wVg8qQ1W41ggJvVFlkSmauEbceD0rhFV3
+         MEwPn5t2tdd0CN8WaGAAe0KGZDkMNxVe/13wjx2fcYuS0QFxhBFACp6m2v/kBWNPXJ
+         0KAOLNDDT/22uZGiTzVQItX5rvJCYsixmY01rgDQXltzf5IjhnmuxVKx0ooQEwGxMR
+         zkNHB3sX+ELMwmi5CHN/rIW0u1NgP6ydNk1m4e1CgKclxKhPihz1PCp0z19CIw3BqK
+         uW90oINhckOvg==
+Message-ID: <4e64477f-8479-d67d-522e-285a829323a1@denx.de>
+Date:   Tue, 23 Aug 2022 16:07:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823105352.56306-4-mika.westerberg@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 2/2] extcon: usbc-tusb320: Add USB TYPE-C support
+Content-Language: en-US
+To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+References: <20220730180500.152004-1-marex@denx.de>
+ <20220730180500.152004-2-marex@denx.de>
+ <20220823094934.so377vfpe4vipxuw@bang-olufsen.dk>
+ <d1df55df-3baf-4200-cee5-7dbc3311a4de@denx.de>
+ <20220823125719.bafu6k72jf5u7z7z@bang-olufsen.dk>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220823125719.bafu6k72jf5u7z7z@bang-olufsen.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 01:53:51PM +0300, Mika Westerberg wrote:
-> +/**
-> + * tb_port_is_clx_enabled() - Is given CL state enabled
-> + * @port: USB4 port to check
-> + * @clx: CL state to check
-> + *
-> + * Returns true if given CL state is enabled for @port.
-> + */
-> +bool tb_port_is_clx_enabled(struct tb_port *port, enum tb_clx clx)
-> +{
-> +	u32 phy, mask = LANE_ADP_CS_1_CL0S_ENABLE | LANE_ADP_CS_1_CL1_ENABLE;
-> +	int ret;
-> +
-> +	if (!tb_port_clx_supported(port, clx))
-> +		return false;
-> +
-> +	ret = tb_port_read(port, &phy, TB_CFG_PORT,
-> +			   port->cap_phy + LANE_ADP_CS_1, 1);
-> +	if (ret)
-> +		return false;
-> +
-> +	return (phy & mask) == mask;
-> +}
-> +
-[...]
-> +static inline bool tb_port_are_clx_enabled(struct tb_port *port)
-> +{
-> +	return tb_port_is_clx_enabled(port, TB_CL1) ||
-> +	       tb_port_is_clx_enabled(port, TB_CL2);
-> +}
+On 8/23/22 14:57, Alvin Šipraga wrote:
+> On Tue, Aug 23, 2022 at 12:39:28PM +0200, Marek Vasut wrote:
+>> On 8/23/22 11:49, Alvin Šipraga wrote:
+>>> Hi Marek,
+>>
+>> Hi,
+>>
+>>> On Sat, Jul 30, 2022 at 08:05:00PM +0200, Marek Vasut wrote:
+>>>> The TI TUSB320 seems like a better fit for USB TYPE-C subsystem,
+>>>> which can expose details collected by the TUSB320 in a far more
+>>>> precise way than extcon. Since there are existing users in the
+>>>> kernel and in DT which depend on the extcon interface, keep it
+>>>> for now.
+>>>>
+>>>> Add TYPE-C interface and expose the supported supply current,
+>>>> direction and connector polarity via the TYPE-C interface.
+>>>>
+>>>> Signed-off-by: Marek Vasut <marex@denx.de>
+>>>> ---
+>>>> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>>>> Cc: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>> To: linux-usb@vger.kernel.org
+>>>> ---
+>>>>    drivers/extcon/Kconfig               |   2 +-
+>>>>    drivers/extcon/extcon-usbc-tusb320.c | 159 +++++++++++++++++++++++++++
+>>>>    2 files changed, 160 insertions(+), 1 deletion(-)
+>>>
+>>> Happy to see I'm not the only one that observed this. I wonder if you
+>>> saw also my previous stab at this:
+>>>
+>>> https://lore.kernel.org/linux-usb/20220301132010.115258-1-alvin@pqrs.dk/
+>>
+>> I have not.
+>>
+>>> I had some issues with the dt-bindings which I could not reconcile, but
+>>> the basic problem was how to describe a typec accessory mode mux
+>>> connected to the TUSB320. Perhaps you have a better intuition for how
+>>> this should look?
+>>>
+>>> One thing that is missing from your implementation that we are using on
+>>> our end is the USB role switch. I set this from the typec driver via
+>>> usb_role_switch_set_role().
+>>
+>> I only use this chip to detect charger type (and cable polarity), the device
+>> where this is integrated is always peripheral and cannot charge other
+>> devices or become host.
+>>
+>> But I think those aforementioned requirements could be extended on top of
+>> this patch, can they not ? I recall I looked at least at the direction
+>> detection and that could be added easily. I have no way of testing any of
+>> that functionality, so I didn't add them as part of the patch.
+> 
+> Sure - if your patch gets merged then I'll just extend it. Fair enough
+> that you cannot test on your board.
+> 
+> To that end, you can add:
+> 
+> Reviewed-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-If you change enum tb_clx to use "power of two" values (0 1 2 4 8 ...)
-then you could just pass a bitmask to tb_port_is_clx_enabled()
-and thus need only a single invocation in tb_port_are_clx_enabled().
-Just a thought.
+Thanks.
 
-Thanks,
-
-Lukas
+If you plan to submit anything on top, I might be able to test at least 
+the charger detect and plug orientation still works ... but that's 
+probably something you can also test on your own, that's the easy part 
+of the USB-C.
