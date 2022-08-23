@@ -2,117 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330B259EB4F
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 20:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C545C59EC17
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 21:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbiHWSqg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 14:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S229530AbiHWTU6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 15:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbiHWSqW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 14:46:22 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942C4B2D9F;
-        Tue, 23 Aug 2022 10:09:57 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="292491145"
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="292491145"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:09:57 -0700
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="670121475"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:09:55 -0700
-From:   Rajat Khandelwal <rajat.khandelwal@intel.corp-partner.google.com>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     rajat.khandelwal@intel.com, shawn.c.lee@intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Enter safe mode only when pins need to be reconfigured
-Date:   Tue, 23 Aug 2022 22:39:49 +0530
-Message-Id: <20220823170949.2066916-1-rajat.khandelwal@intel.corp-partner.google.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229759AbiHWTUK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 15:20:10 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001CB13DE6
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 10:58:53 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w20so3278609edd.10
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 10:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc;
+        bh=T6cPiq5aaTmDRXkb9IvTR4+yR7CfcU7U1kI+dKIE7L8=;
+        b=Y3RomgNnHGHGivtLFQeqKi6DsKBKgv5X8PyknhAPVLF3R+vy+ORY9Ucmgq66pwtoZx
+         ms4eeS9+I5wbX3E/bBZz2sZoJjzhXjE4+Y7qULeYZ4QMjdgx9cX9Qkhwg3MFBALUY75g
+         NXn6K8iXrlDoa2ZG9VJcrteLebSIZcmQ4SJedXlMzLqh4Gr/24ekg3/bOT26+DwfeMWR
+         6mrq+n0U7u+euuSw2vbmrWXJ+em986fkNxzNdamDI5U4WvY/3e7euOj7OBt7vIkGxLkS
+         otqLK7Onj2ro9VadpRREX+q/qOLR2d3hoEw/X0mnenn9GcL43oaH3Y6fmwRZQMohntPs
+         p+cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc;
+        bh=T6cPiq5aaTmDRXkb9IvTR4+yR7CfcU7U1kI+dKIE7L8=;
+        b=spBF/8CFQj8+3cQYXvopkEKKGVNe1zwbmUba/FV7B9y2DC/YSLZGzTHcHjYmN+LpbE
+         hMFNktQ7TjVI/Au5vLG6S3XMN+BiJxWZ8gW8Zv3Nw6X8I4IBnBOO564SRPG6zxwpSw23
+         3psaE/DlUTDKs6z/gZMAr3EBXLq9ZAAJXKNOioKd44AV03GXsqQFlrMXp/Xb+q6Upz4Z
+         LRmO4ECjW49VRBS44fiEffFbTHHqTvVJE0Cb3L5siFrjkPwtE0aMvxnD+wIv4v19VsFQ
+         MaZDobsrg+iW8Efq5vO5rKEA72QQh9dt6lXMb3nybNA3JFEV+kZ5ibKTeKRri+YAOus4
+         dpnw==
+X-Gm-Message-State: ACgBeo1jjt4GKqrNQEWwuvXc7nP0fDokcVGA4b+xvFGkxVVHMppm4vod
+        pRO9gKr+oOvqeD+LORDuktQ=
+X-Google-Smtp-Source: AA6agR5Qla/Xjc0paAV7x2nnK5yePJejLYhbLPyjbfYdzsXV7ahAiPNqfCGdm3nE6WQqKk59dGmELw==
+X-Received: by 2002:a05:6402:2791:b0:447:3193:6b13 with SMTP id b17-20020a056402279100b0044731936b13mr2117513ede.335.1661277531412;
+        Tue, 23 Aug 2022 10:58:51 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:7758:1500:8528:d099:20f2:8fd6? (dynamic-2a01-0c22-7758-1500-8528-d099-20f2-8fd6.c22.pool.telefonica.de. [2a01:c22:7758:1500:8528:d099:20f2:8fd6])
+        by smtp.googlemail.com with ESMTPSA id x2-20020aa7d382000000b00446473adeacsm1760974edq.82.2022.08.23.10.58.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 10:58:50 -0700 (PDT)
+Message-ID: <dfcc6b40-2274-4e86-e73c-5c5e6aa3e046@gmail.com>
+Date:   Tue, 23 Aug 2022 19:58:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v2] usb: dwc2: fix wrong order of phy_power_on and phy_init
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Lee Shawn C <shawn.c.lee@intel.com>
+Since 1599069a62c6 ("phy: core: Warn when phy_power_on is called before
+phy_init") the driver complains. In my case (Amlogic SoC) the warning
+is: phy phy-fe03e000.phy.2: phy_power_on was called before phy_init
+So change the order of the two calls. The same change has to be done
+to the order of phy_exit() and phy_power_off().
 
-There is no point to enter safe mode during DP/TBT configuration
-if the DP/TBT was already configured in mux. This is because safe
-mode is only applicable when there is a need to reconfigure the
-pins in order to avoid damage within/to port partner.
-
-1. if HPD interrupt arrives and DP mode was already configured,
-safe mode is entered again which is not desired.
-2. in chrome systems, IOM/mux is already configured before OS
-comes up. Thus, when driver is probed, it blindly enters safe
-mode due to PD negotiations but only after gfx driver lowers
-dp_phy_ownership, will the IOM complete safe mode and send
-ack to PMC.
-Since, that never happens, we see IPC timeout.
-
-Hence, allow safe mode only when pin reconfiguration is not
-required, which makes sense.
-
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
-Signed-off-by: Lee Shawn C <shawn.c.lee@intel.com>
-
+Fixes: 09a75e857790 ("usb: dwc2: refactor common low-level hw code to platform.c")
+Cc: stable@vger.kernel.org
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/usb/typec/mux/intel_pmc_mux.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+v2:
+- switch the order of phy_power_off() and phy_exit() too
+---
+ drivers/usb/dwc2/platform.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index d238913e996a..4bf84466d1ff 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -432,6 +432,25 @@ static int pmc_usb_connect(struct pmc_usb_port *port, enum usb_role role)
- 	return pmc_usb_command(port, msg, sizeof(msg));
- }
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index c8ba87df7..91febf0e1 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -154,9 +154,9 @@ static int __dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg)
+ 	} else if (hsotg->plat && hsotg->plat->phy_init) {
+ 		ret = hsotg->plat->phy_init(pdev, hsotg->plat->phy_type);
+ 	} else {
+-		ret = phy_power_on(hsotg->phy);
++		ret = phy_init(hsotg->phy);
+ 		if (ret == 0)
+-			ret = phy_init(hsotg->phy);
++			ret = phy_power_on(hsotg->phy);
+ 	}
  
-+static bool
-+pmc_usb_mux_allow_to_enter_safe_mode(struct pmc_usb_port *port,
-+				      struct typec_mux_state *state)
-+{
-+	if ((IOM_PORT_ACTIVITY_IS(port->iom_status, DP) ||
-+	     IOM_PORT_ACTIVITY_IS(port->iom_status, DP_MFD)) &&
-+	     state->alt &&
-+	     state->alt->svid == USB_TYPEC_DP_SID)
-+		return false;
-+
-+	if ((IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) ||
-+	     IOM_PORT_ACTIVITY_IS(port->iom_status, ALT_MODE_TBT_USB)) &&
-+	     state->alt &&
-+	     state->alt->svid == USB_TYPEC_TBT_SID)
-+		return false;
-+
-+	return true;
-+}
-+
- static int
- pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
- {
-@@ -442,8 +461,13 @@ pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
- 	if (port->orientation == TYPEC_ORIENTATION_NONE || port->role == USB_ROLE_NONE)
- 		return 0;
- 
--	if (state->mode == TYPEC_STATE_SAFE)
-+	if (state->mode == TYPEC_STATE_SAFE) {
-+		if (!pmc_usb_mux_allow_to_enter_safe_mode(port, state))
-+			return 0;
-+
- 		return pmc_usb_mux_safe_state(port);
-+	}
-+
- 	if (state->mode == TYPEC_STATE_USB)
- 		return pmc_usb_connect(port, port->role);
- 
+ 	return ret;
+@@ -188,9 +188,9 @@ static int __dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg)
+ 	} else if (hsotg->plat && hsotg->plat->phy_exit) {
+ 		ret = hsotg->plat->phy_exit(pdev, hsotg->plat->phy_type);
+ 	} else {
+-		ret = phy_exit(hsotg->phy);
++		ret = phy_power_off(hsotg->phy);
+ 		if (ret == 0)
+-			ret = phy_power_off(hsotg->phy);
++			ret = phy_exit(hsotg->phy);
+ 	}
+ 	if (ret)
+ 		return ret;
 -- 
-2.31.1
+2.37.2
 
