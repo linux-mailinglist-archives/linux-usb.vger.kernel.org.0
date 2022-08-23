@@ -2,211 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC66159D2F7
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 10:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4836859D965
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 12:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241295AbiHWIDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 04:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
+        id S241982AbiHWJsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 05:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241622AbiHWIDY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 04:03:24 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA0066116
-        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 01:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661241787; x=1692777787;
-  h=message-id:date:mime-version:to:references:from:subject:
-   in-reply-to:content-transfer-encoding;
-  bh=0IxY+YlLL3VDowsiUttNcqHUeo1TzNO+p0FWU6TFxbk=;
-  b=Mr2zGDeQvcfUB3Z2/cJgufqIkf3BeYmQCiRWtVXogMLsz1NKHMP+l5Cj
-   jXsU/L+PVx2tGVfUssjg+rSQ2q5tLbJ8j0o4SaJSQz7BZ1M8KaRoEgKDj
-   t6VgVvCmxuDPmIlEk06rZt7WqOafIEZcOuew99/3jKzMC6hbaaNesy5n0
-   yIoXDCwdRoVPZnNhl7OLokU/veQALsVBX3KaavvW3IX7c+K5Qc/tGF6Dh
-   97ULtr7aQPMyFnkHFMnBTOXwOcInHfApOpHYuWQrwN9TKYBydwr3tU2QR
-   XoEz/QvmlOjv8ACaIbGEzYqdOVra+4VJ8KyoJ6gGhB0MIlcpCp+Yf0Ggl
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="319662954"
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="319662954"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 01:03:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="677527671"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2022 01:03:06 -0700
-Message-ID: <0e13b14f-be11-3f00-28b6-fa334667ee35@linux.intel.com>
-Date:   Tue, 23 Aug 2022 11:04:23 +0300
+        with ESMTP id S238966AbiHWJrW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 05:47:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899DA9C8CE;
+        Tue, 23 Aug 2022 01:44:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B12AB81C4A;
+        Tue, 23 Aug 2022 08:44:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9733BC433B5;
+        Tue, 23 Aug 2022 08:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661244239;
+        bh=azrkHgPOnQs884ZEUGFFFLQT6q0lJFF7yhUhaKnD080=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RWExlh+fyrRuwMbIxKr/2863jpg53DDS8GIMBy9wXUfwpcEfm5lEdzncqx4HV/QIo
+         GFBOPINW6aH4pFTiOpn3xO2LHWozElYjn+OK+n3cOFWu7ez00L8yU+0ggTBIkJUtR7
+         EyJFUNkXLA7b8cC7QT1I/ALs35hStapQ42VD9cYQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Raviteja Garimella <raviteja.garimella@broadcom.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 107/229] usb: gadget: udc: amd5536 depends on HAS_DMA
+Date:   Tue, 23 Aug 2022 10:24:28 +0200
+Message-Id: <20220823080057.502281644@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <587e5aa0-63d2-3b0b-4cc5-8c0240a9e8df@redhat.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: 6.0-rc1 new XHCI cacheline tracking EEXIST WARN/oops
-In-Reply-To: <587e5aa0-63d2-3b0b-4cc5-8c0240a9e8df@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gMTkuOC4yMDIyIDE1LjA0LCBIYW5zIGRlIEdvZWRlIHdyb3RlOg0KPiBIaSBBbGwsDQo+
-IA0KPiBXaGlsZSBkb2dmb29kaW5nIDYuMC1yYzEgb24gbXkgbWFpbiB3b3Jrc3RhdGlvbiBJ
-IG5vdGljZWQgdGhlIGZvbGxvd2luZw0KPiBuZXcgV0FSTi9vb3BzOg0KPiANCj4gQXVnIDE5
-IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IC0tLS0tLS0tLS0tLVsgY3V0IGhlcmUgXS0tLS0t
-LS0tLS0tLQ0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogRE1BLUFQSTogeGhj
-aV9oY2QgMDAwMDozMDowMC4zOiBjYWNoZWxpbmUgdHJhY2tpbmcgRUVYSVNULCBvdmVybGFw
-cGluZyBtYXBwaW5ncyBhcmVuJ3Qgc3VwcG9ydGVkDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFs
-ZW0ga2VybmVsOiBXQVJOSU5HOiBDUFU6IDE0IFBJRDogODMyMSBhdCBrZXJuZWwvZG1hL2Rl
-YnVnLmM6NTcwIGFkZF9kbWFfZW50cnkrMHgxZWQvMHgyNzANCj4gQXVnIDE5IDEyOjIyOjM5
-IHNoYWxlbSBrZXJuZWw6IE1vZHVsZXMgbGlua2VkIGluOiByZmNvbW0gc25kX3NlcV9kdW1t
-eSBzbmRfaHJ0aW1lciBxcnRyIGJuZXAgdmJveG5ldGFkcChPRSkgdmJveG5ldGZsdChPRSkg
-dmJveGRydihPRSkgYmluZm10X21pc2MgdmZhdCBmYXQgaW50ZWxfcmFwbF9tc3IgaW50ZWxf
-cmFwbF9jb21tb24gaXdsbXZtIHNuZF9oZGFfY29kZWNfcmVhbHRlayBzbmRfaGRhX2NvZGVj
-X2dlbmVyaWMgZWRhY19tY2VfYW1kIG1hYzgwMjExIGxlZHRyaWdfYXVkaW8gc25kX2hkYV9j
-b2RlY19oZG1pIGt2bV9hbWQgc25kX2hkYV9pbnRlbCBzbmRfaW50ZWxfZHNwY2ZnIHNuZF9p
-bnRlbF9zZHdfYWNwaSBsaWJhcmM0IGt2bSBzbmRfaGRhX2NvZGVjIGlycWJ5cGFzcyBpd2x3
-aWZpIHNuZF9oZGFfY29yZSBzbmRfdXNiX2F1ZGlvIGJ0dXNiIHJhcGwgYnRydGwgc25kX3Vz
-Ym1pZGlfbGliIGl3bG1laSBidGJjbSBzbmRfaHdkZXAgYnRpbnRlbCBzbmRfcmF3bWlkaSBz
-bmRfc2VxIG1jIGJ0bXRrIHNuZF9zZXFfZGV2aWNlIGNmZzgwMjExIHdtaV9ibW9mIGJsdWV0
-b290aCBzbmRfcGNtIGpveWRldiBzbmRfdGltZXIgcmZraWxsIG1laSByODE2OSBzbmQgc291
-bmRjb3JlIGkyY19waWl4NCBrMTB0ZW1wIGdwaW9fYW1kcHQgZ3Bpb19nZW5lcmljIHpyYW0g
-ZG1fY3J5cHQgYW1kZ3B1IGRybV90dG1faGVscGVyIHR0bSBpb21tdV92MiBjcmN0MTBkaWZf
-cGNsbXVsIGdwdV9zY2hlZCBjcmMzMl9wY2xtdWwgY3JjMzJjX2ludGVsIGRybV9idWRkeSBo
-aWRfbGdfZzE1IGRybV9kaXNwbGF5X2hlbHBlciBudm1lIGdoYXNoX2NsbXVsbmlfaW50ZWwg
-bnZtZV9jb3JlIGNjcCBjZWMgc3A1MTAwX3RjbyB3bWkgdmlkZW8gaGlkX2xvZ2l0ZWNoX2hp
-ZHBwIHVhcyB1c2Jfc3RvcmFnZSBoaWRfbG9naXRlY2hfZGogaXA2X3RhYmxlcyBpcF90YWJs
-ZXMgZnVzZSBpMmNfZGV2DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBVbmxv
-YWRlZCB0YWludGVkIG1vZHVsZXM6IGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6
-MSBhY3BpX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6MSBw
-Y2NfY3B1ZnJlcSgpOjEgcGNjX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9j
-cHVmcmVxKCk6MSBhY3BpX2NwdWZyZXEoKToxIGFtZDY0X2VkYWMoKToxIGFjcGlfY3B1ZnJl
-cSgpOjEgYW1kNjRfZWRhYygpOjEgYWNwaV9jcHVmcmVxKCk6MSBhbWQ2NF9lZGFjKCk6MSBh
-Y3BpX2NwdWZyZXEoKToxIGFtZDY0X2VkYWMoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYW1kNjRf
-ZWRhYygpOjEgYW1kNjRfZWRhYygpOjEgYWNwaV9jcHVmcmVxKCk6MSBmamVzKCk6MSBhbWQ2
-NF9lZGFjKCk6MSBhY3BpX2NwdWZyZXEoKToxIGZqZXMoKToxIGFtZDY0X2VkYWMoKToxIGFj
-cGlfY3B1ZnJlcSgpOjEgZmplcygpOjEgcGNjX2NwdWZyZXEoKToxIGFtZDY0X2VkYWMoKTox
-IGFjcGlfY3B1ZnJlcSgpOjEgZmplcygpOjEgYW1kNjRfZWRhYygpOjEgYWNwaV9jcHVmcmVx
-KCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9jcHVmcmVxKCk6MSBhbWQ2NF9l
-ZGFjKCk6MSBwY2NfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6MSBmamVzKCk6MSBhbWQ2
-NF9lZGFjKCk6MSBwY2NfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6MSBmamVzKCk6MSBh
-bWQ2NF9lZGFjKCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYW1kNjRfZWRhYygpOjEg
-YWNwaV9jcHVmcmVxKCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYW1kNjRfZWRhYygp
-OjEgYWNwaV9jcHVmcmVxKCk6MSBwY2NfY3B1ZnJlcSgpOjEgYW1kNjRfZWRhYygpOjEgZmpl
-cygpOjEgcGNjX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgYWNwaV9jcHVmcmVxKCk6
-MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9jcHVmcmVxKCk6MSBwY2NfY3B1ZnJl
-cSgpOjENCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBmamVzKCk6MSBhY3Bp
-X2NwdWZyZXEoKToxIHBjY19jcHVmcmVxKCk6MSBhY3BpX2NwdWZyZXEoKToxIGZqZXMoKTox
-IHBjY19jcHVmcmVxKCk6MSBhY3BpX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgZmpl
-cygpOjEgcGNjX2NwdWZyZXEoKToxIGFjcGlfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9j
-cHVmcmVxKCk6MSBwY2NfY3B1ZnJlcSgpOjEgZmplcygpOjEgYWNwaV9jcHVmcmVxKCk6MQ0K
-PiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogQ1BVOiAxNCBQSUQ6IDgzMjEgQ29t
-bToga3dvcmtlci91NjQ6NTcgVGFpbnRlZDogRyAgICAgICAgICAgT0UgICAgIC0tLS0tLS0g
-IC0tLSAgNi4wLjAtMC5yYzEuMjAyMjA4MTdnaXQzY2M0MGE0NDNhMDQuMTQuZmMzOC54ODZf
-NjQgIzENCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IEhhcmR3YXJlIG5hbWU6
-IE1pY3JvLVN0YXIgSW50ZXJuYXRpb25hbCBDby4sIEx0ZC4gTVMtN0M5NS9CNTUwTSBQUk8t
-VkRIIFdJRkkgKE1TLTdDOTUpLCBCSU9TIDIuOTAgMTIvMjMvMjAyMQ0KPiBBdWcgMTkgMTI6
-MjI6Mzkgc2hhbGVtIGtlcm5lbDogV29ya3F1ZXVlOiBldmVudHNfdW5ib3VuZCBhc3luY19y
-dW5fZW50cnlfZm4NCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IFJJUDogMDAx
-MDphZGRfZG1hX2VudHJ5KzB4MWVkLzB4MjcwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0g
-a2VybmVsOiBDb2RlOiBmZiAwZiA4NCA5NyAwMCAwMCAwMCA0OCA4YiA1ZiA1MCA0OCA4NSBk
-YiA3NSAwMyA0OCA4YiAxZiBlOCAxNSA5NiA4NSAwMCA0OCA4OSBjNiA0OCA4OSBkYSA0OCBj
-NyBjNyAzMCBjOSA4NiA4NSBlOCA3MyA5OSBjZSAwMCA8MGY+IDBiIDQ4IDg1IGVkIDBmIDg1
-IGE5IDUwIGNmIDAwIDhiIDA1IGYyIDA5IDIzIDAyIDg1IGMwIDBmIDg1IGNhDQo+IEF1ZyAx
-OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBSU1A6IDAwMTg6ZmZmZmE3OGRjMmMwYmEyMCBF
-RkxBR1M6IDAwMDEwMjgyDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBSQVg6
-IDAwMDAwMDAwMDAwMDAwNjAgUkJYOiBmZmZmOGFjMTg2YTYzNmMwIFJDWDogMDAwMDAwMDAw
-MDAwMDAwMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogUkRYOiAwMDAwMDAw
-MDAwMDAwMDAxIFJTSTogZmZmZmZmZmY4NThkMDdhNCBSREk6IDAwMDAwMDAwZmZmZmZmZmYN
-Cj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IFJCUDogZmZmZjhhYzE4NGYxN2E4
-MCBSMDg6IDAwMDAwMDAwMDAwMDAwMDEgUjA5OiAwMDAwMDAwMDAwMDAwMDAxDQo+IEF1ZyAx
-OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBSMTA6IDAwMDAwMDAwMDAwMDAwMDEgUjExOiAw
-MDAwMDAwMDAwMDAwMDAwIFIxMjogMDAwMDAwMDAwMDAwMDAwMA0KPiBBdWcgMTkgMTI6MjI6
-Mzkgc2hhbGVtIGtlcm5lbDogUjEzOiAwMDAwMDAwMDAwMDAwMDAxIFIxNDogMDAwMDAwMDAw
-MDAwMDIwNiBSMTU6IDAwMDAwMDAwMDQyZjY1YmQNCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxl
-bSBrZXJuZWw6IEZTOiAgMDAwMDAwMDAwMDAwMDAwMCgwMDAwKSBHUzpmZmZmOGFjNDA5YTAw
-MDAwKDAwMDApIGtubEdTOjAwMDAwMDAwMDAwMDAwMDANCj4gQXVnIDE5IDEyOjIyOjM5IHNo
-YWxlbSBrZXJuZWw6IENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAw
-ODAwNTAwMzMNCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6IENSMjogMDAwMDAw
-MDAwMDAwMDAwMCBDUjM6IDAwMDAwMDAxNGMwMjgwMDAgQ1I0OiAwMDAwMDAwMDAwNzUwZWUw
-DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBQS1JVOiA1NTU1NTU1NA0KPiBB
-dWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogQ2FsbCBUcmFjZToNCj4gQXVnIDE5IDEy
-OjIyOjM5IHNoYWxlbSBrZXJuZWw6ICA8VEFTSz4NCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxl
-bSBrZXJuZWw6ICBkbWFfbWFwX3BhZ2VfYXR0cnMrMHg4Mi8weDJkMA0KPiBBdWcgMTkgMTI6
-MjI6Mzkgc2hhbGVtIGtlcm5lbDogID8gX3Jhd19zcGluX3VubG9ja19pcnFyZXN0b3JlKzB4
-MzAvMHg2MA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHVzYl9oY2RfbWFw
-X3VyYl9mb3JfZG1hKzB4NDIzLzB4NTAwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2Vy
-bmVsOiAgdXNiX2hjZF9zdWJtaXRfdXJiKzB4OWIvMHhiODANCj4gQXVnIDE5IDEyOjIyOjM5
-IHNoYWxlbSBrZXJuZWw6ICA/IGxvY2tkZXBfaW5pdF9tYXBfdHlwZSsweDYyLzB4MjYwDQo+
-IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgdXNiX3N0YXJ0X3dhaXRfdXJiKzB4
-NTUvMHgxNDANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICB1c2JfY29udHJv
-bF9tc2crMHhjOS8weDEyMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIGh1
-Yl9leHRfcG9ydF9zdGF0dXMrMHg4OS8weDExMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVt
-IGtlcm5lbDogIGh1Yl9hY3RpdmF0ZSsweDExYy8weDhiMA0KPiBBdWcgMTkgMTI6MjI6Mzkg
-c2hhbGVtIGtlcm5lbDogID8gdXNiX2Rldl90aGF3KzB4MTAvMHgxMA0KPiBBdWcgMTkgMTI6
-MjI6Mzkgc2hhbGVtIGtlcm5lbDogIGh1Yl9yZXN1bWUrMHgyMy8weGUwDQo+IEF1ZyAxOSAx
-MjoyMjozOSBzaGFsZW0ga2VybmVsOiAgPyB1c2JfZGV2X3RoYXcrMHgxMC8weDEwDQo+IEF1
-ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgdXNiX3Jlc3VtZV9pbnRlcmZhY2UuY29u
-c3Rwcm9wLjAuaXNyYS4wKzB4ODkvMHhkMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtl
-cm5lbDogIHVzYl9yZXN1bWVfYm90aCsweDEwOS8weDE4MA0KPiBBdWcgMTkgMTI6MjI6Mzkg
-c2hhbGVtIGtlcm5lbDogID8gdXNiX2Rldl90aGF3KzB4MTAvMHgxMA0KPiBBdWcgMTkgMTI6
-MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHVzYl9yZXN1bWUrMHgxNS8weDYwDQo+IEF1ZyAxOSAx
-MjoyMjozOSBzaGFsZW0ga2VybmVsOiAgZHBtX3J1bl9jYWxsYmFjaysweDUzLzB4YzANCj4g
-QXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBkZXZpY2VfcmVzdW1lKzB4YTgvMHgy
-MDANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBhc3luY19yZXN1bWUrMHgx
-OS8weDMwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgYXN5bmNfcnVuX2Vu
-dHJ5X2ZuKzB4MzAvMHgxMzANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICBw
-cm9jZXNzX29uZV93b3JrKzB4MmEwLzB4NjAwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0g
-a2VybmVsOiAgd29ya2VyX3RocmVhZCsweDRmLzB4M2EwDQo+IEF1ZyAxOSAxMjoyMjozOSBz
-aGFsZW0ga2VybmVsOiAgPyBwcm9jZXNzX29uZV93b3JrKzB4NjAwLzB4NjAwDQo+IEF1ZyAx
-OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAga3RocmVhZCsweGY1LzB4MTIwDQo+IEF1ZyAx
-OSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgPyBrdGhyZWFkX2NvbXBsZXRlX2FuZF9leGl0
-KzB4MjAvMHgyMA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHJldF9mcm9t
-X2ZvcmsrMHgyMi8weDMwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgPC9U
-QVNLPg0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogaXJxIGV2ZW50IHN0YW1w
-OiAyMTE1DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBoYXJkaXJxcyBsYXN0
-ICBlbmFibGVkIGF0ICgyMTIzKTogWzxmZmZmZmZmZjg0MThmYjUyPl0gdnByaW50a19lbWl0
-KzB4MzQyLzB4MzUwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBoYXJkaXJx
-cyBsYXN0IGRpc2FibGVkIGF0ICgyMTMwKTogWzxmZmZmZmZmZjg0MThmYjAxPl0gdnByaW50
-a19lbWl0KzB4MmYxLzB4MzUwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiBz
-b2Z0aXJxcyBsYXN0ICBlbmFibGVkIGF0ICgwKTogWzxmZmZmZmZmZjg0MGY1MDc5Pl0gY29w
-eV9wcm9jZXNzKzB4YTQ5LzB4MWU1MA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5l
-bDogc29mdGlycXMgbGFzdCBkaXNhYmxlZCBhdCAoMCk6IFs8MDAwMDAwMDAwMDAwMDAwMD5d
-IDB4MA0KPiBBdWcgMTkgMTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogLS0tWyBlbmQgdHJhY2Ug
-MDAwMDAwMDAwMDAwMDAwMCBdLS0tDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVs
-OiBETUEtQVBJOiBNYXBwZWQgYXQ6DQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVs
-OiAgZGVidWdfZG1hX21hcF9wYWdlKzB4NjYvMHgxMDANCj4gQXVnIDE5IDEyOjIyOjM5IHNo
-YWxlbSBrZXJuZWw6ICBkbWFfbWFwX3BhZ2VfYXR0cnMrMHg4Mi8weDJkMA0KPiBBdWcgMTkg
-MTI6MjI6Mzkgc2hhbGVtIGtlcm5lbDogIHVzYl9oY2RfbWFwX3VyYl9mb3JfZG1hKzB4NDIz
-LzB4NTAwDQo+IEF1ZyAxOSAxMjoyMjozOSBzaGFsZW0ga2VybmVsOiAgdXNiX2hjZF9zdWJt
-aXRfdXJiKzB4OWIvMHhiODANCj4gQXVnIDE5IDEyOjIyOjM5IHNoYWxlbSBrZXJuZWw6ICB1
-c2Jfc3RhcnRfd2FpdF91cmIrMHg1NS8weDE0MA0KPiANCg0KSSdtIGd1ZXNzaW5nIHRoYXQg
-dGhlIGRhdGEgYnVmZmVyIHdoZXJlIGh1YiBkcml2ZXIgc3RvcmVzIHBvcnQgc3RhdHVzIGRh
-dGENCndhcyBhbHJlYWR5IGRtYSBtYXBwZWQgd2hlbiBodWIgZHJpdmVyIHN1Ym1pdHRlZCBh
-IG5ldyBnZXQgcG9ydCBzdGF0dXMgVVJCLg0KdXNiIGNvcmUgdHJpZXMgdG8gbWFwIHRoZSBi
-dWZmZXIgYWdhaW4gYXQgdXJiIHN1Yml0LCB0cmlnZ2VyaW5nIHRoaXMuDQoNCkh1YiBkcml2
-ZXIgYWxsb2NhdGVzIG9uZSBkYXRhIGJ1ZmZlciBvbmNlLCBhbmQgdXNlcyBpdCB0byBzdG9y
-ZSBib3RoDQpodWIgc3RhdHVzIGRhdGEgYW5kIHBvcnQgc3RhdHVzIGRhdGEuICh1bmlvbiAm
-aHViLT5zdGF0dXMtPnBvcnQgYW5kICZodWItPnN0YXR1cy0+aHViKQ0KDQpTbyBwcm9iYWJs
-eSB0aGUgcHJldmlvdXMgVVJCIChnZXQgcG9ydCBzdGF0dXMsIG9yIGdldCBodWIgc3RhdHVz
-KSBuZXZlciBzdWNjZXNzZnVsbHkNCmNvbXBsZXRlZCwgb3IgZm9yIHNvbWUgcmVhc29uIGRp
-ZG4ndCB1bm1hcCBkbWEgYXQgY29tcGxldGlvbi4NCg0KTG9va3MgbGlrZSB0aGlzIGlzc3Vl
-IGlzIGhpdCBpbiByZXN1bWUsIHNvIG1heWJlIHNvbWV0aGluIHdlbnQgd3JvbmcgaW4gY29t
-cGxldGluZyB0aGUNCmh1YiBVUkIgaW4gc3VzcGVuZD8NCg0KV2FzIHRoaXMgZWFzeSB0byBy
-ZXByb2R1Y2U/IGFueSBleHRlcm5hbCBodWJzIGNvbm5lY3RlZD8NCg0KT25lIHRoaW5nIHRv
-IGNoZWNrIHdvdWxkIGJlIGlmIHVzYm1vbiBzaG93cyBhbiB1bmNvbXBsZXRlZCBodWIgVVJC
-IHdoZW4NCmEgbmV3IFVSQiBpcyBzdWJtaXR0ZWQsIHRyaWdnZXJpbmcgdGhpcy4NCg0KVGhh
-bmtzDQotTWF0aGlhcw0K
+From: Randy Dunlap <rdunlap@infradead.org>
+
+[ Upstream commit 8097cf2fb3b2205257f1c76f4808e3398d66b6d9 ]
+
+USB_AMD5536UDC should depend on HAS_DMA since it selects USB_SNP_CORE,
+which depends on HAS_DMA and since 'select' does not follow any
+dependency chains.
+
+Fixes this kconfig warning:
+
+WARNING: unmet direct dependencies detected for USB_SNP_CORE
+  Depends on [n]: USB_SUPPORT [=y] && USB_GADGET [=y] && (USB_AMD5536UDC [=y] || USB_SNP_UDC_PLAT [=n]) && HAS_DMA [=n]
+  Selected by [y]:
+  - USB_AMD5536UDC [=y] && USB_SUPPORT [=y] && USB_GADGET [=y] && USB_PCI [=y]
+
+Fixes: 97b3ffa233b9 ("usb: gadget: udc: amd5536: split core and PCI layer")
+Cc: Raviteja Garimella <raviteja.garimella@broadcom.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20220709013601.7536-1-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/gadget/udc/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+index 3291ea22853c..4c6eaf2a3b73 100644
+--- a/drivers/usb/gadget/udc/Kconfig
++++ b/drivers/usb/gadget/udc/Kconfig
+@@ -309,7 +309,7 @@ source "drivers/usb/gadget/udc/bdc/Kconfig"
+ 
+ config USB_AMD5536UDC
+ 	tristate "AMD5536 UDC"
+-	depends on USB_PCI
++	depends on USB_PCI && HAS_DMA
+ 	select USB_SNP_CORE
+ 	help
+ 	   The AMD5536 UDC is part of the AMD Geode CS5536, an x86 southbridge.
+-- 
+2.35.1
+
+
+
