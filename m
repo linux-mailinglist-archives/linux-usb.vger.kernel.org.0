@@ -2,61 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066BA59E843
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 19:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE49F59E8FE
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 19:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343787AbiHWREe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 13:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S231925AbiHWRWZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 13:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343879AbiHWRDk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 13:03:40 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9919B4B5
-        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 07:07:57 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 6EDD183010;
-        Tue, 23 Aug 2022 16:07:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1661263674;
-        bh=83qdoxjskF6G6BfAM0qAcnGp3aH0Uow3QytggceuTbM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=F1HyMgEBc5UxOMBrLFoXafjXf1/O8IFDoMlqp7rlGBwU3RtgAUgrQr4dEksNCMJBK
-         vG6jCfJj+4+y2Ry/xizUDzDHnYwWbYJi2wVg8qQ1W41ggJvVFlkSmauEbceD0rhFV3
-         MEwPn5t2tdd0CN8WaGAAe0KGZDkMNxVe/13wjx2fcYuS0QFxhBFACp6m2v/kBWNPXJ
-         0KAOLNDDT/22uZGiTzVQItX5rvJCYsixmY01rgDQXltzf5IjhnmuxVKx0ooQEwGxMR
-         zkNHB3sX+ELMwmi5CHN/rIW0u1NgP6ydNk1m4e1CgKclxKhPihz1PCp0z19CIw3BqK
-         uW90oINhckOvg==
-Message-ID: <4e64477f-8479-d67d-522e-285a829323a1@denx.de>
-Date:   Tue, 23 Aug 2022 16:07:53 +0200
+        with ESMTP id S241767AbiHWRVS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 13:21:18 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C266AC251;
+        Tue, 23 Aug 2022 07:57:29 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id s199so16320760oie.3;
+        Tue, 23 Aug 2022 07:57:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=FAI+J/BAzIOCuYieqj21rHdsHuRaSuJ4Vj8kHpJSNAE=;
+        b=Bguy5gXkBeLZqFWOQeDUzyvG2Dh1lvWQ5M1H3lAWbE8AeicHVgTcaeWv9P0JvKC750
+         Gzr3ibcGK71O2EP+ihg6zRki7XD5NK6bVl0pxo8rFk7n+6xaH6pwSNLePhBalIf/j6do
+         NZHLYH2uZUap4VEBxI1rnY7ImPaXe3PalgnoM984VJyXLz/9+BIINGt4RKGjkDhKvfxF
+         x8BKI8XayQ3u3gHLmVSsjoI4VNW+XGbcep0j4xY9jl9tPpAfCMVwCJ7FX03Cnu+rNy46
+         aLBSYCns9D1BUaU0sUG17eJgITTMZCl3mHHcGCvj11LcKoPh5Dp7fWsxraQ8W8a8E2Lj
+         4ppA==
+X-Gm-Message-State: ACgBeo3jpUgCtT7s9lWaZShSa36wPutKFi+YYKJxiW9ebI2VhFUFPanE
+        ZYeq2R1KX23penPSt1gsYg==
+X-Google-Smtp-Source: AA6agR4hSJQAGxX3KN7ayKSxhwLdWv6s8/qh4bhvrE5yHsP9wzSBH+Rc0HRRZkXNGG1/4mMLZExhJw==
+X-Received: by 2002:aca:3056:0:b0:345:64e9:7435 with SMTP id w83-20020aca3056000000b0034564e97435mr1417894oiw.19.1661266648690;
+        Tue, 23 Aug 2022 07:57:28 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 07:57:28 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Xin Ji <xji@analogixsemi.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org
+Subject: [PATCH] dt-bindings: usb: Add missing (unevaluated|additional)Properties on child nodes
+Date:   Tue, 23 Aug 2022 09:56:40 -0500
+Message-Id: <20220823145649.3118479-9-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 2/2] extcon: usbc-tusb320: Add USB TYPE-C support
-Content-Language: en-US
-To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-References: <20220730180500.152004-1-marex@denx.de>
- <20220730180500.152004-2-marex@denx.de>
- <20220823094934.so377vfpe4vipxuw@bang-olufsen.dk>
- <d1df55df-3baf-4200-cee5-7dbc3311a4de@denx.de>
- <20220823125719.bafu6k72jf5u7z7z@bang-olufsen.dk>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20220823125719.bafu6k72jf5u7z7z@bang-olufsen.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,70 +65,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/23/22 14:57, Alvin Šipraga wrote:
-> On Tue, Aug 23, 2022 at 12:39:28PM +0200, Marek Vasut wrote:
->> On 8/23/22 11:49, Alvin Šipraga wrote:
->>> Hi Marek,
->>
->> Hi,
->>
->>> On Sat, Jul 30, 2022 at 08:05:00PM +0200, Marek Vasut wrote:
->>>> The TI TUSB320 seems like a better fit for USB TYPE-C subsystem,
->>>> which can expose details collected by the TUSB320 in a far more
->>>> precise way than extcon. Since there are existing users in the
->>>> kernel and in DT which depend on the extcon interface, keep it
->>>> for now.
->>>>
->>>> Add TYPE-C interface and expose the supported supply current,
->>>> direction and connector polarity via the TYPE-C interface.
->>>>
->>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>> ---
->>>> Cc: Chanwoo Choi <cw00.choi@samsung.com>
->>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->>>> Cc: Yassine Oudjana <y.oudjana@protonmail.com>
->>>> To: linux-usb@vger.kernel.org
->>>> ---
->>>>    drivers/extcon/Kconfig               |   2 +-
->>>>    drivers/extcon/extcon-usbc-tusb320.c | 159 +++++++++++++++++++++++++++
->>>>    2 files changed, 160 insertions(+), 1 deletion(-)
->>>
->>> Happy to see I'm not the only one that observed this. I wonder if you
->>> saw also my previous stab at this:
->>>
->>> https://lore.kernel.org/linux-usb/20220301132010.115258-1-alvin@pqrs.dk/
->>
->> I have not.
->>
->>> I had some issues with the dt-bindings which I could not reconcile, but
->>> the basic problem was how to describe a typec accessory mode mux
->>> connected to the TUSB320. Perhaps you have a better intuition for how
->>> this should look?
->>>
->>> One thing that is missing from your implementation that we are using on
->>> our end is the USB role switch. I set this from the typec driver via
->>> usb_role_switch_set_role().
->>
->> I only use this chip to detect charger type (and cable polarity), the device
->> where this is integrated is always peripheral and cannot charge other
->> devices or become host.
->>
->> But I think those aforementioned requirements could be extended on top of
->> this patch, can they not ? I recall I looked at least at the direction
->> detection and that could be added easily. I have no way of testing any of
->> that functionality, so I didn't add them as part of the patch.
-> 
-> Sure - if your patch gets merged then I'll just extend it. Fair enough
-> that you cannot test on your board.
-> 
-> To that end, you can add:
-> 
-> Reviewed-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+In order to ensure only documented properties are present, node schemas
+must have unevaluatedProperties or additionalProperties set to false
+(typically).
 
-Thanks.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/usb/analogix,anx7411.yaml    |  2 ++
+ .../devicetree/bindings/usb/aspeed,usb-vhub.yaml     |  2 ++
+ .../devicetree/bindings/usb/st,stusb160x.yaml        | 12 +++++++++---
+ .../devicetree/bindings/usb/willsemi,wusb3801.yaml   |  1 +
+ 4 files changed, 14 insertions(+), 3 deletions(-)
 
-If you plan to submit anything on top, I might be able to test at least 
-the charger detect and plug orientation still works ... but that's 
-probably something you can also test on your own, that's the easy part 
-of the USB-C.
+diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+index ee436308e5dc..0e72c08e6566 100644
+--- a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
++++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
+@@ -23,6 +23,8 @@ properties:
+   connector:
+     type: object
+     $ref: ../connector/usb-connector.yaml
++    unevaluatedProperties: false
++
+     description:
+       Properties for usb c connector.
+ 
+diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+index 8b019ac05bbe..a86bcd95100e 100644
+--- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
++++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+@@ -67,6 +67,7 @@ properties:
+ 
+   vhub-strings:
+     type: object
++    additionalProperties: false
+ 
+     properties:
+       '#address-cells':
+@@ -78,6 +79,7 @@ properties:
+     patternProperties:
+       '^string@[0-9a-f]+$':
+         type: object
++        additionalProperties: false
+         description: string descriptors of the specific language
+ 
+         properties:
+diff --git a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
+index b5a8c9814dd3..b8974807b666 100644
+--- a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
++++ b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
+@@ -33,6 +33,7 @@ properties:
+   connector:
+     type: object
+     $ref: /schemas/connector/usb-connector.yaml#
++    unevaluatedProperties: false
+ 
+     properties:
+       compatible:
+@@ -74,9 +75,14 @@ examples:
+                 data-role = "dual";
+                 typec-power-opmode = "default";
+ 
+-                port {
+-                    typec_con_ep: endpoint {
+-                        remote-endpoint = <&usbotg_hs_ep>;
++                ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                    port@0 {
++                        reg = <0>;
++                        typec_con_ep: endpoint {
++                            remote-endpoint = <&usbotg_hs_ep>;
++                        };
+                     };
+                 };
+             };
+diff --git a/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml b/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
+index c2b2243c7892..5aa4ffd67119 100644
+--- a/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
++++ b/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
+@@ -28,6 +28,7 @@ properties:
+   connector:
+     type: object
+     $ref: ../connector/usb-connector.yaml#
++    unevaluatedProperties: false
+     description:
+       The managed USB Type-C connector. Since WUSB3801 does not support
+       Power Delivery, the node should have the "pd-disable" property.
+-- 
+2.34.1
+
