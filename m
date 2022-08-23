@@ -2,52 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4836859D965
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 12:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD9C59D936
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 12:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241982AbiHWJsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 05:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S1351062AbiHWJeA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 05:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238966AbiHWJrW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 05:47:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899DA9C8CE;
-        Tue, 23 Aug 2022 01:44:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B12AB81C4A;
-        Tue, 23 Aug 2022 08:44:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9733BC433B5;
-        Tue, 23 Aug 2022 08:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244239;
-        bh=azrkHgPOnQs884ZEUGFFFLQT6q0lJFF7yhUhaKnD080=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RWExlh+fyrRuwMbIxKr/2863jpg53DDS8GIMBy9wXUfwpcEfm5lEdzncqx4HV/QIo
-         GFBOPINW6aH4pFTiOpn3xO2LHWozElYjn+OK+n3cOFWu7ez00L8yU+0ggTBIkJUtR7
-         EyJFUNkXLA7b8cC7QT1I/ALs35hStapQ42VD9cYQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Raviteja Garimella <raviteja.garimella@broadcom.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 107/229] usb: gadget: udc: amd5536 depends on HAS_DMA
-Date:   Tue, 23 Aug 2022 10:24:28 +0200
-Message-Id: <20220823080057.502281644@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S1350721AbiHWJcm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 05:32:42 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1018674CC1
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 01:38:51 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-32a09b909f6so361086377b3.0
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 01:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=cgc+e/QzNdyD2sfucJY+c/VRbtSyirfoyG9awCiqMa4=;
+        b=kUrFjIHECTaBr9+CKEUTz4OLFtxjYaXXGh+DIth9fw223PK1yidFfqVYBKotKgREon
+         rn0SdwopAWDltNNwEtcw8x2F4jYDo+6O72ACtJg7eBBRL/AtQFzIr6nPHvoVFHuF6wWG
+         46gE7n2khQGERr18D6bX/yfDzzeEfTcEyt3a4PX0Lpn8i8eI2QGzBb1k1k5n+VLPfqmT
+         gSrfA521jCdxvgWL9H8ZopNm35pxb0KtwT0tRmg2ex7JMIFXZiYCZUrsbBv3K3M4IqNV
+         wgimq51IM18LsFVOViGgvdqQzAZsqDCvnWjnghr+KMQxIUS2HTY1R+lgifuQMzMiyfA2
+         UU8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=cgc+e/QzNdyD2sfucJY+c/VRbtSyirfoyG9awCiqMa4=;
+        b=QV/YwPYi6v3U2eibIUFiiunBhbkKztxH4u5e/2dbSE+yVI1pNLYCspVxUM3SUhUCoJ
+         I4qxsnFLXXOaj6WCXssArPEB7a/iU4uS8RIKheArxaxvkr+qrbANWcv2UbmN7ttuNg9B
+         yXU7w1ke7TRrE4Ed9GIGgE07lzBku9oLUkYGXoPD2d5Sx/J6iqr6/1jK7kQKu72q3UjC
+         ZUqOMV8R3/jYGYguLahvhHRf8QeFtDSBZxV/ZQkDbXGf5XFlViLLhwsdRQYcSDLEBh/i
+         /xiK1Z7w2YzpAZGpQYCL0q+vdHnsUguya/E0zkabe4PTNzj015SyPJqRBA46DvaiRDoG
+         clXw==
+X-Gm-Message-State: ACgBeo3Q0/CUFQyBW/IvtCMuqN5W442mRCPfG0uohUPwu2xiTyiK96IO
+        WKwYUYJsB3rUlTb5azxzM7LHsVEBDWAC/ovZmJ0fsQ==
+X-Google-Smtp-Source: AA6agR5Cgtu718MiKMVY1/XiyInsuBVJHNdFRsvSqTrNoHkmhAshU/tLTB8cZgDu+q0Z/EZnw0wrJC4b3x0GnuHi6qs=
+X-Received: by 2002:a05:6902:387:b0:694:159f:ad3c with SMTP id
+ f7-20020a056902038700b00694159fad3cmr20730903ybs.223.1661243870140; Tue, 23
+ Aug 2022 01:37:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20200917022547.198090-1-linux@roeck-us.net> <20220311202426.GE23776@pengutronix.de>
+ <YizpxhxPBxJ0EHQR@pendragon.ideasonboard.com>
+In-Reply-To: <YizpxhxPBxJ0EHQR@pendragon.ideasonboard.com>
+From:   Lukasz Majczak <lma@semihalf.com>
+Date:   Tue, 23 Aug 2022 10:37:39 +0200
+Message-ID: <CAFJ_xbr+b26DdNomysXKJZ57SaRAJi3nSJd8VK90y=hicEWZ=A@mail.gmail.com>
+Subject: Re: [PATCH RESEND v3 0/5] media: uvcvideo: Fix race conditions
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Michael Grzeschik <mgr@pengutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,49 +71,148 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+sob., 12 mar 2022 o 19:43 Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> napisa=C5=82(a):
+>
+> Hi Michael,
+>
+> On Fri, Mar 11, 2022 at 09:24:26PM +0100, Michael Grzeschik wrote:
+> > Ping!
+> >
+> > This series seems to be hanging around. It would be nice to get these
+> > patches upstream, as they help my uvc-gadget workflow. Without them it
+> > is likely that in the development cases my gadget won't start and then
+> > leave the whole xhci controller broken.
+> >
+> > @Laurent, what do you think?
+>
+> I think I've explained before how this should be fixed at the V4L2
+> level. The problem actually affects character devices globally, and Greg
+> KH said he would have a go at fixing it there, but I don't think much
+> happened. Starting with a V4L2-level fix is fine with me.
+>
+> There are a few patches in the series that are specific to uvcvideo,
+> I'll have another look and merge those.
+>
+> > On Wed, Sep 16, 2020 at 07:25:42PM -0700, Guenter Roeck wrote:
+> > > Something seems to have gone wrong with v3 of this patch series.
+> > > I am sure I sent it out, but I don't find it anywhere.
+> > > Resending. Sorry for any duplicates.
+> > >
+> > > The uvcvideo code has no lock protection against USB disconnects
+> > > while video operations are ongoing. This has resulted in random
+> > > error reports, typically pointing to a crash in usb_ifnum_to_if(),
+> > > called from usb_hcd_alloc_bandwidth(). A typical traceback is as
+> > > follows.
+> > >
+> > > usb 1-4: USB disconnect, device number 3
+> > > BUG: unable to handle kernel NULL pointer dereference at 000000000000=
+0000
+> > > PGD 0 P4D 0
+> > > Oops: 0000 [#1] PREEMPT SMP PTI
+> > > CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d=
+29ca36db06 #1
+> > > Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/201=
+9
+> > > RIP: 0010:usb_ifnum_to_if+0x29/0x40
+> > > Code: <...>
+> > > RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
+> > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
+> > > RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
+> > > RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
+> > > R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
+> > > R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
+> > > FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000=
+000000
+> > > CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
+> > > Call Trace:
+> > >  usb_hcd_alloc_bandwidth+0x1ee/0x30f
+> > >  usb_set_interface+0x1a3/0x2b7
+> > >  uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
+> > >  uvc_video_start_streaming+0x91/0xdd [uvcvideo]
+> > >  uvc_start_streaming+0x28/0x5d [uvcvideo]
+> > >  vb2_start_streaming+0x61/0x143 [videobuf2_common]
+> > >  vb2_core_streamon+0xf7/0x10f [videobuf2_common]
+> > >  uvc_queue_streamon+0x2e/0x41 [uvcvideo]
+> > >  uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
+> > >  __video_do_ioctl+0x33d/0x42a
+> > >  video_usercopy+0x34e/0x5ff
+> > >  ? video_ioctl2+0x16/0x16
+> > >  v4l2_ioctl+0x46/0x53
+> > >  do_vfs_ioctl+0x50a/0x76f
+> > >  ksys_ioctl+0x58/0x83
+> > >  __x64_sys_ioctl+0x1a/0x1e
+> > >  do_syscall_64+0x54/0xde
+> > >
+> > > While there are not many references to this problem on mailing lists,=
+ it is
+> > > reported on a regular basis on various Chromebooks (roughly 300 repor=
+ts
+> > > per month). The problem is relatively easy to reproduce by adding msl=
+eep()
+> > > calls into the code.
+> > >
+> > > I tried to reproduce the problem with non-uvcvideo webcams, but was
+> > > unsuccessful. I was unable to get Philips (pwc) webcams to work. gspc=
+a
+> > > based webcams don't experience the problem, or at least I was unable =
+to
+> > > reproduce it (The gspa driver does not trigger sending USB messages i=
+n the
+> > > open function, and otherwise uses the locking mechanism provided by t=
+he
+> > > v4l2/vb2 core).
+> > >
+> > > I don't presume to claim that I found every issue, but this patch ser=
+ies
+> > > should fix at least the major problems.
+> > >
+> > > The patch series was tested exensively on a Chromebook running chrome=
+os-4.19
+> > > and on a Linux system running a v5.8.y based kernel.
+> > >
+> > > v3:
+> > > - In patch 5/5, add missing calls to usb_autopm_put_interface() and k=
+free()
+> > >   to failure code path
+> > >
+> > > v2:
+> > > - Added details about problem frequency and testing with non-uvc webc=
+ams
+> > >   to summary
+> > > - In patch 4/5, return EPOLLERR instead of -ENODEV on poll errors
+> > > - Fix description in patch 5/5
+> > >
+> > > ----------------------------------------------------------------
+> > > Guenter Roeck (5):
+> > >       media: uvcvideo: Cancel async worker earlier
+> > >       media: uvcvideo: Lock video streams and queues while unregister=
+ing
+> > >       media: uvcvideo: Release stream queue when unregistering video =
+device
+> > >       media: uvcvideo: Protect uvc queue file operations against disc=
+onnect
+> > >       media: uvcvideo: Abort uvc_v4l2_open if video device is unregis=
+tered
+> > >
+> > >  drivers/media/usb/uvc/uvc_ctrl.c   | 11 ++++++----
+> > >  drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++
+> > >  drivers/media/usb/uvc/uvc_queue.c  | 32 +++++++++++++++++++++++++--
+> > >  drivers/media/usb/uvc/uvc_v4l2.c   | 45 ++++++++++++++++++++++++++++=
+++++++++--
+> > >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+> > >  5 files changed, 93 insertions(+), 8 deletions(-)
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
 
-[ Upstream commit 8097cf2fb3b2205257f1c76f4808e3398d66b6d9 ]
+Hi Laurent,
 
-USB_AMD5536UDC should depend on HAS_DMA since it selects USB_SNP_CORE,
-which depends on HAS_DMA and since 'select' does not follow any
-dependency chains.
+Have you had time to take another look at those patches? Can we
+somehow move at least with the uvcvideo patches?
 
-Fixes this kconfig warning:
-
-WARNING: unmet direct dependencies detected for USB_SNP_CORE
-  Depends on [n]: USB_SUPPORT [=y] && USB_GADGET [=y] && (USB_AMD5536UDC [=y] || USB_SNP_UDC_PLAT [=n]) && HAS_DMA [=n]
-  Selected by [y]:
-  - USB_AMD5536UDC [=y] && USB_SUPPORT [=y] && USB_GADGET [=y] && USB_PCI [=y]
-
-Fixes: 97b3ffa233b9 ("usb: gadget: udc: amd5536: split core and PCI layer")
-Cc: Raviteja Garimella <raviteja.garimella@broadcom.com>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220709013601.7536-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/gadget/udc/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index 3291ea22853c..4c6eaf2a3b73 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -309,7 +309,7 @@ source "drivers/usb/gadget/udc/bdc/Kconfig"
- 
- config USB_AMD5536UDC
- 	tristate "AMD5536 UDC"
--	depends on USB_PCI
-+	depends on USB_PCI && HAS_DMA
- 	select USB_SNP_CORE
- 	help
- 	   The AMD5536 UDC is part of the AMD Geode CS5536, an x86 southbridge.
--- 
-2.35.1
-
-
-
+Best regards,
+Lukasz
