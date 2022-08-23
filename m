@@ -2,51 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1EC59E3CA
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 14:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969AA59E19D
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 14:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242124AbiHWMd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 08:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S1350616AbiHWLRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 07:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350191AbiHWMb6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 08:31:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CD49AFD8;
-        Tue, 23 Aug 2022 02:46:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5665B81C97;
-        Tue, 23 Aug 2022 09:44:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD06C433C1;
-        Tue, 23 Aug 2022 09:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247885;
-        bh=GWrWHEXhlQQswpA6DAPgI155pHAU0QDTGhRNbc94k9U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dBhK42w6clG5tr9KERqU1VeCyWxJ5UMAC+OfOYEokZdnOV57txXemTdBlPQaDZtIl
-         3hWXnnnijc0vkhG87pnFobGsKKcbHtF8pHUxJ3G68S5zHs7XCVCSYnN/T+Y6pLRqGt
-         08K9JjxmWnuGCCvhROi5+P+6dG+8uRVQY1SrbWEk=
-Date:   Tue, 23 Aug 2022 11:08:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Szuying Chen <chensiying21@gmail.com>
-Cc:     mario.limonciello@amd.com, mika.westerberg@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
-        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
-Subject: Re: [PATCH 2/2] thunderbolt: thunderbolt: add nvm specific
- operations for
-Message-ID: <YwSY+SfCSioF/VQM@kroah.com>
-References: <20220823090423.5249-1-chensiying21@gmail.com>
+        with ESMTP id S1357857AbiHWLQs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 07:16:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD24BD287
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 02:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661246405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RK7XtREpFLhbfzxnimWw3D/7SMk9co/GteGqXfWisLY=;
+        b=HTaQIHQkbtv4MdLYbkrzG8WXezxFEpZPKvd8+wZZ+rl6PZEPQbqo3mi+xzVnoCSyTv6tJ+
+        7+65s3at5Hbjfp5aqnffq8zPLRdlO/6czvqIbI7ErIngV09FbKJU92wxAPWrVwwvldy129
+        I3VaS90APFUrC2pNd2A/qctZpVZ87zs=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-325-t6LFKt7uPmicf4EJBctJfw-1; Tue, 23 Aug 2022 05:20:04 -0400
+X-MC-Unique: t6LFKt7uPmicf4EJBctJfw-1
+Received: by mail-qv1-f72.google.com with SMTP id ea4-20020ad458a4000000b0049682af0ca8so7147518qvb.21
+        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 02:20:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc;
+        bh=RK7XtREpFLhbfzxnimWw3D/7SMk9co/GteGqXfWisLY=;
+        b=ff2cy9ZvHiQjD4o6xwTZqQIum2iiVmeNsoJgRTp4jA0o+9qWp9CHlPe5zVsRSq2y+4
+         j66PsDBTU8d9YFOvBbLzqUKBXH1zAqaFrWkMaH7teLA3NEoFdLybAhd4PZmVVEB8iwgv
+         oflyS1tNVICB4A0SVfUtWfd/vj15UOVL+iqXrtqstQrBsVIuRqwTVZqSDaW+AyK1PDnj
+         /WXe4ZXfgAMckaVhvRlZ8ji7yeLIEpRQX7f5gfi50uZo4zqJFluDCuAfjcWqXcSMpFt4
+         a9Iw5cw71dtaYRPThz7s07VamsdwP1CRUyKhWTmwq0/hxaFjqO6qhSoDswdNhe8GFl3C
+         idmA==
+X-Gm-Message-State: ACgBeo1pzOoKVD7qbx/X3VszdHyCmk7ldRQS4TqwJBFKGe7LOB4xvDxX
+        z4PUCV7j3PGmc2YsbooGOV2FYefFVgbDXhO/evqOb+Y9tACqSGa1n9/ymrsufvY375fXUDztttG
+        DQCvOoBHzGQFC23yqIJTr
+X-Received: by 2002:a05:620a:1990:b0:6bb:61c3:8970 with SMTP id bm16-20020a05620a199000b006bb61c38970mr15401560qkb.394.1661246403623;
+        Tue, 23 Aug 2022 02:20:03 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4scwdvU3X5bSXYFjzLfBWQF4j11vAlCrZyx7tLKMNMOtVgqKg9TOrjDWVBkK33M3QbDk49fg==
+X-Received: by 2002:a05:620a:1990:b0:6bb:61c3:8970 with SMTP id bm16-20020a05620a199000b006bb61c38970mr15401551qkb.394.1661246403407;
+        Tue, 23 Aug 2022 02:20:03 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id j10-20020ac8664a000000b0033fc75c3469sm9976682qtp.27.2022.08.23.02.20.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 02:20:03 -0700 (PDT)
+Message-ID: <3745745afedb2eff890277041896356149a8f2bf.camel@redhat.com>
+Subject: Commit 'r8152: fix a WOL issue' makes Ethernet port on Lenovo
+ Thunderbolt 3 dock go crazy
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Hayes Wang <hayeswang@realtek.com>
+Date:   Tue, 23 Aug 2022 12:20:00 +0300
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823090423.5249-1-chensiying21@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,25 +75,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 05:04:23PM +0800, Szuying Chen wrote:
-> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> 
-> The patch depends on patch 1/2.
 
-That's always implicit based on the naming scheme here, you never have
-to say this in the commit message (hint, look at all of the existing
-patches on the mailing list for how they are structured, there are
-thousands of examples.)
+I recently bisected an issue on my Lenovo P1 gen3, which is connected to the Lenovo Thunderbolt 3 dock.
 
-> Add nvm specific operations for ASMedia.
-> And add tb_switch_nvm_upgradable() of enable firmware upgrade.
-> 
-> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> ---
+After I suspend the laptop to ram, the ethernet port led on the dock starts to blink like crazy,
+its peer port on my ethernet switch blinks as well, and eventually the switch stops forwarding packets,
+bringing all my network down.
 
-As the documentation asked you to, you did not version this patch set,
-nor say what is different from your previous ones :(
+Likely the ethernet card in the dock sends some kind of a garbage over the wire.
 
-thanks,
+Resuming the laptop, "fixes" the issue (leds stops blinking, and the network starts working again
+after a minute or so).
 
-greg k-h
+I also tried to connect the dock directly to my main desktop over a dedicated usb network card
+and try to capture the packets that are sent, but no packets were captured. I will soon retry
+this test with another network card. I did use promicious mode.
+
+
+This is the offending commit, and reverting it helps:
+
+commit cdf0b86b250fd3c1c3e120c86583ea510c52e4ce
+Author: Hayes Wang <hayeswang@realtek.com>
+Date:   Mon Jul 18 16:21:20 2022 +0800
+
+    r8152: fix a WOL issue
+    
+    This fixes that the platform is waked by an unexpected packet. The
+    size and range of FIFO is different when the device enters S3 state,
+    so it is necessary to correct some settings when suspending.
+    
+    Regardless of jumbo frame, set RMS to 1522 and MTPS to MTPS_DEFAULT.
+    Besides, enable MCU_BORW_EN to update the method of calculating the
+    pointer of data. Then, the hardware could get the correct data.
+    
+    Fixes: 195aae321c82 ("r8152: support new chips")
+    Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+    Link: https://lore.kernel.org/r/20220718082120.10957-391-nic_swsd@realtek.com
+    Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+
+WOL from dock was enabled in BIOS, but I tested with it disabled as well, and
+no change in behavier.
+
+Any help is welcome. I can test patches if needed, the laptop currently runs 6.0-rc2
+with this commit reverted.
+
+When I find some time I can also narrow the change down by reverting only parts
+of the patch.
+
+Best regards,
+	Maxim Levitsky
+
