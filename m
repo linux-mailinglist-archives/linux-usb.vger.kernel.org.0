@@ -2,62 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE49F59E8FE
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 19:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330B259EB4F
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 20:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbiHWRWZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 13:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S233810AbiHWSqg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 14:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241767AbiHWRVS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 13:21:18 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C266AC251;
-        Tue, 23 Aug 2022 07:57:29 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id s199so16320760oie.3;
-        Tue, 23 Aug 2022 07:57:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=FAI+J/BAzIOCuYieqj21rHdsHuRaSuJ4Vj8kHpJSNAE=;
-        b=Bguy5gXkBeLZqFWOQeDUzyvG2Dh1lvWQ5M1H3lAWbE8AeicHVgTcaeWv9P0JvKC750
-         Gzr3ibcGK71O2EP+ihg6zRki7XD5NK6bVl0pxo8rFk7n+6xaH6pwSNLePhBalIf/j6do
-         NZHLYH2uZUap4VEBxI1rnY7ImPaXe3PalgnoM984VJyXLz/9+BIINGt4RKGjkDhKvfxF
-         x8BKI8XayQ3u3gHLmVSsjoI4VNW+XGbcep0j4xY9jl9tPpAfCMVwCJ7FX03Cnu+rNy46
-         aLBSYCns9D1BUaU0sUG17eJgITTMZCl3mHHcGCvj11LcKoPh5Dp7fWsxraQ8W8a8E2Lj
-         4ppA==
-X-Gm-Message-State: ACgBeo3jpUgCtT7s9lWaZShSa36wPutKFi+YYKJxiW9ebI2VhFUFPanE
-        ZYeq2R1KX23penPSt1gsYg==
-X-Google-Smtp-Source: AA6agR4hSJQAGxX3KN7ayKSxhwLdWv6s8/qh4bhvrE5yHsP9wzSBH+Rc0HRRZkXNGG1/4mMLZExhJw==
-X-Received: by 2002:aca:3056:0:b0:345:64e9:7435 with SMTP id w83-20020aca3056000000b0034564e97435mr1417894oiw.19.1661266648690;
-        Tue, 23 Aug 2022 07:57:28 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 07:57:28 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Xin Ji <xji@analogixsemi.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org
-Subject: [PATCH] dt-bindings: usb: Add missing (unevaluated|additional)Properties on child nodes
-Date:   Tue, 23 Aug 2022 09:56:40 -0500
-Message-Id: <20220823145649.3118479-9-robh@kernel.org>
+        with ESMTP id S231714AbiHWSqW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 14:46:22 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942C4B2D9F;
+        Tue, 23 Aug 2022 10:09:57 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="292491145"
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="292491145"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:09:57 -0700
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="670121475"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:09:55 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@intel.corp-partner.google.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     rajat.khandelwal@intel.com, shawn.c.lee@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Enter safe mode only when pins need to be reconfigured
+Date:   Tue, 23 Aug 2022 22:39:49 +0530
+Message-Id: <20220823170949.2066916-1-rajat.khandelwal@intel.corp-partner.google.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,93 +42,77 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In order to ensure only documented properties are present, node schemas
-must have unevaluatedProperties or additionalProperties set to false
-(typically).
+From: Lee Shawn C <shawn.c.lee@intel.com>
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+There is no point to enter safe mode during DP/TBT configuration
+if the DP/TBT was already configured in mux. This is because safe
+mode is only applicable when there is a need to reconfigure the
+pins in order to avoid damage within/to port partner.
+
+1. if HPD interrupt arrives and DP mode was already configured,
+safe mode is entered again which is not desired.
+2. in chrome systems, IOM/mux is already configured before OS
+comes up. Thus, when driver is probed, it blindly enters safe
+mode due to PD negotiations but only after gfx driver lowers
+dp_phy_ownership, will the IOM complete safe mode and send
+ack to PMC.
+Since, that never happens, we see IPC timeout.
+
+Hence, allow safe mode only when pin reconfiguration is not
+required, which makes sense.
+
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+Signed-off-by: Lee Shawn C <shawn.c.lee@intel.com>
+
 ---
- .../devicetree/bindings/usb/analogix,anx7411.yaml    |  2 ++
- .../devicetree/bindings/usb/aspeed,usb-vhub.yaml     |  2 ++
- .../devicetree/bindings/usb/st,stusb160x.yaml        | 12 +++++++++---
- .../devicetree/bindings/usb/willsemi,wusb3801.yaml   |  1 +
- 4 files changed, 14 insertions(+), 3 deletions(-)
+ drivers/usb/typec/mux/intel_pmc_mux.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-index ee436308e5dc..0e72c08e6566 100644
---- a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-+++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-@@ -23,6 +23,8 @@ properties:
-   connector:
-     type: object
-     $ref: ../connector/usb-connector.yaml
-+    unevaluatedProperties: false
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index d238913e996a..4bf84466d1ff 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -432,6 +432,25 @@ static int pmc_usb_connect(struct pmc_usb_port *port, enum usb_role role)
+ 	return pmc_usb_command(port, msg, sizeof(msg));
+ }
+ 
++static bool
++pmc_usb_mux_allow_to_enter_safe_mode(struct pmc_usb_port *port,
++				      struct typec_mux_state *state)
++{
++	if ((IOM_PORT_ACTIVITY_IS(port->iom_status, DP) ||
++	     IOM_PORT_ACTIVITY_IS(port->iom_status, DP_MFD)) &&
++	     state->alt &&
++	     state->alt->svid == USB_TYPEC_DP_SID)
++		return false;
 +
-     description:
-       Properties for usb c connector.
++	if ((IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) ||
++	     IOM_PORT_ACTIVITY_IS(port->iom_status, ALT_MODE_TBT_USB)) &&
++	     state->alt &&
++	     state->alt->svid == USB_TYPEC_TBT_SID)
++		return false;
++
++	return true;
++}
++
+ static int
+ pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+ {
+@@ -442,8 +461,13 @@ pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+ 	if (port->orientation == TYPEC_ORIENTATION_NONE || port->role == USB_ROLE_NONE)
+ 		return 0;
  
-diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-index 8b019ac05bbe..a86bcd95100e 100644
---- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-+++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-@@ -67,6 +67,7 @@ properties:
+-	if (state->mode == TYPEC_STATE_SAFE)
++	if (state->mode == TYPEC_STATE_SAFE) {
++		if (!pmc_usb_mux_allow_to_enter_safe_mode(port, state))
++			return 0;
++
+ 		return pmc_usb_mux_safe_state(port);
++	}
++
+ 	if (state->mode == TYPEC_STATE_USB)
+ 		return pmc_usb_connect(port, port->role);
  
-   vhub-strings:
-     type: object
-+    additionalProperties: false
- 
-     properties:
-       '#address-cells':
-@@ -78,6 +79,7 @@ properties:
-     patternProperties:
-       '^string@[0-9a-f]+$':
-         type: object
-+        additionalProperties: false
-         description: string descriptors of the specific language
- 
-         properties:
-diff --git a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
-index b5a8c9814dd3..b8974807b666 100644
---- a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
-+++ b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
-@@ -33,6 +33,7 @@ properties:
-   connector:
-     type: object
-     $ref: /schemas/connector/usb-connector.yaml#
-+    unevaluatedProperties: false
- 
-     properties:
-       compatible:
-@@ -74,9 +75,14 @@ examples:
-                 data-role = "dual";
-                 typec-power-opmode = "default";
- 
--                port {
--                    typec_con_ep: endpoint {
--                        remote-endpoint = <&usbotg_hs_ep>;
-+                ports {
-+                    #address-cells = <1>;
-+                    #size-cells = <0>;
-+                    port@0 {
-+                        reg = <0>;
-+                        typec_con_ep: endpoint {
-+                            remote-endpoint = <&usbotg_hs_ep>;
-+                        };
-                     };
-                 };
-             };
-diff --git a/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml b/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
-index c2b2243c7892..5aa4ffd67119 100644
---- a/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
-+++ b/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
-@@ -28,6 +28,7 @@ properties:
-   connector:
-     type: object
-     $ref: ../connector/usb-connector.yaml#
-+    unevaluatedProperties: false
-     description:
-       The managed USB Type-C connector. Since WUSB3801 does not support
-       Power Delivery, the node should have the "pd-disable" property.
 -- 
-2.34.1
+2.31.1
 
