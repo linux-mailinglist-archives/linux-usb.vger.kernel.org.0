@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D4759E1A0
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 14:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D4A59E31E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Aug 2022 14:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241912AbiHWL1y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Aug 2022 07:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S1354746AbiHWKhZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Aug 2022 06:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357884AbiHWL04 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 07:26:56 -0400
+        with ESMTP id S1355112AbiHWKed (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Aug 2022 06:34:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AB5C04DF;
-        Tue, 23 Aug 2022 02:24:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95887A5C65;
+        Tue, 23 Aug 2022 02:06:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FE44B81C96;
-        Tue, 23 Aug 2022 09:24:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B044BC433C1;
-        Tue, 23 Aug 2022 09:24:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A06D6B81C95;
+        Tue, 23 Aug 2022 09:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B99C433B5;
+        Tue, 23 Aug 2022 09:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246676;
-        bh=bFP8WNIAi/xpN+RuABosBRmY0Hj9c/EwfxNDVdA0MPY=;
+        s=korg; t=1661245616;
+        bh=lNOn6QaHW8plvFamaLgqEtt38KC5LSM6pyNKcHZruUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=umHRHl0TgrVf3sBGAi6Mz9dJrYgNodZwlE4PoaEwW4x3naG9m/rCd74HheRkj3YUn
-         uUz/0daA8D8vsh2dN5tXSuukeD/qTI0b+13+nQCYqfzLsqqnXFAjT5ELyNHn88jfip
-         LNNJaF4i5rbTlJ6f6ni534nprLpnzd3Ps1Q90ezs=
+        b=h/E991gOiGGa09gYyIViMFa3mshBUa/ZA/SaaK4SLHktBddEvHuF+hpIVWsgMDIvg
+         ZPR3XPEUgxyb5x3hGpF4NQatCo43FqINz1z/Hr1kSTn2lrLS6rm28Ry5gMfZgvALPz
+         xhyA9Twofs/CONdEiY5s6oXLpHqpNT3wqgBfrauA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 184/389] usb: gadget: udc: amd5536 depends on HAS_DMA
-Date:   Tue, 23 Aug 2022 10:24:22 +0200
-Message-Id: <20220823080123.321428081@linuxfoundation.org>
+Subject: [PATCH 4.19 133/287] usb: gadget: udc: amd5536 depends on HAS_DMA
+Date:   Tue, 23 Aug 2022 10:25:02 +0200
+Message-Id: <20220823080104.909987977@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -85,10 +85,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index f985bb4a42db..ccf2c736d495 100644
+index d83d93c6ef9e..33b5648b2819 100644
 --- a/drivers/usb/gadget/udc/Kconfig
 +++ b/drivers/usb/gadget/udc/Kconfig
-@@ -311,7 +311,7 @@ source "drivers/usb/gadget/udc/bdc/Kconfig"
+@@ -309,7 +309,7 @@ source "drivers/usb/gadget/udc/bdc/Kconfig"
  
  config USB_AMD5536UDC
  	tristate "AMD5536 UDC"
