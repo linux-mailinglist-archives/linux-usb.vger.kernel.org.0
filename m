@@ -2,143 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2166759FF81
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 18:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6017B59FFB0
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 18:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239191AbiHXQ2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 12:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S238970AbiHXQnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 12:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiHXQ2O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 12:28:14 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0961382F8D;
-        Wed, 24 Aug 2022 09:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661358478;
-        bh=/JoCUmYyXJpMrmMGoBDe1GVrcRBpSz2UCYx2nBYqnrI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=hdicWkl6A5DLxc1Wu7iQlkEoyQnbt3Qg3bGL9Dg4FYVmtXmwwnJq4giwn+PvB6aPh
-         lqRO1oD+uXumt27iGHdGmAKNZMuqg5gxD+9yO2ubAzpsWQZWOtc8YsLDEvgwtOaVCf
-         BGBYS7yiK9EJYlapt4zNRxuKYTKgX+SGVHFVRaUM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from silverpad ([82.113.106.57]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MvK4f-1pI1qm3Xgf-00rFKd; Wed, 24
- Aug 2022 18:27:58 +0200
-From:   Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-To:     oliver@neukum.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     JFLF <jflf_kernel@gmx.com>
-Subject: [PATCH v2] r8152: add PID for the Lenovo OneLink+ Dock
-Date:   Wed, 24 Aug 2022 18:27:51 +0200
-Message-Id: <20220824162751.11881-1-jflf_kernel@gmx.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S239040AbiHXQly (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 12:41:54 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09AD13DC5
+        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c2so16155351plo.3
+        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=6UQFQzWIMsXO0TvDttsqfOV0v+YnUpw24yC7SfNzNmc=;
+        b=mYDsAVW1aU4k8MheXoibjYixBApob+/Ft5F8QdMk3X+LrTO6NuWOLhy3xipx/kwxyv
+         pW1fBs3gHKCNr9NF8WU8pt2/knAWGD+HwKoxBSMO+hu1oMgC4stVT4NFG06IXNvARd2+
+         xPuCa6Og0kJAKoVFkGfnyLuhgL9UApXPYo4sk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=6UQFQzWIMsXO0TvDttsqfOV0v+YnUpw24yC7SfNzNmc=;
+        b=WbGrXI5YLpFNKNb3fQ9VGrZr3cYziX3kIkJl+6iVVtMwvQsTP4H3/ri0XZU/ulTN7C
+         zc8WXzGLFftY7m7pRQAzs6S02j/ODAEGEvxgUTiOWAlVFRSrvMn6s7har72HJ2cfUjRw
+         G08Waw2DybrStFC4y/IkYxsxuY0EhMsMS58WaWGGsUxBT6Jw/VMRN1CIwhSEpQhdyGcG
+         d0mtQlwMZ44gowuEb7uDt7E3uQk8mKCi0+0X+S3tFNbf5WxPvvwut8ptAzi7gh3ieSTI
+         gc8kMZeAzar2Wtnyuj7SqNaPnihhR8RS40WZz+1S+mo8g3bAOieK4SMJKlvT85pKQWge
+         44WQ==
+X-Gm-Message-State: ACgBeo3+jEM8LMxjNMC+/Ebu5X6sGwGcBkTC9zElwve58gmUoUwsy8y9
+        zCf/A50CIeZFhXLgZ/rwdoD6hg==
+X-Google-Smtp-Source: AA6agR4Ox2+16RSl4/g10D50pDnJ0eAEz01Nnp/jLZOFEVTkg4IYINoxfPssWRQvepPRPq9b5eTy2w==
+X-Received: by 2002:a17:902:e88c:b0:172:cf6c:2801 with SMTP id w12-20020a170902e88c00b00172cf6c2801mr21261555plg.114.1661359312427;
+        Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:fba3:9861:f694:5325])
+        by smtp.gmail.com with UTF8SMTPSA id t15-20020a1709027fcf00b0016d5428f041sm12740625plb.199.2022.08.24.09.41.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 09:41:49 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: keep PHYs disabled during suspend
+Message-ID: <YwZUzeCTw2BupuMm@google.com>
+References: <20220823124047.14634-1-johan+linaro@kernel.org>
+ <YwUdbkyL8GgvLQJA@google.com>
+ <YwXhANZ8l6E9yQDe@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6FZAJtIqXhXav3lOfcXwUhEu6JC99LFsPjFBMODnDY8h00Jt5Pz
- p9Y9DpKtQ8r98M0scFU/LofzRfqAajzg8NRUuQJBkNSQMhlXa+XZyWNJgw0QBw6NVRnzZOQ
- 4aEz8kRyE5EjVx59rb1rV6NVhedqQzQJjtNLaYbcdhOphkWDqeGoTv3c7i+VezkmNIhb/rV
- 7yBT6LBrZvPvmyY1aeqyA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xfpsgQm5lWw=:kCHZi2jY/E9O50va/kemj7
- xAlzXxfjYzHGx2ShDXx7MJ6Y0E6m+I8wpdJBT6gmjjGj4dGA4rD7xIcrEHiXM5b3CdluYnHDP
- XVDvjN394IBnMN904NkGn9Zde4cizcCZwLFHin5E+qTHZZy1QUWX95SVN0bZD9lOT/zCC+jF5
- JrqFfJ9XdONR3cjja36XHjWUkxWlj0baMmqBqE+O5BHFy3f08JHffQjaWzadA9OPyIuj/5bH1
- 9MXpCi02TjGeHJ85ak7oB4yn1egSApF/if43Bl1cl/zQ3PigVj9Vo5nqNw7AqeGC935WUw5kl
- doRsYzJFJqSs3r8t+f0PRrz4UJJxvFu6lHnJHtyMzeuiyXdwcYHwGSrDTTElEBL3oaBQtvu3Z
- ejun+rYJtYyJ4EL4ZUu31dr9uAlMUEUJHkMnw9QiZiN3oj6ucjefrRQ7grjaIe0Cj/4yBZe8a
- 1JU6p9bfuBYlYVx2hiLfMZfJc7HTCqDOeJVQDwNcjhn2XcpxlHUs51kR/K2+lLEyGBUXm2gIH
- SmbuSWhdxrEZ/vt3mnT60Ef1ZZcImhs/4uIpvcaG9ovIrGl0EtPEUwJg4uKpQFRoloDY9Zxzu
- dEOcP0HHYnew7RzYbdIQCzpldulZGa3qlOY7vbPqwixQHdE8s49JrPfNH3Vtj1syhpaH6brRm
- WzAGxbfOfqtMGc/o2LKSDeDPW6aBCzOhAs4xCuxl5EzPad/PHQ/zaObNcq8DQBkzMeiimOQYR
- Akwo4c47A1bNRvbdGkiVZ30KVdCrCswCX6efhwMPjl/2kOajTmP2fGkxqUrCyGQeOUQRby8UN
- NoPAm2jQNAeYHs6YkYG/yEX7YDnQ734osg4g0S2WOWNLOI/bQRaW0B66jKzQs1Jodse30kh0u
- xSihvXUp+YF1urtov3G3K0CL/rxpOLonF5O3YknH8Mb7de2Vx/+YchMwCeOvKonvbXaez39sf
- nxdFKACd5sFINSBczlkPvHtSrANeAPTwg3u3CWFweftMaBYjH/NWqYKyJlo+9P2lLxuK01ISc
- jUcSZ4NBSPi0iu5EM8e9Crc8ezclENw6H//bbGh9zJwZTIlYGgsO2kz8EbUKtiKwRvXdXKyr1
- vXvLVINWkBuG8rMj95Fs8M39CnkVTA9jjTcUQocypWhyl7Dr+T9jD+RsmzwiUspzTtji2qOD0
- 8UvtNORaG9BZ1txy2Yg7aSsv7rt/NnZHtu1mX1NIs3E2za6tIG7fu0DgmDSbuirBjjAGXwFy4
- cHIYwtwl2g5FY4wefYlLLI1csTWY7JOLmAkrxYiFYSDzkv6U/AnWoCKjuHHkRvzsOW3qHvbmE
- Pve3al4FXgmLZkfXmLzAvNlRuyZlAg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YwXhANZ8l6E9yQDe@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: JFLF <jflf_kernel@gmx.com>
+On Wed, Aug 24, 2022 at 10:27:44AM +0200, Johan Hovold wrote:
+> On Tue, Aug 23, 2022 at 11:33:18AM -0700, Matthias Kaehlcke wrote:
+> > Hi Johan,
+> > 
+> > On Tue, Aug 23, 2022 at 02:40:47PM +0200, Johan Hovold wrote:
+> > > Commit 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system
+> > > suspend") started leaving the PHYs enabled during suspend for
+> > > wakeup-capable controllers even though it turns out this had nothing to
+> > > do with wakeup.
+> > > 
+> > > Rather, the wakeup capability flag was (ab-)used as a proxy to configure
+> > > the suspend behaviour in an attempt to reduce power leakage on some
+> > > platforms.
+> > > 
+> > > Stop abusing the wakeup configuration and restore the 5.19 behaviour of
+> > > keeping the PHYs powered off during suspend. If needed, a dedicated
+> > > mechanism for configuring the PHY power state during suspend can be
+> > > added later.
+> > > 
+> > > Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
+> > > Link: https://lore.kernel.org/r/Yuv7AM/5jtO/pgcm@google.com
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > >  drivers/usb/dwc3/core.c      | 4 ++--
+> > >  drivers/usb/dwc3/dwc3-qcom.c | 1 -
+> > >  2 files changed, 2 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > index 8c8e32651473..0cdb6be720e1 100644
+> > > --- a/drivers/usb/dwc3/core.c
+> > > +++ b/drivers/usb/dwc3/core.c
+> > > @@ -1983,7 +1983,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > >  		dwc3_core_exit(dwc);
+> > >  		break;
+> > >  	case DWC3_GCTL_PRTCAP_HOST:
+> > > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> > > +		if (!PMSG_IS_AUTO(msg)) {
+> > 
+> > My assumption was that the PHYs need to be powered for wakeup to work, but
+> > apparently that isn't the case, wakeup still works on sc7x80 with this part
+> > of this patch.
+> 
+> Thanks for confirming.
+> 
+> > >  			dwc3_core_exit(dwc);
+> > >  			break;
+> > >  		}
+> > > @@ -2044,7 +2044,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+> > >  		spin_unlock_irqrestore(&dwc->lock, flags);
+> > >  		break;
+> > >  	case DWC3_GCTL_PRTCAP_HOST:
+> > > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> > > +		if (!PMSG_IS_AUTO(msg)) {
+> > >  			ret = dwc3_core_init_for_resume(dwc);
+> > >  			if (ret)
+> > >  				return ret;
+> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > > index 9a94b1ab8f7a..9995395baa12 100644
+> > > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > > @@ -904,7 +904,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+> > >  
+> > >  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
+> > >  	device_init_wakeup(&pdev->dev, wakeup_source);
+> > > -	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
+> > 
+> > Surprisingly this part breaks wakeup on sc7x80, with the above removal
+> > of the device_may_wakeup() checks it is not clear to me why wakeup needs
+> > to be enabled for the core.
+> 
+> I can't explain that behaviour either. This change doesn't affect the
+> wakeup_path flag and genpd, and notably wakeup still works here with
+> sc8280xp.
+> 
+> Could it be some Chromium user-space issue in that it expects all
+> devices on the wakeup path to be wakeup capable? Note that the
+> xhci-plat driver (e.g. for the descendant xhci-hcd.1.auto device)
+> unconditionally sets the wakeup-capable flag (but leaves it disabled by
+> default).
+> 
+> I guess we could do something similar for the dwc3 core device, but we'd
+> need to figure out if and why that is at all needed first.
+> 
+> Can you verify that the wakeup source (e.g. keyboard) you're using still
+> has power/wakeup set to "enabled"?
 
-The Lenovo OneLink+ Dock contains an RTL8153 controller that behaves as
-a broken CDC device by default. Add the custom Lenovo PID to the r8152
-driver to support it properly.
+I confirmed that the wakeup flag of the wakeup source is still enabled when
+the wakeup source suspends.
 
-Also, systems compatible with this dock provide a BIOS option to enable
-MAC address passthrough (as per Lenovo document "ThinkPad Docking
-Solutions 2017"). Add the custom PID to the MAC passthrough list too.
+It turns out the dwc3 core wakeup flags are evaluated by:
 
-Tested on a ThinkPad 13 1st gen with the expected results:
+	int usb_phy_roothub_suspend(struct device *controller_dev,
+	                            struct usb_phy_roothub *phy_roothub)
+	{
+		usb_phy_roothub_power_off(phy_roothub);
 
-passthrough disabled: Invalid header when reading pass-thru MAC addr
-passthrough enabled:  Using pass-thru MAC addr XX:XX:XX:XX:XX:XX
+		/* keep the PHYs initialized so the device can wake up the system */
+		if (device_may_wakeup(controller_dev))
+			return 0;
 
-Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-=2D--
- drivers/net/usb/cdc_ether.c | 7 +++++++
- drivers/net/usb/r8152.c     | 3 +++
- 2 files changed, 10 insertions(+)
+		return usb_phy_roothub_exit(phy_roothub);
+	}
 
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 2de09ad5b..e11f70911 100644
-=2D-- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -777,6 +777,13 @@ static const struct usb_device_id	products[] =3D {
- },
- #endif
-
-+/* Lenovo ThinkPad OneLink+ Dock (based on Realtek RTL8153) */
-+{
-+	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3054, USB_CLASS_COMM,
-+			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-+	.driver_info =3D 0,
-+},
-+
- /* ThinkPad USB-C Dock (based on Realtek RTL8153) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3062, USB_CLASS_COMM,
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 0f6efaaba..e692a1576 100644
-=2D-- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -770,6 +770,7 @@ enum rtl8152_flags {
- 	RX_EPROTO,
- };
-
-+#define DEVICE_ID_THINKPAD_ONELINK_PLUS_DOCK		0x3054
- #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
- #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
- #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
-@@ -9584,6 +9585,7 @@ static bool rtl8152_supports_lenovo_macpassthru(stru=
-ct usb_device *udev)
-
- 	if (vendor_id =3D=3D VENDOR_ID_LENOVO) {
- 		switch (product_id) {
-+		case DEVICE_ID_THINKPAD_ONELINK_PLUS_DOCK:
- 		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
- 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
- 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
-@@ -9831,6 +9833,7 @@ static const struct usb_device_id rtl8152_table[] =
-=3D {
- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927),
- 	REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3054),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082),
-=2D-
-2.34.1
-
+'controller_dev' is the dwc3 core. The root hub is un-initialized when wakeup is
+disabled. That causes wakeup to fail, and also happens to be the/one cause of
+the high power consumption of an onboard USB hub that I mentioned earlier in
+another thread.
