@@ -2,44 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF0159F33A
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 07:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE60C59F33D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 07:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbiHXFyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 01:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S234415AbiHXF4K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 01:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiHXFyK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 01:54:10 -0400
+        with ESMTP id S229551AbiHXF4J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 01:56:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8947C52F
-        for <linux-usb@vger.kernel.org>; Tue, 23 Aug 2022 22:54:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCCC86C2C;
+        Tue, 23 Aug 2022 22:56:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 888BB6189F
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 05:54:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8688DC433D6;
-        Wed, 24 Aug 2022 05:54:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D33C618A9;
+        Wed, 24 Aug 2022 05:56:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9A4C433D6;
+        Wed, 24 Aug 2022 05:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661320444;
-        bh=HDUT+qItTnfgEqbmMkdBQgpae62F7R5aAS1PEsOpEGk=;
+        s=korg; t=1661320568;
+        bh=/lQK6eSyHFmPY9FHfehXTuLBTlCtNaOLxFlDwPC1f/4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yq1asYLqJbZ8HguCA/uvTZeB6HnvDigMIK/pzyDinFHUuRylE/Ar/cYb5W26qv/qW
-         zuoh6n5yaXKJ+5WBZmJOEU4HdxRw7ker33plbSxrxVuzu10+Bv18b8Dq7+vJEuyptg
-         BAgNBWdEcJ2KwecaFZsiFuwKHJy9imD0nOa2BWoc=
-Date:   Wed, 24 Aug 2022 07:54:02 +0200
+        b=zU3ILmUfSavbZXEmKsGu1fAYoww8AzQBdd3YPcnxApAGDxwTBCxdrIxAonCW6Hz5Z
+         f9/C+zA/dIP1ip6oHBmKb0AgMm4uvnH0TonlVfIcZwYTSQI3ybgaKjm/bk1dV3yEm1
+         lioqgCBJIpZuHvmqsTx7M1OVFG+pDfxJZZi+Cyp4=
+Date:   Wed, 24 Aug 2022 07:56:04 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: function: rndis: limit # of RNDIS instances
- to 1000
-Message-ID: <YwW8+hcJ9idgSbwl@kroah.com>
-References: <a8180973-3ded-3644-585a-169589a37642@omp.ru>
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: ehci: Prevent possible modulo by zero
+Message-ID: <YwW9dBW/0TKHPnC1@kroah.com>
+References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
+ <20220823182758.13401-3-khalid.masum.92@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a8180973-3ded-3644-585a-169589a37642@omp.ru>
+In-Reply-To: <20220823182758.13401-3-khalid.masum.92@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -50,38 +51,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 11:53:26PM +0300, Sergey Shtylyov wrote:
-> As follows from #define NAME_TEMPLATE, the procfs code in the RNDIS driver
-> expects the # of instances to be 3-digit decimal, while the driver calls
-> ida_simple_get() passing 0 as the 'end' argument which results in actual
-> max instance # of INT_MAX.  Limit the maximum # of RNDIS instances to 1000
-> which is still a lot! :-)
+On Wed, Aug 24, 2022 at 12:27:58AM +0600, Khalid Masum wrote:
+> usb_maxpacket() returns 0 if it fails to fetch the endpoint. This
+> value is later used for calculating modulo. Which can cause modulo
+> by zero in qtd_fill.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
-> analysis tool.
+> Prevent this breakage by returning if maxpacket is found to be 0.
 > 
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> 
-> ---
-> This patch is against the 'next' branch of Felipe Balbi's 'usb.git' repo...
-> 
->  drivers/usb/gadget/function/rndis.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Index: usb/drivers/usb/gadget/function/rndis.c
-> ===================================================================
-> --- usb.orig/drivers/usb/gadget/function/rndis.c
-> +++ usb/drivers/usb/gadget/function/rndis.c
-> @@ -865,7 +865,7 @@ EXPORT_SYMBOL_GPL(rndis_msg_parser);
->  
->  static inline int rndis_get_nr(void)
->  {
-> -	return ida_simple_get(&rndis_ida, 0, 0, GFP_KERNEL);
-> +	return ida_simple_get(&rndis_ida, 0, 1000, GFP_KERNEL);
+> Fixes coverity warning: 1487371 ("Division or modulo by zero")
 
-Why not just change the procfs code instead?  It's not like anyone
-should ever be using this driver anyway.  We should delete it soon, it's
-totally broken and insecure as noted in the past :(
+Odd tag format, is that in the documentation?
+
+> Fixes: 9841f37a1cca ("usb: ehci: Add support for SINGLE_STEP_SET_FEATURE test of EHSET")
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> ---
+>  drivers/usb/host/ehci-q.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+> index eb31d13e9ecd..cf2585e9a09f 100644
+> --- a/drivers/usb/host/ehci-q.c
+> +++ b/drivers/usb/host/ehci-q.c
+> @@ -1221,6 +1221,8 @@ static int ehci_submit_single_step_set_feature(
+>  	token |= (1 /* "in" */ << 8);  /*This is IN stage*/
+>  
+>  	maxpacket = usb_maxpacket(urb->dev, urb->pipe);
+> +	if (unlikely(!maxpacket))
+
+You only ever use likely/unlikely if you can document how it matters
+with a benchmark or other way to notice the difference.  Otherwise let
+the compiler and the CPU do their magic, they know how to do this better
+than us.
+
+> +		return -1;
+
+A real error number should be returned here if this was valid.
+
+But as Alan said, coverity is often wrong, and unless you can prove
+otherwise, this patch isn't valid.
 
 thanks,
 
