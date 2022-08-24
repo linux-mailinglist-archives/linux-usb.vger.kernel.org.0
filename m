@@ -2,101 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A0759F88C
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 13:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B46F59F8D3
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 13:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236234AbiHXLWY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 07:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S236838AbiHXLuJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 07:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbiHXLWV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 07:22:21 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E86555B;
-        Wed, 24 Aug 2022 04:22:20 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id y19so5868697ilq.9;
-        Wed, 24 Aug 2022 04:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=6H2VCsroSwSsOLzUIr02/aGqdyNOr0x+cKsTlTDmAA0=;
-        b=eiIo6d6uy+0dwAXj3EjHaVAu4zFtq3v/3gRH1ubXYl80iimBeVcT8pAGWQKMWOCJuX
-         E+7f18DINDNVsQiHJmdzTNKwhfeE51yiZa9o1Hxm+uV4XJJwnVoe2OB9ZAuidoLeXOH6
-         jq074poFgm+lvwveJqpzBPD8HccBIyndV0ikYMy+SG/PjJm94pD6J5yRNDntSSXx9a99
-         RhyagH3MwqHBb9iwZOBavHuOPinzXzXW9wCv39Kdui7q746cDVxq3wwBrrB4KQs9obyL
-         YjfrhTGUWMCu0h2/fKGO41IZYhi3IBumkw0S/Io0YaW0J017+UftwTtHa26qFIIrMe1g
-         +BXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=6H2VCsroSwSsOLzUIr02/aGqdyNOr0x+cKsTlTDmAA0=;
-        b=I+jApSbPXQw+Elt6YTrzdxhpWFilYxtiWksj6eJqlpgRoIytiLW5uVNdwbI4o5vL90
-         Nfc1+Pcd8rKHLCxV8wrqdbyoIvQkp57okGk6VdEJMfPh9uqc/+hFBm00NISTPmEK/2s/
-         ibxyBKt1TnwC826qlZ1aKtSKP7Al7RjdjcWTlpeSLaf9LCbTS+kr3fKq5YUgcrQU4IAT
-         8si8yULwws1bccWeHTu4Siksv3z6pLt/bPB4fkuWEI0t19rjpyDeKxGT5qCVATGmbxVe
-         K/v/MbF6q9wQxKaRPyXIZdizgJ3J5aWhsRtwkpLjf/x5iE+BBsqGLcKk8DAaXeCk3X0i
-         zdyA==
-X-Gm-Message-State: ACgBeo3gdtCdIovBwKIpZtDR6Y5LaS4vqWfCbs4rPoAqdq2IV1/AO9RM
-        tPLI1G5zEpLMLO4T9wBsPXzdrTeNr2QlYXaHv4w=
-X-Google-Smtp-Source: AA6agR5BpXLO61wS45MEiXcvDBq4DkMt5K0/2ZJw8+Cg7gc798me1DZ5O7mcPgfyHk1hRhflEO5i1L8sN8B4nv/8+o0=
-X-Received: by 2002:a05:6e02:148c:b0:2de:c3b:91d with SMTP id
- n12-20020a056e02148c00b002de0c3b091dmr1884602ilk.95.1661340139510; Wed, 24
- Aug 2022 04:22:19 -0700 (PDT)
+        with ESMTP id S236885AbiHXLuH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 07:50:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA097961B
+        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 04:50:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B4A661965
+        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 11:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385A6C433C1;
+        Wed, 24 Aug 2022 11:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661341802;
+        bh=Okrp3GWFhOqv2pUg6uu8hJxDbk+w3NKuxSPf7s33mmo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lBFVFtpEZmcAzLXfS0EKKiDIAeAMgI59bKB2IO1QnHPN1V3wDKp3ZcXwHfntfZ4RY
+         bNouTD4+AioeQGDEmOQW0kOKtjvhXJfe3v7Taxd1/b54Rg2fev/sjrqFMYnFz/LZ2L
+         Sy144r7vGgjWUVQttk4CFBNLm7SLOTLNIepU/aRI=
+Date:   Wed, 24 Aug 2022 13:49:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Hu Xiaoying <huxiaoying2008@gmail.com>
+Cc:     usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu
+Subject: Re: Confirmation for subscribe linux-usb
+Message-ID: <YwYQZ/3Nf2hMKcHO@kroah.com>
+References: <S240916AbiHWHMh/20220823071237Z+20120@vger.kernel.org>
+ <CABd4Uja9SoHpiMr2gDFcEP2Cudp7dcWJ_2i+KTEse9CU=KMtzw@mail.gmail.com>
+ <CABd4UjYB=nzha=eoogNJU4pFwW9+4PQ65bC5u=R-gCE_ZLSQXw@mail.gmail.com>
+ <CABd4UjaBog_VVcYjc2YDTq3Q-cfSWVzVbRbffJr8i_YE8dh-nQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
- <20220823182758.13401-3-khalid.masum.92@gmail.com> <YwW9dBW/0TKHPnC1@kroah.com>
-In-Reply-To: <YwW9dBW/0TKHPnC1@kroah.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Wed, 24 Aug 2022 17:22:08 +0600
-Message-ID: <CAABMjtHg3Fe3QQgdDd4p=b25JWHKVFtibczLhk1hG0idMyrJhg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: ehci: Prevent possible modulo by zero
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABd4UjaBog_VVcYjc2YDTq3Q-cfSWVzVbRbffJr8i_YE8dh-nQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 11:56 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, Aug 24, 2022 at 05:45:49PM +0800, Hu Xiaoying wrote:
+> >From 040e7ed7e6e9ed850575ed075e02d960a5ffe191 Mon Sep 17 00:00:00 2001
 
->
+Please stop and take a break for a day.
 
-> Odd tag format, is that in the documentation?
+Look at the subject line of your email, is that what the other subject
+lines for this mailing list look like?  You can see all of the prior
+emails on the list on lore.kernel.org if you want some examples.
 
-You are right. I should have used "Addresses-coverity".
+> From: Hu Xiaoying <huxiaoying@kylinos.cn>
 
-> You only ever use likely/unlikely if you can document how it matters
-> with a benchmark or other way to notice the difference.  Otherwise let
-> the compiler and the CPU do their magic, they know how to do this better
-> than us.
+Ok, but this does not match your signed-off-by line, as my bot told you
+to fix, why not?
 
-Thanks for the important information.
->
-> > +             return -1;
+> Date: Wed, 22 Jun 2022 16:35:59 +0800
+> Subject: [PATCH -next] KYLIN: usb: Improves USB2.0 write performance for
+>  External HDD device (VID:PID = 0x0b05:0x1932)
 
-I noticed. The function returns -1 on failure, everywhere so I used that.
-I guess making them return correct error numbers using macros would
-be a patch.
->
-> A real error number should be returned here if this was valid.
->
-> But as Alan said, coverity is often wrong, and unless you can prove
-> otherwise, this patch isn't valid.
+That is a very long subject line, your editor told you to only use 50 or
+so characters, please follow that rule.
 
-Got you.
->
-> thanks,
->
-> greg k-h
+> 
+> CVE: NA
 
-  -- Khalid Masum
+Why is this even here at all?  We don't track CVE numbers for kernel
+patches, that's crazy and insane and even MITRE agrees that CVEs do not
+make any sense at all for the Linux kernel.  So don't even attempt to
+classify something as "no CVE here" as that makes no sense.
+
+> 
+> USB external storage device(0x0b05:1932), use gnome-disk-utility tools
+> to test usb write  < 30MB/s.
+> then, igoned to load module of uas for this device.
+> ===============================================
+> Write speed: Improves form 27MB/s to 40MB/s+
+
+That seems very odd, what about the USB 3 connection for this device?
+Why is UAS so slow for this specific device?
+
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hu Xiaoying <huxiaoying2008@gmail.cn>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h
+> b/drivers/usb/storage/unusual_uas.h
+> index 4051c8cd0cd8..abaf4ea8138b 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -157,3 +157,10 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
+>   "External HDD",
+>   USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>   US_FL_ALWAYS_SYNC),
+> +
+> +/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
+> +UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
+
+Why all versions?  Why not just your one specific one?
+
+Also, your patch is corrupted and can not be applied at all :(
+
+Please take a day off, relax, and come back in a few days and resubmit a
+fixed up commit after reading our documentation for how to properly
+write and submit a kernel change.
+
+thanks,
+
+greg k-h
