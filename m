@@ -2,72 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6017B59FFB0
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 18:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A7B59FFC3
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 18:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238970AbiHXQnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 12:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S239438AbiHXQsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 12:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239040AbiHXQly (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 12:41:54 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09AD13DC5
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id c2so16155351plo.3
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=6UQFQzWIMsXO0TvDttsqfOV0v+YnUpw24yC7SfNzNmc=;
-        b=mYDsAVW1aU4k8MheXoibjYixBApob+/Ft5F8QdMk3X+LrTO6NuWOLhy3xipx/kwxyv
-         pW1fBs3gHKCNr9NF8WU8pt2/knAWGD+HwKoxBSMO+hu1oMgC4stVT4NFG06IXNvARd2+
-         xPuCa6Og0kJAKoVFkGfnyLuhgL9UApXPYo4sk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=6UQFQzWIMsXO0TvDttsqfOV0v+YnUpw24yC7SfNzNmc=;
-        b=WbGrXI5YLpFNKNb3fQ9VGrZr3cYziX3kIkJl+6iVVtMwvQsTP4H3/ri0XZU/ulTN7C
-         zc8WXzGLFftY7m7pRQAzs6S02j/ODAEGEvxgUTiOWAlVFRSrvMn6s7har72HJ2cfUjRw
-         G08Waw2DybrStFC4y/IkYxsxuY0EhMsMS58WaWGGsUxBT6Jw/VMRN1CIwhSEpQhdyGcG
-         d0mtQlwMZ44gowuEb7uDt7E3uQk8mKCi0+0X+S3tFNbf5WxPvvwut8ptAzi7gh3ieSTI
-         gc8kMZeAzar2Wtnyuj7SqNaPnihhR8RS40WZz+1S+mo8g3bAOieK4SMJKlvT85pKQWge
-         44WQ==
-X-Gm-Message-State: ACgBeo3+jEM8LMxjNMC+/Ebu5X6sGwGcBkTC9zElwve58gmUoUwsy8y9
-        zCf/A50CIeZFhXLgZ/rwdoD6hg==
-X-Google-Smtp-Source: AA6agR4Ox2+16RSl4/g10D50pDnJ0eAEz01Nnp/jLZOFEVTkg4IYINoxfPssWRQvepPRPq9b5eTy2w==
-X-Received: by 2002:a17:902:e88c:b0:172:cf6c:2801 with SMTP id w12-20020a170902e88c00b00172cf6c2801mr21261555plg.114.1661359312427;
-        Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:fba3:9861:f694:5325])
-        by smtp.gmail.com with UTF8SMTPSA id t15-20020a1709027fcf00b0016d5428f041sm12740625plb.199.2022.08.24.09.41.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 09:41:52 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 09:41:49 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: keep PHYs disabled during suspend
-Message-ID: <YwZUzeCTw2BupuMm@google.com>
-References: <20220823124047.14634-1-johan+linaro@kernel.org>
- <YwUdbkyL8GgvLQJA@google.com>
- <YwXhANZ8l6E9yQDe@hovoldconsulting.com>
+        with ESMTP id S236605AbiHXQsQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 12:48:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF954DF18;
+        Wed, 24 Aug 2022 09:48:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DC8AB8259B;
+        Wed, 24 Aug 2022 16:48:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0B0C433D6;
+        Wed, 24 Aug 2022 16:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661359693;
+        bh=sjpYGFIJ+m4vZ7surdq6d5jz3f80uBPmrxte8+TEnRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k5tV8z0KSmJp9Q8eIvyPCN0fsbRehnl2RBXBiXeYFzoBpqY+B6FSVJoFtMbEk0oC4
+         +6DIHLa5g2KydN/gaiA//ccKtiSlAkbhE1Pas2iLjqNMuzbNB9Za9VvHZl1A21oFo2
+         XQ4MWbltwpcctlBbomOXByzXiwkze8eE0/GFRTQI=
+Date:   Wed, 24 Aug 2022 18:48:10 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: add quirks for Lenovo OneLink+ Dock
+Message-ID: <YwZWSud0hr/+PpgI@kroah.com>
+References: <20220824162641.11805-1-jflf_kernel@gmx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwXhANZ8l6E9yQDe@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220824162641.11805-1-jflf_kernel@gmx.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,110 +49,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 10:27:44AM +0200, Johan Hovold wrote:
-> On Tue, Aug 23, 2022 at 11:33:18AM -0700, Matthias Kaehlcke wrote:
-> > Hi Johan,
-> > 
-> > On Tue, Aug 23, 2022 at 02:40:47PM +0200, Johan Hovold wrote:
-> > > Commit 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system
-> > > suspend") started leaving the PHYs enabled during suspend for
-> > > wakeup-capable controllers even though it turns out this had nothing to
-> > > do with wakeup.
-> > > 
-> > > Rather, the wakeup capability flag was (ab-)used as a proxy to configure
-> > > the suspend behaviour in an attempt to reduce power leakage on some
-> > > platforms.
-> > > 
-> > > Stop abusing the wakeup configuration and restore the 5.19 behaviour of
-> > > keeping the PHYs powered off during suspend. If needed, a dedicated
-> > > mechanism for configuring the PHY power state during suspend can be
-> > > added later.
-> > > 
-> > > Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
-> > > Link: https://lore.kernel.org/r/Yuv7AM/5jtO/pgcm@google.com
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > ---
-> > >  drivers/usb/dwc3/core.c      | 4 ++--
-> > >  drivers/usb/dwc3/dwc3-qcom.c | 1 -
-> > >  2 files changed, 2 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 8c8e32651473..0cdb6be720e1 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -1983,7 +1983,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >  		dwc3_core_exit(dwc);
-> > >  		break;
-> > >  	case DWC3_GCTL_PRTCAP_HOST:
-> > > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
-> > > +		if (!PMSG_IS_AUTO(msg)) {
-> > 
-> > My assumption was that the PHYs need to be powered for wakeup to work, but
-> > apparently that isn't the case, wakeup still works on sc7x80 with this part
-> > of this patch.
+On Wed, Aug 24, 2022 at 06:26:41PM +0200, Jean-Francois Le Fillatre wrote:
+> From: JFLF <jflf_kernel@gmx.com>
 > 
-> Thanks for confirming.
+> The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
+> 17ef:1018 upstream
+> 17ef:1019 downstream
 > 
-> > >  			dwc3_core_exit(dwc);
-> > >  			break;
-> > >  		}
-> > > @@ -2044,7 +2044,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
-> > >  		spin_unlock_irqrestore(&dwc->lock, flags);
-> > >  		break;
-> > >  	case DWC3_GCTL_PRTCAP_HOST:
-> > > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
-> > > +		if (!PMSG_IS_AUTO(msg)) {
-> > >  			ret = dwc3_core_init_for_resume(dwc);
-> > >  			if (ret)
-> > >  				return ret;
-> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > > index 9a94b1ab8f7a..9995395baa12 100644
-> > > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > > @@ -904,7 +904,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
-> > >  
-> > >  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
-> > >  	device_init_wakeup(&pdev->dev, wakeup_source);
-> > > -	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
-> > 
-> > Surprisingly this part breaks wakeup on sc7x80, with the above removal
-> > of the device_may_wakeup() checks it is not clear to me why wakeup needs
-> > to be enabled for the core.
+> Those two controllers both have problems with some USB3.0 devices,
+> particularly self-powered ones. Typical error messages include:
 > 
-> I can't explain that behaviour either. This change doesn't affect the
-> wakeup_path flag and genpd, and notably wakeup still works here with
-> sc8280xp.
+>   Timeout while waiting for setup device command
+>   device not accepting address X, error -62
+>   unable to enumerate USB device
 > 
-> Could it be some Chromium user-space issue in that it expects all
-> devices on the wakeup path to be wakeup capable? Note that the
-> xhci-plat driver (e.g. for the descendant xhci-hcd.1.auto device)
-> unconditionally sets the wakeup-capable flag (but leaves it disabled by
-> default).
+> By process of elimination the controllers themselves were identified as
+> the cause of the problem. Through trial and error the issue was solved
+> by using USB_QUIRK_RESET_RESUME for both chips.
 > 
-> I guess we could do something similar for the dwc3 core device, but we'd
-> need to figure out if and why that is at all needed first.
-> 
-> Can you verify that the wakeup source (e.g. keyboard) you're using still
-> has power/wakeup set to "enabled"?
+> Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
 
-I confirmed that the wakeup flag of the wakeup source is still enabled when
-the wakeup source suspends.
+Does not match your "From:" line :(
 
-It turns out the dwc3 core wakeup flags are evaluated by:
+> ---
+>  drivers/usb/core/quirks.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-	int usb_phy_roothub_suspend(struct device *controller_dev,
-	                            struct usb_phy_roothub *phy_roothub)
-	{
-		usb_phy_roothub_power_off(phy_roothub);
+Forgot to list below the --- line what changed from v1 :(
 
-		/* keep the PHYs initialized so the device can wake up the system */
-		if (device_may_wakeup(controller_dev))
-			return 0;
-
-		return usb_phy_roothub_exit(phy_roothub);
-	}
-
-'controller_dev' is the dwc3 core. The root hub is un-initialized when wakeup is
-disabled. That causes wakeup to fail, and also happens to be the/one cause of
-the high power consumption of an onboard USB hub that I mentioned earlier in
-another thread.
