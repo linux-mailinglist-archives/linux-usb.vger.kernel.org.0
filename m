@@ -2,94 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7AA5A0118
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 20:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31FB5A014E
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 20:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240398AbiHXSHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 14:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S238711AbiHXSX6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 14:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240373AbiHXSHd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 14:07:33 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B386BCC1;
-        Wed, 24 Aug 2022 11:07:33 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id o13so5084111ilt.3;
-        Wed, 24 Aug 2022 11:07:32 -0700 (PDT)
+        with ESMTP id S240573AbiHXSXz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 14:23:55 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF5E796B6;
+        Wed, 24 Aug 2022 11:23:53 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id m2so5934337qvq.11;
+        Wed, 24 Aug 2022 11:23:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=n6VLsvWXIz4UjtHlsmuUC9VbAunQhpMZsf7gkqqQZ2Y=;
-        b=faDH/HocgmiiUZY09EKlXYCW1XuMalpCM2E3GILA4rvtRzE8DS5T7K0CD6GHLX9ayy
-         ayLhx6PEn1Bho8YSpGR6NiXGoYu0DzMS8gHaXWAEvfB7rMzBCpxtT6bLUKW9T806sFRp
-         eln1H6Xt6A2Am9jEIPcTdR8/E0TkDvPZIWdUT8Uvb3fDFQvokCnQNplgIegXgRFkF1f5
-         wc1af73fVLrdAfoxo7GWRz8+/3XmHiXw/1diHj8FGQp1lJI+cU1CCtzbCrzP80m4DfFk
-         yxwVJTmChD8B8Phyv47IFU//4RHqu7UZubLSZ3jjk2O38eT67cqV28GjB7Qecgzzifaz
-         r2dw==
+        bh=yK26ITzqXq21qe37kX2FSO/m5ELFXUKoDF4JXVSf2Yk=;
+        b=MvM8l4jybyLdDHdEzRIMNyw4AOmrePmypzWB/zttf9T0J7PG9J4Wx7dBNTuzVXoDk6
+         Pts/G2fqgF/JQaMqB8fJCMqJ+beuAsVHD6sSwZSkmpwHWjs16E2IT4XNIe6Q6fgb30Zs
+         ZcGIpsoNniM9EIH/+Zb37nJErUfqlUsOccOHh0uSZMEY0dSlyAXKjLqlO75Yqdtv7OO1
+         dYCSyGktFrnrMS7HOVtlvTOS/XCbqoto8P5Sqf35hN1TiAKL6A/vNI3F+nGX8XYj/qRm
+         v0nFEnMlNMqnOzVrB+gBsvrsuai6QZJ7YhzoDyRlAbIr6vHxT20Zg8tQelGuhq4BeT5z
+         iqhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=n6VLsvWXIz4UjtHlsmuUC9VbAunQhpMZsf7gkqqQZ2Y=;
-        b=COxHnxoS7aPqnZn7SvoyvK1QcJPQe68UoKGK8Tq50slUqB/aTrKDomOaKLgw1le55d
-         PHgcitOPFB7NZ3ZZ0TY5BqX14/jL3VcgAhntCB4EhUdKV9LMBkkXBBlaNXVQJqLDdjZa
-         UWaTUjFhyGhWs6zcOjWmVmcu8Va50akvontkrmPmtSQ+LS4EzT66QouuKa+MteeL511G
-         gOrxm67yTkqnQzL9o75OVj3ZC4Ze2whsaoarJzLvEonmhU6uXZAlfiAXiRzE7LhzoEUf
-         BX9zQFmh5EVOB7OsMGwaWIb9ISHyJ80eJefdGNRUWDFGBE1jP6xwGEI7/HV/GdNcyROE
-         YvNA==
-X-Gm-Message-State: ACgBeo08X6c8S/7ubMoIboBENgG6P21AToPJyaFZO0+7jgFjDgma0RjF
-        gMDXwwNj7C/io0LEPATEu+3KTrnVvC86r4qEDNqblA5USLE=
-X-Google-Smtp-Source: AA6agR7RlBHQbobnbPFqBFroqbpCV4A75VEHEvpnsT0oRzEEXEX0TD4FmvwEHuVA+Kl3BAWYsdsyC3JLx0a4XAZ1ods=
-X-Received: by 2002:a05:6e02:20c1:b0:2e9:f747:ad54 with SMTP id
- 1-20020a056e0220c100b002e9f747ad54mr141644ilq.144.1661364452449; Wed, 24 Aug
- 2022 11:07:32 -0700 (PDT)
+        bh=yK26ITzqXq21qe37kX2FSO/m5ELFXUKoDF4JXVSf2Yk=;
+        b=ew9wNes9zgcyGDsrd9Bi5eQkrcA/8ts6AbnCGm2s70xB4jHBeqa7W8sd89pDIeu4ni
+         0kQjTxsT6Kr/pmoRhJBNYNF9t2tHzFre8+a/zev+qyeMUtz/jJiOeIgQwhyquGxk/rxH
+         vCSqCT6gPXnlBS5xODD1yH7QLVBrHtaGS/qvfgEegPBboL9iU/OhsqrPSXyvO8ONTbYU
+         uWmm0Pi/DRMUicCK8RzGy+tRxV26S1KJ6qwEu4UTZ61fj9FeukNgyQteQQOgkBfLC6YA
+         4whmgZyiQirpwur0//6LYLmBBSYNjWN4GUplGGvjhioFLIy4P532lEiy6q16+eFWsO23
+         +chw==
+X-Gm-Message-State: ACgBeo1mIcw8u4OkCzInhBa79wJxYpkEWa69GAeKXIONalRajjGPESHV
+        k2dXehjKwsFSnqdhqVbuCyZM91nFx3GNbXlw/FU=
+X-Google-Smtp-Source: AA6agR7WR+Chq5aALN21nOJ8KtaVCyeyYnWxi+FloTWgbk+pFsOcnv1Pvt3w71jsFBNxphNxwDKQxBn+Vf6P77yzICI=
+X-Received: by 2002:ad4:4eaf:0:b0:496:ac46:2d9c with SMTP id
+ ed15-20020ad44eaf000000b00496ac462d9cmr345077qvb.82.1661365432794; Wed, 24
+ Aug 2022 11:23:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
- <20220823182758.13401-2-khalid.masum.92@gmail.com> <YwU2vp0FSR5dS/FX@rowland.harvard.edu>
- <CAABMjtH7q2evZ4R7FGC8m3a716ec9+e8+KdmrvnqB4_r6rF2Jg@mail.gmail.com> <YwY3yHB/Ia+cPa1L@rowland.harvard.edu>
-In-Reply-To: <YwY3yHB/Ia+cPa1L@rowland.harvard.edu>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Thu, 25 Aug 2022 00:07:21 +0600
-Message-ID: <CAABMjtE96E78YgVe3Psba-5G+ELTXWFgGuUWWeb-o06iJHOi6w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: ehci: Prevent possible modulo by zero
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <12036348.O9o76ZdvQC@kreacher> <2196460.iZASKD2KPV@kreacher> <5857822.lOV4Wx5bFT@kreacher>
+In-Reply-To: <5857822.lOV4Wx5bFT@kreacher>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 24 Aug 2022 21:23:16 +0300
+Message-ID: <CAHp75VcjxUjH4p_NOEQjOuFO8LcSdUU_stEvfWvtbQc8hfud0w@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> The usb_maxpacket() routine does a two-step computation.  First, it
-> looks up the endpoint number in the pipe to get a usb_host_endpoint
-> pointer, and then it uses the pointer to get the maxpacket value.
-> Coverity complained that the lookup in the first step can fail, and that
-> is in fact true: If there is an interface or configuration change before
-> usb_maxpacket() is called, the endpoint number table can change and the
-> lookup may fail.
+On Wed, Aug 24, 2022 at 8:13 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> But it turns out the first step isn't needed here at all, since the
-> endpoint pointer is already stored in the URB (by the code in
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> The parent field in struct acpi_device is, in fact, redundant,
+> because the dev.parent field in it effectively points to the same
+> object and it is used by the driver core.
+>
+> Accordingly, the parent field can be dropped from struct acpi_device
+> and for this purpose define acpi_dev_parent() to retrieve a parent
+> struct acpi_device pointer from the dev.parent field in struct
+> acpi_device.  Next, update all of the users of the parent field
+> in struct acpi_device to use acpi_dev_parent() instead of it and
+> drop it.
+>
+> While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
+> in one place in a confusing way.
+>
+> No intentional functional impact.
 
-That makes sense. Thanks for explaining.
-> usb_submit_urb() that I pointed out earlier).  So an appropriate way to
-> fix the problem is to carry out just the second step:
->
-> -       maxpacket = usb_maxpacket(urb->dev, urb->pipe);
-> +       maxpacket = usb_endpoint_maxp(&urb->ep->desc);
->
-> This holds for both of your patches.
+Side note: Should we not convert these to use acpi_dev_parent()?
 
-Got you.
->
-> Alan Stern
+https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/acpi/property.c#L1271
+https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/bus/hisi_lpc.c#L397
 
--- Khalid Masum
+-- 
+With Best Regards,
+Andy Shevchenko
