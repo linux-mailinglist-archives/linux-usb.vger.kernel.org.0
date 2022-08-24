@@ -2,152 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A506E59F53D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 10:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5C259F55B
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 10:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235751AbiHXI1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 04:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S234957AbiHXIcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 04:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235729AbiHXI1r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 04:27:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0426E93230;
-        Wed, 24 Aug 2022 01:27:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AC0CB8238E;
-        Wed, 24 Aug 2022 08:27:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C61C433B5;
-        Wed, 24 Aug 2022 08:27:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661329661;
-        bh=Cswsg5zwfQnIxDqhYpbvzbjzMba7/Q3SMHSTlIl4nr8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rns/zYsL6l6/nzNgn6OPoDzXGQ9O4PkTAx4ahpmezNfDqJO5X2igsp3OWb0tBrUgL
-         od/SBuxqloB/0+k6Urdah49vznJ4jlaF2N1un/Vmv/dW6hpLveHekjs3OZ0vOjybsh
-         2lBgIS7aVUUfSARtNBrmNU2YUMqim/pgq/fTwmh0HxyLBN2gncoWfD3bjvag7iF/4+
-         WRbUtcdS9S8cgb7z2nfnIHDgObqFywt5sNHEUAus1Qu2RcGBDu0YXI9qRQj07cVa2S
-         7lKCYTdMROFIuwSV0YKqE4WBDL0gEGJuptFAYhF1V2/XnIh0yJTNkNFGOzG1f8wfC0
-         vU9YZHWbf+zbw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oQljk-0003G4-4G; Wed, 24 Aug 2022 10:27:44 +0200
-Date:   Wed, 24 Aug 2022 10:27:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: keep PHYs disabled during suspend
-Message-ID: <YwXhANZ8l6E9yQDe@hovoldconsulting.com>
-References: <20220823124047.14634-1-johan+linaro@kernel.org>
- <YwUdbkyL8GgvLQJA@google.com>
+        with ESMTP id S232621AbiHXIcu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 04:32:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D21886C27
+        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 01:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661329969; x=1692865969;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=riCTA8JhslnFd7Bi/wv6W6kgOd0zsTl09lB/l0h63iE=;
+  b=m2Qs0cy1mfAcpEpu7kBubT1vsLnI0Z0whHgQvgvZWetlaOTjPjkaa0xi
+   HHaUQgSQ7aQnCKU/tCc3ZTshTMGMBjgN/sjaYceYBWEk162JyXsaYFe/a
+   ix+M7qvEROMkwVuWpXEfX+WGXqaprIf6tJLzy473DT4QK8aDiqk/znSIq
+   wTOpWNmb8dAuExrTDZ6Sxh12Wo54Hbm0H4XsHDQJcZ5fLbKFJ3nKySa31
+   DP9SB5BqiL0MqUxq1gYDgiPeqvtiCqbBvoL367+24Kj4lna1C+FaVxdDe
+   pilBWkxzYLQN7axtrySNGmTOT56F7r9EGS9QJxCcMmvKuGuNX1wPOMRG0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="295187074"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="295187074"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 01:32:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="937817050"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Aug 2022 01:32:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id EF99219D; Wed, 24 Aug 2022 11:33:00 +0300 (EEST)
+Date:   Wed, 24 Aug 2022 11:33:00 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>
+Subject: Re: [PATCH 3/4] thunderbolt: Add helpers to check if CL states are
+ enabled on port
+Message-ID: <YwXiPPRT1brWHCIv@black.fi.intel.com>
+References: <20220823105352.56306-1-mika.westerberg@linux.intel.com>
+ <20220823105352.56306-4-mika.westerberg@linux.intel.com>
+ <20220823140216.GA28421@wunner.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwUdbkyL8GgvLQJA@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220823140216.GA28421@wunner.de>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 11:33:18AM -0700, Matthias Kaehlcke wrote:
-> Hi Johan,
+Hi Lukas,
+
+On Tue, Aug 23, 2022 at 04:02:16PM +0200, Lukas Wunner wrote:
+> On Tue, Aug 23, 2022 at 01:53:51PM +0300, Mika Westerberg wrote:
+> > +/**
+> > + * tb_port_is_clx_enabled() - Is given CL state enabled
+> > + * @port: USB4 port to check
+> > + * @clx: CL state to check
+> > + *
+> > + * Returns true if given CL state is enabled for @port.
+> > + */
+> > +bool tb_port_is_clx_enabled(struct tb_port *port, enum tb_clx clx)
+> > +{
+> > +	u32 phy, mask = LANE_ADP_CS_1_CL0S_ENABLE | LANE_ADP_CS_1_CL1_ENABLE;
+> > +	int ret;
+> > +
+> > +	if (!tb_port_clx_supported(port, clx))
+> > +		return false;
+> > +
+> > +	ret = tb_port_read(port, &phy, TB_CFG_PORT,
+> > +			   port->cap_phy + LANE_ADP_CS_1, 1);
+> > +	if (ret)
+> > +		return false;
+> > +
+> > +	return (phy & mask) == mask;
+> > +}
+> > +
+> [...]
+> > +static inline bool tb_port_are_clx_enabled(struct tb_port *port)
+> > +{
+> > +	return tb_port_is_clx_enabled(port, TB_CL1) ||
+> > +	       tb_port_is_clx_enabled(port, TB_CL2);
+> > +}
 > 
-> On Tue, Aug 23, 2022 at 02:40:47PM +0200, Johan Hovold wrote:
-> > Commit 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system
-> > suspend") started leaving the PHYs enabled during suspend for
-> > wakeup-capable controllers even though it turns out this had nothing to
-> > do with wakeup.
-> > 
-> > Rather, the wakeup capability flag was (ab-)used as a proxy to configure
-> > the suspend behaviour in an attempt to reduce power leakage on some
-> > platforms.
-> > 
-> > Stop abusing the wakeup configuration and restore the 5.19 behaviour of
-> > keeping the PHYs powered off during suspend. If needed, a dedicated
-> > mechanism for configuring the PHY power state during suspend can be
-> > added later.
-> > 
-> > Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
-> > Link: https://lore.kernel.org/r/Yuv7AM/5jtO/pgcm@google.com
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  drivers/usb/dwc3/core.c      | 4 ++--
-> >  drivers/usb/dwc3/dwc3-qcom.c | 1 -
-> >  2 files changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 8c8e32651473..0cdb6be720e1 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -1983,7 +1983,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >  		dwc3_core_exit(dwc);
-> >  		break;
-> >  	case DWC3_GCTL_PRTCAP_HOST:
-> > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
-> > +		if (!PMSG_IS_AUTO(msg)) {
-> 
-> My assumption was that the PHYs need to be powered for wakeup to work, but
-> apparently that isn't the case, wakeup still works on sc7x80 with this part
-> of this patch.
+> If you change enum tb_clx to use "power of two" values (0 1 2 4 8 ...)
+> then you could just pass a bitmask to tb_port_is_clx_enabled()
+> and thus need only a single invocation in tb_port_are_clx_enabled().
+> Just a thought.
 
-Thanks for confirming.
-
-> >  			dwc3_core_exit(dwc);
-> >  			break;
-> >  		}
-> > @@ -2044,7 +2044,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
-> >  		spin_unlock_irqrestore(&dwc->lock, flags);
-> >  		break;
-> >  	case DWC3_GCTL_PRTCAP_HOST:
-> > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
-> > +		if (!PMSG_IS_AUTO(msg)) {
-> >  			ret = dwc3_core_init_for_resume(dwc);
-> >  			if (ret)
-> >  				return ret;
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index 9a94b1ab8f7a..9995395baa12 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -904,7 +904,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
-> >  
-> >  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
-> >  	device_init_wakeup(&pdev->dev, wakeup_source);
-> > -	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
-> 
-> Surprisingly this part breaks wakeup on sc7x80, with the above removal
-> of the device_may_wakeup() checks it is not clear to me why wakeup needs
-> to be enabled for the core.
-
-I can't explain that behaviour either. This change doesn't affect the
-wakeup_path flag and genpd, and notably wakeup still works here with
-sc8280xp.
-
-Could it be some Chromium user-space issue in that it expects all
-devices on the wakeup path to be wakeup capable? Note that the
-xhci-plat driver (e.g. for the descendant xhci-hcd.1.auto device)
-unconditionally sets the wakeup-capable flag (but leaves it disabled by
-default).
-
-I guess we could do something similar for the dwc3 core device, but we'd
-need to figure out if and why that is at all needed first.
-
-Can you verify that the wakeup source (e.g. keyboard) you're using still
-has power/wakeup set to "enabled"?
-
-Johan
+Sure good point. I'll do that in v2 thanks!
