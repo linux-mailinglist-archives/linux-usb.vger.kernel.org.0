@@ -2,66 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBEE5A00D9
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 19:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7AA5A0118
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 20:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237747AbiHXR6J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 13:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S240398AbiHXSHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 14:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239932AbiHXR5i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 13:57:38 -0400
+        with ESMTP id S240373AbiHXSHd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 14:07:33 -0400
 Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042414CA0A;
-        Wed, 24 Aug 2022 10:57:37 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id b13so826984ils.0;
-        Wed, 24 Aug 2022 10:57:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B386BCC1;
+        Wed, 24 Aug 2022 11:07:33 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id o13so5084111ilt.3;
+        Wed, 24 Aug 2022 11:07:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=+VXhj0+Ay3TZpIZhOIKirdlUbEchMg+eeIoWbSwLaMQ=;
-        b=FqtlcR6PHeQ8FbGlZamnZDydsLfqdO3pLGS+vY127CjFh6hz/qgMoQMaQ8HBZy6ipD
-         Q59V6mtCFsldEsyndmhrSkNtCRhzSLGpQCWcnQhRMlzITXNnBdeDKq9GtPjqHVm0w6Ec
-         1nwsRXlq49OgoxJIAWfpeUqG6t0NX1f8uRkKPwFHUNYsgQhQfZgnBFzalBgtXwrH2fUU
-         pPY0pYK5Ydml35/Yuunds+vQua/f8U+jGONJ9fCQmpcJ96UNTBKbbWNzkzaHIPNlaLd7
-         90JHi+AAih6FCyRY7qjULGx/1o68eov03pnTZRYo0qThVwMtyKcPWXe7yYwKp7+M1Vi2
-         hnDw==
+        bh=n6VLsvWXIz4UjtHlsmuUC9VbAunQhpMZsf7gkqqQZ2Y=;
+        b=faDH/HocgmiiUZY09EKlXYCW1XuMalpCM2E3GILA4rvtRzE8DS5T7K0CD6GHLX9ayy
+         ayLhx6PEn1Bho8YSpGR6NiXGoYu0DzMS8gHaXWAEvfB7rMzBCpxtT6bLUKW9T806sFRp
+         eln1H6Xt6A2Am9jEIPcTdR8/E0TkDvPZIWdUT8Uvb3fDFQvokCnQNplgIegXgRFkF1f5
+         wc1af73fVLrdAfoxo7GWRz8+/3XmHiXw/1diHj8FGQp1lJI+cU1CCtzbCrzP80m4DfFk
+         yxwVJTmChD8B8Phyv47IFU//4RHqu7UZubLSZ3jjk2O38eT67cqV28GjB7Qecgzzifaz
+         r2dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=+VXhj0+Ay3TZpIZhOIKirdlUbEchMg+eeIoWbSwLaMQ=;
-        b=5WeAhDqSleLXSScr2LJQ8IuyBwXi+NW9Q7JchNip1U58yexSB13ADm8vtVpts8KWKk
-         M1HICEj+67gS3JzOLoE/3Tn8SDQbmEXIKXVVJHfcUrcsuLImGSg/4gVqCMPGI3yQ5gOq
-         uoSVcW8r7AZw7LPtYYM2giH7/7DkhMTxcMjVQxy+yV5CjwHoiMWvUSKp7fOKTBUHehg/
-         GnUJcXGrHy49kMwGpwhVk77i63/Jm45AuGX4K9Cs3RObb+bwFRNnzVnMWGnU1skT+M32
-         LUCZ/05mJUwZi/mEWL6av96l9I6uiAFqYKux+mvGbavjzzt9CMidJqn/YdxTIWwVk3EI
-         yZVQ==
-X-Gm-Message-State: ACgBeo0T1AxSH5I5TBAJsu1/1MQD1N4kPloISmBU9AC9Kj3RkAmOvGTQ
-        O/HqmtphusgZgndo95bau1fp4jeqfqc01pAUgA0=
-X-Google-Smtp-Source: AA6agR5sKcUgOKHc8NyRxfYOHRnWRzz6vHXZxz1MTlpe6CuP8vult6tat6rs88BXsF3sGnLkPhYCTnVAukbOwWMzw7I=
+        bh=n6VLsvWXIz4UjtHlsmuUC9VbAunQhpMZsf7gkqqQZ2Y=;
+        b=COxHnxoS7aPqnZn7SvoyvK1QcJPQe68UoKGK8Tq50slUqB/aTrKDomOaKLgw1le55d
+         PHgcitOPFB7NZ3ZZ0TY5BqX14/jL3VcgAhntCB4EhUdKV9LMBkkXBBlaNXVQJqLDdjZa
+         UWaTUjFhyGhWs6zcOjWmVmcu8Va50akvontkrmPmtSQ+LS4EzT66QouuKa+MteeL511G
+         gOrxm67yTkqnQzL9o75OVj3ZC4Ze2whsaoarJzLvEonmhU6uXZAlfiAXiRzE7LhzoEUf
+         BX9zQFmh5EVOB7OsMGwaWIb9ISHyJ80eJefdGNRUWDFGBE1jP6xwGEI7/HV/GdNcyROE
+         YvNA==
+X-Gm-Message-State: ACgBeo08X6c8S/7ubMoIboBENgG6P21AToPJyaFZO0+7jgFjDgma0RjF
+        gMDXwwNj7C/io0LEPATEu+3KTrnVvC86r4qEDNqblA5USLE=
+X-Google-Smtp-Source: AA6agR7RlBHQbobnbPFqBFroqbpCV4A75VEHEvpnsT0oRzEEXEX0TD4FmvwEHuVA+Kl3BAWYsdsyC3JLx0a4XAZ1ods=
 X-Received: by 2002:a05:6e02:20c1:b0:2e9:f747:ad54 with SMTP id
- 1-20020a056e0220c100b002e9f747ad54mr118567ilq.144.1661363856349; Wed, 24 Aug
- 2022 10:57:36 -0700 (PDT)
+ 1-20020a056e0220c100b002e9f747ad54mr141644ilq.144.1661364452449; Wed, 24 Aug
+ 2022 11:07:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824130702.10912-1-khalid.masum.92@gmail.com> <YwY4cVdB3tVVMIqJ@rowland.harvard.edu>
-In-Reply-To: <YwY4cVdB3tVVMIqJ@rowland.harvard.edu>
+References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
+ <20220823182758.13401-2-khalid.masum.92@gmail.com> <YwU2vp0FSR5dS/FX@rowland.harvard.edu>
+ <CAABMjtH7q2evZ4R7FGC8m3a716ec9+e8+KdmrvnqB4_r6rF2Jg@mail.gmail.com> <YwY3yHB/Ia+cPa1L@rowland.harvard.edu>
+In-Reply-To: <YwY3yHB/Ia+cPa1L@rowland.harvard.edu>
 From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Wed, 24 Aug 2022 23:57:25 +0600
-Message-ID: <CAABMjtFEfgQtcGKLkd=whFN=WHUywTg=fDAxRQ+zKLiqOFhvQg@mail.gmail.com>
-Subject: Re: [PATCH] usb: host: Use helper function to get endpoint
+Date:   Thu, 25 Aug 2022 00:07:21 +0600
+Message-ID: <CAABMjtE96E78YgVe3Psba-5G+ELTXWFgGuUWWeb-o06iJHOi6w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: ehci: Prevent possible modulo by zero
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexey Sheplyakov <asheplyakov@basealt.ru>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -73,18 +68,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 8:40 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> The usb_maxpacket() routine does a two-step computation.  First, it
+> looks up the endpoint number in the pipe to get a usb_host_endpoint
+> pointer, and then it uses the pointer to get the maxpacket value.
+> Coverity complained that the lookup in the first step can fail, and that
+> is in fact true: If there is an interface or configuration change before
+> usb_maxpacket() is called, the endpoint number table can change and the
+> lookup may fail.
 >
->
-> Even this is awkward.  It's silly to look up the endpoint in a table
-> when you already know that it is endpoint 0.  Just do:
->
->         ep = &udev->ep0;
->
-> with no need to check for NULL.
+> But it turns out the first step isn't needed here at all, since the
+> endpoint pointer is already stored in the URB (by the code in
 
-After further checking, I realized that  usb_device udev is created by
-ehset_single_step_set_feature and depends on usb_hcd and port. So I do
-not get why the endpoint is at udev->ep0. Can you help me with this?
+That makes sense. Thanks for explaining.
+> usb_submit_urb() that I pointed out earlier).  So an appropriate way to
+> fix the problem is to carry out just the second step:
+>
+> -       maxpacket = usb_maxpacket(urb->dev, urb->pipe);
+> +       maxpacket = usb_endpoint_maxp(&urb->ep->desc);
+>
+> This holds for both of your patches.
+
+Got you.
+>
+> Alan Stern
 
 -- Khalid Masum
