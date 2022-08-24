@@ -2,320 +2,301 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA7D59F8D6
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 13:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633F959F9E2
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 14:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiHXLus (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 07:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S237360AbiHXMXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 08:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiHXLuq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 07:50:46 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00100.outbound.protection.outlook.com [40.107.0.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA9780B74;
-        Wed, 24 Aug 2022 04:50:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iGErF6qzySpM6spLWB3HcshdAeipFldbzUy80eztl9j8zRA6JBMpG8nxrx/G2xYfRFlPoB6Dfr6wc9e1sUPFcRkdHi8m32tyUkFD3InD9+Iih8XvZLdkinQBYoQmvTBNxP5j1XO4SPL4b6UVEFE4L6QfhMssFyaqurZ+THZhhZbM3pSbgZdpRZj32cPM/8YZ9BBMyLVX6fXUWB+/ve42fnuRRh5WCPt4o0ykcuFB1PwC4FdrrFMzuE+OFasUPgDqkZBBIo0gblKT9wfedQSgbe3vij7otHTuKIroEeC3bf9rDree4dQndEcE8QzqF8wsH/a04iu/tZVwvMbiqWtaaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tJa0W/R+udM+MZz0HURQEdKiD/n4HyfRuwP2Qq8WI/I=;
- b=lZ3pVEeYstE0AhOV0VIg6gjINHBCV26iKoPNgEKZh3zMLcGqAq5dsCDPu7TcO1cbEjIDhywWjj29lQot8CmgYtA/6X8F88tiWBgD4hVguDBSVPSkeO5ZQRkzQE9XdAoa8ILkqwaaWt8+dbOLjYPJY8xlor6cjWEzWjDBRVOcus8c7SQbQioVPJrZVYmBUjhzK1poE6nb1BoKl7Yh4dJyp0VU6Uyv9apUr0x7J53N6M6zixrU819Y/ESOAXXZgrbGO8ZKEfb3oXQYABA1Q6kaY1Eh/s0u5M5fTp51rRwabro01dQPMWMvoueznqSa6ykOQ8ei865yYKL3CzZRlPIS6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tJa0W/R+udM+MZz0HURQEdKiD/n4HyfRuwP2Qq8WI/I=;
- b=N73RToRa7bwLFCotBDwOHm6bcPu9ajgpL5qfXmivCMwfRObUZ82xad43lPJxKqqGSX+xEDAq2up7kYbeu1+0z64X9UEbxqtVxfrrCXmX3tpptcDOFOa6Xyh0uQBUBNrSJwjhj1uBb0Jja0jNQLRrmcbQn5ZRJdCr8UQa6EmBvTE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by AM7PR02MB6067.eurprd02.prod.outlook.com (2603:10a6:20b:1ab::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
- 2022 11:50:41 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::1d88:3306:c280:3179]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::1d88:3306:c280:3179%6]) with mapi id 15.20.5566.015; Wed, 24 Aug 2022
- 11:50:41 +0000
-Message-ID: <dca6b5a4-9865-2d93-1cb6-ceed024b484f@axentia.se>
-Date:   Wed, 24 Aug 2022 13:50:39 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 3/4] usb: typec: mux: add typec orientation switch
- support via mux controller
+        with ESMTP id S233796AbiHXMXO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 08:23:14 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E807962C;
+        Wed, 24 Aug 2022 05:23:11 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oQpPa-0002yI-0X; Wed, 24 Aug 2022 14:23:10 +0200
+Message-ID: <02d7e4ac-f7f0-0597-7ab0-4f916194f7b9@leemhuis.info>
+Date:   Wed, 24 Aug 2022 14:23:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
 Content-Language: en-US
-To:     Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com,
-        robh+dt@kernel.org, shawnguo@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux@roeck-us.net, jun.li@nxp.com,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220823195429.1243516-1-xu.yang_2@nxp.com>
- <20220823195429.1243516-4-xu.yang_2@nxp.com>
-From:   Peter Rosin <peda@axentia.se>
-In-Reply-To: <20220823195429.1243516-4-xu.yang_2@nxp.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Oliver Neukum <oliver@neukum.org>
+Cc:     netdev <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: [Regression] Bug 216336 - 3G USB Modem Huawei k4203 stop working on
+ kernel > 4.X
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0103.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:9::17) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1daef090-8c1f-47a8-b584-08da85c6deb1
-X-MS-TrafficTypeDiagnostic: AM7PR02MB6067:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YlKseXzUzfJSyECMBWdjCer4Ak1GcB8scDy4q6Oxkm7PgGKI932k1+cU6OVeFsJHy+n+NfUhThhC20uKmjGeD8C96gfZ2fWi6rw6KwmyiELQY3rP0Tpv3YwnKAXLlrz65ojX8s/32B0kuSl78jojYLNH+k3V65+xB6nuLLRbQY3AEhBy5JFajMvIqqGf79nwT39kS1NWnhOGVVJ7cmIaNNJwyEAnt0qxRxXbBK6DhEZJcqoeu+5aimyzojIJMZ2rT6DtjBZFlbWBNH7dEHTiA0Pcer9DGlV1cBE9r47qBK3QMdikpeiEyvje/hywuYKX/lvpXfDvqH8ODuz1zQxE2P7g6UrM4/aqc/f2jwJmn8N5oX3ZYL9i+/AcT20lg2l5IrWTea+bFIXXlMC85qiwXrHXGHlRps61vhRYkAWJH+vLLxsu26xEKHuMIBrtKNoMKBOFHtsI3efauDdbE6zwX87kiIfkPfg5piLsTmzSHX0BnlNbGSJnReH7pyWaHE0gRyojKcmQmSl1JqaMNgupkdpTsrXcmMamOP1dNrRWYLD6Lwo7zpt+Q2NNt8I26tFYdIEIf/lHUSFaCb91whwUCCYLbpIfPHmYYUrs7AograJoxtHeBAwQXTchjIoIqAjj/xWOWslB3IMrwg/qu30gbI7G/7pGwlinF0efCWtf+kh9CVFLcxpP0UFNdSScAtaNYlS4zdn2Vu9K/29SIaCzrh6H7RZxaiwEiQuNnP0FWZx+W/LVDacI8At0hCemv69iMqMktzK5fuZPxZttvfS1yIPK9Su2qzoxTEOaZ8K1Dpk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(376002)(136003)(346002)(39840400004)(396003)(38100700002)(186003)(316002)(2616005)(31696002)(66556008)(66946007)(66476007)(2906002)(41300700001)(8676002)(4326008)(6506007)(86362001)(31686004)(83380400001)(6486002)(5660300002)(6512007)(7416002)(26005)(8936002)(478600001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NXhLajR2ZlNMbmg0WVVVcWI2YmZveEl1ZGpjOUJvbU9BNXF4ZGhKMzlUVUp4?=
- =?utf-8?B?UTd1MVJwZGVCWVhWVFkvak16VVVWNzFDb0lQUFlRS1d6NnZnWjBjbkxPd3M2?=
- =?utf-8?B?WUNCV1NpRi9sRm1rc3lsTG9xY3RZQ2lqRjlxZmpqWlBmUkFLZTJDNnZlR2t1?=
- =?utf-8?B?RnhqNUF0eXc3dDJjSXVvSG1zMmMrVWtxYUJzSVNCeXRDN3d6dE1oV0F6enlr?=
- =?utf-8?B?b1llQU4rY1dkeDN1eW00dlpCWjhHYTh2bXlsN0pTSi9rOXZOZFZ4SWU2Y2lo?=
- =?utf-8?B?dG5hbEs4dEV2aURHQzRyMnU4R0tiSFRJSTl1SUpZOWJjTGVsREsxYkJEWXBR?=
- =?utf-8?B?R2tEZjVpRk40b0pIMlNoWWdWU0lnaTBkQmRSOXI1RU80L2V3Sk9oSEV4ZzE2?=
- =?utf-8?B?QkFKVk1DdHQrRndqRCthbm9KbmxIb3hCRUh5UFpnZ09tV24wUGg1alBRZE9X?=
- =?utf-8?B?UjZHREdkNHFZWEZiMmptMHdVM2IxUjdTS1liQktpRVdvdDVOanczcUltblpO?=
- =?utf-8?B?ODZ6TndIRS8rc0VSZ2ZWR1dGQVRrZ3BsaFR2cnJjeVo2enIwbmRGY3g1cjNX?=
- =?utf-8?B?MjArbmw3SmdzUkRnZ1VSbk0xb2dTZ1V3aXRDdXl1akRqL0orRXFOVEttZitu?=
- =?utf-8?B?ZXlVTzNzRHhuUFVqelFzQ2diWEJvRWxKb0c5VFJDbUhRdGJIeXk1a1JVZ2Rt?=
- =?utf-8?B?ZzJnUjZ5dHBIZkRlOGU0ckY5NmM4RnQ1cTZqQTBFV0Q4VVExVk5UY29xZEdK?=
- =?utf-8?B?ZDk4emUrejBMSi9kaTVINWFpcCtCdlNKUm91b1dRZXRKZlhMclAxQUxEWDdC?=
- =?utf-8?B?bEhqalNXVTE1alFHVkk3UzQySlF2NGd1ZTNRdCtYR05sTHJRM0FKb21PdWU1?=
- =?utf-8?B?Y2ZPQXJxZzBoUUo2RHhhMGk3TVR5b0ZOUFB2ekhuVXFjeEFVT0hrS2YxVGJT?=
- =?utf-8?B?dS9oTks2YTlCSVgwOXpYemNwdHNka3RmQnFyVkhEVHgyL1BOM3dON1FYQ0FM?=
- =?utf-8?B?dXM2dStRTWFDUk9ZU25FNmJEeEpiYW9QamJIeEE0UU5zUjlBTnBtMnhZT3pJ?=
- =?utf-8?B?aERqVkdQRi93aXMzQzh5Q0RTdjF1akNCVVkxU2N1Vkp6SXEvSUdqNW8rL1la?=
- =?utf-8?B?cjAwYi85alA3UmtjR1NhQzVUN2ZSd1ViSy9KOUhGV09JVzBSNzlxMytKWWph?=
- =?utf-8?B?Mm9kclMzTjlLS05qU3BsMDBLZ0NqNXJLd2FNenBLaC95eHRCNFNXOEJ5Z0M3?=
- =?utf-8?B?ZTgyaysxY2FqSmNqVzh3UjRSNlJoV1RWUi9uMWhRK2F2d0FUQ2RIOUtOTWZD?=
- =?utf-8?B?VktEYmFWZkRvMVIzeGpOZXBleGFYNmF6QnBSSUZwWDBOQ2lUUHFHZlQwWDhY?=
- =?utf-8?B?eGRESHB0SXAzTnY0ZldqMDU0SUg5dWZqdVBxRVNDT0l0aXdMU1k3eUE1aWdI?=
- =?utf-8?B?ZkZFQkRUK0VhUmUwdGp6TVZwaWx3ZzhyTU4wcnliOTBBUmpGVjdXOFBBYzBZ?=
- =?utf-8?B?SUhWREhSMEIxTEExL2RPalBoSWdEbzA2cGYrTFZ0alZFTHoxOUIvYWVONzB4?=
- =?utf-8?B?SEl1MjUyOU5nS0JidTgrY2xJMjlUVHJBd2hBaW9Cdk5QZ3JSeHMzVnIwemJs?=
- =?utf-8?B?dndMMlUzYVdTOURibHNneWU0VVpHSWV0aFp2dHlWLzM1cXFFUWtjSy93M1Fr?=
- =?utf-8?B?R010ODdxZVBSYXIyTXlHWTlrUDhlL1lBeXZxTUttOGVFT2crZFV1TEVib3dB?=
- =?utf-8?B?QlkxWU1GZ0lOVDlFcWRiYlFadVNMVXZ1bU9vaHJHL2VtcUJVVWpQV2RlYUR4?=
- =?utf-8?B?a0lXNm9wL09GTXVaM3dJVHlhaitxUFdKajRIRTlwSDJyYjRHeVFsMkpUdWhK?=
- =?utf-8?B?TU5RTXVpeS9HTDZWSTJTZGlqRHRsRk03L1hKZHFKR1JJZVl5K1BHYjA3M1B2?=
- =?utf-8?B?THdybmdOc1JtcitVT2hidHlaVlVydkgrSjE2VWtnR0gzaHdiT0RHWld1N1FM?=
- =?utf-8?B?K0EwY3RLNjZFWG9GcldFWmczc3J5Rk1sbXc4SlNFMnlQR205NGcxUTFleEZV?=
- =?utf-8?B?bjRGeGxNSy9RaWJpT1ZmUzRXU3FxVERNMkV0V2puMy81VHQ1cEJ3THRPWjN1?=
- =?utf-8?Q?bipADUOZI/KyyOzkPCMipnUD5?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1daef090-8c1f-47a8-b584-08da85c6deb1
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 11:50:41.4741
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: haUZlBiPprixBHEUU6ny+HCIi3DZ8mj1xKkHYIDQi/IrZKYd+/Prdt9YYqarU6RR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR02MB6067
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661343792;c4cf87e8;
+X-HE-SMSGID: 1oQpPa-0002yI-0X
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi!
+Hi, this is your Linux kernel regression tracker.
 
-2022-08-23 at 21:54, Xu Yang wrote:
-> Some dedicated mux block can use existing mux controller as a mux
-> provider, typec port as a consumer to select channel for orientation
-> switch, this can be an alternate way to control typec orientation switch.
-> Also, one mux controller could cover highspeed, superspeed and sideband
-> use case one time in this implementation.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
-> ---
-> Changes since v1:
-> - add build dependence (select MULTIPLEXER)
-> - improve Multiplexer control logic
-> 
->  drivers/usb/typec/Kconfig     |  1 +
->  drivers/usb/typec/mux.c       | 76 ++++++++++++++++++++++++++++++++++-
->  include/linux/usb/typec_mux.h |  7 +---
->  3 files changed, 78 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index 5defdfead653..73d4976d8148 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -2,6 +2,7 @@
->  
->  menuconfig TYPEC
->  	tristate "USB Type-C Support"
-> +	select MULTIPLEXER
->  	help
->  	  USB Type-C Specification defines a cable and connector for USB where
->  	  only one type of plug is supported on both ends, i.e. there will not
-> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> index 464330776cd6..05e6ed217620 100644
-> --- a/drivers/usb/typec/mux.c
-> +++ b/drivers/usb/typec/mux.c
-> @@ -13,6 +13,7 @@
->  #include <linux/mutex.h>
->  #include <linux/property.h>
->  #include <linux/slab.h>
-> +#include <linux/mux/consumer.h>
->  
->  #include "class.h"
->  #include "mux.h"
-> @@ -22,6 +23,11 @@
->  struct typec_switch {
->  	struct typec_switch_dev *sw_devs[TYPEC_MUX_MAX_DEVS];
->  	unsigned int num_sw_devs;
-> +
-> +	/* Could handle HighSpeed, SuperSpeed, Sideband switch one time */
-> +	struct mux_control *mux_switch;
-> +	/* 3 state correspond to NONE, NORMAL, REVERSE for all switches */
-> +	int mux_states[3];
->  };
->  
->  static int switch_fwnode_match(struct device *dev, const void *fwnode)
-> @@ -117,6 +123,58 @@ struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode)
->  }
->  EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
->  
-> +static struct typec_switch *mux_control_typec_switch_get(struct device *dev)
-> +{
-> +	struct typec_switch *sw;
-> +	struct mux_control *mux;
-> +	int ret;
-> +
-> +	if (!device_property_present(dev, "mux-controls"))
-> +		return NULL;
-> +
-> +	sw = kzalloc(sizeof(*sw), GFP_KERNEL);
-> +	if (!sw)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	mux = mux_control_get(dev, NULL);
-> +	if (!IS_ERR(mux)) {
-> +		sw->mux_switch = mux;
-> +		ret = device_property_read_u32_array(dev,
-> +			"typec-switch-states", sw->mux_states, 3);
-> +		if (ret) {
-> +			kfree(sw);
-> +			return ERR_PTR(ret);
-> +		}
-> +	} else {
-> +		kfree(sw);
-> +		return ERR_CAST(mux);
-> +	}
-> +
-> +	return sw;
-> +}
-> +
-> +/**
-> + * typec_switch_get - Find USB Type-C orientation switch
-> + * @dev: The device using switch
-> + *
-> + * Finds a switch used by @dev. Returns a reference to the switch on
-> + * success, NULL if no matching connection was found, or
-> + * ERR_PTR(-EPROBE_DEFER) when a connection was found but the switch
-> + * has not been enumerated yet, or ERR_PTR with a negative errno.
-> + */
-> +struct typec_switch *typec_switch_get(struct device *dev)
-> +{
-> +	struct typec_switch *sw;
-> +
-> +	sw = fwnode_typec_switch_get(dev_fwnode(dev));
-> +	if (!sw)
-> +		/* Try get switch based on mux control */
-> +		sw = mux_control_typec_switch_get(dev);
-> +
-> +	return sw;
-> +}
-> +EXPORT_SYMBOL_GPL(typec_switch_get);
-> +
->  /**
->   * typec_switch_put - Release USB Type-C orientation switch
->   * @sw: USB Type-C orientation switch
-> @@ -137,6 +195,10 @@ void typec_switch_put(struct typec_switch *sw)
->  		module_put(sw_dev->dev.parent->driver->owner);
->  		put_device(&sw_dev->dev);
->  	}
-> +
-> +	if (sw->mux_switch)
-> +		mux_control_put(sw->mux_switch);
-> +
->  	kfree(sw);
->  }
->  EXPORT_SYMBOL_GPL(typec_switch_put);
-> @@ -204,6 +266,7 @@ int typec_switch_set(struct typec_switch *sw,
->  		     enum typec_orientation orientation)
->  {
->  	struct typec_switch_dev *sw_dev;
-> +	struct mux_control *mux;
->  	unsigned int i;
->  	int ret;
->  
-> @@ -218,7 +281,18 @@ int typec_switch_set(struct typec_switch *sw,
->  			return ret;
->  	}
->  
-> -	return 0;
-> +	mux = sw->mux_switch;
-> +	if (!mux)
-> +		return 0;
-> +
-> +	ret = mux_control_select(mux, sw->mux_states[orientation]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Keep it as it is since idle_state is MUX_IDLE_AS_IS */
-> +	ret = mux_control_deselect(mux);
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported. That's why I decided to forward it by
+mail to those that afaics should handle this.
 
-No, this is also broken. You cannot, in any client driver, rely on a
-mux keeping its state unless you keep it selected. As soon as you
-deselect it, it might be selected by some other driver. Sure, you
-might know that there are no other users of the mux in question, and
-you might also know that the idles state is "as-is". But the driver
-does not see the bigger picture and has no way of knowing that. So,
-it needs to keep the mux selected.
+To quote from https://bugzilla.kernel.org/show_bug.cgi?id=216336 :
 
-Cheers,
-Peter
+>  S.Bonomar 2022-08-08 05:28:54 UTC
+> 
+> i am new on kernel development,
+> i can successfully use my Huawei vodafone k4203 usb modem with kernel version 4.15(I test it on ubuntu-18.04.1 LTS with kernel 4.15 (i donwlaod this iso on 2018)) but when i try to use it with the newer 5.x.x kernel i get the error "kernel: cdc_mbim 2-1.5:2.0: SET_NTB_FORMAT failed
+> kernel: cdc_mbim 2-1.5:2.0: bind() failure"
+> 
+> when I want to use I enter on ubuntu-18.04.1LTS, insert the device and reboot and enter on fedora-36
+> but when I enter the fedora-36 and insert the device,  reboot and enter the ubuntu-18.04.1 LTS, the device fails on ubuntu-18.04.1 LTS, just remove and insert again and it works
+> 
+> Now i'm use (Fedora_36 kernel 5.18.13-200.x86_64)
+> I compiled the kernel-{5.4,4.19} longterm and the problem persist
+> But when I access the 4.x.x kernel then reboot the PC and access the 5.x.x kernel it works, do you have any idea how I can solve this problem ? :)
+> 
+> Note: the modem has a dhcp server and web server.
+> 
+> My log on fedora-36:
+> [  115.571291] usb 2-1.4: new high-speed USB device number 7 using ehci-pci
+> [  115.652037] usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> [  115.652045] usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> [  115.652049] usb 2-1.4: Product: HUAWEI Mobile
+> [  115.652052] usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> [  115.652054] usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> [  115.779381] usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> [  115.779821] scsi host4: usb-storage 2-1.4:1.0
+> [  115.779917] usbcore: registered new interface driver usb-storage
+> [  115.787770] usbcore: registered new interface driver uas
+> [  116.646327] usbcore: registered new interface driver cdc_ether
+> [  116.655897] usbcore: registered new interface driver cdc_ncm
+> [  116.665733] usbcore: registered new interface driver cdc_wdm
+> [  116.706710] cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> [  116.730917] cdc_mbim 2-1.4:2.0: bind() failure
+> [  116.730987] usbcore: registered new interface driver cdc_mbim
+> [  116.935660] usb 2-1.4: USB disconnect, device number 7
+> [  121.459317] usb 2-1.4: new high-speed USB device number 8 using ehci-pci
+> [  121.539511] usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> [  121.539520] usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> [  121.539525] usb 2-1.4: Product: HUAWEI Mobile
+> [  121.539528] usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> [  121.539531] usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> [  121.594546] usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> [  121.594911] scsi host4: usb-storage 2-1.4:1.0
+> [  122.466808] cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> [  122.490514] cdc_mbim 2-1.4:2.0: bind() failure
+> [  122.567541] usb 2-1.4: USB disconnect, device number 8
+> [  127.091345] usb 2-1.4: new high-speed USB device number 9 using ehci-pci
+> [  127.172930] usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> [  127.172939] usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> [  127.172943] usb 2-1.4: Product: HUAWEI Mobile
+> [  127.172947] usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> [  127.172949] usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> [  127.226234] usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> [  127.226706] scsi host4: usb-storage 2-1.4:1.0
+> [  128.090497] cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> [  128.114422] cdc_mbim 2-1.4:2.0: bind() failure
+> [  128.199565] usb 2-1.4: USB disconnect, device number 9
+> 
+> /var/lib/messages:
+> Aug  7 17:59:49 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
+> Aug  7 17:59:49 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> Aug  7 17:59:49 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> Aug  7 17:59:49 localhost mtp-probe[1531]: checking bus 2, device 7: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 17:59:49 localhost mtp-probe[1531]: bus: 2, device: 7 was not an MTP device
+> Aug  7 17:59:49 localhost systemd[1]: Created slice system-usb_modeswitch.slice - Slice /system/usb_modeswitch.
+> Aug  7 17:59:49 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0...
+> Aug  7 17:59:49 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> Aug  7 17:59:49 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
+> Aug  7 17:59:49 localhost kernel: usbcore: registered new interface driver usb-storage
+> Aug  7 17:59:49 localhost kernel: usbcore: registered new interface driver uas
+> Aug  7 17:59:49 localhost mtp-probe[1546]: checking bus 2, device 7: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 17:59:49 localhost mtp-probe[1546]: bus: 2, device: 7 was not an MTP device
+> Aug  7 17:59:50 localhost usb_modeswitch[1551]: switch device 12d1:1f1c on 002/007
+> Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver cdc_ether
+> Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver cdc_ncm
+> Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver cdc_wdm
+> Aug  7 17:59:50 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> Aug  7 17:59:50 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
+> Aug  7 17:59:50 localhost kernel: usbcore: registered new interface driver cdc_mbim
+> Aug  7 17:59:50 localhost kernel: usb 2-1.4: USB disconnect, device number 7
+> Aug  7 17:59:55 localhost kernel: usb 2-1.4: new high-speed USB device number 8 using ehci-pci
+> Aug  7 17:59:55 localhost kernel: usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> Aug  7 17:59:55 localhost kernel: usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Aug  7 17:59:55 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
+> Aug  7 17:59:55 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> Aug  7 17:59:55 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> Aug  7 17:59:55 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> Aug  7 17:59:55 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
+> Aug  7 17:59:55 localhost mtp-probe[1565]: checking bus 2, device 8: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 17:59:55 localhost mtp-probe[1565]: bus: 2, device: 8 was not an MTP device
+> Aug  7 17:59:55 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main process exited, code=killed, status=15/TERM
+> Aug  7 17:59:55 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Failed with result 'signal'.
+> Aug  7 17:59:55 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0.
+> Aug  7 17:59:55 localhost audit[1]: SERVICE_START pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=usb_modeswitch@2-1.4:1.0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=failed'
+> Aug  7 17:59:55 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0...
+> Aug  7 17:59:55 localhost mtp-probe[1575]: checking bus 2, device 8: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 17:59:55 localhost mtp-probe[1575]: bus: 2, device: 8 was not an MTP device
+> Aug  7 17:59:55 localhost usb_modeswitch[1579]: switch device 12d1:1f1c on 002/008
+> Aug  7 17:59:56 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> Aug  7 17:59:56 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
+> Aug  7 17:59:56 localhost kernel: usb 2-1.4: USB disconnect, device number 8
+> Aug  7 18:00:00 localhost kernel: usb 2-1.4: new high-speed USB device number 9 using ehci-pci
+> Aug  7 18:00:00 localhost kernel: usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> Aug  7 18:00:00 localhost kernel: usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Aug  7 18:00:00 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
+> Aug  7 18:00:00 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> Aug  7 18:00:00 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> Aug  7 18:00:01 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> Aug  7 18:00:01 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
+> Aug  7 18:00:01 localhost mtp-probe[1586]: checking bus 2, device 9: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:01 localhost mtp-probe[1586]: bus: 2, device: 9 was not an MTP device
+> Aug  7 18:00:01 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main process exited, code=killed, status=15/TERM
+> Aug  7 18:00:01 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Failed with result 'signal'.
+> Aug  7 18:00:01 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0.
+> Aug  7 18:00:01 localhost audit[1]: SERVICE_START pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=usb_modeswitch@2-1.4:1.0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=failed'
+> Aug  7 18:00:01 localhost mtp-probe[1594]: checking bus 2, device 9: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:01 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0...
+> Aug  7 18:00:01 localhost mtp-probe[1594]: bus: 2, device: 9 was not an MTP device
+> Aug  7 18:00:01 localhost usb_modeswitch[1601]: switch device 12d1:1f1c on 002/009
+> Aug  7 18:00:01 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> Aug  7 18:00:01 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
+> Aug  7 18:00:01 localhost kernel: usb 2-1.4: USB disconnect, device number 9
+> Aug  7 18:00:06 localhost kernel: usb 2-1.4: new high-speed USB device number 10 using ehci-pci
+> Aug  7 18:00:06 localhost kernel: usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> Aug  7 18:00:06 localhost kernel: usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Aug  7 18:00:06 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
+> Aug  7 18:00:06 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> Aug  7 18:00:06 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> Aug  7 18:00:06 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> Aug  7 18:00:06 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
+> Aug  7 18:00:06 localhost mtp-probe[1611]: checking bus 2, device 10: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:06 localhost mtp-probe[1611]: bus: 2, device: 10 was not an MTP device
+> Aug  7 18:00:06 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main process exited, code=killed, status=15/TERM
+> Aug  7 18:00:06 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Failed with result 'signal'.
+> Aug  7 18:00:06 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0.
+> Aug  7 18:00:06 localhost audit[1]: SERVICE_START pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=usb_modeswitch@2-1.4:1.0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=failed'
+> Aug  7 18:00:06 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0...
+> Aug  7 18:00:06 localhost mtp-probe[1620]: checking bus 2, device 10: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:06 localhost mtp-probe[1620]: bus: 2, device: 10 was not an MTP device
+> Aug  7 18:00:07 localhost usb_modeswitch[1625]: switch device 12d1:1f1c on 002/010
+> Aug  7 18:00:07 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> Aug  7 18:00:07 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
+> Aug  7 18:00:07 localhost kernel: usb 2-1.4: USB disconnect, device number 10
+> Aug  7 18:00:12 localhost kernel: usb 2-1.4: new high-speed USB device number 11 using ehci-pci
+> Aug  7 18:00:12 localhost kernel: usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> Aug  7 18:00:12 localhost kernel: usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Aug  7 18:00:12 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
+> Aug  7 18:00:12 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> Aug  7 18:00:12 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> Aug  7 18:00:12 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> Aug  7 18:00:12 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
+> Aug  7 18:00:12 localhost mtp-probe[1633]: checking bus 2, device 11: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:12 localhost mtp-probe[1633]: bus: 2, device: 11 was not an MTP device
+> Aug  7 18:00:12 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main process exited, code=killed, status=15/TERM
+> Aug  7 18:00:12 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Failed with result 'signal'.
+> Aug  7 18:00:12 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0.
+> Aug  7 18:00:12 localhost audit[1]: SERVICE_START pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=usb_modeswitch@2-1.4:1.0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=failed'
+> Aug  7 18:00:12 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0...
+> Aug  7 18:00:12 localhost mtp-probe[1643]: checking bus 2, device 11: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:12 localhost mtp-probe[1643]: bus: 2, device: 11 was not an MTP device
+> Aug  7 18:00:12 localhost usb_modeswitch[1647]: switch device 12d1:1f1c on 002/011
+> Aug  7 18:00:13 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> Aug  7 18:00:13 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
+> Aug  7 18:00:13 localhost kernel: usb 2-1.4: USB disconnect, device number 11
+> Aug  7 18:00:17 localhost kernel: usb 2-1.4: new high-speed USB device number 12 using ehci-pci
+> Aug  7 18:00:17 localhost kernel: usb 2-1.4: New USB device found, idVendor=12d1, idProduct=1f1c, bcdDevice= 1.02
+> Aug  7 18:00:17 localhost kernel: usb 2-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Aug  7 18:00:17 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
+> Aug  7 18:00:17 localhost kernel: usb 2-1.4: Manufacturer: Vodafone(Huawei)
+> Aug  7 18:00:17 localhost kernel: usb 2-1.4: SerialNumber: FFFFFFFFFFFFFFFF
+> Aug  7 18:00:17 localhost kernel: usb-storage 2-1.4:1.0: USB Mass Storage device detected
+> Aug  7 18:00:17 localhost kernel: scsi host4: usb-storage 2-1.4:1.0
+> Aug  7 18:00:17 localhost mtp-probe[1654]: checking bus 2, device 12: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:17 localhost mtp-probe[1654]: bus: 2, device: 12 was not an MTP device
+> Aug  7 18:00:17 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Main process exited, code=killed, status=15/TERM
+> Aug  7 18:00:17 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Failed with result 'signal'.
+> Aug  7 18:00:17 localhost systemd[1]: Stopped usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0.
+> Aug  7 18:00:17 localhost audit[1]: SERVICE_START pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=usb_modeswitch@2-1.4:1.0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=failed'
+> Aug  7 18:00:17 localhost systemd[1]: Starting usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0...
+> Aug  7 18:00:17 localhost mtp-probe[1663]: checking bus 2, device 12: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:17 localhost mtp-probe[1663]: bus: 2, device: 12 was not an MTP device
+> Aug  7 18:00:18 localhost usb_modeswitch[1668]: switch device 12d1:1f1c on 002/012
+> Aug  7 18:00:18 localhost kernel: cdc_mbim 2-1.4:2.0: SET_NTB_FORMAT failed
+> Aug  7 18:00:18 localhost kernel: cdc_mbim 2-1.4:2.0: bind() failure
+> Aug  7 18:00:18 localhost kernel: usb 2-1.4: USB disconnect, device number 12
+> Aug  7 18:00:25 localhost kernel: usb 2-1.4: new high-speed USB device number 13 using ehci-pci
+> Aug  7 18:00:25 localhost kernel: usb 2-1.4: New USB device found, idVendor=12d1, idProduct=14fb, bcdDevice= 1.02
+> Aug  7 18:00:25 localhost kernel: usb 2-1.4: New USB device strings: Mfr=2, Product=1, SerialNumber=0
+> Aug  7 18:00:25 localhost kernel: usb 2-1.4: Product: HUAWEI Mobile
+> Aug  7 18:00:25 localhost kernel: usb 2-1.4: Manufacturer: HUAWEI Technology
+> Aug  7 18:00:25 localhost mtp-probe[1672]: checking bus 2, device 13: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:25 localhost mtp-probe[1672]: bus: 2, device: 13 was not an MTP device
+> Aug  7 18:00:25 localhost kernel: usbcore: registered new interface driver option
+> Aug  7 18:00:25 localhost kernel: usbserial: USB Serial support registered for GSM modem (1-port)
+> Aug  7 18:00:25 localhost kernel: option 2-1.4:1.0: GSM modem (1-port) converter detected
+> Aug  7 18:00:25 localhost kernel: usb 2-1.4: GSM modem (1-port) converter now attached to ttyUSB0
+> Aug  7 18:00:25 localhost kernel: option 2-1.4:1.1: GSM modem (1-port) converter detected
+> Aug  7 18:00:25 localhost kernel: usb 2-1.4: GSM modem (1-port) converter now attached to ttyUSB1
+> Aug  7 18:00:25 localhost mtp-probe[1679]: checking bus 2, device 13: "/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4"
+> Aug  7 18:00:25 localhost mtp-probe[1679]: bus: 2, device: 13 was not an MTP device
+> Aug  7 18:00:38 localhost systemd[1]: usb_modeswitch@2-1.4:1.0.service: Deactivated successfully.
+> Aug  7 18:00:38 localhost systemd[1]: Finished usb_modeswitch@2-1.4:1.0.service - USB_ModeSwitch_2-1.4:1.0.
+> Aug  7 18:00:38 localhost audit[1]: SERVICE_START pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=usb_modeswitch@2-1.4:1.0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+> Aug  7 18:00:38 localhost audit[1]: SERVICE_STOP pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=usb_modeswitch@2-1.4:1.0 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+> Aug  7 18:00:48 localhost systemd[1149]: Starting grub-boot-success.service - Mark boot as successful...
+> Aug  7 18:00:48 localhost systemd[1149]: Finished grub-boot-success.service - Mark boot as successful.
+> Aug  7 18:00:57 localhost ModemManager[936]: <info>  [device /sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4] creating modem with plugin 'huawei' and '2' ports
+> Aug  7 18:00:57 localhost ModemManager[936]: <warn>  [plugin/huawei] could not grab port ttyUSB0: Cannot add port 'tty/ttyUSB0', unhandled port type
+> Aug  7 18:00:57 localhost ModemManager[936]: <warn>  [plugin/huawei] could not grab port ttyUSB1: Cannot add port 'tty/ttyUSB1', unhandled port type
+> Aug  7 18:00:57 localhost ModemManager[936]: <warn>  [base-manager] couldn't create modem for device '/sys/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.4': Failed to find primary AT port
 
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL_GPL(typec_switch_set);
->  
-> diff --git a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
-> index 9292f0e07846..2287e5a5f591 100644
-> --- a/include/linux/usb/typec_mux.h
-> +++ b/include/linux/usb/typec_mux.h
-> @@ -24,16 +24,13 @@ struct typec_switch_desc {
->  	void *drvdata;
->  };
->  
-> +
-> +struct typec_switch *typec_switch_get(struct device *dev);
->  struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode);
->  void typec_switch_put(struct typec_switch *sw);
->  int typec_switch_set(struct typec_switch *sw,
->  		     enum typec_orientation orientation);
->  
-> -static inline struct typec_switch *typec_switch_get(struct device *dev)
-> -{
-> -	return fwnode_typec_switch_get(dev_fwnode(dev));
-> -}
-> -
->  struct typec_switch_dev *
->  typec_switch_register(struct device *parent,
->  		      const struct typec_switch_desc *desc);
+See the ticket for details and further comments.
+
+@S.Bonomar FYI: you might need to bisect this issue to get us to the
+root of the problem. I also wonder if you used a vanilla 4.15 version or
+Ubuntu's kernel (which might include a patch to make your device work).
+But well, maybe the developers have a idea what's wrong here without
+further debugging. They will know, I have no idea about this driver or
+how it works.
+
+Moving on:
+
+If you're among the main recipients of this mail and not just CCed,
+could you please look into the issue to get it fixed as per
+https://docs.kernel.org/process/handling-regressions.html ? tia!
+
+Anyway, to ensure this is not forgotten lets get this tracked by the the
+Linux kernel regression tracking bot:
+
+#regzbot introduced: v4.15..v4.19
+https://bugzilla.kernel.org/show_bug.cgi?id=216336
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report in bugzilla, as the kernel's documentation calls
+for; above page explains why this is important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
