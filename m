@@ -2,79 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C2459F640
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 11:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8537A59F6DF
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 11:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236304AbiHXJbO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 05:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S236545AbiHXJvV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 05:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236301AbiHXJax (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 05:30:53 -0400
-Received: from m13131.mail.163.com (m13131.mail.163.com [220.181.13.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DB59895C6;
-        Wed, 24 Aug 2022 02:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=jYbWW
-        wWJU1UZELsnMoadaD8lwGOGXDDJJHvX5F9D2o4=; b=fRmdBMAhj2cSHI7Q6gNEz
-        P2q12XNavxDgiIWHs6OZLrK8buB6sTcsdivuBB94K52mVtKi2ACXw172u3I6J+8d
-        642WqDixCzjL3p+JPIxWivt3ADV5vg5C4tXJdrr7sru+2UXZ17Vi8u3WsjO1k7Er
-        M0IHOgW0f3Y/U/K6Ma8W6k=
-Received: from slark_xiao$163.com ( [112.97.50.93] ) by
- ajax-webmail-wmsvr131 (Coremail) ; Wed, 24 Aug 2022 17:29:33 +0800 (CST)
-X-Originating-IP: [112.97.50.93]
-Date:   Wed, 24 Aug 2022 17:29:33 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Johan Hovold" <johan@kernel.org>
-Cc:     gregkh <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-Subject: Re:Re: Re: [PATCH] USB: serial: option: add support for Cinterion
- MV32-WA/WB RmNet mode
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <YwXu3ZDozZczJxuh@hovoldconsulting.com>
-References: <20220810033050.3117-1-slark_xiao@163.com>
- <54f2b923.341c.182a606bab3.Coremail.slark_xiao@163.com>
- <YvtoSQUVuUkMCXtl@kroah.com>
- <7491a855.2224.182cf117a99.Coremail.slark_xiao@163.com>
- <YwXu3ZDozZczJxuh@hovoldconsulting.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        with ESMTP id S236539AbiHXJvB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 05:51:01 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24FF481D0;
+        Wed, 24 Aug 2022 02:50:56 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oQn2F-00065t-1o; Wed, 24 Aug 2022 11:50:55 +0200
+Message-ID: <4291cff9-b9d6-17f4-f62a-d88a9c01048a@leemhuis.info>
+Date:   Wed, 24 Aug 2022 11:50:54 +0200
 MIME-Version: 1.0
-Message-ID: <60adb407.24aa.182cf2f836c.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: g8GowACHA3l97wVjU2gdAA--.52833W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDQZnZFaEKgHe4gABsM
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [REGRESSION 5.19] NULL dereference by ucsi_acpi driver
+Content-Language: en-US
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <87r11cmbx0.wl-tiwai@suse.de>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <87r11cmbx0.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661334657;dc02e3de;
+X-HE-SMSGID: 1oQn2F-00065t-1o
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDgtMjQgMTc6MjY6NTMsICJKb2hhbiBIb3ZvbGQiIDxq
-b2hhbkBrZXJuZWwub3JnPiB3cm90ZToKPk9uIFdlZCwgQXVnIDI0LCAyMDIyIGF0IDA0OjU2OjQ1
-UE0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4KPj4gQXQgMjAyMi0wOC0xNiAxNzo1MDowMSwg
-ImdyZWdraCIgPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPiB3cm90ZToKPj4gPk9uIFR1ZSwg
-QXVnIDE2LCAyMDIyIGF0IDA1OjQwOjM1UE0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+ID4+
-IEFueSByZXNwb25zZaO/Cj4+ID4KPj4gPlRvIHdoYXQ/Cj4+ID4KPj4gPkl0IHdhcyB0aGUgbWlk
-ZGxlIG9mIHRoZSBtZXJnZSB3aW5kb3csIHdlIGNhbid0IGRvIGFueXRoaW5nIHdpdGggbmV3Cj4+
-ID5wYXRjaGVzIHVudGlsIGFmdGVyIC1yYzEgaXMgb3V0LCBhbmQgdGhlbiB3ZSBoYXZlIGEgZmV3
-IHRob3VzYW5kIHRvIGRpZwo+PiA+dGhyb3VnaCBhZnRlcndhcmQuCj4+ID4KPj4gPlJlbGF4LCB0
-aGVyZSBpcyBubyBydXNoIGhlcmUuCj4+ID4KPj4gPnRoYW5rcywKPj4gPgo+PiA+Z3JlZyBrLWgK
-Pj4gSGkgR3JlZywKPj4gICBOb3cgdjYuMC1yYzIgaXMgb3V0IGZvciBzZXZlcmFsIGRheXMuIEkg
-c3RpbGwgZGlkbid0IGZpbmQgYW55IHByb2dyZXNzIGFib3V0IHRoaXMgY29tbWl0Lgo+PiBOb3Jt
-YWxseSBzdWNoIGNvbW1pdCB3b3VsZCBiZSBjb21taXR0ZWQgaW50byBKb2hhbiBIb3ZvbGQncyBw
-ZXJzb25hbCBwcm9qZWN0IGZpcnN0bHk6Cj4+IGluZGV4OiBrZXJuZWwvZ2l0L2pvaGFuL3VzYi1z
-ZXJpYWwuZ2l0IGFuZCB3YWl0dGluZyBmb3IgbWVyZ2Ugd2luZG93Lgo+PiAgIEluIHNvbWUgc3Vi
-LXN5c3RlbSwgdGhlIG1lcmdlIHdpbmRvdyB3b3VsZCBiZSBjbG9zZWQgYWZ0ZXIgcmM0Lgo+PiBT
-byBKb2hhbiBvciBHcmVnICwgY291bGQgeW91IGhlbHAgaGFuZGxlIHRoaXMgYXNhcD8KPgo+QWdh
-aW4sIHJlbGF4LiBJIGhhdmVuJ3QgaGFkIHRpbWUgdG8gcHJvY2VzcyBteSBxdWV1ZSBhZnRlciB0
-aGUgbWVyZ2UKPndpbmRvdyBhbmQgc29tZSBob2xpZGF5LiBOb3RoaW5nIGlzIGxvc3QgYW5kIEkn
-bGwgZ2V0IHRvIHlvdXIgcGF0Y2ggaW4KPnRpbWUuCj4KPkpvaGFuCgpPSywgZ290IGl0LCB0aGFu
-a3Mh
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
+
+Hi, this is your Linux kernel regression tracker.
+
+On 19.08.22 18:32, Takashi Iwai wrote:
+> Hi,
+> 
+> we've got multiple reports about 5.19 kernel starting crashing after
+> some time, and this turned out to be triggered by ucsi_acpi driver.
+> The details are found in:
+>   https://bugzilla.suse.com/show_bug.cgi?id=1202386
+> 
+> The culprit seems to be the commit 87d0e2f41b8c
+>     usb: typec: ucsi: add a common function ucsi_unregister_connectors()
+>     
+> This commit looks as if it were a harmless cleanup, but this failed in
+> a subtle way.  Namely, in the error scenario, the driver gets an error
+> at ucsi_register_altmodes(), and goes to the error handling to release
+> the resources.  Through this refactoring, the release part was unified
+> to a funciton ucsi_unregister_connectors().  And there, it has a NULL
+> check of con->wq, and it bails out the loop if it's NULL. 
+> Meanwhile, ucsi_register_port() itself still calls destroy_workqueue()
+> and clear con->wq at its error path.  This ended up in the leftover
+> power supply device with the uninitialized / cleared device.
+> 
+> It was confirmed that the problem could be avoided by a simple
+> revert.
+> 
+> I guess another fix could be removing the part clearing con->wq, i.e.
+> 
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1192,11 +1192,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  out_unlock:
+>  	mutex_unlock(&con->lock);
+>  
+> -	if (ret && con->wq) {
+> -		destroy_workqueue(con->wq);
+> -		con->wq = NULL;
+> -	}
+> -
+>  	return ret;
+>  }
+>  
+> 
+> ... but it's totally untested and I'm not entirely sure whether it's
+> better.
+
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
+
+#regzbot introduced 87d0e2f41b8c ^
+https://bugzilla.suse.com/show_bug.cgi?id=1202386
+#regzbot title NULL dereference by ucsi_acpi driver
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
