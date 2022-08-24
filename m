@@ -2,108 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7D75A025D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 21:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E4E5A02C3
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 22:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240074AbiHXT4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 15:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S240396AbiHXUbT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 16:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239116AbiHXT4r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 15:56:47 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257757C32C
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 12:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=XfI2zVgSybuOFKHs2O2v3i5/yydH
-        RuHPYDuh8ZRgJUs=; b=Swji6jBeHIh+BLay/t9qq7wLzAC/ChVuYStJRqnbb/cA
-        5gK9jYsPk/78DkcmgW6d5/dIHHexz6Zt/vLFijqHvZv/P/VlZlgo5wFZQ6IhigE5
-        95s/clSwPPp1KPeAdT7qYOymeivsKP+G4IKpw/TayHSnAbEJZVoa08pqab/HuyU=
-Received: (qmail 2364728 invoked from network); 24 Aug 2022 21:56:40 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2022 21:56:40 +0200
-X-UD-Smtp-Session: l3s3148p1@P0dLFALn3r4gAwDtxwoDABxA2q3xYuRb
-Date:   Wed, 24 Aug 2022 21:56:39 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Duncan Sands <duncan.sands@free.fr>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH] usb: move from strlcpy with unused retval to strscpy
-Message-ID: <YwaCd6BkBMKMv6kj@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Duncan Sands <duncan.sands@free.fr>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-References: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
- <Yv9TWTnYc4T3tkqA@kroah.com>
+        with ESMTP id S233796AbiHXUbS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 16:31:18 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5656B67F;
+        Wed, 24 Aug 2022 13:31:17 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id p185so3132139pfb.13;
+        Wed, 24 Aug 2022 13:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=JS396VO3RjIxv2EdN1gwXH0IVteoC89fKy018NJlSI4=;
+        b=DJ726nuBhrKxCRN9Vl4h7nD8MJ9khauabketOtwG96ztSRmma9M2LL737/A973Xm9/
+         A1HkXBFymyUePR2E65G300Nu0vcvXoSh7vP9CmNxstGOJjC3LuPq5bjRN/MqD29p11Cu
+         e9+zoPU/vd+hzx4fofmm420f8lNB6OU4ddogOkU/FYfvo2ylDNeAVULRKnHLtkMRpFkE
+         BI+OsrRnTz/MLZo4RhPEXOPRggF7kJYn0o3TKB5iNo33Zs+z5dlAuY4/T2YOD40VRtW8
+         bBBEFN+hg0pj3Q1FhcWVDQLA0ObqaGwnvNRgA6BDYen8z7S6f7Na6J5aB5BX8lgRU3M+
+         7vTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=JS396VO3RjIxv2EdN1gwXH0IVteoC89fKy018NJlSI4=;
+        b=kGS+zsN5cvu1Mt8i5qHFz6E/IEpZWo3I+TNPb/UcHK1eQrBrov4kIe6G4NiNlH6Oz3
+         K2MC52I1l7SGkvYh14qG1+PFSsMQiNqstW/fV/xiu3IOy97SjeOIW+aSuNZ/OHx2MJrx
+         6khZ2VXycJst+ReDjxSlKDy55Pbg2tqMjEm7AmMymi97IGXXSoGSzh8NhzRV+DjSOKo7
+         tc1THTk5PCmc8QejhvXVXGb05GXxYPTreaOrcWF+RfkVDC4MEHgNChh1CzKzcCQSR4Rm
+         KJRIhSgxtzX8Qwby9U6cCBjvUf98Fw0gy/p2yPZ7fH0DT2VgaPUyDrUShLdq6C3c1Vx4
+         XdIg==
+X-Gm-Message-State: ACgBeo2XOHG0wdroYRmbtNx1GDdU+jLf1MmfoZV2aKn2SCzfY1+mQXHC
+        h3E1aaHx63oGBBwwbc2lIzAHAFOCAkowXw==
+X-Google-Smtp-Source: AA6agR7J3xx58TIIiBDRjMFIdMcuBK4hAzDg9M0xKet4Ornl9P/KbcddihwBWRKszlRF1Uk8iDebDw==
+X-Received: by 2002:aa7:88d0:0:b0:536:e993:730d with SMTP id k16-20020aa788d0000000b00536e993730dmr813054pff.81.1661373077014;
+        Wed, 24 Aug 2022 13:31:17 -0700 (PDT)
+Received: from fedora.. ([103.159.189.138])
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902dacc00b0017269cc60d7sm13065714plx.214.2022.08.24.13.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 13:31:16 -0700 (PDT)
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: host: Initiate urb ep with udev ep0
+Date:   Thu, 25 Aug 2022 02:31:07 +0600
+Message-Id: <20220824203107.14908-1-khalid.masum.92@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v5ByJUCPpsV/XVJP"
-Content-Disposition: inline
-In-Reply-To: <Yv9TWTnYc4T3tkqA@kroah.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Currently we look up for endpoint in a table and initate urb endpoint
+with it. This is unnecessary because the lookup will always result in
+endpoint 0.
 
---v5ByJUCPpsV/XVJP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+---
+Changes since v1:
+ - Remove endpoint lookup and NULL check
+ - Remove unnecessary variable *ep
+ - Initiate urb ep with udev ep0
+ - Update commit message
+ - v1 Link: https://lore.kernel.org/lkml/20220824130702.10912-1-khalid.masum.92@gmail.com/ 
 
+ drivers/usb/core/hcd.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
->   =E2=9C=97 BADSIG: DKIM/sang-engineering.com
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 94b305bbd621..05f30ae5570b 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2158,21 +2158,14 @@ static struct urb *request_single_step_set_feature_urb(
+ {
+ 	struct urb *urb;
+ 	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
+-	struct usb_host_endpoint *ep;
+ 
+ 	urb = usb_alloc_urb(0, GFP_KERNEL);
+ 	if (!urb)
+ 		return NULL;
+ 
+ 	urb->pipe = usb_rcvctrlpipe(udev, 0);
+-	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
+-				[usb_pipeendpoint(urb->pipe)];
+-	if (!ep) {
+-		usb_free_urb(urb);
+-		return NULL;
+-	}
+ 
+-	urb->ep = ep;
++	urb->ep = &udev->ep0;
+ 	urb->dev = udev;
+ 	urb->setup_packet = (void *)dr;
+ 	urb->transfer_buffer = buf;
+-- 
+2.37.1
 
-Strange. When I save the message into a file and check locally, it seems
-OK. I also never received a similar report from other b4 users.
-
-=3D=3D=3D
-
-$ cat message | dkimverify
-signature ok
-
-
---v5ByJUCPpsV/XVJP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMGgnMACgkQFA3kzBSg
-KbZ0cw/9FAwUMwXibHECPDn27lqmPu+9+JcL1bW+8klud63Gu9NuQelmHjOeQiW/
-mK08FGs/unPDv4AYzZjtuPcii4BjA2BKMDM3FR87lkTVYOf5JGRHKzz8OeqTuIsi
-Rtz/b+qS0vdzNQfByCCvjUSIp2aygxY5n28eOlLzNQsESO/hH8btVqUY9Kc3+i1b
-8fgwnkblqfk5rsR0bo2rf99gMbmxflfLL16EUPryAp6os1QtC7UV5IWfV4D4z965
-tycqvPES1/HxJO0+6KRjN7umL8qZoWDkWEbU0tyE/HWQCDia/RB/hqMlDOKgeO+a
-rOWRI4YoY2oJRxQ9wtGc/5662ASs05pcHAky/J7BALv96+PbopbiAK2PdByBAGgF
-3GfCwUvEAZRLb0ZRp8vaBRunwbNXBur3NSJWi/wDRQy4Rx0t75pvTIqb0plPlZVn
-WdNmYyMjV9Yw9gEe0ecbAh0UPIy8H7xMS+2sLTgOeGkRdc52EDYgzAoTu7rfTSSv
-K9SmrX7Asff8TDStQMhwgOaOK5bkXY//242EMnoIxyTgNULe89+M7oitNdnBDYj1
-J6EJKVEN+6ZOtdoPlJmi5nU0IAQ0q0sLdkXZ0rLEPp7P5hGHHnM0r7PhLKhpFOJg
-efRTKdLWHExE6jJMmAD2+As3Q6dNNzMySYXNvyr1iJ6yh40piPs=
-=qKuh
------END PGP SIGNATURE-----
-
---v5ByJUCPpsV/XVJP--
