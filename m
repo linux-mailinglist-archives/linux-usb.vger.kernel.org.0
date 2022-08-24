@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE60C59F33D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 07:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AF659F34A
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 07:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234415AbiHXF4K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 01:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S232848AbiHXF7R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 01:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiHXF4J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 01:56:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCCC86C2C;
-        Tue, 23 Aug 2022 22:56:09 -0700 (PDT)
+        with ESMTP id S234763AbiHXF7P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 01:59:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9162B91D03;
+        Tue, 23 Aug 2022 22:59:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D33C618A9;
-        Wed, 24 Aug 2022 05:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9A4C433D6;
-        Wed, 24 Aug 2022 05:56:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44A46B820E2;
+        Wed, 24 Aug 2022 05:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9076DC433C1;
+        Wed, 24 Aug 2022 05:59:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661320568;
-        bh=/lQK6eSyHFmPY9FHfehXTuLBTlCtNaOLxFlDwPC1f/4=;
+        s=korg; t=1661320752;
+        bh=3UOExyhBJWI58bskqf1OVcbIGVqWq4fcBmpW9lG1Mak=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zU3ILmUfSavbZXEmKsGu1fAYoww8AzQBdd3YPcnxApAGDxwTBCxdrIxAonCW6Hz5Z
-         f9/C+zA/dIP1ip6oHBmKb0AgMm4uvnH0TonlVfIcZwYTSQI3ybgaKjm/bk1dV3yEm1
-         lioqgCBJIpZuHvmqsTx7M1OVFG+pDfxJZZi+Cyp4=
-Date:   Wed, 24 Aug 2022 07:56:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        b=yQxP137GqYPwNImbfxYo9yNEHQajXByUoomLUNG16UIh8Z7rsTj4dsZapeoRppTcG
+         0F0OSEN9GbBVKBWy0ynS+XCnso4raEZaEI0rM4qdEqyrCMleA3hUZszdQmcMf3z87x
+         5NztAL0vdHLx7rdA2dUSqcl+GiindfaT9alqhTtU=
+Date:   Wed, 24 Aug 2022 07:59:08 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rajat Khandelwal <rajat.khandelwal@intel.corp-partner.google.com>
+Cc:     heikki.krogerus@linux.intel.com, rajat.khandelwal@intel.com,
+        shawn.c.lee@intel.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: ehci: Prevent possible modulo by zero
-Message-ID: <YwW9dBW/0TKHPnC1@kroah.com>
-References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
- <20220823182758.13401-3-khalid.masum.92@gmail.com>
+Subject: Re: [PATCH] Enter safe mode only when pins need to be reconfigured
+Message-ID: <YwW+LI345ind56ks@kroah.com>
+References: <20220823170949.2066916-1-rajat.khandelwal@intel.corp-partner.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823182758.13401-3-khalid.masum.92@gmail.com>
+In-Reply-To: <20220823170949.2066916-1-rajat.khandelwal@intel.corp-partner.google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -51,44 +51,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:27:58AM +0600, Khalid Masum wrote:
-> usb_maxpacket() returns 0 if it fails to fetch the endpoint. This
-> value is later used for calculating modulo. Which can cause modulo
-> by zero in qtd_fill.
+On Tue, Aug 23, 2022 at 10:39:49PM +0530, Rajat Khandelwal wrote:
+> From: Lee Shawn C <shawn.c.lee@intel.com>
 > 
-> Prevent this breakage by returning if maxpacket is found to be 0.
+> There is no point to enter safe mode during DP/TBT configuration
+> if the DP/TBT was already configured in mux. This is because safe
+> mode is only applicable when there is a need to reconfigure the
+> pins in order to avoid damage within/to port partner.
 > 
-> Fixes coverity warning: 1487371 ("Division or modulo by zero")
+> 1. if HPD interrupt arrives and DP mode was already configured,
+> safe mode is entered again which is not desired.
+> 2. in chrome systems, IOM/mux is already configured before OS
+> comes up. Thus, when driver is probed, it blindly enters safe
+> mode due to PD negotiations but only after gfx driver lowers
+> dp_phy_ownership, will the IOM complete safe mode and send
+> ack to PMC.
+> Since, that never happens, we see IPC timeout.
+> 
+> Hence, allow safe mode only when pin reconfiguration is not
+> required, which makes sense.
+> 
+> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+> Signed-off-by: Lee Shawn C <shawn.c.lee@intel.com>
 
-Odd tag format, is that in the documentation?
+First off, don't use invalid "corp-partner.google.com" email addresses,
+you know that's not going to work and just bounce everywhere and there's
+no proof that this has any relationship to your intel address :(
 
-> Fixes: 9841f37a1cca ("usb: ehci: Add support for SINGLE_STEP_SET_FEATURE test of EHSET")
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+And your signed-off-by chain is incorrect.
+
+And most importantly, you did not follow the required Intel rules for
+how to submit kernel patches.  Please go work with your internal groups
+to learn what is needed and how to do this properly.  Until then, I'm
+not allowed to take your changes at all, sorry.
+
 > ---
->  drivers/usb/host/ehci-q.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/usb/typec/mux/intel_pmc_mux.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-> index eb31d13e9ecd..cf2585e9a09f 100644
-> --- a/drivers/usb/host/ehci-q.c
-> +++ b/drivers/usb/host/ehci-q.c
-> @@ -1221,6 +1221,8 @@ static int ehci_submit_single_step_set_feature(
->  	token |= (1 /* "in" */ << 8);  /*This is IN stage*/
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index d238913e996a..4bf84466d1ff 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -432,6 +432,25 @@ static int pmc_usb_connect(struct pmc_usb_port *port, enum usb_role role)
+>  	return pmc_usb_command(port, msg, sizeof(msg));
+>  }
 >  
->  	maxpacket = usb_maxpacket(urb->dev, urb->pipe);
-> +	if (unlikely(!maxpacket))
+> +static bool
+> +pmc_usb_mux_allow_to_enter_safe_mode(struct pmc_usb_port *port,
+> +				      struct typec_mux_state *state)
+> +{
+> +	if ((IOM_PORT_ACTIVITY_IS(port->iom_status, DP) ||
+> +	     IOM_PORT_ACTIVITY_IS(port->iom_status, DP_MFD)) &&
+> +	     state->alt &&
+> +	     state->alt->svid == USB_TYPEC_DP_SID)
+> +		return false;
+> +
+> +	if ((IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) ||
+> +	     IOM_PORT_ACTIVITY_IS(port->iom_status, ALT_MODE_TBT_USB)) &&
+> +	     state->alt &&
+> +	     state->alt->svid == USB_TYPEC_TBT_SID)
+> +		return false;
+> +
+> +	return true;
 
-You only ever use likely/unlikely if you can document how it matters
-with a benchmark or other way to notice the difference.  Otherwise let
-the compiler and the CPU do their magic, they know how to do this better
-than us.
-
-> +		return -1;
-
-A real error number should be returned here if this was valid.
-
-But as Alan said, coverity is often wrong, and unless you can prove
-otherwise, this patch isn't valid.
+Return normal 0/-ERROR for functions like this, don't mess with bool for
+a return value, that's just confusing to everyone involved.
 
 thanks,
 
