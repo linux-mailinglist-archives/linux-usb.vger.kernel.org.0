@@ -2,108 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC9E5A016B
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 20:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7535A01DE
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 21:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240046AbiHXSeq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 14:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S236489AbiHXTOT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 15:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbiHXSem (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 14:34:42 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33E07A515;
-        Wed, 24 Aug 2022 11:34:40 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33db4e5ab43so1368647b3.4;
-        Wed, 24 Aug 2022 11:34:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0fJKE51ZwEoPTaUMc8JUaf3dO19a2GBvZUGjA8lc9aM=;
-        b=ZwAmpYJALVf29JVgH/ycyVZHqUcyuoaZ6sYEDbMsahFUFuGFpzyCXTn0WU5ndQ/tpA
-         mq5tv9ClbV+js8SHHUsqFNeWqmvIafm3M/Ne2avIuO31a6Mdjppt0a56ys2i/J/1QXO2
-         q2L/XFYyja+gUKO3GxH6imB/nQfSIj9ayY4MFNJii5HDYlyxN5FYHo6qOIhzbDDTQEDS
-         hcd7drI46ljsW6UPWFvRx3nSn7Eskf2+CRT9/1OlEHbx1m+pKVdVhpEEk5fW0y2+G1Qs
-         SMOFt3fl3Dwivwj4jaPzWwEAfnQrQSArFq9Gc9Eb9c9vQfxt/4ydt+6YoS2WAJJ0Gynq
-         hJZQ==
-X-Gm-Message-State: ACgBeo0G1FhTBOxPa//btogDVvolGNl9lEfsd9goR8xGd1h31cINtu9S
-        Z7nHOAhI1DcMxjNxdvU1ZpAgMfV/386trPfSKdo=
-X-Google-Smtp-Source: AA6agR5aJcrYwH49iHESjxTPAWqPBe0D8n9Ip5MMV3jUkGvXtNya+iOVTI3qvJUxh/NHkFav+oANxQPheMLPeXRe+wM=
-X-Received: by 2002:a25:664a:0:b0:695:e7cc:9a20 with SMTP id
- z10-20020a25664a000000b00695e7cc9a20mr415847ybm.153.1661366079973; Wed, 24
- Aug 2022 11:34:39 -0700 (PDT)
+        with ESMTP id S232084AbiHXTOS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 15:14:18 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9AF65240;
+        Wed, 24 Aug 2022 12:14:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661368454;
+        bh=Wf+PgvEMxVLzIEkHcy0ZAH85uq9spAuazl+zPdNjBpc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=MSVaIYBJDTVZPe+Y5zdglJAkgXaWuHmY47lpMPqe87nQfw6n7ALxH/0gsqo3jO+F8
+         BAFPIX1ShzI6zswgafYwZ5agCQ6jleMmQeqXN/pA5hVE9AIs+6NeqHMlWwhFd8kyGA
+         l3ymQ5xG5dKDSk+FMVPO3T0AWZ1Xhthxu9IdsoWI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from silverpad ([89.204.135.131]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mqs0X-1pDgrE3Z0z-00mqrV; Wed, 24
+ Aug 2022 21:14:14 +0200
+From:   Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+Subject: [PATCH v3] usb: add quirks for Lenovo OneLink+ Dock
+Date:   Wed, 24 Aug 2022 21:13:21 +0200
+Message-Id: <20220824191320.17883-1-jflf_kernel@gmx.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <12036348.O9o76ZdvQC@kreacher> <2196460.iZASKD2KPV@kreacher>
- <5857822.lOV4Wx5bFT@kreacher> <CAHp75VcjxUjH4p_NOEQjOuFO8LcSdUU_stEvfWvtbQc8hfud0w@mail.gmail.com>
-In-Reply-To: <CAHp75VcjxUjH4p_NOEQjOuFO8LcSdUU_stEvfWvtbQc8hfud0w@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Aug 2022 20:34:28 +0200
-Message-ID: <CAJZ5v0hm8NszTDsq-KJ4iO452WZ7C7u4ufbfTDdFXX9YnXmTDw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:oC3+so+41R2EyHHJ2AN93nJq1sJqJgGMVDu43fxDbWm7rWjz+K4
+ vfdv5/FlFIDOAvUItqOQz14zYlfwbT8m63QonQgXO34eqcuYEKt3W4ma8CPsJlrz6ZJHdPW
+ 8enCachOymIRNjvrix9VnhbKKIhVNEBsVF/RA98bdU4t5cEzL7llpurQQBDciLTTi2AFSD6
+ v1qgQNGIdIZyV535QhH5g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2foCDcNJHi8=:WX+rB6uxNjd6ec8zY4NMcD
+ PCfWYJcp6TmnzRZkcAc7WOclVd/vCjvKmZSQxTynFXsr5Suu+ndZn5okE1oA2hKatTgVmG0lj
+ RHCQ46/lQZER+TWzPiyLlN6zCKYl5FWeUSwJE1PVw9wFn7g5OkYHHdvO+qn3yJpaAfc1Y8qQp
+ jUTz4LkuVOdb4Y+9FVy7CiIAGXmgJhUxyGkTPwneUeaTDjBqQdD4x/RlRTkzNRJjoo5JwKW/b
+ dDYxaILlz9T0U2AY75BkE8dfef9ZBOtrlEN0KVgiKPWY4O1blf7jcxVcommNrdxQBdE+z58gg
+ P5jK1amojHxRAYzsOPkPBBxlHgNYR3Qt9mPbnXD2ILdBVGfyVT31QveFgpZtU0L9GuggZaH8n
+ wpSAn+Mg8IsM30dVW/YFy9vVt4D2BJp01td+b+sYa/hMomNdt/1BOV0F+SqrC2qkyn+O4Vvdf
+ SYgO9ZmK5DWFX7Ci9bvltGAGq2h0fbphIgyZ/cr6vDC5xggCd1o8kuYP5imYI3YqNqC5SGVkQ
+ BXJyjH6v2TSV5mZAZDYAxzO8SaJjNLnYW4h5xFbe+evhlTskn5aIf9zoFtKd5hWLu/qsQKyqQ
+ PFjnKlHYEVvjDHVSIk3yK8MW3jfFOMKZbqJX1OKFmOhnkAeqV0R+4d+mApv4p1ISoSRj+1rJE
+ pK2rZuTZqGbU1nCCj5Y+uQsF5jmWqK6RZKWOzEf7DcSE3zPRw0yvLJ2Oqg8SNXBoPWEy/gVdr
+ 5M6Z25HbzsMoLt/00z/ZiSo9mvoS5xKHSm9NZIRTcJbXMAznPSDrABwAuYtZltaIGBbrTyQFu
+ 2JUJ1mhlZjy4fYLb0WPswD/1OA2oXoy+7CSNySYk3dqKevL2e8JzO8NnKniIcoM3omQuRTP9v
+ AYT+ChPilrllyGc7iN6eBuEL2m0AwKSwZSZbr4WlFHrNLQxsYpcqh6ZNiS1ZTJOT4OMuYfRC7
+ +fzRYNzYySL+S9oGkpZWonMDs4fcPTjCWC9KBLTJjsOnb/VusyrpUIrYzUb5X6VS1HOyF+KCB
+ czotvjtN0HgxoRWvteyB+vGmVCvNpXPxV4EcYm//Wn2wCgis9W0TiMRHmS4jPMVGMZ5zQrMJH
+ noLHzTd4NLyhp9Jyor7zhcnrCtDlfpoJ9al+54NjzkRCU32gRQNTkx2Cw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 8:23 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Aug 24, 2022 at 8:13 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > The parent field in struct acpi_device is, in fact, redundant,
-> > because the dev.parent field in it effectively points to the same
-> > object and it is used by the driver core.
-> >
-> > Accordingly, the parent field can be dropped from struct acpi_device
-> > and for this purpose define acpi_dev_parent() to retrieve a parent
-> > struct acpi_device pointer from the dev.parent field in struct
-> > acpi_device.  Next, update all of the users of the parent field
-> > in struct acpi_device to use acpi_dev_parent() instead of it and
-> > drop it.
-> >
-> > While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
-> > in one place in a confusing way.
-> >
-> > No intentional functional impact.
->
-> Side note: Should we not convert these to use acpi_dev_parent()?
->
-> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/acpi/property.c#L1271
-> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/bus/hisi_lpc.c#L397
+The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
+17ef:1018 upstream
+17ef:1019 downstream
 
-That can be done later, but thanks for the pointers!
+Those two controllers both have problems with some USB3.0 devices,
+particularly self-powered ones. Typical error messages include:
+
+  Timeout while waiting for setup device command
+  device not accepting address X, error -62
+  unable to enumerate USB device
+
+By process of elimination the controllers themselves were identified as
+the cause of the problem. Through trial and error the issue was solved
+by using USB_QUIRK_RESET_RESUME for both chips.
+
+Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+=2D--
+v2 -> v3: fix commit email address, add revision details
+v1 -> v2: use full author name
+
+
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f99a65a64..999b7c969 100644
+=2D-- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -437,6 +437,10 @@ static const struct usb_device_id usb_quirk_list[] =
+=3D {
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =3D
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+
++	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) *=
+/
++	{ USB_DEVICE(0x17ef, 0x1018), .driver_info =3D USB_QUIRK_RESET_RESUME },
++	{ USB_DEVICE(0x17ef, 0x1019), .driver_info =3D USB_QUIRK_RESET_RESUME },
++
+ 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
+ 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info =3D USB_QUIRK_NO_LPM },
+
+=2D-
+2.34.1
+
