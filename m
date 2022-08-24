@@ -2,78 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E39B59FD6D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 16:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F72259FF26
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 18:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239220AbiHXOkw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 10:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S236086AbiHXQKY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 12:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbiHXOkv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 10:40:51 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7A3445754E
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 07:40:50 -0700 (PDT)
-Received: (qmail 380982 invoked by uid 1000); 24 Aug 2022 10:40:49 -0400
-Date:   Wed, 24 Aug 2022 10:40:49 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexey Sheplyakov <asheplyakov@basealt.ru>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] usb: host: Use helper function to get endpoint
-Message-ID: <YwY4cVdB3tVVMIqJ@rowland.harvard.edu>
-References: <20220824130702.10912-1-khalid.masum.92@gmail.com>
+        with ESMTP id S233460AbiHXQKX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 12:10:23 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E3A4DB4F;
+        Wed, 24 Aug 2022 09:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661357418;
+        bh=7mm/yrPnEWFWZR/Jlf21nIbJSmJwkfcdwaQyebvIAQ4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=IeFDWWWg/Womv8SFsMA1qj48+QZuOnhDYyulqfO/K+0hg/6/GHZ7gn6XASUkH6k2R
+         2NIi5hFRCUiAFv4dCGV+OAWe10w8lekkUcrPTUt4ZrZ6ivnPWtHBIM8BJ55mmmVCjv
+         E6IlQAee3C4zKzw+1mM6XsSBVUlmn/YOHtv/NKAE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from silverpad ([82.113.106.57]) by mail.gmx.net (mrgmx005
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MGhyS-1odaX547Pe-00Dlch; Wed, 24
+ Aug 2022 18:10:18 +0200
+From:   JFLF <jflf_kernel@gmx.com>
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     JFLF <jflf_kernel@gmx.com>
+Subject: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
+Date:   Wed, 24 Aug 2022 18:09:46 +0200
+Message-Id: <20220824160946.10128-1-jflf_kernel@gmx.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824130702.10912-1-khalid.masum.92@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:INBwlXI5QhpWoz/qQX0OcR52mZmVSnqRiNsEVK+pL34v67cjCvK
+ Cn0iA7Os9nN0nf+46p0PVYK77AuVewBJXcfP5LLz4sYymrhK0KiwvOaevOFu7jbKgS2txXd
+ aHCUbI0g4q8tjrFoeQnm9FsKQeul6nfTrNROTG9ql8NDbRg6uGLW7XUHkVTNoxxIwgXCPWE
+ 0pBL7koYL1Go14v8B2vGw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rHjN7vGzHVs=:ls50/fZyBRhhA2Wgd2uq9e
+ /wr2tYM49tUiWgqNY9Xpk0e6U9yhTMSunz30tJLS8YfmaFO6+tsK0kvKoPML7jE0d1nh/aHGn
+ ulW0CLhwt1lqNKmCg/NE+S4z0jk9lpj2Yp0bB3tsSqOqqe8UG0YaWpA4qUz0/JHjxpRELsE1j
+ CtjPNw6PIB+zACWZykgoP1IWhf2HbQGsGJS7VL7TtQlotie4nlDO+zPqe8U6ICcybGwKWAOj3
+ KwNlp5yPDYxRN972uPI/3luwP3dcBLytUBdCsKzmx5EMTXte7MCIZ/q/GxJz6ZndqIqDmPEYP
+ 983bXJ6z64I6nJXZhOVQCf28R7cbV26zml+/P4nBHb8giWlLlZjGnbg814irOFL3RZW3CLqJD
+ cRs8vXKLvQAQsiUqFq+SnbYP4A8bPEakEl7oYIGJi1opOJ3Yn3LtxSswWnUnq3yikuv2k+M/U
+ j4BJOPRpx4DzeE255gDZrYC2eZChrP+yyd3EFh14bqyepLW4g1UIV6eNnO+poa9Xu8b/aXGX7
+ YXjQo0C1kY0CD/xZj+pKdwQgFaUKWrqL6+SRhZU1y4WEMIDxouG1Gww5ryCpP0iUYx3bOvBIV
+ H5ii4oaOlcXsaL25gSgYA5R8uCDvnhFvqdsK7w03leqzPCjizo4MA8iztTTNgr1d0te4F4IvG
+ RYMLQDuyyaW3tO/KLlgpoKeTktEgreHyoTsPcr0OMSaJsAJRw4C2KjuYwY7KW3l2Ns+K31hOW
+ LwYPRgyJ6sj5CkuGBDFLCMzJDWUE6USm+exXqFeJtkVUDTIusudb4/U6SaVfkKMWVLAE5reiO
+ GKMNL2wLxEATF0JZ4rIEuTx5FZhQ61oitNY4nGnf7Nc7EIVe4lXIvKiAwh8SNnLYyiLSeXOIb
+ nGg3Q23iN/xOxeHpUIvRx5JGpaVh5GedvbyNgv/AB6wPdb4iZBzMGJ8TX6jsrhispD7EP2pSO
+ unce6V4nQkyKyV3A5rdaAmiSt6OaV1789JXypRQTrGyB6DKSYe5/VcsDf+ycQGZvWFYNB4Zn0
+ nBY37lH48p783jr/J6qiEfw23x1FQuBpUNrX2osRCLmfVhv0CaxTqVHdw8BiEhDPPFimYk0q4
+ Jz4PZiaGNxUDBLHWRi1bGo7637BXOQODGYYeq+sHwDtGlo2uvfzPcl3Rg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 07:07:02PM +0600, Khalid Masum wrote:
-> Current implementation to convert urb pipe number to struct 
-> usb_host_endpoint in rquest_single_step_set_feature_urb is a little
-> messy. 
-> 
-> Use usb_pipe_endpoint helper function to get the endpoint instead.
-> 
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> ---
->  drivers/usb/core/hcd.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 94b305bbd621..107e29d5d3ae 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2165,8 +2165,7 @@ static struct urb *request_single_step_set_feature_urb(
->  		return NULL;
->  
->  	urb->pipe = usb_rcvctrlpipe(udev, 0);
-> -	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
-> -				[usb_pipeendpoint(urb->pipe)];
-> +	ep = usb_pipe_endpoint(udev, urb->pipe);
->  	if (!ep) {
->  		usb_free_urb(urb);
->  		return NULL;
+The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
+17ef:1018 upstream
+17ef:1019 downstream
 
-Even this is awkward.  It's silly to look up the endpoint in a table 
-when you already know that it is endpoint 0.  Just do:
+Those two controllers both have problems with some USB3.0 devices,
+particularly self-powered ones. Typical error messages include:
 
-	ep = &udev->ep0;
+  Timeout while waiting for setup device command
+  device not accepting address X, error -62
+  unable to enumerate USB device
 
-with no need to check for NULL.
+By process of elimination the controllers themselves were identified as
+the cause of the problem. Through trial and error the issue was solved
+by using USB_QUIRK_RESET_RESUME for both chips.
 
-Alan Stern
+Signed-off-by: JFLF <jflf_kernel@gmx.com>
+=2D--
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f99a65a64..999b7c969 100644
+=2D-- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -437,6 +437,10 @@ static const struct usb_device_id usb_quirk_list[] =
+=3D {
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =3D
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+
++	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) *=
+/
++	{ USB_DEVICE(0x17ef, 0x1018), .driver_info =3D USB_QUIRK_RESET_RESUME },
++	{ USB_DEVICE(0x17ef, 0x1019), .driver_info =3D USB_QUIRK_RESET_RESUME },
++
+ 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
+ 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info =3D USB_QUIRK_NO_LPM },
+
+=2D-
+2.34.1
+
