@@ -2,44 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C4359F417
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 09:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A506E59F53D
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 10:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiHXHUx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 03:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
+        id S235751AbiHXI1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 04:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiHXHUw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 03:20:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46892F3A3
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 00:20:50 -0700 (PDT)
+        with ESMTP id S235729AbiHXI1r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 04:27:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0426E93230;
+        Wed, 24 Aug 2022 01:27:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D74D615D2
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 07:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5099DC433C1;
-        Wed, 24 Aug 2022 07:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661325649;
-        bh=1FyWTL/hYlIXoGKRicQgwQww2cBGZ1SJV6f2HELVkKA=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AC0CB8238E;
+        Wed, 24 Aug 2022 08:27:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C61C433B5;
+        Wed, 24 Aug 2022 08:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661329661;
+        bh=Cswsg5zwfQnIxDqhYpbvzbjzMba7/Q3SMHSTlIl4nr8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=suQ3YWCL4pFxI6nHuUNwU0vA32sH9Alm94jpCWoC8QR67E2SAaq+2Kio5mm7XKsJh
-         ITF+37X8WFNMwcuySei6++dN8qFUPQzyNHEnFSCIlHnEWEOrJ4SwlYL3KY+VkMgJ1J
-         ifbhOaLtdGsxsM6eEWFUKDQCL96KNolZqKjjeGQw=
-Date:   Wed, 24 Aug 2022 09:20:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hu Xiaoying <huxiaoying2008@gmail.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: linux-next patch
-Message-ID: <YwXRTo5SCbF0MKa0@kroah.com>
-References: <CABd4UjZCm-EmqmD0z2bNkem8K138SV+Gvo90h9S_ckHc4QT5yQ@mail.gmail.com>
+        b=rns/zYsL6l6/nzNgn6OPoDzXGQ9O4PkTAx4ahpmezNfDqJO5X2igsp3OWb0tBrUgL
+         od/SBuxqloB/0+k6Urdah49vznJ4jlaF2N1un/Vmv/dW6hpLveHekjs3OZ0vOjybsh
+         2lBgIS7aVUUfSARtNBrmNU2YUMqim/pgq/fTwmh0HxyLBN2gncoWfD3bjvag7iF/4+
+         WRbUtcdS9S8cgb7z2nfnIHDgObqFywt5sNHEUAus1Qu2RcGBDu0YXI9qRQj07cVa2S
+         7lKCYTdMROFIuwSV0YKqE4WBDL0gEGJuptFAYhF1V2/XnIh0yJTNkNFGOzG1f8wfC0
+         vU9YZHWbf+zbw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oQljk-0003G4-4G; Wed, 24 Aug 2022 10:27:44 +0200
+Date:   Wed, 24 Aug 2022 10:27:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: keep PHYs disabled during suspend
+Message-ID: <YwXhANZ8l6E9yQDe@hovoldconsulting.com>
+References: <20220823124047.14634-1-johan+linaro@kernel.org>
+ <YwUdbkyL8GgvLQJA@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABd4UjZCm-EmqmD0z2bNkem8K138SV+Gvo90h9S_ckHc4QT5yQ@mail.gmail.com>
+In-Reply-To: <YwUdbkyL8GgvLQJA@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -50,86 +65,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 03:04:03PM +0800, Hu Xiaoying wrote:
+On Tue, Aug 23, 2022 at 11:33:18AM -0700, Matthias Kaehlcke wrote:
+> Hi Johan,
 > 
-
-> From 040e7ed7e6e9ed850575ed075e02d960a5ffe191 Mon Sep 17 00:00:00 2001
-> From: Hu Xiaoying <huxiaoying@kylinos.cn>
-> Date: Wed, 22 Jun 2022 16:35:59 +0800
-> Subject: [PATCH -next] KYLIN: usb: Improves USB2.0 write performance for
->  External HDD device (VID:PID = 0x0b05:0x1932)
+> On Tue, Aug 23, 2022 at 02:40:47PM +0200, Johan Hovold wrote:
+> > Commit 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system
+> > suspend") started leaving the PHYs enabled during suspend for
+> > wakeup-capable controllers even though it turns out this had nothing to
+> > do with wakeup.
+> > 
+> > Rather, the wakeup capability flag was (ab-)used as a proxy to configure
+> > the suspend behaviour in an attempt to reduce power leakage on some
+> > platforms.
+> > 
+> > Stop abusing the wakeup configuration and restore the 5.19 behaviour of
+> > keeping the PHYs powered off during suspend. If needed, a dedicated
+> > mechanism for configuring the PHY power state during suspend can be
+> > added later.
+> > 
+> > Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
+> > Link: https://lore.kernel.org/r/Yuv7AM/5jtO/pgcm@google.com
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >  drivers/usb/dwc3/core.c      | 4 ++--
+> >  drivers/usb/dwc3/dwc3-qcom.c | 1 -
+> >  2 files changed, 2 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 8c8e32651473..0cdb6be720e1 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1983,7 +1983,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> >  		dwc3_core_exit(dwc);
+> >  		break;
+> >  	case DWC3_GCTL_PRTCAP_HOST:
+> > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> > +		if (!PMSG_IS_AUTO(msg)) {
 > 
-> CVE: NA
+> My assumption was that the PHYs need to be powered for wakeup to work, but
+> apparently that isn't the case, wakeup still works on sc7x80 with this part
+> of this patch.
+
+Thanks for confirming.
+
+> >  			dwc3_core_exit(dwc);
+> >  			break;
+> >  		}
+> > @@ -2044,7 +2044,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+> >  		spin_unlock_irqrestore(&dwc->lock, flags);
+> >  		break;
+> >  	case DWC3_GCTL_PRTCAP_HOST:
+> > -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> > +		if (!PMSG_IS_AUTO(msg)) {
+> >  			ret = dwc3_core_init_for_resume(dwc);
+> >  			if (ret)
+> >  				return ret;
+> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > index 9a94b1ab8f7a..9995395baa12 100644
+> > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > @@ -904,7 +904,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+> >  
+> >  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
+> >  	device_init_wakeup(&pdev->dev, wakeup_source);
+> > -	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
 > 
-> USB external storage device(0x0b05:1932), use gnome-disk-utility tools
-> to test usb write  < 30MB/s.
-> then, igoned to load module of uas for this device.
-> ===============================================
-> Write speed: Improves form 27MB/s to 40MB/s+
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hu Xiaoying <huxiaoying2008@gmail.cn>
-> ---
->  drivers/usb/storage/unusual_uas.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 4051c8cd0cd8..abaf4ea8138b 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -157,3 +157,10 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
->  		"External HDD",
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_ALWAYS_SYNC),
-> +
-> +/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
-> +UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
-> +		"ASUS",
-> +		"External HDD",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_UAS),
-> -- 
-> 2.25.1
-> 
+> Surprisingly this part breaks wakeup on sc7x80, with the above removal
+> of the device_may_wakeup() checks it is not clear to me why wakeup needs
+> to be enabled for the core.
 
-Hi,
+I can't explain that behaviour either. This change doesn't affect the
+wakeup_path flag and genpd, and notably wakeup still works here with
+sc8280xp.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Could it be some Chromium user-space issue in that it expects all
+devices on the wakeup path to be wakeup capable? Note that the
+xhci-plat driver (e.g. for the descendant xhci-hcd.1.auto device)
+unconditionally sets the wakeup-capable flag (but leaves it disabled by
+default).
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+I guess we could do something similar for the dwc3 core device, but we'd
+need to figure out if and why that is at all needed first.
 
-- Your patch was attached, please place it inline so that it can be
-  applied directly from the email message itself.
+Can you verify that the wakeup source (e.g. keyboard) you're using still
+has power/wakeup set to "enabled"?
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file, Documentation/SubmittingPatches
-  for how to do this correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Johan
