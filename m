@@ -2,72 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D745A0211
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 21:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ED75A022F
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 21:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239605AbiHXTYx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 15:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S238801AbiHXTiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 15:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239888AbiHXTYu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 15:24:50 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B06EA60D5
-        for <linux-usb@vger.kernel.org>; Wed, 24 Aug 2022 12:24:47 -0700 (PDT)
-Received: (qmail 390799 invoked by uid 1000); 24 Aug 2022 15:24:46 -0400
-Date:   Wed, 24 Aug 2022 15:24:46 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S237076AbiHXTiW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 15:38:22 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A602792CD;
+        Wed, 24 Aug 2022 12:38:22 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id c2so16562333plo.3;
+        Wed, 24 Aug 2022 12:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=+a6jv7NfNrfRkmcgmIrBanDX9FdHOAhQmluL8KWS9kY=;
+        b=hS9HSmuVExcPoo1oXgtzI+luC6C9dx3+aaSsA3utzcJW2xp+mcy194vf6PDE+5soJJ
+         MoOf0ZM30sejHgrOdYtB94MFfcv+wH5JjlWx/ITOUSXpzzoZARlTp1SkASmluEN216e+
+         QBd/c9VaKMkxKHZ1h+tltKOZkTRnsEHn+kLKnQxlpuuFuIqczkGF+ixb1PJZbRhI7pvg
+         2iRGOHKKO9sK2JcM6Gr8D2eyoae6ErW+yjU+nQslSCyEwutGfMjc5deoT9jEvy9wIuZo
+         oRo+a0aL6rueqb2C2C1iHTjK0E+aLYex2+b8eZ4K7+V0kgvZF9mDv1S/7ZP/PyyIq0zT
+         INrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=+a6jv7NfNrfRkmcgmIrBanDX9FdHOAhQmluL8KWS9kY=;
+        b=sTNyq6Wo2wmYI0H2aFpJEMdO1xK9KsxQ41R6h188jvmDm6jf1rQNLHx11SCNN0a2lc
+         ZUrkrVQUma1KYtJMxrl8BiJJlgXqxlB644gZTbZBkm2gUvfwvM69PdUpAMc4zNVxmuHz
+         EAxLfeoGE35wwsmT9GdBwTSYOcQfmfN/FWExpKTfwjTiONbrRDM7Zra1yxGzAl1IzjYH
+         Q6K9iPkZOODJibD49meHGwWTDGaUzJMz4Bi1PDEIFyj9DLqWYeKeRTGLUda+6ZAosYdz
+         iLfZUoDfZuc4goQSjPbrS1VyIwCbd8vnjlwpnKD/Dtybevxp55L1wG6+VCC1JtM5CuCe
+         2hXw==
+X-Gm-Message-State: ACgBeo01RSzCDVyrnQFyYkdlGBvDMRKPsZyDuppWyVkDnqHlZSjWO/95
+        tULRMIvbHkwrspcLN4MmCY4=
+X-Google-Smtp-Source: AA6agR7mG1hX2EMA+Idul5KJg99esNSnsDHlCIyKQqqI9GrDY4rzzRbbgZVkiutkB4BTlTMXCYUcwg==
+X-Received: by 2002:a17:902:c949:b0:172:e3c3:bdeb with SMTP id i9-20020a170902c94900b00172e3c3bdebmr364156pla.80.1661369901604;
+        Wed, 24 Aug 2022 12:38:21 -0700 (PDT)
+Received: from fedora.. ([103.159.189.144])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b001729da53673sm12968558plk.14.2022.08.24.12.38.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 12:38:20 -0700 (PDT)
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexey Sheplyakov <asheplyakov@basealt.ru>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Subject: Re: [PATCH] usb: host: Use helper function to get endpoint
-Message-ID: <YwZ6/qkEAk8867qh@rowland.harvard.edu>
-References: <20220824130702.10912-1-khalid.masum.92@gmail.com>
- <YwY4cVdB3tVVMIqJ@rowland.harvard.edu>
- <CAABMjtFEfgQtcGKLkd=whFN=WHUywTg=fDAxRQ+zKLiqOFhvQg@mail.gmail.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jack Pham <jackp@codeaurora.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Khalid Masum <khalid.masum.92@gmail.com>
+Subject: [PATCH v2] usb: ehci: Use endpoint in URB to get maxpacket
+Date:   Thu, 25 Aug 2022 01:38:13 +0600
+Message-Id: <20220824193813.13129-1-khalid.masum.92@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAABMjtFEfgQtcGKLkd=whFN=WHUywTg=fDAxRQ+zKLiqOFhvQg@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 11:57:25PM +0600, Khalid Masum wrote:
-> On Wed, Aug 24, 2022 at 8:40 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> >
-> > Even this is awkward.  It's silly to look up the endpoint in a table
-> > when you already know that it is endpoint 0.  Just do:
-> >
-> >         ep = &udev->ep0;
-> >
-> > with no need to check for NULL.
-> 
-> After further checking, I realized that  usb_device udev is created by
-> ehset_single_step_set_feature and depends on usb_hcd and port. So I do
-> not get why the endpoint is at udev->ep0. Can you help me with this?
+usb_maxpacket() looks up the endpoint number in the pipe which can fail
+if the interface or configuration changes before the routine is called.
+This is unexpected and may even cause a modulo by zero afterwards.
 
-udev is not a usb_device structure; it is a _pointer_ to a usb_device 
-structure.  The pointer is created when ehset_single_step_set_feature() 
-calls usb_hub_find_child(), but the structure itself gets created long 
-before that, when the USB device is first detected and initialized.
+So use usb_endpoint_maxp() routine which uses the endpoint stored in URB
+to get the maxpacket.
 
-You can see this happening where hub_port_connect() calls 
-usb_alloc_dev().  The ep0 field is filled in by hub_port_init() and the 
-routines it calls.
+Addresses-Coverity: 744857 ("Division or modulo by zero")
+Addresses-Coverity: 1487371 ("Division or modulo by zero")
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+---
+Changes since v1:
+ - Update commit description
+ - Use usb_endpoint_maxp() instead of checking whether getting maxpacket
+   failed
+ - Link: https://lore.kernel.org/lkml/20220823182758.13401-1-khalid.masum.92@gmail.com/
 
-Alan Stern
+ drivers/usb/host/ehci-q.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+index 807e64991e3e..666f5c4db25a 100644
+--- a/drivers/usb/host/ehci-q.c
++++ b/drivers/usb/host/ehci-q.c
+@@ -645,7 +645,7 @@ qh_urb_transaction (
+ 		token |= (1 /* "in" */ << 8);
+ 	/* else it's already initted to "out" pid (0 << 8) */
+ 
+-	maxpacket = usb_maxpacket(urb->dev, urb->pipe);
++	maxpacket = usb_endpoint_maxp(&urb->ep->desc);
+ 
+ 	/*
+ 	 * buffer gets wrapped in one or more qtds;
+@@ -1218,7 +1218,7 @@ static int ehci_submit_single_step_set_feature(
+ 
+ 	token |= (1 /* "in" */ << 8);  /*This is IN stage*/
+ 
+-	maxpacket = usb_maxpacket(urb->dev, urb->pipe);
++	maxpacket = usb_endpoint_maxp(&urb->ep->desc);
+ 
+ 	qtd_fill(ehci, qtd, buf, len, token, maxpacket);
+ 
+-- 
+2.37.1
+
