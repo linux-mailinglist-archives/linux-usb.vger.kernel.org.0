@@ -2,69 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E4E5A02C3
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 22:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30215A02E1
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Aug 2022 22:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240396AbiHXUbT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Aug 2022 16:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        id S240450AbiHXUhA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Aug 2022 16:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbiHXUbS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 16:31:18 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5656B67F;
-        Wed, 24 Aug 2022 13:31:17 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id p185so3132139pfb.13;
-        Wed, 24 Aug 2022 13:31:17 -0700 (PDT)
+        with ESMTP id S240430AbiHXUg6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Aug 2022 16:36:58 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481C354673;
+        Wed, 24 Aug 2022 13:36:58 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id y187so14382325iof.0;
+        Wed, 24 Aug 2022 13:36:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=JS396VO3RjIxv2EdN1gwXH0IVteoC89fKy018NJlSI4=;
-        b=DJ726nuBhrKxCRN9Vl4h7nD8MJ9khauabketOtwG96ztSRmma9M2LL737/A973Xm9/
-         A1HkXBFymyUePR2E65G300Nu0vcvXoSh7vP9CmNxstGOJjC3LuPq5bjRN/MqD29p11Cu
-         e9+zoPU/vd+hzx4fofmm420f8lNB6OU4ddogOkU/FYfvo2ylDNeAVULRKnHLtkMRpFkE
-         BI+OsrRnTz/MLZo4RhPEXOPRggF7kJYn0o3TKB5iNo33Zs+z5dlAuY4/T2YOD40VRtW8
-         bBBEFN+hg0pj3Q1FhcWVDQLA0ObqaGwnvNRgA6BDYen8z7S6f7Na6J5aB5BX8lgRU3M+
-         7vTQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=o/Asl1a05iqi7M0+s6lqc9+F54rnbn8OzEyUZOMsiEo=;
+        b=ACOE4tdbDMngehxmTvG7PfhPyErgshLWF2bCW4RnDsuQ7be+urtFNkb26DfVKfZ3PT
+         AgCY5atQiy/sHku6wYUM4pmUgguac4Vj8HEsGyYBoI6maLLs4fWCraooOpRze+S7+wFs
+         c/LpcvOzINAL199TDGIyj3RkX/+ovAWsl3MLZ6ByLTZrI94wy28EoxKN1w86wiK27ZJz
+         AzRB2/8Usba3V1eDyfy/jyVJXUHSBeyRRvPtjxZzQ12BfoNs1IvD/0EawRvNrOthyeqA
+         y5HAMp6O6awJ3tgJcOsgGjUaCWcipQcsMrbLpgKBqQEndD32gtdBUP9M91U/8lb/BBjb
+         2M2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=JS396VO3RjIxv2EdN1gwXH0IVteoC89fKy018NJlSI4=;
-        b=kGS+zsN5cvu1Mt8i5qHFz6E/IEpZWo3I+TNPb/UcHK1eQrBrov4kIe6G4NiNlH6Oz3
-         K2MC52I1l7SGkvYh14qG1+PFSsMQiNqstW/fV/xiu3IOy97SjeOIW+aSuNZ/OHx2MJrx
-         6khZ2VXycJst+ReDjxSlKDy55Pbg2tqMjEm7AmMymi97IGXXSoGSzh8NhzRV+DjSOKo7
-         tc1THTk5PCmc8QejhvXVXGb05GXxYPTreaOrcWF+RfkVDC4MEHgNChh1CzKzcCQSR4Rm
-         KJRIhSgxtzX8Qwby9U6cCBjvUf98Fw0gy/p2yPZ7fH0DT2VgaPUyDrUShLdq6C3c1Vx4
-         XdIg==
-X-Gm-Message-State: ACgBeo2XOHG0wdroYRmbtNx1GDdU+jLf1MmfoZV2aKn2SCzfY1+mQXHC
-        h3E1aaHx63oGBBwwbc2lIzAHAFOCAkowXw==
-X-Google-Smtp-Source: AA6agR7J3xx58TIIiBDRjMFIdMcuBK4hAzDg9M0xKet4Ornl9P/KbcddihwBWRKszlRF1Uk8iDebDw==
-X-Received: by 2002:aa7:88d0:0:b0:536:e993:730d with SMTP id k16-20020aa788d0000000b00536e993730dmr813054pff.81.1661373077014;
-        Wed, 24 Aug 2022 13:31:17 -0700 (PDT)
-Received: from fedora.. ([103.159.189.138])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902dacc00b0017269cc60d7sm13065714plx.214.2022.08.24.13.31.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 13:31:16 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v2] usb: host: Initiate urb ep with udev ep0
-Date:   Thu, 25 Aug 2022 02:31:07 +0600
-Message-Id: <20220824203107.14908-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=o/Asl1a05iqi7M0+s6lqc9+F54rnbn8OzEyUZOMsiEo=;
+        b=GEFP0asRjydd0YrYxdrCFS1f1sm/uDzFGfnVreJCfb04v3vpXOemAvMRab9VcIz9T3
+         uf98cZgPt1QH+rkbrYrXWk8S+AJF6Vo1wF2S+aSDEMoutvdKNAVu+bAmvXs9bGeRWwkQ
+         S3bVqb2Xa8mJeJg/cPhBeOwIPRpP9pdRcChwEnTZmdQGNGa6cROfltfSxXVc4khNoFJ2
+         9SZmYV3dYVn9fD1PRQyUOvaxKarkyYRvUx148rHRmWhc7XG8hA5N2d/Ak3yu42cEnX/t
+         +bKz7CIw9PA0G1vwhjZMvK+4Qd3dT1FRVCbamNqNSHP5PXl/Rkf/Wx5wrVPeYIJc5kAK
+         PB4A==
+X-Gm-Message-State: ACgBeo2tGOM3rpYswGkfvEOzcxTQnbJneuptIX1mnMkx0i0A1rvA1oj5
+        Oek3NYNAtpE5+MNHAi3Xh9vFLGyDRDtORfcD4cs=
+X-Google-Smtp-Source: AA6agR5DpOdPAD6gzya2ULpmA8X/Zi+Fwz8OwSAK60RpbZt56iF4Bnkf57ojFhAkTDkU1BJ5xvQ+AagsIyTeZ9xAKVY=
+X-Received: by 2002:a6b:5f08:0:b0:688:9846:2f61 with SMTP id
+ t8-20020a6b5f08000000b0068898462f61mr290298iob.65.1661373417623; Wed, 24 Aug
+ 2022 13:36:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220824130702.10912-1-khalid.masum.92@gmail.com>
+ <YwY4cVdB3tVVMIqJ@rowland.harvard.edu> <CAABMjtFEfgQtcGKLkd=whFN=WHUywTg=fDAxRQ+zKLiqOFhvQg@mail.gmail.com>
+ <YwZ6/qkEAk8867qh@rowland.harvard.edu>
+In-Reply-To: <YwZ6/qkEAk8867qh@rowland.harvard.edu>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+Date:   Thu, 25 Aug 2022 02:36:46 +0600
+Message-ID: <CAABMjtH8WqoraFLQ=-TTwah=A+PRjRjJ2hS-ySK_5h9qYyy8Sg@mail.gmail.com>
+Subject: Re: [PATCH] usb: host: Use helper function to get endpoint
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexey Sheplyakov <asheplyakov@basealt.ru>,
+        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,50 +75,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently we look up for endpoint in a table and initate urb endpoint
-with it. This is unnecessary because the lookup will always result in
-endpoint 0.
+On Thu, Aug 25, 2022 at 1:24 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> udev is not a usb_device structure; it is a _pointer_ to a usb_device
+> structure.  The pointer is created when ehset_single_step_set_feature()
+> calls usb_hub_find_child(), but the structure itself gets created long
+> before that, when the USB device is first detected and initialized.
+>
+> You can see this happening where hub_port_connect() calls
+> usb_alloc_dev().  The ep0 field is filled in by hub_port_init() and the
+> routines it calls.
+>
+Thanks for clarifying this. That helps a lot.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
----
-Changes since v1:
- - Remove endpoint lookup and NULL check
- - Remove unnecessary variable *ep
- - Initiate urb ep with udev ep0
- - Update commit message
- - v1 Link: https://lore.kernel.org/lkml/20220824130702.10912-1-khalid.masum.92@gmail.com/ 
-
- drivers/usb/core/hcd.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 94b305bbd621..05f30ae5570b 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2158,21 +2158,14 @@ static struct urb *request_single_step_set_feature_urb(
- {
- 	struct urb *urb;
- 	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
--	struct usb_host_endpoint *ep;
- 
- 	urb = usb_alloc_urb(0, GFP_KERNEL);
- 	if (!urb)
- 		return NULL;
- 
- 	urb->pipe = usb_rcvctrlpipe(udev, 0);
--	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
--				[usb_pipeendpoint(urb->pipe)];
--	if (!ep) {
--		usb_free_urb(urb);
--		return NULL;
--	}
- 
--	urb->ep = ep;
-+	urb->ep = &udev->ep0;
- 	urb->dev = udev;
- 	urb->setup_packet = (void *)dr;
- 	urb->transfer_buffer = buf;
--- 
-2.37.1
-
+-- Khalid Masum
