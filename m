@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040595A11CE
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Aug 2022 15:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333E15A12EF
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Aug 2022 16:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242433AbiHYNTl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Aug 2022 09:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S234778AbiHYOEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Aug 2022 10:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241948AbiHYNTj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Aug 2022 09:19:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72EEAA37A;
-        Thu, 25 Aug 2022 06:19:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 829BC61CD3;
-        Thu, 25 Aug 2022 13:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E229AC433D6;
-        Thu, 25 Aug 2022 13:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661433572;
-        bh=FO3o/vDoP9XtmRQXXKxIgPtLa05j7400CrUZvjFU5GM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X2hz5ehw79Z6abk+ajVRkSathM2xiXRPLCyieuOcBe/Ol7VgZgQrb70178DjIB8uU
-         9fx8WJMOmkx7tD6y+KMinJBCSz3U3v/a1t4elWmQ6eKJeu9w+VyHEYGqNcani7rMZ7
-         OmnXKZK1w6dscdqeUZytFOx2k/EeQiJIhjhMXp8Wl+dJL9hQI5TnEwIEc/kfuZch1O
-         0h+BqH49dhkXmb9WszaFxcd1E0E+UY8wGOiOBJLYMbjBmSMbkYydteViboo5+oy6FY
-         jE+/5o+d7Wa9JKG5UHRVkn71wkm02xVD0q7ItjhGzA4kLIS4bBdLLz5q+a0/TJbkTK
-         dhH7CviSbkYBA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oRClm-00059W-DK; Thu, 25 Aug 2022 15:19:39 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] usb: dwc3: disable USB core PHY management
-Date:   Thu, 25 Aug 2022 15:18:36 +0200
-Message-Id: <20220825131836.19769-1-johan+linaro@kernel.org>
+        with ESMTP id S240638AbiHYOEV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Aug 2022 10:04:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA90B6014
+        for <linux-usb@vger.kernel.org>; Thu, 25 Aug 2022 07:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661436251; x=1692972251;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1cK+9SxPYNZV4dLKgcmEvxjOmc6XkHw/SpIppWBBeTc=;
+  b=KWnK8jBIaFvhX1C1nc5ssOiY2vvjSItvj3ZOFp9aaidGd2I5gDPgKZ2E
+   utQz3jtp7KP6juiDPwxgFWyQqgCN92EV3TH8tbYU48XhyHnwCJs6OvAYx
+   yHtVn3TsFy/epzCFF9e2zQsLUpLElokAWmK3BqhAhRRnrkw7vmxC5I3CH
+   JU/JnVFpVWtZILyt5irxu8UGiU+gkxFyPnjMsrj9/dmv4BvOgLlXafES0
+   YrcKejXV2psf/iWc0crNislniyKr1t4AE+O8WxsSZmcxlurOJuqW+RPvt
+   x9JzH953ceVn+yMg+GxMV6FgpRpiwjzbmOu9RTruJMSNKtTSNsUq/7xPu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="358209860"
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="358209860"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 07:03:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="752492806"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Aug 2022 07:03:56 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Prashant Malani <pmalani@chromium.org>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: Remove retimers properly
+Date:   Thu, 25 Aug 2022 17:04:11 +0300
+Message-Id: <20220825140411.10743-1-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,51 +56,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The dwc3 driver manages its PHYs itself so the USB core PHY management
-needs to be disabled.
+Retimer device class is left dangling when the typec module
+is unloaded. Attempts to reload the module failed with warning:
 
-Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
-host: xhci-plat: add platform data support") and f768e718911e ("usb:
-host: xhci-plat: add priv quirk for skip PHY initialization") to
-propagate the setting for now.
+        "sysfs: cannot create duplicate filename '/class/retimer'"
 
-Fixes: 4e88d4c08301 ("usb: add a flag to skip PHY initialization to struct usb_hcd")
-Fixes: 178a0bce05cb ("usb: core: hcd: integrate the PHY wrapper into the HCD core")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Fixing the issue by unregistering the class properly.
+
+Fixes: ddaf8d96f93b ("usb: typec: Add support for retimers")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/dwc3/host.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/usb/typec/class.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index f6f13e7f1ba1..a7154fe8206d 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -11,8 +11,13 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index ebc29ec20e3fb..bd5e5dd704313 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -2346,6 +2346,7 @@ static void __exit typec_exit(void)
+ 	ida_destroy(&typec_index_ida);
+ 	bus_unregister(&typec_bus);
+ 	class_unregister(&typec_mux_class);
++	class_unregister(&retimer_class);
+ }
+ module_exit(typec_exit);
  
-+#include "../host/xhci-plat.h"
- #include "core.h"
- 
-+static const struct xhci_plat_priv dwc3_xhci_plat_priv = {
-+	.quirks = XHCI_SKIP_PHY_INIT,
-+};
-+
- static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
- 					int irq, char *name)
- {
-@@ -92,6 +97,11 @@ int dwc3_host_init(struct dwc3 *dwc)
- 		goto err;
- 	}
- 
-+	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_priv,
-+					sizeof(dwc3_xhci_plat_priv));
-+	if (ret)
-+		goto err;
-+
- 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
- 
- 	if (dwc->usb3_lpm_capable)
 -- 
 2.35.1
 
