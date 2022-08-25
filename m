@@ -2,90 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35805A1352
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Aug 2022 16:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A875A1538
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Aug 2022 17:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237660AbiHYOUK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Aug 2022 10:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S236396AbiHYPHd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Aug 2022 11:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241459AbiHYOT1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Aug 2022 10:19:27 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0351CAE9F5
-        for <linux-usb@vger.kernel.org>; Thu, 25 Aug 2022 07:19:26 -0700 (PDT)
-Received: (qmail 2307 invoked by uid 1000); 25 Aug 2022 10:19:26 -0400
-Date:   Thu, 25 Aug 2022 10:19:26 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: host: Initiate urb ep with udev ep0
-Message-ID: <YweE7jCfGDhLB16G@rowland.harvard.edu>
-References: <20220824203107.14908-1-khalid.masum.92@gmail.com>
+        with ESMTP id S237360AbiHYPHc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Aug 2022 11:07:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A940A7EFD0
+        for <linux-usb@vger.kernel.org>; Thu, 25 Aug 2022 08:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661440051; x=1692976051;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=q0ID/2UoE/y+AF7jod32wQ5q5PZAMzEq4aNsc8gUY9A=;
+  b=Gxi64OnJDfIlNpUeIk3HPsmlVbHQy0LlEIE23DgQhJHLyLtrpVX89ZDx
+   6xm0/1LMi1dWRE2jLOu41A/nos9dS7+aIj3ylCoBzVLr2lom7SYmlEtFV
+   ruMo3N1VQF2Ym5jlVqquBETA2jaSGZex8j6wKKtUQCL8RE6adN3iKuwpU
+   2G/73IEP3uURD02D8S62ZuRSRZclkynaC/LYYKKB9lekmPDVWUq5TULlR
+   w9aq9UwO80bcRsNZTrDhds5oRrzpoTlawufp5e7DD86C7wk3GW3VwWrK6
+   0unWOcIrQnc8EoHx8ljbJi7fctgv50GoaaykXSOTBiXt+jB0Td0fDG6KQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="355981776"
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="355981776"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 08:07:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
+   d="scan'208";a="643284819"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 25 Aug 2022 08:07:28 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci fixes for usb-linus
+Date:   Thu, 25 Aug 2022 18:08:37 +0300
+Message-Id: <20220825150840.132216-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824203107.14908-1-khalid.masum.92@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 02:31:07AM +0600, Khalid Masum wrote:
-> Currently we look up for endpoint in a table and initate urb endpoint
-> with it. This is unnecessary because the lookup will always result in
-> endpoint 0.
-> 
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> ---
-> Changes since v1:
->  - Remove endpoint lookup and NULL check
->  - Remove unnecessary variable *ep
->  - Initiate urb ep with udev ep0
->  - Update commit message
->  - v1 Link: https://lore.kernel.org/lkml/20220824130702.10912-1-khalid.masum.92@gmail.com/ 
-> 
->  drivers/usb/core/hcd.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 94b305bbd621..05f30ae5570b 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2158,21 +2158,14 @@ static struct urb *request_single_step_set_feature_urb(
->  {
->  	struct urb *urb;
->  	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-> -	struct usb_host_endpoint *ep;
->  
->  	urb = usb_alloc_urb(0, GFP_KERNEL);
->  	if (!urb)
->  		return NULL;
->  
->  	urb->pipe = usb_rcvctrlpipe(udev, 0);
-> -	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
-> -				[usb_pipeendpoint(urb->pipe)];
-> -	if (!ep) {
-> -		usb_free_urb(urb);
-> -		return NULL;
-> -	}
->  
-> -	urb->ep = ep;
-> +	urb->ep = &udev->ep0;
->  	urb->dev = udev;
->  	urb->setup_packet = (void *)dr;
->  	urb->transfer_buffer = buf;
+Hi Greg
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+A few xhci fixes for usb-linus.
+
+USB3 devices aren't visible immediately after xHC reset, so don't
+stop polling the roothub and suspend too early after xHC reset.
+
+Also Revert the port poweroff patch due to regression,
+and fix a null pointer issue for xHC hosts with just one roothub.
+
+-Mathias
+
+Mathias Nyman (3):
+  xhci: Fix null pointer dereference in remove if xHC has only one
+    roothub
+  xhci: Add grace period after xHC start to prevent premature runtime
+    suspend.
+  Revert "xhci: turn off port power in shutdown"
+
+ drivers/usb/host/xhci-hub.c  | 13 ++++++++++++-
+ drivers/usb/host/xhci-plat.c | 11 ++++++++---
+ drivers/usb/host/xhci.c      | 19 +++++--------------
+ drivers/usb/host/xhci.h      |  4 +---
+ 4 files changed, 26 insertions(+), 21 deletions(-)
+
+-- 
+2.25.1
+
