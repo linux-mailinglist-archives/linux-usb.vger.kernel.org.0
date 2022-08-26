@@ -2,31 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D287E5A2FFF
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 21:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3EA5A3004
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 21:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243911AbiHZTbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Aug 2022 15:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S1344542AbiHZTbj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Aug 2022 15:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343791AbiHZTbT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 15:31:19 -0400
+        with ESMTP id S1344651AbiHZTbf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 15:31:35 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 70393DFB50
-        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 12:31:18 -0700 (PDT)
-Received: (qmail 48538 invoked by uid 1000); 26 Aug 2022 15:31:17 -0400
-Date:   Fri, 26 Aug 2022 15:31:17 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AD5E5E01E6
+        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 12:31:32 -0700 (PDT)
+Received: (qmail 48553 invoked by uid 1000); 26 Aug 2022 15:31:32 -0400
+Date:   Fri, 26 Aug 2022 15:31:32 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
+Cc:     Rondreis <linhaoguo86@gmail.com>,
         USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: gadget: Fix obscure lockdep violation for udc_mutex
-Message-ID: <YwkfhdxA/I2nOcK7@rowland.harvard.edu>
+Subject: [PATCH] USB: core: Prevent nested device-reset calls
+Message-ID: <YwkflDxvg0KWqyZK@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -36,202 +34,133 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A recent commit expanding the scope of the udc_lock mutex in the
-gadget core managed to cause an obscure and slightly bizarre lockdep
-violation.  In abbreviated form:
+Automatic kernel fuzzing revealed a recursive locking violation in
+usb-storage:
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.19.0-rc7+ #12510 Not tainted
-------------------------------------------------------
-udevadm/312 is trying to acquire lock:
-ffff80000aae1058 (udc_lock){+.+.}-{3:3}, at: usb_udc_uevent+0x54/0xe0
+============================================
+WARNING: possible recursive locking detected
+5.18.0 #3 Not tainted
+--------------------------------------------
+kworker/1:3/1205 is trying to acquire lock:
+ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
 
 but task is already holding lock:
-ffff000002277548 (kn->active#4){++++}-{0:0}, at: kernfs_seq_start+0x34/0xe0
+ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
 
-which lock already depends on the new lock.
+...
 
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (kn->active#4){++++}-{0:0}:
-        lock_acquire+0x68/0x84
-        __kernfs_remove+0x268/0x380
-        kernfs_remove_by_name_ns+0x58/0xac
-        sysfs_remove_file_ns+0x18/0x24
-        device_del+0x15c/0x440
-
--> #2 (device_links_lock){+.+.}-{3:3}:
-        lock_acquire+0x68/0x84
-        __mutex_lock+0x9c/0x430
-        mutex_lock_nested+0x38/0x64
-        device_link_remove+0x3c/0xa0
-        _regulator_put.part.0+0x168/0x190
-        regulator_put+0x3c/0x54
-        devm_regulator_release+0x14/0x20
-
--> #1 (regulator_list_mutex){+.+.}-{3:3}:
-        lock_acquire+0x68/0x84
-        __mutex_lock+0x9c/0x430
-        mutex_lock_nested+0x38/0x64
-        regulator_lock_dependent+0x54/0x284
-        regulator_enable+0x34/0x80
-        phy_power_on+0x24/0x130
-        __dwc2_lowlevel_hw_enable+0x100/0x130
-        dwc2_lowlevel_hw_enable+0x18/0x40
-        dwc2_hsotg_udc_start+0x6c/0x2f0
-        gadget_bind_driver+0x124/0x1f4
-
--> #0 (udc_lock){+.+.}-{3:3}:
-        __lock_acquire+0x1298/0x20cc
-        lock_acquire.part.0+0xe0/0x230
-        lock_acquire+0x68/0x84
-        __mutex_lock+0x9c/0x430
-        mutex_lock_nested+0x38/0x64
-        usb_udc_uevent+0x54/0xe0
+stack backtrace:
+CPU: 1 PID: 1205 Comm: kworker/1:3 Not tainted 5.18.0 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+<TASK>
+__dump_stack lib/dump_stack.c:88 [inline]
+dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+check_deadlock kernel/locking/lockdep.c:3031 [inline]
+validate_chain kernel/locking/lockdep.c:3816 [inline]
+__lock_acquire.cold+0x152/0x3ca kernel/locking/lockdep.c:5053
+lock_acquire kernel/locking/lockdep.c:5665 [inline]
+lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5630
+__mutex_lock_common kernel/locking/mutex.c:603 [inline]
+__mutex_lock+0x14f/0x1610 kernel/locking/mutex.c:747
+usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+usb_reset_device+0x37d/0x9a0 drivers/usb/core/hub.c:6109
+r871xu_dev_remove+0x21a/0x270 drivers/staging/rtl8712/usb_intf.c:622
+usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
+device_remove drivers/base/dd.c:545 [inline]
+device_remove+0x11f/0x170 drivers/base/dd.c:537
+__device_release_driver drivers/base/dd.c:1222 [inline]
+device_release_driver_internal+0x1a7/0x2f0 drivers/base/dd.c:1248
+usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
+usb_forced_unbind_intf+0x4d/0xa0 drivers/usb/core/driver.c:1118
+usb_reset_device+0x39b/0x9a0 drivers/usb/core/hub.c:6114
 
 
-Evidently this was caused by the scope of udc_mutex being too large.
-The mutex is only meant to protect udc->driver along with a few other
-things.  As far as I can tell, there's no reason for the mutex to be
-held while the gadget core calls a gadget driver's ->bind or ->unbind
-routine, or while a UDC is being started or stopped.  (This accounts
-for link #1 in the chain above, where the mutex is held while the
-dwc2_hsotg_udc is started as part of driver probing.)
+This turned out not to be an error in usb-storage but rather a nested
+device reset attempt.  That is, as the rtl8712 driver was being
+unbound from a composite device in preparation for an unrelated USB
+reset (that driver does not have pre_reset or post_reset callbacks),
+its ->remove routine called usb_reset_device() -- thus nesting one
+reset call within another.
 
-Gadget drivers' ->disconnect callbacks are problematic.  Even though
-usb_gadget_disconnect() will now acquire the udc_mutex, there's a
-window in usb_gadget_bind_driver() between the times when the mutex is
-released and the ->bind callback is invoked.  If a disconnect occurred
-during that window, we could call the driver's ->disconnect routine
-before its ->bind routine.  To prevent this from happening, it will be
-necessary to prevent a UDC from connecting while it has no gadget
-driver.  This should be done already but it doesn't seem to be;
-currently usb_gadget_connect() has no check for this.  Such a check
-will have to be added later.
+Performing a reset as part of disconnect processing is a questionable
+practice at best.  However, the bug report points out that the USB
+core does not have any protection against nested resets.  Adding a
+reset_in_progress flag and testing it will prevent such errors in the
+future.
 
-Some degree of mutual exclusion is required in soft_connect_store(),
-which can dereference udc->driver at arbitrary times since it is a
-sysfs callback.  The solution here is to acquire the gadget's device
-lock rather than the udc_mutex.  Since the driver core guarantees that
-the device lock is always held during driver binding and unbinding,
-this will make the accesses in soft_connect_store() mutually exclusive
-with any changes to udc->driver.
-
-Lastly, it turns out there is one place which should hold the
-udc_mutex but currently does not: The function_show() routine needs
-protection while it dereferences udc->driver.  The missing lock and
-unlock calls are added.
-
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reported-and-tested-by: Rondreis <linhaoguo86@gmail.com>
 Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: Felipe Balbi <balbi@kernel.org>
 Cc: stable@vger.kernel.org
-Fixes: 2191c00855b0 ("USB: gadget: Fix use-after-free Read in usb_udc_uevent()")
-Link: https://lore.kernel.org/all/b2ba4245-9917-e399-94c8-03a383e7070e@samsung.com/
+Link: https://lore.kernel.org/all/CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com/
 
 ---
 
 
-[as1984]
+[as1985]
 
 
- drivers/usb/gadget/udc/core.c |   26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ drivers/usb/core/hub.c |   10 ++++++++++
+ include/linux/usb.h    |    2 ++
+ 2 files changed, 12 insertions(+)
 
-Index: usb-devel/drivers/usb/gadget/udc/core.c
+Index: usb-devel/drivers/usb/core/hub.c
 ===================================================================
---- usb-devel.orig/drivers/usb/gadget/udc/core.c
-+++ usb-devel/drivers/usb/gadget/udc/core.c
-@@ -736,7 +736,10 @@ int usb_gadget_disconnect(struct usb_gad
- 	ret = gadget->ops->pullup(gadget, 0);
- 	if (!ret) {
- 		gadget->connected = 0;
--		gadget->udc->driver->disconnect(gadget);
-+		mutex_lock(&udc_lock);
-+		if (gadget->udc->driver)
-+			gadget->udc->driver->disconnect(gadget);
-+		mutex_unlock(&udc_lock);
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -6038,6 +6038,11 @@ re_enumerate:
+  * the reset is over (using their post_reset method).
+  *
+  * Return: The same as for usb_reset_and_verify_device().
++ * However, if a reset is already in progress (for instance, if a
++ * driver doesn't have pre_ or post_reset() callbacks, and while
++ * being unbound or re-bound during the ongoing reset its disconnect()
++ * or probe() routine tries to perform a second, nested reset), the
++ * routine returns -EINPROGRESS.
+  *
+  * Note:
+  * The caller must own the device lock.  For example, it's safe to use
+@@ -6071,6 +6076,10 @@ int usb_reset_device(struct usb_device *
+ 		return -EISDIR;
  	}
  
- out:
-@@ -1489,7 +1492,6 @@ static int gadget_bind_driver(struct dev
++	if (udev->reset_in_progress)
++		return -EINPROGRESS;
++	udev->reset_in_progress = 1;
++
+ 	port_dev = hub->ports[udev->portnum - 1];
  
- 	usb_gadget_udc_set_speed(udc, driver->max_speed);
+ 	/*
+@@ -6135,6 +6144,7 @@ int usb_reset_device(struct usb_device *
  
--	mutex_lock(&udc_lock);
- 	ret = driver->bind(udc->gadget, driver);
- 	if (ret)
- 		goto err_bind;
-@@ -1499,7 +1501,6 @@ static int gadget_bind_driver(struct dev
- 		goto err_start;
- 	usb_gadget_enable_async_callbacks(udc);
- 	usb_udc_connect_control(udc);
--	mutex_unlock(&udc_lock);
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
- 	return 0;
-@@ -1512,6 +1513,7 @@ static int gadget_bind_driver(struct dev
- 		dev_err(&udc->dev, "failed to start %s: %d\n",
- 			driver->function, ret);
- 
-+	mutex_lock(&udc_lock);
- 	udc->driver = NULL;
- 	driver->is_bound = false;
- 	mutex_unlock(&udc_lock);
-@@ -1529,7 +1531,6 @@ static void gadget_unbind_driver(struct
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
- 
--	mutex_lock(&udc_lock);
- 	usb_gadget_disconnect(gadget);
- 	usb_gadget_disable_async_callbacks(udc);
- 	if (gadget->irq)
-@@ -1537,6 +1538,7 @@ static void gadget_unbind_driver(struct
- 	udc->driver->unbind(gadget);
- 	usb_gadget_udc_stop(udc);
- 
-+	mutex_lock(&udc_lock);
- 	driver->is_bound = false;
- 	udc->driver = NULL;
- 	mutex_unlock(&udc_lock);
-@@ -1612,7 +1614,7 @@ static ssize_t soft_connect_store(struct
- 	struct usb_udc		*udc = container_of(dev, struct usb_udc, dev);
- 	ssize_t			ret;
- 
--	mutex_lock(&udc_lock);
-+	device_lock(&udc->gadget->dev);
- 	if (!udc->driver) {
- 		dev_err(dev, "soft-connect without a gadget driver\n");
- 		ret = -EOPNOTSUPP;
-@@ -1633,7 +1635,7 @@ static ssize_t soft_connect_store(struct
- 
- 	ret = n;
- out:
--	mutex_unlock(&udc_lock);
-+	device_unlock(&udc->gadget->dev);
+ 	usb_autosuspend_device(udev);
+ 	memalloc_noio_restore(noio_flag);
++	udev->reset_in_progress = 0;
  	return ret;
  }
- static DEVICE_ATTR_WO(soft_connect);
-@@ -1652,11 +1654,15 @@ static ssize_t function_show(struct devi
- 			     char *buf)
- {
- 	struct usb_udc		*udc = container_of(dev, struct usb_udc, dev);
--	struct usb_gadget_driver *drv = udc->driver;
-+	struct usb_gadget_driver *drv;
-+	int			rc = 0;
+ EXPORT_SYMBOL_GPL(usb_reset_device);
+Index: usb-devel/include/linux/usb.h
+===================================================================
+--- usb-devel.orig/include/linux/usb.h
++++ usb-devel/include/linux/usb.h
+@@ -575,6 +575,7 @@ struct usb3_lpm_parameters {
+  * @devaddr: device address, XHCI: assigned by HW, others: same as devnum
+  * @can_submit: URBs may be submitted
+  * @persist_enabled:  USB_PERSIST enabled for this device
++ * @reset_in_progress: the device is being reset
+  * @have_langid: whether string_langid is valid
+  * @authorized: policy has said we can use it;
+  *	(user space) policy determines if we authorize this device to be
+@@ -662,6 +663,7 @@ struct usb_device {
  
--	if (!drv || !drv->function)
--		return 0;
--	return scnprintf(buf, PAGE_SIZE, "%s\n", drv->function);
-+	mutex_lock(&udc_lock);
-+	drv = udc->driver;
-+	if (drv && drv->function)
-+		rc = scnprintf(buf, PAGE_SIZE, "%s\n", drv->function);
-+	mutex_unlock(&udc_lock);
-+	return rc;
- }
- static DEVICE_ATTR_RO(function);
- 
+ 	unsigned can_submit:1;
+ 	unsigned persist_enabled:1;
++	unsigned reset_in_progress:1;
+ 	unsigned have_langid:1;
+ 	unsigned authorized:1;
+ 	unsigned authenticated:1;
