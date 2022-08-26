@@ -2,138 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B9B5A219C
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 09:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE3F5A21B0
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 09:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245054AbiHZHT2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Aug 2022 03:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S245225AbiHZHWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Aug 2022 03:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244483AbiHZHT1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 03:19:27 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42287D2B24;
-        Fri, 26 Aug 2022 00:19:26 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 4D13530000947;
-        Fri, 26 Aug 2022 09:19:24 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 3DC764F33A; Fri, 26 Aug 2022 09:19:24 +0200 (CEST)
-Date:   Fri, 26 Aug 2022 09:19:24 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
- to PHY driver to avoid polling
-Message-ID: <20220826071924.GA21264@wunner.de>
-References: <cover.1652343655.git.lukas@wunner.de>
- <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
- <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
- <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
- <20220519190841.GA30869@wunner.de>
- <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
- <e598a232-6c78-782a-316f-77902644ad6c@samsung.com>
+        with ESMTP id S229970AbiHZHWk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 03:22:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B5F4DB43;
+        Fri, 26 Aug 2022 00:22:40 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 09:22:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661498558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GQJwizWUZDP3BI9K5yZYcBnhISmXQJvntuw2CVta3II=;
+        b=KZZpkSO4qaRwW67bSXJjY/YP/HPGu14NbRtLiv2aK+v+sYqEIcgMQkEgDnwBMtm6W5HDNB
+        JTzGM5Ne9McUF7ORLicrPYO9ssNEQEoUIlCeb4K9INMi6laExJpeaL5M85XW+lXKw+Pz3Z
+        zGKKKlEaCS6WcNKXmf5RWaBsZRUuzIfkSWbUtQQn0CEoCN4TA8WVrvGS2AOqsOsexL2v28
+        jpl0p96//YJcKBGbQ/O+1I2GtE/sKnrQIrj7rMkzTgUHRQ2LBhXuHO+qull3FwpUXaGHbq
+        4L0baQvDHtybe59BnZXT4LZodIQUJVUnq9R5fHdHlM6/D4CdiQRKiMfFZYxB1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661498558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GQJwizWUZDP3BI9K5yZYcBnhISmXQJvntuw2CVta3II=;
+        b=u79Zlqto8+LIFUoD2rNHsPmmDaQEm+HcsZsxCrxqtp96SzJ3nfiQj4OiAxDLb6hTW7Qcgt
+        7Hv4QPzsuOhCLfAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: Re: [PATCH v2 16/25] usb: gadget: f_tcm: Update state on data write
+Message-ID: <Ywh0vQkRLTrSeExk@linutronix.de>
+References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+ <dd9069e0527f2da04b6567fd17b19545646f4348.1658192351.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e598a232-6c78-782a-316f-77902644ad6c@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dd9069e0527f2da04b6567fd17b19545646f4348.1658192351.git.Thinh.Nguyen@synopsys.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 08:51:58AM +0200, Marek Szyprowski wrote:
-> On 19.05.2022 23:22, Marek Szyprowski wrote:
-> > On 19.05.2022 21:08, Lukas Wunner wrote:
-> >> On Tue, May 17, 2022 at 12:18:45PM +0200, Marek Szyprowski wrote:
-> >>> This patch landed in the recent linux next-20220516 as commit
-> >>> 1ce8b37241ed ("usbnet: smsc95xx: Forward PHY interrupts to PHY 
-> >>> driver to
-> >>> avoid polling"). Unfortunately it breaks smsc95xx usb ethernet 
-> >>> operation
-> >>> after system suspend-resume cycle. On the Odroid XU3 board I got the
-> >>> following warning in the kernel log:
-> >>>
-> >>> # time rtcwake -s10 -mmem
-> >>> rtcwake: wakeup from "mem" using /dev/rtc0 at Tue May 17 09:16:07 2022
-> >>> PM: suspend entry (deep)
-> >>> Filesystems sync: 0.001 seconds
-> >>> Freezing user space processes ... (elapsed 0.002 seconds) done.
-> >>> OOM killer disabled.
-> >>> Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-> >>> printk: Suspending console(s) (use no_console_suspend to debug)
-> >>> smsc95xx 4-1.1:1.0 eth0: entering SUSPEND2 mode
-> >>> smsc95xx 4-1.1:1.0 eth0: Failed to read reg index 0x00000114: -113
-> >>> smsc95xx 4-1.1:1.0 eth0: Error reading MII_ACCESS
-> >>> smsc95xx 4-1.1:1.0 eth0: __smsc95xx_mdio_read: MII is busy
-> >>> ------------[ cut here ]------------
-> >>> WARNING: CPU: 2 PID: 73 at drivers/net/phy/phy.c:946
-> >>> phy_state_machine+0x98/0x28c
-> >> [...]
-> >>> It looks that the driver's suspend/resume operations might need some
-> >>> adjustments. After the system suspend/resume cycle the driver is not
-> >>> operational anymore. Reverting the $subject patch on top of linux
-> >>> next-20220516 restores ethernet operation after system suspend/resume.
-> >> Thanks a lot for the report. It seems the PHY is signaling a link 
-> >> change
-> >> shortly before system sleep and by the time the phy_state_machine() 
-> >> worker
-> >> gets around to handle it, the device has already been suspended and thus
-> >> refuses any further USB requests with -EHOSTUNREACH (-113):
-[...]
-> >> Assuming the above theory is correct, calling phy_stop_machine()
-> >> after usbnet_suspend() would be sufficient to fix the issue.
-> >> It cancels the phy_state_machine() worker.
-> >>
-> >> The small patch below does that. Could you give it a spin?
-> >
-> > That's it. Your analysis is right and the patch fixes the issue. Thanks!
-> >
-> > Feel free to add:
-> >
-> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> >
-> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+On 2022-07-18 18:27:45 [-0700], Thinh Nguyen wrote:
+> When preparing request for data write state, the next state is
+> UASP_SEND_STATUS. When data write completes, the next state is
+> UASP_QUEUE_COMMAND. Without this change, the command will transition to
+> the wrong state.
+
+Why is this needed now, what is the outcome of not having it?
+My point is, was this always broken, worked by chance and broke over
+time while code was changed?
+
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  Changes in v2:
+>  - Move a related change from TASK MANAGEMENT updating cmd state to
+>    UASP_QUEUE_COMMAND to here.
 > 
-> Gentle ping for the final patch...
+>  drivers/usb/gadget/function/f_tcm.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+> index 1e7d29f8aecb..d7318c84af98 100644
+> --- a/drivers/usb/gadget/function/f_tcm.c
+> +++ b/drivers/usb/gadget/function/f_tcm.c
+> @@ -934,6 +934,8 @@ static void usbg_data_write_cmpl(struct usb_ep *ep, struct usb_request *req)
+>  	struct usbg_cmd *cmd = req->context;
+>  	struct se_cmd *se_cmd = &cmd->se_cmd;
+>  
+> +	cmd->state = UASP_QUEUE_COMMAND;
+> +
+>  	if (req->status < 0) {
+>  		pr_err("%s() state %d transfer failed\n", __func__, cmd->state);
+>  		goto cleanup;
+> @@ -976,6 +978,8 @@ static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
+>  	req->complete = usbg_data_write_cmpl;
+>  	req->length = se_cmd->data_length;
+>  	req->context = cmd;
+> +
+> +	cmd->state = UASP_SEND_STATUS;
+>  	return 0;
+>  }
+>  
 
-Hm?  Actually this issue is supposed to be fixed by mainline commit
-1758bde2e4aa ("net: phy: Don't trigger state machine while in suspend").
-
-The initial fix attempt that you're replying to should not be necessary
-with that commit.
-
-Are you still seeing issues even with 1758bde2e4aa applied?
-Or are you maybe using a custom downstream tree which is missing that commit?
-
-Thanks,
-
-Lukas
+Sebastian
