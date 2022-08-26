@@ -2,106 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49D85A241D
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 11:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524CF5A2611
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 12:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343597AbiHZJUm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Aug 2022 05:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S1343877AbiHZKq6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Aug 2022 06:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343675AbiHZJUe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 05:20:34 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7267C22A6;
-        Fri, 26 Aug 2022 02:20:32 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 202so883672pgc.8;
-        Fri, 26 Aug 2022 02:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=XCs65AqKF8nYHmFctjAQYP7Kb099G/Og2TNUg8MNKII=;
-        b=JGla83o4EgOfL5+TIw5GjgufqCFO2gy8TNbUDZGFMZ4nuo7eKlMlPnA7W40U7CO/cb
-         azamcgWFAWxmbH/gHVcphRRBRIjT9+4IDmrjFSTMPGGAnB3lmQWNhlPcCtE/OXZIzrNH
-         4g/170IeHv63xOVNtsgNT9ZIk0ye39WSyLdrv09KkcfEj6HOFMwttC/6gGhULWo08LbD
-         aw3UQjhMk9CEkfeIhifRaZoXDQohXRy4svQ59jx1H1FUGHG6FKrB/Lclm03Zyj19t0RU
-         o05oTTQr16YqfzH4kKsuzEwIRU0BdRB7HlCwK+yc0u5SmbLTc1V9K+a7KZM4MoqKtivP
-         cwcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=XCs65AqKF8nYHmFctjAQYP7Kb099G/Og2TNUg8MNKII=;
-        b=i9VJNpTpL2tMd43uD8qzCKXRKAOkiiAwyh3KnaQAvqMIZIoc4+AVH2wTochiBqLacR
-         XA+VcLX7IfO9OopF9qirrpdYsGrNd1Nlr/oEyTiKTVRq/ZT8VAXodwLJM70QpGkFsEKX
-         2+LVD1sBmQXf9B/o0yCED3Pw+zhX6yB+nXiJaOA2HvcdJBTl+FttnEiSGuRyONy7ooRX
-         n14caVGZnhNgtv66MPmLbIjGO65dREQQg9Gqmg16f9+XDgikLdofnMOoQ2ReYQpYFH9k
-         YA2Ib0sm1n77+waJxOT+FZoSgKP1b19RlHw4YtQOO/VHVvW0pEof+cRRbROuWkWbBK/2
-         10NQ==
-X-Gm-Message-State: ACgBeo06Qf22/x/YtpbyX7ixcV1yf9lHr0iwQGFQPe2LnhtsybREnsaE
-        k9hdUGoVj9VdhzS+hO9fpi1Qskag6gU=
-X-Google-Smtp-Source: AA6agR5jrsZxC3iHTVCO+cuXMEZUzntCr8rOW47hsOLq7CpxuTlfCqMhn+FvN77l0/HR4VazgkdgQQ==
-X-Received: by 2002:a05:6a00:1a93:b0:536:5dca:a685 with SMTP id e19-20020a056a001a9300b005365dcaa685mr3046037pfv.13.1661505632382;
-        Fri, 26 Aug 2022 02:20:32 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170902d64b00b0016d88dc7745sm1025429plh.259.2022.08.26.02.20.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 02:20:31 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.panda@zte.com.cn
-To:     linux@roeck-us.net
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        with ESMTP id S244472AbiHZKq5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 06:46:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAA17A763;
+        Fri, 26 Aug 2022 03:46:56 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 12:46:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661510814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JLKW8+/j05XzobomCTWDjC7GAsM4Tiaeh1yzbn0SKPY=;
+        b=gzamVHIfjCARprpeBnwWFwV8NV7x+ZWKLyNsaIEzWeJwBBPDQ8XnPvE7erQIRyFWMkphZu
+        FBnwv9hzRF/qcSs4HeG43p8xvXWoaA0ZgrcQhw54fD5yBa7hTbjw74/Swqq+b/MqJhD3eG
+        AZWYov5/UJBA9iwshksEWqf+IHkrOYn+Pr5dRo97a0GFd9nkJnu0q6ejlY9/T01u/jyPXw
+        T5rlgvsHF+x98SoiE84wE8CA8dTmjnpwDHjxkrA6FfWXA0pEwfU1uoW/ay4BIalSPcXrGm
+        VkuKKhHAnRaJuiQv1uw+tcuf1H3p4kPo3wNWt+ra82+6rxypPcXVSyIf+oUyVQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661510814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JLKW8+/j05XzobomCTWDjC7GAsM4Tiaeh1yzbn0SKPY=;
+        b=SECI0838/ZKT7qQsWIPRnpqe8wMBBUBmLIQU13YyL3w29zETQp/fIG9RpmlF2Ff6j3KVeW
+        ThwgW/tQXcSeLyDA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xupanda <xu.panda@zte.com.cn>, Zeal Robot <zeal@zte.com.cn>
-Subject: [PATCH linux-next v2] usb: typec: tcpm: tcpci: Remove the unneeded result variable
-Date:   Fri, 26 Aug 2022 09:17:32 +0000
-Message-Id: <20220826091731.254966-1-xu.panda@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: Re: [PATCH v2 24/25] usb: gadget: f_tcm: Check overlapped command
+Message-ID: <YwikndRzQM+ToQV5@linutronix.de>
+References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+ <0150d7b669ad80e94596b371cbce0460a327ce7c.1658192351.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0150d7b669ad80e94596b371cbce0460a327ce7c.1658192351.git.Thinh.Nguyen@synopsys.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: xupanda <xu.panda@zte.com.cn>
+On 2022-07-18 18:28:34 [-0700], Thinh Nguyen wrote:
+> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+> index 8b99ee07df87..dfa3e7c043a3 100644
+> --- a/drivers/usb/gadget/function/f_tcm.c
+> +++ b/drivers/usb/gadget/function/f_tcm.c
+> @@ -1214,6 +1233,51 @@ static void usbg_cmd_work(struct work_struct *work)
+>  	return;
+>  
+>  skip:
+> +	if (cmd->tmr_rsp == RC_OVERLAPPED_TAG) {
+> +		struct se_session *se_sess;
+> +		struct uas_stream *stream;
+> +
+> +		se_sess = cmd->fu->tpg->tpg_nexus->tvn_se_sess;
+> +		stream = uasp_get_stream_by_tag(cmd->fu, cmd->tag);
+> +
+> +		/*
+> +		 * There's no guarantee of a matching completion order between
+> +		 * different endpoints. i.e. The device may receive a new (CDB)
+> +		 * command request completion of the command endpoint before it
+> +		 * gets notified of the previous command status completion from
+> +		 * a status endpoint. The driver still needs to detect
+> +		 * misbehaving host and respond with an overlap command tag. To
+> +		 * prevent false overlapped tag failure, give the active and
+> +		 * matching stream id a short time (1ms) to complete before
+> +		 * respond with overlapped command failure.
+> +		 */
+> +		msleep(1);
 
-Return the value regmap_update_bits() directly instead of
-storing it in another redundant variable.
+How likely is it for this to happen? Is there maybe some synchronisation
+missing? If I see this right, in order to get here, you will already
+spill the message "Command tag %d overlapped" which does not look good.
+Why should the host re-use a tag which did not yet complete?
 
-Reported-by: Zeal Robot <zeal@zte.com.cn>
-Signed-off-by: xupanda <xu.panda@zte.com.cn>
-
----
-change for v2
- - remove those irrelevant sentences 
----
-
- drivers/usb/typec/tcpm/tcpci.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index b2bfcebe218f..29047da826a9 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -328,11 +328,9 @@ static int tcpci_set_vconn(struct tcpc_dev *tcpc, bool enable)
- static int tcpci_enable_auto_vbus_discharge(struct tcpc_dev *dev, bool enable)
- {
- 	struct tcpci *tcpci = tcpc_to_tcpci(dev);
--	int ret;
- 
--	ret = regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_POWER_CTRL_AUTO_DISCHARGE,
-+	return regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_POWER_CTRL_AUTO_DISCHARGE,
- 				 enable ? TCPC_POWER_CTRL_AUTO_DISCHARGE : 0);
--	return ret;
- }
- 
- static int tcpci_set_auto_vbus_discharge_threshold(struct tcpc_dev *dev, enum typec_pwr_opmode mode,
--- 
-2.25.1
-
+Sebastian
