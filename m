@@ -2,594 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DF75A1E5A
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 03:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D035A1EDA
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 04:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244603AbiHZBtH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Aug 2022 21:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S244491AbiHZCfc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Aug 2022 22:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244076AbiHZBtG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Aug 2022 21:49:06 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C82BC7BBF
-        for <linux-usb@vger.kernel.org>; Thu, 25 Aug 2022 18:49:03 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-f2a4c51c45so388786fac.9
-        for <linux-usb@vger.kernel.org>; Thu, 25 Aug 2022 18:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=PwzZFDisk1EWvGmx0z+8zGzW5E/K5zLK7zj2AB3nbXw=;
-        b=XzqvacsijdLD5gmVEjGyy7AB8aylRai918eKI9PEKsGrnAAGjPRy57m5kynQqVKL5A
-         d2nDP1EE+SJ3dqHjIgL9z3aXznvsQe3WMc6+1OZbY9aIvhUocR35n9J/1bulJapXm5bH
-         Z/0wnfFUtFXtg2bUd80srqvxqlZjjKzWm3zk0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=PwzZFDisk1EWvGmx0z+8zGzW5E/K5zLK7zj2AB3nbXw=;
-        b=QHhii09SGcEP0GHYEM03U5n30meE7VBDofSNeNFspN+aiCF6cWL76HN3afZArUFJbJ
-         zr6mWnkXnA2afE91lo7A+tMdWdkaH3ewcy9hDV5t10sHwQKGVvayjCAjDXhxB9/m2FJy
-         yR8jnlaRboiZe+kvqtlTuTbeZO6gFzqA2yT4HXsFD/i1fnbidGAXuqis6DMn+wnoxZe8
-         miNsuyxEv72RAYwXk1NwZE51WIoA4fEwYmgIMt7zsNUigLmkbPJcn5judSV4UuBcpykl
-         rMkGmz1Xq614G9lkA+e2rmY4TPwF+Prp8qLkJF0weAPoXaCPLH9schq38pSuNnMVzisV
-         4zmQ==
-X-Gm-Message-State: ACgBeo39pbbedL7L0yx8h8t7BWiHyCFNXG5PGOpCE/+n61KsjkascPEN
-        0NDNNcPe6H6DF/pVk57D/z1pw2AxELTLQJPoKjYc9w==
-X-Google-Smtp-Source: AA6agR4VzTr4e33gtscsTs9XtMrvyTlpDwuYjLihuBkOy5et035VLci8MSKxsknxgwA9Q0kAtxcnTwrv6p33asrv3Ew=
-X-Received: by 2002:a05:6870:a99c:b0:11c:2c37:3d03 with SMTP id
- ep28-20020a056870a99c00b0011c2c373d03mr808411oab.0.1661478542594; Thu, 25 Aug
- 2022 18:49:02 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 25 Aug 2022 20:49:01 -0500
+        with ESMTP id S244818AbiHZCfX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Aug 2022 22:35:23 -0400
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C4913FBF;
+        Thu, 25 Aug 2022 19:35:17 -0700 (PDT)
+Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
+        by mx0b-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PNVF22031767;
+        Thu, 25 Aug 2022 19:34:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
+ bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
+ b=XXTRu1a6QHQlLoOAJ/TZiuKXF1pg0skW01ghFhqrACcnijNwQNKfnyX1jZiRKCX8jsF/
+ iWk6SLNpgji6bMlIltm8EaOuFaJ7xJ2A5pEyzVO34ArJ6ZG3D0RhaJnugAs7fiL2mBDC
+ 0IoaFPs+iYxQ4nf4klNxS/Y8MxAVRfRAQtW8N4NdCYppHvc/tuI+6yVCQqGMHhDr4COa
+ BWPABEBvjTub1lpB7oB8mxBAK8Klalz45YGMJISAT2zqI/CWWPFo1zyqlN1nY3+6Ji9l
+ SLYm3D/4eIUn7lBsXbK6nvNUlDQKI4NpBQMlaIQVR5RXaO9FE1hnjoGIZnrZp52ev5am nQ== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3j5abrpyu6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Aug 2022 19:34:34 -0700
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 497F7C00F3;
+        Fri, 26 Aug 2022 02:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1661481273; bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=bUzzaTYIT4cVZKtkDRNYQPy50KoHO6fPMq+DxjX2lPHXso2VKI+Ezo53u3pVkByr7
+         ZbKCsFlwyw0WVA1s/WjLtv1/v8vN1QVMFhUMBzZH9nfTNNzeTdtR22i46AIEaT4+rX
+         3jm/W8R15OqkfubbJNyTRrvPEW/mxKUVlN2xhVTaZEVA6KUYqDIXJ0etIreJRsXiN3
+         jQQf5Bubh7iTtBJfUWXGVtTr8A2ZGS21DTupS9+qU+x7wgJHCnWSmjTDXrhZiMs2eE
+         6k1UAhMib815RkcxmjumWYgB3gDv91fKo0Mr1wTGkFynyPfwWCHVUT32HybX+O9wif
+         QnuUKspguhBvg==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id BD9F8A0076;
+        Fri, 26 Aug 2022 02:34:28 +0000 (UTC)
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2174.outbound.protection.outlook.com [104.47.73.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 9CF9480199;
+        Fri, 26 Aug 2022 02:34:25 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="YE1EY7+u";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oZ9IjhhHlZmBQYaphYW2g9ueSU/bIIy9UF0I9uaSEIVwCXnWh98keV45azBIDQFYOncvFjadRwbPW7Fj2keR0DBl1Ih1X6vdFWX6v0fwehGccbWcPECgewzJndOOHJtHRE8nd4/XQic/R0/0RdGOkJtrzYTXK3o09Tl93Qj04+6ZCckgSBkY5zWRtduRGr5GaoTgTzIYVzAD1i+WxFLIbZle/Uo57I4lFDK5zXH2M/rxl7TjVTLDSvDQvq46I+DPBJKEeXxG2KmeBHajGN4sqfCciR7wP76KULUOUCTKkoE2OA8SgSsKZ2KcL2BPyqs0ii1CgyKM2cTKXW84E+ZdXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
+ b=X8ccExV5MMUvnN1b+rx5uZYzb7zIqthrNSQRPq1CLphQ5vehn7P6TrP+fnGEYkszhOyYlw/lDoQJLWUBGCBTO7GhzKemwGRuZg91b3zEzbjLjluseZxoBoztgrPObErDgafi7qHZmi11n/bXuQYUmA/vfYlhjPfoO5ePRGcTG+lUQQ0DfEOzyBcFX2hy/l2SAnbj38hgmKrfQ1rk3fE9zscLunxC+DqcucDpkSU8zpZ+w38SKS0yLZY7YXaY2JoBWOQRPocq7+lWx2S+YA652yzbcvQG23JHMG8yjQ4ya5orymDgv9RbdEsQcfx9i+nHwlgZXvV0tRS/veje1LjZRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tDgjqN4zbjgP8B0TglOuFd2MtN6dPXLizG7tRIJgoBI=;
+ b=YE1EY7+u2+z7cwMx1ZjY9016zPYRMGiYmLzsp3fJrdW3YfzPFeJPscmBaiBg3Q2/yGLOrp7UfrSMwTJDY7tOApVDCCzezZxmGRIfFg21Yia/AZ9rQFHZgFt6R2tgxleepFw/y3UjaqI/Q9L9FiIQotJ5iGrhVeUSlP668kdSxfQ=
+Received: from BN8PR12MB4787.namprd12.prod.outlook.com (2603:10b6:408:a1::11)
+ by BN6PR12MB1348.namprd12.prod.outlook.com (2603:10b6:404:1f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Fri, 26 Aug
+ 2022 02:34:22 +0000
+Received: from BN8PR12MB4787.namprd12.prod.outlook.com
+ ([fe80::34d0:5282:1e1e:98d5]) by BN8PR12MB4787.namprd12.prod.outlook.com
+ ([fe80::34d0:5282:1e1e:98d5%7]) with mapi id 15.20.5566.015; Fri, 26 Aug 2022
+ 02:34:22 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Nicholas Bellinger <nab@linux-iscsi.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        John Youn <John.Youn@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v2 00/25] usb: gadget: f_tcm: Enhance UASP driver
+Thread-Topic: [PATCH v2 00/25] usb: gadget: f_tcm: Enhance UASP driver
+Thread-Index: AQHYmw6F3vPaFvUH1UezRNMH+EVsTq22FgOAgACTPICACglBAA==
+Date:   Fri, 26 Aug 2022 02:34:21 +0000
+Message-ID: <20220826023404.un6jmymwjfortotu@synopsys.com>
+References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+ <Yv9KWyevXLegwQcK@kroah.com> <20220819171821.estwvvfkkxo64bkq@synopsys.com>
+In-Reply-To: <20220819171821.estwvvfkkxo64bkq@synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 699505bc-25e8-4298-a64d-08da870b7bf8
+x-ms-traffictypediagnostic: BN6PR12MB1348:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5AOJduuAJG/esqeSTryx2/ln79fuQAgFPs8ODpFDetp5eIgSHONpKSQcsk0/uEH3h5/eJBiJUPh6FTuHJeMz15gWhtbRuzfNsesgVYI1eyYBAwplQTHmXKjqDgJQtsYVg8r9nJMAZXFP5wmfxZkHvadxDD+pfonCg2eI5Q8Kur3PkXE3R/FW9DXVkxP7P4ZjHMP/VRGIxRApjGdA3hzUHcSbRLNOa13hQOg+Y7QTUvVGZxiXu45sLRhbZi9mgHT9FeOfVJLCXp9MglKVyd7ZGkQu4UfiNSFvAs3qgnI2BpWFhHiI2ZLMn/XtmGzAjunDOh+9+xEsvF7v+nmYyrccG8/9aTXktyGvX5NmwfPhEnq0wjvdOGq323o55OB3qF0iNgnerEEcux/D3lnUerKTahB4TkMgUYwnxP2nRx1qZDspf+delZDmq2i4TSfJrZaGRsoPmlwpfb7tJ62tV/to+UwX+jn602y90TAsQU0m48syou6nq8BAC4MQwWrnIemmdHVhiIE1Z5yqTg9abkf3VHT79W1H/32SKYzQTnGq86I0zBDvMYXTwfEsO96pT0TP2JJnKscQcjlYwDEgIFiY8p1p5rPmnmvoxOYGzrGuM6xCgTNj74Gmo35j99xv/2zxfsyfxRqGSg+3AGZK8MkusU4HLH42SJIUwq0ltdq2FyhU819X0tlCSBxs716uA7E1N3BQ0wyvBJ+4Tf7PSEuOHX5sN0YIJ8JP/kRX4tKZORQDj2CkGEMMnmiO5ZsVk9yipPNh9ZxyE9K21s4NEMFcyQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB4787.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(396003)(39860400002)(136003)(376002)(86362001)(38070700005)(122000001)(38100700002)(91956017)(316002)(54906003)(110136005)(76116006)(2906002)(8936002)(5660300002)(7416002)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(2616005)(186003)(1076003)(83380400001)(478600001)(71200400001)(6486002)(6506007)(26005)(6512007)(41300700001)(36756003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OXI5RGVTSkVZQnA3OTFkV0ZjZ0RWMStrTEU0YzJYVEZOLzdDU3lYbVF2OEEy?=
+ =?utf-8?B?OUtobGR1UFI1Y3dzdlJzbmYwWTh4b0dzZmFjRVpicXd3ZmtYMnJUNnpPdG1U?=
+ =?utf-8?B?d2Uxemh6SDZtNXYxbVBlbDYxK0FiM2lzeERIWU5MMURaSmJ5cTd6aWNOdkQy?=
+ =?utf-8?B?NHhrVkFrS1NGRmcwRlA2WlRwZjZ1TDdsMzVTMkRVNjF6b2gyUFJSeGRZbHJz?=
+ =?utf-8?B?dG5ld1ljbEdmd2xMc0R2a0dWNURWQ0lUWDVHQUZXZjJXekVKWVg5NXJqYVEz?=
+ =?utf-8?B?YllyL3dWbWx6a0NHRml4SG1mRkZuSXB3cjZMYjBpWGlYMHdGSFV3WDRUclF6?=
+ =?utf-8?B?VE9IM09RUFMxZnByaElWd2hCSGhWSzEySXlrVzJrT05NU3dHZ0xhd2FyeDFB?=
+ =?utf-8?B?VlplUlJpNExETEdjUUhjdHcwcmxCdzNPV2lrZmdFb2o0dXBpWmdUbEZpallm?=
+ =?utf-8?B?VFdBenNSeVd6OWlOaHA3d1l6ZWZKY1ZGc1ZuWlBNeVdRaEw2UkYzaDB4ejhP?=
+ =?utf-8?B?NE9OUXRVaWF5MWRqeXVUUjJuUlB2Q0NaYU5UR05mRFh0MzFsNWVsSzJnV09C?=
+ =?utf-8?B?cHI1TDIvb3dTLzBwMUk3bzBHYzJkN2VqUktNaGp3V2FKNktQcWdsdnBkRkd6?=
+ =?utf-8?B?Zzh1OEVETGpOYXBKV1pzUlA1SzMwLzB2ZWhsQ1RKNXdJOEx4UEtoeUttRkxw?=
+ =?utf-8?B?MFB3UVBRWkZGcWo0NHBzb2trYTF2L2cwZjBMRDEyb2tOd1NENSs3MVRDbkdS?=
+ =?utf-8?B?L3NBdTNOTXpqMG1zeDBXVVV4ZHFwUTQ5dlA5RnFPcnlQUVlDbHRscnVmTkdY?=
+ =?utf-8?B?a1Y3Vk5BSmFHaVdsN1dYaHk2OEtwcUhNNnFNNWV6L2dOOVptS1VDTGFXKzFP?=
+ =?utf-8?B?Z0JwNlpWc3JzbHlHRllaNGhXQlF2eDlkaEpiVXg0bFB0SjA2T2ZBZGRLRFVz?=
+ =?utf-8?B?TmI5L1lFTjlHRGwreUlmVStWOEREWG4wODhPVXVFajZoenZkc2VFaWtscm5q?=
+ =?utf-8?B?N1NGT0c5dThlNUM0SU9iK1hxVjJLdUJGR2E5NE9pbmxnU2ZCWEZZTFVFODVL?=
+ =?utf-8?B?UWFKUjRHNmNWZC9ncWMvNk1pcHdPenBYS3k1U1JYeCt4YnFVeUxZMGFLQjdl?=
+ =?utf-8?B?TjRxVytVUnhRQS9aRnRqV1RPTDFCbEcxSGJySUxVd0FxbzBpUW9GUmZnNER6?=
+ =?utf-8?B?bVc3ZmN1NUMxK2JXaVRHblQyUjhWbmdvS3E2enN5T1lGb3JDZGJOckNsQkxq?=
+ =?utf-8?B?NzhVWFd2RVFpWEF3amVtU2xLTVUvMFRUaWdiSVdLUk5uWXh3SDgrdUlOaFQ2?=
+ =?utf-8?B?SjhnSUFBcHlyZ1A2YXZ0MCthWU1xMmp0Sk5HaHMzeDFiUllNeFRLKzFEYThN?=
+ =?utf-8?B?VFVBcFVuOXF0d0prSGJNY0YwbzRKZmdWSHZTTm5iY0w2UXZWTk9ESHZvcXNU?=
+ =?utf-8?B?USt2U2d5em9OOFZ4VmtGaUh6bkFnQWVWRzBWREVSd2I4ODI5NjRTbmplbGdW?=
+ =?utf-8?B?ZEU1enZxZ2hXeEtBbkl4UWpFZ0xKcUR0a3gxS3Z0eXFQREV1OWhjbGUvK0hy?=
+ =?utf-8?B?U1hmT2ZrODdIVU5TU0hVb1VzWkVjVnRKODJWVVdQTkFKcXVNQ2M0TjdQKys2?=
+ =?utf-8?B?Ukxma0p4ME0ydTlHMlRMY3lEbmNPNEZUYllYc3poOU5uSWpxQ3JuSllsN3dC?=
+ =?utf-8?B?eFM1THZZMFhESE5SQmVGVFhRcCtFY2RRTUc3RnQzQjlLR1VyNTB3ZnNwOFh4?=
+ =?utf-8?B?eWw1VVI0MWRYQmdYSWNWS1o4UG5TVkZVUXZsWTk4NUJCSnNvOVc5N0lXTjZN?=
+ =?utf-8?B?UzMwOWF6bTJrNjFlVVlaR09iSXJXRDhnNS9HREtKYVYxZVVmdkJuQktpOFFC?=
+ =?utf-8?B?M1ZJRVNLS2duQ1ErRS9hS1ZRTnVwWHNabmxuUXRHenhYN0RWT1padFJVaXlY?=
+ =?utf-8?B?NldkM2xSMml6RFhVTEVpVHkyVE94WmhaeGRIRFpWd0hRQkZhZHlsNzQrbGZX?=
+ =?utf-8?B?UUNJVDE5dTZ4cmRDVFg3M3RudEkzNHNtb1NxaEZPN1k5ZHcwL0tqcWtUdTRo?=
+ =?utf-8?B?SyszY2FVTnMwK3drcVZndTdwWUswZVNUUzV6dmhPbWY2YkJZcXpDcFY5b1JV?=
+ =?utf-8?Q?JhF4gGzQkNXE5O+d/kiwnX5NH?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <145DE1A491928B46A9A56B2A55336820@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <YwBpcY2s+T1t4elN@builder.lan>
-References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
- <20220810204750.3672362-2-bjorn.andersson@linaro.org> <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
- <20220814210104.GA690892-robh@kernel.org> <Yv1y9Wjp16CstJvK@baldur>
- <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
- <YwAACIKvNtHtyL6o@builder.lan> <CAE-0n527ASkKgmoUV_MnmA3qwA+KKjQeWafwRHAvY5026gdBCw@mail.gmail.com>
- <YwBpcY2s+T1t4elN@builder.lan>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 25 Aug 2022 20:49:01 -0500
-Message-ID: <CAE-0n52-QVeUVCB1qZzPbYyrb1drrbJf6H2DEEW9bOE6mh7egw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Prashant Malani <pmalani@chromium.org>,
-        Pin-yen Lin <treapking@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB4787.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 699505bc-25e8-4298-a64d-08da870b7bf8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2022 02:34:22.0004
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bdMq4WqcNsMGPqdeK0LitFVmY9MRedd5w5HdAFREn9d9ZIsBq2sYj7PKxdsSBpoGOQCNzuDQI0QeCU5aLrZqlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1348
+X-Proofpoint-GUID: _T5P2zqEA-edt0MWWCG_gf_jRcT0BjuM
+X-Proofpoint-ORIG-GUID: _T5P2zqEA-edt0MWWCG_gf_jRcT0BjuM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-25_11,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=16
+ malwarescore=0 bulkscore=0 adultscore=0 phishscore=0 mlxscore=16
+ spamscore=16 impostorscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=73 lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208260008
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Bjorn Andersson (2022-08-19 21:56:17)
-> On Fri 19 Aug 22:51 CDT 2022, Stephen Boyd wrote:
->
-> > I realize I've hijacked this thread to discuss the QMP binding :-/
-> >
-> > The QMP phy is doing type-c "muxing" of different PHYs (USB and DP) onto
-> > the SS lanes. Other altmodes that want to use the SS lanes would
-> > similarly need to be routed through the QMP phy and muxed onto the lanes
-> > when the altmode is used, e.g. thunderbolt. While it is certainly
-> > convenient to have a "DP" endpoint in the usb-c-connector, I feel that
-> > it is wrong, primarily because the DP phy has the QMP phy in between it
-> > and the usb-c-connector, but also because DP is an altmode/virtual
-> > construct built on top of the 4 lanes in the typec pinout.
-> >
-> > We should look at the binding from the perspective of the connector and
-> > figure out how the pinout can be mapped to the binding. That would allow
-> > board designers to ignore the internal SoC details, and stay focused on
-> > what is in the schematic, which is the qmp phy and the usb-c-connector
-> > in this case. My understanding is that two SS lanes always have to go
-> > together in the type-c spec, hence the two endpoints in the graph, but
-> > if all the SS lanes are physically wired to the same PHY then we can
-> > omit the second endpoint and use data-lanes if for example DP is handled
-> > by a different phy.
-> >
->
-> There is nothing in the schematics representing how the HPD signal comes
-> from the Type-C controller to the DP controller - but it is a M:N
-> relationship, so we must represent it in some way.
->
-> I suggested a new port for describing this virtual connection, Rob asked
-> for it to be a separate endpoint in port@1. I'm fine with either path.
-
-I don't think we should be making a virtual connection. I'm not sure Rob
-wants it to be a virtual connection either.
-
->
-> But as Benson described to us, we do muxing of the signals in one
-> operation and we do HPD signalling in a completely separate operation -
-> from the Type-C controller's PoV. As such the QMP has nothing to do with
-> the HPD signal.
->
-> > >
-> > > > Other designs only connect two lanes to the qmp phy and the other two
-> > > > connect to a USB hub. That's where it gets interesting because we don't
-> > > > know how to represent that. Do we make two endpoints in the
-> > > > usb-c-connector port@1 and split the SS lines into SS RX1/TX1 and SS
-> > > > RX2/TX2 pairs? Or do we use data-lanes to represent the SS lines? If we
-> > > > make two endpoints then do we need to have two endpoints all the time
-> > > > even though in this 4 SS line design it is redundant?
-> > > >
-> > > >       port@1 {
-> > > >               reg = <1>;
-> > > >               endpoint@0 { // Represents RX1/TX1
-> > > >                       reg = <0>;
-> > > >                       remote-endpoint = <&qmp_phy_lanes01>;
-> > > >               };
-> > > >               endpoint@1 { // Represents RX2/TX2
-> > > >                       reg = <1>;
-> > > >                       remote-endpoint = <&qmp_phy_lanes23>;
-> > > >               };
-> > > >       };
-> > > >
-> > >
-> > > So on the other side of that PHY we would have a multi-port USB
-> > > controller, or two USB controllers?
-> >
-> > I'm thinking of a single USB+DP PHY.
-> >
-> > > Either way, this seems like a proper
-> > > representation of the two different ports, but not something we can do
-> > > with the QMP.
-> >
-> > This example I gave is for the usb-c-connector, hence the
-> > remote-endpoint pointing to the USB+DP PHY "bundled lanes" endpoints for
-> > 0+1 and 2+3. Sorry if that wasn't clear.
-> >
-> > >
-> > > The QMP phy has certain ability to swap the signals around, so it's
-> > > conceivable that a data-lanes property in the outgoing port definition
-> > > could be used to reorder the SS lanes...
-> > >
-> > > But it would be unrelated to the USB vs DP selection in my view.
-> > >
-> > > All we want here is a connection between the usb-c-connector and the QMP
-> > > phy, such that the usb-c-connector's Type-C controller can inform the
-> > > QMP what has been negotiated.
-> >
-> > Ok. By Type-C controller you mean the typec manager? Is that all Linux
-> > for you?
-> >
->
-> I mean the entity that tells the remote-endpoints of the usb-c-connector
-> about the outcome of USB PD negotiations. This might be implemented
-> fully in Linux or partially in firmware.
->
-> But this something will be the thing that ultimately calls
-> typec_switch_set() et al.
->
->
-> Can you please elaborate on the operations you see that the typec
-> manager would perform on the remote-endpoint of endpoint@0 and
-> endpoint@1?
-
-Sorry, which endpoints are we talking about here?
-
-> >
-> > Ok, so the idea is to make a drm bridge in the device registering the
-> > usb-c-connector? Doesn't the qmp_phy register the usb-c-connector for
-> > you? I'm not really following along on this part.
-> >
->
-> No, it's not a part of the QMP.
->
-> We want to use the graph from the usb-c-connector to signal the provider
-> of HS, SS and SBU-signals about changes related to the connector. As
-> such we associate the usb-c-connector with the Type-C
-> manager/controller.
->
-> Like described here, for a single usb-c-connector:
-> https://lore.kernel.org/all/20220818031512.319310-2-bjorn.andersson@linaro.org/
->
-> In this case, the pmic_glink firmware will send Linux messages which can
-> be directly translated to a set of typec_mux_set(), typec_switch_set()
-> and drm_bridge_hpd_notify() calls - with the graph defining which remote
-> components should receive these events.
-
-Ok, got it. The usb-c-connector is registered by the qcom,pmic-glink
-driver. That is similar to the google,cros-ec-typec driver that we have
-on chromeos.
-
->
-> > >
-> > >
-> > > This is analog to the case you have today, where the QMP has no
-> > > knowledge of the GPIO pin that carries the HPD state in your design.
-
-Yes.
-
->
-> I don't think it makes sense in your design to register a drm_bridge per
-> usb-c-connector, because then you need to connect the one DP controller
-> to both the drm_bridges and you need to spill the mux-logic from the EC
-> into the DP controller as well.
->
-> If you put the muxing logic in entity that does the muxing and implement
-> a signle drm_bridge there you will mimic the current design nicely,
-> where there is a single connection (GPIO) between the EC and the DP
-> controller for propagating the HPD signal.
-
-Yes, agreed. I believe implementing the drm_bridge in an EC driver is
-the approach we will take. We will have to add a port binding to the EC
-binding that accepts displayport as an input. Essentially the driver
-will act as a DP connector that accepts the 2 DP lanes coming from QMP
-and then muxes them onto one or the other usb-c-connector. The same
-driver will need to support multiple DP input ports and USB inputs.
-
->
-> You could choose to model the two usb-c-connectors there somehow as
-> well, perhaps just as static entities directly in /, but that would then
-> be a question of how to describing the link between the EC and the two
-> connectors.
->
-> Similarly, describing the relationship between the QMP PHY and the mux
-> makes sense to me (or just not describe it at all, if you're not going
-> to invoke any of the muxing/switching operations on the PHY)
->
-> > >
-> > [...]
-> > > >
-> > > > So should we explicitly have two endpoints in the usb-c-connector for
-> > > > the two pairs all the time, or should we represent that via data-lanes
-> > > > and only split up the connector's endpoint if we need to connect the
-> > > > usb-c-connector to two different endpoints?
-> > >
-> > > I think the endpoint of port@1 should represent the set of signals
-> > > connected to the other side, in our case 1:1 with the QMP. I like the
-> > > idea of adding data-lanes to the QMP side in order to describe any
-> > > swapping of the pads, but I see that as a separate thing.
-> > >
-> > > If you have a design where your usb-c-connector is wired to two
-> > > different PHYs and you have a Type-C controller that only negotiates the
-> > > 2+2 mode, then I think it makes sense to represent that as two endpoint
-> > > of port@1 - but the QMP side would only reference one of these
-> > > endpoints.
-> > >
-> >
-> > Agreed. I think that means at most two endpoints are possible in port@1
-> > in the usb-c-connector binding. We would only use the second endpoint if
-> > we had two different PHYs that required it, otherwise only a single
-> > endpoint.
->
-> Sure.
->
-> But I do need to have a link between a DP controller and something
-> representing each USB-C port.
-
-Do you? I think you need a link between the DP driver and the drm_bridge
-driver that sends virtual hpd signals based on typec messages. That may
-be the usb-c port driver, or it may be the driver implementing the
-mode-switch. It doesn't need to be the usb-c-connector.
-
->
-> By registering a drm_bridge associated with the usb-c-connector the DP
-> controller implementation and binding will look identical between the
-> dp-connector case and the usb-c-connector case.
->
-> But the two options I see is to either add it in port@1 as a separate
-> logical endpoint or to add a new logical port.
->
-> The alternative to this would be to have a separate of graph outside the
-> multiple connectors, where each port@N implements the drm_bridge for
-> connector@N - but I feel we're just making things overly complicated,
-> just to avoid adding a logical endpoint/port in the usb-c-connector.
->
-
-In your case you have a 1:1 relationship between the QMP and the
-usb-c-connector, so anything extra in the graph relationship between QMP
-and the usb-c-connector looks like extra overly complicated binding. In
-the chromeos trogdor case, we have a physical switch on the DP lanes to
-steer DP from QMP to one of the two usb-c-connectors that are controlled
-by the EC. Making a direct connection between DP and the
-usb-c-connectors is impossible because DP has 1 graph output that can't
-be connected to two usb-c-connectors at the same time.
-
-The creation of a drm_bridge for a usb-c-connector doesn't work.
-Connecting the QMP to the EC is a solution, or connecting the DP
-controller to the EC is another solution, but the QMP path is preferred.
-
-Here's why:
-
- (brace yourself for the wall of text!)
-
- 1. QMP needs to know lane routing
-
-We need to know which lanes coming out of QMP are for DP. Are they the
-first two lanes (TX1/RX1) or the second two lanes (TX2/RX2), or all 4
-lanes? The orientation bit inside QMP needs to be configured properly
-too. In the 1:1 case you have this is not important until the DP pinconf
-is assigned; connecting the DP controller directly to the
-usb-c-connector in DT works because typec framework controls the
-orientation switch inside QMP that's connected to the other port in
-usb-c-connector. In the 1:N case the mapping is static, and we need a
-way to express which lanes from QMP are for DP and which lanes from QMP
-are for USB.
-
- 2. DP lane remapping is controlled in the DP phy before orientation is
- controlled in the QMP phy
-
-DP lanes coming out of the DP phy can be remapped however desired via a
-register in the DP phy. The orientation control works on the TX1/RX1 and
-TX2/RX2 pairs via QMP registers, so that two lanes DP and two lanes USB
-can't put the two USB lanes on TX1/TX2 and the two DP lanes on RX1/RX2
-when the orientation is flipped. If QMP has all four lanes wired to a DP
-connector, i.e. USB is disabled, then we would use the data-lanes
-property inside the DP phy's graph endpoint to figure out how to remap
-the four DP lanes going to the QMP and out of the SoC to the connector.
-The QMP orientation bit would need to be set to normal, so that
-engineers can ignore QMP and how it flips the lanes it took from the DP
-phy.
-
- 3. QMP should have incoming and outgoing graph ports
-
-The data-lanes property should only be inside graph endpoints, hence the
-requirement to use a graph binding from the DP phy to the QMP node.
-Sometimes the lanes from QMP are directly connected to a
-usb-c-connector, hence the requirement to have a graph binding in QMP
-that can connect to a usb-c-connector. Other times the QMP node would be
-directly connected to a dp-connector. In that case we would also use a
-graph binding to link the connector to QMP.
-
- 4. Graph endpoints without a remote-endpoint property are bad style
-
-In your design this wouldn't be the case, but in chromeos' case we would
-connect the DP controller to the EC or one of the two usb-c-connectors
-and then if we want to configure QMP lanes we would have to implement
-the graph in QMP but omit the remote-endpoint property. That's because
-we have 2 usb-c-connectors for 1 QMP. Having two endpoints in
-usb-c-connector doesn't help us, because we can only connect QMP to one
-of the two usb-c-connectors. We're unable to express that both
-usb-c-connectors support DP from this one DP controller.
-
-TL;DR: We have a verbose binding indeed, but it is required because
-trogdor takes 2 DP lanes and muxes them to different usb-c-connectors.
-
-To do that, we have to send the DP lanes to the thing that controls the
-muxing (the EC). It's also complicated by the fact that the DP and USB
-phy are split from the controllers, and put behind QMP (basically a
-typec phy). I propose we make the graph binding for QMP have logically
-numbered endpoints: 0 for USB+DP (most common), 1 for USB, and 2 for DP
-and use data-lanes to physically map the pins while connecting the DP
-and USB phys to QMP within the graph and using data-lanes again.
-
-Here are some examples:
-
- - 4 lanes DP only, normal orientation of QMP, remapped DP lanes
-  qmp {
-    ports {
-      qmp_dp_in: port@1 {
-        reg = <1>;
-        remote-endpoint = <&dp_phy_out>;
-      };
-      port@2 {
-        reg = <2>;
-        qmp_dp_out: endpoint@2 {
-          reg = <2>;
-          // data-lanes indicates how many lanes are used for DP
-          // and if the lanes are flipped
-          //
-          // data-lanes = <0 1 2 3> == normal orientation (default)
-          // data-lanes = <2 3 0 1> == flipped orientation
-          // data-lanes = <0 1> == 2 lane DP, normal orientation
-          // data-lanes = <2 3> == 2 lane DP, flipped orientation
-          // data-lanes = <0/1/2/3> == 1 lane DP
-          remote-endpoint = <&dp_connector>;
-        };
-      };
-    };
-
-    dp-phy {
-      ports {
-        dp_phy_out: port {
-          remote-endpoint = <&qmp_dp_in>;
-          data-lanes = <3 1 2 0>; // remap lanes
-        };
-      };
-    };
-  };
-
-  dp-connector {
-    compatible = "dp-connector";
-    ports {
-      dp_connector: port@0 {
-        remote-endpoint = <&qmp_dp_out>;
-      };
-    };
-  };
-
- - 2 lanes DP, 2 lanes USB fixed, flipped orientation of QMP
-  qmp {
-    ports {
-      qmp_usb_in: port@0 {
-        reg = <0>;
-        remote-endpoint = <&usb_phy_out>;
-      };
-      qmp_dp_in: port@1 {
-        reg = <1>;
-        remote-endpoint = <&dp_phy_out>;
-      };
-      port@2 {
-        reg = <2>;
-        qmp_usb_out: endpoint@1 {
-          reg = <1>;
-          data-lanes = <2 3>; // SSTRX2 (flipped)
-          remote-endpoint = <&usb_hub_in>;
-        };
-        qmp_dp_out: endpoint@2 {
-          reg = <2>;
-          data-lanes = <0 1>; // SSTRX1 (flipped)
-          remote-endpoint = <&cros_ec_dp_in>;
-        };
-      };
-    };
-
-    dp-phy {
-      ports {
-        dp_phy_out: port {
-          remote-endpoint = <&qmp_dp_in>;
-          data-lanes = <0 1>; // DP phy fixed at two lanes, remap possible
-        };
-      };
-    };
-
-    usb-phy {
-      ports {
-        usb_phy_out: port {
-          remote-endpoint = <&qmp_usb_in>;
-          data-lanes = <0 1>; // remap lanes possibly? otherwise implicit
-        };
-      };
-    };
-  };
-
-  usb-hub {
-    compatible = "usb-hub";
-    ports {
-      usb_hub_in: port@0 {
-        remote-endpoint = <&qmp_usb_out>;
-      };
-    };
-  };
-
-  ec {
-    cros_ec_typec {
-      ports {
-        port@0 { // inputs
-          reg = <1>;
-          cros_ec_dp_in: endpoint@0 {
-            reg = <0>;
-            remote-endpoint = <&qmp_dp_out>;
-          };
-        };
-      };
-
-      usb-c0 {
-        compatible = "usb-c-connector";
-	// Do we care to connect this in the graph?
-      };
-
-      usb-c1 {
-        compatible = "usb-c-connector";
-      };
-    };
-
- - 2/4 lanes DP, 2 lanes USB (i.e. USB+DP what you have)
-  qmp {
-    mode-switch;
-    orientation-switch;
-    ports {
-      qmp_usb_in: port@0 {
-        reg = <0>;
-        remote-endpoint = <&usb_phy_out>;
-      };
-      qmp_dp_in: port@1 {
-        reg = <1>;
-        remote-endpoint = <&dp_phy_out>;
-      };
-      port@2 {
-        reg = <2>;
-        qmp_usb_dp_out: endpoint@0 {
-          reg = <0>;
-          // data-lanes indicates orientation if this
-          // doesn't have an orientation-switch property
-          //
-          // data-lanes = <0 1 2 3> == normal (default)
-          // data-lanes = <2 3 0 1> == flipped
-          remote-endpoint = <&usb_c_connector_ss0>;
-        };
-      };
-    };
-
-    dp-phy {
-      ports {
-        dp_phy_out: port {
-          remote-endpoint = <&qmp_dp_in>;
-          // data-lanes can only be <0 1> or <1 0> and
-          // orientation-switch can't be present in qmp
-          // when data-lanes is here.
-        };
-      };
-    };
-
-    usb-phy {
-      ports {
-        usb_phy_out: port {
-          remote-endpoint = <&qmp_usb_in>;
-        };
-      };
-    };
-  };
-
-  glink {
-    usb-c-connector {
-      compatible = "usb-c-connector";
-      ports {
-        port@1 {
-          reg = <1>;
-          endpoint@0 {
-            reg = <0>;
-            remote-endpoint = <&qmp_usb_dp_out>;
-          };
-        };
-      };
-    };
-  };
-
-In your case (this last example) you don't need to have an extra graph
-outside the connector in glink, because you have a direct connection
-between QMP and the usb-c-connector. As I understand it, you want to add
-another endpoint to usb-c-connector above, endpoint@1 in port@1, that
-connects directly to the DP controller. It doesn't scale if we add
-another altmode though, we'll have to add another virtual endpoint. We
-can also see that DP is connected if we walk the graph to the dp phy.
-
-------
-
-Assuming everything is good above, the primary concern I'm left with is
-how to find the drm_bridge from the DP controller driver. It would be
-convenient to make a graph connection from the DP controller to the
-mode-switch device. Then we could cut out the DP phy and the QMP part
-and avoid walking the graph from DP phy to qmp to the next endpoint that
-may or may not be a drm_bridge. In your case, the mode-switch is the
-qmp, because it is used to control 2 or 4 lanes of DP. In chromeos' case
-it's the EC. Either way, we're talking about a virtual link in the
-binding, to make things simpler for the drm_bridge linkage code
-devm_drm_of_get_bridge(). It would leave us with a parallel graph
-connection from the DP controller node and the QMP node. I'm not excited
-about this approach.
-
-I wonder if drm can learn to walk from the 'phys' property to the graph
-of the phy node and then search from there for a drm_bridge. Or if it's
-simpler we can make a drm_bridge in the dp phy, qmp, and in
-cros_ec/glink, where the dp phy and qmp would do nothing besides have a
-drm_bridge_funcs::attach() function that knew which port in their graph
-to search for the next bridge on. Then we could connect the port in the
-DP controller's graph representing the DP output to the DP phy graph as
-an input. Then the drm_bridge isn't entirely useless, just a small bit
-of code to do the walk on attach.
-
-The glink driver would make a drm_bridge for each usb-c-connector and
-associate the connector of_node with the bridge. Similarly, with a cros
-EC where the relationship is 1:1 we would make a drm_bridge for each
-usb-c-connector and omit the graph binding outside the connector in
-cros_ec_typec, directly connecting the graph from QMP to the connector.
-This is because of_drm_find_bridge() looks for the parent of the graph
-to find the bridge, and we would have two bridges in this case that need
-different nodes.
+T24gRnJpLCBBdWcgMTksIDIwMjIsIFRoaW5oIE5ndXllbiB3cm90ZToNCj4gSGkgTWFydGluLCBE
+bWl0cnksIGFuZCBvdGhlcnMsDQo+IA0KPiBPbiBGcmksIEF1ZyAxOSwgMjAyMiBhdCAxMDozMToy
+M0FNICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6DQo+ID4gT24gTW9uLCBKdWwgMTgs
+IDIwMjIgYXQgMDY6MjY6MDFQTSAtMDcwMCwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPiA+ID4gVGhl
+IExpbnV4IFVBU1AgZ2FkZ2V0IGRyaXZlciBpcyBpbmNvbXBsZXRlIGFuZCByZW1haW5lZCBicm9r
+ZW4gZm9yIGEgbG9uZyB0aW1lLg0KPiA+ID4gSXQgd2FzIG5vdCBpbXBsZW1lbnRlZCBmb3IgcGVy
+Zm9ybWFuY2UgZWl0aGVyLiBUaGlzIHNlcmllcyBhZGRzIHNvbWUgb2YgdGhlDQo+ID4gPiByZXF1
+aXJlZCBmZWF0dXJlcyBmb3IgdGhlIFVBU1AgZHJpdmVyIHRvIHdvcmsuIEl0IGFsc28gbWFrZXMg
+c29tZSBjaGFuZ2VzIHRvDQo+ID4gPiB0aGUgdGFyZ2V0IGNvcmUuDQo+ID4gPiANCj4gPiA+IFRo
+aXMgaXMgdGVzdGVkIGFnYWluc3QgVUFTUCBDViBhbmQgRFdDX3VzYjN4IGNvbnRyb2xsZXIuIEl0
+IHN0aWxsIG5lZWRzIHNvbWUNCj4gPiA+IGZpeGVzIGluIHRoZSB0YXJnZXQgY29yZSwgd2hpY2gg
+d2lsbCBiZSBzZXBhcmF0ZWQgZnJvbSB0aGlzIHNlcmllcy4NCj4gPiA+IA0KPiA+ID4gVGhlcmUg
+YXJlIHN0aWxsIG1vcmUgcm9vbSBmb3IgcGVyZm9ybWFuY2UgaW1wcm92ZW1lbnQgYW5kIGZpeGVz
+LiBIb3dldmVyLCB0aGlzDQo+ID4gPiBzZXJpZXMgc2hvdWxkIGJlIHN1ZmZpY2llbnQgdG8gYnJp
+bmcgdXAgYSB3b3JraW5nIFVBU1AgZGV2aWNlLg0KPiA+ID4gDQo+ID4gPiANCj4gPiA+IENoYW5n
+ZXMgaW4gdjI6DQo+ID4gPiAgLSBSZW1vdmUgbW9zdCB0YXJnZXQgY29yZSBjaGFuZ2VzIGZyb20g
+dGhpcyBzZXJpZXMgYW5kIG9ubHkga2VlcCB0aGUgbXVzdC1oYXZlDQo+ID4gPiAgICBvbmVzDQo+
+ID4gPiAgLSBTcGxpdCB0aGUgdGFzay1tYW5hZ2VtZW50IHBhdGNoIHRvIHNtYWxsZXIgcGF0Y2hl
+cw0KPiA+ID4gIC0gRG9uJ3Qgc2VuZCBmYWlsdXJlIFRhc2sgTWFuYWdlbWVudCByZXNwb25zZSB0
+byB0YXJnZXQgY29yZSwgcmVkdWNpbmcNCj4gPiA+ICAgIGRlcGVuZGVuY3kNCj4gPiA+ICAtIEFk
+ZCBVQVNQIGJyaW5ndXAgc2NyaXB0IGV4YW1wbGUgaW4gY292ZXIgcGFnZQ0KPiA+ID4gIC0gTWFr
+ZSB2YXJpb3VzIHNtYWxsIHVwZGF0ZXMgYWNjb3JkaW5nIHRvIGZlZWRiYWNrcw0KPiA+IA0KPiA+
+IEkgd291bGQgbmVlZCBhIHJldmlldyBieSB0aGUgdGFyZ2V0IG1haW50YWluZXJzIGJlZm9yZSBi
+ZWluZyBhYmxlIHRvDQo+ID4gdGFrZSBhbnkgb2YgdGhlIFVTQiBnYWRnZXQgY2hhbmdlcyBpbnRv
+IHRoZSBVU0IgdHJlZS4uLg0KPiA+IA0KPiANCj4gRG8geW91IGhhdmUgYW55IGNvbW1lbnQgb24g
+dGhpcyBzZXJpZXM/DQo+IA0KDQpIaSB0YXJnZXQgbWFpbnRhaW5lcnMsDQoNCkdlbnRsZSBwaW5n
+Li4uDQoNCkJSLA0KVGhpbmg=
