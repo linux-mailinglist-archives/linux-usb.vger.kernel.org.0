@@ -2,157 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E155A2679
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 13:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1675A2772
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 14:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344118AbiHZLEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Aug 2022 07:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S235942AbiHZMLc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Aug 2022 08:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344175AbiHZLE0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 07:04:26 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEA59FCD
-        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 04:04:03 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id sd33so2461616ejc.8
-        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 04:04:03 -0700 (PDT)
+        with ESMTP id S245546AbiHZML3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 08:11:29 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F934DD753;
+        Fri, 26 Aug 2022 05:11:29 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso1437023pjr.3;
+        Fri, 26 Aug 2022 05:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Mo0Po55MrltQlOf9otDY45W2NU30AebQjce6V8ULWN4=;
-        b=VvOz75vXDfguNnZLVcPMsvzH/GHMCE8wmoT/mbk8ZGRbOe7B99+18xa7t8lM5d30d3
-         7h+wfgHgVwqGkJplsz5JNw2MV2NBqOwRKE4uw8G4LnZ3M5vt2WsJEE2Ve//6z+R/57cw
-         WMUlM77P4f59X8OeGXH24poHiT8Iwg95ImrmaEbxKhU7RfFDvpMEhnTdcvG3v5VZqb80
-         knw5EhcVyM0meowHk2wm1N3salnvqRAgVHL7AsYt4N8sAQ5YM8GdoQoYXINVuLHvNKOc
-         +aZB0gwOBXTcOcV0GtOyTUvfJckgTQFNfuFVNFnEJog+ydX36ho0kxzqIzhdaG09fHGM
-         eurQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=PotJ1wRmqkbv3voX6k4qeuA7obENHsV2m/UgBbrlOOI=;
+        b=Db340hCV4Fq8RLFaxcWdmacj0FyV5VSYpqXRmmpyxPjvvKSj9w9uEhYtoPjIQ7BI2X
+         iaPtydFptX3IrPlBjVj5jNAOg3LPeLSt4uFuC66jKoeL37A644lShCu0iNzLRm0IMeGN
+         rl8fAwGLbTiUdgi5D7wuHdRdLJ6bkjGdSD7bpQoTUpWaaPRt6M1ORDH5nqgf5E+L+3hD
+         2W4980+/0o1A+lkERMnTIE7ii8HgUBNTOwLBpxSX3rN1i9BVVun0G9rCh/tkym+cvhrf
+         3/y5cWO5wX1gXyNajyOX2V5kMbpQJxKKTTPfQmeT0RyRT+xmZbxPE/dXiwtfPpRaYZAa
+         TkyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Mo0Po55MrltQlOf9otDY45W2NU30AebQjce6V8ULWN4=;
-        b=HoH4mqnNJqvfu9Dn7gNx/Ip0az2oqBJCGGmJFhd8MrVlAmZLXLwzEbkFrVJe3ypcmj
-         d+8n0WR0uryFpyaBusFOXGcksSTw5zpGTWWer+M3uQCA5r/epJ6YAzUoMYLiu9QEeP/F
-         ilZLAZk6oUjzCT0d4xGFA6YG38k5CX858uAguMaekBg5wbzYS1nsJg9NLVCDzUbWlleb
-         0F+aeH77JbfBcjNzdUVN/aMdi/jtSP61WPF0v9PC57p6sHelJIcC20eHjguKRDIdV4hg
-         oDvFWY7KdMtunKyy1EJ0qxQ4isa5FapW4ToO18y4ZsEKIbhcVWxCgDerrwcXp9zGdSx2
-         sEfg==
-X-Gm-Message-State: ACgBeo0vrSWh6gWu+9Uo4GU9CNqJsPSeuMFQx/jVDecEQ8+vc1GjkTDK
-        OC6qj1JV4J2csS1oXOPCOSzxUoQKQqRV4/0W/oG9fstxtHg=
-X-Google-Smtp-Source: AA6agR7QvLAqRTdbq4TYx8odE7Pqo40mqPQ7sAdhFJHTRKx9db4amFYUeVLwc3JxKBRaLd1/RwuUkCD9eIGDI9WitBI=
-X-Received: by 2002:a17:907:72cf:b0:73d:d007:e249 with SMTP id
- du15-20020a17090772cf00b0073dd007e249mr4908899ejc.500.1661511842254; Fri, 26
- Aug 2022 04:04:02 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=PotJ1wRmqkbv3voX6k4qeuA7obENHsV2m/UgBbrlOOI=;
+        b=xw+5o5YMXvwLkeI7CdNlwX5wkzoJx5u6cJXbtux879JBfrkGSmhjxiKY+S0p6KlbqF
+         Ymwrh+p8M2fMivUKSv4r0HGtuA5OznOGh/3GDmaXFaCqOKnN5yQ+iZMbNsk44UoDPSlR
+         W8CC6ILVwIjy5zF3TafW397R+Y9tXdPIMQAGjxfa5R/pSe9nNaOiSEXpohsGpmaP6DHj
+         lzfwzkCymTWpVeaWlJnfeb+TqJf9/J5GEOiX1+htTsHDEn8QkG1iLylsMwAjVR7nYBa5
+         nRyrRdWfJy295A3yc7kVLcKEBp78GScCLFwIqULW/njtrz2ZxvVu79TX3zb3llvbDrvl
+         3Yqw==
+X-Gm-Message-State: ACgBeo0idrzJLVtBtL87p52sI7o4/bUJhuLfMR5YtqNHJ/HaZ+VR5Jm+
+        yaqq8i9eU83JBvj7x+39NUQ=
+X-Google-Smtp-Source: AA6agR61Fy97WeEjRcYwmgw2ZGGc63DLAP1ZQwZfLZx/2DyREl0AeNYmXWxW8htKkhU3H5bYlJMKSw==
+X-Received: by 2002:a17:90b:388c:b0:1fb:6738:6e50 with SMTP id mu12-20020a17090b388c00b001fb67386e50mr4005131pjb.231.1661515888580;
+        Fri, 26 Aug 2022 05:11:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r10-20020aa79eca000000b0052d981e7842sm1545874pfq.208.2022.08.26.05.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 05:11:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 26 Aug 2022 05:11:26 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     cgel.zte@gmail.com
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xupanda <xu.panda@zte.com.cn>, Zeal Robot <zeal@zte.com.cn>
+Subject: Re: [PATCH linux-next v2] usb: typec: tcpm: tcpci: Remove the
+ unneeded result variable
+Message-ID: <20220826120548.GA2897306@roeck-us.net>
+References: <20220826091731.254966-1-xu.panda@zte.com.cn>
 MIME-Version: 1.0
-References: <20220824071253.1261096-1-piyush.mehta@amd.com>
-In-Reply-To: <20220824071253.1261096-1-piyush.mehta@amd.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 13:03:51 +0200
-Message-ID: <CACRpkdae4fijFrFs-1u-AUNExvbda=6yeAyQJRQeVVQmdQOQZQ@mail.gmail.com>
-Subject: Re: [PATCH V2] usb: gadget: udc-xilinx: replace memcpy with memcpy_toio
-To:     Piyush Mehta <piyush.mehta@amd.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        michal.simek@xilinx.com, michal.simek@amd.com,
-        shubhrajyoti.datta@xilinx.com, lee.jones@linaro.org,
-        christophe.jaillet@wanadoo.fr, szymon.heidrich@gmail.com,
-        jakobkoschel@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@amd.com, siva.durga.prasad.paladugu@amd.com,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826091731.254966-1-xu.panda@zte.com.cn>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 9:14 AM Piyush Mehta <piyush.mehta@amd.com> wrote:
+On Fri, Aug 26, 2022 at 09:17:32AM +0000, cgel.zte@gmail.com wrote:
+> From: xupanda <xu.panda@zte.com.cn>
+> 
+> Return the value regmap_update_bits() directly instead of
+> storing it in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zeal@zte.com.cn>
+> Signed-off-by: xupanda <xu.panda@zte.com.cn>
 
-> For ARM processor, unaligned access to device memory is not allowed.
-> Method memcpy does not take care of alignment.
->
-> USB detection failure with the unaligned address of memory access, with
-> below kernel crash. To fix the unaligned address the kernel panic issue,
-> replace memcpy with memcpy_toio method.
->
-> Kernel crash:
-> Unable to handle kernel paging request at virtual address ffff80000c05008a
-> Mem abort info:
->   ESR = 0x96000061
->   EC = 0x25: DABT (current EL), IL = 32 bits
->   SET = 0, FnV = 0
->   EA = 0, S1PTW = 0
->   FSC = 0x21: alignment fault
-> Data abort info:
->   ISV = 0, ISS = 0x00000061
->   CM = 0, WnR = 1
-> swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000000143b000
-> [ffff80000c05008a] pgd=100000087ffff003, p4d=100000087ffff003,
-> pud=100000087fffe003, pmd=1000000800bcc003, pte=00680000a0010713
-> Internal error: Oops: 96000061 [#1] SMP
-> Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.15.19-xilinx-v2022.1 #1
-> Hardware name: ZynqMP ZCU102 Rev1.0 (DT)
-> pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : __memcpy+0x30/0x260
-> lr : __xudc_ep0_queue+0xf0/0x110
-> sp : ffff800008003d00
-> x29: ffff800008003d00 x28: ffff800009474e80 x27: 00000000000000a0
-> x26: 0000000000000100 x25: 0000000000000012 x24: ffff000800bc8080
-> x23: 0000000000000001 x22: 0000000000000012 x21: ffff000800bc8080
-> x20: 0000000000000012 x19: ffff000800bc8080 x18: 0000000000000000
-> x17: ffff800876482000 x16: ffff800008004000 x15: 0000000000004000
-> x14: 00001f09785d0400 x13: 0103020101005567 x12: 0781400000000200
-> x11: 00000000c5672a10 x10: 00000000000008d0 x9 : ffff800009463cf0
-> x8 : ffff8000094757b0 x7 : 0201010055670781 x6 : 4000000002000112
-> x5 : ffff80000c05009a x4 : ffff000800a15012 x3 : ffff00080362ad80
-> x2 : 0000000000000012 x1 : ffff000800a15000 x0 : ffff80000c050088
-> Call trace:
->  __memcpy+0x30/0x260
->  xudc_ep0_queue+0x3c/0x60
->  usb_ep_queue+0x38/0x44
->  composite_ep0_queue.constprop.0+0x2c/0xc0
->  composite_setup+0x8d0/0x185c
->  configfs_composite_setup+0x74/0xb0
->  xudc_irq+0x570/0xa40
->  __handle_irq_event_percpu+0x58/0x170
->  handle_irq_event+0x60/0x120
->  handle_fasteoi_irq+0xc0/0x220
->  handle_domain_irq+0x60/0x90
->  gic_handle_irq+0x74/0xa0
->  call_on_irq_stack+0x2c/0x60
->  do_interrupt_handler+0x54/0x60
->  el1_interrupt+0x30/0x50
->  el1h_64_irq_handler+0x18/0x24
->  el1h_64_irq+0x78/0x7c
->  arch_cpu_idle+0x18/0x2c
->  do_idle+0xdc/0x15c
->  cpu_startup_entry+0x28/0x60
->  rest_init+0xc8/0xe0
->  arch_call_rest_init+0x10/0x1c
->  start_kernel+0x694/0x6d4
->  __primary_switched+0xa4/0xac
->
-> Cc: stable@vger.kernel.org
-> Fixes: 1f7c51660034 ("usb: gadget: Add xilinx usb2 device support")
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+This needs to be a real (full) name.
+
+> 
 > ---
-> Changes in V2:
-> - Address Greg KH review comments:
->  - Added information in the form of a Fixes: commit Id (commit message).
->  - Cc stable kernel.
->
-> Link:https://lore.kernel.org/all/YwW8zE8ieLCsSxPN@kroah.com/
+> change for v2
+>  - remove those irrelevant sentences 
+> ---
+> 
+>  drivers/usb/typec/tcpm/tcpci.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index b2bfcebe218f..29047da826a9 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -328,11 +328,9 @@ static int tcpci_set_vconn(struct tcpc_dev *tcpc, bool enable)
+>  static int tcpci_enable_auto_vbus_discharge(struct tcpc_dev *dev, bool enable)
+>  {
+>  	struct tcpci *tcpci = tcpc_to_tcpci(dev);
+> -	int ret;
+>  
+> -	ret = regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_POWER_CTRL_AUTO_DISCHARGE,
+> +	return regmap_update_bits(tcpci->regmap, TCPC_POWER_CTRL, TCPC_POWER_CTRL_AUTO_DISCHARGE,
+>  				 enable ? TCPC_POWER_CTRL_AUTO_DISCHARGE : 0);
 
-That link should be up under the commit message, but it's not very important.
+Continuation line alignment still needs to be adjusted.
 
-The solution looks reasonable.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Both were aready mentioned in feedback to v1 of the patch.
 
-Yours,
-Linus Walleij
+Guenter
