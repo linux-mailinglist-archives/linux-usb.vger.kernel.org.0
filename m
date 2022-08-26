@@ -2,116 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B125A20E2
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 08:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73B75A2136
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 08:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiHZGbD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Aug 2022 02:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S239858AbiHZGwF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Aug 2022 02:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiHZGbB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 02:31:01 -0400
+        with ESMTP id S229676AbiHZGwE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 02:52:04 -0400
 Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ED032D9B
-        for <linux-usb@vger.kernel.org>; Thu, 25 Aug 2022 23:30:56 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220826063051euoutp0237d2e9ac77cf15a765f7d1646428ee67~O0U97S5Zk0462704627euoutp02B
-        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 06:30:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220826063051euoutp0237d2e9ac77cf15a765f7d1646428ee67~O0U97S5Zk0462704627euoutp02B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB49AD126C
+        for <linux-usb@vger.kernel.org>; Thu, 25 Aug 2022 23:52:02 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220826065201euoutp027cbf1e865acce8a61d66c0ae26f89fa7~O0ncHes3Y2526225262euoutp02i
+        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 06:52:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220826065201euoutp027cbf1e865acce8a61d66c0ae26f89fa7~O0ncHes3Y2526225262euoutp02i
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1661495451;
-        bh=W+UMzgOy5nrhfOOkuzPjb/BXopoI0JJlZTrynR9BkzA=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=FCRSoa1HH+wY1PfFdDx5sBPGlMyQbAfRchoFFXElsslNhkZ6qepUtibiUnrLPVFDH
-         ZIas2SdXnoLIyDj3Lq1kK+dnFvnoowoZn9eHyq2ySk9MZzH4eOMWfor43Q1opjcgXa
-         a4VrzJUU4OkqX4dFz6YlIdrvZQpzfzJUZrmdnpDo=
+        s=mail20170921; t=1661496721;
+        bh=SLj360xnTj6kGDPF6JmBxasPLiWgx7pBYkGeIApy3qU=;
+        h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
+        b=prJQhgvgDJI4DnCkaoP+VFBY7dYBdsEoyDvfPWYL/HM6QfYdK38b8aZ9EotPVRVPw
+         L90awOUe49KpBSElGWdNAOU7WWcMt/Wufqfb2Yc7Dhz5MId6YhfKI9XwAG9oFmvvhB
+         UTtnTb2lpjTc2ewgvp72CzAnrU8TpDsvURqkpmtY=
 Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220826063051eucas1p22e2a079e2ba427d70bc765dbb17e3800~O0U9tY6um1228312283eucas1p2d;
-        Fri, 26 Aug 2022 06:30:51 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id AA.5E.29727.B9868036; Fri, 26
-        Aug 2022 07:30:51 +0100 (BST)
+        20220826065200eucas1p2520da7f0fa1a2b3852778148f893a6ee~O0nbt0_0N0105001050eucas1p2a;
+        Fri, 26 Aug 2022 06:52:00 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id BA.42.29727.09D68036; Fri, 26
+        Aug 2022 07:52:00 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220826063051eucas1p1221e5515617dbd4c8c3b31917b8ce26a~O0U9XVEyf2391823918eucas1p1o;
-        Fri, 26 Aug 2022 06:30:51 +0000 (GMT)
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220826065200eucas1p269812df7f3883e14369248e797166439~O0nbR8hxw0097800978eucas1p2a;
+        Fri, 26 Aug 2022 06:52:00 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220826063051eusmtrp19e2b799dcbdfce83ebaa2121ed0d2c38~O0U9V-Ebk0256002560eusmtrp1z;
-        Fri, 26 Aug 2022 06:30:51 +0000 (GMT)
-X-AuditID: cbfec7f2-21dff7000001741f-a9-6308689b73a3
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BE.B7.07473.B9868036; Fri, 26
-        Aug 2022 07:30:51 +0100 (BST)
+        20220826065200eusmtrp1b36d5c4ef16b4855a2c57b7d2163ebfc~O0nbQ2s6s1442814428eusmtrp1V;
+        Fri, 26 Aug 2022 06:52:00 +0000 (GMT)
+X-AuditID: cbfec7f2-205ff7000001741f-d6-63086d90e5d1
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 44.1A.07473.09D68036; Fri, 26
+        Aug 2022 07:52:00 +0100 (BST)
 Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220826063050eusmtip162f1db11e1b5404e629e8731daca3897~O0U865DvI3084430844eusmtip12;
-        Fri, 26 Aug 2022 06:30:50 +0000 (GMT)
-Message-ID: <d174d0cc-464d-7ae0-35e8-bb78c35eac22@samsung.com>
-Date:   Fri, 26 Aug 2022 08:30:50 +0200
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220826065158eusmtip2d83128b117fe974ca16b4ca68ce5b752~O0nZ5XZ2a3256932569eusmtip2J;
+        Fri, 26 Aug 2022 06:51:58 +0000 (GMT)
+Message-ID: <e598a232-6c78-782a-316f-77902644ad6c@samsung.com>
+Date:   Fri, 26 Aug 2022 08:51:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
         Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH] USB: gadget: Fix use-after-free Read in
- usb_udc_uevent()
+Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY
+ interrupts to PHY driver to avoid polling
 Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
 From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <YvUo7ukc8xKxKLZt@rowland.harvard.edu>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJKsWRmVeSWpSXmKPExsWy7djP87qzMziSDZonyFsca3vCbtG8eD2b
-        xaJlrcwWx3sPMFlM+H2BzeLGlrnMDmweeyaeZPPYvELLY9OqTjaP/XPXsHvMvvuD0ePzJrkA
-        tigum5TUnMyy1CJ9uwSujI2zljEXvOar2DJnCmMD43/uLkYODgkBE4l3TUpdjFwcQgIrGCUu
-        NN5gg3C+MEp0nZvBAuF8ZpSY/Ow6excjJ1jHx1NnoaqWM0p8vXiPGcL5yCgxv2cmC0gVr4Cd
-        xLsZq1lBbBYBVYk9J+4zQ8QFJU7OfAJWIyqQLDHr2DFGkDuEBfwlrs1OAQkzC4hL3HoynwnE
-        FhHQktjc9BJsPrPAYUaJLVtmgiXYBAwlut52sYHYnALGEp2rVjJDNMtLbH87B6xBQuAGh8SG
-        GwfZIB51kWjcKwfxgbDEq+NboL6RkTg9uYcFoiRf4u8MY4hwhcS112uYIWxriTvnfoFNYRbQ
-        lFi/Sx8i7CjRtWAxO0Qnn8SNt4IQB/BJTNo2nRkizCvR0SYEUa0mMev4OridBy9cYp7AqDQL
-        KUhmIfl9FpJXZiHsXcDIsopRPLW0ODc9tdgwL7Vcrzgxt7g0L10vOT93EyMw9Zz+d/zTDsa5
-        rz7qHWJk4mA8xCjBwawkwmt1jCVZiDclsbIqtSg/vqg0J7X4EKM0B4uSOG9y5oZEIYH0xJLU
-        7NTUgtQimCwTB6dUA5N084KtDl8l9NsFhKesyI6sfpjH0jNFWvr5lDknHhQvuKe093hEzIOZ
-        u5XWBLzrEXVNXz1j29sJ30+uzEieFXnwgdR55km5D+4tKvfbFm1+ep0Eg5iIRKj/ior7/Qu+
-        Be18pxS/wvXnWwHW3A0hcdIui25MYdvE8rLs/f5r79SlZ96sFTMX8t9+0iBLw3lZrb7THtat
-        l/bI7Ttwe/ubX3V5fNvbtnvPepQdp77wduaGgzkNSws5tA5cX3P13JPIZ5fesXGUHPRe8e2B
-        V+lu0yp2fjWBvfKBx2Pvv3tbPlH89x4Xtacr/USZyxUK55UderJd2GanbX3g1vbLJo/WLmjj
-        evOsMcH6yJQnpWt2bl8zQYmlOCPRUIu5qDgRALy2mv+sAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIIsWRmVeSWpSXmKPExsVy+t/xu7qzMziSDR5c4LI41vaE3aJ58Xo2
-        i0XLWpktjvceYLKY8PsCm8WNLXOZHdg89kw8yeaxeYWWx6ZVnWwe++euYfeYffcHo8fnTXIB
-        bFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6GRtn
-        LWMueM1XsWXOFMYGxv/cXYycHBICJhIfT51l62Lk4hASWMooMe/GYXaIhIzEyWkNrBC2sMSf
-        a11QRe+Biva/YANJ8ArYSbybsRqsiEVAVWLPifvMEHFBiZMzn7CA2KICyRJLGu6D1QgL+ErM
-        2dYPVsMsIC5x68l8JhBbREBLYnPTS2aQBcwChxklNqw8xgKxbR+zxOlni8G2sQkYSnS97QKz
-        OQWMJTpXrYSaZCbRtbWLEcKWl9j+dg7zBEahWUgOmYVk4SwkLbOQtCxgZFnFKJJaWpybnlts
-        qFecmFtcmpeul5yfu4kRGHfbjv3cvINx3quPeocYmTgYDzFKcDArifBaHWNJFuJNSaysSi3K
-        jy8qzUktPsRoCgyNicxSosn5wMjPK4k3NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1OTS1I
-        LYLpY+LglGpgWue4QO8hjxBjHnea0Cb7g3fs2EsvT6qUmWaR+1OCKUDHcE3xveBnbN665XEq
-        lqfjGmbvDXfUvf2p4r6Ds0Zj+CvJub89D7hrrfrx6Crn87iNFY+/vojmMrJ9yfTBWf+f2YtF
-        +3xigvJ4/L/f5NjavNtrm+HSBI4/ZrzpEyfXRHTN3RV8WjvGbrKvlMjJn9/ZV/f9bW3JSJby
-        XL9fL/z00wN7Pfx/s0fKGp2+1P1f8ExgfKDB7gaHjvKInKx5i9eubz11SNx13l3X7k8Tl3/z
-        n8CiwfzKsCdvz81ga74T+8sulEWU6Onms386yzQ3Y/6NyalsvO0fFtVqi0/ZISm9zN6C/z33
-        1kwppXsRNu+UWIozEg21mIuKEwGmoZbJRAMAAA==
-X-CMS-MailID: 20220826063051eucas1p1221e5515617dbd4c8c3b31917b8ce26a
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+In-Reply-To: <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf1CTZRy/533fvXsHDV/Hao/SWfeWkXiiRNc9lyloXb7Xr+OMrMPK5ngD
+        dGzcBol1XcSEYBIy0YA5ZHEIsko84rfnysGNk50bSFLzwGltAUPBMUowxRgvFv99vp/v5/t8
+        Pt/vPRQuqSFXUxmqbE6jkisZMoxos885N5RlUopNv16IQaZCtxC5Rmw4+tN9lUQm1yEC+ey/
+        C9HsyW4SuSrycVQ7VSlALtdZIepvKxUg73f1GKp0WTFUW1+AI9vx8wD1zFgINDYaha4P6Alk
+        Nz+G9H80kshc4CPQ346bAOmm/Rj6xzBAJsrYwaEBnO0YqQNsS6MbYzuNI0L2duBD1tycw/rK
+        yoVss6WYZHvcNwDb2RHE2OHZU4Cdsl4hWfekH2cf6AYJtqnlCsEGm9ckSVLCXkrllBmfcJqN
+        Wz8KS69uOUJmVa/PtZa0kHkg72k9EFGQfh5aB+4RehBGSejTADaeMywVMwB2nTqB80UQwDqf
+        mXw4kqcrxkNYQjcAOOHfwosCAF76KR8LNcT0VljuqReEMEGvhZ3+SgHPr4QXq7xECD9KK6DR
+        bgchHEmr4ITbsqjBaRm86q1ZfIek46D+ln7RWEozMP/YJBYyw2kPCQM/9i2KRHQCHD9TjvPD
+        T0BdKx8b0t+Gwduto0I+9itwatqF8zgS+ntblvjHoaO8ZCERtYDV8H5lPE/nwqGJ75fkm+Gw
+        8y4ZkuD0OtjUtZGnt8HAz9dwfjIC/nZrJZ8gAh5tq1iixbCoUMKrn4HG3jP/eV7ov4yXAca4
+        7CjGZcsbl+1i/N/XDAgLkHE52sw0Thun4g7EauWZ2hxVWqxCndkMFv6wY753ugNU+wOxNoBR
+        wAYghTNS8Yt2QiERp8oPfspp1Hs0OUpOawNRFMHIxIqMs3IJnSbP5vZzXBanedjFKNHqPOzz
+        XC775RWte7OiGO1OU1JCav/5B58VmxJF3uh2w1qZ9dya15KTsIhVfSsmb7R/9UPhB/u2J1aJ
+        pp50nbZeBIGKHfOeR3a9OqSPtcxPnJgaCx9/q+e9oWb/uFTsS9hharjWp/T4AodF7VWeYHrj
+        zs132tftMV6+e6g0m8EjaqRzuvnoe1Ct273q48ikLmdDzHEoPObdFX6gqOMp4xd90SlNM03J
+        z90J9zqkb84Gd7998/Cz3UUlsu0NhpPqyi1/lXZihtf3Std3d+9vsB6t/dp5fVD17v30FzI3
+        eJref+MXQ9EwU7Ap/hvnO/HKdHKU+jJFctDBXNKNbUsW7sMiBS5t/lwdQ2jT5XExuEYr/xdA
+        hvDhMgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCKsWRmVeSWpSXmKPExsVy+t/xe7oTcjmSDf4u4bSY03aT3eL83UPM
+        Fs9u3mKzmHO+hcXi6bFH7BY/5h1mszg/vYnZYtH7GawW589vYLe4sK2P1eLJ6mVMFjPO72Oy
+        WLSsldni0NS9jBZHvqxisXjxXNriwcUuFotjC8Qsuh6vZLNY0PqUxeLb6TeMFs2fXjFZ/J54
+        kc1B3OPytYvMHjvuLmH02LLyJpPHzll32T0+fIzzWLCp1OPphMnsHptWdbJ5HLn5kNFj547P
+        TB53fixl9Hi/7yqbx813r5g9/jdfZvFYv+Uqi8fnTXIBQlF6NkX5pSWpChn5xSW2StGGFkZ6
+        hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6GXO39LMVzNWu2Nezha2BsUGli5GTQ0LA
+        RKKhuZMZxBYSWMooMW92CURcRuLktAZWCFtY4s+1LrYuRi6gmveMEm+7HzCBJHgF7CQm318G
+        VsQioCqx89UMVoi4oMTJmU9YQGxRgWSJJQ33weLCAnkSp5vfgNnMAuISt57MB5vDJmAo0fUW
+        ZAEnh4iAkkTTlHdMIMuYBR6zSUz4OpMdYvNDJokFHffAujkF7CVerpvMDDHJTKJraxcjhC0v
+        0bx1NvMERqFZSA6ZhWThLCQts5C0LGBkWcUoklpanJueW2yoV5yYW1yal66XnJ+7iRGYfLYd
+        +7l5B+O8Vx/1DjEycTAeYpTgYFYS4bU6xpIsxJuSWFmVWpQfX1Sak1p8iNEUGBoTmaVEk/OB
+        6S+vJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaPiYNTqoEpkndGwO1ymc18
+        R07dEl4pfiNwReOU7vofNX/X+hwLrs0t0pwfqvvvl3HXj22fIxjMuqZpvjphxvZZKDK1PP+w
+        u3i9hsCMFxP5riytT2mNrVxrPGmd7OPz2hXdUmzNPB8Prwn9/IlHkMMu/XvnDLdPDyY3cXx/
+        UyO3crnyOr26B/etUzLeVm4V5FOQ8Paxt4n943uAgcl0XtI27V2KeaU5zWxcnPUvH3GE3THi
+        und+amlG/v+sF+dizI4lzqvtCb9wqL5BYtqx1urnV86ZOEdcaGpW+Lc51PlH37erD5NFXx02
+        2lsbW266Me67NgtHwHy/Ca0vZTYIVTx4lHl33W4X67XrPsRcCDH11tF/80KJpTgj0VCLuag4
+        EQCIwLODxwMAAA==
+X-CMS-MailID: 20220826065200eucas1p269812df7f3883e14369248e797166439
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220808145736eucas1p234e56422bd7973d7f0676e74f03ba405
+X-RootMTR: 20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20220808145736eucas1p234e56422bd7973d7f0676e74f03ba405
-References: <YtlbkmVGJyhO4kR6@rowland.harvard.edu>
-        <000000000000acc0e905e4517fa0@google.com>
-        <YtlrnhHyrHsSky9m@rowland.harvard.edu>
-        <CGME20220808145736eucas1p234e56422bd7973d7f0676e74f03ba405@eucas1p2.samsung.com>
-        <b2ba4245-9917-e399-94c8-03a383e7070e@samsung.com>
-        <YvFxiXmPlJc9wLZT@rowland.harvard.edu>
-        <YvQH7IMTIFO0OCnG@rowland.harvard.edu>
-        <febf579a-6451-1dc6-b583-0ba1a76344a6@samsung.com>
-        <YvUo7ukc8xKxKLZt@rowland.harvard.edu>
+X-CMS-RootMailID: 20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99
+References: <cover.1652343655.git.lukas@wunner.de>
+        <748ac44eeb97b209f66182f3788d2a49d7bc28fe.1652343655.git.lukas@wunner.de>
+        <CGME20220517101846eucas1p2c132f7e7032ed00996e222e9cc6cdf99@eucas1p2.samsung.com>
+        <a5315a8a-32c2-962f-f696-de9a26d30091@samsung.com>
+        <20220519190841.GA30869@wunner.de>
+        <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
@@ -123,43 +141,137 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11.08.2022 18:06, Alan Stern wrote:
-> On Thu, Aug 11, 2022 at 09:31:34AM +0200, Marek Szyprowski wrote:
->> On 10.08.2022 21:33, Alan Stern wrote:
->>> On Mon, Aug 08, 2022 at 04:26:49PM -0400, Alan Stern wrote:
->>>> On Mon, Aug 08, 2022 at 04:57:35PM +0200, Marek Szyprowski wrote:
->>>>> This patch landed recently in linux-next as commit 2191c00855b0 ("USB:
->>>>> gadget: Fix use-after-free Read in usb_udc_uevent()"). Unfortunately it
->>>>> fixes the issue by introducing another one. It doesn't look very
->>>>> probable, but it would be nice to fix it to make the lock dependency
->>>>> checker happy.
->>>> Indeed.
->>>> I suspect the problem is that udc_lock is held for too long.  Probably it
->>>> should be released during the calls to udc->driver->bind and
->>>> udc->driver->unbind.
->>>>
->>>> Getting this right will require some careful study.  Marek, if I send you
->>>> a patch later, will you be able to test it?
->>> Here's a patch for you to try, when you have the chance.  It reduces the
->>> scope of udc_lock to cover only the fields it's supposed to protect and
->>> changes the locking in a few other places.
+On 19.05.2022 23:22, Marek Szyprowski wrote:
+> On 19.05.2022 21:08, Lukas Wunner wrote:
+>> On Tue, May 17, 2022 at 12:18:45PM +0200, Marek Szyprowski wrote:
+>>> This patch landed in the recent linux next-20220516 as commit
+>>> 1ce8b37241ed ("usbnet: smsc95xx: Forward PHY interrupts to PHY 
+>>> driver to
+>>> avoid polling"). Unfortunately it breaks smsc95xx usb ethernet 
+>>> operation
+>>> after system suspend-resume cycle. On the Odroid XU3 board I got the
+>>> following warning in the kernel log:
 >>>
->>> There's still the possibility of a locking cycle, because udc_lock is
->>> held in the ->disconnect pathway.  It's very hard to know whether that
->>> might cause any trouble; it depends on how the function drivers handle
->>> disconnections.
->> It looks this fixed the issue I've reported. I've checked it on all my
->> test systems and none reported any issue related to the udc.
+>>> # time rtcwake -s10 -mmem
+>>> rtcwake: wakeup from "mem" using /dev/rtc0 at Tue May 17 09:16:07 2022
+>>> PM: suspend entry (deep)
+>>> Filesystems sync: 0.001 seconds
+>>> Freezing user space processes ... (elapsed 0.002 seconds) done.
+>>> OOM killer disabled.
+>>> Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+>>> printk: Suspending console(s) (use no_console_suspend to debug)
+>>> smsc95xx 4-1.1:1.0 eth0: entering SUSPEND2 mode
+>>> smsc95xx 4-1.1:1.0 eth0: Failed to read reg index 0x00000114: -113
+>>> smsc95xx 4-1.1:1.0 eth0: Error reading MII_ACCESS
+>>> smsc95xx 4-1.1:1.0 eth0: __smsc95xx_mdio_read: MII is busy
+>>> ------------[ cut here ]------------
+>>> WARNING: CPU: 2 PID: 73 at drivers/net/phy/phy.c:946
+>>> phy_state_machine+0x98/0x28c
+>> [...]
+>>> It looks that the driver's suspend/resume operations might need some
+>>> adjustments. After the system suspend/resume cycle the driver is not
+>>> operational anymore. Reverting the $subject patch on top of linux
+>>> next-20220516 restores ethernet operation after system suspend/resume.
+>> Thanks a lot for the report.  It seems the PHY is signaling a link 
+>> change
+>> shortly before system sleep and by the time the phy_state_machine() 
+>> worker
+>> gets around to handle it, the device has already been suspended and thus
+>> refuses any further USB requests with -EHOSTUNREACH (-113):
 >>
->> Feel free to add:
+>> usb_suspend_both()
+>>    usb_suspend_interface()
+>>      smsc95xx_suspend()
+>>        usbnet_suspend()
+>>          __usbnet_status_stop_force() # stops interrupt polling,
+>>                                       # link change is signaled 
+>> before this
 >>
->> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>>    udev->can_submit = 0               # refuse further URBs
 >>
->> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Thanks for the quick testing.  I'll submit the patch when the current
-> merge window ends.
+>> Assuming the above theory is correct, calling phy_stop_machine()
+>> after usbnet_suspend() would be sufficient to fix the issue.
+>> It cancels the phy_state_machine() worker.
+>>
+>> The small patch below does that.  Could you give it a spin?
+>
+> That's it. Your analysis is right and the patch fixes the issue. Thanks!
+>
+> Feel free to add:
+>
+> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
 
 Gentle ping for the final patch...
+
+It looks that the similar fix is posted for other drivers, i.e.:
+
+https://lore.kernel.org/all/20220825023951.3220-1-f.fainelli@gmail.com/
+
+
+>
+>> Taking a step back though, I'm wondering if there's a bigger problem 
+>> here:
+>> This is a USB device, so we stop receiving interrupts once the Interrupt
+>> Endpoint is no longer polled.  But what if a PHY's interrupt is attached
+>> to a GPIO of the SoC and that interrupt is raised while the system is
+>> suspending?  The interrupt handler may likewise try to reach an
+>> inaccessible (suspended) device.
+>>
+>> The right thing to do would probably be to signal wakeup.  But the
+>> PHY drivers' irq handlers instead schedule the phy_state_machine().
+>> Perhaps we need something like the following at the top of
+>> phy_state_machine():
+>>
+>>     if (phydev->suspended) {
+>>         pm_wakeup_dev_event(&phydev->mdio.dev, 0, true);
+>>         return;
+>>     }
+>>
+>> However, phydev->suspended is set at the *bottom* of phy_suspend(),
+>> it would have to be set at the *top* of mdio_bus_phy_suspend()
+>> for the above to be correct.  Hmmm...
+> Well, your concern sounds valid, but I don't have a board with such hw 
+> configuration, so I cannot really test.
+>> Thanks,
+>>
+>> Lukas
+>>
+>> -- >8 --
+>> diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+>> index bd03e16..d351a6c 100644
+>> --- a/drivers/net/usb/smsc95xx.c
+>> +++ b/drivers/net/usb/smsc95xx.c
+>> @@ -1201,6 +1201,7 @@ static int smsc95xx_bind(struct usbnet *dev, 
+>> struct usb_interface *intf)
+>>       }
+>>         pdata->phydev->irq = phy_irq;
+>> +    pdata->phydev->mac_managed_pm = true;
+>>       pdata->phydev->is_internal = is_internal_phy;
+>>         /* detect device revision as different features may be 
+>> available */
+>> @@ -1496,6 +1497,9 @@ static int smsc95xx_suspend(struct 
+>> usb_interface *intf, pm_message_t message)
+>>           return ret;
+>>       }
+>>   +    if (netif_running(dev->net))
+>> +        phy_stop(pdata->phydev);
+>> +
+>>       if (pdata->suspend_flags) {
+>>           netdev_warn(dev->net, "error during last resume\n");
+>>           pdata->suspend_flags = 0;
+>> @@ -1778,6 +1782,8 @@ static int smsc95xx_resume(struct usb_interface 
+>> *intf)
+>>       }
+>>         phy_init_hw(pdata->phydev);
+>> +    if (netif_running(dev->net))
+>> +        phy_start(pdata->phydev);
+>>         ret = usbnet_resume(intf);
+>>       if (ret < 0)
+>>
+> Best regards
 
 Best regards
 -- 
