@@ -2,57 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5465A2351
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 10:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE71C5A2350
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Aug 2022 10:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245438AbiHZIl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Aug 2022 04:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S234424AbiHZIl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Aug 2022 04:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343705AbiHZIkj (ORCPT
+        with ESMTP id S1343713AbiHZIkj (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 04:40:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5606E24963
-        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 01:40:11 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33dd097f993so15675077b3.10
-        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 01:40:11 -0700 (PDT)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875473ECDC
+        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 01:40:13 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33dd097f993so15676477b3.10
+        for <linux-usb@vger.kernel.org>; Fri, 26 Aug 2022 01:40:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=RLmxwVwtne7Ris2nr8dSsVg7os+UaP8tQY3U04GCx/Q=;
-        b=bUWPHNUvCcT+uV6k7KJHdeY5B+TXt9tNnJE7NjCcjfnWH9S5GYXggIwBwIPylOO2Zg
-         8xZmT4s/Q/73gUdWXlzpv9vTZm2ZFGl+kC4vEjUva2NNG9Tebr87+w175hJVn4IcTWUw
-         wuZBDMDfMNeuEcIhIUQJmzsPWI7rZ69942HHPnkyC3RV56Nv+k6p/vm82de5pHQLQ2+K
-         vxVx/Sh+Bgt+9EvFX3+Gga6YEl0NIClbj61smG9Ygn9xvdH4obcbeW3F3JanL1CLeEfu
-         qPOpF0H9O/Px4CsoqMzDu68YvyEbZXVr2z5PYOqhmohrJ0vWDRukGHIjPYBTOez1WowK
-         Lp6g==
+        bh=1BCRKzVhOtBrKG/VR6oCKwA2rCN8yts14gxEEpWzTCs=;
+        b=LpDUdywQAhULaMYLRcfvjEFdyqICCSbvUhMa1DwrNNBTXZ98htp1qCZwkXePp0+qCP
+         fjWkp3GQpIlRivOEyhsVHLsN6eU/KWRz9XFPvbwOinyj0d3mfcx9j2h9IvBFz3Cax1dx
+         D+6trm1GmP3wzvlvqtVNSb/Zh1UtxY9xcfwoJ5/Z5nUEZNPNZHtV2V/7VzGIvP8BVwSv
+         wLi74SKWq17U0iEorxRpjRSmMMIAGSy47nHgvX2KCsjCfjZjhu9pFdF1ancQdj4wBoLR
+         vKVy7pYQN320eHO3HAsMf1AEOpRSt++WrxHCnZDOsPV1hBoLjM5R1WBoNIHhyi+ndYRj
+         nn7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=RLmxwVwtne7Ris2nr8dSsVg7os+UaP8tQY3U04GCx/Q=;
-        b=4IubFzzNPJ7U9sITLZ9s+ps6ZiCarUcFSEnZnEt7myJU0WckOO8P4UsyNjYKKqo4Cv
-         p5Of8je7nlNaNoyuuQ5f56V4NmjjOWHKaBH5Mo8JzCmw0+ngI1yRcycMHG7K/YbXAc80
-         1ANh3kKkbUgjZIfGqy7+62jK8smN/S+BvHJpB1cbA+HlOECkHIprXasu4QSdUlvn18w+
-         YdLZvM59QNi7SNoiI7GyDdEWIuSIGHzPbq+FDXKTZJXGI5/EypLG8zjkTUNybnSr3xps
-         zh7f3dYfmjdGnXAJn0ho28KoolR4JYj9rOgJ5K94vvl14ZKntox09nJNLfMPKVG0a31a
-         CHCg==
-X-Gm-Message-State: ACgBeo1BYf4anFJM5QpwSPZZUOEZvporbsY2i21ZbBCmhIR4dy9/Kdo5
-        kwLO5ZIZMQQCO1yIUF4IG2jvzS/8TMw=
-X-Google-Smtp-Source: AA6agR4KLKITQOlDJ02mlSvMKGIjTT/6g02Bqj3cS1aQg1rBbh1nvTiFY+LvtnmVm7uVG74q+zc0+lIAL2M=
+        bh=1BCRKzVhOtBrKG/VR6oCKwA2rCN8yts14gxEEpWzTCs=;
+        b=aOnZtO+q3qqhu5XGiCuXopwFcK+vIo5OCKVwRgq/k4jjYFOs3MWPh7AgidYda2/AIa
+         Y/b7dlrUMscvlgdofd3lmefRXwTrVZpHLSZzX7qK22PzLO/qVUG0lkO+PizoMo6QgzI5
+         gWyTkGgU+2g5nEjTVOK3Nt0IZK4xNZvNutxJZKhAX6JyF6vcZAkgxgr84ecK1jMz4EON
+         IAMTfzZtlkKIB10xjjsHpa3KDfSSD8ki3AXQvnhXb8ofHAGHT8iUhXfp5P8LZ3N3DhDi
+         pcVTAeRdk4xItXjt1iTD6QV+4XjLGDAd1Ej0CKaVwtNI08psOsC7mmnc7SN2rEg6CUSh
+         RNdQ==
+X-Gm-Message-State: ACgBeo3ENeA1dm/ocT5PSTDLmrjCyzWOsBa+AngQm4f1aByZsy+MXlzA
+        poI/9NDJB0uHeeDflPArs3UyoplUlLU=
+X-Google-Smtp-Source: AA6agR6wjESRw5TzQK2Y6xr9dLNT27OzE76bMAt4poVX5d//5QWPL/VdEtum0Cvn2yNc0Zzee+GEEfFEqGs=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:9c82:622c:af33:39f2])
- (user=badhri job=sendgmr) by 2002:a05:6902:722:b0:695:62a2:f22c with SMTP id
- l2-20020a056902072200b0069562a2f22cmr7071146ybt.272.1661503210277; Fri, 26
- Aug 2022 01:40:10 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 01:39:59 -0700
+ (user=badhri job=sendgmr) by 2002:a0d:da83:0:b0:329:9c04:fe6d with SMTP id
+ c125-20020a0dda83000000b003299c04fe6dmr7700379ywe.196.1661503212667; Fri, 26
+ Aug 2022 01:40:12 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 01:40:00 -0700
 In-Reply-To: <20220826084001.3341215-1-badhri@google.com>
 Mime-Version: 1.0
 References: <20220826084001.3341215-1-badhri@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826084001.3341215-2-badhri@google.com>
-Subject: [PATCH v1 2/4] usb: typec: tcpci: Add callback for evaluating
- contaminant presence
+Message-ID: <20220826084001.3341215-3-badhri@google.com>
+Subject: [PATCH v1 3/4] usb: typec: tcpci_maxim: Export helper function for
+ register reads
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -71,67 +71,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This change adds callback to evaluate presence of contaminant in
-the TCPCI layer.
-
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/typec/tcpm/tcpci.c | 9 +++++++++
- include/linux/usb/tcpci.h      | 7 +++++++
- 2 files changed, 16 insertions(+)
+ drivers/usb/typec/tcpm/tcpci_maxim.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 50674ecf430d..53f6fad61781 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -403,6 +403,14 @@ static void tcpci_frs_sourcing_vbus(struct tcpc_dev *dev)
- 		tcpci->data->frs_sourcing_vbus(tcpci, tcpci->data);
+diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+index 4b6705f3d7b7..af3a7ecab23b 100644
+--- a/drivers/usb/typec/tcpm/tcpci_maxim.c
++++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+@@ -68,25 +68,29 @@ static struct max_tcpci_chip *tdata_to_max_tcpci(struct tcpci_data *tdata)
+ 	return container_of(tdata, struct max_tcpci_chip, data);
  }
  
-+static void tcpci_check_contaminant(struct tcpc_dev *dev, bool disconnect_while_debouncing)
-+{
-+	struct tcpci *tcpci = tcpc_to_tcpci(dev);
-+
-+	if (tcpci->data->check_contaminant)
-+		tcpci->data->check_contaminant(tcpci, tcpci->data, disconnect_while_debouncing);
-+}
-+
- static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
+-static int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
++inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
  {
- 	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-@@ -777,6 +785,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- 	tcpci->tcpc.enable_frs = tcpci_enable_frs;
- 	tcpci->tcpc.frs_sourcing_vbus = tcpci_frs_sourcing_vbus;
- 	tcpci->tcpc.set_partner_usb_comm_capable = tcpci_set_partner_usb_comm_capable;
-+	tcpci->tcpc.check_contaminant = tcpci_check_contaminant;
+ 	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u16));
+ }
++EXPORT_SYMBOL_GPL(max_tcpci_read16);
  
- 	if (tcpci->data->auto_discharge_disconnect) {
- 		tcpci->tcpc.enable_auto_vbus_discharge = tcpci_enable_auto_vbus_discharge;
-diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-index 17657451c762..250b34ccbf9c 100644
---- a/include/linux/usb/tcpci.h
-+++ b/include/linux/usb/tcpci.h
-@@ -188,6 +188,11 @@ struct tcpci;
-  *		Optional; The USB Communications Capable bit indicates if port
-  *		partner is capable of communication over the USB data lines
-  *		(e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
-+ * @check_contaminant:
-+ *		Optional;The callback is called when CC pins report open status
-+ *		at the end of the deboumce period or when the port is still
-+ *		toggling. Chip level drivers are expected to check for contaminant
-+ *		and call tcpm_clean_port when the port is clean.
-  */
- struct tcpci_data {
- 	struct regmap *regmap;
-@@ -204,6 +209,8 @@ struct tcpci_data {
- 	void (*frs_sourcing_vbus)(struct tcpci *tcpci, struct tcpci_data *data);
- 	void (*set_partner_usb_comm_capable)(struct tcpci *tcpci, struct tcpci_data *data,
- 					     bool capable);
-+	void (*check_contaminant)(struct tcpci *tcpci, struct tcpci_data *data,
-+				  bool disconnect_while_debouncing);
- };
+-static int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
++inline int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
+ {
+ 	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u16));
+ }
++EXPORT_SYMBOL_GPL(max_tcpci_write16);
  
- struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+-static int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
++inline int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
+ {
+ 	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u8));
+ }
++EXPORT_SYMBOL_GPL(max_tcpci_read8);
+ 
+-static int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
++inline int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
+ {
+ 	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8));
+ }
++EXPORT_SYMBOL_GPL(max_tcpci_write8);
+ 
+ static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
+ {
 -- 
 2.37.2.672.g94769d06f0-goog
 
