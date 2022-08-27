@@ -2,74 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D6A5A341B
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Aug 2022 05:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF125A36FA
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Aug 2022 12:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344717AbiH0DPt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Aug 2022 23:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S234021AbiH0KWZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Aug 2022 06:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiH0DPr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Aug 2022 23:15:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D972026547;
-        Fri, 26 Aug 2022 20:15:41 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27R31i2F003736;
-        Sat, 27 Aug 2022 03:15:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=DkYKDBl6yZONQWm6+yJ7qa93tm2iuOH4EPhdHyuyziQ=;
- b=oz9zRB0gzsbjru2k5R35iSm3JnE3TDX+W9/xOEcIWl06wH40kkv2CmgK7dQX8rGHCOu1
- UKSDZTTAGoFD/ptQI6sNyTrLbsoPGrQRY4fECLH9Az15tf+F//KCr6NVA5EVD1yOYkde
- x9zFEgfinKyaCiKEtag0Ih/AY6XQIiMrPna1YnKmsNg10FIN7F+WR64S6n/PxTA3n1Da
- HPjFdLJCcMqTUtCN72V5xsJztJPb6PNOyMOC3SlLg3uK0qU02hf37QodIPyto9Li2MlP
- Njyat6iiWWsUlZejB2ZlyeiHsCv6Fv2R4ELz87iO2GLC4rNDbW/F9GWTi7Yoh68hgTrG 5w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j78murkhw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 Aug 2022 03:15:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27R3FQVE027633
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 Aug 2022 03:15:26 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 26 Aug 2022 20:15:23 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Maxim Devaev <mdevaev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_jackp@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
-Date:   Sat, 27 Aug 2022 08:45:10 +0530
-Message-ID: <1661570110-19127-1-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S232966AbiH0KWY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Aug 2022 06:22:24 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D271E0C4
+        for <linux-usb@vger.kernel.org>; Sat, 27 Aug 2022 03:22:23 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id w11-20020a056e021c8b00b002ea48389206so2916181ill.3
+        for <linux-usb@vger.kernel.org>; Sat, 27 Aug 2022 03:22:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Gb7abvGIHoaB/5SBUEpY/fy+KAw1/SvawtzKQ+r85EU=;
+        b=H1IKdqR7EWAEifnOHuxCwNr0YydHmy3ImAoM5z8hT40NzqfI51H72Wdv6ok+jISU2o
+         zZOHz0gk9FYrcJ0j7YdLFPXpSR9NG5OzOzWBFb16tqdiXUSWBO1bANn1b+jue1ar9H03
+         Pquk6z8BoL15JpHiaJ3rz5467vak5QmzC7WVkj/ES3unyw1Zyp1k/Du8Uo0oUTGFELJS
+         U1FhuE9OVxjv2/xFFRam0R+kSJhanNxlQPC/HKw39CnKUzPBx5eQmFNagIULdv6+4MwW
+         7WFxWUGPnjPb3dh4eJ3jAKuGO2m/s9DABNmIAgq/hEw0mas0kh/19o/YMkkv0UwkKYH2
+         TTVw==
+X-Gm-Message-State: ACgBeo2zAeMbv8h0sCXhs8f+F8jdAKn3KE9c8FF2T84UHpU2BK5ZK1Oh
+        i4jT7C/sUgtdnC9PZFRNdmKcp7VmBYptii/ekY4YF3TJPGmt
+X-Google-Smtp-Source: AA6agR5hmEyV7Vp5romEdJsYJsNhDtxKXA9ReYvnliAArlj2k8k8quqeHF3rzrEoFixJvj+jEPhqJlF9ZvZVR57cw+F47QmVc+Co
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NEoMPlLzwx-h7FH-L-N8pIUAsxiX6RLc
-X-Proofpoint-ORIG-GUID: NEoMPlLzwx-h7FH-L-N8pIUAsxiX6RLc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_14,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=320 phishscore=0 spamscore=0 adultscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208270012
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:6a43:0:b0:348:e25e:21ad with SMTP id
+ m3-20020a026a43000000b00348e25e21admr5738465jaf.242.1661595742554; Sat, 27
+ Aug 2022 03:22:22 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 03:22:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fedb3e05e736678c@google.com>
+Subject: [syzbot] usb-testing boot error: BUG: unable to handle kernel paging
+ request in kernel_execve
+From:   syzbot <syzbot+9bf040803765a6ca02c4@syzkaller.appspotmail.com>
+To:     ebiederm@xmission.com, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,45 +56,96 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During cdrom emulation, the response to read_toc command must contain
-the cdrom address as the number of sectors (2048 byte sized blocks)
-represented either as an absolute value (when MSF bit is '0') or in
-terms of PMin/PSec/PFrame (when MSF bit is set to '1'). Incase of
-cdrom, the fsg_lun_open call sets the sector size to 2048 bytes.
+Hello,
 
-When MAC OS sends a read_toc request with MSF set to '1', the
-store_cdrom_address assumes that the address being provided is the
-LUN size represented in 512 byte sized blocks instead of 2048. It
-tries to modify the address further to convert it to 2048 byte sized
-blocks and store it in MSF format. This results in data transfer
-failures as the cdrom address being provided in the read_toc response
-is incorrect.
+syzbot found the following issue on:
 
-Fixes: 3f565a363cee ("usb: gadget: storage: adapt logic block size to bound block devices")
-Cc: stable@vger.kernel.org
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+HEAD commit:    4dce3b375179 usb/hcd: Fix dma_map_sg error check
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1000fa65080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=9bf040803765a6ca02c4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9bf040803765a6ca02c4@syzkaller.appspotmail.com
+
+BUG: unable to handle page fault for address: ffffdc0000000000
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 100026067 P4D 100026067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 258 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller-00028-g4dce3b375179 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+RSP: 0000:ffffc9000181fe08 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+R13: ffff000000000000 R14: dffffc0000000000 R15: 1ffff11021cd1ab0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ strnlen include/linux/fortify-string.h:119 [inline]
+ copy_string_kernel+0x27/0x460 fs/exec.c:616
+ copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+ kernel_execve+0x377/0x500 fs/exec.c:2001
+ call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+CR2: ffffdc0000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+RSP: 0000:ffffc9000181fe08 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+R13: ffff000000000000 R14: dffffc0000000000 R15: 1ffff11021cd1ab0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	74 3c                	je     0x3e
+   2:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
+   9:	fc ff df
+   c:	49 89 fc             	mov    %rdi,%r12
+   f:	48 89 f8             	mov    %rdi,%rax
+  12:	eb 09                	jmp    0x1d
+  14:	48 83 c0 01          	add    $0x1,%rax
+  18:	48 39 e8             	cmp    %rbp,%rax
+  1b:	74 1e                	je     0x3b
+  1d:	48 89 c2             	mov    %rax,%rdx
+  20:	48 89 c1             	mov    %rax,%rcx
+  23:	48 c1 ea 03          	shr    $0x3,%rdx
+  27:	83 e1 07             	and    $0x7,%ecx
+* 2a:	0f b6 14 1a          	movzbl (%rdx,%rbx,1),%edx <-- trapping instruction
+  2e:	38 ca                	cmp    %cl,%dl
+  30:	7f 04                	jg     0x36
+  32:	84 d2                	test   %dl,%dl
+  34:	75 11                	jne    0x47
+  36:	80 38 00             	cmpb   $0x0,(%rax)
+  39:	75 d9                	jne    0x14
+  3b:	4c 29 e0             	sub    %r12,%rax
+  3e:	48                   	rex.W
+  3f:	83                   	.byte 0x83
+
+
 ---
- drivers/usb/gadget/function/storage_common.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
-index 03035db..208c6a9 100644
---- a/drivers/usb/gadget/function/storage_common.c
-+++ b/drivers/usb/gadget/function/storage_common.c
-@@ -294,8 +294,10 @@ EXPORT_SYMBOL_GPL(fsg_lun_fsync_sub);
- void store_cdrom_address(u8 *dest, int msf, u32 addr)
- {
- 	if (msf) {
--		/* Convert to Minutes-Seconds-Frames */
--		addr >>= 2;		/* Convert to 2048-byte frames */
-+		/*
-+		 * Convert to Minutes-Seconds-Frames.
-+		 * Sector size is already set to 2048 bytes.
-+		 */
- 		addr += 2*75;		/* Lead-in occupies 2 seconds */
- 		dest[3] = addr % 75;	/* Frames */
- 		addr /= 75;
--- 
-2.7.4
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
