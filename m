@@ -2,82 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75D35A385B
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Aug 2022 17:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F7D5A399D
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Aug 2022 20:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiH0Pds (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Aug 2022 11:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S231340AbiH0Suy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Aug 2022 14:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbiH0Pdr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Aug 2022 11:33:47 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C2F57240;
-        Sat, 27 Aug 2022 08:33:44 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1661614400txkl1ykv
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 27 Aug 2022 23:33:14 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: 5mtg6EGDOv68Ts38tfpKEmESutiBsyd4V6NWxAv4Ot7c+82wyq8RfC8uV6GwF
-        fFwISSsMfD02XndSGck0PsJjsO3ARf0bFyWFkY+DUjaKR0QGl1A16J/6OI+9+08PPXrZQ+a
-        d7ysB5dnOuo71JfQYAozezPScViKlTusyl/t0oIlTWLS+ZwPYsbpUJzCyjJv0/Ia1icoI2l
-        tLJVk1n9cMiOjzamhNp+Rzeo3k6QgoTv+3fUwtVrjJt71tjw19KRFrcUXnyZbrVMl93O9oz
-        pEzMVAumJAj+hKn4PWUI3HQ4amOKoOO/pHqgccviis45faSs1hZ8Q/opoNBiLyW3ZJJjmUO
-        1cs3FWMmAqi9aYJf7KXoqBaWQH/4Y2jBhUUH0u9p5gAbGJkvus/ckZj8U0b4w==
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] usb: gadget: at91_udc: Fix comments typo
-Date:   Sat, 27 Aug 2022 11:33:13 -0400
-Message-Id: <20220827153313.5754-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229493AbiH0Sux (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 27 Aug 2022 14:50:53 -0400
+X-Greylist: delayed 148 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 27 Aug 2022 11:50:51 PDT
+Received: from smtprelay08.ispgateway.de (smtprelay08.ispgateway.de [134.119.228.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B4933A21;
+        Sat, 27 Aug 2022 11:50:50 -0700 (PDT)
+Received: from [92.206.161.29] (helo=note-book.lan)
+        by smtprelay08.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <git@apitzsch.eu>)
+        id 1oS0rW-0005oZ-Ov; Sat, 27 Aug 2022 20:48:54 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+To:     Aaron Ma <aaron.ma@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+Subject: [PATCH] r8152: Add MAC passthrough support for Lenovo Travel Hub
+Date:   Sat, 27 Aug 2022 20:47:29 +0200
+Message-Id: <20220827184729.15121-1-git@apitzsch.eu>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Delete the rebundant word "also" in comments.
+The Lenovo USB-C Travel Hub supports MAC passthrough.
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/usb/gadget/udc/at91_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/usb/r8152.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/at91_udc.c b/drivers/usb/gadget/udc/at91_udc.c
-index 728987280373..c80d0902bb30 100644
---- a/drivers/usb/gadget/udc/at91_udc.c
-+++ b/drivers/usb/gadget/udc/at91_udc.c
-@@ -994,7 +994,7 @@ static const struct usb_gadget_ops at91_udc_ops = {
- 	.udc_stop		= at91_stop,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index d142ac8fcf6e..6fe50797e3c5 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -770,6 +770,7 @@ enum rtl8152_flags {
+ 	RX_EPROTO,
+ };
  
- 	/*
--	 * VBUS-powered devices may also also want to support bigger
-+	 * VBUS-powered devices may also want to support bigger
- 	 * power budgets after an appropriate SET_CONFIGURATION.
- 	 */
- 	/* .vbus_power		= at91_vbus_power, */
++#define DEVICE_ID_LENOVO_USB_C_TRAVEL_HUB		0x721e
+ #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
+ #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+@@ -9581,6 +9582,7 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
+ 
+ 	if (vendor_id == VENDOR_ID_LENOVO) {
+ 		switch (product_id) {
++		case DEVICE_ID_LENOVO_USB_C_TRAVEL_HUB:
+ 		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
 -- 
-2.35.1
+2.37.2
 
