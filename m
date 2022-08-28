@@ -2,51 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E268D5A3D34
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Aug 2022 12:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D132A5A3D5C
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Aug 2022 13:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiH1Ko3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Aug 2022 06:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S229696AbiH1L2s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Aug 2022 07:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiH1Ko2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Aug 2022 06:44:28 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6012E12D0C
-        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 03:44:27 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id h5-20020a056e021d8500b002eb09a4f7e6so366282ila.14
-        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 03:44:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=mWpjuw2cEypIEwPl3uUFPCRS5JpzlHOLzs3TgwZBGJ8=;
-        b=eBJ9Aj+6ZR/GAzQYn+vEUsXhRC4PwKukUj3sIgQut9MUr4EWPgF2Ad/s87cE1kQvgC
-         OvLsJYdjcCfXhBUFpjt7DgAzQzNFyNDhMaDPhO1i2lt6BIMD2/TATNrYK0JP1TrjMgh+
-         N7gszuz8+AjJG4FzZB2vwxrWNkqd/613xbK711lEnK0xZ8JyqQJC74CWvfCF2rvaGlfF
-         eU68B9KtBvmONCMDOCjX2uiDZ59/GL9QBgoykvU3Lvo1jIBXQbMU4D+IQHsjBM7dHXSg
-         sOO9SqtT8i26gfaHQVpUS13mLBkakwhhBSwJPewLSMAPjoKiiWCnA1f7qFGT+H2Py8om
-         YYgg==
-X-Gm-Message-State: ACgBeo12KgmYfmau1KPiC3Sq230cLVt5giztCApuklJU5aKISJhhsWYD
-        cbEEiOPUBaa4E8JpeFBigtGbfrcPDxBmqJmpMWqXpEHBxBPm
-X-Google-Smtp-Source: AA6agR6nuK/jedOn6XCE2bkX14AoyBxrnUcfzrL/5xBxG4n5OSiyPFeC5poB3hAAjIY419N82aIif5hhFBf2i5SdioS+22IT0ulS
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a8b:b0:2ea:8154:1da0 with SMTP id
- k11-20020a056e021a8b00b002ea81541da0mr6378225ilv.47.1661683466752; Sun, 28
- Aug 2022 03:44:26 -0700 (PDT)
-Date:   Sun, 28 Aug 2022 03:44:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c3da4d05e74ad4fc@google.com>
-Subject: [syzbot] usb-testing boot error: general protection fault in driver_register
-From:   syzbot <syzbot+e7499dac4bd3955773ed@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
+        with ESMTP id S229591AbiH1L2q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Aug 2022 07:28:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F6933E20
+        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 04:28:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D803AB80A4D
+        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 11:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A6CD8C433C1
+        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 11:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661686122;
+        bh=lIDlmObMZ0X3fRWJaB16CW8+MAFPh00gPu9qslNIE8c=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Kx/G3gFfVVNdWcX8L4fKpG133Jv/idWb4HhE4e6S29wJGPY299vr/AkNvu/QMUWIg
+         13yjF47lpPd342HmQbq953z3itHIcHrscTD8TluOKUmEtMs2IfZu+YBNRfn3czNpZp
+         KEpGwbjZKaufDly+PkG4V4tdFggz7wCL8EaW0z2BFfeTjAHgFxnHgKHFXfwsbq4GJb
+         Q8VX9OAdFo9XENkS1vcR80vIc4jyVwtnFnHQIFedJx0+ViJWlAF7P4Wq3MBwq+Z8qe
+         5B8XFTwIQXrV9ZaOO1rTe0nfnxs3Xb0M4FVtvAcZfjBydasUr9lUGy4eN1O5hgGcMr
+         W9sFOwVC1K+wQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 938C1C433E7; Sun, 28 Aug 2022 11:28:42 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216422] BUG: kernel NULL pointer dereference, address:
+ 0000000000000000
+Date:   Sun, 28 Aug 2022 11:28:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216422-208809-R87IMgW2bj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216422-208809@https.bugzilla.kernel.org/>
+References: <bug-216422-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,150 +71,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216422
 
-syzbot found the following issue on:
+The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
+huis.info) changed:
 
-HEAD commit:    4dce3b375179 usb/hcd: Fix dma_map_sg error check
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=10344fd3080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=e7499dac4bd3955773ed
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |regressions@leemhuis.info,
+                   |                            |tiwai@suse.de
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e7499dac4bd3955773ed@syzkaller.appspotmail.com
+--- Comment #3 from The Linux kernel's regression tracker (Thorsten Leemhui=
+s) (regressions@leemhuis.info) ---
+Thx for the bisect. That commits is known to cause some trouble. See this
+thread:
+https://lore.kernel.org/all/87r11cmbx0.wl-tiwai@suse.de/
 
-PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
-software IO TLB: mapped [mem 0x00000000bbffd000-0x00000000bfffd000] (64MB)
-RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb6b90ffa2, max_idle_ns: 440795278193 ns
-clocksource: Switched to clocksource tsc
-Initialise system trusted keyrings
-workingset: timestamp_bits=40 max_order=21 bucket_order=0
-NFS: Registering the id_resolver key type
-Key type id_resolver registered
-Key type id_legacy registered
-9p: Installing v9fs 9p2000 file system support
-Key type asymmetric registered
-Asymmetric key parser 'x509' registered
-Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
-io scheduler mq-deadline registered
-io scheduler kyber registered
-usbcore: registered new interface driver udlfb
-usbcore: registered new interface driver smscufx
-input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-ACPI: button: Power Button [PWRF]
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-usbcore: registered new interface driver udl
-loop: module loaded
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-usbcore: registered new interface driver port100
-usbcore: registered new interface driver nfcmrvl
-scsi host0: Virtio SCSI HBA
-scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-sd 0:0:1:0: Attached scsi generic sg0 type 0
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
-CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-syzkaller-00028-g4dce3b375179 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x15e/0x3b0 mm/slub.c:3282
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 9d 01 00 00 48 85 c0 0f 84 94 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 a0 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0000:ffffc9000001fce8 EFLAGS: 00010246
-RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
-RDX: 0000000000000d39 RSI: 0000000000000dc0 RDI: 000000000003b470
-RBP: ffff888100042140 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000dc0
-R13: 0000000000000a20 R14: 0000000000000dc0 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
- driver_register+0x2db/0x3a0 drivers/base/driver.c:248
- virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4108
- do_one_initcall+0xfe/0x650 init/main.c:1296
- do_initcall_level init/main.c:1369 [inline]
- do_initcalls init/main.c:1385 [inline]
- do_basic_setup init/main.c:1404 [inline]
- kernel_init_freeable+0x6ac/0x735 init/main.c:1611
- kernel_init+0x1a/0x1d0 init/main.c:1500
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x15e/0x3b0 mm/slub.c:3282
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 9d 01 00 00 48 85 c0 0f 84 94 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 a0 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0000:ffffc9000001fce8 EFLAGS: 00010246
-RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
-RDX: 0000000000000d39 RSI: 0000000000000dc0 RDI: 000000000003b470
-RBP: ffff888100042140 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000dc0
-R13: 0000000000000a20 R14: 0000000000000dc0 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	8b 51 08             	mov    0x8(%rcx),%edx
-   3:	48 8b 01             	mov    (%rcx),%rax
-   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
-   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-  10:	0f 84 9d 01 00 00    	je     0x1b3
-  16:	48 85 c0             	test   %rax,%rax
-  19:	0f 84 94 01 00 00    	je     0x1b3
-  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
-  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
-  26:	40 f6 c7 0f          	test   $0xf,%dil
-* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
-  2e:	0f 85 a0 01 00 00    	jne    0x1d4
-  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3d:	0f 94 c0             	sete   %al
+A fix for that problem is heading towards mainline currently:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/=
+?h=3Dmaster&id=3D5f73aa2cf8bef4a39baa1591c3144ede4788826e
 
+Might be worth giving it a shot.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--=20
+You may reply to this email to add a comment.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
