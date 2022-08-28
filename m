@@ -2,68 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D132A5A3D5C
-	for <lists+linux-usb@lfdr.de>; Sun, 28 Aug 2022 13:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDE35A3EF8
+	for <lists+linux-usb@lfdr.de>; Sun, 28 Aug 2022 19:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiH1L2s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Aug 2022 07:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S229992AbiH1Rxf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Aug 2022 13:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiH1L2q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Aug 2022 07:28:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F6933E20
-        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 04:28:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D803AB80A4D
-        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 11:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A6CD8C433C1
-        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 11:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661686122;
-        bh=lIDlmObMZ0X3fRWJaB16CW8+MAFPh00gPu9qslNIE8c=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Kx/G3gFfVVNdWcX8L4fKpG133Jv/idWb4HhE4e6S29wJGPY299vr/AkNvu/QMUWIg
-         13yjF47lpPd342HmQbq953z3itHIcHrscTD8TluOKUmEtMs2IfZu+YBNRfn3czNpZp
-         KEpGwbjZKaufDly+PkG4V4tdFggz7wCL8EaW0z2BFfeTjAHgFxnHgKHFXfwsbq4GJb
-         Q8VX9OAdFo9XENkS1vcR80vIc4jyVwtnFnHQIFedJx0+ViJWlAF7P4Wq3MBwq+Z8qe
-         5B8XFTwIQXrV9ZaOO1rTe0nfnxs3Xb0M4FVtvAcZfjBydasUr9lUGy4eN1O5hgGcMr
-         W9sFOwVC1K+wQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 938C1C433E7; Sun, 28 Aug 2022 11:28:42 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216422] BUG: kernel NULL pointer dereference, address:
- 0000000000000000
-Date:   Sun, 28 Aug 2022 11:28:42 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: regressions@leemhuis.info
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-216422-208809-R87IMgW2bj@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216422-208809@https.bugzilla.kernel.org/>
-References: <bug-216422-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229701AbiH1Rxe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Aug 2022 13:53:34 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6C819019
+        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 10:53:33 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id m2-20020a056e021c2200b002eab6c7e79cso3825994ilh.21
+        for <linux-usb@vger.kernel.org>; Sun, 28 Aug 2022 10:53:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Q2ukYj4tpd0/O6neIyA0kBrMxUGYIUM/MZ6IE+AZxV8=;
+        b=soiRwu3+9bDcyk8PlNv4WzofxnyCyMIGqxWuyWfV9gwb0kTDABVPspnOYk0Jdgs7YJ
+         JrBTHN3MXveihkg60vzLXx9l7yTp9hTV6oScBb1pY+HnWd03DMyk7NgxKCweErslFNyx
+         M3Mwbm3ilxGjEfyIfOlJRwiIRhTnD1MdotqjGZHDjeZ4osJKB26LjL1NyJMrm+jRnoB7
+         VGRcuppP6hZSEZx2xPS2mq0Oy1T4Ob95uSlr7NZ/Ufe4A+0fb34s1JLIyONL/oh6fXKV
+         Kh0tEvq9xsUSAmTi8a/qgZdws73rJj11UsMISpVUwjwdIKe0gHrSWQ1YuBrDiIzyvnDQ
+         9+JQ==
+X-Gm-Message-State: ACgBeo373fUvugJTRKWNpuDNf8lc0bTZDrXY6bSwRx9d8BEK7rRoqTQ6
+        MKubHLeCBQaDErNGM69Qti4+P1kLkCHBvBOMVs82INmmrRvI
+X-Google-Smtp-Source: AA6agR4csTG9R3fHvITe+sjvNtJc/Gn20+GWGsCZDZah708Npsae65wQyyrkEZ/LUJfgVjkO/g61n4dSxltPMzPYE1SXfORcKdfm
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:184e:b0:2ea:1e2b:d29c with SMTP id
+ b14-20020a056e02184e00b002ea1e2bd29cmr8182798ilv.284.1661709212669; Sun, 28
+ Aug 2022 10:53:32 -0700 (PDT)
+Date:   Sun, 28 Aug 2022 10:53:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000575d9305e750d39c@google.com>
+Subject: [syzbot] usb-testing boot error: WARNING in corrupted
+From:   syzbot <syzbot+d39fd48d595c37317338@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +53,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216422
+Hello,
 
-The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
-huis.info) changed:
+syzbot found the following issue on:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |regressions@leemhuis.info,
-                   |                            |tiwai@suse.de
+HEAD commit:    4dce3b375179 usb/hcd: Fix dma_map_sg error check
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=10d30033080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=d39fd48d595c37317338
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
---- Comment #3 from The Linux kernel's regression tracker (Thorsten Leemhui=
-s) (regressions@leemhuis.info) ---
-Thx for the bisect. That commits is known to cause some trouble. See this
-thread:
-https://lore.kernel.org/all/87r11cmbx0.wl-tiwai@suse.de/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d39fd48d595c37317338@syzkaller.appspotmail.com
 
-A fix for that problem is heading towards mainline currently:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/=
-?h=3Dmaster&id=3D5f73aa2cf8bef4a39baa1591c3144ede4788826e
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 1 PID: 268 at kernel/locking/mutex.c:582 __mutex_lock_common kernel/locking/mutex.c:582 [inline]
+WARNING: CPU: 1 PID: 268 at kernel/locking/mutex.c:582 __mutex_lock+0xa01/0x1350 kernel/locking/mutex.c:747
+Modules linked in:
+CPU: 1 PID: 268 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller-00028-g4dce3b375179 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:582 [inline]
+RIP: 0010:__mutex_lock+0xa01/0x1350 kernel/locking/mutex.c:747
 
-Might be worth giving it a shot.
 
---=20
-You may reply to this email to add a comment.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
