@@ -2,99 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050CC5A4E48
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Aug 2022 15:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB935A4EA7
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Aug 2022 15:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiH2Ngz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Aug 2022 09:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S229919AbiH2N46 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Aug 2022 09:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiH2Ngp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Aug 2022 09:36:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2946557E;
-        Mon, 29 Aug 2022 06:36:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F4A260B9A;
-        Mon, 29 Aug 2022 13:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4BEC433C1;
-        Mon, 29 Aug 2022 13:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661780203;
-        bh=Y7V8r6sKAbYpz0MLRTWg2oGd3TE6f80EOgHwCR0HEnM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nURGRNq5QN8Oiqy5mUVr39TkEHoDgFPF9jYMYgHPBQAuMH+aVMe2lbtCbvUmhU5AX
-         ZU9xzlqhdyDOWLCWURlcNADzBi+NzvF6exfJaiOM/yBMntt4MOVRmljFQqtwkWLzJn
-         HchaxVr0n920bh+6nbbjZFLkxDtFGF3pcGWPa8Mvqrm0/opaKaBJFUWqWyIL/osyoj
-         6OnWUAwVCfRotSbap0elSzuKPjYW9/k0eXFNzJUDK7KiqfDQXrm0OaRAdvCPsb0Ng4
-         dbvxmc3Bz0aEptVqb0+0J+EvBWkPiYSVcjp3TAo5mJMUHzdaWgMTFtPjfsBLhERh7M
-         t2VWBVcBP0cKA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oSewc-0004gQ-Uh; Mon, 29 Aug 2022 15:36:51 +0200
-Date:   Mon, 29 Aug 2022 15:36:50 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add support for Cinterion
- MV32-WA/WB RmNet mode
-Message-ID: <YwzA8kOf6AFECDuQ@hovoldconsulting.com>
-References: <20220810033050.3117-1-slark_xiao@163.com>
+        with ESMTP id S229491AbiH2N44 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Aug 2022 09:56:56 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 266947D7A9
+        for <linux-usb@vger.kernel.org>; Mon, 29 Aug 2022 06:56:53 -0700 (PDT)
+Received: (qmail 122685 invoked by uid 1000); 29 Aug 2022 09:56:52 -0400
+Date:   Mon, 29 Aug 2022 09:56:52 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hu Xiaoying <huxiaoying2008@gmail.com>
+Cc:     usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] usb: Improves USB2.0 write performance
+Message-ID: <YwzFpJeoIPjOS8K7@rowland.harvard.edu>
+References: <CABd4UjYS4QDozv-RKp3_9XhQec=LO+z9U8+=Oa8=MEFyaeXYhA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220810033050.3117-1-slark_xiao@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CABd4UjYS4QDozv-RKp3_9XhQec=LO+z9U8+=Oa8=MEFyaeXYhA@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 11:30:50AM +0800, Slark Xiao wrote:
-> We added PIDs for MV32-WA/WB MBIM mode before, now we need to add
-> support for RmNet mode.
-
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  drivers/usb/serial/option.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+On Mon, Aug 29, 2022 at 04:58:57PM +0800, Hu Xiaoying wrote:
+> From: Hu Xiaoying <huxiaoying@gmail.com>
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index de59fa919540..63af8b48831a 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -438,6 +438,8 @@ static void option_instat_callback(struct urb *urb);
->  #define CINTERION_PRODUCT_MV31_2_RMNET		0x00b9
->  #define CINTERION_PRODUCT_MV32_WA		0x00f1
->  #define CINTERION_PRODUCT_MV32_WB		0x00f2
-> +#define CINTERION_PRODUCT_MV32_WA_RMNET		0x00f3
-> +#define CINTERION_PRODUCT_MV32_WB_RMNET		0x00f4
->  
->  /* Olivetti products */
->  #define OLIVETTI_VENDOR_ID			0x0b3c
-> @@ -1995,6 +1997,10 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(3)},
->  	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB, 0xff),
->  	  .driver_info = RSVD(3)},
-> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WA_RMNET, 0xff),
-> +	  .driver_info = RSVD(0)},
+> USB external storage device(0x0b05:1932), use gnome-disk-utility tools
+> to test usb write  < 30MB/s.
+> Then, igoned to load module of uas for this device.
+--------^^^^^^
 
-I moved this entry above CINTERION_PRODUCT_MV32_WB to the keep the
-entries sorted.
+"igoned" is not a word in English.
 
-> +	{ USB_DEVICE_INTERFACE_CLASS(CINTERION_VENDOR_ID, CINTERION_PRODUCT_MV32_WB_RMNET, 0xff),
-> +	  .driver_info = RSVD(0)},
->  	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD100),
->  	  .driver_info = RSVD(4) },
->  	{ USB_DEVICE(OLIVETTI_VENDOR_ID, OLIVETTI_PRODUCT_OLICARD120),
+> ===============================================
 
-Now applied, thanks.
+Why did you put this line here?
 
-Johan
+> Write speed: Improves form 27MB/s to 40MB/s+
+------------------------^^^^
+---------------------------------------^^^^^^^
+"from", not "form".
+"> 40MB/s", not "40MB/s+".
+
+> 
+> Signed-off-by: Hu Xiaoying <huxiaoying@gmail.com>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h
+> b/drivers/usb/storage/unusual_uas.h
+> index 4051c8cd0cd8..abaf4ea8138b 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -157,3 +157,10 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
+>                 "External HDD",
+>                 USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>                 US_FL_ALWAYS_SYNC),
+> +
+> +/* Reported-by: Tom Hu <huxiaoying@gmail.com> */
+> +UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
+> +               "ASUS",
+> +               "External HDD",
+> +               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +               US_FL_IGNORE_UAS),
+
+Entries should be sorted by vendor ID and product ID.  This entry is 
+added in the wrong place (0x0b05 comes before 0x4971, not after).
+
+Alan Stern
