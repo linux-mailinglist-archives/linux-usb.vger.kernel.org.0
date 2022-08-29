@@ -2,146 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DB55A467E
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Aug 2022 11:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F985A4598
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Aug 2022 11:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiH2Jva (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Aug 2022 05:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S229751AbiH2JAH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Aug 2022 05:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiH2Jv2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Aug 2022 05:51:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5805E544;
-        Mon, 29 Aug 2022 02:51:25 -0700 (PDT)
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MAfQk-1oZECh1Xdw-00B0If; Mon, 29 Aug 2022 11:51:23 +0200
-Received: by mail-wr1-f53.google.com with SMTP id az27so9456056wrb.6;
-        Mon, 29 Aug 2022 02:51:22 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1cdW7Ud/KXAcDgKJg54KDGFmdQy7RgJV68olTI2Ez5P56n7hnN
-        HnEYMrHAmR0ki9RZgu7dvem1mbIma6k4U72r6g4=
-X-Google-Smtp-Source: AA6agR4dO9Qog99EOhFMYD2/TUvDUFPeLAFKpCKJySAtY2CWxJsmH8fvbDozC2seipJY5siIbg1N/2rhc6q5GDAswIQ=
-X-Received: by 2002:a17:907:d0b:b0:741:7ca6:a2b with SMTP id
- gn11-20020a1709070d0b00b007417ca60a2bmr3580848ejc.654.1661763177783; Mon, 29
- Aug 2022 01:52:57 -0700 (PDT)
+        with ESMTP id S229476AbiH2JAG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Aug 2022 05:00:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D7065F7
+        for <linux-usb@vger.kernel.org>; Mon, 29 Aug 2022 02:00:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B35FB80D53
+        for <linux-usb@vger.kernel.org>; Mon, 29 Aug 2022 09:00:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B5AC433D6;
+        Mon, 29 Aug 2022 09:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661763602;
+        bh=hJ7pQKuZUP+0llxe7b+ppp+OrLVGlE+Ul7hxkT4zd/A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vfH3d0wU9O4v8UcA3rLE8QK+NMw57ht1DydAOmRd2r2/RIWt4hEBAYJvZ8SYjC/SG
+         X6Y45Py2NYUKjFRh2JSTXO1bbtXWO8xf8tZa7gXDn8CSFQ1VsLbOnmiuByX5f3+IS8
+         laCvVnCV6yC73nm1jfSoLO5v03uSUdgDrFpXUPpA=
+Date:   Mon, 29 Aug 2022 10:59:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Hu Xiaoying <huxiaoying2008@gmail.com>
+Cc:     usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu
+Subject: Re: [PATCH v2] usb: Improves USB2.0 write performance
+Message-ID: <YwyADyS9kD2qyoKJ@kroah.com>
+References: <CABd4UjYSaZv6H9Q-UbM8QQZk8HcBPrJ7=DfDQGxJNVNot68Kfg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220818135522.3143514-1-arnd@kernel.org>
-In-Reply-To: <20220818135522.3143514-1-arnd@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 29 Aug 2022 10:52:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1tsby7+xfKTQaaBQZ4t-=uWG5Dtbcn_jPEsSMG_YVHgA@mail.gmail.com>
-Message-ID: <CAK8P3a1tsby7+xfKTQaaBQZ4t-=uWG5Dtbcn_jPEsSMG_YVHgA@mail.gmail.com>
-Subject: Re: [PATCH 00/11] ARM: defconfig cleanup
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        Peter Chen <peter.chen@nxp.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Felipe Balbi <balbi@ti.com>, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:gf85k6zCm5cJECsQs0SxRf847/xq4I8ODO7U+Gj6k40fdTozveb
- ELMjAat5zmIE6s9q9Wptq93QYI1b5l8o38ZGAYjV5JZ8cmpULenjiyPXQVvHEQgV6mF130v
- VSJnO02CRXim3eSApkQCq8P2pGrhvU8o05XEwg/HVMbEnmhNu0h4E2mqxfz6cMReAEPRZDR
- 1SkGK7PVFUuDfdBuTn0fw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:voOQ47dxVno=:PWIiRwLvZoKwxn1je+6eqX
- zzuj+QAdkWrtqZZmv9hITubgCl/xx1huPOm3X7bQaL+aRwz2a81CEwnGHzlNET9Myc6rrI3Ts
- ldk1ewreYruxMeNpTwKoyI7cyFO18t3PGqs1UdV78+nqTjUJj6MtLjvCx7PC7k4rrq/Foet2N
- gCc2r8833dfAMINc1nLyMxrz+MgyQORVUbyjFzAz36PZwf0paK/QzZVd0Q+14C4uA6NoUe5Hy
- Dl9crudMA9Sst2ETlhefH4ncE5R4xgDUKteSJ85R6nkovqlQN84letbl16oLxHVVMEX3LofCP
- 09ElDRovbRApc0nT6hWJ9xTOv3ka5QRkoOceCvGICFYoiJv1yASbB+u1QI6pb6T3ysiUiQcdV
- uTpvI1lv0X6scUo9xyC1rRJKZbr5BKOGPGwUbswxrMAWJ3K4+XFNqPDAugeYsfZ/2r4ERerHz
- D8IqpwPdDAkZh8A3WNcicCZ6aLVVejh3D5lSEQlkrbUnApAY4KrGPTXkI+Q8zxNZ7ctGjqccn
- 6DLvIQvHii2UbO0zKXSOiznK3zXssly8jRGS42PyRUMASCd34sm+QWjAFK3CMzmfwlbY96aeZ
- 2Vnp1vM/GJpcy7CSG3GAJghov7BJzknwv9993qrShvb51nUJ2pGNzPCC6hTgyxAuCPs4Io4Yy
- ITZAMmcq9z/G25OZUO9j4i0bft9caKDl3DuFY+oYJBk71Dnmu5SSyRW6UlXc/yyj1LjIgARUj
- /nyE4DrbW2xx+sFdPdxUNkw4JIpmOde2ffmaJ50Kxsas/FmbIHpE4SuScXRLZf0XCLqnuisxA
- BifvE3qsJaviSfrX3teBxsIFa6YNvCESM6NJSTAQzPj2lenERzYcQF1xyolfz4ZlGeSVDYzEz
- Dc/hU1HNMA9yHJ5fWXQQ==
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABd4UjYSaZv6H9Q-UbM8QQZk8HcBPrJ7=DfDQGxJNVNot68Kfg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 3:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> I have continued the cleanup of the multi_*_defconfig files, and
-> reordered the other files according to the 'make savedefconfig'
-> output as before.
->
-> I would like to queue these up for 6.1, though the last two
-> should probably be considered bugfixes and merged for 6.0.
->
-> Since a third of the defconfig files are for machines that
-> are now marked as unused, I skipped those files. There are still
-> a few things that get removed by 'make savedefconfig' as they
-> now get selected by some driver:
->
-> -CONFIG_SERIAL_BCM63XX=y
-> -CONFIG_SND_AUDIO_GRAPH_CARD=m
-> -CONFIG_NEW_LEDS=y
-> -CONFIG_LEDS_TRIGGERS=y
-> -CONFIG_TEGRA20_APB_DMA=y
->
-> I think for those we should follow up with patches to remove the
-> 'select' statements.
+On Mon, Aug 29, 2022 at 04:52:36PM +0800, Hu Xiaoying wrote:
+> >From ad9e714341bbc944d4b8868229f15622592f37d5 Mon Sep 17 00:00:00 2001
+> From: Hu Xiaoying <huxiaoying@gmail.com>
+> Date: Wed, 22 Jun 2022 16:35:59 +0800
+> Subject: [PATCH] usb: Improves USB2.0 write performance
+> 
+> USB external storage device(0x0b05:1932), use gnome-disk-utility tools
+> to test usb write  < 30MB/s.
+> Then, igoned to load module of uas for this device.
+> ===============================================
+> Write speed: Improves form 27MB/s to 40MB/s+
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hu Xiaoying <huxiaoying@gmail.com>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h
+> b/drivers/usb/storage/unusual_uas.h
+> index 4051c8cd0cd8..abaf4ea8138b 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -157,3 +157,10 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
+>                 "External HDD",
+>                 USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>                 US_FL_ALWAYS_SYNC),
+> +
+> +/* Reported-by: Tom Hu <huxiaoying@gmail.com> */
+> +UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
+> +               "ASUS",
+> +               "External HDD",
+> +               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +               US_FL_IGNORE_UAS),
+> -- 
+> 2.25.1
 
-I dropped the last patch that Greg has already picked up, and merged the
-rest into the arm/defconfig branch of the soc tree.
+Hi,
 
-Thanks for the Acks.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-        Arnd
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch was attached, please place it inline so that it can be
+  applied directly from the email message itself.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file, Documentation/SubmittingPatches
+  for how to do this correctly.
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
