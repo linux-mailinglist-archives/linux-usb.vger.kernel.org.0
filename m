@@ -2,124 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C42D5A6B75
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 19:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C5C5A6BDD
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 20:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiH3R5w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 13:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S231359AbiH3SOL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 14:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiH3R53 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 13:57:29 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3A75FAC1;
-        Tue, 30 Aug 2022 10:55:28 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id f12so11681440plb.11;
-        Tue, 30 Aug 2022 10:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=vb9Txx5Uh/L+QuxtJIth7TcErE5X34YjzO6bgHHP7Tg=;
-        b=IQ6xAu3/nXAWwamZXWcaFQ5otw2ovfEAK4lLyx+PRD57VdFwOM2jBY1BuCMVAwn7lU
-         EMmos/MovZ5fMPZyk+r1pR/0arZL/v91ZhSEme+8nZJH3/9xvEcJ9VVIV/Z6rCg9lojY
-         1pY2xe5wDnLcpkNKAS2KtrERRAbQ+b2Gqmi9eWgpuhG3y6QvZx/hrAehjDO+iBbK+IdN
-         VdQBIH1EzxOyWEDAH8u1gsdL/5orqIEt3Z+bSBctIyBmk9zSoD1rnPYmb5BYrXvriKMQ
-         apEaeUhBjtGKUjm6mQHqliR5T4WHYJTazmT6OPT7LpZVbtCX7h7fnMHj6TZxyyHVBbve
-         5qNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=vb9Txx5Uh/L+QuxtJIth7TcErE5X34YjzO6bgHHP7Tg=;
-        b=o+KW40llG7XZfBxk8qoH24akYRReGECP4UuERfYkG3gXeOJe7ElMY113tgd0tgtz5r
-         hhe1FNirholxOF52jJ5mZerbhX9nyazYp0mo7glAQqofUeXRp2/R0sFwuPsOPPK230ic
-         wFQrXx5Wbz9Fzmfzp/oDlk23Namuz5qjTL2m6E5CVNcOdGymHvlPpPVkT884sJIz9ESD
-         obAu8i1J5wcF7+GtjkQFwdSWYpmVlg2NfWNlKj00TasdnZzf0gX5zI+/fIjNItPxtoZ5
-         coKE7eFm023sy2rFz1OoNYZNhfRMUe115G9fGRbizAdZyuS0XjyIcKNDPJppIH6dNlnB
-         LU1Q==
-X-Gm-Message-State: ACgBeo0MgTQzN5ajFcXtztLfi9CvWnLuH9yrlzDAB+s2ULm/y2UKrFtr
-        4syP2Ckjot+s4s1L1FKjd1Q=
-X-Google-Smtp-Source: AA6agR5cWVfYgwip1zhIhpvSKqyEy5SVodf9cOoo6ad7WG1uiD/shmfC+3NK2w/cufXKcxObqaek3g==
-X-Received: by 2002:a17:902:a60c:b0:171:407d:16f8 with SMTP id u12-20020a170902a60c00b00171407d16f8mr21914557plq.58.1661882127096;
-        Tue, 30 Aug 2022 10:55:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 124-20020a620482000000b0052deda6e3d2sm9874679pfe.98.2022.08.30.10.55.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 10:55:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 30 Aug 2022 10:55:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v1 4/4] usb: typec: maxim_contaminant: Implement
- check_contaminant callback
-Message-ID: <20220830175523.GA239841@roeck-us.net>
-References: <20220826084001.3341215-1-badhri@google.com>
- <20220826084001.3341215-4-badhri@google.com>
+        with ESMTP id S230451AbiH3SOL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 14:14:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F8798D12;
+        Tue, 30 Aug 2022 11:14:10 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UFx86p001451;
+        Tue, 30 Aug 2022 18:14:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Ptp6lUe9nsKYl0kW5xnrFUHhLtp7FtLC9xKOZrhuvpg=;
+ b=GbbomZcHwQueWS41sAp8akENeBoVE7TGinTCF3mOUjiwxoEeW33jsuDW0Dcf97IYO6/2
+ PD5dVWuwPWeL0WB4NqsXKV63QIdEDYkbxXrs/07dOCwtMStOtBzHMYNpW7PkNAmIJ5YG
+ p4HkHQU2GW+Z/AhOSK8egGJAv3cRTAGVwjf/fS5MrtXZCvAMrnejRshAIi/wD380AB3C
+ w5Low/9p2WkicmGDXNsPqYQoBe/opYfl8C1hUouAUOIYhPSVCOecaeSNLBDIDHQVv8Lr
+ hDKVHv4TCEeLt65up4gxN7T/h4sTK/EmG/W4Ke8p2oCjYOzkRwdy/3Esz+4BU4ubX9SA Kw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j9n860jn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 18:14:06 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27UIE55g006699
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 18:14:05 GMT
+Received: from [10.110.18.131] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 30 Aug
+ 2022 11:14:05 -0700
+Message-ID: <91415092-e622-a636-3bc4-d81fb56b2f66@quicinc.com>
+Date:   Tue, 30 Aug 2022 11:13:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826084001.3341215-4-badhri@google.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 5/9] usb: dwc3: Avoid unmapping USB requests if endxfer
+ is not complete
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <balbi@kernel.org>, <Thinh.Nguyen@synopsys.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>
+References: <20220817182359.13550-1-quic_wcheng@quicinc.com>
+ <20220817182359.13550-6-quic_wcheng@quicinc.com> <Yw4Z191jbRJc9EuR@kroah.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <Yw4Z191jbRJc9EuR@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: yKkWE4tlyRYBkQxQa85TT1mCzwMKUUn6
+X-Proofpoint-ORIG-GUID: yKkWE4tlyRYBkQxQa85TT1mCzwMKUUn6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-30_10,2022-08-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 adultscore=0 mlxlogscore=799 spamscore=0
+ clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208300083
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 01:40:01AM -0700, Badhri Jagan Sridharan wrote:
-> Maxim TCPC has additional ADCs and low current(1ua) current source
-> to measure the impedance of CC and SBU pins. When tcpm invokes
-> the check_contaminant callback, Maxim TCPC measures the impedance
-> of the CC & SBU pins and when the impedance measured is less than
-> 1MOhm, it is assumed that USB-C port is contaminated. CC comparators
-> are also checked to differentiate between presence of sink and
-> contaminant. Once USB-C is deemed to be contaminated, MAXIM TCPC
-> has additional hardware to disable normal DRP toggling cycle and
-> enable 1ua on CC pins once every 2.4secs/4.8secs. Maxim TCPC
-> interrupts AP once the impedance on the CC pin is above the
-> 1MOhm threshold. The Maxim tcpc driver then signals TCPM_PORT_CLEAN
-> to restart toggling.
+Hi Greg,
+
+On 8/30/2022 7:08 AM, Greg KH wrote:
+> On Wed, Aug 17, 2022 at 11:23:55AM -0700, Wesley Cheng wrote:
+>> If DWC3_EP_DELAYED_STOP is set during stop active transfers, then do not
+>> continue attempting to unmap request buffers during dwc3_remove_requests().
+>> This can lead to SMMU faults, as the controller has not stopped the
+>> processing of the TRB.  Defer this sequence to the EP0 out start, which
+>> ensures that there are no pending SETUP transactions before issuing the
+>> endxfer.
+>>
+>> Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.h   | 3 +++
+>>   drivers/usb/dwc3/ep0.c    | 5 ++++-
+>>   drivers/usb/dwc3/gadget.c | 6 +++++-
+>>   3 files changed, 12 insertions(+), 2 deletions(-)
+>>
 > 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/Makefile            |   2 +-
->  drivers/usb/typec/tcpm/maxim_contaminant.c | 338 +++++++++++++++++++++
->  drivers/usb/typec/tcpm/tcpci_maxim.c       |  34 ++-
->  drivers/usb/typec/tcpm/tcpci_maxim.h       |  68 +++++
->  4 files changed, 429 insertions(+), 13 deletions(-)
->  create mode 100644 drivers/usb/typec/tcpm/maxim_contaminant.c
->  create mode 100644 drivers/usb/typec/tcpm/tcpci_maxim.h
+> This commit does not apply to my usb-testing branch.  I've taken the
+> first 4, please rebase and resend the rest.
 > 
-> diff --git a/drivers/usb/typec/tcpm/Makefile b/drivers/usb/typec/tcpm/Makefile
-> index 906d9dced8e7..81e4e9421fa0 100644
-> --- a/drivers/usb/typec/tcpm/Makefile
-> +++ b/drivers/usb/typec/tcpm/Makefile
-> @@ -7,4 +7,4 @@ obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
->  obj-$(CONFIG_TYPEC_RT1711H)		+= tcpci_rt1711h.o
->  obj-$(CONFIG_TYPEC_MT6360)		+= tcpci_mt6360.o
->  obj-$(CONFIG_TYPEC_TCPCI_MT6370)	+= tcpci_mt6370.o
-> -obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o
-> +obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o maxim_contaminant.o
 
-This creates two separate modules, which doesn't really add any value.
-I would suggest to adjust the file names and create a single module
-named tcpci_maxim instead. Renaming tcpci_maxim.c to, say,
-tcpci_maxim_core.c and
+Sure resubmit it later today.  Sorry about that and thanks for the heads up.
 
-obj-$(CONFIG_TYPEC_TCPCI_MAXIM) += tcpci_maxim.o
-tcpci_maxim-y := tcpci_maxim_core.o maxim_contaminant.o
-
-should do. This would also avoid the need for exporting symbols
-from tcpci_maxim.c.
-
-Thanks,
-Guenter
+Thanks
+Wesley Cheng
