@@ -2,77 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261985A65EB
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 16:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB45E5A664E
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 16:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiH3OI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 10:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S229744AbiH3Oa1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 10:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiH3OI2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 10:08:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79558F8244;
-        Tue, 30 Aug 2022 07:08:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CE1861509;
-        Tue, 30 Aug 2022 14:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7504C433C1;
-        Tue, 30 Aug 2022 14:08:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661868506;
-        bh=ux4h3Llu3Xn8hcq4G08hx6TYSq1WAZloO+EsuQis5QA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kSCQkPJGPWzIGcKEolE5zeH0J3N2NX+yq4V5Bfos9C3jmc9u4E+4vNZjs9Kz5ysCY
-         CsRFA37iNEE9D3UC3h6jDf4yz7UKom9t1fNa/DfNxHQuz16Wcn8+H/cKH24eNg2Bsa
-         g1SIRJeuG7368DsmalEt047R9xDQX2kzKHukhCMY=
-Date:   Tue, 30 Aug 2022 16:08:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     balbi@kernel.org, Thinh.Nguyen@synopsys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com
-Subject: Re: [PATCH v4 5/9] usb: dwc3: Avoid unmapping USB requests if
- endxfer is not complete
-Message-ID: <Yw4Z191jbRJc9EuR@kroah.com>
-References: <20220817182359.13550-1-quic_wcheng@quicinc.com>
- <20220817182359.13550-6-quic_wcheng@quicinc.com>
+        with ESMTP id S229557AbiH3Oa1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 10:30:27 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7E4D45F227
+        for <linux-usb@vger.kernel.org>; Tue, 30 Aug 2022 07:30:24 -0700 (PDT)
+Received: (qmail 158852 invoked by uid 1000); 30 Aug 2022 10:30:23 -0400
+Date:   Tue, 30 Aug 2022 10:30:23 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Subject: Re: [PATCH v1] usb: ohci-platform: fix usb disconnect issue after s4
+Message-ID: <Yw4e/9GqGSrn89wo@rowland.harvard.edu>
+References: <20220830111449.2300-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817182359.13550-6-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220830111449.2300-1-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:23:55AM -0700, Wesley Cheng wrote:
-> If DWC3_EP_DELAYED_STOP is set during stop active transfers, then do not
-> continue attempting to unmap request buffers during dwc3_remove_requests().
-> This can lead to SMMU faults, as the controller has not stopped the
-> processing of the TRB.  Defer this sequence to the EP0 out start, which
-> ensures that there are no pending SETUP transactions before issuing the
-> endxfer.
+On Tue, Aug 30, 2022 at 07:14:49PM +0800, Yinbo Zhu wrote:
+> Avoid retaining bogus hardware states during resume-from-hibernation.
+> Previously we had reset the hardware as part of preparing to reinstate
+> the snapshot image. But we can do better now with the new PM framework,
+> since we know exactly which resume operations are from hibernation
 > 
-> Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> According to the commit "cd1965db0" and "6ec4beb5c" that the flag
+> "hibernated" is for resume-from-hibernation and it should be true when
+> usb resume from disk.
+> 
+> When this flag "hibernated" is set, the drivers will reset the hardware
+> to get rid of any existing state and make sure resume from hibernation
+> re-enumerates everything for ohci.
+
+What is the "usb disconnect issue" you mention in the Subject line that 
+this patch is supposed to fix?
+
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->  drivers/usb/dwc3/core.h   | 3 +++
->  drivers/usb/dwc3/ep0.c    | 5 ++++-
->  drivers/usb/dwc3/gadget.c | 6 +++++-
->  3 files changed, 12 insertions(+), 2 deletions(-)
+>  drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
+>  1 file changed, 24 insertions(+), 4 deletions(-)
 > 
+> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> index 0adae6265127..e733da2cd3b7 100644
+> --- a/drivers/usb/host/ohci-platform.c
+> +++ b/drivers/usb/host/ohci-platform.c
+> @@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int ohci_platform_resume(struct device *dev)
+> +static int ohci_platform_renew(struct device *dev, bool hibernated)
 
-This commit does not apply to my usb-testing branch.  I've taken the
-first 4, please rebase and resend the rest.
+How about calling this routine ohci_platform_resume_maybe_hibernated() 
+instead?
 
-thanks,
+Alan Stern
 
-greg k-h
+>  {
+>  	struct usb_hcd *hcd = dev_get_drvdata(dev);
+>  	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
+> @@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
+>  			return err;
+>  	}
+>  
+> -	ohci_resume(hcd, false);
+> +	ohci_resume(hcd, hibernated);
+>  
+>  	pm_runtime_disable(dev);
+>  	pm_runtime_set_active(dev);
+> @@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> +
+> +static int ohci_platform_resume(struct device *dev)
+> +{
+> +	return ohci_platform_renew(dev, false);
+> +}
+> +
+> +static int ohci_platform_restore(struct device *dev)
+> +{
+> +	return ohci_platform_renew(dev, true);
+> +}
+>  #endif /* CONFIG_PM_SLEEP */
+>  
+>  static const struct of_device_id ohci_platform_ids[] = {
+> @@ -325,8 +335,16 @@ static const struct platform_device_id ohci_platform_table[] = {
+>  };
+>  MODULE_DEVICE_TABLE(platform, ohci_platform_table);
+>  
+> -static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
+> -	ohci_platform_resume);
+> +#ifdef CONFIG_PM_SLEEP
+> +static const struct dev_pm_ops ohci_platform_pm_ops = {
+> +	.suspend = ohci_platform_suspend,
+> +	.resume = ohci_platform_resume,
+> +	.freeze = ohci_platform_suspend,
+> +	.thaw = ohci_platform_resume,
+> +	.poweroff = ohci_platform_suspend,
+> +	.restore = ohci_platform_restore,
+> +};
+> +#endif
+>  
+>  static struct platform_driver ohci_platform_driver = {
+>  	.id_table	= ohci_platform_table,
+> @@ -335,7 +353,9 @@ static struct platform_driver ohci_platform_driver = {
+>  	.shutdown	= usb_hcd_platform_shutdown,
+>  	.driver		= {
+>  		.name	= "ohci-platform",
+> +#ifdef CONFIG_PM_SLEEP
+>  		.pm	= &ohci_platform_pm_ops,
+> +#endif
+>  		.of_match_table = ohci_platform_ids,
+>  		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>  	}
+> -- 
+> 2.31.1
+> 
