@@ -2,103 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A530A5A6753
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 17:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E566E5A677C
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 17:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiH3PZL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 11:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        id S230472AbiH3PdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 11:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiH3PZD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 11:25:03 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87368AE55;
-        Tue, 30 Aug 2022 08:24:56 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1D3E25C0145;
-        Tue, 30 Aug 2022 11:24:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 30 Aug 2022 11:24:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1661873095; x=1661959495; bh=OmTYbgq3ym
-        zCgFNPdz53oo2sqm/UojddZkcXYiaY6/Y=; b=DK/jbJuBUTMb2rnbkv3gjAsJ7J
-        HjQO4m97NmbnoU2zN7G9Jcxom9ZgWKM+7UJdMMu1Iw6uQEg10L6ANuhZF2k4ePgs
-        sOApNWqNga7snlviFv0u+fyxvTPuXm1idcp95F+cYMJbKD1mdCdk3jJVbt+yJvjv
-        pZty9VL9bhBBv+ERPI/KyJaUX19iPWIDDGHYFIg/wXpgppHOwp4tN0juWqVA+Wbz
-        KS4ESEt3Zvphn0ZML4mb4EcBVlxdnApsMi9YnTtvjj5j2150R/XhMvbKgk7lPBMv
-        P8GfMAN7+xNjNtxcxgcJt5AIS0oD8+Tvu5/IF4auSLp3vB9PKJA4PLgCZ0Kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661873095; x=1661959495; bh=OmTYbgq3ymzCgFNPdz53oo2sqm/U
-        ojddZkcXYiaY6/Y=; b=PwtgwiJZ3o8XBj6Lugz0r9hm0EgOY5LiojD7i1Gu+MuS
-        H2BYUL4UhMu4DEzBfmMicAfWteDidaDwn4VELaSx/BMlSJ1cGGXxhDWKTCdB/rmM
-        Aw+jZYoQz1U50pc16E6rj0MtLkIMy7Bb/ao/4j2RvfgTfXqKnCj/Q+aIVBaLij+c
-        soQEyxbs2Wodp22L2fN2a/QGudSNfLrcYdukCddq5D1wFL0+f0ttwTMyv9/kIAv7
-        CT81bGmNJeupv4FSt/Igbhpa2T0wFtq5v92+XTrd/jiAmOmQpF51EazQMW6rJVzX
-        YmWt2VreniHBpFjfxPd+bfsazty699sI33aRTqR/kw==
-X-ME-Sender: <xms:xSsOY9DMnqYirKCyFPHiP1Xn7lqcnfWqOpfGXlR-A8_zPqvGBxN6kw>
-    <xme:xSsOY7gwVhXPUl5Xqv_N9HEDQjM-ca42ERNmS4unvIT4b9cJxnVXqbwFDoOHW7R1L
-    a9Tchm06Aw8gQ>
-X-ME-Received: <xmr:xSsOY4lmePaeEyhJkUs9yt5NFYKoWglTyUErRIGgJ6RHLaQNRWANuXdazW-3DGFirkzH7Ti1fqx4EDfBN6jyfkEU_ghwi78K>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekfedgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
-    qeenucggtffrrghtthgvrhhnpeehgedvvedvleejuefgtdduudfhkeeltdeihfevjeekje
-    euhfdtueefhffgheekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:xSsOY3wqkrZTt3PynE_fWlKb6QdUo8LzjROFEFhJVU7sNZphETUufw>
-    <xmx:xSsOYyRD-_yqOU-fL3wT7J5s802ay2FWRELA1Un8_QmnRqjyn0LQ1A>
-    <xmx:xSsOY6aKZBN2qc__t4NGnyuDpqFvNW9Gj8TjvsgcE01Z_omwMtzPhA>
-    <xmx:xysOY7RmvrOEnA6nIg7eDS5aUYhy_dXpHyIkkFw6-JQk9IBZa9UZrg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 Aug 2022 11:24:53 -0400 (EDT)
-Date:   Tue, 30 Aug 2022 17:24:49 +0200
-From:   Greg KH <greg@kroah.com>
-To:     cgel.zte@gmail.com
-Cc:     stern@rowland.harvard.edu, skhan@linuxfoundation.org,
-        richard.leitner@skidata.com, tasos@tasossah.com,
-        wsa+renesas@sang-engineering.com, ingo.rohloff@lauterbach.com,
-        cui.jinpeng2@zte.com.cn, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] usb: core: remove redundant variables ret
-Message-ID: <Yw4rweh3lKeWkZJ5@kroah.com>
-References: <20220830143318.299640-1-cui.jinpeng2@zte.com.cn>
+        with ESMTP id S230461AbiH3Pc7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 11:32:59 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCE2155D57;
+        Tue, 30 Aug 2022 08:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661873577; x=1693409577;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ELYRSkSj3v+VRtzRmWlCHo5Qj7Ik37akWpVFF+yCXiI=;
+  b=bCiYvWyhgt9dmXTEHgDWcLdfDswe2LBuAowH46TAV57RxHl9BzkDjoxJ
+   0WojVAbP6UCe1p6byFiIf5/UUNVNc1YpYxcfjGDvb+wdaCIvqXwfT8ivv
+   w67MzZRLXsnqYCe9DOb+R4+a1Ciq/jZ/V6pXwhdVB1x1JG1d/9MxNHO/o
+   5+Qtp8rF7sq2WN43RFbl0/wmI4NsVsM6wa8us5hcg0uwzCa+aSPR/Qvg5
+   Mlis6vUeIWO1eCHd2FvSAfEzIe9d56w8Y55CJqhx3RR8c6xJ7/C0WxvEu
+   j+7+arw3HBRxat9WA11rlo913WBDVhH2hR+f2KMtPUQDa9zUHqMqur33L
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="295990324"
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="295990324"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 08:32:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="715339370"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Aug 2022 08:32:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 1CF1FAD; Tue, 30 Aug 2022 18:32:50 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org
+Subject: [PATCH 0/5] thunderbolt: net: Enable full end-to-end flow control
+Date:   Tue, 30 Aug 2022 18:32:45 +0300
+Message-Id: <20220830153250.15496-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830143318.299640-1-cui.jinpeng2@zte.com.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 02:33:18PM +0000, cgel.zte@gmail.com wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> 
-> Rturn value directly from usbdev_do_ioctl() instead of
-> getting value from redundant variable ret.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
+Hi all,
 
-As stated before, please read the documentation for how to handle stuff
-coming from research tools like this and properly document it in your
-changelog text.
+Thunderbolt/USB4 host controllers support full end-to-end flow control
+that prevents dropping packets if there are not enough hardware receive
+buffers. So far it has not been enabled for the networking driver yet
+but this series changes that. There is one snag though: the second
+generation (Intel Falcon Ridge) had a bug that needs special quirk to
+get it working. We had that in the early stages of the Thunderbolt/USB4
+driver but it got dropped because it was not needed at the time. Now we
+add it back as a quirk for the host controller (NHI).
 
-Also, why is this being sent from a gmail account?  How do we know this
-is really from a zte.com.cn address?
+The first patch of this series is a bugfix that I'm planning to push for
+v6.0-rc. Rest are v6.1 material. This also includes a patch that shows
+the XDomain link type in sysfs the same way we do for USB4 routers and
+updates the networking driver module description.
 
-thanks,
+Mika Westerberg (5):
+  net: thunderbolt: Enable DMA paths only after rings are enabled
+  thunderbolt: Show link type for XDomain connections too
+  thunderbolt: Add back Intel Falcon Ridge end-to-end flow control workaround
+  net: thunderbolt: Enable full end-to-end flow control
+  net: thunderbolt: Update module description with mention of USB4
 
-greg k-h
+ drivers/net/thunderbolt.c       | 62 +++++++++++++++++++++------------
+ drivers/thunderbolt/nhi.c       | 49 ++++++++++++++++++++++----
+ drivers/thunderbolt/tb.c        |  8 ++---
+ drivers/thunderbolt/tb.h        |  2 +-
+ drivers/thunderbolt/usb4.c      |  8 +++--
+ drivers/thunderbolt/usb4_port.c |  2 ++
+ include/linux/thunderbolt.h     |  2 ++
+ 7 files changed, 96 insertions(+), 37 deletions(-)
+
+-- 
+2.35.1
+
