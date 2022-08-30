@@ -2,63 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645845A5B55
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 07:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07145A5E68
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 10:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiH3F7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 01:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S231693AbiH3Inn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 04:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiH3F7x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 01:59:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC8F108E
-        for <linux-usb@vger.kernel.org>; Mon, 29 Aug 2022 22:59:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC3CD60DD4
-        for <linux-usb@vger.kernel.org>; Tue, 30 Aug 2022 05:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1758C433D6;
-        Tue, 30 Aug 2022 05:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661839189;
-        bh=2jZ407aXNqXEisyrYC8JjQWUhV5sxVzJDtskGUtVGpk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YktAs4luBcg2jyqdC5Tj2IrZ3+jc13hI/5642htUePFjEv9LdROTAj2nwU7WZqGSh
-         /FUHHNpwSdcyA9TZVlnO9Btkzz2ehecy5OgJT9d8/5AMp9x/pVmjFKBZ6fTIgOVif0
-         hOzVTdWoprElIyU4biqpR5nhhNGKyKfE2S4qGHRo=
-Date:   Tue, 30 Aug 2022 07:59:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hu Xiaoying <huxiaoying2008@gmail.com>
-Cc:     usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu
-Subject: Re: [PATCH v3] usb: Improves USB2.0 write performance
-Message-ID: <Yw2nUkHFiga+I2af@kroah.com>
-References: <CABd4UjZmn+J86BtSrRY42s57fpO+F5LBQL0neLpczzWKJ_Srxg@mail.gmail.com>
+        with ESMTP id S231673AbiH3Inj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 04:43:39 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3D9A5735;
+        Tue, 30 Aug 2022 01:43:34 -0700 (PDT)
+X-UUID: a1eacdbadf364491962084fe0678a21c-20220830
+X-CPASD-INFO: 5c614a9c99bb432ebf4fe4b30a3a12d8@frNwUWGTZ5NlWaSug3Z9n4KXZJaVYIK
+        CcptTkV9ikFiVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3hKVwUWSPaQ==
+X-CLOUD-ID: 5c614a9c99bb432ebf4fe4b30a3a12d8
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:173.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:102.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:2,DUF:3567,ACD:65,DCD:65,SL:0,EISP:0,AG:0,CFC:0.338,CFSR:0.081,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: a1eacdbadf364491962084fe0678a21c-20220830
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: a1eacdbadf364491962084fe0678a21c-20220830
+X-User: huxiaoying@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <huxiaoying@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 2131062562; Tue, 30 Aug 2022 16:43:47 +0800
+From:   Hu Xiaoying <huxiaoying@kylinos.cn>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Cc:     linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, Hu Xiaoying <huxiaoying@kylinos.cn>,
+        Hu Xiaoying <huxiaoying@gmail.com>
+Subject: [PATCH] usb: Improves USB2.0 write performance
+Date:   Tue, 30 Aug 2022 16:43:25 +0800
+Message-Id: <20220830084325.752655-1-huxiaoying@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABd4UjZmn+J86BtSrRY42s57fpO+F5LBQL0neLpczzWKJ_Srxg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,KHOP_HELO_FCRDNS,RDNS_DYNAMIC,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 01:19:32PM +0800, Hu Xiaoying wrote:
-> USB external storage device(0x0b05:1932), use gnome-disk-utility tools
-> to test usb write speed < 30MB/s. if does not to load module of uas for
-> this device
-> , can increase the write speed from 20MB/s to >40MB/s.
-> 
-> Signed-off-by: Hu Xiaoying <huxiaoying@gmail.com>
+USB external storage device(0x0b05:1932), use gnome-disk-utility tools
+to test usb write  < 30MB/s. if does not to load module of uas for this device
+, can increase the write speed from 20MB/s to more than 40MB/s.
 
-Again, you have not done what I have asked in the past in order to make
-this patch acceptable, so I'll just start ignoring it now :(
+Signed-off-by: Hu Xiaoying <huxiaoying@gmail.com>
+---
+ drivers/usb/storage/unusual_uas.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-greg k-h
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index 4051c8cd0cd8..3925c7c67915 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -62,6 +62,13 @@ UNUSUAL_DEV(0x0984, 0x0301, 0x0128, 0x0128,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_IGNORE_UAS),
+ 
++/* Reported-by: Tom Hu <huxiaoying@gmail.com> */
++UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
++		"ASUS",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: David Webb <djw@noc.ac.uk> */
+ UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
+ 		"Seagate",
+-- 
+2.25.1
+
