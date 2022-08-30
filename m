@@ -2,240 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49685A65AB
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 15:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96625A65CE
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 15:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiH3NyU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 09:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S229652AbiH3N7H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 09:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiH3NyB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 09:54:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA43109E;
-        Tue, 30 Aug 2022 06:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661867617; x=1693403617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CfUW4WBXt1HwDAtQIzZ6c8S6TWUb2CY9IO/h++eGxkk=;
-  b=ml5Vc1Q9uxnQcO6yzYNVYm2949+5cIOG8gIYbYshlinI80kA+mJ0MbYs
-   AmOC3JS207IET6YSW4NS0NSAaiCJj00HFWhamnmw8iTIOw5aTri+Tl9vV
-   ZhVhM7d6UfRuT1uoyF9z2gKaS2Q3n8HUCAYSoLQK+DpAU1BIoczMTm5Cx
-   yMQbq1/3OjihQXDM1XGSJyFYZWFP3ps5qFDS7YrMVWTPao/nHSVWIvxMw
-   Ttqz9ZaEOI82J5Uw7D8/Vk6/BMeg2JWnl9E7kW0Lz50s2LjjqVliiKu0b
-   v1kBxZFkSH/KAhOup422NvfGtqQej+CDxb71n12sAyGJgA0qw2nAUlHJa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="275577693"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="275577693"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 06:53:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="715304954"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Aug 2022 06:53:33 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 31E41174; Tue, 30 Aug 2022 16:53:47 +0300 (EEST)
-Date:   Tue, 30 Aug 2022 16:53:47 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Szuying Chen <chensiying21@gmail.com>
-Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
-        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
-Subject: Re: [PATCH v7 3/3] thunderbolt: To extend ASMedia NVM formats.
-Message-ID: <Yw4Wa1s/zg4XtTxi@black.fi.intel.com>
-References: <20220829111059.665305-1-chensiying21@gmail.com>
- <20220829111059.665305-4-chensiying21@gmail.com>
+        with ESMTP id S230450AbiH3N5w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 09:57:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F506352;
+        Tue, 30 Aug 2022 06:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661867821;
+        bh=EHevt7zWC6JO3ARZtbty/8S8Npfn4RsL6Nlqm8Ymweg=;
+        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+        b=R1TpPcg+5VGxpHJd5sf8stLZKnPWbLZnE8RoHvIn08qHbkWxh8O9zzwsQK2MIrgTf
+         Dw/t/0jq+dK1OLgnsO1PkTopv66xtWQO40YFqCKBHmaI9RvkQ07y3+4sodQNeCKwML
+         RqIPr3cc/f4vVpCY5tzwAMsCv9aJC3Z9ssjifzJc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.168] ([5.147.48.133]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N7i8Y-1pWh8p0bDu-014jJ1; Tue, 30
+ Aug 2022 15:57:01 +0200
+Message-ID: <d1a5f149-50a1-49fc-9a6d-eceffa23311b@gmx.com>
+Date:   Tue, 30 Aug 2022 15:56:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829111059.665305-4-chensiying21@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
+Content-Language: en-US
+To:     Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220824160946.10128-1-jflf_kernel@gmx.com>
+ <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
+From:   jflf_kernel@gmx.com
+In-Reply-To: <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FLyu7aM0okQ6rwOx9wRriOCGW6Xkv2orBrUuA6s2SZcZYLhEzJJ
+ Y5xYn1nf0RuT15g/J+mcrbVw8NV+Y4Y+CH4FGkYpbf/X+y+29M6Z8AB9QtQNSAFPd40un9p
+ DLm57PkFd6VQdu8WhshtM/6/6jwtBCWXtppNfCjfpA4PdvqH43xN/S0w2XyaBETlD53XZD/
+ yB7Zp6egBTN/456B6Tf4A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:adpJWW/Rk+8=:c2HNJVnB20hiGMhcSvur4X
+ DZNqU7fRZTbT2R/0+hUTtpTLKwBoPhhZFTjhNJwUGnsMO2sDzBhvYztg+ftFWu2lkgF3HCNqk
+ SfHQTS5DRFxpceOizfBVfCqrR08RL5f01RNQh0wSPrLhVeTymnNsImZUHHucRhHXjQvctMxYq
+ oSsxtSxizTCzdOfioREcM6Gptw6Z0iJo/nR/NGMUlWgONynTQfCbmcQe//Y7Y/IyyFhBelfoh
+ YR18CTfAq9LB5GmQyGB/nmMuMJfWRHfASuYhXwG6z0EpqnSsU6HucCCqwuCbay3Cjq4YEcJW/
+ zwLBLi9xx4bJniXG7spgn0mnpEQHgPvXi3WVeEbEUjuTr0jKsLHh5IVXSRyuyBAreTJ4KTn3n
+ jlIATPE/f1+3km/dqDRCCGnH3NXdhBr5F1DQeeTb0btCrz9XLTv476xK0lR5geTcGpnlKun/s
+ F8/bcxVpPVwwlp+oxCXIzbkipZusKyDuLptXKeMeUNGpaFbB5XqReHeBI0FNBJ2DbW7d+th+6
+ Pk/NtejYiNO9Owwxsbc9S3y57mUWXhS1aag9xM2QmwYEUA/8TFL+J/HdpGzSCZKPU2Lay8SXr
+ EGlkmSWfxeErefJvdnE/LCaXYL+TZOU02crjS4sR8ZQxrQQ5z2ZHnLjX5LKdWreYYzb5DQyUL
+ jfNjqWSlHsETcw/JUssIECVJwV81xmiuxRxPlDVPHlgNudpbdyD0to/iVbGSNNzEBS39DnZA9
+ LSKCVNNElubpZA3Mpr0pGNzfMJz2M++lqMoBM6VHD6UvUKsanbS8O39UaPOkAUCMhQvMy0KDh
+ OghY/9WV5cW70C8OWhadNzelU1g4VjFKUgdOvhp8dxAmND7D2Pu1sUFXUSXqAwjiyO6FRGaIH
+ SIlPGwZ8V6uEg/BRMRv0SEkQ2bS3DS7GNK6VMNiWl/EfOqklO+EdOZyBZ1jtN6/h2keKax1Of
+ 6qBzzpd4wf7o7QZLURc0QbussIdps6Z28YO6UDaXEF4BsVL1VjSz3kLNpCKNl1avIL3nK8vXT
+ IYV9r2z9yPZbKBrln+vCgLltjTE2d15KtWjM1U0nKq9yINL9mbmo/nTksHkwNJeamOU+yUWCs
+ lzMRwd/CVKs+TAJkjcwDJfijsyuBHuRDFGMn4+lYxE6Ev0Ln9JCF1FNcg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 07:10:59PM +0800, Szuying Chen wrote:
-> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> 
-> The patch add ASMedia NVM formats. And add tb_switch_nvm_upgradeable()
-> to enable firmware upgrade.
-> 
-> Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> ---
-> Add ASMedia NVM formats. And fix asmedia_nvm_version() part of code so
-> that easier to read.
-> 
->  drivers/thunderbolt/nvm.c    | 68 ++++++++++++++++++++++++++++++++++++
->  drivers/thunderbolt/switch.c |  3 ++
->  drivers/thunderbolt/tb.h     |  1 +
->  3 files changed, 72 insertions(+)
-> 
-> diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-> index 91c8848b4d2e..c69db5b65f7d 100644
-> --- a/drivers/thunderbolt/nvm.c
-> +++ b/drivers/thunderbolt/nvm.c
-> @@ -15,16 +15,25 @@
->  /* Switch NVM support */
->  #define NVM_CSS		0x10
-> 
-> +/* Vendor ID of the Router. It's assigned by the USB-IF */
 
-Pretty useless comment.
+On 30/08/2022 13.54, Oliver Neukum wrote:
+> On 24.08.22 18:09, JFLF wrote:
+>
+>> By process of elimination the controllers themselves were identified as
+>> the cause of the problem. Through trial and error the issue was solved
+>> by using USB_QUIRK_RESET_RESUME for both chips.
+>
+> Hi,
+>
+>
+> aside from the aspects of getting this properly signed off and merged,
+> this opens up a question. What does resetting a hub do to its children?
+> That is if the request to wake up comes from a child, do we
+>
+> a) lose state in the child?
+> b) retain the knowledge which port requested the wakeup?
+>
+> How far has this patch been tested?
+>
+> 	Regards
+> 		Oliver
 
-> +#define ROUTER_VENDOR_ID_ASMEDIA 0x174c
-> +
-> +/* ASMedia specific NVM offsets */
-> +#define ASMEDIA_NVM_DATE	0x1c
-> +#define ASMEDIA_NVM_VERSION	0x28
-> +
->  static DEFINE_IDA(nvm_ida);
-> 
->  /**
->   * struct tb_nvm_vendor_ops - Vendor NVM specific operations
->   * @read_version: Used NVM read get Firmware version.
->   * @validate: Vendors have their validate method before NVM write.
-> + * @nvm_upgrade: Enable NVM upgrade.
->   */
->  struct tb_nvm_vendor_ops {
->  	int (*read_version)(struct tb_switch *sw);
->  	int (*validate)(struct tb_switch *sw);
-> +	void (*nvm_upgrade)(struct tb_switch *sw);
->  };
-> 
->  static inline int nvm_read(struct tb_switch *sw, unsigned int address,
-> @@ -128,11 +137,49 @@ static int intel_nvm_validate(struct tb_switch *sw)
->  	return 0;
->  }
-> 
-> +static int asmedia_nvm_version(struct tb_switch *sw)
-> +{
-> +	struct tb_nvm *nvm = sw->nvm;
-> +	u32 val;
-> +	int ret;
-> +
-> +	/* ASMedia get version and date format is xxxxxx.xxxxxx */
-> +	ret = nvm_read(sw, ASMEDIA_NVM_VERSION, &val, sizeof(val));
-> +	if (ret)
-> +		return ret;
-> +
-> +	nvm->major = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-> +
-> +	ret = nvm_read(sw, ASMEDIA_NVM_DATE, &val, sizeof(val));
-> +	if (ret)
-> +		return ret;
-> +
-> +	nvm->minor = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-> +
-> +	/*
-> +	 * Asmedia NVM size fixed on 512K. We currently have no plan
-> +	 * to increase size in the future.
-> +	 */
-> +	nvm->nvm_size = SZ_512K;
-> +
-> +	return 0;
-> +}
-> +
-> +static void tb_switch_set_nvm_upgrade(struct tb_switch *sw)
-> +{
-> +	sw->no_nvm_upgrade = false;
-> +}
-> +
->  static const struct tb_nvm_vendor_ops intel_switch_nvm_ops = {
->  	.read_version = intel_nvm_version,
->  	.validate = intel_nvm_validate,
->  };
-> 
-> +static const struct tb_nvm_vendor_ops asmedia_switch_nvm_ops = {
-> +	.nvm_upgrade = tb_switch_set_nvm_upgrade,
 
-This is bad name IMHO. It does not really upragade the NVM so perhaps
-something like .nvm_upgradeable?
+Hi Oliver,
 
-Hower, I don't think this is needed at all because instead of the hack
-in tb_start():
+Partial answer for now: I have been using those quirks via the kernel comm=
+and line for about a year now. I have been meaning to send in the patch lo=
+ng ago, but kept forgetting about it.
 
-	tb->root_switch->no_nvm_upgrade = true;
+I agree that USB_QUIRK_RESET_RESUME seems fishy with a hub. It's pretty mu=
+ch the last quirk I tried, and the only one that worked. I can't say I und=
+erstand what it does exactly. The hubs themselves don't seem to reset (or =
+at least not fully), as there is no re-enumeration of existing children.
 
-we should make this:
+I have not experienced a single problem or side effect since using those q=
+uirks. I use a mix of USB 2.0 and 3.0 devices, some bus- and some self-pow=
+ered, some permanently connected (including ethernet and audio in the hub =
+itself) and some not.
 
-	tb->root_switch->no_nvm_upgrade = !tb_switch_is_usb4(sw);
-
-and then it only depends on the fact whether the router implements the
-necessary NVM operations (please double check if this actually works).
-
-> +	.read_version = asmedia_nvm_version,
-> +};
-> +
->  struct switch_nvm_vendor {
->  	u16 vendor;
->  	const struct tb_nvm_vendor_ops *vops;
-> @@ -143,6 +190,27 @@ static const struct switch_nvm_vendor switch_nvm_vendors[] = {
->  	{ 0x8087, &intel_switch_nvm_ops },
->  };
-> 
-> +/**
-> + * tb_switch_nvm_upgradeable() - Enable NVM upgrade of a switch
-> + * @sw: Switch whose NVM upgrade to enable
-> + *
-> + * This function must be called before creating the switch devices, it will
-> + * make the no_active NVM device visible.
-
-non_active
-
-> + */
-> +void tb_switch_nvm_upgradeable(struct tb_switch *sw)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(switch_nvm_vendors); i++) {
-> +		const struct switch_nvm_vendor *v = &switch_nvm_vendors[i];
-> +
-> +		if (v->vendor == sw->config.vendor_id) {
-> +			if (v->vops->nvm_upgrade)
-> +				v->vops->nvm_upgrade(sw);
-> +		}
-> +	}
-> +}
-> +
->  /**
->   * tb_switch_nvm_validate() - Validate NVM image
->   * @switch: Switch to NVM write
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 2dbfd75202bf..f8dc18f6c5c8 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -2822,6 +2822,9 @@ int tb_switch_add(struct tb_switch *sw)
->  			return ret;
->  	}
-> 
-> +	/* Enable the NVM firmware upgrade */
-> +	tb_switch_nvm_upgradeable(sw);
-> +
->  	ret = device_add(&sw->dev);
->  	if (ret) {
->  		dev_err(&sw->dev, "failed to add device: %d\n", ret);
-> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> index 9cf62d5f25d2..642af7473851 100644
-> --- a/drivers/thunderbolt/tb.h
-> +++ b/drivers/thunderbolt/tb.h
-> @@ -773,6 +773,7 @@ int tb_switch_reset(struct tb_switch *sw);
->  int tb_switch_wait_for_bit(struct tb_switch *sw, u32 offset, u32 bit,
->  			   u32 value, int timeout_msec);
->  int tb_switch_nvm_validate(struct tb_switch *sw);
-> +void tb_switch_nvm_upgradeable(struct tb_switch *sw);
->  void tb_sw_set_unplugged(struct tb_switch *sw);
->  struct tb_port *tb_switch_find_port(struct tb_switch *sw,
-> 				    enum tb_port_type type);
-> --
-> 2.34.1
+Thanks!
+JF
