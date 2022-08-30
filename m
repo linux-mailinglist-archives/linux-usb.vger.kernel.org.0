@@ -2,63 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0905D5A6043
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 12:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EBA5A613E
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 12:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiH3KGq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 06:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
+        id S230081AbiH3K6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 06:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiH3KGH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 06:06:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E052CEE68A;
-        Tue, 30 Aug 2022 03:03:26 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 12:03:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661853802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Th0mQ/sNN9c18CVRxErzRPXBEZvcyeYzQkxhouGlyc=;
-        b=qMETC6v6RTxNCE90+XAWi3L/rz6zS3FsKcQe2Uj32rmKr8M0vVUZ0iD6iQ+/6v1YT62AKY
-        UfmzmDieJiYqyLxx1/XJ5g7u9AhVAEnynv1O2TYCk2buD7zFdf7cLeajft8SWRFT/GSImi
-        4yk5pfiCQ/1D6VWuafWjBidWdsrI9K/EhkUxNu9w2f7YxooeGv7Abv3FkWJr20P7zzZGHd
-        fnB4umkby03JJarue+rnpk+Xr1znNtRpX40Nk0OP63an3yDMYbaGJ2xWxsLO0sRjMKy96A
-        2pkLletIezeR4cPRY+qUHHMUYYACxtw2MEa+qqknEV5vGkbB/zXrJLB+x/jiYg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661853802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Th0mQ/sNN9c18CVRxErzRPXBEZvcyeYzQkxhouGlyc=;
-        b=C3ReCx7C6MDZVd65vQy2DaG87J1pVM2D6Je302ILkOPzKilw0k3yrFc3iUYHAF7iR6GhCu
-        wLEcLJGk6gxrgSBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S230087AbiH3K56 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 06:57:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A99A405E;
+        Tue, 30 Aug 2022 03:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661857075; x=1693393075;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DCdm7zO12JjMTqB/LiqCExVRxENy5N3vIqGs/oWeM0s=;
+  b=hBHemhB9maKn67gECoKgRseGZ9A8v0QIx0QQyYW8C2eSgiyyypx0FfTa
+   vHznQicWFh/EpzFLJcJyKRWj6vw8R24WMbU10P/ai4WKa9puBF1zK3DsE
+   u0DNaAOtUfjw1Pqysbdlz4AnZ64HCJS/4R30dCVdvvVryv2aVuXkolH4N
+   IjVdqaKW/7JYMjRK3zYKcnEm6Bly/M6TezbmQW6GDemqzpJ7YepjyyL3C
+   Br1Gb+mDRgKhG+CmSVzttsCPOqlGyw+e5qQcX6QuKzTyP1cBdVOtpexak
+   bydUgeVQZNalAagvPqUtaSaQtGwzCLfvArO1gB+YPwwmnFuuRluHGucDl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293888381"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="293888381"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:57:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="753987563"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 30 Aug 2022 03:57:50 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Aug 2022 13:57:49 +0300
+Date:   Tue, 30 Aug 2022 13:57:49 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
-Subject: Re: [PATCH v2 11/25] usb: gadget: f_tcm: Execute command on write
- completion
-Message-ID: <Yw3gaLk24rPvRsAn@linutronix.de>
-References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
- <b030d10834c13aa09bbbba7b33b1957d5ba3664c.1658192351.git.Thinh.Nguyen@synopsys.com>
- <YwhvmpdbG8WXhhZ0@linutronix.de>
- <20220826183732.vxogtdlwqiqbcg2t@synopsys.com>
- <Yw0YP1qUYAw6inMJ@linutronix.de>
- <20220829214738.g4sazbxapgmlyksa@synopsys.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v1 3/4] usb: typec: tcpci_maxim: Export helper function
+ for register reads
+Message-ID: <Yw3tLf6lcmtU1+t/@kuha.fi.intel.com>
+References: <20220826084001.3341215-1-badhri@google.com>
+ <20220826084001.3341215-3-badhri@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220829214738.g4sazbxapgmlyksa@synopsys.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220826084001.3341215-3-badhri@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,25 +64,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022-08-29 21:47:41 [+0000], Thinh Nguyen wrote:
-> Ok. Maybe we should make a change in the target_execute_cmd() then. It
-> seems unreasonable to force the caller to workaround this such as the
-> wait+complete construct you did (and I don't recall we have changes in
-> place to know/guarantee that interrupts are enabled before executing
-> target_execute_cmd() previously either).
+Hi Badhri,
 
-Sounds reasonable. Back then I wasn't sure if I'm putting all the puzzle
-pieces correctly together so I preferred this over a target change I
-wasn't sure was really needed. Anyway.
+On Fri, Aug 26, 2022 at 01:40:00AM -0700, Badhri Jagan Sridharan wrote:
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-> For the dwc3, we masked the interrupt at this point, so interrupt won't
-> be asserted here.
+No commit message? I guess you want to do this because you want to
+split the driver into several files. Please put that into your commit
+message.
 
-dwc3 has a irqrestore() after calling the routine so that will avoid the
-splat. But lockdep should yell here.
-Anyway, other interrupts on that CPU (timer for instance) could trigger.
+> ---
+>  drivers/usb/typec/tcpm/tcpci_maxim.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> index 4b6705f3d7b7..af3a7ecab23b 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+> @@ -68,25 +68,29 @@ static struct max_tcpci_chip *tdata_to_max_tcpci(struct tcpci_data *tdata)
+>  	return container_of(tdata, struct max_tcpci_chip, data);
+>  }
+>  
+> -static int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
+> +inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
+>  {
+>  	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u16));
+>  }
+> +EXPORT_SYMBOL_GPL(max_tcpci_read16);
 
-> Thanks,
-> Thinh
+Hold on! You don't need to export these under any circumstance.
 
-Sebastian
+If you want to make these inline function, move them to a header.
+Otherwise just make them non-static.
+
+Either way, don't export them.
+
+> -static int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
+> +inline int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
+>  {
+>  	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u16));
+>  }
+> +EXPORT_SYMBOL_GPL(max_tcpci_write16);
+>  
+> -static int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
+> +inline int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
+>  {
+>  	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u8));
+>  }
+> +EXPORT_SYMBOL_GPL(max_tcpci_read8);
+>  
+> -static int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
+> +inline int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
+>  {
+>  	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8));
+>  }
+> +EXPORT_SYMBOL_GPL(max_tcpci_write8);
+>  
+>  static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
+>  {
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+
+-- 
+heikki
