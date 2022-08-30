@@ -2,238 +2,770 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104055A6DC6
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 21:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80DC5A6E38
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 22:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiH3TuR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 15:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
+        id S231474AbiH3UPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 16:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiH3TuM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 15:50:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E1117E37;
-        Tue, 30 Aug 2022 12:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661889005;
-        bh=SoWzx77IQCm3NDWi+NdoQddonnC0+ombRYsETbGGbLU=;
-        h=X-UI-Sender-Class:Date:From:Subject:To:References:In-Reply-To;
-        b=VubDD+HTa7e6HFBRTcwKKzALpMDNB7Jfl+y6FEtpVRi6/EJSG9KNkJkSXDt360eKK
-         ySbROWa7CR1fsU54Ny/X3oGdc36cTkUhzlhz3VwFI0QcRnSheaDw88v9hgKFCeFfT5
-         Ak66GF60ahCX3g/0Pyn9AuTaek+t0mmyryGHIDbE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.49] ([5.147.48.133]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MrQEx-1pEGMc1QHv-00oUdP; Tue, 30
- Aug 2022 21:50:05 +0200
-Message-ID: <edd97137-74a1-ee0b-d475-7c5b36197155@gmx.com>
-Date:   Tue, 30 Aug 2022 21:50:03 +0200
+        with ESMTP id S231454AbiH3UPL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 16:15:11 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928A112D33
+        for <linux-usb@vger.kernel.org>; Tue, 30 Aug 2022 13:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=o5bbG2QOos7wbpnJ9f9b1soaRzy
+        Nj3QB+LXiYlOUDrk=; b=jl4cFYrW3QsnaisG+EQo4/w8W65Z99uyKtMIIlZZvJ7
+        HHToWX5iASwMZEqjUKHO02jLpbyEjIyTyx+L+LRY9Wr+4MCCb38sRCoqXJgfOssl
+        BaNH791fTjxEA7yzH6Ipd/Fk8gaYWTsFfrKNs+mt0h2TCijHzmLJSEh+PQfpuXgI
+        =
+Received: (qmail 422647 invoked from network); 30 Aug 2022 22:14:59 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Aug 2022 22:14:59 +0200
+X-UD-Smtp-Session: l3s3148p1@TazhCHvnUu0gAwDtxxrgAFH1RcxMblwv
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Sridhar Samudrala <sridhar.samudrala@intel.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Petko Manolov <petkan@nucleusys.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Ronak Doshi <doshir@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        ntb@lists.linux.dev, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v2 1/3] net: move from strlcpy with unused retval to strscpy
+Date:   Tue, 30 Aug 2022 22:14:52 +0200
+Message-Id: <20220830201457.7984-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-From:   jflf_kernel@gmx.com
-Subject: Re: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
-To:     Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220824160946.10128-1-jflf_kernel@gmx.com>
- <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
- <d1a5f149-50a1-49fc-9a6d-eceffa23311b@gmx.com>
- <4b92eee0-b020-9211-2039-18ac3ac72a7b@suse.com>
-Content-Language: en-US
-In-Reply-To: <4b92eee0-b020-9211-2039-18ac3ac72a7b@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rJwoaBzqNKLIqlf6plkcfk9ESYPxsTShlqR69Z1gRu9JL+BrOpd
- CydfW6bYhxNL7Z9jXIeLQpeTLZPsQIqAaI7VehhcjOz1AHtH5nR9me7ZXBzpPoO/OXAruag
- nTzGjoqtqU32tIL9sF1t6U4JDKfAedp25D6vrGCmRMnditDLhy3j8WuEypsYVQLLg1iLGmT
- /MLsmL9cUEmCcqjKNjYXQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:whRwQSkybiY=:hFaBrrUl8VcqUDV6pdyz59
- G62jA9KuiGJsDvbbrAXu8waayQ6eyixSy+rANMDvG/OtEDGnWN2NyEKruUQPHCywcCu7KQ53I
- FPf54KwmYGIU2vnQDuaPveExuptmMskM9o7H5/r0xkI0HqgjNoAhjPnvx5pu4j2miRn/TofdD
- dfDmAIjCyWxuWY0az7V8RuQsWAinjWncmqtCMP2oaiXV7RqIbmPsezIfdCGere5YcBQ7W05In
- sNP4luBFHc+sRBHgnL9UKL9GeVP2oCK6aSjDZ2sNP6+GZG+VEh5uxhhxf35VB6eGMmNVPkovM
- wTExH9kjNpGfBTPm9/cZBy8tq6LW92aI9gfVFtSDPEi0x9jKhixGVdmitajeAvLpfug/eCMj/
- 77abhK14fp6WOT16XOl3N2Wfpm/gmxxcWZAju+me55vuymm+tEGMTa80aD925nsBwfj9RNDoF
- oN7/gAYQrdRd5B34hcTVMNpcAx7TUBaMz9BS2r3IhVBzT0uztWmfLXP3NAOEbCAzV76LdnDVC
- IvvWSOZlKEdSa7bndfKa0YPSJYdmeqFLFq+GmPpDwN+Vzu1nggc6HYif7PXL8AQ4LNG+YloWS
- w0A8GxcBjo2k9N7V/2lD5fj+pmYQxwfCDUYQUPVtjABB23N6E2Mt7gzFlk1klKGRekbN03Kkh
- OY7hgJxsu53gTgCYwTgCMhgSjKhde8QhfbudSEnvX3TC/TvhDY0G1QozxT75jiKpOKnRY+z+p
- zRU2BsYjJM2G6eiB7MLzNlh+9SLCJRU1Px0QYHbVMxxOU6gu2nIOOSwoGyhDRrHpPh1dHGWbd
- zZEmyI8CKt//CGRij5FBC83C3sHdJyjWRkbqdxcVu/C/mrd6x0xG4FhNYke4EHBT+y9CAI+mb
- GFlhUltwoNR5egUL+jJQhAtPHkVwgHfHAFCTmW0rWkxFe8kqq3c1Gq9K/6XNGEysB3Vsy12N8
- YplBDFzYacmeiidd2f8elUyv5yEpFnTji/KMhX5QcoZH9KuY35xmLA6mOqPZk2sE5BSYaE/mE
- qRbS0lD7yagzx/VMHNlaHe5kZqbOXxMcel42qx1/AxW26BCYqr2EUvcCtFwh+04KP35Oe2pvW
- o1MpNfmWd7Ra36dwvQpP3Y4HBIaYP7wzFHa3657P0StuQJFIlqYbI0ixA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Follow the advice of the below link and prefer 'strscpy' in this
+subsystem. Conversion is 1:1 because the return value is not used.
+Generated by a coccinelle script.
 
-On 30/08/2022 16.47, Oliver Neukum wrote:
+Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for CAN
+---
 
-> 1) force a reset after a resume and call reset_resume() instead of resum=
-e()
-> 2) block autosuspend if remote wakeup is required
->
-> I suspect you are actually using the second effect. Have you
-> tested with "usbcore.autosuspend=3D-1" on the kernel command line.
+Changes since v1:
+* split into smaller patches
+* added given tags
 
-After further testing, your suspicion is correct.
+ drivers/net/Space.c                          |  2 +-
+ drivers/net/bonding/bond_main.c              |  2 +-
+ drivers/net/can/sja1000/peak_pcmcia.c        |  2 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c |  2 +-
+ drivers/net/dsa/b53/b53_common.c             |  2 +-
+ drivers/net/dsa/bcm_sf2_cfp.c                |  2 +-
+ drivers/net/dsa/hirschmann/hellcreek.c       |  2 +-
+ drivers/net/dsa/mv88e6xxx/chip.c             |  2 +-
+ drivers/net/dummy.c                          |  2 +-
+ drivers/net/fjes/fjes_ethtool.c              |  6 +++---
+ drivers/net/geneve.c                         |  4 ++--
+ drivers/net/hamradio/hdlcdrv.c               |  2 +-
+ drivers/net/hyperv/netvsc_drv.c              |  4 ++--
+ drivers/net/ipvlan/ipvlan_main.c             |  4 ++--
+ drivers/net/macvlan.c                        |  4 ++--
+ drivers/net/net_failover.c                   |  4 ++--
+ drivers/net/netconsole.c                     | 10 +++++-----
+ drivers/net/ntb_netdev.c                     |  6 +++---
+ drivers/net/phy/adin.c                       |  2 +-
+ drivers/net/phy/bcm-phy-lib.c                |  2 +-
+ drivers/net/phy/marvell.c                    |  2 +-
+ drivers/net/phy/micrel.c                     |  2 +-
+ drivers/net/phy/mscc/mscc_main.c             |  2 +-
+ drivers/net/phy/phy_device.c                 |  2 +-
+ drivers/net/rionet.c                         |  8 ++++----
+ drivers/net/team/team.c                      |  4 ++--
+ drivers/net/tun.c                            |  8 ++++----
+ drivers/net/usb/aqc111.c                     |  2 +-
+ drivers/net/usb/asix_common.c                |  4 ++--
+ drivers/net/usb/catc.c                       |  4 ++--
+ drivers/net/usb/pegasus.c                    |  2 +-
+ drivers/net/usb/r8152.c                      |  6 +++---
+ drivers/net/usb/rtl8150.c                    |  4 ++--
+ drivers/net/usb/sierra_net.c                 |  4 ++--
+ drivers/net/usb/usbnet.c                     |  6 +++---
+ drivers/net/veth.c                           |  4 ++--
+ drivers/net/virtio_net.c                     |  6 +++---
+ drivers/net/vmxnet3/vmxnet3_ethtool.c        |  6 +++---
+ drivers/net/vrf.c                            |  4 ++--
+ drivers/net/vxlan/vxlan_core.c               |  4 ++--
+ 40 files changed, 75 insertions(+), 75 deletions(-)
 
-TL;DR: the two VL812 hubs don't behave well when suspended.
+diff --git a/drivers/net/Space.c b/drivers/net/Space.c
+index f475eef14390..83214e2e70ab 100644
+--- a/drivers/net/Space.c
++++ b/drivers/net/Space.c
+@@ -68,7 +68,7 @@ static int netdev_boot_setup_add(char *name, struct ifmap *map)
+ 	for (i = 0; i < NETDEV_BOOT_SETUP_MAX; i++) {
+ 		if (s[i].name[0] == '\0' || s[i].name[0] == ' ') {
+ 			memset(s[i].name, 0, sizeof(s[i].name));
+-			strlcpy(s[i].name, name, IFNAMSIZ);
++			strscpy(s[i].name, name, IFNAMSIZ);
+ 			memcpy(&s[i].map, map, sizeof(s[i].map));
+ 			break;
+ 		}
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 2f4da2c13c0a..dc618bf51c5e 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -5619,7 +5619,7 @@ static int bond_ethtool_get_link_ksettings(struct net_device *bond_dev,
+ static void bond_ethtool_get_drvinfo(struct net_device *bond_dev,
+ 				     struct ethtool_drvinfo *drvinfo)
+ {
+-	strlcpy(drvinfo->driver, DRV_NAME, sizeof(drvinfo->driver));
++	strscpy(drvinfo->driver, DRV_NAME, sizeof(drvinfo->driver));
+ 	snprintf(drvinfo->fw_version, sizeof(drvinfo->fw_version), "%d",
+ 		 BOND_ABI_VERSION);
+ }
+diff --git a/drivers/net/can/sja1000/peak_pcmcia.c b/drivers/net/can/sja1000/peak_pcmcia.c
+index 131a084c3535..ebd5941c3f53 100644
+--- a/drivers/net/can/sja1000/peak_pcmcia.c
++++ b/drivers/net/can/sja1000/peak_pcmcia.c
+@@ -478,7 +478,7 @@ static void pcan_free_channels(struct pcan_pccard *card)
+ 		if (!netdev)
+ 			continue;
+ 
+-		strlcpy(name, netdev->name, IFNAMSIZ);
++		strscpy(name, netdev->name, IFNAMSIZ);
+ 
+ 		unregister_sja1000dev(netdev);
+ 
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index 8c9d53f6e24c..225697d70a9a 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -962,7 +962,7 @@ static void peak_usb_disconnect(struct usb_interface *intf)
+ 
+ 		dev_prev_siblings = dev->prev_siblings;
+ 		dev->state &= ~PCAN_USB_STATE_CONNECTED;
+-		strlcpy(name, netdev->name, IFNAMSIZ);
++		strscpy(name, netdev->name, IFNAMSIZ);
+ 
+ 		unregister_netdev(netdev);
+ 
+diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
+index 48cf344750ff..59cdfc51ce06 100644
+--- a/drivers/net/dsa/b53/b53_common.c
++++ b/drivers/net/dsa/b53/b53_common.c
+@@ -972,7 +972,7 @@ void b53_get_strings(struct dsa_switch *ds, int port, u32 stringset,
+ 
+ 	if (stringset == ETH_SS_STATS) {
+ 		for (i = 0; i < mib_size; i++)
+-			strlcpy(data + i * ETH_GSTRING_LEN,
++			strscpy(data + i * ETH_GSTRING_LEN,
+ 				mibs[i].name, ETH_GSTRING_LEN);
+ 	} else if (stringset == ETH_SS_PHY_STATS) {
+ 		phydev = b53_get_phy_device(ds, port);
+diff --git a/drivers/net/dsa/bcm_sf2_cfp.c b/drivers/net/dsa/bcm_sf2_cfp.c
+index edbe5e7f1cb6..22bc295bebdb 100644
+--- a/drivers/net/dsa/bcm_sf2_cfp.c
++++ b/drivers/net/dsa/bcm_sf2_cfp.c
+@@ -1296,7 +1296,7 @@ void bcm_sf2_cfp_get_strings(struct dsa_switch *ds, int port,
+ 				 "CFP%03d_%sCntr",
+ 				 i, bcm_sf2_cfp_stats[j].name);
+ 			iter = (i - 1) * s + j;
+-			strlcpy(data + iter * ETH_GSTRING_LEN,
++			strscpy(data + iter * ETH_GSTRING_LEN,
+ 				buf, ETH_GSTRING_LEN);
+ 		}
+ 	}
+diff --git a/drivers/net/dsa/hirschmann/hellcreek.c b/drivers/net/dsa/hirschmann/hellcreek.c
+index 01f90994dedd..ea8bbfce0f1f 100644
+--- a/drivers/net/dsa/hirschmann/hellcreek.c
++++ b/drivers/net/dsa/hirschmann/hellcreek.c
+@@ -288,7 +288,7 @@ static void hellcreek_get_strings(struct dsa_switch *ds, int port,
+ 	for (i = 0; i < ARRAY_SIZE(hellcreek_counter); ++i) {
+ 		const struct hellcreek_counter *counter = &hellcreek_counter[i];
+ 
+-		strlcpy(data + i * ETH_GSTRING_LEN,
++		strscpy(data + i * ETH_GSTRING_LEN,
+ 			counter->name, ETH_GSTRING_LEN);
+ 	}
+ }
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 07e9a4da924c..22288d3e73a4 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1128,7 +1128,7 @@ static void mv88e6xxx_atu_vtu_get_strings(uint8_t *data)
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(mv88e6xxx_atu_vtu_stats_strings); i++)
+-		strlcpy(data + i * ETH_GSTRING_LEN,
++		strscpy(data + i * ETH_GSTRING_LEN,
+ 			mv88e6xxx_atu_vtu_stats_strings[i],
+ 			ETH_GSTRING_LEN);
+ }
+diff --git a/drivers/net/dummy.c b/drivers/net/dummy.c
+index f82ad7419508..aa0fc00faecb 100644
+--- a/drivers/net/dummy.c
++++ b/drivers/net/dummy.c
+@@ -102,7 +102,7 @@ static const struct net_device_ops dummy_netdev_ops = {
+ static void dummy_get_drvinfo(struct net_device *dev,
+ 			      struct ethtool_drvinfo *info)
+ {
+-	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
++	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
+ }
+ 
+ static const struct ethtool_ops dummy_ethtool_ops = {
+diff --git a/drivers/net/fjes/fjes_ethtool.c b/drivers/net/fjes/fjes_ethtool.c
+index 746736c83873..19c99529566b 100644
+--- a/drivers/net/fjes/fjes_ethtool.c
++++ b/drivers/net/fjes/fjes_ethtool.c
+@@ -151,11 +151,11 @@ static void fjes_get_drvinfo(struct net_device *netdev,
+ 
+ 	plat_dev = adapter->plat_dev;
+ 
+-	strlcpy(drvinfo->driver, fjes_driver_name, sizeof(drvinfo->driver));
+-	strlcpy(drvinfo->version, fjes_driver_version,
++	strscpy(drvinfo->driver, fjes_driver_name, sizeof(drvinfo->driver));
++	strscpy(drvinfo->version, fjes_driver_version,
+ 		sizeof(drvinfo->version));
+ 
+-	strlcpy(drvinfo->fw_version, "none", sizeof(drvinfo->fw_version));
++	strscpy(drvinfo->fw_version, "none", sizeof(drvinfo->fw_version));
+ 	snprintf(drvinfo->bus_info, sizeof(drvinfo->bus_info),
+ 		 "platform:%s", plat_dev->name);
+ }
+diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
+index 7962c37b3f14..ce3a710a9b4e 100644
+--- a/drivers/net/geneve.c
++++ b/drivers/net/geneve.c
+@@ -1200,8 +1200,8 @@ static const struct net_device_ops geneve_netdev_ops = {
+ static void geneve_get_drvinfo(struct net_device *dev,
+ 			       struct ethtool_drvinfo *drvinfo)
+ {
+-	strlcpy(drvinfo->version, GENEVE_NETDEV_VER, sizeof(drvinfo->version));
+-	strlcpy(drvinfo->driver, "geneve", sizeof(drvinfo->driver));
++	strscpy(drvinfo->version, GENEVE_NETDEV_VER, sizeof(drvinfo->version));
++	strscpy(drvinfo->driver, "geneve", sizeof(drvinfo->driver));
+ }
+ 
+ static const struct ethtool_ops geneve_ethtool_ops = {
+diff --git a/drivers/net/hamradio/hdlcdrv.c b/drivers/net/hamradio/hdlcdrv.c
+index 8297411e87ea..a6184d6c7b15 100644
+--- a/drivers/net/hamradio/hdlcdrv.c
++++ b/drivers/net/hamradio/hdlcdrv.c
+@@ -600,7 +600,7 @@ static int hdlcdrv_siocdevprivate(struct net_device *dev, struct ifreq *ifr,
+ 
+ 	case HDLCDRVCTL_DRIVERNAME:
+ 		if (s->ops && s->ops->drvname) {
+-			strlcpy(bi.data.drivername, s->ops->drvname,
++			strscpy(bi.data.drivername, s->ops->drvname,
+ 				sizeof(bi.data.drivername));
+ 			break;
+ 		}
+diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
+index 15ebd5426604..5f08482065ca 100644
+--- a/drivers/net/hyperv/netvsc_drv.c
++++ b/drivers/net/hyperv/netvsc_drv.c
+@@ -935,8 +935,8 @@ int netvsc_recv_callback(struct net_device *net,
+ static void netvsc_get_drvinfo(struct net_device *net,
+ 			       struct ethtool_drvinfo *info)
+ {
+-	strlcpy(info->driver, KBUILD_MODNAME, sizeof(info->driver));
+-	strlcpy(info->fw_version, "N/A", sizeof(info->fw_version));
++	strscpy(info->driver, KBUILD_MODNAME, sizeof(info->driver));
++	strscpy(info->fw_version, "N/A", sizeof(info->fw_version));
+ }
+ 
+ static void netvsc_get_channels(struct net_device *net,
+diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan_main.c
+index 49ba8a50dfb1..54c94a69c2bb 100644
+--- a/drivers/net/ipvlan/ipvlan_main.c
++++ b/drivers/net/ipvlan/ipvlan_main.c
+@@ -408,8 +408,8 @@ static int ipvlan_ethtool_get_link_ksettings(struct net_device *dev,
+ static void ipvlan_ethtool_get_drvinfo(struct net_device *dev,
+ 				       struct ethtool_drvinfo *drvinfo)
+ {
+-	strlcpy(drvinfo->driver, IPVLAN_DRV, sizeof(drvinfo->driver));
+-	strlcpy(drvinfo->version, IPV_DRV_VER, sizeof(drvinfo->version));
++	strscpy(drvinfo->driver, IPVLAN_DRV, sizeof(drvinfo->driver));
++	strscpy(drvinfo->version, IPV_DRV_VER, sizeof(drvinfo->version));
+ }
+ 
+ static u32 ipvlan_ethtool_get_msglevel(struct net_device *dev)
+diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
+index 1080d6ebff63..713e3354cb2e 100644
+--- a/drivers/net/macvlan.c
++++ b/drivers/net/macvlan.c
+@@ -1043,8 +1043,8 @@ static int macvlan_fdb_del(struct ndmsg *ndm, struct nlattr *tb[],
+ static void macvlan_ethtool_get_drvinfo(struct net_device *dev,
+ 					struct ethtool_drvinfo *drvinfo)
+ {
+-	strlcpy(drvinfo->driver, "macvlan", sizeof(drvinfo->driver));
+-	strlcpy(drvinfo->version, "0.1", sizeof(drvinfo->version));
++	strscpy(drvinfo->driver, "macvlan", sizeof(drvinfo->driver));
++	strscpy(drvinfo->version, "0.1", sizeof(drvinfo->version));
+ }
+ 
+ static int macvlan_ethtool_get_link_ksettings(struct net_device *dev,
+diff --git a/drivers/net/net_failover.c b/drivers/net/net_failover.c
+index 21a0435c02de..7a28e082436e 100644
+--- a/drivers/net/net_failover.c
++++ b/drivers/net/net_failover.c
+@@ -324,8 +324,8 @@ static const struct net_device_ops failover_dev_ops = {
+ static void nfo_ethtool_get_drvinfo(struct net_device *dev,
+ 				    struct ethtool_drvinfo *drvinfo)
+ {
+-	strlcpy(drvinfo->driver, FAILOVER_NAME, sizeof(drvinfo->driver));
+-	strlcpy(drvinfo->version, FAILOVER_VERSION, sizeof(drvinfo->version));
++	strscpy(drvinfo->driver, FAILOVER_NAME, sizeof(drvinfo->driver));
++	strscpy(drvinfo->version, FAILOVER_VERSION, sizeof(drvinfo->version));
+ }
+ 
+ static int nfo_ethtool_get_link_ksettings(struct net_device *dev,
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index ddac61d79145..bdff9ac5056d 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -55,7 +55,7 @@ MODULE_PARM_DESC(oops_only, "Only log oops messages");
+ #ifndef	MODULE
+ static int __init option_setup(char *opt)
+ {
+-	strlcpy(config, opt, MAX_PARAM_LENGTH);
++	strscpy(config, opt, MAX_PARAM_LENGTH);
+ 	return 1;
+ }
+ __setup("netconsole=", option_setup);
+@@ -178,7 +178,7 @@ static struct netconsole_target *alloc_param_target(char *target_config)
+ 		goto fail;
+ 
+ 	nt->np.name = "netconsole";
+-	strlcpy(nt->np.dev_name, "eth0", IFNAMSIZ);
++	strscpy(nt->np.dev_name, "eth0", IFNAMSIZ);
+ 	nt->np.local_port = 6665;
+ 	nt->np.remote_port = 6666;
+ 	eth_broadcast_addr(nt->np.remote_mac);
+@@ -414,7 +414,7 @@ static ssize_t dev_name_store(struct config_item *item, const char *buf,
+ 		return -EINVAL;
+ 	}
+ 
+-	strlcpy(nt->np.dev_name, buf, IFNAMSIZ);
++	strscpy(nt->np.dev_name, buf, IFNAMSIZ);
+ 
+ 	/* Get rid of possible trailing newline from echo(1) */
+ 	len = strnlen(nt->np.dev_name, IFNAMSIZ);
+@@ -630,7 +630,7 @@ static struct config_item *make_netconsole_target(struct config_group *group,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	nt->np.name = "netconsole";
+-	strlcpy(nt->np.dev_name, "eth0", IFNAMSIZ);
++	strscpy(nt->np.dev_name, "eth0", IFNAMSIZ);
+ 	nt->np.local_port = 6665;
+ 	nt->np.remote_port = 6666;
+ 	eth_broadcast_addr(nt->np.remote_mac);
+@@ -708,7 +708,7 @@ static int netconsole_netdev_event(struct notifier_block *this,
+ 		if (nt->np.dev == dev) {
+ 			switch (event) {
+ 			case NETDEV_CHANGENAME:
+-				strlcpy(nt->np.dev_name, dev->name, IFNAMSIZ);
++				strscpy(nt->np.dev_name, dev->name, IFNAMSIZ);
+ 				break;
+ 			case NETDEV_RELEASE:
+ 			case NETDEV_JOIN:
+diff --git a/drivers/net/ntb_netdev.c b/drivers/net/ntb_netdev.c
+index 80bdc07f2cd3..464d88ca8ab0 100644
+--- a/drivers/net/ntb_netdev.c
++++ b/drivers/net/ntb_netdev.c
+@@ -364,9 +364,9 @@ static void ntb_get_drvinfo(struct net_device *ndev,
+ {
+ 	struct ntb_netdev *dev = netdev_priv(ndev);
+ 
+-	strlcpy(info->driver, KBUILD_MODNAME, sizeof(info->driver));
+-	strlcpy(info->version, NTB_NETDEV_VER, sizeof(info->version));
+-	strlcpy(info->bus_info, pci_name(dev->pdev), sizeof(info->bus_info));
++	strscpy(info->driver, KBUILD_MODNAME, sizeof(info->driver));
++	strscpy(info->version, NTB_NETDEV_VER, sizeof(info->version));
++	strscpy(info->bus_info, pci_name(dev->pdev), sizeof(info->bus_info));
+ }
+ 
+ static int ntb_get_link_ksettings(struct net_device *dev,
+diff --git a/drivers/net/phy/adin.c b/drivers/net/phy/adin.c
+index ee374a85544a..134637584a83 100644
+--- a/drivers/net/phy/adin.c
++++ b/drivers/net/phy/adin.c
+@@ -749,7 +749,7 @@ static void adin_get_strings(struct phy_device *phydev, u8 *data)
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(adin_hw_stats); i++) {
+-		strlcpy(&data[i * ETH_GSTRING_LEN],
++		strscpy(&data[i * ETH_GSTRING_LEN],
+ 			adin_hw_stats[i].string, ETH_GSTRING_LEN);
+ 	}
+ }
+diff --git a/drivers/net/phy/bcm-phy-lib.c b/drivers/net/phy/bcm-phy-lib.c
+index 287cccf8f7f4..b2c0baa51f39 100644
+--- a/drivers/net/phy/bcm-phy-lib.c
++++ b/drivers/net/phy/bcm-phy-lib.c
+@@ -519,7 +519,7 @@ void bcm_phy_get_strings(struct phy_device *phydev, u8 *data)
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(bcm_phy_hw_stats); i++)
+-		strlcpy(data + i * ETH_GSTRING_LEN,
++		strscpy(data + i * ETH_GSTRING_LEN,
+ 			bcm_phy_hw_stats[i].string, ETH_GSTRING_LEN);
+ }
+ EXPORT_SYMBOL_GPL(bcm_phy_get_strings);
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index a714150f5e8c..a3e810705ce2 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -1952,7 +1952,7 @@ static void marvell_get_strings(struct phy_device *phydev, u8 *data)
+ 	int i;
+ 
+ 	for (i = 0; i < count; i++) {
+-		strlcpy(data + i * ETH_GSTRING_LEN,
++		strscpy(data + i * ETH_GSTRING_LEN,
+ 			marvell_hw_stats[i].string, ETH_GSTRING_LEN);
+ 	}
+ }
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index e78d0bf69bc3..16301634b44e 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -1650,7 +1650,7 @@ static void kszphy_get_strings(struct phy_device *phydev, u8 *data)
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(kszphy_hw_stats); i++) {
+-		strlcpy(data + i * ETH_GSTRING_LEN,
++		strscpy(data + i * ETH_GSTRING_LEN,
+ 			kszphy_hw_stats[i].string, ETH_GSTRING_LEN);
+ 	}
+ }
+diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
+index 7e3017e7a1c0..8a13b1ad9a33 100644
+--- a/drivers/net/phy/mscc/mscc_main.c
++++ b/drivers/net/phy/mscc/mscc_main.c
+@@ -136,7 +136,7 @@ static void vsc85xx_get_strings(struct phy_device *phydev, u8 *data)
+ 		return;
+ 
+ 	for (i = 0; i < priv->nstats; i++)
+-		strlcpy(data + i * ETH_GSTRING_LEN, priv->hw_stats[i].string,
++		strscpy(data + i * ETH_GSTRING_LEN, priv->hw_stats[i].string,
+ 			ETH_GSTRING_LEN);
+ }
+ 
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 12ff276b80ae..2198f1302642 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -370,7 +370,7 @@ int phy_register_fixup(const char *bus_id, u32 phy_uid, u32 phy_uid_mask,
+ 	if (!fixup)
+ 		return -ENOMEM;
+ 
+-	strlcpy(fixup->bus_id, bus_id, sizeof(fixup->bus_id));
++	strscpy(fixup->bus_id, bus_id, sizeof(fixup->bus_id));
+ 	fixup->phy_uid = phy_uid;
+ 	fixup->phy_uid_mask = phy_uid_mask;
+ 	fixup->run = run;
+diff --git a/drivers/net/rionet.c b/drivers/net/rionet.c
+index 39e61e07e489..fbcb9d05da64 100644
+--- a/drivers/net/rionet.c
++++ b/drivers/net/rionet.c
+@@ -443,10 +443,10 @@ static void rionet_get_drvinfo(struct net_device *ndev,
+ {
+ 	struct rionet_private *rnet = netdev_priv(ndev);
+ 
+-	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
+-	strlcpy(info->version, DRV_VERSION, sizeof(info->version));
+-	strlcpy(info->fw_version, "n/a", sizeof(info->fw_version));
+-	strlcpy(info->bus_info, rnet->mport->name, sizeof(info->bus_info));
++	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
++	strscpy(info->version, DRV_VERSION, sizeof(info->version));
++	strscpy(info->fw_version, "n/a", sizeof(info->fw_version));
++	strscpy(info->bus_info, rnet->mport->name, sizeof(info->bus_info));
+ }
+ 
+ static u32 rionet_get_msglevel(struct net_device *ndev)
+diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
+index aac133a1e27a..6a391a60c2a5 100644
+--- a/drivers/net/team/team.c
++++ b/drivers/net/team/team.c
+@@ -2070,8 +2070,8 @@ static const struct net_device_ops team_netdev_ops = {
+ static void team_ethtool_get_drvinfo(struct net_device *dev,
+ 				     struct ethtool_drvinfo *drvinfo)
+ {
+-	strlcpy(drvinfo->driver, DRV_NAME, sizeof(drvinfo->driver));
+-	strlcpy(drvinfo->version, UTS_RELEASE, sizeof(drvinfo->version));
++	strscpy(drvinfo->driver, DRV_NAME, sizeof(drvinfo->driver));
++	strscpy(drvinfo->version, UTS_RELEASE, sizeof(drvinfo->version));
+ }
+ 
+ static int team_ethtool_get_link_ksettings(struct net_device *dev,
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 259b2b84b2b3..3732e51b5ad8 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -3540,15 +3540,15 @@ static void tun_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info
+ {
+ 	struct tun_struct *tun = netdev_priv(dev);
+ 
+-	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
+-	strlcpy(info->version, DRV_VERSION, sizeof(info->version));
++	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
++	strscpy(info->version, DRV_VERSION, sizeof(info->version));
+ 
+ 	switch (tun->flags & TUN_TYPE_MASK) {
+ 	case IFF_TUN:
+-		strlcpy(info->bus_info, "tun", sizeof(info->bus_info));
++		strscpy(info->bus_info, "tun", sizeof(info->bus_info));
+ 		break;
+ 	case IFF_TAP:
+-		strlcpy(info->bus_info, "tap", sizeof(info->bus_info));
++		strscpy(info->bus_info, "tap", sizeof(info->bus_info));
+ 		break;
+ 	}
+ }
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index 3020e81159d0..a017e9de2119 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -201,7 +201,7 @@ static void aqc111_get_drvinfo(struct net_device *net,
+ 
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strlcpy(info->driver, DRIVER_NAME, sizeof(info->driver));
++	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
+ 	snprintf(info->fw_version, sizeof(info->fw_version), "%u.%u.%u",
+ 		 aqc111_data->fw_ver.major,
+ 		 aqc111_data->fw_ver.minor,
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index 9ea91c3ff045..72ffc89b477a 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -752,8 +752,8 @@ void asix_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
+ {
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strlcpy(info->driver, DRIVER_NAME, sizeof(info->driver));
+-	strlcpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, DRIVER_NAME, sizeof(info->driver));
++	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ }
+ 
+ int asix_set_mac_address(struct net_device *net, void *p)
+diff --git a/drivers/net/usb/catc.c b/drivers/net/usb/catc.c
+index 843893482abd..ff439ef535ac 100644
+--- a/drivers/net/usb/catc.c
++++ b/drivers/net/usb/catc.c
+@@ -672,8 +672,8 @@ static void catc_get_drvinfo(struct net_device *dev,
+ 			     struct ethtool_drvinfo *info)
+ {
+ 	struct catc *catc = netdev_priv(dev);
+-	strlcpy(info->driver, driver_name, sizeof(info->driver));
+-	strlcpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, driver_name, sizeof(info->driver));
++	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ 	usb_make_path(catc->usbdev, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index feb247e355f7..81ca64debc5b 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -894,7 +894,7 @@ static void pegasus_get_drvinfo(struct net_device *dev,
+ {
+ 	pegasus_t *pegasus = netdev_priv(dev);
+ 
+-	strlcpy(info->driver, driver_name, sizeof(info->driver));
++	strscpy(info->driver, driver_name, sizeof(info->driver));
+ 	usb_make_path(pegasus->usb, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index d142ac8fcf6e..09f0c1677a22 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -8601,11 +8601,11 @@ static void rtl8152_get_drvinfo(struct net_device *netdev,
+ {
+ 	struct r8152 *tp = netdev_priv(netdev);
+ 
+-	strlcpy(info->driver, MODULENAME, sizeof(info->driver));
+-	strlcpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, MODULENAME, sizeof(info->driver));
++	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ 	usb_make_path(tp->udev, info->bus_info, sizeof(info->bus_info));
+ 	if (!IS_ERR_OR_NULL(tp->rtl_fw.fw))
+-		strlcpy(info->fw_version, tp->rtl_fw.version,
++		strscpy(info->fw_version, tp->rtl_fw.version,
+ 			sizeof(info->fw_version));
+ }
+ 
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index 3d2bf2acca94..97afd7335d86 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -769,8 +769,8 @@ static void rtl8150_get_drvinfo(struct net_device *netdev, struct ethtool_drvinf
+ {
+ 	rtl8150_t *dev = netdev_priv(netdev);
+ 
+-	strlcpy(info->driver, driver_name, sizeof(info->driver));
+-	strlcpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, driver_name, sizeof(info->driver));
++	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ 	usb_make_path(dev->udev, info->bus_info, sizeof(info->bus_info));
+ }
+ 
+diff --git a/drivers/net/usb/sierra_net.c b/drivers/net/usb/sierra_net.c
+index bb4cbe8fc846..b3ae949e6f1c 100644
+--- a/drivers/net/usb/sierra_net.c
++++ b/drivers/net/usb/sierra_net.c
+@@ -612,8 +612,8 @@ static void sierra_net_get_drvinfo(struct net_device *net,
+ {
+ 	/* Inherit standard device info */
+ 	usbnet_get_drvinfo(net, info);
+-	strlcpy(info->driver, driver_name, sizeof(info->driver));
+-	strlcpy(info->version, DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->driver, driver_name, sizeof(info->driver));
++	strscpy(info->version, DRIVER_VERSION, sizeof(info->version));
+ }
+ 
+ static u32 sierra_net_get_link(struct net_device *net)
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index aaa89b4cfd50..fd399a8ed973 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1050,9 +1050,9 @@ void usbnet_get_drvinfo (struct net_device *net, struct ethtool_drvinfo *info)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+ 
+-	strlcpy (info->driver, dev->driver_name, sizeof info->driver);
+-	strlcpy (info->fw_version, dev->driver_info->description,
+-		sizeof info->fw_version);
++	strscpy(info->driver, dev->driver_name, sizeof(info->driver));
++	strscpy(info->fw_version, dev->driver_info->description,
++		sizeof(info->fw_version));
+ 	usb_make_path (dev->udev, info->bus_info, sizeof info->bus_info);
+ }
+ EXPORT_SYMBOL_GPL(usbnet_get_drvinfo);
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 466da01ba2e3..550c85a366a0 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -128,8 +128,8 @@ static int veth_get_link_ksettings(struct net_device *dev,
+ 
+ static void veth_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
+ {
+-	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
+-	strlcpy(info->version, DRV_VERSION, sizeof(info->version));
++	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
++	strscpy(info->version, DRV_VERSION, sizeof(info->version));
+ }
+ 
+ static void veth_get_strings(struct net_device *dev, u32 stringset, u8 *buf)
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 9cce7dec7366..e0e57083d442 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2594,9 +2594,9 @@ static void virtnet_get_drvinfo(struct net_device *dev,
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	struct virtio_device *vdev = vi->vdev;
+ 
+-	strlcpy(info->driver, KBUILD_MODNAME, sizeof(info->driver));
+-	strlcpy(info->version, VIRTNET_DRIVER_VERSION, sizeof(info->version));
+-	strlcpy(info->bus_info, virtio_bus_name(vdev), sizeof(info->bus_info));
++	strscpy(info->driver, KBUILD_MODNAME, sizeof(info->driver));
++	strscpy(info->version, VIRTNET_DRIVER_VERSION, sizeof(info->version));
++	strscpy(info->bus_info, virtio_bus_name(vdev), sizeof(info->bus_info));
+ 
+ }
+ 
+diff --git a/drivers/net/vmxnet3/vmxnet3_ethtool.c b/drivers/net/vmxnet3/vmxnet3_ethtool.c
+index e2034adc3a1a..18cf7c723201 100644
+--- a/drivers/net/vmxnet3/vmxnet3_ethtool.c
++++ b/drivers/net/vmxnet3/vmxnet3_ethtool.c
+@@ -209,12 +209,12 @@ vmxnet3_get_drvinfo(struct net_device *netdev, struct ethtool_drvinfo *drvinfo)
+ {
+ 	struct vmxnet3_adapter *adapter = netdev_priv(netdev);
+ 
+-	strlcpy(drvinfo->driver, vmxnet3_driver_name, sizeof(drvinfo->driver));
++	strscpy(drvinfo->driver, vmxnet3_driver_name, sizeof(drvinfo->driver));
+ 
+-	strlcpy(drvinfo->version, VMXNET3_DRIVER_VERSION_REPORT,
++	strscpy(drvinfo->version, VMXNET3_DRIVER_VERSION_REPORT,
+ 		sizeof(drvinfo->version));
+ 
+-	strlcpy(drvinfo->bus_info, pci_name(adapter->pdev),
++	strscpy(drvinfo->bus_info, pci_name(adapter->pdev),
+ 		sizeof(drvinfo->bus_info));
+ }
+ 
+diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
+index 5df7a0abc39d..badf6f09ae51 100644
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -1541,8 +1541,8 @@ static const struct l3mdev_ops vrf_l3mdev_ops = {
+ static void vrf_get_drvinfo(struct net_device *dev,
+ 			    struct ethtool_drvinfo *info)
+ {
+-	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
+-	strlcpy(info->version, DRV_VERSION, sizeof(info->version));
++	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
++	strscpy(info->version, DRV_VERSION, sizeof(info->version));
+ }
+ 
+ static const struct ethtool_ops vrf_ethtool_ops = {
+diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+index c3285242f74f..939be2e148de 100644
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -3313,8 +3313,8 @@ static int vxlan_validate(struct nlattr *tb[], struct nlattr *data[],
+ static void vxlan_get_drvinfo(struct net_device *netdev,
+ 			      struct ethtool_drvinfo *drvinfo)
+ {
+-	strlcpy(drvinfo->version, VXLAN_VERSION, sizeof(drvinfo->version));
+-	strlcpy(drvinfo->driver, "vxlan", sizeof(drvinfo->driver));
++	strscpy(drvinfo->version, VXLAN_VERSION, sizeof(drvinfo->version));
++	strscpy(drvinfo->driver, "vxlan", sizeof(drvinfo->driver));
+ }
+ 
+ static int vxlan_get_link_ksettings(struct net_device *dev,
+-- 
+2.35.1
 
-I'd like to prepare a better patch for that issue. What's the recommended =
-strategy? The current patch works, even if only as a side effect and when =
-there's a wakeup source downstream. It's currently in Greg KH's usb-linus =
-branch, and will land in linux-next at some point. I'm tempted to let it b=
-e and undo it later in the better patch. Is that acceptable? Or should I a=
-sk Greg KH to pull it?
-
-
-> The interesting test would be to see whether a keyboard, ethernet
-> or mouse can wake your system from suspend. Have you tested WOL?
-
-Right, a bit of background to understand what's going on with that dock.
-
-There are actually three USB hubs in the dock: the two VL812, and a third =
-Genesys Logic USB 2.0 only:
-
-    $ lsusb -d 17ef:
-    Bus 002 Device 005: ID 17ef:3054 Lenovo OneLink+ Giga
-    Bus 002 Device 004: ID 17ef:1019 Lenovo USB3.0 Hub
-    Bus 002 Device 002: ID 17ef:1018 Lenovo USB3.0 Hub
-    Bus 001 Device 011: ID 17ef:3055 Lenovo ThinkPad OneLink Plus Dock Aud=
-io
-    Bus 001 Device 006: ID 17ef:1019 Lenovo USB2.0 Hub
-    Bus 001 Device 004: ID 17ef:1018 Lenovo USB2.0 Hub
-
-    $ lsusb -d 05e3:
-    Bus 001 Device 007: ID 05e3:0608 Genesys Logic, Inc. Hub
-
-
-    $ lsusb -tv | grep -B1 -e 17ef: -e 05e3:
-        |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
-            ID 17ef:1018 Lenovo
-            |__ Port 1: Dev 4, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
-                ID 17ef:1019 Lenovo
-                |__ Port 3: Dev 5, If 1, Class=3DCDC Data, Driver=3Dcdc_et=
-her, 5000M
-                    ID 17ef:3054 Lenovo
-                |__ Port 3: Dev 5, If 0, Class=3DCommunications, Driver=3D=
-cdc_ether, 5000M
-                    ID 17ef:3054 Lenovo
-    --
-        |__ Port 6: Dev 4, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-            ID 17ef:1018 Lenovo
-    --
-            |__ Port 2: Dev 7, If 0, Class=3DHub, Driver=3Dhub/2p, 480M
-                ID 05e3:0608 Genesys Logic, Inc. Hub
-    --
-            |__ Port 1: Dev 6, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
-                ID 17ef:1019 Lenovo
-                |__ Port 4: Dev 8, If 1, Class=3DAudio, Driver=3Dsnd-usb-a=
-udio, 12M
-                    ID 17ef:3055 Lenovo
-                |__ Port 4: Dev 8, If 2, Class=3DAudio, Driver=3Dsnd-usb-a=
-udio, 12M
-                    ID 17ef:3055 Lenovo
-                |__ Port 4: Dev 8, If 0, Class=3DAudio, Driver=3Dsnd-usb-a=
-udio, 12M
-                    ID 17ef:3055 Lenovo
-                |__ Port 4: Dev 8, If 3, Class=3DHuman Interface Device, D=
-river=3Dusbhid, 12M
-                    ID 17ef:3055 Lenovo
-
-
-The user-friendly port view (front and back refer to the locations of USB-=
-A ports):
-
-    1018  [p1] -->  1019  [p1] -->  USB3 back 4
-       |               |  [p2] -->  USB3 back 3
-       |               |  [p3] -->  USB3 RTL8153 ethernet
-       |               |  [p4] -->  USB2 CM6533 audio
-       |
-       |  [p2] -->  GL850S  [p1] --> USB2 back 2
-       |                 |  [p2] --> USB2 back 1 "keyboard/mouse"
-       |
-       |  [p3] -->  USB3 front 1 "power"
-       |  [p4] -->  USB3 front 2
-
-
-I have always kept keyboard and mouse on the USB2 ports connected to the G=
-enesys Logic hub. They work there without any problem.
-
-With WoL enabled in the BIOS, there are only two wakeup sources:
-
-    $ grep . /sys/bus/usb/devices/*/power/wakeup | grep enabled
-    /sys/bus/usb/devices/1-6.2.2/power/wakeup:enabled       # keyboard on =
-GL850S
-    /sys/bus/usb/devices/2-1.1.3/power/wakeup:enabled       # net
-
-While suspended I can wake up the laptop with the keyboard and everything =
-works.
-
-Moving the keyboard to one of the VL812 ports moves the wakeup source::
-
-    $ grep . /sys/bus/usb/devices/*/power/wakeup | grep enabled
-    /sys/bus/usb/devices/1-6.1.1/power/wakeup:enabled       # keyboard on =
-the :1019 VL812 (USB2)
-    /sys/bus/usb/devices/2-1.1.3/power/wakeup:enabled       # net
-
-
-Now here's the interesting bit. Without "usbcore.autosuspend=3D-1" I can s=
-till wakeup the laptop from suspend, but after waking up the keyboard is g=
-one:
-
-    kernel: hub 1-6.1:1.0: hub_ext_port_status failed (err =3D -71)
-    kernel: hub 1-6:1.0: hub_ext_port_status failed (err =3D -71)
-    kernel: hub 1-6.1:1.0: hub_ext_port_status failed (err =3D -71)
-    kernel: hub 1-6.1:1.0: hub_ext_port_status failed (err =3D -71)
-    kernel: usb 1-6.1-port4: cannot disable (err =3D -71)
-    kernel: usb 1-6.1-port1: cannot disable (err =3D -71)
-
-After that the port to which the keyboard is connected is essentially dead=
-. Replugging doesn't help, I need to shutdown the laptop (powered via the =
-dock) and cut all power to the dock to get that port back to operational s=
-tatus.
-
-With "usbcore.autosuspend=3D-1", everything behaves as it should.
-
-I met the exact same behaviour ("dead" port) with USB 3.0 devices too, alt=
-hough in my experience so far only with bus-powered devices. Sample kernel=
- output:
-
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: usb 2-1.4: device not accepting address 6, error -62
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: usb 2-1.4: device not accepting address 7, error -62
-    kernel: usb 2-1-port4: attempt power cycle
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: usb 2-1.4: device not accepting address 8, error -62
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: xhci_hcd 0000:00:14.0: Timeout while waiting for setup device =
-command
-    kernel: usb 2-1.4: device not accepting address 9, error -62
-    kernel: usb 2-1-port4: unable to enumerate USB device
-
-
-I'll run some more tests out of curiosity to see how things behave in corn=
-er cases.
-
-Thanks!
-JF
