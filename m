@@ -2,45 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695305A6438
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 14:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062BF5A6443
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 15:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiH3M7I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 08:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S229735AbiH3NAv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 09:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiH3M7I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 08:59:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A005F25;
-        Tue, 30 Aug 2022 05:59:07 -0700 (PDT)
+        with ESMTP id S229697AbiH3NAt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 09:00:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FE467467;
+        Tue, 30 Aug 2022 06:00:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D390F616E0;
-        Tue, 30 Aug 2022 12:59:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82E3C433D6;
-        Tue, 30 Aug 2022 12:59:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C55C3B81AAC;
+        Tue, 30 Aug 2022 13:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2146FC433D6;
+        Tue, 30 Aug 2022 13:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661864346;
-        bh=py80JNZjWXneLCtoEplvUtMQuHLBH9TJN1tDhgjF5Ys=;
+        s=korg; t=1661864442;
+        bh=Rvc2bFCIFK22EQawxsOj2oGKNzfL8EY9xA5bD1tf4gk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xRhzp+ham63Qub7sG6+g79g/Jd1t9JTySXNHNbfKyEx20HVIUUl3+KM1Z4TIvviqn
-         Cwrh+dzHQ9xx6LF9JV8HQhUzUjj0HQrI+JKc4kBRlm4MLbI1COUea7EUo4pJs/FBho
-         KBdYInSUvJnuyuKM3n4/MR+g91tDR1SKZo3+YaQw=
-Date:   Tue, 30 Aug 2022 14:59:03 +0200
+        b=j1IKvWl9ijPPNphkRJWR2GfaCDLJ6/fqGrBvh4I2NY0q6lfQOd3cU4m4XLyvCvNfd
+         P2e+DQmFbCXpqUtMnVprgswcj5nVh6yxSFSor5piyuv7Oa2lTC5ChC/c5hehCz3vOF
+         RfErQtZwi+CHAo3KqZa7rKbDg9s1IOaVKaiT20EI=
+Date:   Tue, 30 Aug 2022 15:00:39 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Subject: Re: [PATCH v1] usb: ohci-platform: fix usb disconnect issue after s4
-Message-ID: <Yw4JlyrjwHE5nYyd@kroah.com>
-References: <20220830111449.2300-1-zhuyinbo@loongson.cn>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v1 3/4] usb: typec: tcpci_maxim: Export helper function
+ for register reads
+Message-ID: <Yw4J9wv1N2Z5/qbN@kroah.com>
+References: <20220826084001.3341215-1-badhri@google.com>
+ <20220826084001.3341215-3-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830111449.2300-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20220826084001.3341215-3-badhri@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,76 +54,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:14:49PM +0800, Yinbo Zhu wrote:
-> Avoid retaining bogus hardware states during resume-from-hibernation.
-> Previously we had reset the hardware as part of preparing to reinstate
-> the snapshot image. But we can do better now with the new PM framework,
-> since we know exactly which resume operations are from hibernation
-> 
-> According to the commit "cd1965db0" and "6ec4beb5c" that the flag
-> "hibernated" is for resume-from-hibernation and it should be true when
-> usb resume from disk.
+On Fri, Aug 26, 2022 at 01:40:00AM -0700, Badhri Jagan Sridharan wrote:
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-When writing commit ids in changelogs, please use the recommended
-format.  For this, that paragraph would read:
+As Heikki pointed out, I can not accept changes with no changelog text
+at all, you know this.
 
-According to commit cd1965db054e ("USB: ohci: move
-ohci_pci_{suspend,resume} to ohci-hcd.c") and commit 6ec4beb5c701 ("USB:
-new flag for resume-from-hibernation"), the flag "hibernated" is for...
-
-> When this flag "hibernated" is set, the drivers will reset the hardware
-> to get rid of any existing state and make sure resume from hibernation
-> re-enumerates everything for ohci.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-
-What commit id does this fix?
-
-
-> ---
->  drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
->  1 file changed, 24 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-> index 0adae6265127..e733da2cd3b7 100644
-> --- a/drivers/usb/host/ohci-platform.c
-> +++ b/drivers/usb/host/ohci-platform.c
-> @@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
->  	return ret;
->  }
->  
-> -static int ohci_platform_resume(struct device *dev)
-> +static int ohci_platform_renew(struct device *dev, bool hibernated)
-
-I hate functions like this as it's now impossible to read the caller and
-understand what is going on.
-
->  {
->  	struct usb_hcd *hcd = dev_get_drvdata(dev);
->  	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-> @@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
->  			return err;
->  	}
->  
-> -	ohci_resume(hcd, false);
-> +	ohci_resume(hcd, hibernated);
->  
->  	pm_runtime_disable(dev);
->  	pm_runtime_set_active(dev);
-> @@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
->  
->  	return 0;
->  }
-> +
-> +static int ohci_platform_resume(struct device *dev)
-> +{
-> +	return ohci_platform_renew(dev, false);
-
-See, what does "false" here mean?
-
-You can wrap the ohci_platform_renew() function with two helpers that
-are ohci_platform_renew_hibernated() and ohci_platform_renew() or
-something like that, which would explain what the difference is here.
+Please write a good changelog text that explains why you are doing this
+so we can properly review it.  As it is, we have no idea what is going
+on here at all.
 
 thanks,
 
