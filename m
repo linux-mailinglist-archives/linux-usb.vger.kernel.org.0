@@ -2,61 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EBA5A613E
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 12:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E335A6175
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 13:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiH3K6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 06:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S229794AbiH3LPt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 07:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiH3K56 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 06:57:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A99A405E;
-        Tue, 30 Aug 2022 03:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661857075; x=1693393075;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DCdm7zO12JjMTqB/LiqCExVRxENy5N3vIqGs/oWeM0s=;
-  b=hBHemhB9maKn67gECoKgRseGZ9A8v0QIx0QQyYW8C2eSgiyyypx0FfTa
-   vHznQicWFh/EpzFLJcJyKRWj6vw8R24WMbU10P/ai4WKa9puBF1zK3DsE
-   u0DNaAOtUfjw1Pqysbdlz4AnZ64HCJS/4R30dCVdvvVryv2aVuXkolH4N
-   IjVdqaKW/7JYMjRK3zYKcnEm6Bly/M6TezbmQW6GDemqzpJ7YepjyyL3C
-   Br1Gb+mDRgKhG+CmSVzttsCPOqlGyw+e5qQcX6QuKzTyP1cBdVOtpexak
-   bydUgeVQZNalAagvPqUtaSaQtGwzCLfvArO1gB+YPwwmnFuuRluHGucDl
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293888381"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="293888381"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:57:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="753987563"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 30 Aug 2022 03:57:50 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Aug 2022 13:57:49 +0300
-Date:   Tue, 30 Aug 2022 13:57:49 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        with ESMTP id S230268AbiH3LP1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 07:15:27 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07DBE26121;
+        Tue, 30 Aug 2022 04:15:13 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx72st8Q1jtF8MAA--.51656S2;
+        Tue, 30 Aug 2022 19:15:02 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v1 3/4] usb: typec: tcpci_maxim: Export helper function
- for register reads
-Message-ID: <Yw3tLf6lcmtU1+t/@kuha.fi.intel.com>
-References: <20220826084001.3341215-1-badhri@google.com>
- <20220826084001.3341215-3-badhri@google.com>
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Cc:     zhuyinbo@loongson.cn
+Subject: [PATCH v1] usb: ohci-platform: fix usb disconnect issue after s4
+Date:   Tue, 30 Aug 2022 19:14:49 +0800
+Message-Id: <20220830111449.2300-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826084001.3341215-3-badhri@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cx72st8Q1jtF8MAA--.51656S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF47CrWDAF13ur1rWF1kuFg_yoW5AFW3pr
+        4UJFWftr48GF42g3y7twnrZFWrCwsaq3y7K34UKwnF9a98t3s8Ja1jyFy0vFnxXry7Jwn5
+        tF4jyFWUuF4UZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,66 +56,92 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Badhri,
+Avoid retaining bogus hardware states during resume-from-hibernation.
+Previously we had reset the hardware as part of preparing to reinstate
+the snapshot image. But we can do better now with the new PM framework,
+since we know exactly which resume operations are from hibernation
 
-On Fri, Aug 26, 2022 at 01:40:00AM -0700, Badhri Jagan Sridharan wrote:
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+According to the commit "cd1965db0" and "6ec4beb5c" that the flag
+"hibernated" is for resume-from-hibernation and it should be true when
+usb resume from disk.
 
-No commit message? I guess you want to do this because you want to
-split the driver into several files. Please put that into your commit
-message.
+When this flag "hibernated" is set, the drivers will reset the hardware
+to get rid of any existing state and make sure resume from hibernation
+re-enumerates everything for ohci.
 
-> ---
->  drivers/usb/typec/tcpm/tcpci_maxim.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index 4b6705f3d7b7..af3a7ecab23b 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -68,25 +68,29 @@ static struct max_tcpci_chip *tdata_to_max_tcpci(struct tcpci_data *tdata)
->  	return container_of(tdata, struct max_tcpci_chip, data);
->  }
->  
-> -static int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-> +inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
->  {
->  	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u16));
->  }
-> +EXPORT_SYMBOL_GPL(max_tcpci_read16);
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-Hold on! You don't need to export these under any circumstance.
-
-If you want to make these inline function, move them to a header.
-Otherwise just make them non-static.
-
-Either way, don't export them.
-
-> -static int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
-> +inline int max_tcpci_write16(struct max_tcpci_chip *chip, unsigned int reg, u16 val)
->  {
->  	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u16));
->  }
-> +EXPORT_SYMBOL_GPL(max_tcpci_write16);
->  
-> -static int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
-> +inline int max_tcpci_read8(struct max_tcpci_chip *chip, unsigned int reg, u8 *val)
->  {
->  	return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u8));
->  }
-> +EXPORT_SYMBOL_GPL(max_tcpci_read8);
->  
-> -static int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
-> +inline int max_tcpci_write8(struct max_tcpci_chip *chip, unsigned int reg, u8 val)
->  {
->  	return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u8));
->  }
-> +EXPORT_SYMBOL_GPL(max_tcpci_write8);
->  
->  static void max_tcpci_init_regs(struct max_tcpci_chip *chip)
->  {
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-
+diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+index 0adae6265127..e733da2cd3b7 100644
+--- a/drivers/usb/host/ohci-platform.c
++++ b/drivers/usb/host/ohci-platform.c
+@@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
+ 	return ret;
+ }
+ 
+-static int ohci_platform_resume(struct device *dev)
++static int ohci_platform_renew(struct device *dev, bool hibernated)
+ {
+ 	struct usb_hcd *hcd = dev_get_drvdata(dev);
+ 	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
+@@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
+ 			return err;
+ 	}
+ 
+-	ohci_resume(hcd, false);
++	ohci_resume(hcd, hibernated);
+ 
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_set_active(dev);
+@@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
+ 
+ 	return 0;
+ }
++
++static int ohci_platform_resume(struct device *dev)
++{
++	return ohci_platform_renew(dev, false);
++}
++
++static int ohci_platform_restore(struct device *dev)
++{
++	return ohci_platform_renew(dev, true);
++}
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ static const struct of_device_id ohci_platform_ids[] = {
+@@ -325,8 +335,16 @@ static const struct platform_device_id ohci_platform_table[] = {
+ };
+ MODULE_DEVICE_TABLE(platform, ohci_platform_table);
+ 
+-static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
+-	ohci_platform_resume);
++#ifdef CONFIG_PM_SLEEP
++static const struct dev_pm_ops ohci_platform_pm_ops = {
++	.suspend = ohci_platform_suspend,
++	.resume = ohci_platform_resume,
++	.freeze = ohci_platform_suspend,
++	.thaw = ohci_platform_resume,
++	.poweroff = ohci_platform_suspend,
++	.restore = ohci_platform_restore,
++};
++#endif
+ 
+ static struct platform_driver ohci_platform_driver = {
+ 	.id_table	= ohci_platform_table,
+@@ -335,7 +353,9 @@ static struct platform_driver ohci_platform_driver = {
+ 	.shutdown	= usb_hcd_platform_shutdown,
+ 	.driver		= {
+ 		.name	= "ohci-platform",
++#ifdef CONFIG_PM_SLEEP
+ 		.pm	= &ohci_platform_pm_ops,
++#endif
+ 		.of_match_table = ohci_platform_ids,
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	}
 -- 
-heikki
+2.31.1
+
