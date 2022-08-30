@@ -2,146 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E335A6175
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 13:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF175A6226
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 13:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiH3LPt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 07:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        id S230215AbiH3LjP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 07:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbiH3LP1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 07:15:27 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07DBE26121;
-        Tue, 30 Aug 2022 04:15:13 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx72st8Q1jtF8MAA--.51656S2;
-        Tue, 30 Aug 2022 19:15:02 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v1] usb: ohci-platform: fix usb disconnect issue after s4
-Date:   Tue, 30 Aug 2022 19:14:49 +0800
-Message-Id: <20220830111449.2300-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        with ESMTP id S231194AbiH3Lie (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 07:38:34 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFF64E86B;
+        Tue, 30 Aug 2022 04:37:22 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id l3so10823716plb.10;
+        Tue, 30 Aug 2022 04:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=6KNK/Qer37pzDc5PqooWdVUsv4ChHn4/mUHtr5VgJZ0=;
+        b=B/RK3EqxipgVqKFf0dtCSUmJhO0BwkBfBN5JAZqQrjRyS55tYNgcifxj8m3yKWL9T1
+         sN4yvF+Rde0etRQu9R9ULdjfCNVWfDQM08fHMWWE4ZEkxxd7FdC/wW+zc+do68vs6WKQ
+         VL0Wr64doOvUeppiDemQZhnFV4UDB2aU+4Bmqf+YobACeQtWuwuMy/NngcIywMlDBl6Z
+         U2cKgIZI7l+4OdMTs76iRSEbJ69dVBtzqlKaNYVxaE1RbpmdqCgdzUBWAIjgxFdM02By
+         zV6rc7/icw4DfWHUNm/SLdR77rl8NDTZE8BCSGlpP7wcG3VzaS69ntrzekgJepNCOTz9
+         gC9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=6KNK/Qer37pzDc5PqooWdVUsv4ChHn4/mUHtr5VgJZ0=;
+        b=pkzW9BO6aQyqPiJHf2SeQonnzw4WcwoBhYgrpz21b5Ex1tIEZ6Ve1nVpYB++eGi70U
+         yB7hfGq5JLOum9JbuIetGUZRMrlZejBtdk5meMRAddSR4zn/OLvpoarC/Czj4lBYZ8fr
+         TdzBT5L3YjmN4EcpoBYAmX2RcZsRtz2RhLquxmeNX2rBjHZPUA4FmKOe+dldpdj/13NT
+         7GQ+4vuG++gho2ze9bmJDq4eOnhVPQERchdrykJMJo9DBA8Rtk0etL03jDvtrwEhJYZ0
+         7ytBJH8cj3ASQ7Dwi8TFcqxLst7s8NPVHZ8g0UBDmHCk6thKyWQp0hwEAe8LXEkujsP5
+         NIUA==
+X-Gm-Message-State: ACgBeo2JL6HPUf4t8AIvfX8MITXPMpiPK6/ElgHDRGMpns6DXTi8Al+Z
+        M8l4w918qW6wqp+y1OwG2Us=
+X-Google-Smtp-Source: AA6agR75UjHnbrL+QMBV7Kx0U4AmXrY0/uQSilpcTQY4gnXb4H5a3CnIgH5v5bp5zmVwiNAoHs3ghQ==
+X-Received: by 2002:a17:90b:4a51:b0:1f5:8308:6ed7 with SMTP id lb17-20020a17090b4a5100b001f583086ed7mr23096648pjb.177.1661859441227;
+        Tue, 30 Aug 2022 04:37:21 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b0016cb873fe6fsm7467590pln.183.2022.08.30.04.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 04:37:20 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] usb: gadget: remove redundant variables ret
+Date:   Tue, 30 Aug 2022 11:37:16 +0000
+Message-Id: <20220830113716.287855-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx72st8Q1jtF8MAA--.51656S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF47CrWDAF13ur1rWF1kuFg_yoW5AFW3pr
-        4UJFWftr48GF42g3y7twnrZFWrCwsaq3y7K34UKwnF9a98t3s8Ja1jyFy0vFnxXry7Jwn5
-        tF4jyFWUuF4UZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Avoid retaining bogus hardware states during resume-from-hibernation.
-Previously we had reset the hardware as part of preparing to reinstate
-the snapshot image. But we can do better now with the new PM framework,
-since we know exactly which resume operations are from hibernation
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-According to the commit "cd1965db0" and "6ec4beb5c" that the flag
-"hibernated" is for resume-from-hibernation and it should be true when
-usb resume from disk.
+Rturn value directly from configfs_register_subsystem()
+instead of getting value from redundant variable ret.
 
-When this flag "hibernated" is set, the drivers will reset the hardware
-to get rid of any existing state and make sure resume from hibernation
-re-enumerates everything for ohci.
-
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 ---
- drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/configfs.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-index 0adae6265127..e733da2cd3b7 100644
---- a/drivers/usb/host/ohci-platform.c
-+++ b/drivers/usb/host/ohci-platform.c
-@@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
- 	return ret;
- }
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 3a6b4926193e..070872d1ae70 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1671,12 +1671,9 @@ EXPORT_SYMBOL_GPL(unregister_gadget_item);
  
--static int ohci_platform_resume(struct device *dev)
-+static int ohci_platform_renew(struct device *dev, bool hibernated)
+ static int __init gadget_cfs_init(void)
  {
- 	struct usb_hcd *hcd = dev_get_drvdata(dev);
- 	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-@@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
- 			return err;
- 	}
+-	int ret;
+-
+ 	config_group_init(&gadget_subsys.su_group);
  
--	ohci_resume(hcd, false);
-+	ohci_resume(hcd, hibernated);
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_set_active(dev);
-@@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
- 
- 	return 0;
+-	ret = configfs_register_subsystem(&gadget_subsys);
+-	return ret;
++	return configfs_register_subsystem(&gadget_subsys);
  }
-+
-+static int ohci_platform_resume(struct device *dev)
-+{
-+	return ohci_platform_renew(dev, false);
-+}
-+
-+static int ohci_platform_restore(struct device *dev)
-+{
-+	return ohci_platform_renew(dev, true);
-+}
- #endif /* CONFIG_PM_SLEEP */
+ module_init(gadget_cfs_init);
  
- static const struct of_device_id ohci_platform_ids[] = {
-@@ -325,8 +335,16 @@ static const struct platform_device_id ohci_platform_table[] = {
- };
- MODULE_DEVICE_TABLE(platform, ohci_platform_table);
- 
--static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
--	ohci_platform_resume);
-+#ifdef CONFIG_PM_SLEEP
-+static const struct dev_pm_ops ohci_platform_pm_ops = {
-+	.suspend = ohci_platform_suspend,
-+	.resume = ohci_platform_resume,
-+	.freeze = ohci_platform_suspend,
-+	.thaw = ohci_platform_resume,
-+	.poweroff = ohci_platform_suspend,
-+	.restore = ohci_platform_restore,
-+};
-+#endif
- 
- static struct platform_driver ohci_platform_driver = {
- 	.id_table	= ohci_platform_table,
-@@ -335,7 +353,9 @@ static struct platform_driver ohci_platform_driver = {
- 	.shutdown	= usb_hcd_platform_shutdown,
- 	.driver		= {
- 		.name	= "ohci-platform",
-+#ifdef CONFIG_PM_SLEEP
- 		.pm	= &ohci_platform_pm_ops,
-+#endif
- 		.of_match_table = ohci_platform_ids,
- 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	}
 -- 
-2.31.1
+2.25.1
 
