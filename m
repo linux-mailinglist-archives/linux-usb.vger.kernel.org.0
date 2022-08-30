@@ -2,67 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640BB5A665C
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8385A668B
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 16:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiH3Od1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 10:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S230183AbiH3OpI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 30 Aug 2022 10:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiH3Od0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 10:33:26 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57222B530F;
-        Tue, 30 Aug 2022 07:33:25 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id s206so10856081pgs.3;
-        Tue, 30 Aug 2022 07:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=fUwt7yj09XB0Ng50ttOlbYr2HPETQA5wazbCmht9hZM=;
-        b=YIEPpO/4BwljrKam4CEanBvRJL9EW3SDkoP2ZVwKPVDHmNoulkmF8hbq/8J5omlqGM
-         ASCsm8dxfvvoqhHRjzLseP788VNZ8nM8MlTNzdLoDNpw+RI81Xah4+EuzNN67gQ/U81A
-         DCipa8xTsgV8HhJPYKBt8ZHrkPavEVpJxEdvg/CKl/I7BXhQ53BR0/ZHXpaVoWyOA7E8
-         3kuYOtyQ+cdEhc4xaRJKX9PouQ3htxsZ9sXqeyLrCVgEdK6r2IWBHk0XE9sqy2a/5B8t
-         KI+klDTRdfqdZN5AUirf+2dngiWlDDl0vQz7Aa8LUN3UwLdqpwjm+PgBWh3SguhnQQhJ
-         615Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=fUwt7yj09XB0Ng50ttOlbYr2HPETQA5wazbCmht9hZM=;
-        b=OAKCe88CTvnXi8e74AJTumij1f56DOJrAobSsdx4WA8msYm10YjoYLiR6SB6nAENIn
-         IgCTyEVAW4y3ng7iIR4Kcf+JFSipC+vxioGKIEIelu44eWfgkfgzAk2q6bT4oRuDXbtg
-         9ylsCMfHTOjOz91WVOCJMVJvY7xll7rXkGkHpIX34+dnicrKpRODB03ymCJny6o5NWtf
-         XBCFnTMxdGAxz02DuEgqneIcN+kuu0cxmr5qgTk+cN6k2YUcgWOAJLJWN9yxkGHwM5Py
-         n2HkbxaXGH+hGu5gdI7DAtzfR72hLtrMXN4VfVlud8lqBAu7UwPRD3n/nypMIRXiYEQP
-         UsTQ==
-X-Gm-Message-State: ACgBeo2RwjNrBnyjd0XfPDvqK2HFR45Uypz/yPy9RW3yA3AMOxEHKrXR
-        Q/Y1iQ0aIdbtQfVyFFFtzYY=
-X-Google-Smtp-Source: AA6agR6QqrPzpRSg1am4AEwOixlGhH2Ny4FkY75lwCi5RCBm7QuPJwLJEcMdiSL2SGnVbC6gQ+1XVw==
-X-Received: by 2002:a05:6a00:1a44:b0:52a:ecd5:bbef with SMTP id h4-20020a056a001a4400b0052aecd5bbefmr21272004pfv.28.1661870004824;
-        Tue, 30 Aug 2022 07:33:24 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902dac400b0016d10267927sm1545909plx.203.2022.08.30.07.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 07:33:24 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     stern@rowland.harvard.edu, skhan@linuxfoundation.org,
-        richard.leitner@skidata.com, tasos@tasossah.com
-Cc:     wsa+renesas@sang-engineering.com, ingo.rohloff@lauterbach.com,
-        cui.jinpeng2@zte.com.cn, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] usb: core: remove redundant variables ret
-Date:   Tue, 30 Aug 2022 14:33:18 +0000
-Message-Id: <20220830143318.299640-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230338AbiH3OpA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 10:45:00 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE503E0DD;
+        Tue, 30 Aug 2022 07:44:57 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 11D24200002;
+        Tue, 30 Aug 2022 14:44:52 +0000 (UTC)
+Message-ID: <31207cebad932bd9d943421d6528ad81877758a5.camel@hadess.net>
+Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Date:   Tue, 30 Aug 2022 16:44:52 +0200
+In-Reply-To: <Yv5V1KWOQa5mnktE@kroah.com>
+References: <20220809094300.83116-1-hadess@hadess.net>
+         <20220809094300.83116-3-hadess@hadess.net> <YvI5DJnOjhJbNnNO@kroah.com>
+         <2cde406b4d59ddfe71a7cdc11a76913a0a168595.camel@hadess.net>
+         <YvKMVjl6x38Hud6I@kroah.com>
+         <fae7e35a920239fe2a35b6b967bd17e04af1e1b7.camel@hadess.net>
+         <Yv5V1KWOQa5mnktE@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,34 +50,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Thu, 2022-08-18 at 17:08 +0200, Greg Kroah-Hartman wrote:
+> On Tue, Aug 09, 2022 at 07:27:11PM +0200, Bastien Nocera wrote:
+> > On Tue, 2022-08-09 at 18:33 +0200, Greg Kroah-Hartman wrote:
+> > > On Tue, Aug 09, 2022 at 04:31:04PM +0200, Bastien Nocera wrote:
+> > > > On Tue, 2022-08-09 at 12:38 +0200, Greg Kroah-Hartman wrote:
+> > > > > Now if you really really want to disable a device from under
+> > > > > a
+> > > > > user,
+> > > > > without the file handle present, you can do that today, as
+> > > > > root,
+> > > > > by
+> > > > > doing the 'unbind' hack through userspace and sysfs.  It's so
+> > > > > common
+> > > > > that this seems to be how virtual device managers handle
+> > > > > virtual
+> > > > > machines, so it should be well tested by now.
+> > > > 
+> > > > The only thing I know that works that way is usbip, and it
+> > > > requires
+> > > > unbinding each of the interfaces:
+> > > > 
+> > > > https://sourceforge.net/p/usbip/git-windows/ci/master/tree/trunk/userspace/src/bind-driver.c#l157
+> > > 
+> > > virtio devices also use the api from what I recall.
+> > 
+> > I can't find any code that would reference
+> > /sys/bus/usb/drivers/usbfs/unbind or /sys/bus/usb/drivers/usbfs wrt
+> > virtio. Where's the host side code for that?
+> 
+> I mean the virtio code uses bind/unbind for it's devices, nothing to
+> do
+> with USB other than the userspace interface involved.
 
-Rturn value directly from usbdev_do_ioctl() instead of
-getting value from redundant variable ret.
+This is one big hammer that is really counterproductive in some fairly
+common use cases. It's fine for assigning a full USB device to a VM, it
+really isn't for gently removing "just that bit of interface" the user
+is using while leaving the rest running.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- drivers/usb/core/devio.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+If a USB device has 2 interfaces, and one of those interfaces is used
+by a kernel driver, or a system-wide application, then the whole USB
+device is made unavailable.
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 837f3e57f580..043d934ead83 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -2802,11 +2802,8 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- static long usbdev_ioctl(struct file *file, unsigned int cmd,
- 			unsigned long arg)
- {
--	int ret;
--
--	ret = usbdev_do_ioctl(file, cmd, (void __user *)arg);
- 
--	return ret;
-+	return usbdev_do_ioctl(file, cmd, (void __user *)arg);
- }
- 
- /* No kernel lock - fine */
--- 
-2.25.1
+For example:
+- a wireless headset, sound is handled by ALSA at the kernel-level,
+battery status is monitored through another interface by the user
+directly, unbinding the USB driver will disable both the sound driver
+and the battery monitor
+- a keyboard with RGB backlight, key presses are handled by the input
+subsystem in the kernel, RGB backlight through another interface as a
+normal user, unbinding the USB driver disconnects the keyboard
+completely making it lose lock keys status, amongst other things
+- a phone used for both network access and file access through MTP,
+unbinding the USB driver will boot the computer off the network as well
+as disconnecting the file access when we only wanted the latter to
+happen
 
+I'll explain those use cases in the commit message.
+
+For those who want to reproduce the problem, tested with USB wireless
+headset:
+$ lsusb
+Bus 001 Device 011: ID 1038:12b6 SteelSeries ApS SteelSeries Arctis 1 Wireless
+
+# Using the bus and device IDs
+$ grep -l 001/011 /sys/bus/usb/devices/*/uevent | sed 's,/sys/bus/usb/devices/,,' | sed 's,/uevent,,'
+1-10
+
+$ echo 1-10 > /sys/bus/usb/drivers/usb/unbind
+
+Both the ALSA device:
+Aug 30 16:19:07 classic pipewire[2061]: spa.alsa: hw:2: snd_pcm_drop No such device
+Aug 30 16:19:07 classic pipewire[2061]: spa.alsa: hw:2: close failed: No such device
+Aug 30 16:19:07 classic pipewire[2061]: spa.alsa: front:2: snd_pcm_drop No such device
+Aug 30 16:19:07 classic pipewire[2061]: spa.alsa: front:2: close failed: No such device
+
+
+and the battery script
+(https://github.com/Sapd/HeadsetControl/pull/230) are gone.
