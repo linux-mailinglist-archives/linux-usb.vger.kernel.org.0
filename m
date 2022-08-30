@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1D05A656B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 15:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49685A65AB
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 15:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiH3Ns1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 09:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
+        id S229798AbiH3NyU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 09:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiH3NsF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 09:48:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A42915C365;
-        Tue, 30 Aug 2022 06:45:47 -0700 (PDT)
+        with ESMTP id S231346AbiH3NyB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 09:54:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA43109E;
+        Tue, 30 Aug 2022 06:53:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661867147; x=1693403147;
+  t=1661867617; x=1693403617;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YgoTg1VgtIwM92xPEd8ShwW4NWossGMVjWFSvQrUIDY=;
-  b=MgplcZCzRWEdR9sbbCmKw13d38Dljl+D2Oi3D9njgmEp6y4ZKtN01RMU
-   0fSWkJDxRH0hbjJtiH3NTNcPWTcYmXcknhJYFQIHHayR5qbGj4RKpdBOQ
-   EW3ALA+dfAtTbC8CYnrshC+d0mWzYwbopRShIOXjmW1Esgl2aqlNMdtkC
-   8yREbiH26UNOg4ddDdf030Lcaw4s0iHz5DLutdAWYk0ib+iyL5mKQg/6a
-   Fd0HNgHNXZ7faOJbLNKAwMyLBTMmNh9WxYLUDriCzOlj3zf3Wu3fGZfnp
-   VBPi7vdbJogpmAII8c8v+PU6uW031gVb9C1t2FdUGAZDgVe4dbUFwasVy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296453715"
+  bh=CfUW4WBXt1HwDAtQIzZ6c8S6TWUb2CY9IO/h++eGxkk=;
+  b=ml5Vc1Q9uxnQcO6yzYNVYm2949+5cIOG8gIYbYshlinI80kA+mJ0MbYs
+   AmOC3JS207IET6YSW4NS0NSAaiCJj00HFWhamnmw8iTIOw5aTri+Tl9vV
+   ZhVhM7d6UfRuT1uoyF9z2gKaS2Q3n8HUCAYSoLQK+DpAU1BIoczMTm5Cx
+   yMQbq1/3OjihQXDM1XGSJyFYZWFP3ps5qFDS7YrMVWTPao/nHSVWIvxMw
+   Ttqz9ZaEOI82J5Uw7D8/Vk6/BMeg2JWnl9E7kW0Lz50s2LjjqVliiKu0b
+   v1kBxZFkSH/KAhOup422NvfGtqQej+CDxb71n12sAyGJgA0qw2nAUlHJa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="275577693"
 X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="296453715"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 06:45:25 -0700
+   d="scan'208";a="275577693"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 06:53:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="614615325"
+   d="scan'208";a="715304954"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Aug 2022 06:45:22 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 30 Aug 2022 06:53:33 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 06DD2174; Tue, 30 Aug 2022 16:45:36 +0300 (EEST)
-Date:   Tue, 30 Aug 2022 16:45:36 +0300
+        id 31E41174; Tue, 30 Aug 2022 16:53:47 +0300 (EEST)
+Date:   Tue, 30 Aug 2022 16:53:47 +0300
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     Szuying Chen <chensiying21@gmail.com>
 Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
@@ -47,15 +47,14 @@ Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
         YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
         Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
-Subject: Re: [PATCH v7 1/3] thunderbolt: Add vendor's specific operations of
- NVM
-Message-ID: <Yw4UgEu5ecNd9qh4@black.fi.intel.com>
+Subject: Re: [PATCH v7 3/3] thunderbolt: To extend ASMedia NVM formats.
+Message-ID: <Yw4Wa1s/zg4XtTxi@black.fi.intel.com>
 References: <20220829111059.665305-1-chensiying21@gmail.com>
- <20220829111059.665305-2-chensiying21@gmail.com>
+ <20220829111059.665305-4-chensiying21@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220829111059.665305-2-chensiying21@gmail.com>
+In-Reply-To: <20220829111059.665305-4-chensiying21@gmail.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -66,428 +65,175 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 07:10:57PM +0800, Szuying Chen wrote:
+On Mon, Aug 29, 2022 at 07:10:59PM +0800, Szuying Chen wrote:
 > From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 > 
-> The patch add tb_switch_nvm_alloc() contain an array that has functions
-> pointers to vendor_ops that vendor to define.
-> And moved vendor:intel part of the code to make all the vendors
-> (includes Intel) support it in nvm.c.
-
-This should really answer the question: why this patch is needed. Not
-what it does as we can see that from the code itself.
-
+> The patch add ASMedia NVM formats. And add tb_switch_nvm_upgradeable()
+> to enable firmware upgrade.
+> 
 > Signed-off-by: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 > ---
-> Fix $subject and add part of kernel-doc.
+> Add ASMedia NVM formats. And fix asmedia_nvm_version() part of code so
+> that easier to read.
 > 
->  drivers/thunderbolt/nvm.c    | 206 +++++++++++++++++++++++++++++++++++
->  drivers/thunderbolt/switch.c | 102 +++--------------
->  drivers/thunderbolt/tb.h     |   6 +
->  3 files changed, 229 insertions(+), 85 deletions(-)
+>  drivers/thunderbolt/nvm.c    | 68 ++++++++++++++++++++++++++++++++++++
+>  drivers/thunderbolt/switch.c |  3 ++
+>  drivers/thunderbolt/tb.h     |  1 +
+>  3 files changed, 72 insertions(+)
 > 
 > diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-> index b3f310389378..91c8848b4d2e 100644
+> index 91c8848b4d2e..c69db5b65f7d 100644
 > --- a/drivers/thunderbolt/nvm.c
 > +++ b/drivers/thunderbolt/nvm.c
-> @@ -12,8 +12,214 @@
+> @@ -15,16 +15,25 @@
+>  /* Switch NVM support */
+>  #define NVM_CSS		0x10
 > 
->  #include "tb.h"
-> 
-> +/* Switch NVM support */
-> +#define NVM_CSS		0x10
+> +/* Vendor ID of the Router. It's assigned by the USB-IF */
+
+Pretty useless comment.
+
+> +#define ROUTER_VENDOR_ID_ASMEDIA 0x174c
+> +
+> +/* ASMedia specific NVM offsets */
+> +#define ASMEDIA_NVM_DATE	0x1c
+> +#define ASMEDIA_NVM_VERSION	0x28
 > +
 >  static DEFINE_IDA(nvm_ida);
 > 
-> +/**
-> + * struct tb_nvm_vendor_ops - Vendor NVM specific operations
-> + * @read_version: Used NVM read get Firmware version.
-> + * @validate: Vendors have their validate method before NVM write.
-> + */
-> +struct tb_nvm_vendor_ops {
-> +	int (*read_version)(struct tb_switch *sw);
-> +	int (*validate)(struct tb_switch *sw);
-> +};
-> +
-> +static inline int nvm_read(struct tb_switch *sw, unsigned int address,
-> +			   void *buf, size_t size)
-> +{
-> +	if (tb_switch_is_usb4(sw))
-> +		return usb4_switch_nvm_read(sw, address, buf, size);
-> +	return dma_port_flash_read(sw->dma_port, address, buf, size);
-> +}
-
-There is already a version of this in switch.c so can't we move this
-into tb.h and use it in both places?
-
-> +
-> +static int intel_nvm_version(struct tb_switch *sw)
+>  /**
+>   * struct tb_nvm_vendor_ops - Vendor NVM specific operations
+>   * @read_version: Used NVM read get Firmware version.
+>   * @validate: Vendors have their validate method before NVM write.
+> + * @nvm_upgrade: Enable NVM upgrade.
+>   */
+>  struct tb_nvm_vendor_ops {
+>  	int (*read_version)(struct tb_switch *sw);
+>  	int (*validate)(struct tb_switch *sw);
+> +	void (*nvm_upgrade)(struct tb_switch *sw);
+>  };
+> 
+>  static inline int nvm_read(struct tb_switch *sw, unsigned int address,
+> @@ -128,11 +137,49 @@ static int intel_nvm_validate(struct tb_switch *sw)
+>  	return 0;
+>  }
+> 
+> +static int asmedia_nvm_version(struct tb_switch *sw)
 > +{
 > +	struct tb_nvm *nvm = sw->nvm;
 > +	u32 val;
 > +	int ret;
 > +
+> +	/* ASMedia get version and date format is xxxxxx.xxxxxx */
+> +	ret = nvm_read(sw, ASMEDIA_NVM_VERSION, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	nvm->major = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+> +
+> +	ret = nvm_read(sw, ASMEDIA_NVM_DATE, &val, sizeof(val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	nvm->minor = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+> +
 > +	/*
-> +	 * If the switch is in safe-mode the only accessible portion of
-> +	 * the NVM is the non-active one where userspace is expected to
-> +	 * write new functional NVM.
+> +	 * Asmedia NVM size fixed on 512K. We currently have no plan
+> +	 * to increase size in the future.
 > +	 */
-> +	if (!sw->safe_mode) {
-> +		u32 nvm_size, hdr_size;
-> +
-> +		ret = nvm_read(sw, NVM_FLASH_SIZE, &val, sizeof(val));
-> +		if (ret)
-> +			return ret;
-> +
-> +		hdr_size = sw->generation < 3 ? SZ_8K : SZ_16K;
-> +		nvm_size = (SZ_1M << (val & 7)) / 8;
-> +		nvm_size = (nvm_size - hdr_size) / 2;
-> +
-> +		ret = nvm_read(sw, NVM_VERSION, &val, sizeof(val));
-> +		if (ret)
-> +			return ret;
-> +
-> +		nvm->major = val >> 16;
-> +		nvm->minor = val >> 8;
-> +		nvm->nvm_size = nvm_size;
-> +	}
+> +	nvm->nvm_size = SZ_512K;
 > +
 > +	return 0;
 > +}
 > +
-> +static int intel_nvm_validate(struct tb_switch *sw)
+> +static void tb_switch_set_nvm_upgrade(struct tb_switch *sw)
 > +{
-> +	unsigned int image_size, hdr_size;
-> +	u8 *buf = sw->nvm->buf;
-> +	u16 ds_size;
-> +	int ret;
-> +
-> +	image_size = sw->nvm->buf_data_size;
-> +	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * FARB pointer must point inside the image and must at least
-> +	 * contain parts of the digital section we will be reading here.
-> +	 */
-> +	hdr_size = (*(u32 *)buf) & 0xffffff;
-> +	if (hdr_size + NVM_DEVID + 2 >= image_size)
-> +		return -EINVAL;
-> +
-> +	/* Digital section start should be aligned to 4k page */
-> +	if (!IS_ALIGNED(hdr_size, SZ_4K))
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Read digital section size and check that it also fits inside
-> +	 * the image.
-> +	 */
-> +	ds_size = *(u16 *)(buf + hdr_size);
-> +	if (ds_size >= image_size)
-> +		return -EINVAL;
-> +
-> +	if (!sw->safe_mode) {
-> +		u16 device_id;
-> +
-> +		/*
-> +		 * Make sure the device ID in the image matches the one
-> +		 * we read from the switch config space.
-> +		 */
-> +		device_id = *(u16 *)(buf + hdr_size + NVM_DEVID);
-> +		if (device_id != sw->config.device_id)
-> +			return -EINVAL;
-> +
-> +		if (sw->generation < 3) {
-> +			/* Write CSS headers first */
-> +			ret = dma_port_flash_write(sw->dma_port,
-> +				DMA_PORT_CSS_ADDRESS, buf + NVM_CSS,
-> +				DMA_PORT_CSS_MAX_SIZE);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +
-> +		/* Skip headers in the image */
-> +		sw->nvm->buf = buf + hdr_size;
-> +		sw->nvm->buf_data_size = image_size - hdr_size;
-> +	}
-> +
-> +	return 0;
+> +	sw->no_nvm_upgrade = false;
 > +}
 > +
-> +static const struct tb_nvm_vendor_ops intel_switch_nvm_ops = {
-> +	.read_version = intel_nvm_version,
-> +	.validate = intel_nvm_validate,
-> +};
-> +
-> +struct switch_nvm_vendor {
-> +	u16 vendor;
-> +	const struct tb_nvm_vendor_ops *vops;
-> +};
-> +
-> +static const struct switch_nvm_vendor switch_nvm_vendors[] = {
-> +	{ PCI_VENDOR_ID_INTEL, &intel_switch_nvm_ops },
-> +	{ 0x8087, &intel_switch_nvm_ops },
-> +};
-> +
-> +/**
-> + * tb_switch_nvm_validate() - Validate NVM image
-> + * @switch: Switch to NVM write
-> + *
-> + * The function include vendor's validate before writes data to actual NVM
-> + * flash device. Return %0 in success and error otherwise.
-> + */
-> +int tb_switch_nvm_validate(struct tb_switch *sw)
-> +{
-> +	const struct tb_nvm_vendor_ops *vops = sw->nvm->vops;
-> +	const u8 *buf = sw->nvm->buf;
-> +	unsigned int image_size;
-> +	int ret = 0;
-> +
-> +	if (!buf)
-> +		return -EINVAL;
-> +
-> +	image_size = sw->nvm->buf_data_size;
-> +	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
-> +		return -EINVAL;
-> +
-> +	if (!vops)
-> +		return 0;
-> +
-> +	if (vops->validate)
-> +		ret = vops->validate(sw);
-> +
-> +	return ret;
+>  static const struct tb_nvm_vendor_ops intel_switch_nvm_ops = {
+>  	.read_version = intel_nvm_version,
+>  	.validate = intel_nvm_validate,
+>  };
+> 
+> +static const struct tb_nvm_vendor_ops asmedia_switch_nvm_ops = {
+> +	.nvm_upgrade = tb_switch_set_nvm_upgrade,
 
-return vops->validate ? vops->validate(sw) ? 0;
+This is bad name IMHO. It does not really upragade the NVM so perhaps
+something like .nvm_upgradeable?
 
-> +}
+Hower, I don't think this is needed at all because instead of the hack
+in tb_start():
+
+	tb->root_switch->no_nvm_upgrade = true;
+
+we should make this:
+
+	tb->root_switch->no_nvm_upgrade = !tb_switch_is_usb4(sw);
+
+and then it only depends on the fact whether the router implements the
+necessary NVM operations (please double check if this actually works).
+
+> +	.read_version = asmedia_nvm_version,
+> +};
 > +
+>  struct switch_nvm_vendor {
+>  	u16 vendor;
+>  	const struct tb_nvm_vendor_ops *vops;
+> @@ -143,6 +190,27 @@ static const struct switch_nvm_vendor switch_nvm_vendors[] = {
+>  	{ 0x8087, &intel_switch_nvm_ops },
+>  };
+> 
 > +/**
-> + * tb_switch_nvm_alloc() - Allocate new NVM structure.
-> + * @sw: Switch to allocate NVM
+> + * tb_switch_nvm_upgradeable() - Enable NVM upgrade of a switch
+> + * @sw: Switch whose NVM upgrade to enable
 > + *
-> + * Allocates new NVM structure and returns it. In case of error returns
-> + * ERR_PTR().
+> + * This function must be called before creating the switch devices, it will
+> + * make the no_active NVM device visible.
+
+non_active
+
 > + */
-> +struct tb_nvm *tb_switch_nvm_alloc(struct tb_switch *sw)
+> +void tb_switch_nvm_upgradeable(struct tb_switch *sw)
 > +{
-> +	const struct tb_nvm_vendor_ops *vops = NULL;
-> +	struct tb_nvm *nvm;
-> +	int ret;
 > +	int i;
 > +
-> +	/*
-> +	 * If the vendor matches on the array then set nvm->vops to
-> +	 * point the vendor specific operations.
-> +	 */
 > +	for (i = 0; i < ARRAY_SIZE(switch_nvm_vendors); i++) {
 > +		const struct switch_nvm_vendor *v = &switch_nvm_vendors[i];
 > +
 > +		if (v->vendor == sw->config.vendor_id) {
-> +			vops = v->vops;
-> +			break;
+> +			if (v->vops->nvm_upgrade)
+> +				v->vops->nvm_upgrade(sw);
 > +		}
 > +	}
-> +
-> +	if (!vops)
-> +		return ERR_PTR(-EOPNOTSUPP);
-> +
-> +	nvm = tb_nvm_alloc(&sw->dev);
-> +	if (IS_ERR(nvm))
-> +		return nvm;
-> +
-> +	nvm->vops = vops;
-> +	sw->nvm = nvm;
-> +	ret = vops->read_version(sw);
-> +	if (ret)
-> +		goto err_nvm;
-> +
-> +	return nvm;
-> +
-> +err_nvm:
-> +	tb_nvm_free(nvm);
-> +	return ERR_PTR(ret);
 > +}
 > +
 >  /**
->   * tb_nvm_alloc() - Allocate new NVM structure
->   * @dev: Device owning the NVM
+>   * tb_switch_nvm_validate() - Validate NVM image
+>   * @switch: Switch to NVM write
 > diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 244f8cd38b25..2dbfd75202bf 100644
+> index 2dbfd75202bf..f8dc18f6c5c8 100644
 > --- a/drivers/thunderbolt/switch.c
 > +++ b/drivers/thunderbolt/switch.c
-> @@ -102,62 +102,17 @@ static void nvm_clear_auth_status(const struct tb_switch *sw)
-> 
->  static int nvm_validate_and_write(struct tb_switch *sw)
->  {
-> -	unsigned int image_size, hdr_size;
-> -	const u8 *buf = sw->nvm->buf;
-> -	u16 ds_size;
-> +	unsigned int image_size;
-> +	const u8 *buf;
->  	int ret;
-> 
-> -	if (!buf)
-> -		return -EINVAL;
-> +	/* validate NVM image before NVM write */
-> +	ret = tb_switch_nvm_validate(sw);
-> +	if (ret)
-> +		return ret;
-> 
-> +	buf = sw->nvm->buf;
->  	image_size = sw->nvm->buf_data_size;
-> -	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
-> -		return -EINVAL;
-> -
-> -	/*
-> -	 * FARB pointer must point inside the image and must at least
-> -	 * contain parts of the digital section we will be reading here.
-> -	 */
-> -	hdr_size = (*(u32 *)buf) & 0xffffff;
-> -	if (hdr_size + NVM_DEVID + 2 >= image_size)
-> -		return -EINVAL;
-> -
-> -	/* Digital section start should be aligned to 4k page */
-> -	if (!IS_ALIGNED(hdr_size, SZ_4K))
-> -		return -EINVAL;
-> -
-> -	/*
-> -	 * Read digital section size and check that it also fits inside
-> -	 * the image.
-> -	 */
-> -	ds_size = *(u16 *)(buf + hdr_size);
-> -	if (ds_size >= image_size)
-> -		return -EINVAL;
-> -
-> -	if (!sw->safe_mode) {
-> -		u16 device_id;
-> -
-> -		/*
-> -		 * Make sure the device ID in the image matches the one
-> -		 * we read from the switch config space.
-> -		 */
-> -		device_id = *(u16 *)(buf + hdr_size + NVM_DEVID);
-> -		if (device_id != sw->config.device_id)
-> -			return -EINVAL;
-> -
-> -		if (sw->generation < 3) {
-> -			/* Write CSS headers first */
-> -			ret = dma_port_flash_write(sw->dma_port,
-> -				DMA_PORT_CSS_ADDRESS, buf + NVM_CSS,
-> -				DMA_PORT_CSS_MAX_SIZE);
-> -			if (ret)
-> -				return ret;
-> -		}
-> -
-> -		/* Skip headers in the image */
-> -		buf += hdr_size;
-> -		image_size -= hdr_size;
-> -	}
-> 
->  	if (tb_switch_is_usb4(sw))
->  		ret = usb4_switch_nvm_write(sw, 0, buf, image_size);
-> @@ -384,28 +339,22 @@ static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
->  static int tb_switch_nvm_add(struct tb_switch *sw)
->  {
->  	struct tb_nvm *nvm;
-> -	u32 val;
->  	int ret;
-> 
->  	if (!nvm_readable(sw))
->  		return 0;
-> 
-> -	/*
-> -	 * The NVM format of non-Intel hardware is not known so
-> -	 * currently restrict NVM upgrade for Intel hardware. We may
-> -	 * relax this in the future when we learn other NVM formats.
-> -	 */
-> -	if (sw->config.vendor_id != PCI_VENDOR_ID_INTEL &&
-> -	    sw->config.vendor_id != 0x8087) {
-> -		dev_info(&sw->dev,
-> -			 "NVM format of vendor %#x is not known, disabling NVM upgrade\n",
-> -			 sw->config.vendor_id);
-> -		return 0;
-> -	}
-> +	nvm = tb_switch_nvm_alloc(sw);
-> +	if (IS_ERR(nvm)) {
-> +		if (PTR_ERR(nvm) == -EOPNOTSUPP) {
-> +			dev_info(&sw->dev,
-> +				"NVM format of vendor %#x is not known, disabling NVM upgrade\n",
-> +				sw->config.vendor_id);
-> +			return 0;
-> +		}
-> 
-> -	nvm = tb_nvm_alloc(&sw->dev);
-> -	if (IS_ERR(nvm))
->  		return PTR_ERR(nvm);
-> +	}
-> 
->  	/*
->  	 * If the switch is in safe-mode the only accessible portion of
-> @@ -413,24 +362,7 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
->  	 * write new functional NVM.
->  	 */
->  	if (!sw->safe_mode) {
-> -		u32 nvm_size, hdr_size;
-> -
-> -		ret = nvm_read(sw, NVM_FLASH_SIZE, &val, sizeof(val));
-> -		if (ret)
-> -			goto err_nvm;
-> -
-> -		hdr_size = sw->generation < 3 ? SZ_8K : SZ_16K;
-> -		nvm_size = (SZ_1M << (val & 7)) / 8;
-> -		nvm_size = (nvm_size - hdr_size) / 2;
-> -
-> -		ret = nvm_read(sw, NVM_VERSION, &val, sizeof(val));
-> -		if (ret)
-> -			goto err_nvm;
-> -
-> -		nvm->major = val >> 16;
-> -		nvm->minor = val >> 8;
-> -
-> -		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
-> +		ret = tb_nvm_add_active(nvm, nvm->nvm_size, tb_switch_nvm_read);
->  		if (ret)
->  			goto err_nvm;
+> @@ -2822,6 +2822,9 @@ int tb_switch_add(struct tb_switch *sw)
+>  			return ret;
 >  	}
+> 
+> +	/* Enable the NVM firmware upgrade */
+> +	tb_switch_nvm_upgradeable(sw);
+> +
+>  	ret = device_add(&sw->dev);
+>  	if (ret) {
+>  		dev_err(&sw->dev, "failed to add device: %d\n", ret);
 > diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> index 5db76de40cc1..fc32737fcde4 100644
+> index 9cf62d5f25d2..642af7473851 100644
 > --- a/drivers/thunderbolt/tb.h
 > +++ b/drivers/thunderbolt/tb.h
-> @@ -42,6 +42,8 @@
->   *		   image
->   * @authenticating: The device is authenticating the new NVM
->   * @flushed: The image has been flushed to the storage area
-> + * @nvm_size: Number of bytes to activate NVM
-
-@nvm_size: Size in bytes of the active NVM
-
-> + * @vops: Vendor NVM specific operations
->   *
->   * The user of this structure needs to handle serialization of possible
->   * concurrent access.
-> @@ -57,6 +59,8 @@ struct tb_nvm {
->  	size_t buf_data_size;
->  	bool authenticating;
->  	bool flushed;
-> +	u32 nvm_size;
-> +	const struct tb_nvm_vendor_ops *vops;
->  };
-> 
->  enum tb_nvm_write_ops {
-> @@ -759,6 +763,7 @@ struct tb_switch *tb_switch_alloc(struct tb *tb, struct device *parent,
->  				  u64 route);
->  struct tb_switch *tb_switch_alloc_safe_mode(struct tb *tb,
->  			struct device *parent, u64 route);
-> +struct tb_nvm *tb_switch_nvm_alloc(struct tb_switch *sw);
->  int tb_switch_configure(struct tb_switch *sw);
->  int tb_switch_add(struct tb_switch *sw);
->  void tb_switch_remove(struct tb_switch *sw);
-> @@ -767,6 +772,7 @@ int tb_switch_resume(struct tb_switch *sw);
->  int tb_switch_reset(struct tb_switch *sw);
+> @@ -773,6 +773,7 @@ int tb_switch_reset(struct tb_switch *sw);
 >  int tb_switch_wait_for_bit(struct tb_switch *sw, u32 offset, u32 bit,
 >  			   u32 value, int timeout_msec);
-> +int tb_switch_nvm_validate(struct tb_switch *sw);
+>  int tb_switch_nvm_validate(struct tb_switch *sw);
+> +void tb_switch_nvm_upgradeable(struct tb_switch *sw);
 >  void tb_sw_set_unplugged(struct tb_switch *sw);
 >  struct tb_port *tb_switch_find_port(struct tb_switch *sw,
 > 				    enum tb_port_type type);
