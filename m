@@ -2,113 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0FB5A686F
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 18:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27955A6872
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Aug 2022 18:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiH3Q2u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 30 Aug 2022 12:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S229823AbiH3Qb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 12:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiH3Q2j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 12:28:39 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56413D34C7;
-        Tue, 30 Aug 2022 09:28:37 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 53AEEE0006;
-        Tue, 30 Aug 2022 16:28:31 +0000 (UTC)
-Message-ID: <71407e16e141ebc6e9eb042187a1448ad6cfa419.camel@hadess.net>
-Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Date:   Tue, 30 Aug 2022 18:28:30 +0200
-In-Reply-To: <Yw4ocSXDuWmlFkIg@kroah.com>
-References: <20220809094300.83116-1-hadess@hadess.net>
-         <20220809094300.83116-3-hadess@hadess.net> <YvI5DJnOjhJbNnNO@kroah.com>
-         <2cde406b4d59ddfe71a7cdc11a76913a0a168595.camel@hadess.net>
-         <YvKMVjl6x38Hud6I@kroah.com>
-         <fae7e35a920239fe2a35b6b967bd17e04af1e1b7.camel@hadess.net>
-         <Yv5V1KWOQa5mnktE@kroah.com>
-         <31207cebad932bd9d943421d6528ad81877758a5.camel@hadess.net>
-         <Yw4ocSXDuWmlFkIg@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        with ESMTP id S229453AbiH3Qb5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 12:31:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60B8B980;
+        Tue, 30 Aug 2022 09:31:54 -0700 (PDT)
+Received: from [192.168.0.74] ([91.64.235.177]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mj8Vx-1p5xjd0PHJ-00fCHk; Tue, 30 Aug 2022 18:31:48 +0200
+From:   "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+To:     mathias.nyman@intel.com
+Subject: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96
+ controller
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 30 Aug 2022 16:31:47 +0000
+Message-Id: <emc5c926da-851b-4152-8d2f-9d43bab7bcdc@607fe812.com>
+Reply-To: "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+User-Agent: eM_Client/9.1.2109.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="------=_MB3241BCED-BD68-41C7-BA37-E3D7783F0573"
+X-Antivirus: Avast (VPS 220830-6, 30.8.2022), Outbound message
+X-Antivirus-Status: Clean
+X-Provags-ID: V03:K1:06BnlqnG/Q1vMM+tYaQjtE+/EPWOxCcUeMYUonqvD1llIz9ZNbH
+ OR1yJNab236L7Jzf8y8knJbfR8e16B1nv0/JXRL8QED6YjNvgIWaQ99fL7Kvqv8ttO4eejE
+ DohW2pBGGg5beePDEBNp+JTyKt0/5ovl1WEHPLD6ge3xkNdLovio+h3zvsOa3ZiPHoCVnbO
+ 4HxMO8J+N/rWQ9LMn88jQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2KGciDdT2wc=:ct5ZKgbBHpmYjwhpkOVLK7
+ iEcr+HA9Z2b8SFqfgkP4gIXozO9+Cogf9b2K/XDau+PONNdF7pud51q4pCo6F1np8yQZx5P3g
+ YH6OPN+RlCcAegv72oubPRVCdYXH51zOH/MgAqIpPIaCt0iKVrChM/2GC7kOE6hXgzaZxjkTS
+ ke3QRMtxWWuOCUTeaIn97p4+diVFFmy5Lz+RBAS0Oj2GcQObHesoSLBRgYzG4EFExs4zEAUfl
+ 5VZh3QyzZ7eBWAzgyubnMph3/ESQzxlUyNluX/B+qSW5vb3+D2M0/pMe6Mhaj6cbCAnZHJ2Bl
+ dGuuHAKteSd744nsfgT4LbPj2aMi0mguXHLFIEi9BBHYKqkPw7xOu2lomvNZ0RSPXGNq+k3tC
+ jYHbAFuV0pG+p2r2WAjzQBxftytACgMgjEpWKVFxK9jRiilsciEeEP33icOVNxM3ffJvMVMgP
+ cZX/yBn3onDQM1OfeII+MYEVeHBHV6XPP3qgKCIqS+10QPRt3Bw6QQgCnYyLVIrB18mq+TO0D
+ PDYB0mbvQAOd+zwGpEzaIm6pjR2yv54Ia5y2adXXw1dVdtEsBMwwxPO+CQgAL09xDTA6Px79w
+ eEXmVuZZdPWgEYFAM8IJzNZl57mR5cywmHDks+l9L3t0X/2rGH1VjcEhB2p/t5GBUwms96Y7q
+ T4TBe78JqyULGXdJRNkyru6GHcDN1ajXNwUtV/oUX1Vd6DEsF1+vo59lg3nYHOhuLJNE/ACqX
+ jEyPM6I8r1oIzYIf9YeL1dk0q5CNDP2xefhPYnwQRFSnSsOuviHnZbmROmQ=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2022-08-30 at 17:10 +0200, Greg Kroah-Hartman wrote:
-> On Tue, Aug 30, 2022 at 04:44:52PM +0200, Bastien Nocera wrote:
-> > On Thu, 2022-08-18 at 17:08 +0200, Greg Kroah-Hartman wrote:
-> > > On Tue, Aug 09, 2022 at 07:27:11PM +0200, Bastien Nocera wrote:
-> > > > On Tue, 2022-08-09 at 18:33 +0200, Greg Kroah-Hartman wrote:
-> > > > > On Tue, Aug 09, 2022 at 04:31:04PM +0200, Bastien Nocera
-> > > > > wrote:
-> > > > > > On Tue, 2022-08-09 at 12:38 +0200, Greg Kroah-Hartman
-> > > > > > wrote:
-> > > > > > > Now if you really really want to disable a device from
-> > > > > > > under
-> > > > > > > a
-> > > > > > > user,
-> > > > > > > without the file handle present, you can do that today,
-> > > > > > > as
-> > > > > > > root,
-> > > > > > > by
-> > > > > > > doing the 'unbind' hack through userspace and sysfs. 
-> > > > > > > It's so
-> > > > > > > common
-> > > > > > > that this seems to be how virtual device managers handle
-> > > > > > > virtual
-> > > > > > > machines, so it should be well tested by now.
-> > > > > > 
-> > > > > > The only thing I know that works that way is usbip, and it
-> > > > > > requires
-> > > > > > unbinding each of the interfaces:
-> > > > > > 
-> > > > > > https://sourceforge.net/p/usbip/git-windows/ci/master/tree/trunk/userspace/src/bind-driver.c#l157
-> > > > > 
-> > > > > virtio devices also use the api from what I recall.
-> > > > 
-> > > > I can't find any code that would reference
-> > > > /sys/bus/usb/drivers/usbfs/unbind or /sys/bus/usb/drivers/usbfs
-> > > > wrt
-> > > > virtio. Where's the host side code for that?
-> > > 
-> > > I mean the virtio code uses bind/unbind for it's devices, nothing
-> > > to
-> > > do
-> > > with USB other than the userspace interface involved.
-> > 
-> > This is one big hammer that is really counterproductive in some
-> > fairly
-> > common use cases. It's fine for assigning a full USB device to a
-> > VM, it
-> > really isn't for gently removing "just that bit of interface" the
-> > user
-> > is using while leaving the rest running.
-> 
-> In USB, drivers are bound to interfaces, not to the device.
+--------=_MB3241BCED-BD68-41C7-BA37-E3D7783F0573
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-I did implement kernel drivers for devices all the way back in 2020, if
-you remember.
+Hi there,
 
-> But as Alan pointed out, we don't ever really "bind" the usbfs code
-> to
-> the interface, so that will not work all that well :(
+first try at a patch which was an actual pain with my Lenovo T500=20
+notebook, augmented with an USB3 PCMCIA card that has an ASM1042 chip.=20
+Inspired by this email thread:=20
+https://markmail.org/thread/7vzqbe7t6du6qsw3
 
-Right.
+ASM1042 identifies as a 0x96 XHCI host, brings spurious transfer event=20
+errors with a r8152 (Realtek 8153a) USB3 enthernet adapter. Additionally=20
+setting quirk XHCI_SPURIOUS_SUCCESS seems to resolve this issue in this=20
+case.
+
+wiith best regards
+
+Jens Glathe
+--------=_MB3241BCED-BD68-41C7-BA37-E3D7783F0573
+Content-Type: text/plain;
+ name=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch;
+ charset=iso-8859-1
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch
+
+RnJvbSBlYWMzNDEwZWVhZjAzYzExMWFkZDRkY2UyNDdjNDAwMmZjNThiYTVkIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBKZW5zIEdsYXRoZSA8amVucy5nbGF0aGVAb2xkc2Nob29sc29s
+dXRpb25zLmJpej4KRGF0ZTogU3VuLCAyOCBBdWcgMjAyMiAxNjoyMzo0MSArMDIwMApTdWJqZWN0
+OiBbUEFUQ0hdIGZpeDogYWRkIFhIQ0lfU1BVUklPVVNfU1VDQ0VTUyB0byBBU00xMDQyIGRlc3Bp
+dGUgYmVpbmcgYQogVjAuOTYgY29udHJvbGxlcgoKb25seSBpZiBpdCByZXBvcnRzIGFzIGEgVjAu
+OTYgWEhDSSBjb250cm9sbGVyLiBBcHBlYXJzIHRvIGZpeCB0aGUgZXJyb3JzCiJ4aGNpX2hjZCA8
+YWRkcmVzcz47IEVSUk9SIFRyYW5zZmVyIGV2ZW50IFRSQiBETUEgcHRyIG5vdCBwYXJ0IG9mIGN1
+cnJlbnQgVEQgZXBfaW5kZXggMiBjb21wX2NvZGUgMTMiCnRoYXQgYXBwZWFyIHNwdXJpb3VzbHkg
+KG9yIHByZXR0eSBvZnRlbikgd2hlbiB1c2luZyBhIHI4MTUyIFVTQjMgZXRoZXJuZXQgYWRhcHRl
+ciB3aXRoIGludGVncmF0ZWQgaHViLgotLS0KIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1wY2kuYyB8
+IDggKysrKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24o
+LSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMgYi9kcml2ZXJzL3Vz
+Yi9ob3N0L3hoY2ktcGNpLmMKaW5kZXggZGNlNmMwZWM4ZDM0Li4wMzUyMjliYzZkMjkgMTAwNjQ0
+Ci0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1wY2kuYworKysgYi9kcml2ZXJzL3VzYi9ob3N0
+L3hoY2ktcGNpLmMKQEAgLTMwNiw4ICszMDYsMTQgQEAgc3RhdGljIHZvaWQgeGhjaV9wY2lfcXVp
+cmtzKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHhoY2lfaGNkICp4aGNpKQogCX0KIAogCWlm
+IChwZGV2LT52ZW5kb3IgPT0gUENJX1ZFTkRPUl9JRF9BU01FRElBICYmCi0JCXBkZXYtPmRldmlj
+ZSA9PSBQQ0lfREVWSUNFX0lEX0FTTUVESUFfMTA0Ml9YSENJKQorCQlwZGV2LT5kZXZpY2UgPT0g
+UENJX0RFVklDRV9JRF9BU01FRElBXzEwNDJfWEhDSSkgeworICAgIC8qIHRyeSB0byB0YW1lIHRo
+ZSBBU01lZGlhIDEwNDIgY29udHJvbGxlciB3aGljaCBpcyAwLjk2IAorICAgICovCisJICBpZiAo
+eGhjaS0+aGNpX3ZlcnNpb24gPT0gMHg5NikgeworICAgICAgeGhjaS0+cXVpcmtzIHw9IFhIQ0lf
+U1BVUklPVVNfU1VDQ0VTUzsKKyAgICB9CiAJCXhoY2ktPnF1aXJrcyB8PSBYSENJX0JST0tFTl9T
+VFJFQU1TOworCX0KIAlpZiAocGRldi0+dmVuZG9yID09IFBDSV9WRU5ET1JfSURfQVNNRURJQSAm
+JgogCQlwZGV2LT5kZXZpY2UgPT0gUENJX0RFVklDRV9JRF9BU01FRElBXzEwNDJBX1hIQ0kpIHsK
+IAkJeGhjaS0+cXVpcmtzIHw9IFhIQ0lfVFJVU1RfVFhfTEVOR1RIOwotLSAKMi4yNS4xCgo=
+--------=_MB3241BCED-BD68-41C7-BA37-E3D7783F0573--
+
