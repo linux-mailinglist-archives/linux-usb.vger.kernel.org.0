@@ -2,63 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3940D5A8828
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 23:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015C45A88B7
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 00:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbiHaVfo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 17:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S232332AbiHaWA0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 18:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiHaVfl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 17:35:41 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18865A88A
-        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 14:35:39 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id 72so15675392pfx.9
-        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 14:35:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=k+a5ywY0A19s4ewXtlKzkVso1icQ7ila5o+nOXUa5t0=;
-        b=c5JgVe1Byofhc6O6ncpug3jMP9vrBQ8mg1iV4x6OffluDyNwdc5yQC0i91mRpeqi+R
-         e60mwo7NYHqTwKLefxzxP98T5zdFGDwLlfZQhYzJomTXQ3P9D2BppXIkeoRHIChSYNap
-         k39or0uq0Q9ofWiwRcSOxl+34jVOM9ez6ZVUQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=k+a5ywY0A19s4ewXtlKzkVso1icQ7ila5o+nOXUa5t0=;
-        b=2v9sjCNeuA1F3BHSQCpU1sf4SLiOdtyy+PdbAqod/qah3+E5SUoQm9tE8KHzOTYLRM
-         En4MuLGwpSSw7tGNBaWAVTQPn9mM7Uvo/Ycg6UFTHA1Ieg0kLoFjMHy3T0wqseNtB9e1
-         Z7JUStqd38U7EaZ82aiScRb46U6MFrzO9Q97XVL7glUiTKg9veD17+v4x8u7GAc1OTJB
-         ufysdLOr8DTFEVolXdbZRks3MjY2DhrlAWP2kCKRcArVpxZ9CYPIl8wGyM/yvnnZkMgh
-         utK+4hi3YfQ3Jf4i11M63579vHc8pFz+llHNPouMEsUfEoQffzyDxSk4wCcXugLvLbWn
-         FF9A==
-X-Gm-Message-State: ACgBeo2yHpoHEo7RF5BDL67rAxRQ0Pd25eOzTWS6XGGKbgTIdGDyK20Z
-        iX3LTzMMwCXh1rIeWDf6vKK43g==
-X-Google-Smtp-Source: AA6agR7bFSZUedthvJeKRtZPEbMNHJYiT50MWzKxjKEkFCt2A0WVVF41IJxipQKQFVlWm7oAFPkp1Q==
-X-Received: by 2002:a63:d16:0:b0:41d:fe52:1d2f with SMTP id c22-20020a630d16000000b0041dfe521d2fmr23976158pgl.416.1661981739540;
-        Wed, 31 Aug 2022 14:35:39 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:732f:b56c:f5e0:57d])
-        by smtp.gmail.com with UTF8SMTPSA id t10-20020a170902e84a00b00174f4316c24sm6051640plg.245.2022.08.31.14.35.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 14:35:39 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 14:35:36 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Hu Xiaoying <huxiaoying@kylinos.cn>
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] usb: Improves USB2.0 write performance.
-Message-ID: <Yw/UKNu0++5MtvbK@google.com>
-References: <20220831015624.1119578-1-huxiaoying@kylinos.cn>
+        with ESMTP id S232463AbiHaWAY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 18:00:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BB56DAEE;
+        Wed, 31 Aug 2022 15:00:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3F42ACE2371;
+        Wed, 31 Aug 2022 22:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 19728C433B5;
+        Wed, 31 Aug 2022 22:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661983217;
+        bh=D2hckKTWv4BB2ko/rlSdTwsjSj88gseeyvmPpsyYjY4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OBDpf6NekLJPoBGwSFts/vCEIXfXQ+t8afU++8QV+ZM6wMapDpgV/55jr8/umjNNz
+         nwdZdc0tuQ0UjsNOFU6npmuI7XiByTI/lSL/SPGw4p1TjDgWE5LwspHiPBUfKNB0nr
+         3xC/orlQ5jyxKie1tcQfIpu/j90SBA/4bVby/4ewxGvGhke7Qa5J3/YaJd4iQjgvwa
+         95n4Mz44YO96Lpcw+NAJy5IseI13V71GbgvX+bBs5HascffJOiIDsVWOYXJ1mgRlns
+         Z/g5dI6rCHcqE2bGuJKH3o8m8YEql71KpYjN42Ps8b1hCA3YLQN9YsFTxLbg6cOoGo
+         +nhqd2DFaWmxA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0259CE924D6;
+        Wed, 31 Aug 2022 22:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220831015624.1119578-1-huxiaoying@kylinos.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v1] r8152: allow userland to disable multicast
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166198321700.20200.2886724035407277786.git-patchwork-notify@kernel.org>
+Date:   Wed, 31 Aug 2022 22:00:17 +0000
+References: <20220830045923.net-next.v1.1.I4fee0ac057083d4f848caf0fa3a9fd466fc374a0@changeid>
+In-Reply-To: <20220830045923.net-next.v1.1.I4fee0ac057083d4f848caf0fa3a9fd466fc374a0@changeid>
+To:     Sven van Ashbrook <svenva@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, levinale@google.com,
+        chithraa@google.com, frankgor@google.com, aaron.ma@canonical.com,
+        dober6023@gmail.com, davem@davemloft.net, edumazet@google.com,
+        chenhao288@hisilicon.com, hayeswang@realtek.com, kuba@kernel.org,
+        jflf_kernel@gmx.com, pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,54 +60,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 09:56:24AM +0800, Hu Xiaoying wrote:
+Hello:
 
-> Subject: [PATCH v4] usb: Improves USB2.0 write performance.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Virtually everyone who sees this will think that this patch improves
-USB 2.0 write performance in general, which isn't the case.
-
-Instead the subject could be something like:
-
-USB: storage: Add ASUS <model> to IGNORE_UAS
-
-> USB external storage device(0x0b05:1932), use gnome-disk-utility tools
-> to test usb write  < 30MB/s.
-> if does not to load module of uas for this device, can increase the
-> write speed from 20MB/s to >40MB/s.
+On Tue, 30 Aug 2022 04:59:39 +0000 you wrote:
+> The rtl8152 driver does not disable multicasting when userspace asks
+> it to. For example:
+>  $ ifconfig eth0 -multicast -allmulti
+>  $ tcpdump -p -i eth0  # will still capture multicast frames
 > 
-> Signed-off-by: Hu Xiaoying <huxiaoying@kylinos.cn>
-> ---
-> change for v4
->  - Update two email addresses to be the same.
-> change for v3
->  - Does not send html mail to the mailing lists.
->  - Update patch, which sorted by vendor ID and product ID.
->  - Modify discription, correct some english words.
-> change for v2
->  - Update discription for patch.
-> ---
->  drivers/usb/storage/unusual_uas.h | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Fix by clearing the device multicast filter table when multicast and
+> allmulti are both unset.
 > 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 4051c8cd0cd8..23ab3b048d9b 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -62,6 +62,13 @@ UNUSUAL_DEV(0x0984, 0x0301, 0x0128, 0x0128,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_IGNORE_UAS),
->  
-> +/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
-> +UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
-> +		"ASUS",
-> +		"External HDD",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_UAS),
-> +
->  /* Reported-by: David Webb <djw@noc.ac.uk> */
->  UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
->  		"Seagate",
-> -- 
-> 2.25.1
-> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v1] r8152: allow userland to disable multicast
+    https://git.kernel.org/netdev/net-next/c/7305b78ae45f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
