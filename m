@@ -2,97 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4285A761D
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 08:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7516C5A764D
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 08:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiHaGA3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 02:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S229814AbiHaGM6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 02:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiHaGAV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 02:00:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768495F201
-        for <linux-usb@vger.kernel.org>; Tue, 30 Aug 2022 23:00:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15A25616DD
-        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 06:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3323DC433D6;
-        Wed, 31 Aug 2022 06:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661925618;
-        bh=/Q6Tfs+lInYQRhLernni4ly8FKeBgkBd9ufFEun+unU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qXtxXl1PhHLJrrVTbvGdgQXlDCqjha4R6rAqJPEVotGXfnCD7+SA0AQ4B6WkudyDP
-         DF4rsIaa8L2uJBTPZIyNwllDJtYEl3UoDQZRVlx9NURiRXb1DThTu8mblKv0SLkecN
-         tI1gqQFLaDXXHE/sJkhPzGe5h8rBRn7zDsPrbwUw=
-Date:   Wed, 31 Aug 2022 08:00:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     kernel test robot <lkp@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>, kbuild-all@lists.01.org,
-        linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [usb:usb-testing 29/47] drivers/usb/host/ehci-platform.c:56:19:
- warning: 'hcd_name' defined but not used
-Message-ID: <Yw75Aa35sWOjKMN0@kroah.com>
-References: <202208310007.6yJMsSYz-lkp@intel.com>
- <Yw5E7n+lNgz1ANEH@rowland.harvard.edu>
+        with ESMTP id S229544AbiHaGM5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 02:12:57 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015F4BCC0D;
+        Tue, 30 Aug 2022 23:12:52 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1661926291twgncv13
+Received: from localhost.localdomain ( [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 31 Aug 2022 14:11:30 +0800 (CST)
+X-QQ-SSF: 01400000000000D0U000000A0000000
+X-QQ-FEAT: jQKiaYrAUW4ZlxG/h6O0gpeDTaMLfo5pIe2W1kqFQ22usg+63OAX2iOgoePpB
+        WCl1i88e5zaPk/hx1uae+M6BW+4iLGBZitEZBalO5/Oxc6hMJ4PCjv0eTd67eVmB/9MlP56
+        v4pwGdztY2szTp1l7wx1x6ILpZ+J9I6uXIKt8x1M/itDdfZcC9Rj2vY4T+7YMORwHp2Jg+B
+        MTXEgODeOIPdb6ufH6GeD1qGvhzKzqUaB7Az4CcnhaT6lhbFF/3/IIVm0B9eAN4ht8CJVM9
+        cZWZWVsUCb/nMXq8Ln8R7UnQ03BbAQOZAODJ486ofIJEJsBrTpZVaHLWceHN1h6WIU8UYcr
+        2+ldp5CHySPGNbvT7ZYRpBKvUN1HZRryUpQ0ykC
+X-QQ-GoodBg: 1
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH] usb:mux:intel_pmc_mux: Use the helper acpi_dev_get_memory_resources()
+Date:   Wed, 31 Aug 2022 14:11:26 +0800
+Message-Id: <20220831061126.25172-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yw5E7n+lNgz1ANEH@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 01:12:14PM -0400, Alan Stern wrote:
-> On Wed, Aug 31, 2022 at 12:10:36AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > head:   594b9411b4adceb59ca8a66997eec1eaa3756785
-> > commit: 5cfdb45657c97315501316657e504298b381ceee [29/47] usb: reduce kernel log spam on driver registration
-> > config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220831/202208310007.6yJMsSYz-lkp@intel.com/config)
-> > compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-> > reproduce (this is a W=1 build):
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=5cfdb45657c97315501316657e504298b381ceee
-> >         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> >         git fetch --no-tags usb usb-testing
-> >         git checkout 5cfdb45657c97315501316657e504298b381ceee
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/host/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/usb/host/ehci-platform.c:56:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-> >       56 | static const char hcd_name[] = "ehci-platform";
-> >          |                   ^~~~~~~~
-> > --
-> > >> drivers/usb/host/ohci-platform.c:44:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-> >       44 | static const char hcd_name[] = "ohci-platform";
-> >          |                   ^~~~~~~~
-> 
-> This is a side effect from Ard's patch removing the pr_info lines from 
-> these drivers.  It will show up in some of the other drivers too (the 
-> ones that don't initialize their own hc_driver structure).  The solution 
-> is simply to remove the unused definitions.
-> 
-> Ard, do you want to write a fixup patch to do this?
+It removes the need to check the resource data type separately.
 
-I'll go fix it up...
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+---
+ drivers/usb/typec/mux/intel_pmc_mux.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 47b733f78fb0..6207c8f54240 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -569,13 +569,6 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
+ 	return ret;
+ }
+ 
+-static int is_memory(struct acpi_resource *res, void *data)
+-{
+-	struct resource r;
+-
+-	return !acpi_dev_resource_memory(res, &r);
+-}
+-
+ /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
+ static const struct acpi_device_id iom_acpi_ids[] = {
+ 	/* TigerLake */
+@@ -606,7 +599,7 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
+ 		return -ENODEV;
+ 
+ 	INIT_LIST_HEAD(&resource_list);
+-	ret = acpi_dev_get_resources(adev, &resource_list, is_memory, NULL);
++	ret = acpi_dev_get_memory_resources(adev, &resource_list);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-- 
+2.20.1
 
-greg k-h
