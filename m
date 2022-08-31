@@ -2,72 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC7D5A77DC
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 09:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC235A781A
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 09:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiHaHoX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 03:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S231174AbiHaHtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 03:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiHaHoB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 03:44:01 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D823AE84A;
-        Wed, 31 Aug 2022 00:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661931783;
-        bh=9ycy50m2BVzr+LR+TASn5nabN2535sy01KiW7i6O5SI=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=f5E0Y3mnOH4y5rk5REftiX/ra1cHOrSNn2EDojkZDYQ4a6n6zWNuQ6yUqv352cVoo
-         GlNrez+6fHS0CiZiAw27yIdFAIFg+xrZ3AOpmkBbsdmstxODxujF6I01Y//JNt/Abl
-         uiFRZo79VNxMzMFwL3KWbo/EW6fy2U3pkZAAV8Z4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.170] ([5.147.48.164]) by mail.gmx.net (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MxlzI-1pKqZV2v0A-00zBxz; Wed, 31
- Aug 2022 09:43:03 +0200
-Message-ID: <9a17ea86-079f-510d-e919-01bc53a6d09f@gmx.com>
-Date:   Wed, 31 Aug 2022 09:43:02 +0200
+        with ESMTP id S231319AbiHaHtA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 03:49:00 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58925C2E9A
+        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 00:48:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1661932132; x=1693468132;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rg5BpRgOaAuH3ZkKcryXgflmwL6yiYYEJS6kl4M3yis=;
+  b=RvYgtSc8rBxCOH9R0RW5SJBI2Ev7n+oDsERUDOAVPAK/fN0y+C/5UjC/
+   mc0jmxqrDBf9Q1iQ+Y/88NMkS4AxqEtnsjrDe4fobFRaGbjOQmtR2qyOp
+   k2qk47STNuzdtZWNBWLpj6klC1cs8rt4cccpvqoDKfo0jkfhCIP+6uQ1m
+   NrP1jouz/faDaY2c8nCem6zSr7/7sLISI6kY9KL4P6Od37hb25UhyDy/3
+   2Kd/417PXKei3EZkOd4+8ym8cubu9MOi0gQvfwPwqXnK4X0LwdEN5C6b4
+   30NIWldlV/yg4O3CI0lfZDqRIdUskChrfUDzpwurgdSDl/WDPOGpEjGYy
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,277,1654552800"; 
+   d="scan'208";a="25901430"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 31 Aug 2022 09:48:37 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 31 Aug 2022 09:48:37 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 31 Aug 2022 09:48:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1661932117; x=1693468117;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rg5BpRgOaAuH3ZkKcryXgflmwL6yiYYEJS6kl4M3yis=;
+  b=a+A/zPqNV3ezLmLJwJ9KwMVz9r/GR+Y7Cz08wkNN3msPvl2pQ145LSq0
+   y8K7+eiV8E08W7wN9XyYygxPfAK6IQcbCpwsZ/fCHcGnbl/ZkFmrrwSRz
+   Dh9QTdyobKczEr4eZz4F67uMw8WNRzdzXZy2VhtwpnrvH3foZ15FXCJ9c
+   jChWEoWPJlypWO6TgONXQQLxeeT9Nb8rxafwcBIaGMGuyUvtvJ4q4E6zS
+   MMVxQYSq+DF4Ik2gKytkWkvTeqLxTtSDLRQXKV41Cz9F5a8iAOY1wIc7L
+   0Fom4jXyO4hI/c1OtKFTb2cJNQJr3swQtskpzDtj1XkXowQ5umivv+/L7
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,277,1654552800"; 
+   d="scan'208";a="25901429"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 31 Aug 2022 09:48:36 +0200
+Received: from steina-w.localnet (unknown [10.123.49.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 40419280056;
+        Wed, 31 Aug 2022 09:48:36 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Jun Li <jun.li@nxp.com>
+Cc:     Jacky Bai <ping.bai@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Fabio Estevam <festevam@denx.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: RE: imx8mp USB OTG/dual-role
+Date:   Wed, 31 Aug 2022 09:48:34 +0200
+Message-ID: <1907644.PYKUYFuaPT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <PA4PR04MB9640F578AEF2558BA3F08F8889789@PA4PR04MB9640.eurprd04.prod.outlook.com>
+References: <CAJ+vNU2bLPAta6GpDn_dGSrCnCRuBtxvLZ-g01h1jGwQuruBuA@mail.gmail.com> <DB9PR04MB8412164E22460736FB15B8D687789@DB9PR04MB8412.eurprd04.prod.outlook.com> <PA4PR04MB9640F578AEF2558BA3F08F8889789@PA4PR04MB9640.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220824160946.10128-1-jflf_kernel@gmx.com>
- <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
- <d1a5f149-50a1-49fc-9a6d-eceffa23311b@gmx.com>
- <4b92eee0-b020-9211-2039-18ac3ac72a7b@suse.com>
- <edd97137-74a1-ee0b-d475-7c5b36197155@gmx.com> <Yw8OU8hYZuuBgrnj@kroah.com>
-From:   jflf_kernel@gmx.com
-In-Reply-To: <Yw8OU8hYZuuBgrnj@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:srQKQZK8ADX8KwScDmh4lqDIcInEz4EDuODcx9UEJneswEXzplT
- t896XiklipY0btbl9olZvkkYvTP4hNbU/jDhpwzUE6j1KASX10GNVMUeE8UvwL7rpum3/aV
- vKr+LR4I1APV/z6ieU0kxmBuc8CRo7Q+G5N1E5eYmG3u9n0rQHyqn6VKJwV1Lh4Q2N+5uwS
- +MuK2fFKTvALsI4hmSz3g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:s1LCIMQoT+E=:PPssNvGUCexs+Xj4K2tnFz
- mA3mw4aYslGu1Zl05g8RDTkhW409O6BehloNq7tXfI807QzF0N6Mw1qM363sDF65zFaOhLhMZ
- Paf5NDGlc61nVsTcZMkKjPpKXFlTSkhELtuPxyuUELa6Vo8U2ZGgi4e2SFrJxIrbtLMiRLUmQ
- z0OiWyyaYBVmUQ2hT8AUDiyG7XKw+alHymCNVdlgjgPCfgWqZVhQwQ4nxumHMILD0LbATlcmM
- wYyNUBlm59oqdbaI0ouJ46y5gpj8cqOVQiHqhpaQnhr5wIXzI047Or7BjF+pstW6k9KkZ3t0s
- cIPwYZasC16j/C0UQXdeOwtdKiVvYhBcR7O/LEP3R0zJleD5nJs11v0D7mR3uR2w39ZXVUErv
- WW2PT+ywiO3qYVNrTnA5f9sS6lf+xWQOKYYlS5gF1JbaKqUghsd7ad29CinOlysDlbKnZWrWo
- g3Uwq1o10KJlsL91y8dml8BzYvDRwPzzgBjGfJSqglZbKvGS6yPA1Tjwhl2WYNCFrGmB+HwDa
- MRogB9AgYWSJGA+XPTeDodBTeMh5VuDVbUQ9ytMjKY4dKP2HnKpMhDjMVwUBJnrKJMYFd96Mp
- sA7Vat6HFSYbH/wFBDbgS5RlB5sj5g0voxA0vanQlqZaX+TNB/lCuw4xmi9r54ccQLWjQJkBN
- ldtUHQqlFyCDhJDDKpN1I6Vz9HvwL7OUIqtBePTI+mhz9ptBc3BNWOHStOv5g06QiZQQcCjdL
- C63qnYR3z5+gJ3I0WPNxefVMiZZjad0vbULfcu25hh+Y+jRS/+aPf1UGevlPRHH6oDDKQWaX8
- 6xtTNjj1rzUJgWif0+ryB71BDhN6iaE1R6P0uYy9m24OQuBAC0YzI/ZxbccD4Dkt1AD/XW2mi
- MNCzh2s5GlGiKijYDgBTlIWUuzG+mw/02i6XYEhQQ22XjllWrYZnu7f5ISOlHW2BugccuI5IK
- DsjB3M/WDKSNIgTwfyIyrbiILU6ips784EvQp7E4gW3CQ7WD1Kf8odTok2CKb7C+ZY2q8bOeE
- TAJp7W5k+R9HkWLNm0Zn1iR9kpjN0IXCQq8h/UwTZNTSZdmskdU2CzbHf6/YDEo2I/zDvi0+p
- 4kSi4aiG8Ut1oo2a7HzGwV7oYG9iylD384njK2ZFSc1fy7TFVV33Y8hiw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +94,214 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi everybody,
 
-On 31/08/2022 09.31, Greg KH wrote:
-> On Tue, Aug 30, 2022 at 09:50:03PM +0200, jflf_kernel@gmx.com wrote:
->>
->> On 30/08/2022 16.47, Oliver Neukum wrote:
->>
->>> 1) force a reset after a resume and call reset_resume() instead of res=
-ume()
->>> 2) block autosuspend if remote wakeup is required
->>>
->>> I suspect you are actually using the second effect. Have you
->>> tested with "usbcore.autosuspend=3D-1" on the kernel command line.
->>
->> After further testing, your suspicion is correct.
->>
->> TL;DR: the two VL812 hubs don't behave well when suspended.
->>
->> I'd like to prepare a better patch for that issue. What's the recommend=
-ed strategy? The current patch works, even if only as a side effect and wh=
-en there's a wakeup source downstream. It's currently in Greg KH's usb-lin=
-us branch, and will land in linux-next at some point. I'm tempted to let i=
-t be and undo it later in the better patch. Is that acceptable? Or should =
-I ask Greg KH to pull it?
->
-> I can revert it if you want me to, just let me know.
->
-> thanks,
->
-> greg k-h
+Am Mittwoch, 31. August 2022, 05:11:38 CEST schrieb Jun Li:
+> Hi,
+> 
+> 
+> > -----Original Message-----
+> > From: Jacky Bai <ping.bai@nxp.com>
+> > Sent: Wednesday, August 31, 2022 9:18 AM
+> > To: tharvey@gateworks.com; linux-usb@vger.kernel.org; Linux ARM Mailing
+> > List <linux-arm-kernel@lists.infradead.org>; Jun Li <jun.li@nxp.com>
+> > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>; Jun Li
+> > <jun.li@nxp.com>; Rikard Falkeborn <rikard.falkeborn@gmail.com>; Lucas
+> > Stach <l.stach@pengutronix.de>; Philippe Schenker
+> > <philippe.schenker@toradex.com>; Felipe Balbi <balbi@kernel.org>; Fabio
+> > Estevam <festevam@denx.de>; Marcel Ziswiler
+> > <marcel.ziswiler@toradex.com>;
+> > Shawn Guo <shawnguo@kernel.org>; Marek Vasut <marex@denx.de>; Francesco
+> > Dolcini <francesco.dolcini@toradex.com>; Aisheng Dong
+> > <aisheng.dong@nxp.com>; Sascha Hauer <s.hauer@pengutronix.de>;
+> > dl-linux-imx <linux-imx@nxp.com>; Pengutronix Kernel Team
+> > <kernel@pengutronix.de>
+> > Subject: RE: imx8mp USB OTG/dual-role
+> > 
+> > Jun, as we discussed before, any conclusion on how to handle the USB OTG
+> > ID pin in RM?
+> 
+> 
+> The NXP datasheet for iMX8MP already changed the ID pin name to be with
+> _DNU
+ suffix, RM may be updated in next version.
+> If legacy ID is going to be used, any normal GPIO function can be selected
+> for it, extcon is well supported in dwc3 controller driver. 
+> 
+> More comments for Tim, see below...
+> 
+> 
+> > 
+> > 
+> > BR
+> > Jacky Bai
+> > 
+> > 
+> > > Subject: imx8mp USB OTG/dual-role
+> > >
+> > >
+> > >
+> > > Greetings,
+> > >
+> > >
+> > >
+> > > I have an imx8mp board (imx8mp-venice-gw74xx) which has a DWC3 USB
+> > > host controller using imx8mp PHY
+> > > (drivers/phy/freescale/phy-fsl-imx8mq-usb.c fsl,imx8mp-usb-phy) and
+> > > DWC3 host controller core (drivers/usb/dwc3/core.c snps,dwc3) with
+> > > imx8mp glue (drivers/usb/dwc3/dwc3-imx8mp.c fsl,imx8mp-dwc3).
+> > >
+> > >
+> > >
+> > > One of the 2x USB 3.0 hosts is connected to a USB Type C connector
+> > > using a
+> > > TPS25821 USB power switch and config controller which handles the CC
+> > > pins on and VBUS enable as well as drives the mux sel pin of a
+> > > USB3 mux to route the USB SS pairs to the appropriate half of the Type
+> > > C connector. This device has no I2C or other management bus - only
+> > > VBUS, FAULT#, SINK#, and POL# outputs based on CC pins.
+> > >
+> > >
+> > >
+> > > I'm not clear how to describe this in the device-tree in order for it
+> > > to function as a dual-role controller for host vs device mode.
+> > >
+> > >
+> > >
+> > > The TPS25821 has a FAULT# signal that routes to IMX8MP GPIO1_IO13
+> > > pinmuxed as MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC and a SINK# signal
+> > > that routes to IMX8MP GPIO1_IO10 pinmuxed as
+> > > MX8MP_IOMUXC_GPIO1_IO10__USB1_OTG_ID. Additionally the VBUS output of
+> > > the TPS25821 also connected to the TypeC VBUS pin routes to the IMX8MP
+> > > USB1_VBUS pin.
+> 
+> 
+> So TPS25821 does not need a driver.
+> 
+> 
+> > >
+> > >
+> > > I've noticed there are currently only 2 other IMX8MP boards in Linux
+> > > mainline that specify dr_mode="otg"; the DH electronics i.MX8M Plus
+> > > DHCOM SOM (imx8mp-dhcom-som.dtsi), and the Toradex i.MX8M Plus Verdin
+> > > SOM (imx8mp-verdin.dtsi). I'm not clear how these are hooked up or if
+> > > USB dual-role work on these currently. I did notice that
+> 
+> 
+> NXP iMX8MP EVK has not enabled type-C port due to the SS orientation
+> switch binding is still in discussion, but you don't need a SW control
+> in your case so you are okay here.
+> 
+> 
+> > > imx8mp-verdin.dtsi looks like it does not enable the phy or core via
+> > > status prop and uses invalid 'over-current-active-low' and
+> > 
+> > 'disable-over-current' dt props.
+> > 
+> > >
+> > >
+> > > I am currently using the following with imx8mp-venice-gw74xx:
+> > >
+> > >
+> > >
+> > > /* USB1 - Type C front panel */
+> > > &usb3_phy0 {
+> > > 
+> > >         status = "okay";
+> > > 
+> > > };
+> > >
+> > >
+> > >
+> > > /* USB1 dwc3 glue */
+> > > &usb3_0 {
+> > > 
+> > >         fsl,over-current-active-low;
+> > >         status = "okay";
+> > > 
+> > > };
+> > >
+> > >
+> > >
+> > > /* USB1 dwc3 core */
+> > > &usb_dwc3_0 {
+> > > 
+> > >         pinctrl-names = "default";
+> > >         pinctrl-0 = <&pinctrl_usb1>;
+> > >         dr_mode = "otg";
+> > > 
+> > > };
+> > >
+> > >
+> > >
+> > > &iomuxc {
+> > > 
+> > >         pinctrl_usb1: usb1grp {
+> > >         
+> > >                 fsl,pins = <
+> > >
+> > >
+> > >
+> > > MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC    0x140
+> > >
+> > >
+> > >
+> > > MX8MP_IOMUXC_GPIO1_IO10__USB1_OTG_ID    0x140
+> > > 
+> > >                 >;
+> > >         
+> > >         };
+> > > 
+> > > };
+> > >
+> > >
+> > >
+> > > And currently v6.0-rc2 enumerates the host controller even without a
+> > > Type-C to host cable attached which tells me that OTG_ID isn't doing
+> > > its job. I vaguely recall some confusing statements on the IMX
+> > > community forum that these pins might not even be used on the IMX8MP.
+> > >
+> > >
+> > >
+> > > How should I be describing the device-tree for this scenario in order
+> > > to get dual-role behavior?
+> 
+> 
+> Could this dts work for you?
+> 
+> /* Config the "ID" pin iomux to be GPIO */
+> 
+> pinctrl_usb1: usb1grp {
+>                  fsl,pins = <
+>                       MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC    0x140
+>                       MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10    0x140
+> 
+>           >;
+> 
+>  };
+> 
+>  extcon_usb: extcon_iddig {
+>                  compatible = "linux,extcon-usb-gpio";                      
+>                                                                            
+>                               
+ id-gpio = <&gpio1 10 GPIO_ACTIVE_HIGH>;
+>  };
+> 
+>  &usb_dwc3_0 {
+>          pinctrl-names = "default";
+>          pinctrl-0 = <&pinctrl_usb1>;
+> 		 extcon = <&extcon_usb>
+>          dr_mode = "otg";
+>  };
+> 
+> Li Jun
 
-[keeping the lists in CC this time]
+I just send a patch for USB DR support on our TQMa8MPxL+MBa8MPxL platform, 
+added Tim Harvey and Li Jun on CC. This is quite similar but uses usb-role-
+switch instead of extcon.
 
-Please revert if possible, and apologies for the trouble.
+Best regards,
+Alexander
 
-Thanks!
-JF
+
+
