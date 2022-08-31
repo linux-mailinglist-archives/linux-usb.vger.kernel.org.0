@@ -2,96 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910F95A7E90
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 15:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FCD5A7FFE
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 16:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiHaNUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 09:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S232054AbiHaOVk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 10:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiHaNUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 09:20:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992634C613;
-        Wed, 31 Aug 2022 06:20:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C02B61AAC;
-        Wed, 31 Aug 2022 13:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80440C433D6;
-        Wed, 31 Aug 2022 13:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661952016;
-        bh=kfskSvGs0EaG0N6+EOLLY3xTESBBvnf66NZHzdfg9Cw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DmMJV86gkP0DyhvQ3h85XHKfuuEKPIrq6sQDqe7K+arVHKWOEnKwZ6yUMhKVbQwUJ
-         9uhBf8GswS03puTQhvs5liFWSkefvL+dOLH89yzNBVkDuufipzxM9zwiRbBvo0kVsm
-         NCY/vV1WucRzUBvtkXGDuTaTg9HQvmJfOxrmEeQmdupG8e10Hwysr9UDYAZI2FHGMm
-         4FWKVCLSHnzpkut0pohMsR0KzQvYaqCJerjfl4PKbLWW4eEY5SewmSAe6ZVfC3OZEl
-         G3mgOLoFE+4plKkW+o2L+HjNGKug8AgGqnu7SfCwCL2QgLuzSXybiGLpyoj4zXudpP
-         aJrVkGis8sODQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6555BE924D9;
-        Wed, 31 Aug 2022 13:20:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232030AbiHaOVj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 10:21:39 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B465FB2CE6
+        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 07:21:37 -0700 (PDT)
+Received: (qmail 191439 invoked by uid 1000); 31 Aug 2022 10:21:36 -0400
+Date:   Wed, 31 Aug 2022 10:21:36 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: hcd: remove unused hcd_name variables
+Message-ID: <Yw9ucDxO7huIl/2W@rowland.harvard.edu>
+References: <20220831073032.1409291-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/5] thunderbolt: net: Enable full end-to-end flow control
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166195201641.2919.1480626545715329070.git-patchwork-notify@kernel.org>
-Date:   Wed, 31 Aug 2022 13:20:16 +0000
-References: <20220830153250.15496-1-mika.westerberg@linux.intel.com>
-In-Reply-To: <20220830153250.15496-1-mika.westerberg@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, andreas.noever@gmail.com,
-        lukas@wunner.de, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831073032.1409291-1-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 30 Aug 2022 18:32:45 +0300 you wrote:
-> Hi all,
+On Wed, Aug 31, 2022 at 09:30:32AM +0200, Greg Kroah-Hartman wrote:
+> In the commit 10174220f55a ("usb: reduce kernel log spam on driver
+> registration") a lot of unneeded kernel log messages were removed, but
+> that caused a few build warnings to show up where the variable
+> `hcd_name` was being set but never used anymore.
 > 
-> Thunderbolt/USB4 host controllers support full end-to-end flow control
-> that prevents dropping packets if there are not enough hardware receive
-> buffers. So far it has not been enabled for the networking driver yet
-> but this series changes that. There is one snag though: the second
-> generation (Intel Falcon Ridge) had a bug that needs special quirk to
-> get it working. We had that in the early stages of the Thunderbolt/USB4
-> driver but it got dropped because it was not needed at the time. Now we
-> add it back as a quirk for the host controller (NHI).
+> Resolve this by just removing these variables as they are not needed
+> anymore
 > 
-> [...]
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-samsung-soc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Fixes: 10174220f55a ("usb: reduce kernel log spam on driver registration")
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/host/ehci-exynos.c   | 1 -
+>  drivers/usb/host/ehci-platform.c | 2 --
+>  drivers/usb/host/ohci-platform.c | 2 --
+>  3 files changed, 5 deletions(-)
 
-Here is the summary with links:
-  - [1/5] net: thunderbolt: Enable DMA paths only after rings are enabled
-    https://git.kernel.org/netdev/net-next/c/ff7cd07f3064
-  - [2/5] thunderbolt: Show link type for XDomain connections too
-    https://git.kernel.org/netdev/net-next/c/f9cad07b840e
-  - [3/5] thunderbolt: Add back Intel Falcon Ridge end-to-end flow control workaround
-    https://git.kernel.org/netdev/net-next/c/54669e2f17cb
-  - [4/5] net: thunderbolt: Enable full end-to-end flow control
-    https://git.kernel.org/netdev/net-next/c/8bdc25cf62c7
-  - [5/5] net: thunderbolt: Update module description with mention of USB4
-    https://git.kernel.org/netdev/net-next/c/e550ed4b87ad
+This isn't enough, as you can see from this kernel test robot excerpt:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+clang_recent_errors
+|-- arm-s5pv210_defconfig
+|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-exynos.c:warning:unused-variable-hcd_name
+|-- hexagon-randconfig-r024-20220830
+|   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
+|   |-- 
+drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-spear.c:warning:unused-variable-hcd_name
+|   `-- 
+drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|-- hexagon-randconfig-r036-20220830
+|   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
+|   |-- 
+drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-st.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-at91.c:warning:unused-variable-hcd_name
+|   |-- 
+drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-s3c2410.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-spear.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-st.c:warning:unused-variable-hcd_name
 
+Yes, it has duplicates and your patch handles some of these.  But there 
+are others that still need to be fixed.  Also, this list is missing 
+ohci-pxa27x.c.
 
+Alan Stern
