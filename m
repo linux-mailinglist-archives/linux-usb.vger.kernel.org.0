@@ -2,174 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1C75A7554
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 06:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4285A761D
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 08:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiHaE7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 00:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S229599AbiHaGA3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 02:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiHaE73 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 00:59:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68E49B6012;
-        Tue, 30 Aug 2022 21:59:27 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOKi6g5j_2UNAA--.59804S2;
-        Wed, 31 Aug 2022 12:59:20 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v2] usb: ohci-platform: fix usb disconnect issue after s4
-Date:   Wed, 31 Aug 2022 12:59:10 +0800
-Message-Id: <20220831045910.12203-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        with ESMTP id S229965AbiHaGAV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 02:00:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768495F201
+        for <linux-usb@vger.kernel.org>; Tue, 30 Aug 2022 23:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15A25616DD
+        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 06:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3323DC433D6;
+        Wed, 31 Aug 2022 06:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661925618;
+        bh=/Q6Tfs+lInYQRhLernni4ly8FKeBgkBd9ufFEun+unU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qXtxXl1PhHLJrrVTbvGdgQXlDCqjha4R6rAqJPEVotGXfnCD7+SA0AQ4B6WkudyDP
+         DF4rsIaa8L2uJBTPZIyNwllDJtYEl3UoDQZRVlx9NURiRXb1DThTu8mblKv0SLkecN
+         tI1gqQFLaDXXHE/sJkhPzGe5h8rBRn7zDsPrbwUw=
+Date:   Wed, 31 Aug 2022 08:00:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     kernel test robot <lkp@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>, kbuild-all@lists.01.org,
+        linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: [usb:usb-testing 29/47] drivers/usb/host/ehci-platform.c:56:19:
+ warning: 'hcd_name' defined but not used
+Message-ID: <Yw75Aa35sWOjKMN0@kroah.com>
+References: <202208310007.6yJMsSYz-lkp@intel.com>
+ <Yw5E7n+lNgz1ANEH@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxYOKi6g5j_2UNAA--.59804S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF47CrW3JFWUJr1rtFyxZrb_yoWrJFW3pr
-        4UJFWrtr48KF42g3y7twn7ZFWrCw4Sg3y7K348Kw1jv398tr98Jay2vFy0yFn3Xry7Gw17
-        tF4jyFWUuF4UZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw5E7n+lNgz1ANEH@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Avoid retaining bogus hardware states during resume-from-hibernation.
-Previously we had reset the hardware as part of preparing to reinstate
-the snapshot image. But we can do better now with the new PM framework,
-since we know exactly which resume operations are from hibernation.
+On Tue, Aug 30, 2022 at 01:12:14PM -0400, Alan Stern wrote:
+> On Wed, Aug 31, 2022 at 12:10:36AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> > head:   594b9411b4adceb59ca8a66997eec1eaa3756785
+> > commit: 5cfdb45657c97315501316657e504298b381ceee [29/47] usb: reduce kernel log spam on driver registration
+> > config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220831/202208310007.6yJMsSYz-lkp@intel.com/config)
+> > compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+> > reproduce (this is a W=1 build):
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=5cfdb45657c97315501316657e504298b381ceee
+> >         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+> >         git fetch --no-tags usb usb-testing
+> >         git checkout 5cfdb45657c97315501316657e504298b381ceee
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/host/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> drivers/usb/host/ehci-platform.c:56:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
+> >       56 | static const char hcd_name[] = "ehci-platform";
+> >          |                   ^~~~~~~~
+> > --
+> > >> drivers/usb/host/ohci-platform.c:44:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
+> >       44 | static const char hcd_name[] = "ohci-platform";
+> >          |                   ^~~~~~~~
+> 
+> This is a side effect from Ard's patch removing the pr_info lines from 
+> these drivers.  It will show up in some of the other drivers too (the 
+> ones that don't initialize their own hc_driver structure).  The solution 
+> is simply to remove the unused definitions.
+> 
+> Ard, do you want to write a fixup patch to do this?
 
-According to the commit 'cd1965db054e ("USB: ohci: move ohci_pci_{
-suspend,resume} to ohci-hcd.c")' and commit '6ec4beb5c701 ("USB: new
-flag for resume-from-hibernation")', the flag "hibernated" is for
-resume-from-hibernation and it should be true when usb resume from disk.
+I'll go fix it up...
 
-When this flag "hibernated" is set, the drivers will reset the hardware
-to get rid of any existing state and make sure resume from hibernation
-re-enumerates everything for ohci.
+thanks,
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v2:
-		1. Revise the commit log infomation.	
-		2. Wrap the ohci_platform_renew() function with two 
-		   helpers that are ohci_platform_renew_hibernated() 
-		   and ohci_platform_renew().
-
- drivers/usb/host/ohci-platform.c | 49 ++++++++++++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-index 0adae6265127..56cb424d3bb0 100644
---- a/drivers/usb/host/ohci-platform.c
-+++ b/drivers/usb/host/ohci-platform.c
-@@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
- 	return ret;
- }
- 
--static int ohci_platform_resume(struct device *dev)
-+static int ohci_platform_renew(struct device *dev)
- {
- 	struct usb_hcd *hcd = dev_get_drvdata(dev);
- 	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-@@ -297,6 +297,7 @@ static int ohci_platform_resume(struct device *dev)
- 
- 	if (pdata->power_on) {
- 		int err = pdata->power_on(pdev);
-+
- 		if (err < 0)
- 			return err;
- 	}
-@@ -309,6 +310,38 @@ static int ohci_platform_resume(struct device *dev)
- 
- 	return 0;
- }
-+
-+static int ohci_platform_renew_hibernated(struct device *dev)
-+{
-+	struct usb_hcd *hcd = dev_get_drvdata(dev);
-+	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-+	struct platform_device *pdev = to_platform_device(dev);
-+
-+	if (pdata->power_on) {
-+		int err = pdata->power_on(pdev);
-+
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	ohci_resume(hcd, true);
-+
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_active(dev);
-+	pm_runtime_enable(dev);
-+
-+	return 0;
-+}
-+
-+static int ohci_platform_resume(struct device *dev)
-+{
-+	return ohci_platform_renew(dev);
-+}
-+
-+static int ohci_platform_restore(struct device *dev)
-+{
-+	return ohci_platform_renew_hibernated(dev);
-+}
- #endif /* CONFIG_PM_SLEEP */
- 
- static const struct of_device_id ohci_platform_ids[] = {
-@@ -325,8 +358,16 @@ static const struct platform_device_id ohci_platform_table[] = {
- };
- MODULE_DEVICE_TABLE(platform, ohci_platform_table);
- 
--static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
--	ohci_platform_resume);
-+#ifdef CONFIG_PM_SLEEP
-+static const struct dev_pm_ops ohci_platform_pm_ops = {
-+	.suspend = ohci_platform_suspend,
-+	.resume = ohci_platform_resume,
-+	.freeze = ohci_platform_suspend,
-+	.thaw = ohci_platform_resume,
-+	.poweroff = ohci_platform_suspend,
-+	.restore = ohci_platform_restore,
-+};
-+#endif
- 
- static struct platform_driver ohci_platform_driver = {
- 	.id_table	= ohci_platform_table,
-@@ -335,7 +376,9 @@ static struct platform_driver ohci_platform_driver = {
- 	.shutdown	= usb_hcd_platform_shutdown,
- 	.driver		= {
- 		.name	= "ohci-platform",
-+#ifdef CONFIG_PM_SLEEP
- 		.pm	= &ohci_platform_pm_ops,
-+#endif
- 		.of_match_table = ohci_platform_ids,
- 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	}
--- 
-2.31.1
-
+greg k-h
