@@ -2,36 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FCD5A7FFE
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 16:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7032D5A803A
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 16:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiHaOVk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 10:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S231224AbiHaObZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 10:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbiHaOVj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 10:21:39 -0400
+        with ESMTP id S231137AbiHaObU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 10:31:20 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B465FB2CE6
-        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 07:21:37 -0700 (PDT)
-Received: (qmail 191439 invoked by uid 1000); 31 Aug 2022 10:21:36 -0400
-Date:   Wed, 31 Aug 2022 10:21:36 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A38E63E75D
+        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 07:31:19 -0700 (PDT)
+Received: (qmail 191749 invoked by uid 1000); 31 Aug 2022 10:31:18 -0400
+Date:   Wed, 31 Aug 2022 10:31:18 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: hcd: remove unused hcd_name variables
-Message-ID: <Yw9ucDxO7huIl/2W@rowland.harvard.edu>
-References: <20220831073032.1409291-1-gregkh@linuxfoundation.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Subject: Re: [PATCH v2] usb: ohci-platform: fix usb disconnect issue after s4
+Message-ID: <Yw9wtv5TtEr209j0@rowland.harvard.edu>
+References: <20220831045910.12203-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831073032.1409291-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20220831045910.12203-1-zhuyinbo@loongson.cn>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
@@ -41,63 +38,107 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 09:30:32AM +0200, Greg Kroah-Hartman wrote:
-> In the commit 10174220f55a ("usb: reduce kernel log spam on driver
-> registration") a lot of unneeded kernel log messages were removed, but
-> that caused a few build warnings to show up where the variable
-> `hcd_name` was being set but never used anymore.
+On Wed, Aug 31, 2022 at 12:59:10PM +0800, Yinbo Zhu wrote:
+> Avoid retaining bogus hardware states during resume-from-hibernation.
+> Previously we had reset the hardware as part of preparing to reinstate
+> the snapshot image. But we can do better now with the new PM framework,
+> since we know exactly which resume operations are from hibernation.
 > 
-> Resolve this by just removing these variables as they are not needed
-> anymore
+> According to the commit 'cd1965db054e ("USB: ohci: move ohci_pci_{
+> suspend,resume} to ohci-hcd.c")' and commit '6ec4beb5c701 ("USB: new
+> flag for resume-from-hibernation")', the flag "hibernated" is for
+> resume-from-hibernation and it should be true when usb resume from disk.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Fixes: 10174220f55a ("usb: reduce kernel log spam on driver registration")
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> When this flag "hibernated" is set, the drivers will reset the hardware
+> to get rid of any existing state and make sure resume from hibernation
+> re-enumerates everything for ohci.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->  drivers/usb/host/ehci-exynos.c   | 1 -
->  drivers/usb/host/ehci-platform.c | 2 --
->  drivers/usb/host/ohci-platform.c | 2 --
->  3 files changed, 5 deletions(-)
+> Change in v2:
+> 		1. Revise the commit log infomation.	
+> 		2. Wrap the ohci_platform_renew() function with two 
+> 		   helpers that are ohci_platform_renew_hibernated() 
+> 		   and ohci_platform_renew().
+> 
+>  drivers/usb/host/ohci-platform.c | 49 ++++++++++++++++++++++++++++++--
+>  1 file changed, 46 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> index 0adae6265127..56cb424d3bb0 100644
+> --- a/drivers/usb/host/ohci-platform.c
+> +++ b/drivers/usb/host/ohci-platform.c
+> @@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int ohci_platform_resume(struct device *dev)
+> +static int ohci_platform_renew(struct device *dev)
+>  {
+>  	struct usb_hcd *hcd = dev_get_drvdata(dev);
+>  	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
+> @@ -297,6 +297,7 @@ static int ohci_platform_resume(struct device *dev)
+>  
+>  	if (pdata->power_on) {
+>  		int err = pdata->power_on(pdev);
+> +
+>  		if (err < 0)
+>  			return err;
+>  	}
+> @@ -309,6 +310,38 @@ static int ohci_platform_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> +
+> +static int ohci_platform_renew_hibernated(struct device *dev)
+> +{
+> +	struct usb_hcd *hcd = dev_get_drvdata(dev);
+> +	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +
+> +	if (pdata->power_on) {
+> +		int err = pdata->power_on(pdev);
+> +
+> +		if (err < 0)
+> +			return err;
+> +	}
+> +
+> +	ohci_resume(hcd, true);
+> +
+> +	pm_runtime_disable(dev);
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ohci_platform_resume(struct device *dev)
+> +{
+> +	return ohci_platform_renew(dev);
+> +}
+> +
+> +static int ohci_platform_restore(struct device *dev)
+> +{
+> +	return ohci_platform_renew_hibernated(dev);
+> +}
 
-This isn't enough, as you can see from this kernel test robot excerpt:
+I really do not see any point in these helper routines.  Why not just 
+use these names (ohci_platform_resume and ohci_platform_restore) for the 
+actual routines and forget about the _renew names?
 
-clang_recent_errors
-|-- arm-s5pv210_defconfig
-|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-exynos.c:warning:unused-variable-hcd_name
-|-- hexagon-randconfig-r024-20220830
-|   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
-|   |-- 
-drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-spear.c:warning:unused-variable-hcd_name
-|   `-- 
-drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- hexagon-randconfig-r036-20220830
-|   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
-|   |-- 
-drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-st.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-at91.c:warning:unused-variable-hcd_name
-|   |-- 
-drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-s3c2410.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-spear.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-st.c:warning:unused-variable-hcd_name
+Although if it were me, I'd do it more like this:
 
-Yes, it has duplicates and your patch handles some of these.  But there 
-are others that still need to be fixed.  Also, this list is missing 
-ohci-pxa27x.c.
+static int ohci_platform_resume_common(struct device *dev, bool hibernated)
+{ ... }
+
+static int ohci_platform_resume(struct device *dev)
+{
+	return ohci_platform_resume_common(dev, false);
+}
+
+static int ohci_platform_restore(struct device *dev)
+{
+	return ohci_platform_resume_common(dev, true);
+}
 
 Alan Stern
