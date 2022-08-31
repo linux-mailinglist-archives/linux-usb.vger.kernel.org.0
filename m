@@ -2,143 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1745A84C3
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 19:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2780C5A85C1
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 20:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbiHaRvc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 13:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S233033AbiHaShP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 14:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiHaRv3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 13:51:29 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0293BB938;
-        Wed, 31 Aug 2022 10:51:27 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id fa2so7162413pjb.2;
-        Wed, 31 Aug 2022 10:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=HeHd13NUasJVCk4KgKhrFLwhTEXtxTOChOcy1/oX1Kk=;
-        b=T3LTxnDRIVReJHwofzw8MZ2qvXfgMT4g2ghnvIhL51ORKruE4CxWgyIGCEuhsrqJGs
-         71nm++fCd3TSlgdZWfe8X5JelIqfT6FhGPivegZmZ9te5yfzyy8hp12KSxl2rgPnvFWg
-         lq+Um47WnFZ0ZA/pLUW9aFGS1PWKIn+L9RQSYQ0wFJXuSbbIvoQQhMX09g5xcgVFPn7Y
-         rvvANWn6DoJb1jxRagdXdjHJbZEm0FkR6kAKh61Fe4wAGKfHYTvdXHNlZgus30qhvZCc
-         P0iofwI3avwqlQmh4hFasO3tYD8P6/+cY3XrQNIdjji7xY3r3aThxJAzMSRqrYknUu9a
-         6c+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=HeHd13NUasJVCk4KgKhrFLwhTEXtxTOChOcy1/oX1Kk=;
-        b=pna58Aw7/7wb1pWtxC/qyjpRR7IMmwCAw+netoYACZ4kTEecXBKWZqXEXSX3NAYc0C
-         wZrgUPUK8ehtU+ePV5MZ1ZhNV/2HPZwjF1k8b6AlOXeH4CzTbCRDV2kE9eay12N9q8VM
-         yFpXbLZL0BH3D1y/AFbnpfbFyU4gXM09OYL6Pwp22W52Z4hqIMb373BbsADEu0A545A7
-         rjy8T7f0ZL7CmNaDcxRc+Ivpehxd90gj1HBz/UZgE16CE7LdaeMQBNaT1Wh1P1uC3LaB
-         z5GChAmWDBqlwXRDX0DpWcdfojOKLD9zVkTEBYK6DXuZHNc776EVn1ZFXBcRIM9/v9e9
-         LyxQ==
-X-Gm-Message-State: ACgBeo2a/IvfF7mLaiTp2KRaKpo8S/eBVrVt+f81ElkZowVtrVSVc5Q6
-        aQrbuciPiCqQhHaTNuXZhUQ=
-X-Google-Smtp-Source: AA6agR5HBd4CNH6zTJ8+Z3CX9INI+OIwMpJqpGsYZjR7qeZm/8PiyItn0SSCIb5xClMyuzkKaycn7Q==
-X-Received: by 2002:a17:903:187:b0:175:4e37:c294 with SMTP id z7-20020a170903018700b001754e37c294mr2271991plg.129.1661968287105;
-        Wed, 31 Aug 2022 10:51:27 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 96-20020a17090a0fe900b001f54fa41242sm1558355pjz.42.2022.08.31.10.51.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 10:51:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7bf33aaa-11d3-2ff2-8c32-70e11340a3a9@roeck-us.net>
-Date:   Wed, 31 Aug 2022 10:51:23 -0700
+        with ESMTP id S232937AbiHaShA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 14:37:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3A09DF99;
+        Wed, 31 Aug 2022 11:33:08 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VDt3rg019477;
+        Wed, 31 Aug 2022 18:32:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=gcFBJtVpigwd3dr3YYRez32IFKAFJ02k9HAMkUNGwxA=;
+ b=QKLo9rRxTfpT24biS1MZM9zDd/Emq9X9ZmYELmJwjmIXSOJ5Ce08+WgPli46heSh9S9F
+ wW8I63TYokljxLLl+/uEL6TSWhERMdKOLYoL3z8+oxhj39Y6YNrpSwzFtYnU1fWFRNHe
+ XmS6NyIyD0IydRF35TBrxzQN35aZG48dC/heU4wHTdEyD8OF7Dc9yjAg5VqxzI8lkf7v
+ krhsUQAUKpdMtA3pDGzTbouecunyo84PZgYxFXW2kBHHL8b13NsJxO1Td/HEHQi3es1x
+ 2qYWQFO6sHxmYfDyhrYAZv6DUeS8YkWItmQtZZuhcQrTCEyYLGu1KZcIyuG69zfcUznx /g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j9qdm3x7m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 18:32:59 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27VIWxbK003732
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 18:32:59 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 31 Aug 2022 11:32:58 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v5 0/5] Fix controller halt and endxfer timeout issues
+Date:   Wed, 31 Aug 2022 11:32:37 -0700
+Message-ID: <20220831183242.27826-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] usb: typec: tcpm: Add callbacks to mitigate
- wakeups due to contaminant
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-References: <20220831001555.285081-1-badhri@google.com>
- <Yw90JmdIxg/YdUYH@kuha.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yw90JmdIxg/YdUYH@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xwwPPlLRvRdK11vYFuzVgUJJequEzjRb
+X-Proofpoint-GUID: xwwPPlLRvRdK11vYFuzVgUJJequEzjRb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-31_11,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 spamscore=0 bulkscore=0 suspectscore=0
+ clxscore=1015 malwarescore=0 mlxscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=587 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208310089
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/31/22 07:45, Heikki Krogerus wrote:
-> Hi Badhri,
-> 
-> On Tue, Aug 30, 2022 at 05:15:53PM -0700, Badhri Jagan Sridharan wrote:
->> On some of the TCPC implementations, when the Type-C port is exposed
->> to contaminants, such as water, TCPC stops toggling while reporting OPEN
->> either by the time TCPM reads CC pin status or during CC debounce
->> window. This causes TCPM to be stuck in TOGGLING state. If TCPM is made
->> to restart toggling, the behavior recurs causing redundant CPU wakeups
->> till the USB-C port is free of contaminant.
->>
->> [206199.287817] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
->> [206199.640337] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
->> [206199.985789] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
->> ...
->>
->> To mitigate redundant TCPM wakeups, TCPCs which do have the needed hardware
->> can implement the check_contaminant callback which is invoked by TCPM
->> to evaluate for presence of contaminant. Lower level TCPC driver can
->> restart toggling through TCPM_PORT_CLEAN event when the driver detects
->> that USB-C port is free of contaminant. check_contaminant callback also passes
->> the disconnect_while_debounce flag which when true denotes that the CC pins
->> transitioned to OPEN state during the CC debounce window.
-> 
-> I'm a little bit concerned about the size of the state machine. I
-> think this is a special case that at least in the beginning only the
-> Maxim port controller can support, but it's still mixed into the
-> "generic" state machine.
-> 
-> How about if we just add "run_state_machine" callback for the port
-> controller drivers so they can handle this kind of special cases on
-> their own - they can then also add custom states?
-> 
+Changes in v5:
+- Rebased series on usb-testing from patch #5 onwards.
 
-Same concern here. I would very much prefer an approach as suggested below,
-especially since the changes around the added disconnect_while_debounce flag
-are extensive and difficult to verify.
+Changes in v4:
+- Split the increase timeout patch into separate patches. #1 for the
+gadget suspend/resume locking changes #2 for the increased timeout
+- Modified msleep to usleep_range w/ an interval of 1-2ms and a max
+timeout of 4s.
 
-Thanks,
-Guenter
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 904c7b4ce2f0c..91c22945ba258 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4858,9 +4858,11 @@ static void run_state_machine(struct tcpm_port *port)
->                  tcpm_set_state(port, port->pwr_role == TYPEC_SOURCE ? SRC_READY : SNK_READY, 0);
->                  break;
->          default:
-> -               WARN(1, "Unexpected port state %d\n", port->state);
->                  break;
->          }
-> +
-> +       if (port->tcpc->run_state_machine)
-> +               port->tcpc->run_state_machine(port->tcpc);
->   }
->   
->   static void tcpm_state_machine_work(struct kthread_work *work)
-> 
-> thanks,
-> 
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
+
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
+
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
+
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
+
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
+
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
+Wesley Cheng (5):
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Remove DWC3 locking during gadget suspend/resume
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
+
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  3 +++
+ drivers/usb/dwc3/ep0.c    |  5 ++++-
+ drivers/usb/dwc3/gadget.c | 31 +++++++++++++++++++++++++++----
+ 4 files changed, 34 insertions(+), 9 deletions(-)
 
