@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0CF5A7391
-	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 03:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30505A73A7
+	for <lists+linux-usb@lfdr.de>; Wed, 31 Aug 2022 03:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbiHaBwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Aug 2022 21:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S231793AbiHaB4g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Aug 2022 21:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbiHaBww (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 21:52:52 -0400
+        with ESMTP id S230382AbiHaB4f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Aug 2022 21:56:35 -0400
 Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C08AB275B;
-        Tue, 30 Aug 2022 18:52:45 -0700 (PDT)
-X-UUID: b06198feaa43475f977da810b3909272-20220831
-X-CPASD-INFO: 3dcdee8cd1a341cba5870ef212fc03d1@fLSdhJKXZpOQUaN_g3SunIFmaGdgkYa
-        Bc2yGll5jkFGVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBjXoZgUZB3gqadhJiTaA==
-X-CLOUD-ID: 3dcdee8cd1a341cba5870ef212fc03d1
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:3.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:128.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:3.0,CFOB:3.0,SPC:0,SIG:-
-        5,AUF:4,DUF:3605,ACD:65,DCD:65,SL:0,EISP:0,AG:0,CFC:0.449,CFSR:0.05,UAT:0,RAF
-        :0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EA
-        F:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: b06198feaa43475f977da810b3909272-20220831
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD117AE224;
+        Tue, 30 Aug 2022 18:56:33 -0700 (PDT)
+X-UUID: 2be4833337b1422a9d0e2f0ccfa45b94-20220831
+X-CPASD-INFO: 7e3fb8c83900468d85e2043c88a2527d@gLVtho9qkWhfWXJ8g3mDnlhmlWJgYFO
+        yenKBaGNiY4SVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBmXoZgUZB3hqdthphmkw==
+X-CLOUD-ID: 7e3fb8c83900468d85e2043c88a2527d
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:6.0,URL:-5,TVAL:173.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:129.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:6.0,CFOB:6.0,SPC:0,SIG:-
+        5,AUF:5,DUF:3607,ACD:65,DCD:65,SL:0,EISP:0,AG:0,CFC:0.435,CFSR:0.049,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 2be4833337b1422a9d0e2f0ccfa45b94-20220831
 X-CPASD-BLOCK: 1000
 X-CPASD-STAGE: 1
-X-UUID: b06198feaa43475f977da810b3909272-20220831
+X-UUID: 2be4833337b1422a9d0e2f0ccfa45b94-20220831
 X-User: huxiaoying@kylinos.cn
 Received: from localhost.localdomain [(112.64.161.44)] by mailgw
         (envelope-from <huxiaoying@kylinos.cn>)
         (Generic MTA)
-        with ESMTP id 753277048; Wed, 31 Aug 2022 09:53:00 +0800
+        with ESMTP id 2096684557; Wed, 31 Aug 2022 09:56:46 +0800
 From:   Hu Xiaoying <huxiaoying@kylinos.cn>
 To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
 Cc:     linux-kernel@vger.kernel.org, Hu Xiaoying <huxiaoying@kylinos.cn>
 Subject: [PATCH v4] usb: Improves USB2.0 write performance.
-Date:   Wed, 31 Aug 2022 09:52:36 +0800
-Message-Id: <20220831015236.1119093-1-huxiaoying@kylinos.cn>
+Date:   Wed, 31 Aug 2022 09:56:24 +0800
+Message-Id: <20220831015624.1119578-1-huxiaoying@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,14 +74,14 @@ change for v2
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 4051c8cd0cd8..3925c7c67915 100644
+index 4051c8cd0cd8..23ab3b048d9b 100644
 --- a/drivers/usb/storage/unusual_uas.h
 +++ b/drivers/usb/storage/unusual_uas.h
 @@ -62,6 +62,13 @@ UNUSUAL_DEV(0x0984, 0x0301, 0x0128, 0x0128,
  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
  		US_FL_IGNORE_UAS),
  
-+/* Reported-by: Tom Hu <huxiaoying@gmail.com> */
++/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
 +UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
 +		"ASUS",
 +		"External HDD",
