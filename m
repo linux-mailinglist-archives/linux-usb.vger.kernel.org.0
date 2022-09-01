@@ -2,87 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1235A9A5E
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 16:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414475A9A8E
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 16:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiIAOc1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 10:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
+        id S234952AbiIAOhr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 10:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234104AbiIAOc0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 10:32:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25E572B6B
-        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 07:32:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A4C661D21
-        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 14:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38500C433D6;
-        Thu,  1 Sep 2022 14:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662042744;
-        bh=bFlTwOoof4OBLvFR+zi31qCdKorAk+yKk7zPo5ps7LE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i8c3MXZGRP2Kg0ZXCY5BZZGEHFNjsuAXIzfvNgtzO84PXpPvNy6sr8Y4+s+w0tA0W
-         rOZCK3rAYKtOFtX28icDffL9yz6fu5vhCq+BXtkIXvSYo5XOcu28QrTymv/6xPJz2q
-         3A+nyzJ4s+rZ7j0E0NKvCcBuih4DSd310vhdo8f4=
-Date:   Thu, 1 Sep 2022 16:32:21 +0200
-From:   gregkh <gregkh@linuxfoundation.org>
-To:     "zhongling0719@126.com" <zhongling0719@126.com>
-Cc:     zenghongling <zenghongling@kylinos.cn>,
-        stern <stern@rowland.harvard.edu>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        usb-storage <usb-storage@lists.one-eyed-alien.net>
-Subject: Re: Re: [PATCH v4] uas: add no-uas quirk for Thinkplus and Hiksemi
- usb-storage
-Message-ID: <YxDCdQ885wdyr8wG@kroah.com>
-References: <1662015653-12976-1-git-send-email-zenghongling@kylinos.cn>
- <YxBvNEn0jEEd0lXV@kroah.com>
- <2022090120371974113815@126.com>
- <YxCtyOUkRlIqcC4d@kroah.com>
- <2022090121570194160929@126.com>
+        with ESMTP id S233362AbiIAOha (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 10:37:30 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 15CFC80B4E
+        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 07:37:11 -0700 (PDT)
+Received: (qmail 235714 invoked by uid 1000); 1 Sep 2022 10:36:34 -0400
+Date:   Thu, 1 Sep 2022 10:36:34 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] USB: core: Fix RST error in hub.c
+Message-ID: <YxDDcsLtRZ7c20pq@rowland.harvard.edu>
+References: <20220831152458.56059e42@canb.auug.org.au>
+ <Yw9vYaqczVlWzONt@rowland.harvard.edu>
+ <20220901075048.7b281231@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2022090121570194160929@126.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220901075048.7b281231@canb.auug.org.au>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+A recent commit added an invalid RST expression to a kerneldoc comment
+in hub.c.  The fix is trivial.
 
-A: No.
-Q: Should I include quotations after my reply?
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Fixes: 9c6d778800b9 ("USB: core: Prevent nested device-reset calls")
+Cc: <stable@vger.kernel.org>
 
-http://daringfireball.net/2007/07/on_top
+---
 
-On Thu, Sep 01, 2022 at 09:58:03PM +0800, zhongling0719@126.com wrote:
-> Some UASP capable USB-to-SATA bridge controllers are not compatible,this problem has always existed.
 
-What problem is this exactly?  Why is this failing on only Linux?
+[as1987]
 
-> you can refer to other auther submit the similar patch.
 
-What other author and other patch?
+ drivers/usb/core/hub.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> this patch is fixed no speed,not slow speed.
-
-I do not understand, sorry.
-
-thanks,
-
-greg k-h
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -6039,7 +6039,7 @@ re_enumerate:
+  *
+  * Return: The same as for usb_reset_and_verify_device().
+  * However, if a reset is already in progress (for instance, if a
+- * driver doesn't have pre_ or post_reset() callbacks, and while
++ * driver doesn't have pre_reset() or post_reset() callbacks, and while
+  * being unbound or re-bound during the ongoing reset its disconnect()
+  * or probe() routine tries to perform a second, nested reset), the
+  * routine returns -EINPROGRESS.
