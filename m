@@ -2,243 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB035A8D11
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 07:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2ED5A8F0D
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 09:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbiIAFGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 01:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S233545AbiIAHCD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 03:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiIAFGo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 01:06:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557DB112EC7
-        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 22:06:43 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oTcPV-0000wM-D8; Thu, 01 Sep 2022 07:06:37 +0200
-Message-ID: <e0e1ece2-350a-8412-8dc2-56004f870f8a@pengutronix.de>
-Date:   Thu, 1 Sep 2022 07:06:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: imx8mp USB OTG/dual-role
-Content-Language: en-US
-To:     Tim Harvey <tharvey@gateworks.com>, Jun Li <jun.li@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Marek Vasut <marex@denx.de>, Felipe Balbi <balbi@kernel.org>,
-        Fabio Estevam <festevam@denx.de>, Jacky Bai <ping.bai@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Lucas Stach <l.stach@pengutronix.de>
-References: <CAJ+vNU2bLPAta6GpDn_dGSrCnCRuBtxvLZ-g01h1jGwQuruBuA@mail.gmail.com>
- <DB9PR04MB8412164E22460736FB15B8D687789@DB9PR04MB8412.eurprd04.prod.outlook.com>
- <PA4PR04MB9640F578AEF2558BA3F08F8889789@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <CAJ+vNU10JeQg7GO+cd+Twn_uE4Hsh0T422+vZKT-DW517OD-RA@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <CAJ+vNU10JeQg7GO+cd+Twn_uE4Hsh0T422+vZKT-DW517OD-RA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233459AbiIAHBC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 03:01:02 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58C511A38
+        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 00:00:46 -0700 (PDT)
+X-UUID: d103c71f3fc74af99f4845dd6ffc6e74-20220901
+X-CPASD-INFO: 3d271a446fd641829edf3b5b15762428@fLRsV16TYmRihqaCg3SDbFmWlJZjjlW
+        xc29XZmBkXliVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3gqZsV2GPZA==
+X-CLOUD-ID: 3d271a446fd641829edf3b5b15762428
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:172.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:275.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:8,DUF:3768,ACD:67,DCD:67,SL:0,EISP:0,AG:0,CFC:0.288,CFSR:0.094,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: d103c71f3fc74af99f4845dd6ffc6e74-20220901
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: d103c71f3fc74af99f4845dd6ffc6e74-20220901
+X-User: zenghongling@kylinos.cn
+Received: from localhost.localdomain.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <zenghongling@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 965130518; Thu, 01 Sep 2022 15:01:01 +0800
+From:   zenghongling <zenghongling@kylinos.cn>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        zhongling0719@126.com, zenghongling <zenghongling@kylinos.cn>
+Subject: [PATCH v4] uas: add no-uas quirk for Thinkplus and Hiksemi usb-storage
+Date:   Thu,  1 Sep 2022 15:00:53 +0800
+Message-Id: <1662015653-12976-1-git-send-email-zenghongling@kylinos.cn>
+X-Mailer: git-send-email 2.1.0
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 31.08.22 18:38, Tim Harvey wrote:
-> On Tue, Aug 30, 2022 at 8:11 PM Jun Li <jun.li@nxp.com> wrote:
->>
->> Hi,
->>
->>> -----Original Message-----
->>> From: Jacky Bai <ping.bai@nxp.com>
->>> Sent: Wednesday, August 31, 2022 9:18 AM
->>> To: tharvey@gateworks.com; linux-usb@vger.kernel.org; Linux ARM Mailing
->>> List <linux-arm-kernel@lists.infradead.org>; Jun Li <jun.li@nxp.com>
->>> Cc: Alexander Stein <alexander.stein@ew.tq-group.com>; Jun Li
->>> <jun.li@nxp.com>; Rikard Falkeborn <rikard.falkeborn@gmail.com>; Lucas
->>> Stach <l.stach@pengutronix.de>; Philippe Schenker
->>> <philippe.schenker@toradex.com>; Felipe Balbi <balbi@kernel.org>; Fabio
->>> Estevam <festevam@denx.de>; Marcel Ziswiler <marcel.ziswiler@toradex.com>;
->>> Shawn Guo <shawnguo@kernel.org>; Marek Vasut <marex@denx.de>; Francesco
->>> Dolcini <francesco.dolcini@toradex.com>; Aisheng Dong
->>> <aisheng.dong@nxp.com>; Sascha Hauer <s.hauer@pengutronix.de>;
->>> dl-linux-imx <linux-imx@nxp.com>; Pengutronix Kernel Team
->>> <kernel@pengutronix.de>
->>> Subject: RE: imx8mp USB OTG/dual-role
->>>
->>> Jun, as we discussed before, any conclusion on how to handle the USB OTG
->>> ID pin in RM?
->>
->> The NXP datasheet for iMX8MP already changed the ID pin name to be with _DNU
->> suffix, RM may be updated in next version.
->> If legacy ID is going to be used, any normal GPIO function can be selected
->> for it, extcon is well supported in dwc3 controller driver.
->>
->> More comments for Tim, see below...
->>
->>>
->>>
->>> BR
->>> Jacky Bai
->>>
->>>> Subject: imx8mp USB OTG/dual-role
->>>>
->>>> Greetings,
->>>>
->>>> I have an imx8mp board (imx8mp-venice-gw74xx) which has a DWC3 USB
->>>> host controller using imx8mp PHY
->>>> (drivers/phy/freescale/phy-fsl-imx8mq-usb.c fsl,imx8mp-usb-phy) and
->>>> DWC3 host controller core (drivers/usb/dwc3/core.c snps,dwc3) with
->>>> imx8mp glue (drivers/usb/dwc3/dwc3-imx8mp.c fsl,imx8mp-dwc3).
->>>>
->>>> One of the 2x USB 3.0 hosts is connected to a USB Type C connector
->>>> using a
->>>> TPS25821 USB power switch and config controller which handles the CC
->>>> pins on and VBUS enable as well as drives the mux sel pin of a
->>>> USB3 mux to route the USB SS pairs to the appropriate half of the Type
->>>> C connector. This device has no I2C or other management bus - only
->>>> VBUS, FAULT#, SINK#, and POL# outputs based on CC pins.
->>>>
->>>> I'm not clear how to describe this in the device-tree in order for it
->>>> to function as a dual-role controller for host vs device mode.
->>>>
->>>> The TPS25821 has a FAULT# signal that routes to IMX8MP GPIO1_IO13
->>>> pinmuxed as MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC and a SINK# signal
->>>> that routes to IMX8MP GPIO1_IO10 pinmuxed as
->>>> MX8MP_IOMUXC_GPIO1_IO10__USB1_OTG_ID. Additionally the VBUS output of
->>>> the TPS25821 also connected to the TypeC VBUS pin routes to the IMX8MP
->>>> USB1_VBUS pin.
->>
->> So TPS25821 does not need a driver.
->>
->>>>
->>>> I've noticed there are currently only 2 other IMX8MP boards in Linux
->>>> mainline that specify dr_mode="otg"; the DH electronics i.MX8M Plus
->>>> DHCOM SOM (imx8mp-dhcom-som.dtsi), and the Toradex i.MX8M Plus Verdin
->>>> SOM (imx8mp-verdin.dtsi). I'm not clear how these are hooked up or if
->>>> USB dual-role work on these currently. I did notice that
->>
->> NXP iMX8MP EVK has not enabled type-C port due to the SS orientation
->> switch binding is still in discussion, but you don't need a SW control
->> in your case so you are okay here.
->>
->>>> imx8mp-verdin.dtsi looks like it does not enable the phy or core via
->>>> status prop and uses invalid 'over-current-active-low' and
->>> 'disable-over-current' dt props.
->>>>
->>>> I am currently using the following with imx8mp-venice-gw74xx:
->>>>
->>>> /* USB1 - Type C front panel */
->>>> &usb3_phy0 {
->>>>         status = "okay";
->>>> };
->>>>
->>>> /* USB1 dwc3 glue */
->>>> &usb3_0 {
->>>>         fsl,over-current-active-low;
->>>>         status = "okay";
->>>> };
->>>>
->>>> /* USB1 dwc3 core */
->>>> &usb_dwc3_0 {
->>>>         pinctrl-names = "default";
->>>>         pinctrl-0 = <&pinctrl_usb1>;
->>>>         dr_mode = "otg";
->>>> };
->>>>
->>>> &iomuxc {
->>>>         pinctrl_usb1: usb1grp {
->>>>                 fsl,pins = <
->>>>
->>>> MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC    0x140
->>>>
->>>> MX8MP_IOMUXC_GPIO1_IO10__USB1_OTG_ID    0x140
->>>>                 >;
->>>>         };
->>>> };
->>>>
->>>> And currently v6.0-rc2 enumerates the host controller even without a
->>>> Type-C to host cable attached which tells me that OTG_ID isn't doing
->>>> its job. I vaguely recall some confusing statements on the IMX
->>>> community forum that these pins might not even be used on the IMX8MP.
->>>>
->>>> How should I be describing the device-tree for this scenario in order
->>>> to get dual-role behavior?
->>
->> Could this dts work for you?
->>
->> /* Config the "ID" pin iomux to be GPIO */
->>
->> pinctrl_usb1: usb1grp {
->>                  fsl,pins = <
->>                       MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC    0x140
->>                       MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10    0x140
->>           >;
->>  };
->>
->>  extcon_usb: extcon_iddig {
->>                  compatible = "linux,extcon-usb-gpio";
->>                  id-gpio = <&gpio1 10 GPIO_ACTIVE_HIGH>;
->>  };
->>
->>  &usb_dwc3_0 {
->>          pinctrl-names = "default";
->>          pinctrl-0 = <&pinctrl_usb1>;
->>                  extcon = <&extcon_usb>
->>          dr_mode = "otg";
->>  };
->>
->> Li Jun
-> 
-> Jun,
-> 
-> Thank you, this does appear to work as intended as dual-role. I was
-> not aware of linux,extcon-usb-gpio.
-> 
-> And thanks also Alexander, your usb-dual-role via connector method
-> works as well.
-> 
-> Which method is preferred, using extcon or using usb-role-switch via a
-> connector as in Alexander's patch?
+UAS:if ignore uas feature for these drivers can fix the not working and
+output error message bug.
 
-The commit adding the usb-role-switch
-4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-mentions that "[d]ue to the requirement of usb-connector.txt binding, the old way
-using extcon to support USB Dual-Role switch is now deprecated
-when use Type-B connector."
+The UAS mode of Thinkplus and Hiksemi is reported to fail to work on
+several platforms with the following error message,I tested these USB
+disks on other architecture platforms as arm/loongson for different xHCI
+controller,the same error occurred:
 
-> 
-> Additionally, where is it appropriate to put the pinctrl for the OC
-> and ID pins in the usb_dwc3_0 (dwc3 core) node, the usb3_0 (dwc3 glue)
-> node, or the usb3_phy0 (phy) node?
-> 
-> Best Regards,
-> 
-> Tim
-> 
-> 
+[   39.702439] xhci_hcd 0000:0c:00.3: ERROR Transfer event for disabled
+               endpoint or incorrect stream ring
+[   39.702442] xhci_hcd 0000:0c:00.3: @000000026c61f810 00000000 00000000
+               1b000000 05038000
 
+[  592.490369][ 1] xhci_hcd 0000:0c:00.3: Assuming host is dying, halting host.
+[  592.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
+                   inflight: CMD
+[  592.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
+                   04 00 00
+[  592.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
+                   inflight: CMD
+[  592.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
+                   00 08 00
 
+And when running iozone will disconnect from the USB controller, then after
+re-connecting the device will be offlined and not working at all.
+
+We changed a lot of USB devices and contact relevant manufacturers to 
+confirm the USB disk is ok.
+
+Signed-off-by: zenghongling <zenghongling@kylinos.cn>
+---
+change for v4
+ - Change the send patch email address
+
+change for v3
+ - Add the a description of why the patch is needed.
+
+change for v2
+ -Change the ./script/checkpatch.pl warning.
+--
+---
+ drivers/usb/storage/unusual_uas.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index cdff7dc..ddcdf1a 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -62,6 +62,12 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_IGNORE_UAS),
+ 
++UNUSUAL_DEV(0x090c, 0x2000, 0x0000, 0x9999,
++		"Hiksemi",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /*
+  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+  * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
+@@ -142,6 +148,12 @@ UNUSUAL_DEV(0x0bc2, 0xab2a, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_ATA_1X),
+ 
++UNUSUAL_DEV(0x0bda, 0x9210, 0x0000, 0x9999,
++		"Hiksemi",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
+ UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
+ 		"Initio Corporation",
+@@ -184,6 +196,12 @@ UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_ATA_1X),
+ 
++UNUSUAL_DEV(0x17ef, 0x3899, 0x0000, 0x9999,
++		"Thinkplus",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
+ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+ 		"VIA",
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.1.0
+
