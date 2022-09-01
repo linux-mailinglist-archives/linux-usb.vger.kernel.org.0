@@ -2,98 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B920C5A92B3
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 11:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956555A92C3
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 11:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234458AbiIAJF1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 05:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
+        id S234390AbiIAJJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 05:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbiIAJEa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 05:04:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19754BD2D;
-        Thu,  1 Sep 2022 02:03:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46A6D61132;
-        Thu,  1 Sep 2022 09:03:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ABDC433D6;
-        Thu,  1 Sep 2022 09:03:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662023032;
-        bh=AzHCgO/E2otj/+WzqrHgSLeQsmQDBQg/sQ7g3lI19jI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lK5L8GUkAnLhdseS8R407D5bMayLXlQpKEsxhlwm4z5huYYyHq+4q/C/qUCxvaHcT
-         c6lj/90LLqY1i7ZyL6TooHph7/m3VrE4jxjToYemvJGhE8iC+wqqP9BAHxM2O6GHS5
-         Vm/k7ZZDGmNE6aTdrxrKBmzLUoXHoTF86JVmt8GAgfFdAALlUwgp0Y31Dozs2Ow0k0
-         GHaUgz7H3xt36O0pV+QOyJ3qT9qUnrMroUE/gaEJQmGcVhVUJ9lntI0GSitHoG+B5G
-         gf3tlMz1ISv/P619csFPBaeBPg9qmk2RkkbKyMzWNhNo7UQYOeIJRPX586mZLXZUTm
-         U5tRLn4T3uTuQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oTg77-0005T7-Dj; Thu, 01 Sep 2022 11:03:53 +0200
-Date:   Thu, 1 Sep 2022 11:03:53 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 6.0-rc4
-Message-ID: <YxB1eeDSKt+Ei5kf@hovoldconsulting.com>
+        with ESMTP id S234535AbiIAJIs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 05:08:48 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3456B8286A;
+        Thu,  1 Sep 2022 02:07:39 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oTgAi-0002Lg-Io; Thu, 01 Sep 2022 11:07:36 +0200
+Message-ID: <f28e3bdf-2add-574a-cf0a-5d0253ea708a@leemhuis.info>
+Date:   Thu, 1 Sep 2022 11:07:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Mattia Orlandi <mattia.orlandi21@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [regression] Bug 216426 - USB-C port is incorrectly reporting that
+ it's powered when Dell XPS 15-9500 is unplugged
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662023259;e828850e;
+X-HE-SMSGID: 1oTgAi-0002Lg-Io
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+Hi, this is your Linux kernel regression tracker speaking.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+I noticed a regression report in bugzilla.kernel.org. As many (most?)
+kernel developer don't keep an eye on it, I decided to forward it:
 
-are available in the Git repository at:
+https://bugzilla.kernel.org/show_bug.cgi?id=216426
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.0-rc4
+>  Mattia Orlandi 2022-08-29 17:04:21 UTC
+> 
+> System
+> ------
+> - Dell XPS 15 9500
+> - 5.19.4 kernel
+> 
+> Problem description
+> -------------------
+> Whenever I plug and then unplug my laptop from AC power using the USB-C port, the system thinks it is still plugged in (i.e., the KDE applet reports "Plugged in but still discharging").
+> If I check in Dell's BIOS, it correctly reports when the power supply is plugged/unplugged; `acpi -V` also correctly shows `Adapter 0: off-line`.
+> 
+> On the other hand, `upower -d` incorrectly reports `/org/freedesktop/UPower/devices/line_power_ucsi_source_psy_USBC000o002` as `online: yes`.
+> Moreover, `journalctl` reports `ucsi_acpi USBC000:00: ucsi_handle_connector_change: GET_CONNECTOR_STATUS failed (-110)`.
+> 
+> I'm testing the LTS kernel (5.15.63) and the issue does not occur, so I assume it's a regression bug, possibly introduced in kernel 5.18 (I tried downgrading the kernel to version 5.18.16 and the issue was already present).
 
-for you to fetch changes up to 41ca302a697b64a3dab4676e01d0d11bb184737d:
+See the ticket for more details. Apologies if I forwarded it to the
+wrong folks, I cover a lot of ground and thus sometimes get things
+wrong. :-/
 
-  USB: serial: ch341: fix disabled rx timer on older devices (2022-08-31 15:51:06 +0200)
+BTW, I'd also like to add the report to the list of tracked regressions
+to ensure it's doesn't fall through the cracks in the end:
 
-----------------------------------------------------------------
-USB-serial fixes for 6.0-rc4
+#regzbot introduced: v5.15..v5.18
+https://bugzilla.kernel.org/show_bug.cgi?id=216426
+#regzbot ignore-activity
 
-Here are a couple of fixes for two long-standing issues with some older
-ch341 devices and a number of new device ids.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Johan Hovold (3):
-      USB: serial: cp210x: add Decagon UCA device id
-      USB: serial: ch341: fix lost character on LCR updates
-      USB: serial: ch341: fix disabled rx timer on older devices
-
-Niek Nooijens (1):
-      USB: serial: ftdi_sio: add Omron CS1W-CIF31 device id
-
-Slark Xiao (1):
-      USB: serial: option: add support for Cinterion MV32-WA/WB RmNet mode
-
-Yan Xinyu (1):
-      USB: serial: option: add support for OPPO R11 diag port
-
-Yonglin Tan (1):
-      USB: serial: option: add Quectel EM060K modem
-
- drivers/usb/serial/ch341.c        | 16 ++++++++++++++--
- drivers/usb/serial/cp210x.c       |  1 +
- drivers/usb/serial/ftdi_sio.c     |  2 ++
- drivers/usb/serial/ftdi_sio_ids.h |  6 ++++++
- drivers/usb/serial/option.c       | 15 +++++++++++++++
- 5 files changed, 38 insertions(+), 2 deletions(-)
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
