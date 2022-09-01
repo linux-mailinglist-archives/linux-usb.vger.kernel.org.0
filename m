@@ -2,118 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCD45AA02B
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 21:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8025AA38A
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 01:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiIATgr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 15:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S233761AbiIAXO0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 19:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbiIATgm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 15:36:42 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A02B786F2;
-        Thu,  1 Sep 2022 12:36:42 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281JHWZ0027791;
-        Thu, 1 Sep 2022 19:36:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=6AjiAER4+ZaB6b+RFmJR/jM7odXFYTlnWKfsob4i6iE=;
- b=auMzkBHb4mfpbQGPsKPDXIy9k0br2WZFq9EdPrdq1qG14UXqcqqCDBrOSowXlPABfC64
- WJSM3ZlQwn3jhumR2yERoJdXHo3XdB9HPmkQuYrrYVjqDpzXNlrtJbkvW2z8ScA7eksh
- cjoluytgislURQNzHAGbfGv08zO4QVxS6PQaTA+SzGmdFt3SCCEA1R2IXBzibdu8Ka0m
- 9byOcgcwnM06ffA6J4iWYH07M/UkS+UJU84N34Y0ylfBamwgsb505XSiwkLy3KdXXPzQ
- CteEQ52XVOZwa+KQugnCleMGgVGtBMyuu8R1QcDaW6GTQU5tWaMKQTCuBkopBdKO3nrN +w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3javjc1k53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 19:36:38 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281JacfC029172
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Sep 2022 19:36:38 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 1 Sep 2022 12:36:37 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v8 5/5] usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
-Date:   Thu, 1 Sep 2022 12:36:25 -0700
-Message-ID: <20220901193625.8727-6-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220901193625.8727-1-quic_wcheng@quicinc.com>
-References: <20220901193625.8727-1-quic_wcheng@quicinc.com>
+        with ESMTP id S234330AbiIAXOX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 19:14:23 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5607C32A
+        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 16:14:22 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id v26so861045lfd.10
+        for <linux-usb@vger.kernel.org>; Thu, 01 Sep 2022 16:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=soZe33lENWxiQfWnUb8rFmt1gciGa3few/PDkKqWJgk=;
+        b=Q9NSFUlKmJ4Tynyu3mbmhTQJzKGpEguIwnWBqC3h+f2/JPqnyP8NIsdr2PUAONuJnH
+         qDDKM0OwqigCYuuvKBhka6ZRigp7FQ2Xtoka7iFbMLi97ca8ookPnbRgXUu0gWRDdODI
+         7SV5pUkx8SYYRsHzzOKc/T0iEwuA5/mp9i80AUfhptdBAf9h1RfGMPryyPfX/vG1ZPth
+         oazI1k9sW/BYolcBIQT7XYlWQv8Us5PTpf+JkxvJ/vRP4AypZfnwhezd6Uu3ZE+mMsMr
+         Tny+SQB0OJHKtciTBab0FJIOOML64wahaHo2lPvnIePTRXJ0CDiSLukE5SjnhAHPn6iI
+         Qigg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=soZe33lENWxiQfWnUb8rFmt1gciGa3few/PDkKqWJgk=;
+        b=7lRkS230gCn7AkTLrP78J2WMWsOfH5p4y3/W8RCKHtAIRYqGxg/x9UZz/3eiMcHsvT
+         rbjHguH4OsZRS1nNBnKhQ4wdjlA4gr+gIsIWFpSeeV1OeDXqBZJtNjbL69+vyi+M+r2b
+         6x0Kpc0ajtPOqcaxdA+aY7gNngPEF2OSuV2qIRPEvlleuBGAJnEqXXMzf+VDStdsdbvn
+         HNbAGwaepVD05YIX0tnzmHO421PgzrYZl7v/D2+4yL3PvyE9eLzV54cqAwciwEJ40HpE
+         ceotsipy9PI9JVxJhXmEio6Hah7N9BzbrN5oitT2CY9aBteSSl6nbq+ZH72rEcLFeArQ
+         Egyw==
+X-Gm-Message-State: ACgBeo2v6Nw8Moi31FHQegYZQrhzZFYSmIsQKxAOFcD2ugLomk5CxdE3
+        /YOI8DVZnNtSDRwcoyn1hxrLELKERUE=
+X-Google-Smtp-Source: AA6agR4KSWVq931GCShb/cS8MQU9EjwEgM9RbZZ6Kmc8p9NCvzBuAUuXQpwnvUQ2M3diZ5YauNCOLA==
+X-Received: by 2002:a05:6512:1309:b0:492:e273:d800 with SMTP id x9-20020a056512130900b00492e273d800mr10746240lfu.93.1662074061108;
+        Thu, 01 Sep 2022 16:14:21 -0700 (PDT)
+Received: from [192.168.2.145] ([109.252.119.13])
+        by smtp.googlemail.com with ESMTPSA id 10-20020ac25f4a000000b00492e4c97ca3sm30084lfz.246.2022.09.01.16.14.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 16:14:20 -0700 (PDT)
+Message-ID: <36709b7c-d1b7-f81f-1ff5-c3743590fe35@gmail.com>
+Date:   Fri, 2 Sep 2022 02:14:19 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zLGpm7vtBpAo3Lew_RKkT8FSCdOoONp8
-X-Proofpoint-ORIG-GUID: zLGpm7vtBpAo3Lew_RKkT8FSCdOoONp8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 bulkscore=0 mlxlogscore=876 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209010085
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: Cleaning up bf88fef0b6f1 ("usb: otg-fsm: Fix hrtimer list
+ corruption")
+Content-Language: en-US
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+References: <78712d64-7bac-cc2f-4a99-52e35d12f46f@suse.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <78712d64-7bac-cc2f-4a99-52e35d12f46f@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During a cable disconnect sequence, if ep0state is not in the SETUP phase,
-then nothing will trigger any pending end transfer commands.  Force
-stopping of any pending SETUP transaction, and move back to the SETUP
-phase.
+29.08.2022 16:10, Oliver Neukum пишет:
+> Hi,
+> 
+> I am looking at that patch and I am afraid, while it does the job
+> it is quite unclean. In effect you introduce a flag you set, but
+> never clear. That is just a kludge. It really tells you that your
+> setup of data structures is misplaced and you should just do it earlier.
+> 
+> Could you test the attached patch?
+> 
+> 	Regards
+> 		Oliver
 
-Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4721561e4ba5..515980bf61e2 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3776,13 +3776,24 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- 	reg &= ~DWC3_DCTL_INITU2ENA;
- 	dwc3_gadget_dctl_write_safe(dwc, reg);
- 
-+	dwc->connected = false;
-+
- 	dwc3_disconnect_gadget(dwc);
- 
- 	dwc->gadget->speed = USB_SPEED_UNKNOWN;
- 	dwc->setup_packet_pending = false;
- 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
- 
--	dwc->connected = false;
-+	if (dwc->ep0state != EP0_SETUP_PHASE) {
-+		unsigned int    dir;
-+
-+		dir = !!dwc->ep0_expect_in;
-+		if (dwc->ep0state == EP0_DATA_PHASE)
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
-+		else
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
-+		dwc3_ep0_stall_and_restart(dwc);
-+	}
- }
- 
- static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+That certainly won't work because phy-fsl has nothing to do with the
+original problem. You'll need to check carefully every USB controller
+driver. It's just not very worthwhile to do, IMO.
