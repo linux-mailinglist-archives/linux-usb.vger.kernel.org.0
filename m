@@ -2,78 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3C35A93D8
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 12:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681495A9590
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 13:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbiIAKDH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 06:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
+        id S234163AbiIALT0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 07:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiIAKC5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 06:02:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574EF155A5D
-        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 03:02:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76479B8255E
-        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 10:02:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB498C433C1;
-        Thu,  1 Sep 2022 10:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662026565;
-        bh=45DSY3xPoOwg/iyKAJpPMQOatHzInrzxLnPAAX5Zdbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1mBbkIiTBa7VEqhQ2Nanr1L68GYzc/bQZNYNjVrb58XHwmIB6hG4BQ8wEer0I0WtL
-         Kj+b1QEdZtzNtPg6MnXWAw6ocVkJBTwEZX0n+s1gbCvMr87eWo5O5T2u0JNIgopkq0
-         fV/IDRIe5GaT+WjgVzxMpOdpKTN1JwBKTQUNb32c=
-Date:   Thu, 1 Sep 2022 12:02:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     dd <zhongling0719@126.com>
-Cc:     zenghongling <zenghongling@kylinos.cn>, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: Re: [PATCH v4] uas: add no-uas quirk for Thinkplus and Hiksemi
- usb-storage
-Message-ID: <YxCDQi3TpXbcwCQ5@kroah.com>
-References: <1662015653-12976-1-git-send-email-zenghongling@kylinos.cn>
- <YxBvNEn0jEEd0lXV@kroah.com>
- <409cbf8b.5b1a.182f8682364.Coremail.zhongling0719@126.com>
+        with ESMTP id S233114AbiIALTY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 07:19:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BBE1275DF;
+        Thu,  1 Sep 2022 04:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662031164; x=1693567164;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=UjpVOtpMNTn8a2g9tUjix6AHloEUqxCpowEEZFoDF+g=;
+  b=llpeSeZo0LZnxmwgRt0iSdEpj3IAxrfd2AcxwhMvQaXObyN9M3afbeyV
+   oVSW5J+KuzlA1PpPRmt6Qa5E7lSl0e332oQMdz2Y/hhHcyPz7d+yziiNM
+   6OisqgcREb/YxUISDDMwh5vzCOopE4runesJQNXu1YYiPxBDCgJC9FBT7
+   oQchpIENDYfHaLzj8rhFQf4RC0Yskb7I5zTQC/hkhS4ZD80PXotNrST+s
+   TbEinPu324NRCQ7JZqDAdSec/ae3ULCNaMmZXn2kOFAsue2xO3cvNOW4q
+   2xya6CBfH+LVxuwAoE0/J2gfGE22cX6M+5P7k5zGfTmjzJkBm01xgOscV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="293266248"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="293266248"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 04:19:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="754785221"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 01 Sep 2022 04:19:21 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 01 Sep 2022 14:19:20 +0300
+Date:   Thu, 1 Sep 2022 14:19:20 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     =?utf-8?B?6LW15pmT?= <zhaoxiao@uniontech.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb:mux:intel_pmc_mux: Use the helper
+ acpi_dev_get_memory_resources()
+Message-ID: <YxCVOHuaOQGKNf7X@kuha.fi.intel.com>
+References: <20220831061126.25172-1-zhaoxiao@uniontech.com>
+ <Yw8aJ8QC1BtBNBfx@kuha.fi.intel.com>
+ <Yw8c0Qdelk8XecV5@kroah.com>
+ <tencent_4E7B2E1523A5D8801223AAB6@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <409cbf8b.5b1a.182f8682364.Coremail.zhongling0719@126.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_4E7B2E1523A5D8801223AAB6@qq.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Sep 01, 2022 at 11:39:17AM +0800, 赵晓 wrote:
+> No generated by yet another bot, The patch refer to the below:&nbsp;
+> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&amp;id=6505e452371d44be00fe321996f1de248a7606a2
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+I don't know what are you trying to point at with that, but I'm
+guessing you are trying to refer to this patch series [1] that Rafael
+indeed picked to his PM tree - mostly. The first patch was taken by
+Greg, though now that I look at his linux-usb tree, it's not there?
 
-A: No.
-Q: Should I include quotations after my reply?
+In any case, your patch will create a conflict with that first patch
+in that series. There is a proper solution in that very same series,
+but it can only be applied after the first patch becomes available.
 
-http://daringfireball.net/2007/07/on_top
-
-On Thu, Sep 01, 2022 at 05:35:50PM +0800, dd wrote:
-> Hi:
-
-Please fix your email client to not send html email, as that is rejected
-by the mailing list and will not show up to anyone :(
-
-Can you fix that up and respond again?
+[1] https://lore.kernel.org/linux-usb/20220816101629.69054-1-heikki.krogerus@linux.intel.com/
 
 thanks,
 
-greg k-h
+-- 
+heikki
