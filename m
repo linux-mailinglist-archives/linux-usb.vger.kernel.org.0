@@ -2,209 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DBA5A9DBD
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 19:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1E75A9E52
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 19:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbiIARHu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 13:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S234791AbiIARmh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 13:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbiIARHt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 13:07:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD3E99B7D
-        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 10:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662052068; x=1693588068;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PpwBp4R7JYA2QpxbbTr0qMDqWQdhijS3xc/EL9mZKPE=;
-  b=aCFktGO1FOsGmxMvoLfzhpCPvvm4lUNa70+bWNPCfmBgNhYoyGu+uQ6D
-   ZxSVyonxe0R1Bgci5wUIYdRtYYVObACK2vr1fZCp1ie0gugLhrkwZzlDE
-   dKOIfMbyjCe4Y4th5qfBa6CmfkxxFCIaMGQsa/UwzBlNHv/ValUI7ZxLK
-   Df5ss2IkqkyJsUhD6NP5OwhzHoaSaHVq/2ZzidjxaQUrIF7/E2Wy7kgDQ
-   Hju/9nKtVr2e4LCkzy/HEpAtVPfPn8AZFn9SRZEwciVb9P+k0urWTUXTS
-   HB5lfMjSQ3DvdpmkQdolCNYiqmAKrDDIPfcRGx3luXJoG/egWgzlazI6k
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="275522503"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="275522503"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:07:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="754906166"
-Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Sep 2022 10:07:46 -0700
-Received: from kbuild by b138c9e8658c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTnfN-0000YD-2J;
-        Thu, 01 Sep 2022 17:07:45 +0000
-Date:   Fri, 2 Sep 2022 01:07:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Piyush Mehta <piyush.mehta@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [usb:usb-linus 33/42] drivers/usb/gadget/udc/udc-xilinx.c:502:25:
- sparse: sparse: incorrect type in argument 1 (different address spaces)
-Message-ID: <202209020044.CX2PfZzM-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S234759AbiIARmT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 13:42:19 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C689E1E3D6;
+        Thu,  1 Sep 2022 10:40:16 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 966B332009CB;
+        Thu,  1 Sep 2022 13:39:15 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Thu, 01 Sep 2022 13:39:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1662053955; x=1662140355; bh=K0
+        PySzeYRj1ESNvfGlD4cjnNfqWN52DtgIAV14TgWck=; b=uYBYecRB/4RUS4pgH2
+        kjGUEnaWa0SBVmhZry7Vm/2RtraTn/+/ZFWrNwozvIQXIyZ7IGndDvybY0SZ4aXd
+        T+LCGDB0timXorhMuDM8gmo8yjl23NVAed86hk2oq6olqGwllZE9v6AE7Gm/npnu
+        kqjfNmiJpc/z0dV3+tKmbWYC82oe6WPXlDvI3ysSwQacffH1Fd+cumxiK1bptUj8
+        NJBUkSp1NzrXbOH+3fQY+y0IrxloR7UUV5+7pnNxq8zMhewSOWdeMG6niDfDGVAG
+        VrlGr9rhrCsciGy3Yox+2VwsiKTkaYoD0aB63FS/QGZRgWo1VTlB9yZfBnFe0/Yh
+        MCew==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1662053955; x=1662140355; bh=K0PySzeYRj1ESNvfGlD4cjnNfqWN
+        52DtgIAV14TgWck=; b=x6METu9GZD6tP+qGai7qs12DJ/3C7y92eKLbDUXqiDyP
+        PErmImk4lZWiqHYJCR2ZBZm7qq62Bj5C+U0eBt8hlkhpjyXSCCclcLsUPEMVM9Sp
+        EqiQPxi6LVo0EuioHPsDuBU1jxr39ZJiONXiuEKofS2Mql8zmDr2dRF/CPJRarzt
+        KXLF/B5rNtQCFjVso2ROVjHXzhwqJbfXYt/xgTbyRex/TyFmeYSo33+RIYEoFja0
+        UOjQkUL7m4fsxfFr+A5ugASwjDssWMnxEgHlifjyWMLmxJ82n/PisT4MTF7XkvV9
+        O986EjnI4H8cRh1M91QTFBGi8wfJR1oxfsS6XorYbw==
+X-ME-Sender: <xms:Qu4QY3BiXX6MF2jzzvaqiY6kPh0GQnHL58ex1PMIBmuUjTx2ORPyEw>
+    <xme:Qu4QY9iladtoMG7GxIA84Rrz5FO4DfBFXCRyaXZwKfj8YR-sTJwy-DmFpotSeW-97
+    7eDy1guGatxqWgxMbA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
+    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
+    frrghtthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefg
+    hfeiveeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:Qu4QYykFfIGCsFHPqJyGh514Buv-oPTW_1o3JIH04IizaYn3qiuHcQ>
+    <xmx:Qu4QY5x0ICNZeqZuo67dXOOFG3cXqwrwWIuGsfD-aHhUfbTWf90Dvg>
+    <xmx:Qu4QY8SSqSEpIzvk6XvD59e6_8PdmgP868H-Om65d7SJOc44rGFSTg>
+    <xmx:Q-4QYxKDrLNwPxA2TgRO7i2Smuq-zWqP4j0iK8YTsP08KUFEibirtw>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8BD49A6007C; Thu,  1 Sep 2022 13:39:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <8fc4eb4b-25c4-4d4c-8203-1e5c314436b3@www.fastmail.com>
+In-Reply-To: <20220901083446.3799754-1-william.wu@rock-chips.com>
+References: <20220901083446.3799754-1-william.wu@rock-chips.com>
+Date:   Thu, 01 Sep 2022 19:38:53 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "William Wu" <william.wu@rock-chips.com>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Fabio Aiuto" <fabioaiuto83@gmail.com>, frank.wang@rock-chips.com,
+        jianwei.zheng@rock-chips.com
+Subject: Re: [PATCH] usb: dwc3: core: leave default DMA if the controller does not
+ support 64-bit DMA
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Piyush,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-head:   a6aedb58a887aa2ea142ee914ff4030d019584bf
-commit: 8cb339f1c1f04baede9d54c1e40ac96247a6393b [33/42] usb: gadget: udc-xilinx: replace memcpy with memcpy_toio
-config: arm-randconfig-s033-20220901 (https://download.01.org/0day-ci/archive/20220902/202209020044.CX2PfZzM-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=8cb339f1c1f04baede9d54c1e40ac96247a6393b
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-linus
-        git checkout 8cb339f1c1f04baede9d54c1e40ac96247a6393b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/gadget/udc/
+On Thu, Sep 1, 2022, at 10:34, William Wu wrote:
+> On some DWC3 controllers (e.g. Rockchip SoCs), the DWC3 core
+> doesn't support 64-bit DMA address width. In this case, this
+> driver should use the default 32-bit mask. Otherwise, the DWC3
+> controller will break if it runs on above 4GB physical memory
+> environment.
+>
+> This patch reads the DWC_USB3_AWIDTH bits of GHWPARAMS0 which
+> used for the DMA address width, and only configure 64-bit DMA
+> mask if the DWC_USB3_AWIDTH is 64.
+>
+> Fixes: 45d39448b4d0 ("usb: dwc3: support 64 bit DMA in platform driver")
+> Signed-off-by: William Wu <william.wu@rock-chips.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/gadget/udc/udc-xilinx.c:502:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got unsigned int [usertype] *[assigned] eprambase @@
-   drivers/usb/gadget/udc/udc-xilinx.c:502:25: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:502:25: sparse:     got unsigned int [usertype] *[assigned] eprambase
->> drivers/usb/gadget/udc/udc-xilinx.c:506:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got unsigned char [usertype] *bufferptr @@
-   drivers/usb/gadget/udc/udc-xilinx.c:506:25: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:506:25: sparse:     got unsigned char [usertype] *bufferptr
-   drivers/usb/gadget/udc/udc-xilinx.c:520:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got unsigned int [usertype] *[assigned] eprambase @@
-   drivers/usb/gadget/udc/udc-xilinx.c:520:25: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:520:25: sparse:     got unsigned int [usertype] *[assigned] eprambase
-   drivers/usb/gadget/udc/udc-xilinx.c:524:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got unsigned char [usertype] *bufferptr @@
-   drivers/usb/gadget/udc/udc-xilinx.c:524:25: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:524:25: sparse:     got unsigned char [usertype] *bufferptr
->> drivers/usb/gadget/udc/udc-xilinx.c:1026:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got unsigned char [usertype] *[assigned] corebuf @@
-   drivers/usb/gadget/udc/udc-xilinx.c:1026:17: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:1026:17: sparse:     got unsigned char [usertype] *[assigned] corebuf
-   drivers/usb/gadget/udc/udc-xilinx.c:1620:35: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/udc-xilinx.c:1626:31: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/udc-xilinx.c:1641:34: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   drivers/usb/gadget/udc/udc-xilinx.c:1641:34: sparse:     expected unsigned short [usertype]
-   drivers/usb/gadget/udc/udc-xilinx.c:1641:34: sparse:     got restricted __le16 [usertype]
-   drivers/usb/gadget/udc/udc-xilinx.c:1669:35: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/udc-xilinx.c:1669:35: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/udc-xilinx.c:1689:46: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/udc-xilinx.c:1695:46: sparse: sparse: restricted __le16 degrades to integer
->> drivers/usb/gadget/udc/udc-xilinx.c:1755:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got struct usb_ctrlrequest * @@
-   drivers/usb/gadget/udc/udc-xilinx.c:1755:9: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:1755:9: sparse:     got struct usb_ctrlrequest *
-   drivers/usb/gadget/udc/udc-xilinx.c:1758:29: sparse: sparse: cast from restricted __le16
-   drivers/usb/gadget/udc/udc-xilinx.c:1759:29: sparse: sparse: cast from restricted __le16
-   drivers/usb/gadget/udc/udc-xilinx.c:1760:30: sparse: sparse: cast from restricted __le16
->> drivers/usb/gadget/udc/udc-xilinx.c:1842:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got void *[assigned] buffer @@
-   drivers/usb/gadget/udc/udc-xilinx.c:1842:17: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:1842:17: sparse:     got void *[assigned] buffer
-   drivers/usb/gadget/udc/udc-xilinx.c:1872:34: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/udc-xilinx.c:1883:49: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned int [usertype] @@     got restricted __le16 [usertype] wValue @@
-   drivers/usb/gadget/udc/udc-xilinx.c:1883:49: sparse:     expected unsigned int [usertype]
-   drivers/usb/gadget/udc/udc-xilinx.c:1883:49: sparse:     got restricted __le16 [usertype] wValue
-   drivers/usb/gadget/udc/udc-xilinx.c:1888:47: sparse: sparse: restricted __le16 degrades to integer
->> drivers/usb/gadget/udc/udc-xilinx.c:1918:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *to @@     got unsigned char [usertype] *[assigned] ep0rambase @@
-   drivers/usb/gadget/udc/udc-xilinx.c:1918:25: sparse:     expected void volatile [noderef] __iomem *to
-   drivers/usb/gadget/udc/udc-xilinx.c:1918:25: sparse:     got unsigned char [usertype] *[assigned] ep0rambase
+> ---
+>  drivers/usb/dwc3/core.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index c5c238ab3083..2fcbd05b2af1 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1751,12 +1751,6 @@ static int dwc3_probe(struct platform_device *pdev)
+> 
+>  	dwc3_get_properties(dwc);
+> 
+> -	if (!dwc->sysdev_is_parent) {
+> -		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+> -		if (ret)
+> -			return ret;
+> -	}
+> -
+>  	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+>  	if (IS_ERR(dwc->reset))
+>  		return PTR_ERR(dwc->reset);
+> @@ -1823,6 +1817,13 @@ static int dwc3_probe(struct platform_device 
+> *pdev)
+>  	dwc3_cache_hwparams(dwc);
+>  	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, 
+> "wakeup-source"));
+> 
+> +	if (!dwc->sysdev_is_parent &&
+> +	    DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0) == 64) {
+> +		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+> +		if (ret)
+> +			goto disable_clks;
+> +	}
 
-vim +502 drivers/usb/gadget/udc/udc-xilinx.c
+I guess you could also create the mask from DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0)
+directly instead of hardcoding it to 64bit here. Probably doesn't matter though unless
+there are some weird systems where dwc3 can only do 48bit DMA but there's actually memory
+above that.
 
-   468	
-   469	/**
-   470	 * xudc_eptxrx - Transmits or receives data to or from an endpoint.
-   471	 * @ep: pointer to the usb endpoint configuration structure.
-   472	 * @req: pointer to the usb request structure.
-   473	 * @bufferptr: pointer to buffer containing the data to be sent.
-   474	 * @bufferlen: The number of data bytes to be sent.
-   475	 *
-   476	 * Return: 0 on success, -EAGAIN if no buffer is free.
-   477	 *
-   478	 * This function copies the transmit/receive data to/from the end point buffer
-   479	 * and enables the buffer for transmission/reception.
-   480	 */
-   481	static int xudc_eptxrx(struct xusb_ep *ep, struct xusb_req *req,
-   482			       u8 *bufferptr, u32 bufferlen)
-   483	{
-   484		u32 *eprambase;
-   485		u32 bytestosend;
-   486		int rc = 0;
-   487		struct xusb_udc *udc = ep->udc;
-   488	
-   489		bytestosend = bufferlen;
-   490		if (udc->dma_enabled) {
-   491			if (ep->is_in)
-   492				rc = xudc_dma_send(ep, req, bufferptr, bufferlen);
-   493			else
-   494				rc = xudc_dma_receive(ep, req, bufferptr, bufferlen);
-   495			return rc;
-   496		}
-   497		/* Put the transmit buffer into the correct ping-pong buffer.*/
-   498		if (!ep->curbufnum && !ep->buffer0ready) {
-   499			/* Get the Buffer address and copy the transmit data.*/
-   500			eprambase = (u32 __force *)(udc->addr + ep->rambase);
-   501			if (ep->is_in) {
- > 502				memcpy_toio(eprambase, bufferptr, bytestosend);
-   503				udc->write_fn(udc->addr, ep->offset +
-   504					      XUSB_EP_BUF0COUNT_OFFSET, bufferlen);
-   505			} else {
- > 506				memcpy_toio(bufferptr, eprambase, bytestosend);
-   507			}
-   508			/*
-   509			 * Enable the buffer for transmission.
-   510			 */
-   511			udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET,
-   512				      1 << ep->epnumber);
-   513			ep->buffer0ready = 1;
-   514			ep->curbufnum = 1;
-   515		} else if (ep->curbufnum && !ep->buffer1ready) {
-   516			/* Get the Buffer address and copy the transmit data.*/
-   517			eprambase = (u32 __force *)(udc->addr + ep->rambase +
-   518				     ep->ep_usb.maxpacket);
-   519			if (ep->is_in) {
-   520				memcpy_toio(eprambase, bufferptr, bytestosend);
-   521				udc->write_fn(udc->addr, ep->offset +
-   522					      XUSB_EP_BUF1COUNT_OFFSET, bufferlen);
-   523			} else {
-   524				memcpy_toio(bufferptr, eprambase, bytestosend);
-   525			}
-   526			/*
-   527			 * Enable the buffer for transmission.
-   528			 */
-   529			udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET,
-   530				      1 << (ep->epnumber + XUSB_STATUS_EP_BUFF2_SHIFT));
-   531			ep->buffer1ready = 1;
-   532			ep->curbufnum = 0;
-   533		} else {
-   534			/* None of the ping-pong buffers are ready currently */
-   535			return -EAGAIN;
-   536		}
-   537		return rc;
-   538	}
-   539	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+Sven
+
+
