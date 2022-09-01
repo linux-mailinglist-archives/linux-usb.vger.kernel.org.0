@@ -2,125 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23EB5AA003
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 21:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243885AA025
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 21:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbiIATdJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 1 Sep 2022 15:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S234510AbiIATgp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 15:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiIATdI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 15:33:08 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B6D7C503
-        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 12:33:06 -0700 (PDT)
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2107.outbound.protection.outlook.com [104.47.22.107]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-24-mWwtzTOPMjGrERRAo0Yi1Q-1; Thu, 01 Sep 2022 21:33:04 +0200
-X-MC-Unique: mWwtzTOPMjGrERRAo0Yi1Q-1
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- ZRAP278MB0802.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:49::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5588.10; Thu, 1 Sep 2022 19:33:03 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
- 19:33:03 +0000
-Date:   Thu, 1 Sep 2022 21:33:02 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: gadget: Fix obscure lockdep violation for udc_mutex
-Message-ID: <20220901193302.GA2275408@francesco-nb.int.toradex.com>
-References: <YwkfhdxA/I2nOcK7@rowland.harvard.edu>
-In-Reply-To: <YwkfhdxA/I2nOcK7@rowland.harvard.edu>
-X-ClientProxiedBy: MR2P264CA0058.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:31::22) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        with ESMTP id S232561AbiIATgm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 15:36:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6382A74347;
+        Thu,  1 Sep 2022 12:36:41 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281JHVO7018969;
+        Thu, 1 Sep 2022 19:36:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=0vTLilb6GDdgIy9McvcoI5bJ1lU4xywEby2MrZZ661w=;
+ b=QdLA6jxOVjwFeabnQPhQqMO+/Qicnj8STvmLJeK31Rziq9XHL7CRpcWtqBhhcBWmu3Nw
+ FtMH02A0+rFXvnmpXzDJSN+oFNLUg7PiRFsd8VRbgVA5TRjqOrj13ISHuY3N9pAjlzEk
+ KmOAFp+wYcEuRuMeL/z+eju6czvsASu2ni2AXneT6SDKcnKNwyY6XMNckwxzDNPv5xnF
+ 92I8udHVue07g2nfELzfVAc4LF6/3IZ+ZdeIs6+5uH6efMbBFDbnH6VRV3bAq5I2HGjk
+ DaWzK6GeFqKSxzMJdPQ3kilHFE4b5tfQHeQf8GFhT4/UgSxWnVJOq5RXpj1VTVccswGg qA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jaeb4v0gu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 19:36:37 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281Jaa5u029144
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Sep 2022 19:36:36 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 1 Sep 2022 12:36:36 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v8 0/5] Fix controller halt and endxfer timeout issues
+Date:   Thu, 1 Sep 2022 12:36:20 -0700
+Message-ID: <20220901193625.8727-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cd274a4d-7f14-4dda-af40-08da8c50c99e
-X-MS-TrafficTypeDiagnostic: ZRAP278MB0802:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: jTz7yH3hnhtox8Wp4U19RLhJQCfRG5ykXtEgCj71le/b151h1Wy6fyP5slzOgBC5LGBeogbr09v6liPMgV64DEsTCTvbeBULoPIDAGG5kUjXxv02g1rLbuSmAbrBuAGmQ8DTuUl6vl+4oEyTYT3QEQI7TigUreZqptPBA+rMjiwQqOje8SwZ7Ab22py3BHoYdXw71JlQOiEI1V+n0bdA3hXNzDtWMCl3AeaKowF4m+4ipSCtuII4wahanAn6oxdiwqP8r40zR2UNEoC+7AywwBmgT0nL1Qyra2PDhSTN9db/GdZifPajfMREPLqJ4xIMFBZk32931UpzVDplolOzoMUo1p5alPExBoy1iaTB6daVKkmolAMNExwAVKqZ7mALXpBXIl2Nl1hYTukq5d+LdK1eSCZM2hkLOURGWp0NuSAjVzt4LNvv/N4eA+l5Sa0dgKMTct1O/Uc44CEVnXa2LGQL6u1o1KXUdE7wNpABGlV2upYokjSfQtyEzbbNb19ey56hGWNT8QNYYh6DoTYr7dkWN72IoL++H1E9V2/lDja8xd3Oba7/hVe3S4LHazXugB5gb+NoC0X0wl6Gn0k2BvyQIya6zL/OcONYotCwdSKuBYII2tvA96uYA5+Ub7ZvKvMXB7HxLuz85q0SJHQiI/JJL9mP/XJlMO5nuN0Jyjl8zGvLoYJm8WSNFD2PrPL1ae87DNaZAKSbqB/yzNzaVTn9ql9BQTHV9+cYi9/lCHMZXX75LUfqX4Z8Ne2ADjpNVeY8QX/D4sSd+lG0bl/2jIPzJD3SNuzrJ91ncVfj284=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(136003)(39850400004)(366004)(396003)(6512007)(52116002)(26005)(186003)(1076003)(38100700002)(83380400001)(38350700002)(33656002)(5660300002)(8936002)(8676002)(4326008)(66556008)(66946007)(2906002)(66476007)(4744005)(478600001)(6486002)(966005)(41300700001)(86362001)(54906003)(6916009)(6506007)(44832011)(316002);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4CVbpp6zK4HA+QCCOF8E18FjFddw/TMx7p8+FOg7TFjucQyVb6AnG83WD4wZ?=
- =?us-ascii?Q?ZsIuf6WIMuwuG7C7BCkNfOpl0G/lSLMPVDAwcamh8ZMG9Y+YD+kXU4kzzoup?=
- =?us-ascii?Q?sE1sm8tk3nEOvP7Ezczusf7Q/XSOjcCWoUbxAZ6xudeKblXltqJcTAAwXA1c?=
- =?us-ascii?Q?lP6UKXWYedE11zYA5833h0+KN/jF0y9xvmwcgx/Wy4hlZOlzlmeHowMpkGhm?=
- =?us-ascii?Q?0P9HHfZl9LYX/vAv2Fp3hN104r+nptWhNY1hL4Y19gj5dpDMkfx1VVlEqIU+?=
- =?us-ascii?Q?6GnwR4qNgfNUnCLA+/0IEHYjWXfghKAIsy0Tem0XUB019qOVoPkRB4QYVwl+?=
- =?us-ascii?Q?WOy2hpLTXUZ1PAFFbhdO1P7BBxtIsZj9QO67g6Y3nQg5KJIVWHgN6/sqFenc?=
- =?us-ascii?Q?XFoRJy7AqtQ1cpXIN0sXOQAZ+vF8pX3jUztlwkslMLR45+c1PdN6bmcj+Pgt?=
- =?us-ascii?Q?pMSqBJQfqAWGjuwzKLo164QN57vwAGPRRybozzQo59UQz77oU3DoZLY3wM1e?=
- =?us-ascii?Q?gB6kRcpuMiBao0UXWOMB2ZegkqsMyc8a7jTaEheEqgJiYomh4F8OUEn38UFE?=
- =?us-ascii?Q?Cau0cbkBNtZitOhNKMuf2sUvWIetfXzdsos4vL5eScq/cseriYlG1EmIfqqh?=
- =?us-ascii?Q?VH8WbDtF5rCO5HQ/o9dnO8WTN/qH36U4VLam+IYz0wNS9MTbtGNpnlZD0g4j?=
- =?us-ascii?Q?ROVZUgMDYAUlvhrKYrMk6y1W0EFvm+jIE2rzch/v2Mdo1TvLwxjkuQmww4za?=
- =?us-ascii?Q?/O41veGwno0+HwQ18E4PF6wRgVhahyOc0VktYtf2q3ANtKLait9lArtnApCf?=
- =?us-ascii?Q?eAwTw4nfsg3qR75F1kGaP3I4uAifyIGAMjDq4m/VGpOGI4F68JlCKyHuK5a7?=
- =?us-ascii?Q?7fwrBDsoGNgqzHaK0DIzlHGkaScrmiwdtzd+T1nDTuoE8QHPNMU1VX5kv8m6?=
- =?us-ascii?Q?RmoqjnMdIXeF+SwcSQvVx+I8KVQ1R85w3oqBvqzpfFBCLsJ7rB3qyoeEX4dq?=
- =?us-ascii?Q?I3Li+ZGgiAdfrLxlc490N4sHYpVXgfe3ouYT1jrF+/xCPvbaHGz1TqaoHb8s?=
- =?us-ascii?Q?I2bd3LLCLXjWXfFYzMWF9Ucm+hiWxwKRrzmrcc18zpiGTDUdTbK6NQq8HNRP?=
- =?us-ascii?Q?Ij/fg24b32McXFW/4TcZQb/0My2WjgW/RZX+Mp+BABUt5lviTo6Hzma8lp3L?=
- =?us-ascii?Q?4Z1YzFFlfvJ+wSCulEcl+CRBCJuE37FXDJ8EhRcsL+52eIMGORfeEXFaJDIu?=
- =?us-ascii?Q?u3G8fiQ8OsnZ6ggPM4ROP2fqu/GrNmTXenOmLWqb3k0Mpdr95ZLmg0GvEu9t?=
- =?us-ascii?Q?YB/sIANTzuLpR6/ZAGvDelUTb+1VyrURubuNyph7+sRbpZXT4xMbpxhdaX3V?=
- =?us-ascii?Q?tK+qsoI2Oi+kETQ2g4G7WAWABTqW4ZCOoWUpJYFpZooBpjumTlfa8f+Q/cA5?=
- =?us-ascii?Q?oFJyzvB7TMKNgkAVXmdailZmRYHxklYDtiat9V3WU/yTaagy+bg2BbB65Jgu?=
- =?us-ascii?Q?5MgMz9/gOsRVcRn69O+pPkYrY589oXrD6gMkTI5UKiRNT1GsxHIt/Nn8gWHh?=
- =?us-ascii?Q?0eHwxKqEH0LVN+ISBUkyqQKXPmC/Ff/+X0htAC/ttUerTRhzUl9vxXi04hKQ?=
- =?us-ascii?Q?Wg=3D=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd274a4d-7f14-4dda-af40-08da8c50c99e
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 19:33:03.5175
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 09Sh3lSpYKnS9jhrCOlKNRZip/kZ9ccZMKNauRdCW1PukMPoBxA+2tJ/vinPHh1sCe5Rh8GFjUr9j9MP+LUjXoT1vWujpmQ4DxN+kJBeS/M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0802
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -8CxXDsJVAi4KL4AYkJghGis8Dshts9P
+X-Proofpoint-ORIG-GUID: -8CxXDsJVAi4KL4AYkJghGis8Dshts9P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=639
+ impostorscore=0 suspectscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 lowpriorityscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209010085
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 03:31:17PM -0400, Alan Stern wrote:
-> A recent commit expanding the scope of the udc_lock mutex in the
-> gadget core managed to cause an obscure and slightly bizarre lockdep
-> violation.  In abbreviated form:
-> 
-...
+Changes in v8:
+- Remove stub for dwc3_remove_requests() as if DWC3 host only is enabled
+then ep0 isn't event compiled.
 
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: stable@vger.kernel.org
-> Fixes: 2191c00855b0 ("USB: gadget: Fix use-after-free Read in usb_udc_uevent()")
-> Link: https://lore.kernel.org/all/b2ba4245-9917-e399-94c8-03a383e7070e@samsung.com/
+Changes in v7:
+- Added missing arugment if DWC3 is not enabled in the kernel config
 
-Tested-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Changes in v6:
+- Fix kernel bot errors/warnings.
 
-Francesco
+Changes in v5:
+- Rebased series on usb-testing from patch #5 onwards.
+
+Changes in v4:
+- Split the increase timeout patch into separate patches. #1 for the
+gadget suspend/resume locking changes #2 for the increased timeout
+- Modified msleep to usleep_range w/ an interval of 1-2ms and a max
+timeout of 4s.
+
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
+
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
+
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
+
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
+
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
+
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
+
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
+
+
+Wesley Cheng (5):
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Remove DWC3 locking during gadget suspend/resume
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
+
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  1 +
+ drivers/usb/dwc3/ep0.c    |  5 ++++-
+ drivers/usb/dwc3/gadget.c | 31 +++++++++++++++++++++++++++----
+ 4 files changed, 32 insertions(+), 9 deletions(-)
 
