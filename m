@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420965A8CF0
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 06:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FD45A8CFD
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 06:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbiIAEsQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 00:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S232561AbiIAE5w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 00:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiIAEsQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 00:48:16 -0400
+        with ESMTP id S231530AbiIAE5v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 00:57:51 -0400
 Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F577C7F91
-        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 21:48:08 -0700 (PDT)
-X-UUID: c8b6509bf3c94424a284e96f132df42c-20220901
-X-CPASD-INFO: b3810b0e68e4430288a4f3dba18d6af8@q4NyUV2UXpViWKeAg3Z7bFhpkWSWX4S
-        xo2tYlGSRkliVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3sXVyUWCQYA==
-X-CLOUD-ID: b3810b0e68e4430288a4f3dba18d6af8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5477A10F95B
+        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 21:57:50 -0700 (PDT)
+X-UUID: 310dcbdb25fa4400a39df82dd5133278-20220901
+X-CPASD-INFO: 0762841faff54982b4821fdf80681029@eYdwUmVnX5aNhqiBg3yDbIJlaGJhkoS
+        1empWaF9gXlmVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3f3lwUmpiYQ==
+X-CLOUD-ID: 0762841faff54982b4821fdf80681029
 X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:146.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:8,DUF:3751,ACD:66,DCD:66,SL:0,EISP:0,AG:0,CFC:0.471,CFSR:0.038,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
-        AF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: c8b6509bf3c94424a284e96f132df42c-20220901
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:153.0,IP:-3.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:-5.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:2.0,SPC:0,SIG:-5,
+        AUF:9,DUF:3752,ACD:67,DCD:67,SL:0,EISP:0,AG:0,CFC:0.486,CFSR:0.039,UAT:0,RAF:
+        0,IMG:-5.0,DFA:0,DTA:0,IBL:-5,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF:0
+        ,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 310dcbdb25fa4400a39df82dd5133278-20220901
 X-CPASD-BLOCK: 1000
 X-CPASD-STAGE: 1
-X-UUID: c8b6509bf3c94424a284e96f132df42c-20220901
+X-UUID: 310dcbdb25fa4400a39df82dd5133278-20220901
 X-User: huxiaoying@kylinos.cn
 Received: from localhost.localdomain [(112.64.161.44)] by mailgw
         (envelope-from <huxiaoying@kylinos.cn>)
         (Generic MTA)
-        with ESMTP id 292417292; Thu, 01 Sep 2022 12:48:25 +0800
+        with ESMTP id 271972006; Thu, 01 Sep 2022 12:58:03 +0800
 From:   Hu Xiaoying <huxiaoying@kylinos.cn>
 To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
 Cc:     Hu Xiaoying <huxiaoying@kylinos.cn>,
         Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH v5] usb: storage: Add ASUS <0x0b05:0x1932> to IGNORE_UAS
-Date:   Thu,  1 Sep 2022 12:48:01 +0800
-Message-Id: <20220901044801.3354605-1-huxiaoying@kylinos.cn>
+Subject: [PATCH v6] usb: storage: Add ASUS <0x0b05:0x1932> to IGNORE_UAS
+Date:   Thu,  1 Sep 2022 12:57:37 +0800
+Message-Id: <20220901045737.3438046-1-huxiaoying@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,10 +60,12 @@ to test usb write  < 30MB/s.
 if does not to load module of uas for this device, can increase the
 write speed from 20MB/s to >40MB/s.
 
-Signed-off-by: Hu Xiaoying <huxiaoying@kylinos.cn>
 Suggested-by: Matthias Kaehlcke <mka@chromium.org>
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Hu Xiaoying <huxiaoying@kylinos.cn>
 ---
+change for v6
+ - Add maintenance email addresses for acked-by and Suggested -by.
 change for v5
  - Update the description of title accurately.
 change for v4
