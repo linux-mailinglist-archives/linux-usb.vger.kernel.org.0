@@ -2,83 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1E75A9E52
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 19:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BEF5A9F46
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 20:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbiIARmh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 13:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S234474AbiIASn5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 14:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234759AbiIARmT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 13:42:19 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C689E1E3D6;
-        Thu,  1 Sep 2022 10:40:16 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 966B332009CB;
-        Thu,  1 Sep 2022 13:39:15 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Thu, 01 Sep 2022 13:39:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1662053955; x=1662140355; bh=K0
-        PySzeYRj1ESNvfGlD4cjnNfqWN52DtgIAV14TgWck=; b=uYBYecRB/4RUS4pgH2
-        kjGUEnaWa0SBVmhZry7Vm/2RtraTn/+/ZFWrNwozvIQXIyZ7IGndDvybY0SZ4aXd
-        T+LCGDB0timXorhMuDM8gmo8yjl23NVAed86hk2oq6olqGwllZE9v6AE7Gm/npnu
-        kqjfNmiJpc/z0dV3+tKmbWYC82oe6WPXlDvI3ysSwQacffH1Fd+cumxiK1bptUj8
-        NJBUkSp1NzrXbOH+3fQY+y0IrxloR7UUV5+7pnNxq8zMhewSOWdeMG6niDfDGVAG
-        VrlGr9rhrCsciGy3Yox+2VwsiKTkaYoD0aB63FS/QGZRgWo1VTlB9yZfBnFe0/Yh
-        MCew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1662053955; x=1662140355; bh=K0PySzeYRj1ESNvfGlD4cjnNfqWN
-        52DtgIAV14TgWck=; b=x6METu9GZD6tP+qGai7qs12DJ/3C7y92eKLbDUXqiDyP
-        PErmImk4lZWiqHYJCR2ZBZm7qq62Bj5C+U0eBt8hlkhpjyXSCCclcLsUPEMVM9Sp
-        EqiQPxi6LVo0EuioHPsDuBU1jxr39ZJiONXiuEKofS2Mql8zmDr2dRF/CPJRarzt
-        KXLF/B5rNtQCFjVso2ROVjHXzhwqJbfXYt/xgTbyRex/TyFmeYSo33+RIYEoFja0
-        UOjQkUL7m4fsxfFr+A5ugASwjDssWMnxEgHlifjyWMLmxJ82n/PisT4MTF7XkvV9
-        O986EjnI4H8cRh1M91QTFBGi8wfJR1oxfsS6XorYbw==
-X-ME-Sender: <xms:Qu4QY3BiXX6MF2jzzvaqiY6kPh0GQnHL58ex1PMIBmuUjTx2ORPyEw>
-    <xme:Qu4QY9iladtoMG7GxIA84Rrz5FO4DfBFXCRyaXZwKfj8YR-sTJwy-DmFpotSeW-97
-    7eDy1guGatxqWgxMbA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
-    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
-    frrghtthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefg
-    hfeiveeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:Qu4QYykFfIGCsFHPqJyGh514Buv-oPTW_1o3JIH04IizaYn3qiuHcQ>
-    <xmx:Qu4QY5x0ICNZeqZuo67dXOOFG3cXqwrwWIuGsfD-aHhUfbTWf90Dvg>
-    <xmx:Qu4QY8SSqSEpIzvk6XvD59e6_8PdmgP868H-Om65d7SJOc44rGFSTg>
-    <xmx:Q-4QYxKDrLNwPxA2TgRO7i2Smuq-zWqP4j0iK8YTsP08KUFEibirtw>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8BD49A6007C; Thu,  1 Sep 2022 13:39:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <8fc4eb4b-25c4-4d4c-8203-1e5c314436b3@www.fastmail.com>
-In-Reply-To: <20220901083446.3799754-1-william.wu@rock-chips.com>
-References: <20220901083446.3799754-1-william.wu@rock-chips.com>
-Date:   Thu, 01 Sep 2022 19:38:53 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "William Wu" <william.wu@rock-chips.com>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Fabio Aiuto" <fabioaiuto83@gmail.com>, frank.wang@rock-chips.com,
-        jianwei.zheng@rock-chips.com
-Subject: Re: [PATCH] usb: dwc3: core: leave default DMA if the controller does not
- support 64-bit DMA
+        with ESMTP id S234217AbiIASni (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 14:43:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E716057576;
+        Thu,  1 Sep 2022 11:43:37 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281G3R2o023463;
+        Thu, 1 Sep 2022 18:43:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=wQg5lM5NIBdQXGGHQVaw+J/9CounQFBRQW/JKOyBH8U=;
+ b=K9xA7v3rLqklzflVmtq/5NfkYoEqRN0tWLKi2vPNv8yCU8MsEeLMwKvm4VOVuzT1fC9q
+ P3yi4VAeTPMV1WZjUVEHeaT3itLbBv33IilaYugYIn8L15EhPMfgYzdond6jOtSaK130
+ 2McU+V4R5fRZoniz045zmSojyAP8z/prSxKd3pFLhiKcSy9VewKxpFHzlEi4AsLeBWi2
+ OHgROM6puDnA2x4WKsVipBV8/k8z5QbSfP6C+a/DVC9ziibA+y85TSKmGxLqVun6fN1k
+ AFvZIC7oL+H0WDbNNuf5kAIHDfbRvYG5EM6hDSb7GD19qoCBwH4mQ+uVHcylYHQ0TT5e Yg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3javjc1ewk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 18:43:27 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281IhQS3003522
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Sep 2022 18:43:26 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 1 Sep 2022 11:43:25 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v6 0/5] Fix controller halt and endxfer timeout issues
+Date:   Thu, 1 Sep 2022 11:43:09 -0700
+Message-ID: <20220901184314.30481-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
 Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 86QITRb23w9AnHXRKoae4rejx9hfx0XN
+X-Proofpoint-ORIG-GUID: 86QITRb23w9AnHXRKoae4rejx9hfx0XN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 bulkscore=0 mlxlogscore=652 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010080
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,65 +73,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Changes in v6:
+- Fix kernel bot errors/warnings.
 
+Changes in v5:
+- Rebased series on usb-testing from patch #5 onwards.
 
-On Thu, Sep 1, 2022, at 10:34, William Wu wrote:
-> On some DWC3 controllers (e.g. Rockchip SoCs), the DWC3 core
-> doesn't support 64-bit DMA address width. In this case, this
-> driver should use the default 32-bit mask. Otherwise, the DWC3
-> controller will break if it runs on above 4GB physical memory
-> environment.
->
-> This patch reads the DWC_USB3_AWIDTH bits of GHWPARAMS0 which
-> used for the DMA address width, and only configure 64-bit DMA
-> mask if the DWC_USB3_AWIDTH is 64.
->
-> Fixes: 45d39448b4d0 ("usb: dwc3: support 64 bit DMA in platform driver")
-> Signed-off-by: William Wu <william.wu@rock-chips.com>
+Changes in v4:
+- Split the increase timeout patch into separate patches. #1 for the
+gadget suspend/resume locking changes #2 for the increased timeout
+- Modified msleep to usleep_range w/ an interval of 1-2ms and a max
+timeout of 4s.
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
 
-> ---
->  drivers/usb/dwc3/core.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index c5c238ab3083..2fcbd05b2af1 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1751,12 +1751,6 @@ static int dwc3_probe(struct platform_device *pdev)
-> 
->  	dwc3_get_properties(dwc);
-> 
-> -	if (!dwc->sysdev_is_parent) {
-> -		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
->  	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
->  	if (IS_ERR(dwc->reset))
->  		return PTR_ERR(dwc->reset);
-> @@ -1823,6 +1817,13 @@ static int dwc3_probe(struct platform_device 
-> *pdev)
->  	dwc3_cache_hwparams(dwc);
->  	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, 
-> "wakeup-source"));
-> 
-> +	if (!dwc->sysdev_is_parent &&
-> +	    DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0) == 64) {
-> +		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
-> +		if (ret)
-> +			goto disable_clks;
-> +	}
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
 
-I guess you could also create the mask from DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0)
-directly instead of hardcoding it to 64bit here. Probably doesn't matter though unless
-there are some weird systems where dwc3 can only do 48bit DMA but there's actually memory
-above that.
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
 
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
 
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
 
-Sven
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
 
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
+
+Wesley Cheng (5):
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Remove DWC3 locking during gadget suspend/resume
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
+
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  3 +++
+ drivers/usb/dwc3/ep0.c    |  5 ++++-
+ drivers/usb/dwc3/gadget.c | 31 +++++++++++++++++++++++++++----
+ 4 files changed, 34 insertions(+), 9 deletions(-)
 
