@@ -2,97 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A8D5A8A2C
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 03:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74BC5A8B15
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Sep 2022 03:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiIABCY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 31 Aug 2022 21:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S231530AbiIABzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 31 Aug 2022 21:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiIABCW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 21:02:22 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D72FEE69D
-        for <linux-usb@vger.kernel.org>; Wed, 31 Aug 2022 18:02:20 -0700 (PDT)
-X-UUID: 29fe5ba4e2c44b07982d76b0a603b114-20220901
-X-CPASD-INFO: 5784a1c20e704c1c8b856da4d83eb240@fodyVI5jkWJchXl8g6Z8nViTaGVmkIG
-        DpnJTlZBiYFCVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3hHlyVJNfkw==
-X-CLOUD-ID: 5784a1c20e704c1c8b856da4d83eb240
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:134.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:2.0,SPC:0,SIG:-
-        5,AUF:7,DUF:3712,ACD:66,DCD:66,SL:0,EISP:0,AG:0,CFC:0.448,CFSR:0.043,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
-        AF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 29fe5ba4e2c44b07982d76b0a603b114-20220901
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 29fe5ba4e2c44b07982d76b0a603b114-20220901
-X-User: huxiaoying@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-        (envelope-from <huxiaoying@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 2034289510; Thu, 01 Sep 2022 09:02:37 +0800
-From:   Hu Xiaoying <huxiaoying@kylinos.cn>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Cc:     Hu Xiaoying <huxiaoying@kylinos.cn>
-Subject: [PATCH v5] usb: storage: Add ASUS <0x0b05:0x1932> to IGNORE_UAS
-Date:   Thu,  1 Sep 2022 09:02:11 +0800
-Message-Id: <20220901010211.3246162-1-huxiaoying@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230056AbiIABzC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 31 Aug 2022 21:55:02 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 128112C7;
+        Wed, 31 Aug 2022 18:55:00 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXWvoEBBjY2EOAA--.1762S2;
+        Thu, 01 Sep 2022 09:54:54 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Cc:     zhuyinbo@loongson.cn
+Subject: [PATCH v3] usb: ohci-platform: fix usb disconnect issue after s4
+Date:   Thu,  1 Sep 2022 09:54:46 +0800
+Message-Id: <20220901015446.22384-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,KHOP_HELO_FCRDNS,RDNS_DYNAMIC,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-CM-TRANSID: AQAAf8BxXWvoEBBjY2EOAA--.1762S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF47CrW3JFWUJF1rJw4fZrb_yoW5ZrWfpF
+        4UJFWSyr48GF42g3y7twn7ZFWrCwsag3y7K34UKwnFv390q3s8JF4jyFy0vFnxXry7Jwn5
+        tF4jyr4UuF4UZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm
+        -wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB external storage device(0x0b05:1932), use gnome-disk-utility tools
-to test usb write  < 30MB/s.
-if does not to load module of uas for this device, can increase the
-write speed from 20MB/s to >40MB/s.
+Avoid retaining bogus hardware states during resume-from-hibernation.
+Previously we had reset the hardware as part of preparing to reinstate
+the snapshot image. But we can do better now with the new PM framework,
+since we know exactly which resume operations are from hibernation.
 
-Signed-off-by: Hu Xiaoying <huxiaoying@kylinos.cn>
----
-change for v5
- - Update the description of title accurately.
-change for v4
- - Update two email addresses to be the same.
-change for v3
- - Does not send html mail to the mailing lists.
- - Update patch, which sorted by vendor ID and product ID.
- - Modify discription, correct some english words.
-change for v2
- - Update discription for patch.
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+According to the commit 'cd1965db054e ("USB: ohci: move ohci_pci_{
+suspend,resume} to ohci-hcd.c")' and commit '6ec4beb5c701 ("USB: new
+flag for resume-from-hibernation")', the flag "hibernated" is for
+resume-from-hibernation and it should be true when usb resume from disk.
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 4051c8cd0cd8..23ab3b048d9b 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -62,6 +62,13 @@ UNUSUAL_DEV(0x0984, 0x0301, 0x0128, 0x0128,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_IGNORE_UAS),
+When this flag "hibernated" is set, the drivers will reset the hardware
+to get rid of any existing state and make sure resume from hibernation
+re-enumerates everything for ohci.
+
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v3:
+		Cancel helper routines.
+
+ drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+index 0adae6265127..822a0f927e62 100644
+--- a/drivers/usb/host/ohci-platform.c
++++ b/drivers/usb/host/ohci-platform.c
+@@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
+ 	return ret;
+ }
  
-+/* Reported-by: Tom Hu <huxiaoying@kylinos.cn> */
-+UNUSUAL_DEV(0x0b05, 0x1932, 0x0000, 0x9999,
-+		"ASUS",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
+-static int ohci_platform_resume(struct device *dev)
++static int ohci_platform_resume_common(struct device *dev, bool hibernated)
+ {
+ 	struct usb_hcd *hcd = dev_get_drvdata(dev);
+ 	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
+@@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
+ 			return err;
+ 	}
+ 
+-	ohci_resume(hcd, false);
++	ohci_resume(hcd, hibernated);
+ 
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_set_active(dev);
+@@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
+ 
+ 	return 0;
+ }
 +
- /* Reported-by: David Webb <djw@noc.ac.uk> */
- UNUSUAL_DEV(0x0bc2, 0x331a, 0x0000, 0x9999,
- 		"Seagate",
++static int ohci_platform_resume(struct device *dev)
++{
++	return ohci_platform_resume_common(dev, false);
++}
++
++static int ohci_platform_restore(struct device *dev)
++{
++	return ohci_platform_resume_common(dev, true);
++}
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ static const struct of_device_id ohci_platform_ids[] = {
+@@ -325,8 +335,16 @@ static const struct platform_device_id ohci_platform_table[] = {
+ };
+ MODULE_DEVICE_TABLE(platform, ohci_platform_table);
+ 
+-static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
+-	ohci_platform_resume);
++#ifdef CONFIG_PM_SLEEP
++static const struct dev_pm_ops ohci_platform_pm_ops = {
++	.suspend = ohci_platform_suspend,
++	.resume = ohci_platform_resume,
++	.freeze = ohci_platform_suspend,
++	.thaw = ohci_platform_resume,
++	.poweroff = ohci_platform_suspend,
++	.restore = ohci_platform_restore,
++};
++#endif
+ 
+ static struct platform_driver ohci_platform_driver = {
+ 	.id_table	= ohci_platform_table,
+@@ -335,7 +353,9 @@ static struct platform_driver ohci_platform_driver = {
+ 	.shutdown	= usb_hcd_platform_shutdown,
+ 	.driver		= {
+ 		.name	= "ohci-platform",
++#ifdef CONFIG_PM_SLEEP
+ 		.pm	= &ohci_platform_pm_ops,
++#endif
+ 		.of_match_table = ohci_platform_ids,
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	}
 -- 
-2.25.1
+2.31.1
 
