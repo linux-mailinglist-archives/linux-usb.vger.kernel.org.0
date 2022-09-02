@@ -2,96 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587515AAB65
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 11:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE74B5AAB9D
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 11:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236041AbiIBJ34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Sep 2022 05:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S235657AbiIBJk3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Sep 2022 05:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbiIBJ3W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 05:29:22 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44F4CD7B4
-        for <linux-usb@vger.kernel.org>; Fri,  2 Sep 2022 02:28:37 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id gb36so2624275ejc.10
-        for <linux-usb@vger.kernel.org>; Fri, 02 Sep 2022 02:28:37 -0700 (PDT)
+        with ESMTP id S235505AbiIBJk2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 05:40:28 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548032ABC;
+        Fri,  2 Sep 2022 02:40:27 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 199so1371782pfz.2;
+        Fri, 02 Sep 2022 02:40:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=KHNwV5mx6gUjlOLCRF/PLTfLRK6Nfmd9+PtbuISOuEA=;
-        b=M0KeLwxzeSoLJxa8C1OND2HppYCPxKTP+rai1VGnNJLpVe5btrhUxlfQzFc4sRks9N
-         Ft0uaS5zd772/WI6qZ+t1Dn7fM7tpxF9Kxk05ZFYWQH+y8akl7KHdRs90/MyhoihNUL1
-         iA5PBOvvB71OecyzpG5lIczD0+vDPUcrTWw6uaLegSu57Ky8WplwpIbCFzR+7YTPaFSW
-         0xhSV25GhqOo0TMfWHeE4Di+iPEXebOa3/d9C+noOAGDJX9dJtf/59GcdDEGwcmsiisT
-         3ffxu+EemzvN4fPjqmTyAQXI/CiOlduE6N3Sv6HiKJq3ilt4TiXyNTWG/sUD+CyOm9vT
-         p/uw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=36yM+c0itGs1Ctc0yud6YxUq+RbAYF44TxAUEUxLkqM=;
+        b=oO1tgJcFfKO7KQBpzIDGdwdIY/qEqA6wDMdcUG+MSdSrD3pNshMilYceyNAfHfuO0t
+         DrcaW8kR+v4SnR9MQsI4mrueohbISW6nKf/A8wMcM34OJe47wnzd1w7RL0jCr8Cm359R
+         e9w9nFOEGNonCGb583gyYdbEzk8M5X/UhvkHiiBv/FcmSreltMeemYIkGyCBVpCie3Fn
+         5l7sOLO3vNiN/1X/iqSFFm8U9N+2c3MiD+m7AEtcw6QTMsbVeDr2IlB7kLLVGyFWHvbZ
+         midbXaWrpFQuTuUkPhsEAmZS4iIn110a11qUxJvVv3sgzAhVxi9z64HFqnQkK1/nM6Ph
+         4fyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=KHNwV5mx6gUjlOLCRF/PLTfLRK6Nfmd9+PtbuISOuEA=;
-        b=QT2btd8uGJLUnTEGNyFgO8wiA0GEjFEFGg4jMG53kmmYk3xtHiqaNX7zl9OehYQWai
-         F7NLD5mQ8SdCa21Qbdf38sLGp8u7LZOR7G7j3DI6uC2iDEYaricynRCCiJcYf5pWn5Gl
-         YMT9tArN9gmN2BNnNqRhSc883rKo7wYNo5uBR8/qEWUxchXXPAwcpBGnQDJsplbZIyr9
-         d0RHlBfxtXyw4uO+X36XJHcm0MfyvGdBvVEYwvbLELApi3x0qA8abvtyIuc9DWs/8KM2
-         1qQW1pikKzLkAYcnda09/M6qTz7I/R3OI8Vme/ZwI2mfCNZJny1Ry8ZhX6b9zEWNLZmP
-         ArMQ==
-X-Gm-Message-State: ACgBeo1UDhel6uAVqSB0G80rhgnVdA0f77iCqskb/weJ7+cUvL8HNBMJ
-        nx5NfgIBDBar5tTSYPBcoD5mu+p7aRCJqrd/+PsW2Q==
-X-Google-Smtp-Source: AA6agR7FYxmCIOGzTe5dYOt6peYrFJvRHIR7rydBTdT9Hv3Hy7Ey+n+P6uBKXLJQmUb2YiRybJqE/2OV8ewKZip5ycM=
-X-Received: by 2002:a17:906:cc57:b0:73d:cdfd:28b4 with SMTP id
- mm23-20020a170906cc5700b0073dcdfd28b4mr25688033ejb.211.1662110915660; Fri, 02
- Sep 2022 02:28:35 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=36yM+c0itGs1Ctc0yud6YxUq+RbAYF44TxAUEUxLkqM=;
+        b=dqYEfb9TlNo52ho+AUV1x4JAnaJs8qdbA1VyqPAG1S66SDPAI1Eb+njJvuv/TxM4gX
+         Z5uC7htcah1kcvQDeHF/vpHB/nKKpvzx6IHJub0/r4NMmkh5gHpi9YGagFRIYC2EGrbG
+         vOzdsWjYbUmu3HOnsAB2tdiSCBf76oZsapjEFGIlvErONX6H7V7N4uVawBw/9Xgrr2h2
+         1pOb5S2bQNaEv0VLdw4LaAzV899NAOfcrNgMfqU2OtoCDzQ4j5pIkz3SmTJyNChijO6D
+         IocKy7/BT0LdV4xG0QOhNw3BX+jyQGPJUB3OrESqDwud+LZt0h4YyD25IlTitIgimQ6c
+         xT1w==
+X-Gm-Message-State: ACgBeo2f+w4baNqYweZFZnfQNXzCIbWHhuOHfkF9DDJwSGqdU/11xxvb
+        IN8GDDbHcN19tJzhKgLVi4GxJ4ZWlvkkMQ==
+X-Google-Smtp-Source: AA6agR5+2at4W5LBkrLSq3lVQ26nPtSRcIKF1fGzwKfeS2AM8ksmDckUkZza4DSeCH/AKWMcWQvb0g==
+X-Received: by 2002:a63:d448:0:b0:41d:d4e9:b4aa with SMTP id i8-20020a63d448000000b0041dd4e9b4aamr28601036pgj.123.1662111626579;
+        Fri, 02 Sep 2022 02:40:26 -0700 (PDT)
+Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
+        by smtp.gmail.com with ESMTPSA id z14-20020a655a4e000000b0041d9e78de05sm971855pgs.73.2022.09.02.02.40.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 02:40:26 -0700 (PDT)
+From:   Szuying Chen <chensiying21@gmail.com>
+To:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
+        mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw
+Subject: [PATCH v8 0/3] thunderbolt: add vendor's NVM formats
+Date:   Fri,  2 Sep 2022 17:40:07 +0800
+Message-Id: <20220902094010.2170-1-chensiying21@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220826075839.292615-1-raychi@google.com> <Yw4GH4U5ULV3VFSY@kroah.com>
-In-Reply-To: <Yw4GH4U5ULV3VFSY@kroah.com>
-From:   Ray Chi <raychi@google.com>
-Date:   Fri, 2 Sep 2022 17:28:24 +0800
-Message-ID: <CAPBYUsA1oARNuGus5uzxZ7Co+gJrm2V_axCPsyZHhp85cndaAg@mail.gmail.com>
-Subject: Re: [PATCH] usb: core: stop USB enumeration if too many retries
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@linux.intel.com,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Wang <albertccwang@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Puma Hsu <pumahsu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 8:44 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Aug 26, 2022 at 03:58:39PM +0800, Ray Chi wrote:
-> > If a broken accessory connected to a USB host, usbcore might
-> > keep doing enumeration retries and it will take a long time to
-> > cause system unstable.
-> >
-> > This patch provides a quirk to specific USB ports of the hub to
-> > stop USB enumeration if needed.
->
-> Where does it ever allow the port to handle new devices in the future if
-> the device is removed and then a new one is added back?  Or is the port
-> just now dead for forever?
->
+From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 
-I modified the patch according to Alan's suggestion, so the port will
-be working again
-after clearing the quirk with the v2 patch.
+The patch series for vendors to extend their NVM format.
 
-> thanks,
->
-> greg k-h
+v7->v8: The nvm_read() defined in tb.h. Modify
+tb_switch_nvm_validate() return value and no_nvm_upgrade bit setting.
 
-Thanks,
-Ray
+Szuying Chen (3):
+  thunderbolt: Add vendor's specific operations of NVM
+  thunderbolt: Modify tb_nvm major and minor size.
+  thunderbolt: To extend ASMedia NVM formats.
+
+ drivers/thunderbolt/nvm.c    | 234 +++++++++++++++++++++++++++++++++++
+ drivers/thunderbolt/switch.c | 104 +++-------------
+ drivers/thunderbolt/tb.c     |   2 +-
+ drivers/thunderbolt/tb.h     |  12 +-
+ 4 files changed, 263 insertions(+), 89 deletions(-)
+
+--
+2.34.1
+
