@@ -2,161 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB02B5AA964
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 10:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC255AAAD3
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 11:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbiIBIGT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Sep 2022 04:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S233931AbiIBJDs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Sep 2022 05:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiIBIGR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 04:06:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4648461708;
-        Fri,  2 Sep 2022 01:06:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6B6E61EDD;
-        Fri,  2 Sep 2022 08:06:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A259FC433C1;
-        Fri,  2 Sep 2022 08:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662105975;
-        bh=mbEUvK0cacfjub0C0SY/uJmoNeFaJv7RGSFQ2fv4XYE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e/oqQUOfN5p7RcBk8BLtMhRxoInELOwnXXs0nCIQVGsrhyj20G83mlWYoqQ21PGFN
-         t34tWcURSrlUgzF+0c3MCcmTpHNHJyhToT1aLg17ybjLCITVP8B5ueTDfibSbhYJOe
-         GvS/JqIPZGAfVemm91WsmgzPRJKttX1Vo7H7y9Nk=
-Date:   Fri, 2 Sep 2022 10:06:12 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: ftdi_sio: Convert to use dev_groups
-Message-ID: <YxG5dD/krDTazhsX@kroah.com>
-References: <20220902075853.3931834-1-jiasheng@iscas.ac.cn>
+        with ESMTP id S236115AbiIBJDo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 05:03:44 -0400
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BB42A5980
+        for <linux-usb@vger.kernel.org>; Fri,  2 Sep 2022 02:03:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Message-ID:Date:From:MIME-Version:Subject; bh=NCa33
+        59hAgm4SPuAP/Xtq8NZEttoCoARxHDuc+GO8cE=; b=hDnACpZ0JW3+bv/4wPhom
+        kPsCdcwzw/N5SDVsfeJgqfqvuDOj5y76/3R5x0LbZkSPEEaBoaha17cMkhlJVnc/
+        a/xqNbGeXLS8IkEiyPl4NAhlSI/ONrW18fvpmENeKZMidxcPNj3ZduElK7t//EwN
+        dW+KbUN/gxfpWDi0xK/LZo=
+Received: from localhost.localdomain (unknown [112.64.161.44])
+        by smtp3 (Coremail) with SMTP id DcmowAB3I8jkxhFj1zysAg--.31320S2;
+        Fri, 02 Sep 2022 17:03:33 +0800 (CST)
+Message-ID: <6311C702.708@126.com>
+Date:   Fri, 02 Sep 2022 17:04:02 +0800
+From:   nana <zhongling0719@126.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Thunderbird/31.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902075853.3931834-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     gregkh <gregkh@linuxfoundation.org>
+CC:     zenghongling <zenghongling@kylinos.cn>,
+        stern <stern@rowland.harvard.edu>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        usb-storage <usb-storage@lists.one-eyed-alien.net>
+Subject: Re: [PATCH v4] uas: add no-uas quirk for Thinkplus and Hiksemi usb-storage
+References: <1662015653-12976-1-git-send-email-zenghongling@kylinos.cn> <YxBvNEn0jEEd0lXV@kroah.com> <2022090120371974113815@126.com> <YxCtyOUkRlIqcC4d@kroah.com> <2022090121570194160929@126.com> <YxDCdQ885wdyr8wG@kroah.com> <6311A323.40100@126.com>
+In-Reply-To: <6311A323.40100@126.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowAB3I8jkxhFj1zysAg--.31320S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw15KF1kGryxur4fKF45Jrb_yoW8AF1kpF
+        WIq3Z3GF4DGr18tF42vF1IvF4jq395tFWv9ryrWr47ta13XFyftrs2grZ8uF1DXr1kGw1U
+        Kr15Jry8CrWDAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UJKsUUUUUU=
+X-Originating-IP: [112.64.161.44]
+X-CM-SenderInfo: x2kr0wpolqwiqxrzqiyswou0bp/1tbiLQZw0FpD-Zl+mQABsQ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 03:58:53PM +0800, Jiasheng Jiang wrote:
-> The driver core supports the ability to handle the creation and removal
-> of device-specific sysfs files in a race-free manner. Moreover, it can
-> guarantee the success of creation. Therefore, it should be better to
-> move the definition of ftdi_sio_device to the end, remove
-> create_sysfs_attrs and remove_sysfs_attrs, and convert to use dev_groups.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+explain for this:
+   this patch is fixed no speed,not slow speed.
+I do not understand, sorry.
 
-This is not a "Fix:", sorry.
+---I just checked,I got the disk test data wrong , the high speed is for 
+usb3.2 , these disks are usb3.0 ,so the slower speed is normal.
+the disks of USB3-FW appears to be incompatible with UAS cause crash to 
+no speed.
 
-And did you test this change?
+Thanks!
 
-It does not work like the original submission did at all:
 
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog:
-> 
-> v1 -> v2:
-> 
-> 1. Change the title.
-> 2. Switch to use an attribute group.
-> ---
->  drivers/usb/serial/ftdi_sio.c | 124 ++++++++++++----------------------
->  1 file changed, 42 insertions(+), 82 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-> index d5a3986dfee7..41d8bfb02322 100644
-> --- a/drivers/usb/serial/ftdi_sio.c
-> +++ b/drivers/usb/serial/ftdi_sio.c
-> @@ -1108,41 +1108,6 @@ static u32 ftdi_232bm_baud_to_divisor(int baud);
->  static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
->  static u32 ftdi_2232h_baud_to_divisor(int baud);
->  
-> -static struct usb_serial_driver ftdi_sio_device = {
-> -	.driver = {
-> -		.owner =	THIS_MODULE,
-> -		.name =		"ftdi_sio",
-> -	},
-> -	.description =		"FTDI USB Serial Device",
-> -	.id_table =		id_table_combined,
-> -	.num_ports =		1,
-> -	.bulk_in_size =		512,
-> -	.bulk_out_size =	256,
-> -	.probe =		ftdi_sio_probe,
-> -	.port_probe =		ftdi_sio_port_probe,
-> -	.port_remove =		ftdi_sio_port_remove,
-> -	.open =			ftdi_open,
-> -	.dtr_rts =		ftdi_dtr_rts,
-> -	.throttle =		usb_serial_generic_throttle,
-> -	.unthrottle =		usb_serial_generic_unthrottle,
-> -	.process_read_urb =	ftdi_process_read_urb,
-> -	.prepare_write_buffer =	ftdi_prepare_write_buffer,
-> -	.tiocmget =		ftdi_tiocmget,
-> -	.tiocmset =		ftdi_tiocmset,
-> -	.tiocmiwait =		usb_serial_generic_tiocmiwait,
-> -	.get_icount =           usb_serial_generic_get_icount,
-> -	.ioctl =		ftdi_ioctl,
-> -	.get_serial =		get_serial_info,
-> -	.set_serial =		set_serial_info,
-> -	.set_termios =		ftdi_set_termios,
-> -	.break_ctl =		ftdi_break_ctl,
-> -	.tx_empty =		ftdi_tx_empty,
-> -};
-> -
-> -static struct usb_serial_driver * const serial_drivers[] = {
-> -	&ftdi_sio_device, NULL
-> -};
+在 2022年09月02日 14:30, nana 写道:
+> Sorry,replay again
+>
+> a)These disks have a broken uas implementation, the tag field of the 
+> status iu-s is not set properly,
+> so we need to fall-back to usb-storage for these.
+>
+> b).I found this patch . The causes of errors are similar.
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v4.9.326&id=3ba5d3a2cf40c4ebdc1f702af3b5dea405a6a11e 
+>
+>
+> c) not to express clearly, the driver cause hang on by copy big files 
+> or stress read/write.
+>
+>
+> 在 2022年09月01日 22:32, gregkh 写道:
+>> A: http://en.wikipedia.org/wiki/Top_post
+>> Q: Were do I find info about this thing called top-posting?
+>> A: Because it messes up the order in which people normally read text.
+>> Q: Why is top-posting such a bad thing?
+>> A: Top-posting.
+>> Q: What is the most annoying thing in e-mail?
+>>
+>> A: No.
+>> Q: Should I include quotations after my reply?
+>>
+>> http://daringfireball.net/2007/07/on_top
+>>
+>> On Thu, Sep 01, 2022 at 09:58:03PM +0800, zhongling0719@126.com wrote:
+>>> Some UASP capable USB-to-SATA bridge controllers are not 
+>>> compatible,this problem has always existed.
+>> What problem is this exactly?  Why is this failing on only Linux?
+>>
+>>> you can refer to other auther submit the similar patch.
+>> What other author and other patch?
+>>
+>>>   this patch is fixed no speed,not slow speed.
+>> I do not understand, sorry.
+>>
+>> thanks,
+>>
+>> greg k-h
+>
 
-No need to move this structure if you don't have to.
-
->  
->  #define WDR_TIMEOUT 5000 /* default urb timeout */
->  #define WDR_SHORT_TIMEOUT 1000	/* shorter urb timeout */
-> @@ -1729,50 +1694,12 @@ static ssize_t event_char_store(struct device *dev,
->  }
->  static DEVICE_ATTR_WO(event_char);
->  
-> -static int create_sysfs_attrs(struct usb_serial_port *port)
-> -{
-> -	struct ftdi_private *priv = usb_get_serial_port_data(port);
-> -	int retval = 0;
-> -
-> -	/* XXX I've no idea if the original SIO supports the event_char
-> -	 * sysfs parameter, so I'm playing it safe.  */
-> -	if (priv->chip_type != SIO) {
-> -		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
-> -		retval = device_create_file(&port->dev, &dev_attr_event_char);
-> -		if ((!retval) &&
-> -		    (priv->chip_type == FT232BM ||
-> -		     priv->chip_type == FT2232C ||
-> -		     priv->chip_type == FT232RL ||
-> -		     priv->chip_type == FT2232H ||
-> -		     priv->chip_type == FT4232H ||
-> -		     priv->chip_type == FT232H ||
-> -		     priv->chip_type == FTX)) {
-> -			retval = device_create_file(&port->dev,
-> -						    &dev_attr_latency_timer);
-
-See how a specific file only gets added for a specific chip type?  Your
-change adds that file for all chip types.
-
-That's not going to work.  To solve this properly you need to set the
-is_visible attribute in the attribute group and only create the needed
-files based on the chip type.
-
-thanks,
-
-greg k-h
