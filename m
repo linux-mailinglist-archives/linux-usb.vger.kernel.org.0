@@ -2,142 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34275AB41A
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 16:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043E95AB4A3
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 17:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbiIBOvO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Sep 2022 10:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S236864AbiIBPER (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Sep 2022 11:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236061AbiIBOu7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 10:50:59 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2CFA55F106
-        for <linux-usb@vger.kernel.org>; Fri,  2 Sep 2022 07:12:58 -0700 (PDT)
-Received: (qmail 272628 invoked by uid 1000); 2 Sep 2022 10:12:58 -0400
-Date:   Fri, 2 Sep 2022 10:12:58 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Subject: Re: [PATCH v4] usb: ohci-platform: fix usb disconnect issue after s4
-Message-ID: <YxIPai+YGyzCRlkp@rowland.harvard.edu>
-References: <20220902063639.17875-1-zhuyinbo@loongson.cn>
+        with ESMTP id S237367AbiIBPD7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 11:03:59 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D093C5FF44
+        for <linux-usb@vger.kernel.org>; Fri,  2 Sep 2022 07:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662129242; x=1693665242;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=optJifeKryLRNZKlyFdfyt1rKh1CpwsBzaiYkJGllcY=;
+  b=JBfMsRrQUK31IqC14WRNTapUhzpHYqB2E5NhQ1P1YDgZDGoucXnFMyyA
+   6ZNwdulubWe6q4O0ArqN3i4/dbyUEvZlwYiZp9K8coqZTALrIJee5T3Bb
+   kZLjxhfAg2D8qYZnaOy0/TIuLwF/gr3QiasS8KwWSpC4wzVQwNRjLrvsa
+   MVdNnryHHEiGQ/CPMX953LFTBTPuGEhNSgIpnEHUGG8k7ZvNxFOBQ96mO
+   qdKIrkhzJeAv+qd6jkbZtPYqsEgLBgJQfsCo8pHb4zToXyb/m0lnByXzV
+   dXoCko6xGCIq8pBGo/GsISB5PtE0AYaZGwIptPmDmFoCplzjZ38nF0zpD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="295999640"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="295999640"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:33:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="563979333"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 07:33:53 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oU7k0-0000Bv-1c;
+        Fri, 02 Sep 2022 14:33:52 +0000
+Date:   Fri, 02 Sep 2022 22:33:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
+ 4e55e22d3d9aa50ef1ba059bf3a53aa61109c179
+Message-ID: <63121443.NP1lO5I6M3DaTquC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902063639.17875-1-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 02:36:39PM +0800, Yinbo Zhu wrote:
-> The ohci retaining bogus hardware states cause usb disconnect devices
-> connected before hibernation(s4), this issue occur when ohci-platform
-> driver build as a module and the built-in ohci-platform driver will
-> re probe and re enumerate the devices, so there will be no such problem.
-> 
-> Avoid retaining bogus hardware states during resume-from-hibernation.
-> Previously we had reset the hardware as part of preparing to reinstate
-> the snapshot image. But we can do better now with the new PM framework,
-> since we know exactly which resume operations are from hibernation.
-> 
-> According to the commit 'cd1965db054e ("USB: ohci: move ohci_pci_{
-> suspend,resume} to ohci-hcd.c")' and commit '6ec4beb5c701 ("USB: new
-> flag for resume-from-hibernation")', the flag "hibernated" is for
-> resume-from-hibernation and it should be true when usb resume from disk.
-> 
-> When this flag "hibernated" is set, the drivers will reset the hardware
-> to get rid of any existing state and make sure resume from hibernation
-> re-enumerates everything for ohci.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v4:
-> 		Add explain what this disconnect issue is.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 4e55e22d3d9aa50ef1ba059bf3a53aa61109c179  USB: hcd-pci: Drop the unused id parameter from usb_hcd_pci_probe()
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Warning reports:
 
-I'm a little surprised that the driver doesn't support runtime PM.
+https://lore.kernel.org/linux-usb/202208310007.6yJMsSYz-lkp@intel.com
+https://lore.kernel.org/llvm/202208310216.5IOl43es-lkp@intel.com
 
->  drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
->  1 file changed, 24 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-> index 0adae6265127..822a0f927e62 100644
-> --- a/drivers/usb/host/ohci-platform.c
-> +++ b/drivers/usb/host/ohci-platform.c
-> @@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
->  	return ret;
->  }
->  
-> -static int ohci_platform_resume(struct device *dev)
-> +static int ohci_platform_resume_common(struct device *dev, bool hibernated)
->  {
->  	struct usb_hcd *hcd = dev_get_drvdata(dev);
->  	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-> @@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
->  			return err;
->  	}
->  
-> -	ohci_resume(hcd, false);
-> +	ohci_resume(hcd, hibernated);
->  
->  	pm_runtime_disable(dev);
->  	pm_runtime_set_active(dev);
-> @@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
->  
->  	return 0;
->  }
-> +
-> +static int ohci_platform_resume(struct device *dev)
-> +{
-> +	return ohci_platform_resume_common(dev, false);
-> +}
-> +
-> +static int ohci_platform_restore(struct device *dev)
-> +{
-> +	return ohci_platform_resume_common(dev, true);
-> +}
->  #endif /* CONFIG_PM_SLEEP */
->  
->  static const struct of_device_id ohci_platform_ids[] = {
-> @@ -325,8 +335,16 @@ static const struct platform_device_id ohci_platform_table[] = {
->  };
->  MODULE_DEVICE_TABLE(platform, ohci_platform_table);
->  
-> -static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
-> -	ohci_platform_resume);
-> +#ifdef CONFIG_PM_SLEEP
-> +static const struct dev_pm_ops ohci_platform_pm_ops = {
-> +	.suspend = ohci_platform_suspend,
-> +	.resume = ohci_platform_resume,
-> +	.freeze = ohci_platform_suspend,
-> +	.thaw = ohci_platform_resume,
-> +	.poweroff = ohci_platform_suspend,
-> +	.restore = ohci_platform_restore,
-> +};
-> +#endif
->  
->  static struct platform_driver ohci_platform_driver = {
->  	.id_table	= ohci_platform_table,
-> @@ -335,7 +353,9 @@ static struct platform_driver ohci_platform_driver = {
->  	.shutdown	= usb_hcd_platform_shutdown,
->  	.driver		= {
->  		.name	= "ohci-platform",
-> +#ifdef CONFIG_PM_SLEEP
->  		.pm	= &ohci_platform_pm_ops,
-> +#endif
->  		.of_match_table = ohci_platform_ids,
->  		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->  	}
-> -- 
-> 2.31.1
-> 
+Warning: (recently discovered and may have been fixed)
+
+drivers/usb/host/ehci-npcm7xx.c:27:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
+drivers/usb/host/ehci-orion.c:68:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
+drivers/usb/host/ehci-platform.c:56:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
+drivers/usb/host/ehci-platform.c:56:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
+drivers/usb/host/ohci-platform.c:44:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
+drivers/usb/host/ohci-s3c2410.c:42:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
+drivers/usb/host/ohci-spear.c:26:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- i386-allyesconfig
+|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
+|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+|-- i386-randconfig-a001
+|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
+|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+|-- i386-randconfig-a003
+|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
+|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+|-- i386-randconfig-a012
+|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+|-- i386-randconfig-a014
+|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+|-- x86_64-allmodconfig
+|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
+|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+|-- x86_64-allyesconfig
+|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
+|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+`-- x86_64-randconfig-a002
+    |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
+    `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
+clang_recent_errors
+|-- i386-randconfig-a002
+|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|-- i386-randconfig-a011
+|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|-- i386-randconfig-a015
+|   `-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|-- riscv-randconfig-r026-20220901
+|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|-- s390-randconfig-r022-20220901
+|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-s3c2410.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-spear.c:warning:unused-variable-hcd_name
+|-- s390-randconfig-r044-20220901
+|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|-- x86_64-randconfig-a003
+|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|-- x86_64-randconfig-a012
+|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|-- x86_64-randconfig-a014
+|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+`-- x86_64-randconfig-a016
+    |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+    `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+
+elapsed time: 1454m
+
+configs tested: 53
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+m68k                             allyesconfig
+m68k                             allmodconfig
+i386                          randconfig-a016
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+i386                          randconfig-a001
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                               rhel-8.3
+x86_64                        randconfig-a013
+arc                  randconfig-r043-20220901
+x86_64                        randconfig-a011
+x86_64                        randconfig-a004
+i386                                defconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a015
+x86_64                        randconfig-a006
+i386                             allyesconfig
+x86_64                           allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+
+clang tested configs:
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220901
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+riscv                randconfig-r042-20220901
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220901
+x86_64                        randconfig-a012
+x86_64                        randconfig-a005
+x86_64                        randconfig-a014
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+s390                 randconfig-r044-20220901
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
