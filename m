@@ -2,58 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB585AB831
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 20:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546625AB8C6
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 21:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiIBSaR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Sep 2022 14:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S230234AbiIBTO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Sep 2022 15:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiIBSaL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 14:30:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CE95244F;
-        Fri,  2 Sep 2022 11:30:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8028FB82D08;
-        Fri,  2 Sep 2022 18:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 30BC5C433D6;
-        Fri,  2 Sep 2022 18:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662143406;
-        bh=PJkTFOfwdEddaB++EeEmUDJRqKpt4gnmHEon4YuJIik=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gSCZE+5BaLaUqxFC3qz0QF1YqpklEJQesCJfA9NaMVgnCl8xDRFQVelnwAG7dqeTp
-         wHqSSfEntl0tj+qhpa8pOZRUxWf5A8iTGy1ZkaVnwW9VMZ7KQClmrphe/6udIgfoj2
-         C/I8nlQUYYwytG2WxboLMHIQJoObjI+m2+vqiaC9nC5IgrvCx4rlo+PWAhi609FLy/
-         RiikcKZhACmMWIhdYMrT6fQLefpCwFRxlceZz+ymVY/+Rj/7Ov4ekNypa5+RyhfYKK
-         M+94L1yiLkoCtiN3pPq2R/y+9Naus5h956Dpc7CQyTPrr/XxxwRNQYHaabvXBRR3Tu
-         zhQigV+hP092Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B0EFC4166F;
-        Fri,  2 Sep 2022 18:30:06 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt driver fixes for 6.0-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YxIfXoyXB6UQulWv@kroah.com>
-References: <YxIfXoyXB6UQulWv@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YxIfXoyXB6UQulWv@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-rc4
-X-PR-Tracked-Commit-Id: fe0a2ac7c627b064c479ad0c3b25e531d342e048
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fd59585c420df1fc2df33bea2ed925b3373fbae2
-Message-Id: <166214340607.20636.11398411994836723090.pr-tracker-bot@kernel.org>
-Date:   Fri, 02 Sep 2022 18:30:06 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229731AbiIBTO1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 15:14:27 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37DB3D;
+        Fri,  2 Sep 2022 12:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662146062; x=1693682062;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LGelK57um33buhYq2dvNurCSd5PhnvJUO/tfyE/kfyE=;
+  b=F07sro2+c3zqlAmPcFfcQFx5NAzvyclbbvzygia7acbp0LUJ69uhU0EQ
+   hjG1cmJqKgNYCVoScjfEO4RSZBp1dMxU4i8TqdXXhs/qk0ZKCBQjWfIlf
+   emqhwUeP62UrNAKs2bJKoXxCOmHnWAOPm0upVdT8PzTdShvKMQvSWeSNA
+   tF/MjQUgJP8l/5lsAX7GlGRpwtbWZwAaxH7rkYv3glSU25b8aP/dLHPNW
+   J8LnRw5ZxsNPXzRaPNPsIIDuOB7vTBXuE0HP2TMLxSfRDpoyBuxNrysJs
+   X1CYM8ZBDywEoIG2gaq8vvGvUiOTcFHLy+w3NSmqGMr1HwmZq36ufOsvU
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="275806606"
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="275806606"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 12:01:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,285,1654585200"; 
+   d="scan'208";a="681381055"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Sep 2022 12:01:17 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUBum-0000UT-2a;
+        Fri, 02 Sep 2022 19:01:16 +0000
+Date:   Sat, 3 Sep 2022 03:01:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org
+Subject: [usb:usb-linus 36/44] htmldocs:
+ Documentation/driver-api/usb/usb:176: ./drivers/usb/core/hub.c:6040:
+ WARNING: Unknown target name: "pre".
+Message-ID: <202209030207.7BTPa8q0-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +63,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Fri, 2 Sep 2022 17:21:02 +0200:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+head:   fe0a2ac7c627b064c479ad0c3b25e531d342e048
+commit: 9c6d778800b921bde3bff3cff5003d1650f942d1 [36/44] USB: core: Prevent nested device-reset calls
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=9c6d778800b921bde3bff3cff5003d1650f942d1
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch --no-tags usb usb-linus
+        git checkout 9c6d778800b921bde3bff3cff5003d1650f942d1
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-rc4
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fd59585c420df1fc2df33bea2ed925b3373fbae2
+All warnings (new ones prefixed by >>):
 
-Thank you!
+>> Documentation/driver-api/usb/usb:176: ./drivers/usb/core/hub.c:6040: WARNING: Unknown target name: "pre".
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp
