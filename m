@@ -2,92 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8025AA38A
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 01:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220DE5AA65B
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 05:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiIAXO0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Sep 2022 19:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S234064AbiIBD2W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Sep 2022 23:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbiIAXOX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 19:14:23 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5607C32A
-        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 16:14:22 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id v26so861045lfd.10
-        for <linux-usb@vger.kernel.org>; Thu, 01 Sep 2022 16:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=soZe33lENWxiQfWnUb8rFmt1gciGa3few/PDkKqWJgk=;
-        b=Q9NSFUlKmJ4Tynyu3mbmhTQJzKGpEguIwnWBqC3h+f2/JPqnyP8NIsdr2PUAONuJnH
-         qDDKM0OwqigCYuuvKBhka6ZRigp7FQ2Xtoka7iFbMLi97ca8ookPnbRgXUu0gWRDdODI
-         7SV5pUkx8SYYRsHzzOKc/T0iEwuA5/mp9i80AUfhptdBAf9h1RfGMPryyPfX/vG1ZPth
-         oazI1k9sW/BYolcBIQT7XYlWQv8Us5PTpf+JkxvJ/vRP4AypZfnwhezd6Uu3ZE+mMsMr
-         Tny+SQB0OJHKtciTBab0FJIOOML64wahaHo2lPvnIePTRXJ0CDiSLukE5SjnhAHPn6iI
-         Qigg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=soZe33lENWxiQfWnUb8rFmt1gciGa3few/PDkKqWJgk=;
-        b=7lRkS230gCn7AkTLrP78J2WMWsOfH5p4y3/W8RCKHtAIRYqGxg/x9UZz/3eiMcHsvT
-         rbjHguH4OsZRS1nNBnKhQ4wdjlA4gr+gIsIWFpSeeV1OeDXqBZJtNjbL69+vyi+M+r2b
-         6x0Kpc0ajtPOqcaxdA+aY7gNngPEF2OSuV2qIRPEvlleuBGAJnEqXXMzf+VDStdsdbvn
-         HNbAGwaepVD05YIX0tnzmHO421PgzrYZl7v/D2+4yL3PvyE9eLzV54cqAwciwEJ40HpE
-         ceotsipy9PI9JVxJhXmEio6Hah7N9BzbrN5oitT2CY9aBteSSl6nbq+ZH72rEcLFeArQ
-         Egyw==
-X-Gm-Message-State: ACgBeo2v6Nw8Moi31FHQegYZQrhzZFYSmIsQKxAOFcD2ugLomk5CxdE3
-        /YOI8DVZnNtSDRwcoyn1hxrLELKERUE=
-X-Google-Smtp-Source: AA6agR4KSWVq931GCShb/cS8MQU9EjwEgM9RbZZ6Kmc8p9NCvzBuAUuXQpwnvUQ2M3diZ5YauNCOLA==
-X-Received: by 2002:a05:6512:1309:b0:492:e273:d800 with SMTP id x9-20020a056512130900b00492e273d800mr10746240lfu.93.1662074061108;
-        Thu, 01 Sep 2022 16:14:21 -0700 (PDT)
-Received: from [192.168.2.145] ([109.252.119.13])
-        by smtp.googlemail.com with ESMTPSA id 10-20020ac25f4a000000b00492e4c97ca3sm30084lfz.246.2022.09.01.16.14.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 16:14:20 -0700 (PDT)
-Message-ID: <36709b7c-d1b7-f81f-1ff5-c3743590fe35@gmail.com>
-Date:   Fri, 2 Sep 2022 02:14:19 +0300
+        with ESMTP id S230271AbiIBD2T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Sep 2022 23:28:19 -0400
+X-Greylist: delayed 491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 20:28:18 PDT
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 286C18B2C8
+        for <linux-usb@vger.kernel.org>; Thu,  1 Sep 2022 20:28:17 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABXX0tjdhFjm_xwAA--.15986S2;
+        Fri, 02 Sep 2022 11:20:04 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] USB: serial: ftdi_sio: Add check for create_sysfs_attrs
+Date:   Fri,  2 Sep 2022 11:20:02 +0800
+Message-Id: <20220902032002.3859368-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: Cleaning up bf88fef0b6f1 ("usb: otg-fsm: Fix hrtimer list
- corruption")
-Content-Language: en-US
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-References: <78712d64-7bac-cc2f-4a99-52e35d12f46f@suse.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <78712d64-7bac-cc2f-4a99-52e35d12f46f@suse.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowABXX0tjdhFjm_xwAA--.15986S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GFy5GrW3JFWkurWUur48JFb_yoWfCFXE9w
+        1UWFsxXryYkFyfJwn2k3yrArWYgws5ZF48uF12gFyfta4DJFZxXrs2v39xGr4UXr4kAr9x
+        Cwn8ua4xAay0gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4kFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWx
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUjhL8DU
+        UUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-29.08.2022 16:10, Oliver Neukum пишет:
-> Hi,
-> 
-> I am looking at that patch and I am afraid, while it does the job
-> it is quite unclean. In effect you introduce a flag you set, but
-> never clear. That is just a kludge. It really tells you that your
-> setup of data structures is misplaced and you should just do it earlier.
-> 
-> Could you test the attached patch?
-> 
-> 	Regards
-> 		Oliver
+As create_sysfs_attrs() can return error number,
+it should be better to check the return value and
+deal with the exception.
 
-That certainly won't work because phy-fsl has nothing to do with the
-original problem. You'll need to check carefully every USB controller
-driver. It's just not very worthwhile to do, IMO.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/usb/serial/ftdi_sio.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index d5a3986dfee7..c28f894430a5 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -2251,7 +2251,11 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 	if (read_latency_timer(port) < 0)
+ 		priv->latency = 16;
+ 	write_latency_timer(port);
+-	create_sysfs_attrs(port);
++	result = create_sysfs_attrs(port);
++	if (result) {
++		remove_sysfs_attrs(port);
++		return result;
++	}
+ 
+ 	result = ftdi_gpio_init(port);
+ 	if (result < 0) {
+-- 
+2.25.1
+
