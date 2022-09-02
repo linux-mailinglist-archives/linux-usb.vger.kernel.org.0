@@ -2,59 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043E95AB4A3
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 17:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A754B5AB4BE
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Sep 2022 17:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236864AbiIBPER (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Sep 2022 11:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
+        id S236748AbiIBPMX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Sep 2022 11:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237367AbiIBPD7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 11:03:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D093C5FF44
-        for <linux-usb@vger.kernel.org>; Fri,  2 Sep 2022 07:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662129242; x=1693665242;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=optJifeKryLRNZKlyFdfyt1rKh1CpwsBzaiYkJGllcY=;
-  b=JBfMsRrQUK31IqC14WRNTapUhzpHYqB2E5NhQ1P1YDgZDGoucXnFMyyA
-   6ZNwdulubWe6q4O0ArqN3i4/dbyUEvZlwYiZp9K8coqZTALrIJee5T3Bb
-   kZLjxhfAg2D8qYZnaOy0/TIuLwF/gr3QiasS8KwWSpC4wzVQwNRjLrvsa
-   MVdNnryHHEiGQ/CPMX953LFTBTPuGEhNSgIpnEHUGG8k7ZvNxFOBQ96mO
-   qdKIrkhzJeAv+qd6jkbZtPYqsEgLBgJQfsCo8pHb4zToXyb/m0lnByXzV
-   dXoCko6xGCIq8pBGo/GsISB5PtE0AYaZGwIptPmDmFoCplzjZ38nF0zpD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10458"; a="295999640"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="295999640"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 07:33:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="563979333"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Sep 2022 07:33:53 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oU7k0-0000Bv-1c;
-        Fri, 02 Sep 2022 14:33:52 +0000
-Date:   Fri, 02 Sep 2022 22:33:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- 4e55e22d3d9aa50ef1ba059bf3a53aa61109c179
-Message-ID: <63121443.NP1lO5I6M3DaTquC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S236221AbiIBPMB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Sep 2022 11:12:01 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED8B716EECF;
+        Fri,  2 Sep 2022 07:41:56 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowADn70tLFBJj3kOoAA--.21300S2;
+        Fri, 02 Sep 2022 22:33:47 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH v3] USB: serial: ftdi_sio: Convert to use dev_groups
+Date:   Fri,  2 Sep 2022 22:33:46 +0800
+Message-Id: <20220902143346.4120012-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowADn70tLFBJj3kOoAA--.21300S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr47Zry8ZryDur1UWF13twb_yoW8AF4fpF
+        sxGay3KF4ktFnxXw4a9r4UX34rtw4kKrWfG3yIy34rW3Z8J3srKFW5ta48WF1rAry8G3W2
+        qFsavr90kr4rArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xryl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUxDGnUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,147 +54,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 4e55e22d3d9aa50ef1ba059bf3a53aa61109c179  USB: hcd-pci: Drop the unused id parameter from usb_hcd_pci_probe()
+On Fri, Sep 02, 2022 at 05:56:13PM +0800, Greg KH wrote:
+>>  drivers/usb/serial/ftdi_sio.c | 101 +++++++++++++++++-----------------
+>>  1 file changed, 51 insertions(+), 50 deletions(-)
+>> 
+>> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+>> index d5a3986dfee7..479c3a5caaf8 100644
+>> --- a/drivers/usb/serial/ftdi_sio.c
+>> +++ b/drivers/usb/serial/ftdi_sio.c
+>> @@ -1107,11 +1107,40 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base);
+>>  static u32 ftdi_232bm_baud_to_divisor(int baud);
+>>  static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
+>>  static u32 ftdi_2232h_baud_to_divisor(int baud);
+>> +static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
+>> +					 struct attribute *attr, int idx);
+>> +static ssize_t latency_timer_store(struct device *dev,
+>> +				   struct device_attribute *attr,
+>> +				   const char *valbuf, size_t count);
+>> +static ssize_t event_char_store(struct device *dev,
+>> +	struct device_attribute *attr, const char *valbuf, size_t count);
+>> +static ssize_t latency_timer_show(struct device *dev,
+>> +				  struct device_attribute *attr, char *buf);
+>> +
+> 
+> Please work with the code so that you do not have to pre-define these
+> functions.  It should be possible.  Worst case, you pre-define the
+> structure for the driver, that should be it.
 
-Warning reports:
+Without pre-definition of the functions, compilation errors will occur,
+such as 'ftdi_sio_attr_is_visible' undeclared here.
+I have no idea why they are not necessary.
+Please explain in detail.
 
-https://lore.kernel.org/linux-usb/202208310007.6yJMsSYz-lkp@intel.com
-https://lore.kernel.org/llvm/202208310216.5IOl43es-lkp@intel.com
+> And again, have you tested this change?
 
-Warning: (recently discovered and may have been fixed)
+Every time I change the code, I recomplie it and check whether there are
+errors.
+Are there any other tests I need to do?
 
-drivers/usb/host/ehci-npcm7xx.c:27:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ehci-orion.c:68:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ehci-platform.c:56:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-drivers/usb/host/ehci-platform.c:56:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ohci-platform.c:44:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-drivers/usb/host/ohci-s3c2410.c:42:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ohci-spear.c:26:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
+Thanks,
+Jiang
 
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- i386-allyesconfig
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- i386-randconfig-a001
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- i386-randconfig-a003
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- i386-randconfig-a012
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- i386-randconfig-a014
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- x86_64-allmodconfig
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- x86_64-allyesconfig
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-`-- x86_64-randconfig-a002
-    |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-    `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-clang_recent_errors
-|-- i386-randconfig-a002
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- i386-randconfig-a011
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- i386-randconfig-a015
-|   `-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|-- riscv-randconfig-r026-20220901
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- s390-randconfig-r022-20220901
-|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-s3c2410.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-spear.c:warning:unused-variable-hcd_name
-|-- s390-randconfig-r044-20220901
-|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|-- x86_64-randconfig-a003
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- x86_64-randconfig-a012
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- x86_64-randconfig-a014
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-`-- x86_64-randconfig-a016
-    |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-    `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-
-elapsed time: 1454m
-
-configs tested: 53
-configs skipped: 2
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-m68k                             allyesconfig
-m68k                             allmodconfig
-i386                          randconfig-a016
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-i386                          randconfig-a001
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-arc                  randconfig-r043-20220901
-x86_64                        randconfig-a011
-x86_64                        randconfig-a004
-i386                                defconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a015
-x86_64                        randconfig-a006
-i386                             allyesconfig
-x86_64                           allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220901
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-riscv                randconfig-r042-20220901
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220901
-x86_64                        randconfig-a012
-x86_64                        randconfig-a005
-x86_64                        randconfig-a014
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-s390                 randconfig-r044-20220901
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
