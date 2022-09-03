@@ -2,88 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B825ABD7A
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Sep 2022 08:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58835ABDA0
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Sep 2022 09:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbiICGi5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Sep 2022 02:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S232470AbiICHRm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Sep 2022 03:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiICGi4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Sep 2022 02:38:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B5ED4779
-        for <linux-usb@vger.kernel.org>; Fri,  2 Sep 2022 23:38:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51EA460E01
-        for <linux-usb@vger.kernel.org>; Sat,  3 Sep 2022 06:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B17B0C43142
-        for <linux-usb@vger.kernel.org>; Sat,  3 Sep 2022 06:38:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662187134;
-        bh=LfvDrm6PgyJO83cQN6C+EihN9fJwciH7L4BfLp+vQL8=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Sp4xOdYiaRM8a8HowF+hpLTxIUUGCe9ql2Dm0IViSPJhONZA/blGmRybnb0ICIm+1
-         T0I+W/RpOxKMsn6nxnkfGID3ksR3DCdVbR/NPsssjMYpfHGuXJxcdtPmewQA/eAReY
-         t+F/Um7FZoXAEO+V11Pd8oG8lzzuKAs+khVOIt/zVwEUpwEQTeQDKiK+zTpISnwI9q
-         NvChaAJsP9MIhNTjYcv9NS7bQRknRCOJpHnZkGRJOD5VpcxrkDCF58v5mJ+vBe91Wu
-         hsHM/dRuWRKyt5hvxIwcZobMP7aCFUozRXbCS0hSQjXXwUaf9Q3X7kPx7dfrsZnW5H
-         4Lfigw2dqpy4w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id A1B24C433E7; Sat,  3 Sep 2022 06:38:54 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Sat, 03 Sep 2022 06:38:54 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: grzegorz.alibozek@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-hFhBpbfZLw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231753AbiICHRl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Sep 2022 03:17:41 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8723B07D0;
+        Sat,  3 Sep 2022 00:17:38 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 2837Gbth007057-2837Gbtk007057
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 3 Sep 2022 15:16:44 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: misc: usb3503: call clk_disable_unprepare in the error handling
+Date:   Sat,  3 Sep 2022 15:15:40 +0800
+Message-Id: <20220903071543.2844698-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
---- Comment #26 from Grzegorz Alibo=C5=BCek (grzegorz.alibozek@gmail.com) -=
---
-correcting the problem occurs on the dock: Lenovo Thinkpad Ultra Dock 40AJ,
-in journalctl i see:
-sep 03 08:33:25 kernel: ucsi_acpi USBC000:00: ucsi_handle_connector_change:
-GET_CONNECTOR_STATUS failed (-110)
+Smatch reports the following warning:
 
-but the main problem seems to be resolved
+vers/usb/misc/usb3503.c:267 usb3503_probe() warn: 'hub->clk'
+from clk_prepare_enable() not released on lines: 240,246,252
 
---=20
-You may reply to this email to add a comment.
+Fix this by adding a flag to indicate if hub->clk is prepared or not and
+invoke clk_disable_unprepare in the error handling.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ drivers/usb/misc/usb3503.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
+index 330f494cd158..add47dd964b2 100644
+--- a/drivers/usb/misc/usb3503.c
++++ b/drivers/usb/misc/usb3503.c
+@@ -160,6 +160,7 @@ static int usb3503_probe(struct usb3503 *hub)
+ 	struct usb3503_platform_data *pdata = dev_get_platdata(dev);
+ 	struct device_node *np = dev->of_node;
+ 	int err;
++	int is_clk_enable = 0;
+ 	u32 mode = USB3503_MODE_HUB;
+ 	const u32 *property;
+ 	enum gpiod_flags flags;
+@@ -217,6 +218,8 @@ static int usb3503_probe(struct usb3503 *hub)
+ 			return err;
+ 		}
+ 
++		// set a flag for successful clk_prepare_enable
++		is_clk_enable = 1;
+ 		property = of_get_property(np, "disabled-ports", &len);
+ 		if (property && (len / sizeof(u32)) > 0) {
+ 			int i;
+@@ -236,20 +239,29 @@ static int usb3503_probe(struct usb3503 *hub)
+ 	else
+ 		flags = GPIOD_OUT_HIGH;
+ 	hub->intn = devm_gpiod_get_optional(dev, "intn", flags);
+-	if (IS_ERR(hub->intn))
++	if (IS_ERR(hub->intn)) {
++		if (is_clk_enable)
++			clk_disable_unprepare(hub->clk);
+ 		return PTR_ERR(hub->intn);
++	}
+ 	if (hub->intn)
+ 		gpiod_set_consumer_name(hub->intn, "usb3503 intn");
+ 
+ 	hub->connect = devm_gpiod_get_optional(dev, "connect", GPIOD_OUT_LOW);
+-	if (IS_ERR(hub->connect))
++	if (IS_ERR(hub->connect)) {
++		if (is_clk_enable)
++			clk_disable_unprepare(hub->clk);
+ 		return PTR_ERR(hub->connect);
++	}
+ 	if (hub->connect)
+ 		gpiod_set_consumer_name(hub->connect, "usb3503 connect");
+ 
+ 	hub->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+-	if (IS_ERR(hub->reset))
++	if (IS_ERR(hub->reset)) {
++		if (is_clk_enable)
++			clk_disable_unprepare(hub->clk);
+ 		return PTR_ERR(hub->reset);
++	}
+ 	if (hub->reset) {
+ 		/* Datasheet defines a hardware reset to be at least 100us */
+ 		usleep_range(100, 10000);
+-- 
+2.25.1
+
