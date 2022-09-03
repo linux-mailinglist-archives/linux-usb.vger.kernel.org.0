@@ -2,118 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3085E5ABE84
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Sep 2022 12:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE205AC167
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Sep 2022 23:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbiICKbs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Sep 2022 06:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S229525AbiICVAp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Sep 2022 17:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiICKbl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Sep 2022 06:31:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF4B59279;
-        Sat,  3 Sep 2022 03:31:34 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 283AGBkl027701;
-        Sat, 3 Sep 2022 10:31:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=nFjaabrQNY09jR57Vw3+gq4pp7hiX6Yx4HqOBOuEyuM=;
- b=euMhdGex0T9MpxehGqZDkWO51VXaMiySATthlffz4pyGpuagoh1EplUmzaWxL5aLZNlf
- OTAnd0MtoHIiB9vdZ0CQPLpywXrQBYXE/6lwdLm258kXfTsys46ugNznvB1k2bixV+1M
- ek7zYG6J1Lr8DPrMlMLwsLj2NerxT7NIuCLHqWpiCeAVIifgAvuuCWlFif5NS9m75QEy
- 3JPWkPJg47KfCkSoq2AH+SnNEn3DJdA6ckcGxD40HCzwK8QUGxhDGtDCjwkjGwIOl4Z1
- mxMRUUtoSbzag3UI3pmwa8vjIxsKV+COmoVZSZbLTGQcATGBd7hT+nM5cokGaaucH7kT HQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jc03v0hed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 03 Sep 2022 10:31:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 283AVMLH024663
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 3 Sep 2022 10:31:22 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sat, 3 Sep 2022 03:31:15 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v12 3/3] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
-Date:   Sat, 3 Sep 2022 16:00:48 +0530
-Message-ID: <1662201048-26049-4-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1662201048-26049-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1662201048-26049-1-git-send-email-quic_kriskura@quicinc.com>
+        with ESMTP id S229491AbiICVAo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Sep 2022 17:00:44 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A333399D3
+        for <linux-usb@vger.kernel.org>; Sat,  3 Sep 2022 14:00:43 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id n125so5391267vsc.5
+        for <linux-usb@vger.kernel.org>; Sat, 03 Sep 2022 14:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=m9wcpsESPaJa1VNPZvMRevtD3fO7aWo1DGqnJTjQdjQ=;
+        b=YIWfb8NK+tVOj2pW7FUuPZoS+wA+db3dfJyWs9+5L7h4+em0bqGkmy50kRp+xRBAfF
+         Fk3PSyHvyr/bNfg0X7XslNufeSQa955yyGbhjgecq7czwK5C0poF6GwZOU9t2/vC1294
+         EmyTMaQWVm3QJcZJ+J+f9fxFJuKwtI/fh7TnWZlF5LAgGZJETu6ZALCjS8NL0KUZMP9P
+         0HLcnZSxHk8gL0b/VTS08SuqmyJ84+2IJ7yRXltYqmj0XmNC8S/kFFMUTFHMhZWIH59U
+         7xlWYIrCvstQ/uCzaCoFp2K0oUBTUy1geFIpW2kUG5n3rBv/RxeyNm2i7WmTY5LV+71y
+         C5QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=m9wcpsESPaJa1VNPZvMRevtD3fO7aWo1DGqnJTjQdjQ=;
+        b=XrNSnIaYoF683LQZwKRXg3lRhJRXdlpyPhJSeLOPRzzaN4plav6ieaMSTbkcn9HV5X
+         iYC5UgkZZOV646x6OjXBx2HbsMtnT+SZ5fLiClJGJref/zTd0yYaMV5Te9arFneZrIMh
+         +ORn0TMKonppV8it2DAGVHu+L1MF4iitSKDLFjZrofjv9I/OsuYGcq2460LVX5KsAVJP
+         AklgEVNlhQ5IRiILju0QHV17FRnnT/F/eMW4LTEz1Qq/kLB4vT0GzR+dREBpuHS6bmMZ
+         DpUipI1ZWQkXdG4WenDWFFNqBQHNgzkktSaeG++/thbhwG3OqMqC+zxfJrjgEZdTDNge
+         G9lg==
+X-Gm-Message-State: ACgBeo3gA7inQDw7G8PQC4LdP7iDkYuT86mmTdbgwAFPCApyElEUe/q7
+        1dowtr9I9K84r9KdBHbV1Cc/Wu3LDn9KD0i0RV8=
+X-Google-Smtp-Source: AA6agR6LwiSBpwSWAB5XGV1T6EfyjrxNa7kx/rXSB3eB0X7LLp/jqCO+kkrfZlZWSytGd88N8FEe5SPt/vZ137aQXyg=
+X-Received: by 2002:a05:6102:3711:b0:390:3faf:3f1b with SMTP id
+ s17-20020a056102371100b003903faf3f1bmr12870226vst.49.1662238842557; Sat, 03
+ Sep 2022 14:00:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jvsscNWZggA4EwLm8w20FtB3mlsaWjAI
-X-Proofpoint-ORIG-GUID: jvsscNWZggA4EwLm8w20FtB3mlsaWjAI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-03_03,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- phishscore=0 clxscore=1015 mlxlogscore=783 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209030053
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Received: by 2002:a59:be48:0:b0:2de:b802:62b with HTTP; Sat, 3 Sep 2022
+ 14:00:42 -0700 (PDT)
+Reply-To: dysonb@legalprivilege.ch
+From:   Dyson Butler <lordsdoing1978@gmail.com>
+Date:   Sat, 3 Sep 2022 22:00:42 +0100
+Message-ID: <CAOEwxUhXpXUU1cFW=iZn08rur1Ch9k4xA10t9bMo3m0=BxqEBg@mail.gmail.com>
+Subject: We are broker firm in London-UK,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Overriding the SNPS Phy tuning parameters for SC7280 IDP device.
-
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 0c48db6..053fd1e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -325,6 +325,12 @@
- 	vdda-pll-supply = <&vreg_l10c_0p8>;
- 	vdda33-supply = <&vreg_l2b_3p0>;
- 	vdda18-supply = <&vreg_l1c_1p8>;
-+	qcom,hs-rise-fall-time-bp = <0>;
-+	qcom,squelch-detector-bp = <(-2090)>;
-+	qcom,hs-disconnect-bp = <1743>;
-+	qcom,hs-amplitude-bp = <1780>;
-+	qcom,hs-crossover-voltage-microvolt = <(-31000)>;
-+	qcom,hs-output-impedance-micro-ohms = <2600000>;
- };
- 
- &usb_1_qmpphy {
 -- 
-2.7.4
+Good Day
 
+We are broker firm in London-UK, we have direct Provider of BG/SBLC
+specifically for Lease, The provider is tested and trusted. We have
+been dealing with the company for paste 6 years. Interested
+Agent/Lessee should contact us for directives. We also give out a loan
+for project funding.
+
+We are one of the leading financial company, we have major's providers
+of Fresh Cut BG, SBLC, POF, MTN, Bonds and CDs that are registered
+with us and this financial instruments are specifically for lease and
+sale, our providers deliver in time and precision as Seth forth in the
+agreement. You are at liberty to engage our leased facilities into
+trade programs, project financing, Credit line enhancement, Corporate
+Loans (Business Start-up Loans or Business Expansion Loans), Equipment
+Procurement Loans (industrial equipment, air planes, ships, etc.) And
+many more , Our terms and Conditions are reasonable.
+
+DESCRIPTION OF INSTRUMENTS:
+
+1. Instrument: Bank Guarantee (BG)/SBLC (Appendix A)
+2. Total Face Value: 10M MIN to 50B MAX USD or Euro
+3. Issuing Bank: HSBC, London or Deutsche Bank Frankfurt, UBS or any Top 25 .
+4. Age: One Year, One Day
+5. Leasing Price: 5+ 2%
+6. Sale Price: 38+2%
+7. Delivery SWIFT TO SWIFT.
+8. Payment: MT103-23
+9. Hard Copy: Bonded Courier within 7 banking days.
+
+If you have need for corporate loans, international project funding,
+etc. or if you have a client who requires funding for his project or
+business, We are also affiliated to lenders who specialises on funding
+against financial instrument, such as BG, SBLC, POF or MTN, we fund
+100% of the face value of the financial instrument.Enquiries from
+agents/ brokers/ intermediaries are also welcomed; Please reply back
+if you are interested in any of our service.
+
+Dyson Butler
