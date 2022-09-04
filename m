@@ -2,107 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE205AC167
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Sep 2022 23:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96345AC1C7
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Sep 2022 02:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiICVAp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Sep 2022 17:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S229680AbiIDAE2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Sep 2022 20:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiICVAo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Sep 2022 17:00:44 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A333399D3
-        for <linux-usb@vger.kernel.org>; Sat,  3 Sep 2022 14:00:43 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id n125so5391267vsc.5
-        for <linux-usb@vger.kernel.org>; Sat, 03 Sep 2022 14:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=m9wcpsESPaJa1VNPZvMRevtD3fO7aWo1DGqnJTjQdjQ=;
-        b=YIWfb8NK+tVOj2pW7FUuPZoS+wA+db3dfJyWs9+5L7h4+em0bqGkmy50kRp+xRBAfF
-         Fk3PSyHvyr/bNfg0X7XslNufeSQa955yyGbhjgecq7czwK5C0poF6GwZOU9t2/vC1294
-         EmyTMaQWVm3QJcZJ+J+f9fxFJuKwtI/fh7TnWZlF5LAgGZJETu6ZALCjS8NL0KUZMP9P
-         0HLcnZSxHk8gL0b/VTS08SuqmyJ84+2IJ7yRXltYqmj0XmNC8S/kFFMUTFHMhZWIH59U
-         7xlWYIrCvstQ/uCzaCoFp2K0oUBTUy1geFIpW2kUG5n3rBv/RxeyNm2i7WmTY5LV+71y
-         C5QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=m9wcpsESPaJa1VNPZvMRevtD3fO7aWo1DGqnJTjQdjQ=;
-        b=XrNSnIaYoF683LQZwKRXg3lRhJRXdlpyPhJSeLOPRzzaN4plav6ieaMSTbkcn9HV5X
-         iYC5UgkZZOV646x6OjXBx2HbsMtnT+SZ5fLiClJGJref/zTd0yYaMV5Te9arFneZrIMh
-         +ORn0TMKonppV8it2DAGVHu+L1MF4iitSKDLFjZrofjv9I/OsuYGcq2460LVX5KsAVJP
-         AklgEVNlhQ5IRiILju0QHV17FRnnT/F/eMW4LTEz1Qq/kLB4vT0GzR+dREBpuHS6bmMZ
-         DpUipI1ZWQkXdG4WenDWFFNqBQHNgzkktSaeG++/thbhwG3OqMqC+zxfJrjgEZdTDNge
-         G9lg==
-X-Gm-Message-State: ACgBeo3gA7inQDw7G8PQC4LdP7iDkYuT86mmTdbgwAFPCApyElEUe/q7
-        1dowtr9I9K84r9KdBHbV1Cc/Wu3LDn9KD0i0RV8=
-X-Google-Smtp-Source: AA6agR6LwiSBpwSWAB5XGV1T6EfyjrxNa7kx/rXSB3eB0X7LLp/jqCO+kkrfZlZWSytGd88N8FEe5SPt/vZ137aQXyg=
-X-Received: by 2002:a05:6102:3711:b0:390:3faf:3f1b with SMTP id
- s17-20020a056102371100b003903faf3f1bmr12870226vst.49.1662238842557; Sat, 03
- Sep 2022 14:00:42 -0700 (PDT)
+        with ESMTP id S229487AbiIDAE0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Sep 2022 20:04:26 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D66422A;
+        Sat,  3 Sep 2022 17:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662249861; x=1693785861;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RVEhZ6y4T1JLmd8UZJsB2e4A0dQiVCt7KFVfFW0jwQA=;
+  b=cAtyjK00jWHVtA2WvzESCxsPrAKFS0tycokzzT+8Tt+S9CfaBxUeKnJc
+   R3jSL9ttdEEmeQjCuRodx4Vb8PS5Ir3/1iWekFv3JmzDCYIoUkaxT2rKZ
+   AjbQ6jPZtDwbhFAHygsg2uisHpGslDA1AScnhwRrZMaoLwAYunSrQLQRy
+   2+fAJk9tCYavi+M1t8kU1c3HTF6pMIfoRJsFheoR6e+X9JXBIVNiDY6Fu
+   3HGn7Zx+MD1817DUVUGoz0uAcveV4ZsdGfgmlUSKILxLP3X5zM1Pgb+Wc
+   5D/a72JXPKwNeL9/2MVDREaIkfc2oxXGu2AMHeCUHmcQ0i5gx2lOLJK8R
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="297494730"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="297494730"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 17:04:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="564348244"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 03 Sep 2022 17:04:17 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUd7Y-0002Ll-1R;
+        Sun, 04 Sep 2022 00:04:16 +0000
+Date:   Sun, 4 Sep 2022 08:03:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>, gregkh@linuxfoundation.org,
+        mario.limonciello@amd.com, mika.westerberg@linux.intel.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Yd_Tseng@asmedia.com.tw,
+        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
+Subject: Re: [PATCH v8 1/3] thunderbolt: Add vendor's specific operations of
+ NVM
+Message-ID: <202209040723.T3GBSVUx-lkp@intel.com>
+References: <20220902094010.2170-2-chensiying21@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a59:be48:0:b0:2de:b802:62b with HTTP; Sat, 3 Sep 2022
- 14:00:42 -0700 (PDT)
-Reply-To: dysonb@legalprivilege.ch
-From:   Dyson Butler <lordsdoing1978@gmail.com>
-Date:   Sat, 3 Sep 2022 22:00:42 +0100
-Message-ID: <CAOEwxUhXpXUU1cFW=iZn08rur1Ch9k4xA10t9bMo3m0=BxqEBg@mail.gmail.com>
-Subject: We are broker firm in London-UK,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902094010.2170-2-chensiying21@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Szuying,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Szuying-Chen/thunderbolt-add-vendor-s-NVM-formats/20220902-174246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 42e66b1cc3a070671001f8a1e933a80818a192bf
+config: loongarch-randconfig-s051-20220901 (https://download.01.org/0day-ci/archive/20220904/202209040723.T3GBSVUx-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/02a1339d2c5a67367909bfcb11e307d3cfa44f74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Szuying-Chen/thunderbolt-add-vendor-s-NVM-formats/20220902-174246
+        git checkout 02a1339d2c5a67367909bfcb11e307d3cfa44f74
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/thunderbolt/nvm.c: note: in included file:
+>> drivers/thunderbolt/tb.h:743:20: sparse: sparse: marked inline, but without a definition
+>> drivers/thunderbolt/tb.h:743:20: sparse: sparse: marked inline, but without a definition
+
+vim +743 drivers/thunderbolt/tb.h
+
+   742	
+ > 743	inline int nvm_read(struct tb_switch *sw, unsigned int address,
+   744				   void *buf, size_t size);
+   745	struct tb_nvm *tb_nvm_alloc(struct device *dev);
+   746	int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+   747	int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+   748			     size_t bytes);
+   749	int tb_nvm_add_non_active(struct tb_nvm *nvm, size_t size,
+   750				  nvmem_reg_write_t reg_write);
+   751	void tb_nvm_free(struct tb_nvm *nvm);
+   752	void tb_nvm_exit(void);
+   753	
+
 -- 
-Good Day
-
-We are broker firm in London-UK, we have direct Provider of BG/SBLC
-specifically for Lease, The provider is tested and trusted. We have
-been dealing with the company for paste 6 years. Interested
-Agent/Lessee should contact us for directives. We also give out a loan
-for project funding.
-
-We are one of the leading financial company, we have major's providers
-of Fresh Cut BG, SBLC, POF, MTN, Bonds and CDs that are registered
-with us and this financial instruments are specifically for lease and
-sale, our providers deliver in time and precision as Seth forth in the
-agreement. You are at liberty to engage our leased facilities into
-trade programs, project financing, Credit line enhancement, Corporate
-Loans (Business Start-up Loans or Business Expansion Loans), Equipment
-Procurement Loans (industrial equipment, air planes, ships, etc.) And
-many more , Our terms and Conditions are reasonable.
-
-DESCRIPTION OF INSTRUMENTS:
-
-1. Instrument: Bank Guarantee (BG)/SBLC (Appendix A)
-2. Total Face Value: 10M MIN to 50B MAX USD or Euro
-3. Issuing Bank: HSBC, London or Deutsche Bank Frankfurt, UBS or any Top 25 .
-4. Age: One Year, One Day
-5. Leasing Price: 5+ 2%
-6. Sale Price: 38+2%
-7. Delivery SWIFT TO SWIFT.
-8. Payment: MT103-23
-9. Hard Copy: Bonded Courier within 7 banking days.
-
-If you have need for corporate loans, international project funding,
-etc. or if you have a client who requires funding for his project or
-business, We are also affiliated to lenders who specialises on funding
-against financial instrument, such as BG, SBLC, POF or MTN, we fund
-100% of the face value of the financial instrument.Enquiries from
-agents/ brokers/ intermediaries are also welcomed; Please reply back
-if you are interested in any of our service.
-
-Dyson Butler
+0-DAY CI Kernel Test Service
+https://01.org/lkp
