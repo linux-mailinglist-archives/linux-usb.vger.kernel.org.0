@@ -2,89 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84ADC5AC426
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Sep 2022 13:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B3A5AC479
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Sep 2022 15:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbiIDLph (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Sep 2022 07:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S233755AbiIDNVV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Sep 2022 09:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiIDLpg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Sep 2022 07:45:36 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38713FA0D;
-        Sun,  4 Sep 2022 04:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662291934; x=1693827934;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=77ht/KHIDDl1w0O/JksmRcRIg/55sUgNvVkXVvRucq0=;
-  b=SRgpFrc1E+3oK6pjaUImetJ0wpvpZKCgr4SsUa1L5HAGx0S2EXGG+h1s
-   V9Sln6Ybo1GgJR+DkS/vtrczXpAYUzDd2d23r3WJQRSLdu4/5K386+fHe
-   8NDDzmo7/8GB2Qrk6cEsKZxattg9wt/t6QPf7pvb2RLOMZc9+/NhjK+Du
-   ofTNz9gcg6KseVmBI7x2gG7BESRSt0loIAJzwvG2tKyiUU2wXuk+D4HKm
-   zrchNpcfrIA+p97hYw+CGUPceQAGAlJB5aXyjEshvrnMQ9n8nh15SG2IJ
-   JsuZJXfEfA0Wydp9zIFFk3AKryNJIMLBqdLj4XZfrX2u+NqNaezpvJnbA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="296238009"
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="296238009"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2022 04:45:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="739316884"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 04 Sep 2022 04:45:31 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 0777486; Sun,  4 Sep 2022 14:45:46 +0300 (EEST)
-Date:   Sun, 4 Sep 2022 14:45:46 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Szuying Chen <chensiying21@gmail.com>
-Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yd_Tseng@asmedia.com.tw,
-        Chloe_Chen@asmedia.com.tw, Richard_Hsu@asmedia.com.tw
-Subject: Re: [PATCH v8 0/3] thunderbolt: add vendor's NVM formats
-Message-ID: <YxSP6pxh99Ewgnvo@black.fi.intel.com>
-References: <20220902094010.2170-1-chensiying21@gmail.com>
+        with ESMTP id S229748AbiIDNVU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Sep 2022 09:21:20 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DEF303E8;
+        Sun,  4 Sep 2022 06:21:19 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id k2so6537866vsk.8;
+        Sun, 04 Sep 2022 06:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=zm+EyzwIQUGPDwFnMMoLTrR9COFLYicTA4/koBenuTc=;
+        b=b6+N4hNrgd/gwbt5oOVeNZuwJR+TKHHQTg3dog//QrbCMyNOeDYTfcg02r/phrrZpA
+         WClzq/CZsyp7IOzAaZ4rE2nXfo0mD3g/pt3tz65NSNlW9YHcdQKUZzzMpcwNt+qule/x
+         VxB7mDGI/0TTcjT2rbGmlob/sfViC8FWwISqW5xHsXRFseBwkLWf1vVlhNH8ick5cYUE
+         aT1IcwBnICVufrkheKnZkfsEc2BO0wtsZjvhOGV0bds5H9eCQO0II/hg83uWpC44Q+rH
+         W+WrbCuVfZjvUassAMGNxjHfRTvGnLy1UvHVwjGkZ2vsvQKgkF7OgOf0xFK1+lU6UpC/
+         6B5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=zm+EyzwIQUGPDwFnMMoLTrR9COFLYicTA4/koBenuTc=;
+        b=z5AcCMpuLMSAV9GzlYmBGNnoVjZcUKYOiQ8MetqWMHTz7WRUxgqbiz5S9LAZ2Q4lN+
+         5pJ//lduH6XqfapUqyTX7UM8XIqrxUQ0vbpbj0LKS7B3BlWquBJYsQaB6Jdvm2eQInBh
+         rJAzDKMkVikdAaIvU0/sO5TVAMqmZ3nNBj8v3fzmrN4JqKpjZtanoFem6I6gSnfy/145
+         38WWOWcKzAahmop3pGidTriK6EQSA9wkT6rSoj7YCMCB7MKqckhksiEScXGm8EVMFa9v
+         icZcBCrYSMbevTtRI4xd2WJIhRKG/Z+1UYbTlQVKCGhL9m5lmVxY4jjFFWzFY6z4PJey
+         zsOw==
+X-Gm-Message-State: ACgBeo3I840KxQ46VLWEZO4TnmPLO5Kc1YqWkQahqiyktfhTmcYa+luA
+        CpchoJVZARSboKrYYNeJhriL4MbJehhmG/iGsKgWuFCYLcw1Lg==
+X-Google-Smtp-Source: AA6agR6v9SEpaR8/h54E7r+sUehl1VRLwX60543GLlfUliZxUS0Q7Y+G3LNY7pi73BRd34qYx8zL8bEUVnnr9mRK28U=
+X-Received: by 2002:a67:d901:0:b0:390:d093:591a with SMTP id
+ t1-20020a67d901000000b00390d093591amr12463484vsj.81.1662297678763; Sun, 04
+ Sep 2022 06:21:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902094010.2170-1-chensiying21@gmail.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAB7eexLHN1gn2QPdo1_PF70sPbo2cA8skwG17oZb7+J1DQ+J1Q@mail.gmail.com>
+ <CAB7eexKGRgDWBLiRs=U70OPLREESi+bCgwt=7wWCESBDZDM=zQ@mail.gmail.com> <YxC7ix+MerW5xGsB@kroah.com>
+In-Reply-To: <YxC7ix+MerW5xGsB@kroah.com>
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Sun, 4 Sep 2022 21:21:07 +0800
+Message-ID: <CAB7eexK+x8+RZp16aJFmdmqqEL=NMYp+Fy+hAJG+CWUUEH1_fg@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in configfs_composite_bind
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Szuying Chen,
+Thanks for your reply! I ran the reproducer again on the master
+branch(commit id: 7726d4c3e60bfe206738894267414a5f10510f1a) and it
+didn't crash.
 
-On Fri, Sep 02, 2022 at 05:40:07PM +0800, Szuying Chen wrote:
-> From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
-> 
-> The patch series for vendors to extend their NVM format.
-> 
-> v7->v8: The nvm_read() defined in tb.h. Modify
-> tb_switch_nvm_validate() return value and no_nvm_upgrade bit setting.
-> 
-> Szuying Chen (3):
->   thunderbolt: Add vendor's specific operations of NVM
->   thunderbolt: Modify tb_nvm major and minor size.
->   thunderbolt: To extend ASMedia NVM formats.
+The reason for not using the latest version is I can't attach more
+than one gadget at a time using `configfs` and `dummy_hcd`. When I
+attach the second gadget with a different `udc` it always fails and
+the kernel message says:
 
-Thanks for the patches. There are a couple of things I would still like
-to change in this series but I can do those myself, and then I need to
-run some testing to make sure Intel NVM formats still work.
+```
+[ 1625.254858] Error: Driver 'configfs-gadget' is already registered,
+aborting...
+[ 1625.271018] UDC core: g1: driver registration failed: -16
+```
 
-No need to send a new version. Once I've done my modifications I will
-post the updated series for review and perhaps you can then try on your
-side that it still works on ASMedia hardware.
+I'm not sure if this is a new feature from version v5.19(v5.18, commit
+id: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f works very well) or a
+potential bug, or my mistake...
 
-Thanks!
+The kernel config is: https://pastebin.com/raw/SLmNMMRd
+The shell to attach gadgets is: https://pastebin.com/raw/2eDPNip3
+The kernel log is: https://pastebin.com/raw/MaDwMQWk
+
+Best wishes!
+Rondreis
