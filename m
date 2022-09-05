@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1705ACD5F
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 10:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C4E5ACD99
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 10:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236948AbiIEICl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 04:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S236273AbiIEIWl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 04:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236743AbiIEICj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 04:02:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7504548CB1
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 01:02:33 -0700 (PDT)
+        with ESMTP id S235860AbiIEIWk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 04:22:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E171F31344
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 01:22:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 31E2DCE1064
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:02:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 583DFC43142
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:02:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8434DB80EDC
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:22:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F4B3C43142
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662364950;
-        bh=zzv+rVwPY0WDEzqxo67yeFzT0f0GzFntIW3r3CEwApU=;
+        s=k20201202; t=1662366156;
+        bh=oefGQXrLLTHBbNFXw10XLf+RncX+46K/nKYNyez16AI=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=MBU4nodNVH+qjqWY5d2zFnqIS/YxLhEd4TIQB23kxst2N4zWaZwsmXGeNJT7nnauw
-         8ZM/a3gc8aTG1N67G7BsPQvOaBWS/PT3LQpJBlWTzQTNzfAS5pgz0Ow4BVsb9x8Dyc
-         f97YTLc4OmGtzoxPbB4+/BCrq5CrNNW8Yrn2YOXDP95K1gpQxNBTkNeVy1EKzMSqCk
-         jWUscxbJ2QKMcjcHdYW4Y4aGfsIVdCRsdz4BNlj7lRyv89v3nb9VIfWBhMRzn7fENp
-         hblEaMNBi5CCKx6HpXH0ol9SUMvyNbJQ0LlsdFxfPPxQZAihej4vOjFaVpQzSHb79T
-         cMRp5NmvTLrpQ==
+        b=ma3Uo8ruvwaKBK82F7F1ujK9LmlQBs3SY/LVPMSunnuJagqXZ0cEkFG5ytCvdwyiA
+         cftbI7usOkgc4QChT+GtLaBxwHGT8mIuOAzoFdFgdzhRmc7TKGufAOtK1irbHW64V7
+         R1Ya0+0hZxlJPpExAk4OzS0HsncAhKVaAqKHagL5rr0YqNakMVKJk2FCajosadYkcD
+         8pBYg2FdruPG3bGZRRgEMjwWjJmwBkIo2lG6gJwH3xL8srHkWf2oNoAntOlxoqANLc
+         15ciN3mExdr+u/0ToRC/0T4OhdhuNRpcbygXcFOlGOTmo8sPs1qZ9Sc3S4ikcAQRDe
+         tB9+jjh4FF8Jg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 48B46C433EA; Mon,  5 Sep 2022 08:02:30 +0000 (UTC)
+        id 2DB88C433E9; Mon,  5 Sep 2022 08:22:36 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 210425] Plugging in or unplugging power cord while system is
  suspended does not trigger updates
-Date:   Mon, 05 Sep 2022 08:02:29 +0000
+Date:   Mon, 05 Sep 2022 08:22:35 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -46,14 +46,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: heikki.krogerus@linux.intel.com
+X-Bugzilla-Who: grzegorz.alibozek@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-RFStTKURQh@https.bugzilla.kernel.org/>
+Message-ID: <bug-210425-208809-08YdzUhPqG@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
 References: <bug-210425-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,24 +73,9 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
---- Comment #27 from Heikki Krogerus (heikki.krogerus@linux.intel.com) ---
-(In reply to Grzegorz Alibo=C5=BCek from comment #26)
-> correcting the problem occurs on the dock: Lenovo Thinkpad Ultra Dock 40A=
-J,
-> in journalctl i see:
-> sep 03 08:33:25 kernel: ucsi_acpi USBC000:00: ucsi_handle_connector_chang=
-e:
-> GET_CONNECTOR_STATUS failed (-110)
->=20
-> but the main problem seems to be resolved
-
-Okay. In your case this bug may be just a symptom of that other issue. So my
-patch may just be a workaround in your case, but how about the others? Does
-everybody with this issue see that warning when they resume?
-
-There is another report for that issue. I think it's best that we try to so=
-lve
-that first: https://bugzilla.kernel.org/show_bug.cgi?id=3D216426
+--- Comment #28 from Grzegorz Alibo=C5=BCek (grzegorz.alibozek@gmail.com) -=
+--
+for the sake of clarity, I had this warning also before your patch.
 
 --=20
 You may reply to this email to add a comment.
