@@ -2,119 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C795E5ACD1D
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 09:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1705ACD5F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 10:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236686AbiIEHug (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 03:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S236948AbiIEICl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 04:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236721AbiIEHuZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 03:50:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560B61BE9D;
-        Mon,  5 Sep 2022 00:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662364221; x=1693900221;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rY1TCG8yN4ejyittlrT4eiFuc0Mo/U8I/RU+8hrtv2c=;
-  b=IaldhKnjFj2Z735w4m+DRkx6nvpI87IBESH10rKbuD0FkeSC0QRrWtG7
-   BR2y9Hj1LK4hDynz6HJcEd3dXdnclqvENOBp+fUoCz/I32ohqsA+gT4Pe
-   lGMpt9PP8jRRlqzxplCdqg3W9zGNkxQOTkHEFutlFtYxBX2kE0xFilkjI
-   SKeWS40jb4HfFtjes+UzPGr/dFv4af8mL/zQtKj7j6bOjcDYIMYZwd3w9
-   Bq2Pe0KjqhFCm0Rv65yQUdY4O4XkRbr6aB7qDz2wyJPirHm2fUoyGfTx8
-   h7cuHglrA9gbxjb0bfeOvhvAlsdwZF21Brk9GMtjzfzw2wk6AZFu3wBQU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="382630819"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="382630819"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 00:50:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="609599751"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 05 Sep 2022 00:50:18 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 71CC586; Mon,  5 Sep 2022 10:50:33 +0300 (EEST)
-Date:   Mon, 5 Sep 2022 10:50:33 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, sanju.mehta@amd.com,
-        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
- on AMD USB4 controller
-Message-ID: <YxWqSYDWe0NitSkL@black.fi.intel.com>
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
- <YxWgGKIAvsxwSz85@black.fi.intel.com>
- <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+        with ESMTP id S236743AbiIEICj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 04:02:39 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7504548CB1
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 01:02:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 31E2DCE1064
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:02:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 583DFC43142
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:02:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662364950;
+        bh=zzv+rVwPY0WDEzqxo67yeFzT0f0GzFntIW3r3CEwApU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=MBU4nodNVH+qjqWY5d2zFnqIS/YxLhEd4TIQB23kxst2N4zWaZwsmXGeNJT7nnauw
+         8ZM/a3gc8aTG1N67G7BsPQvOaBWS/PT3LQpJBlWTzQTNzfAS5pgz0Ow4BVsb9x8Dyc
+         f97YTLc4OmGtzoxPbB4+/BCrq5CrNNW8Yrn2YOXDP95K1gpQxNBTkNeVy1EKzMSqCk
+         jWUscxbJ2QKMcjcHdYW4Y4aGfsIVdCRsdz4BNlj7lRyv89v3nb9VIfWBhMRzn7fENp
+         hblEaMNBi5CCKx6HpXH0ol9SUMvyNbJQ0LlsdFxfPPxQZAihej4vOjFaVpQzSHb79T
+         cMRp5NmvTLrpQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 48B46C433EA; Mon,  5 Sep 2022 08:02:30 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Mon, 05 Sep 2022 08:02:29 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: heikki.krogerus@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210425-208809-RFStTKURQh@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 03:26:28PM +0800, Kai-Heng Feng wrote:
-> Hi Mika,
-> 
-> On Mon, Sep 5, 2022 at 3:06 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Sep 05, 2022 at 02:56:22PM +0800, Kai-Heng Feng wrote:
-> > > AMD USB4 can not detect external PCIe devices like external NVMe when
-> > > it's hotplugged, because card/link are not up:
-> > >
-> > > pcieport 0000:00:04.1: pciehp: pciehp_check_link_active: lnk_status = 1101
-> >
-> > I think the correct solution is then to block them from runtime
-> > suspending entirely.
-> 
-> Do you mean disable runtime suspend completely? Or just block runtime
-> suspend for a period?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-Completely. The port should enter D3 if it cannot wake up and Linux does
-not even enable runtime PM for such ports unless they declare
-"HotPlugSupportInD3" in their ACPI description:
+--- Comment #27 from Heikki Krogerus (heikki.krogerus@linux.intel.com) ---
+(In reply to Grzegorz Alibo=C5=BCek from comment #26)
+> correcting the problem occurs on the dock: Lenovo Thinkpad Ultra Dock 40A=
+J,
+> in journalctl i see:
+> sep 03 08:33:25 kernel: ucsi_acpi USBC000:00: ucsi_handle_connector_chang=
+e:
+> GET_CONNECTOR_STATUS failed (-110)
+>=20
+> but the main problem seems to be resolved
 
-https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
+Okay. In your case this bug may be just a symptom of that other issue. So my
+patch may just be a workaround in your case, but how about the others? Does
+everybody with this issue see that warning when they resume?
 
-So that property should not be there if they cannot wake up.
+There is another report for that issue. I think it's best that we try to so=
+lve
+that first: https://bugzilla.kernel.org/show_bug.cgi?id=3D216426
 
-> > > Use `lspci` to resume pciehp bridges can find external devices.
-> > >
-> > > A long delay before checking card/link presence doesn't help, either.
-> > > The only way to make the hotplug work is to enable pciehp interrupt and
-> > > check card presence after the TB switch is added.
-> > >
-> > > Since the topology of USB4 and its PCIe bridges are siblings, hardcode
-> > > the bridge ID so TBT driver can wake them up to check presence.
-> >
-> > Let's not add PCI things into TBT driver unless absolutely necessary.
-> 
-> OK. It's getting harder as different components are intertwined
-> together on new hardwares...
-> 
-> >
-> > At least on Intel hardware the PCIe hotplug is signaled by SCI when the
-> > root port is in D3, I wonder if AMD has something similar.
-> 
-> Yes those root ports are resumed to D0 when something is plugged. They
-> however fail to detect any externel PCIe devices.
+--=20
+You may reply to this email to add a comment.
 
-Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
-detected? Does the PCIe "Card Present" (or Data Link Layer Active)
-status change at all or is it always 0?
+You are receiving this mail because:
+You are watching the assignee of the bug.=
