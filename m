@@ -2,68 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACE95AD4E6
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 16:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAE95AD518
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 16:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238275AbiIEOeB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 10:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
+        id S237615AbiIEOhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 10:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238237AbiIEOd7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 10:33:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD0A5A883
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 07:33:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A80F61040
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 14:33:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D621C43144
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 14:33:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662388437;
-        bh=sgmNqRF4Ywn4lOepNqrJpcU3vDq1j4fM2h2cI6vxLks=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FPkMBnGdiQCzlt9soI8QOQTZTt7cHiGUm0h+6sdKOxq6852RuIFnQcpgjc6YyvU07
-         I/yFuuzOnelzublDIG1ouDWnyEhvY1AYfo12Ruhj3opefP6aua1fcFoco0Eu+lFm0f
-         m2DqFZWsh/24X1mYXJuq47TEANJ3oj946Ukjl+biALK997kvtTcZYQ2eLm9dwReGUn
-         h5UnC3wdoWebs+Nh+xY612Ttmq/zKRiLWOnw8G79E1aQEa4PundmPLRhjQ8aWIunOf
-         jFhG+WmmzLIPOAquOjiyVGRe7d05+23M1IZE3G06upY32ZBmMJ1JLlD1gWv24uTVOV
-         6eTwz6g3vnk6g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6A2BFC32747; Mon,  5 Sep 2022 14:33:57 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Mon, 05 Sep 2022 14:33:56 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: grzegorz.alibozek@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-GR6K493O6R@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S238328AbiIEOg1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 10:36:27 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0B317E2E
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 07:35:33 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id a21-20020a5d9815000000b006882e9be20aso5025436iol.17
+        for <linux-usb@vger.kernel.org>; Mon, 05 Sep 2022 07:35:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=1eu12Y/7myvVTlijkPxBB986iRYCXXzL9QUqsoDSoRU=;
+        b=JhqdLMcwmpmdBkbfD30OdiAnNT8IcEjqLZHqzd0Tf5XezNf77RU3RuxP0zo8tfzjZ0
+         Sjd5JW7k4xb0551744frHfktWAlAIrQIh4sDN1f1gGjiE90ZckRfrPAot7lqvGzRE9cs
+         eZdnzAP5RGS5B7t+tZlBofdbu7jefptRhBTuJZEskWo5GzfO4B65ATZiXJ10jLvvLI1s
+         hPChJhtDXaJajzqSn63dwC0Fcs56bJHWqZUj+EKwLUIjpfiIuRnv7lqrAmNL6J5JubeI
+         ZupBcCW8EKXAL4Y+MP/jQs7FT7URyCao4+u+CzHfLb8vCWA9m8sEbO+XrJJdgHkswENC
+         dzeg==
+X-Gm-Message-State: ACgBeo3fbaSqaQhcnNbJdq5QuOsVQ40DzAX0oz+nKynE3GXskPUHyhuO
+        K0adp/+YCYEdDnb9ybKTttJGDPIvZxNCgUE34g6W1dMHKfVw
+X-Google-Smtp-Source: AA6agR5ttrukC8L+K07DB/liSFE04gWoF92fJyZa6kcUmS5ZynOGvthyp5Mb3LrgWXAy5aTh6Xm/R8Cib7OuKz2L32AwJ6iyO2SA
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:3043:b0:341:d8a4:73e8 with SMTP id
+ u3-20020a056638304300b00341d8a473e8mr26455973jak.239.1662388530884; Mon, 05
+ Sep 2022 07:35:30 -0700 (PDT)
+Date:   Mon, 05 Sep 2022 07:35:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dcb48a05e7eefddd@google.com>
+Subject: [syzbot] usb-testing boot error: general protection fault in kvmalloc_node
+From:   syzbot <syzbot+24e8438a720679b9b878@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,14 +54,116 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+Hello,
 
---- Comment #29 from Grzegorz Alibo=C5=BCek (grzegorz.alibozek@gmail.com) -=
---
-Will you post the change request to the Linux kernel?
+syzbot found the following issue on:
 
---=20
-You may reply to this email to add a comment.
+HEAD commit:    10174220f55a usb: reduce kernel log spam on driver registr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=131ee98b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=24e8438a720679b9b878
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cc623f81ac2e/disk-10174220.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d582f7185db2/vmlinux-10174220.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+24e8438a720679b9b878@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xffff0fff00000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff89ff800004000-0xfff89ff800004007]
+CPU: 1 PID: 1149 Comm: mkdir Not tainted 6.0.0-rc1-syzkaller-00047-g10174220f55a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:__kmalloc_node+0x1dd/0x360 mm/slub.c:4468
+Code: 48 83 c4 18 44 89 e1 4c 89 ea 5b 4c 89 fe 48 89 ef 5d 41 5c 41 5d 41 5e 41 5f e9 6e 55 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 3d 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0018:ffffc900004e7c20 EFLAGS: 00010246
+RAX: ffff0fff00000000 RBX: 0000000000400cc0 RCX: 0000000000000800
+RDX: 0000000000000041 RSI: 0000000000400cc0 RDI: 000000000003b880
+RBP: ffff88810004c280 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000400cc0
+R13: 0000000000001000 R14: 0000000000000000 R15: ffffffff81632b1e
+FS:  00007fd7fef3f800(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd7ff039410 CR3: 000000010f2f0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kmalloc_node include/linux/slab.h:623 [inline]
+ kvmalloc_node+0x3e/0x190 mm/util.c:613
+ kvmalloc include/linux/slab.h:750 [inline]
+ seq_buf_alloc fs/seq_file.c:38 [inline]
+ seq_read_iter+0x7f7/0x1280 fs/seq_file.c:210
+ proc_reg_read_iter+0x1fb/0x2d0 fs/proc/inode.c:305
+ call_read_iter include/linux/fs.h:2181 [inline]
+ new_sync_read fs/read_write.c:389 [inline]
+ vfs_read+0x67d/0x930 fs/read_write.c:470
+ ksys_read+0x127/0x250 fs/read_write.c:607
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd7ff0cb8fe
+Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+RSP: 002b:00007fff62d03468 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 000055cc8ec572a0 RCX: 00007fd7ff0cb8fe
+RDX: 0000000000000400 RSI: 000055cc8ec57500 RDI: 0000000000000003
+RBP: 00007fd7ff198380 R08: 0000000000000003 R09: 00007fd7ff19ba60
+R10: 000000000000005d R11: 0000000000000246 R12: 00007fff62d03530
+R13: 0000000000000d68 R14: 00007fd7ff197780 R15: 0000000000000d68
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:__kmalloc_node+0x1dd/0x360 mm/slub.c:4468
+Code: 48 83 c4 18 44 89 e1 4c 89 ea 5b 4c 89 fe 48 89 ef 5d 41 5c 41 5d 41 5e 41 5f e9 6e 55 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 3d 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0018:ffffc900004e7c20 EFLAGS: 00010246
+RAX: ffff0fff00000000 RBX: 0000000000400cc0 RCX: 0000000000000800
+RDX: 0000000000000041 RSI: 0000000000400cc0 RDI: 000000000003b880
+RBP: ffff88810004c280 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000400cc0
+R13: 0000000000001000 R14: 0000000000000000 R15: ffffffff81632b1e
+FS:  00007fd7fef3f800(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd7ff039410 CR3: 000000010f2f0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 83 c4 18          	add    $0x18,%rsp
+   4:	44 89 e1             	mov    %r12d,%ecx
+   7:	4c 89 ea             	mov    %r13,%rdx
+   a:	5b                   	pop    %rbx
+   b:	4c 89 fe             	mov    %r15,%rsi
+   e:	48 89 ef             	mov    %rbp,%rdi
+  11:	5d                   	pop    %rbp
+  12:	41 5c                	pop    %r12
+  14:	41 5d                	pop    %r13
+  16:	41 5e                	pop    %r14
+  18:	41 5f                	pop    %r15
+  1a:	e9 6e 55 00 00       	jmpq   0x558d
+  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 3d 01 00 00    	jne    0x171
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
