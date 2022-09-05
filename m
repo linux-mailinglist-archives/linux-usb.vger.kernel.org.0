@@ -2,212 +2,408 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CCC5ACE27
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 10:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB1C5ACF35
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 11:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbiIEIiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 04:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S236829AbiIEJvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 05:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiIEIhq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 04:37:46 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2CA51413
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 01:36:29 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gb36so15528215ejc.10
-        for <linux-usb@vger.kernel.org>; Mon, 05 Sep 2022 01:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=1lu9MLQdmAJPl0QYqaa7yEFLZznS5vLoLep8F8T+FYw=;
-        b=H2bDRiMbS14CyPl3fR01O9q0Bs05J8ffM4pBPPXnO0iZ3yRZ8Dzrj0HV1k4ibmFf7n
-         yBAEJHRZ/46vEBkUVFSx5dDYgSYlqv33E5CeDufv7+g7hvfwHhx8TPOUKZJnnqGj72ef
-         zgIcLtDTuTHWCxoZLnUKogo//rZxOQqcgwtsewRxJ6ktc8uq4qspEeRriPL0SXCC7TvC
-         kvihgc1UYzBEt3AcOTp7/rIshiDqlimygk7z3YX3sWAjl3cFC6KjyhViS9/NdKTXAtLG
-         CKlcAqpvUV4eo017epw2/GzNyKTh0Srgwa+Dr2Ul7MKXeHicg6pKWh/WYSUNUUE1cwce
-         xA5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1lu9MLQdmAJPl0QYqaa7yEFLZznS5vLoLep8F8T+FYw=;
-        b=jyzDXs0vaIjBpnLXAFGeRqEVEvppZAhdtsz7kAOnUP6ZF0n3XbTgQqCw51ZCTBk3XO
-         AXCBdBcdNNAH7+iwJYaD8pm1Acc7sp5bnVygl6Pe08M6/UvPregJ1mmbOB4h6/CiwXXa
-         JGDSEbTP4IiBei7DJaLuRAEbn6s4HdNyv9GVVCqX5a+d2uKFdW1rs6M3l+Lb4PIBacSA
-         LaRPcW70v5OVsmqqhgNYbwXyQFeNWHkUgAFgkR7nyIcXxyRGEod9m9Zx9qIWW0QPrXGI
-         UPaQP++b/SOEaIaFw0UCXM639/cBcogOqVIo5rfC2nUZR31Kf2bhMGU4ozfZssCyxcS4
-         k1jw==
-X-Gm-Message-State: ACgBeo16y8r3RmiTIIPqOvjLK2saqbvMwOeIw6sgPXrwVrpUsHgpOkL9
-        UPP8r1Yq/uUurRNNSgAeSyJ0Oz7VFGeOai6ZpPtBIA==
-X-Google-Smtp-Source: AA6agR4fz4Smdw2KZoVZGDuCurFKnu6Y8V/Lzw7j8rOztBCFb0LI8EO8Qw8PlC63R1Gfk3UWkQNqk27p7Mbm7n00OxU=
-X-Received: by 2002:a17:907:782:b0:740:7120:c6e7 with SMTP id
- xd2-20020a170907078200b007407120c6e7mr30594417ejb.313.1662366987661; Mon, 05
- Sep 2022 01:36:27 -0700 (PDT)
+        with ESMTP id S231540AbiIEJvh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 05:51:37 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05D0C29C85;
+        Mon,  5 Sep 2022 02:51:28 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAD361CZxhVjfAunAQ--.29035S2;
+        Mon, 05 Sep 2022 17:51:22 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v4] USB: serial: ftdi_sio: Convert to use dev_groups
+Date:   Mon,  5 Sep 2022 17:51:20 +0800
+Message-Id: <20220905095120.343807-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220902091535.3572333-1-raychi@google.com> <YxIX+jqWFfwAWYot@rowland.harvard.edu>
- <CAPBYUsApTYex027qBe-=EyUxDHb8MMQscX+2jqZ98zXxN-0tHA@mail.gmail.com> <YxI4ZViLkZOjN/Bh@rowland.harvard.edu>
-In-Reply-To: <YxI4ZViLkZOjN/Bh@rowland.harvard.edu>
-From:   Ray Chi <raychi@google.com>
-Date:   Mon, 5 Sep 2022 16:36:16 +0800
-Message-ID: <CAPBYUsCEjMSJ8P8ZM1_W+S1DOWFTOM0wJwi2fTukfxSGucYhnQ@mail.gmail.com>
-Subject: Re: [Patch v2] usb: core: stop USB enumeration if too many retries
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        mathias.nyman@linux.intel.com,
-        Albert Wang <albertccwang@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Puma Hsu <pumahsu@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAD361CZxhVjfAunAQ--.29035S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3tw1fWrW7XF13try3Xr17GFg_yoWDCF4kpF
+        4UWay3tFW8Jr47Wr4vka1DZr15uw48K3sxt3yUJw4Svr1xK3s3tFyxAas0vry3tFykKry3
+        Krs0qF98urWUJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_MED,RCVD_IN_SBL_CSS,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 3, 2022 at 1:07 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Sat, Sep 03, 2022 at 12:08:04AM +0800, Ray Chi wrote:
-> > On Fri, Sep 2, 2022 at 10:49 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Fri, Sep 02, 2022 at 05:15:35PM +0800, Ray Chi wrote:
-> > > > If a broken accessory connected to a USB host, usbcore might
-> > > > keep doing enumeration retries and it will take a long time to
-> > > > cause system unstable.
-> > > >
-> > > > This patch provides a quirk to specific USB ports of the hub to
-> > > > stop USB enumeration if needed.
-> > >
-> > > This seems very awkward.  Why not have a quirk that prevents USB
-> > > enumeration completely, instead of after some number of retries?  After
-> > > all, if the port is connected to a broken accessory, there's no reason
-> > > to try enumerating it even once.
-> > >
-> > > For that matter, have you tried using the existing "disabled" port
-> > > attribute instead of adding a new quirk?  Does it already solve your
-> > > problem?
-> > >
-> >
-> > Since we don't know if the connected accessory is normal or broken, doing port
-> > initialization is necessary.
->
-> I don't understand.  If you don't know whether the accessory is broken,
-> how do you know whether to set the quirk?
->
-> On the other hand, if you always set the quirk even before you know
-> whether the accessory is broken, why make it a quirk at all?  Why not
-> make it the normal behavior of the driver?
->
+The driver core supports the ability to handle the creation and removal
+of device-specific sysfs files in a race-free manner. Moreover, it can
+guarantee the success of creation. Therefore, it should be better to
+move the code and convert to use dev_groups.
 
-Since our device has a watchdog mechanism, when the device connects to
-a broken accessory, the kernel panic will happen. This problem didn't happen
-in all USB Hosts, so I want to use the quirk to fix this problem for those hosts
-with a watchdog mechanism.
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-> > > > +              * Some USB hosts can't take a long time to keep doing enumeration
-> > > > +              * retry. After doing half of the retries, we would turn off the port
-> > > > +              * power to stop enumeration if the quirk is set.
-> > >
-> > > What made you decide that half of the retries was the right place to
-> > > stop?  Why not do all the retries?
-> >
-> > Since some normal devices will be timeout in the first attempt, I set
-> > the condition to half
-> > of the retries. All the retries will take 12*timeout seconds. It is
-> > too long so that a watchdog
-> > timeout problem may happen.
->
-> Why not set CONFIG_USB_FEW_INIT_RETRIES instead?
->
+v3 -> v4:
 
-https://source.android.com/docs/core/architecture/kernel/android-common
-According to Android Common Kernel, I can't only add this config to one project.
-In addition, it can't stop enumeration so that the timeout problem
-still happens.
+1. Move the code and remove the pre-definitions.
 
-> > > If the quirk prevented enumeration completely then this function
-> > > wouldn't be needed.
-> >
-> > The enumeration is still needed as above.
-> >
-> > >
-> > > > +
-> > > >  /* Check if a port is power on */
-> > > >  int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
-> > > >  {
-> > > > @@ -4855,6 +4879,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
-> > > >                                       buf->bMaxPacketSize0;
-> > > >                       kfree(buf);
-> > > >
-> > > > +                     if (r < 0 && (port_dev->quirks & USB_PORT_QUIRK_STOP_ENUM)) {
-> > >
-> > > How come this line tests the quirk but doesn't call
-> > > hub_port_stop_enumerate()?
-> >
-> > Since the quirk is used to stop enumeration and reduce the total time.
-> > If the port has the quirk, I think the port doesn't need to do
-> > set_address after the port gets
-> > failures in the new scheme. It will add 2 attempts * timeout (defined
-> > in hc_driver) seconds.
->
-> I still can't tell what you're trying to accomplish.  You need to do a
-> much better job of explaining the point of this.  For instance, you
-> might describe in detail a situation where the quirk is needed,
-> explaining what sort of behavior of the system would lead you to set the
-> quirk, and why.
->
+v2 -> v3:
 
-There is a kernel panic when the device connects to the broken accessory.
-I tried to modify the initial_descriptor_timeout. When the accessory is not
-working, the total time is 6.5s (get descriptor retry) + 5*2 seconds
-(set address of xhci timeout).
-The time is so long to cause kernel panic for the device. This is why I want to
-stop enumeration instead reducing the retries or timeout.
+1. Add is_visible to filter the unneeded files.
 
-[16433.648337] usb 2-1: reset full-speed USB device number 2 using
-xhci-hcd-exynos
-[16435.311614] usb 2-1: device descriptor read/64, error -110
-[16437.103767] usb 2-1: device descriptor read/64, error -110
-[16437.339768] usb 2-1: reset full-speed USB device number 2 using
-xhci-hcd-exynos
-[16439.023868] usb 2-1: device descriptor read/64, error -110
-[16440.815597] usb 2-1: device descriptor read/64, error -110
-[16441.051575] usb 2-1: reset full-speed USB device number 2 using
-xhci-hcd-exynos
-[16446.063656] xhci-hcd-exynos xhci-hcd-exynos.4.auto: Timeout while
-waiting for setup device command
-[16446.953961] Kernel panic - not syncing: PM suspend timeout
-[16446.978122] Workqueue: events_unbound async_run_entry_fn.cfi_jt
-[16446.978136] Call trace:
-[16446.978150]  __switch_to+0x260/0x4dc
-[16446.978165]  __schedule+0x6c4/0xabc
-[16446.978181]  schedule+0x12c/0x24c
-[16446.978195]  schedule_timeout+0x48/0x138
-[16446.978210]  wait_for_common+0x148/0x310
-[16446.978238]  xhci_setup_device+0x470/0xe30
-[16446.978250]  xhci_address_device+0x18/0x28
-[16446.978340]  hub_port_init+0x5a0/0xfec
-[16446.978356]  usb_reset_and_verify_device+0x710/0xb8c
-[16446.978370]  usb_port_resume+0x5a8/0x780
-[16446.978393]  usb_generic_driver_resume+0x28/0x60
-[16446.978413]  usb_resume_both+0x16c/0x474
-[16446.978436]  usb_dev_resume+0x2c/0x84
-[16446.978446]  dpm_run_callback+0x50/0x250
-[16446.978459]  device_resume+0x250/0x2f8
-[16446.978473]  async_resume+0x28/0x12c
-[16446.978492]  async_run_entry_fn+0x6c/0x3dc
-[16446.978516]  process_one_work+0x24c/0x5bc
-[16446.978530]  worker_thread+0x3e8/0xa50
-[16446.978547]  kthread+0x150/0x1b4
-[16446.978563]  ret_from_fork+0x10/0x30
+v1 -> v2:
 
-> Alan Stern
+1. Change the title.
+2. Switch to use an attribute group.
+---
+ drivers/usb/serial/ftdi_sio.c | 275 +++++++++++++++++-----------------
+ 1 file changed, 135 insertions(+), 140 deletions(-)
 
-Thanks,
-Ray
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index d5a3986dfee7..c06ad75ba6d7 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1108,10 +1108,145 @@ static u32 ftdi_232bm_baud_to_divisor(int baud);
+ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
+ static u32 ftdi_2232h_baud_to_divisor(int baud);
+ 
++
++#define WDR_TIMEOUT 5000 /* default urb timeout */
++#define WDR_SHORT_TIMEOUT 1000	/* shorter urb timeout */
++
++static int write_latency_timer(struct usb_serial_port *port)
++{
++	struct ftdi_private *priv = usb_get_serial_port_data(port);
++	struct usb_device *udev = port->serial->dev;
++	int rv;
++	int l = priv->latency;
++
++	if (priv->chip_type == SIO || priv->chip_type == FT8U232AM)
++		return -EINVAL;
++
++	if (priv->flags & ASYNC_LOW_LATENCY)
++		l = 1;
++
++	dev_dbg(&port->dev, "%s: setting latency timer = %i\n", __func__, l);
++
++	rv = usb_control_msg(udev,
++			     usb_sndctrlpipe(udev, 0),
++			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST,
++			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST_TYPE,
++			     l, priv->interface,
++			     NULL, 0, WDR_TIMEOUT);
++	if (rv < 0)
++		dev_err(&port->dev, "Unable to write latency timer: %i\n", rv);
++	return rv;
++}
++
++static ssize_t latency_timer_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct usb_serial_port *port = to_usb_serial_port(dev);
++	struct ftdi_private *priv = usb_get_serial_port_data(port);
++
++	if (priv->flags & ASYNC_LOW_LATENCY)
++		return sprintf(buf, "1\n");
++	else
++		return sprintf(buf, "%u\n", priv->latency);
++}
++
++/* Write a new value of the latency timer, in units of milliseconds. */
++static ssize_t latency_timer_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *valbuf, size_t count)
++{
++	struct usb_serial_port *port = to_usb_serial_port(dev);
++	struct ftdi_private *priv = usb_get_serial_port_data(port);
++	u8 v;
++	int rv;
++
++	if (kstrtou8(valbuf, 10, &v))
++		return -EINVAL;
++
++	priv->latency = v;
++	rv = write_latency_timer(port);
++	if (rv < 0)
++		return -EIO;
++	return count;
++}
++static DEVICE_ATTR_RW(latency_timer);
++
++/*
++ * Write an event character directly to the FTDI register.  The ASCII
++ * value is in the low 8 bits, with the enable bit in the 9th bit.
++ */
++static ssize_t event_char_store(struct device *dev,
++	struct device_attribute *attr, const char *valbuf, size_t count)
++{
++	struct usb_serial_port *port = to_usb_serial_port(dev);
++	struct ftdi_private *priv = usb_get_serial_port_data(port);
++	struct usb_device *udev = port->serial->dev;
++	unsigned int v;
++	int rv;
++
++	if (kstrtouint(valbuf, 0, &v) || v >= 0x200)
++		return -EINVAL;
++
++	dev_dbg(&port->dev, "%s: setting event char = 0x%03x\n", __func__, v);
++
++	rv = usb_control_msg(udev,
++			     usb_sndctrlpipe(udev, 0),
++			     FTDI_SIO_SET_EVENT_CHAR_REQUEST,
++			     FTDI_SIO_SET_EVENT_CHAR_REQUEST_TYPE,
++			     v, priv->interface,
++			     NULL, 0, WDR_TIMEOUT);
++	if (rv < 0) {
++		dev_dbg(&port->dev, "Unable to write event character: %i\n", rv);
++		return -EIO;
++	}
++
++	return count;
++}
++static DEVICE_ATTR_WO(event_char);
++
++static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
++					 struct attribute *attr, int idx)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct usb_serial_port *port = container_of(dev, struct usb_serial_port, dev);
++	struct ftdi_private *priv = usb_get_serial_port_data(port);
++	umode_t mode = attr->mode;
++
++	if (attr == &dev_attr_latency_timer.attr) {
++		if (priv->chip_type == FT232BM ||
++		    priv->chip_type == FT2232C ||
++		    priv->chip_type == FT232RL ||
++		    priv->chip_type == FT2232H ||
++		    priv->chip_type == FT4232H ||
++		    priv->chip_type == FT232H ||
++		    priv->chip_type == FTX) {
++			return mode;
++		}
++	}
++	return 0;
++}
++
++static struct attribute *ftdi_sio_attrs[] = {
++	&dev_attr_event_char.attr,
++	&dev_attr_latency_timer.attr,
++	NULL,
++};
++
++static const struct attribute_group ftdi_sio_group = {
++	.attrs = ftdi_sio_attrs,
++	.is_visible = ftdi_sio_attr_is_visible,
++};
++
++static const struct attribute_group *ftdi_sio_groups[] = {
++	&ftdi_sio_group,
++	NULL
++};
++
+ static struct usb_serial_driver ftdi_sio_device = {
+ 	.driver = {
+ 		.owner =	THIS_MODULE,
+ 		.name =		"ftdi_sio",
++		.dev_groups =	ftdi_sio_groups,
+ 	},
+ 	.description =		"FTDI USB Serial Device",
+ 	.id_table =		id_table_combined,
+@@ -1144,9 +1279,6 @@ static struct usb_serial_driver * const serial_drivers[] = {
+ };
+ 
+ 
+-#define WDR_TIMEOUT 5000 /* default urb timeout */
+-#define WDR_SHORT_TIMEOUT 1000	/* shorter urb timeout */
+-
+ /*
+  * ***************************************************************************
+  * Utility functions
+@@ -1413,32 +1545,6 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
+ 	return rv;
+ }
+ 
+-static int write_latency_timer(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	struct usb_device *udev = port->serial->dev;
+-	int rv;
+-	int l = priv->latency;
+-
+-	if (priv->chip_type == SIO || priv->chip_type == FT8U232AM)
+-		return -EINVAL;
+-
+-	if (priv->flags & ASYNC_LOW_LATENCY)
+-		l = 1;
+-
+-	dev_dbg(&port->dev, "%s: setting latency timer = %i\n", __func__, l);
+-
+-	rv = usb_control_msg(udev,
+-			     usb_sndctrlpipe(udev, 0),
+-			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST,
+-			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST_TYPE,
+-			     l, priv->interface,
+-			     NULL, 0, WDR_TIMEOUT);
+-	if (rv < 0)
+-		dev_err(&port->dev, "Unable to write latency timer: %i\n", rv);
+-	return rv;
+-}
+-
+ static int _read_latency_timer(struct usb_serial_port *port)
+ {
+ 	struct ftdi_private *priv = usb_get_serial_port_data(port);
+@@ -1666,114 +1772,6 @@ static void ftdi_set_max_packet_size(struct usb_serial_port *port)
+  * ***************************************************************************
+  */
+ 
+-static ssize_t latency_timer_show(struct device *dev,
+-				  struct device_attribute *attr, char *buf)
+-{
+-	struct usb_serial_port *port = to_usb_serial_port(dev);
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	if (priv->flags & ASYNC_LOW_LATENCY)
+-		return sprintf(buf, "1\n");
+-	else
+-		return sprintf(buf, "%u\n", priv->latency);
+-}
+-
+-/* Write a new value of the latency timer, in units of milliseconds. */
+-static ssize_t latency_timer_store(struct device *dev,
+-				   struct device_attribute *attr,
+-				   const char *valbuf, size_t count)
+-{
+-	struct usb_serial_port *port = to_usb_serial_port(dev);
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	u8 v;
+-	int rv;
+-
+-	if (kstrtou8(valbuf, 10, &v))
+-		return -EINVAL;
+-
+-	priv->latency = v;
+-	rv = write_latency_timer(port);
+-	if (rv < 0)
+-		return -EIO;
+-	return count;
+-}
+-static DEVICE_ATTR_RW(latency_timer);
+-
+-/* Write an event character directly to the FTDI register.  The ASCII
+-   value is in the low 8 bits, with the enable bit in the 9th bit. */
+-static ssize_t event_char_store(struct device *dev,
+-	struct device_attribute *attr, const char *valbuf, size_t count)
+-{
+-	struct usb_serial_port *port = to_usb_serial_port(dev);
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	struct usb_device *udev = port->serial->dev;
+-	unsigned int v;
+-	int rv;
+-
+-	if (kstrtouint(valbuf, 0, &v) || v >= 0x200)
+-		return -EINVAL;
+-
+-	dev_dbg(&port->dev, "%s: setting event char = 0x%03x\n", __func__, v);
+-
+-	rv = usb_control_msg(udev,
+-			     usb_sndctrlpipe(udev, 0),
+-			     FTDI_SIO_SET_EVENT_CHAR_REQUEST,
+-			     FTDI_SIO_SET_EVENT_CHAR_REQUEST_TYPE,
+-			     v, priv->interface,
+-			     NULL, 0, WDR_TIMEOUT);
+-	if (rv < 0) {
+-		dev_dbg(&port->dev, "Unable to write event character: %i\n", rv);
+-		return -EIO;
+-	}
+-
+-	return count;
+-}
+-static DEVICE_ATTR_WO(event_char);
+-
+-static int create_sysfs_attrs(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-	int retval = 0;
+-
+-	/* XXX I've no idea if the original SIO supports the event_char
+-	 * sysfs parameter, so I'm playing it safe.  */
+-	if (priv->chip_type != SIO) {
+-		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
+-		retval = device_create_file(&port->dev, &dev_attr_event_char);
+-		if ((!retval) &&
+-		    (priv->chip_type == FT232BM ||
+-		     priv->chip_type == FT2232C ||
+-		     priv->chip_type == FT232RL ||
+-		     priv->chip_type == FT2232H ||
+-		     priv->chip_type == FT4232H ||
+-		     priv->chip_type == FT232H ||
+-		     priv->chip_type == FTX)) {
+-			retval = device_create_file(&port->dev,
+-						    &dev_attr_latency_timer);
+-		}
+-	}
+-	return retval;
+-}
+-
+-static void remove_sysfs_attrs(struct usb_serial_port *port)
+-{
+-	struct ftdi_private *priv = usb_get_serial_port_data(port);
+-
+-	/* XXX see create_sysfs_attrs */
+-	if (priv->chip_type != SIO) {
+-		device_remove_file(&port->dev, &dev_attr_event_char);
+-		if (priv->chip_type == FT232BM ||
+-		    priv->chip_type == FT2232C ||
+-		    priv->chip_type == FT232RL ||
+-		    priv->chip_type == FT2232H ||
+-		    priv->chip_type == FT4232H ||
+-		    priv->chip_type == FT232H ||
+-		    priv->chip_type == FTX) {
+-			device_remove_file(&port->dev, &dev_attr_latency_timer);
+-		}
+-	}
+-
+-}
+-
+ #ifdef CONFIG_GPIOLIB
+ 
+ static int ftdi_set_bitmode(struct usb_serial_port *port, u8 mode)
+@@ -2251,7 +2249,6 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+ 	if (read_latency_timer(port) < 0)
+ 		priv->latency = 16;
+ 	write_latency_timer(port);
+-	create_sysfs_attrs(port);
+ 
+ 	result = ftdi_gpio_init(port);
+ 	if (result < 0) {
+@@ -2377,8 +2374,6 @@ static void ftdi_sio_port_remove(struct usb_serial_port *port)
+ 
+ 	ftdi_gpio_remove(port);
+ 
+-	remove_sysfs_attrs(port);
+-
+ 	kfree(priv);
+ }
+ 
+-- 
+2.25.1
+
