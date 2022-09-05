@@ -2,124 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA71F5AD15C
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 13:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A525AD209
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 14:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237657AbiIELSP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 07:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S229822AbiIEMCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 08:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235874AbiIELSM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 07:18:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3FC5AC67;
-        Mon,  5 Sep 2022 04:18:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE86BB810EE;
-        Mon,  5 Sep 2022 11:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84511C43147;
-        Mon,  5 Sep 2022 11:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662376688;
-        bh=VqDluIVUCa0cvkguJgqU0qU0mM2vHSOAmaSO20HhtAk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=q6BmZ1QMF63HoDD/P7moeMLa+G1n88M4wOMcVbYClfBxzKmPMQ74uqDdaHwSku00i
-         /IPgadj+DfsdTH/0T/kD8oU55dlB+s7yobE3ZWCVPguW8bL6ufitxHc/7f/OcdKlvA
-         rJEsYPOu0mhYpikubnPNVWmFkAG0ZSR6v4S/c0ldh5FxqlmRZ7iWi6WrrhnhsaNykE
-         PKuAE2qyazipp7WwSvqB4mlW4MlYsNw0F14tpXl32678ssVZo6gSMfgS6uIH3CZ14r
-         wwODrSCcZdTazHd9orXEuwKIzq3hOjUIE/kQA3woApsD/yniXCW5SpwBe4bbs4jhoi
-         asmoteEajmSMA==
-Received: by mail-lj1-f170.google.com with SMTP id k22so8908507ljg.2;
-        Mon, 05 Sep 2022 04:18:08 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1322twlth2xDs7zUirfnZmdc32Mck2zjtKHz2I5anf3QO33v9/
-        4WAynM3Mx0SuXPsDJAQFCfWyYpyN7dRAImhmkds=
-X-Google-Smtp-Source: AA6agR5KS/N7PwAIE1VgLmLrimzWOIJ66TyKWYDA3eq+4LJpciY5M1NhNEKFX77c9InbsebrMfDTY91CD1+6hxCAd/U=
-X-Received: by 2002:a2e:9b0e:0:b0:268:cb68:575b with SMTP id
- u14-20020a2e9b0e000000b00268cb68575bmr5579388lji.152.1662376686339; Mon, 05
- Sep 2022 04:18:06 -0700 (PDT)
+        with ESMTP id S236488AbiIEMB5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 08:01:57 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1BA5B7B4
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 05:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662379313; x=1693915313;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J5+T9D1PsG1Ayne1H5fLoKKZJZM9WU2gkzfYst/qkWI=;
+  b=I/Ia1Q6lqyb6ykZPD4ClFqVJY1l24eVHz4i3ZjodL2b/aLpEywydjlom
+   yKNqM4xixvC74BVKBpSOD5xvg+pWR3ny9coLv7PucEyQAjjizkbWxPjJw
+   A5jAAoQmDCpv6dTn/kSyiPLhOjGf/Umysr4vxVFAFn6AbNTH3VQ8vprnT
+   kV7goVzekck01rmC4myZmmjneWdTlMdGfJz3dcc+2l+Aufcsg0QWHspBK
+   phUdZzzjERGv+o//xuN/3TYju9wwUnikG8aCD23owynWA0NPxMVh+9agq
+   OT8bu9lSUqoTYFlYAz9XLNfdaalEEemBjb4y5K5+izwfZvnQvd+SBBE6c
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10460"; a="279390032"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="279390032"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 05:01:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="646879460"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 05 Sep 2022 05:01:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 1F588128; Mon,  5 Sep 2022 15:02:05 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Szuying Chen <Chloe_Chen@asmedia.com.tw>
+Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, Yd_Tseng@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw, Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v9 0/6] thunderbolt: Add support for ASMedia NVM firmware image format
+Date:   Mon,  5 Sep 2022 15:01:59 +0300
+Message-Id: <20220905120205.23025-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220905105252.351795-1-ardb@kernel.org> <YxXYgNsug4BIWsoF@kroah.com>
-In-Reply-To: <YxXYgNsug4BIWsoF@kroah.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 5 Sep 2022 13:17:55 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFuzXPmah+bO+tORQSWnBn_YktDA716FJA=_Psez0OTmg@mail.gmail.com>
-Message-ID: <CAMj1kXFuzXPmah+bO+tORQSWnBn_YktDA716FJA=_Psez0OTmg@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: reduce kernel log spam on driver registration
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 5 Sept 2022 at 13:07, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Sep 05, 2022 at 12:52:52PM +0200, Ard Biesheuvel wrote:
-> > Drivers are typically supposed to be quiet unless they are actually
-> > probed, but for some reason, USB host controllers seem to be exempt from
-> > this rule, and happily broadcast their existence into the kernel log at
-> > boot even if the hardware in question is nowhere to be found.
-> >
-> > Let's fix that, and remove these pr_info() calls.
-> >
-> > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> > Cc: Avi Fishman <avifishman70@gmail.com>
-> > Cc: Tomer Maimon <tmaimon77@gmail.com>
-> > Cc: Tali Perry <tali.perry1@gmail.com>
-> > Cc: Patrick Venture <venture@google.com>
-> > Cc: Nancy Yuen <yuenn@google.com>
-> > Cc: Benjamin Fair <benjaminfair@google.com>
-> > Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-> > Cc: Vladimir Zapolskiy <vz@mleia.com>
-> > Cc: linux-usb@vger.kernel.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-samsung-soc@vger.kernel.org
-> > Cc: linux-omap@vger.kernel.org
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-> > ---
-> > v2: - drop another couple of occurrences pointed out by Robert
-> >     - drop hcd_name variables as well if the only reference to them is
-> >       being dropped
-> >     - pick up acks
->
-> I've already applied your first version, so can you rebase this against
-> linux-next and send just the fixups?
->
+Hi all,
 
-OK
+This series adds support for ASMedia NVM images. It is based on the work
+of Szuying Chen with a couple of changes from me. The first patches move
+Intel specific NVM validation into nvm.c and adds a vendor table for
+both routers and retimers that can be extended to support different
+vendor NVM image formats. Once that is done the ASMedia NVM image format
+support is added.
+
+The previous version of the patch series can be found here:
+
+  https://lore.kernel.org/linux-usb/20220902094010.2170-1-chensiying21@gmail.com/
+
+Changes from the previous version:
+
+  * Shuffled the ordering of the patches a bit
+  * Add tb_retimer_nvm_read() and tb_switch_nvm_read()
+  * Add ->write_headers() callback that is used with Thunderbolt 2
+    routers
+  * Cover retimers too
+  * Minor cleanups and tweaks
+
+I have tested this on Intel Thunderbolt 3 and Thunderbolt 4 routers.
+ASMedia folks, can you try this also on your side and let me know if it
+works or not?
+
+Mika Westerberg (1):
+  thunderbolt: Provide tb_retimer_nvm_read() analogous to tb_switch_nvm_read()
+
+Szuying Chen (5):
+  thunderbolt: Allow NVM upgrade of USB4 host routers
+  thunderbolt: Extend NVM version fields to 32-bits
+  thunderbolt: Rename and make nvm_read() available for other files
+  thunderbolt: Move vendor specific NVM handling into nvm.c
+  thunderbolt: Add support for ASMedia NVM image format
+
+ drivers/thunderbolt/nvm.c     | 385 +++++++++++++++++++++++++++++++++-
+ drivers/thunderbolt/retimer.c | 105 ++++------
+ drivers/thunderbolt/switch.c  | 162 +++++---------
+ drivers/thunderbolt/tb.c      |   5 +-
+ drivers/thunderbolt/tb.h      |  30 ++-
+ 5 files changed, 498 insertions(+), 189 deletions(-)
+
+-- 
+2.35.1
+
