@@ -2,408 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB1C5ACF35
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 11:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4951E5ACF52
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 11:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236829AbiIEJvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 05:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S237411AbiIEJzm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 05:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiIEJvh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 05:51:37 -0400
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05D0C29C85;
-        Mon,  5 Sep 2022 02:51:28 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAD361CZxhVjfAunAQ--.29035S2;
-        Mon, 05 Sep 2022 17:51:22 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v4] USB: serial: ftdi_sio: Convert to use dev_groups
-Date:   Mon,  5 Sep 2022 17:51:20 +0800
-Message-Id: <20220905095120.343807-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S236507AbiIEJzd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 05:55:33 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F981A382;
+        Mon,  5 Sep 2022 02:55:30 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u18so70073lfo.8;
+        Mon, 05 Sep 2022 02:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=m6bwvWKIYsYkkQiw6WkHW3VenkfYyqcqiN7fetf2fKA=;
+        b=IHLIbQ5vHZQVIyqqjxII8xfEjM3Q6fZoeMqDFdIiU0vsFp6oi7h0IwMdNfx1vPlnFp
+         ZPEemHQtgtDg6DfHplUdQ9jQ9sLqz7D7QN4FLqbsDi3rJNDxpjjlWDcgUMOkA9w2Tjs9
+         x9VWcOV0/2DW1Hg36LsG6DteksM93YpJyP0rfadAndCJKb/yY4pF55KE51FqNTxioDRe
+         KBJzVpsAFs2k6LKzsnJmjaNF0PAQrTJoMhIKZekTRu34MSjNFM9c+GyRzLjBHe1ybOQZ
+         eLbeL6kyIXJDXmENmbtGhQKPn5KPfZrIYSXNEMQPhMhg5ikHY+XI6LCK0LoPM/K1/Mnt
+         uzTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=m6bwvWKIYsYkkQiw6WkHW3VenkfYyqcqiN7fetf2fKA=;
+        b=cJrmN5TdpSC1CJYECbMh8tYQ/51oAUhyt56FCocDx7wHZm4UuvgJaB0OGIaGB7mCr9
+         omAVQS9KfmTxvGUG9xOZXuzV5cBzm96NdJMXsfIdmJKwAYX2/MI85eWMPVcgQ4m4oJXy
+         ajaXZ6WElwp2597281DyPaPgTtkd50VNnG4zie1FauXjbdYrp4GahIJLinLSYQZPxgBP
+         7QX9bLb0qPSKhrghi0PQ0uv4RqrWiq/K2rpJSelw9dqzY6tycgq0ItaOFzIPdcg7GNJ3
+         JyyXpBynEPf3cGUieOAaxcBfkpZf/wB4PyJEM2bJWLrubWTT+3rIicWoPaxF/6lMfOOV
+         YAFg==
+X-Gm-Message-State: ACgBeo2LVTDJ/UTWF9xQJvwxW3YlSIfFNtuLkhb9HqtzekCc8MAeEpIC
+        K3Ek23H6BuNej8F/hrYV60M=
+X-Google-Smtp-Source: AA6agR4gwPt5aivllJzzHsjCuIDbWlzFIp6/PHCkmSvNiw6IUsaZdTaionvGINkVRjZdKCtkzi3jFA==
+X-Received: by 2002:a19:6b16:0:b0:48c:e218:7c51 with SMTP id d22-20020a196b16000000b0048ce2187c51mr15164353lfa.681.1662371728951;
+        Mon, 05 Sep 2022 02:55:28 -0700 (PDT)
+Received: from [172.16.194.135] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id v27-20020ac258fb000000b0048b13d0b896sm1141980lfo.141.2022.09.05.02.55.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 02:55:28 -0700 (PDT)
+Message-ID: <4a536310-3f79-d248-dc48-5cdbd640e04a@gmail.com>
+Date:   Mon, 5 Sep 2022 12:55:26 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAD361CZxhVjfAunAQ--.29035S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3tw1fWrW7XF13try3Xr17GFg_yoWDCF4kpF
-        4UWay3tFW8Jr47Wr4vka1DZr15uw48K3sxt3yUJw4Svr1xK3s3tFyxAas0vry3tFykKry3
-        Krs0qF98urWUJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_MED,RCVD_IN_SBL_CSS,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 08/11] regulator: bd71815: switch to using
+ devm_fwnode_gpiod_get()
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-8-b29adfb27a6c@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-8-b29adfb27a6c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver core supports the ability to handle the creation and removal
-of device-specific sysfs files in a race-free manner. Moreover, it can
-guarantee the success of creation. Therefore, it should be better to
-move the code and convert to use dev_groups.
+On 9/5/22 09:31, Dmitry Torokhov wrote:
+> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
+> so that gpiolib can be cleaned a bit, so let's switch to the generic
+> fwnode property API.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-v3 -> v4:
+> 
+> diff --git a/drivers/regulator/bd71815-regulator.c b/drivers/regulator/bd71815-regulator.c
+> index acaa6607898e..c2b8b8be7824 100644
+> --- a/drivers/regulator/bd71815-regulator.c
+> +++ b/drivers/regulator/bd71815-regulator.c
+> @@ -571,11 +571,10 @@ static int bd7181x_probe(struct platform_device *pdev)
+>   		dev_err(&pdev->dev, "No parent regmap\n");
+>   		return -ENODEV;
+>   	}
+> -	ldo4_en = devm_gpiod_get_from_of_node(&pdev->dev,
+> -					      pdev->dev.parent->of_node,
+> -						 "rohm,vsel-gpios", 0,
+> -						 GPIOD_ASIS, "ldo4-en");
+>   
+> +	ldo4_en = devm_fwnode_gpiod_get(&pdev->dev,
+> +					dev_fwnode(pdev->dev.parent),
+> +					"rohm,vsel", GPIOD_ASIS, "ldo4-en");
+>   	if (IS_ERR(ldo4_en)) {
+>   		ret = PTR_ERR(ldo4_en);
+>   		if (ret != -ENOENT)
+> 
 
-1. Move the code and remove the pre-definitions.
 
-v2 -> v3:
-
-1. Add is_visible to filter the unneeded files.
-
-v1 -> v2:
-
-1. Change the title.
-2. Switch to use an attribute group.
----
- drivers/usb/serial/ftdi_sio.c | 275 +++++++++++++++++-----------------
- 1 file changed, 135 insertions(+), 140 deletions(-)
-
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index d5a3986dfee7..c06ad75ba6d7 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1108,10 +1108,145 @@ static u32 ftdi_232bm_baud_to_divisor(int baud);
- static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
- static u32 ftdi_2232h_baud_to_divisor(int baud);
- 
-+
-+#define WDR_TIMEOUT 5000 /* default urb timeout */
-+#define WDR_SHORT_TIMEOUT 1000	/* shorter urb timeout */
-+
-+static int write_latency_timer(struct usb_serial_port *port)
-+{
-+	struct ftdi_private *priv = usb_get_serial_port_data(port);
-+	struct usb_device *udev = port->serial->dev;
-+	int rv;
-+	int l = priv->latency;
-+
-+	if (priv->chip_type == SIO || priv->chip_type == FT8U232AM)
-+		return -EINVAL;
-+
-+	if (priv->flags & ASYNC_LOW_LATENCY)
-+		l = 1;
-+
-+	dev_dbg(&port->dev, "%s: setting latency timer = %i\n", __func__, l);
-+
-+	rv = usb_control_msg(udev,
-+			     usb_sndctrlpipe(udev, 0),
-+			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST,
-+			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST_TYPE,
-+			     l, priv->interface,
-+			     NULL, 0, WDR_TIMEOUT);
-+	if (rv < 0)
-+		dev_err(&port->dev, "Unable to write latency timer: %i\n", rv);
-+	return rv;
-+}
-+
-+static ssize_t latency_timer_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	struct usb_serial_port *port = to_usb_serial_port(dev);
-+	struct ftdi_private *priv = usb_get_serial_port_data(port);
-+
-+	if (priv->flags & ASYNC_LOW_LATENCY)
-+		return sprintf(buf, "1\n");
-+	else
-+		return sprintf(buf, "%u\n", priv->latency);
-+}
-+
-+/* Write a new value of the latency timer, in units of milliseconds. */
-+static ssize_t latency_timer_store(struct device *dev,
-+				   struct device_attribute *attr,
-+				   const char *valbuf, size_t count)
-+{
-+	struct usb_serial_port *port = to_usb_serial_port(dev);
-+	struct ftdi_private *priv = usb_get_serial_port_data(port);
-+	u8 v;
-+	int rv;
-+
-+	if (kstrtou8(valbuf, 10, &v))
-+		return -EINVAL;
-+
-+	priv->latency = v;
-+	rv = write_latency_timer(port);
-+	if (rv < 0)
-+		return -EIO;
-+	return count;
-+}
-+static DEVICE_ATTR_RW(latency_timer);
-+
-+/*
-+ * Write an event character directly to the FTDI register.  The ASCII
-+ * value is in the low 8 bits, with the enable bit in the 9th bit.
-+ */
-+static ssize_t event_char_store(struct device *dev,
-+	struct device_attribute *attr, const char *valbuf, size_t count)
-+{
-+	struct usb_serial_port *port = to_usb_serial_port(dev);
-+	struct ftdi_private *priv = usb_get_serial_port_data(port);
-+	struct usb_device *udev = port->serial->dev;
-+	unsigned int v;
-+	int rv;
-+
-+	if (kstrtouint(valbuf, 0, &v) || v >= 0x200)
-+		return -EINVAL;
-+
-+	dev_dbg(&port->dev, "%s: setting event char = 0x%03x\n", __func__, v);
-+
-+	rv = usb_control_msg(udev,
-+			     usb_sndctrlpipe(udev, 0),
-+			     FTDI_SIO_SET_EVENT_CHAR_REQUEST,
-+			     FTDI_SIO_SET_EVENT_CHAR_REQUEST_TYPE,
-+			     v, priv->interface,
-+			     NULL, 0, WDR_TIMEOUT);
-+	if (rv < 0) {
-+		dev_dbg(&port->dev, "Unable to write event character: %i\n", rv);
-+		return -EIO;
-+	}
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(event_char);
-+
-+static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
-+					 struct attribute *attr, int idx)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct usb_serial_port *port = container_of(dev, struct usb_serial_port, dev);
-+	struct ftdi_private *priv = usb_get_serial_port_data(port);
-+	umode_t mode = attr->mode;
-+
-+	if (attr == &dev_attr_latency_timer.attr) {
-+		if (priv->chip_type == FT232BM ||
-+		    priv->chip_type == FT2232C ||
-+		    priv->chip_type == FT232RL ||
-+		    priv->chip_type == FT2232H ||
-+		    priv->chip_type == FT4232H ||
-+		    priv->chip_type == FT232H ||
-+		    priv->chip_type == FTX) {
-+			return mode;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static struct attribute *ftdi_sio_attrs[] = {
-+	&dev_attr_event_char.attr,
-+	&dev_attr_latency_timer.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group ftdi_sio_group = {
-+	.attrs = ftdi_sio_attrs,
-+	.is_visible = ftdi_sio_attr_is_visible,
-+};
-+
-+static const struct attribute_group *ftdi_sio_groups[] = {
-+	&ftdi_sio_group,
-+	NULL
-+};
-+
- static struct usb_serial_driver ftdi_sio_device = {
- 	.driver = {
- 		.owner =	THIS_MODULE,
- 		.name =		"ftdi_sio",
-+		.dev_groups =	ftdi_sio_groups,
- 	},
- 	.description =		"FTDI USB Serial Device",
- 	.id_table =		id_table_combined,
-@@ -1144,9 +1279,6 @@ static struct usb_serial_driver * const serial_drivers[] = {
- };
- 
- 
--#define WDR_TIMEOUT 5000 /* default urb timeout */
--#define WDR_SHORT_TIMEOUT 1000	/* shorter urb timeout */
--
- /*
-  * ***************************************************************************
-  * Utility functions
-@@ -1413,32 +1545,6 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
- 	return rv;
- }
- 
--static int write_latency_timer(struct usb_serial_port *port)
--{
--	struct ftdi_private *priv = usb_get_serial_port_data(port);
--	struct usb_device *udev = port->serial->dev;
--	int rv;
--	int l = priv->latency;
--
--	if (priv->chip_type == SIO || priv->chip_type == FT8U232AM)
--		return -EINVAL;
--
--	if (priv->flags & ASYNC_LOW_LATENCY)
--		l = 1;
--
--	dev_dbg(&port->dev, "%s: setting latency timer = %i\n", __func__, l);
--
--	rv = usb_control_msg(udev,
--			     usb_sndctrlpipe(udev, 0),
--			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST,
--			     FTDI_SIO_SET_LATENCY_TIMER_REQUEST_TYPE,
--			     l, priv->interface,
--			     NULL, 0, WDR_TIMEOUT);
--	if (rv < 0)
--		dev_err(&port->dev, "Unable to write latency timer: %i\n", rv);
--	return rv;
--}
--
- static int _read_latency_timer(struct usb_serial_port *port)
- {
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
-@@ -1666,114 +1772,6 @@ static void ftdi_set_max_packet_size(struct usb_serial_port *port)
-  * ***************************************************************************
-  */
- 
--static ssize_t latency_timer_show(struct device *dev,
--				  struct device_attribute *attr, char *buf)
--{
--	struct usb_serial_port *port = to_usb_serial_port(dev);
--	struct ftdi_private *priv = usb_get_serial_port_data(port);
--	if (priv->flags & ASYNC_LOW_LATENCY)
--		return sprintf(buf, "1\n");
--	else
--		return sprintf(buf, "%u\n", priv->latency);
--}
--
--/* Write a new value of the latency timer, in units of milliseconds. */
--static ssize_t latency_timer_store(struct device *dev,
--				   struct device_attribute *attr,
--				   const char *valbuf, size_t count)
--{
--	struct usb_serial_port *port = to_usb_serial_port(dev);
--	struct ftdi_private *priv = usb_get_serial_port_data(port);
--	u8 v;
--	int rv;
--
--	if (kstrtou8(valbuf, 10, &v))
--		return -EINVAL;
--
--	priv->latency = v;
--	rv = write_latency_timer(port);
--	if (rv < 0)
--		return -EIO;
--	return count;
--}
--static DEVICE_ATTR_RW(latency_timer);
--
--/* Write an event character directly to the FTDI register.  The ASCII
--   value is in the low 8 bits, with the enable bit in the 9th bit. */
--static ssize_t event_char_store(struct device *dev,
--	struct device_attribute *attr, const char *valbuf, size_t count)
--{
--	struct usb_serial_port *port = to_usb_serial_port(dev);
--	struct ftdi_private *priv = usb_get_serial_port_data(port);
--	struct usb_device *udev = port->serial->dev;
--	unsigned int v;
--	int rv;
--
--	if (kstrtouint(valbuf, 0, &v) || v >= 0x200)
--		return -EINVAL;
--
--	dev_dbg(&port->dev, "%s: setting event char = 0x%03x\n", __func__, v);
--
--	rv = usb_control_msg(udev,
--			     usb_sndctrlpipe(udev, 0),
--			     FTDI_SIO_SET_EVENT_CHAR_REQUEST,
--			     FTDI_SIO_SET_EVENT_CHAR_REQUEST_TYPE,
--			     v, priv->interface,
--			     NULL, 0, WDR_TIMEOUT);
--	if (rv < 0) {
--		dev_dbg(&port->dev, "Unable to write event character: %i\n", rv);
--		return -EIO;
--	}
--
--	return count;
--}
--static DEVICE_ATTR_WO(event_char);
--
--static int create_sysfs_attrs(struct usb_serial_port *port)
--{
--	struct ftdi_private *priv = usb_get_serial_port_data(port);
--	int retval = 0;
--
--	/* XXX I've no idea if the original SIO supports the event_char
--	 * sysfs parameter, so I'm playing it safe.  */
--	if (priv->chip_type != SIO) {
--		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
--		retval = device_create_file(&port->dev, &dev_attr_event_char);
--		if ((!retval) &&
--		    (priv->chip_type == FT232BM ||
--		     priv->chip_type == FT2232C ||
--		     priv->chip_type == FT232RL ||
--		     priv->chip_type == FT2232H ||
--		     priv->chip_type == FT4232H ||
--		     priv->chip_type == FT232H ||
--		     priv->chip_type == FTX)) {
--			retval = device_create_file(&port->dev,
--						    &dev_attr_latency_timer);
--		}
--	}
--	return retval;
--}
--
--static void remove_sysfs_attrs(struct usb_serial_port *port)
--{
--	struct ftdi_private *priv = usb_get_serial_port_data(port);
--
--	/* XXX see create_sysfs_attrs */
--	if (priv->chip_type != SIO) {
--		device_remove_file(&port->dev, &dev_attr_event_char);
--		if (priv->chip_type == FT232BM ||
--		    priv->chip_type == FT2232C ||
--		    priv->chip_type == FT232RL ||
--		    priv->chip_type == FT2232H ||
--		    priv->chip_type == FT4232H ||
--		    priv->chip_type == FT232H ||
--		    priv->chip_type == FTX) {
--			device_remove_file(&port->dev, &dev_attr_latency_timer);
--		}
--	}
--
--}
--
- #ifdef CONFIG_GPIOLIB
- 
- static int ftdi_set_bitmode(struct usb_serial_port *port, u8 mode)
-@@ -2251,7 +2249,6 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
- 	if (read_latency_timer(port) < 0)
- 		priv->latency = 16;
- 	write_latency_timer(port);
--	create_sysfs_attrs(port);
- 
- 	result = ftdi_gpio_init(port);
- 	if (result < 0) {
-@@ -2377,8 +2374,6 @@ static void ftdi_sio_port_remove(struct usb_serial_port *port)
- 
- 	ftdi_gpio_remove(port);
- 
--	remove_sysfs_attrs(port);
--
- 	kfree(priv);
- }
- 
 -- 
-2.25.1
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
+~~ When things go utterly wrong vim users can always type :help! ~~
