@@ -2,130 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FEE5ACF64
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 12:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257205ACF6C
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 12:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbiIEJ4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 05:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S237058AbiIEKBJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 06:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236780AbiIEJ4f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 05:56:35 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A066322295;
-        Mon,  5 Sep 2022 02:56:32 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id z6so12339667lfu.9;
-        Mon, 05 Sep 2022 02:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=RdubYDDix+oOh2a0h//nboO40BpZ5xfyyxVZCNAs3B0=;
-        b=et2BStfuMMuGC6Hmc0ahP2YMtl2IOvVs82z7fBLtShtRiNOLZEUcKr2FN+yvHNZxWj
-         hUQof0CelJPy6k645QZnNEtobw55lyLfO/xzbj7BHjhPUtrr6ZyyJrZD5+wJPU8x4s/V
-         wDTG6XP1BvwPE/YT5IW93WWtvTubg44nQ/U2m0Ukxn8zuXPeusqOLZkrZIQo7BaTII3T
-         tjpw7YIxVKZOVR6ozOO29YwJBQZS8KoqWz1HV/AEJBiJwCnjVlLgAcdY8jrwxwGrjJtw
-         gmvPsEX0owb2idPOc8tLiT8uceUOa827MJ139sBCmc4Km7ZtH35OknAdtVpmn61dpmua
-         LvYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RdubYDDix+oOh2a0h//nboO40BpZ5xfyyxVZCNAs3B0=;
-        b=XYe7falFuPUINq8OKUEiYQ/aI22NbiDQESAyt22FWHsr87GRz2RcqhWsDaxMf1aVr8
-         thgcr5kuWwdUrZgSdTPdJ7d6L+i+4zpF+pScv5hKuMuCywrL+CpV+rdkj+tU8DPgUvOM
-         gWw12+JHT56Z/c4rGvu00Nf5QCtV4YHwnw+XXlX+110JvshiG8dUafvR4f47bPfo1awW
-         CWALFDi6dos16Xgl/xfB5w9hGdK2ySxicAAEV1WZz3Gbk3xJPYWynvp8JF0SDciRjzLS
-         kVdGUAE9gXO9X6LbViXBrGyHpKuhY1r39uTYOLLrft+xGrSJTFq2YqCaVO01eI71rBW1
-         9eWg==
-X-Gm-Message-State: ACgBeo2pPnYz468gee9hV+C8+BJwBXFDL28E4YJEKiFTtGrec4zzqbWm
-        /xiOMD+UeVlwiZ46k9Atk2Q=
-X-Google-Smtp-Source: AA6agR49m1znt1xCwEgykIjaaYQRJwjqD0WPTDOx4N16eYQFUBRnr5DGteFNKPh7H42GT7aHHRsE7g==
-X-Received: by 2002:a05:6512:13a4:b0:479:3b9f:f13c with SMTP id p36-20020a05651213a400b004793b9ff13cmr15342515lfa.380.1662371790521;
-        Mon, 05 Sep 2022 02:56:30 -0700 (PDT)
-Received: from [172.16.194.136] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac25e24000000b004965e80b761sm40259lfg.224.2022.09.05.02.56.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 02:56:30 -0700 (PDT)
-Message-ID: <0b051f7e-1754-cb69-c0df-0bae08c967fd@gmail.com>
-Date:   Mon, 5 Sep 2022 12:56:28 +0300
+        with ESMTP id S235591AbiIEKBH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 06:01:07 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6C2B1F2F3;
+        Mon,  5 Sep 2022 03:01:05 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowADHQ1PeyBVjDZynAQ--.30103S2;
+        Mon, 05 Sep 2022 18:01:03 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH v3] USB: serial: ftdi_sio: Convert to use dev_groups
+Date:   Mon,  5 Sep 2022 18:01:01 +0800
+Message-Id: <20220905100101.343861-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 09/11] regulator: bd9576: switch to using
- devm_fwnode_gpiod_get()
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowADHQ1PeyBVjDZynAQ--.30103S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW3Zw48uF47trW5uFyUWrg_yoW8tFWfpF
+        43JayakFWkJFnxX342vw45X3s3tw4kJryfGr4ft34rWwn8J347GFW8Ja4UC3W8Jry8G3W7
+        XF4kurZIkFWrArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4D
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXAw3UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/5/22 09:31, Dmitry Torokhov wrote:
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
+On Fri, Sep 02, 2022 at 10:52:52PM +0800, Greg KH wrote:
+>>>>  drivers/usb/serial/ftdi_sio.c | 101 +++++++++++++++++-----------------
+>>>>  1 file changed, 51 insertions(+), 50 deletions(-)
+>>>> 
+>>>> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+>>>> index d5a3986dfee7..479c3a5caaf8 100644
+>>>> --- a/drivers/usb/serial/ftdi_sio.c
+>>>> +++ b/drivers/usb/serial/ftdi_sio.c
+>>>> @@ -1107,11 +1107,40 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base);
+>>>>  static u32 ftdi_232bm_baud_to_divisor(int baud);
+>>>>  static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
+>>>>  static u32 ftdi_2232h_baud_to_divisor(int baud);
+>>>> +static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
+>>>> +					 struct attribute *attr, int idx);
+>>>> +static ssize_t latency_timer_store(struct device *dev,
+>>>> +				   struct device_attribute *attr,
+>>>> +				   const char *valbuf, size_t count);
+>>>> +static ssize_t event_char_store(struct device *dev,
+>>>> +	struct device_attribute *attr, const char *valbuf, size_t count);
+>>>> +static ssize_t latency_timer_show(struct device *dev,
+>>>> +				  struct device_attribute *attr, char *buf);
+>>>> +
+>>> 
+>>> Please work with the code so that you do not have to pre-define these
+>>> functions.  It should be possible.  Worst case, you pre-define the
+>>> structure for the driver, that should be it.
+>> 
+>> Without pre-definition of the functions, compilation errors will occur,
+>> such as 'ftdi_sio_attr_is_visible' undeclared here.
+>> I have no idea why they are not necessary.
 > 
-> While at it switch the rest of the calls to read properties in
-> bd957x_probe() to the generic device property API as well.
+> If you move the code around that asks for those functions, you will not
+> need to define them.
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
+Fine, I have already revised the patch and submitted a v4.
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>> And again, have you tested this change?
+>> 
+>> Every time I change the code, I recomplie it and check whether there are
+>> errors.
+>> Are there any other tests I need to do?
+> 
+> Yes, boot with the device and make sure that the sysfs files are still
+> there.  You do have access to one of these devices, right?  They are
+> very very common.
 
-Thanks!
+Sorry, I still have no idea how to boot with the device.
+But if there is any wrong with the patch, you can tell me and I will continue
+to revise it.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+Thanks,
+Jiang
 
-~~ When things go utterly wrong vim users can always type :help! ~~
