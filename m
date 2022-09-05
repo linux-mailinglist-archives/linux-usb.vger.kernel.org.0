@@ -2,87 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0555ACC9D
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 09:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7685B5ACCC8
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 09:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbiIEHW4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 03:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S235980AbiIEH3h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 03:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236417AbiIEHW2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 03:22:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B247B84;
-        Mon,  5 Sep 2022 00:19:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S237238AbiIEH2A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 03:28:00 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BE3267C
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 00:26:43 -0700 (PDT)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85BE561133;
-        Mon,  5 Sep 2022 07:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A82C433C1;
-        Mon,  5 Sep 2022 07:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662362344;
-        bh=19nxD2OgHF2QVoth2PFq3CxZH5zVFIqpZyEzuI/YHbw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A5IVl+JOjFxfodqmnjA5/iplAcU9jdP05wWuvEqZCUxiPZuyoNor7xgxpbYXB6NVK
-         7DcajL5+Q4Jwv4XR1AvPOAXkUgrwSH/Ov7HM3KXUEl/b4BKQG5MdZ5GTO8igdjjVEV
-         HR2BrWQ7cSeUZcnhf0SNpLKhbJC0AEjYvFObLKGjaI4ohnPRXMXtOd+2eSUbXERAnn
-         Wt+aJ6+72CZQwxjMiKfr0QzSL2qh96wXclEVsX5h4ma+908Zyb6OVtZsD0AEGTokvq
-         Z4gsx2A9lpZW+2kJWomwEZtX41BXuoB9ZUs+w+vRDjrWEAYqK9IYV1wftZ4A4k/PEn
-         RnEC8ylDHE6IA==
-Received: by pali.im (Postfix)
-        id 32DB27D7; Mon,  5 Sep 2022 09:19:02 +0200 (CEST)
-Date:   Mon, 5 Sep 2022 09:19:02 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 01/11] PCI: tegra: switch to using
- devm_fwnode_gpiod_get
-Message-ID: <20220905071902.fv4uozrsttk3mosu@pali>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C68843F466
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 07:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1662362801;
+        bh=ThEpzsYAWPQ+vR3sDdfrBp9HRNSWWVxORABQ85lL8jw=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=TFhNx7lJO9eK+vUyOGCquUQg6dC0NTczO8KQeutShvjeM8fCkOcih76XU2dbGjDp9
+         1MNqEHvhH9FUnO1tpuVXhCylMmrc7FZNaNR3Nb+fA55VzQIjuRGqENEoGUvlfGUBpA
+         63dR5FA5VFPMumAN3KtLsrL6vp18MHKvlF+ytOqqSjfMBw91TCwrAobnxPrr/TsRA+
+         GW+m9cyt0XkigCPqdL4VXn4kV1dUHClREdw+X2utrne9GIxqCKS1F+A0J+hFyvyL6D
+         UfZAXjpjWntF2Q1JBy3x+tISmsLp+T7jbyt9u6NsePU8oVgnoZjanriovKgh++Araj
+         FQoWc9047St1g==
+Received: by mail-wm1-f70.google.com with SMTP id c64-20020a1c3543000000b003a61987ffb3so5000404wma.6
+        for <linux-usb@vger.kernel.org>; Mon, 05 Sep 2022 00:26:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ThEpzsYAWPQ+vR3sDdfrBp9HRNSWWVxORABQ85lL8jw=;
+        b=f3YVaIDitxEdteQ1nzuxoc5tmLHovMR/Ecf0LlRuknsZ/lbaPpbS2+vgTUKUP4wsZF
+         mbMBUnJS+pgsqYslWrqROFNWCfvTjG0yvYLx7/sY0acxJ+hq6dX4quzQEVW51ETy+D+0
+         xqL4oB7fo2jPqs03ETFVQZbfegTo0AeDVUQAsmNbo+9HYiy08iN5pp8OAcElbnN34zfr
+         rbupG9SqiW6oCf65AqW8kKpl0BJxbNHz73RiYM4Ra9MJ3m7TtO8y23FZmsppZDtAOfWZ
+         Bjxwsg6bySGr1YAsTB0X8RUWzUX3acKdJTjxKMePaaocCfkf4N55ZV2jq44yCg44lsI/
+         cNCQ==
+X-Gm-Message-State: ACgBeo0M0KxvrUsNLh6K51X1qIHfnkFDKWgQM70jh7bVdiZl2p+Gs6Ov
+        B7PXymQsp+OqwDCSd+jf1V0bhid1U4pXDR01YQcdi8YFtOtXPDopNjp8Ke/ypeiEh/VvO68BXKs
+        YgNW17pLSPYXAfScADYk2gtJjg0msBafiFGiW16JtKT60zA+zd36KsA==
+X-Received: by 2002:a05:6000:2c5:b0:225:618e:1708 with SMTP id o5-20020a05600002c500b00225618e1708mr24710037wry.510.1662362800179;
+        Mon, 05 Sep 2022 00:26:40 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5DNgFlxvyoZfpOOUELTnOafjMuqQXkJ0hW4QhgYWzp8crxxH1IY+naMUchHq1loiOEaiVzWAi+X0elo/b3/Oc=
+X-Received: by 2002:a05:6000:2c5:b0:225:618e:1708 with SMTP id
+ o5-20020a05600002c500b00225618e1708mr24710018wry.510.1662362799922; Mon, 05
+ Sep 2022 00:26:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220905065622.1573811-1-kai.heng.feng@canonical.com> <YxWgGKIAvsxwSz85@black.fi.intel.com>
+In-Reply-To: <YxWgGKIAvsxwSz85@black.fi.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 5 Sep 2022 15:26:28 +0800
+Message-ID: <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
+ AMD USB4 controller
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, sanju.mehta@amd.com,
+        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,41 +77,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sunday 04 September 2022 23:30:53 Dmitry Torokhov wrote:
-> I would like to limit (or maybe even remove) use of
-> [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
-> a bit, so let's switch to the generic device property API. It may even
-> help with handling secondary fwnodes when gpiolib is taught to handle
-> gpios described by swnodes.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-> index 8e323e93be91..929f9363e94b 100644
-> --- a/drivers/pci/controller/pci-tegra.c
-> +++ b/drivers/pci/controller/pci-tegra.c
-> @@ -2202,10 +2202,11 @@ static int tegra_pcie_parse_dt(struct tegra_pcie *pcie)
->  		 * and in this case fall back to using AFI per port register
->  		 * to toggle PERST# SFIO line.
->  		 */
-> -		rp->reset_gpio = devm_gpiod_get_from_of_node(dev, port,
-> -							     "reset-gpios", 0,
-> -							     GPIOD_OUT_LOW,
-> -							     label);
-> +		rp->reset_gpio = devm_fwnode_gpiod_get(dev,
-> +						       of_fwnode_handle(port),
-> +						       "reset",
-> +						       GPIOD_OUT_LOW,
-> +						       label);
+Hi Mika,
 
-Why in pci-aardvark.c for PERST# reset-gpio you have used
-devm_gpiod_get_optional() and here in pci-tegra.c you have used
-devm_fwnode_gpiod_get()? I think that PERST# logic is same in both
-drivers.
+On Mon, Sep 5, 2022 at 3:06 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Mon, Sep 05, 2022 at 02:56:22PM +0800, Kai-Heng Feng wrote:
+> > AMD USB4 can not detect external PCIe devices like external NVMe when
+> > it's hotplugged, because card/link are not up:
+> >
+> > pcieport 0000:00:04.1: pciehp: pciehp_check_link_active: lnk_status = 1101
+>
+> I think the correct solution is then to block them from runtime
+> suspending entirely.
 
->  		if (IS_ERR(rp->reset_gpio)) {
->  			if (PTR_ERR(rp->reset_gpio) == -ENOENT) {
->  				rp->reset_gpio = NULL;
-> 
-> -- 
-> b4 0.10.0-dev-fc921
+Do you mean disable runtime suspend completely? Or just block runtime
+suspend for a period?
+
+>
+> > Use `lspci` to resume pciehp bridges can find external devices.
+> >
+> > A long delay before checking card/link presence doesn't help, either.
+> > The only way to make the hotplug work is to enable pciehp interrupt and
+> > check card presence after the TB switch is added.
+> >
+> > Since the topology of USB4 and its PCIe bridges are siblings, hardcode
+> > the bridge ID so TBT driver can wake them up to check presence.
+>
+> Let's not add PCI things into TBT driver unless absolutely necessary.
+
+OK. It's getting harder as different components are intertwined
+together on new hardwares...
+
+>
+> At least on Intel hardware the PCIe hotplug is signaled by SCI when the
+> root port is in D3, I wonder if AMD has something similar.
+
+Yes those root ports are resumed to D0 when something is plugged. They
+however fail to detect any externel PCIe devices.
+
+Kai-Heng
