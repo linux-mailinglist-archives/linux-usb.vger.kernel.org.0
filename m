@@ -2,123 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BB85ACB23
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 08:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCEB5ACB6D
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 08:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235591AbiIEGgf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 02:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S236786AbiIEGz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 02:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237012AbiIEGgT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 02:36:19 -0400
-Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065D23B;
-        Sun,  4 Sep 2022 23:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1662359759;
-        bh=V8ZDTeX4onpSjv5CcGuGKq/H8OzsvnzZfzF+5C+J3c4=;
-        h=From:To:Cc:Subject:Date;
-        b=Uj+VmQSY+twYXPmb1laM50lwYrrzvkp8KbQgn+k/NtjQBcrGWBnXAWDrh7ETuxOBq
-         +cz8OSApY+QorVMK2Bo4sDRZ4xjDcqJxUg9TokjOpFyMqJFDp+jPnAv8eDzejd+Efl
-         hOrXk4dN4zGifcRsSUt+B4r15oQBRp5WYU3Nd6EU=
-Received: from quectel.localdomain ([220.180.239.55])
-        by newxmesmtplogicsvrszc14.qq.com (NewEsmtp) with SMTP
-        id 8E3B9AFC; Mon, 05 Sep 2022 14:35:35 +0800
-X-QQ-mid: xmsmtpt1662359735tam44x0hn
-Message-ID: <tencent_23054B863154DC02C6E98E5942416BFC200A@qq.com>
-X-QQ-XMAILINFO: M/oQ2p0eBD4uHP2+x9T9Hfu7FWrsPUFjS4xTkhnQcxCrP4eh8GTKo6sE37tDEc
-         UXvfv1V3cX8A5SSthQpfZwvwqvd4Fgqs6GNO3TCpeAOFtcmwauWua4PXEV/IdgvyUQpSOwGUnp7I
-         T+26ohr7fZlU7ZCvekvrJGHU5zC+gvBaN5JMRKT1t/J8YOKecD7FW5yGi5MMwpLZ896k+y4uWXO9
-         kal2fep485clIZ31lEXohRITr1S4igxdDAs6ddr8JISMh5IziOIrJH0IwXJ89VN+3GUTcSnTIDxC
-         4O98zQIho/daStwbCU+w/AJGcajGcnkFjcCc72YflIoUkXC5YIDzV+leQyZIpYLcuIO9msBRNZnB
-         vrjW55pxC3Q0NbSoBZKkP7kPUQHLGld3Rkhf/LVcX2snOMC/GbJJuZSYE6eXv9r5TYkIKqCbLp2t
-         yS2hH6NLXnV86NC9tv1XknPjUhJgF6LTvFRdK/ZfpfQTLnGeqCcq8wPzAUu6tLkHN/Op9ff7HHty
-         Y56zQXurDU3m4ZOWq8+LOCqeSK683VLwFLdW/f5JTYDXq05WqXXNm4/FOBKKXK4cNpJ7bKNh0fac
-         jpcQTEGba8WSAYa+h8WzdohfAC3cYdmRewKxJxcYyvUHbTozI015mkpb4dlwTOy/q9ia4dXOvLly
-         wwjKq9FZWf+E+K8cHrOTH98eVzjR3tSO6CpfWccDHNBiCzvS0S80w7Sq2hhrjMRQxrw/kloFD18X
-         HX8Tw3eD2TjrLct84mREX/OzH8v1mS5yqvJ26ucbyqSSujQ9L4dhsjIYnUNQUE0qumUQ+kzF4YQ+
-         rj1O+YB0pxLLY4I1zXSKxNgIVnB6XpyOzwRfgdwS8K2YGDQA2NU7PCSnjQztiftjm7d3RAhrYTtE
-         kJ4+PHu2Qn1Vl2FC0+WFMeIQqDzq3a4C1lhkhJkY8bxDTK8JLgtETQCLDXXZPETlMpVXMM1an3Ti
-         SHSmRu1yagfUwlwq0K31OtuF3opQjKahVC7LjMih3ATDV2zQfCZA==
-From:   jerry meng <jerry-meng@foxmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jerry meng <jerry-meng@foxmail.com>
-Subject: [PATCH] USB: serial: option: add Quectel RM520N
-Date:   Mon,  5 Sep 2022 14:35:33 +0800
-X-OQ-MSGID: <20220905063533.53616-1-jerry-meng@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S236769AbiIEGza (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 02:55:30 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465861D0C5;
+        Sun,  4 Sep 2022 23:55:20 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9e:d400:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 2856t5FO876715
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 5 Sep 2022 07:55:07 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 2856t0fO1042270
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Mon, 5 Sep 2022 08:55:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1662360900; bh=B8ds51VEQCz5E7/NG7drgSbJ23MaxqKfWsx4DbN9JtM=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=hnJa60PtRVy0j9Y7+kZGgs3afvqGApgD0Ic6z4z9qfFCszjcvjCcwnMkX1F/yFJFe
+         pFYcp9P7a/9mQcOq0xMFQHQVgxitiISdCy+ccAcEvjkkFBwzL1s9uOcWS+CrhYV/o4
+         LjvAhj4hJRruFTsSX0UfzhgxT4C4PWyHPtfeQSsQ=
+Received: (nullmailer pid 176082 invoked by uid 1000);
+        Mon, 05 Sep 2022 06:54:45 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     "jerry.meng" <jerry-meng@foxmail.com>
+Cc:     davem@davemloft.net, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: add Quectel RM520N
+Organization: m
+References: <tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com>
+Date:   Mon, 05 Sep 2022 08:54:45 +0200
+In-Reply-To: <tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com> (jerry
+        meng's message of "Mon, 5 Sep 2022 09:24:52 +0800")
+Message-ID: <874jxmfgzu.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.6 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+"jerry.meng" <jerry-meng@foxmail.com> writes:
 
-0x0801: DIAG + NMEA + AT + MODEM + RMNET
+> add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
+>
+> 0x0801: DIAG + NMEA + AT + MODEM + RMNET
+>
+> T:  Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D02 Dev#=3D 10 Spd=3D480  =
+MxCh=3D 0
+> D:  Ver=3D 2.10 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
+> P:  Vendor=3D2c7c ProdID=3D0801 Rev=3D 5.04
+> S:  Manufacturer=3DQuectel
+> S:  Product=3DRM520N-GL
+> S:  SerialNumber=3D384af524
+> C:* #Ifs=3D 5 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
+> I:* If#=3D 0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
+=3Doption
+> E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D40 Driver=
+=3Doption
+> E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
+=3Doption
+> E:  Ad=3D85(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
+=3Doption
+> E:  Ad=3D87(I) Atr=3D03(Int.) MxPS=3D  10 Ivl=3D32ms
+> E:  Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> I:* If#=3D 4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
+=3Dqmi_wwan
+> E:  Ad=3D88(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D32ms
+> E:  Ad=3D8e(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+> E:  Ad=3D0f(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
+>
+> Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
+> ---
+>  drivers/net/usb/qmi_wwan.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 709e3c59e340..0cb187def5bc 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -1087,6 +1087,7 @@ static const struct usb_device_id products[] =3D {
+>  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
+>  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
+>  	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
+> +	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
+>=20=20
+>  	/* 3. Combined interface devices matching on interface number */
+>  	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
 
-T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0801 Rev= 5.04
-S:  Manufacturer=Quectel
-S:  Product=RM520N-GL
-S:  SerialNumber=384af524
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Signed-off-by: jerry meng <jerry-meng@foxmail.com>
----
- drivers/usb/serial/option.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Looks good!
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index a5e8374a8d71..e716395268fe 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EM060K			0x030b
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
-+#define QUECTEL_PRODUCT_RM520N			0x0801
- #define QUECTEL_PRODUCT_EC200S_CN		0x6002
- #define QUECTEL_PRODUCT_EC200T			0x6026
- #define QUECTEL_PRODUCT_RM500K			0x7001
-@@ -1159,6 +1160,9 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
- 	  .driver_info = ZLP },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0xff, 0x30) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
--- 
-2.25.1
-
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
