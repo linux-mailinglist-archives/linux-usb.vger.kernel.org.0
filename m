@@ -2,114 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45785ACFF1
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 12:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6745AD05A
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 12:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236197AbiIEKS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 06:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S237343AbiIEKlW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 06:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237327AbiIEKSP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 06:18:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D4E56BBA
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 03:17:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D0B4611E3
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 10:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8F1C433C1;
-        Mon,  5 Sep 2022 10:17:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662373040;
-        bh=zexbFhyo7ClmCsE1D0fdZxpmtAoMSQd9AuNjqNON82M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aj68C0Sp0XpukcZLiecZ77GZcBHShk4HM559dVqRveJMoxfMpfSj90pn+RojUuA6p
-         fyVaQecMQvNBABnD07ZXSxPlbFFYO86xhBEPsQ7y8HjY1fwA2fJCX0LzwXvloBbJBl
-         0sTW2z30g4486QGs1NBzJu4fV5FQDXukbfGJEt+8=
-Date:   Mon, 5 Sep 2022 12:17:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-usb@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [usb:usb-testing 29/47] drivers/usb/host/ehci-platform.c:56:19:
- warning: 'hcd_name' defined but not used
-Message-ID: <YxXMrW06iuT5w2pf@kroah.com>
-References: <202208310007.6yJMsSYz-lkp@intel.com>
- <Yw5E7n+lNgz1ANEH@rowland.harvard.edu>
- <Yw75Aa35sWOjKMN0@kroah.com>
- <CAMj1kXHaFa6GqPvXjuat6ccLt7D1V1XypbPH1F_TES-cLgx1Ww@mail.gmail.com>
+        with ESMTP id S236511AbiIEKlT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 06:41:19 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2927F4C624;
+        Mon,  5 Sep 2022 03:41:19 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id g14so5837143qto.11;
+        Mon, 05 Sep 2022 03:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=kd7g7axcQ4As/Ok0I5izIzwGPbtYaPyDkbWIGk2kRMc=;
+        b=a4V6ibAx1P4YjsDZwhtMLMuWUwWCK3+Yn9JF3VwjA4fF5N0JKuAGKvW0x7Oeq36vRu
+         ZD2NpBYMNC8pDvV3B9bTynqivMhFDkGOtzwr7JY7i6mY6fQ9mOwr7PCsrNfMvKVlTB6m
+         AQwPmzkKfJqq/qd3lYrZAvkeG/klQ18FzMuuftSPGpjscQilPNTppd9oLyhCECyBTnmS
+         uo+4FUsm1gWsG4XuM9BafRncQA8YVM65g/X3SPg8260dxRuAheVR5JT3lXCfMda99osm
+         3ghxFB0uVJftBWwHDXIPOXJK9RgFq/ZehUGlD71aQbbwaHNfsi/Wi+FWVWYy7rB5ueEz
+         4ZYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kd7g7axcQ4As/Ok0I5izIzwGPbtYaPyDkbWIGk2kRMc=;
+        b=fS38WuL+y89CFcR4bObI+GY0Jt70yC4nxDJvdd+qk11KLxRHNaV0zKSRBZcJNleBGX
+         CkriUpWIID6NE6uRoc6tq7qKOJichj79PcUGs6nL6yM+ISSYeLZnUuOAvrsrLj4nfXYB
+         XSqs/koI41Rgj/Zznv+A+FfLktK/lsx5o6Hdl6AC7AWY/RrWBibSglHr1WKFz7oU+ruB
+         mGe11AbjQaDuydcgcUcsV2aLlVpd75wJ2yzx73GaGPAKy8BGi8Po0t9kFBB0odiAnLMO
+         0oq6iCGI24zSt5TDPuPHlT14w/e3zWUUhS1jevfDVip3ZyuP8D2mjZNx7UJrqPM85wSV
+         /kVg==
+X-Gm-Message-State: ACgBeo3wLJBBYCGCx0ilDr3W3hnKIF9+sMSnU3a2PCmnOA45cVmhXF03
+        JmpoJP0D2vWhNH5xfzYiVTE+2IhpoBk61Lg2ffQ=
+X-Google-Smtp-Source: AA6agR5jckAzCxTGD9mkHIt9A012zarGH47OL+wuWeavoOdmt2QYtP37qTO1N0BzU0mjGhkgR0fMvN19uxKTRqEH6ZQ=
+X-Received: by 2002:ac8:7dd0:0:b0:344:afc1:b11d with SMTP id
+ c16-20020ac87dd0000000b00344afc1b11dmr37941390qte.195.1662374478234; Mon, 05
+ Sep 2022 03:41:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHaFa6GqPvXjuat6ccLt7D1V1XypbPH1F_TES-cLgx1Ww@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
+In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 5 Sep 2022 13:40:42 +0300
+Message-ID: <CAHp75VeA+oVPmsEOg+y0cvRcTU5qA+Y+9=Byp0C982EB7SAArQ@mail.gmail.com>
+Subject: Re: [PATCH v1 09/11] regulator: bd9576: switch to using devm_fwnode_gpiod_get()
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 12:13:03PM +0200, Ard Biesheuvel wrote:
-> On Wed, 31 Aug 2022 at 08:00, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Aug 30, 2022 at 01:12:14PM -0400, Alan Stern wrote:
-> > > On Wed, Aug 31, 2022 at 12:10:36AM +0800, kernel test robot wrote:
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > > > head:   594b9411b4adceb59ca8a66997eec1eaa3756785
-> > > > commit: 5cfdb45657c97315501316657e504298b381ceee [29/47] usb: reduce kernel log spam on driver registration
-> > > > config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220831/202208310007.6yJMsSYz-lkp@intel.com/config)
-> > > > compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-> > > > reproduce (this is a W=1 build):
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=5cfdb45657c97315501316657e504298b381ceee
-> > > >         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> > > >         git fetch --no-tags usb usb-testing
-> > > >         git checkout 5cfdb45657c97315501316657e504298b381ceee
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/host/
-> > > >
-> > > > If you fix the issue, kindly add following tag where applicable
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All warnings (new ones prefixed by >>):
-> > > >
-> > > > >> drivers/usb/host/ehci-platform.c:56:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-> > > >       56 | static const char hcd_name[] = "ehci-platform";
-> > > >          |                   ^~~~~~~~
-> > > > --
-> > > > >> drivers/usb/host/ohci-platform.c:44:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-> > > >       44 | static const char hcd_name[] = "ohci-platform";
-> > > >          |                   ^~~~~~~~
-> > >
-> > > This is a side effect from Ard's patch removing the pr_info lines from
-> > > these drivers.  It will show up in some of the other drivers too (the
-> > > ones that don't initialize their own hc_driver structure).  The solution
-> > > is simply to remove the unused definitions.
-> > >
-> > > Ard, do you want to write a fixup patch to do this?
-> >
-> > I'll go fix it up...
-> >
-> 
-> Apologies for missing this, I was on vacation last week.
-> 
-> Is there anything that needs to be done at this point?
+On Mon, Sep 5, 2022 at 9:33 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
+> so that gpiolib can be cleaned a bit, so let's switch to the generic
+> fwnode property API.
+>
+> While at it switch the rest of the calls to read properties in
+> bd957x_probe() to the generic device property API as well.
 
-Yeah, my fixup patch was incomplete and I'll not have the chance to fix
-it up for a few more days due to travel :(
+With or without below addressed,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-So if you want to send a follow-on patch, like my fixup one but in more
-places, that would be great!
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>
+> diff --git a/drivers/regulator/bd9576-regulator.c b/drivers/regulator/bd9576-regulator.c
+> index aa42da4d141e..393c8693b327 100644
+> --- a/drivers/regulator/bd9576-regulator.c
+> +++ b/drivers/regulator/bd9576-regulator.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  #include <linux/regulator/driver.h>
+>  #include <linux/regulator/machine.h>
+>  #include <linux/regulator/of_regulator.h>
+> @@ -939,8 +940,8 @@ static int bd957x_probe(struct platform_device *pdev)
+>         }
+>
+>         ic_data->regmap = regmap;
+> -       vout_mode = of_property_read_bool(pdev->dev.parent->of_node,
+> -                                        "rohm,vout1-en-low");
+> +       vout_mode = device_property_read_bool(pdev->dev.parent,
+> +                                             "rohm,vout1-en-low");
 
-thanks,
+They all using parent device and you may make code neater by adding
 
-greg k-h
+  struct device *parent = pdev->dev.parent;
+
+at the definition block of the probe function.
+
+>         if (vout_mode) {
+>                 struct gpio_desc *en;
+>
+> @@ -948,10 +949,10 @@ static int bd957x_probe(struct platform_device *pdev)
+>
+>                 /* VOUT1 enable state judged by VOUT1_EN pin */
+>                 /* See if we have GPIO defined */
+> -               en = devm_gpiod_get_from_of_node(&pdev->dev,
+> -                                                pdev->dev.parent->of_node,
+> -                                                "rohm,vout1-en-gpios", 0,
+> -                                                GPIOD_OUT_LOW, "vout1-en");
+> +               en = devm_fwnode_gpiod_get(&pdev->dev,
+> +                                          dev_fwnode(pdev->dev.parent),
+> +                                          "rohm,vout1-en", GPIOD_OUT_LOW,
+> +                                          "vout1-en");
+>                 if (!IS_ERR(en)) {
+>                         /* VOUT1_OPS gpio ctrl */
+>                         /*
+> @@ -986,8 +987,8 @@ static int bd957x_probe(struct platform_device *pdev)
+>          * like DDR voltage selection.
+>          */
+>         platform_set_drvdata(pdev, ic_data);
+> -       ddr_sel =  of_property_read_bool(pdev->dev.parent->of_node,
+> -                                        "rohm,ddr-sel-low");
+> +       ddr_sel = device_property_read_bool(pdev->dev.parent,
+> +                                           "rohm,ddr-sel-low");
+>         if (ddr_sel)
+>                 ic_data->regulator_data[2].desc.fixed_uV = 1350000;
+>         else
+>
+> --
+> b4 0.10.0-dev-fc921
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
