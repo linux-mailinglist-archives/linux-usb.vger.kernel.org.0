@@ -2,172 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49545AD649
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 17:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6C95AD64E
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 17:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238437AbiIEPWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 11:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S238725AbiIEPYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 11:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238810AbiIEPW0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 11:22:26 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E5F5E65A;
-        Mon,  5 Sep 2022 08:22:19 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id s22so6492937qkj.3;
-        Mon, 05 Sep 2022 08:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+ZiqcY4iwW4z7/E7mCAKrjs2qkOwesFoeuU+408Ac8o=;
-        b=VFmGFDTElC9gVBP4IH125hq51A7FGr51vQ9KGLGqsDH5FAEMbMbUXIVHi85ww+a0fI
-         GziSfVv/AV96vVMyihm0a9WLMAOVaqURD6Z6C0QYsgp+rD6u9b5XKuySpRwB9/4ukD5r
-         ntRcngBKUZIdj1p7dnKxVpS61IIJC70YsoWsdaYgU3yQ1OeaPC6Dp8pG57kfBWmOL/93
-         L/IFFf00dHT3zgOp5UKnif6AxMU2wmHM+SIXzgJwfA+idsrUzSPhTV0Cy8bk19HNDekI
-         +ldaJp7J0Y+v4fVjKkwUglDoR826zDL6l5uW2KrYqW3xGquKc2bpuTp1y4lh/YVJ6mAK
-         GUTw==
+        with ESMTP id S238758AbiIEPYn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 11:24:43 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178456410
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:24:39 -0700 (PDT)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id AC6D93F11F
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 15:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1662391477;
+        bh=g146zNAqOIiaxRfFjyEWyS887hMtJQy+1QFNyABJP04=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Z4zr96dI4sv3pOTBL1abyUnCiMbjNxgAHgLvdvt4rdIiAXcmGqdrbcbEhs0f8TMfh
+         pHdIqiN+UI8yn0wigItD3WqevwdnMhXr9Vw+XHSRrTiXmeyv+QtTVdM1qiuW/MwwOQ
+         rBQav82GsuzT1307wsQzas4pyI7ejR8JntFpr8f8G8p4JrwgO3uQk+whC60tw9+Bq2
+         ksZyXdNrDXR1SmyXAq5v3wXtdzOmao7egZ8q0w670QNuC8cHGwY08p9geJIca1bjnE
+         KvGFfZdmIosAfMRu31TR/lP75yoOpsgQQiEFgFhg5jNex65m82fhJOv87bz2CfUqfh
+         ZlnH1R19bv5Hg==
+Received: by mail-wr1-f71.google.com with SMTP id o3-20020adfa103000000b0022514e8e99bso1368058wro.19
+        for <linux-usb@vger.kernel.org>; Mon, 05 Sep 2022 08:24:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+ZiqcY4iwW4z7/E7mCAKrjs2qkOwesFoeuU+408Ac8o=;
-        b=X6vXErVPMJY7d1KHJ77+zIPQCFI0nwzh7fnLnnmSbuQktl5hH9FtjLRDtYuOI0WmG6
-         Kz7kh8TDh2HB3DV5mlOrGD2uV8vB4EWEZrp4W0faBhfTjKk3giHYFE1KfO4Xvd24RhM6
-         aGp5qEDIxfTWy6MfSwEpxi4bDypI5y4zEcgpC3G94j1LW3ESHj1f0BbMKhwwxMN4sv4E
-         vFgzPkpOJsMXgVTHijBSspw7sYMW878mYTkjqwPrSXHqe1MQBOTAGhMogWGD3hUipc0a
-         kVNiJsvM6x1bBO4kvgBNpqQZsEMHHMN20n3o/yiYOtxdZ5IGI3dOsp6NSzUj5IjgEv5J
-         8YYQ==
-X-Gm-Message-State: ACgBeo35E66bskPTI7omOBhSkr9TDFyyrrO6OkACMhX9OBlca8TALC2y
-        un8UsY7S4/gZYKkpzPLRtYb2NQaXKfBvEVr6xv4=
-X-Google-Smtp-Source: AA6agR6eqDleGJQNbmaUKo+DXkG0Owzp6XfxQg6gg92/7A34V7uBDxuh7YdkC5fcKcuRE7T6e8KsWIJlWSuvkZ2TzuU=
-X-Received: by 2002:a05:620a:410e:b0:6bc:5cdc:88ec with SMTP id
- j14-20020a05620a410e00b006bc5cdc88ecmr33187504qko.734.1662391338268; Mon, 05
- Sep 2022 08:22:18 -0700 (PDT)
+        bh=g146zNAqOIiaxRfFjyEWyS887hMtJQy+1QFNyABJP04=;
+        b=huFsd+oHgx4cpzKi/fFRfTYPAd/rgTRgJgvdNmtuLXLl05LJ9PNlB/e89/lkn2wZr7
+         6Cnd+hCCvHwGmE6YmUSa8cH+tl1vYWFeBS6QT3ck7ICSMcNmag3IYu/0IZXF9mWN+dyd
+         AqvIOOIiveY2YMDn29l5dFSF7YehhT9tHdZTCt9nflYFwvkeC53jcfduYTK/kCk35SH5
+         OFrZ5fY/7YMlHiR+ffX6cYahwT6IqGzo1rcA2ArHEY9QvhpDYSNEaQZSGIyVl39CK7TA
+         jpIDyARKrs1vD83a34jsE+BVX99Sn1rwgCtunHx9OhVLqxuds0MsaPVwaZHFU5PD9Nr4
+         sPXQ==
+X-Gm-Message-State: ACgBeo36t+FYrrETBjUGKO7AzSVtxWofyfPe4yITa22QwTdK+YB6+gHZ
+        wJ/LIpRjlyf5Lxk5B5CQvAME2KpbZ+psh4vvNve4Q7a6IrF1Iy7OX4wNf2cKlMEgYstSSt52m/A
+        n2srBa/sXiTnJ/ZxnHldF17PEDam5Zb4oY8GhJNHjoqY14CEif2nLqQ==
+X-Received: by 2002:a5d:508c:0:b0:226:e033:c042 with SMTP id a12-20020a5d508c000000b00226e033c042mr18738864wrt.389.1662391477403;
+        Mon, 05 Sep 2022 08:24:37 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR58aB0FpwdrnSxmhOkQKCebTZVB+w1RQdeso1rXEy4eMMgBjQOjuSIu0kT0g83M2OZWUATR+oRrrN8F98XJwMM=
+X-Received: by 2002:a5d:508c:0:b0:226:e033:c042 with SMTP id
+ a12-20020a5d508c000000b00226e033c042mr18738851wrt.389.1662391477192; Mon, 05
+ Sep 2022 08:24:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
- <CAHp75Vd35EOy=mP25=9fmYfqQnbafgotHw1fxk-TdGk6Oc8g8Q@mail.gmail.com> <75e60144-9fa2-d6ba-bc92-edd23f7e7189@roeck-us.net>
-In-Reply-To: <75e60144-9fa2-d6ba-bc92-edd23f7e7189@roeck-us.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 18:21:42 +0300
-Message-ID: <CAHp75VcisCTYoRp-=713YKtwi7BQyPKGiUhF4DkpfAFtvDXCiQ@mail.gmail.com>
-Subject: Re: [PATCH v1 10/11] watchdog: bd9576_wdt: switch to using devm_fwnode_gpiod_get()
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
+ <YxWgGKIAvsxwSz85@black.fi.intel.com> <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+ <YxWqSYDWe0NitSkL@black.fi.intel.com> <YxX3JeQLbciJ+hhc@black.fi.intel.com>
+In-Reply-To: <YxX3JeQLbciJ+hhc@black.fi.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 5 Sep 2022 23:24:26 +0800
+Message-ID: <CAAd53p5hjmPgPNifo-QV9KU4DFbvPnrYV-YD2b6cSXNN=5GLWQ@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
+ AMD USB4 controller
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, sanju.mehta@amd.com,
+        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 6:13 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 9/5/22 04:09, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 9:33 AM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-
-...
-
-> >> +       count = device_property_count_u32(dev->parent, "rohm,hw-timeout-ms");
-> >> +       if (count < 0 && count != -EINVAL)
-> >> +               return count;
-> >> +
-> >> +       if (count > 0) {
-> >
-> >> +               if (count > ARRAY_SIZE(hw_margin))
-> >> +                       return -EINVAL;
-> >
-> > Why double check? You may move it out of the (count > 0).
+On Mon, Sep 5, 2022 at 9:18 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
 >
-> Two checks will always be needed, so I don't entirely see
-> how that would be better.
-
-But not nested. That's my point:
-
-if (count > ARRAY_SIZE())
-  return ...
-if (count > 0)
-  ...
-
-> >> -       if (ret == 1)
-> >> -               hw_margin_max = hw_margin[0];
+> Hi,
+>
+> On Mon, Sep 05, 2022 at 10:50:33AM +0300, Mika Westerberg wrote:
+> > > Yes those root ports are resumed to D0 when something is plugged. They
+> > > however fail to detect any externel PCIe devices.
 > >
-> >> +               ret = device_property_read_u32_array(dev->parent,
-> >> +                                                    "rohm,hw-timeout-ms",
-> >> +                                                    hw_margin, count);
-> >> +               if (ret < 0)
-> >> +                       return ret;
-> >
-> > So, only this needs the count > 0 check since below already has it implicitly.
-> >
-> Sorry, I don't understand this comment.
+> > Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
+> > detected? Does the PCIe "Card Present" (or Data Link Layer Active)
+> > status change at all or is it always 0?
+>
+> I wonder if we are simply missing the required delays here? Looking at
+> the lspci dump in the bugzilla you refer the root port 03.1 supports
+> active link reporting:
+>
+>                 LnkCap: Port #247, Speed 2.5GT/s, Width x1, ASPM L1, Exit Latency L1 <4us
+>                         ClockPM- Surprise- LLActRep+ BwNot- ASPMOptComp+
+>
+> So when the link goes back to L0 (D3 -> D0 transition) the kernel should
+> issue the 100+ ms reset delay in pci_bridge_wait_for_secondary_bus():
 
-if (count > 0) {
-  ret = device_property_read_u32_array(...);
-  ...
-}
-if (count == 1)
- ...
-if (count == 2)
- ...
+This was actually the first thing I tried but it doesn't work. Even a
+5 seconds delay doesn't work either.
 
-But here it might be better to have the nested conditionals.
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pci.c#n5045
+>
+> can you check if that is happening? It should show up in the dmesg when
+> CONFIG_PCI_DEBUG=y but I don't see it in yours.
 
-> >> -       if (ret == 2) {
-> >> -               hw_margin_max = hw_margin[1];
-> >> -               hw_margin_min = hw_margin[0];
-> >> +               if (count == 1)
-> >> +                       hw_margin_max = hw_margin[0];
-> >> +
-> >> +               if (count == 2) {
-> >> +                       hw_margin_max = hw_margin[1];
-> >> +                       hw_margin_min = hw_margin[0];
-> >> +               }
-> >>          }
+That's because there isn't any child device yet, so the function bails early:
+if (!dev->subordinate || list_empty(&dev->subordinate->devices))
 
--- 
-With Best Regards,
-Andy Shevchenko
+Kai-Heng
