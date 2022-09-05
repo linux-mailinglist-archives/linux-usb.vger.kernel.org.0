@@ -2,44 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1096F5ACA65
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 08:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B595ACA6C
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 08:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236239AbiIEGJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 02:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
+        id S236389AbiIEGTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 02:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiIEGJe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 02:09:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B25F93;
-        Sun,  4 Sep 2022 23:09:32 -0700 (PDT)
+        with ESMTP id S236270AbiIEGTw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 02:19:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ACC13DF4;
+        Sun,  4 Sep 2022 23:19:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7867B80ECE;
-        Mon,  5 Sep 2022 06:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE24C433D7;
-        Mon,  5 Sep 2022 06:09:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662358169;
-        bh=ged1Iuc/8Vkmz5SoOQAQ9hvKuGOuVj7be3WgcFAK3U4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F4VbMIQZek37mJxYhL8WdQTgRXWJuBWqqgQrEmuzdd3N7J8vj8wt2V9fDvJCkUwVR
-         0fpljKOKmVhFpvD73RCZMbB7cmGNVaYIYmTYBnkZ23U8u9Xm5c4o8Kmz4In3SpNgb/
-         8QgWtGcM4sXmJv0Euu7yoOlhe+Gj4ysaYMvBaK/k=
-Date:   Mon, 5 Sep 2022 08:09:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "jerry.meng" <jerry-meng@foxmail.com>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel RM520N
-Message-ID: <YxWSlsA3Klg/LmjB@kroah.com>
-References: <tencent_3F0D3FA6C173619315358082BA45961FD008@qq.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6025B610D5;
+        Mon,  5 Sep 2022 06:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10C8C433C1;
+        Mon,  5 Sep 2022 06:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662358789;
+        bh=qoVU5IEku9HQk6piaO1ti5LKrgIU0qiuy5TONVv+YGc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WbhpBa4oNYu4pybWN/GNkcg1rjEJJ+uhDKXay5P/yQJeLJV4wLgeSqCTVtiIRmz8V
+         Pa+ZY0Jlkd4Ff4r0jLNjQ2LHpW/C1hzwMiyG7Uv4vh3o1k+slIPLHPfsx2lS/FOOB6
+         N2sCxUcJ1pFszykKb6oxm1dANWozR/VDC4N7cbRpQcMcaY0L3ZqjhSty1UNQFz/CTQ
+         6zNXoqb/8yHHD3sgo4+A2cYXOwVSMq3mhf0Q/BmSK3mXmH1enarW+Co2KUVLd4Va6M
+         q4n2erohl8dtqCR4qkCkBYogNfc4CxtfgJuAkeWY2PT+s61G+xJUXWjCqD3qx8irGh
+         k0mZ6YBwujkRA==
+Date:   Mon, 5 Sep 2022 08:19:42 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yu Chen <chenyu56@huawei.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Carvalho Chehab <mchehab+huawei@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: phy: hisilicon,hi3670-usb3: simplify
+ example
+Message-ID: <20220905081942.4cd47318@coco.lan>
+In-Reply-To: <20220817142246.828762-3-krzysztof.kozlowski@linaro.org>
+References: <20220817142246.828762-1-krzysztof.kozlowski@linaro.org>
+        <20220817142246.828762-3-krzysztof.kozlowski@linaro.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_3F0D3FA6C173619315358082BA45961FD008@qq.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,43 +67,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 09:19:38AM +0800, jerry.meng wrote:
-> add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
-> 
-> 0x0801: DIAG + NMEA + AT + MODEM + RMNET
-> 
-> T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0801 Rev= 5.04
-> S:  Manufacturer=Quectel
-> S:  Product=RM520N-GL
-> S:  SerialNumber=384af524
-> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
+Em Wed, 17 Aug 2022 17:22:44 +0300
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> escreveu:
 
-I doubt that you have a "." in your name that you sign documents with,
-so can you please resend this with the proper name you use?
+> syscon and simple-mfd cannot be used without device specific compatible,
+> so simplify the example to fix this.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/phy/hisilicon,hi3670-usb3.yaml   | 26 ++++++-------------
+>  1 file changed, 8 insertions(+), 18 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml b/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+> index ebd78acfe2de..1cb00dbcd4c5 100644
+> --- a/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+> +++ b/Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+> @@ -52,22 +52,12 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> -    bus {
+> -      #address-cells = <2>;
+> -      #size-cells = <2>;
+> -
+> -      usb3_otg_bc: usb3_otg_bc@ff200000 {
+> -        compatible = "syscon", "simple-mfd";
+> -        reg = <0x0 0xff200000 0x0 0x1000>;
+> -
+> -        usb_phy {
+> -          compatible = "hisilicon,hi3670-usb-phy";
+> -          #phy-cells = <0>;
+> -          hisilicon,pericrg-syscon = <&crg_ctrl>;
+> -          hisilicon,pctrl-syscon = <&pctrl>;
+> -          hisilicon,sctrl-syscon = <&sctrl>;
+> -          hisilicon,eye-diagram-param = <0xfdfee4>;
+> -          hisilicon,tx-vboost-lvl = <0x5>;
+> -        };
+> -      };
+> +    usb-phy {
+> +        compatible = "hisilicon,hi3670-usb-phy";
+> +        #phy-cells = <0>;
+> +        hisilicon,pericrg-syscon = <&crg_ctrl>;
+> +        hisilicon,pctrl-syscon = <&pctrl>;
+> +        hisilicon,sctrl-syscon = <&sctrl>;
+> +        hisilicon,eye-diagram-param = <0xfdfee4>;
+> +        hisilicon,tx-vboost-lvl = <0x5>;
+>      };
 
-thanks,
+Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-greg k-h
+Thanks,
+Mauro
