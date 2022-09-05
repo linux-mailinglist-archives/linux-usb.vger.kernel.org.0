@@ -2,82 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A83B5AC862
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 03:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C585AC87C
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 03:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbiIEBCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Sep 2022 21:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
+        id S235092AbiIEBWA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Sep 2022 21:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiIEBCW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Sep 2022 21:02:22 -0400
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C37219288;
-        Sun,  4 Sep 2022 18:02:20 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id ZAH00116;
-        Mon, 05 Sep 2022 09:02:16 +0800
-Received: from guoweibin00.home.langchao.com (10.180.162.54) by
- Jtjnmail201614.home.langchao.com (10.100.2.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 5 Sep 2022 09:02:15 +0800
-Date:   Mon, 5 Sep 2022 09:02:12 +0800
-From:   guoweibin <guoweibin@inspur.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: musb: Fix musb_gadget.c rxstate overflow bug
-Message-ID: <20220905090212.f0118580ec37bf0aababb53d@inspur.com>
-X-Mailer: Sylpheed 3.7.0beta1 (GTK+ 2.24.30; i686-pc-mingw32)
+        with ESMTP id S230013AbiIEBV6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Sep 2022 21:21:58 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA76F28E02;
+        Sun,  4 Sep 2022 18:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1662340913;
+        bh=p7tq8EFo2hJlkSavCDSglg7r5xGb0ADexWQox9zQCOw=;
+        h=From:To:Cc:Subject:Date;
+        b=uJrXjx63SiYFmPEfnsGcvZaTb6mJWEWCxy9js5kvhr5krTCoGs3HXQagP6XG1U6ZD
+         vZdmxtu6Dy7Urzb8PGt7ca/aiMeIsX73nUdbcMwTqeRs8aFoCH+lsFx7eyVSSxnU2G
+         L2wVrAqJ3eADGuDZMvZlEpnOGWXtfzHRh/yJ8esE=
+Received: from localhost.localdomain ([112.31.70.25])
+        by newxmesmtplogicsvrsza31.qq.com (NewEsmtp) with SMTP
+        id 519A9474; Mon, 05 Sep 2022 09:20:25 +0800
+X-QQ-mid: xmsmtpt1662340825t907jmgji
+Message-ID: <tencent_3F0D3FA6C173619315358082BA45961FD008@qq.com>
+X-QQ-XMAILINFO: MyirvGjpKb1j/a0KbPEA511fFlavcJNNlbfq0lc4rsXw6VSA5e4phzKnIX2SXm
+         hGP1K4f162PBDeySpqKcoscrxT1UVoQdrfo8Uuh3ctOVdXZVZgcZw59PE2EBm5pODPScIc7RU6BZ
+         uri6/h9Nc5YNSCC6PETPSWS6DKaVNR6iSfl1MFzZhEvzP1qGHNLB8AUApo2GUhdY0hTCbPvEyd/z
+         0cKzLFL8mDdW83BBNd5eKVnBldukragscpnbu7jwKA3NMKZ/1QlwCOiNKwQpnhonLBWyM9KUC53p
+         5GcppHGPD8KiQucr3LXxf3UrRbx5ZJYvdMO8kGRQUx2d4P9h6OORGFW2yWud4dkS+4Wy7Zh2v9IU
+         CD73I9gG3zpxTiMq6mSroNRcP5bvdTcI5JjhZck9P7CnLwBq6s5HxF1Ifr42ndEeC1RK09D/lz8k
+         7uI/9ornZFUJth6hKL0Rz0+pTa5NKNfKqc+lGOBhbAgYSOb9sVhms2N37mEPljUMvXP+PQY+8xhA
+         RGA3V+zE6CkMIgcOVcPUZ9rFnqfZxPEdImVYNZ2pEk/hVmcoanW0/2I6Z9ifCn5zprQVrvkcz6ed
+         1SH/oMtb+lXCVoCqhJRBwycBMtTQXcVhdigk300McPWFWzq4PU9zfoVtTf+xRIiCqY3jPty/4JQN
+         ecm3PxU5DEsYdyiCaK5VvQ9HsOrS9qnU8qYW/QRbr7uvSR+X0hMtsLvAJFzxs8OAMrXYLydu1koP
+         LHm4g7mQTkie2szMhISoIhgR6M1o9iu82P8MxJ9bTDEnEj8CZYMbePMNT8Bet9H3FcN4Phe14XYD
+         kvBITf/T2lDdMJoP6aou3wVid8hO+plDQ5a+R/GE1YHks4ZILSzjI8R1CKCsIKzuo2cp7s/fsn9o
+         p7VS/cuXpSXEUxQus+AtmVGz0vMM8JGCdW6/SvCTVV2c+SB29YxvPaqGWl936yTNf7RKD4Gn3pEJ
+         Qyx2g60MwWUGGpbPVSCg==
+From:   "jerry.meng" <jerry-meng@foxmail.com>
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "jerry.meng" <jerry-meng@foxmail.com>
+Subject: [PATCH] USB: serial: option: add Quectel RM520N
+Date:   Mon,  5 Sep 2022 09:19:38 +0800
+X-OQ-MSGID: <20220905011938.35620-1-jerry-meng@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.162.54]
-X-ClientProxiedBy: Jtjnmail201615.home.langchao.com (10.100.2.15) To
- Jtjnmail201614.home.langchao.com (10.100.2.14)
-tUid:   202290509021662a3e525d8cc98769b5b2a0e91bcf34c
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: guoweibin <guoweibin@inspur.com>
-Date: Mon, 25 Jul 2022 19:27:49 +0800
-Subject: [PATCH] usb: musb: Fix musb_gadget.c rxstate overflow bug
+add support for Quectel RM520N which is based on Qualcomm SDX62 chip.
 
-when the rxstate function executes the 'goto buffer_aint_mapped' code
-branch, it will always copy the fifocnt bytes data to request->buf,
-which may cause request->buf out of bounds..
+0x0801: DIAG + NMEA + AT + MODEM + RMNET
 
-Fix it by add the length check :
-fifocnt = min_t(unsigned, request->length - request->actual, fifocnt);
+T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#= 10 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=0801 Rev= 5.04
+S:  Manufacturer=Quectel
+S:  Product=RM520N-GL
+S:  SerialNumber=384af524
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Signed-off-by: guoweibin <guoweibin@inspur.com>
+Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
 ---
- drivers/usb/musb/musb_gadget.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/serial/option.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-index 51274b87f46c..dc67fff8e941 100644
---- a/drivers/usb/musb/musb_gadget.c
-+++ b/drivers/usb/musb/musb_gadget.c
-@@ -760,6 +760,9 @@ static void rxstate(struct musb *musb, struct musb_request *req)
- 			musb_writew(epio, MUSB_RXCSR, csr);
- 
- buffer_aint_mapped:
-+			fifo_count = min_t(unsigned int,
-+					request->length - request->actual,
-+					(unsigned int)fifo_count);
- 			musb_read_fifo(musb_ep->hw_ep, fifo_count, (u8 *)
- 					(request->buf + request->actual));
- 			request->actual += fifo_count;
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index a5e8374a8d71..e716395268fe 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EM060K			0x030b
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
++#define QUECTEL_PRODUCT_RM520N			0x0801
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+ #define QUECTEL_PRODUCT_EC200T			0x6026
+ #define QUECTEL_PRODUCT_RM500K			0x7001
+@@ -1159,6 +1160,9 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
+ 	  .driver_info = ZLP },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
 -- 
-2.17.1
+2.25.1
+
