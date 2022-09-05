@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C585AC87C
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 03:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E70F5AC87F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 03:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbiIEBWA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Sep 2022 21:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S234039AbiIEBZ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Sep 2022 21:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIEBV6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Sep 2022 21:21:58 -0400
-Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA76F28E02;
-        Sun,  4 Sep 2022 18:21:55 -0700 (PDT)
+        with ESMTP id S229702AbiIEBZ0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Sep 2022 21:25:26 -0400
+X-Greylist: delayed 279 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Sep 2022 18:25:24 PDT
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F7E2B606;
+        Sun,  4 Sep 2022 18:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1662340913;
-        bh=p7tq8EFo2hJlkSavCDSglg7r5xGb0ADexWQox9zQCOw=;
+        s=s201512; t=1662341120;
+        bh=YIE8sJ2GxvwPy8tD7EYzlAYfVnYvTWwBsPmlX9YPYv0=;
         h=From:To:Cc:Subject:Date;
-        b=uJrXjx63SiYFmPEfnsGcvZaTb6mJWEWCxy9js5kvhr5krTCoGs3HXQagP6XG1U6ZD
-         vZdmxtu6Dy7Urzb8PGt7ca/aiMeIsX73nUdbcMwTqeRs8aFoCH+lsFx7eyVSSxnU2G
-         L2wVrAqJ3eADGuDZMvZlEpnOGWXtfzHRh/yJ8esE=
-Received: from localhost.localdomain ([112.31.70.25])
-        by newxmesmtplogicsvrsza31.qq.com (NewEsmtp) with SMTP
-        id 519A9474; Mon, 05 Sep 2022 09:20:25 +0800
-X-QQ-mid: xmsmtpt1662340825t907jmgji
-Message-ID: <tencent_3F0D3FA6C173619315358082BA45961FD008@qq.com>
-X-QQ-XMAILINFO: MyirvGjpKb1j/a0KbPEA511fFlavcJNNlbfq0lc4rsXw6VSA5e4phzKnIX2SXm
-         hGP1K4f162PBDeySpqKcoscrxT1UVoQdrfo8Uuh3ctOVdXZVZgcZw59PE2EBm5pODPScIc7RU6BZ
-         uri6/h9Nc5YNSCC6PETPSWS6DKaVNR6iSfl1MFzZhEvzP1qGHNLB8AUApo2GUhdY0hTCbPvEyd/z
-         0cKzLFL8mDdW83BBNd5eKVnBldukragscpnbu7jwKA3NMKZ/1QlwCOiNKwQpnhonLBWyM9KUC53p
-         5GcppHGPD8KiQucr3LXxf3UrRbx5ZJYvdMO8kGRQUx2d4P9h6OORGFW2yWud4dkS+4Wy7Zh2v9IU
-         CD73I9gG3zpxTiMq6mSroNRcP5bvdTcI5JjhZck9P7CnLwBq6s5HxF1Ifr42ndEeC1RK09D/lz8k
-         7uI/9ornZFUJth6hKL0Rz0+pTa5NKNfKqc+lGOBhbAgYSOb9sVhms2N37mEPljUMvXP+PQY+8xhA
-         RGA3V+zE6CkMIgcOVcPUZ9rFnqfZxPEdImVYNZ2pEk/hVmcoanW0/2I6Z9ifCn5zprQVrvkcz6ed
-         1SH/oMtb+lXCVoCqhJRBwycBMtTQXcVhdigk300McPWFWzq4PU9zfoVtTf+xRIiCqY3jPty/4JQN
-         ecm3PxU5DEsYdyiCaK5VvQ9HsOrS9qnU8qYW/QRbr7uvSR+X0hMtsLvAJFzxs8OAMrXYLydu1koP
-         LHm4g7mQTkie2szMhISoIhgR6M1o9iu82P8MxJ9bTDEnEj8CZYMbePMNT8Bet9H3FcN4Phe14XYD
-         kvBITf/T2lDdMJoP6aou3wVid8hO+plDQ5a+R/GE1YHks4ZILSzjI8R1CKCsIKzuo2cp7s/fsn9o
-         p7VS/cuXpSXEUxQus+AtmVGz0vMM8JGCdW6/SvCTVV2c+SB29YxvPaqGWl936yTNf7RKD4Gn3pEJ
-         Qyx2g60MwWUGGpbPVSCg==
+        b=DuJclr5sbM9yxLim3EuOSpbufDQgj/+N9DmbbsqECQjtRmHgJhblx+E4wD3mXuezT
+         BMYq2ypadmmMQnR0Yjy6m0H4sbwmfniFvLxwfebNm1MlVCBsWLPoMuBgBNULvh+A0a
+         EYxpejfXkhd6iu71fOU/1Vfsw2/myYSH4wBjeUII=
+Received: from localhost.localdomain ([220.180.239.55])
+        by newxmesmtplogicsvrsza30.qq.com (NewEsmtp) with SMTP
+        id 64A95C5E; Mon, 05 Sep 2022 09:25:10 +0800
+X-QQ-mid: xmsmtpt1662341110tndn78uzk
+Message-ID: <tencent_E50CA8A206904897C2D20DDAE90731183C05@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9ZWgqfJXkZM4H4vOysS4TklrQQhM+P+Ej9Syk9Sq/AudcFZzF2R
+         fugW62F6ffsfWk9IKEDRHBG+02SAx4sD/Hw/TckfMiP1mrZdLBiS+sd/1B7k3DL3yS/w8BExiu+H
+         gAgPy+NIfO/EvODK5QcUsXa4uudd3Ql236ddTYts2ihWr6Z9Kqg0ab6BsGKtolH1hOZxh29ALy5T
+         RjOU2INrZqPWUjwCdaHr/quI395Ndm7Pk26oVqL4OY0Xn9dQA42xjKXiULh6+8ekaPamBqg0SyvO
+         Rongy1d4mnC3LBT0pBMY2dbPDmo5pBzjwj8McgMWl6UNNPK3MDM+/DWalFBZVv9sKhEUI2+sg8AU
+         G7ypTnLCgJSOG8LfZWGli+dl9jhwfEdyMXN9db8vBY1U26D7LVK3bxIQBc9tv7kXl+dS8fXysGSQ
+         gTED/w9siCb0ibE/M3YOaQLn+5tZ9VmmDsCCEfSZ4BNgk5lNgCBouEOTKZ65K7Y4hsO7Ppax/jFB
+         7ZsfGCoJh6/dcFZU4tzM8GrwaYtdUwPGwVKfuG6jpAHbPMGBZyiFgGO0LA8hdTlskh0dME/YxMiL
+         e540ryjDXntcJ43S8gvuRAVIFShaoi11O5i1iHqIPAx7rP9x0bjAnnjcuuXIVwG7RtckadLSiWKv
+         iBe0JjE/YOErLJ57dY00K+wL72H3MPjqNtzogcTZDdsOnW7jP3T8vm6FlPJoaxX0J83v/i2PkoJ3
+         nsrykLUE1Ba/zrXGVTkLDJ4HvHYi2T9foRgNBoc77nsyNuXlIISv0475qlo6rGnNo7odu1ZqzTLV
+         3bKXaH8p/AQUjCXqby+O350k+BxhoOt49EsBmetdsraLZXAPEUPAjyJwn/hQlk5EvgpqAekyIxtY
+         +ZCsgEhXSPucF+KUuoGjGVIrVi87VcTTs8GC9wrrpoNEkTp9UBZykPMy6GG6cSLXAU2dwq1PUJLF
+         IfwgnjwDLFttfq1l/R+9y6q0zWZIhP1btwYjQbuQS7aN+cBowC2KqUS+LeL5SVxaiM6TT2Ngo=
 From:   "jerry.meng" <jerry-meng@foxmail.com>
-To:     johan@kernel.org
+To:     bjorn@mork.no, davem@davemloft.net
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "jerry.meng" <jerry-meng@foxmail.com>
-Subject: [PATCH] USB: serial: option: add Quectel RM520N
-Date:   Mon,  5 Sep 2022 09:19:38 +0800
-X-OQ-MSGID: <20220905011938.35620-1-jerry-meng@foxmail.com>
+        netdev@vger.kernel.org, "jerry.meng" <jerry-meng@foxmail.com>
+Subject: [PATCH] net: usb: qmi_wwan: add Quectel RM520N
+Date:   Mon,  5 Sep 2022 09:24:52 +0800
+X-OQ-MSGID: <20220905012452.36343-1-jerry-meng@foxmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -94,31 +95,22 @@ E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
 Signed-off-by: jerry.meng <jerry-meng@foxmail.com>
 ---
- drivers/usb/serial/option.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index a5e8374a8d71..e716395268fe 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EM060K			0x030b
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
-+#define QUECTEL_PRODUCT_RM520N			0x0801
- #define QUECTEL_PRODUCT_EC200S_CN		0x6002
- #define QUECTEL_PRODUCT_EC200T			0x6026
- #define QUECTEL_PRODUCT_RM500K			0x7001
-@@ -1159,6 +1160,9 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
- 	  .driver_info = ZLP },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0xff, 0x30) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0x40) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM520N, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 709e3c59e340..0cb187def5bc 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1087,6 +1087,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0620)},	/* Quectel EM160R-GL */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
++	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0801)},	/* Quectel RM520N */
+ 
+ 	/* 3. Combined interface devices matching on interface number */
+ 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
 -- 
 2.25.1
+
 
