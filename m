@@ -2,204 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBE05AD8FB
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 20:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0401C5AD9BD
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 21:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiIESYM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 14:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S232459AbiIEThk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 15:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbiIESXs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 14:23:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CCF24BD6
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 11:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662402226; x=1693938226;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iVZXXJ1Ezg+WEIxdTu8fYATgtvOCvaUnqVvnQFh7/jw=;
-  b=gugXFgi2ORKHwbRwABSbt3W8Qf8Fd4JbOBfeno+9v5nCR0cP6VmMqk91
-   ZuFZOhKUKhZ3LGwBvd3FNIHtb7BfJM6LUArxxH7GH+CLdW5NStGcdymn4
-   oDuPNb71n3masbpszgToT6aI/LWU0lJP+KWcsTIoHV0tAKlkxm14jekHq
-   24ybvphseOxtjWnkQiHzReJq724Ll3hvsKQtsLCLDy63JXdmkG8c65VnA
-   Ew2G95IMCVLzfU1HYMTY2P6O7YlfJkhvte4flbyq2Zpg0vqfUxy7JytlO
-   AlDf9+jb4YTz+KcPLsp/YwsHOPyOfVb5Q4D3oa+hhxJgFzEi9KaP2q30Y
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="276832276"
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="276832276"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 11:23:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="590997040"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Sep 2022 11:23:45 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVGl6-0004QD-1j;
-        Mon, 05 Sep 2022 18:23:44 +0000
-Date:   Tue, 06 Sep 2022 02:23:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS WITH WARNING
- a956f91247da3fe71e4d5f7da1f6dd8bae7c3c21
-Message-ID: <63163e9c.sSqe8BMEsxMpwDUm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230037AbiIEThi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 15:37:38 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64699501B6;
+        Mon,  5 Sep 2022 12:37:38 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mj6so9182808pjb.1;
+        Mon, 05 Sep 2022 12:37:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=UX/1xWsBuUZKNpnGbmaCNyLgDKXUyHyjW7LSvfviiGM=;
+        b=Jq6z0TjBOs+Trb+l/l0E6v2zXWY5HGZUjeUfFoj6h1dgSSPD3CMOMJzKW/FgRblSih
+         9XKG/JuD76vNnuQGH4IReEwETm+svg5j/jghxR4WWjXAxOGp9pztBXjFtpMn9fKYvJDF
+         mXDcmytCgAWXvi4BSG5pj9Y0FI8rlxUZq6PAQAUnNGkrMF0VrQAsHOOkpAHrZbr3nOJS
+         i68fopwEQC0oJscyLwdmpyB8JB1DvXhZEhs94bZIP7npUYVRKyMbaEZFnY/EWTOyJFcw
+         6eno1/ywfeqqOcLh7eCoxWyTJI1hItySN2zX1dRx/cdYZr0XNXm5Jc2yy3MvF+522GeF
+         f4vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=UX/1xWsBuUZKNpnGbmaCNyLgDKXUyHyjW7LSvfviiGM=;
+        b=51rjBqNdzYfljuefi+NTR5VYmhd5/2hwdQZG4bx0jWBG9PHNg71wmR3BGysNHkpPE3
+         y3/I3m2Hc6DaT62Ieakfnnn9VIQQLz3PMJFD7qa1fnkQnj4AcySqyItcawA1k9K0NwYi
+         8FMJ160IJ1AjPYIBzIRyTS+S/gKOMaP+vXaJ4oRsUZDLHw6H7t6FTR9qFFWlcR892sSJ
+         O3YXiAzAXZaL3t2AT+Wvcuw0FZHW/sKg/TqyUkMmmPgxS3MeL9+kjZxTrIE8/jtDctUw
+         GsALYIsU7bNMrv8Uq4D3w2CJU7fOUv5cQeWMDFsFXYqqyvkUZaXPFWA2SKUeEdvlNY4N
+         uucA==
+X-Gm-Message-State: ACgBeo0WeFusS8+usdwj2PrAvb09DLWlfzsu3hvZupVCdko6O2ZcrRrx
+        zDEh5MHGkCktjor5OwA/tRQ=
+X-Google-Smtp-Source: AA6agR70u6IDqbN3XobJcWbGlwEoBHj5+DIO4sKvf09Hb5lknd4pdCEXQAQd60uZG48UmUAgfPRBLA==
+X-Received: by 2002:a17:902:edd5:b0:174:a6e6:51f4 with SMTP id q21-20020a170902edd500b00174a6e651f4mr40804784plk.82.1662406657709;
+        Mon, 05 Sep 2022 12:37:37 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:7332:f188:2984:5930])
+        by smtp.gmail.com with ESMTPSA id u1-20020a170902e5c100b00176b5035045sm2216157plf.202.2022.09.05.12.37.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 12:37:37 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 12:37:33 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 02/11] drm/tegra: switch to using devm_fwnode_gpiod_get
+Message-ID: <YxZP/exeVD7DQ5Hx@google.com>
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-2-b29adfb27a6c@gmail.com>
+ <CAHp75Vc4yfh0JcY0B-vNawHTay5QNuhd7GAm86QZZZvUnQaMzQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vc4yfh0JcY0B-vNawHTay5QNuhd7GAm86QZZZvUnQaMzQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: a956f91247da3fe71e4d5f7da1f6dd8bae7c3c21  Merge 6.0-rc4 into usb-next
+On Mon, Sep 05, 2022 at 01:57:01PM +0300, Andy Shevchenko wrote:
+> On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
+> >
+> > I would like to limit (or maybe even remove) use of
+> > [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
+> > a bit, so let's switch to the generic device property API.
+> 
+> > It may even
+> > help with handling secondary fwnodes when gpiolib is taught to handle
+> > gpios described by swnodes.
+> 
+> I would remove this sentence from all commit messages since it's a
+> debatable thing and might even not happen, so the above is a pure
+> speculation.
 
-Warning reports:
+I have the patches. Granted, I had them since '19 ;) but I'm rebasing
+them and going to push them. I need them to convert bunch of input
+drivers away from platform data.
 
-https://lore.kernel.org/linux-usb/202208310007.6yJMsSYz-lkp@intel.com
-https://lore.kernel.org/llvm/202208310216.5IOl43es-lkp@intel.com
-
-Warning: (recently discovered and may have been fixed)
-
-drivers/usb/host/ehci-platform.c:56:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-drivers/usb/host/ehci-platform.c:56:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ohci-at91.c:65:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ohci-platform.c:44:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-drivers/usb/host/ohci-s3c2410.c:42:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ohci-st.c:43:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- x86_64-allmodconfig
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- x86_64-allyesconfig
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- x86_64-randconfig-a004-20220905
-|   `-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|-- x86_64-randconfig-a005-20220905
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-`-- x86_64-randconfig-a006-20220905
-    `-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-clang_recent_errors
-|-- i386-randconfig-a016-20220905
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- powerpc-buildonly-randconfig-r001-20220905
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- riscv-randconfig-r023-20220905
-|   |-- drivers-usb-host-ohci-at91.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-exynos.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ohci-s3c2410.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-st.c:warning:unused-variable-hcd_name
-|-- x86_64-randconfig-a011-20220905
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-`-- x86_64-randconfig-a012-20220905
-    |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-    `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-
-elapsed time: 728m
-
-configs tested: 77
-configs skipped: 2
-
-gcc tested configs:
-csky                              allnoconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-um                             i386_defconfig
-arc                  randconfig-r043-20220905
-i386                                defconfig
-alpha                            allyesconfig
-um                           x86_64_defconfig
-x86_64               randconfig-a002-20220905
-x86_64                              defconfig
-i386                 randconfig-a002-20220905
-x86_64               randconfig-a001-20220905
-i386                 randconfig-a003-20220905
-m68k                             allmodconfig
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-syz
-arc                              allyesconfig
-i386                 randconfig-a001-20220905
-x86_64               randconfig-a003-20220905
-x86_64                         rhel-8.3-kunit
-powerpc                           allnoconfig
-x86_64                               rhel-8.3
-m68k                             allyesconfig
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-kvm
-sh                               allmodconfig
-x86_64                    rhel-8.3-kselftests
-mips                             allyesconfig
-x86_64               randconfig-a004-20220905
-ia64                             allmodconfig
-i386                             allyesconfig
-arm                              allyesconfig
-x86_64               randconfig-a005-20220905
-x86_64               randconfig-a006-20220905
-i386                             alldefconfig
-powerpc                      mgcoge_defconfig
-sh                           se7343_defconfig
-arm                            mps2_defconfig
-openrisc                    or1ksim_defconfig
-sparc                               defconfig
-sh                               j2_defconfig
-sh                             espt_defconfig
-sh                 kfr2r09-romimage_defconfig
-arm64                            allyesconfig
-i386                 randconfig-a005-20220905
-i386                 randconfig-a006-20220905
-i386                 randconfig-a004-20220905
-i386                 randconfig-c001-20220905
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-loongarch                           defconfig
-loongarch                         allnoconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20220905
-hexagon              randconfig-r041-20220905
-x86_64               randconfig-a011-20220905
-i386                 randconfig-a014-20220905
-x86_64               randconfig-a012-20220905
-x86_64               randconfig-a014-20220905
-i386                 randconfig-a015-20220905
-s390                 randconfig-r044-20220905
-x86_64               randconfig-a016-20220905
-riscv                randconfig-r042-20220905
-i386                 randconfig-a016-20220905
-x86_64               randconfig-a013-20220905
-x86_64               randconfig-a015-20220905
-arm                  colibri_pxa270_defconfig
-powerpc                    socrates_defconfig
-i386                 randconfig-a011-20220905
-i386                 randconfig-a013-20220905
-i386                 randconfig-a012-20220905
-powerpc                     ksi8560_defconfig
+Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Dmitry
