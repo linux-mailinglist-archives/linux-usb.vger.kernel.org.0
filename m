@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5D35AD6A3
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 17:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C3A5AD6A6
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 17:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238871AbiIEPer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 11:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S238988AbiIEPgT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 11:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238825AbiIEPen (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 11:34:43 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AC313E87;
-        Mon,  5 Sep 2022 08:34:42 -0700 (PDT)
+        with ESMTP id S238930AbiIEPgS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 11:36:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3ED64055C;
+        Mon,  5 Sep 2022 08:36:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662392082; x=1693928082;
+  t=1662392177; x=1693928177;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xyfIktsZgiPCthxn1bCTekhDbusq67xgMuCvjpVPHQY=;
-  b=RmzSd5OOZh+Ogc31OtcNd+d7pgxIwFlFSDPNSRk7wRGipvQp2w2/DGIy
-   g7bX945bgcvECwpaNLJy3XPANa6BSUmYNhR6nYYA3leIMa9nxn8nWdVVQ
-   5UK3QF1vOIBDB4nO1sTdlwA/DV6n1vjbmwSQUfkIQKxUFb1t+itzKLouu
-   g/T7dpBWmW49RTossUjJNErMMDZlNBF15honO78hWOOS/ttWiNZxj78Zu
-   Bi4eGrR4eZNZ1xDwkQw24KxWj5PnMyTxI4MmgATwtBYwU3yE/82oYHrTr
-   CYK0qDqoz5Og+kZEL3Qw7oou6Pig2BTF5cBxSHdZasIFooITt64biWVKC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="382710231"
+  bh=WhUNghi/IiZ0aS9sedOc5de6KPGY/YFtu9yZreNVi54=;
+  b=RNv70RiMcI6n7bgW7cvN5uJi5tRvDJY2lhuGRYIuik4iBWANjHq0ho6m
+   mIBPl3ijkguA2oaPTLMgmATo/OlAF+MRlYJx1XI0fVvKlfkKDvjrdDlY5
+   id3iluJ+6Kzkpd82Qc3g9VfpQwLscW/gBTNdFdIUokkAL82H3NRlzz9i+
+   J94R4rgU6Uls7x/4MXNjE/6DFWAVr1EodjbYxDIUN723RbrCjkzDmdtCU
+   YmqIN+sNy60wWhctoZC+cpJF/BxtpAFv4YJMauuI/c72N5Q/gPsl/Hovi
+   v3VRRIteAsMtNH7nn0zNBe7IRvOgc9kvL/sEAFFZCbsxGXvrBmOrAD4Q4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="293997725"
 X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="382710231"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 08:34:42 -0700
+   d="scan'208";a="293997725"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 08:36:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
-   d="scan'208";a="756075896"
+   d="scan'208";a="616443041"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Sep 2022 08:34:40 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 05 Sep 2022 08:36:15 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 9AD3014F; Mon,  5 Sep 2022 18:34:55 +0300 (EEST)
-Date:   Mon, 5 Sep 2022 18:34:55 +0300
+        id E8D1114F; Mon,  5 Sep 2022 18:36:30 +0300 (EEST)
+Date:   Mon, 5 Sep 2022 18:36:30 +0300
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
 Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
@@ -48,18 +48,19 @@ Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
  on AMD USB4 controller
-Message-ID: <YxYXH5dqKqPANeVX@black.fi.intel.com>
+Message-ID: <YxYXfhCCaj6tGAx7@black.fi.intel.com>
 References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
  <YxWgGKIAvsxwSz85@black.fi.intel.com>
  <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
  <YxWqSYDWe0NitSkL@black.fi.intel.com>
- <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
+ <YxX3JeQLbciJ+hhc@black.fi.intel.com>
+ <CAAd53p5hjmPgPNifo-QV9KU4DFbvPnrYV-YD2b6cSXNN=5GLWQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <CAAd53p5hjmPgPNifo-QV9KU4DFbvPnrYV-YD2b6cSXNN=5GLWQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,28 +69,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 11:21:36PM +0800, Kai-Heng Feng wrote:
-> > Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
-> > detected? Does the PCIe "Card Present" (or Data Link Layer Active)
-> > status change at all or is it always 0?
+On Mon, Sep 05, 2022 at 11:24:26PM +0800, Kai-Heng Feng wrote:
+> > can you check if that is happening? It should show up in the dmesg when
+> > CONFIG_PCI_DEBUG=y but I don't see it in yours.
 > 
-> It changes only after tb_switch_add() is called.
+> That's because there isn't any child device yet, so the function bails early:
+> if (!dev->subordinate || list_empty(&dev->subordinate->devices))
 
-I doubt tb_switch_add() does anything but instead it is the established
-PCIe tunnel that then shows up as it toggles the Card Present bit or so.
-But that should also trigger PME if the root port is in D3 so you should
-see this wake if everything works accordingly (unless I'm missing
-something).
-
-So if you do this:
-
-1. Boot the system up, nothing connected
-2. Plug in the TBT/USB4 device but do not authorize the PCIe tunnel
-3. Wait for the TBT/USB4 domain to enter sleep (runtime suspend)
-4. Authorize the PCIe tunnel
-
-  # echo 1 > .../authorized
-
-The established PCIe tunnel should trigger PME and the root port then
-should be able to detect the PCIe link. Can you add full dmesg with
-"thunderbolt.dyndbg=+p" in the command line to the bug?
+Ah, of course I forgot that this is hotplug case so there are no need
+for the delays :/
