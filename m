@@ -2,116 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6C95AD64E
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 17:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5D35AD6A3
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Sep 2022 17:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238725AbiIEPYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 11:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S238871AbiIEPer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 11:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238758AbiIEPYn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 11:24:43 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178456410
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 08:24:39 -0700 (PDT)
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id AC6D93F11F
-        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 15:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1662391477;
-        bh=g146zNAqOIiaxRfFjyEWyS887hMtJQy+1QFNyABJP04=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Z4zr96dI4sv3pOTBL1abyUnCiMbjNxgAHgLvdvt4rdIiAXcmGqdrbcbEhs0f8TMfh
-         pHdIqiN+UI8yn0wigItD3WqevwdnMhXr9Vw+XHSRrTiXmeyv+QtTVdM1qiuW/MwwOQ
-         rBQav82GsuzT1307wsQzas4pyI7ejR8JntFpr8f8G8p4JrwgO3uQk+whC60tw9+Bq2
-         ksZyXdNrDXR1SmyXAq5v3wXtdzOmao7egZ8q0w670QNuC8cHGwY08p9geJIca1bjnE
-         KvGFfZdmIosAfMRu31TR/lP75yoOpsgQQiEFgFhg5jNex65m82fhJOv87bz2CfUqfh
-         ZlnH1R19bv5Hg==
-Received: by mail-wr1-f71.google.com with SMTP id o3-20020adfa103000000b0022514e8e99bso1368058wro.19
-        for <linux-usb@vger.kernel.org>; Mon, 05 Sep 2022 08:24:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=g146zNAqOIiaxRfFjyEWyS887hMtJQy+1QFNyABJP04=;
-        b=huFsd+oHgx4cpzKi/fFRfTYPAd/rgTRgJgvdNmtuLXLl05LJ9PNlB/e89/lkn2wZr7
-         6Cnd+hCCvHwGmE6YmUSa8cH+tl1vYWFeBS6QT3ck7ICSMcNmag3IYu/0IZXF9mWN+dyd
-         AqvIOOIiveY2YMDn29l5dFSF7YehhT9tHdZTCt9nflYFwvkeC53jcfduYTK/kCk35SH5
-         OFrZ5fY/7YMlHiR+ffX6cYahwT6IqGzo1rcA2ArHEY9QvhpDYSNEaQZSGIyVl39CK7TA
-         jpIDyARKrs1vD83a34jsE+BVX99Sn1rwgCtunHx9OhVLqxuds0MsaPVwaZHFU5PD9Nr4
-         sPXQ==
-X-Gm-Message-State: ACgBeo36t+FYrrETBjUGKO7AzSVtxWofyfPe4yITa22QwTdK+YB6+gHZ
-        wJ/LIpRjlyf5Lxk5B5CQvAME2KpbZ+psh4vvNve4Q7a6IrF1Iy7OX4wNf2cKlMEgYstSSt52m/A
-        n2srBa/sXiTnJ/ZxnHldF17PEDam5Zb4oY8GhJNHjoqY14CEif2nLqQ==
-X-Received: by 2002:a5d:508c:0:b0:226:e033:c042 with SMTP id a12-20020a5d508c000000b00226e033c042mr18738864wrt.389.1662391477403;
-        Mon, 05 Sep 2022 08:24:37 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR58aB0FpwdrnSxmhOkQKCebTZVB+w1RQdeso1rXEy4eMMgBjQOjuSIu0kT0g83M2OZWUATR+oRrrN8F98XJwMM=
-X-Received: by 2002:a5d:508c:0:b0:226:e033:c042 with SMTP id
- a12-20020a5d508c000000b00226e033c042mr18738851wrt.389.1662391477192; Mon, 05
- Sep 2022 08:24:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
- <YxWgGKIAvsxwSz85@black.fi.intel.com> <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
- <YxWqSYDWe0NitSkL@black.fi.intel.com> <YxX3JeQLbciJ+hhc@black.fi.intel.com>
-In-Reply-To: <YxX3JeQLbciJ+hhc@black.fi.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 5 Sep 2022 23:24:26 +0800
-Message-ID: <CAAd53p5hjmPgPNifo-QV9KU4DFbvPnrYV-YD2b6cSXNN=5GLWQ@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
- AMD USB4 controller
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+        with ESMTP id S238825AbiIEPen (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 11:34:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AC313E87;
+        Mon,  5 Sep 2022 08:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662392082; x=1693928082;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xyfIktsZgiPCthxn1bCTekhDbusq67xgMuCvjpVPHQY=;
+  b=RmzSd5OOZh+Ogc31OtcNd+d7pgxIwFlFSDPNSRk7wRGipvQp2w2/DGIy
+   g7bX945bgcvECwpaNLJy3XPANa6BSUmYNhR6nYYA3leIMa9nxn8nWdVVQ
+   5UK3QF1vOIBDB4nO1sTdlwA/DV6n1vjbmwSQUfkIQKxUFb1t+itzKLouu
+   g/T7dpBWmW49RTossUjJNErMMDZlNBF15honO78hWOOS/ttWiNZxj78Zu
+   Bi4eGrR4eZNZ1xDwkQw24KxWj5PnMyTxI4MmgATwtBYwU3yE/82oYHrTr
+   CYK0qDqoz5Og+kZEL3Qw7oou6Pig2BTF5cBxSHdZasIFooITt64biWVKC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="382710231"
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="382710231"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 08:34:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,291,1654585200"; 
+   d="scan'208";a="756075896"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Sep 2022 08:34:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 9AD3014F; Mon,  5 Sep 2022 18:34:55 +0300 (EEST)
+Date:   Mon, 5 Sep 2022 18:34:55 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
 Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
         YehezkelShB@gmail.com, sanju.mehta@amd.com,
         mario.limonciello@amd.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
+ on AMD USB4 controller
+Message-ID: <YxYXH5dqKqPANeVX@black.fi.intel.com>
+References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
+ <YxWgGKIAvsxwSz85@black.fi.intel.com>
+ <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+ <YxWqSYDWe0NitSkL@black.fi.intel.com>
+ <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 9:18 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Mon, Sep 05, 2022 at 10:50:33AM +0300, Mika Westerberg wrote:
-> > > Yes those root ports are resumed to D0 when something is plugged. They
-> > > however fail to detect any externel PCIe devices.
-> >
+On Mon, Sep 05, 2022 at 11:21:36PM +0800, Kai-Heng Feng wrote:
 > > Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
 > > detected? Does the PCIe "Card Present" (or Data Link Layer Active)
 > > status change at all or is it always 0?
->
-> I wonder if we are simply missing the required delays here? Looking at
-> the lspci dump in the bugzilla you refer the root port 03.1 supports
-> active link reporting:
->
->                 LnkCap: Port #247, Speed 2.5GT/s, Width x1, ASPM L1, Exit Latency L1 <4us
->                         ClockPM- Surprise- LLActRep+ BwNot- ASPMOptComp+
->
-> So when the link goes back to L0 (D3 -> D0 transition) the kernel should
-> issue the 100+ ms reset delay in pci_bridge_wait_for_secondary_bus():
+> 
+> It changes only after tb_switch_add() is called.
 
-This was actually the first thing I tried but it doesn't work. Even a
-5 seconds delay doesn't work either.
+I doubt tb_switch_add() does anything but instead it is the established
+PCIe tunnel that then shows up as it toggles the Card Present bit or so.
+But that should also trigger PME if the root port is in D3 so you should
+see this wake if everything works accordingly (unless I'm missing
+something).
 
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pci.c#n5045
->
-> can you check if that is happening? It should show up in the dmesg when
-> CONFIG_PCI_DEBUG=y but I don't see it in yours.
+So if you do this:
 
-That's because there isn't any child device yet, so the function bails early:
-if (!dev->subordinate || list_empty(&dev->subordinate->devices))
+1. Boot the system up, nothing connected
+2. Plug in the TBT/USB4 device but do not authorize the PCIe tunnel
+3. Wait for the TBT/USB4 domain to enter sleep (runtime suspend)
+4. Authorize the PCIe tunnel
 
-Kai-Heng
+  # echo 1 > .../authorized
+
+The established PCIe tunnel should trigger PME and the root port then
+should be able to detect the PCIe link. Can you add full dmesg with
+"thunderbolt.dyndbg=+p" in the command line to the bug?
