@@ -2,78 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDAA5AEEFA
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 17:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AACD55AEEF0
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 17:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiIFPgh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Sep 2022 11:36:37 -0400
+        id S238706AbiIFPfR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Sep 2022 11:35:17 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237500AbiIFPgM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 11:36:12 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B000BD17C
-        for <linux-usb@vger.kernel.org>; Tue,  6 Sep 2022 07:45:31 -0700 (PDT)
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 945383F45F
-        for <linux-usb@vger.kernel.org>; Tue,  6 Sep 2022 14:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1662474555;
-        bh=97GqXImGG+MXZDwD0Hi1FKiYbWbcXEGTrI+TzMSJ84w=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=D/HOJV6RFEGLJwNCdMr/tTV7/4k2jFrRiuPKhsPEDsLMK2sA9ObcG8CF+uvPNhzsO
-         DKxXkJ+Eax+CkfPk5XiJwkL3wLSv+z/B4J930zC03KDipczfYdNof2UQlPifJlzu2E
-         uSFmsWZTwwoVYRUd2ebdU1lExRDNZpfpwnep6o13H5TSbdnJoCRx0KrfaoDDroN39v
-         FRzHPHgvWcjhdGUUEqNH5sjH1E7aK4siFLEGyn2DvN8t2I5BCWSbw9p4u4G/mWihUp
-         cqLGNHxtHa/FPRZYL9OSEIHvtLrCpkXGe8FZ6AbAsWhuhF6p7RKqas97hySD9iSu/z
-         ZBQJ6MAqDlKIA==
-Received: by mail-wr1-f71.google.com with SMTP id c6-20020adfa706000000b00222c3caa23eso2457089wrd.15
-        for <linux-usb@vger.kernel.org>; Tue, 06 Sep 2022 07:29:15 -0700 (PDT)
+        with ESMTP id S231831AbiIFPeB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 11:34:01 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4914DF18
+        for <linux-usb@vger.kernel.org>; Tue,  6 Sep 2022 07:44:38 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id m12-20020a056e021c2c00b002ed9189c241so9653003ilh.15
+        for <linux-usb@vger.kernel.org>; Tue, 06 Sep 2022 07:44:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=97GqXImGG+MXZDwD0Hi1FKiYbWbcXEGTrI+TzMSJ84w=;
-        b=SaDEuouDAl9LT0Dwy8qakFyVFd+lksbNQAqY/dbYmHh6E712lmMUsxYw9urRsDec7u
-         lOFGGQPLJjY9on784fmdT0ZdY/YbkI0HRKxOGSS4tMo+VYM60K9YJ7Nehg4/+TRYA8KW
-         1wEQTF2xSxz/5VUFJHeTUnzlcwa30/U4uHUf/CLU4G8UZLQtYKc7ixldilySKCTcGhum
-         IbiSHPmCvZy724xZbwWoP/AUIxAENg2TIU4PCuzLSy1sMmU+Xr+hQv9+7I5RgwjNMTC5
-         FEQeBTDin0JCdXyjobEazPKBb4fzZLraaSjWQ96STsMOyoRrHkiK3+fj567y67Ug0cu8
-         r3Zw==
-X-Gm-Message-State: ACgBeo1wmohXCAz4rZtBLEzhCQ/fnfy1khiQTUnXa9Ru+pgHqlvOqE7T
-        ZMF/fIWlnhkpvN2NNDIyvjBdNa3CLi/fEbRDPp8ez9/NDoQdeMbeqenNXrPktyeos1qg6Vn1V5Q
-        cPAJ+/bUA6eKlgxSfbFdzCEPY9cyaYL3ffJyAzLXvx2nvCaSrnUrdOQ==
-X-Received: by 2002:a5d:47a6:0:b0:228:473c:b84b with SMTP id 6-20020a5d47a6000000b00228473cb84bmr11147199wrb.556.1662474555166;
-        Tue, 06 Sep 2022 07:29:15 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5HpYYxZQ9UXOe2F+hMzRwb0JPHQBggFgsZyckZdFaZor7r/1SrdJeC9o6xq/HmIFMAPcD0JeHb69TOJj3/CiA=
-X-Received: by 2002:a5d:47a6:0:b0:228:473c:b84b with SMTP id
- 6-20020a5d47a6000000b00228473cb84bmr11147182wrb.556.1662474554828; Tue, 06
- Sep 2022 07:29:14 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Fe89WGWJZwiIb158sxstTr/GnL2kLOTXmABZOYRz0hw=;
+        b=1eFdBh5HFmUFr4B2bqUyjuEjVxLwsyiHOQ2aMNZPu5FOQYq6bFJP+kyAU36Mov3kf+
+         2G0VXQ1hSUjAHjkGC9tugSmu04SWeFK99BQ4rjTKyqrgxyp50QA21YZQrWHq4bWRs9Kw
+         mmJoSQjFoEA+wgTibjG/Nc3yqpyahBMIwX8aW+0oCRXGFNuNxB7bVXeNtQijQyAcKGjX
+         oC6MvCUbu2D0c84tbK3YwG89qjYfK55mbrKJL0Xq4pU5M88XCw4ZbGSRXAm5qJe2VuP8
+         YgTAiL7L68SVz0Yc4kUCcPNaxN7bQBf4wU1vUvl7acqRFesSRgipE2QGfkI+U5heApFW
+         LVKA==
+X-Gm-Message-State: ACgBeo0Pu+Y0hy2Y5QCGzmiP2WWcL7qwvQbCQa1kA6yIMRhUtj/VsjCd
+        1W5c6gkn1WW0XI1N27mKrmTHuEu8UTxflm1YTmrcQphCLnnd
+X-Google-Smtp-Source: AA6agR6UbPF1yi0UcJv+otI7unVJjhlAKyO1RsEcB8JlQSEq+cfX8KQb0M4+0FH+ofYXeEYxmb4LC2NcF/HOw6U4uZe+2iofILjf
 MIME-Version: 1.0
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
- <YxWgGKIAvsxwSz85@black.fi.intel.com> <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
- <YxWqSYDWe0NitSkL@black.fi.intel.com> <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
- <YxYXH5dqKqPANeVX@black.fi.intel.com> <CAAd53p5tYG=mAR-RSr1g_iznmmcCy1QpthG5vQzr99AP4QLJyg@mail.gmail.com>
- <YxdNKx1OFKsgBUBu@black.fi.intel.com>
-In-Reply-To: <YxdNKx1OFKsgBUBu@black.fi.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 6 Sep 2022 22:29:03 +0800
-Message-ID: <CAAd53p6nNh1nUSfJgj5db+2B=eOCfiKta5aRiGsE4N0teL9cPQ@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
- AMD USB4 controller
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, sanju.mehta@amd.com,
-        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6e02:1bcb:b0:2ed:3517:3292 with SMTP id
+ x11-20020a056e021bcb00b002ed35173292mr12792554ilv.103.1662475465936; Tue, 06
+ Sep 2022 07:44:25 -0700 (PDT)
+Date:   Tue, 06 Sep 2022 07:44:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000098580e05e8033b9a@google.com>
+Subject: [syzbot] usb-testing boot error: BUG: unable to handle kernel paging
+ request in follow_page_mask
+From:   syzbot <syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,74 +55,106 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 9:37 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Tue, Sep 06, 2022 at 08:57:20PM +0800, Kai-Heng Feng wrote:
-> > On Mon, Sep 5, 2022 at 11:34 PM Mika Westerberg
-> > <mika.westerberg@linux.intel.com> wrote:
-> > >
-> > > On Mon, Sep 05, 2022 at 11:21:36PM +0800, Kai-Heng Feng wrote:
-> > > > > Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
-> > > > > detected? Does the PCIe "Card Present" (or Data Link Layer Active)
-> > > > > status change at all or is it always 0?
-> > > >
-> > > > It changes only after tb_switch_add() is called.
-> > >
-> > > I doubt tb_switch_add() does anything but instead it is the established
-> > > PCIe tunnel that then shows up as it toggles the Card Present bit or so.
-> > > But that should also trigger PME if the root port is in D3 so you should
-> > > see this wake if everything works accordingly (unless I'm missing
-> > > something).
-> >
-> > You are right. Sometimes it may still fail to detect hotplugged device
-> > right after tb_switch_add().
-> > At which point PCIe tunnels are established? Is it after tb_scan_port()?
->
-> They are established when userspace writes "1" to ../authorized of the
-> device (not automatically).
->
-> On Ubuntu that's boltd that handles this so you may need to disable it
-> before you do the experiment.
+Hello,
 
-In the dmesg it was disabled and "authorized" was 0 originally.
+syzbot found the following issue on:
 
->
-> > I found that it's cleaner to wakeup hotplug ports via iterating device
-> > link consumers at the end of tb_scan_port().
-> >
-> > According to your commit b2be2b05cf3b1c7b499d3b05decdcc524879fea7
-> > ("thunderbolt: Create device links from ACPI description"), it states
-> > "The _DSD can be added to tunneled USB3 and PCIe ports, and is needed to
-> > make sure the USB4 NHI is resumed before any of the tunneled ports so
-> > the protocol tunnels get established properly before the actual port
-> > itself is resumed. Othwerwise the USB/PCI core find the link may not be
-> > established and starts tearing down the device stack."
-> >
-> > So isn't waking them up a logical thing to do here?
->
-> No they should wake up themselves.
+HEAD commit:    4e55e22d3d9a USB: hcd-pci: Drop the unused id parameter fr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b2d4d7080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b3a1fd733d73b7a14d7
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-OK.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/05f931abacee/disk-4e55e22d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9b749a498398/vmlinux-4e55e22d.xz
 
->
-> > > So if you do this:
-> > >
-> > > 1. Boot the system up, nothing connected
-> > > 2. Plug in the TBT/USB4 device but do not authorize the PCIe tunnel
-> > > 3. Wait for the TBT/USB4 domain to enter sleep (runtime suspend)
-> > > 4. Authorize the PCIe tunnel
-> > >
-> > >   # echo 1 > .../authorized
-> > >
-> > > The established PCIe tunnel should trigger PME and the root port then
-> > > should be able to detect the PCIe link. Can you add full dmesg with
-> > > "thunderbolt.dyndbg=+p" in the command line to the bug?
-> >
-> > dmesg attached. Unfortunately there's no PME.
->
-> Hmm, attached to where? Forgot to attach? ;-)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com
 
-Oops, it's attached to the Bugzilla now.
+BUG: unable to handle page fault for address: ffffeefda00001ff
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 0 P4D 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 687 Comm: kworker/u4:0 Not tainted 6.0.0-rc1-syzkaller-00049-g4e55e22d3d9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
+RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
+RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
+RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
+RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
+Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
+RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
+RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
+RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
+RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
+R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __get_user_pages+0x3f2/0x1020 mm/gup.c:1193
+ __get_user_pages_locked mm/gup.c:1399 [inline]
+ __get_user_pages_remote+0x18f/0x830 mm/gup.c:2109
+ get_user_pages_remote+0x84/0xc0 mm/gup.c:2182
+ get_arg_page+0xe4/0x2a0 fs/exec.c:222
+ copy_string_kernel+0x169/0x460 fs/exec.c:639
+ copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+ kernel_execve+0x377/0x500 fs/exec.c:2001
+ call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+CR2: ffffeefda00001ff
+---[ end trace 0000000000000000 ]---
+RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
+RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
+RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
+RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
+RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
+Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
+RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
+RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
+RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
+RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
+R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	00 80 88 ff ff 4c    	add    %al,0x4cffff88(%rax)
+   6:	01 e8                	add    %ebp,%eax
+   8:	4d 89 e5             	mov    %r12,%r13
+   b:	49 c1 ed 1b          	shr    $0x1b,%r13
+   f:	41 81 e5 f8 0f 00 00 	and    $0xff8,%r13d
+  16:	49 01 c5             	add    %rax,%r13
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	4c 89 ea             	mov    %r13,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 d4 18 00 00    	jne    0x1908
+  34:	4d 8b 75 00          	mov    0x0(%r13),%r14
+  38:	31 ff                	xor    %edi,%edi
+  3a:	49 83 e6 9f          	and    $0xffffffffffffff9f,%r14
+  3e:	4c                   	rex.WR
+  3f:	89                   	.byte 0x89
 
-Kai-Heng
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
