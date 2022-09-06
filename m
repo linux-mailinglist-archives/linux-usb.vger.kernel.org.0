@@ -2,124 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FC95ADDB4
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 05:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20015ADE02
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 05:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238153AbiIFDDX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 23:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S238308AbiIFD22 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 23:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiIFDDS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 23:03:18 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98687659F3;
-        Mon,  5 Sep 2022 20:03:17 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28620mUK018111;
-        Tue, 6 Sep 2022 03:02:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Tc6EpNFZm+9NHdKjj0VbkY8yZPYUDinr4yfonAuofRQ=;
- b=IAnvaksPMtnVdIIMrni6mKp4WGSJOyD2ZCJEokA4bvyhrpm9llahutfH3bmEENuKn0gC
- j5L4wCUsIJlg9w2NIyOdJHFQ869u1H/+VnRmvU7+3bP2GgKXu7zOxHidI6slP5+CoKbh
- fI7xvj/rD8OwQ2D38xtXXty4wKH16HFzaqmRKYIM7GdcCvH6bO1QKmlmRpIrcKFei0Jn
- qFuS8SSy5+z5PsPDMKxoB31dNBS/f5Po4fH/TohXJ7yKWiTURHw3XCPLjTYXUK2er99H
- J5EW+g5GhK4zJ25jiErlvwXiOvJ97SG1XFY08AG5doYbPVKKTy8alVvucnR9eZ6QN0uM TQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jby58wj5r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 03:02:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2862mYOw024803
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Sep 2022 02:48:34 GMT
-Received: from [10.216.11.219] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 5 Sep 2022
- 19:48:26 -0700
-Message-ID: <4e5bc823-0a98-da39-9f01-af819ee675ef@quicinc.com>
-Date:   Tue, 6 Sep 2022 08:18:19 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v12 2/3] phy: qcom-snps: Add support for overriding phy
- tuning parameters
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-References: <1662201048-26049-1-git-send-email-quic_kriskura@quicinc.com>
- <1662201048-26049-3-git-send-email-quic_kriskura@quicinc.com>
- <20220906024552.lob5k4q3iyagyo5e@baldur>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20220906024552.lob5k4q3iyagyo5e@baldur>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Xul-_ViYEhCSAQikk6TYI23VuJ3TYYmm
-X-Proofpoint-GUID: Xul-_ViYEhCSAQikk6TYI23VuJ3TYYmm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_01,2022-09-05_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1015 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209060013
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S238371AbiIFD2G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 23:28:06 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760BC6CD3E
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 20:27:36 -0700 (PDT)
+X-UUID: 9ca6b3b5ee494520a2c44c9b04f4a8aa-20220906
+X-CPASD-INFO: 743a436644ff47e7946ab9795cb4f12f@gIRtgWFlZGZgVKiyg3qwcVllZpGSZVe
+        Id52CZZRhXoaVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBhXoZgUZB3hnZtgWVhZg==
+X-CLOUD-ID: 743a436644ff47e7946ab9795cb4f12f
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:1.0,URL:-5,TVAL:172.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:141.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:1.0,CFOB:1.0,SPC:0,SIG:-
+        5,AUF:12,DUF:4112,ACD:71,DCD:71,SL:0,EISP:0,AG:0,CFC:0.2,CFSR:0.155,UAT:0,RAF
+        :0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EA
+        F:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 9ca6b3b5ee494520a2c44c9b04f4a8aa-20220906
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 9ca6b3b5ee494520a2c44c9b04f4a8aa-20220906
+X-User: zenghongling@kylinos.cn
+Received: from localhost.localdomain.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <zenghongling@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1249559960; Tue, 06 Sep 2022 11:27:57 +0800
+From:   zenghongling <zenghongling@kylinos.cn>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        zhongling0719@126.com, zenghongling <zenghongling@kylinos.cn>
+Subject: [PATCH 1/3] uas: add no-uas quirk for Hiksemi usb_disk
+Date:   Tue,  6 Sep 2022 11:27:54 +0800
+Message-Id: <1662434874-5116-1-git-send-email-zenghongling@kylinos.cn>
+X-Mailer: git-send-email 2.1.0
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The UAS mode of Hiksemi is reported to fail to work on several platforms
+with the following error message, then after re-connecting the device will
+be offlined and not working at all.
 
+[  592.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
+                   inflight: CMD
+[  592.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
+                   04 00 00
+[  592.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
+                   inflight: CMD
+[  592.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
+                   00 08 00
 
-On 9/6/2022 8:15 AM, Bjorn Andersson wrote:
-> On Sat, Sep 03, 2022 at 04:00:47PM +0530, Krishna Kurapati wrote:
-> [..]
->> +static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
->> +{
->> +	struct device_node *node = dev->of_node;
->> +	s32 val;
->> +	int ret, i;
->> +	struct qcom_snps_hsphy *hsphy;
->> +	const struct override_param_map *cfg = of_device_get_match_data(dev);
-> 
-> Given that you don't have any .data specified for the other compatibles
-> (which is fine), cfg would be NULL here and below loop would attempt to
-> access NULL[0].prop_name and crash.
-> 
-> Please add a check for !cfg and just return here.
-> 
-> With that I think the series looks good.
-> 
-> Regards,
-> Bjorn
-My bad. Missed this before. Thanks for pointing it out.
-Will push updated changes.
+These disks have a broken uas implementation, the tag field of the status 
+iu-s is not set properly,so we need to fall-back to usb-storage.
 
-Thanks,
-Krishna,
+Signed-off-by: zenghongling <zenghongling@kylinos.cn>
+---
+ linux-4.9.327/drivers/usb/storage/unusual_uas.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/linux-4.9.327/drivers/usb/storage/unusual_uas.h b/linux-4.9.327/drivers/usb/storage/unusual_uas.h
+index cdff7dc..2fc6787 100644
+--- a/linux-4.9.327/drivers/usb/storage/unusual_uas.h
++++ b/linux-4.9.327/drivers/usb/storage/unusual_uas.h
+@@ -62,6 +62,12 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_IGNORE_UAS),
+ 
++UNUSUAL_DEV(0x090c, 0x2000, 0x0000, 0x9999,
++		"Hiksemi",
++		"External HDD",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /*
+  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+  * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
+-- 
+2.1.0
+
