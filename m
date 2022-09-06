@@ -2,48 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C19B5ADFFE
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 08:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047AD5AE278
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 10:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238584AbiIFGiS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Sep 2022 02:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
+        id S234052AbiIFI1q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Sep 2022 04:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbiIFGiR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 02:38:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24C722286;
-        Mon,  5 Sep 2022 23:38:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94278B8161C;
-        Tue,  6 Sep 2022 06:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A81FAC433D6;
-        Tue,  6 Sep 2022 06:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662446294;
-        bh=QsCDlqO4tjSBHwaY1BpaR2HUe1nmWPIOovcOuwER1F0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YBSs4dEHzflv4FTctNetNLXgdPKv5Hqe+R/BB1M9gAM5+84WiarO4LPC+Ya3Zn9JM
-         GwjUeuXMi/iCXJYbX0JLzs6ebCB6XxE+nWEJARGKdcy+dBWfOqGiTXED+cTPQ6gZ7v
-         Q8DmXDYsuVmPfRNQuJAdaysTt583Ugr2z7WxUd8s=
-Date:   Tue, 6 Sep 2022 08:38:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vincent Shih <vincent.sunplus@gmail.com>
-Cc:     kishon@ti.com, vkoul@kernel.org, linux-usb@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wells.lu@sunplus.com
+        with ESMTP id S234006AbiIFI1n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 04:27:43 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89936696E5;
+        Tue,  6 Sep 2022 01:27:41 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.80.140) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 6 Sep 2022
+ 11:27:32 +0300
 Subject: Re: [PATCH] phy: usb: free the buffer after reading a given nvmem
  cell
-Message-ID: <Yxbq0ynfdsKNAySv@kroah.com>
+To:     Vincent Shih <vincent.sunplus@gmail.com>, <kishon@ti.com>,
+        <vkoul@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <wells.lu@sunplus.com>
 References: <1662445382-29879-1-git-send-email-vincent.sunplus@gmail.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <9d396131-72da-772b-3027-89d390cad1fa@omp.ru>
+Date:   Tue, 6 Sep 2022 11:27:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <1662445382-29879-1-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.80.140]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 09/06/2022 07:30:13
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 172591 [Sep 06 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 498 498 840112829f78e8dd3e3ddbbff8b15d552f4973a3
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.80.140 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.80.140
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 09/06/2022 07:34:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 9/6/2022 6:35:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,15 +80,18 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 02:23:02PM +0800, Vincent Shih wrote:
+Hello!
+
+On 9/6/22 9:23 AM, Vincent Shih wrote:
+
 > Use kfree() to free the buffer after calling nvmem_cell_read() to
 > read a given nvmem cell.
-> 
+
+   Your patch does more than just that. It looks like we need 2 patches here...
+
 > Fixes:99d9ccd97385("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
 
-This is not a commit in Linus's tree, are you sure it is right?
-
-And the format is not quite correct, you need some spaces in the line.
+   Need spaces after : and before (.
 
 > Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
 > ---
@@ -71,20 +102,16 @@ And the format is not quite correct, you need some spaces in the line.
 > index 5269968..c8540e1 100644
 > --- a/drivers/phy/sunplus/phy-sunplus-usb2.c
 > +++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> @@ -13,6 +13,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
-> +#include <linux/err.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/nvmem-consumer.h>
+[...]
 > @@ -92,13 +93,15 @@ static int update_disc_vol(struct sp_usbphy *usbphy)
 >  	otp_v = nvmem_cell_read(cell, &otp_l);
 >  	nvmem_cell_put(cell);
 >  
 > -	if (otp_v) {
 > +	if (!IS_ERR(otp_v)) {
+
+   This needs a separate patch, I think...
+
 >  		set = *(otp_v + 1);
 >  		set = (set << (sizeof(char) * 8)) | *otp_v;
 >  		set = (set >> usbphy->disc_vol_addr_off) & J_DISC;
@@ -104,8 +131,6 @@ And the format is not quite correct, you need some spaces in the line.
 >  MODULE_LICENSE("GPL");
 > +
 
-Why the extra blank line?
+   Huh? :-)
 
-thanks,
-
-greg k-h
+MBR, Sergey
