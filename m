@@ -2,84 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFD05AEFD0
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 18:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16455AF08A
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 18:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbiIFQCW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Sep 2022 12:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S238928AbiIFQhD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Sep 2022 12:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbiIFQCH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 12:02:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BE392F44;
-        Tue,  6 Sep 2022 08:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662477735; x=1694013735;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pvrR9AaLZeSwwdJMT20ILWHfqE4EnXxLAynRB+jX/wQ=;
-  b=Um8gNvqCvUVyx8LaKk16gyE6h8lS6nQ7vGfMfL0UD0FBVyU/oMurtOlr
-   QAiMwMq7Mm6Da8SmBKQmU9Y74lkA9RrpTKboCyLYf/0las1kh59hM0u0N
-   18NozXJRxTQ3GiQtrPE+FtOFdV8GWP9oes4yuZVuaMpfvfWsEPLfIuZf7
-   MEEDBTtvuzk17MvnzjE0zVsbXYq1CMOv8ym4LBhP5Ts5Hf4MXIelCB1sk
-   1vYaqIVbIVodGKyn1NVtG/HHnd5fgHnWB6kENpI8QV23RipOr2VywMmwm
-   qRKYVdQ6ejLrmDL+TXtolWBmtZlOCHF0jPM65miwngnBlQi7TsSk38pY6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297405550"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="297405550"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:22:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="675734200"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Sep 2022 08:22:11 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 5BF0586; Tue,  6 Sep 2022 18:22:27 +0300 (EEST)
-Date:   Tue, 6 Sep 2022 18:22:27 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, sanju.mehta@amd.com,
-        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
- on AMD USB4 controller
-Message-ID: <Yxdls5XlZ0EBGfON@black.fi.intel.com>
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
- <YxWgGKIAvsxwSz85@black.fi.intel.com>
- <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
- <YxWqSYDWe0NitSkL@black.fi.intel.com>
- <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
- <YxYXH5dqKqPANeVX@black.fi.intel.com>
- <CAAd53p5tYG=mAR-RSr1g_iznmmcCy1QpthG5vQzr99AP4QLJyg@mail.gmail.com>
- <YxdNKx1OFKsgBUBu@black.fi.intel.com>
- <CAAd53p6nNh1nUSfJgj5db+2B=eOCfiKta5aRiGsE4N0teL9cPQ@mail.gmail.com>
- <YxdgZavuLU78lqIL@black.fi.intel.com>
+        with ESMTP id S233093AbiIFQgl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 12:36:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D565594;
+        Tue,  6 Sep 2022 09:12:45 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286FbSDU003370;
+        Tue, 6 Sep 2022 16:12:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=aEc794XOU78IjaB4Anobb658Fmb1e6ScIqNaoytW334=;
+ b=O6rmfyZuPIyzviR/7O1t5ieVSmry31DE7NeTcJQrc21iZRgJ3fOyqGtg3qyjSRTnQUBo
+ dORmWS/xxrkFT2RbJjqz+wLaSdGuQKnxqQnKm3/vO7a/TaRfW/fzLj5LD4VzrvGvqdMN
+ mQys8e8N5/PEBIccRkJO+whLR0ON/Py/nqdlUTThumzULWGtYTQ2YPDLjlfVeqcN7Vis
+ G2xdWypc8vLt9YX+oxNk5YxvWBfRRGCIjzMLurC4iQnY50wRcE+DC06OxE/g5YoZ7NdB
+ KDTK9HNJs6H7XyiMKhCFBJEGzu73G8UHlcObTjLzue3JlqI0e5Fw5xD1IK79TAKhCroc 9Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jdusrjqwf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 16:12:19 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 286GCJKR002287
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Sep 2022 16:12:19 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 6 Sep 2022 09:12:13 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v12 0/3] Add QCOM SNPS PHY overriding params support
+Date:   Tue, 6 Sep 2022 21:42:06 +0530
+Message-ID: <1662480729-10187-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxdgZavuLU78lqIL@black.fi.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1O36iFad_5QGW_pYz3NsIDYbgjU5rFOe
+X-Proofpoint-ORIG-GUID: 1O36iFad_5QGW_pYz3NsIDYbgjU5rFOe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=673 malwarescore=0 suspectscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060075
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 05:59:49PM +0300, Mika Westerberg wrote:
-> This reminded me that in Intel hardware there is an ACPI power resource that is
-> shared between related devices. IIRC there is _PR0() method under the root
-> port, xHCI and the TBT NHI that returns the same power resource. Now, when the
-> power resource is turned on for any of the devices the kernel wakes up the rest
-> too to make sure they get properly re-initialized if they went into
-> D0unitialized or something like that. The commit that added this is
-> 4533771c1e53 ("ACPI / PM: Introduce concept of a _PR0 dependent device").
+Added support for overriding tuning parameters in QCOM SNPS PHY
+from device tree. This parameter tuning is required to tune the
+hs signal on dp/dm lines for electrical compliance to be successful.
 
-Probably has nothing to do with this actually.
+Changes in v12:
+Fixed nitpicks in driver code.
+
+Changes in v11:
+Made changes to logs added in phy driver.
+Fixed nitpicks in code.
+
+Changes in v10:
+Fixed patch headers.
+
+changes in v9:
+Fixed nitpick in driver code.
+
+changes in v8:
+Fixed nitpick in driver code.
+
+changes in v7:
+Fixed nitpick in driver code and dtsi file.
+
+changes in v6:
+Fixed errors in dt-bindings.
+Fixed nitpick in driver code.
+
+changes in v5:
+Fixed nitpicks in code.
+Added minimum and maximum for each parameter added in dt-bindings.
+Added proper suffixes to each parameter as per dtschema.
+
+changes in v4:
+Fixed nitpicks in code.
+Initial compliance test results showed overshoot in the middle of eye
+diagram. The current dt values were put in place to correct it and fix
+overshoot issue.
+
+changes in v3:
+Added support for phy tuning parameters to be represented in bps and
+corresponding register values to be written are obtained by traversing
+through data map declared in the driver.
+
+changes in v2:
+Reading the individual fields in each overriding register from
+device tree.
+
+Krishna Kurapati (2):
+  phy: qcom-snps: Add support for overriding phy tuning parameters
+  arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
+
+Sandeep Maheswaram (1):
+  dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params
+    bindings
+
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml       |  88 +++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   6 +
+ drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c      | 252 ++++++++++++++++++++-
+ 3 files changed, 344 insertions(+), 2 deletions(-)
+
+-- 
+2.7.4
+
