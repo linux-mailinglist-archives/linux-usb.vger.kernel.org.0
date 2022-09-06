@@ -2,135 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77F35ADC48
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 02:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5495ADCB0
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 02:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbiIFATZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Sep 2022 20:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S230168AbiIFAwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Sep 2022 20:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbiIFATX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 20:19:23 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56745C14;
-        Mon,  5 Sep 2022 17:19:22 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id o126so782510pfb.6;
-        Mon, 05 Sep 2022 17:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=v4JA0M0hCIbFC7NXFN+IygsKVK4ZMU4qWYqYqoR4tJc=;
-        b=fHHlrsomzS5RX1w3UIei5qFtxTClmy9iSQEvGb1yFamLQYZo+o6zDJ8zJUVbJLL82Y
-         pkr7UJu0RGPOf+0J7r9ut0astM8MHGg1EaaL+qlGu/ue2aBOikrSmX+DoJq6OVnfYCTQ
-         FMcozHAuaegI9kVFEFk5BCS8NUELgRVLurFlc4zQR+4mEluidRXNcvb1Uq6r9730CALq
-         i+o2Z457eW9sgjxUmvKSOZs27VXpd+EYrVSuTXtKTDhoWiowlHQASX22DQpd3afScQaO
-         NjyzcFcZoXy1i9cNJaiHRj8JaHrrDq+3JIoFmZc3azTXuJLuoblV3/wMiYnfYqdVD2x3
-         dUTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=v4JA0M0hCIbFC7NXFN+IygsKVK4ZMU4qWYqYqoR4tJc=;
-        b=1+/5jNNCtN2Fcbg7pa+Qn/ASzRvEJrQL10qk+VIX4yxA73AmUf3kGFqwy67432klT+
-         xI8H0pD7o2ehXiLaGzu1EbGJDhLIOVJa+pgCjPROUcBeAn5O6xhx2lfpjdWBK6tjUp8X
-         96WY+LDvoHHWl1avLrqsFV79rW8Cdx2ZVmgmCEe852dzNaaKUUdfMH/bMfcPBeyibutS
-         JVb2DPHW0NkXJq/hdYPVFDm0/oUWgZt+j9ceBnY/9sTXmfOib7HBi4/4WQci5KFVRK4f
-         QCl8bdsvVAV2uvVTXbNAZKydZesxAdqYCx7hDCA5YCSMS3Fy5wneVBEhLblQISGolQeu
-         d7+w==
-X-Gm-Message-State: ACgBeo18iFOHzHPbVoCq6ZcjBkFQfj/7YMbXiSussqZwsqA2g7flFT3a
-        8iaXhHR3W2O+9ens/wL9qkQ=
-X-Google-Smtp-Source: AA6agR6BSwkY2FCM/mxUqmLHetzPYwEnkn1n9g0P2sCyTVfQpw3+hUsDHc+Gpjiwldy8UpbPbUcIag==
-X-Received: by 2002:aa7:88c8:0:b0:536:926:700f with SMTP id k8-20020aa788c8000000b005360926700fmr53349294pff.72.1662423561657;
-        Mon, 05 Sep 2022 17:19:21 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:1190:fbfa:ae95:111c])
-        by smtp.gmail.com with ESMTPSA id c10-20020a624e0a000000b0053e156e9475sm431528pfb.182.2022.09.05.17.19.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 17:19:21 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 17:19:17 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 07/11] PCI: apple: switch to using
- fwnode_gpiod_get_index()
-Message-ID: <YxaSBRkAG/hKjFol@google.com>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-7-b29adfb27a6c@gmail.com>
+        with ESMTP id S229546AbiIFAwH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Sep 2022 20:52:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86413474C6
+        for <linux-usb@vger.kernel.org>; Mon,  5 Sep 2022 17:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662425526; x=1693961526;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cvqdInnz2xSvh4iJd+L/CHE93/Wbfcn1EXdltu/5pmI=;
+  b=csiaNZUfCoazaVRalE3x3XkIcuarc9vJXvKGXsJflQfoU6XR63/HDMTK
+   pkYDqArBF0bnswzIjYng+JIAFiVBGvaaZqL319YPn5jxLej0qJp+nPmAM
+   4G3ButDN5bqwE3WAQhXo+wqqZX77BywOvmZZStvllIw7YMMFN5WTKJLSP
+   2xnfDrO4CGl8Peit/v7wKI27fcBd8u9PlJpfaAmdo2FTUob/og4kowUgK
+   pdO89zIWaEsld5ihC8IyJGntZzJvtWT2JcnZB2Jza6EQf0iCqaRRWuuPq
+   ZB7xeQ/45lCK7Xt5qTdUZ1ncDW6PHH2bAl9cmWKGusX6ca6ICeGVJG7it
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="322641370"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="322641370"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 17:52:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="739718476"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 05 Sep 2022 17:52:04 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVMou-0004gX-0o;
+        Tue, 06 Sep 2022 00:52:04 +0000
+Date:   Tue, 06 Sep 2022 08:51:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 6690986da1e21f3bebe1aaa54a70c636f40343b5
+Message-ID: <6316997f.yLV9d2rNJ9/116AX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-7-b29adfb27a6c@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 04, 2022 at 11:30:59PM -0700, Dmitry Torokhov wrote:
-> I would like to stop exporting OF-specific gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
-> index a2c3c207a04b..d83817d3ff86 100644
-> --- a/drivers/pci/controller/pcie-apple.c
-> +++ b/drivers/pci/controller/pcie-apple.c
-> @@ -516,8 +516,8 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
->  	u32 stat, idx;
->  	int ret, i;
->  
-> -	reset = gpiod_get_from_of_node(np, "reset-gpios", 0,
-> -				       GPIOD_OUT_LOW, "PERST#");
-> +	reset = fwnode_gpiod_get_index(of_fwnode_handle(np),
-> +				       "reset", 0, GPIOD_OUT_LOW, "PERST#");
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 6690986da1e21f3bebe1aaa54a70c636f40343b5  usb: clean up after dropping driver registration log spam
 
-Hmm, I am looking at the driver and it leaks the reset gpio on
-unbind/unload. I guess it does not matter in practice, but still nice
-not to leak. Thankfully it is easy to cure by switching to devm option:
-devm_fwnode_gpiod_get().
+elapsed time: 728m
 
-I'll send and updated patch with a new justification.
+configs tested: 53
+configs skipped: 2
 
-Thanks.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                              allyesconfig
+arm                                 defconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+arc                  randconfig-r043-20220905
+m68k                             allmodconfig
+sh                               allmodconfig
+m68k                             allyesconfig
+arm                              allyesconfig
+x86_64                              defconfig
+arm64                            allyesconfig
+x86_64                               rhel-8.3
+i386                 randconfig-a003-20220905
+i386                 randconfig-a004-20220905
+i386                                defconfig
+i386                 randconfig-a001-20220905
+i386                 randconfig-a002-20220905
+i386                 randconfig-a005-20220905
+i386                 randconfig-a006-20220905
+x86_64                           allyesconfig
+i386                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-kvm
+x86_64               randconfig-a003-20220905
+x86_64               randconfig-a002-20220905
+x86_64               randconfig-a001-20220905
+x86_64               randconfig-a004-20220905
+x86_64               randconfig-a006-20220905
+x86_64               randconfig-a005-20220905
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20220905
+hexagon              randconfig-r041-20220905
+riscv                randconfig-r042-20220905
+s390                 randconfig-r044-20220905
+x86_64               randconfig-a012-20220905
+x86_64               randconfig-a013-20220905
+x86_64               randconfig-a011-20220905
+x86_64               randconfig-a014-20220905
+x86_64               randconfig-a016-20220905
+x86_64               randconfig-a015-20220905
+i386                 randconfig-a013-20220905
+i386                 randconfig-a012-20220905
+i386                 randconfig-a011-20220905
+i386                 randconfig-a014-20220905
+i386                 randconfig-a015-20220905
+i386                 randconfig-a016-20220905
 
 -- 
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp
