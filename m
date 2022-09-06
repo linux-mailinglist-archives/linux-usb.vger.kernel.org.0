@@ -2,92 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD32B5AE827
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 14:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A8C5AE8E3
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Sep 2022 14:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240172AbiIFMbM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Sep 2022 08:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S230112AbiIFM5h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Sep 2022 08:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239968AbiIFMaz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 08:30:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E144E275C2;
-        Tue,  6 Sep 2022 05:27:46 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="296579839"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="296579839"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:27:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="565074197"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:27:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1oVXfv-00975d-2X;
-        Tue, 06 Sep 2022 15:27:31 +0300
-Date:   Tue, 6 Sep 2022 15:27:31 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 04/11] usb: phy: tegra: switch to using
- devm_gpiod_get()
-Message-ID: <Yxc8s8IfzElm/mjS@smile.fi.intel.com>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-4-b29adfb27a6c@gmail.com>
- <CAHp75VdMr7wru-2hD1HH3OS5JTNdzt6VRqB6OFoCp2JkiuiTjw@mail.gmail.com>
- <YxZQj8bwJCx5rqDv@google.com>
- <CAHp75VdHJS4YgrTK15OuY5sxodxKObUtzturL+YPXFQ3_wpxig@mail.gmail.com>
- <YxZTS3Nl1YaMGoBC@google.com>
- <CAHp75VeNajcf-Y6xvDDVwZijg6U53ggg1HQox1AZ74=wRut+1Q@mail.gmail.com>
- <4a0d089d-6ac6-b92e-6ac7-3d3de0144b4b@roeck-us.net>
+        with ESMTP id S232850AbiIFM5g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 08:57:36 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71E71C2
+        for <linux-usb@vger.kernel.org>; Tue,  6 Sep 2022 05:57:35 -0700 (PDT)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AD2663F1A5
+        for <linux-usb@vger.kernel.org>; Tue,  6 Sep 2022 12:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1662469052;
+        bh=ZeMz6vTV3Lb+O6ntJe36FQ693bLtRnNCDnuRRDRkmJ0=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=pwSAfISoJOLtn1Bq7qOy0dEzbbLI3DuIzvvxFVd+/Dg/+6yoSsr8c6BZ5MskSSn+C
+         UWqat1E9+F/1FP3TVHsFmnHqhg6vaWUNkj7rwUnagy1556aIof/Y/E5cbiWDJb41xb
+         64F+A9+6sWuvJ4rFJhOdwSS8QaNMeFVzMH+s1ryP4THQ7ji3JhcZGsdY28mkbD5zNa
+         +sUqzvEl8IVOZmc8S6REwXMJ83nNOCzkk5fHThZ5ye6C6vhkUEMvTZXYyQYrGDoj9U
+         5ZbMMKqIuGstEsGJvq5CnLfWmbPs2X3GKmhOxpIcdv7p3zrNi2V5PWNDRSBopnA2wK
+         g3LlHP3BZeOkw==
+Received: by mail-wm1-f72.google.com with SMTP id c64-20020a1c3543000000b003a61987ffb3so6253976wma.6
+        for <linux-usb@vger.kernel.org>; Tue, 06 Sep 2022 05:57:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZeMz6vTV3Lb+O6ntJe36FQ693bLtRnNCDnuRRDRkmJ0=;
+        b=5FMcmlQ5X6toCfSw3p8r9TQ46M0Ro1K0BWOKjEBJlV5cgU4boWeBHeGHmlL9Lkh8Ib
+         boNT/UmEQZDSEqH4xNsJ+Dt1ZYboKj909irukt8u3ZDCykKIxOEie+SEi3/PSL5YAAmO
+         269HM0UzXOywLHgNfxlQDGAkATDNxtzoCu3tUkpWaIY/V30jPbaZNUrfkPXRnMK3URmt
+         jj76l+nKwp2xBqD0V+wf01enOVElap88D2mSWZeTudv0B5gU59d/VvUzcXDFoE40BIYD
+         KK6cmWX+MHPvLXMOt3Ehe8mbP7rYdeC0vZlJPS1p1iqUisqHKCewR0urp0Tzt62H5S0C
+         N2Pw==
+X-Gm-Message-State: ACgBeo219M/Ne9TmhPtyH+NEGW+lEQ6260uyNyaYvuDO+i99qtkY5c23
+        O2O4hi1UfsYwE3Zjt0wdtShu4XdnBfucWL+Dp3cisHn4xxoAKByZutwEetLGc51Fr2ocE8Whb5N
+        mKKtndwrnFOjyyqasa1RukKKktQta5YlocZdBWJCwNoaxLVkkLNUy1A==
+X-Received: by 2002:a05:600c:1f11:b0:3a5:3df9:4859 with SMTP id bd17-20020a05600c1f1100b003a53df94859mr13322117wmb.175.1662469052342;
+        Tue, 06 Sep 2022 05:57:32 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR65rWPT4NVP08yn563SnrAJ/I0xVzrfQgfTxoESTNMcEcebJlUJ23IE046tww33H8VYNhfbpKWUqYOa+yUYjMw=
+X-Received: by 2002:a05:600c:1f11:b0:3a5:3df9:4859 with SMTP id
+ bd17-20020a05600c1f1100b003a53df94859mr13322100wmb.175.1662469052047; Tue, 06
+ Sep 2022 05:57:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a0d089d-6ac6-b92e-6ac7-3d3de0144b4b@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
+ <YxWgGKIAvsxwSz85@black.fi.intel.com> <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+ <YxWqSYDWe0NitSkL@black.fi.intel.com> <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
+ <YxYXH5dqKqPANeVX@black.fi.intel.com>
+In-Reply-To: <YxYXH5dqKqPANeVX@black.fi.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 6 Sep 2022 20:57:20 +0800
+Message-ID: <CAAd53p5tYG=mAR-RSr1g_iznmmcCy1QpthG5vQzr99AP4QLJyg@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
+ AMD USB4 controller
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, sanju.mehta@amd.com,
+        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,57 +80,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 03:07:48PM -0700, Guenter Roeck wrote:
-> On 9/5/22 12:55, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 10:51 PM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> > > On Mon, Sep 05, 2022 at 10:41:40PM +0300, Andy Shevchenko wrote:
-> > > > On Mon, Sep 5, 2022 at 10:40 PM Dmitry Torokhov
-> > > > <dmitry.torokhov@gmail.com> wrote:
-> > > > > On Mon, Sep 05, 2022 at 01:59:44PM +0300, Andy Shevchenko wrote:
-> > > > > > On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-> > > > > > <dmitry.torokhov@gmail.com> wrote:
+On Mon, Sep 5, 2022 at 11:34 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Mon, Sep 05, 2022 at 11:21:36PM +0800, Kai-Heng Feng wrote:
+> > > Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
+> > > detected? Does the PCIe "Card Present" (or Data Link Layer Active)
+> > > status change at all or is it always 0?
+> >
+> > It changes only after tb_switch_add() is called.
+>
+> I doubt tb_switch_add() does anything but instead it is the established
+> PCIe tunnel that then shows up as it toggles the Card Present bit or so.
+> But that should also trigger PME if the root port is in D3 so you should
+> see this wake if everything works accordingly (unless I'm missing
+> something).
 
-...
+You are right. Sometimes it may still fail to detect hotplugged device
+right after tb_switch_add().
+At which point PCIe tunnels are established? Is it after tb_scan_port()?
 
-> > > > > > > +               gpiod = devm_gpiod_get(&pdev->dev, "nvidia,phy-reset",
-> > > > > > > +                                      GPIOD_OUT_HIGH);
-> > > > > > >                  err = PTR_ERR_OR_ZERO(gpiod);
-> > > > > > 
-> > > > > > What does _OR_ZERO mean now?
-> > > > > 
-> > > > > This converts a pointer to an error code if a pointer represents
-> > > > > ERR_PTR() encoded error, or 0 to indicate success.
-> > > > 
-> > > > Yes, I know that. My point is, how is it useful now (or even before)?
-> > > > I mean that devm_gpio_get() never returns NULL, right?
-> > > 
-> > > What does returning NULL have to do with anything.
-> > 
-> > It has to do with a dead code. If defm_gpiod_get() does not return
-> > NULL, then why do we even bother to check?
-> 
-> PTR_ERR_OR_ZERO() converts into an error code (if the pointer is an
-> ERR_PTR) or 0 if it is a real pointer. Its purpose is not to convert
-> NULL into 0, its purpose is to convert a pointer either into an error
-> code or 0. That is what is done here, and it is done all over the place
-> in the kernel. I don't see your problem with it. Care to explain ?
-> 
-> > > It converts a pointer
-> > > to a "classic" return code, with negative errors and 0 on success.
-> > > 
-> > > It allows to not use multiple IS_ERR/PTR_ERR in the code (I'd need 1
-> > > IS_ERR and 2 PTR_ERR, one in dev_err() and another to return).
-> > 
-> > I don't see how this is relevant.
-> 
-> You lost me. Really, please explain your problem with PTR_ERR_OR_ZERO().
+I found that it's cleaner to wakeup hotplug ports via iterating device
+link consumers at the end of tb_scan_port().
 
-I don't know what I was thinking about... You, guys, are right, sorry for
-my noise.
+According to your commit b2be2b05cf3b1c7b499d3b05decdcc524879fea7
+("thunderbolt: Create device links from ACPI description"), it states
+"The _DSD can be added to tunneled USB3 and PCIe ports, and is needed to
+make sure the USB4 NHI is resumed before any of the tunneled ports so
+the protocol tunnels get established properly before the actual port
+itself is resumed. Othwerwise the USB/PCI core find the link may not be
+established and starts tearing down the device stack."
 
--- 
-With Best Regards,
-Andy Shevchenko
+So isn't waking them up a logical thing to do here?
 
+>
+> So if you do this:
+>
+> 1. Boot the system up, nothing connected
+> 2. Plug in the TBT/USB4 device but do not authorize the PCIe tunnel
+> 3. Wait for the TBT/USB4 domain to enter sleep (runtime suspend)
+> 4. Authorize the PCIe tunnel
+>
+>   # echo 1 > .../authorized
+>
+> The established PCIe tunnel should trigger PME and the root port then
+> should be able to detect the PCIe link. Can you add full dmesg with
+> "thunderbolt.dyndbg=+p" in the command line to the bug?
 
+dmesg attached. Unfortunately there's no PME.
+
+Kai-Heng
