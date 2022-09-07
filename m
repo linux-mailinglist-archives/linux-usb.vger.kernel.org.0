@@ -2,64 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FEC5AF8E2
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 02:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B835AF8EE
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 02:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiIGALB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Sep 2022 20:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
+        id S229482AbiIGAW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Sep 2022 20:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiIGAK7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 20:10:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B2E7EFDB;
-        Tue,  6 Sep 2022 17:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662509457; x=1694045457;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5VL1HdoAlQpX/wJgCDQycSomzAIMxMiV5IkyN0016so=;
-  b=dhIPvwufq41j6iFqhlpLKFLotQUHfpKb8hKBLnUwNKJvs0o7uyZv3cN1
-   lCINu3dhmz4c6HO9DvextMOVPbhiVbAaBYEOjpv4KFF/ssVe4MpZhfpan
-   7fOQRjdkBCgVmjFssbci5eUQF8cRYRljYQp7+1Gf2S6RTucspacqx94ar
-   zXkBJGF+6/2FEa201N0DSRcH4HBJc4j9EOnnuf0czFFH0vFktq0OipcVZ
-   zf3I6W57OWCdZCyaOKhbION9tRjTNpzwMkro5PtOZUHtZNlRhexHgpRjH
-   mrMnfWipOnwcLTsSxoFEzfdPCMpW43k7IOVCgDrdy6icGpPED7eXyGE/9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="296740853"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="296740853"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 17:10:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="647424580"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 06 Sep 2022 17:10:53 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oViea-0005oX-0t;
-        Wed, 07 Sep 2022 00:10:52 +0000
-Date:   Wed, 07 Sep 2022 08:10:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, bpf@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, alsa-devel@alsa-project.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 840126e36e8ff272cb63158646433fa1324533d9
-Message-ID: <6317e168.JCyIK4idIjFsweBL%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        with ESMTP id S229437AbiIGAW0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Sep 2022 20:22:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B535FD3;
+        Tue,  6 Sep 2022 17:22:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA252B81AD5;
+        Wed,  7 Sep 2022 00:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27797C433C1;
+        Wed,  7 Sep 2022 00:22:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662510139;
+        bh=TYWpPceGQUQ3nUCdRp3xaZF6BK9txggkZUQFe6i+Vs4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TIVMP6mYzzT7hfQg6d6B2fGnVkgOWIf8Sa7mG47TYUdRKFuNNjAZlTQ+1X7XJSXVj
+         xJ0SWxeB6RfX2pmwosNN6e1wOPqGgh3L/24hcSDqTW8zPlo3eLAIk5rsvRg1RtrZXG
+         o7dFQaWCJA3qBTCFncDwxnOCaI90brg75nftLVgE=
+Date:   Tue, 6 Sep 2022 17:22:18 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [syzbot] usb-testing boot error: BUG: unable to handle kernel
+ paging request in follow_page_mask
+Message-Id: <20220906172218.b50521a3caf73095983a907e@linux-foundation.org>
+In-Reply-To: <00000000000098580e05e8033b9a@google.com>
+References: <00000000000098580e05e8033b9a@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,222 +58,115 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 840126e36e8ff272cb63158646433fa1324533d9  Add linux-next specific files for 20220906
 
-Error/Warning reports:
+(cc some of the gup.c developers)
 
-https://lore.kernel.org/linux-mm/202209021204.DcLzOllr-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209042337.FQi69rLV-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209060229.dVuyxjBv-lkp@intel.com
-https://lore.kernel.org/linux-mm/202209070728.o3stvgVt-lkp@intel.com
-https://lore.kernel.org/llvm/202208312208.HjwleIeN-lkp@intel.com
+On Tue, 06 Sep 2022 07:44:25 -0700 syzbot <syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com> wrote:
 
-Error/Warning: (recently discovered and may have been fixed)
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    4e55e22d3d9a USB: hcd-pci: Drop the unused id parameter fr..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16b2d4d7080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6b3a1fd733d73b7a14d7
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/05f931abacee/disk-4e55e22d.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/9b749a498398/vmlinux-4e55e22d.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com
+> 
+> BUG: unable to handle page fault for address: ffffeefda00001ff
 
-ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-arm-linux-gnueabi-ld: vkms_formats.c:(.text+0x1e98): undefined reference to `__divdi3'
-drivers/base/regmap/regmap-mmio.c:221:17: error: implicit declaration of function 'writesb'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:224:17: error: implicit declaration of function 'writesw'; did you mean 'writew'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:227:17: error: implicit declaration of function 'writesl'; did you mean 'writel'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:231:17: error: implicit declaration of function 'writesq'; did you mean 'writeq'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:231:17: error: implicit declaration of function 'writesq'; did you mean 'writesl'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:358:17: error: implicit declaration of function 'readsb'; did you mean 'readb'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:361:17: error: implicit declaration of function 'readsw'; did you mean 'readw'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:364:17: error: implicit declaration of function 'readsl'; did you mean 'readl'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readq'? [-Werror=implicit-function-declaration]
-drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readsl'? [-Werror=implicit-function-declaration]
-drivers/gpu/drm/amd/amdgpu/imu_v11_0_3.c:139:6: warning: no previous prototype for 'imu_v11_0_3_program_rlc_ram' [-Wmissing-prototypes]
-drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for drm_atomic_helper_check_wb_connector_state(). Prototype was for drm_atomic_helper_check_wb_encoder_state() instead
-drivers/gpu/drm/vkms/vkms_formats.c:(.text+0x4b0): undefined reference to `__divdi3'
-drivers/gpu/drm/vkms/vkms_formats.c:259: undefined reference to `__divdi3'
-drivers/gpu/drm/vkms/vkms_plane.c:105 vkms_plane_atomic_update() warn: variable dereferenced before check 'fb' (see line 103)
-drivers/scsi/qla2xxx/qla_os.c:2854:23: warning: assignment to 'struct trace_array *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-drivers/usb/host/ehci-platform.c:56:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-drivers/usb/host/ohci-platform.c:44:19: warning: 'hcd_name' defined but not used [-Wunused-const-variable=]
-include/linux/string.h:303:42: warning: 'strnlen' specified bound 4 exceeds source size 3 [-Wstringop-overread]
-kernel/bpf/memalloc.c:344 bpf_mem_alloc_destroy() error: potentially dereferencing uninitialized 'c'.
-kismet: WARNING: unmet direct dependencies detected for PINCTRL_IMX when selected by PINCTRL_IMX8MM
-ld: drivers/gpu/drm/vkms/vkms_formats.c:260: undefined reference to `__divdi3'
-ld: vkms_formats.c:(.text+0x47f): undefined reference to `__divdi3'
-mips-linux-ld: vkms_formats.c:(.text+0x384): undefined reference to `__divdi3'
-mips-linux-ld: vkms_formats.c:(.text.argb_u16_to_RGB565+0xd0): undefined reference to `__divdi3'
-mipsel-linux-ld: drivers/gpu/drm/vkms/vkms_formats.c:(.text+0x4d8): undefined reference to `__divdi3'
-sound/soc/codecs/tas2562.c:442:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-vkms_formats.c:(.text+0x455): undefined reference to `__divdi3'
-vkms_formats.c:(.text.argb_u16_to_RGB565+0xb0): undefined reference to `__divdi3'
+Thanks.  A bit strange that it came from the USB tree, but I assume this
+bug originates from Linus's current.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-drivers/usb/host/ehci-atmel.c:28:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ehci-exynos.c:35:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ehci-npcm7xx.c:27:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ehci-orion.c:68:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ehci-platform.c:56:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ehci-spear.c:27:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-drivers/usb/host/ohci-platform.c:44:19: warning: unused variable 'hcd_name' [-Wunused-const-variable]
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
-|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
-|   `-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
-|-- alpha-buildonly-randconfig-r001-20220906
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
-|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
-|-- arc-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
-|-- arm-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
-|-- arm-randconfig-r006-20220906
-|   |-- ERROR:__aeabi_ldivmod-drivers-gpu-drm-vkms-vkms.ko-undefined
-|   `-- ERROR:__aeabi_uldivmod-drivers-gpu-drm-vkms-vkms.ko-undefined
-|-- arm-randconfig-r013-20220905
-|   `-- arm-linux-gnueabi-ld:vkms_formats.c:(.text):undefined-reference-to-__divdi3
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
-|-- csky-randconfig-r006-20220906
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
-|-- csky-randconfig-s031-20220906
-|   |-- ERROR:__divdi3-drivers-gpu-drm-vkms-vkms.ko-undefined
-|   `-- kernel-exit.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-struct-sighand_struct-sighand-got-struct-sighand_struct-noderef-__rcu-sighand
-|-- i386-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
-|-- i386-randconfig-a001
-|   |-- drivers-usb-host-ehci-platform.c:warning:hcd_name-defined-but-not-used
-|   `-- drivers-usb-host-ohci-platform.c:warning:hcd_name-defined-but-not-used
-|-- i386-randconfig-a003
-|   |-- ERROR:__divdi3-drivers-gpu-drm-vkms-vkms.ko-undefined
-|   `-- ERROR:__udivdi3-drivers-gpu-drm-vkms-vkms.ko-undefined
-|-- i386-randconfig-a012
-|   |-- drivers-gpu-drm-vkms-vkms_formats.c:undefined-reference-to-__divdi3
-|   `-- ld:drivers-gpu-drm-vkms-vkms_formats.c:undefined-reference-to-__divdi3
-|-- i386-randconfig-a014
-|   |-- ld:vkms_formats.c:(.text):undefined-reference-to-__divdi3
-clang_recent_errors
-|-- arm64-randconfig-r005-20220906
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-function-imu_v11_0_3_program_rlc_ram
-|-- hexagon-randconfig-r001-20220906
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- hexagon-randconfig-r045-20220907
-|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
-|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
-|-- i386-randconfig-a002
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- i386-randconfig-a011
-|   |-- drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
-|-- i386-randconfig-a015
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- riscv-randconfig-r004-20220906
-|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-function-imu_v11_0_3_program_rlc_ram
-|-- riscv-randconfig-r042-20220907
-|   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
-|   `-- drivers-usb-host-ehci-spear.c:warning:unused-variable-hcd_name
-|-- s390-randconfig-r036-20220906
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:call-to-undeclared-function-trace_array_get_by_name-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   |-- drivers-scsi-qla2xxx-qla_os.c:error:call-to-undeclared-function-trace_array_put-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- drivers-scsi-qla2xxx-qla_os.c:error:incompatible-integer-to-pointer-conversion-assigning-to-struct-trace_array-from-int
-|-- x86_64-randconfig-a003
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-|-- x86_64-randconfig-a012
-|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-`-- x86_64-randconfig-a016
-    `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
-
-elapsed time: 721m
-
-configs tested: 64
-configs skipped: 2
-
-gcc tested configs:
-arc                  randconfig-r043-20220906
-riscv                randconfig-r042-20220906
-um                           x86_64_defconfig
-s390                 randconfig-r044-20220906
-um                             i386_defconfig
-i386                          randconfig-a014
-i386                          randconfig-a001
-i386                          randconfig-a012
-i386                                defconfig
-i386                          randconfig-a016
-i386                          randconfig-a003
-m68k                             allmodconfig
-i386                          randconfig-a005
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a002
-x86_64                        randconfig-a013
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a011
-i386                             allyesconfig
-x86_64                        randconfig-a006
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a015
-x86_64                        randconfig-a004
-ia64                             allmodconfig
-arm                              allyesconfig
-microblaze                      mmu_defconfig
-openrisc                         alldefconfig
-arm                          pxa3xx_defconfig
-sh                          r7785rp_defconfig
-sh                     sh7710voipgw_defconfig
-arm64                            allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-csky                              allnoconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-i386                          randconfig-c001
-sh                               allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220906
-hexagon              randconfig-r045-20220906
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a002
-i386                          randconfig-a015
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a001
-x86_64                        randconfig-a016
-x86_64                        randconfig-a003
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a005
-x86_64                          rhel-8.3-rust
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 0 P4D 0 
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 687 Comm: kworker/u4:0 Not tainted 6.0.0-rc1-syzkaller-00049-g4e55e22d3d9a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
+> RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
+> RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
+> RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
+> RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
+> Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
+> RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
+> RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
+> RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
+> RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
+> R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
+> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __get_user_pages+0x3f2/0x1020 mm/gup.c:1193
+>  __get_user_pages_locked mm/gup.c:1399 [inline]
+>  __get_user_pages_remote+0x18f/0x830 mm/gup.c:2109
+>  get_user_pages_remote+0x84/0xc0 mm/gup.c:2182
+>  get_arg_page+0xe4/0x2a0 fs/exec.c:222
+>  copy_string_kernel+0x169/0x460 fs/exec.c:639
+>  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+>  kernel_execve+0x377/0x500 fs/exec.c:2001
+>  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> Modules linked in:
+> CR2: ffffeefda00001ff
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
+> RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
+> RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
+> RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
+> RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
+> Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
+> RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
+> RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
+> RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
+> RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
+> R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
+> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:	00 80 88 ff ff 4c    	add    %al,0x4cffff88(%rax)
+>    6:	01 e8                	add    %ebp,%eax
+>    8:	4d 89 e5             	mov    %r12,%r13
+>    b:	49 c1 ed 1b          	shr    $0x1b,%r13
+>    f:	41 81 e5 f8 0f 00 00 	and    $0xff8,%r13d
+>   16:	49 01 c5             	add    %rax,%r13
+>   19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+>   20:	fc ff df
+>   23:	4c 89 ea             	mov    %r13,%rdx
+>   26:	48 c1 ea 03          	shr    $0x3,%rdx
+> * 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+>   2e:	0f 85 d4 18 00 00    	jne    0x1908
+>   34:	4d 8b 75 00          	mov    0x0(%r13),%r14
+>   38:	31 ff                	xor    %edi,%edi
+>   3a:	49 83 e6 9f          	and    $0xffffffffffffff9f,%r14
+>   3e:	4c                   	rex.WR
+>   3f:	89                   	.byte 0x89
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
