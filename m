@@ -2,49 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B71D5B0622
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 16:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08D45B067F
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 16:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiIGOKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Sep 2022 10:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S229907AbiIGO1K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Sep 2022 10:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiIGOJ7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 10:09:59 -0400
+        with ESMTP id S229446AbiIGO1J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 10:27:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12471A07F;
-        Wed,  7 Sep 2022 07:09:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD9173301;
+        Wed,  7 Sep 2022 07:26:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CD6BB81CB3;
-        Wed,  7 Sep 2022 14:09:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326E2C433D7;
-        Wed,  7 Sep 2022 14:09:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFD2CB81CED;
+        Wed,  7 Sep 2022 14:25:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1BBC433B5;
+        Wed,  7 Sep 2022 14:25:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662559795;
-        bh=K/KsIfvrFq9SzocNl8CKHN2GWRmhpf37njgbFoR7Cww=;
+        s=korg; t=1662560723;
+        bh=yeuu+YHoAaM56AfzE5PPgWroRTD2ZSJ/Qth+YAHZXGY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mw1dcaOwgOalP8H794ETn2moK1XTstJzt19Pcudq76GPfrG6M9T+pPNp3I835U1gD
-         0f8UUfq6c5If/JVG62GzP5NMX1VD2Q1JM1Imvn9m5w+EOQ9fUnkZk2Mqs/CPahC5pC
-         u7I8DXitY8+LSqjYlDsZcLk2h/bhrDBIIiLkw9A8=
-Date:   Wed, 7 Sep 2022 16:09:52 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
-Subject: Re: [RESEND v7 0/4] usb: gadget: uvc: use configfs entries for
- negotiation and v4l2 VIDIOCS
-Message-ID: <YximMNDbVJMVK/iY@kroah.com>
-References: <20220608105748.139922-1-m.grzeschik@pengutronix.de>
- <YxiclqKkPDQR8qMM@kroah.com>
- <20220907140341.GC18739@pengutronix.de>
+        b=ZPmOYajAhegwV3psYKwg+vq4onOeLdGDlkuyS17OzlQgjeVPLlZlGqw50FQ9dYQ57
+         hXk7h1nBc+axwYn5E1pqm4ftvnfR5ccTs6zieobqhYV2fKYPlJDrdSv4CbRaQWuuJo
+         tKay+5AG+4Vyz7JrNDDdtlRQcdam6AxE6hEm8yjY=
+Date:   Wed, 7 Sep 2022 16:25:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: misc: usb3503: call clk_disable_unprepare in the
+ error handling
+Message-ID: <Yxip0d2bBOi/CB4P@kroah.com>
+References: <20220903071543.2844698-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907140341.GC18739@pengutronix.de>
+In-Reply-To: <20220903071543.2844698-1-dzm91@hust.edu.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,41 +51,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 04:03:41PM +0200, Michael Grzeschik wrote:
-> On Wed, Sep 07, 2022 at 03:28:54PM +0200, Greg KH wrote:
-> > On Wed, Jun 08, 2022 at 12:57:44PM +0200, Michael Grzeschik wrote:
-> > > This series improves the uvc video gadget by parsing the configfs
-> > > entries. With the configfs data, the driver now is able to negotiate the
-> > > format with the usb host in the kernel and also exports the supported
-> > > frames/formats/intervals via the v4l2 VIDIOC interface.
-> > > 
-> > > The uvc userspace stack is also under development. One example is an generic
-> > > v4l2uvcsink gstreamer elemnt, which is currently under discussion. [1]
-> > > 
-> > > [1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1304
-> > > 
-> > > With the libusbgx library [1] used by the gadget-tool [2] it is now also
-> > > possible to fully describe the configfs layout of the uvc gadget with scheme
-> > > files.
-> > > 
-> > > [2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c76f9d512f59fdc23b65cd5c46b7fb09eb4
-> > > 
-> > > [3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
-> > > 
-> > > The bigger picture of these patches is to provide a more versatile interface to
-> > > the uvc gadget. The goal is to simply start a uvc-gadget with the following
-> > > commands:
-> > > 
-> > > $ gt load uvc.scheme
-> > > $ gst-launch v4l2src ! v4l2uvcsink
-> > 
-> > v4l developers, given a lack of review response to this series, I'm
-> > assuming that you all have no objection to this series and I can take it
-> > through my usb-next tree.
+On Sat, Sep 03, 2022 at 03:15:40PM +0800, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
 > 
-> Since this will not apply anymore, I just send v8 with some minor
-> changes.
+> Smatch reports the following warning:
+> 
+> vers/usb/misc/usb3503.c:267 usb3503_probe() warn: 'hub->clk'
+> from clk_prepare_enable() not released on lines: 240,246,252
+> 
+> Fix this by adding a flag to indicate if hub->clk is prepared or not and
+> invoke clk_disable_unprepare in the error handling.
+> 
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>  drivers/usb/misc/usb3503.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
+> index 330f494cd158..add47dd964b2 100644
+> --- a/drivers/usb/misc/usb3503.c
+> +++ b/drivers/usb/misc/usb3503.c
+> @@ -160,6 +160,7 @@ static int usb3503_probe(struct usb3503 *hub)
+>  	struct usb3503_platform_data *pdata = dev_get_platdata(dev);
+>  	struct device_node *np = dev->of_node;
+>  	int err;
+> +	int is_clk_enable = 0;
 
-Thanks, I'll take that series now.
+bool?
+
+>  	u32 mode = USB3503_MODE_HUB;
+>  	const u32 *property;
+>  	enum gpiod_flags flags;
+> @@ -217,6 +218,8 @@ static int usb3503_probe(struct usb3503 *hub)
+>  			return err;
+>  		}
+>  
+> +		// set a flag for successful clk_prepare_enable
+
+Comment isn't needed.
+
+> +		is_clk_enable = 1;
+>  		property = of_get_property(np, "disabled-ports", &len);
+>  		if (property && (len / sizeof(u32)) > 0) {
+>  			int i;
+> @@ -236,20 +239,29 @@ static int usb3503_probe(struct usb3503 *hub)
+>  	else
+>  		flags = GPIOD_OUT_HIGH;
+>  	hub->intn = devm_gpiod_get_optional(dev, "intn", flags);
+> -	if (IS_ERR(hub->intn))
+> +	if (IS_ERR(hub->intn)) {
+> +		if (is_clk_enable)
+> +			clk_disable_unprepare(hub->clk);
+>  		return PTR_ERR(hub->intn);
+
+This is getting messy, any way to make a common error handler at the
+bottom of the function instead?  That's the common kernel coding style
+for this type of thing.
+
+thanks,
 
 greg k-h
