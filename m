@@ -2,47 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5407D5AFE3E
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 09:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266525B01ED
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 12:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiIGH7P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Sep 2022 03:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S230128AbiIGK36 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Sep 2022 06:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiIGH7O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 03:59:14 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1F6CA896A;
-        Wed,  7 Sep 2022 00:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Msj1Q
-        C6+hqxSIXMSAOcQBdkaMXFRb0rZzELsEToclcY=; b=eROGLvT6ZOUSfEHfGlLUZ
-        ild251wKOwzt+OFp21CXsHjGFxPCgeBPf2JezhARPzQHLHOnVFUg+8Pr7uZwQrlL
-        VEtQ1aeHAY13WUSVeIjR9SDiIM52i2n/FnyhiuiVn9whB8hlIsiGJNWc8boGXQYq
-        WaUbySz05BK2jM7+zIv4gc=
-Received: from localhost.localdomain (unknown [36.112.3.164])
-        by smtp4 (Coremail) with SMTP id HNxpCgCnKeAsTxhjktH0aw--.22456S4;
-        Wed, 07 Sep 2022 15:58:49 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     pawell@cadence.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] usb: cdnsp: Fix potential memory leak in cdnsp_alloc_stream_info()
-Date:   Wed,  7 Sep 2022 15:58:35 +0800
-Message-Id: <20220907075835.60436-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229772AbiIGK34 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 06:29:56 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5404E22B18;
+        Wed,  7 Sep 2022 03:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662546594; x=1694082594;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jIShqri1pu6w44wIq+yVdEEpJL1KbDbI/l4jaclyJCg=;
+  b=HTj2b8E9+BonSkotoRdrUu9gOwL13FvFgwnvp/IRl2VE+/2VK2GwLSi1
+   dXjRjgPFHXndIShPj5m/PHhrgq9Uhj6E3RWDxOSFeG/jenlaMkLedTnvl
+   3MHgSijkJMYUg1/w66sz9g4BMEgrdy7Z84or1qChltNE6vb9IB7i0pQ3o
+   /ZRARy9gr+yVxVn2Q9A8iMmRJe7bXrqei3qJr6Cal9+kGLGUmxzvzxs5g
+   pq9akctqc2LfVxz7HIYTGFDYmOgOB8vYz2d61f5GM5Bv/gzpV9PLfw/VP
+   a8xE0ZODKponss6nL6owtRGXF32kxBUFEjpn7d8DmCWd3MQOL5gnR5tZH
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297621608"
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="297621608"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 03:29:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="756720762"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2022 03:29:51 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: intel_pmc_mux: Use the helper acpi_dev_get_memory_resources()
+Date:   Wed,  7 Sep 2022 13:30:07 +0300
+Message-Id: <20220907103007.12954-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgCnKeAsTxhjktH0aw--.22456S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GrWrXr47Kw1fWFW8AFyDtrb_yoWDXFc_ZF
-        4a9FZrGF1jkws7Gw1Fqr98urWqyr42vFWkXa12qr4fGF18ur93AryxZr4xXFW7J3y5Jrnr
-        Z348t3y5ur1kJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_F4i7UUUUU==
-X-Originating-IP: [36.112.3.164]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiQxl1jFc7bS78jwAAs-
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,32 +57,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-cdnsp_alloc_stream_info() allocates stream context array for stream_info
-->stream_ctx_array with cdnsp_alloc_stream_ctx(). When some error occurs,
-stream_info->stream_ctx_array is not released, which will lead to a
-memory leak.
+It removes the need to check the resource data type
+separately.
 
-We can fix it by releasing the stream_info->stream_ctx_array with
-cdnsp_free_stream_ctx() on the error path to avoid the potential memory
-leak.
-
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/cdns3/cdnsp-mem.c | 1 +
- 1 file changed, 1 insertion(+)
+Hi Rafael,
 
-diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
-index 97866bfb2da9..319037848151 100644
---- a/drivers/usb/cdns3/cdnsp-mem.c
-+++ b/drivers/usb/cdns3/cdnsp-mem.c
-@@ -631,6 +631,7 @@ int cdnsp_alloc_stream_info(struct cdnsp_device *pdev,
- 			stream_info->stream_rings[cur_stream] = NULL;
- 		}
- 	}
-+	cdnsp_free_stream_ctx(pdev, pep);
+Now resending this [1]. It applies on top of -rc4 (not -rc3). The
+other patches from that series you already picked.
+
+thanks,
+
+[1] https://lore.kernel.org/linux-acpi/20220816101629.69054-7-heikki.krogerus@linux.intel.com/
+---
+ drivers/usb/typec/mux/intel_pmc_mux.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index a8e273fe204ab..e1f4df7238bf4 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -569,15 +569,6 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
+ 	return ret;
+ }
  
- cleanup_stream_rings:
- 	kfree(pep->stream_info.stream_rings);
+-static int is_memory(struct acpi_resource *res, void *data)
+-{
+-	struct resource_win win = {};
+-	struct resource *r = &win.res;
+-
+-	return !(acpi_dev_resource_memory(res, r) ||
+-		 acpi_dev_resource_address_space(res, &win));
+-}
+-
+ /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
+ static const struct acpi_device_id iom_acpi_ids[] = {
+ 	/* TigerLake */
+@@ -611,7 +602,7 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
+ 		return -ENODEV;
+ 
+ 	INIT_LIST_HEAD(&resource_list);
+-	ret = acpi_dev_get_resources(adev, &resource_list, is_memory, NULL);
++	ret = acpi_dev_get_memory_resources(adev, &resource_list);
+ 	if (ret < 0)
+ 		return ret;
+ 
 -- 
-2.25.1
+2.35.1
 
