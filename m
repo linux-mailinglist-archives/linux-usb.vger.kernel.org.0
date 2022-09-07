@@ -2,54 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9525B0784
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 16:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCE35B07AB
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 16:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiIGOwP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Sep 2022 10:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
+        id S229865AbiIGO5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Sep 2022 10:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiIGOwM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 10:52:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3CFAB1AD
-        for <linux-usb@vger.kernel.org>; Wed,  7 Sep 2022 07:52:09 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oVwPN-0004J4-Ao; Wed, 07 Sep 2022 16:52:05 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oVwPM-0005PX-Ou; Wed, 07 Sep 2022 16:52:04 +0200
-Date:   Wed, 7 Sep 2022 16:52:04 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de, linux-media@vger.kernel.org
-Subject: Re: [PATCH v8 0/4] usb: gadget: uvc: use configfs entries for
- negotiation and v4l2 VIDIOCS
-Message-ID: <20220907145204.GE18739@pengutronix.de>
-References: <20220907140254.2378109-1-m.grzeschik@pengutronix.de>
- <YxiqkhQl60E+tnAB@kroah.com>
+        with ESMTP id S230192AbiIGO4m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 10:56:42 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDDCB14E6
+        for <linux-usb@vger.kernel.org>; Wed,  7 Sep 2022 07:56:36 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id o15-20020a056e02188f00b002f01f1dfebcso11524543ilu.10
+        for <linux-usb@vger.kernel.org>; Wed, 07 Sep 2022 07:56:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=M0ck3zhRmF4k7FihEXUJjiDZ+fwtcv/W6kVeRN0u1vs=;
+        b=zrXBhry2eV+WhHAY4HStiAegPf2pGxU0M4AmoiAGIYPcZJcHA15ngEhJIzkjwHMNBM
+         NC/pdDMCcCnECC5V+qTzD7Go/N/9ExRw8Rd8J/AzFu/bP680MP1afFj7+KLGys6WofB3
+         nwLH9RHHw5fEFn1HaQlafRJ5oXZ5EkYinFsKL2IVkyK/noUFWDbIbrU6sqLzyv+BBTS1
+         tqYpNURehGN7Kzkj332SJB2Qvzchthc72yW2NV+KbBcKrybc80alMMse9RmcLi+8jIJb
+         rb/b++oSA+lHzbu6H1sMoVn+r4muHJvbBefRv6HaiXJgkMPZ8pVsQfwooazQoqUZ9Vjc
+         4UBw==
+X-Gm-Message-State: ACgBeo3OJNoby8ooAMxrJ+kIXy2Spk3D6A/sff8TlMCmK8T2I/fu+AfT
+        0jbpc4+E+i4xJtGbV5xMTqF3Zyf3HEBR3oc+7tmvLVlOWAFF
+X-Google-Smtp-Source: AA6agR5t4AwuXZ/KT7KOUPlU+Fqk4GKe6LTMbwtLXUILoPhKonA+fzxicNDNAuz6+DQ9BNf8wM2+uEsL1bKVD9Zf81QNeCFbN0ub
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9l24NVCWtSuIVIod"
-Content-Disposition: inline
-In-Reply-To: <YxiqkhQl60E+tnAB@kroah.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:3720:b0:352:7d09:a327 with SMTP id
+ k32-20020a056638372000b003527d09a327mr2274515jav.283.1662562594927; Wed, 07
+ Sep 2022 07:56:34 -0700 (PDT)
+Date:   Wed, 07 Sep 2022 07:56:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e33bb005e817847a@google.com>
+Subject: [syzbot] usb-testing boot error: general protection fault in copy_process
+From:   syzbot <syzbot+d3cb3281a93037d5a02e@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, luto@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,132 +56,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---9l24NVCWtSuIVIod
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Wed, Sep 07, 2022 at 04:28:34PM +0200, Greg KH wrote:
->On Wed, Sep 07, 2022 at 04:02:50PM +0200, Michael Grzeschik wrote:
->> This series improves the uvc video gadget by parsing the configfs
->> entries. With the configfs data, the driver now is able to negotiate the
->> format with the usb host in the kernel and also exports the supported
->> frames/formats/intervals via the v4l2 VIDIOC interface.
->>
->> The uvc userspace stack is also under development. One example is an gen=
-eric
->> v4l2uvcsink gstreamer elemnt, which is currently under discussion. [1]
->>
->> [1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/=
-1304
->>
->> With the libusbgx library [1] used by the gadget-tool [2] it is now also
->> possible to fully describe the configfs layout of the uvc gadget with sc=
-heme
->> files.
->>
->> [2] https://github.com/linux-usb-gadgets/libusbgx/pull/61/commits/53231c=
-76f9d512f59fdc23b65cd5c46b7fb09eb4
->>
->> [3] https://github.com/linux-usb-gadgets/gt/tree/master/examples/systemd
->>
->> The bigger picture of these patches is to provide a more versatile inter=
-face to
->> the uvc gadget. The goal is to simply start a uvc-gadget with the follow=
-ing
->> commands:
->>
->> $ gt load uvc.scheme
->> $ gst-launch v4l2src ! v4l2uvcsink
->>
->> --
->>
->> v1: https://lore.kernel.org/linux-usb/20210530222239.8793-1-m.grzeschik@=
-pengutronix.de/
->> v2: https://lore.kernel.org/linux-usb/20211117004432.3763306-1-m.grzesch=
-ik@pengutronix.de/
->> v3: https://lore.kernel.org/linux-usb/20211117122435.2409362-1-m.grzesch=
-ik@pengutronix.de/
->> v4: https://lore.kernel.org/linux-usb/20211205225803.268492-1-m.grzeschi=
-k@pengutronix.de/
->> v5: https://lore.kernel.org/linux-usb/20211209084322.2662616-1-m.grzesch=
-ik@pengutronix.de/
->> v6: https://lore.kernel.org/linux-usb/20220105115527.3592860-1-m.grzesch=
-ik@pengutronix.de/
->> v7: https://lore.kernel.org/linux-usb/20220608105748.139922-1-m.grzeschi=
-k@pengutronix.de/
->
->Please say what changed somewhere :(
+HEAD commit:    4e55e22d3d9a USB: hcd-pci: Drop the unused id parameter fr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15ba5d7d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=d3cb3281a93037d5a02e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I addressed each patch individually.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/26cea6f2cda1/disk-4e55e22d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/00aba451c439/vmlinux-4e55e22d.xz
 
->Anyway, this patch series does not even build properly:
->
->drivers/usb/gadget/function/uvc_v4l2.c: In function =E2=80=98uvc_v4l2_get_=
-format=E2=80=99:
->drivers/usb/gadget/function/uvc_v4l2.c:258:42: error: =E2=80=98struct uvc_=
-video=E2=80=99 has no member named =E2=80=98bpp=E2=80=99
->  258 |         fmt->fmt.pix.bytesperline =3D video->bpp * video->width / =
-8;
->      |                                          ^~
->drivers/usb/gadget/function/uvc_v4l2.c:258:55: error: =E2=80=98struct uvc_=
-video=E2=80=99 has no member named =E2=80=98width=E2=80=99
->  258 |         fmt->fmt.pix.bytesperline =3D video->bpp * video->width / =
-8;
->      |                                                       ^~
->drivers/usb/gadget/function/uvc_v4l2.c:259:39: error: =E2=80=98struct uvc_=
-video=E2=80=99 has no member named =E2=80=98imagesize=E2=80=99
->  259 |         fmt->fmt.pix.sizeimage =3D video->imagesize;
->      |                                       ^~
->drivers/usb/gadget/function/uvc_v4l2.c: In function =E2=80=98uvc_v4l2_try_=
-format=E2=80=99:
->drivers/usb/gadget/function/uvc_v4l2.c:316:37: error: =E2=80=98bpl=E2=80=
-=99 undeclared (first use in this function)
->  316 |         fmt->fmt.pix.bytesperline =3D bpl;
->      |                                     ^~~
->drivers/usb/gadget/function/uvc_v4l2.c:316:37: note: each undeclared ident=
-ifier is reported only once for each function it appears in
->drivers/usb/gadget/function/uvc_v4l2.c:317:34: error: =E2=80=98imagesize=
-=E2=80=99 undeclared (first use in this function); did you mean =E2=80=98pa=
-ge_size=E2=80=99?
->  317 |         fmt->fmt.pix.sizeimage =3D imagesize;
->      |                                  ^~~~~~~~~
->      |                                  page_size
->
->
->What did you test this with?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d3cb3281a93037d5a02e@syzkaller.appspotmail.com
 
-I rebased and tested another series than I send.
-Sorry for that. I will RESEND the v8 with the proper content.
+general protection fault, probably for non-canonical address 0xffff000000000300: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000001800-0xfff8200000001807]
+CPU: 0 PID: 36 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-syzkaller-00049-g4e55e22d3d9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Workqueue: events_unbound call_usermodehelper_exec_work
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x15d/0x4a0 mm/slub.c:3268
+Code: 51 08 48 8b 01 48 83 79 10 00 48 89 04 24 0f 84 7c 02 00 00 48 85 c0 0f 84 73 02 00 00 49 8b 3c 24 41 8b 4c 24 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 7b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc900004778f0 EFLAGS: 00010246
 
-Thanks,
-Michael
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000300
+RDX: 0000000000000580 RSI: 0000000000000dc0 RDI: 000000000003e300
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff88de9657
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff88810016d500
+R13: 0000000000000dc0 R14: ffffffff811486fe R15: 0000000000000dc0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kmem_cache_zalloc include/linux/slab.h:723 [inline]
+ copy_signal kernel/fork.c:1689 [inline]
+ copy_process+0x256e/0x6de0 kernel/fork.c:2253
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2673
+ user_mode_thread+0xad/0xe0 kernel/fork.c:2742
+ call_usermodehelper_exec_work kernel/umh.c:174 [inline]
+ call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+----------------
+Code disassembly (best guess):
+   0:	51                   	push   %rcx
+   1:	08 48 8b             	or     %cl,-0x75(%rax)
+   4:	01 48 83             	add    %ecx,-0x7d(%rax)
+   7:	79 10                	jns    0x19
+   9:	00 48 89             	add    %cl,-0x77(%rax)
+   c:	04 24                	add    $0x24,%al
+   e:	0f 84 7c 02 00 00    	je     0x290
+  14:	48 85 c0             	test   %rax,%rax
+  17:	0f 84 73 02 00 00    	je     0x290
+  1d:	49 8b 3c 24          	mov    (%r12),%rdi
+  21:	41 8b 4c 24 28       	mov    0x28(%r12),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 7b 02 00 00    	jne    0x2af
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---9l24NVCWtSuIVIod
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmMYsA4ACgkQC+njFXoe
-LGTUmRAA0aCq3O/LYBr8pjRQ4TjjR1Jbzyr40Ubte5XwXcQwo4xa8uz/hx8Cc2m7
-hxnDIc3gm9UKm+5Cz58wMQi3yEja7lvZ5o0zgTK49KY76IdExBy7obB7ckWc7PnM
-HtWDMg6GGL26BXjIqBHLCEZYyaokzbea0xncMLTzWMojazGALNOfVBMVS7GK3p+9
-i1NvgWGlzZylRNgp1yKioNYfT35pS2uPyw+czZQuwABgEQ33PbgbmOyoWzc6PA6q
-OjFmZg8xQiY6UIlZiieeHRBsFvErfRVmpIIs7/xndWAFhRZPTozRzXhgtzV6UM3j
-MwSMoTzURcaKlnpmmEMh3/fi6OOwdabyX/n45zw/iBc6TvdvVivh45fDvec2lgEE
-KiG9N7WxXCWtYRm2KXALb1TqS4V0PDu7yU0ZbhwmjVgLZlaKKQhPpsSjzMGrtX/8
-hgKJ0f9O/fWrDKxBfaWqslC2+keGNTNcY6LUmEFvsD3Od6gwKIAQK4AT8HKO9hTn
-aHfhBgehXWzUfG1VNqnyi1jeAMuDEiFxV9yIl9b7kfTn1S+N8C8VrwSW/23eAN6N
-l072Ee6bMGfMy8CTi45REyrm1qX8Nv8FmdgApP1VIpqlMViY8vcOsMSKhAD5BtvX
-yarQ4hsXxebq5dDQt2qbY36yy5qG/aoPvWryq/oLDfbzHDSBG2U=
-=n08K
------END PGP SIGNATURE-----
-
---9l24NVCWtSuIVIod--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
