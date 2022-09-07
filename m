@@ -2,54 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266525B01ED
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 12:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137725B02CF
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 13:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiIGK36 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Sep 2022 06:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S229846AbiIGLWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Sep 2022 07:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiIGK34 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 06:29:56 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5404E22B18;
-        Wed,  7 Sep 2022 03:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662546594; x=1694082594;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jIShqri1pu6w44wIq+yVdEEpJL1KbDbI/l4jaclyJCg=;
-  b=HTj2b8E9+BonSkotoRdrUu9gOwL13FvFgwnvp/IRl2VE+/2VK2GwLSi1
-   dXjRjgPFHXndIShPj5m/PHhrgq9Uhj6E3RWDxOSFeG/jenlaMkLedTnvl
-   3MHgSijkJMYUg1/w66sz9g4BMEgrdy7Z84or1qChltNE6vb9IB7i0pQ3o
-   /ZRARy9gr+yVxVn2Q9A8iMmRJe7bXrqei3qJr6Cal9+kGLGUmxzvzxs5g
-   pq9akctqc2LfVxz7HIYTGFDYmOgOB8vYz2d61f5GM5Bv/gzpV9PLfw/VP
-   a8xE0ZODKponss6nL6owtRGXF32kxBUFEjpn7d8DmCWd3MQOL5gnR5tZH
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297621608"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="297621608"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 03:29:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="756720762"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2022 03:29:51 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: intel_pmc_mux: Use the helper acpi_dev_get_memory_resources()
-Date:   Wed,  7 Sep 2022 13:30:07 +0300
-Message-Id: <20220907103007.12954-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229797AbiIGLWh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 07:22:37 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63FEABF00;
+        Wed,  7 Sep 2022 04:22:35 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id z187so14279822pfb.12;
+        Wed, 07 Sep 2022 04:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=7qyFZsGWwAuwHvfMqmiVvBZdSteXB+wapmc7uA04y2U=;
+        b=aCuCAWxFeN2XStVyMev2Jg/wMpPXQzbod+1BUL+CsL6TeNeFwlL2OGZzojzPf4IEre
+         KCLJVIVwlZnXcvwf/Xcx/uEdNKaP9PBK8t517FOGbBr5tjdxfmkYXK2dTvqe9x36EIUl
+         hWErBzS4Az7h08NgRiUs8UL4aQULNa282IZZTIJehn2l4rqfsNkV9Dp5pYV+JMohAeFK
+         fW8yQt10Uvm6YWWWY0AExVpln6r5TfURQUNIqZvK+IKpDBm8tslUI36LprSllRsw1M3k
+         2cnvfp5zX7gfPCWCbmTV13GAyzEkSQ0USq5T44bv7OuJ77qdURNf4tn5opzsCkiBRby/
+         xjAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=7qyFZsGWwAuwHvfMqmiVvBZdSteXB+wapmc7uA04y2U=;
+        b=OPiw8rFmI2ckvLkN8YYQPWU4r9olBjZrZz0hT98zN3DTrzdNRZf+NMk4vUzx4PXpOI
+         LJwfVD0Q8KOf2dUpkaEsRqQdg71h78Gvlis8+WborW95kBsQLyBnjX6PLBeCC0WUCG70
+         GIpHPUFCjwTKIb9Wx66Ruvh1iad+2S+PEMwISI+zkacdyFvISBW+/buKvJL1DXCxFNHD
+         OqRlDDLwY5Ovz8q72kqTvITmGoV8nMHgSQ4hIdNhFK0YXGqxmzldqraGjm8pJeEPkC6j
+         KSwGn0za/OPHeLPb/qTyBE0XwSaLA20ezk7VXp8cEcItbgn8t9A9R3NnC9w7L1Cut4vS
+         PZCQ==
+X-Gm-Message-State: ACgBeo0cniGfAyMmmqLaeMpsZ+LeMu9K7oZASKKiShfyCCmDcjRVyE4A
+        ZlPNnpmauh3ACh/meI+gGULWFmmfzKWzw9KBSoY=
+X-Google-Smtp-Source: AA6agR4V+q0tr3YCrE+dwEu0P179tWT4sYYiIaGRaqNgxkVho/T+wWBfyIlASv5KAki7Go+UrvZ7uA==
+X-Received: by 2002:a63:df56:0:b0:42c:2dee:87de with SMTP id h22-20020a63df56000000b0042c2dee87demr2999208pgj.202.1662549755401;
+        Wed, 07 Sep 2022 04:22:35 -0700 (PDT)
+Received: from yiru-pc.localdomain ([183.173.184.117])
+        by smtp.gmail.com with ESMTPSA id n13-20020a17090a73cd00b0020071acaecasm5635657pjk.42.2022.09.07.04.22.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 04:22:35 -0700 (PDT)
+From:   Rondreis <linhaoguo86@gmail.com>
+To:     balbi@kernel.org, stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rondreis <linhaoguo86@gmail.com>
+Subject: [PATCH] usb: gadget: Assign a unique name for each configfs driver
+Date:   Wed,  7 Sep 2022 19:22:10 +0800
+Message-Id: <20220907112210.11949-1-linhaoguo86@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,52 +67,136 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It removes the need to check the resource data type
-separately.
+When fuzzing the kernel, I couldn't use configfs to attach more than one
+gadget. When attaching the second gadget with a different UDC it always
+failed and the kernel message said:
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Error: Driver 'configfs-gadget' is already registered, aborting...
+UDC core: g1: driver registration failed: -16
+
+The problem is that when creating multiple gadgets with configfs and
+binding them to different UDCs, the UDC drivers have the same name
+"configfs-gadget". Because of the addition of the "gadget" bus,
+naming conflicts will occur when more than one UDC drivers
+registered to the bus.
+
+It's not an isolated case, this patch refers to the commit f2d8c2606825
+("usb: gadget: Fix non-unique driver names in raw-gadget driver").
+Each configfs-gadget driver will be assigned a unique name
+"configfs-gadget.N", with a different value of N for each driver instance.
+
+Reported-and-tested-by: Rondreis <linhaoguo86@gmail.com>
+Signed-off-by: Rondreis <linhaoguo86@gmail.com>
 ---
-Hi Rafael,
+ drivers/usb/gadget/configfs.c | 39 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 3 deletions(-)
 
-Now resending this [1]. It applies on top of -rc4 (not -rc3). The
-other patches from that series you already picked.
-
-thanks,
-
-[1] https://lore.kernel.org/linux-acpi/20220816101629.69054-7-heikki.krogerus@linux.intel.com/
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
-
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index a8e273fe204ab..e1f4df7238bf4 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -569,15 +569,6 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
- 	return ret;
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 3a6b4926193e..7e7ff94dbaab 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -4,12 +4,18 @@
+ #include <linux/slab.h>
+ #include <linux/device.h>
+ #include <linux/nls.h>
++#include <linux/idr.h>
+ #include <linux/usb/composite.h>
+ #include <linux/usb/gadget_configfs.h>
+ #include "configfs.h"
+ #include "u_f.h"
+ #include "u_os_desc.h"
+ 
++#define DRIVER_NAME "configfs-gadget"
++
++static DEFINE_IDA(driver_id_numbers);
++#define DRIVER_DRIVER_NAME_LENGTH_MAX 32
++
+ int check_user_usb_string(const char *name,
+ 		struct usb_gadget_strings *stringtab_dev)
+ {
+@@ -46,6 +52,7 @@ struct gadget_info {
+ 
+ 	struct usb_composite_driver composite;
+ 	struct usb_composite_dev cdev;
++	int driver_id_number;
+ 	bool use_os_desc;
+ 	char b_vendor_code;
+ 	char qw_sign[OS_STRING_QW_SIGN_LEN];
+@@ -252,6 +259,11 @@ static int unregister_gadget(struct gadget_info *gi)
+ 		return ret;
+ 	kfree(gi->composite.gadget_driver.udc_name);
+ 	gi->composite.gadget_driver.udc_name = NULL;
++
++	kfree(gi->composite.gadget_driver.driver.name);
++	if (gi->driver_id_number >= 0)
++		ida_free(&driver_id_numbers, gi->driver_id_number);
++
+ 	return 0;
  }
  
--static int is_memory(struct acpi_resource *res, void *data)
--{
--	struct resource_win win = {};
--	struct resource *r = &win.res;
--
--	return !(acpi_dev_resource_memory(res, r) ||
--		 acpi_dev_resource_address_space(res, &win));
--}
--
- /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
- static const struct acpi_device_id iom_acpi_ids[] = {
- 	/* TigerLake */
-@@ -611,7 +602,7 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
- 		return -ENODEV;
+@@ -1571,7 +1583,6 @@ static const struct usb_gadget_driver configfs_driver_template = {
+ 	.max_speed	= USB_SPEED_SUPER_PLUS,
+ 	.driver = {
+ 		.owner          = THIS_MODULE,
+-		.name		= "configfs-gadget",
+ 	},
+ 	.match_existing_only = 1,
+ };
+@@ -1580,6 +1591,8 @@ static struct config_group *gadgets_make(
+ 		struct config_group *group,
+ 		const char *name)
+ {
++	int ret = 0;
++	char *driver_driver_name;
+ 	struct gadget_info *gi;
  
- 	INIT_LIST_HEAD(&resource_list);
--	ret = acpi_dev_get_resources(adev, &resource_list, is_memory, NULL);
-+	ret = acpi_dev_get_memory_resources(adev, &resource_list);
- 	if (ret < 0)
- 		return ret;
+ 	gi = kzalloc(sizeof(*gi), GFP_KERNEL);
+@@ -1609,6 +1622,7 @@ static struct config_group *gadgets_make(
+ 	gi->composite.suspend = NULL;
+ 	gi->composite.resume = NULL;
+ 	gi->composite.max_speed = USB_SPEED_SUPER_PLUS;
++	gi->driver_id_number = -1;
  
+ 	spin_lock_init(&gi->spinlock);
+ 	mutex_init(&gi->lock);
+@@ -1622,16 +1636,35 @@ static struct config_group *gadgets_make(
+ 
+ 	gi->composite.gadget_driver = configfs_driver_template;
+ 
++	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
++	if (ret < 0)
++		goto err;
++	gi->driver_id_number = ret;
++
++	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
++	if (!driver_driver_name) {
++		ret = -ENOMEM;
++		goto err_free_driver_id_number;
++	}
++	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
++			DRIVER_NAME ".%d", gi->driver_id_number);
++	gi->composite.gadget_driver.driver.name = driver_driver_name;
++
+ 	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
+ 	gi->composite.name = gi->composite.gadget_driver.function;
+ 
+-	if (!gi->composite.gadget_driver.function)
++	if (!gi->composite.gadget_driver.function) {
++		ret = -ENOMEM;
+ 		goto err;
++	}
+ 
+ 	return &gi->group;
++
++err_free_driver_id_number:
++	ida_free(&driver_id_numbers, gi->driver_id_number);
+ err:
+ 	kfree(gi);
+-	return ERR_PTR(-ENOMEM);
++	return ERR_PTR(ret);
+ }
+ 
+ static void gadgets_drop(struct config_group *group, struct config_item *item)
 -- 
-2.35.1
+2.37.3
 
