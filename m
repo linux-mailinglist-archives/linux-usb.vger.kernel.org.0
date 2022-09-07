@@ -2,72 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C140E5AFC3B
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 08:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822445AFE12
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Sep 2022 09:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiIGGO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Sep 2022 02:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S230212AbiIGHut (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Sep 2022 03:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiIGGOO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 02:14:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522779DFB3;
-        Tue,  6 Sep 2022 23:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662531243; x=1694067243;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tKD7dcQrTgQ5yRktwcwRD+zn41Oh2clj3ui4dG0kocA=;
-  b=CvNbLaMNMMFv77f/fZyjX2jd4dpRnZPFm6MR9rRcFkVHYOHYfvcLEbnO
-   gF5qElYss/DzHfGZFjiyzPSkc62pxHA50t3X0gI9hd/pImK9dhnj+3V+K
-   viXKNgGZC4vRnzdbMvbmzbQpyd9OLMzLJugQGENCfGH6/jPbOKK+1Ojp4
-   qvr4J6hxIoQTrZRwmv/C1P4WPLVPBRMrPJfNKc9slvw5OnUkOKbSgWdZ+
-   jRVro7tBAyHBxz/HXjr8LsqAlwSm4FYx8d0sGnujAexmdhBVzOWzz0uDT
-   fcE+acLoEuD4Qa1iAPhWUGzj8GLPjzxGKKRMO5qcPSNLUuURgDhu34VjK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="295525532"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="295525532"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 23:14:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="676034182"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Sep 2022 23:14:01 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 1524BF7; Wed,  7 Sep 2022 09:14:16 +0300 (EEST)
-Date:   Wed, 7 Sep 2022 09:14:16 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] thunderbolt: debugfs: Fix spelling mistakes in
- seq_puts text
-Message-ID: <Yxg2uHEBdwMkbbBI@black.fi.intel.com>
-References: <20220906140314.194565-1-colin.i.king@gmail.com>
+        with ESMTP id S230042AbiIGHu2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Sep 2022 03:50:28 -0400
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DFC87E330;
+        Wed,  7 Sep 2022 00:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=sReSM
+        hucH/qWbquMPkRNKaMOx4jB93wLhYEMfyfSQQE=; b=HUEPXciyfphBSF+hLRqE3
+        Q9JA3Vcw+Z56vwyipJIH+twaRTOSjxypBjuVszxNsuhUZXfDkBB042OZ1EaCFbam
+        ocqFdG7ZcqfaSm9ABHb97ce5bmpGIEXVo7s2E5gTpj5zio7+DCLNAGprJtj90H+Q
+        sqVgmJEqsQG3X/91u/Q7FU=
+Received: from localhost.localdomain (unknown [36.112.3.164])
+        by smtp5 (Coremail) with SMTP id HdxpCgCnpzHkTBhj9jE2ag--.3087S4;
+        Wed, 07 Sep 2022 15:49:07 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] usb: host: xhci: Fix potential memory leak in xhci_alloc_stream_info()
+Date:   Wed,  7 Sep 2022 15:48:50 +0800
+Message-Id: <20220907074850.59693-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906140314.194565-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgCnpzHkTBhj9jE2ag--.3087S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw48KFWxCF17WF1DuFy8Zrb_yoW8Xw1rpF
+        yrZw1F9r43tFn7KF1DJa4Yvay8Kw18Ga4rKrZrJ34kur4DtF45XF1UCFW8urySvr1xWr10
+        yF98twn3JF4UGFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR1mh7UUUUU=
+X-Originating-IP: [36.112.3.164]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBORN1jF-PPLQeqQAAs8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:03:14PM +0100, Colin Ian King wrote:
-> There are a handful of spelling mistakes in seq_puts text. Fix them.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+xhci_alloc_stream_info() allocates stream context array for stream_info
+->stream_ctx_array with xhci_alloc_stream_ctx(). When some error occurs,
+stream_info->stream_ctx_array is not released, which will lead to a
+memory leak.
 
-Applied to thunderbolt.git/next, thanks!
+We can fix it by releasing the stream_info->stream_ctx_array with
+xhci_free_stream_ctx() on the error path to avoid the potential memory
+leak.
+
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/usb/host/xhci-mem.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 8c19e151a945..9e56aa28efcd 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -641,7 +641,7 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
+ 			num_stream_ctxs, &stream_info->ctx_array_dma,
+ 			mem_flags);
+ 	if (!stream_info->stream_ctx_array)
+-		goto cleanup_ctx;
++		goto cleanup_ring_array;
+ 	memset(stream_info->stream_ctx_array, 0,
+ 			sizeof(struct xhci_stream_ctx)*num_stream_ctxs);
+ 
+@@ -702,6 +702,11 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
+ 	}
+ 	xhci_free_command(xhci, stream_info->free_streams_command);
+ cleanup_ctx:
++	xhci_free_stream_ctx(xhci,
++		stream_info->num_stream_ctxs,
++		stream_info->stream_ctx_array,
++		stream_info->ctx_array_dma);
++cleanup_ring_array:
+ 	kfree(stream_info->stream_rings);
+ cleanup_info:
+ 	kfree(stream_info);
+-- 
+2.25.1
+
