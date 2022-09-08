@@ -2,76 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F04C5B1A59
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 12:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78835B1AFC
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 13:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiIHKoR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 06:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S229917AbiIHLLS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 07:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiIHKoI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 06:44:08 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE4CE1272;
-        Thu,  8 Sep 2022 03:44:00 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t14so18053922wrx.8;
-        Thu, 08 Sep 2022 03:43:59 -0700 (PDT)
+        with ESMTP id S229874AbiIHLLR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 07:11:17 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14882E1ABC
+        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 04:11:14 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a70so7667457edf.10
+        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 04:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=ItPI0MR3NN2HvuVuI/7ScAvDP5QuDEGNBgMAv6on+2k=;
-        b=Qwl9qXCtUZAEXBRAr7K21sULv09wLNrYWhe7Tqgxdgq8iCs2UNVpXTmHLSihAYrMFB
-         xqPp1w6KiUfXyae1qXE7yYG9/WlBAVSqzQfBQppoR0nPN8/NZV1q0qC81qPEpT25B8j9
-         lv7K1Tpd3eqjlYr9uZR05QBI+Ee4WyqYEiDi9gEeYKP1NfX30ewVC9KM6uc+aeFNKGAU
-         Vhb4Z4anKzyJmunTqHDt5RrnC6twaekPXm8GT/lUid5tNmlUGLYLN5l7IWiShbEWuYJt
-         7sMZoOZOaRVd/OzmXh+IhauAAXAbWstN4pdCv0Z2S02OqUX22yUA5TSbAYhrseEmfD1z
-         jEaA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=r4Y41vD7puNvlBr3i+ZthSauPxLbBF/SBVHLhtBk8es=;
+        b=O3teFLEVTRxUkz3Uqk15z3RuX29Ow05PzlJ0X0o6YZjiRUzJ6euRq4QMRsAJct0ylr
+         +hBbNkynYoe9Ng6hdzLIhJ8cYQTlVRHCzdlqjyPx6DWch3I6IqH5a5myeJbNsU/OEl1x
+         N231Kp80INeo1M1CJilpL50vdbjIOV5X4wg7g2zbON9yzkyoGl+ZAtZnv05Cqc6BR1K9
+         iyv3xA62Z9D2v0KrnUTSMm9gc8wmLY7b1mgdcref1u8a7if7QGkv6Wn8TbRpMGZMurvN
+         EkpNUHxypu2eAODpXJxngGd1mlwEznRD0AyxA6aMAjJZBc2GinLv2D0GlIaRAm2u2cGp
+         ndwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ItPI0MR3NN2HvuVuI/7ScAvDP5QuDEGNBgMAv6on+2k=;
-        b=WrDMYHZPbZQpVzRumXYHgVqarESs3HXnEMn1rKthqMJwFiM/LpT6s/yzeOvMuVdMm+
-         mraf4r6mYlVRSvN0DszBQGuXqChTU3SZR9e18DDp74w6aZFdVQkqMryRcpR/5770u0a+
-         xJOz/+81GwVVep9WUPBY4GtRgNMj0uofOqOhW5x41bLKnb1oTD/UyHZijhvx3bXAgWD3
-         Zw742b2ujLYthBDClxJB75PCsCEX2Ap74lJAmrjgOQ9VZLhRkwRfokFeu/UDoAOZCK7I
-         Svoy2I6H7HaNhsGhHRZPt1C8F5QgH//rkeRFpYvh1rr9gB7RNkrzFZeYk0+qNrZHZC9h
-         K5sw==
-X-Gm-Message-State: ACgBeo1kxTzyj2aRf8raxcFw/2lnGIA4maPCt/Bm8rkKCzOnkFfw0rH8
-        ojfzxeBfg3VISLUww6aUMSQ=
-X-Google-Smtp-Source: AA6agR6RYLcqVQoPCUZV9g02cRKPZpdef5LX5qakouTpz1Mv2m826gHTOyz4Ytc64G6rdcluoww9GA==
-X-Received: by 2002:adf:ee89:0:b0:228:7bdf:47d with SMTP id b9-20020adfee89000000b002287bdf047dmr4535843wro.641.1662633838474;
-        Thu, 08 Sep 2022 03:43:58 -0700 (PDT)
-Received: from felia.fritz.box (200116b826f77600d0640cc051af4288.dip.versatel-1u1.de. [2001:16b8:26f7:7600:d064:cc0:51af:4288])
-        by smtp.gmail.com with ESMTPSA id bu3-20020a056000078300b0022863395912sm17227486wrb.53.2022.09.08.03.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 03:43:58 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 6/6] init/Kconfig: remove confusing config EMBEDDED
-Date:   Thu,  8 Sep 2022 12:43:37 +0200
-Message-Id: <20220908104337.11940-7-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
-References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=r4Y41vD7puNvlBr3i+ZthSauPxLbBF/SBVHLhtBk8es=;
+        b=bzw/JCgudcMoucP0xnRIYe56Q5QkZP9eo+iS4sczgWk9mssBeDB7vmtFnovWzRH5nB
+         tU/JlQitrObSpq4KYgraNP7U3JO1h3JClw+7OYSMGS5xv4IUl38ZHJmKva2FQ9iY8xU6
+         Z/eq5aG9qkzTtfg1idpf76HRf2R9BdTamSbInv9YJGvToLz2jfXvv50xCgzEx4Rq5P3v
+         zuyqj054FraMV+KN+zwb2fUXjD+w4S27qLeHTejTUAJ11kseDpGfp2jC3lmnEVUvNQ81
+         EjBJgz/x04knCHeREj7vG0g8f8ZBGs67UY3cIHWMXKliAyKqC9nkOLPnS5JS1IE3sg3O
+         4CuQ==
+X-Gm-Message-State: ACgBeo0VYG5D8y1AX+D32SAGvLUk4QGOZT44mDvGbEySipZPp0bEMIni
+        237jCQu518df42tOKNCqIIEpn6y3D6cRoalzI5hpYA==
+X-Google-Smtp-Source: AA6agR4xkyjcTwbCW7SBccyIEeG9xwZTAgMp/RIM5wyyDOvh5Zoit4OM/BjfhNTr5hQAQI4BQk9b64UVG2vYRBfDs/4=
+X-Received: by 2002:a05:6402:547:b0:44e:8d81:cd9c with SMTP id
+ i7-20020a056402054700b0044e8d81cd9cmr6621525edx.196.1662635472393; Thu, 08
+ Sep 2022 04:11:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220902091535.3572333-1-raychi@google.com> <YxIX+jqWFfwAWYot@rowland.harvard.edu>
+ <CAPBYUsApTYex027qBe-=EyUxDHb8MMQscX+2jqZ98zXxN-0tHA@mail.gmail.com>
+ <YxI4ZViLkZOjN/Bh@rowland.harvard.edu> <CAPBYUsCEjMSJ8P8ZM1_W+S1DOWFTOM0wJwi2fTukfxSGucYhnQ@mail.gmail.com>
+ <YxYTRSSeNqooy7lz@rowland.harvard.edu>
+In-Reply-To: <YxYTRSSeNqooy7lz@rowland.harvard.edu>
+From:   Ray Chi <raychi@google.com>
+Date:   Thu, 8 Sep 2022 19:11:01 +0800
+Message-ID: <CAPBYUsD5peoF0WNQnjS3xc6R_tCXH3685AKdf3MbUhk8Tkxf_g@mail.gmail.com>
+Subject: Re: [Patch v2] usb: core: stop USB enumeration if too many retries
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        mathias.nyman@linux.intel.com,
+        Albert Wang <albertccwang@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Puma Hsu <pumahsu@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,114 +73,83 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
-introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
-and just gives that intent a much better name. That has been clearly a good
-and long overdue renaming, and it is clearly an improvement to the kernel
-build configuration that has shown to help managing the kernel build
-configuration in the last decade.
+On Mon, Sep 5, 2022 at 11:18 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, Sep 05, 2022 at 04:36:16PM +0800, Ray Chi wrote:
+> > On Sat, Sep 3, 2022 at 1:07 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > I don't understand.  If you don't know whether the accessory is broken,
+> > > how do you know whether to set the quirk?
+> > >
+> > > On the other hand, if you always set the quirk even before you know
+> > > whether the accessory is broken, why make it a quirk at all?  Why not
+> > > make it the normal behavior of the driver?
+> > >
+> >
+> > Since our device has a watchdog mechanism, when the device connects to
+> > a broken accessory, the kernel panic will happen. This problem didn't happen
+> > in all USB Hosts, so I want to use the quirk to fix this problem for those hosts
+> > with a watchdog mechanism.
+>
+> Okay.  So this shouldn't be a quirk; it should apply all the time to any
+> hub where the host controller has this watchdog mechanism.
+>
+> > > Why not set CONFIG_USB_FEW_INIT_RETRIES instead?
+> > >
+> >
+> > https://source.android.com/docs/core/architecture/kernel/android-common
+> > According to Android Common Kernel, I can't only add this config to one project.
+> > In addition, it can't stop enumeration so that the timeout problem
+> > still happens.
+>
+> This is the first time you have mentioned either the watchdog mechanism
+> or the fact that this is intended for Android.  It would have been a lot
+> better if both of these facts were included in the initial patch
+> description.  You can't expect people to evaluate a new patch properly
+> if they don't have a clear picture of what it was meant for.
+>
+> > > might describe in detail a situation where the quirk is needed,
+> > > explaining what sort of behavior of the system would lead you to set the
+> > > quirk, and why.
+> > >
+> >
+> > There is a kernel panic when the device connects to the broken accessory.
+> > I tried to modify the initial_descriptor_timeout. When the accessory is not
+> > working, the total time is 6.5s (get descriptor retry) + 5*2 seconds
+> > (set address of xhci timeout).
+> > The time is so long to cause kernel panic for the device. This is why I want to
+> > stop enumeration instead reducing the retries or timeout.
+>
+> It sounds like what you need is a "quick initialization" option that
+> will limit the timeout lengths and the numbers of retries, and will
+> cause the system to ignore connections on a port once an initialization
+> has failed.  There should also be a way to make the system stop ignoring
+> a port, perhaps by writing to a sysfs file.
+>
 
-However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
-this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
-open for future contributors to implement that intended semantics:
+I will remove the quirk and use the sysfs file to do.
 
-    A new CONFIG_EMBEDDED option is added that automatically selects
-    CONFIG_EXPERT when enabled and can be used in the future to isolate
-    options that should only be considered for embedded systems (RISC
-    architectures, SLOB, etc).
+> In addition, there should be an automatic algorithm to determine which
+> hub ports this option will apply to.  I don't think you want it to be
+> based on a quirk, because you shouldn't need to wait for a kernel panic
+> before realizing that the quirk is needed -- that's why the algorithm
+> has to be automatic.
+>
+> Can you write a new patch that works more like this?
+>
 
-Since then, this CONFIG_EMBEDDED implicitly had two purposes:
+I had two ideas to determine whether the port should apply the option or not.
+One is a timeout and the other one is using a retry count. If using
+the retry count,
+I think it is close to current retry definitions. Maybe we can modify
+the design.
+If I use the timeout, I need more time to think of a better way to do it for the
+synchronization problem. Currently, they are rough ideas. I will
+upload the commit
+if I have a better solution to determine the behavior automatically.
 
-  - It can make even more options visible beyond what CONFIG_EXPERT makes
-    visible. In other words, it may introduce another level of enabling the
-    visibility of configuration options: always visible, visible with
-    CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
+I will upload a v3 patch using sysfs file to fix the current problem.
 
-  - Set certain default values of some configurations differently,
-    following the assumption that configuring a kernel build for an
-    embedded system generally starts with a different set of default values
-    compared to kernel builds for all other kind of systems.
+> Alan Stern
 
-Considering the first purpose, at the point in time where CONFIG_EMBEDDED
-was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more options
-become visible throughout all different menus for the kernel configuration.
-Over the last decade, this has gradually increased, so that currently, with
-CONFIG_EXPERT, roughly 170 more options become visible throughout all
-different menus for the kernel configuration. In comparison, currently with
-CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86,
-one in arm, and five for the ChipIdea Highspeed Dual Role Controller.
-
-As the numbers suggest, these two levels of enabling the visibility of even
-more configuration options---beyond what CONFIG_EXPERT enables---never
-evolved to a good solution in the last decade. In other words, this
-additional level of visibility of configuration option with CONFIG_EMBEDDED
-compared to CONFIG_EXPERT has since its introduction never become really
-valuable. It requires quite some investigation to actually understand what
-is additionally visible and it does not differ significantly in complexity
-compared to just enabling CONFIG_EXPERT. This CONFIG_EMBEDDED---or any
-other config to show more detailed options beyond CONFIG_EXPERT---is
-unlikely to be valuable unless somebody puts significant effort in
-identifying how such visibility options can be properly split and creating
-clear criteria, when some config option is visible with CONFIG_EXPERT and
-when some config option is visible only with some further option enabled
-beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do. For now, it
-is much more reasonable to simply make those additional seven options that
-visible with CONFIG_EMBEDDED, visible with CONFIG_EXPERT, and then remove
-CONFIG_EMBEDDED. If anyone spends significant effort in structuring the
-visibility of config options, they may re-introduce suitable new config
-options simply as they see fit.
-
-Hence, all uses of CONFIG_EMBEDDED have been replaced with CONFIG_EXPERT.
-
-Considering the second purpose, note that already probably arguing that a
-kernel build for an embedded system would choose some values differently is
-already tricky: the set of embedded systems with Linux kernels is already
-quite diverse. Many embedded system have powerful CPUs and it would not be
-clear that all embedded systems just optimize towards one specific aspect,
-e.g., a smaller kernel image size. So, it is unclear if starting with "one
-set of default configuration" that is induced by CONFIG_EMBEDDED is a good
-offer for developers configuring their kernels.
-
-Also, the differences of needed user-space features in an embedded system
-compared to a non-embedded system are probably difficult or even impossible
-to name in some generic way.
-
-So it is not surprising that in the last decade hardly anyone has
-contributed changes to make something default differently in case of
-CONFIG_EMBEDDED=y.
-
-In v6.0-rc4, SECRETMEM is the only config switched off if
-CONFIG_EMBEDDED=y. That one use was removed as well, SECRETMEM was made
-configurable at build time by experts using menuconfig instead.
-
-As there are no further uses of CONFIG_EMBEDDED and CONFIG_EMBEDDED never
-lived up to its intended purpose defined above, simply delete this
-confusing CONFIG_EMBEDDED.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- init/Kconfig | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index 9e3fd79b089c..d7429e0b8cae 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1818,14 +1818,6 @@ config DEBUG_RSEQ
- 
- 	  If unsure, say N.
- 
--config EMBEDDED
--	bool "Embedded system"
--	select EXPERT
--	help
--	  This option should be enabled if compiling the kernel for
--	  an embedded system so certain expert options are available
--	  for configuration.
--
- config HAVE_PERF_EVENTS
- 	bool
- 	help
--- 
-2.17.1
-
+Thanks,
+Ray
