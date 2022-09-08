@@ -2,63 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B313A5B1B06
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 13:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8965B1B36
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 13:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiIHLNf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 07:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S230330AbiIHLTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 07:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiIHLNW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 07:13:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FBAD99E9;
-        Thu,  8 Sep 2022 04:13:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 88232CE1F07;
-        Thu,  8 Sep 2022 11:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14B1C433D6;
-        Thu,  8 Sep 2022 11:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662635590;
-        bh=iJAltEe80iBgnEcTrGpToVAW8pvN4/7NYz8vdUhpFAs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q86NaGdXLc8cdu7XwxAzrwSH9WjGvlaAPr6xEVBgQ3CQSOqxk2Qz3Y6McraLUAxi+
-         BK5cTAl72DtjcF9dEmM+dvXs0F8xQrsEv9mr+//QNoMKfX8LEgzNTj/RwyEjWdVYBp
-         vEfYZ0JY2orfoKTZxaSp48W2D3D9VDkO5rDxEQ1cyJXiJBCABfZfNmloz2qSRfDZxe
-         FPjVLsQ3wfRSYbQHmDJQUVL5dlyiIO2Rw+j9kwyRS9nMKxCVA+mFGTeNLhLoONM+F2
-         i6XDpxbJePNuDNxveXOopz2fCr56iNg6KH3k5wWwCQYxITLeKhLHU5sG7vrfAu4TNi
-         npKBqh2BnhmUQ==
-Date:   Thu, 8 Sep 2022 13:13:03 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-media@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] media: remove reference to CONFIG_EMBEDDED in
- MEDIA_SUPPORT_FILTER
-Message-ID: <20220908131303.1fe813cd@coco.lan>
-In-Reply-To: <20220908104337.11940-4-lukas.bulwahn@gmail.com>
-References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
-        <20220908104337.11940-4-lukas.bulwahn@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        with ESMTP id S231216AbiIHLSk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 07:18:40 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E37ED3B5;
+        Thu,  8 Sep 2022 04:18:28 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oWFYA-0002mj-Ng; Thu, 08 Sep 2022 13:18:26 +0200
+Message-ID: <dbceb7d0-8fd8-4202-2913-18e90c70ff55@leemhuis.info>
+Date:   Thu, 8 Sep 2022 13:18:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: Regression in 5.19.0: USB errors during boot #forregzbot
+Content-Language: en-US, de-DE
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <25342.20092.262450.330346@wylie.me.uk>
+ <Yv5Q8gDvVTGOHd8k@kroah.com> <20220821062345.GA26598@lst.de>
+ <25345.60162.942383.502797@wylie.me.uk> <20220821142610.GA2979@lst.de>
+ <25346.25145.488362.162952@wylie.me.uk>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <25346.25145.488362.162952@wylie.me.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662635909;1dc62638;
+X-HE-SMSGID: 1oWFYA-0002mj-Ng
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,38 +46,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Em Thu,  8 Sep 2022 12:43:34 +0200
-Lukas Bulwahn <lukas.bulwahn@gmail.com> escreveu:
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-> The config EMBEDDED selects EXPERT, i.e., when EMBEDDED is enabled, EXPERT
-> is usually also enabled. Hence, it sufficient to have the option
-> MEDIA_SUPPORT_FILTER set to y if !EXPERT.
+On 21.08.22 18:50, Alan J. Wylie wrote:
+> at 16:26 on Sun 21-Aug-2022 Christoph Hellwig (hch@lst.de) wrote:
 > 
-> This way, MEDIA_SUPPORT_FILTER does not refer to CONFIG_EMBEDDED anymore
-> and allows us to remove CONFIG_EMBEDDED in the close future.
+>> Thanks for confirming my suspicion.  I'd still like to fix the issue
+>> with CONFIG_GART_IOMMU enabled once I've tracked it down.  Would you
+>> be willing to test patches?
 > 
-> Remove the reference to CONFIG_EMBEDDED in MEDIA_SUPPORT_FILTER.
+> I'll be glad to help.
 > 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/media/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I've also had a look in the loft and my box of bits for an old
+> Athlon64/Opteron/Turion/Sempron processor, but I'm afraid all I've got
+> are:
 > 
-> diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-> index ba6592b3dab2..283b78b5766e 100644
-> --- a/drivers/media/Kconfig
-> +++ b/drivers/media/Kconfig
-> @@ -24,7 +24,7 @@ if MEDIA_SUPPORT
->  
->  config MEDIA_SUPPORT_FILTER
->  	bool "Filter media drivers"
-> -	default y if !EMBEDDED && !EXPERT
-> +	default y if !EXPERT
->  	help
->  	   Configuring the media subsystem can be complex, as there are
->  	   hundreds of drivers and other config options.
+> Phenom II X6 1055T
+> Phenom II X2 545
+> Athlon 2  x2 270
 
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+#regzbot backburner: unusual config, workaround found, devs still want
+to fix it, but apparently not urgent
+#regzbot ignore-activity
 
-Thanks,
-Mauro
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
