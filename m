@@ -2,221 +2,237 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F445B1F56
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 15:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DD75B1F9F
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 15:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiIHNhK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 09:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S231775AbiIHNvl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 09:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbiIHNhG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 09:37:06 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E034C229B
-        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 06:37:04 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id y18so5177080ljh.12
-        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 06:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Vxk3BD0/hlvsfcgrjPEYWkWfcXAkjr5TEjw+Mc20fXk=;
-        b=dI3ZLlvk0VFXZjyVwn0+e+oya3zxxAHvJkGT3oybttPS7LkruCfyvu41iOuPvyADce
-         qRwLFpqSj7gEab2LY9WhxVfkHAMZ7piiai8/skHCi7y8aJAarEgeaxWcv6+GresaByA5
-         VKrETFxHhhp/pwu94M18v+e8uUIybgntQZqf6BKUEXId+jlNWIZJl5V0/V+ZG7b2c6N4
-         GQLpQYU+gCO1ZhfEjObHnzetw1veTleibwXwBzJVjYiEJ2jME2zIBadoCMFWan4+Zcyr
-         Y92wDxodoHsiBCJ0yYgepHHoawAARnzfOc0E4ehCaxkhSVbxW9x6wuw9dSKUnMPyGXDv
-         ABcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Vxk3BD0/hlvsfcgrjPEYWkWfcXAkjr5TEjw+Mc20fXk=;
-        b=Gt7yA6u1pgk1nhG4Wc52Snoa1grlHR7Uwe2goknw7wdhrnIknsNjIyhWD6+HaETkCU
-         jFda8z0oY3BfIf1kiRt9UF9FNNTcljkfxVIfUpLErd+9nQhrsFikpAJARWiM6GIsHPqD
-         qsQid6nPy3HO2X3yRA70ARE31sxX5MSR8MNfOpjmzG2JUJXdiC3KjxVnkaZIUcrCAafN
-         GI7VqBXLeCknl2uPyv/h30J7RUoo2y26hyz3tzDt+T+Guxj9dhx8eI6YWW9JOcEHpic3
-         GXmDfHVtSFhLsFJq8oW8R+wDHJqv0GdZV6x9162LA3n/qG/DwQMwbtwDmFZ8Zmmv7W39
-         bCXg==
-X-Gm-Message-State: ACgBeo0eeXFS76puP9549ShprY+N9sVpupX8cawl0bjZU0N7iQEoTcqW
-        dVu3uGncPtZuWIxRw7dnTcp7FArP+vmTuYK2UbUPkQ==
-X-Google-Smtp-Source: AA6agR6tYHuaSX50E72EdIElTwk4VDHCtIqBQUg8sJ52P9TAXX4sCzDY8e6ZHpEJR2+Fe/gKSHgNI/3PlCg+BPHv+s8=
-X-Received: by 2002:a2e:be88:0:b0:25f:e9a8:44b8 with SMTP id
- a8-20020a2ebe88000000b0025fe9a844b8mr2378257ljr.92.1662644222255; Thu, 08 Sep
- 2022 06:37:02 -0700 (PDT)
+        with ESMTP id S231203AbiIHNvj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 09:51:39 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70085.outbound.protection.outlook.com [40.107.7.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D5B7754A;
+        Thu,  8 Sep 2022 06:51:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VE8Ub1qpQT8To/VbnPs4gjeOsbMhW/bMmqwxB2AH4He4SAVvc3rjrnGQTMlQ1TQnis9gxWrPIOtQtgCNN97JUnF8Fi58/S10eLqo3kJRjV/6HWZhnj9WXjNo5KZdWTUtpxibZUAi5aaLY87AV9Y+69Bh/IeqaQxKtT4AYrT/9Jqn8uSlP+HQynFu1ILekng3aMSmQYQE7fXp4fYx2OMH8QeSsyXV48yF4e952FdZi4g1ASEvA4mc4ADrySqHpIIbe1Q/jhbVJ5Flb2gE10W8Znf5mr1417npZktlg2zDLvXBysSC5qIlyrewScJN1lEiiFHF3WaA+SQ43Q7kIOtQPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U35Sepkj6t2Mmn88f5OkFHgcAAFdSzLX/Y1gISq8y9s=;
+ b=PH8BrxTVaK4EXc9F4BD91NvV9UzNlNuJ8W67zdisls8C/HeDzIoTf1eG6KQw2nYdvtwxQVPjyritlVkf2lbHkBiKxn9syeDgIL7ygZUhCnomfLQcNK24Jaah51twKlw2lmoLG01O2vbkj3dgY9yf5JoXY6oO0lIqclYnTe+nhsAU6RYbpI0SxowvSWTGkahZ38LGk1Nk91QM+X2QbUmL0fidfFAYIR83IR3FK6Neqmiu5z9DgppHmOeyVSVQotPJxcgpKDk1dbP3clgUR7L09peE70Rznwdbrhh4rDFdTPL7UGA5h0uLfc93WXJ9iAgdXh+X4iU+sYhoBkfST3mgyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U35Sepkj6t2Mmn88f5OkFHgcAAFdSzLX/Y1gISq8y9s=;
+ b=ErmotNeiq9eSbFDn9HeiskNHPxwykz7HP+Pvq14nGAdpkPmVFfq+ynbDqvEvHPWfF2KAs6zsbzoJFo5F0d0IlSIPZsCZVosFqZgYbjUzLuOZvKifcpRiyxHIl1aht6q/iSWFOnQBNr6svCx1AZa0l91LqY+by84Sry5GksYeGd8=
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
+ by VI1PR04MB4447.eurprd04.prod.outlook.com (2603:10a6:803:76::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Thu, 8 Sep
+ 2022 13:51:33 +0000
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::25b6:d7f1:c25e:24d2]) by PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::25b6:d7f1:c25e:24d2%9]) with mapi id 15.20.5588.012; Thu, 8 Sep 2022
+ 13:51:33 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 3/4] arm64: dts: imx8mp: Add snps, gfladj-refclk-lpm-sel
+ quirk to USB nodes
+Thread-Topic: [PATCH 3/4] arm64: dts: imx8mp: Add snps, gfladj-refclk-lpm-sel
+ quirk to USB nodes
+Thread-Index: AQHYw2bc6Qh93RgiaUetlFhVHkNoxa3VjKog
+Date:   Thu, 8 Sep 2022 13:51:33 +0000
+Message-ID: <PA4PR04MB964018044E80B9A0867B142D89409@PA4PR04MB9640.eurprd04.prod.outlook.com>
+References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
+ <20220907144624.2810117-4-alexander.stein@ew.tq-group.com>
+ <PA4PR04MB9640C21A8F2DC44DB58C5C9089409@PA4PR04MB9640.eurprd04.prod.outlook.com>
+ <1836686.CQOukoFCf9@steina-w>
+In-Reply-To: <1836686.CQOukoFCf9@steina-w>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9f3c70ea-5185-4c3d-c7e9-08da91a13dbf
+x-ms-traffictypediagnostic: VI1PR04MB4447:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: K22QQvctijm7/Tlvurb26lJHqsNrfC372RyS6JEklIVjiSsOm99bzAYDG6vYzfkyv/VMiD6REGggqYbqnGoOwOkVfzMVreSJFfgYW8LfyfMJp0TrxUEfnl6zNkuhz4527R9kpSvXtp3D+pUjOWcBxbL6Ae7YjJ1DfzklYp1QE7pe+XzMTCeFj5jv3BPgkfdESz9OjDAuHDwuO6JbQ5X5JuKSH5x5vmVD5EgFLxa0BYX257X6/lHL0uhP1tFjes0Pr141kKQbItyyI4VHgoNdNupObn+7c+6z+rpk4a3SE9r8tuQtl2WJGwm0I3Y1711TZtT/rF+xpdL61uvG+55Hq79rpMonBSoBV1LInFraLwGIcLb+otQbysA+YZQMcoPpXxTYcU4cmhpkW5gPhzfDSCF8qCpvSQ29iM+ngYIpTkfBqFKxdems13+xiMpRoAX2NJyaw6r8EU9qgGOM05iKoQ5zPAt8VWaiKordPcM1mqvC7Aesh30lDOBSCfzhAtgFyL8wRI7cXIjwER0PTe6yKMqCeqaZMmD71j7+dNYQJKLBbh6KfThdrNVp5V7+rZCDSbKyAMRt0C6L1uLqMFCIbYO4OI4a2jDhzzg5/2Ut1MAW6ONG4kZFV36r0mXUY+aRoc8rcyzd2zzpJBaycRcZrdRVbW+tYcgYZNNXJpBGY8z0ZjjkDymEQVY6dGcHURQRUjIiWMfWTS5jptKe6jDyeRNuHBQCv6LAh8pFiqwd0f38YFDF6V8lVuCM7SZQlh2SR5M5ebKdfCRsSFVpOhNg/MQBscGJBnTnnWI3duSphS4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(39860400002)(346002)(376002)(316002)(66446008)(478600001)(6916009)(54906003)(6506007)(9686003)(7696005)(83380400001)(26005)(8936002)(33656002)(52536014)(38070700005)(55016003)(7416002)(5660300002)(2906002)(53546011)(86362001)(44832011)(66556008)(4326008)(66946007)(66476007)(8676002)(76116006)(38100700002)(71200400001)(41300700001)(186003)(64756008)(122000001)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2MgzE/CiH3AnrM48HBsnAmwODhVw8xlTIwfKDHN/NCpl7Wyw753Dzw3OWot8?=
+ =?us-ascii?Q?6v1XjKbb+b0GK0bf1UAmEcRmpS2SFrpmJzg+r7KHGBSVJJbd1Qbw23rxOSVe?=
+ =?us-ascii?Q?43ejuHaJTfOSTHuDJJ+gs1g2y2auQ0EJOwCp4xC3VtfQ5/S19HUP+utZQbqf?=
+ =?us-ascii?Q?BVmA0eCKdRDMQYwjCeXBdbjoNwoWBmdeDArkDwMslfkHJDxCTiQUrhVFsVw9?=
+ =?us-ascii?Q?zKGkV3QnSDk4hTGcMAMRhAW2HepguVccZm85gDDkYHWji60XATrq0ukKIDo2?=
+ =?us-ascii?Q?Cz+/AJliJ35i5MFvXugIqV3WcRD+OVuA2KYblLWt+LdppdJ0JwT7mNja6MSq?=
+ =?us-ascii?Q?kDvgSZCPzhqrRsrANk6MeSQSINRISqb4mXXiY3j5901/6+P79iNkRofiVyZd?=
+ =?us-ascii?Q?O6JQKyoMzNivtQqzLFHhdBtLBhNea+wgc3SFJPtmfYDW0CVQBaMbkq0uCbpR?=
+ =?us-ascii?Q?5K9IBXM2OJBxfi2RV/gSyRvnD1KpS8jcJInxsapE4mSEHv6Tf00TEzp5SPwZ?=
+ =?us-ascii?Q?Jj1a6ff7FbyBlde9l0n93+UDvsK2fx5XZZNGD9lvUz82CAovf21DvgkW1sV0?=
+ =?us-ascii?Q?AY+V+43O5zmTwT+axGTx9lRCBceQDPBvjTdGkPjjpckxTQ9aCJuvefyV68R4?=
+ =?us-ascii?Q?qZHq90jgTrmkqJWt1UlP1OigZP5UePpZBHgleECWx5jSUn7UXZElk//pqKtj?=
+ =?us-ascii?Q?0yzSW8iLzpJ2dJ/qAO64r08Z21eQdv9RMuNojL0Xu0+a8mShESI9At5Cn8vz?=
+ =?us-ascii?Q?pARozkC1j0FrNvf+DqnyEkFT1wXVQoxZtKaaf9XYviwEPfYOudg3B3bAiZNZ?=
+ =?us-ascii?Q?HNOjStNK5x/FSceulvOddSalGmpL9+qkJkCsRo/ZAgAUZHA/0SkGsUJxwgnp?=
+ =?us-ascii?Q?gArn5/UJ/zzS+lz+joC4nrMaAu3GA6ttEPOUafb2h+RO2RvdyDmIjVQ3V69o?=
+ =?us-ascii?Q?dbL4jgT82UpPZiW8j/gEhq++6LLokm1bDzE3MJ4sY24ikwwRFc0jqokZpk9K?=
+ =?us-ascii?Q?IyJ0RsyWyCmnfqoTM9ux8IvwdvmMF0m4LGJCGo1wJod2cc6HSkTj60MJiwbf?=
+ =?us-ascii?Q?BJ7uXCpgojg7hs0T+pIkZDWNJ1CUvkxBFRcsAk3c1bGLamG4CyxJgPHqFTw4?=
+ =?us-ascii?Q?uN0Lia5TUNKpJXWWiSgfTbWa8VXF0FLfZLLvpxx2V7t1CDv2dZR02lmqxTDx?=
+ =?us-ascii?Q?9xPV9967nDSboMm14sOTuBNcMpJf5YPRHN0CqItPWOB1CM1BhbRQhrAkegGs?=
+ =?us-ascii?Q?kGorcUtoOaho5J/pZzhyZUpJYzEZEp/3y0h6Syz0SDmLTXdt0zlhOAUG18EX?=
+ =?us-ascii?Q?IXOoS5qxzFFktK6SZZ3rQ6iW8IkfTyIMeHv6Qbk8WfNo2rc9ePW3bIvBkC6j?=
+ =?us-ascii?Q?YSb7oMFtQHykT/yjyhs5vwNsplY7rYuwj9UNE65faqIRkD+JMO9zM/wmDNNf?=
+ =?us-ascii?Q?wjT5Yc4uf8xEdtFGhgadmHsfmY9pXoYsJLGSItKwa1UYaG0vsW4i5MuiQG27?=
+ =?us-ascii?Q?bH4XmUQD6KKmluXW/p3hOJGtTvArAM1sbh456FAFIYLibuWiVbBsbjoRb2xP?=
+ =?us-ascii?Q?EvsdvWPJEfqrAYe6hdc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <00000000000098580e05e8033b9a@google.com> <20220906172218.b50521a3caf73095983a907e@linux-foundation.org>
- <eb26e739-1b9b-d76e-bc60-0ba08818b096@nvidia.com>
-In-Reply-To: <eb26e739-1b9b-d76e-bc60-0ba08818b096@nvidia.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 8 Sep 2022 15:36:50 +0200
-Message-ID: <CACT4Y+ZBrhAr70pZLRAKJD6zgtV0Zk_hxozOMyEMxNMmntg9fQ@mail.gmail.com>
-Subject: Re: [syzbot] usb-testing boot error: BUG: unable to handle kernel
- paging request in follow_page_mask
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        syzbot <syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f3c70ea-5185-4c3d-c7e9-08da91a13dbf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 13:51:33.7618
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YMZkU6vz7Kdz3ADyFIStMFCRyLZEwGvfc5mgiLOGFqEr8+J+6t1ZdNU7UAEiRBd0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4447
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 8 Sept 2022 at 03:01, 'John Hubbard' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
->
-> On 9/6/22 17:22, Andrew Morton wrote:
+
+
+> -----Original Message-----
+> From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Sent: Thursday, September 8, 2022 5:39 PM
+> To: Jun Li <jun.li@nxp.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
+> <robh+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo <shawnguo@kernel.org>;
+> Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
+> <linux-imx@nxp.com>; linux-usb@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: RE: [PATCH 3/4] arm64: dts: imx8mp: Add snps, gfladj-refclk-lpm-=
+sel
+> quirk to USB nodes
+>=20
+> Am Donnerstag, 8. September 2022, 11:12:23 CEST schrieb Jun Li:
+> > > -----Original Message-----
+> > > From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > Sent: Wednesday, September 7, 2022 10:46 PM
+> > > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
+> > > <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > > <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo
+> > > <shawnguo@kernel.org>; Sascha Hauer <s.hauer@pengutronix.de>;
+> > > Pengutronix Kernel Team <kernel@pengutronix.de>; Fabio Estevam
+> > > <festevam@gmail.com>; dl-linux-imx <linux-imx@nxp.com>; Jun Li
+> > > <jun.li@nxp.com>
+> > > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>;
+> > > linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
+> > > linux-kernel@vger.kernel.org
+> > > Subject: [PATCH 3/4] arm64: dts: imx8mp: Add
+> > > snps,gfladj-refclk-lpm-sel quirk to USB nodes
+> > >
+> > > With this set the SOF/ITP counter is based on ref_clk when 2.0 ports
+> > > are suspended.
+> > >
+> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > ---
+> > >
+> > >  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > > index 53493dc7d976..0e7f5842a3e4 100644
+> > > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > > @@ -1300,6 +1300,7 @@ usb_dwc3_0: usb@38100000 {
+> > >
+> > >  				phys =3D <&usb3_phy0>, <&usb3_phy0>;
+> > >  				phy-names =3D "usb2-phy", "usb3-
+> phy";
+> > >  				snps,dis-u2-freeclk-exists-quirk;
 > >
-> > (cc some of the gup.c developers)
->
-> I wrote down some of the more obvious analysis results below, but I
-> don't have any insight into how this happened.
->
+> > So this property can be removed?
+>=20
+> I'm not so sure about this one, as the description is talking about USB2
+> PHY providing a free-running PHY clock. I don't know the details if this
+> is true or not.
+> But removing snps,dis-u2-freeclk-exists-quirk from both USB device nodes,
+> USB devices attachments are still detected when the USB hub is suspended,
+> both super-speed and high-speed ports.
+
+With below change in driver:
+
+-	if (dwc->dis_u2_freeclk_exists_quirk)
++	if (dwc->dis_u2_freeclk_exists_quirk || dwc->gfladj_refclk_lpm_sel)
+ 		reg &=3D ~DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS;
+
+DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS bit can be cleared by new property
+snps,gfladj-refclk-lpm-sel-quirk
+
+Li Jun
+
+>=20
+> Best regards,
+> Alexander
+>=20
+> > > +				snps,gfladj-refclk-lpm-sel-quirk;
+> > >
+> > >  			};
+> > >
+> > >  		};
+> > >
+> > > @@ -1342,6 +1343,7 @@ usb_dwc3_1: usb@38200000 {
+> > >
+> > >  				phys =3D <&usb3_phy1>, <&usb3_phy1>;
+> > >  				phy-names =3D "usb2-phy", "usb3-
+> phy";
+> > >  				snps,dis-u2-freeclk-exists-quirk;
 > >
-> > On Tue, 06 Sep 2022 07:44:25 -0700 syzbot <syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com> wrote:
+> > Ditto.
 > >
-> >> Hello,
-> >>
-> >> syzbot found the following issue on:
-> >>
-> >> HEAD commit:    4e55e22d3d9a USB: hcd-pci: Drop the unused id parameter fr..
-> >> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> >> console output: https://syzkaller.appspot.com/x/log.txt?x=16b2d4d7080000
-> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-> >> dashboard link: https://syzkaller.appspot.com/bug?extid=6b3a1fd733d73b7a14d7
-> >> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> >>
-> >> Downloadable assets:
-> >> disk image: https://storage.googleapis.com/syzbot-assets/05f931abacee/disk-4e55e22d.raw.xz
-> >> vmlinux: https://storage.googleapis.com/syzbot-assets/9b749a498398/vmlinux-4e55e22d.xz
-> >>
-> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> >> Reported-by: syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com
-> >>
-> >> BUG: unable to handle page fault for address: ffffeefda00001ff
+> > Li Jun
 > >
-> > Thanks.  A bit strange that it came from the USB tree, but I assume this
-> > bug originates from Linus's current.
-> >
-> >> #PF: supervisor read access in kernel mode
-> >> #PF: error_code(0x0000) - not-present page
-> >> PGD 0 P4D 0
-> >> Oops: 0000 [#1] PREEMPT SMP KASAN
-> >> CPU: 1 PID: 687 Comm: kworker/u4:0 Not tainted 6.0.0-rc1-syzkaller-00049-g4e55e22d3d9a #0
-> >> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> >> RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
-> >> RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
-> >> RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
->
-> Verified in the source code: this is crashing due to a bad address
-> in the pud pointer:
->
-> follow_pud_mask():
->         pud = pud_offset(p4dp, address);
->         if (pud_none(*pud))  // <-- crashes here
+> > > +				snps,gfladj-refclk-lpm-sel-quirk;
+> > >
+> > >  			};
+> > >
+> > >  		};
+> > >
+> > > --
+> > > 2.25.1
+>=20
+>=20
+>=20
 
-
-USB tree still misses "virtio: Revert "virtio: find_vqs() add arg
-sizes"" commit.
-W/o that revert there are assorted memory corruptions all over the kernel.
-If you don't see anything obvious, I think we can safely say:
-
-#syz fix: virtio: Revert "virtio: find_vqs() add arg sizes"
-
-
-
-
-> >> RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
-> >> RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
-> >> Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
-> >> RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
-> >> RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
-> >> RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
-> >> RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
-> >> R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
-> >> R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
-> >> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
-> >> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> >> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> >> Call Trace:
-> >>   <TASK>
-> >>   __get_user_pages+0x3f2/0x1020 mm/gup.c:1193
-> >>   __get_user_pages_locked mm/gup.c:1399 [inline]
-> >>   __get_user_pages_remote+0x18f/0x830 mm/gup.c:2109
-> >>   get_user_pages_remote+0x84/0xc0 mm/gup.c:2182
-> >>   get_arg_page+0xe4/0x2a0 fs/exec.c:222
-> >>   copy_string_kernel+0x169/0x460 fs/exec.c:639
-> >>   copy_strings_kernel+0xb3/0x190 fs/exec.c:655
-> >>   kernel_execve+0x377/0x500 fs/exec.c:2001
-> >>   call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
-> >>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> >>   </TASK>
-> >> Modules linked in:
-> >> CR2: ffffeefda00001ff
-> >> ---[ end trace 0000000000000000 ]---
-> >> RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
-> >> RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
-> >> RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
-> >> RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
-> >> RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
-> >> Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
-> >> RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
-> >> RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
-> >> RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
-> >> RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
-> >> R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
-> >> R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
-> >> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
-> >> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> >> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> >> ----------------
-> >> Code disassembly (best guess):
-> >>     0:       00 80 88 ff ff 4c       add    %al,0x4cffff88(%rax)
-> >>     6:       01 e8                   add    %ebp,%eax
-> >>     8:       4d 89 e5                mov    %r12,%r13
-> >>     b:       49 c1 ed 1b             shr    $0x1b,%r13
-> >>     f:       41 81 e5 f8 0f 00 00    and    $0xff8,%r13d
-> >>    16:       49 01 c5                add    %rax,%r13
-> >>    19:       48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
-> >>    20:       fc ff df
-> >>    23:       4c 89 ea                mov    %r13,%rdx
-> >>    26:       48 c1 ea 03             shr    $0x3,%rdx
-> >> * 2a:        80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
->
->
-> The fault address captured in CR2 (ffffeefda00001ff) matches what
-> is calculated in the above line:
->
-> %rdx             + (%rax * 1):
-> 1ffff2fda00001ff + dffffc0000000000 == ffffeefda00001ff
->
-> Note that this is an odd (as opposed to even) address, in fact it
-> ends with 511. This is never a valid pointer, but it does look like
-> a calculation gone wrong.
->
-> I'm short of ideas as to how this happened, though.
->
-> >>    2e:       0f 85 d4 18 00 00       jne    0x1908
-> >>    34:       4d 8b 75 00             mov    0x0(%r13),%r14
-> >>    38:       31 ff                   xor    %edi,%edi
-> >>    3a:       49 83 e6 9f             and    $0xffffffffffffff9f,%r14
-> >>    3e:       4c                      rex.WR
-> >>    3f:       89                      .byte 0x89
-> >>
