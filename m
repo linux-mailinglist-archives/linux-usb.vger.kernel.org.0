@@ -2,237 +2,240 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DD75B1F9F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 15:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2A65B2003
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 16:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiIHNvl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 09:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S232125AbiIHOC4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 10:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbiIHNvj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 09:51:39 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70085.outbound.protection.outlook.com [40.107.7.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D5B7754A;
-        Thu,  8 Sep 2022 06:51:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VE8Ub1qpQT8To/VbnPs4gjeOsbMhW/bMmqwxB2AH4He4SAVvc3rjrnGQTMlQ1TQnis9gxWrPIOtQtgCNN97JUnF8Fi58/S10eLqo3kJRjV/6HWZhnj9WXjNo5KZdWTUtpxibZUAi5aaLY87AV9Y+69Bh/IeqaQxKtT4AYrT/9Jqn8uSlP+HQynFu1ILekng3aMSmQYQE7fXp4fYx2OMH8QeSsyXV48yF4e952FdZi4g1ASEvA4mc4ADrySqHpIIbe1Q/jhbVJ5Flb2gE10W8Znf5mr1417npZktlg2zDLvXBysSC5qIlyrewScJN1lEiiFHF3WaA+SQ43Q7kIOtQPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U35Sepkj6t2Mmn88f5OkFHgcAAFdSzLX/Y1gISq8y9s=;
- b=PH8BrxTVaK4EXc9F4BD91NvV9UzNlNuJ8W67zdisls8C/HeDzIoTf1eG6KQw2nYdvtwxQVPjyritlVkf2lbHkBiKxn9syeDgIL7ygZUhCnomfLQcNK24Jaah51twKlw2lmoLG01O2vbkj3dgY9yf5JoXY6oO0lIqclYnTe+nhsAU6RYbpI0SxowvSWTGkahZ38LGk1Nk91QM+X2QbUmL0fidfFAYIR83IR3FK6Neqmiu5z9DgppHmOeyVSVQotPJxcgpKDk1dbP3clgUR7L09peE70Rznwdbrhh4rDFdTPL7UGA5h0uLfc93WXJ9iAgdXh+X4iU+sYhoBkfST3mgyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U35Sepkj6t2Mmn88f5OkFHgcAAFdSzLX/Y1gISq8y9s=;
- b=ErmotNeiq9eSbFDn9HeiskNHPxwykz7HP+Pvq14nGAdpkPmVFfq+ynbDqvEvHPWfF2KAs6zsbzoJFo5F0d0IlSIPZsCZVosFqZgYbjUzLuOZvKifcpRiyxHIl1aht6q/iSWFOnQBNr6svCx1AZa0l91LqY+by84Sry5GksYeGd8=
-Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
- by VI1PR04MB4447.eurprd04.prod.outlook.com (2603:10a6:803:76::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Thu, 8 Sep
- 2022 13:51:33 +0000
-Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
- ([fe80::25b6:d7f1:c25e:24d2]) by PA4PR04MB9640.eurprd04.prod.outlook.com
- ([fe80::25b6:d7f1:c25e:24d2%9]) with mapi id 15.20.5588.012; Thu, 8 Sep 2022
- 13:51:33 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 3/4] arm64: dts: imx8mp: Add snps, gfladj-refclk-lpm-sel
- quirk to USB nodes
-Thread-Topic: [PATCH 3/4] arm64: dts: imx8mp: Add snps, gfladj-refclk-lpm-sel
- quirk to USB nodes
-Thread-Index: AQHYw2bc6Qh93RgiaUetlFhVHkNoxa3VjKog
-Date:   Thu, 8 Sep 2022 13:51:33 +0000
-Message-ID: <PA4PR04MB964018044E80B9A0867B142D89409@PA4PR04MB9640.eurprd04.prod.outlook.com>
-References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
- <20220907144624.2810117-4-alexander.stein@ew.tq-group.com>
- <PA4PR04MB9640C21A8F2DC44DB58C5C9089409@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <1836686.CQOukoFCf9@steina-w>
-In-Reply-To: <1836686.CQOukoFCf9@steina-w>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9f3c70ea-5185-4c3d-c7e9-08da91a13dbf
-x-ms-traffictypediagnostic: VI1PR04MB4447:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: K22QQvctijm7/Tlvurb26lJHqsNrfC372RyS6JEklIVjiSsOm99bzAYDG6vYzfkyv/VMiD6REGggqYbqnGoOwOkVfzMVreSJFfgYW8LfyfMJp0TrxUEfnl6zNkuhz4527R9kpSvXtp3D+pUjOWcBxbL6Ae7YjJ1DfzklYp1QE7pe+XzMTCeFj5jv3BPgkfdESz9OjDAuHDwuO6JbQ5X5JuKSH5x5vmVD5EgFLxa0BYX257X6/lHL0uhP1tFjes0Pr141kKQbItyyI4VHgoNdNupObn+7c+6z+rpk4a3SE9r8tuQtl2WJGwm0I3Y1711TZtT/rF+xpdL61uvG+55Hq79rpMonBSoBV1LInFraLwGIcLb+otQbysA+YZQMcoPpXxTYcU4cmhpkW5gPhzfDSCF8qCpvSQ29iM+ngYIpTkfBqFKxdems13+xiMpRoAX2NJyaw6r8EU9qgGOM05iKoQ5zPAt8VWaiKordPcM1mqvC7Aesh30lDOBSCfzhAtgFyL8wRI7cXIjwER0PTe6yKMqCeqaZMmD71j7+dNYQJKLBbh6KfThdrNVp5V7+rZCDSbKyAMRt0C6L1uLqMFCIbYO4OI4a2jDhzzg5/2Ut1MAW6ONG4kZFV36r0mXUY+aRoc8rcyzd2zzpJBaycRcZrdRVbW+tYcgYZNNXJpBGY8z0ZjjkDymEQVY6dGcHURQRUjIiWMfWTS5jptKe6jDyeRNuHBQCv6LAh8pFiqwd0f38YFDF6V8lVuCM7SZQlh2SR5M5ebKdfCRsSFVpOhNg/MQBscGJBnTnnWI3duSphS4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(39860400002)(346002)(376002)(316002)(66446008)(478600001)(6916009)(54906003)(6506007)(9686003)(7696005)(83380400001)(26005)(8936002)(33656002)(52536014)(38070700005)(55016003)(7416002)(5660300002)(2906002)(53546011)(86362001)(44832011)(66556008)(4326008)(66946007)(66476007)(8676002)(76116006)(38100700002)(71200400001)(41300700001)(186003)(64756008)(122000001)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2MgzE/CiH3AnrM48HBsnAmwODhVw8xlTIwfKDHN/NCpl7Wyw753Dzw3OWot8?=
- =?us-ascii?Q?6v1XjKbb+b0GK0bf1UAmEcRmpS2SFrpmJzg+r7KHGBSVJJbd1Qbw23rxOSVe?=
- =?us-ascii?Q?43ejuHaJTfOSTHuDJJ+gs1g2y2auQ0EJOwCp4xC3VtfQ5/S19HUP+utZQbqf?=
- =?us-ascii?Q?BVmA0eCKdRDMQYwjCeXBdbjoNwoWBmdeDArkDwMslfkHJDxCTiQUrhVFsVw9?=
- =?us-ascii?Q?zKGkV3QnSDk4hTGcMAMRhAW2HepguVccZm85gDDkYHWji60XATrq0ukKIDo2?=
- =?us-ascii?Q?Cz+/AJliJ35i5MFvXugIqV3WcRD+OVuA2KYblLWt+LdppdJ0JwT7mNja6MSq?=
- =?us-ascii?Q?kDvgSZCPzhqrRsrANk6MeSQSINRISqb4mXXiY3j5901/6+P79iNkRofiVyZd?=
- =?us-ascii?Q?O6JQKyoMzNivtQqzLFHhdBtLBhNea+wgc3SFJPtmfYDW0CVQBaMbkq0uCbpR?=
- =?us-ascii?Q?5K9IBXM2OJBxfi2RV/gSyRvnD1KpS8jcJInxsapE4mSEHv6Tf00TEzp5SPwZ?=
- =?us-ascii?Q?Jj1a6ff7FbyBlde9l0n93+UDvsK2fx5XZZNGD9lvUz82CAovf21DvgkW1sV0?=
- =?us-ascii?Q?AY+V+43O5zmTwT+axGTx9lRCBceQDPBvjTdGkPjjpckxTQ9aCJuvefyV68R4?=
- =?us-ascii?Q?qZHq90jgTrmkqJWt1UlP1OigZP5UePpZBHgleECWx5jSUn7UXZElk//pqKtj?=
- =?us-ascii?Q?0yzSW8iLzpJ2dJ/qAO64r08Z21eQdv9RMuNojL0Xu0+a8mShESI9At5Cn8vz?=
- =?us-ascii?Q?pARozkC1j0FrNvf+DqnyEkFT1wXVQoxZtKaaf9XYviwEPfYOudg3B3bAiZNZ?=
- =?us-ascii?Q?HNOjStNK5x/FSceulvOddSalGmpL9+qkJkCsRo/ZAgAUZHA/0SkGsUJxwgnp?=
- =?us-ascii?Q?gArn5/UJ/zzS+lz+joC4nrMaAu3GA6ttEPOUafb2h+RO2RvdyDmIjVQ3V69o?=
- =?us-ascii?Q?dbL4jgT82UpPZiW8j/gEhq++6LLokm1bDzE3MJ4sY24ikwwRFc0jqokZpk9K?=
- =?us-ascii?Q?IyJ0RsyWyCmnfqoTM9ux8IvwdvmMF0m4LGJCGo1wJod2cc6HSkTj60MJiwbf?=
- =?us-ascii?Q?BJ7uXCpgojg7hs0T+pIkZDWNJ1CUvkxBFRcsAk3c1bGLamG4CyxJgPHqFTw4?=
- =?us-ascii?Q?uN0Lia5TUNKpJXWWiSgfTbWa8VXF0FLfZLLvpxx2V7t1CDv2dZR02lmqxTDx?=
- =?us-ascii?Q?9xPV9967nDSboMm14sOTuBNcMpJf5YPRHN0CqItPWOB1CM1BhbRQhrAkegGs?=
- =?us-ascii?Q?kGorcUtoOaho5J/pZzhyZUpJYzEZEp/3y0h6Syz0SDmLTXdt0zlhOAUG18EX?=
- =?us-ascii?Q?IXOoS5qxzFFktK6SZZ3rQ6iW8IkfTyIMeHv6Qbk8WfNo2rc9ePW3bIvBkC6j?=
- =?us-ascii?Q?YSb7oMFtQHykT/yjyhs5vwNsplY7rYuwj9UNE65faqIRkD+JMO9zM/wmDNNf?=
- =?us-ascii?Q?wjT5Yc4uf8xEdtFGhgadmHsfmY9pXoYsJLGSItKwa1UYaG0vsW4i5MuiQG27?=
- =?us-ascii?Q?bH4XmUQD6KKmluXW/p3hOJGtTvArAM1sbh456FAFIYLibuWiVbBsbjoRb2xP?=
- =?us-ascii?Q?EvsdvWPJEfqrAYe6hdc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S231290AbiIHOCx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 10:02:53 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAD61838B
+        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 07:02:51 -0700 (PDT)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 76BF83F475
+        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 14:02:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1662645767;
+        bh=jBazOeFQpWIHTwFBMzR7bbHllwYOtYl+NqES2kBpRFA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=adQFzG1bipmOiEYbmqMcvtnC08Zj1eec6VkP3Kvz5xWW1me+7ngIG39mTPe3+5++4
+         kPM40JOsi1Vmwon8AiU140Un7jTry9tA86KuLBA7xkacUTMESCqsqwh63jZaCTy5Xv
+         y2S5W8hli+egr4Afj1FUW8+I9RgUucWxlzl7K0TPjkyijXVO4VxsqRsHalJ/Ix47SL
+         zLfJ0xKnFC+cLehViflaZ0+JADHpZ8OjzmdkBxUQ1qc6UU6JaQQkA8zkTmWwA0xk8p
+         P0SZwStlamIxELgtB7vP2Ec1+CnH9GhsGJtodvbkCN5gRvYoD8PrQHvRHKgmnpxSbW
+         J3RatMR+PG2MA==
+Received: by mail-wm1-f70.google.com with SMTP id y7-20020a7bcd87000000b003b338001a4bso220723wmj.2
+        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 07:02:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=jBazOeFQpWIHTwFBMzR7bbHllwYOtYl+NqES2kBpRFA=;
+        b=AEGqk0XArr3WSKAjToHVWkhPy0Q0BGorNhkEQb1US9NkczMsODHjobfP21H3KrMZGe
+         zgHSQWEDSNBDqevOAldMxcRRF1UXUu+chn6elxjdQ3SEWxs7tfLOw1qH0M0L/0ML4Hw6
+         Lvel8LD+HIgGwmv9bRKfi2Zn6TziArfjIZRqmMm76u8HyMRlSdQpaAGKv8eEXyNC0A9n
+         vZhHflMzFXVDeYDhEOrFbn22w3pZKw0DCqqRPySU147QMuTKX5SwxKOAAU0htr9lfbSK
+         w0p9MwJxg6y6sfBcpjvAb9S2IK6bRgcURo0phZb9eL5T+K/YcKTbq4dsVZ92KHjPKUiB
+         +KrA==
+X-Gm-Message-State: ACgBeo0KVRJ923H7x4j2fkkPmKqyNbNblA4s6glKPVhNtPOiomVD9fRS
+        mPdFhJv9SZ79TZjmjTwMT60IFeJVmYPrIG+Zi6uii8ENeUBIGjAVMsE4QpXIUw+BwbvoZWcGABn
+        HYqqJGNGyMYyUPjRojjMrv3KYavsUjQWPKnYTCU1tmlko/00K8i1jxA==
+X-Received: by 2002:a5d:44cf:0:b0:228:dc26:eb3c with SMTP id z15-20020a5d44cf000000b00228dc26eb3cmr5245644wrr.389.1662645766970;
+        Thu, 08 Sep 2022 07:02:46 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5R64h+QMqhy56543P/zaKEpAVhDgGehq88VnAOL/4ZsZ+HE48Y4zqWwq/WPVivO2cS5wfBCkS0Cg9KXILZThQ=
+X-Received: by 2002:a5d:44cf:0:b0:228:dc26:eb3c with SMTP id
+ z15-20020a5d44cf000000b00228dc26eb3cmr5245613wrr.389.1662645766687; Thu, 08
+ Sep 2022 07:02:46 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f3c70ea-5185-4c3d-c7e9-08da91a13dbf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 13:51:33.7618
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YMZkU6vz7Kdz3ADyFIStMFCRyLZEwGvfc5mgiLOGFqEr8+J+6t1ZdNU7UAEiRBd0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4447
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
+ <YxWlc1n4HRxawa/K@kroah.com> <DS7PR12MB60959AACEDB0AEFEE78A5B2EE2419@DS7PR12MB6095.namprd12.prod.outlook.com>
+In-Reply-To: <DS7PR12MB60959AACEDB0AEFEE78A5B2EE2419@DS7PR12MB6095.namprd12.prod.outlook.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 8 Sep 2022 22:02:34 +0800
+Message-ID: <CAAd53p5cz0VWUH9Rdvk70pcpY-PLc9SV8UCvMEc0+TBGES5W5w@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
+ AMD USB4 controller
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Tsao, Anson" <anson.tsao@amd.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+"
 
+On Thu, Sep 8, 2022 at 12:30 AM Limonciello, Mario
+<Mario.Limonciello@amd.com> wrote:
+>
+> [Public]
+>
+> Hi,
+>
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Monday, September 5, 2022 02:30
+> > To: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > Cc: mika.westerberg@linux.intel.com; andreas.noever@gmail.com;
+> > michael.jamet@intel.com; YehezkelShB@gmail.com; Mehta, Sanju
+> > <Sanju.Mehta@amd.com>; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; linux-usb@vger.kernel.org; linux-
+> > kernel@vger.kernel.org
+> > Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
+> > on AMD USB4 controller
+> >
+> > On Mon, Sep 05, 2022 at 02:56:22PM +0800, Kai-Heng Feng wrote:
+> > > AMD USB4 can not detect external PCIe devices like external NVMe when
+> > > it's hotplugged, because card/link are not up:
+> > >
+> > > pcieport 0000:00:04.1: pciehp: pciehp_check_link_active: lnk_status = 1101
+> >
+> > That sounds like a hardware bug, how does this work in other operating
+> > systems for this hardware?
+>
+> We happen to have this HP system in our lab.  My colleague Anson (now on CC) flashed
+> the same BIOS to it (01.02.01) using dediprog and loaded a 6.0-rc3 mainline kernel built
+> from the Canonical mainline kernel PPA.
+>
+> He then tried to hotplug a TBT3 SSD a number of times but couldn't hit this issue.
+> I attached his log to the kernel Bugzilla.
 
-> -----Original Message-----
-> From: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Sent: Thursday, September 8, 2022 5:39 PM
-> To: Jun Li <jun.li@nxp.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
-> <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo <shawnguo@kernel.org>;
-> Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
-> <linux-imx@nxp.com>; linux-usb@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: RE: [PATCH 3/4] arm64: dts: imx8mp: Add snps, gfladj-refclk-lpm-=
-sel
-> quirk to USB nodes
->=20
-> Am Donnerstag, 8. September 2022, 11:12:23 CEST schrieb Jun Li:
-> > > -----Original Message-----
-> > > From: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > Sent: Wednesday, September 7, 2022 10:46 PM
-> > > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
-> > > <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > > <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo
-> > > <shawnguo@kernel.org>; Sascha Hauer <s.hauer@pengutronix.de>;
-> > > Pengutronix Kernel Team <kernel@pengutronix.de>; Fabio Estevam
-> > > <festevam@gmail.com>; dl-linux-imx <linux-imx@nxp.com>; Jun Li
-> > > <jun.li@nxp.com>
-> > > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>;
-> > > linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
-> > > linux-kernel@vger.kernel.org
-> > > Subject: [PATCH 3/4] arm64: dts: imx8mp: Add
-> > > snps,gfladj-refclk-lpm-sel quirk to USB nodes
+Nice to hear. Hopefully this can be fixed at firmware/hardware side.
+
+>
+> >
+> > > Use `lspci` to resume pciehp bridges can find external devices.
+> >
+> > That's not good :(
+> >
+> > > A long delay before checking card/link presence doesn't help, either.
+> > > The only way to make the hotplug work is to enable pciehp interrupt and
+> > > check card presence after the TB switch is added.
 > > >
-> > > With this set the SOF/ITP counter is based on ref_clk when 2.0 ports
-> > > are suspended.
+> > > Since the topology of USB4 and its PCIe bridges are siblings, hardcode
+> > > the bridge ID so TBT driver can wake them up to check presence.
+> >
+> > As I mention below, this is not an acceptable solution.
+> >
+> > AMD developers, any ideas on how to get this fixed in the TB controller
+> > firware instead?
+>
+> Anson also double checked on the AMD reference hardware that the HP system is built
+> against and couldn't reproduce it there either.
+>
+> KH, I've got a few questions/comments to try to better explain why we're here.
+>
+> 1) How did you flash the 01.02.01 firmware?  In Anson's check, he used dediprog.
+> Is it possible there was some stateful stuff used by HP's BIOS still on the SPI from the
+> upgrade that didn't get set/cleared properly from an earlier pre-release BIOS?
+
+We used UEFI capsule to update the firmware, via fwupd.
+
+>
+> 2) Did you change any BIOS settings?  Particularly anything to do with Pre-OS CM?
+
+No, nothing in BIOS was changed.
+
+>
+> 3) If you explicitly reset to HP's "default BIOS settings" does it resolve?
+
+Doesn't help. I put the device to ACPI G3 and it doesn't help, either.
+
+>
+> 4) Can you double check ADP_CS_5 bit 31?  I attached is a patch to kernel Bugzilla to
+> add dyndbg output for it.  If it was for some reason set by Pre-OS CM in your BIOS/settings
+> combination, we might need to undo it by the Linux CM.
+
+All ports say "Hotplug disabled: 0".
+
+dmesg attached to the bugzilla.
+
+>
+> 5) Are you changing any of the default runtime PM policies for any of the USB4 routers or
+> root ports used for tunneling using software like TLP?
+
+No. And they should be suspended by default.
+
+Kai-Heng
+
+>
+> >
 > > >
-> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > Bugzilla:
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugz
+> > illa.kernel.org%2Fshow_bug.cgi%3Fid%3D216448&amp;data=05%7C01%7Cm
+> > ario.limonciello%40amd.com%7C1e27b1d6f69e42796c7b08da8f107121%7C3d
+> > d8961fe4884e608e11a82d994e183d%7C0%7C0%7C637979598042186185%7CU
+> > nknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI
+> > 6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=0lhcaKfUyoK
+> > 0FXT9uDZ8a%2Fpxs9tHd8aoQcyPFdB%2F0eY%3D&amp;reserved=0
+> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > > > ---
+> > >  drivers/thunderbolt/nhi.c    | 29 +++++++++++++++++++++++++++++
+> > >  drivers/thunderbolt/switch.c |  6 ++++++
+> > >  drivers/thunderbolt/tb.c     |  1 +
+> > >  drivers/thunderbolt/tb.h     |  5 +++++
+> > >  include/linux/thunderbolt.h  |  1 +
+> > >  5 files changed, 42 insertions(+)
 > > >
-> > >  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 2 ++
-> > >  1 file changed, 2 insertions(+)
+> > > diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+> > > index cb8c9c4ae93a2..75f5ce5e22978 100644
+> > > --- a/drivers/thunderbolt/nhi.c
+> > > +++ b/drivers/thunderbolt/nhi.c
+> > > @@ -1225,6 +1225,8 @@ static int nhi_probe(struct pci_dev *pdev, const
+> > struct pci_device_id *id)
+> > >  {
+> > >     struct tb_nhi *nhi;
+> > >     struct tb *tb;
+> > > +   struct pci_dev *p = NULL;
+> > > +   struct tb_pci_bridge *pci_bridge, *n;
+> > >     int res;
 > > >
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > > index 53493dc7d976..0e7f5842a3e4 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > > @@ -1300,6 +1300,7 @@ usb_dwc3_0: usb@38100000 {
-> > >
-> > >  				phys =3D <&usb3_phy0>, <&usb3_phy0>;
-> > >  				phy-names =3D "usb2-phy", "usb3-
-> phy";
-> > >  				snps,dis-u2-freeclk-exists-quirk;
+> > >     if (!nhi_imr_valid(pdev)) {
+> > > @@ -1306,6 +1308,19 @@ static int nhi_probe(struct pci_dev *pdev, const
+> > struct pci_device_id *id)
+> > >             nhi_shutdown(nhi);
+> > >             return res;
+> > >     }
+> > > +
+> > > +   if (pdev->vendor == PCI_VENDOR_ID_AMD) {
+> > > +           while ((p = pci_get_device(PCI_VENDOR_ID_AMD, 0x14cd,
+> > p))) {
+> > > +                   pci_bridge = kmalloc(sizeof(struct tb_pci_bridge),
+> > GFP_KERNEL);
+> > > +                   if (!pci_bridge)
+> > > +                           goto cleanup;
+> > > +
+> > > +                   pci_bridge->bridge = p;
+> > > +                   INIT_LIST_HEAD(&pci_bridge->list);
+> > > +                   list_add(&pci_bridge->list, &tb->bridge_list);
+> > > +           }
+> > > +   }
 > >
-> > So this property can be removed?
->=20
-> I'm not so sure about this one, as the description is talking about USB2
-> PHY providing a free-running PHY clock. I don't know the details if this
-> is true or not.
-> But removing snps,dis-u2-freeclk-exists-quirk from both USB device nodes,
-> USB devices attachments are still detected when the USB hub is suspended,
-> both super-speed and high-speed ports.
-
-With below change in driver:
-
--	if (dwc->dis_u2_freeclk_exists_quirk)
-+	if (dwc->dis_u2_freeclk_exists_quirk || dwc->gfladj_refclk_lpm_sel)
- 		reg &=3D ~DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS;
-
-DWC3_GUSB2PHYCFG_U2_FREECLK_EXISTS bit can be cleared by new property
-snps,gfladj-refclk-lpm-sel-quirk
-
-Li Jun
-
->=20
-> Best regards,
-> Alexander
->=20
-> > > +				snps,gfladj-refclk-lpm-sel-quirk;
-> > >
-> > >  			};
-> > >
-> > >  		};
-> > >
-> > > @@ -1342,6 +1343,7 @@ usb_dwc3_1: usb@38200000 {
-> > >
-> > >  				phys =3D <&usb3_phy1>, <&usb3_phy1>;
-> > >  				phy-names =3D "usb2-phy", "usb3-
-> phy";
-> > >  				snps,dis-u2-freeclk-exists-quirk;
+> > You can't walk the device tree and create a "shadow" list of devices
+> > like this and expect any lifetime rules to work properly with them at
+> > all.
 > >
-> > Ditto.
+> > Please do not do this.
 > >
-> > Li Jun
-> >
-> > > +				snps,gfladj-refclk-lpm-sel-quirk;
-> > >
-> > >  			};
-> > >
-> > >  		};
-> > >
-> > > --
-> > > 2.25.1
->=20
->=20
->=20
-
+> > greg k-h
