@@ -2,154 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78835B1AFC
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 13:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B313A5B1B06
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 13:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiIHLLS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 07:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S229552AbiIHLNf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 07:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiIHLLR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 07:11:17 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14882E1ABC
-        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 04:11:14 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id a70so7667457edf.10
-        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 04:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=r4Y41vD7puNvlBr3i+ZthSauPxLbBF/SBVHLhtBk8es=;
-        b=O3teFLEVTRxUkz3Uqk15z3RuX29Ow05PzlJ0X0o6YZjiRUzJ6euRq4QMRsAJct0ylr
-         +hBbNkynYoe9Ng6hdzLIhJ8cYQTlVRHCzdlqjyPx6DWch3I6IqH5a5myeJbNsU/OEl1x
-         N231Kp80INeo1M1CJilpL50vdbjIOV5X4wg7g2zbON9yzkyoGl+ZAtZnv05Cqc6BR1K9
-         iyv3xA62Z9D2v0KrnUTSMm9gc8wmLY7b1mgdcref1u8a7if7QGkv6Wn8TbRpMGZMurvN
-         EkpNUHxypu2eAODpXJxngGd1mlwEznRD0AyxA6aMAjJZBc2GinLv2D0GlIaRAm2u2cGp
-         ndwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=r4Y41vD7puNvlBr3i+ZthSauPxLbBF/SBVHLhtBk8es=;
-        b=bzw/JCgudcMoucP0xnRIYe56Q5QkZP9eo+iS4sczgWk9mssBeDB7vmtFnovWzRH5nB
-         tU/JlQitrObSpq4KYgraNP7U3JO1h3JClw+7OYSMGS5xv4IUl38ZHJmKva2FQ9iY8xU6
-         Z/eq5aG9qkzTtfg1idpf76HRf2R9BdTamSbInv9YJGvToLz2jfXvv50xCgzEx4Rq5P3v
-         zuyqj054FraMV+KN+zwb2fUXjD+w4S27qLeHTejTUAJ11kseDpGfp2jC3lmnEVUvNQ81
-         EjBJgz/x04knCHeREj7vG0g8f8ZBGs67UY3cIHWMXKliAyKqC9nkOLPnS5JS1IE3sg3O
-         4CuQ==
-X-Gm-Message-State: ACgBeo0VYG5D8y1AX+D32SAGvLUk4QGOZT44mDvGbEySipZPp0bEMIni
-        237jCQu518df42tOKNCqIIEpn6y3D6cRoalzI5hpYA==
-X-Google-Smtp-Source: AA6agR4xkyjcTwbCW7SBccyIEeG9xwZTAgMp/RIM5wyyDOvh5Zoit4OM/BjfhNTr5hQAQI4BQk9b64UVG2vYRBfDs/4=
-X-Received: by 2002:a05:6402:547:b0:44e:8d81:cd9c with SMTP id
- i7-20020a056402054700b0044e8d81cd9cmr6621525edx.196.1662635472393; Thu, 08
- Sep 2022 04:11:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220902091535.3572333-1-raychi@google.com> <YxIX+jqWFfwAWYot@rowland.harvard.edu>
- <CAPBYUsApTYex027qBe-=EyUxDHb8MMQscX+2jqZ98zXxN-0tHA@mail.gmail.com>
- <YxI4ZViLkZOjN/Bh@rowland.harvard.edu> <CAPBYUsCEjMSJ8P8ZM1_W+S1DOWFTOM0wJwi2fTukfxSGucYhnQ@mail.gmail.com>
- <YxYTRSSeNqooy7lz@rowland.harvard.edu>
-In-Reply-To: <YxYTRSSeNqooy7lz@rowland.harvard.edu>
-From:   Ray Chi <raychi@google.com>
-Date:   Thu, 8 Sep 2022 19:11:01 +0800
-Message-ID: <CAPBYUsD5peoF0WNQnjS3xc6R_tCXH3685AKdf3MbUhk8Tkxf_g@mail.gmail.com>
-Subject: Re: [Patch v2] usb: core: stop USB enumeration if too many retries
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        mathias.nyman@linux.intel.com,
-        Albert Wang <albertccwang@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Puma Hsu <pumahsu@google.com>, linux-usb@vger.kernel.org,
+        with ESMTP id S229630AbiIHLNW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 07:13:22 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FBAD99E9;
+        Thu,  8 Sep 2022 04:13:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 88232CE1F07;
+        Thu,  8 Sep 2022 11:13:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14B1C433D6;
+        Thu,  8 Sep 2022 11:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662635590;
+        bh=iJAltEe80iBgnEcTrGpToVAW8pvN4/7NYz8vdUhpFAs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q86NaGdXLc8cdu7XwxAzrwSH9WjGvlaAPr6xEVBgQ3CQSOqxk2Qz3Y6McraLUAxi+
+         BK5cTAl72DtjcF9dEmM+dvXs0F8xQrsEv9mr+//QNoMKfX8LEgzNTj/RwyEjWdVYBp
+         vEfYZ0JY2orfoKTZxaSp48W2D3D9VDkO5rDxEQ1cyJXiJBCABfZfNmloz2qSRfDZxe
+         FPjVLsQ3wfRSYbQHmDJQUVL5dlyiIO2Rw+j9kwyRS9nMKxCVA+mFGTeNLhLoONM+F2
+         i6XDpxbJePNuDNxveXOopz2fCr56iNg6KH3k5wWwCQYxITLeKhLHU5sG7vrfAu4TNi
+         npKBqh2BnhmUQ==
+Date:   Thu, 8 Sep 2022 13:13:03 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-media@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 3/6] media: remove reference to CONFIG_EMBEDDED in
+ MEDIA_SUPPORT_FILTER
+Message-ID: <20220908131303.1fe813cd@coco.lan>
+In-Reply-To: <20220908104337.11940-4-lukas.bulwahn@gmail.com>
+References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
+        <20220908104337.11940-4-lukas.bulwahn@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 11:18 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, Sep 05, 2022 at 04:36:16PM +0800, Ray Chi wrote:
-> > On Sat, Sep 3, 2022 at 1:07 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > I don't understand.  If you don't know whether the accessory is broken,
-> > > how do you know whether to set the quirk?
-> > >
-> > > On the other hand, if you always set the quirk even before you know
-> > > whether the accessory is broken, why make it a quirk at all?  Why not
-> > > make it the normal behavior of the driver?
-> > >
-> >
-> > Since our device has a watchdog mechanism, when the device connects to
-> > a broken accessory, the kernel panic will happen. This problem didn't happen
-> > in all USB Hosts, so I want to use the quirk to fix this problem for those hosts
-> > with a watchdog mechanism.
->
-> Okay.  So this shouldn't be a quirk; it should apply all the time to any
-> hub where the host controller has this watchdog mechanism.
->
-> > > Why not set CONFIG_USB_FEW_INIT_RETRIES instead?
-> > >
-> >
-> > https://source.android.com/docs/core/architecture/kernel/android-common
-> > According to Android Common Kernel, I can't only add this config to one project.
-> > In addition, it can't stop enumeration so that the timeout problem
-> > still happens.
->
-> This is the first time you have mentioned either the watchdog mechanism
-> or the fact that this is intended for Android.  It would have been a lot
-> better if both of these facts were included in the initial patch
-> description.  You can't expect people to evaluate a new patch properly
-> if they don't have a clear picture of what it was meant for.
->
-> > > might describe in detail a situation where the quirk is needed,
-> > > explaining what sort of behavior of the system would lead you to set the
-> > > quirk, and why.
-> > >
-> >
-> > There is a kernel panic when the device connects to the broken accessory.
-> > I tried to modify the initial_descriptor_timeout. When the accessory is not
-> > working, the total time is 6.5s (get descriptor retry) + 5*2 seconds
-> > (set address of xhci timeout).
-> > The time is so long to cause kernel panic for the device. This is why I want to
-> > stop enumeration instead reducing the retries or timeout.
->
-> It sounds like what you need is a "quick initialization" option that
-> will limit the timeout lengths and the numbers of retries, and will
-> cause the system to ignore connections on a port once an initialization
-> has failed.  There should also be a way to make the system stop ignoring
-> a port, perhaps by writing to a sysfs file.
->
+Em Thu,  8 Sep 2022 12:43:34 +0200
+Lukas Bulwahn <lukas.bulwahn@gmail.com> escreveu:
 
-I will remove the quirk and use the sysfs file to do.
+> The config EMBEDDED selects EXPERT, i.e., when EMBEDDED is enabled, EXPERT
+> is usually also enabled. Hence, it sufficient to have the option
+> MEDIA_SUPPORT_FILTER set to y if !EXPERT.
+> 
+> This way, MEDIA_SUPPORT_FILTER does not refer to CONFIG_EMBEDDED anymore
+> and allows us to remove CONFIG_EMBEDDED in the close future.
+> 
+> Remove the reference to CONFIG_EMBEDDED in MEDIA_SUPPORT_FILTER.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  drivers/media/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+> index ba6592b3dab2..283b78b5766e 100644
+> --- a/drivers/media/Kconfig
+> +++ b/drivers/media/Kconfig
+> @@ -24,7 +24,7 @@ if MEDIA_SUPPORT
+>  
+>  config MEDIA_SUPPORT_FILTER
+>  	bool "Filter media drivers"
+> -	default y if !EMBEDDED && !EXPERT
+> +	default y if !EXPERT
+>  	help
+>  	   Configuring the media subsystem can be complex, as there are
+>  	   hundreds of drivers and other config options.
 
-> In addition, there should be an automatic algorithm to determine which
-> hub ports this option will apply to.  I don't think you want it to be
-> based on a quirk, because you shouldn't need to wait for a kernel panic
-> before realizing that the quirk is needed -- that's why the algorithm
-> has to be automatic.
->
-> Can you write a new patch that works more like this?
->
-
-I had two ideas to determine whether the port should apply the option or not.
-One is a timeout and the other one is using a retry count. If using
-the retry count,
-I think it is close to current retry definitions. Maybe we can modify
-the design.
-If I use the timeout, I need more time to think of a better way to do it for the
-synchronization problem. Currently, they are rough ideas. I will
-upload the commit
-if I have a better solution to determine the behavior automatically.
-
-I will upload a v3 patch using sysfs file to fix the current problem.
-
-> Alan Stern
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
 Thanks,
-Ray
+Mauro
