@@ -2,94 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968535B1747
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 10:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEE25B17C8
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 10:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbiIHIit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 04:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S231628AbiIHIx5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 04:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiIHIip (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 04:38:45 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343AFE1A8E
-        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 01:38:44 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id lz22so15518235ejb.3
-        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 01:38:44 -0700 (PDT)
+        with ESMTP id S231825AbiIHIxr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 04:53:47 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B095E6B8D
+        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 01:53:45 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id x14so11225984lfu.10
+        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 01:53:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=SqPML+unsouuIp4FVHK4Uf7DFvDcdAzoCu01LQ5xtJU=;
-        b=SAoPOQWnZqu89mgLfBmiK5MrA8YCX5o9aGmYu4qqPNVoBkVnERkpNhCjHVCDQ9Zla1
-         dwqjtxWA+cJ6EDML6KOuvVZ4R6NIPdCxT8QAEB80mIcXpDf2Zf9m7S4FsFoMJ51USitH
-         Qd1pfZ4aI8HWIB9O1qt8jwZQ6YhUw0CUeBplhf899+yVwxpGxiGqmmXQn83Kl/G4s1eI
-         C+ZSChYFtQHAmgSz+vgZPMqj3wcCWnPZrWj/U9r/3gRuxpP0SGbraorsJPs29Q973tKF
-         kAzOfKhkV3IcUs1n2dwba5aeil8pWoUhDW7HjrjRLDXn9ByPmVyCvnNoBZTuKajNSFhw
-         VwcQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=9VquOKQ3hKK4VW69duKHqam2B9oML/lOcHv1HNPnEmA=;
+        b=DB7qj/3lifsH8Ly2TJe/zzZdOFOyFijp7RptdtdBcsW8wQUZtDpQESqx3Vnq7I0VXE
+         9SHdT6AtmEImEgTN2AiQGYkN5Nqf+RwhQfIBBULoFvCriWLOBp6rXnNzluUgnZri4hlc
+         NTCOAEfkS3c3s0/6qAe4gaDZBj00ohmpjXivIXBinMQSMoCE2P9p14MFl302C/XwplG8
+         rIYJlO8MPS9DPBOBkCzuG9QJbpWK8aOsQxUqwoYXLyxL0z7hIo2mp6fg4CBiaYZmv0rq
+         T9MVBMSlPYWnL/sHFpZkNsLPiEqhvm430q3lymG7+4bQ6Kzo5+UpXhf8hSYt3og+MWnh
+         nf/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SqPML+unsouuIp4FVHK4Uf7DFvDcdAzoCu01LQ5xtJU=;
-        b=MYzycrX94IVapKkRvdzcNJfVAj5EToq/mdMG8AHQh1s4zLQBbqM69UW0iVfQtxpYop
-         tbvdngylYc3Mf+V+/ejxhuwrMhcpXMFtCYYmV/25AwegZt/dQCyTj78GkOSq1zQ2W7g+
-         boMJZqxMYRu8WC02WwcsGyTTy15TVta+pKGZBACGNZtVM5fX/ZnouOLLgnFEELL92Mas
-         pM0ggY9rCXQSFg9/GEfbSCuStzu3t+Rf06fXxkV2ofxdip9MXEcwlCQh3NNMvTB0CtXM
-         eTlDhotoDalB/3y/UwAnIk9F+9p+jIgxHnJhrGsjZUVukcsVG8nRXQf25EvHqWwZ+evH
-         IEuA==
-X-Gm-Message-State: ACgBeo3xOL+WWfzkfcJFA8KLpjxKBtZNSBDG8EfzEFw8NgDEe/2TJm0f
-        8u3+pyPA7g8w0EMfyCqLRn2dB8AlVu1TbfAY2j70aw==
-X-Google-Smtp-Source: AA6agR5Qlu6bHigQRlsF7FnyAifGVWu07Yimovaj6W3A7lzSYgEVwFSZi08eyLAuAWp+B7C3eLgpufDg+xQ7EBPkK+Y=
-X-Received: by 2002:a17:907:a420:b0:765:70a4:c101 with SMTP id
- sg32-20020a170907a42000b0076570a4c101mr5281501ejc.526.1662626322796; Thu, 08
- Sep 2022 01:38:42 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=9VquOKQ3hKK4VW69duKHqam2B9oML/lOcHv1HNPnEmA=;
+        b=TY2MEephaO8HT1VjC9KCqCZgGyGWKZI2pfmds40rSQ22NLzutCZcy3qdP8rl5FqEZ3
+         kNh6tnqEIMWJ8+6+irUt/JCfpudTehfasnyRphKuXc0KWkFnk0WQOqGNMYELdhpkGTXh
+         M9DrZvpjKfoDttCS0dLqN4LX6LVt/DgLudwxD33mqaFyJQjNZoI1dIaD2VXlYNZ82F+d
+         TBl452LeCviu2tiyDmHEKmL01Uw/ioU2huAoS5rBRnhdeujF4pSFfAgYwUqtSitGaMtd
+         OwhU4rfWsICPUH7wCtiu5QLisAaqw9H4xCHXYrXH42ImYI+UW1GkCVplAMd3r87vTWUP
+         QjoQ==
+X-Gm-Message-State: ACgBeo2iUoCXdxoe95Igt7G7PiCzjcc9n14emXMjeJFfEELWag80KkBJ
+        j0EfF8WoDrhzlwCTdhRV0tTpCQ==
+X-Google-Smtp-Source: AA6agR5d9Kr7OR2aZotVHTJ06sSnIQxXzgza6rDlRHbtVbyZcqSkboT1leot3yaDXuIbY10+N2GMQg==
+X-Received: by 2002:a05:6512:e97:b0:492:c677:f867 with SMTP id bi23-20020a0565120e9700b00492c677f867mr2476900lfb.190.1662627223427;
+        Thu, 08 Sep 2022 01:53:43 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s26-20020a05651c201a00b0026a999966bbsm1661652ljo.24.2022.09.08.01.53.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 01:53:43 -0700 (PDT)
+Message-ID: <456b1bd4-e3bd-1806-8af9-45c6ab9c289d@linaro.org>
+Date:   Thu, 8 Sep 2022 10:53:41 +0200
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 8 Sep 2022 10:38:31 +0200
-Message-ID: <CACRpkdaeQFP+H786D=SG4s+sQmxScUzve-uWkm-Sg7xFDK_Syw@mail.gmail.com>
-Subject: Re: [PATCH v1 10/11] watchdog: bd9576_wdt: switch to using devm_fwnode_gpiod_get()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/4] dt-bindings: usb: dwc3: Add
+ gfladj-refclk-lpm-sel-quirk
+Content-Language: en-US
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
+ <20220907144624.2810117-2-alexander.stein@ew.tq-group.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220907144624.2810117-2-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,19 +84,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 8:31 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On 07/09/2022 16:46, Alexander Stein wrote:
+> This selects SOF/ITP to be running on ref_clk.
+> 
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
->
-> While at it switch the rest of the calls to read properties in
-> bd9576_wdt_probe() to the generic device property API as well.
->
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yours,
-Linus Walleij
+Best regards,
+Krzysztof
