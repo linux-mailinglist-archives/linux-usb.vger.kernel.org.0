@@ -2,149 +2,221 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CA15B1C60
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 14:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F445B1F56
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 15:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiIHMJP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 08:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S231601AbiIHNhK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 09:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiIHMI6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 08:08:58 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE7D11CD4F
-        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 05:08:48 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id e16so6447573wrx.7
-        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 05:08:48 -0700 (PDT)
+        with ESMTP id S231497AbiIHNhG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 09:37:06 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E034C229B
+        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 06:37:04 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id y18so5177080ljh.12
+        for <linux-usb@vger.kernel.org>; Thu, 08 Sep 2022 06:37:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=61JNgHFLNVCOHtS3GBlVT+sTDzg02TjYElOUCZQYEf8=;
-        b=HtgKNuSMlm36EUZXIQjvg66VG4Cf9KG9o7TXw54X62EKPmk+Ub/rVrVF7Jzl7Ds7kO
-         UCH679hMgBDNwFLGGeHb/2LN8HSMepKYQ4XHZWOYz2pfFTRTo10jgM61feW0CtIH9wTs
-         cWDVplksOqYnCDhQZqLWKFvC/ITbZV1SE7ZOJKNcvW/zr6YWejyvShHr4HqV1XqqLKSi
-         aHWzLSbuPSm4DXlJKfkx9cjhQ8ly/i7YVPOUpfNC3SpdRtbgdpYeqV+sVkApZCZesmsU
-         GaR5lECUziqJ61lt1CqsdCA5x5rBiwWkFcCMmQ9iK1vrrbk84so4bGOLELfaa0Dt/Xs0
-         /qWA==
+        bh=Vxk3BD0/hlvsfcgrjPEYWkWfcXAkjr5TEjw+Mc20fXk=;
+        b=dI3ZLlvk0VFXZjyVwn0+e+oya3zxxAHvJkGT3oybttPS7LkruCfyvu41iOuPvyADce
+         qRwLFpqSj7gEab2LY9WhxVfkHAMZ7piiai8/skHCi7y8aJAarEgeaxWcv6+GresaByA5
+         VKrETFxHhhp/pwu94M18v+e8uUIybgntQZqf6BKUEXId+jlNWIZJl5V0/V+ZG7b2c6N4
+         GQLpQYU+gCO1ZhfEjObHnzetw1veTleibwXwBzJVjYiEJ2jME2zIBadoCMFWan4+Zcyr
+         Y92wDxodoHsiBCJ0yYgepHHoawAARnzfOc0E4ehCaxkhSVbxW9x6wuw9dSKUnMPyGXDv
+         ABcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=61JNgHFLNVCOHtS3GBlVT+sTDzg02TjYElOUCZQYEf8=;
-        b=DrYN4bxx1YbUV5y9avav9+jscxEi77k1Nrv4P315G28JTWXX4bctLrBZM7cxhhMTZd
-         ocmv49AaiktybbBGGK20YCTj2t0RegoeA130Vm6oD6Ofe0hy9p+GIQT2ZW7heoAuOAMC
-         TdbPdtUoO68OFkjuOTqCAJDdvLIZY15wEybwsCU1qnrlnpEekyuaAI1AQ14mg11N6X9H
-         2r0qUVUAUAeNe+l9flggeVPC/fKn4uVMHstsXZCF2uQ9248efmRtdBbf9FXRZQiBvq9o
-         JvLkYarQF7SbN2m1yFIttyigF1qXqNhrvqy9yu7CbCB64mTUL0ApVy0oUGGdqFx29hy8
-         HtmQ==
-X-Gm-Message-State: ACgBeo3mWf6zh9Wvxq0XLb4dMnFtuaSgwH3W3heh4TJCjE/7gEOfpryR
-        a/3gcAG2eZkS0gOlq2+42LmP0tIFB081ADSTw9XkSwKgsOw=
-X-Google-Smtp-Source: AA6agR4faGLlknEVHCd7paYi7uHizUiDAwBUfsO6+JblJj9xGRNmTX1c8O11BeMjUhyh3saGVevsRUjxGHHK3sBQAxs=
-X-Received: by 2002:a17:907:6e18:b0:73d:63d9:945f with SMTP id
- sd24-20020a1709076e1800b0073d63d9945fmr5985318ejc.12.1662638916092; Thu, 08
- Sep 2022 05:08:36 -0700 (PDT)
+        bh=Vxk3BD0/hlvsfcgrjPEYWkWfcXAkjr5TEjw+Mc20fXk=;
+        b=Gt7yA6u1pgk1nhG4Wc52Snoa1grlHR7Uwe2goknw7wdhrnIknsNjIyhWD6+HaETkCU
+         jFda8z0oY3BfIf1kiRt9UF9FNNTcljkfxVIfUpLErd+9nQhrsFikpAJARWiM6GIsHPqD
+         qsQid6nPy3HO2X3yRA70ARE31sxX5MSR8MNfOpjmzG2JUJXdiC3KjxVnkaZIUcrCAafN
+         GI7VqBXLeCknl2uPyv/h30J7RUoo2y26hyz3tzDt+T+Guxj9dhx8eI6YWW9JOcEHpic3
+         GXmDfHVtSFhLsFJq8oW8R+wDHJqv0GdZV6x9162LA3n/qG/DwQMwbtwDmFZ8Zmmv7W39
+         bCXg==
+X-Gm-Message-State: ACgBeo0eeXFS76puP9549ShprY+N9sVpupX8cawl0bjZU0N7iQEoTcqW
+        dVu3uGncPtZuWIxRw7dnTcp7FArP+vmTuYK2UbUPkQ==
+X-Google-Smtp-Source: AA6agR6tYHuaSX50E72EdIElTwk4VDHCtIqBQUg8sJ52P9TAXX4sCzDY8e6ZHpEJR2+Fe/gKSHgNI/3PlCg+BPHv+s8=
+X-Received: by 2002:a2e:be88:0:b0:25f:e9a8:44b8 with SMTP id
+ a8-20020a2ebe88000000b0025fe9a844b8mr2378257ljr.92.1662644222255; Thu, 08 Sep
+ 2022 06:37:02 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:906:749d:b0:743:2e24:e8cd with HTTP; Thu, 8 Sep 2022
- 05:08:35 -0700 (PDT)
-Reply-To: mrtonyelumelu98@gmail.com
-From:   "Mrs. Cristalina Georgieva" <nastyanastya88889@gmail.com>
-Date:   Thu, 8 Sep 2022 13:08:35 +0100
-Message-ID: <CADsX60CBiVvwN+F4ym_2zFH_MaVo9i9qaarXjBKw+YCBOGqM=w@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
+References: <00000000000098580e05e8033b9a@google.com> <20220906172218.b50521a3caf73095983a907e@linux-foundation.org>
+ <eb26e739-1b9b-d76e-bc60-0ba08818b096@nvidia.com>
+In-Reply-To: <eb26e739-1b9b-d76e-bc60-0ba08818b096@nvidia.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 8 Sep 2022 15:36:50 +0200
+Message-ID: <CACT4Y+ZBrhAr70pZLRAKJD6zgtV0Zk_hxozOMyEMxNMmntg9fQ@mail.gmail.com>
+Subject: Re: [syzbot] usb-testing boot error: BUG: unable to handle kernel
+ paging request in follow_page_mask
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-2LXZhtiv2YjZgiDYp9mE2YbZgtivINin2YTYr9mI2YTZiiAoSS5NLkYpDQrYtNi52KjYqSDYpdiv
-2KfYsdipINin2YTYr9mK2YjZhiDYp9mE2K/ZiNmE2YrYqSDYjA0KIyAxOTAwINiMINi02KfYsdi5
-INin2YTYsdim2YrYsw0KDQrZhdix2K3YqNmL2Kcg2KjZg9mFINmB2Yog2LnZhtmI2KfZhiDYp9mE
-2KjYsdmK2K8g2KfZhNil2YTZg9iq2LHZiNmG2Yog2KfZhNix2LPZhdmKINmE2YTZhdiv2YrYsSBJ
-Lk0uRi4g2YPYsdmK2LPYqtin2YTZitmG2Kcg2KzZiNix2KzZitmB2KcNCg0KDQrYudiy2YrYstmK
-INin2YTZhdiz2KrZgdmK2K8hDQoNCtmE2YLYryDYs9mF2K0g2YTZhtinINmI2LLZitixINin2YTY
-rtiy2KfZhtipINin2YTZhdi52YrZhiDYrdiv2YrYq9mL2Kcg2YjYp9mE2YfZitim2Kkg2KfZhNit
-2KfZg9mF2Kkg2YTZhNiz2YTYt9ipINin2YTZhtmC2K/ZitipDQrZhNmE2KPZhdmFINin2YTZhdiq
-2K3Yr9ipINio2YHYrdi1INin2YTYo9mF2YjYp9mEINin2YTYqtmKINmE2YUg2KrYqtmFINin2YTZ
-hdi32KfZhNio2Kkg2KjZh9inINmI2KfZhNiq2Yog2YTYt9in2YTZhdinINmD2KfZhtiqDQrZhdiv
-2YrZhtipINmE2K3Zg9mI2YXYqSDYp9mE2KPZhdmFINin2YTZhdiq2K3Yr9ipINiMINmE2LDZhNmD
-INiq2YUg2KfYqtmH2KfZhSDZhdin2YTZg9mK2YfYpyDYqNin2YTYp9it2KrZitin2YQuDQrYp9mE
-2YXYrdiq2KfZhNmI2YYg2KfZhNiw2YrZhiDZitiz2KrYrtiv2YXZiNmGINin2LPZhSDYp9mE2KPZ
-hdmFINin2YTZhdiq2K3Yr9ipINiMINmI2YHZgtmL2Kcg2YTYs9is2YQg2KrYrtiy2YrZhiDYp9mE
-2KjZitin2YbYp9iqDQrZhdi5INi52YbZiNin2YYg2KfZhNio2LHZitivINin2YTYpdmE2YPYqtix
-2YjZhtmKINmE2YbYuNin2YXZhtinINij2KvZhtin2KEg2KfZhNiq2K3ZgtmK2YIg2KfZhNiw2Yog
-2KPYrNix2YrZhtin2Ycg2Iwg2YHYpdmGDQrYr9mB2LnYqtmDINmF2K/Ysdis2Kkg2YHZiiDZgtin
-2KbZhdipINiq2LbZhSAxNTAg2YXYs9iq2YHZitiv2YvYpyDZgdmKINin2YTZgdim2KfYqiDYp9mE
-2KrYp9mE2YrYqTog2LXZhtiv2YjZgiDZitin2YbYtdmK2KgNCti62YrYsSDZhdmP2LPZhNmO2ZHZ
-hSAvINi12YbYr9mI2YIg2YrYp9mG2LXZitioINi62YrYsSDZhdiv2YHZiNi5IC8g2YjYsdin2KvY
-qSDZhtmC2YQg2LrZitixINmF2YPYqtmF2YTYqSAvINij2YXZiNin2YQNCtin2YTYudmC2K8uDQoN
-CtmC2KfZhSDZhdiz2KTZiNmE2Ygg2KfZhNio2YbZgyDYp9mE2YHYp9iz2K8g2Iwg2KfZhNiw2YrZ
-hiDYp9ix2KrZg9io2YjYpyDYp9mE2YHYs9in2K8g2YXZhiDYo9is2YQg2KfZhNin2K3YqtmK2KfZ
-hCDYudmE2YkNCtij2YXZiNin2YTZgyDYjCDYqNiq2KPYrtmK2LEg2K/Zgdi52YMg2KjYtNmD2YQg
-2LrZitixINmF2LnZgtmI2YQg2Iwg2YXZhdinINij2K/ZiSDYpdmE2Ykg2KrYrdmF2YTZgyDYp9mE
-2YPYq9mK2LEg2YXZhg0K2KfZhNiq2YPYp9mE2YrZgSDZiNiq2KPYrtmK2LEg2LrZitixINmF2LnZ
-gtmI2YQg2YHZiiDZgtio2YjZhCDZhdiv2YHZiNi52KfYqtmDLiDYp9iu2KrYp9ix2Kog2KfZhNij
-2YXZhSDYp9mE2YXYqtit2K/YqQ0K2YjYtdmG2K/ZiNmCINin2YTZhtmC2K8g2KfZhNiv2YjZhNmK
-IChJTUYpINiv2YHYuSDYrNmF2YrYuSDYp9mE2KrYudmI2YrYttin2Kog2YTZgCAxNTAg2YXYs9iq
-2YHZitiv2YvYpyDYqNin2LPYqtiu2K/Yp9mFDQrYqNi32KfZgtin2KogVmlzYSBBVE0g2YXZhiDY
-o9mF2LHZitmD2Kcg2KfZhNi02YXYp9mE2YrYqSDZiNij2YXYsdmK2YPYpyDYp9mE2KzZhtmI2KjZ
-itipINmI2KfZhNmI2YTYp9mK2KfYqiDYp9mE2YXYqtit2K/YqQ0K2YjYo9mI2LHZiNio2Kcg2YjY
-otiz2YrYpyDZiNit2YjZhCDYp9mE2LnYp9mE2YUg2Iwg2K3ZitirINiq2KrZiNmB2LEg2KrZgtmG
-2YrYqSDYp9mE2K/Zgdi5INin2YTYudin2YTZhdmK2Kkg2YfYsNmHDQrZhNmE2YXYs9iq2YfZhNmD
-2YrZhiDZiNin2YTYtNix2YPYp9iqINmI2KfZhNmF2KTYs9iz2KfYqiDYp9mE2YXYp9mE2YrYqS4g
-2YjZitiz2YXYrSDZhNmE2K3Zg9mI2YXYp9iqINio2KfYs9iq2K7Yr9in2YUg2KfZhNi52YXZhNin
-2KoNCtin2YTYsdmC2YXZitipINio2K/ZhNin2Ysg2YXZhiDYp9mE2YbZgtivINmI2KfZhNi02YrZ
-g9in2KouDQoNCtmE2YLYryDZgtmF2YbYpyDYqNin2YTYqtix2KrZitioINmE2LPYr9in2K8g2YXY
-r9mB2YjYudin2KrZgyDYqNin2LPYqtiu2K/Yp9mFINio2LfYp9mC2KkgVmlzYSBBVE0g2YjYs9mK
-2KrZhSDYpdi12K/Yp9ix2YfYpw0K2YTZgyDZiNil2LHYs9in2YTZh9inINmF2KjYp9i02LHYqdmL
-INil2YTZiSDYudmG2YjYp9mG2YMg2LnYqNixINij2Yog2K7Yr9mF2KfYqiDYqNix2YrYryDYs9ix
-2YrYuSDZhdiq2KfYrdipLiDYqNi52K8NCtin2YTYp9iq2LXYp9mEINio2YbYpyDYjCDYs9mK2KrZ
-hSDYqtit2YjZitmEINmF2KjZhNi6IDHYjDUwMNiMMDAwLjAwINiv2YjZhNin2LEg2KPZhdix2YrZ
-g9mKINil2YTZiSDYqNi32KfZgtipIFZpc2ENCkFUTSDYjCDZiNin2YTYqtmKINiz2KrYs9mF2K0g
-2YTZgyDYqNiz2K3YqCDYo9mF2YjYp9mE2YMg2LnZhiDYt9ix2YrZgiDYs9it2Kgg2YXYpyDZhNin
-INmK2YLZhCDYudmGIDEw2IwwMDAg2K/ZiNmE2KfYsQ0K2KPZhdix2YrZg9mKINmB2Yog2KfZhNmK
-2YjZhSDZhdmGINij2Yog2YXYp9mD2YrZhtipINi12LHYp9mBINii2YTZiiDZgdmKINio2YTYr9mD
-LiDYqNmG2KfYodmLINi52YTZiSDYt9mE2KjZgyDYjCDZitmF2YPZhtmDDQrYstmK2KfYr9ipINin
-2YTYrdivINil2YTZiSAyMNiMMDAwLjAwINiv2YjZhNin2LEg2YHZiiDYp9mE2YrZiNmFLiDZgdmK
-INmH2LDYpyDYp9mE2LXYr9ivINiMINmK2KzYqCDYudmE2YrZgw0K2KfZhNin2KrYtdin2YQg2KjY
-pdiv2KfYsdipINin2YTZhdiv2YHZiNi52KfYqiDZiNin2YTYqtit2YjZitmE2KfYqiDYp9mE2K/Z
-iNmE2YrYqSDZiNiq2YLYr9mK2YUg2KfZhNmF2LnZhNmI2YXYp9iqINin2YTZhdi32YTZiNio2KkN
-CtmF2YYg2K7ZhNin2YQ6DQoNCjEuINin2LPZhdmDINin2YTZg9in2YXZhCAuLi4uLi4uLi4uLi4u
-Lg0KMi4g2LnZhtmI2KfZhtmDINin2YTZg9in2YXZhCAuLi4NCjMuINin2YTYrNmG2LPZitipIC4u
-Li4uLi4uLi4uLi4uLi4NCjQuINiq2KfYsdmK2K4g2KfZhNmF2YrZhNin2K8gLyDYp9mE2KzZhtiz
-IC4uLi4uLi4uLg0KNS4g2KfZhNiq2K7Ytdi1IC4uLg0KNi4g2LHZgtmFINin2YTZh9in2KrZgSAu
-Li4uLi4uLi4NCjcuINi52YbZiNin2YYg2KfZhNio2LHZitivINin2YTYpdmE2YPYqtix2YjZhtmK
-INmE2LTYsdmD2KrZgyAuLi4uLi4NCjguINi52YbZiNin2YYg2KfZhNio2LHZitivINin2YTYpdmE
-2YPYqtix2YjZhtmKINin2YTYtNiu2LXZiiAuLi4uLi4NCg0KDQrZhNiq2K3Yr9mK2K8g2YfYsNin
-INin2YTYsdmF2LIgKNin2YTYsdin2KjYtzogQ0xJRU5ULTk2Ni8xNikg2Iwg2KfYs9iq2K7Yr9mF
-2Ycg2YPZhdmI2LbZiNi5INmE2YTYqNix2YrYrw0K2KfZhNil2YTZg9iq2LHZiNmG2Yog2KfZhNiu
-2KfYtSDYqNmDINmI2K3Yp9mI2YQg2KrZgtiv2YrZhSDYp9mE2YXYudmE2YjZhdin2Kog2KfZhNmF
-2LDZg9mI2LHYqSDYo9i52YTYp9mHINil2YTZiSDYp9mE2YXZiNi42YHZitmGDQrYp9mE2KrYp9mE
-2YrZitmGINmE2KXYtdiv2KfYsSDZiNiq2LPZhNmK2YUg2KjYt9in2YLYqSBWaXNhIEFUTSDYmw0K
-DQrZhtmI2LXZitmDINio2YHYqtitINi52YbZiNin2YYg2KjYsdmK2K8g2KXZhNmD2KrYsdmI2YbZ
-iiDYtNiu2LXZiiDYqNix2YLZhSDYrNiv2YrYryDZhNmE2LPZhdin2K0g2YTZiNmD2YrZhCDYp9mE
-2KjZhtmDINio2KrYqtio2LkNCtmH2LDZhyDYp9mE2YXYr9mB2YjYudin2Kog2YjYqtio2KfYr9mE
-INin2YTYsdiz2KfYptmEINmE2YXZhti5INin2YTZhdiy2YrYryDZhdmGINin2YTYqtij2K7Zitix
-INij2Ygg2KfZhNiq2YjYrNmK2Ycg2KfZhNiu2KfYt9imDQrZhNij2YXZiNin2YTZgy4g2KfYqti1
-2YQg2KjZiNmD2YrZhCDYp9mE2KjZhtmDINin2YTYpdmB2LHZitmC2Yog2KfZhNmF2KrYrdivINin
-2YTYotmGINio2KfYs9iq2K7Yr9in2YUg2YXYudmE2YjZhdin2KoNCtin2YTYp9iq2LXYp9mEINij
-2K/Zhtin2Yc6DQoNCtin2YTYtNiu2LUg2KfZhNmF2LPYpNmI2YQ6INin2YTYs9mK2K8g2KrZiNmG
-2Yog2KXZhNmI2YXZitmE2YgNCtil2K/Yp9ix2Kkg2KrYrdmI2YrZhCDYo9mF2YjYp9mEINin2YTY
-qti52YjZiti22KfYqiDYjCDYrNmH2Kkg2KfZhNin2KrYtdin2YQg2KjYp9mE2KjYsdmK2K8g2KfZ
-hNil2YTZg9iq2LHZiNmG2Yog2YTYqNmG2YMNCtil2YHYsdmK2YLZitinINin2YTZhdiq2K3Yrzog
-KG1ydG9ueWVsdW1lbHU5OEBnbWFpbC5jb20pDQoNCtmG2K3Yqtin2Kwg2KXZhNmJINix2K8g2LPY
-sdmK2Lkg2LnZhNmJINmH2LDYpyDYp9mE2KjYsdmK2K8g2KfZhNil2YTZg9iq2LHZiNmG2Yog2YTY
-qtis2YbYqCDYp9mE2YXYstmK2K8g2YXZhiDYp9mE2KrYo9iu2YrYsS4NCg0K2LXYr9mK2YLZgyDY
-p9mE2YXYrtmE2LUNCtin2YTYs9mR2YrYr9ipLiDZg9ix2YrYs9iq2KfZhNmK2YbYpyDYrNmI2LHY
-rNmK2YHYpw0K
+On Thu, 8 Sept 2022 at 03:01, 'John Hubbard' via syzkaller-bugs
+<syzkaller-bugs@googlegroups.com> wrote:
+>
+> On 9/6/22 17:22, Andrew Morton wrote:
+> >
+> > (cc some of the gup.c developers)
+>
+> I wrote down some of the more obvious analysis results below, but I
+> don't have any insight into how this happened.
+>
+> >
+> > On Tue, 06 Sep 2022 07:44:25 -0700 syzbot <syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com> wrote:
+> >
+> >> Hello,
+> >>
+> >> syzbot found the following issue on:
+> >>
+> >> HEAD commit:    4e55e22d3d9a USB: hcd-pci: Drop the unused id parameter fr..
+> >> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> >> console output: https://syzkaller.appspot.com/x/log.txt?x=16b2d4d7080000
+> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+> >> dashboard link: https://syzkaller.appspot.com/bug?extid=6b3a1fd733d73b7a14d7
+> >> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> >>
+> >> Downloadable assets:
+> >> disk image: https://storage.googleapis.com/syzbot-assets/05f931abacee/disk-4e55e22d.raw.xz
+> >> vmlinux: https://storage.googleapis.com/syzbot-assets/9b749a498398/vmlinux-4e55e22d.xz
+> >>
+> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> >> Reported-by: syzbot+6b3a1fd733d73b7a14d7@syzkaller.appspotmail.com
+> >>
+> >> BUG: unable to handle page fault for address: ffffeefda00001ff
+> >
+> > Thanks.  A bit strange that it came from the USB tree, but I assume this
+> > bug originates from Linus's current.
+> >
+> >> #PF: supervisor read access in kernel mode
+> >> #PF: error_code(0x0000) - not-present page
+> >> PGD 0 P4D 0
+> >> Oops: 0000 [#1] PREEMPT SMP KASAN
+> >> CPU: 1 PID: 687 Comm: kworker/u4:0 Not tainted 6.0.0-rc1-syzkaller-00049-g4e55e22d3d9a #0
+> >> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> >> RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
+> >> RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
+> >> RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
+>
+> Verified in the source code: this is crashing due to a bad address
+> in the pud pointer:
+>
+> follow_pud_mask():
+>         pud = pud_offset(p4dp, address);
+>         if (pud_none(*pud))  // <-- crashes here
+
+
+USB tree still misses "virtio: Revert "virtio: find_vqs() add arg
+sizes"" commit.
+W/o that revert there are assorted memory corruptions all over the kernel.
+If you don't see anything obvious, I think we can safely say:
+
+#syz fix: virtio: Revert "virtio: find_vqs() add arg sizes"
+
+
+
+
+> >> RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
+> >> RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
+> >> Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
+> >> RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
+> >> RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
+> >> RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
+> >> RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
+> >> R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
+> >> R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
+> >> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
+> >> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >> Call Trace:
+> >>   <TASK>
+> >>   __get_user_pages+0x3f2/0x1020 mm/gup.c:1193
+> >>   __get_user_pages_locked mm/gup.c:1399 [inline]
+> >>   __get_user_pages_remote+0x18f/0x830 mm/gup.c:2109
+> >>   get_user_pages_remote+0x84/0xc0 mm/gup.c:2182
+> >>   get_arg_page+0xe4/0x2a0 fs/exec.c:222
+> >>   copy_string_kernel+0x169/0x460 fs/exec.c:639
+> >>   copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+> >>   kernel_execve+0x377/0x500 fs/exec.c:2001
+> >>   call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+> >>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> >>   </TASK>
+> >> Modules linked in:
+> >> CR2: ffffeefda00001ff
+> >> ---[ end trace 0000000000000000 ]---
+> >> RIP: 0010:native_pud_val arch/x86/include/asm/pgtable_types.h:347 [inline]
+> >> RIP: 0010:pud_none arch/x86/include/asm/pgtable.h:829 [inline]
+> >> RIP: 0010:follow_pud_mask mm/gup.c:730 [inline]
+> >> RIP: 0010:follow_p4d_mask mm/gup.c:782 [inline]
+> >> RIP: 0010:follow_page_mask+0x1a9/0x1c90 mm/gup.c:846
+> >> Code: 00 80 88 ff ff 4c 01 e8 4d 89 e5 49 c1 ed 1b 41 81 e5 f8 0f 00 00 49 01 c5 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f 85 d4 18 00 00 4d 8b 75 00 31 ff 49 83 e6 9f 4c 89
+> >> RSP: 0000:ffffc90001e7fb10 EFLAGS: 00010a06
+> >> RAX: dffffc0000000000 RBX: ffff88810e732500 RCX: 0000000000000000
+> >> RDX: 1ffff2fda00001ff RSI: ffffffff8167fdbd RDI: 0000000000000007
+> >> RBP: ffffc90001e7fc48 R08: 0000000000000007 R09: 0000000000000000
+> >> R10: 0000000000000000 R11: 0000000000000000 R12: 00007fffffffefc0
+> >> R13: ffff97ed00000ff8 R14: 0000000000000000 R15: 0000000000002017
+> >> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> CR2: ffffeefda00001ff CR3: 0000000007825000 CR4: 00000000003506e0
+> >> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >> ----------------
+> >> Code disassembly (best guess):
+> >>     0:       00 80 88 ff ff 4c       add    %al,0x4cffff88(%rax)
+> >>     6:       01 e8                   add    %ebp,%eax
+> >>     8:       4d 89 e5                mov    %r12,%r13
+> >>     b:       49 c1 ed 1b             shr    $0x1b,%r13
+> >>     f:       41 81 e5 f8 0f 00 00    and    $0xff8,%r13d
+> >>    16:       49 01 c5                add    %rax,%r13
+> >>    19:       48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+> >>    20:       fc ff df
+> >>    23:       4c 89 ea                mov    %r13,%rdx
+> >>    26:       48 c1 ea 03             shr    $0x3,%rdx
+> >> * 2a:        80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+>
+>
+> The fault address captured in CR2 (ffffeefda00001ff) matches what
+> is calculated in the above line:
+>
+> %rdx             + (%rax * 1):
+> 1ffff2fda00001ff + dffffc0000000000 == ffffeefda00001ff
+>
+> Note that this is an odd (as opposed to even) address, in fact it
+> ends with 511. This is never a valid pointer, but it does look like
+> a calculation gone wrong.
+>
+> I'm short of ideas as to how this happened, though.
+>
+> >>    2e:       0f 85 d4 18 00 00       jne    0x1908
+> >>    34:       4d 8b 75 00             mov    0x0(%r13),%r14
+> >>    38:       31 ff                   xor    %edi,%edi
+> >>    3a:       49 83 e6 9f             and    $0xffffffffffffff9f,%r14
+> >>    3e:       4c                      rex.WR
+> >>    3f:       89                      .byte 0x89
+> >>
