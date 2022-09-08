@@ -2,135 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFF85B144F
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 08:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE745B1467
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Sep 2022 08:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiIHGC3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 02:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S229810AbiIHGKx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 02:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiIHGC0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 02:02:26 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C79CAC63;
-        Wed,  7 Sep 2022 23:02:22 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z97so1425743ede.8;
-        Wed, 07 Sep 2022 23:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=pzAYh75bCi6mD7QguChUHb7Kk1cOW8K0HQEeNEeD7Ac=;
-        b=isJpu1ZzOk7SWcVpQ1/WrUXtRTesDoawD1Ni2+2GCCTltnlmHOsDeu68vlyejR5Two
-         ps7tS8ujfYW8GKkdtzmpUxvNDQLXFCe6kgm0tfPv3lZW11bmWreXEf6NEcetqaMobaVA
-         YHbgJqj04y29x44HtR763vlkYuvmgBzTdKvLmuiFKiIlLaCzveagK4r5ebjFoxluTgcV
-         bnVMy6dHkXxG/pIbCgvIStNhlFgQ5GykZHsHFawd6bCooUKGu506J8WEhXG1Fs/+hJZH
-         zFxoodCiiS6u112EWKzXUpLP3fY2q9xtNDxeBQ/JkG5GsidgndnuoSiyQzRa+BYH+R3B
-         k40Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=pzAYh75bCi6mD7QguChUHb7Kk1cOW8K0HQEeNEeD7Ac=;
-        b=NE7l6t2rgeyuwTZN0AzotAssLhF0/SWehhllyCOw9J+RiJgEHCiPnOafZW63DR1gYp
-         ebovGPYGefs3kpQ4QB8Csb2vFYtfwDvBaenf9DYHc3HRc40tJbJDAulb7oGt0dcI4GGF
-         tdyWdvtx5TTqoXLhUBuzHcZdMaHf54lW7svyzoATLXPHemmTVsEmK4tyhpEowZT92p5y
-         9/456w0z2CvYdnFHW1UjumaP4rB62uaR2oq3moDDPuPXfP4rcDhoohSD9H+itojVELww
-         zrLKLukbR+K7H+SCY3gTNKAo3kUgSDBvRkynkGZQnAwqyaLPCsRKJVnZYYWtw8/qdqHk
-         d4Rg==
-X-Gm-Message-State: ACgBeo1cceWMaQ4evFUxIy8sYra7MOis7Ll+SQngCky+Gl3jkzEbQ93l
-        Tp4eufazRnrPwZJl1OoLUN8yqxpqPSpFxl9/upZmBYscY4o=
-X-Google-Smtp-Source: AA6agR7YLSA3qEKKP/tERou9Yn8POKGNnoNbNfX2RMWhngOS6mOmQu8L9WkWLpz8WwSWB0DscX9lbM+0VaFubXzMOeo=
-X-Received: by 2002:a05:6402:28c8:b0:43e:8622:1c21 with SMTP id
- ef8-20020a05640228c800b0043e86221c21mr5681932edb.135.1662616940848; Wed, 07
- Sep 2022 23:02:20 -0700 (PDT)
+        with ESMTP id S229561AbiIHGKw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 02:10:52 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E854A0609
+        for <linux-usb@vger.kernel.org>; Wed,  7 Sep 2022 23:10:45 -0700 (PDT)
+X-UUID: 9c559e37686944d3bbe2f03e6186413d-20220908
+X-CPASD-INFO: 482cb6fa76104cf0bab05ea42f588b83@fYhsg49olJFjVnN8g6axaoKSkmBlkYG
+        DdKBVaGaSZFOVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3g3psg5Jklg==
+X-CLOUD-ID: 482cb6fa76104cf0bab05ea42f588b83
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:185.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:221.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:10,DUF:4342,ACD:74,DCD:74,SL:0,EISP:0,AG:0,CFC:0.511,CFSR:0.032,UAT:0,R
+        AF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,
+        EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 9c559e37686944d3bbe2f03e6186413d-20220908
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 9c559e37686944d3bbe2f03e6186413d-20220908
+X-User: chenzhang@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <chenzhang@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 704618729; Thu, 08 Sep 2022 14:11:09 +0800
+From:   chen zhang <chenzhang@kylinos.cn>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     chenzhang_0901@163.com, linux-usb@vger.kernel.org
+Subject: [PATCH v3] usb: gadget: Fix spelling typo in comments
+Date:   Thu,  8 Sep 2022 14:10:41 +0800
+Message-Id: <20220908061041.16926-1-chenzhang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220903071543.2844698-1-dzm91@hust.edu.cn> <Yxip0d2bBOi/CB4P@kroah.com>
-In-Reply-To: <Yxip0d2bBOi/CB4P@kroah.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 8 Sep 2022 14:01:15 +0800
-Message-ID: <CAD-N9QWnqA_FKZ_PZ5gBgVkYykZfd3OOxSYPG7JZZ52aVwhkvg@mail.gmail.com>
-Subject: Re: [PATCH] usb: misc: usb3503: call clk_disable_unprepare in the
- error handling
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, USB <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 10:25 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sat, Sep 03, 2022 at 03:15:40PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > Smatch reports the following warning:
-> >
-> > vers/usb/misc/usb3503.c:267 usb3503_probe() warn: 'hub->clk'
-> > from clk_prepare_enable() not released on lines: 240,246,252
-> >
-> > Fix this by adding a flag to indicate if hub->clk is prepared or not and
-> > invoke clk_disable_unprepare in the error handling.
-> >
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > ---
-> >  drivers/usb/misc/usb3503.c | 18 +++++++++++++++---
-> >  1 file changed, 15 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
-> > index 330f494cd158..add47dd964b2 100644
-> > --- a/drivers/usb/misc/usb3503.c
-> > +++ b/drivers/usb/misc/usb3503.c
-> > @@ -160,6 +160,7 @@ static int usb3503_probe(struct usb3503 *hub)
-> >       struct usb3503_platform_data *pdata = dev_get_platdata(dev);
-> >       struct device_node *np = dev->of_node;
-> >       int err;
-> > +     int is_clk_enable = 0;
->
-> bool?
->
-> >       u32 mode = USB3503_MODE_HUB;
-> >       const u32 *property;
-> >       enum gpiod_flags flags;
-> > @@ -217,6 +218,8 @@ static int usb3503_probe(struct usb3503 *hub)
-> >                       return err;
-> >               }
-> >
-> > +             // set a flag for successful clk_prepare_enable
->
-> Comment isn't needed.
->
-> > +             is_clk_enable = 1;
-> >               property = of_get_property(np, "disabled-ports", &len);
-> >               if (property && (len / sizeof(u32)) > 0) {
-> >                       int i;
-> > @@ -236,20 +239,29 @@ static int usb3503_probe(struct usb3503 *hub)
-> >       else
-> >               flags = GPIOD_OUT_HIGH;
-> >       hub->intn = devm_gpiod_get_optional(dev, "intn", flags);
-> > -     if (IS_ERR(hub->intn))
-> > +     if (IS_ERR(hub->intn)) {
-> > +             if (is_clk_enable)
-> > +                     clk_disable_unprepare(hub->clk);
-> >               return PTR_ERR(hub->intn);
->
-> This is getting messy, any way to make a common error handler at the
-> bottom of the function instead?  That's the common kernel coding style
-> for this type of thing.
+Fix spelling typo in comments.
 
-I have addressed all the issues mentioned above:
-1. change is_clk_enable to is_clk_enabled, and change its type to bool.
-2. remove the comment and move the error handling code to the end of
-probe function.
->
-> thanks,
->
-> greg k-h
+K2ci (Kylin Continuous Integration) is a code pre-verification tool
+independently developed by KylinSoft, which is used for ensuring the
+code quality of code submission. K2ci includes the comment check tool
+notes_check.
+
+This spelling typo was found using notes_check tool, which reported the
+following warning when check the v5.19 kernel release:
+
+python3 notes_check.py
+drivers/usb/gadget/function/f_uac1_legacy.c selecotor
+python3 notes_check.py
+drivers/usb/gadget/udc/bdc/bdc_ core.c dyanmic
+
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: chen zhang <chenzhang@kylinos.cn>
+---
+change for v3: move k2ci tool explain to changelog text 
+change for v2: add k2ci tool explain
+---
+ drivers/usb/gadget/function/f_uac1_legacy.c | 2 +-
+ drivers/usb/gadget/udc/bdc/bdc_core.c       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
+index e2d7f69128a0..e23aed620c4d 100644
+--- a/drivers/usb/gadget/function/f_uac1_legacy.c
++++ b/drivers/usb/gadget/function/f_uac1_legacy.c
+@@ -780,7 +780,7 @@ static int generic_get_cmd(struct usb_audio_control *con, u8 cmd)
+ 	return con->data[cmd];
+ }
+ 
+-/* Todo: add more control selecotor dynamically */
++/* Todo: add more control selector dynamically */
+ static int control_selector_init(struct f_audio *audio)
+ {
+ 	INIT_LIST_HEAD(&audio->cs);
+diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+index 9849e0c86e23..f9bf3b192cc8 100644
+--- a/drivers/usb/gadget/udc/bdc/bdc_core.c
++++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+@@ -361,7 +361,7 @@ int bdc_reinit(struct bdc *bdc)
+ 	return ret;
+ }
+ 
+-/* Allocate all the dyanmic memory */
++/* Allocate all the dynamic memory */
+ static int bdc_mem_alloc(struct bdc *bdc)
+ {
+ 	u32 page_size;
+-- 
+2.25.1
+
