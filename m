@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5DA5B2D0C
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 05:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA385B2D17
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 05:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiIIDqu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 23:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S229791AbiIIDue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Sep 2022 23:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiIIDqt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 23:46:49 -0400
+        with ESMTP id S229541AbiIIDub (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 23:50:31 -0400
 Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D681098DC
-        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 20:46:46 -0700 (PDT)
-X-UUID: 7206e171dccb4ef1aac36cf1f3c88b9a-20220909
-X-CPASD-INFO: c0e7f1b491174061bfc859a7213f8d87@rICfV5NjkGRlUXODg3OBa4KXk2hlZYG
-        GdGtTlmaUZFeVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3snKfV5dfkg==
-X-CLOUD-ID: c0e7f1b491174061bfc859a7213f8d87
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:172.
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847BFA6C0C
+        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 20:50:30 -0700 (PDT)
+X-UUID: fffb9cb6e1b14e548ae6d3698bd7da96-20220909
+X-CPASD-INFO: 4aea5dfa0bb24069afffcc45825d06b9@fbGfgWKWlJFcgqR-g3OBc4GXlpaTj1S
+        EemxVll5mjlmVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBiXoZgUZB3g6OfgWmSlg==
+X-CLOUD-ID: 4aea5dfa0bb24069afffcc45825d06b9
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:2.0,URL:-5,TVAL:172.
         0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:163.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:1.0,SPC:0,SIG:-
-        5,AUF:29,DUF:4426,ACD:74,DCD:74,SL:0,EISP:0,AG:0,CFC:0.226,CFSR:0.131,UAT:0,R
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:2.0,CFOB:4.0,SPC:0,SIG:-
+        5,AUF:30,DUF:4427,ACD:74,DCD:74,SL:0,EISP:0,AG:0,CFC:0.226,CFSR:0.131,UAT:0,R
         AF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,
         EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 7206e171dccb4ef1aac36cf1f3c88b9a-20220909
+X-CPASD-ID: fffb9cb6e1b14e548ae6d3698bd7da96-20220909
 X-CPASD-BLOCK: 1000
 X-CPASD-STAGE: 1
-X-UUID: 7206e171dccb4ef1aac36cf1f3c88b9a-20220909
+X-UUID: fffb9cb6e1b14e548ae6d3698bd7da96-20220909
 X-User: zenghongling@kylinos.cn
 Received: from localhost.localdomain [(112.64.161.44)] by mailgw
         (envelope-from <zenghongling@kylinos.cn>)
         (Generic MTA)
-        with ESMTP id 1229032628; Fri, 09 Sep 2022 11:47:13 +0800
+        with ESMTP id 169722319; Fri, 09 Sep 2022 11:50:55 +0800
 From:   Hongling Zeng <zenghongling@kylinos.cn>
 To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
         zhongling0719@126.com, Hongling Zeng <zenghongling@kylinos.cn>
 Subject: [PATCH v3 2/3] usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
-Date:   Fri,  9 Sep 2022 11:47:10 +0800
-Message-Id: <1662695230-28197-1-git-send-email-zenghongling@kylinos.cn>
+Date:   Fri,  9 Sep 2022 11:50:51 +0800
+Message-Id: <1662695451-28270-1-git-send-email-zenghongling@kylinos.cn>
 X-Mailer: git-send-email 2.1.0
 X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
         MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
@@ -76,7 +76,7 @@ Change for v1
 Change for v2
  -Change spelling error.
 
-Change for v2
+Change for v3
  -Add acked-by
 ---
  drivers/usb/storage/unusual_uas.h | 7 +++++++
