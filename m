@@ -2,127 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEC95B3458
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 11:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0930F5B3407
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 11:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbiIIJrX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Sep 2022 05:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S232131AbiIIJch (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Sep 2022 05:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiIIJrV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 05:47:21 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9216DFA6A7;
-        Fri,  9 Sep 2022 02:47:19 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id f131so1860867ybf.7;
-        Fri, 09 Sep 2022 02:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=jfc5PI7vUD4Aq68rXzOdTc1GotoBc8f6RchZ+GS6IIs=;
-        b=c704vzTIEE8fD/+/yEejZ7dnnrVdpFgSizdgMZGxd8hZWJzMFgmZ5EdxpBlbOUvAiV
-         UQNGbMKvyIxj4+AF6dbyQIpPlzKw+9WRX+pf6AxZusOzuIp904FHwapLxuZWjRvIjeJf
-         ptoKp+v53gvE4UhNe8CdSyRhZfVnBoFPuZk88c09lR0b7uM3YomAA+haLBE671ddHqt9
-         5O23+VDPTnCnyUQOmnbvzeqZid4M8FkuKKCt1CKRl2K3GVKhLKLAYSATr40xRAU41ihb
-         JRU2ZscubQRTTjS6NFsUdEJv8luO2yB46THkdYNHN3FqL6Tgt4ObN2jxmU0iSe6vZW//
-         4mKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jfc5PI7vUD4Aq68rXzOdTc1GotoBc8f6RchZ+GS6IIs=;
-        b=jK5k6/D1IU1Zjm6URqDbSEvoa8L8yRV5A5AcFjdzRNBsrclVsv256A4PdteLC24IaW
-         AD7qhpUnvdNcFF++l9EZAZn+5GsS4ac9QptOGhve8ImJVmqgtPsOYD7eAQIAD/Fvc0Mb
-         F/vfd8QNtJ0e9Ji2RJ4dRNpHkeZeJoo1LVWgQKy0i20s3HFZS1mlUxKWcCdlQhPKJ/jH
-         zekdj1kuqAz6AojX8T/rZweycriT7eQQfJDi76I0QtdGaEYTsdsDQ0ekTANeeupOCf9C
-         5c9yhxwvhWcjMoRJEkFMpcrRIizxXMxxw74m1LwibUIUM6MJXcmzaGpEveLj+FtLXZI3
-         ccsQ==
-X-Gm-Message-State: ACgBeo0mij3n7Xhh1NfzQdojZ9BIVFcqQ9ri8IJFM6Uk7LyNJXUF3yIO
-        8E0cbUHqLfquOSr9j24++dV35fPkp8zV+IVyds0=
-X-Google-Smtp-Source: AA6agR5iecDvFUTm3i7dnv6+ipXhF18SNJAuAN5Vk4ZI4UmY6mu5QedSKsbgiHyH5fdvRxxAyuv6TJXapYjUleCR1Vk=
-X-Received: by 2002:a25:d791:0:b0:6ae:2ee3:710e with SMTP id
- o139-20020a25d791000000b006ae2ee3710emr6161116ybg.389.1662716838695; Fri, 09
- Sep 2022 02:47:18 -0700 (PDT)
+        with ESMTP id S231696AbiIIJcI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 05:32:08 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FFA6B176;
+        Fri,  9 Sep 2022 02:29:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MP9dL5r23z6S2mb;
+        Fri,  9 Sep 2022 17:27:50 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.102.38])
+        by APP2 (Coremail) with SMTP id Syh0CgA3inOBBxtjV_RbAg--.16776S4;
+        Fri, 09 Sep 2022 17:29:38 +0800 (CST)
+From:   Wei Yongjun <weiyongjun@huaweicloud.com>
+To:     Vincent Shih <vincent.sunplus@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>, linux-usb@vger.kernel.org,
+        linux-phy@lists.infradead.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH -next] phy: usb: sunplus: Fix return value check in update_disc_vol()
+Date:   Fri,  9 Sep 2022 09:47:09 +0000
+Message-Id: <20220909094709.1790970-1-weiyongjun@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
- <20220908104337.11940-7-lukas.bulwahn@gmail.com> <ca25a32d-aadb-f0d0-9e24-70fbabc4d377@csgroup.eu>
-In-Reply-To: <ca25a32d-aadb-f0d0-9e24-70fbabc4d377@csgroup.eu>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 9 Sep 2022 11:47:07 +0200
-Message-ID: <CAKXUXMwo-X+cM9f_K=JpnjAcPr89OKCZ4JRAFMYCaTwt85UJ5Q@mail.gmail.com>
-Subject: Re: [PATCH 6/6] init/Kconfig: remove confusing config EMBEDDED
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@ozlabs.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-CM-TRANSID: Syh0CgA3inOBBxtjV_RbAg--.16776S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4DXF1ktF1xWFWDWF4fuFg_yoWkAFb_ur
+        yfKr17Jw4DKFnFvrWDAw4IvryIvFs8XFyFgw40qFy5AFyUtrnay3Z7uFyfuF1fZ3yUCr92
+        k3ZrZ343A34xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbokYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_JrC_JFWl1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> >   init/Kconfig | 8 --------
-> >   1 file changed, 8 deletions(-)
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 9e3fd79b089c..d7429e0b8cae 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1818,14 +1818,6 @@ config DEBUG_RSEQ
-> >
-> >         If unsure, say N.
-> >
-> > -config EMBEDDED
-> > -     bool "Embedded system"
-> > -     select EXPERT
-> > -     help
-> > -       This option should be enabled if compiling the kernel for
-> > -       an embedded system so certain expert options are available
-> > -       for configuration.
-> > -
-> >   config HAVE_PERF_EVENTS
-> >       bool
-> >       help
->
-> That's fine, but what happens to existing defconfigs then ?
->
-> $ git grep -w CONFIG_EMBEDDED arch/powerpc/
-> arch/powerpc/configs/40x/klondike_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/44x/fsp2_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/52xx/tqm5200_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/mgcoge_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/microwatt_defconfig:CONFIG_EMBEDDED=y
-> arch/powerpc/configs/ps3_defconfig:CONFIG_EMBEDDED=y
->
-> They need to get converted to selecting CONFIG_EXPERT instead.
->
-> And that needs to be done before you remove CONFIG_EMBEDDED.
->
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-Agree. Let us get the first five patches included. Then adjust the
-configs for all architectures and then delete the CONFIG_EMBEDDED.
+In case of error, the function nvmem_cell_read() returns ERR_PTR()
+and never returns NULL. The NULL test in the return value check
+should be replaced with IS_ERR().
 
-Lukas
+Fixes: 99d9ccd97385 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ drivers/phy/sunplus/phy-sunplus-usb2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
+index 5269968b3060..b932087c55b2 100644
+--- a/drivers/phy/sunplus/phy-sunplus-usb2.c
++++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
+@@ -92,13 +92,13 @@ static int update_disc_vol(struct sp_usbphy *usbphy)
+ 	otp_v = nvmem_cell_read(cell, &otp_l);
+ 	nvmem_cell_put(cell);
+ 
+-	if (otp_v) {
++	if (!IS_ERR(otp_v)) {
+ 		set = *(otp_v + 1);
+ 		set = (set << (sizeof(char) * 8)) | *otp_v;
+ 		set = (set >> usbphy->disc_vol_addr_off) & J_DISC;
+ 	}
+ 
+-	if (!otp_v || set == 0)
++	if (IS_ERR(otp_v) || set == 0)
+ 		set = OTP_DISC_LEVEL_DEFAULT;
+ 
+ 	val = readl(usbphy->phy_regs + CONFIG7);
+
