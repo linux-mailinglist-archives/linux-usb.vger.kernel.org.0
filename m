@@ -2,102 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9515B2D9C
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 06:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D875B2E19
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 07:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiIIEm1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Sep 2022 00:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S229687AbiIIF16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Sep 2022 01:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiIIEm0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 00:42:26 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F52E2938;
-        Thu,  8 Sep 2022 21:42:25 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id z9-20020a17090a468900b001ffff693b27so441574pjf.2;
-        Thu, 08 Sep 2022 21:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=JDjtSG+gwH2qlwCxPBWJXUQX1Nbq4myEQelim1fY0Pc=;
-        b=VQ6VPll3U64mkMC+BFqUyttE+g/p68TnAR5OXibzYR25rbASMItXUwGiLg/B3AgTeK
-         KRhvv+5Pua2aljA/Rb79qbTzXwGxkbV+8lBKJpyYIHFG6Vd7H35NItzHSsDZN4BGXief
-         bUNDX8rSfZGeJODtQZPZB2cxM2oeQdaTWwGhZpM0MODyK5DYWss5QPAt0reL15FHzLSG
-         dSij9GdsXgieD+IR2SaWp/RrU8011KvMjnqbF6NmfGNKfpxc3PgCn4oRcvVJ+MpAhxPR
-         eGLFzqcRjdTzWnOXNtP9eYpnzpU2PjAfNjtCweK6DLBzXQPYIAWy7XUP7I4Zwr2P0iuE
-         7Wcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=JDjtSG+gwH2qlwCxPBWJXUQX1Nbq4myEQelim1fY0Pc=;
-        b=6NZb9dqWuDGCczX4YoWAWFa89UaFoeP3qllIhUu9X4YY5fAXJBPq5vPEspeUZUua+L
-         GvT/JOpoilFI4B/PgoH8fkjOD3nS1kUCyL5Ffb8n+gUcBT6uk7ucPLiXMkjRfpFtgkI3
-         78NceF3jtNOUHo8YjRRFMUt1wxveLVM1dgVys3kNbhzIcD/VaZH8c+EOXZQmDynUlgOc
-         WMey1cXm8kQSupb6W1CmgNzxXgbBDFy67qZoyKmAeX0AjYPWsLi3rYbnJHEKMVb1Hjnv
-         Uky95GCaCP3GhAA+mT35KCupvwtfcO5Sq3Ysvr2IEL7IKgjhg71Rzp4Fgbk4tAft6MBO
-         nTAw==
-X-Gm-Message-State: ACgBeo2fWJAdi34W+7+BRxOgD18nthgbdCdvefvfNkr0+/mDt8VOiE6u
-        gPNl/i+mL7uYDwwXQvUanVTMSLYzOO91Jg==
-X-Google-Smtp-Source: AA6agR4bwJ7gNhAuPVwXBe89DSzVafG+uVaSe9IpJXzP+Jm0eI+Da57EusV7fC4NMP4HYZMgkA2SWg==
-X-Received: by 2002:a17:90a:4105:b0:202:80ac:4686 with SMTP id u5-20020a17090a410500b0020280ac4686mr3377855pjf.154.1662698544226;
-        Thu, 08 Sep 2022 21:42:24 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id lw2-20020a17090b180200b00200b12f2bf5sm10569097pjb.1.2022.09.08.21.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 21:42:23 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     heghedus.razvan@gmail.com, evgreen@chromium.org,
+        with ESMTP id S229437AbiIIF15 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 01:27:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45DD125B0A;
+        Thu,  8 Sep 2022 22:27:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 883BC61E8F;
+        Fri,  9 Sep 2022 05:27:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A25EC433D6;
+        Fri,  9 Sep 2022 05:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662701276;
+        bh=aJi6kD7CroSMwq0qBAS7SzFUnHhyRakwLscMPvg06Bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kRawzbBkowL+S5NLoA0/VB/FSmoFW2l88GlR08PRUL2IieiPt67uQXKrLFlnQHhrQ
+         KTgFOmQdfi5x3FndeGMT49A9p7Oyx9+OIBOml3AAHgt6XyKlaDoIm0hW0YZ2osSgWW
+         CnGFSqs/Ju0rCRaKcH+N2vQHPbOMub6vzmN2LAHg=
+Date:   Fri, 9 Sep 2022 07:27:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Li Zhong <floridsleeves@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heghedus.razvan@gmail.com, evgreen@chromium.org,
         yuanjilin@cdjrlc.com, stern@rowland.harvard.edu,
-        jj251510319013@gmail.com, gregkh@linuxfoundation.org,
-        Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] drivers/usb/core/driver: check return value of usb_set_interface()
-Date:   Thu,  8 Sep 2022 21:42:14 -0700
-Message-Id: <20220909044215.2620024-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        jj251510319013@gmail.com
+Subject: Re: [PATCH v1] drivers/usb/core/driver: check return value of
+ usb_set_interface()
+Message-ID: <YxrO2Wji2UJJs/eg@kroah.com>
+References: <20220909044215.2620024-1-floridsleeves@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909044215.2620024-1-floridsleeves@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Check return value of usb_set_interface() and report error if it fails.
-Otherwise usb_set_interface() may fail without any warnings. 
+On Thu, Sep 08, 2022 at 09:42:14PM -0700, Li Zhong wrote:
+> This flaw was found using an experimental static analysis tool we are
+> developing. Report warnings when the function usb_set_interface() fails
+> can increase the dianosability.
 
-This flaw was found using an experimental static analysis tool we are
-developing. Report warnings when the function usb_set_interface() fails
-can increase the dianosability.
+Please read Documentation/process/researcher-guidelines.rst for how to
+properly submit such things.  Until that is followed, we can not accept
+stuff from you, sorry.
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/usb/core/driver.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 7e7e119c253f..ee375b5eafe6 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1332,8 +1332,10 @@ static int usb_resume_interface(struct usb_device *udev,
- 
- 		/* Carry out a deferred switch to altsetting 0 */
- 		if (intf->needs_altsetting0 && !intf->dev.power.is_prepared) {
--			usb_set_interface(udev, intf->altsetting[0].
--					desc.bInterfaceNumber, 0);
-+			status = usb_set_interface(udev, intf->altsetting[0].desc.bInterfaceNumber, 0);
-+			if (status < 0)
-+				dev_err(intf->dev, "usb_set_interface error %d\n",
-+							status);
- 			intf->needs_altsetting0 = 0;
- 		}
- 		goto done;
--- 
-2.25.1
-
+greg k-h
