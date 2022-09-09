@@ -2,50 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A41D5B3F50
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 21:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEDE5B4027
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 21:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiIITQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Sep 2022 15:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
+        id S231907AbiIITtq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Sep 2022 15:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiIITQg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 15:16:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2529A13B542
-        for <linux-usb@vger.kernel.org>; Fri,  9 Sep 2022 12:16:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oWjUM-0005iz-T5; Fri, 09 Sep 2022 21:16:31 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oWjUK-004sQO-9D; Fri, 09 Sep 2022 21:16:30 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oWjUK-00HZkO-Ve; Fri, 09 Sep 2022 21:16:28 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com
-Subject: [PATCH v1 4/4] usb: gadget: uvc: add v4l2 try_format api call
-Date:   Fri,  9 Sep 2022 21:16:27 +0200
-Message-Id: <20220909191627.4188908-5-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220909191627.4188908-1-m.grzeschik@pengutronix.de>
-References: <20220909191627.4188908-1-m.grzeschik@pengutronix.de>
+        with ESMTP id S232138AbiIITtT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 15:49:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE2F106357
+        for <linux-usb@vger.kernel.org>; Fri,  9 Sep 2022 12:48:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662752887; x=1694288887;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CETwE2pv9jpDxgdAJb9ZQ3GyJ3DeOLvv4b7ZylO22TQ=;
+  b=mupljmqaBa1zFBoJJN7G/zfFubD8fulCUeVunkXihq2nAt+CvP0gbGx2
+   ws2I3MO0UUMekQyJ7gCD1zPpbw5PZKc5JkYNbN7F/h7srvEoX4xX5R2gb
+   v+ADhUNCaLAfNI/kMsOQ1BWRrk/U/rVnwrf6abY3C6WWBLg/k2emAMyyY
+   nQBdj5vs+QQ2Zwt7yfsj3bjB873smKoyr0rw43fG023PFgoNyCnGmP7mE
+   G8AmCG/rgXimTc9Mwtj6BJMNzxgXUGkxB/A86u0CJA0Ojebm73/l6PilZ
+   YxWFrV2NBnqYNXrUbxnP0yrxDswlcnwvOx+BaaYX55jvPD54Y4EUnPCJn
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277950147"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="277950147"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 12:48:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="943892355"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Sep 2022 12:48:05 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWjyv-0001g1-0J;
+        Fri, 09 Sep 2022 19:48:05 +0000
+Date:   Sat, 10 Sep 2022 03:47:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 7eb2bf871454d3b35c2e988477aab4c0e12aa7c4
+Message-ID: <631b9850.RZHBJbo4K4JCNtyD%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,161 +62,137 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds the uvc_v4l2_try_format api call to validate
-the setting of v4l2_format. It will fallback to the nearest
-allowed framesize.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 7eb2bf871454d3b35c2e988477aab4c0e12aa7c4  usb: misc: usb3503: call clk_disable_unprepare in the error handling
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+elapsed time: 720m
 
----
-v13 -> v1:
-    - moved to this smaller patch series
+configs tested: 115
+configs skipped: 3
 
- drivers/usb/gadget/function/uvc_v4l2.c | 110 +++++++++++++++++++++++++
- 1 file changed, 110 insertions(+)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 00c107ed30796b..60e477ce42d4e7 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -48,6 +48,31 @@ static struct uvc_format_desc *to_uvc_format(struct uvcg_format *uformat)
- 	return format;
- }
- 
-+static int uvc_v4l2_get_bytesperline(struct uvcg_format *uformat,
-+			      struct uvcg_frame *uframe)
-+{
-+	struct uvcg_uncompressed *u;
-+
-+	if (uformat->type == UVCG_UNCOMPRESSED) {
-+		u = to_uvcg_uncompressed(&uformat->group.cg_item);
-+		if (!u)
-+			return 0;
-+
-+		return u->desc.bBitsPerPixel * uframe->frame.w_width / 8;
-+	}
-+
-+	return 0;
-+}
-+
-+int uvc_get_frame_size(struct uvcg_format *uformat,
-+		       struct uvcg_frame *uframe)
-+{
-+	unsigned int bpl = uvc_v4l2_get_bytesperline(uformat, uframe);
-+
-+	return bpl ? bpl * uframe->frame.w_height :
-+		uframe->frame.dw_max_video_frame_buffer_size;
-+}
-+
- struct uvcg_format *find_format_by_index(struct uvc_device *uvc, int index)
- {
- 	struct uvcg_format_ptr *format;
-@@ -105,6 +130,50 @@ static struct uvcg_format *find_format_by_pix(struct uvc_device *uvc,
- 	return uformat;
- }
- 
-+static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
-+					   struct uvcg_format *uformat,
-+					   u16 rw, u16 rh)
-+{
-+	struct uvc_video *video = &uvc->video;
-+	struct uvcg_format_ptr *format;
-+	struct uvcg_frame_ptr *frame;
-+	struct uvcg_frame *uframe = NULL;
-+	unsigned int d, maxd;
-+
-+	/* Find the closest image size. The distance between image sizes is
-+	 * the size in pixels of the non-overlapping regions between the
-+	 * requested size and the frame-specified size.
-+	 */
-+	maxd = (unsigned int)-1;
-+
-+	list_for_each_entry(format, &uvc->header->formats, entry) {
-+		if (format->fmt->type != uformat->type)
-+			continue;
-+
-+		list_for_each_entry(frame, &format->fmt->frames, entry) {
-+			u16 w, h;
-+
-+			w = frame->frm->frame.w_width;
-+			h = frame->frm->frame.w_height;
-+
-+			d = min(w, rw) * min(h, rh);
-+			d = w*h + rw*rh - 2*d;
-+			if (d < maxd) {
-+				maxd = d;
-+				uframe = frame->frm;
-+			}
-+
-+			if (maxd == 0)
-+				break;
-+		}
-+	}
-+
-+	if (!uframe)
-+		uvcg_dbg(&video->uvc->func, "Unsupported size %ux%u\n", rw, rh);
-+
-+	return uframe;
-+}
-+
- /* --------------------------------------------------------------------------
-  * Requests handling
-  */
-@@ -214,6 +283,46 @@ uvc_v4l2_set_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	return 0;
- }
- 
-+static int
-+uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+	struct uvc_device *uvc = video_get_drvdata(vdev);
-+	struct uvc_video *video = &uvc->video;
-+	struct uvcg_format *uformat;
-+	struct uvcg_frame *uframe;
-+	u8 *fcc;
-+
-+	if (fmt->type != video->queue.queue.type)
-+		return -EINVAL;
-+
-+	fcc = (u8 *)&fmt->fmt.pix.pixelformat;
-+	uvcg_dbg(&uvc->func, "Trying format 0x%08x (%c%c%c%c): %ux%u\n",
-+		fmt->fmt.pix.pixelformat,
-+		fcc[0], fcc[1], fcc[2], fcc[3],
-+		fmt->fmt.pix.width, fmt->fmt.pix.height);
-+
-+	uformat = find_format_by_pix(uvc, fmt->fmt.pix.pixelformat);
-+	if (!uformat)
-+		return -EINVAL;
-+
-+	uframe = find_closest_frame_by_size(uvc, uformat,
-+				fmt->fmt.pix.width, fmt->fmt.pix.height);
-+	if (!uframe)
-+		return -EINVAL;
-+
-+	fmt->fmt.pix.width = uframe->frame.w_width;
-+	fmt->fmt.pix.height = uframe->frame.w_height;
-+	fmt->fmt.pix.field = V4L2_FIELD_NONE;
-+	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(uformat, uframe);
-+	fmt->fmt.pix.sizeimage = uvc_get_frame_size(uformat, uframe);
-+	fmt->fmt.pix.pixelformat = to_uvc_format(uformat)->fcc;
-+	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-+	fmt->fmt.pix.priv = 0;
-+
-+	return 0;
-+}
-+
- static int
- uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
- 		struct v4l2_frmivalenum *fival)
-@@ -471,6 +580,7 @@ uvc_v4l2_ioctl_default(struct file *file, void *fh, bool valid_prio,
- 
- const struct v4l2_ioctl_ops uvc_v4l2_ioctl_ops = {
- 	.vidioc_querycap = uvc_v4l2_querycap,
-+	.vidioc_try_fmt_vid_out = uvc_v4l2_try_format,
- 	.vidioc_g_fmt_vid_out = uvc_v4l2_get_format,
- 	.vidioc_s_fmt_vid_out = uvc_v4l2_set_format,
- 	.vidioc_enum_frameintervals = uvc_v4l2_enum_frameintervals,
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+i386                                defconfig
+arm                                 defconfig
+x86_64                              defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+arm64                            allyesconfig
+arm                              allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+m68k                             allmodconfig
+i386                             allyesconfig
+m68k                             allyesconfig
+x86_64                               rhel-8.3
+arc                              allyesconfig
+mips                             allyesconfig
+x86_64                        randconfig-a002
+powerpc                           allnoconfig
+x86_64                        randconfig-a015
+alpha                            allyesconfig
+x86_64                           allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a014
+x86_64                        randconfig-a004
+i386                          randconfig-a012
+arc                  randconfig-r043-20220908
+riscv                randconfig-r042-20220908
+i386                          randconfig-a016
+arc                  randconfig-r043-20220907
+s390                 randconfig-r044-20220908
+mips                            ar7_defconfig
+mips                         rt305x_defconfig
+arc                      axs103_smp_defconfig
+openrisc                    or1ksim_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+i386                          randconfig-c001
+arc                    vdk_hs38_smp_defconfig
+sh                         microdev_defconfig
+mips                           xway_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+m68k                          multi_defconfig
+nios2                            allyesconfig
+sh                             espt_defconfig
+sh                     magicpanelr2_defconfig
+i386                             alldefconfig
+arm                        mini2440_defconfig
+sh                            shmin_defconfig
+powerpc                        cell_defconfig
+nios2                               defconfig
+mips                 decstation_r4k_defconfig
+sh                             shx3_defconfig
+xtensa                              defconfig
+mips                    maltaup_xpa_defconfig
+mips                  maltasmvp_eva_defconfig
+sh                        edosk7705_defconfig
+arm                             pxa_defconfig
+arc                              alldefconfig
+arm                           u8500_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+m68k                       m5475evb_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                     tqm8548_defconfig
+ia64                             allmodconfig
+s390                       zfcpdump_defconfig
+mips                        bcm47xx_defconfig
+riscv                               defconfig
+nios2                         10m50_defconfig
+powerpc                 mpc837x_rdb_defconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+s390                 randconfig-r044-20220907
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r041-20220907
+hexagon              randconfig-r041-20220908
+riscv                randconfig-r042-20220907
+i386                          randconfig-a011
+hexagon              randconfig-r045-20220908
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220907
+powerpc                        fsp2_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                        qi_lb60_defconfig
+arm                          pcm027_defconfig
+x86_64                        randconfig-k001
+mips                           mtx1_defconfig
+riscv                randconfig-r042-20220909
+hexagon              randconfig-r041-20220909
+hexagon              randconfig-r045-20220909
+s390                 randconfig-r044-20220909
+powerpc                          allmodconfig
+powerpc                     tqm8540_defconfig
+powerpc                      ppc44x_defconfig
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
