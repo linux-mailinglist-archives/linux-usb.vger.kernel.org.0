@@ -2,90 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B75A5B2E30
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 07:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC595B2E45
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 07:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiIIFjk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Sep 2022 01:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S229623AbiIIFrm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Sep 2022 01:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIIFjh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 01:39:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AEE1D0FA;
-        Thu,  8 Sep 2022 22:39:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BE9D61E22;
-        Fri,  9 Sep 2022 05:39:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C799C433C1;
-        Fri,  9 Sep 2022 05:39:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662701974;
-        bh=XZoGAJnq0Epw0ofT4kF1WcYEbl8SCrwY3jcmk+Ck+Fw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tzbWQDzQqSF1qxkUvwWC+MToN1KwKYT9TwEsc2n1pzdho9Xb9LiovSGRBFjzkSY0H
-         U+QcC13iijqcN0VFut0gJrw/AA0rt15aAkIpWqr/c2uHK6PejyH6q2YxQhPHQpT3pJ
-         DU6iteSAc6wUZh4i7Dnsk6LbEdZBiYZIEXwmbShA=
-Date:   Fri, 9 Sep 2022 07:39:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sun Ke <sunke32@huawei.com>
-Cc:     vincent.sunplus@gmail.com, kishon@ti.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
-        linux-phy@lists.infradead.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 1/2] phy: usb: Fix potential NULL dereference in
- sp_usb_phy_probe()
-Message-ID: <YxrRlCytfPobnjSv@kroah.com>
-References: <20220909013546.2259545-1-sunke32@huawei.com>
- <20220909013546.2259545-2-sunke32@huawei.com>
+        with ESMTP id S229643AbiIIFrk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 01:47:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088027F12D
+        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 22:47:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662702451; x=1694238451;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XiDDHnUE/yTK60Wl2/aP5+lgd5KHEy/rJRGA6czObsA=;
+  b=b4kdIAhI/ZnOYJpb3zGtTE05RztJy4P46r3iRi5T6VI1DVA0j1lJ2WL2
+   QIQNtgIbS7aGhMC4x8/LRu6Jrvgt8jSJL6l2tCjWkhMAaXZtvOzyb1wzC
+   JXynwW4QY82yXGTZdRiMtG3dTT/xfHnq/aq/TyJSME9MJkHZMV0IXeGeq
+   4Q/V36Y9CbpXvgalhqfuUBhIwc6tQxTJeFk0xLCatCuWiGMJaNd5e1Qqz
+   6VVfb0piAi5kW0dLOWH3Nvw59o8xZY9d4Oz/p4WA1QWNUG2LuvNdZAUYM
+   3vil087XbVtyAP1HuBxvX1zjGN5FpirJX0eQVA1yHzDKUT6/G47SYEdfw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284422286"
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="284422286"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 22:47:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="704289418"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Sep 2022 22:47:28 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 9E4A8F7; Fri,  9 Sep 2022 08:47:44 +0300 (EEST)
+Date:   Fri, 9 Sep 2022 08:47:44 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Gil Fine <gil.fine@intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: Re: [PATCH] thunderbolt: Add support for Intel Maple Ridge single
+ port controller
+Message-ID: <YxrTgG+kAEFbPyLR@black.fi.intel.com>
+References: <20220908104320.3409720-1-gil.fine@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220909013546.2259545-2-sunke32@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220908104320.3409720-1-gil.fine@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 09:35:45AM +0800, Sun Ke wrote:
-> platform_get_resource_byname() may fail and return NULL, so we should
-> better check it s return value to avoid a NULL pointer dereference
-> a bit later in the code.
+On Thu, Sep 08, 2022 at 01:43:20PM +0300, Gil Fine wrote:
+> Add support for Maple Ridge discrete USB4 host controller from Intel
+> which has a single USB4 port (versus the already supported dual port
+> Maple Ridge USB4 host controller).
 > 
-> Fixes: 99d9ccd97385 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
-> Signed-off-by: Sun Ke <sunke32@huawei.com>
-> ---
->  drivers/phy/sunplus/phy-sunplus-usb2.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> index 5269968b3060..d73a8a421d9c 100644
-> --- a/drivers/phy/sunplus/phy-sunplus-usb2.c
-> +++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> @@ -249,11 +249,15 @@ static int sp_usb_phy_probe(struct platform_device *pdev)
->  	usbphy->dev = &pdev->dev;
->  
->  	usbphy->phy_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "phy");
+> Signed-off-by: Gil Fine <gil.fine@intel.com>
 
-How can this fail on this system?
-
-> +	if (!usbphy->phy_res_mem)
-> +		return -EINVAL;
->  	usbphy->phy_regs = devm_ioremap_resource(&pdev->dev, usbphy->phy_res_mem);
->  	if (IS_ERR(usbphy->phy_regs))
->  		return PTR_ERR(usbphy->phy_regs);
->  
->  	usbphy->moon4_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon4");
-
-Same here, how can this fail?
-Have you seen these failures happen in real systems?
-
-thanks,
-
-greg k-h
+Applied to thunderbolt.git/fixes, thanks!
