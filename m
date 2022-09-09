@@ -2,358 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842F35B385B
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 14:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729315B38D9
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 15:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiIIM5e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Sep 2022 08:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S230504AbiIINXi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Sep 2022 09:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiIIM5c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 08:57:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDED12E1A7;
-        Fri,  9 Sep 2022 05:57:31 -0700 (PDT)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4ED6CDD;
-        Fri,  9 Sep 2022 14:57:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662728249;
-        bh=0X6SKJNPk5OkpXfTo5ahOa/LoPG1eBmaBdFNGcsYX8I=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=u3W5DZIrhukR0NxgjK7oqPuPHGW48lZL123WC3TmxN1ZH8kVjgo2m2qUIwfzFu1GF
-         x6cKFz5pMsNbHOPLQfp7zd/h46JleEhb+Xc0krE3K8ZDyUvh2TnIOwYghrLXKQq9Hi
-         97DHvb//s/fagMtQWG3vfwfzHLEZ3DPoavX4KBUE=
-Message-ID: <52b3d18c-9f17-7f73-0f32-a6008f1c4321@ideasonboard.com>
-Date:   Fri, 9 Sep 2022 13:57:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        kernel@pengutronix.de, nicolas@ndufresne.ca,
-        kieran.bingham@ideasonboard.com
-References: <20220908194750.3750310-1-m.grzeschik@pengutronix.de>
- <20220908194750.3750310-2-m.grzeschik@pengutronix.de>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v13 1/6] media: v4l: move helper functions for fractions
- from uvc to v4l2-common
-In-Reply-To: <20220908194750.3750310-2-m.grzeschik@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229585AbiIINXi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 09:23:38 -0400
+Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93B4E10B7C2
+        for <linux-usb@vger.kernel.org>; Fri,  9 Sep 2022 06:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:Mime-Version:Message-ID; bh=MDIrP
+        iPBDHsw3XzfJ4ODObTkhyGjxa5PB/x5giGDUeI=; b=n/xUH6Dc9swfTJNcax9SO
+        oOqzYEOxFsAJEeBYcDCMj7SGTkUFsZcRrS98SQj22OiBFglxaoK6acNMBKNxZnF1
+        sUmartA82ZwarJWjsmyWXqFgeR5IrAO2pUNrPUfLDkLz/pkjAmfoTGi74yafP5tu
+        Py7HFtzAFbgUaj8Q+BQW9E=
+Received: from 0V5ZS2WE6VIK6H0 (unknown [117.143.49.84])
+        by smtp1 (Coremail) with SMTP id C8mowAAXAXUPPhtjlmMuBQ--.17167S2;
+        Fri, 09 Sep 2022 21:22:25 +0800 (CST)
+Date:   Fri, 9 Sep 2022 21:22:25 +0800
+From:   "zhongling0719@126.com" <zhongling0719@126.com>
+To:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "zenghongling@kylinos.cn" <zenghongling@kylinos.cn>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "usb-storage@lists.one-eyed-alien.net" 
+        <usb-storage@lists.one-eyed-alien.net>
+Subject: Re: Re: [PATCH v4 3/3] uas: ignore UAS for Thinkplus chips
+References: <1662720530-32313-1-git-send-email-zenghongling@kylinos.cn>, 
+        <YxsucjOnUkb8NxKo@rowland.harvard.edu>
+X-Priority: 3
+X-GUID: C1798030-29D6-43AA-AC3A-125C58E3E45D
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.16.188[cn]
+Mime-Version: 1.0
+Message-ID: <202209092121245768249@126.com>
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+X-CM-TRANSID: C8mowAAXAXUPPhtjlmMuBQ--.17167S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KF18Kw15Xw13Jr4DJry5Arb_yoW8uw47p3
+        4DKF95CrWkGF1IvF17Jw47AryrXanayFWrK3s29w17Za1Sva4jqFnrKr48Wr9Fvr47Wa1Y
+        vF4vvFW7KrWDGaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziSdgAUUUUU=
+X-Originating-IP: [117.143.49.84]
+X-CM-SenderInfo: x2kr0wpolqwiqxrzqiyswou0bp/1tbiuRJ30FpD+ghOXAAAs1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael - thanks for the patch
+U29ycnkgLCBJIHRlc3RlZCBpdCB3b3JrIHdlbGwgb24gV2luNywgbm90IGdvb2Qgb24gV2luMTAu
+wqAKSSBkb24ndCBoYXZlIE1hYyBPU1ggc3lzdGVtLiBXZSBhbHdheXMgd29yayBvbiBsaW51eMKg
+ZW52aXJvbm1lbnQuCk5lZWQgSSByZXNlbmQgdGhlIHZlcnNpb24gVjUgZm9yIHBhdGNoIDMgwqBj
+YW5jZWwgImFja2VkIGJ5IiA/CgpUaGFua3MhCgp6aG9uZ2xpbmcwNzE5QDEyNi5jb20KwqAKRnJv
+bTrCoEFsYW4gU3Rlcm4KRGF0ZTrCoDIwMjItMDktMDnCoDIwOjE1ClRvOsKgSG9uZ2xpbmcgWmVu
+ZwpDQzrCoGdyZWdraDsgbGludXgtdXNiOyB1c2Itc3RvcmFnZTsgemhvbmdsaW5nMDcxOQpTdWJq
+ZWN0OsKgUmU6IFtQQVRDSCB2NCAzLzNdIHVhczogaWdub3JlIFVBUyBmb3IgVGhpbmtwbHVzIGNo
+aXBzCk9uIEZyaSwgU2VwIDA5LCAyMDIyIGF0IDA2OjQ4OjUwUE0gKzA4MDAsIEhvbmdsaW5nIFpl
+bmcgd3JvdGU6Cj4gVGhlIFVBUyBtb2RlIG9mIFRoaW5rcGx1cyBpcyByZXBvcnRlZCB0byBmYWls
+IHRvIHdvcmsgb24KPiBzZXZlcmFsIHBsYXRmb3JtcyB3aXRoIHRoZSBmb2xsb3dpbmcgZXJyb3Ig
+bWVzc2FnZToKPgo+IFvCoMKgIDM5LjcwMjQzOV0geGhjaV9oY2QgMDAwMDowYzowMC4zOiBFUlJP
+UiBUcmFuc2ZlciBldmVudCBmb3IgZGlzYWJsZWQKPsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCBlbmRwb2ludCBvciBpbmNvcnJlY3Qgc3RyZWFtIHJpbmcKPiBbwqDCoCAzOS43MDI0NDJd
+IHhoY2lfaGNkIDAwMDA6MGM6MDAuMzogQDAwMDAwMDAyNmM2MWY4MTAgMDAwMDAwMDAgMDAwMDAw
+MDAKPsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxYjAwMDAwMCAwNTAzODAwMAo+Cj4g
+RmFsbGluZyBiYWNrIHRvIFVTQiBtYXNzIHN0b3JhZ2UgY2FuIHNvbHZlIHRoaXMgcHJvYmxlbSwg
+c28gaWdub3JlIFVBUwo+IGZ1bmN0aW9uIG9mIHRoaXMgY2hpcC4KPgo+IEFja2VkLWJ5OiBBbGFu
+IFN0ZXJuIDxzdGVybkByb3dsYW5kLmhhcnZhcmQuZWR1PgrCoApJIG5ldmVyIHNlbnQgeW91IGFu
+IEFja2VkLWJ5OiBmb3IgdGhpcyBwYXRjaC7CoCBJbiBmYWN0LCBJIGFza2VkIHlvdQpxdWVzdGlv
+bnMgYWJvdXQgaXQgd2hpY2ggeW91IGhhdmVuJ3QgeWV0IGFuc3dlcmVkLgrCoApTcGVjaWZpY2Fs
+bHk6IEhvdyBkbyBXaW5kb3dzIGFuZCBNYWMgT1NYIHdvcmsgd2l0aCB0aGlzIGRyaXZlPwrCoApB
+bGFuIFN0ZXJuCsKgCj4gU2lnbmVkLW9mZi1ieTogSG9uZ2xpbmcgWmVuZyA8emVuZ2hvbmdsaW5n
+QGt5bGlub3MuY24+Cj4gLS0tCj4gQ2hhbmdlIGZvciB2MQo+wqAgLSBDaGFuZ2UgdGhlIGVtYWls
+IHJlYWwgbmFtZSBhbmQgdGhlIGNvZGUgd29ybmcgcGxhY2UuCj4KPiBDaGFuZ2UgZm9yIHYyCj7C
+oCAtQ2hhbmdlIHNwZWxsaW5nIGVycm9yLgo+Cj4gQ2hhbmdlIGZvciB2Mwo+wqAgLUFkZCBhY2tl
+ZC1ieQo+Cj4gQ2hhbmdlIGZvciB2NAo+wqAgLUZpeCB2ZXJzaW9uIGVycm9yCj4gLS0tCj7CoCBk
+cml2ZXJzL3VzYi9zdG9yYWdlL3VudXN1YWxfdWFzLmggfCA3ICsrKysrKysKPsKgIDEgZmlsZSBj
+aGFuZ2VkLCA3IGluc2VydGlvbnMoKykKPgo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9zdG9y
+YWdlL3VudXN1YWxfdWFzLmggYi9kcml2ZXJzL3VzYi9zdG9yYWdlL3VudXN1YWxfdWFzLmgKPiBp
+bmRleCA4YTE4ZDU4Li4xNTZlODljIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdXNiL3N0b3JhZ2Uv
+dW51c3VhbF91YXMuaAo+ICsrKyBiL2RyaXZlcnMvdXNiL3N0b3JhZ2UvdW51c3VhbF91YXMuaAo+
+IEBAIC0xOTgsNiArMTk4LDEzIEBAIFVOVVNVQUxfREVWKDB4MTU0YiwgMHhmMDBkLCAweDAwMDAs
+IDB4OTk5OSwKPsKgIFVTQl9TQ19ERVZJQ0UsIFVTQl9QUl9ERVZJQ0UsIE5VTEwsCj7CoCBVU19G
+TF9OT19BVEFfMVgpLAo+wqAKPiArLyogUmVwb3J0ZWQtYnk6IEhvbmdsaW5nIFplbmcgPHplbmdo
+b25nbGluZ0BreWxpbm9zLmNuPiAqLwo+ICtVTlVTVUFMX0RFVigweDE3ZWYsIDB4Mzg5OSwgMHgw
+MDAwLCAweDk5OTksCj4gKwkiVGhpbmtwbHVzIiwKPiArCSJFeHRlcm5hbCBIREQiLAo+ICsJVVNC
+X1NDX0RFVklDRSwgVVNCX1BSX0RFVklDRSwgTlVMTCwKPiArCVVTX0ZMX0lHTk9SRV9VQVMpLAo+
+ICsKPsKgIC8qIFJlcG9ydGVkLWJ5OiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQuY29t
+PiAqLwo+wqAgVU5VU1VBTF9ERVYoMHgyMTA5LCAweDA3MTEsIDB4MDAwMCwgMHg5OTk5LAo+wqAg
+IlZJQSIsCj4gLS0KPiAyLjEuMAo+
 
-On 08/09/2022 20:47, Michael Grzeschik wrote:
-> The functions uvc_simplify_fraction and uvc_fraction_to_interval are
-> generic helpers which are also useful for other v4l2 drivers. This patch
-> moves them to v4l2-common.
->
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
-
-This and #2 make sense to me, so for these two:
-
-
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-
-Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
-
->
-> ---
-> v1 -> v7: -
-> v7 -> v8: - ported all style fixes and broken links from latest version on rebase
-> v8 -> v13: -
->
->   drivers/media/usb/uvc/uvc_driver.c    | 84 --------------------------
->   drivers/media/usb/uvc/uvc_v4l2.c      | 14 ++---
->   drivers/media/usb/uvc/uvcvideo.h      |  3 -
->   drivers/media/v4l2-core/v4l2-common.c | 86 +++++++++++++++++++++++++++
->   include/media/v4l2-common.h           |  4 ++
->   5 files changed, 97 insertions(+), 94 deletions(-)
->
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index 9c05776f11d1f0..0f14dee4b6d794 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -329,90 +329,6 @@ static enum v4l2_ycbcr_encoding uvc_ycbcr_enc(const u8 matrix_coefficients)
->   	return V4L2_YCBCR_ENC_DEFAULT;  /* Reserved */
->   }
->   
-> -/*
-> - * Simplify a fraction using a simple continued fraction decomposition. The
-> - * idea here is to convert fractions such as 333333/10000000 to 1/30 using
-> - * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
-> - * arbitrary parameters to remove non-significative terms from the simple
-> - * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
-> - * respectively seems to give nice results.
-> - */
-> -void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
-> -		unsigned int n_terms, unsigned int threshold)
-> -{
-> -	u32 *an;
-> -	u32 x, y, r;
-> -	unsigned int i, n;
-> -
-> -	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
-> -	if (an == NULL)
-> -		return;
-> -
-> -	/*
-> -	 * Convert the fraction to a simple continued fraction. See
-> -	 * https://en.wikipedia.org/wiki/Continued_fraction
-> -	 * Stop if the current term is bigger than or equal to the given
-> -	 * threshold.
-> -	 */
-> -	x = *numerator;
-> -	y = *denominator;
-> -
-> -	for (n = 0; n < n_terms && y != 0; ++n) {
-> -		an[n] = x / y;
-> -		if (an[n] >= threshold) {
-> -			if (n < 2)
-> -				n++;
-> -			break;
-> -		}
-> -
-> -		r = x - an[n] * y;
-> -		x = y;
-> -		y = r;
-> -	}
-> -
-> -	/* Expand the simple continued fraction back to an integer fraction. */
-> -	x = 0;
-> -	y = 1;
-> -
-> -	for (i = n; i > 0; --i) {
-> -		r = y;
-> -		y = an[i-1] * y + x;
-> -		x = r;
-> -	}
-> -
-> -	*numerator = y;
-> -	*denominator = x;
-> -	kfree(an);
-> -}
-> -
-> -/*
-> - * Convert a fraction to a frame interval in 100ns multiples. The idea here is
-> - * to compute numerator / denominator * 10000000 using 32 bit fixed point
-> - * arithmetic only.
-> - */
-> -u32 uvc_fraction_to_interval(u32 numerator, u32 denominator)
-> -{
-> -	u32 multiplier;
-> -
-> -	/* Saturate the result if the operation would overflow. */
-> -	if (denominator == 0 ||
-> -	    numerator/denominator >= ((u32)-1)/10000000)
-> -		return (u32)-1;
-> -
-> -	/*
-> -	 * Divide both the denominator and the multiplier by two until
-> -	 * numerator * multiplier doesn't overflow. If anyone knows a better
-> -	 * algorithm please let me know.
-> -	 */
-> -	multiplier = 10000000;
-> -	while (numerator > ((u32)-1)/multiplier) {
-> -		multiplier /= 2;
-> -		denominator /= 2;
-> -	}
-> -
-> -	return denominator ? numerator * multiplier / denominator : 0;
-> -}
-> -
->   /* ------------------------------------------------------------------------
->    * Terminal and unit management
->    */
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index 4cc3fa6b8c9812..f4d4c33b6dfbd7 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -386,7 +386,7 @@ static int uvc_v4l2_get_streamparm(struct uvc_streaming *stream,
->   	mutex_unlock(&stream->mutex);
->   
->   	denominator = 10000000;
-> -	uvc_simplify_fraction(&numerator, &denominator, 8, 333);
-> +	v4l2_simplify_fraction(&numerator, &denominator, 8, 333);
->   
->   	memset(parm, 0, sizeof(*parm));
->   	parm->type = stream->type;
-> @@ -427,7 +427,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
->   	else
->   		timeperframe = parm->parm.output.timeperframe;
->   
-> -	interval = uvc_fraction_to_interval(timeperframe.numerator,
-> +	interval = v4l2_fraction_to_interval(timeperframe.numerator,
->   		timeperframe.denominator);
->   	uvc_dbg(stream->dev, FORMAT, "Setting frame interval to %u/%u (%u)\n",
->   		timeperframe.numerator, timeperframe.denominator, interval);
-> @@ -481,7 +481,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
->   	/* Return the actual frame period. */
->   	timeperframe.numerator = probe.dwFrameInterval;
->   	timeperframe.denominator = 10000000;
-> -	uvc_simplify_fraction(&timeperframe.numerator,
-> +	v4l2_simplify_fraction(&timeperframe.numerator,
->   		&timeperframe.denominator, 8, 333);
->   
->   	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
-> @@ -1275,7 +1275,7 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
->   		fival->discrete.numerator =
->   			frame->dwFrameInterval[index];
->   		fival->discrete.denominator = 10000000;
-> -		uvc_simplify_fraction(&fival->discrete.numerator,
-> +		v4l2_simplify_fraction(&fival->discrete.numerator,
->   			&fival->discrete.denominator, 8, 333);
->   	} else {
->   		fival->type = V4L2_FRMIVAL_TYPE_STEPWISE;
-> @@ -1285,11 +1285,11 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
->   		fival->stepwise.max.denominator = 10000000;
->   		fival->stepwise.step.numerator = frame->dwFrameInterval[2];
->   		fival->stepwise.step.denominator = 10000000;
-> -		uvc_simplify_fraction(&fival->stepwise.min.numerator,
-> +		v4l2_simplify_fraction(&fival->stepwise.min.numerator,
->   			&fival->stepwise.min.denominator, 8, 333);
-> -		uvc_simplify_fraction(&fival->stepwise.max.numerator,
-> +		v4l2_simplify_fraction(&fival->stepwise.max.numerator,
->   			&fival->stepwise.max.denominator, 8, 333);
-> -		uvc_simplify_fraction(&fival->stepwise.step.numerator,
-> +		v4l2_simplify_fraction(&fival->stepwise.step.numerator,
->   			&fival->stepwise.step.denominator, 8, 333);
->   	}
->   
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 24c911aeebce56..ff710bdd38b3fd 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -911,9 +911,6 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
->   		      struct uvc_xu_control_query *xqry);
->   
->   /* Utility functions */
-> -void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
-> -			   unsigned int n_terms, unsigned int threshold);
-> -u32 uvc_fraction_to_interval(u32 numerator, u32 denominator);
->   struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
->   					    u8 epaddr);
->   u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index e0fbe6ba4b6c49..40f56e044640d7 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -484,3 +484,89 @@ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
->   	return freq > 0 ? freq : -EINVAL;
->   }
->   EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
-> +
-> +/*
-> + * Simplify a fraction using a simple continued fraction decomposition. The
-> + * idea here is to convert fractions such as 333333/10000000 to 1/30 using
-> + * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
-> + * arbitrary parameters to remove non-significative terms from the simple
-> + * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
-> + * respectively seems to give nice results.
-> + */
-> +void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
-> +		unsigned int n_terms, unsigned int threshold)
-> +{
-> +	u32 *an;
-> +	u32 x, y, r;
-> +	unsigned int i, n;
-> +
-> +	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
-> +	if (an == NULL)
-> +		return;
-> +
-> +	/*
-> +	 * Convert the fraction to a simple continued fraction. See
-> +	 * https://en.wikipedia.org/wiki/Continued_fraction
-> +	 * Stop if the current term is bigger than or equal to the given
-> +	 * threshold.
-> +	 */
-> +	x = *numerator;
-> +	y = *denominator;
-> +
-> +	for (n = 0; n < n_terms && y != 0; ++n) {
-> +		an[n] = x / y;
-> +		if (an[n] >= threshold) {
-> +			if (n < 2)
-> +				n++;
-> +			break;
-> +		}
-> +
-> +		r = x - an[n] * y;
-> +		x = y;
-> +		y = r;
-> +	}
-> +
-> +	/* Expand the simple continued fraction back to an integer fraction. */
-> +	x = 0;
-> +	y = 1;
-> +
-> +	for (i = n; i > 0; --i) {
-> +		r = y;
-> +		y = an[i-1] * y + x;
-> +		x = r;
-> +	}
-> +
-> +	*numerator = y;
-> +	*denominator = x;
-> +	kfree(an);
-> +}
-> +EXPORT_SYMBOL_GPL(v4l2_simplify_fraction);
-> +
-> +/*
-> + * Convert a fraction to a frame interval in 100ns multiples. The idea here is
-> + * to compute numerator / denominator * 10000000 using 32 bit fixed point
-> + * arithmetic only.
-> + */
-> +u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator)
-> +{
-> +	u32 multiplier;
-> +
-> +	/* Saturate the result if the operation would overflow. */
-> +	if (denominator == 0 ||
-> +	    numerator/denominator >= ((u32)-1)/10000000)
-> +		return (u32)-1;
-> +
-> +	/*
-> +	 * Divide both the denominator and the multiplier by two until
-> +	 * numerator * multiplier doesn't overflow. If anyone knows a better
-> +	 * algorithm please let me know.
-> +	 */
-> +	multiplier = 10000000;
-> +	while (numerator > ((u32)-1)/multiplier) {
-> +		multiplier /= 2;
-> +		denominator /= 2;
-> +	}
-> +
-> +	return denominator ? numerator * multiplier / denominator : 0;
-> +}
-> +EXPORT_SYMBOL_GPL(v4l2_fraction_to_interval);
-> diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-> index b708d63995f458..725ff91b26e063 100644
-> --- a/include/media/v4l2-common.h
-> +++ b/include/media/v4l2-common.h
-> @@ -540,6 +540,10 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt, u32 pixelformat,
->   s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
->   		       unsigned int div);
->   
-> +void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
-> +		unsigned int n_terms, unsigned int threshold);
-> +u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator);
-> +
->   static inline u64 v4l2_buffer_get_timestamp(const struct v4l2_buffer *buf)
->   {
->   	/*
