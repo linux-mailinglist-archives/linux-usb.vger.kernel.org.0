@@ -2,104 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA385B2D17
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 05:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9515B2D9C
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Sep 2022 06:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiIIDue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Sep 2022 23:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S229562AbiIIEm1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Sep 2022 00:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIIDub (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Sep 2022 23:50:31 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847BFA6C0C
-        for <linux-usb@vger.kernel.org>; Thu,  8 Sep 2022 20:50:30 -0700 (PDT)
-X-UUID: fffb9cb6e1b14e548ae6d3698bd7da96-20220909
-X-CPASD-INFO: 4aea5dfa0bb24069afffcc45825d06b9@fbGfgWKWlJFcgqR-g3OBc4GXlpaTj1S
-        EemxVll5mjlmVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBiXoZgUZB3g6OfgWmSlg==
-X-CLOUD-ID: 4aea5dfa0bb24069afffcc45825d06b9
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:2.0,URL:-5,TVAL:172.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:163.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:2.0,CFOB:4.0,SPC:0,SIG:-
-        5,AUF:30,DUF:4427,ACD:74,DCD:74,SL:0,EISP:0,AG:0,CFC:0.226,CFSR:0.131,UAT:0,R
-        AF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,
-        EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: fffb9cb6e1b14e548ae6d3698bd7da96-20220909
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: fffb9cb6e1b14e548ae6d3698bd7da96-20220909
-X-User: zenghongling@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-        (envelope-from <zenghongling@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 169722319; Fri, 09 Sep 2022 11:50:55 +0800
-From:   Hongling Zeng <zenghongling@kylinos.cn>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        zhongling0719@126.com, Hongling Zeng <zenghongling@kylinos.cn>
-Subject: [PATCH v3 2/3] usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
-Date:   Fri,  9 Sep 2022 11:50:51 +0800
-Message-Id: <1662695451-28270-1-git-send-email-zenghongling@kylinos.cn>
-X-Mailer: git-send-email 2.1.0
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229521AbiIIEm0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Sep 2022 00:42:26 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F52E2938;
+        Thu,  8 Sep 2022 21:42:25 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id z9-20020a17090a468900b001ffff693b27so441574pjf.2;
+        Thu, 08 Sep 2022 21:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=JDjtSG+gwH2qlwCxPBWJXUQX1Nbq4myEQelim1fY0Pc=;
+        b=VQ6VPll3U64mkMC+BFqUyttE+g/p68TnAR5OXibzYR25rbASMItXUwGiLg/B3AgTeK
+         KRhvv+5Pua2aljA/Rb79qbTzXwGxkbV+8lBKJpyYIHFG6Vd7H35NItzHSsDZN4BGXief
+         bUNDX8rSfZGeJODtQZPZB2cxM2oeQdaTWwGhZpM0MODyK5DYWss5QPAt0reL15FHzLSG
+         dSij9GdsXgieD+IR2SaWp/RrU8011KvMjnqbF6NmfGNKfpxc3PgCn4oRcvVJ+MpAhxPR
+         eGLFzqcRjdTzWnOXNtP9eYpnzpU2PjAfNjtCweK6DLBzXQPYIAWy7XUP7I4Zwr2P0iuE
+         7Wcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=JDjtSG+gwH2qlwCxPBWJXUQX1Nbq4myEQelim1fY0Pc=;
+        b=6NZb9dqWuDGCczX4YoWAWFa89UaFoeP3qllIhUu9X4YY5fAXJBPq5vPEspeUZUua+L
+         GvT/JOpoilFI4B/PgoH8fkjOD3nS1kUCyL5Ffb8n+gUcBT6uk7ucPLiXMkjRfpFtgkI3
+         78NceF3jtNOUHo8YjRRFMUt1wxveLVM1dgVys3kNbhzIcD/VaZH8c+EOXZQmDynUlgOc
+         WMey1cXm8kQSupb6W1CmgNzxXgbBDFy67qZoyKmAeX0AjYPWsLi3rYbnJHEKMVb1Hjnv
+         Uky95GCaCP3GhAA+mT35KCupvwtfcO5Sq3Ysvr2IEL7IKgjhg71Rzp4Fgbk4tAft6MBO
+         nTAw==
+X-Gm-Message-State: ACgBeo2fWJAdi34W+7+BRxOgD18nthgbdCdvefvfNkr0+/mDt8VOiE6u
+        gPNl/i+mL7uYDwwXQvUanVTMSLYzOO91Jg==
+X-Google-Smtp-Source: AA6agR4bwJ7gNhAuPVwXBe89DSzVafG+uVaSe9IpJXzP+Jm0eI+Da57EusV7fC4NMP4HYZMgkA2SWg==
+X-Received: by 2002:a17:90a:4105:b0:202:80ac:4686 with SMTP id u5-20020a17090a410500b0020280ac4686mr3377855pjf.154.1662698544226;
+        Thu, 08 Sep 2022 21:42:24 -0700 (PDT)
+Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
+        by smtp.googlemail.com with ESMTPSA id lw2-20020a17090b180200b00200b12f2bf5sm10569097pjb.1.2022.09.08.21.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 21:42:23 -0700 (PDT)
+From:   Li Zhong <floridsleeves@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     heghedus.razvan@gmail.com, evgreen@chromium.org,
+        yuanjilin@cdjrlc.com, stern@rowland.harvard.edu,
+        jj251510319013@gmail.com, gregkh@linuxfoundation.org,
+        Li Zhong <floridsleeves@gmail.com>
+Subject: [PATCH v1] drivers/usb/core/driver: check return value of usb_set_interface()
+Date:   Thu,  8 Sep 2022 21:42:14 -0700
+Message-Id: <20220909044215.2620024-1-floridsleeves@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The UAS mode of Hiksemi USB_HDD is reported to fail to work on several
-platforms with the following error message, then after re-connecting the
-device will be offlined and not working at all.
+Check return value of usb_set_interface() and report error if it fails.
+Otherwise usb_set_interface() may fail without any warnings. 
 
-[  592.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
-                   inflight: CMD
-[  592.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
-                   04 00 00
-[  592.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
-                   inflight: CMD
-[  592.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
-                   00 08 00
+This flaw was found using an experimental static analysis tool we are
+developing. Report warnings when the function usb_set_interface() fails
+can increase the dianosability.
 
-These disks have a broken uas implementation, the tag field of the status
-iu-s is not set properly,so we need to fall-back to usb-storage.
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
+Signed-off-by: Li Zhong <floridsleeves@gmail.com>
 ---
-Change for v1
- - Change the email real name and the code worng place.
+ drivers/usb/core/driver.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Change for v2
- -Change spelling error.
-
-Change for v3
- -Add acked-by
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index a6bf87a..8a18d58 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -149,6 +149,13 @@ UNUSUAL_DEV(0x0bc2, 0xab2a, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_ATA_1X),
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 7e7e119c253f..ee375b5eafe6 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1332,8 +1332,10 @@ static int usb_resume_interface(struct usb_device *udev,
  
-+/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
-+UNUSUAL_DEV(0x0bda, 0x9210, 0x0000, 0x9999,
-+		"Hiksemi",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: Benjamin Tissoires <benjamin.tissoires@redhat.com> */
- UNUSUAL_DEV(0x13fd, 0x3940, 0x0000, 0x9999,
- 		"Initio Corporation",
+ 		/* Carry out a deferred switch to altsetting 0 */
+ 		if (intf->needs_altsetting0 && !intf->dev.power.is_prepared) {
+-			usb_set_interface(udev, intf->altsetting[0].
+-					desc.bInterfaceNumber, 0);
++			status = usb_set_interface(udev, intf->altsetting[0].desc.bInterfaceNumber, 0);
++			if (status < 0)
++				dev_err(intf->dev, "usb_set_interface error %d\n",
++							status);
+ 			intf->needs_altsetting0 = 0;
+ 		}
+ 		goto done;
 -- 
-2.1.0
+2.25.1
 
