@@ -2,100 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA3D5B4757
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Sep 2022 17:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A804B5B477C
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Sep 2022 18:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiIJPmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Sep 2022 11:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S229504AbiIJQ1B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Sep 2022 12:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIJPmn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Sep 2022 11:42:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398E614D26;
-        Sat, 10 Sep 2022 08:42:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA13EB8010F;
-        Sat, 10 Sep 2022 15:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F99C433C1;
-        Sat, 10 Sep 2022 15:42:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662824560;
-        bh=luECLScAoXW4trye3u3QR5BAVG50o9WKq4LURxl0cWE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=OglzfM37e36vzr8RIz38aKNhfmFgibKtibSrXPxPXQxdygFx+atkOZh3JNt71PUY6
-         2S0Eip2IqnsZuGY7oggCvdwm42lV9aRNn7Dn9nUzGuh/E4BcZYjwkAAn+a+jtNxp+8
-         FOXE46EQA4dSN2Km2LXB6ukzhgc7QWaVgmbUb4i2klVbVrzmJNvLapw+jTc4WgP8Sn
-         gT6sTIx/QE1RnpSC++ABbUzSwSDvU1GBgjd7UB997SV46FyILWCbmjKFFIh1JSPvq0
-         8RJ0TU+fU8kaAQVZSguBGoaIlIokY7BL2FEZpfhephsISRy9GGuv5q5iKanIgYycUH
-         ILd1FW78uL9qw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com
-Cc:     linux@roeck-us.net, vigneshr@ti.com, sjg@chromium.org,
-        miquel.raynal@bootlin.com, gregkh@linuxfoundation.org,
-        linux-pwm@vger.kernel.org, richard@nod.at, heiko@sntech.de,
-        robh+dt@kernel.org, jamie@jamieiles.com,
-        u.kleine-koenig@pengutronix.de, linux-mtd@lists.infradead.org,
-        philipp.tomsich@vrull.eu, ulf.hansson@linaro.org,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        thierry.reding@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
-        vkoul@kernel.org, zhangqing@rock-chips.com,
-        linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com,
-        linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-In-Reply-To: <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
-References: <20220909212543.17428-1-jbx6244@gmail.com> <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
-Subject: Re: (subset) [PATCH v1 01/11] dt-bindings: serial: rockchip: add rockchip,rk3128-uart
-Message-Id: <166282455399.474671.11726724099870642599.b4-ty@kernel.org>
-Date:   Sat, 10 Sep 2022 16:42:33 +0100
+        with ESMTP id S229488AbiIJQ07 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Sep 2022 12:26:59 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2B14A12E;
+        Sat, 10 Sep 2022 09:26:58 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 198so1844766ybc.1;
+        Sat, 10 Sep 2022 09:26:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=p509KDEJinkWMURv5yyZS2D1SkqNsd02Ucpl2VFNiC4=;
+        b=zSjVkj1XhyGHGsqkgnonhtFa2tI39mtFuAP/Qc9jxX5qhD8ZLKv/ZeRQ3UQnJ6+6uq
+         VorAQ4q4z/TRIA1czONTZJpaXG6o8VKmGQaMCqZFje49ome+lZh9+u2OGIqlCTy/SvWp
+         IswFtItm5voI/jaHwJPexE859Gy0xPPwrQwOcjBIYXkUQ7W0YHAOaAm+3KLBjRnYkArl
+         Rag9Td3QPMsjJLuc0AOzsLp7BILSCxoysku7KmomH9OcFwF95kqJSiyCiWd/kPdgZFdV
+         DEa7Ph97CvrF9bN9P60UIFWDT6aoJMm4seYf+WZjdsn/pN2rHmSGnryO17KAwNTkUVQW
+         M9/g==
+X-Gm-Message-State: ACgBeo1dPJcyIpA0vERg3Pdy8d36Jo3wSN80ARjGwm4+QuZ+1EkFcurP
+        MOuG7wkCjCV7bE4V6u28ozQvkTacwmppqSSXGoU=
+X-Google-Smtp-Source: AA6agR5W6uJhLeHgbVX3ZkPO4fyRPV1XuSuTlB1cpH9ij6+oRcO1zRH9KldU0YYTI3cy7MwkroKEpoOruvjfy5ovzQs=
+X-Received: by 2002:a25:e64c:0:b0:6a9:89cf:155 with SMTP id
+ d73-20020a25e64c000000b006a989cf0155mr14884208ybh.365.1662827217769; Sat, 10
+ Sep 2022 09:26:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220907103007.12954-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20220907103007.12954-1-heikki.krogerus@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 10 Sep 2022 18:26:46 +0200
+Message-ID: <CAJZ5v0gzVtQMCvghY18LjWWfmnqF0Fqa4uPCFQ+tdVso_499BA@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Use the helper acpi_dev_get_memory_resources()
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 10 Sep 2022 00:01:28 +0200, Johan Jonker wrote:
-> Add rockchip,rk3128-uart compatible string.
-> 
-> 
+On Wed, Sep 7, 2022 at 12:30 PM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> It removes the need to check the resource data type
+> separately.
+>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+> Hi Rafael,
+>
+> Now resending this [1]. It applies on top of -rc4 (not -rc3). The
+> other patches from that series you already picked.
+>
+> thanks,
+>
+> [1] https://lore.kernel.org/linux-acpi/20220816101629.69054-7-heikki.krogerus@linux.intel.com/
 
-Applied to
+Applied, thanks!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Note that I rebased the other commits from this series on top of -rc4
+too, but that will become visible when the rebased ones go into my
+linux-next branch.
 
 Thanks!
 
-[05/11] dt-bindings: spi: rockchip: add rockchip,rk3128-spi
-        commit: 14c3ffd7947ef3623682148be07b9c0bb8737f37
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> ---
+>  drivers/usb/typec/mux/intel_pmc_mux.c | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+>
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index a8e273fe204ab..e1f4df7238bf4 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -569,15 +569,6 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
+>         return ret;
+>  }
+>
+> -static int is_memory(struct acpi_resource *res, void *data)
+> -{
+> -       struct resource_win win = {};
+> -       struct resource *r = &win.res;
+> -
+> -       return !(acpi_dev_resource_memory(res, r) ||
+> -                acpi_dev_resource_address_space(res, &win));
+> -}
+> -
+>  /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
+>  static const struct acpi_device_id iom_acpi_ids[] = {
+>         /* TigerLake */
+> @@ -611,7 +602,7 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
+>                 return -ENODEV;
+>
+>         INIT_LIST_HEAD(&resource_list);
+> -       ret = acpi_dev_get_resources(adev, &resource_list, is_memory, NULL);
+> +       ret = acpi_dev_get_memory_resources(adev, &resource_list);
+>         if (ret < 0)
+>                 return ret;
+>
+> --
+> 2.35.1
+>
