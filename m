@@ -2,85 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649405B44EB
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Sep 2022 09:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932F95B463E
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Sep 2022 14:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiIJHq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Sep 2022 03:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
+        id S229652AbiIJMkl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Sep 2022 08:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIJHq1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Sep 2022 03:46:27 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AB972689
-        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 00:46:25 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id k10so6501950lfm.4
-        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 00:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Xc325GZc+vxzGRAdvA0vChIvJkypnglJvofgNCbWMR4=;
-        b=CPmvcoQIYyMAF4zt3FXqNSoDD7DiPiOGlYdVcymhCh+IKdlIs7rTLSuAVlx/fnmLcu
-         96NZnumm1CF84Z+2pYGPbjiWAkif5ly3iN0Kwrq0KeWNsLda90xz+GV8V1yK9ItJ4vG2
-         B1EJuY2n5/0kLF9US3rV3/w1AZwY4XPQxshrXFoNm8pI/hSdNgeek9/L11NVXvSYTWgU
-         2fK6mTHrRrlrabBghWT0dudUvkei0lR0po0ax3jU4MditiLLlY72FydbDtgkVbMNSil7
-         27Nm3kr9NLe4oefhueLn2QCXYfMY0dphxyDHblNj7RHUwh5Jd3gLvlwaOrkHot8uTUZQ
-         Yt0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Xc325GZc+vxzGRAdvA0vChIvJkypnglJvofgNCbWMR4=;
-        b=TUqLAfkI8sUoSF6wEHsxfLr2fntoQN+OTentjl1HUgtkzvFPCdgba7O90p1Wjo9Ffn
-         3/AOQnjQx7Zt2scU3Yjepi+b+BRlqKbz6UZuEw9QNRSCmKxKJ4RuIpkOwwzRVzC4iW1V
-         zo63JAZr/jHUV/P6CQXHHbw4Xgv/TC8s4flnrlPlBbvmsFQg1G5ZhQA89LsM7/eULKjZ
-         b3cb3dI2Ov/tJ9+yhztik40snoB/ADse/iQ0A0wVNwl+QURKDTUYMmQIyxo+xKZQGedV
-         k2WIOc84sBqLdJhYnoxcCcfCOKFxzv/PBPgnsCUcDIzAb9CzGDVnkN4XTE7nK0Fyazxo
-         lhhw==
-X-Gm-Message-State: ACgBeo0LQBy+2ZF+w0k9FShg+83RvvavtHtLIJHrVp83FHAtGcfAJPnA
-        0KMvKEO4IKLpBtb0Fv2R/pNZTw==
-X-Google-Smtp-Source: AA6agR75ZEPrL/yKL8ezMsVKnuKBIXSz81lwLCFZHWoLKO6Bsf7yB53ADVYs4VBVxujyrIqJgj0K/g==
-X-Received: by 2002:ac2:4f03:0:b0:496:272:625d with SMTP id k3-20020ac24f03000000b004960272625dmr5369172lfr.303.1662795983686;
-        Sat, 10 Sep 2022 00:46:23 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05651c124c00b0026bda31c10fsm201998ljh.61.2022.09.10.00.46.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Sep 2022 00:46:23 -0700 (PDT)
-Message-ID: <e8b33710-db07-bde4-e1d1-d42c05b87d6b@linaro.org>
-Date:   Sat, 10 Sep 2022 09:46:21 +0200
+        with ESMTP id S229655AbiIJMkj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Sep 2022 08:40:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CC93FA05
+        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 05:40:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F5D360B97
+        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 12:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EFEEEC433D6
+        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 12:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662813637;
+        bh=8e0FEIyESNl2swxVQIrEFETKbdahdJOl1pzMMv6a0u0=;
+        h=From:To:Subject:Date:From;
+        b=XImsTpbFYudRIf4UwjmzP6O1HXJqr8HxbriMszwmLr0jOGjzSa0Zc8+qwOewXPACN
+         rFBpyCF6+6YlTULo7HWLpEKzlkDwI5XF63l3cnvYBWVZhlnvqZD0Z/P30e+X9svkvu
+         SnOCYAUw1LC0SENXqRmJeXFm++YFVtnSprm1s2eg63UudryiLbCcBskC6K4YBWRO8z
+         jtE4uTpXIvFAvGNPhQ5ffTiA9SjjLOe/sMPdNPvwPZ+iOp1zJ0gHCTtf0v0q7CUd3c
+         A1ugCvO99mYDRvgXoS06H+8r7hiwSxWXVWazY9e7MzAEfGzIMqkpJ9xyRgoajw8rRn
+         6d03npwapXslw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id CFA77C433E4; Sat, 10 Sep 2022 12:40:36 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216470] New: [Regression] xhci_hcd 0000:08:00.2: xHC error in
+ resume, USBSTS 0x401, Reinit
+Date:   Sat, 10 Sep 2022 12:40:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-216470-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 11/11] dt-bindings: mtd: rockchip: add
- rockchip,rk3128-nfc
-Content-Language: en-US
-To:     Johan Jonker <jbx6244@gmail.com>, kever.yang@rock-chips.com
-Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, broonie@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <f09665c1-9938-38c1-9a31-f196a3ef9cf0@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f09665c1-9938-38c1-9a31-f196a3ef9cf0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,14 +71,188 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/09/2022 00:01, Johan Jonker wrote:
-> Add rockchip,rk3128-nfc compatible string.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216470
 
+            Bug ID: 216470
+           Summary: [Regression] xhci_hcd 0000:08:00.2: xHC error in
+                    resume, USBSTS 0x401, Reinit
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.19.8
+          Hardware: AMD
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: low
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: aros@gmx.com
+        Regression: No
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I don't remember this error in kernel 5.18 or earlier kernels, so I consider
+this a regression. Maybe my memory is wrong.
 
+This error/warning message is logged after suspend/resume.
 
-Best regards,
-Krzysztof
+I only have USB keyboard, mouse and onboard/built-in BT adapter connected b=
+ut
+all of them are connected to USB2 ports and this driver AFAIK is responsible
+for USB3.
+
+$ lspci
+
+00:00.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse Ro=
+ot
+Complex
+00:00.2 IOMMU: Advanced Micro Devices, Inc. [AMD] Starship/Matisse IOMMU
+00:01.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse PC=
+Ie
+Dummy Host Bridge
+00:01.2 PCI bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse GPP
+Bridge
+00:02.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse PC=
+Ie
+Dummy Host Bridge
+00:03.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse PC=
+Ie
+Dummy Host Bridge
+00:03.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse GPP
+Bridge
+00:04.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse PC=
+Ie
+Dummy Host Bridge
+00:05.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse PC=
+Ie
+Dummy Host Bridge
+00:07.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse PC=
+Ie
+Dummy Host Bridge
+00:07.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse
+Internal PCIe GPP Bridge 0 to bus[E:B]
+00:08.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse PC=
+Ie
+Dummy Host Bridge
+00:08.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Starship/Matisse
+Internal PCIe GPP Bridge 0 to bus[E:B]
+00:14.0 SMBus: Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller (rev=
+ 61)
+00:14.3 ISA bridge: Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge (rev =
+51)
+00:18.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 0
+00:18.1 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 1
+00:18.2 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 2
+00:18.3 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 3
+00:18.4 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 4
+00:18.5 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 5
+00:18.6 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 6
+00:18.7 Host bridge: Advanced Micro Devices, Inc. [AMD] Matisse/Vermeer Data
+Fabric: Device 18h; Function 7
+01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD] Matisse Switch Upstr=
+eam
+02:01.0 PCI bridge: Advanced Micro Devices, Inc. [AMD] Matisse PCIe GPP Bri=
+dge
+02:05.0 PCI bridge: Advanced Micro Devices, Inc. [AMD] Matisse PCIe GPP Bri=
+dge
+02:08.0 PCI bridge: Advanced Micro Devices, Inc. [AMD] Matisse PCIe GPP Bri=
+dge
+02:09.0 PCI bridge: Advanced Micro Devices, Inc. [AMD] Matisse PCIe GPP Bri=
+dge
+02:0a.0 PCI bridge: Advanced Micro Devices, Inc. [AMD] Matisse PCIe GPP Bri=
+dge
+03:00.0 Non-Volatile memory controller: Sandisk Corp Device 501e
+04:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/8=
+411
+PCI Express Gigabit Ethernet Controller (rev 26)
+05:00.0 Non-Essential Instrumentation [1300]: Advanced Micro Devices, Inc.
+[AMD] Starship/Matisse Reserved SPP
+05:00.1 USB controller: Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 =
+Host
+Controller
+05:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 =
+Host
+Controller
+06:00.0 SATA controller: Advanced Micro Devices, Inc. [AMD] FCH SATA Contro=
+ller
+[AHCI mode] (rev 51)
+07:00.0 SATA controller: Advanced Micro Devices, Inc. [AMD] FCH SATA Contro=
+ller
+[AHCI mode] (rev 51)
+08:00.0 VGA compatible controller: NVIDIA Corporation TU116 [GeForce GTX 16=
+60
+Ti] (rev a1)
+08:00.1 Audio device: NVIDIA Corporation TU116 High Definition Audio Contro=
+ller
+(rev a1)
+08:00.2 USB controller: NVIDIA Corporation TU116 USB 3.1 Host Controller (r=
+ev
+a1)
+08:00.3 Serial bus controller: NVIDIA Corporation TU116 USB Type-C UCSI
+Controller (rev a1)
+09:00.0 Non-Essential Instrumentation [1300]: Advanced Micro Devices, Inc.
+[AMD] Starship/Matisse PCIe Dummy Function
+0a:00.0 Non-Essential Instrumentation [1300]: Advanced Micro Devices, Inc.
+[AMD] Starship/Matisse Reserved SPP
+0a:00.1 Encryption controller: Advanced Micro Devices, Inc. [AMD]
+Starship/Matisse Cryptographic Coprocessor PSPCPP
+0a:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 =
+Host
+Controller
+0a:00.4 Audio device: Advanced Micro Devices, Inc. [AMD] Starship/Matisse HD
+Audio Controller
+
+$ lsusb -vt
+/:  Bus 08.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 10000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 5000M
+        ID 2109:0813 VIA Labs, Inc. VL813 Hub
+/:  Bus 07.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+        ID 2109:2813 VIA Labs, Inc. VL813 Hub
+    |__ Port 3: Dev 3, If 0, Class=3DHuman Interface Device, Driver=3Dusbhi=
+d, 1.5M
+        ID 046d:c31d Logitech, Inc. Media Keyboard K200
+    |__ Port 3: Dev 3, If 1, Class=3DHuman Interface Device, Driver=3Dusbhi=
+d, 1.5M
+        ID 046d:c31d Logitech, Inc. Media Keyboard K200
+    |__ Port 4: Dev 4, If 0, Class=3DHuman Interface Device, Driver=3Dusbhi=
+d, 12M
+        ID 046d:c084 Logitech, Inc. G203 Gaming Mouse
+    |__ Port 4: Dev 4, If 1, Class=3DHuman Interface Device, Driver=3Dusbhi=
+d, 12M
+        ID 046d:c084 Logitech, Inc. G203 Gaming Mouse
+/:  Bus 06.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 10000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+/:  Bus 05.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/2p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+/:  Bus 04.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 10000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+/:  Bus 03.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+    |__ Port 5: Dev 2, If 0, Class=3DWireless, Driver=3Dbtusb, 12M
+        ID 8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Adapter
+    |__ Port 5: Dev 2, If 1, Class=3DWireless, Driver=3Dbtusb, 12M
+        ID 8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Adapter
+    |__ Port 6: Dev 3, If 0, Class=3DVendor Specific Class, Driver=3D, 12M
+        ID 0b05:18f3 ASUSTek Computer, Inc.=20
+    |__ Port 6: Dev 3, If 2, Class=3DHuman Interface Device, Driver=3Dusbhi=
+d, 12M
+        ID 0b05:18f3 ASUSTek Computer, Inc.=20
+/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/4p, 10000M
+    ID 1d6b:0003 Linux Foundation 3.0 root hub
+/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
