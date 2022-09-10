@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67CF5B4640
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Sep 2022 14:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947635B4666
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Sep 2022 14:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIJMom (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Sep 2022 08:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S229529AbiIJMtx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Sep 2022 08:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiIJMok (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Sep 2022 08:44:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19ED6B4B3
-        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 05:44:37 -0700 (PDT)
+        with ESMTP id S229492AbiIJMtv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Sep 2022 08:49:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BF515FDA
+        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 05:49:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94162B80092
-        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 12:44:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41FC6C433D6
-        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 12:44:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E13A60C38
+        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 12:49:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7455C433D7
+        for <linux-usb@vger.kernel.org>; Sat, 10 Sep 2022 12:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662813875;
-        bh=nUZK0qbgP/0ZgC3IdenVBKjJWiE1CwxwZ1zY9oai8zY=;
+        s=k20201202; t=1662814188;
+        bh=L6IdZq8BoEBQaSEJfGKthnOt94zbQnK+jq8WGrU6qyo=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=qtWlrdjc7FVqSAb1iWeYjSOmxa3M2036ODFhr4IdX3e1KkL8b1IJun7UAceN/rli2
-         hatFXT6Iv1/J/H5kr6nXPvwd8f/eBkF/TwHloAVk546Dnmh0FvlP3qH88YWut6Y1IQ
-         Hf1m3fVKbpNzIw2cAApGuahZqt13gPJkloH/kjk0DNvsb/CCHZSoNmftDFMRct/Xm6
-         M3Q12817udl+PIB0aUDX0zjNQSa5KhfNBag5VaRUUOQ0xXBm4j50tuCI9pRJFPTBS9
-         j4RQHp0HevV93tigrOyX+fOvcK9LaLsQSJ11mOHEO7CechOMWZJfwR80k2EvdT4FUQ
-         rbz8zXiCdU+ow==
+        b=AiYjKopl6vBYjWDS10wmsEyGMwzFCMO8YwSyufAN6S6qFtLLJTycLAuIUdd1WiNZX
+         zZIDfOitUEqtWYfxQ2sbrjHH+duV7YR1vsseM0LbnQVODGyxfRE9/JA6TmCsT9jTa1
+         T4O0CUMVcfHwwmCnKMuEFR6LK/hjIq3DJYjGjmXEy+3ICP/hy2T9GAplsxt2VkY6K7
+         v24qDkT+KRtPa2oARnG1XPxf/7zUxTGbNAMhydEVTqcNMvrREj+EjV3+CceYjeLTHL
+         5OwJmxpl9C6lU2zoFl5TYezf50MNWl1aupxdSvrRUaQi92P0+8ZGEcpxVDDfyPpRq4
+         LLfLi9QX382+A==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 1BB07C433E4; Sat, 10 Sep 2022 12:44:35 +0000 (UTC)
+        id 98473C433E4; Sat, 10 Sep 2022 12:49:48 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 216470] [Regression] xhci_hcd 0000:08:00.2: xHC error in
  resume, USBSTS 0x401, Reinit
-Date:   Sat, 10 Sep 2022 12:44:34 +0000
+Date:   Sat, 10 Sep 2022 12:49:48 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -52,8 +52,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-216470-208809-AxjFG3A43P@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: cf_regression
+Message-ID: <bug-216470-208809-XtZVG6rhW2@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-216470-208809@https.bugzilla.kernel.org/>
 References: <bug-216470-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -77,11 +77,16 @@ Artem S. Tashkinov (aros@gmx.com) changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+         Regression|No                          |Yes
 
---- Comment #1 from Artem S. Tashkinov (aros@gmx.com) ---
-CC'ing Mathias Nyman.
+--- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
+Google says the error is relatively new:
+
+https://www.google.com/search?q=3D%22xHC+error+in+resume%2C+USBSTS+0x401%22
+
+Looks like this is indeed a regression because there are no results other t=
+han
+those starting at approximately April, 2022.
 
 --=20
 You may reply to this email to add a comment.
