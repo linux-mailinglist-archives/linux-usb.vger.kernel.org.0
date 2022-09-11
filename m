@@ -2,41 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E365B4C48
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Sep 2022 08:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2435F5B4F05
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Sep 2022 15:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiIKGDI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Sep 2022 02:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S229727AbiIKN3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Sep 2022 09:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIKGDG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 02:03:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB74928E3A;
-        Sat, 10 Sep 2022 23:03:05 -0700 (PDT)
-Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MQJvv0TFRzmV91;
-        Sun, 11 Sep 2022 13:59:23 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500023.china.huawei.com
- (7.221.188.76) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 11 Sep
- 2022 14:03:02 +0800
-From:   Peng Wu <wupeng58@huawei.com>
-To:     <vincent.sunplus@gmail.com>, <kishon@ti.com>, <vkoul@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liwei391@huawei.com>, <wupeng58@huawei.com>
-Subject: [PATCH] phy: sunplus: Fix an IS_ERR() vs NULL bug in sp_usb_phy_probe
-Date:   Sun, 11 Sep 2022 06:00:53 +0000
-Message-ID: <20220911060053.123594-1-wupeng58@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S230136AbiIKN3l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 09:29:41 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37FEB848
+        for <linux-usb@vger.kernel.org>; Sun, 11 Sep 2022 06:29:38 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id m15so10638425lfl.9
+        for <linux-usb@vger.kernel.org>; Sun, 11 Sep 2022 06:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=OphWLkvQQhrqzPynWAsAAmx8wbBl38TQydjTLvj6GfU=;
+        b=N6UfXyWB7yENz1CQ+2maHfxFJu2qp2DJTkFeZPu0bpf2bQDOY+kUQzi7CfOfIW3JKe
+         JzhmUyTQCKRx0BL4gKktIrq/UPm12tphAXjEmknBoTODt8kg5Vct2uvwa0Lrf/3vnLMg
+         3bzbNsAZ4Bpm4meSw85/TPSnjXO5G6uSAnc2bPtVNisFRnAWNXeyFoXmoQ4aBMmL/fUk
+         AzOoZvIuGNee3MEMChOUvk1oATZ9b1I3EIoKzdZV9UuZE+wrH121yQZoQD5xwEt//zTo
+         GFXFVm+aWz5eSFc3ib4YIvHFXUoaDevMVWWHAdz3+Ry9toHfZ3jxYZJQXR4nU6hz7xm+
+         yD5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OphWLkvQQhrqzPynWAsAAmx8wbBl38TQydjTLvj6GfU=;
+        b=yNg05GmyOu5TKJC5jg9f7+AraocTdJCZC2hLL3D42ZccEpfBJSRtF4A7dUm2ZQUwRn
+         cxywrDOPdMxCnzMFQjVn6d1K3HiCxJGquuDtAd6lHvN2lqoIEnZ6nHcTmxxoSyr2F63l
+         udEBqlW307RX5HjLbzZw2bClMkayaCbX7HA4s2h4hNkSdFqTuZwwjI5X07oosdxcSdaG
+         +e89HDVec0Y2JgGVzSRcnZTzQpsxgfKh14VIv/a64Kq8qIr6LUi1LEQwCgPsoMNTuAjE
+         nano5MG3UDzy1s3pVn+fx2BFsUvMMD7gJhAogwniAjZCiaQMNB7EiKdLmgFIm5+oDDIv
+         er7w==
+X-Gm-Message-State: ACgBeo26f9xWPzfiGbViH0Vo+eLOBVvxazC2HVMkHVNv7XObCpuJ8XKA
+        M6M/YmYu8xsjJ3YJtuDzyQyfZi9irX5w2Q==
+X-Google-Smtp-Source: AA6agR77QmYpJc/3ns8W4bNYd6/vvw5ojXJlgiLaqOa1Z13BWn+8R27e3O7NEuzAxRwfqrjLiSMiHg==
+X-Received: by 2002:a05:6512:2381:b0:492:afa4:6b67 with SMTP id c1-20020a056512238100b00492afa46b67mr6933722lfv.621.1662902976894;
+        Sun, 11 Sep 2022 06:29:36 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id t28-20020a192d5c000000b00492e3a8366esm615491lft.9.2022.09.11.06.29.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Sep 2022 06:29:36 -0700 (PDT)
+Message-ID: <9ab86610-af65-3eb3-b694-0d08ee139d32@linaro.org>
+Date:   Sun, 11 Sep 2022 15:29:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500023.china.huawei.com (7.221.188.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 4/9] dt-bindings: usb: qcom,dwc3: Fix SM6115 clocks,
+ irqs
+Content-Language: en-US
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220910143213.477261-1-iskren.chernev@gmail.com>
+ <20220910143213.477261-5-iskren.chernev@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220910143213.477261-5-iskren.chernev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,30 +84,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The devm_ioremap() function returns NULL on error, it doesn't return
-error pointers.
+On 10/09/2022 16:32, Iskren Chernev wrote:
+> SM6115 has 6 clocks and 2 interrupts.
+> 
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 ++-
 
-Fixes: 99d9ccd973852 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
-Signed-off-by: Peng Wu <wupeng58@huawei.com>
----
- drivers/phy/sunplus/phy-sunplus-usb2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
-index 5269968b3060..0e64eb3e6db5 100644
---- a/drivers/phy/sunplus/phy-sunplus-usb2.c
-+++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-@@ -256,8 +256,8 @@ static int sp_usb_phy_probe(struct platform_device *pdev)
- 	usbphy->moon4_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon4");
- 	usbphy->moon4_regs = devm_ioremap(&pdev->dev, usbphy->moon4_res_mem->start,
- 					  resource_size(usbphy->moon4_res_mem));
--	if (IS_ERR(usbphy->moon4_regs))
--		return PTR_ERR(usbphy->moon4_regs);
-+	if (!usbphy->moon4_regs)
-+		return -ENOMEM;
- 
- 	usbphy->phy_clk = devm_clk_get(&pdev->dev, NULL);
- 	if (IS_ERR(usbphy->phy_clk))
--- 
-2.17.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
