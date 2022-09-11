@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EE95B521E
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 02:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16CC5B5220
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 02:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiILACG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Sep 2022 20:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S229597AbiILACI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Sep 2022 20:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiILACE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 20:02:04 -0400
+        with ESMTP id S229586AbiILACG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 20:02:06 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CED0A24979;
-        Sun, 11 Sep 2022 17:02:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8F0B1F2E2;
+        Sun, 11 Sep 2022 17:02:05 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8C9B113E;
-        Sun, 11 Sep 2022 17:02:08 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DECA116F8;
+        Sun, 11 Sep 2022 17:02:11 -0700 (PDT)
 Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E06B13F73B;
-        Sun, 11 Sep 2022 17:01:59 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6AD23F73B;
+        Sun, 11 Sep 2022 17:02:02 -0700 (PDT)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
@@ -33,9 +33,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, Karl Kurbjun <karl.os@veroson.com>,
         Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 6/7] arm64: dts: allwinner: h616: OrangePi Zero 2: Add USB nodes
-Date:   Mon, 12 Sep 2022 00:59:44 +0100
-Message-Id: <20220911235945.6635-7-andre.przywara@arm.com>
+Subject: [PATCH 7/7] arm64: dts: allwinner: h616: X96 Mate: Add USB nodes
+Date:   Mon, 12 Sep 2022 00:59:45 +0100
+Message-Id: <20220911235945.6635-8-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220911235945.6635-1-andre.przywara@arm.com>
 References: <20220911235945.6635-1-andre.przywara@arm.com>
@@ -50,80 +50,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The OrangePi Zero 2 has one USB-A host port, VBUS is provided by
-a GPIO controlled regulator.
-The USB-C port is meant to power the board, but is also connected to
-the USB 0 port, which we configure as an MUSB peripheral.
+The X96 Mate TV box has two USB-A ports, VBUS is always on and connected
+to the DC input.
+Since USB port 0 is connected to an USB-A receptable, we configure it
+as a host port. Using it as a peripheral is dangerous, because VBUS is
+always on.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- .../allwinner/sun50i-h616-orangepi-zero2.dts  | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ .../dts/allwinner/sun50i-h616-x96-mate.dts    | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
-index 02893f3ac99d..3197dc43397b 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
-@@ -49,8 +49,25 @@ reg_vcc5v: vcc5v {
- 		regulator-max-microvolt = <5000000>;
- 		regulator-always-on;
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+index 6619db34714a..07424c28b696 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+@@ -32,6 +32,14 @@ reg_vcc5v: vcc5v {
  	};
-+
-+	reg_usb1_vbus: usb1-vbus {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb1-vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&reg_vcc5v>;
-+		enable-active-high;
-+		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
-+		status = "okay";
-+	};
  };
  
-+&ehci1 {
++&ehci0 {
 +	status = "okay";
 +};
 +
-+/* USB 2 & 3 are on headers only. */
++&ehci2 {
++	status = "okay";
++};
 +
- &emac0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&ext_rgmii_pins>;
-@@ -76,6 +93,10 @@ &mmc0 {
+ &ir {
+ 	status = "okay";
+ };
+@@ -54,6 +62,14 @@ &mmc2 {
  	status = "okay";
  };
  
-+&ohci1 {
++&ohci0 {
++	status = "okay";
++};
++
++&ohci2 {
 +	status = "okay";
 +};
 +
  &r_rsb {
  	status = "okay";
  
-@@ -211,3 +232,24 @@ &uart0 {
+@@ -175,3 +191,12 @@ &uart0 {
  	pinctrl-0 = <&uart0_ph_pins>;
  	status = "okay";
  };
 +
 +&usbotg {
-+	/*
-+	 * PHY0 pins are connected to a USB-C socket, but a role switch
-+	 * is not implemented: both CC pins are pulled to GND.
-+	 * The VBUS pins power the device, so a fixed peripheral mode
-+	 * is the best choice.
-+	 * The board can be powered via GPIOs, in this case port0 *can*
-+	 * act as a host (with a cable/adapter ignoring CC), as VBUS is
-+	 * then provided by the GPIOs. Any user of this setup would
-+	 * need to adjust the DT accordingly: dr_mode set to "host",
-+	 * enabling OHCI0 and EHCI0.
-+	 */
-+	dr_mode = "peripheral";
++	dr_mode = "host";	/* USB A type receptable */
 +	status = "okay";
 +};
 +
 +&usbphy {
-+	usb1_vbus-supply = <&reg_usb1_vbus>;
 +	status = "okay";
 +};
 -- 
