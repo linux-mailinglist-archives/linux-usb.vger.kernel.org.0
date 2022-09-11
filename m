@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8E95B5216
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 02:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07105B5218
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 02:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiILABw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Sep 2022 20:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S229558AbiILABy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Sep 2022 20:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiILABu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 20:01:50 -0400
+        with ESMTP id S229541AbiILABx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 20:01:53 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8252F1F2DF;
-        Sun, 11 Sep 2022 17:01:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8241E1F2F7;
+        Sun, 11 Sep 2022 17:01:52 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8A8816F8;
-        Sun, 11 Sep 2022 17:01:55 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CFE61713;
+        Sun, 11 Sep 2022 17:01:58 -0700 (PDT)
 Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AFF03F73B;
-        Sun, 11 Sep 2022 17:01:46 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 958043F73B;
+        Sun, 11 Sep 2022 17:01:49 -0700 (PDT)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
@@ -33,9 +33,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, Karl Kurbjun <karl.os@veroson.com>,
         Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 2/7] dt-bindings: usb: Add special clock for Allwinner H616 PHY
-Date:   Mon, 12 Sep 2022 00:59:40 +0100
-Message-Id: <20220911235945.6635-3-andre.przywara@arm.com>
+Subject: [PATCH 3/7] phy: sun4i-usb: Introduce port2 SIDDQ quirk
+Date:   Mon, 12 Sep 2022 00:59:41 +0100
+Message-Id: <20220911235945.6635-4-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220911235945.6635-1-andre.przywara@arm.com>
 References: <20220911235945.6635-1-andre.przywara@arm.com>
@@ -50,72 +50,115 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB PHY IP in the Allwinner H616 SoC requires a quirk that involves
-some resources from port 2's PHY and HCI IP. In particular the PMU clock
-for port 2 must be surely ungated before accessing the REG_HCI_PHY_CTL
-register of port 2. To allow each USB port to be controlled
-independently of port 2, we need a handle to that particular PMU clock
-in the *PHY* node, as the HCI and PHY part might be handled by separate
-drivers.
+At least the Allwinner H616 SoC requires a weird quirk to make most
+USB PHYs work: Only port2 works out of the box, but all other ports
+need some help from this port2 to work correctly: The CLK_BUS_PHY2 and
+RST_USB_PHY2 clock and reset need to be enabled, and the SIDDQ bit in
+the PMU PHY control register needs to be cleared. For this register to
+be accessible, CLK_BUS_ECHI2 needs to be ungated. Don't ask ....
 
-Add that clock to the requirements of the H616 PHY binding, so that a
-PHY driver can apply the quirk in isolation, without requiring help from
-port 2's HCI driver.
+Instead of disguising this as some generic feature, treat it more like
+a quirk (what it really is):
+If the quirk bit is set, and we initialise a PHY other than PHY2, ungate
+this one special clock, and clear the SIDDQ bit. We also pick the clock
+and reset from PHY2 and enable them as well.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- .../phy/allwinner,sun8i-h3-usb-phy.yaml       | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/phy/allwinner/phy-sun4i-usb.c | 59 +++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
-index e288450e0844..3a3168392597 100644
---- a/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
-@@ -36,18 +36,22 @@ properties:
-       - const: pmu3
+diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
+index d5f3b42eb8ce..f094a4cd7cbc 100644
+--- a/drivers/phy/allwinner/phy-sun4i-usb.c
++++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+@@ -120,6 +120,7 @@ struct sun4i_usb_phy_cfg {
+ 	u8 phyctl_offset;
+ 	bool dedicated_clocks;
+ 	bool phy0_dual_route;
++	bool needs_phy2_siddq;
+ 	int missing_phys;
+ };
  
-   clocks:
-+    minItems: 4
-     items:
-       - description: USB OTG PHY bus clock
-       - description: USB Host 0 PHY bus clock
-       - description: USB Host 1 PHY bus clock
-       - description: USB Host 2 PHY bus clock
-+      - description: PMU clock for host port 2
+@@ -289,6 +290,50 @@ static int sun4i_usb_phy_init(struct phy *_phy)
+ 		return ret;
+ 	}
  
-   clock-names:
-+    minItems: 4
-     items:
-       - const: usb0_phy
-       - const: usb1_phy
-       - const: usb2_phy
-       - const: usb3_phy
-+      - const: pmu2_clk
- 
-   resets:
-     items:
-@@ -98,6 +102,21 @@ required:
- 
- additionalProperties: false
- 
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - sun50i-h616-usb-phy
++	/* Some PHYs on some SoCs need the help of PHY2 to work. */
++	if (data->cfg->needs_phy2_siddq && phy->index != 2) {
++		struct sun4i_usb_phy *phy2 = &data->phys[2];
 +
-+then:
-+  properties:
-+    clocks:
-+      minItems: 5
++		ret = clk_prepare_enable(phy2->clk);
++		if (ret) {
++			reset_control_assert(phy->reset);
++			clk_disable_unprepare(phy->clk2);
++			clk_disable_unprepare(phy->clk);
++			return ret;
++		}
 +
-+    clock-names:
-+      minItems: 5
++		ret = reset_control_deassert(phy2->reset);
++		if (ret) {
++			clk_disable_unprepare(phy2->clk);
++			reset_control_assert(phy->reset);
++			clk_disable_unprepare(phy->clk2);
++			clk_disable_unprepare(phy->clk);
++			return ret;
++		}
 +
- examples:
-   - |
-     #include <dt-bindings/gpio/gpio.h>
++		/*
++		 * This extra clock is just needed to access the
++		 * REG_HCI_PHY_CTL PMU register for PHY2.
++		 */
++		ret = clk_prepare_enable(phy2->clk2);
++		if (ret) {
++			reset_control_assert(phy2->reset);
++			clk_disable_unprepare(phy2->clk);
++			reset_control_assert(phy->reset);
++			clk_disable_unprepare(phy->clk2);
++			clk_disable_unprepare(phy->clk);
++			return ret;
++		}
++
++		if (phy2->pmu && data->cfg->hci_phy_ctl_clear) {
++			val = readl(phy2->pmu + REG_HCI_PHY_CTL);
++			val &= ~data->cfg->hci_phy_ctl_clear;
++			writel(val, phy2->pmu + REG_HCI_PHY_CTL);
++		}
++
++		clk_disable_unprepare(phy->clk2);
++	}
++
+ 	if (phy->pmu && data->cfg->hci_phy_ctl_clear) {
+ 		val = readl(phy->pmu + REG_HCI_PHY_CTL);
+ 		val &= ~data->cfg->hci_phy_ctl_clear;
+@@ -354,6 +399,13 @@ static int sun4i_usb_phy_exit(struct phy *_phy)
+ 		data->phy0_init = false;
+ 	}
+ 
++	if (data->cfg->needs_phy2_siddq && phy->index != 2) {
++		struct sun4i_usb_phy *phy2 = &data->phys[2];
++
++		clk_disable_unprepare(phy2->clk);
++		reset_control_assert(phy2->reset);
++	}
++
+ 	sun4i_usb_phy_passby(phy, 0);
+ 	reset_control_assert(phy->reset);
+ 	clk_disable_unprepare(phy->clk2);
+@@ -785,6 +837,13 @@ static int sun4i_usb_phy_probe(struct platform_device *pdev)
+ 				dev_err(dev, "failed to get clock %s\n", name);
+ 				return PTR_ERR(phy->clk2);
+ 			}
++		} else {
++			snprintf(name, sizeof(name), "pmu%d_clk", i);
++			phy->clk2 = devm_clk_get_optional(dev, name);
++			if (IS_ERR(phy->clk2)) {
++				dev_err(dev, "failed to get clock %s\n", name);
++				return PTR_ERR(phy->clk2);
++			}
+ 		}
+ 
+ 		snprintf(name, sizeof(name), "usb%d_reset", i);
 -- 
 2.35.3
 
