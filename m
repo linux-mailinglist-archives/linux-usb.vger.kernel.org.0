@@ -2,133 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED3B5B518E
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 00:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBA55B5212
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 02:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiIKWj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Sep 2022 18:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
+        id S229539AbiILABr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Sep 2022 20:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiIKWjz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 18:39:55 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79669FD0A
-        for <linux-usb@vger.kernel.org>; Sun, 11 Sep 2022 15:39:54 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id u22so6888061plq.12
-        for <linux-usb@vger.kernel.org>; Sun, 11 Sep 2022 15:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=qRRQs2bGjpaLwXI2POp6+T5e3gO4USdW3PaSEgYXRs0=;
-        b=MKtEX1wVUsmHJa8JRsd9iRh/J7m/TG3w0/TLn5jkF4RmWW4OUucOj4FINpzgLijmH+
-         elHECt9Hc/jqn4zEQ5APfm2AwHcNuFBOX06fMkDuV8b6EoORCNUkzcaS5DwfQw8chxkZ
-         y6XigSkPwVJ2Hfpdcyr2zcYJzd+uFG1fQ1AAwuqRkgMI2VsXWtUVpDVaoPr/U46mcIOD
-         TivOb0A5+tH55NuYCByvQqIDNx3TmjUmhyPG9Vxbt9+z+9ETrBKL7kg/3M3HieD1gEgF
-         0peHZg4SmAhzivmyfCzH6sEwglV4M1ENwVvbYCYpCmFQ7GikWo6XB6E9QxFjpWampbcL
-         xOMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=qRRQs2bGjpaLwXI2POp6+T5e3gO4USdW3PaSEgYXRs0=;
-        b=BSelbiVz9CTMC+MRDrIGAuI/jQdkXAGA1BQm+HIaFV4cJeqNdIepFaJq6SfAm9KkWg
-         TWDPQZg332O5RJkBJ1AZ1xPOS36lHKJnQLiw5QDOoXRCfbtg+mPZMN8tEIL76rxeL7x6
-         pb2b/jlS8+0pZ1t2EWM9hlvhbahoxrQPk6ImVlEfdMSoqP1q1tcLMeaxj25vHzZHc9PR
-         ob5ya8WYK0x27/c1tTpyq0tDX8lM4frEJsKJXikADnJQTm5kGWJTCZc1T60nByNaU5Q9
-         lJyujPt5W25aAUNTCsm7mUkTqw1ykhMejc+s4goECHWcz/3mwRHLUA4cAdkFSxZFCQg7
-         W1Hw==
-X-Gm-Message-State: ACgBeo2jNSDyviMSDoRAXQo1sUo/+aNi3X896yjAzCwRsSD0iNR//Vao
-        cKVPrWL/mSnSDxquj4IDZ64=
-X-Google-Smtp-Source: AA6agR6sXrkwNnUK2ktdmEV5l09u9J2gzkZoMNsn2HjvwXV+klOqGbphB6g9V6760ROD+TIA3p+QDQ==
-X-Received: by 2002:a17:90b:3b91:b0:202:91d7:6a5d with SMTP id pc17-20020a17090b3b9100b0020291d76a5dmr12778144pjb.101.1662935993977;
-        Sun, 11 Sep 2022 15:39:53 -0700 (PDT)
-Received: from localhost.localdomain ([75.164.0.18])
-        by smtp.gmail.com with ESMTPSA id t123-20020a625f81000000b00540c7a7e9fcsm3795085pfb.89.2022.09.11.15.39.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 15:39:53 -0700 (PDT)
-From:   Albert Briscoe <albertsbriscoe@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Albert Briscoe <albertsbriscoe@gmail.com>
-Subject: [PATCH] usb: gadget: function: fix dangling pnp_string in f_printer.c
-Date:   Sun, 11 Sep 2022 15:37:55 -0700
-Message-Id: <20220911223753.20417-1-albertsbriscoe@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229498AbiILABp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 20:01:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E98691F2E7;
+        Sun, 11 Sep 2022 17:01:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB9A9113E;
+        Sun, 11 Sep 2022 17:01:49 -0700 (PDT)
+Received: from slackpad.fritz.box (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC5713F73B;
+        Sun, 11 Sep 2022 17:01:40 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, Karl Kurbjun <karl.os@veroson.com>,
+        Icenowy Zheng <icenowy@aosc.io>
+Subject: [PATCH 0/7] arm64: sunxi: h616: Add USB support
+Date:   Mon, 12 Sep 2022 00:59:38 +0100
+Message-Id: <20220911235945.6635-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When opts->pnp_string is changed with configfs, new memory is allocated for
-the string. It does not, however, update dev->pnp_string, even though the
-memory is freed. When rquesting the string, the host then gets old or
-corrupted data rather than the new string. The ieee 1284 id string should
-be allowed to change while the device is connected.
+The USB IP used in the Allwinner H616 SoC is very similar to the one
+used in the H3 chip: it contains four USB 2.0 host controllers and four
+PHYs, where the first PHY is shared with a separate USB-OTG controller.
 
-The bug was introduced in commit fdc01cc286be ("usb: gadget: printer:
-Remove pnp_string static buffer"), which changed opts->pnp_string from a
-char[] to a char*.
-This patch changes dev->pnp_string from a char* to a char** pointing to
-opts->pnp_string.
+But out of the four ports, only port 2 works out of the box, the other
+ports require some resources and registers of port 2 to be enabled as
+well.
 
-Fixes: fdc01cc286be ("usb: gadget: printer: Remove pnp_string static buffer")
-Signed-off-by: Albert Briscoe <albertsbriscoe@gmail.com>
----
- drivers/usb/gadget/function/f_printer.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Implement the required workaround in the Allwinner USB PHY driver, and
+key this off the respective compatible string. This core code is
+contained in patch 3/7. The first two patches add the respective DT
+binding documentation, whereas patch 4/7 encodes all the configuration
+options for the H616 USB PHY into the driver.
+The last three patches add the respective devicetree nodes, to the H616
+.dtsi, but also to the DTs of the two supported boards.
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index abec5c58f525..a881c69b1f2b 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -89,7 +89,7 @@ struct printer_dev {
- 	u8			printer_cdev_open;
- 	wait_queue_head_t	wait;
- 	unsigned		q_len;
--	char			*pnp_string;	/* We don't own memory! */
-+	char			**pnp_string;	/* We don't own memory! */
- 	struct usb_function	function;
- };
- 
-@@ -1000,16 +1000,16 @@ static int printer_func_setup(struct usb_function *f,
- 			if ((wIndex>>8) != dev->interface)
- 				break;
- 
--			if (!dev->pnp_string) {
-+			if (!*dev->pnp_string) {
- 				value = 0;
- 				break;
- 			}
--			value = strlen(dev->pnp_string);
-+			value = strlen(*dev->pnp_string);
- 			buf[0] = (value >> 8) & 0xFF;
- 			buf[1] = value & 0xFF;
--			memcpy(buf + 2, dev->pnp_string, value);
-+			memcpy(buf + 2, *dev->pnp_string, value);
- 			DBG(dev, "1284 PNP String: %x %s\n", value,
--			    dev->pnp_string);
-+			    *dev->pnp_string);
- 			break;
- 
- 		case GET_PORT_STATUS: /* Get Port Status */
-@@ -1475,7 +1475,7 @@ static struct usb_function *gprinter_alloc(struct usb_function_instance *fi)
- 	kref_init(&dev->kref);
- 	++opts->refcnt;
- 	dev->minor = opts->minor;
--	dev->pnp_string = opts->pnp_string;
-+	dev->pnp_string = &opts->pnp_string;
- 	dev->q_len = opts->q_len;
- 	mutex_unlock(&opts->lock);
- 
+This allows USB to be used on any H616 based machine. This was tested on
+the X96 Mate box.
+
+This series is an update on what was included in earlier versions of the
+initial H616 support series, but was later dropped to get the basic
+support in first more quickly.
+It is now based on v6.0-rc4 and is also available here:
+https://github.com/apritzel/linux/commits/h616-usb
+
+Please have a look and test on your hardware, especically on all ports
+exposed on header pins of the OrangePi Zero2 board.
+
+Cheers,
+Andre
+
+Andre Przywara (7):
+  dt-bindings: usb: Add H616 compatible string
+  dt-bindings: usb: Add special clock for Allwinner H616 PHY
+  phy: sun4i-usb: Introduce port2 SIDDQ quirk
+  phy: sun4i-usb: Add support for the H616 USB PHY
+  arm64: dts: allwinner: h616: Add USB nodes
+  arm64: dts: allwinner: h616: OrangePi Zero 2: Add USB nodes
+  arm64: dts: allwinner: h616: X96 Mate: Add USB nodes
+
+ .../phy/allwinner,sun8i-h3-usb-phy.yaml       |  19 +++
+ .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+ .../allwinner/sun50i-h616-orangepi-zero2.dts  |  42 +++++
+ .../dts/allwinner/sun50i-h616-x96-mate.dts    |  25 +++
+ .../arm64/boot/dts/allwinner/sun50i-h616.dtsi | 160 ++++++++++++++++++
+ drivers/phy/allwinner/phy-sun4i-usb.c         |  71 ++++++++
+ 7 files changed, 319 insertions(+)
+
 -- 
-2.35.1
+2.35.3
 
