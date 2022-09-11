@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812925B5214
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 02:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8E95B5216
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 02:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiILABt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Sep 2022 20:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S229567AbiILABw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Sep 2022 20:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiILABr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 20:01:47 -0400
+        with ESMTP id S229549AbiILABu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Sep 2022 20:01:50 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9936A1F2E7;
-        Sun, 11 Sep 2022 17:01:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8252F1F2DF;
+        Sun, 11 Sep 2022 17:01:49 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD2D516A3;
-        Sun, 11 Sep 2022 17:01:52 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8A8816F8;
+        Sun, 11 Sep 2022 17:01:55 -0700 (PDT)
 Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5D7E3F73B;
-        Sun, 11 Sep 2022 17:01:43 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AFF03F73B;
+        Sun, 11 Sep 2022 17:01:46 -0700 (PDT)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
@@ -33,9 +33,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, Karl Kurbjun <karl.os@veroson.com>,
         Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 1/7] dt-bindings: usb: Add H616 compatible string
-Date:   Mon, 12 Sep 2022 00:59:39 +0100
-Message-Id: <20220911235945.6635-2-andre.przywara@arm.com>
+Subject: [PATCH 2/7] dt-bindings: usb: Add special clock for Allwinner H616 PHY
+Date:   Mon, 12 Sep 2022 00:59:40 +0100
+Message-Id: <20220911235945.6635-3-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220911235945.6635-1-andre.przywara@arm.com>
 References: <20220911235945.6635-1-andre.przywara@arm.com>
@@ -50,40 +50,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Allwinner H616 contains four fully OHCI/EHCI compatible USB host
-controllers, so just add their compatible strings to the list of
-generic OHCI/EHCI controllers.
+The USB PHY IP in the Allwinner H616 SoC requires a quirk that involves
+some resources from port 2's PHY and HCI IP. In particular the PMU clock
+for port 2 must be surely ungated before accessing the REG_HCI_PHY_CTL
+register of port 2. To allow each USB port to be controlled
+independently of port 2, we need a handle to that particular PMU clock
+in the *PHY* node, as the HCI and PHY part might be handled by separate
+drivers.
+
+Add that clock to the requirements of the H616 PHY binding, so that a
+PHY driver can apply the quirk in isolation, without requiring help from
+port 2's HCI driver.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- Documentation/devicetree/bindings/usb/generic-ehci.yaml | 1 +
- Documentation/devicetree/bindings/usb/generic-ohci.yaml | 1 +
- 2 files changed, 2 insertions(+)
+ .../phy/allwinner,sun8i-h3-usb-phy.yaml       | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index 079f7cff0c24..2e8beab7a9d1 100644
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -30,6 +30,7 @@ properties:
-               - allwinner,sun4i-a10-ehci
-               - allwinner,sun50i-a64-ehci
-               - allwinner,sun50i-h6-ehci
-+              - allwinner,sun50i-h616-ehci
-               - allwinner,sun5i-a13-ehci
-               - allwinner,sun6i-a31-ehci
-               - allwinner,sun7i-a20-ehci
-diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-index 180361b79f52..1acf36b24d1f 100644
---- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-@@ -20,6 +20,7 @@ properties:
-               - allwinner,sun4i-a10-ohci
-               - allwinner,sun50i-a64-ohci
-               - allwinner,sun50i-h6-ohci
-+              - allwinner,sun50i-h616-ohci
-               - allwinner,sun5i-a13-ohci
-               - allwinner,sun6i-a31-ohci
-               - allwinner,sun7i-a20-ohci
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+index e288450e0844..3a3168392597 100644
+--- a/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+@@ -36,18 +36,22 @@ properties:
+       - const: pmu3
+ 
+   clocks:
++    minItems: 4
+     items:
+       - description: USB OTG PHY bus clock
+       - description: USB Host 0 PHY bus clock
+       - description: USB Host 1 PHY bus clock
+       - description: USB Host 2 PHY bus clock
++      - description: PMU clock for host port 2
+ 
+   clock-names:
++    minItems: 4
+     items:
+       - const: usb0_phy
+       - const: usb1_phy
+       - const: usb2_phy
+       - const: usb3_phy
++      - const: pmu2_clk
+ 
+   resets:
+     items:
+@@ -98,6 +102,21 @@ required:
+ 
+ additionalProperties: false
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - sun50i-h616-usb-phy
++
++then:
++  properties:
++    clocks:
++      minItems: 5
++
++    clock-names:
++      minItems: 5
++
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
 -- 
 2.35.3
 
