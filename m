@@ -2,80 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA3B5B5568
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 09:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F21A5B5667
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 10:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiILHfp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Sep 2022 03:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S229967AbiILIhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Sep 2022 04:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiILHfm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 03:35:42 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053C62A70D
-        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 00:35:40 -0700 (PDT)
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4BD793F550
-        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 07:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1662968139;
-        bh=M8ZwI8G9EqvwVDaU3nJXSzOMPkM7yBsKLKTPp2g9WgM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=YJHjMcjkFA4su6TLu0batL9h6JiJhxylxFK9menlqRFslfDguya+YB2YGdJC5F3NK
-         PjvVsqwkFEaTavghRX85bjIYwqppFW2YeqI3HFN2IzYGEnYgnerdc0dd3wWuoJjshp
-         +SR8DfOsLDrvx3piVsU6QlRyrFT3wqn4Kl68bHTxuIZ6J0qKj3s031dBRX/Frkx2HF
-         +uioBn+Yi9lSVrWos/mofvQ1AfaRPinaR2JwMjLuYLX7JQ4UO98jnyaLGYI8VioB/o
-         c3wFbjBcmPXSDW8iD3x/2fvP07GU6wAk6lCS+Bs50Rnc/cR/os5TB+L2+fC9zhhnl0
-         A7IJ/+j82APJw==
-Received: by mail-wm1-f71.google.com with SMTP id h4-20020a1c2104000000b003b334af7d50so6420735wmh.3
-        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 00:35:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=M8ZwI8G9EqvwVDaU3nJXSzOMPkM7yBsKLKTPp2g9WgM=;
-        b=cKoHdf293/gJzqYq/3+A8WFko8GNZKcWrMp7AIi2aAeawY7age4TzJ6xLtQ026QJZm
-         iVo//OckH10Ac0+2yc+k7y6m+RDSz4MeacDFSpQ/mEo+pZMFyHki8AyxwBctDffjZwFU
-         xfZ8pKz1OzcJFbdsBXKC3VLMjKyRPLeqOKd3aoZEDLcwPqWG/Gq5VT9k+yPX1Z63n3Rg
-         ztJvq/g7dAgGM4NJVhVHdtXxm2FBmiqGd0aNUzXwNFKUo9E7DG1do1sAycD09C4uds+b
-         66tf1/Z0HT+yM7EsMWEAzafQgSDVrjjVhYB5i8AHMBMMKVcsiUZYGkBNr8YEr5SR55Ng
-         slvQ==
-X-Gm-Message-State: ACgBeo0Rc/ckpkjupaFixFk75y/dZxpq7U0ww99s1mQ+Gje8CbcmDADB
-        x7zhQUvFoFTiJmn5oqRc2e4yperABQWPd+5AEyThJoZbiKwmRzJS0bYTg6DLQDdFBM+Nfz9kbRs
-        aBKXgOnHFCbUKKEeAZtd8u+wNCBGUJfRt2LlkqIL2FAy264DyoqQznw==
-X-Received: by 2002:a05:600c:1992:b0:3a6:23f6:8417 with SMTP id t18-20020a05600c199200b003a623f68417mr12309800wmq.14.1662968138063;
-        Mon, 12 Sep 2022 00:35:38 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7eP2hnaSKxFe6/FQgH2afyOttjwUxtLLbzmIm5J0Ggx2M2a0Gqg9+4V4VTmuOO2Xkvpii4N4LCgIy3ntprucM=
-X-Received: by 2002:a05:600c:1992:b0:3a6:23f6:8417 with SMTP id
- t18-20020a05600c199200b003a623f68417mr12309784wmq.14.1662968137751; Mon, 12
- Sep 2022 00:35:37 -0700 (PDT)
+        with ESMTP id S230257AbiILIhL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 04:37:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E5436DFB
+        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 01:36:28 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXeuO-0003qU-HH; Mon, 12 Sep 2022 10:35:12 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXeuK-000GV0-Lc; Mon, 12 Sep 2022 10:35:07 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXeuI-000L6p-Kj; Mon, 12 Sep 2022 10:35:06 +0200
+Date:   Mon, 12 Sep 2022 10:35:06 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
+        thierry.reding@gmail.com, gregkh@linuxfoundation.org,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add
+ rockchip,rk3128-pwm
+Message-ID: <20220912083506.js4zyou7kdphrs7m@pengutronix.de>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
 MIME-Version: 1.0
-References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
- <YxWlc1n4HRxawa/K@kroah.com> <DS7PR12MB60959AACEDB0AEFEE78A5B2EE2419@DS7PR12MB6095.namprd12.prod.outlook.com>
- <CAAd53p5cz0VWUH9Rdvk70pcpY-PLc9SV8UCvMEc0+TBGES5W5w@mail.gmail.com> <312d7781-671c-3765-a7d9-690d032650ec@amd.com>
-In-Reply-To: <312d7781-671c-3765-a7d9-690d032650ec@amd.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 12 Sep 2022 15:35:26 +0800
-Message-ID: <CAAd53p5=SJ7gK7e1H4D09-1bXBVezMuzGsgA2ptXLKGtBESR9Q@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found on
- AMD USB4 controller
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Tsao, Anson" <anson.tsao@amd.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tqnrn4kzd6owce4p"
+Content-Disposition: inline
+In-Reply-To: <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,136 +67,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-On Thu, Sep 8, 2022 at 11:22 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
-[snipped]
-> > Nice to hear. Hopefully this can be fixed at firmware/hardware side.
->
-> I guess you and Anson might want to sync up offline and compare whether
-> you have the same hardware stepping.
+--tqnrn4kzd6owce4p
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure.
+Hello,
 
-[snipped]
+On Sat, Sep 10, 2022 at 12:02:22AM +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-pwm compatible string.
+>=20
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-> > We used UEFI capsule to update the firmware, via fwupd.
->
-> So that's a difference from how Anson did it.  Could you perhaps dump
-> the BIOS SPI image?  Anson can flash the exact same dump via dediprog
-> and see if he can repro.
->
-> It would let us confirm if it was caused by your upgrade path.
+Considering the problems pointed out by Rob as orthogonal to this
+change:
 
-OK, will dissuss this with AMD/HP offline.
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
->
-> >
-> >>
-> >> 2) Did you change any BIOS settings?  Particularly anything to do with Pre-OS CM?
-> >
-> > No, nothing in BIOS was changed. >
-> >>
-> >> 3) If you explicitly reset to HP's "default BIOS settings" does it resolve?
-> >
-> > Doesn't help. I put the device to ACPI G3 and it doesn't help, either.
->
-> OK.
->
-> >
-> >>
-> >> 4) Can you double check ADP_CS_5 bit 31?  I attached is a patch to kernel Bugzilla to
-> >> add dyndbg output for it.  If it was for some reason set by Pre-OS CM in your BIOS/settings
-> >> combination, we might need to undo it by the Linux CM.
-> >
-> > All ports say "Hotplug disabled: 0".
-> >
-> > dmesg attached to the bugzilla.
->
-> OK, that at least rules out DHP from Pre-OS CM.
->
-> >
-> >>
-> >> 5) Are you changing any of the default runtime PM policies for any of the USB4 routers or
-> >> root ports used for tunneling using software like TLP?
-> >
-> > No. And they should be suspended by default.
-> >
->
-> Thinking about this being possibly a firmware upgrade path problem, can
-> you please check:
->
-> # grep SMC /sys/kernel/debug/dri/0/amdgpu_firmware_info
->
-> Anson's system was 0x04453200 (program 4, version 69.50.0).
+Best regards
+Uwe
 
-Exactly the same here.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Kai-Heng
+--tqnrn4kzd6owce4p
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
-> > Kai-Heng
-> >
-> >>
-> >>>
-> >>>>
-> >>>> Bugzilla:
-> >>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugz
-> >>> illa.kernel.org%2Fshow_bug.cgi%3Fid%3D216448&amp;data=05%7C01%7Cm
-> >>> ario.limonciello%40amd.com%7C1e27b1d6f69e42796c7b08da8f107121%7C3d
-> >>> d8961fe4884e608e11a82d994e183d%7C0%7C0%7C637979598042186185%7CU
-> >>> nknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI
-> >>> 6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=0lhcaKfUyoK
-> >>> 0FXT9uDZ8a%2Fpxs9tHd8aoQcyPFdB%2F0eY%3D&amp;reserved=0
-> >>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> >>>> ---
-> >>>>   drivers/thunderbolt/nhi.c    | 29 +++++++++++++++++++++++++++++
-> >>>>   drivers/thunderbolt/switch.c |  6 ++++++
-> >>>>   drivers/thunderbolt/tb.c     |  1 +
-> >>>>   drivers/thunderbolt/tb.h     |  5 +++++
-> >>>>   include/linux/thunderbolt.h  |  1 +
-> >>>>   5 files changed, 42 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> >>>> index cb8c9c4ae93a2..75f5ce5e22978 100644
-> >>>> --- a/drivers/thunderbolt/nhi.c
-> >>>> +++ b/drivers/thunderbolt/nhi.c
-> >>>> @@ -1225,6 +1225,8 @@ static int nhi_probe(struct pci_dev *pdev, const
-> >>> struct pci_device_id *id)
-> >>>>   {
-> >>>>      struct tb_nhi *nhi;
-> >>>>      struct tb *tb;
-> >>>> +   struct pci_dev *p = NULL;
-> >>>> +   struct tb_pci_bridge *pci_bridge, *n;
-> >>>>      int res;
-> >>>>
-> >>>>      if (!nhi_imr_valid(pdev)) {
-> >>>> @@ -1306,6 +1308,19 @@ static int nhi_probe(struct pci_dev *pdev, const
-> >>> struct pci_device_id *id)
-> >>>>              nhi_shutdown(nhi);
-> >>>>              return res;
-> >>>>      }
-> >>>> +
-> >>>> +   if (pdev->vendor == PCI_VENDOR_ID_AMD) {
-> >>>> +           while ((p = pci_get_device(PCI_VENDOR_ID_AMD, 0x14cd,
-> >>> p))) {
-> >>>> +                   pci_bridge = kmalloc(sizeof(struct tb_pci_bridge),
-> >>> GFP_KERNEL);
-> >>>> +                   if (!pci_bridge)
-> >>>> +                           goto cleanup;
-> >>>> +
-> >>>> +                   pci_bridge->bridge = p;
-> >>>> +                   INIT_LIST_HEAD(&pci_bridge->list);
-> >>>> +                   list_add(&pci_bridge->list, &tb->bridge_list);
-> >>>> +           }
-> >>>> +   }
-> >>>
-> >>> You can't walk the device tree and create a "shadow" list of devices
-> >>> like this and expect any lifetime rules to work properly with them at
-> >>> all.
-> >>>
-> >>> Please do not do this.
-> >>>
-> >>> greg k-h
->
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMe7zcACgkQwfwUeK3K
+7AlZYwf/ffseGIKL3qdR1ObyfIb5V+iGVTp/SdYtO08mrURjLUEo+B+syZnhYPKY
+WaIox8KDLDXTTzG+l8SOyJN/eVX56XZFaFzqNKpscD60wLFga+ccFaNKGJtk7knG
+NvhVkaLBCMShPPlR6KT4mcKOmSBnZcge7q+h4oVQ5fgstpl2uOPQJPrIrZ+B+k8v
+36gKyh5sYqGHe+uP6mIyiO8yuPztWwFfCILv5MV99qgCPftl3L8IgyvK2vI6wO50
+ymfHbqlS8nxTODgi5iTI0PFMn0YJII1d2xwguOheFXUzRYuU/n3wft1Krdnwcdm2
+fMeJle5erwYQ8Z6/F8F+XCMTdI83dA==
+=6TOs
+-----END PGP SIGNATURE-----
+
+--tqnrn4kzd6owce4p--
