@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE0B5B5871
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 12:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43835B5883
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 12:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiILK34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Sep 2022 06:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
+        id S229889AbiILKhd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Sep 2022 06:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbiILK3j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 06:29:39 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494FB3B955;
-        Mon, 12 Sep 2022 03:29:15 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c2so8152293plo.3;
-        Mon, 12 Sep 2022 03:29:15 -0700 (PDT)
+        with ESMTP id S229585AbiILKhb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 06:37:31 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639FC21245;
+        Mon, 12 Sep 2022 03:37:30 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so52773pjb.0;
+        Mon, 12 Sep 2022 03:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=oUSmh1gw//zaj+S0sn3ELb0An6DYoYmCrSomQNeQSuo=;
-        b=EA1d6WDfsA/I0rOwkkwVViigvWKWbfIoo5lV9xdow/gQFG7q5gIhfauVCgqcfLxGPK
-         mFogrEI3GNpF1uhg+EgVRpi/kDQ5jnaEFQpqx+AgeD69pAsPPO0TtW5iyJIN2sayqdT5
-         eS+wjU9w7jnI7SCslNOsKtsDP+anHwoJRGCOp82BonPXbXpVpcTuLqu4+Hhsifyv1bIW
-         LOjaweGFwVn4VvublGXbfAuauibdvB33aRV8eXMzD8NPtf7NrDj95ML9Fz1+xRyXUXUF
-         aQWIaJHMTfqroG93ZqtKm38ovuTHD7195i/10tIlqvMa/rf/hrNRGveUTNl3MKixrAyw
-         xADg==
+        bh=ingKwpa9zKSOhbnTWnyMzZNsCBv8TeJBTxZJSWGWRHI=;
+        b=GA4rituJy8VN1PzpjG4qUKNP5OJTLX7yyK7yWwUGpuATSJAH33JqBmwdlCYK2L6nwY
+         4kC+FDPak4IArlfjuyaZuPARdt++xDmbVodLUO5VR2US2e/mM9TVjr46jYGGXqoLqx3d
+         S5bztnLsaqUhkGeor4xYDvlQxYXI6TPNmPcBIxUIFHNcxefWh3tX8WvB8q5LDClNClzt
+         MZKhIBE9CzKjsbBy/rmAdGbFA3ahBHZgEFtu5OEb+TcjaJfalcfC5xGB2h1TACGL/u+x
+         BQcsAk/MswrszEa5OH3lMRxV5uZH93ZP2BTUHF9Ns5qUz8nyISrIYHL146WuvuS2drcX
+         snAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=oUSmh1gw//zaj+S0sn3ELb0An6DYoYmCrSomQNeQSuo=;
-        b=naU6S3e5583S/wdERr8Oi+drwOeiauqOAxeUp5BaGjmc9kk2IpUiDmHtQu3NIgSEHg
-         w5bSSgV58WAMo1j+LLKE+0K2wm7/pOmuo2WRVWgj//I7En+p9DphOozPQh2XjhNaPQ9X
-         LAaxjZBUXzgEjmBzYLcP63gGQ3lNnT6cHL8B4t5S0/vN0jTrIoiUYztLuFhBk12Wg1mk
-         v5q+wIikHt1FJtwzsHM3XkKc/eEOxdknRUKOWGNHZ5n459iL6V+vNtMaCy1iAcresTfe
-         La5xowam44dWygGSjT+fWoqFUFjYP0JZQsJ57G2wsM+5wTRr0zMlnnGvoP/Ct2YnknRp
-         Pb9w==
-X-Gm-Message-State: ACgBeo0dwydRPBLOkBQqXGC9/9oPGO8UqMZewv164RANB5XtjR+xOmPg
-        sBG6QU6nbUgWWClgAs1NfYI=
-X-Google-Smtp-Source: AA6agR6V4RLuMPnEjiL2znn+YMQ6Vt1ZTsSN5ljSQfnyiLsiInyzIy5k4oKF51jCVKJ5b+RWN5/U6w==
-X-Received: by 2002:a17:902:b194:b0:176:d229:83bd with SMTP id s20-20020a170902b19400b00176d22983bdmr25286876plr.174.1662978554451;
-        Mon, 12 Sep 2022 03:29:14 -0700 (PDT)
+        bh=ingKwpa9zKSOhbnTWnyMzZNsCBv8TeJBTxZJSWGWRHI=;
+        b=B/Vr8BEfnlay1RtU/7TL44k6hkAB0XU/yQzUxwaW3FPJ2nW9/ITccdyec8rBKbecuK
+         vJDUXYjpYJPdcHWhjAe/o9NyoGGwpO72HR0spov6Yt9A2PStg0GUZXwYlVUaEHyR7/CU
+         n6nBdUThZiscY9tB9/9VCo/DoP9IryAMBxZPwt5mXudNy4yinyZRSc7suKNW+blDwhjT
+         /R0/aSR63Ru8UaX1fm2QyGHzm9yxUX8OI+8TMnLEAhp0PSHIpKtiW/9hYf8tOkBeCPXB
+         bbqRsHZbb1KQ1SRiwRlJoldfBIAmK+N06wvDJE05+XRAHhpYxtWR5OBUYLepqL1Mhcrj
+         iO+w==
+X-Gm-Message-State: ACgBeo2SlQN0LZfgjAwAw8Ac3delLHyfxxKBGk1Mwx6VtVOunzDz1jFE
+        2fc93y1Rppjgk8F9p33cZAQvPF8dSDc=
+X-Google-Smtp-Source: AA6agR4CjmYnlk0qDw55Y/gvdFyD+P6M+rG8+17LrKL3ui+3rI0vDJOWQe6wO8TnlQP+Rv7POsbzmQ==
+X-Received: by 2002:a17:90a:5b:b0:1fa:b78b:ad73 with SMTP id 27-20020a17090a005b00b001fab78bad73mr23338896pjb.107.1662979049909;
+        Mon, 12 Sep 2022 03:37:29 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a2-20020aa79702000000b00537aa0fbb57sm5060850pfg.51.2022.09.12.03.29.12
+        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b0016f057b88c9sm5638507pln.26.2022.09.12.03.37.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 03:29:14 -0700 (PDT)
+        Mon, 12 Sep 2022 03:37:29 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: xu.panda@zte.com.cn
-To:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] usb: dwc3: gadget: remove the unneeded result variable
-Date:   Mon, 12 Sep 2022 10:28:55 +0000
-Message-Id: <20220912102854.18277-1-xu.panda@zte.com.cn>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xu Panda <xu.panda@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] USB: serial: keyspan_pda: remove the unneeded result variable
+Date:   Mon, 12 Sep 2022 10:37:01 +0000
+Message-Id: <20220912103700.18338-1-xu.panda@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,38 +70,36 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Xu Panda <xu.panda@zte.com.cn>
 
-Return the value power_supply_set_property() directly instead of storing
-it in another redundant variable.
+Return the usb_control_msg() directly instead of storing it in
+another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 ---
- drivers/usb/dwc3/gadget.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/usb/serial/keyspan_pda.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 3a344ba0b292..762a92470a01 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2868,7 +2868,6 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+diff --git a/drivers/usb/serial/keyspan_pda.c b/drivers/usb/serial/keyspan_pda.c
+index 6fd15cd9e1eb..902675ac7f5c 100644
+--- a/drivers/usb/serial/keyspan_pda.c
++++ b/drivers/usb/serial/keyspan_pda.c
+@@ -393,12 +393,10 @@ static int keyspan_pda_get_modem_info(struct usb_serial *serial,
+ static int keyspan_pda_set_modem_info(struct usb_serial *serial,
+                                      unsigned char value)
  {
-        struct dwc3             *dwc = gadget_to_dwc(g);
-        union power_supply_propval      val = {0};
--       int                             ret;
-
-        if (dwc->usb2_phy)
-                return usb_phy_set_power(dwc->usb2_phy, mA);
-@@ -2877,9 +2876,7 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
-                return -EOPNOTSUPP;
-
-        val.intval = 1000 * mA;
--       ret = power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
--
--       return ret;
-+       return power_supply_set_property(dwc->usb_psy, POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT, &val);
+-       int rc;
+-       rc = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+-                            3, /* set pins */
+-                            USB_TYPE_VENDOR|USB_RECIP_INTERFACE|USB_DIR_OUT,
+-                            value, 0, NULL, 0, 2000);
+-       return rc;
++       return usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
++                              3, /* set pins */
++                              USB_TYPE_VENDOR|USB_RECIP_INTERFACE|USB_DIR_OUT,
++                              value, 0, NULL, 0, 2000);
  }
 
- /**
+ static int keyspan_pda_tiocmget(struct tty_struct *tty)
 -- 
 2.15.2
 
