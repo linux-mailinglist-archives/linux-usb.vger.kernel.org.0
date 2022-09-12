@@ -2,89 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FCA5B5B46
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 15:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F3F5B5B52
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 15:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiILNgP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Sep 2022 09:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
+        id S229681AbiILNio (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Sep 2022 09:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiILNgO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 09:36:14 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E393E1A3AB;
-        Mon, 12 Sep 2022 06:36:12 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C391561EA1934;
-        Mon, 12 Sep 2022 15:36:09 +0200 (CEST)
-Message-ID: <ae28dabe-d339-b56d-4a8e-ce4291c9b836@molgen.mpg.de>
-Date:   Mon, 12 Sep 2022 15:36:09 +0200
+        with ESMTP id S229512AbiILNim (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 09:38:42 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CCB167DD;
+        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id q3so8089574pjg.3;
+        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=MGvQJSB1vj0XT662a6N9mr0USet28hdf+Av+V/BDZMY=;
+        b=fmENMdxPWsFBjcyMZeQcWhtUG7d/GBDFXAtNDiwsIx6EpEb3YuvEW57IzkjvozPBog
+         tUyyQqI3E6nj44tLi3EQwWvPcQDchSoiwFbxL4yvtG3HioAtd+KSgxm2XFcfrQFHDGL4
+         Q7vzg46sZds61SdSVSuguSw3/mwgWM8OKRzB99hTyb7XSf/yQG9cmOdzSpipe6AcpRHv
+         KKHoAh6wolU/TV/06YOKUhDyUjnB2AEa+X81M4FkSwhrB33GElwCrA/heN9P0SN52g4v
+         Ks5BN18GRRbdjJuKqOixAfSa+WGiGJX9BAe12i7DpgG1QXGYuygFA4HlUDk/3H9zmH5n
+         rHMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=MGvQJSB1vj0XT662a6N9mr0USet28hdf+Av+V/BDZMY=;
+        b=63kZtvKmRA/ke1YqZLnAyqfaHU21ni0BGGqNouXvCKf0cOhi4RkqC2lE3nG7HXDUFK
+         I2+tZjDkfwc3sHIeB3OerpRjbLT4ENjE7OF6fSTokU5+V727SMSOCJIbhFcV6yzROTwz
+         3vbOTMinMc0hNc50I1WEXJFExMhhkjvxUCIpmXq8dEO/MqrEH4z22IcfPKnXM1ESnO7I
+         RvEWxzZIaaHVbC03DBngzvca3JoGAAlOIKqsM+QEfrOzmot8GEyuYOpaU2cdoBCUtReU
+         mU82IFskOFLWEMCpCcjb9lBYZkUZx7UC3j11XHi5rk56P9EFwrt954FrKMaR0kqhbc+U
+         hYyg==
+X-Gm-Message-State: ACgBeo3XNdfmhjYyIwOOjWAVaGqeZcvx3UvmoFJs+IxvmDUGZDJeL18/
+        Ag0lK9mR7UBDIHK86NhYdnE=
+X-Google-Smtp-Source: AA6agR5fwxY8Xj901KKNvRKanCbCXK3Bc1AOrQzThm0Obu4UnT4ueaazkosxz4zTq9VywUX+CwfcJw==
+X-Received: by 2002:a17:902:bb97:b0:175:6721:2c34 with SMTP id m23-20020a170902bb9700b0017567212c34mr26861585pls.146.1662989921497;
+        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id f20-20020a170902f39400b0017829a3df46sm3314879ple.204.2022.09.12.06.38.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.panda@zte.com.cn
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] USB: serial: ftdi_sio: remove the unneeded result variable
+Date:   Mon, 12 Sep 2022 13:38:27 +0000
+Message-Id: <20220912133826.18517-1-xu.panda@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Bjorn Helgaas <bhelgaas@google.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus Error:
- severity=Corrected, type=Data Link Layer, (Receiver ID)
-Cc:     linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Linux folks,
+From: Xu Panda <xu.panda@zte.com.cn>
 
+Return the value usb_control_msg() directly instead of storing
+it in another redundant variable.
 
-On a Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, connect a Dell 
-DA300 to the only USB Type-C port on the left side (with a network cable 
-connect), Linux logs the warnings below:
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+---
+ drivers/usb/serial/ftdi_sio.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-```
-$ cat /proc/version
-Linux version 5.19.0-1-amd64 (debian-kernel@lists.debian.org) (gcc-11 
-(Debian 11.3.0-5) 11.3.0, GNU ld (GNU Binutils for Debian) 
-2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.19.6-1 (2022-09-01)
-$ sudo dmesg --level=warn
-[…]
-[    5.710957] pci 0000:01:00.0: PCIe Bus Error: severity=Corrected, 
-type=Data Link Layer, (Receiver ID)
-[    5.710959] pci 0000:01:00.0:   device [8086:1576] error 
-status/mask=00000080/00002000
-[    5.710962] pci 0000:01:00.0:    [ 7] BadDLLP
-[    5.715022] hpet_acpi_add: no address or irqs in _CRS
-[…]
-[   18.895120] ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0 bytes
-[   19.503002] pcieport 0000:01:00.0: PCIe Bus Error: 
-severity=Corrected, type=Data Link Layer, (Receiver ID)
-[   19.503010] pcieport 0000:01:00.0:   device [8086:1576] error 
-status/mask=00000080/00002000
-[   19.503020] pcieport 0000:01:00.0:    [ 7] BadDLLP
-[…]
-```
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index 0a1da579ead5..f02dcef69cb9 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1394,7 +1394,6 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
+        u16 value;
+        u16 index;
+        u32 index_value;
+-       int rv;
 
-Is that a hardware problem, or something the Linux kernel can address?
+        index_value = get_ftdi_divisor(tty, port);
+        value = (u16)index_value;
+@@ -1407,13 +1406,12 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
+                index = (u16)((index << 8) | priv->interface);
+        }
 
-I created the bug report #216474 [1] with the output of `lspci -nn`, 
-`lsusb` and `dmesg`.
+-       rv = usb_control_msg(port->serial->dev,
+-                           usb_sndctrlpipe(port->serial->dev, 0),
+-                           FTDI_SIO_SET_BAUDRATE_REQUEST,
+-                           FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
+-                           value, index,
+-                           NULL, 0, WDR_SHORT_TIMEOUT);
+-       return rv;
++       return usb_control_msg(port->serial->dev,
++                              usb_sndctrlpipe(port->serial->dev, 0),
++                              FTDI_SIO_SET_BAUDRATE_REQUEST,
++                              FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
++                              value, index,
++                              NULL, 0, WDR_SHORT_TIMEOUT);
+ }
 
+ static int write_latency_timer(struct usb_serial_port *port)
+-- 
+2.15.2
 
-Kind regards,
-
-Paul
-
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=216474
-      "Bug 216474 - Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus 
-Error: severity=Corrected, type=Data Link Layer, (Receiver ID)"
