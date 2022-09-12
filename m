@@ -2,116 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F3F5B5B52
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 15:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21F45B5BAC
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 15:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiILNio (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Sep 2022 09:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S229836AbiILNx6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Sep 2022 09:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiILNim (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 09:38:42 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CCB167DD;
-        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id q3so8089574pjg.3;
-        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=MGvQJSB1vj0XT662a6N9mr0USet28hdf+Av+V/BDZMY=;
-        b=fmENMdxPWsFBjcyMZeQcWhtUG7d/GBDFXAtNDiwsIx6EpEb3YuvEW57IzkjvozPBog
-         tUyyQqI3E6nj44tLi3EQwWvPcQDchSoiwFbxL4yvtG3HioAtd+KSgxm2XFcfrQFHDGL4
-         Q7vzg46sZds61SdSVSuguSw3/mwgWM8OKRzB99hTyb7XSf/yQG9cmOdzSpipe6AcpRHv
-         KKHoAh6wolU/TV/06YOKUhDyUjnB2AEa+X81M4FkSwhrB33GElwCrA/heN9P0SN52g4v
-         Ks5BN18GRRbdjJuKqOixAfSa+WGiGJX9BAe12i7DpgG1QXGYuygFA4HlUDk/3H9zmH5n
-         rHMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=MGvQJSB1vj0XT662a6N9mr0USet28hdf+Av+V/BDZMY=;
-        b=63kZtvKmRA/ke1YqZLnAyqfaHU21ni0BGGqNouXvCKf0cOhi4RkqC2lE3nG7HXDUFK
-         I2+tZjDkfwc3sHIeB3OerpRjbLT4ENjE7OF6fSTokU5+V727SMSOCJIbhFcV6yzROTwz
-         3vbOTMinMc0hNc50I1WEXJFExMhhkjvxUCIpmXq8dEO/MqrEH4z22IcfPKnXM1ESnO7I
-         RvEWxzZIaaHVbC03DBngzvca3JoGAAlOIKqsM+QEfrOzmot8GEyuYOpaU2cdoBCUtReU
-         mU82IFskOFLWEMCpCcjb9lBYZkUZx7UC3j11XHi5rk56P9EFwrt954FrKMaR0kqhbc+U
-         hYyg==
-X-Gm-Message-State: ACgBeo3XNdfmhjYyIwOOjWAVaGqeZcvx3UvmoFJs+IxvmDUGZDJeL18/
-        Ag0lK9mR7UBDIHK86NhYdnE=
-X-Google-Smtp-Source: AA6agR5fwxY8Xj901KKNvRKanCbCXK3Bc1AOrQzThm0Obu4UnT4ueaazkosxz4zTq9VywUX+CwfcJw==
-X-Received: by 2002:a17:902:bb97:b0:175:6721:2c34 with SMTP id m23-20020a170902bb9700b0017567212c34mr26861585pls.146.1662989921497;
-        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f20-20020a170902f39400b0017829a3df46sm3314879ple.204.2022.09.12.06.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 06:38:41 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.panda@zte.com.cn
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xu Panda <xu.panda@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] USB: serial: ftdi_sio: remove the unneeded result variable
-Date:   Mon, 12 Sep 2022 13:38:27 +0000
-Message-Id: <20220912133826.18517-1-xu.panda@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229533AbiILNx5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 09:53:57 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6800F183B5;
+        Mon, 12 Sep 2022 06:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662990836; x=1694526836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rbzt0lrmC7TaIMc8MXfMMR3pFAnIuI/01jw8aaqyKOk=;
+  b=SqB3r34W90JF3iTTLbrtrD4f2bRu/wEQgRl3CksH3Yj6lum2sRjPWyLy
+   cvQZCu6OdmFmWUmj7CJPw3J+KLccmGGwjMRayj3lEv1JbWFe80/gJE/jK
+   3K95US+E34eLYpSX/cc1R9gEFiVWm1XHYQcFLApvr2RkNuCbEU2RuAJHc
+   BnSueOk0Wf5Vg2pXnx9eCo5DppKIXv58ea7Eh9XfHnJRGF36kx6u5dksN
+   WUJSW2qvY6js/WZm4M3KhkI8ziLS9yYf6BYlWh/iqKSqkAsrp3aUyERoG
+   IXO9EzQQySbr0wM/HwAA72b7m1fr6R7naIH0INv8MBFoSmXrgGUZPR0/i
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="278259509"
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="278259509"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 06:53:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,310,1654585200"; 
+   d="scan'208";a="758400221"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 12 Sep 2022 06:53:54 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 12 Sep 2022 16:53:53 +0300
+Date:   Mon, 12 Sep 2022 16:53:53 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus Error:
+ severity=Corrected, type=Data Link Layer, (Receiver ID)
+Message-ID: <Yx858docsDh/ARiL@kuha.fi.intel.com>
+References: <ae28dabe-d339-b56d-4a8e-ce4291c9b836@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae28dabe-d339-b56d-4a8e-ce4291c9b836@molgen.mpg.de>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+Hi Paul,
 
-Return the value usb_control_msg() directly instead of storing
-it in another redundant variable.
+On Mon, Sep 12, 2022 at 03:36:09PM +0200, Paul Menzel wrote:
+> Dear Linux folks,
+> 
+> On a Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, connect a Dell DA300
+> to the only USB Type-C port on the left side (with a network cable connect),
+> Linux logs the warnings below:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
----
- drivers/usb/serial/ftdi_sio.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+> [   18.895120] ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0 bytes
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 0a1da579ead5..f02dcef69cb9 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1394,7 +1394,6 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
-        u16 value;
-        u16 index;
-        u32 index_value;
--       int rv;
+This warning you already reported [1]. I will send a patch for this
+once I'm sure I understand what's going on. I'm fairly sure I now know
+what is causing that, but I will still run a few more tests to be
+absolutely sure.
 
-        index_value = get_ftdi_divisor(tty, port);
-        value = (u16)index_value;
-@@ -1407,13 +1406,12 @@ static int change_speed(struct tty_struct *tty, struct usb_serial_port *port)
-                index = (u16)((index << 8) | priv->interface);
-        }
+The warning is in any case not critical.
 
--       rv = usb_control_msg(port->serial->dev,
--                           usb_sndctrlpipe(port->serial->dev, 0),
--                           FTDI_SIO_SET_BAUDRATE_REQUEST,
--                           FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
--                           value, index,
--                           NULL, 0, WDR_SHORT_TIMEOUT);
--       return rv;
-+       return usb_control_msg(port->serial->dev,
-+                              usb_sndctrlpipe(port->serial->dev, 0),
-+                              FTDI_SIO_SET_BAUDRATE_REQUEST,
-+                              FTDI_SIO_SET_BAUDRATE_REQUEST_TYPE,
-+                              value, index,
-+                              NULL, 0, WDR_SHORT_TIMEOUT);
- }
+[1] https://lore.kernel.org/linux-usb/726661bf-b95f-02fc-e7c5-c222820ee257@molgen.mpg.de/
 
- static int write_latency_timer(struct usb_serial_port *port)
 -- 
-2.15.2
-
+heikki
