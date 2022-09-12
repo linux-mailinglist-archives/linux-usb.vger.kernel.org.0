@@ -2,71 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7661D5B6108
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 20:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA505B6207
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 22:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbiILSe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Sep 2022 14:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S229577AbiILUMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Sep 2022 16:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbiILSeY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 14:34:24 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014364331A;
-        Mon, 12 Sep 2022 11:31:14 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-127f5411b9cso25683635fac.4;
-        Mon, 12 Sep 2022 11:31:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=qOuXJYWFlhMBv+hJob6UqyVwr1Eq15fJbMnFTSXIcyw=;
-        b=3hOnwY1QYm8WnDn+upE1oHWTxLU1QtBxNuLT/sENnRm1CXu1XTAGSVCSRfbL786KAy
-         SQZ/U92gFBVBg7fD89LDyft0HV9iL0tlxdAxiEsvoBTgB6K7zHDeCMyBrWctV0T7QO8G
-         IKCSefZHrQPH/cY/IILyH6Dvt17kdv8lcscj7IqtN3H/t/sBMDmkEaVVZAvFIbOjxNqX
-         I0cSGHPytigihP5McU83/+0o04+wsG18xdLrpfN+92Pi412mdmtAWQcav2mGYTFwUEsU
-         21effksCgG0HTR02tHfCQb5Sot+WDrAiRCWZosZCobDSEAtCMKy9aNd/e78NRUf/kP5j
-         R81g==
-X-Gm-Message-State: ACgBeo1gHFqKJt5fVS0ndKqRRpdPVyPEGqwKdjc0TswvrNi0AaPixHIH
-        KGaPfhCTJHQmLqqTabso8g==
-X-Google-Smtp-Source: AA6agR6sMx7mHoUriHC8Kh+qkq1RuDkElTwvjx7a2+2WT/6UEwW/82ho+p19Lacr5xK7BwDhHvQUvA==
-X-Received: by 2002:a05:6808:9b2:b0:34f:61af:fea7 with SMTP id e18-20020a05680809b200b0034f61affea7mr6381201oig.133.1663007382484;
-        Mon, 12 Sep 2022 11:29:42 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f11-20020a056830056b00b00636eeba9209sm4996703otc.52.2022.09.12.11.29.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 11:29:42 -0700 (PDT)
-Received: (nullmailer pid 1600984 invoked by uid 1000);
-        Mon, 12 Sep 2022 18:29:41 -0000
-Date:   Mon, 12 Sep 2022 13:29:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-remoteproc@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Yu Chen <chenyu56@huawei.com>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        linux-phy@lists.infradead.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] mfd/phy/remoteproc: dt-bindings: syscon: be specific
-Message-ID: <20220912182941.GA1596070-robh@kernel.org>
-References: <20220817142246.828762-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229568AbiILUMF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 16:12:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8B7205EE
+        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 13:12:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 769B5B80C68
+        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 20:12:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2DA40C433D6
+        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 20:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663013522;
+        bh=EoWT2tRmrE0PNqQRz6MpZ0aZs5sRiCy31pNAjynjQuQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=FOwalxBFMSTS0POSNnFb57XawxXceCfG1r3mM9HdEOnC6EwbliMYyQZ1X8OyS0E6r
+         feVH04rWLH0pg4j1XGaMpZQZt5AiwD9yeLnj6Fih57w1JbCmi3UDjVKC6GUg6WZiYf
+         exRUjhm1tp96AMGiqsmt7GEOrLRnxsH1r9mTPO6X2miKPpak6680HTDr2juEnFenAi
+         sfk5U4NTIjaG0olvJ1D/GDJCit/1tdxdhav6caxQ6DeXPZStDMhTZQbmCIWMWbuCIA
+         csj2lSrTZ056q173NZ7CVOlbjIl7eLIhts2eGtBLw/SuwjKz4a//JDSP8Qw4t2vNza
+         lhDDKrFQeyi/w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 147BEC433E6; Mon, 12 Sep 2022 20:12:02 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216470] [Regression] xhci_hcd 0000:08:00.2: xHC error in
+ resume, USBSTS 0x401, Reinit
+Date:   Mon, 12 Sep 2022 20:12:01 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status cc
+Message-ID: <bug-216470-208809-r6jGsV27VS@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216470-208809@https.bugzilla.kernel.org/>
+References: <bug-216470-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817142246.828762-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,29 +71,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 17 Aug 2022 17:22:42 +0300, Krzysztof Kozlowski wrote:
-> Hi,
-> 
-> The last MFD/syscon patch depends on the previous ones to avoid
-> dt_binding_check warnings.
-> 
-> I propose to take entire set via Rob's DT tree.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216470
 
-This may have been in the window where PW server moved and stopped 
-getting patches, so I missed it until patch 4 got applied and broke 
-linux-next...
+Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
 
-> 
-> Best regards,
-> Krzysztof
-> 
-> Krzysztof Kozlowski (4):
->   dt-bindings: phy: hisilicon,hi3660-usb3: simplify example
->   dt-bindings: phy: hisilicon,hi3670-usb3: simplify example
->   dt-bindings: remoteproc: qcom,pil-info: add missing imem compatible
->   dt-bindings: mfd: syscon: require specific compatible also for
->     simple-mfd
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+                 CC|                            |mario.limonciello@amd.com
 
-I applied patches 1-3, thanks!
+--- Comment #3 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+It's a new message as of 5.17-rc6 or later.
 
-Rob
+https://github.com/torvalds/linux/commit/8b328f8002bcf29ef517ee4bf234e09aab=
+ec4d2e
+
+The behavior however is not new; it's due to this quirk introduced a few ye=
+ars
+back for your model.
+
+https://github.com/torvalds/linux/commit/a7d57abcc8a5bdeb53bbf8e87558e8e0a2=
+c2a29d
+
+I don't think we should be doing anything functionally here.  The only think
+that might make sense IMO is downgrading the message to INFO or not showing=
+ it
+instead of WARN when `xhci->broken_suspend` is set.
+
+Something like this:
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 38649284ff88..a7ef675f00fd 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1183,7 +1183,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernate=
+d)
+        /* re-initialize the HC on Restore Error, or Host Controller Error =
+*/
+        if (temp & (STS_SRE | STS_HCE)) {
+                reinit_xhc =3D true;
+-               xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n=
+",
+temp);
++               if (!xhci->broken_suspend)
++                       xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x,
+Reinit\n", temp);
+        }
+
+        if (reinit_xhc) {
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
