@@ -2,50 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAAD5B6D94
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 14:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850A55B6DC0
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 14:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbiIMMsu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Sep 2022 08:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S232130AbiIMMym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Sep 2022 08:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIMMst (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 08:48:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C25150734;
-        Tue, 13 Sep 2022 05:48:48 -0700 (PDT)
+        with ESMTP id S231987AbiIMMyd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 08:54:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7692F1013;
+        Tue, 13 Sep 2022 05:54:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 385E86144A;
-        Tue, 13 Sep 2022 12:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E295C433C1;
-        Tue, 13 Sep 2022 12:48:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E71A3B80E5F;
+        Tue, 13 Sep 2022 12:54:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99BCBC433D7;
+        Tue, 13 Sep 2022 12:54:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663073327;
-        bh=I6oTbatHobNlYjYHGyHKwqANjbSQjrxFlVZfO84Q1lo=;
+        s=k20201202; t=1663073668;
+        bh=yQ+lxkhWQ3O13lv29imS0rBCv/cWaWpZtYwrmgREPik=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=boJkZRu26fOHzXLLainwggBwKA3boKCYYOovR/2wxdln4d79gQfnBP79ZHDw+JPHB
-         nhBTYUzrdi12Fxw0dtfgfIAuZGjOLUhr1McBB2m1wcoCzjHy2D+JZCSVF488luYsEz
-         ma7ujIbRhLoph26nSzLgsfydsLaHX+AiAXKOfSOF+p6A4jDNlWZ7UlnDiVpXziZHme
-         l9u81x6fiXMiJG+MmDFujR+JqslgR+fmWIg8cd/DZxCzi6AF69DtCUgVE3jHBoF3tK
-         lT80yf8q6wwINEZd9Kn5VEJenAcsu6h976w3cORsfJ4j3Rf/Zb4dCU2PfA8Mv2HMq3
-         iMb/7GZa3bEoQ==
+        b=CI6xcvd2RYz1KrSO5Z0cJX0HeUtZaeZL16Ro0aZCTsJh1oJHzeLdpZkD6xWdgvxzS
+         2mdDhaIvTPGU/aGUQ3kEfZEd1N4CRXzHUrk9vSjbCNfgiFzQ4WJvT+cTUWGuzYtWpY
+         Rffe1VDYTO0rS6IgI4S1iW3sSeDaDA9OzupZGJq2oUZHT0DYOT3O0StfKq3kxeNO5G
+         zDXzRrlagLb/y+IVpTc2lFxMVJZp9AtmmjiFeMXcWj7x3xZywN0sFAwUyS4act9I/u
+         lV882oI0rtpPShJ/EPn19qGFt8lyKBlhuzIVjTuAQ59z3msFPjyWRFjFrrFjC/OqkE
+         Hdvhrp1rV17Xw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1oY5LL-0003as-0y; Tue, 13 Sep 2022 14:48:47 +0200
-Date:   Tue, 13 Sep 2022 14:48:47 +0200
+        id 1oY5Qp-0003cd-DW; Tue, 13 Sep 2022 14:54:28 +0200
+Date:   Tue, 13 Sep 2022 14:54:27 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH v3] USB: serial: ftdi_sio: Convert to use dev_groups
-Message-ID: <YyB8L5+R2s7Np/DP@hovoldconsulting.com>
-References: <20220905100101.343861-1-jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH v4] USB: serial: ftdi_sio: Convert to use dev_groups
+Message-ID: <YyB9g2xKIvUsv+vL@hovoldconsulting.com>
+References: <20220905095120.343807-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220905100101.343861-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220905095120.343807-1-jiasheng@iscas.ac.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,28 +56,79 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 06:01:01PM +0800, Jiasheng Jiang wrote:
-> On Fri, Sep 02, 2022 at 10:52:52PM +0800, Greg KH wrote:
-
-> >>> And again, have you tested this change?
-> >> 
-> >> Every time I change the code, I recomplie it and check whether there are
-> >> errors.
-> >> Are there any other tests I need to do?
-> > 
-> > Yes, boot with the device and make sure that the sysfs files are still
-> > there.  You do have access to one of these devices, right?  They are
-> > very very common.
+On Mon, Sep 05, 2022 at 05:51:20PM +0800, Jiasheng Jiang wrote:
+> The driver core supports the ability to handle the creation and removal
+> of device-specific sysfs files in a race-free manner. Moreover, it can
+> guarantee the success of creation. Therefore, it should be better to
+> move the code and convert to use dev_groups.
 > 
-> Sorry, I still have no idea how to boot with the device.
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
+> 
+> v3 -> v4:
+> 
+> 1. Move the code and remove the pre-definitions.
 
-You need to buy an FTDI device and plug it into a machine with your
-patch applied to the running and make sure that you did not break
-anything.
+I don't know exactly you were told to do here, but do not reorganise the
+entire driver just to add an attribute group. It not only makes the
+patch harder to review but also messes up the git history (e.g.
+git-blame) for no good reason.
 
-> But if there is any wrong with the patch, you can tell me and I will continue
-> to revise it.
+> +static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
+> +					 struct attribute *attr, int idx)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct usb_serial_port *port = container_of(dev, struct usb_serial_port, dev);
+> +	struct ftdi_private *priv = usb_get_serial_port_data(port);
+> +	umode_t mode = attr->mode;
+> +
+> +	if (attr == &dev_attr_latency_timer.attr) {
+> +		if (priv->chip_type == FT232BM ||
+> +		    priv->chip_type == FT2232C ||
+> +		    priv->chip_type == FT232RL ||
+> +		    priv->chip_type == FT2232H ||
+> +		    priv->chip_type == FT4232H ||
+> +		    priv->chip_type == FT232H ||
+> +		    priv->chip_type == FTX) {
+> +			return mode;
+> +		}
+> +	}
+> +	return 0;
+> +}
 
-It is your job to test your patches.
+This isn't equivalent with the current implementation, which used
+different visibility per attribute.
+
+> +static struct attribute *ftdi_sio_attrs[] = {
+> +	&dev_attr_event_char.attr,
+> +	&dev_attr_latency_timer.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group ftdi_sio_group = {
+> +	.attrs = ftdi_sio_attrs,
+> +	.is_visible = ftdi_sio_attr_is_visible,
+> +};
+> +
+> +static const struct attribute_group *ftdi_sio_groups[] = {
+> +	&ftdi_sio_group,
+> +	NULL
+> +};
+> +
+>  static struct usb_serial_driver ftdi_sio_device = {
+>  	.driver = {
+>  		.owner =	THIS_MODULE,
+>  		.name =		"ftdi_sio",
+> +		.dev_groups =	ftdi_sio_groups,
+
+And you should only need a forward declaration for ftdi_sio_groups for
+this.
+
+>  	},
+>  	.description =		"FTDI USB Serial Device",
+>  	.id_table =		id_table_combined,
+> @@ -1144,9 +1279,6 @@ static struct usb_serial_driver * const serial_drivers[] = {
+>  };
 
 Johan
