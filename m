@@ -2,68 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1170F5B6C2A
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 13:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055C85B6C8B
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 13:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbiIMLEp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Sep 2022 07:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S231761AbiIMLtj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Sep 2022 07:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiIMLEm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 07:04:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11921B873;
-        Tue, 13 Sep 2022 04:04:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7A0FB80E45;
-        Tue, 13 Sep 2022 11:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E4CC433C1;
-        Tue, 13 Sep 2022 11:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663067079;
-        bh=IQyyHTBiUn1e9HWsmP2j5v65pldmRulf8fHO7IJYFtM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QWEDd01PIjqB7OcnVpxXvXnS3gfd6kb7MgDe21h5dnGOMX15D4+cOnBOGf7N9BfRu
-         AC8n3ykg6zoSdoRBJO1iJBwwWSYdjotWdkN4x2DXBeUFRgwLnrUsx+VD2o6ko3cB9o
-         CKg0NVnNHlFXbMXu1viaqqepLF0/wEss8GNHx530=
-Date:   Tue, 13 Sep 2022 13:05:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     sunghwan jung <onenowy@gmail.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "usb: storage: Add quirk for Samsung Fit flash"
-Message-ID: <YyBj3/qTZiGUlV/3@kroah.com>
-References: <20220913105059.10248-1-onenowy@gmail.com>
+        with ESMTP id S231527AbiIMLth (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 07:49:37 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DB3DFA;
+        Tue, 13 Sep 2022 04:49:36 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id m3so11052256pjo.1;
+        Tue, 13 Sep 2022 04:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=paI+cYCqGHdRW7WJHsWMoltqh+MJU/tBCstn49ikwxE=;
+        b=gjUL6CA/VN6jJZbTyjz05hxm+ffGdwUAjErTH54bYaOafFPeowuTd9pl10VLepigWc
+         NKJN6DlgdfymhdvKVoL84WG7oID9Me6Ot55GolTemRzM64g30YUFP6n1GiCqebUt9DCc
+         Key+K6AMbqtGzaBRfIR4eBKSkF81MlUnlmcvoCXB/nVHrGG/eolPfON3Ufpm/BclOtki
+         KSrwZI2Ng6IS1sgwju5CXzMtZDUs6ODayh14LTWo24INfX7wzuVnAbcqmzRO1gxVpBgf
+         MBivp5P46HZjqN5MLJ9dls5QIq9zZ9MClDmpeA0y18TuGGOhMQoCSDPD5CKOthKAKc7S
+         ehmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=paI+cYCqGHdRW7WJHsWMoltqh+MJU/tBCstn49ikwxE=;
+        b=iPlROBHy4k5J1EPbnxGuHxhIXo2Jk3kTSyALRpg9z3xdOjKFcG3T7kSwM74UdJYxnR
+         dqyDoAJQI9MBdKkFDFrgsTRgtzFRdKtSOx+bl4unY01rLTS2f/LnrZPHzhSSVD7B5kSU
+         3DK5rZCH5CMT/nLItUonbNA+/WysR6T8d9fNz8QvAcwVrmfFUlAAkDpJBR7OxQFck4DY
+         YX6pQkeQfrVdhMUvG4ior7pk3lUbQvRt5GGyuapI8H9ejAXSTxnuq9CtGBrsygNww684
+         Bmxr7a+oAHvzb8S6okFMhVOTCYtAHi2H+Ps7Mqd7zmEzhhchUUyQnef2i+CLSkKjzJlE
+         XDeQ==
+X-Gm-Message-State: ACgBeo3okrTIi2tczTxv0c+iLonYHT4kVKx5K1um/YZ/IMFN4g9wt/ae
+        qJmj6ctm5xRSB0KvOxRxDSkgPJQBnFA=
+X-Google-Smtp-Source: AA6agR7hs3vO3UW8d8NHgGFccTXi1qp6i/AMVFBq9knehQIQnZLxmOrRRal9MhwQZ9wryjgxecKzKw==
+X-Received: by 2002:a17:90b:30d0:b0:200:22a4:bfcf with SMTP id hi16-20020a17090b30d000b0020022a4bfcfmr3516627pjb.181.1663069775570;
+        Tue, 13 Sep 2022 04:49:35 -0700 (PDT)
+Received: from localhost.localdomain ([110.46.146.116])
+        by smtp.gmail.com with ESMTPSA id t2-20020a634442000000b0043057fe66c0sm7480826pgk.48.2022.09.13.04.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 04:49:35 -0700 (PDT)
+From:   sunghwan jung <onenowy@gmail.com>
+To:     stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+        sunghwan jung <onenowy@gmail.com>
+Subject: [PATCH v3] Revert "usb: storage: Add quirk for Samsung Fit flash"
+Date:   Tue, 13 Sep 2022 20:49:13 +0900
+Message-Id: <20220913114913.3073-1-onenowy@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913105059.10248-1-onenowy@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 07:50:59PM +0900, sunghwan jung wrote:
-> This reverts commit 86d92f5465958752481269348d474414dccb1552, which fix the timeout issue for "Samsung Fit Flash".
-> 
-> But the commit affects not only "Samsung Fit Flash" but also other usb storages that use the same controller and causes severe performance regression.
+This reverts commit 86d92f5465958752481269348d474414dccb1552,
+which fix the timeout issue for "Samsung Fit Flash".
 
-Please wrap your changelog text at 72 columns like your editor asked you
-to when you made the commit.
+But the commit affects not only "Samsung Fit Flash" but also other usb
+storages that use the same controller and causes severe performance
+regression.
 
-Also, this is v2, please mark it as such and properly describe what
-changed from v1 in the properly location as the documentation asks you
-to.
+ # hdparm -t /dev/sda (without the quirk)
+ Timing buffered disk reads: 622 MB in  3.01 seconds = 206.66 MB/sec
 
-Please fix up and send v3.
+ # hdparm -t /dev/sda (with the quirk)
+ Timing buffered disk reads: 220 MB in  3.00 seconds =  73.32 MB/sec
 
-thanks,
+The commit author mentioned that "Issue was reproduced after device has
+bad block", so this quirk should be applied when we have the timeout
+issue with a device that has bad blocks.
 
-greg k-h
+We revert the commit so that we apply this quirk by adding kernel
+paramters using a bootloader or other ways when we really need it,
+without the performance regression with devices that don't have the
+issue.
+
+Signed-off-by: sunghwan jung <onenowy@gmail.com>
+---
+changes in v2 : add signed-off-by line
+changes in v3 : wrap changelog at 72 columns
+---
+ drivers/usb/storage/unusual_devs.h | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+index 4993227ab293..20dcbccb290b 100644
+--- a/drivers/usb/storage/unusual_devs.h
++++ b/drivers/usb/storage/unusual_devs.h
+@@ -1275,12 +1275,6 @@ UNUSUAL_DEV( 0x090a, 0x1200, 0x0000, 0x9999,
+ 		USB_SC_RBC, USB_PR_BULK, NULL,
+ 		0 ),
+ 
+-UNUSUAL_DEV(0x090c, 0x1000, 0x1100, 0x1100,
+-		"Samsung",
+-		"Flash Drive FIT",
+-		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+-		US_FL_MAX_SECTORS_64),
+-
+ /* aeb */
+ UNUSUAL_DEV( 0x090c, 0x1132, 0x0000, 0xffff,
+ 		"Feiya",
+-- 
+2.37.3
+
