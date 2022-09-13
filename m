@@ -2,68 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA505B6207
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Sep 2022 22:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC335B6780
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 07:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiILUMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Sep 2022 16:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S229883AbiIMFxW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Sep 2022 01:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiILUMF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Sep 2022 16:12:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8B7205EE
-        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 13:12:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 769B5B80C68
-        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 20:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2DA40C433D6
-        for <linux-usb@vger.kernel.org>; Mon, 12 Sep 2022 20:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663013522;
-        bh=EoWT2tRmrE0PNqQRz6MpZ0aZs5sRiCy31pNAjynjQuQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FOwalxBFMSTS0POSNnFb57XawxXceCfG1r3mM9HdEOnC6EwbliMYyQZ1X8OyS0E6r
-         feVH04rWLH0pg4j1XGaMpZQZt5AiwD9yeLnj6Fih57w1JbCmi3UDjVKC6GUg6WZiYf
-         exRUjhm1tp96AMGiqsmt7GEOrLRnxsH1r9mTPO6X2miKPpak6680HTDr2juEnFenAi
-         sfk5U4NTIjaG0olvJ1D/GDJCit/1tdxdhav6caxQ6DeXPZStDMhTZQbmCIWMWbuCIA
-         csj2lSrTZ056q173NZ7CVOlbjIl7eLIhts2eGtBLw/SuwjKz4a//JDSP8Qw4t2vNza
-         lhDDKrFQeyi/w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 147BEC433E6; Mon, 12 Sep 2022 20:12:02 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216470] [Regression] xhci_hcd 0000:08:00.2: xHC error in
- resume, USBSTS 0x401, Reinit
-Date:   Mon, 12 Sep 2022 20:12:01 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status cc
-Message-ID: <bug-216470-208809-r6jGsV27VS@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216470-208809@https.bugzilla.kernel.org/>
-References: <bug-216470-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229697AbiIMFxV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 01:53:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13EC43611;
+        Mon, 12 Sep 2022 22:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663048400; x=1694584400;
+  h=from:to:cc:subject:date:message-id;
+  bh=eU2J0ZjEAt8/QRcmzeXzVNLD9baR09siYH77WuivdGM=;
+  b=i5tDYNnpus/D6yx5P02m4XljL66+sU9znNxu0Porza5DSU2DPibEVdC7
+   gmeeUyt8BW4HgPDCFTH4GuyOz2+CTBOf1zcee0KY9i+mLaamHPv+0W/XY
+   QrXfp+HTNnU+jaDsvfWsM5czUqOmeMLojts72hAEwcJYQokcJ8vLZoaTV
+   QZj+VMVBJ3Kah0/Ou9YGfVXKkeKycU6j7+B9nNN/xwEpPGlJvXrLUceB0
+   KAy0NtibP8hpuobF/QrtMDMyE8fjf+rlta6JGqjPhufhuGHQYWyEQMMbU
+   gw0XeAf13QELD1TIatpXyF7YP9YYXBSDI1na4PfYnXVlG/DvrK4O4EWIu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="361995437"
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="361995437"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2022 22:53:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,311,1654585200"; 
+   d="scan'208";a="646781548"
+Received: from inlubt0246.iind.intel.com ([10.67.198.165])
+  by orsmga008.jf.intel.com with ESMTP; 12 Sep 2022 22:53:17 -0700
+From:   shruthi.sanil@intel.com
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     heikki.krogerus@intel.com, srikanth.thokala@intel.com,
+        mallikarjunappa.sangannavar@intel.com, shruthi.sanil@intel.com
+Subject: [PATCH 0/2] Update the PCIe device ID's for USB device controllers on Alder Lake platforms
+Date:   Tue, 13 Sep 2022 11:23:14 +0530
+Message-Id: <20220913055316.23050-1-shruthi.sanil@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,57 +55,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216470
+From: Shruthi Sanil <shruthi.sanil@intel.com>
 
-Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
+Alder Lake has split die architecture for the USB device controllers.
+The USB2 controller resides in the PCH sub system and the USB3 controller
+resides in the CPU sub system. Hence we need to update both the device ID's
+for the device to be enumerated correctly.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-                 CC|                            |mario.limonciello@amd.com
+Shruthi Sanil (2):
+  usb: dwc3: pci: Update the macro names for USB PCIe device ID's for
+    Alder Lake platforms
+  usb: dwc3: pci: Add PCIe device ID for USB3 controller on CPU
+    sub-system for Alder Lake P
 
---- Comment #3 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-It's a new message as of 5.17-rc6 or later.
+ drivers/usb/dwc3/dwc3-pci.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-https://github.com/torvalds/linux/commit/8b328f8002bcf29ef517ee4bf234e09aab=
-ec4d2e
 
-The behavior however is not new; it's due to this quirk introduced a few ye=
-ars
-back for your model.
+base-commit: e839a756012b6cad7a4eeb67b0598ac3f349f863
+-- 
+2.17.1
 
-https://github.com/torvalds/linux/commit/a7d57abcc8a5bdeb53bbf8e87558e8e0a2=
-c2a29d
-
-I don't think we should be doing anything functionally here.  The only think
-that might make sense IMO is downgrading the message to INFO or not showing=
- it
-instead of WARN when `xhci->broken_suspend` is set.
-
-Something like this:
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 38649284ff88..a7ef675f00fd 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1183,7 +1183,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernate=
-d)
-        /* re-initialize the HC on Restore Error, or Host Controller Error =
-*/
-        if (temp & (STS_SRE | STS_HCE)) {
-                reinit_xhc =3D true;
--               xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n=
-",
-temp);
-+               if (!xhci->broken_suspend)
-+                       xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x,
-Reinit\n", temp);
-        }
-
-        if (reinit_xhc) {
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
