@@ -2,50 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850A55B6DC0
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 14:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49CC5B6DD6
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 14:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbiIMMym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Sep 2022 08:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
+        id S231406AbiIMM7U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Sep 2022 08:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiIMMyd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 08:54:33 -0400
+        with ESMTP id S231701AbiIMM7J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 08:59:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7692F1013;
-        Tue, 13 Sep 2022 05:54:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40ECF41D20
+        for <linux-usb@vger.kernel.org>; Tue, 13 Sep 2022 05:59:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E71A3B80E5F;
-        Tue, 13 Sep 2022 12:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99BCBC433D7;
-        Tue, 13 Sep 2022 12:54:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01427B80E5F
+        for <linux-usb@vger.kernel.org>; Tue, 13 Sep 2022 12:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACE40C433C1;
+        Tue, 13 Sep 2022 12:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663073668;
-        bh=yQ+lxkhWQ3O13lv29imS0rBCv/cWaWpZtYwrmgREPik=;
+        s=k20201202; t=1663073941;
+        bh=Xzzj7gTqOi+NXgUgstlI5GsjTuTPUzXgqIjHbYFb49c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CI6xcvd2RYz1KrSO5Z0cJX0HeUtZaeZL16Ro0aZCTsJh1oJHzeLdpZkD6xWdgvxzS
-         2mdDhaIvTPGU/aGUQ3kEfZEd1N4CRXzHUrk9vSjbCNfgiFzQ4WJvT+cTUWGuzYtWpY
-         Rffe1VDYTO0rS6IgI4S1iW3sSeDaDA9OzupZGJq2oUZHT0DYOT3O0StfKq3kxeNO5G
-         zDXzRrlagLb/y+IVpTc2lFxMVJZp9AtmmjiFeMXcWj7x3xZywN0sFAwUyS4act9I/u
-         lV882oI0rtpPShJ/EPn19qGFt8lyKBlhuzIVjTuAQ59z3msFPjyWRFjFrrFjC/OqkE
-         Hdvhrp1rV17Xw==
+        b=IYm3bVklqEOK5QhNZ6dVgH1/oALGmA/LCfy6rNvyct6zW99ZKLfwxmeVP5KfFFQSC
+         T9P+9bcAJWbA7kCdTN6n/6BaB4YfgbBt3OjP49WpGbH1nhxS+n5xKVEtPt6RxoMkC1
+         S9t5KzyhWYramym4EeFRT3OIxvgQd5AQuov4XuCRPwYFbwCyNvyKrkiZacLahgXppu
+         004EedGr10Y7BjRSQWKpJBB7chuVQFG0Xa+VWF1gS4dTHxJMYp5V9she8sF9SyMuk7
+         zw5TwljwpSp4n5qauMP8VLcF2mp3SvCE6iETpmAp3H4Bq0CJCuyaVtMo496xiQYkcl
+         7BHzFGsk/Gbng==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1oY5Qp-0003cd-DW; Tue, 13 Sep 2022 14:54:28 +0200
-Date:   Tue, 13 Sep 2022 14:54:27 +0200
+        id 1oY5VF-0003ex-8H; Tue, 13 Sep 2022 14:59:01 +0200
+Date:   Tue, 13 Sep 2022 14:59:01 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] USB: serial: ftdi_sio: Convert to use dev_groups
-Message-ID: <YyB9g2xKIvUsv+vL@hovoldconsulting.com>
-References: <20220905095120.343807-1-jiasheng@iscas.ac.cn>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ch341: GFP_KERNEL in reset_resume()
+Message-ID: <YyB+lTC2GKgL3ZAL@hovoldconsulting.com>
+References: <20220907132040.7747-1-oneukum@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220905095120.343807-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220907132040.7747-1-oneukum@suse.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,79 +55,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 05:51:20PM +0800, Jiasheng Jiang wrote:
-> The driver core supports the ability to handle the creation and removal
-> of device-specific sysfs files in a race-free manner. Moreover, it can
-> guarantee the success of creation. Therefore, it should be better to
-> move the code and convert to use dev_groups.
-> 
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Wed, Sep 07, 2022 at 03:20:40PM +0200, Oliver Neukum wrote:
+> All instances of reset_resume() are potential
+> parts of the block IO path. Use GFP_NOIO.
+
+Please be more verbose here. I have to think through this every time it
+is brought up, and I'm not even sure it's actually an issue any more.
+
+Furthermore, if this is indeed still a problem, then this should be
+fixed in a central place using memalloc_noio_save().
+
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
 > ---
-> Changelog:
+>  drivers/usb/serial/ch341.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> v3 -> v4:
-> 
-> 1. Move the code and remove the pre-definitions.
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index af01a462cc43..3d4f68d58513 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -137,7 +137,7 @@ static int ch341_control_in(struct usb_device *dev,
 
-I don't know exactly you were told to do here, but do not reorganise the
-entire driver just to add an attribute group. It not only makes the
-patch harder to review but also messes up the git history (e.g.
-git-blame) for no good reason.
+And this helper is not only used in the reset path.
 
-> +static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
-> +					 struct attribute *attr, int idx)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct usb_serial_port *port = container_of(dev, struct usb_serial_port, dev);
-> +	struct ftdi_private *priv = usb_get_serial_port_data(port);
-> +	umode_t mode = attr->mode;
-> +
-> +	if (attr == &dev_attr_latency_timer.attr) {
-> +		if (priv->chip_type == FT232BM ||
-> +		    priv->chip_type == FT2232C ||
-> +		    priv->chip_type == FT232RL ||
-> +		    priv->chip_type == FT2232H ||
-> +		    priv->chip_type == FT4232H ||
-> +		    priv->chip_type == FT232H ||
-> +		    priv->chip_type == FTX) {
-> +			return mode;
-> +		}
-> +	}
-> +	return 0;
-> +}
-
-This isn't equivalent with the current implementation, which used
-different visibility per attribute.
-
-> +static struct attribute *ftdi_sio_attrs[] = {
-> +	&dev_attr_event_char.attr,
-> +	&dev_attr_latency_timer.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group ftdi_sio_group = {
-> +	.attrs = ftdi_sio_attrs,
-> +	.is_visible = ftdi_sio_attr_is_visible,
-> +};
-> +
-> +static const struct attribute_group *ftdi_sio_groups[] = {
-> +	&ftdi_sio_group,
-> +	NULL
-> +};
-> +
->  static struct usb_serial_driver ftdi_sio_device = {
->  	.driver = {
->  		.owner =	THIS_MODULE,
->  		.name =		"ftdi_sio",
-> +		.dev_groups =	ftdi_sio_groups,
-
-And you should only need a forward declaration for ftdi_sio_groups for
-this.
-
->  	},
->  	.description =		"FTDI USB Serial Device",
->  	.id_table =		id_table_combined,
-> @@ -1144,9 +1279,6 @@ static struct usb_serial_driver * const serial_drivers[] = {
->  };
+>  	r = usb_control_msg_recv(dev, 0, request,
+>  				 USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
+>  				 value, index, buf, bufsize, DEFAULT_TIMEOUT,
+> -				 GFP_KERNEL);
+> +				 GFP_NOIO);
+>  	if (r) {
+>  		dev_err(&dev->dev, "failed to receive control message: %d\n",
 
 Johan
