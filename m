@@ -2,88 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49CC5B6DD6
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 14:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEB35B6EE2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 16:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbiIMM7U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Sep 2022 08:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S232455AbiIMOGE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Sep 2022 10:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbiIMM7J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 08:59:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40ECF41D20
-        for <linux-usb@vger.kernel.org>; Tue, 13 Sep 2022 05:59:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01427B80E5F
-        for <linux-usb@vger.kernel.org>; Tue, 13 Sep 2022 12:59:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACE40C433C1;
-        Tue, 13 Sep 2022 12:59:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663073941;
-        bh=Xzzj7gTqOi+NXgUgstlI5GsjTuTPUzXgqIjHbYFb49c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IYm3bVklqEOK5QhNZ6dVgH1/oALGmA/LCfy6rNvyct6zW99ZKLfwxmeVP5KfFFQSC
-         T9P+9bcAJWbA7kCdTN6n/6BaB4YfgbBt3OjP49WpGbH1nhxS+n5xKVEtPt6RxoMkC1
-         S9t5KzyhWYramym4EeFRT3OIxvgQd5AQuov4XuCRPwYFbwCyNvyKrkiZacLahgXppu
-         004EedGr10Y7BjRSQWKpJBB7chuVQFG0Xa+VWF1gS4dTHxJMYp5V9she8sF9SyMuk7
-         zw5TwljwpSp4n5qauMP8VLcF2mp3SvCE6iETpmAp3H4Bq0CJCuyaVtMo496xiQYkcl
-         7BHzFGsk/Gbng==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oY5VF-0003ex-8H; Tue, 13 Sep 2022 14:59:01 +0200
-Date:   Tue, 13 Sep 2022 14:59:01 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ch341: GFP_KERNEL in reset_resume()
-Message-ID: <YyB+lTC2GKgL3ZAL@hovoldconsulting.com>
-References: <20220907132040.7747-1-oneukum@suse.com>
+        with ESMTP id S232411AbiIMOFy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 10:05:54 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038571C127;
+        Tue, 13 Sep 2022 07:05:52 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id w39-20020a4a97aa000000b0044dfa1ddc67so1952747ooi.6;
+        Tue, 13 Sep 2022 07:05:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=gUoMuqH8RQNLf6TD5ZgHBTjgUa9ZzQ80Xl0NxTsaRAQ=;
+        b=atlBAHFy5pXU5vu/FMKYD5xMcXZAvVe+4JOqgOWDp0mnko8v3jEdh4zxfnyufDdVg4
+         fQSsLQu1Ub54q3gePuLMKBsBm+/SxRlNNSMkdFerrY1m6SUOqU08GFGQVxp3oCLX02Z/
+         UMz8gTiMyKApaCMQAD+uRgddhIecikQPGw4MtYPIZr1ZLFAfarZMDpnJS9GC/KbSQAFa
+         JlufXp8IkqgQ3kWExDBZWP4gymgvbNTMiM9yk9zjmg6UjLbEhBGDTtuRP5VhnY0neV5G
+         PmqnkENH9bO5++xzkjZY2bqInAM+fzAOSqrjyvPOo1kKVGD5x0ShyQDF9H2kkooCyJr3
+         cPzA==
+X-Gm-Message-State: ACgBeo1vsi/waodI0BM1NqWhLqSdFMaZtoD2gPM9cbEy36p3z6V8Ctvl
+        TJmUR9tUwJ8z737u2tftLg==
+X-Google-Smtp-Source: AA6agR6RrtTNw9L8FzOsi4f1dPwDybzh223SP/qImE6imeHr6gssP4vZDFglDT81BonBYIffpKUqWw==
+X-Received: by 2002:a4a:b04e:0:b0:472:912a:63c9 with SMTP id g14-20020a4ab04e000000b00472912a63c9mr8418280oon.87.1663077951213;
+        Tue, 13 Sep 2022 07:05:51 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k6-20020a056870818600b0010d7242b623sm7045343oae.21.2022.09.13.07.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:05:50 -0700 (PDT)
+Received: (nullmailer pid 3591626 invoked by uid 1000);
+        Tue, 13 Sep 2022 14:05:49 -0000
+Date:   Tue, 13 Sep 2022 09:05:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     philipp.tomsich@vrull.eu, linux-kernel@vger.kernel.org,
+        sjg@chromium.org, heiko@sntech.de, thierry.reding@gmail.com,
+        vigneshr@ti.com, linux-rockchip@lists.infradead.org,
+        linux-mmc@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux@roeck-us.net, u.kleine-koenig@pengutronix.de, kishon@ti.com,
+        robh+dt@kernel.org, miquel.raynal@bootlin.com, jamie@jamieiles.com,
+        wim@linux-watchdog.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, zhangqing@rock-chips.com,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, vkoul@kernel.org, richard@nod.at,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, ulf.hansson@linaro.org,
+        kever.yang@rock-chips.com
+Subject: Re: [PATCH v1 01/11] dt-bindings: serial: rockchip: add
+ rockchip,rk3128-uart
+Message-ID: <20220913140549.GA3591205-robh@kernel.org>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907132040.7747-1-oneukum@suse.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4f283231-2ed4-202b-0c23-157bce0841ee@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 03:20:40PM +0200, Oliver Neukum wrote:
-> All instances of reset_resume() are potential
-> parts of the block IO path. Use GFP_NOIO.
-
-Please be more verbose here. I have to think through this every time it
-is brought up, and I'm not even sure it's actually an issue any more.
-
-Furthermore, if this is indeed still a problem, then this should be
-fixed in a central place using memalloc_noio_save().
-
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/usb/serial/ch341.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 10 Sep 2022 00:01:28 +0200, Johan Jonker wrote:
+> Add rockchip,rk3128-uart compatible string.
 > 
-> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-> index af01a462cc43..3d4f68d58513 100644
-> --- a/drivers/usb/serial/ch341.c
-> +++ b/drivers/usb/serial/ch341.c
-> @@ -137,7 +137,7 @@ static int ch341_control_in(struct usb_device *dev,
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-And this helper is not only used in the reset path.
-
->  	r = usb_control_msg_recv(dev, 0, request,
->  				 USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
->  				 value, index, buf, bufsize, DEFAULT_TIMEOUT,
-> -				 GFP_KERNEL);
-> +				 GFP_NOIO);
->  	if (r) {
->  		dev_err(&dev->dev, "failed to receive control message: %d\n",
-
-Johan
+Acked-by: Rob Herring <robh@kernel.org>
