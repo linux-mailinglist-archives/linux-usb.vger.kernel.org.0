@@ -2,81 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8998C5B7C52
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Sep 2022 22:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A335B7F08
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 04:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiIMUx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Sep 2022 16:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S229644AbiINCgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Sep 2022 22:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiIMUx6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 16:53:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCC8753B3;
-        Tue, 13 Sep 2022 13:53:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E3CF615A3;
-        Tue, 13 Sep 2022 20:53:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA438C433D6;
-        Tue, 13 Sep 2022 20:53:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663102437;
-        bh=0O2LmCUyvqei0RPpnrAKX0X8sRRsI097LTK04EHg0l0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=JLecM6vmyABPSHuy0ZFBwuZstnfgkx9J0ThHLJvkGcFkBgo8Pjosxh4kkj9lo1R59
-         dQoAG3Ntvs7D7g3H1TKAgsZHAlQ64t4FKScAdnnpPMMRKh3rpLkhhxX6bht9RmOI2j
-         DgCUCvd3H5SB8QTIVh6edMb1rekJET/JQ5W+MEy4zu9+dpyMsQd6WvHM6HtdpinBeO
-         Ts01RFoTcEUY3a3uMGzJ9/ckmxV2rE7sorT6MNDkLFv2LDcDpJxvs7mpEqiVfs/hw6
-         PsFqdv7Tlrm951coz2z2Trm5L1cVqDGuDvuHojxeZyjaZdDcoMJ7dwheZHCTb0YwSS
-         q6f3a0X2/izJg==
-Date:   Tue, 13 Sep 2022 15:53:55 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus Error:
- severity=Corrected, type=Data Link Layer, (Receiver ID)
-Message-ID: <20220913205355.GA622822@bhelgaas>
+        with ESMTP id S229547AbiINCgW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Sep 2022 22:36:22 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2988F6AA26;
+        Tue, 13 Sep 2022 19:36:22 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id h1-20020a4aa741000000b004756c611188so1323418oom.4;
+        Tue, 13 Sep 2022 19:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=vPvbO7ZwmBLpmPZWL6EL/Tpq0V2KuVYVEM5NRN+l2Sc=;
+        b=A3EylJT7O9g+jefl03sB6zihaTB7wgZA2FO+LMlf+/2zJFycFMNMvV42oOAjam0hUu
+         q9veoPUNg9U0mYHgosvkYQhENnxvwRKFTmQYeLowna4JznV2cwZrkndSHSBuwMnGBWGr
+         HpvSzkBYj8l3526FZ4h4VEBkSME9jZOFLETJmJTjio4ncV5W+sdzFDJYAP5+JUcSpHpz
+         pss9GyXA/oF1QT+Sl5NQ02TdIyG5aJ8VmjRsqiMmSsxblvIEnO2bWmRBCzwu+EndwKZE
+         5er3E05dgmkofJWq3lQXA5183wlpKLcPKN/1NaWrLLjiw5yWiM4YUPZRmnq+ZHjrEsPG
+         8AAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=vPvbO7ZwmBLpmPZWL6EL/Tpq0V2KuVYVEM5NRN+l2Sc=;
+        b=bDceDK2Or/NuiXvjXoFoVhMATGcgdSvXam8w8Uyutbyk3UiaY4rFPweoCucVUBeTIf
+         o9ID9BYAaLRlq8hVw+73CZHtxe9Wn5sEKzsbm8vLwgzr9jZpsHx/O5HHPCaOHhzdOB04
+         8dyseXCaf0Z3EzgHyQ+IEjk6qTmBxhWxeq80NJtwWV3j4+laLELYj98jcn9GnZrIzyeG
+         5qhatXXqJBMq/LYMoPx50p9dF+uomK8bYbpcHaLCDvlwLCZtOQ5E1SWhX6XQoa3GwYwh
+         niXdro8HU8YaSa/UsgEVNbt72SHYc9xjcK9czbAKittCP/kC48rHs5CvZ2UBsicyoDHu
+         IQ+Q==
+X-Gm-Message-State: ACgBeo1D1Oi3jl0cXtBeHAqgXW7RXvip9JnRXVaqeQXMoMO3xhDnaibH
+        fbQgC3LfKuzKjmKnLn1yHZ0FtAQNrDDGrA==
+X-Google-Smtp-Source: AA6agR6I3eE3rbNa8yHKMInUM6pDXUw7shES1Kt7J1PE6mJTZefEJyxWkWebCz5iMj6/jd/i5Xq7Kg==
+X-Received: by 2002:a4a:b6c8:0:b0:44b:4bfe:426d with SMTP id w8-20020a4ab6c8000000b0044b4bfe426dmr11937299ooo.12.1663122981315;
+        Tue, 13 Sep 2022 19:36:21 -0700 (PDT)
+Received: from macondo.. ([2804:431:e7cd:8cb3:94e2:ccf7:1a63:3c59])
+        by smtp.gmail.com with ESMTPSA id v4-20020a9d4e84000000b00636956b3080sm6979036otk.43.2022.09.13.19.36.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 19:36:20 -0700 (PDT)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xhci: dbc: Fix memory leak in xhci_alloc_dbc()
+Date:   Tue, 13 Sep 2022 23:36:09 -0300
+Message-Id: <20220914023609.695296-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae28dabe-d339-b56d-4a8e-ce4291c9b836@molgen.mpg.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 03:36:09PM +0200, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> On a Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, connect a Dell DA300
-> to the only USB Type-C port on the left side (with a network cable connect),
-> Linux logs the warnings below:
+If DbC is already in use, then the allocated memory for the xhci_dbc struct
+doesn't get freed before returning NULL, which leads to a memleak.
 
-> Linux version 5.19.0-1-amd64 (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.19.6-1 (2022-09-01)
+Fixes: 534675942e90 ("xhci: dbc: refactor xhci_dbc_init()")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+---
+ drivers/usb/host/xhci-dbgcap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> [    5.710957] pci 0000:01:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
-> [    5.710959] pci 0000:01:00.0:   device [8086:1576] error status/mask=00000080/00002000
-> [    5.710962] pci 0000:01:00.0:    [ 7] BadDLLP
+diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+index e61155fa6379..f1367b53b260 100644
+--- a/drivers/usb/host/xhci-dbgcap.c
++++ b/drivers/usb/host/xhci-dbgcap.c
+@@ -988,7 +988,7 @@ xhci_alloc_dbc(struct device *dev, void __iomem *base, const struct dbc_driver *
+ 	dbc->driver = driver;
+ 
+ 	if (readl(&dbc->regs->control) & DBC_CTRL_DBC_ENABLE)
+-		return NULL;
++		goto err;
+ 
+ 	INIT_DELAYED_WORK(&dbc->event_work, xhci_dbc_handle_events);
+ 	spin_lock_init(&dbc->lock);
+-- 
+2.34.1
 
-Your dmesg log has many (51!) BadDLLP errors (which are corrected) and
-one Replay Timer Timeout error (also corrected).  I'm not a hardware
-person, but I don't know how software could cause these errors.
-
-Unless this is a regression, I suspect a hardware issue like a bad
-cable or connector.
-
-> I created the bug report #216474 [1] with the output of `lspci -nn`, `lsusb`
-> and `dmesg`.
-> 
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=216474
->      "Bug 216474 - Dell XPS 13 9360/Dell DA300: USB Type-C: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Receiver ID)"
