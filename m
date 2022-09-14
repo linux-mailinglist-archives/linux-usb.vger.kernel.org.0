@@ -2,65 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFDD5B84FB
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 11:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB735B8834
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 14:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbiINJbu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Sep 2022 05:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S229951AbiINMZv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Sep 2022 08:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiINJbZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 05:31:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9021DF9A
-        for <linux-usb@vger.kernel.org>; Wed, 14 Sep 2022 02:20:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BBF3B818B8
-        for <linux-usb@vger.kernel.org>; Wed, 14 Sep 2022 09:20:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14156C433D7;
-        Wed, 14 Sep 2022 09:20:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663147254;
-        bh=jQFYw3YFJfQZ0feH+FnlOR1EhYXSn1Ul34Wbd87EZ0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J5ipmVguy9ANOTOBCeRMpFPz4+YgENxCI8TVqTgMXDApkKWODeX3kaX3JuY1R0iFE
-         4CqOONlL3YqJn/lrWgr8e4qmEALeQpUuM17tfVBMVpg/RgqBPA08wOI3CvVru+oZpk
-         8jTb6lhwR6A7veTZwgIMoAUQXUqLBm7kZb6498CkJ9ethL6daA74kFDIBwa1nz3Olm
-         VYk0tnaBJNQthepYn+R3cGKjGo+XUL3oCiaQmFdj7jAXm8uQ4vTyr+ePqKQT2SEAKz
-         yWNy1c7x4t2NslxNioVYfkSPTC4zQWvm+tcHTXD1+w1+6gYosFVxwBAt+Sk8izdVOW
-         Ld2Qd/TJleHAA==
-Received: by pali.im (Postfix)
-        id 7BFB27B8; Wed, 14 Sep 2022 11:20:51 +0200 (CEST)
-Date:   Wed, 14 Sep 2022 11:20:51 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 6/7] USB: serial: ftdi_sio: Fix custom_divisor and
- c_*speed for ASYNC_SPD_CUST
-Message-ID: <20220914092051.bixv2ihjtlolcytq@pali>
-References: <20220724123351.icqqvvfxjm7ogo5u@pali>
- <Yt1BIsPqAVH0ajlf@hovoldconsulting.com>
- <20220724125908.6vu3jveiaisvpocb@pali>
- <Yt1EOcRWi0LdKqrB@hovoldconsulting.com>
- <20220818140952.r4c3plso4mm5s7jb@pali>
- <YyCayj7H/3My2amz@hovoldconsulting.com>
- <20220914084831.wboticmzy33guzam@pali>
- <YyGXyGvmAD4G1h2b@hovoldconsulting.com>
- <20220914091006.bltnzb4gmwomc3yo@pali>
- <YyGcS/DwPtN5qnmm@hovoldconsulting.com>
+        with ESMTP id S229913AbiINMZt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 08:25:49 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005CC28714;
+        Wed, 14 Sep 2022 05:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663158347; x=1694694347;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9ORuF9D4Y/8G7urH0ILcZTwbi7f6D7KyK4hVaHWMMUY=;
+  b=Nv/I8lGr4oEwA90Fc7Fwh7KssskLn28w/3NMiSJ0CeKWBlK5PTepcF+e
+   XxR9BuT+gJcYf0tuTkUnu2KIMGaBwGSRBQVaxWiDsycIVBC3kq4dvaThJ
+   akPUPQDNxz1n3qcJcueLSJPJZH+57V2r1la+aukoUIL/VlGiDkYUHiUQi
+   ET2UMrZCOsrQG4HrGGh+d1HqT0ZVKUwI2Nz1noUctn5zmYHO/UMiPNWsn
+   w34kq/+5AydPmgNW+TArwQifo3AWNKePmGfLhJZ+Za/aYuuiA4ftylc1y
+   f5cekRmI5CIAmLqN/EEDpn7drKY4UIwvZXg62GIE4OyByK0AsELOuNq/I
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="278142957"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="278142957"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 05:25:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="679023166"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Sep 2022 05:25:46 -0700
+Message-ID: <07f71b65-b900-62e2-6550-ae89708c9294@linux.intel.com>
+Date:   Wed, 14 Sep 2022 15:27:07 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YyGcS/DwPtN5qnmm@hovoldconsulting.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] xhci: dbc: Fix memory leak in xhci_alloc_dbc()
+Content-Language: en-US
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220914023609.695296-1-rafaelmendsr@gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20220914023609.695296-1-rafaelmendsr@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,43 +63,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wednesday 14 September 2022 11:18:03 Johan Hovold wrote:
-> On Wed, Sep 14, 2022 at 11:10:06AM +0200, Pali Rohár wrote:
-> > On Wednesday 14 September 2022 10:58:48 Johan Hovold wrote:
-> > > On Wed, Sep 14, 2022 at 10:48:31AM +0200, Pali Rohár wrote:
+On 14.9.2022 5.36, Rafael Mendonca wrote:
+> If DbC is already in use, then the allocated memory for the xhci_dbc struct
+> doesn't get freed before returning NULL, which leads to a memleak.
 > 
-> > > > Seems that you did not understand the point. So I will try to explain it
-> > > > again. This is not a new feature for _old_ ASYNC_SPD_CUST. This is the
-> > > > fix for the _new_ TCGETS2 API, to ensure that driver will always returns
-> > > > corrects values in c_*speed fields. If driver is not going to fix this
-> > > > _new_ TCGETS2 API then there is _NO_ point to use this new API in
-> > > > userspace and it is better to stick with the old ASYNC_SPD_CUST. And
-> > > > this is the current userspace state. So based on your input, it is the
-> > > > time to deprecate TCGETS2?
-> > > 
-> > > Stop being silly. As I've said repeatedly, we don't care about
-> > > ASYNC_SPD_CUST. Just return 38400 regardless of whatever magic happens
-> > > behind the scenes with the TIOCSSERIAL ioctl.
-> 
-> > I'm not silly here. Look, those APIs are for userspace. And if userspace
-> > application cannot use this new TCGETS2 API (for more reasons) then they
-> > stick with the old one TIOCSSERIAL. And your inputs just say that it is
-> > not a good idea to switch TCGETS2 as this API stay broken in some
-> > drivers. Silly is the one who do not see (or do not want to see it;
-> > because of own API perfectionism) the reasons why new "proposed API" is
-> > still not (widely) used and applications stick with TCGETS + TIOCSSERIAL.
-> > 
-> > That is why I'm asking, it is time to starting deprecating TCGETS2 and
-> > create for example TCGETS3? Only just few application use TCGETS2, so
-> > deprecation of TCGETS2 can be done _now_ without pain as this API is not
-> > widely used.
-> 
-> You're trying to keep the ASYNC_SPD hack alive by forcing drivers to
-> take it into consideration for TCGETS2. Just stop using the former and
-> switch to using BOTHER. And if something is missing in user space for
-> that, then fix that.
-> 
-> Johan
+> Fixes: 534675942e90 ("xhci: dbc: refactor xhci_dbc_init()")
+> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
 
-And what is the point of switching to BOTHER/TCGETS2 if some drivers
-do not return _correct_ values?
+Thanks, nice catch
+
+Adding to queue
+
+-Mathias
