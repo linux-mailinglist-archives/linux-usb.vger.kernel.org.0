@@ -2,202 +2,286 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45865B81E8
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 09:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AA85B82AF
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 10:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiINHN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Sep 2022 03:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S230243AbiINIOj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Sep 2022 04:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiINHNt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 03:13:49 -0400
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5B8C72B52;
-        Wed, 14 Sep 2022 00:13:44 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAA3Pt4kfyFjLwWNAg--.39905S2;
-        Wed, 14 Sep 2022 15:13:41 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v5] USB: serial: ftdi_sio: Convert to use dev_groups
-Date:   Wed, 14 Sep 2022 15:13:34 +0800
-Message-Id: <20220914071334.2820756-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230112AbiINIOh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 04:14:37 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF35462DC
+        for <linux-usb@vger.kernel.org>; Wed, 14 Sep 2022 01:14:32 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id y15-20020a056e021bef00b002f3c48d7130so6489688ilv.4
+        for <linux-usb@vger.kernel.org>; Wed, 14 Sep 2022 01:14:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=rTdEYGQWknM4bCrr879j6oI5QwDTYjwntwXKpOJK9EE=;
+        b=b6NrI5cPe1A1z5WL4bauOAfzSYOrdhm+7uLb2sI2Qn/m9RnMUg1S9aVYms9dw6/A5T
+         yKn1fVmZht11d0sguJyGeSvT2w6Si+YfrsBt8Y5aagvSSYwUAkzxzKOGr1/EQz+CmnJX
+         oPmT3sd31kg7dvDwSqDtSctnUh7CBq/RW1zSWsthA1PgjgkiVKSgPHt6QbP6DHUPegqm
+         Gphi65WVqwHdqv2Gr7upXju5s3kv3nCW20qBdygOr/VzQL/7j4Y431sNh1Ox+EgHGbVw
+         RvsCcvJ2p1pxz44+9/Ri2ycDcplXZEFRNGH+TDJZASh89TLNi5Ga9nbrwiZ0g8AC+JFJ
+         3Cnw==
+X-Gm-Message-State: ACgBeo3pF2PuQc8r7Iw8zLydf7oHk5rK4GRua9UcNjiS7QZRveJSRuq7
+        FPYkwYvg5/XFfamVQ+vkIUW7NwWr2DqwiJIQhL7TmPoQOI60
+X-Google-Smtp-Source: AA6agR6vazj+c4p+xYys19sbCkPRbW2VP922ajnnL9whyKDepvguYuRi9jpBCnkxAJH52eXiynkH0oFOpiDyhrKNOCPyENd0bGX4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAA3Pt4kfyFjLwWNAg--.39905S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr1rJry3uryfCw48Cry8Xwb_yoWrCF1Dpa
-        yUXFWSqF4UJF4agFs8Ca1qgw1rCw4kKa9Ig3yxGw4FkF1fJ34Iqa4IyasYvry3tFykKFya
-        qrsaqrWqkF4xJrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Received: by 2002:a05:6e02:20ee:b0:2f1:2959:8ec8 with SMTP id
+ q14-20020a056e0220ee00b002f129598ec8mr14150974ilv.236.1663143271865; Wed, 14
+ Sep 2022 01:14:31 -0700 (PDT)
+Date:   Wed, 14 Sep 2022 01:14:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ee264405e89eb7e8@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in hiddev_disconnect (4)
+From:   syzbot <syzbot+08bc30b3c98573f139b8@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver core supports the ability to handle the creation and removal
-of device-specific sysfs files in a race-free manner. Moreover, it can
-guarantee the success of creation. Therefore, it should be better to
-convert to use dev_groups.
+Hello,
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+syzbot found the following issue on:
+
+HEAD commit:    7eb2bf871454 usb: misc: usb3503: call clk_disable_unprepar..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1536bcaf080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c3701a9706c1806e
+dashboard link: https://syzkaller.appspot.com/bug?extid=08bc30b3c98573f139b8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+08bc30b3c98573f139b8@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in debug_spin_lock_before kernel/locking/spinlock_debug.c:85 [inline]
+BUG: KASAN: use-after-free in do_raw_spin_lock+0x261/0x2a0 kernel/locking/spinlock_debug.c:114
+Read of size 4 at addr ffff888115d24c1c by task kworker/1:2/70
+
+CPU: 1 PID: 70 Comm: kworker/1:2 Not tainted 6.0.0-rc4-syzkaller-00066-g7eb2bf871454 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Workqueue: events __usb_queue_reset_device
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ debug_spin_lock_before kernel/locking/spinlock_debug.c:85 [inline]
+ do_raw_spin_lock+0x261/0x2a0 kernel/locking/spinlock_debug.c:114
+ __mutex_unlock_slowpath+0x18e/0x5e0 kernel/locking/mutex.c:932
+ hiddev_disconnect+0x154/0x1c0 drivers/hid/usbhid/hiddev.c:940
+ hid_disconnect+0xb4/0x1a0 drivers/hid/hid-core.c:2252
+ hid_hw_stop+0x12/0x70 drivers/hid/hid-core.c:2297
+ cmhid_remove+0x38/0x50 drivers/hid/hid-cmedia.c:182
+ hid_device_remove+0xbf/0x200 drivers/hid/hid-core.c:2627
+ device_remove+0xc8/0x170 drivers/base/dd.c:548
+ __device_release_driver drivers/base/dd.c:1249 [inline]
+ device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
+ bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
+ device_del+0x4f3/0xc80 drivers/base/core.c:3704
+ hid_remove_device drivers/hid/hid-core.c:2796 [inline]
+ hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2815
+ usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1451
+ usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:550 [inline]
+ device_remove+0x11f/0x170 drivers/base/dd.c:542
+ __device_release_driver drivers/base/dd.c:1249 [inline]
+ device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
+ usb_driver_release_interface drivers/usb/core/driver.c:627 [inline]
+ usb_forced_unbind_intf+0x136/0x210 drivers/usb/core/driver.c:1118
+ unbind_marked_interfaces.isra.0+0x170/0x1e0 drivers/usb/core/driver.c:1141
+ usb_unbind_and_rebind_marked_interfaces+0x34/0x70 drivers/usb/core/driver.c:1202
+ usb_reset_device+0x846/0xac0 drivers/usb/core/hub.c:6142
+ __usb_queue_reset_device+0x68/0x90 drivers/usb/core/message.c:1904
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ process_scheduled_works kernel/workqueue.c:2352 [inline]
+ worker_thread+0x854/0x1080 kernel/workqueue.c:2438
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+Allocated by task 4334:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+ __kasan_kmalloc+0x81/0xa0 mm/kasan/common.c:525
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ hiddev_connect+0x246/0x5c0 drivers/hid/usbhid/hiddev.c:893
+ hid_connect+0x26d/0x17c0 drivers/hid/hid-core.c:2169
+ hid_hw_start drivers/hid/hid-core.c:2277 [inline]
+ hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2268
+ cmhid_probe+0x104/0x160 drivers/hid/hid-cmedia.c:165
+ hid_device_probe+0x2bd/0x3f0 drivers/hid/hid-core.c:2598
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ hid_add_device+0x344/0x9d0 drivers/hid/hid-core.c:2748
+ usbhid_probe+0xb49/0x1040 drivers/hid/usbhid/hid-core.c:1424
+ usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ usb_new_device.cold+0x685/0x10ad drivers/usb/core/hub.c:2573
+ hub_port_connect drivers/usb/core/hub.c:5353 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
+ port_event drivers/usb/core/hub.c:5653 [inline]
+ hub_event+0x26c7/0x4610 drivers/usb/core/hub.c:5735
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Freed by task 14583:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:367 [inline]
+ ____kasan_slab_free+0x14a/0x1b0 mm/kasan/common.c:329
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1754 [inline]
+ slab_free_freelist_hook mm/slub.c:1780 [inline]
+ slab_free mm/slub.c:3534 [inline]
+ kfree+0xca/0x5c0 mm/slub.c:4562
+ hiddev_release+0x402/0x520 drivers/hid/usbhid/hiddev.c:232
+ __fput+0x277/0x9d0 fs/file_table.c:320
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xad5/0x2930 kernel/exit.c:795
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ get_signal+0x238c/0x2610 kernel/signal.c:2857
+ arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x156/0x200 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff888115d24c00
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 28 bytes inside of
+ 512-byte region [ffff888115d24c00, ffff888115d24e00)
+
+The buggy address belongs to the physical page:
+page:ffffea0004574900 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x115d24
+head:ffffea0004574900 order:2 compound_mapcount:0 compound_pincount:0
+flags: 0x200000000010200(slab|head|node=0|zone=2)
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff888100041c80
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 11894, tgid 11894 (udevd), ts 853331188558, free_ts 844278582420
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x11cc/0x2a20 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
+ alloc_pages+0x1a6/0x270 mm/mempolicy.c:2270
+ alloc_slab_page mm/slub.c:1824 [inline]
+ allocate_slab+0x27e/0x3d0 mm/slub.c:1969
+ new_slab mm/slub.c:2029 [inline]
+ ___slab_alloc+0x7b4/0xda0 mm/slub.c:3031
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ kmem_cache_alloc_trace+0x2fb/0x3b0 mm/slub.c:3282
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ kernfs_fop_open+0x2fa/0xfd0 fs/kernfs/file.c:680
+ do_dentry_open+0x49c/0x1240 fs/open.c:878
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x1c92/0x28f0 fs/namei.c:3691
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1311
+ do_sys_open fs/open.c:1327 [inline]
+ __do_sys_openat fs/open.c:1343 [inline]
+ __se_sys_openat fs/open.c:1338 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1338
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x5d2/0xb80 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page+0x19/0x420 mm/page_alloc.c:3476
+ usbhid_disconnect+0xa7/0xe0 drivers/hid/usbhid/hid-core.c:1452
+ usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:550 [inline]
+ device_remove+0x11f/0x170 drivers/base/dd.c:542
+ __device_release_driver drivers/base/dd.c:1249 [inline]
+ device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
+ bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
+ device_del+0x4f3/0xc80 drivers/base/core.c:3704
+ usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
+ usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
+ hub_port_connect drivers/usb/core/hub.c:5197 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
+ port_event drivers/usb/core/hub.c:5653 [inline]
+ hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Memory state around the buggy address:
+ ffff888115d24b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888115d24b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff888115d24c00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                            ^
+ ffff888115d24c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888115d24d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
 ---
-Changelog:
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v4 -> v5:
-
-1. Use a forward declaration for ftdi_sio_groups.
-2. Correct ftdi_sio_attr_is_visible() implementation.
-
-v3 -> v4:
-
-1. Move the code and remove the pre-definitions.
-
-v2 -> v3:
-
-1. Add is_visible to filter the unneeded files.
-
-v1 -> v2:
-
-1. Change the title.
-2. Switch to use an attribute group.
----
- drivers/usb/serial/ftdi_sio.c | 60 +++++++++++++++++------------------
- 1 file changed, 29 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index d5a3986dfee7..660181064cda 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1108,10 +1108,13 @@ static u32 ftdi_232bm_baud_to_divisor(int baud);
- static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base);
- static u32 ftdi_2232h_baud_to_divisor(int baud);
- 
-+extern const struct attribute_group *ftdi_sio_groups[];
-+
- static struct usb_serial_driver ftdi_sio_device = {
- 	.driver = {
- 		.owner =	THIS_MODULE,
- 		.name =		"ftdi_sio",
-+		.dev_groups =	ftdi_sio_groups,
- 	},
- 	.description =		"FTDI USB Serial Device",
- 	.id_table =		id_table_combined,
-@@ -1729,38 +1732,19 @@ static ssize_t event_char_store(struct device *dev,
- }
- static DEVICE_ATTR_WO(event_char);
- 
--static int create_sysfs_attrs(struct usb_serial_port *port)
-+static umode_t ftdi_sio_attr_is_visible(struct kobject *kobj,
-+					 struct attribute *attr, int idx)
- {
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct usb_serial_port *port = container_of(dev, struct usb_serial_port, dev);
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
--	int retval = 0;
-+	umode_t mode = attr->mode;
- 
- 	/* XXX I've no idea if the original SIO supports the event_char
- 	 * sysfs parameter, so I'm playing it safe.  */
- 	if (priv->chip_type != SIO) {
--		dev_dbg(&port->dev, "sysfs attributes for %s\n", ftdi_chip_name[priv->chip_type]);
--		retval = device_create_file(&port->dev, &dev_attr_event_char);
--		if ((!retval) &&
--		    (priv->chip_type == FT232BM ||
--		     priv->chip_type == FT2232C ||
--		     priv->chip_type == FT232RL ||
--		     priv->chip_type == FT2232H ||
--		     priv->chip_type == FT4232H ||
--		     priv->chip_type == FT232H ||
--		     priv->chip_type == FTX)) {
--			retval = device_create_file(&port->dev,
--						    &dev_attr_latency_timer);
--		}
--	}
--	return retval;
--}
--
--static void remove_sysfs_attrs(struct usb_serial_port *port)
--{
--	struct ftdi_private *priv = usb_get_serial_port_data(port);
--
--	/* XXX see create_sysfs_attrs */
--	if (priv->chip_type != SIO) {
--		device_remove_file(&port->dev, &dev_attr_event_char);
-+		if (attr == &dev_attr_event_char.attr)
-+			return mode;
- 		if (priv->chip_type == FT232BM ||
- 		    priv->chip_type == FT2232C ||
- 		    priv->chip_type == FT232RL ||
-@@ -1768,12 +1752,29 @@ static void remove_sysfs_attrs(struct usb_serial_port *port)
- 		    priv->chip_type == FT4232H ||
- 		    priv->chip_type == FT232H ||
- 		    priv->chip_type == FTX) {
--			device_remove_file(&port->dev, &dev_attr_latency_timer);
-+			if (attr == &dev_attr_latency_timer.attr)
-+				return mode;
- 		}
- 	}
--
-+	return 0;
- }
- 
-+static struct attribute *ftdi_sio_attrs[] = {
-+	&dev_attr_event_char.attr,
-+	&dev_attr_latency_timer.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group ftdi_sio_group = {
-+	.attrs = ftdi_sio_attrs,
-+	.is_visible = ftdi_sio_attr_is_visible,
-+};
-+
-+const struct attribute_group *ftdi_sio_groups[] = {
-+	&ftdi_sio_group,
-+	NULL
-+};
-+
- #ifdef CONFIG_GPIOLIB
- 
- static int ftdi_set_bitmode(struct usb_serial_port *port, u8 mode)
-@@ -2251,7 +2252,6 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
- 	if (read_latency_timer(port) < 0)
- 		priv->latency = 16;
- 	write_latency_timer(port);
--	create_sysfs_attrs(port);
- 
- 	result = ftdi_gpio_init(port);
- 	if (result < 0) {
-@@ -2377,8 +2377,6 @@ static void ftdi_sio_port_remove(struct usb_serial_port *port)
- 
- 	ftdi_gpio_remove(port);
- 
--	remove_sysfs_attrs(port);
--
- 	kfree(priv);
- }
- 
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
