@@ -2,87 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2185B883A
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 14:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2D55B8895
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 14:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiINM1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Sep 2022 08:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S229677AbiINMuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Sep 2022 08:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiINM1B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 08:27:01 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1772980E93;
-        Wed, 14 Sep 2022 05:26:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663158410; x=1694694410;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FXpukppwLTUZtkrCV8069cSTP4V7FD1gf4WK/O7FkMc=;
-  b=G52rDO0o2R+pKtiknoUDXjy3C96JY5aDbw1KR5XJh1u0WE3lyBKDmtML
-   njBNLRsUh270bgqjEzmG+S5gZzd2zMEvTM7MYdnBnw0uIrs17X+n3usFm
-   8oj2wjEupanOEtn8qb4/udd4sv+tXLKnYkCNkGeSIsWmtcMXWrM0umLJl
-   8zwliwlWRUcyukNUKwIE1wkTuVsT2txFCYv68/ZXATIpf1oDSifxl8SVl
-   Vmxm53HFaf08rLXGjtT6OYWrvQgvRQDXx4oMPpB+uedNdVpClnWlzH19v
-   2fFTFN/ry4YKzgycdLD1YhCVZRMNIQYfJvBOKjpuyIdrAUwpH2z/JftSL
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="298414116"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="298414116"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 05:26:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="679023475"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Sep 2022 05:26:48 -0700
-Message-ID: <02ef1ae2-9dae-6f02-9951-1230939f06e2@linux.intel.com>
-Date:   Wed, 14 Sep 2022 15:28:09 +0300
+        with ESMTP id S229536AbiINMuD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 08:50:03 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8339A30F52;
+        Wed, 14 Sep 2022 05:50:01 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id j7so10359040vsr.13;
+        Wed, 14 Sep 2022 05:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=bpJxOTCh6oYyCQQdF2icsufM9QvXroCcz9Xfpd1L57M=;
+        b=T+cbO+tKigJbRIFUktlNyjC9bQ6dwfZycN3vkq2FujQcVT0kTBUweNIpGKF3JIdgjd
+         d0vctLHtEFIpRpKqkXBnu6UYeiM1IqTp4PaP8emL7uC7bAH+xtRlPv1pm//qIVD0rShq
+         tlAmveKDrkGKUOy5u77oQX1KUnjauWbA6y/3e+WN2V4pZtFfufHctIXFeyTZ1bjMx7IB
+         4uY+AY0N6iBxSWwBNLtpXJoSghxJX06S4IcoYqT9aJWhVHl1EtvlwpL3gYW8R9ipz9pI
+         +C2uTuWERokOv0Q4uyXmLoIp8R98DLtCgB37+ZYsx4ssKMr2eQTul2nOgmyc7+uNY8zL
+         aLHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=bpJxOTCh6oYyCQQdF2icsufM9QvXroCcz9Xfpd1L57M=;
+        b=EeO/mzxGuBvHLemkg1NJV3SnPBCYZ1BQSI+qI2VqYaSMVtkoV9G8HdLQ6a5Al4+NB3
+         TuBmWoFs2y2EaiNNSFXu/LzZQnTqwB60V4y9tNnCEhNOKdS6VnVqafjWFRk3eyzHrjJM
+         /00EQ49oWXxTTQoxpIXLHC+lftrg3Au1ydXu4x/2T545K3tPXzckhHi9doWu0VkZDpWl
+         4ia66R4GbUiXiYAe5RcbxxRgaswD05gN87qOnfgBgspKZzAxDtvCbRmGpQE2Eheo0s2C
+         8YjJM2YUZhj9BUDa2kIZtuhHVBbTBe7wqWcP9v1TGK/lMusSz9nA+YIZdQJEJ6rvobgp
+         Dcdw==
+X-Gm-Message-State: ACgBeo10iKW8d0mzFU3+JdUS0agjlp3Nmbf3YKJYTrlqV0HW9uU2QNU2
+        9kL8/z7OMMQUrjm1PXtGVASLxmg97k1i6tYT19GptKrnFAIogg==
+X-Google-Smtp-Source: AA6agR7r6FnnOyXSDr5DZY1ea/fXvRtR1nGgWvjMzf6vZVvsLjDq+I/FQpHLTsiUnDYQWPc9MTY8I2aPl4PvhmKAGr4=
+X-Received: by 2002:a67:be16:0:b0:398:c2e4:e01f with SMTP id
+ x22-20020a67be16000000b00398c2e4e01fmr807424vsq.33.1663159800573; Wed, 14 Sep
+ 2022 05:50:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] xhci: Don't show warning for reinit on known broken
- suspend
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Puma Hsu <pumahsu@google.com>
-Cc:     "Artem S . Tashkinov" <aros@gmx.com>, linux-usb@vger.kernel.org,
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Wed, 14 Sep 2022 20:49:49 +0800
+Message-ID: <CAB7eexKfentLRraPRR8kwqY3NRN9WTTijLW8SrKwAPzOzouxDg@mail.gmail.com>
+Subject: possible deadlock in f_midi_transmit
+To:     balbi@kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        john@metanate.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220913203515.451-1-mario.limonciello@amd.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20220913203515.451-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.9.2022 23.35, Mario Limonciello wrote:
-> commit 8b328f8002bc ("xhci: re-initialize the HC during resume if HCE was
-> set") introduced a new warning message when the host controller error
-> was set and re-initializing.
-> 
-> This is expected behavior on some designs which already set
-> `xhci->broken_suspend` so the new warning is alarming to some users.
-> 
-> Modify the code to only show the warning if this was a surprising behavior
-> to the XHCI driver.
-> 
-> Fixes: 8b328f8002bc ("xhci: re-initialize the HC during resume if HCE was set")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216470
-> Reported-by: Artem S. Tashkinov <aros@gmx.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
+Hello,
 
-Thanks, adding to queue
+When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+triggered.
 
--Mathias
+HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+git tree: upstream
+
+kernel config: https://pastebin.com/raw/xtrgsXP3
+C reproducer: https://pastebin.com/raw/C1xYEf7Q
+console output: https://pastebin.com/raw/3RLhvQHE
+
+Basically, in the c reproducer, we use the gadget module to emulate
+attaching a USB device(vendor id: 0x403, product id: 0xff3d, with the
+midi function) and executing some simple sequence of system calls.
+To reproduce this crash, we utilize a third-party library to emulate
+the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
+Just clone this repository, install it, and compile the c
+reproducer with ``` gcc crash.c -lusbgx -lconfig -o crash ``` will do
+the trick.
+
+I would appreciate it if you have any idea how to solve this bug.
+
+The crash report is as follows:
+
+
+============================================
+WARNING: possible recursive locking detected
+6.0.0-rc4+ #20 Not tainted
+--------------------------------------------
+kworker/0:1H/9 is trying to acquire lock:
+ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+
+but task is already holding lock:
+ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&midi->transmit_lock);
+  lock(&midi->transmit_lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+3 locks held by kworker/0:1H/9:
+ #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+atomic_long_set include/linux/atomic/atomic-instrumented.h:1280
+[inline]
+ #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+process_one_work+0x8b0/0x1650 kernel/workqueue.c:2260
+ #1: ffffc900003afdb0 ((work_completion)(&midi->work)){+.+.}-{0:0},
+at: process_one_work+0x8e4/0x1650 kernel/workqueue.c:2264
+ #2: ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+
+stack backtrace:
+CPU: 0 PID: 9 Comm: kworker/0:1H Not tainted 6.0.0-rc4+ #20
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: events_highpri f_midi_in_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+ check_deadlock kernel/locking/lockdep.c:3031 [inline]
+ validate_chain kernel/locking/lockdep.c:3816 [inline]
+ __lock_acquire.cold+0x152/0x3c3 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x580 kernel/locking/lockdep.c:5631
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+ f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+ f_midi_complete+0x1bb/0x480 drivers/usb/gadget/function/f_midi.c:285
+ dummy_queue+0x84a/0xb20 drivers/usb/gadget/udc/dummy_hcd.c:736
+ usb_ep_queue+0xe8/0x3b0 drivers/usb/gadget/udc/core.c:288
+ f_midi_do_transmit drivers/usb/gadget/function/f_midi.c:658 [inline]
+ f_midi_transmit+0x7e4/0x1460 drivers/usb/gadget/function/f_midi.c:686
+ process_one_work+0x9c7/0x1650 kernel/workqueue.c:2289
+ worker_thread+0x623/0x1070 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
