@@ -2,75 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2CC5B89C3
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 16:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE435B89CD
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Sep 2022 16:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiINOCs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Sep 2022 10:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S230019AbiINODW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Sep 2022 10:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiINOCD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 10:02:03 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5755C792D7
-        for <linux-usb@vger.kernel.org>; Wed, 14 Sep 2022 07:01:17 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id r12so16827612ljg.10
-        for <linux-usb@vger.kernel.org>; Wed, 14 Sep 2022 07:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=4I1nWuKw3OANLT7/DYo/zylVSp6G+u/GpJfP6xzHR3E=;
-        b=brLbhteVZvljyIvgq/BZuRLdaBrU3dauTxDoV0afpm3D8G8eC+PzDhihujize4u5bY
-         xgox21O6n2RkerLtHPJSxFlI9Ypd4EaaCMtXQ7yq5LZNyMV3rxWn43mV+DL93secxJ35
-         4Mo/5OnJiR6EUaDKMTG+vYej6lxDoTN17UAF7qfMYvtkuVe2JYPn54zshCzOug6c4hnm
-         0PMtdZptGI+KTwKQPmr17gsklS46PN+JxnAiFa0Kz1YXmHRDDEHnUiBiga5Vbxp6gH4i
-         w0hl0XbK0nFJOe2yMuLg3FVQgvh34lleAXvP2oQC+kW2m8mmi10ye76Qq7J6zmCtULXy
-         wI1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4I1nWuKw3OANLT7/DYo/zylVSp6G+u/GpJfP6xzHR3E=;
-        b=bNcCszXkebzTNg3NFTNmxcQnAdHbuAGkmSlkfpRID8MROw8pn+UHysgo1/E6BLXNiP
-         SPwBbrKo7lBnk8o+lO96dl0Q8C0pYLiN+lIp5hW7GYEBYDZFBkFdB8qyRqSzn/qEbKa9
-         W6rnxO0D11jAUCo7/35WuEgoX8/dDUO0a3wgLLi/YmQ6YEjytS+eqfiB+2zpmyGlY6lC
-         ELfSYb12/cnksPPXq5ZHkxb00eCYY+w3pqn0khEPrjWnWg1ymPuaVnCdx/lZL/2rIsR8
-         0H+ReeGHSc9v8Q1brIcaz9IoN3PcVhJYfD6QZWD54JL51PAmRUwyy/S+1X8KWqo/gcxB
-         IXIg==
-X-Gm-Message-State: ACgBeo2xNTHrfSeIUUw2Pu+iQFqeHQxC8/SstJdJOIHT/9d8txE1dpBW
-        7wuqJBPYQQUROcx7s1Vl02fnflm7cL6ESyJAMPke8Q==
-X-Google-Smtp-Source: AA6agR6JkJbCqyE2gTrtp6CclhDjtY75sWE4XsKvRX/lZhn/DSwVZZASJB/yTmhXGA6tUkOdrnfrqI0qNyYf9XVzF8k=
-X-Received: by 2002:a05:651c:214:b0:26a:b03b:9e0c with SMTP id
- y20-20020a05651c021400b0026ab03b9e0cmr10198201ljn.463.1663164075540; Wed, 14
- Sep 2022 07:01:15 -0700 (PDT)
+        with ESMTP id S229614AbiINOCt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Sep 2022 10:02:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD407A539;
+        Wed, 14 Sep 2022 07:02:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86AD261D8F;
+        Wed, 14 Sep 2022 14:02:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F73C4347C;
+        Wed, 14 Sep 2022 14:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663164121;
+        bh=NCcTwwKCAlQIABfOl9WvMf92ki9ZXJbGa5QXGi7eAl0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V0LhkLbO2f6F3xXrHc9/jVO4fcaYmxCR62Ja689Fi3VSJOxzM4Bp+Mcmejl1filee
+         XTeFYZrz4E5LbxZGSzxz2S7OIx2ernyNrVc6BNxHlrb7+kSR2vJ40gQ1/Zus8MEwcN
+         +L5358vSEtKN5IOQxwcDrUeAL2TgNpzKOEdneQ5k=
+Date:   Wed, 14 Sep 2022 16:02:25 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rondreis <linhaoguo86@gmail.com>
+Cc:     balbi@kernel.org, john@metanate.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: possible deadlock in f_midi_transmit
+Message-ID: <YyHe8dBI5ERbK+sL@kroah.com>
+References: <CAB7eexKfentLRraPRR8kwqY3NRN9WTTijLW8SrKwAPzOzouxDg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220909212543.17428-1-jbx6244@gmail.com> <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
-In-Reply-To: <f2cb42c8-3664-a2d5-074d-5c9a10c693e8@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 14 Sep 2022 16:00:38 +0200
-Message-ID: <CAPDyKFrF5Tn9a_hqp7mrp14YCrcX4LV6Y5qNxOz2ZSRJJuMmCA@mail.gmail.com>
-Subject: Re: [PATCH v1 04/11] dt-bindings: mmc: rockchip: add rockchip,rk3128-dw-mshc
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
-        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        kishon@ti.com, vkoul@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB7eexKfentLRraPRR8kwqY3NRN9WTTijLW8SrKwAPzOzouxDg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,34 +50,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 10 Sept 2022 at 00:02, Johan Jonker <jbx6244@gmail.com> wrote:
->
-> Add rockchip,rk3128-dw-mshc compatible string.
->
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+On Wed, Sep 14, 2022 at 08:49:49PM +0800, Rondreis wrote:
+> Hello,
+> 
+> When fuzzing the Linux kernel driver v6.0-rc4, the following crash was
+> triggered.
+> 
+> HEAD commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+> git tree: upstream
+> 
+> kernel config: https://pastebin.com/raw/xtrgsXP3
+> C reproducer: https://pastebin.com/raw/C1xYEf7Q
+> console output: https://pastebin.com/raw/3RLhvQHE
+> 
+> Basically, in the c reproducer, we use the gadget module to emulate
+> attaching a USB device(vendor id: 0x403, product id: 0xff3d, with the
+> midi function) and executing some simple sequence of system calls.
+> To reproduce this crash, we utilize a third-party library to emulate
+> the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
+> Just clone this repository, install it, and compile the c
+> reproducer with ``` gcc crash.c -lusbgx -lconfig -o crash ``` will do
+> the trick.
+> 
+> I would appreciate it if you have any idea how to solve this bug.
+> 
+> The crash report is as follows:
+> 
+> 
+> ============================================
+> WARNING: possible recursive locking detected
+> 6.0.0-rc4+ #20 Not tainted
+> --------------------------------------------
+> kworker/0:1H/9 is trying to acquire lock:
+> ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> 
+> but task is already holding lock:
+> ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> 
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+> 
+>        CPU0
+>        ----
+>   lock(&midi->transmit_lock);
+>   lock(&midi->transmit_lock);
+> 
+>  *** DEADLOCK ***
+> 
+>  May be due to missing lock nesting notation
 
-Applied for next, thanks!
+That's a lockdep warning, is this really deadlocking?
 
-Kind regards
-Uffe
+If so, I'd recommend asking the midi developers...
 
+thanks,
 
-> ---
->  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> index bad28bc74..95f59a5e3 100644
-> --- a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> @@ -32,6 +32,7 @@ properties:
->                - rockchip,px30-dw-mshc
->                - rockchip,rk1808-dw-mshc
->                - rockchip,rk3036-dw-mshc
-> +              - rockchip,rk3128-dw-mshc
->                - rockchip,rk3228-dw-mshc
->                - rockchip,rk3308-dw-mshc
->                - rockchip,rk3328-dw-mshc
-> --
-> 2.20.1
->
+greg k-h
