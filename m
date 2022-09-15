@@ -2,89 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF8C5B9755
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Sep 2022 11:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5665C5B98B3
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Sep 2022 12:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiIOJXo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Sep 2022 05:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S229866AbiIOKYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Sep 2022 06:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIOJXn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Sep 2022 05:23:43 -0400
-Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD09489CD3
-        for <linux-usb@vger.kernel.org>; Thu, 15 Sep 2022 02:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2tD4L
-        rBGoU+6S1Rru1r84b9A7V5UbhshNzLBx12hF7Q=; b=MbSGNatmMq2jQ2622XSkX
-        dGMNWEv3X/H51g3QQ/OvYjebpcFGmpPc/14w2D4tgS4pGj+Iye5d2upI/z0EEJ4J
-        XXrqv2NPruyWthZMuo5FIMxTGmGYZC48SvfmLp+1PAIbrsH7O834kkGCTFnEod4h
-        hltsa//7d9J/KXls2xhZao=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp7 (Coremail) with SMTP id DsmowACn9pLL7iJj_xJMBg--.43577S2;
-        Thu, 15 Sep 2022 17:22:20 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        with ESMTP id S229852AbiIOKYy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Sep 2022 06:24:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EAC20F64
+        for <linux-usb@vger.kernel.org>; Thu, 15 Sep 2022 03:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663237492; x=1694773492;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kE1uE6ZYE+LQyM+ycahEV8ycIVV7EPs5tNfHhpItNCA=;
+  b=QurgUpqC8ok/4q6QgnvmSSJQqdOneYN3iq53BVnMleLPffuhxxt/dIe5
+   Jmnw4iJ8aoc2kfFast6u8/4hWX45UBJRRSbztGZG2VCIxtwN3XtsbsmVT
+   vuylZcMgnWcHalIypXacRPa+PCweYtFhdlja4sw36uKPdkbtRV8kManDn
+   lAm0lbUDz2QKimW+hp43Tf2iX1RmeaetigUWwOd7kmO5XBp66ATH73R2C
+   l5Ub8RrFwlP1ojVgpeCJYb/B9c0bpjFMZyVjanuVXzR2bI7rFW6R2zdxs
+   TVWAG8EZkvnB0+mlNPwEnKAbO48LhIxjWiIYrLq/xCx4f+384JceF/xWy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="298670417"
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="298670417"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 03:24:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="650429096"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 15 Sep 2022 03:24:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 13CF4F7; Thu, 15 Sep 2022 13:25:06 +0300 (EEST)
+Date:   Thu, 15 Sep 2022 13:25:06 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Gil Fine <gil.fine@intel.com>, Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         linux-usb@vger.kernel.org
-Cc:     windhl@126.com
-Subject: [PATCH v2] usb: typec: anx7411: Use of_get_child_by_name() instead of of_find_node_by_name()
-Date:   Thu, 15 Sep 2022 17:22:09 +0800
-Message-Id: <20220915092209.4009273-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+Subject: [GIT PULL] Thunderbolt/USB4 fix for v6.0-rc6
+Message-ID: <YyL9gsk0cFMeJBS3@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsmowACn9pLL7iJj_xJMBg--.43577S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw1kurW3AF1DGw1rXrykAFb_yoW8JFyrpF
-        W5CrW5Z34xXFyaga40kwn8Aay3KaykG347JayxWas5Kr9xXF45Jr15ta45Grn5KFWIyw1F
-        qay7AFy3AayDJrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRoSotUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3A19F1pEEQpcdwAAsV
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In anx7411_typec_switch_probe(), we should call of_get_child_by_name()
-instead of of_find_node_by_name() as of_find_xxx API will decrease the
-refcount of the 'from' argument.
+Hi Greg,
 
-Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
-Signed-off-by: Liang He <windhl@126.com>
----
- 
- v2: use of_get_child_by_name() advised by Heikki Krogerus.
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
- drivers/usb/typec/anx7411.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-index c0f0842d443c..f178d0eb47b1 100644
---- a/drivers/usb/typec/anx7411.c
-+++ b/drivers/usb/typec/anx7411.c
-@@ -1105,7 +1105,7 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
- 	int ret;
- 	struct device_node *node;
- 
--	node = of_find_node_by_name(dev->of_node, "orientation_switch");
-+	node = of_get_child_by_name(dev->of_node, "orientation_switch");
- 	if (!node)
- 		return 0;
- 
-@@ -1115,7 +1115,7 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
- 		return ret;
- 	}
- 
--	node = of_find_node_by_name(dev->of_node, "mode_switch");
-+	node = of_get_child_by_name(dev->of_node, "mode_switch");
- 	if (!node) {
- 		dev_err(dev, "no typec mux exist");
- 		ret = -ENODEV;
--- 
-2.25.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.0-rc6
+
+for you to fetch changes up to 14c7d905283744809e6b82efae2f490660a11cda:
+
+  thunderbolt: Add support for Intel Maple Ridge single port controller (2022-09-09 08:45:57 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Fix for v6.0-rc6
+
+This includes a single commit adding missing PCI ID for Intel Maple
+Ridge Thunderbolt 4 single port controller.
+
+This has been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Gil Fine (1):
+      thunderbolt: Add support for Intel Maple Ridge single port controller
+
+ drivers/thunderbolt/icm.c | 1 +
+ drivers/thunderbolt/nhi.h | 1 +
+ 2 files changed, 2 insertions(+)
