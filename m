@@ -2,81 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975C15B959E
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Sep 2022 09:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFAB5B968D
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Sep 2022 10:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiIOHnq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Sep 2022 03:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S229641AbiIOIpB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Sep 2022 04:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiIOHnn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Sep 2022 03:43:43 -0400
-X-Greylist: delayed 1848 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Sep 2022 00:43:41 PDT
-Received: from m1564.mail.126.com (m1564.mail.126.com [220.181.15.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 801BA923EC
-        for <linux-usb@vger.kernel.org>; Thu, 15 Sep 2022 00:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=NLF5i
-        Gs2IinGZPv+qpYcfgB4x1ei9AK7Fwlzdtg8oYU=; b=QfYg+4VOjwziGAItyN7oX
-        7Dg1/KA/bz76WVe87d+4mBjhLBq+Q/jMRJJsHKbbsGXznG1k21S7xOYLB1uCBAql
-        BXKMSiV5pZvZju6azGHzIBBxbzBtrM+HBg/pTlfk64MtWQK1t1eebkNn2DTEE8/R
-        cykHgAaBLu/1cxxqDAEgz4=
-Received: from windhl$126.com ( [8.219.73.50] ) by ajax-webmail-wmsvr64
- (Coremail) ; Thu, 15 Sep 2022 15:12:41 +0800 (CST)
-X-Originating-IP: [8.219.73.50]
-Date:   Thu, 15 Sep 2022 15:12:41 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re:Re: [PATCH] usb: typec: anx7411: Call of_node_get() before
- of_find_xxx API
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <YyLL/zGW+Zr1+t0H@kuha.fi.intel.com>
-References: <20220915025400.4003321-1-windhl@126.com>
- <YyLL/zGW+Zr1+t0H@kuha.fi.intel.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        with ESMTP id S229713AbiIOIo7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Sep 2022 04:44:59 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D203267C80
+        for <linux-usb@vger.kernel.org>; Thu, 15 Sep 2022 01:44:57 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id z14-20020a05600c0a0e00b003b486df42a3so8207553wmp.2
+        for <linux-usb@vger.kernel.org>; Thu, 15 Sep 2022 01:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=dH3Xddf4i5wgA75cL5yNqkffds3UMT4VE2SGxW8RhZ0=;
+        b=w3JmFD3guZo7MocNtVx9G7wa+lRT/sZ8vNA5Uk1hmDctwgD4yofQefYoX8F9daHJgw
+         /0mT5QAI3kVtnkM2mfOod90kPojQvCiejX5Hxg7lMTT44u2XJt7koTpLZocfyObv/O4X
+         mmC3zcZdT+vnVMIwHNHDmIu1tLDpT8rHjxk84pHQGBZDamxaPRMdMzMd2h1NiJaFSman
+         lJqbLD4q6jUAR6ZGnZvJ4/YNPZEQyreaj6OM1fN/Xijpj5Tz6fXxilW+yv2+tuF+yVX5
+         1Vg8a7Y3pe2aH1P07gTISmTQZGZwkbxOHrmeW9Kekcbk91Zi1mtZZPKEyxY0uWcMyasu
+         +5uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=dH3Xddf4i5wgA75cL5yNqkffds3UMT4VE2SGxW8RhZ0=;
+        b=3qp2qD8W3N84T2dJUykBQ4zjsCFUZ7CVtuPMsMtZ2FG0ZO0F5GsDfzm3lPwhX5W5oB
+         aavzon9e4BVlfarZ8TJ9IAOb60bBYL/dMpUfP7ViILkYIBUV6hVPqcO56P9FtXPE/iE+
+         f1MdmU6OVdnESrRkNe78kctd0nkz0FFRmlUDCnjCyavwSHmZlL0C0+wRc0gMzhvhJojD
+         VxAahxNJevmTg3ZoV04sLWiq0ssDa4EXAmQVMbQdZIEkQXzhAlHMhHHA1OV+jHPdlTEc
+         kserYyU0+GhARpt2qHR9Cs8VRPyY9CAi6FoaOfERKTIapjCHppKYnsdge1gE0eKQLw1t
+         Lmhw==
+X-Gm-Message-State: ACgBeo0UKpY81m/qLV3Tc4mkPKMokDfp6seTIZIZIOaxZlKk4SxbCN5s
+        urjSFrzG5JPUv0gujtCkY2tqSg==
+X-Google-Smtp-Source: AA6agR6g3+PdSE1eWZLnJptiRikw1dAQOcBMC54WBw3sZVuwHijTXaUiB7oVB1SdslSnYh68ync4Sw==
+X-Received: by 2002:a05:600c:2e15:b0:3b4:9c95:2871 with SMTP id o21-20020a05600c2e1500b003b49c952871mr5852312wmf.133.1663231496194;
+        Thu, 15 Sep 2022 01:44:56 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.73])
+        by smtp.gmail.com with ESMTPSA id iv11-20020a05600c548b00b003a1980d55c4sm2080912wmb.47.2022.09.15.01.44.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 01:44:55 -0700 (PDT)
+Message-ID: <05ce5c7c-c7e2-cac1-341a-5461804f96ea@linaro.org>
+Date:   Thu, 15 Sep 2022 09:44:54 +0100
 MIME-Version: 1.0
-Message-ID: <af70a05.47f5.1833ffe1d42.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: QMqowAAXJnJq0CJjVb9wAA--.59824W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgd9F1-HZ1gq7gABsV
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: usb: dwc3: Add interrupt-names to include
+ hibernation interrupt
+Content-Language: en-US
+To:     "Mehta, Piyush" <piyush.mehta@amd.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
+        Manish Narani <manish.narani@xilinx.com>
+References: <20220912085730.390555-1-piyush.mehta@amd.com>
+ <4cc7a6d2-64ef-c176-21ad-4c3e66f664f7@linaro.org>
+ <MN2PR12MB43330B57F5CFBEC35105665188469@MN2PR12MB4333.namprd12.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MN2PR12MB43330B57F5CFBEC35105665188469@MN2PR12MB4333.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CgoKQXQgMjAyMi0wOS0xNSAxNDo1Mzo1MSwgIkhlaWtraSBLcm9nZXJ1cyIgPGhlaWtraS5rcm9n
-ZXJ1c0BsaW51eC5pbnRlbC5jb20+IHdyb3RlOgo+T24gVGh1LCBTZXAgMTUsIDIwMjIgYXQgMTA6
-NTQ6MDBBTSArMDgwMCwgTGlhbmcgSGUgd3JvdGU6Cj4+IEluIGFueDc0MTFfdHlwZWNfc3dpdGNo
-X3Byb2JlKCksIHdlIHNob3VsZCBjYWxsIG9mX25vZGVfZ2V0KCkgYmVmb3JlCj4+IG9mX2ZpbmRf
-bm9kZV9ieV9uYW1lKCkgd2hpY2ggd2lsbCBhdXRvbWF0aWNhbGx5IGRlY3JlYXNlIHRoZSAnZnJv
-bScKPj4gYXJndW1lbnQuCj4KPkp1c3QgdXNlIG9mX2dldF9jaGlsZF9ieV9uYW1lKCkgaW5zdGVh
-ZCBvZiBvZl9maW5kX25vZGVfYnlfbmFtZSgpLiBJZgo+eW91IGRvbid0IG5lZWQgcmVjdXJzaW9u
-LCB0aGVuIHRoZXJlIGlzIG5vIHBvaW50IGluIHVzaW5nCj5vZl9maW5kX25vZGVfYnlfbmFtZSgp
-Lgo+Cj50aGFua3MsCgpUaGFua3MsIEhlaWtraSBLcm9nZXJ1cywKCkkgd2lsbCBzZW5kIHYyIHBh
-dGNoIGJhc2VkIG9uIHlvdXIgYWR2aWNlcy4KCkxpYW5nCgo+Cj4+IEZpeGVzOiBmZTZkOGE5Yzhl
-NjQgKCJ1c2I6IHR5cGVjOiBhbng3NDExOiBBZGQgQW5hbG9naXggUEQgQU5YNzQxMSBzdXBwb3J0
-IikKPj4gU2lnbmVkLW9mZi1ieTogTGlhbmcgSGUgPHdpbmRobEAxMjYuY29tPgo+PiAtLS0KPj4g
-IGRyaXZlcnMvdXNiL3R5cGVjL2FueDc0MTEuYyB8IDIgKysKPj4gIDEgZmlsZSBjaGFuZ2VkLCAy
-IGluc2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi90eXBlYy9hbng3
-NDExLmMgYi9kcml2ZXJzL3VzYi90eXBlYy9hbng3NDExLmMKPj4gaW5kZXggYzBmMDg0MmQ0NDNj
-Li5mZTAwMGJiZjcxODMgMTAwNjQ0Cj4+IC0tLSBhL2RyaXZlcnMvdXNiL3R5cGVjL2FueDc0MTEu
-Ywo+PiArKysgYi9kcml2ZXJzL3VzYi90eXBlYy9hbng3NDExLmMKPj4gQEAgLTExMDUsNiArMTEw
-NSw3IEBAIHN0YXRpYyBpbnQgYW54NzQxMV90eXBlY19zd2l0Y2hfcHJvYmUoc3RydWN0IGFueDc0
-MTFfZGF0YSAqY3R4LAo+PiAgCWludCByZXQ7Cj4+ICAJc3RydWN0IGRldmljZV9ub2RlICpub2Rl
-Owo+PiAgCj4+ICsJb2Zfbm9kZV9nZXQoZGV2LT5vZl9ub2RlKTsKPj4gIAlub2RlID0gb2ZfZmlu
-ZF9ub2RlX2J5X25hbWUoZGV2LT5vZl9ub2RlLCAib3JpZW50YXRpb25fc3dpdGNoIik7Cj4+ICAJ
-aWYgKCFub2RlKQo+PiAgCQlyZXR1cm4gMDsKPj4gQEAgLTExMTUsNiArMTExNiw3IEBAIHN0YXRp
-YyBpbnQgYW54NzQxMV90eXBlY19zd2l0Y2hfcHJvYmUoc3RydWN0IGFueDc0MTFfZGF0YSAqY3R4
-LAo+PiAgCQlyZXR1cm4gcmV0Owo+PiAgCX0KPj4gIAo+PiArCW9mX25vZGVfZ2V0KGRldi0+b2Zf
-bm9kZSk7Cj4+ICAJbm9kZSA9IG9mX2ZpbmRfbm9kZV9ieV9uYW1lKGRldi0+b2Zfbm9kZSwgIm1v
-ZGVfc3dpdGNoIik7Cj4+ICAJaWYgKCFub2RlKSB7Cj4+ICAJCWRldl9lcnIoZGV2LCAibm8gdHlw
-ZWMgbXV4IGV4aXN0Iik7Cj4+IC0tIAo+PiAyLjI1LjEKPgo+LS0gCj5oZWlra2kK
+On 14/09/2022 14:15, Mehta, Piyush wrote:
+>  
+>> Where is the user (DTS) and implementation of this change? If this is specific
+>> to Xilinx, why you do not have device specific compatible?
+> [Piyush]:
+> We have dedicated irq line for hibernation feature,  "hiber" irq line triggers hibernation interrupt.
+> DWC3 core supports the hibernation feature, we have a dedicated code which is yet to be upstreamed.
+> As the hibernation feature provided by dwc3-core, so this will be supported by other SOC/vendors.
+
+But is hiber irq line present in other vendors? What confuses me is
+adding not only "hiber" irq but also otg in completely new enum.
+
+
+Best regards,
+Krzysztof
