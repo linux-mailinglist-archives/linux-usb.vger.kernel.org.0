@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97895B946C
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Sep 2022 08:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834145B9472
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Sep 2022 08:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiIOG3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Sep 2022 02:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
+        id S229711AbiIOG35 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Sep 2022 02:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiIOG3e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Sep 2022 02:29:34 -0400
+        with ESMTP id S229780AbiIOG3i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Sep 2022 02:29:38 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977AD95ADF;
-        Wed, 14 Sep 2022 23:29:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE5B8C03C;
+        Wed, 14 Sep 2022 23:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1663223347; x=1694759347;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yenovilFRNpCqkpDtpDC2f1lhfdhpbwLD7Xa2hXAFhQ=;
-  b=REDLWnC1QPKeAX1ijcEl/q33DoCeXytCTEC46YNUN0590sR3ZkLnKFWb
-   M1XzOux+Ng2jLOZcPjt9lWVgAapvOmV7cyj5UqkTlLpf0WO0jEiHoNLft
-   5gTjPqrgbh6qFqsTgpvWHdwLiOIwmHzan29X0fs8TrklZkgxTE5/dQixY
-   WTkaVtaEkyXxiLcrWmpiZw0Dg1/cduGlHSVh9AWzyc/Urm762jFULTJN3
-   rmXP34gblfy5lCaEpwP8OSF5r50Wfqg9aFpal5YRTjCdzFvkGu8pnLD0n
-   fdDCwFk4gTsg/rfDDP2WQ+Ppiu7zZ/A4Jb34kZ7NjYOIvDCsyWfz4uqab
-   Q==;
+  t=1663223352; x=1694759352;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Nz3K58GYkjN1DFzET2mFu+DZKTsC6zB71nsZVaPjp1s=;
+  b=BBe6vg0d06L0FV0jztUMN5a5PwNXWpOHDr/PdyP1lDm5+Ag+yG7mf2oe
+   pkjoOdvIwkvySdN+Yjcx4E3e8S4xLaGmKEB7ysznDaVjHMmWv8xRPmdX7
+   AG/JR5amqIUVK6rb8Wb1Gq6ex3/ohGM7n8k6yEyY5cmulCgTOgfJODU9n
+   dHuI2XRY5T+PZ6e2KgLuota8YSa5kbHF0xU3ETayAwILL/14N6gRVqfgZ
+   mOz2pKtu3WGmqds67ZfAQOOOUlDH5ULPJnq927oCfp5edUi2AgONCFvhg
+   s1MjDG4PVpE160VUhWVzFzeyhVho8oDza4/hIwy4oS8I3YfGBXqgUI67z
+   g==;
 X-IronPort-AV: E=Sophos;i="5.93,317,1654552800"; 
-   d="scan'208";a="26189606"
+   d="scan'208";a="26189608"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 15 Sep 2022 08:29:04 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -39,25 +39,25 @@ X-PGP-Universal: processed;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1663223344; x=1694759344;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yenovilFRNpCqkpDtpDC2f1lhfdhpbwLD7Xa2hXAFhQ=;
-  b=Y3G8eh989lOcarD1QrBhrBg2IX+Fs2Pf3L3QluLkBmsb9ay8bxY1Y9T/
-   MRBKR24jLBfbQt7RAAcYyYZyytoPlcFkzZnZbhHgdwpD6Ajbl3vjKslp2
-   XEqCTW572cTqDqzBGTPUfi+Q4/tH/hoJjX5uQcouutSQhLSB2f8Hbl0Sm
-   iRX2RoPFMYP8uZqJeCWe9IEOeZyXhL7IogqJa6hfVManwpwu30b2hFuQp
-   pwKDOdBH/dIKAqcR3JBGl0vgEKYR0aY+8hGMAPonItdSuWUSRDFKXktGd
-   9dLCw3We8qRBu/E2J9PFyO81+KDaHd7oUgiIqC6ORpeBh+Y2tTYxd2gHt
-   Q==;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Nz3K58GYkjN1DFzET2mFu+DZKTsC6zB71nsZVaPjp1s=;
+  b=TUQktTGJ3dwed0wxJRHNP8i64kG5vS1Ug9bJ8bd4qsz3JGfUUj8dCpq0
+   VED91OGE8GJysLw+ce0HVzFTkZeCwNdwOmPzOR929StTTL+WqM1xhCMcv
+   8kHvAZdOBno3NIEwk8RJyY8JyNyhz8wgSA6eSGwBNPI4paShAFtcvmj6d
+   xoh224x9YfKLie7WC8Mkvxre/p2YD0Zs/CHFk7WKhj7uq8Rf81R8U/vkm
+   Jba++GjNcYrQWICSRs5zDK+8Q5wVrQEIO7qDiMe9eR6j7u2qt57URsu/z
+   TMtdvCptVWsqF1K3FSmUQzncOHBcW00lhZXPuk+PlTv2I0WoxMUThj4iA
+   w==;
 X-IronPort-AV: E=Sophos;i="5.93,317,1654552800"; 
-   d="scan'208";a="26189604"
+   d="scan'208";a="26189607"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 15 Sep 2022 08:29:04 +0200
 Received: from steina-w.tq-net.de (unknown [10.123.49.11])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D467C280056;
-        Thu, 15 Sep 2022 08:29:03 +0200 (CEST)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 21E5D280072;
+        Thu, 15 Sep 2022 08:29:04 +0200 (CEST)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -69,11 +69,14 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 0/4] USB host support for TQMa8MPxL + MBa8MPxL
-Date:   Thu, 15 Sep 2022 08:28:51 +0200
-Message-Id: <20220915062855.751881-1-alexander.stein@ew.tq-group.com>
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/4] dt-bindings: usb: dwc3: Add gfladj-refclk-lpm-sel-quirk
+Date:   Thu, 15 Sep 2022 08:28:52 +0200
+Message-Id: <20220915062855.751881-2-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220915062855.751881-1-alexander.stein@ew.tq-group.com>
+References: <20220915062855.751881-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,59 +88,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi everybody,
+This selects SOF/ITP to be running on ref_clk.
 
-this is the next version of this series for USB host support on TQMa8MPxL +
-MBa8MPxL. Thanks everybody for their feedback on v1.
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-The DT configuration itself (patch 4) is rather straight forward, but leads to
-the following dmesg errors regarding superspeed ports:
-> [    8.549243] hub 2-1:1.0: hub_ext_port_status failed (err = -110)
-> [   22.885263] usb 2-1: Failed to suspend device, error -110
-
-This hardware works fine using the downstream kernel, because for imx8mp this
-ITP sync feature is enabled conditionally [1] & [2].
-Hacking this into mainline resulted in a working superspeed setup as well. I
-also noticed that on some android kernel [3] depending in IP core version either
-GCTL.SOFTITPSYNC or GFLADJ.GFLADJ_REFCLK_LPM_SEL is enabled unconditionally.
-So I opted for the latter one using some quirk (patch 1-3).
-
-Changes in v3:
-* Added Krzysztof's A-b to Patch 1
-* Added Li Jun's R-b to Patch 2
-* Remove 'snps,dis-u2-freeclk-exists-quirk' in Patch 3
-  snps,gfladj-refclk-lpm-sel-quirk is a superset of the old one
-* Removed 'snps,dis_u3_susphy_quirk' in Patch 4
-  This is addressed by patch series [4] & [5] separately
-
-Thanks and best regards,
-Alexander
-
-[1] https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/usb/dwc3/dwc3-imx8mp.c?h=lf-5.10.y#n134
-[2] https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/usb/dwc3/core.c?h=lf-5.10.y#n333
-[3] https://android.googlesource.com/kernel/msm/+/87a6b154766907020cc74c7726e8a68aaa9d7f6b%5E%21/#F0
-[4] https://lore.kernel.org/all/1662547028-22279-1-git-send-email-jun.li@nxp.com/
-[5] https://lore.kernel.org/all/1663067426-29534-1-git-send-email-jun.li@nxp.com/
-
-Alexander Stein (4):
-  dt-bindings: usb: dwc3: Add gfladj-refclk-lpm-sel-quirk
-  usb: dwc3: core: add gfladj_refclk_lpm_sel quirk
-  arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel quirk to USB nodes
-  arm64: dts: tqma8mpql: add support for 2nd USB (host) interface
-
-Alexander Stein (4):
-  dt-bindings: usb: dwc3: Add gfladj-refclk-lpm-sel-quirk
-  usb: dwc3: core: add gfladj_refclk_lpm_sel quirk
-  arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel quirk to USB nodes
-  arm64: dts: tqma8mpql: add support for 2nd USB (host) interface
-
- .../devicetree/bindings/usb/snps,dwc3.yaml    |  5 +++
- .../freescale/imx8mp-tqma8mpql-mba8mpxl.dts   | 41 +++++++++++++++++++
- arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  4 +-
- drivers/usb/dwc3/core.c                       |  8 +++-
- drivers/usb/dwc3/core.h                       |  2 +
- 5 files changed, 57 insertions(+), 3 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index 1779d08ba1c0..2a54d0bb0b15 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -234,6 +234,11 @@ properties:
+       avoid -EPROTO errors with usbhid on some devices (Hikey 970).
+     type: boolean
+ 
++  snps,gfladj-refclk-lpm-sel-quirk:
++    description:
++      When set, run the SOF/ITP counter based on ref_clk.
++    type: boolean
++
+   snps,is-utmi-l1-suspend:
+     description:
+       True when DWC3 asserts output signal utmi_l1_suspend_n, false when
 -- 
 2.25.1
 
