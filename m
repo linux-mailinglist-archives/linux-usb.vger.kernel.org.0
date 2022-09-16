@@ -2,104 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726B25BA9D3
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Sep 2022 12:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF21E5BAB05
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Sep 2022 12:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiIPJ7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Sep 2022 05:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S230463AbiIPKOL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Sep 2022 06:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiIPJ64 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Sep 2022 05:58:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC73AB04C
-        for <linux-usb@vger.kernel.org>; Fri, 16 Sep 2022 02:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663322332; x=1694858332;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t537bmNkqs9dAyQDbXHcnZQTEQ6XLcQZ2HqYuG2/gBE=;
-  b=NGpgifRG71TTW37WsD4z8RA13G1oY0hj/rUCIylh+cQ0DO8bR+jIjoCD
-   Qe0Z9BBCdN3USgCj+JpP4Xmcgr3LezW3QIy2LoAn+5YuCFgcKuZwxCAAG
-   BFiDE1PFTH432cv/Hfb+DFUTBjvNrqAhZdfKifgqpBo/p8zZ84nhLcaJl
-   lg1H5rBrsHk7xHMluW9TdoF2Qipxhh5oAWRwqRkCTSBfOn7p5h94ckz7C
-   eiW9SL+SJTWeXKZShIwDU/68Ku2d0YpUeVbYHvUnEvgNl+IGWiqee8QWI
-   arAcjc/VHVpHBoHRB7Y7I4qJqHYVIDO+vMBqOFLCDJuAywor4w9725n7m
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="279338655"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="279338655"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 02:58:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="759991579"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 16 Sep 2022 02:58:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 16 Sep 2022 12:58:47 +0300
-Date:   Fri, 16 Sep 2022 12:58:47 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Liang He <windhl@126.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: anx7411: Use of_get_child_by_name()
- instead of of_find_node_by_name()
-Message-ID: <YyRI12FZYWCG7KNw@kuha.fi.intel.com>
-References: <20220915092209.4009273-1-windhl@126.com>
+        with ESMTP id S231160AbiIPKNg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Sep 2022 06:13:36 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A141ADCCD
+        for <linux-usb@vger.kernel.org>; Fri, 16 Sep 2022 03:10:27 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id g3so14317013wrq.13
+        for <linux-usb@vger.kernel.org>; Fri, 16 Sep 2022 03:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=eVpP3B8Yd3GGlXs2s7bOVxeOJGC3gSkrPxMOLUAsWP4=;
+        b=wvLUctE9te+Df6XtYkm6JJ8C6mOGaMhUfG/JkmfPOw1XJPaOpx1wN4YYB9sfAxbIyB
+         BrgUODZIsHB+9isoBcG9XjRjDCIKvfbFv3FnKYG3RbE2GF7Z6QCYCratzr6QqUo8iilf
+         OZ+lli2lOFVDHcZvX5elHc+C6k53IHe3ApuIYkoBsf9/2QR/4TTAtmFQ483YTn4gA423
+         JKrdGrTUyn0ZrpFfzCb4p2pSwAQeDnYIMDb2o1IvIOMki0aqUoRwH1xxDENhiqOR1rGs
+         D5KoaVl0p0kfaA6qe+lnbawEnq8uc5QXsNPsQeQqw5meBaRebtsSKIU+hZJyYwQ4mB/J
+         WbRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=eVpP3B8Yd3GGlXs2s7bOVxeOJGC3gSkrPxMOLUAsWP4=;
+        b=J4+XEpOc9KA5hmEh31stmXapigP4fEJrFZncIVrHj0+gLPx6OWM6qhVeybEumzC9Rj
+         qUAd/yjXKQKrnvNbL0eXqlSKmVmWyzC/+mLvdRUqIKXtzIKLIyuRP+Wi8/jNXyMX2Vp8
+         Sf8CzUhFQVLFcicaxywqbHppCBOok1tn5rLoUIxweSKHQ0qpjQxH/xkXdeegzKzdVPgx
+         AHCuWvtWomkw+6SUXElLrnB5p9ZU+YjQw4PY9WlZpHk4TyzDL4jbiB/O5Y+eWU6ONZ0d
+         so+2hwjW1623qB8Y8jAXusl3xQvRVKYN/hmOOLLo2OcfD8WtkKq7OnACrTUUwX4Nxgfk
+         4T0A==
+X-Gm-Message-State: ACrzQf1nR5UwS+h2zJsEGZ/QI1r922/LbYJzKJqc51S7B4h1sEGv6KFa
+        ufee85XHstHNSPj9iA7/rHpAGg==
+X-Google-Smtp-Source: AMsMyM6u2LHVqC2nJe9wN0MgBRE3VSw6iSwbOSX3d4vZDY2O2WPYHqKaSndMHVlMJGTCvTgSyitPQg==
+X-Received: by 2002:adf:df82:0:b0:228:e2cf:d20f with SMTP id z2-20020adfdf82000000b00228e2cfd20fmr2522431wrl.356.1663323013991;
+        Fri, 16 Sep 2022 03:10:13 -0700 (PDT)
+Received: from [10.119.22.201] ([89.101.193.73])
+        by smtp.gmail.com with ESMTPSA id c2-20020a1c3502000000b003b4935f04a4sm2205155wma.5.2022.09.16.03.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Sep 2022 03:10:13 -0700 (PDT)
+Message-ID: <00368da8-bf24-da5a-15da-dbc1a6a716e8@linaro.org>
+Date:   Fri, 16 Sep 2022 11:10:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220915092209.4009273-1-windhl@126.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: usb: dwc3: Add interrupt-names to include
+ hibernation interrupt
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>,
+        "Mehta, Piyush" <piyush.mehta@amd.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
+        Manish Narani <manish.narani@xilinx.com>
+References: <20220912085730.390555-1-piyush.mehta@amd.com>
+ <4cc7a6d2-64ef-c176-21ad-4c3e66f664f7@linaro.org>
+ <MN2PR12MB43330B57F5CFBEC35105665188469@MN2PR12MB4333.namprd12.prod.outlook.com>
+ <05ce5c7c-c7e2-cac1-341a-5461804f96ea@linaro.org>
+ <46b9bb31-efb5-1e1f-9d01-3841661293dc@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <46b9bb31-efb5-1e1f-9d01-3841661293dc@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 05:22:09PM +0800, Liang He wrote:
-> In anx7411_typec_switch_probe(), we should call of_get_child_by_name()
-> instead of of_find_node_by_name() as of_find_xxx API will decrease the
-> refcount of the 'from' argument.
+On 15/09/2022 10:04, Michal Simek wrote:
 > 
-> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
-> Signed-off-by: Liang He <windhl@126.com>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  
->  v2: use of_get_child_by_name() advised by Heikki Krogerus.
 > 
->  drivers/usb/typec/anx7411.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> On 9/15/22 10:44, Krzysztof Kozlowski wrote:
+>> On 14/09/2022 14:15, Mehta, Piyush wrote:
+>>>   
+>>>> Where is the user (DTS) and implementation of this change? If this is specific
+>>>> to Xilinx, why you do not have device specific compatible?
+>>> [Piyush]:
+>>> We have dedicated irq line for hibernation feature,  "hiber" irq line triggers hibernation interrupt.
+>>> DWC3 core supports the hibernation feature, we have a dedicated code which is yet to be upstreamed.
+>>> As the hibernation feature provided by dwc3-core, so this will be supported by other SOC/vendors.
+>>
+>> But is hiber irq line present in other vendors? What confuses me is
+>> adding not only "hiber" irq but also otg in completely new enum.
 > 
-> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-> index c0f0842d443c..f178d0eb47b1 100644
-> --- a/drivers/usb/typec/anx7411.c
-> +++ b/drivers/usb/typec/anx7411.c
-> @@ -1105,7 +1105,7 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
->  	int ret;
->  	struct device_node *node;
->  
-> -	node = of_find_node_by_name(dev->of_node, "orientation_switch");
-> +	node = of_get_child_by_name(dev->of_node, "orientation_switch");
->  	if (!node)
->  		return 0;
->  
-> @@ -1115,7 +1115,7 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
->  		return ret;
->  	}
->  
-> -	node = of_find_node_by_name(dev->of_node, "mode_switch");
-> +	node = of_get_child_by_name(dev->of_node, "mode_switch");
->  	if (!node) {
->  		dev_err(dev, "no typec mux exist");
->  		ret = -ENODEV;
+> I will let Piyush to comment hiber IRQ. But I expect we don't have visibility 
+> what others are doing but this is line is not Xilinx invention that's why I 
+> expect IP from Synopsys have it by default but it is up to soc vendor if 
+> hibernation feature is enabled or not.
+> 
+> otg is already listed in
+> Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> 
+> It is only about order.
+> Driver is already using
+> platform_get_irq_byname..() functions
 
-thanks,
+Linux driver yes, but other platforms (bootloaders, operating systems)
+might be doing things differently. Therefore the order and items are
+usually strict. If they cannot be strict, it is nice to know why or it
+is nice to restrict it to some specific variant (if it is applicable).
 
--- 
-heikki
+This is why I asked whether the line is specific to Xilinx or to others.
+
+> 
+> I think any combination should be fine. Do we need to record used order or there 
+> is way in yaml to support any combination with dwc_usb3, host, peripheral, otg 
+> should be working (ignoring that hiber which should be likely there too).
+
+What confuses me here more, is having otg. I understand that dwc_usb3 is
+the single interrupt for all the modes, so my naive approach would be:
+oneOf:
+ - dwc_usb3
+ - enum [dwc_usb3, hiber]
+ - enum [host, peripheral, otg]
+ - enum [host, peripheral, otg, hiber]
+
+However here Piyush adds not only hiber but also otg...
+
+Best regards,
+Krzysztof
