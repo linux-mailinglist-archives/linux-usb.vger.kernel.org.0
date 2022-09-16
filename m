@@ -2,141 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF21E5BAB05
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Sep 2022 12:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BD25BABD8
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Sep 2022 12:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiIPKOL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Sep 2022 06:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S229804AbiIPK7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Sep 2022 06:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiIPKNg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Sep 2022 06:13:36 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A141ADCCD
-        for <linux-usb@vger.kernel.org>; Fri, 16 Sep 2022 03:10:27 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id g3so14317013wrq.13
-        for <linux-usb@vger.kernel.org>; Fri, 16 Sep 2022 03:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=eVpP3B8Yd3GGlXs2s7bOVxeOJGC3gSkrPxMOLUAsWP4=;
-        b=wvLUctE9te+Df6XtYkm6JJ8C6mOGaMhUfG/JkmfPOw1XJPaOpx1wN4YYB9sfAxbIyB
-         BrgUODZIsHB+9isoBcG9XjRjDCIKvfbFv3FnKYG3RbE2GF7Z6QCYCratzr6QqUo8iilf
-         OZ+lli2lOFVDHcZvX5elHc+C6k53IHe3ApuIYkoBsf9/2QR/4TTAtmFQ483YTn4gA423
-         JKrdGrTUyn0ZrpFfzCb4p2pSwAQeDnYIMDb2o1IvIOMki0aqUoRwH1xxDENhiqOR1rGs
-         D5KoaVl0p0kfaA6qe+lnbawEnq8uc5QXsNPsQeQqw5meBaRebtsSKIU+hZJyYwQ4mB/J
-         WbRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=eVpP3B8Yd3GGlXs2s7bOVxeOJGC3gSkrPxMOLUAsWP4=;
-        b=J4+XEpOc9KA5hmEh31stmXapigP4fEJrFZncIVrHj0+gLPx6OWM6qhVeybEumzC9Rj
-         qUAd/yjXKQKrnvNbL0eXqlSKmVmWyzC/+mLvdRUqIKXtzIKLIyuRP+Wi8/jNXyMX2Vp8
-         Sf8CzUhFQVLFcicaxywqbHppCBOok1tn5rLoUIxweSKHQ0qpjQxH/xkXdeegzKzdVPgx
-         AHCuWvtWomkw+6SUXElLrnB5p9ZU+YjQw4PY9WlZpHk4TyzDL4jbiB/O5Y+eWU6ONZ0d
-         so+2hwjW1623qB8Y8jAXusl3xQvRVKYN/hmOOLLo2OcfD8WtkKq7OnACrTUUwX4Nxgfk
-         4T0A==
-X-Gm-Message-State: ACrzQf1nR5UwS+h2zJsEGZ/QI1r922/LbYJzKJqc51S7B4h1sEGv6KFa
-        ufee85XHstHNSPj9iA7/rHpAGg==
-X-Google-Smtp-Source: AMsMyM6u2LHVqC2nJe9wN0MgBRE3VSw6iSwbOSX3d4vZDY2O2WPYHqKaSndMHVlMJGTCvTgSyitPQg==
-X-Received: by 2002:adf:df82:0:b0:228:e2cf:d20f with SMTP id z2-20020adfdf82000000b00228e2cfd20fmr2522431wrl.356.1663323013991;
-        Fri, 16 Sep 2022 03:10:13 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.73])
-        by smtp.gmail.com with ESMTPSA id c2-20020a1c3502000000b003b4935f04a4sm2205155wma.5.2022.09.16.03.10.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Sep 2022 03:10:13 -0700 (PDT)
-Message-ID: <00368da8-bf24-da5a-15da-dbc1a6a716e8@linaro.org>
-Date:   Fri, 16 Sep 2022 11:10:12 +0100
+        with ESMTP id S232197AbiIPK6z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Sep 2022 06:58:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B7D4661C;
+        Fri, 16 Sep 2022 03:46:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663325213; x=1694861213;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=VMKSeL1s3oVRo2Dzgzr3C8yNq48d9P4cYGuFF06QwJ4=;
+  b=XKI/dxb8hvi1E8X9nzTV8gKrhuGSgcHFaptuQy+gpAKI2AoOjVqiS6nP
+   umZEqi2ZWXN8dJtNVWXvDTNjKKW75WxOTMIkYQZ5abXSwslI0Z0j0ExOL
+   1G4H5zdacqJxgfURjbZf7FtzvZA/XL+I7Abzvap4UebqQ8tJzcRbpyRSR
+   G9JyDdiYepCUoVZznoSC4kJomjAefbE9R9Bdis/Ynb689SGUZWDSINsEe
+   Z18T6qurvUyS8bBF54ayRaMJjKIDnJzWSDSnrseGCP5boSlpyaS0d+coE
+   OhVm9jPUKyYUaWKHKOAXtSXQvC4M4UFFELXFL9llwZtlQr9a1MNswa7cI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="385256354"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="385256354"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 03:46:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="760008114"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 16 Sep 2022 03:46:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 16 Sep 2022 13:46:47 +0300
+Date:   Fri, 16 Sep 2022 13:46:47 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bastian Rieck <bastian@rieck.me>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        grzegorz.alibozek@gmail.com, andrew.co@free.fr, meven29@gmail.com,
+        pchernik@gmail.com, jorge.cep.mart@gmail.com,
+        danielmorgan@disroot.org, bernie@codewiz.org,
+        saipavanchitta1998@gmail.com, rubin@starset.net,
+        maniette@gmail.com, nate@kde.org
+Subject: Re: [RFC PATCH 0/2] usb: typec: ucsi: Check connection on resume
+Message-ID: <YyRUF5cFGpe2xf+m@kuha.fi.intel.com>
+References: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
+ <27257661.hdJqBvvX10@nimue>
+ <YxrbtWDR7XI4s+Q+@kuha.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: usb: dwc3: Add interrupt-names to include
- hibernation interrupt
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        "Mehta, Piyush" <piyush.mehta@amd.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "balbi@kernel.org" <balbi@kernel.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
-        Manish Narani <manish.narani@xilinx.com>
-References: <20220912085730.390555-1-piyush.mehta@amd.com>
- <4cc7a6d2-64ef-c176-21ad-4c3e66f664f7@linaro.org>
- <MN2PR12MB43330B57F5CFBEC35105665188469@MN2PR12MB4333.namprd12.prod.outlook.com>
- <05ce5c7c-c7e2-cac1-341a-5461804f96ea@linaro.org>
- <46b9bb31-efb5-1e1f-9d01-3841661293dc@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <46b9bb31-efb5-1e1f-9d01-3841661293dc@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YxrbtWDR7XI4s+Q+@kuha.fi.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/09/2022 10:04, Michal Simek wrote:
-> 
-> 
-> On 9/15/22 10:44, Krzysztof Kozlowski wrote:
->> On 14/09/2022 14:15, Mehta, Piyush wrote:
->>>   
->>>> Where is the user (DTS) and implementation of this change? If this is specific
->>>> to Xilinx, why you do not have device specific compatible?
->>> [Piyush]:
->>> We have dedicated irq line for hibernation feature,  "hiber" irq line triggers hibernation interrupt.
->>> DWC3 core supports the hibernation feature, we have a dedicated code which is yet to be upstreamed.
->>> As the hibernation feature provided by dwc3-core, so this will be supported by other SOC/vendors.
->>
->> But is hiber irq line present in other vendors? What confuses me is
->> adding not only "hiber" irq but also otg in completely new enum.
-> 
-> I will let Piyush to comment hiber IRQ. But I expect we don't have visibility 
-> what others are doing but this is line is not Xilinx invention that's why I 
-> expect IP from Synopsys have it by default but it is up to soc vendor if 
-> hibernation feature is enabled or not.
-> 
-> otg is already listed in
-> Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> 
-> It is only about order.
-> Driver is already using
-> platform_get_irq_byname..() functions
+Hi Bastian,
 
-Linux driver yes, but other platforms (bootloaders, operating systems)
-might be doing things differently. Therefore the order and items are
-usually strict. If they cannot be strict, it is nice to know why or it
-is nice to restrict it to some specific variant (if it is applicable).
-
-This is why I asked whether the line is specific to Xilinx or to others.
-
+On Fri, Sep 09, 2022 at 09:22:50AM +0300, Heikki Krogerus wrote:
+> On Thu, Sep 08, 2022 at 07:01:34AM +0200, Bastian Rieck wrote:
+> > Dear Heikki,
+> > 
+> > > I'm sending these as an RFC first because I'm not done testing.
+> > > 
+> > > I made a small modification to my original proposal (in the bug
+> > > report). Now also connection during suspend should be covered.
+> > > 
+> > > I would appreciate if you guys could test these again. If
+> > > everything works, and the bug is fixed, let me know, and I'll add
+> > > your Tested-by tags to the patches.
+> > >
+> > 
+> > Thanks so much for these changes—that's awesome! I have just finished 
+> > testing this against 5.19.7 (Arch Linux) with a Lenovo X1 (Gen 9).
+> > 
+> > I am very happy to see that, as far as I can tell, the issue 
+> > disappeared completely!
+> > 
+> > However, I am receiving additional warnings via `journalctl` that I 
+> > did not receive before; I have attached this trace as an additional 
+> > log file. Nothing in there seems critical and I can confirm that the 
+> > system continues to operate normally. I merely wanted to provide you 
+> > with this additional information in case it is of relevance.
+> > 
+> > Please let me know if there's anything else I can do here; I really 
+> > appreciate the time you spent on this!
 > 
-> I think any combination should be fine. Do we need to record used order or there 
-> is way in yaml to support any combination with dwc_usb3, host, peripheral, otg 
-> should be working (ignoring that hiber which should be likely there too).
+> Thank you for the report. That warning certainly needs to be sorted
+> out before I send the final versions. I'll try to reproduce that.
 
-What confuses me here more, is having otg. I understand that dwc_usb3 is
-the single interrupt for all the modes, so my naive approach would be:
-oneOf:
- - dwc_usb3
- - enum [dwc_usb3, hiber]
- - enum [host, peripheral, otg]
- - enum [host, peripheral, otg, hiber]
+I'm not getting anywhere with this one. Could you provide me with the
+trace output from both module and ucsi events?
 
-However here Piyush adds not only hiber but also otg...
+To enable those events - assuming debugfs is mounted to
+/sys/kernel/debug:
 
-Best regards,
-Krzysztof
+        % echo 1 > /sys/kernel/debug/tracing/events/ucsi/enable
+        % echo 1 > /sys/kernel/debug/tracing/events/module/enable
+
+Run the suspend resume cycle, and then dump the trace output to a
+file:
+
+        % cat /sys/kernel/debug/tracing/trace > ucsi_trace
+
+thanks,
+
+-- 
+heikki
