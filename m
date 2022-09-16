@@ -2,99 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E56C5BA789
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Sep 2022 09:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726B25BA9D3
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Sep 2022 12:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiIPHgR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Sep 2022 03:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S230304AbiIPJ7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Sep 2022 05:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiIPHgQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Sep 2022 03:36:16 -0400
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 052FA2CDC5
-        for <linux-usb@vger.kernel.org>; Fri, 16 Sep 2022 00:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FhbIG
-        Pq+PNgehqIfbGLgrlWr4gkAc3wMTaWsx4UrTn0=; b=nRSlOEICDaoctFkx7QId1
-        8fKr3BALoA33RFoc+A4TdxlLbsBTCMNidLrnnoRcTuGR6In331kRQIl0zyEpxOVH
-        mJvhKuUa6kFBnTGm0f1W7W04hW/OH9JZEa8RLxDyCYTlH1y6+6Qs6W9bnRKyKiu2
-        /E68qpLDl3TmvSojf3bMJE=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp3 (Coremail) with SMTP id DcmowADn7aFYJyRjUaegBg--.14416S2;
-        Fri, 16 Sep 2022 15:35:55 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     windhl@126.com
-Subject: [PATCH] USB: serial: console: Fix potential use-after-free in usb_console_setup()
-Date:   Fri, 16 Sep 2022 15:35:52 +0800
-Message-Id: <20220916073552.4093048-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230319AbiIPJ64 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Sep 2022 05:58:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC73AB04C
+        for <linux-usb@vger.kernel.org>; Fri, 16 Sep 2022 02:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663322332; x=1694858332;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t537bmNkqs9dAyQDbXHcnZQTEQ6XLcQZ2HqYuG2/gBE=;
+  b=NGpgifRG71TTW37WsD4z8RA13G1oY0hj/rUCIylh+cQ0DO8bR+jIjoCD
+   Qe0Z9BBCdN3USgCj+JpP4Xmcgr3LezW3QIy2LoAn+5YuCFgcKuZwxCAAG
+   BFiDE1PFTH432cv/Hfb+DFUTBjvNrqAhZdfKifgqpBo/p8zZ84nhLcaJl
+   lg1H5rBrsHk7xHMluW9TdoF2Qipxhh5oAWRwqRkCTSBfOn7p5h94ckz7C
+   eiW9SL+SJTWeXKZShIwDU/68Ku2d0YpUeVbYHvUnEvgNl+IGWiqee8QWI
+   arAcjc/VHVpHBoHRB7Y7I4qJqHYVIDO+vMBqOFLCDJuAywor4w9725n7m
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="279338655"
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="279338655"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 02:58:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="759991579"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 16 Sep 2022 02:58:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 16 Sep 2022 12:58:47 +0300
+Date:   Fri, 16 Sep 2022 12:58:47 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Liang He <windhl@126.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: anx7411: Use of_get_child_by_name()
+ instead of of_find_node_by_name()
+Message-ID: <YyRI12FZYWCG7KNw@kuha.fi.intel.com>
+References: <20220915092209.4009273-1-windhl@126.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowADn7aFYJyRjUaegBg--.14416S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1ktF1DZw13CFy7Jw4rAFb_yoW8Wr1rpr
-        4DKFW5Jr18JF43Xw4fAFWrZrn5W3W2kFy2kr12yw43uFnxt34S93Wxt34Ykay3Cr97Jr90
-        yF4jvFW5ua4UKr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRoSotUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuBx+F2JVlaNl9QAAsc
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915092209.4009273-1-windhl@126.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In usb_console_setup(), if we goto error_get_interface and the
-usb_serial_put() may finally call kfree(serial). However, the next
-line will call 'mutex_unlock(&serial->disc_mutex)' which can cause
-a potential UAF bug.
+On Thu, Sep 15, 2022 at 05:22:09PM +0800, Liang He wrote:
+> In anx7411_typec_switch_probe(), we should call of_get_child_by_name()
+> instead of of_find_node_by_name() as of_find_xxx API will decrease the
+> refcount of the 'from' argument.
+> 
+> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
+> Signed-off-by: Liang He <windhl@126.com>
 
-Fixes: 7bd032dc2793 ("USB serial: update the console driver")
-Signed-off-by: Liang He <windhl@126.com>
----
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
- I don't know if the refcount can be zero here, so if it cannot be zero,
-this code is safe and please ignore my patch.
+> ---
+>  
+>  v2: use of_get_child_by_name() advised by Heikki Krogerus.
+> 
+>  drivers/usb/typec/anx7411.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+> index c0f0842d443c..f178d0eb47b1 100644
+> --- a/drivers/usb/typec/anx7411.c
+> +++ b/drivers/usb/typec/anx7411.c
+> @@ -1105,7 +1105,7 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
+>  	int ret;
+>  	struct device_node *node;
+>  
+> -	node = of_find_node_by_name(dev->of_node, "orientation_switch");
+> +	node = of_get_child_by_name(dev->of_node, "orientation_switch");
+>  	if (!node)
+>  		return 0;
+>  
+> @@ -1115,7 +1115,7 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
+>  		return ret;
+>  	}
+>  
+> -	node = of_find_node_by_name(dev->of_node, "mode_switch");
+> +	node = of_get_child_by_name(dev->of_node, "mode_switch");
+>  	if (!node) {
+>  		dev_err(dev, "no typec mux exist");
+>  		ret = -ENODEV;
 
- drivers/usb/serial/console.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/serial/console.c b/drivers/usb/serial/console.c
-index b97aa40ca4d1..21ac2dd6baca 100644
---- a/drivers/usb/serial/console.c
-+++ b/drivers/usb/serial/console.c
-@@ -62,6 +62,7 @@ static int usb_console_setup(struct console *co, char *options)
- 	int cflag = CREAD | HUPCL | CLOCAL;
- 	char *s;
- 	struct usb_serial *serial;
-+	struct mutex *s_mutex;
- 	struct usb_serial_port *port;
- 	int retval;
- 	struct tty_struct *tty = NULL;
-@@ -116,7 +117,7 @@ static int usb_console_setup(struct console *co, char *options)
- 		return -ENODEV;
- 	}
- 	serial = port->serial;
--
-+	s_mutex = &serial->disc_mutex;
- 	retval = usb_autopm_get_interface(serial->interface);
- 	if (retval)
- 		goto error_get_interface;
-@@ -190,7 +191,7 @@ static int usb_console_setup(struct console *co, char *options)
- 	usb_autopm_put_interface(serial->interface);
-  error_get_interface:
- 	usb_serial_put(serial);
--	mutex_unlock(&serial->disc_mutex);
-+	mutex_unlock(s_mutex);
- 	return retval;
- }
- 
 -- 
-2.25.1
-
+heikki
