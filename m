@@ -2,78 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8325BC21A
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 06:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24375BC287
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 07:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiISEZn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Sep 2022 00:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S229572AbiISFcm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Sep 2022 01:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiISEZm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 00:25:42 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4D212AF7
-        for <linux-usb@vger.kernel.org>; Sun, 18 Sep 2022 21:25:40 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id h13-20020a056402280d00b004528c8400afso11166864ede.6
-        for <linux-usb@vger.kernel.org>; Sun, 18 Sep 2022 21:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=vAt8nF5eu7uK8Lb8Ju51hMVsBhvez7qmSLnhO7fz+wg=;
-        b=V9UmvGq8Eq17yaG+MazygbCeB0fMbzPtNIJ+iMJJVz3OAemBzXH1vhcj+R65SOPujQ
-         KySEIwednobZZfTPkB+MA0LWJJw/XLD3UDE0HxK0RJtOw+7eUZzjQvWxkWU4lBTGQqR8
-         /hpjHyg0JM9+bY/PhWRewpYRPvMQzY0kGYUqLWnirvBUDFAOF1uxW0utUJkimWQemuqB
-         LyA3E2OzkHovq0LsD0dglplgpF6YrmzKT/xiLAgsLLSdf8PoGN8pguG2hd9F3CGmJH0d
-         Az8OY08TqgXES5o+5JsAJHkujtIXu1eWVln3k9HbDvTNjPrXQ2Z9WugoRmHoKBq0qW8c
-         zNZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=vAt8nF5eu7uK8Lb8Ju51hMVsBhvez7qmSLnhO7fz+wg=;
-        b=h3XEZA/Nhlx6JdIP1fIpYULx4Ngei0n2MTVmxwUpFqrlFi6C54iZM30PkwrGhRFgxt
-         jM4tLGvcsgNA0Ux5EU9gXZmiaRGdBe8yoWoZJ9SDc+fAN3myGUhZPVAaQ1lxOyKA7c6s
-         iPMVVLwiNTuyCU0J7oMCH+1SbV6mat7ECvhCI9zZRJ9fLyQjg1eWZNS943yylHpyQC59
-         Bdfc7Y+Gn/cve7Nv8JSQTJt3nx3tClYhjM9KPxE65HzR3dpV1arhOWsQMLwj7N+LugCv
-         deCTIGSRz+mkdEV/o5iq0G8eUMJmejGUNBcRhv2fDTmbCWmXXcYNXnIfPOwkHSCbedUG
-         ii1A==
-X-Gm-Message-State: ACrzQf1eHZudsv8/DSHMVVf46hx8OaH8vEQBW/0F3sxMVR8Kks84kPSl
-        CSPEwh+Zi06zq6UT5lgD7LThUjsiAVSb
-X-Google-Smtp-Source: AMsMyM4agj4l3RY3Rw3+CJbbvyULsH03pMXxD/X7JNJXyQCb2nhR5acKflJTR0/65vUBaa79jVX7yRiMpKPB
-X-Received: from dvyukov-desk.muc.corp.google.com ([2a00:79e0:9c:201:62f3:29e:da00:8ea7])
- (user=dvyukov job=sendgmr) by 2002:a17:907:2c77:b0:77b:4445:a852 with SMTP id
- ib23-20020a1709072c7700b0077b4445a852mr11605567ejc.582.1663561538852; Sun, 18
- Sep 2022 21:25:38 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 06:25:33 +0200
-In-Reply-To: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
-Mime-Version: 1.0
-References: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-Message-ID: <20220919042533.2688081-1-dvyukov@google.com>
-Subject: Re: [PATCH] usb: mon: make mmapped memory read only
-From:   Dmitry Vyukov <dvyukov@google.com>
-To:     tadeusz.struk@linaro.org
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org
+        with ESMTP id S229483AbiISFck (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 01:32:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0892217AB2
+        for <linux-usb@vger.kernel.org>; Sun, 18 Sep 2022 22:32:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9560360C79
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 05:32:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 02691C433C1
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 05:32:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663565559;
+        bh=hMcZuP1G0alAmVQmNsuB7NyI/TtvdUTgHaelsoHl14E=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=SVQHKHR248k3x6NE5x2+CcsDqIlzZ5m8ysRGARd8RSggM472++FnUpz/DR5qdVHnq
+         ZdDWhEpNAku92kU9m3t30UdB/1P2R3/KmJgERT5uCUwMHsZwABkj53EN3Hp8b4cRGh
+         qO73ZiXvpPTl8D4170KRM35vo2kjx4vN1ubysHCmrzKgKJq8EQdmGA60NKgTlFpbJj
+         QDOfVlWluIA7S181072Qrp3wBCAjiExOUSRpBz3WnJyx22Up2it1TigQFuyJXF+jXS
+         /tfi/DKmqsfoo1/zznDesEK+3LMtSfmTPHqoEUgK5+UzKWmRP+bfIEhDVWMxhE5dDm
+         FOMVoeAZWTIZg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id DC6F3C433E4; Mon, 19 Sep 2022 05:32:38 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216497] USB connections through thunderbolt dock broken
+Date:   Mon, 19 Sep 2022 05:32:38 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216497-208809-F3Ivpypw92@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216497-208809@https.bugzilla.kernel.org/>
+References: <bug-216497-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Tadeusz,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216497
 
-Looking at places like these:
-https://elixir.bootlin.com/linux/v6.0-rc5/source/drivers/infiniband/hw/qib/qib_file_ops.c#L736
-https://elixir.bootlin.com/linux/v6.0-rc5/source/drivers/infiniband/hw/mlx5/main.c#L2088
-I think we also need to remove VM_MAYWRITE, otherwise it's still
-possible to turn it into a writable mapping with mprotect.
+Mika Westerberg (mika.westerberg@linux.intel.com) changed:
 
-It's also probably better to return an error if VM_WRITE (or VM_EXEC?) is set
-rather than silently fix it up.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mika.westerberg@linux.intel
+                   |                            |.com
+
+--- Comment #3 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+Hi, if the previous version of the kernel works then can you bisect this to=
+ a
+commit that caused the issue?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
