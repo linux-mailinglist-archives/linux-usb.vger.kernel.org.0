@@ -2,100 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E921D5BCE55
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 16:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6214B5BCF4E
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 16:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiISOQB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Sep 2022 10:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S229571AbiISOmK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Sep 2022 10:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiISOP6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 10:15:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925D32ABB
-        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 07:15:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D4C961D1A
-        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 14:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79E88C43470
-        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 14:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663596954;
-        bh=bX1g8+BxMkssqj2UhVgwgVQFAhwWjWQmkuQn52thFj8=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=KNV85hthlInH1G8RZYvcXfqWiZoKCVjTg+rW6x9hIZ78RLw31yzxwlyzLbYQbq1va
-         gNYkkk77EoujTVCAV9NCzA9CGMkJGouHSeu0GAYcYoBkRDmfG6RsGCVJ3Y21O2in+W
-         UKnUnqgVDJhnZlf3fUMIe46YvnEjV3stBd/EYD1OU8WORza4lXb/6s8pBUnS8fJ5ty
-         4D//uJycOofrT3d5U9xmBEwmIjK1RlssYqMQRTS5xz7S71XkZgCC1hOHIBCzBnD8wq
-         gZiL870jHyP6k5Gh6eUAgITJAsepvPh0W3gkm19J6wBS05MZ5shLBF9vFVgTdJ9h2G
-         ILWv8DRRHmZkQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 62754C05FD6; Mon, 19 Sep 2022 14:15:54 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216497] USB connections through thunderbolt dock broken
-Date:   Mon, 19 Sep 2022 14:15:54 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jason@montleon.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-216497-208809-e1azE5sRyA@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216497-208809@https.bugzilla.kernel.org/>
-References: <bug-216497-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229864AbiISOlx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 10:41:53 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A713CE2
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 07:41:51 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id s10so33474232ljp.5
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 07:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=d0PlgnOUHqWSrfkO999QdGVEewNSct5XFVIY4edfUR9ftwo0E48X3wTkFABK7njVWl
+         pc+pqvjt8uZTUHFVmxUdWyIV0jyioote4Qc9uG4MeKO5QnDOcb5S2YMERDBtumq+FM16
+         Jkd1ruRFpqGgQIU8JpBAyrWxJr0F/rcgsq4s2gViTSXpbCJ1jb4iczyAo6lMxdUJHmm9
+         o4Vkm97K2O6OFti8R58Tf9Jun8T0lcKWn8yw5l6ynDUjovw2t6Hv5nzdHkmJflVFOVuc
+         nqdFHAt3+ocRPqRRQcK4kxT44s4SafB9qUPUD6cXubnw1wqLjNk3EyuYc84ftZajcPyd
+         993A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=cW5HMKWX/mzuNJqvHWAdiC34Zb8njNVg+tfN0py11QtzcIoOzMFsETdkNXuEoCB+2k
+         Dr5nnqg91t6rFQnuizH6fVzRBKQUMWpue9XCB2ulpsS2dY4SSqRr+d0yxz+B8qaODY1K
+         nT5/1yBSRMVx9SiGDcTb4rtzWGIKNilvWWdBOdZgPPrW2NnEjMaLFp9DHpVaecOvTvMx
+         qS0n+XpBdCGK9SgNaExygezjxytHIgYEKeyb4qJOVs23KaQA3f2Y1D42iK1mpJos692H
+         p1gxn0yA4Yt508RJlXDC0i8h/w7gcLqeZpN6e2byY+4CTphXeNIf5QBreEd2IRkLdChb
+         YVFA==
+X-Gm-Message-State: ACrzQf0XsZgY81h223J5WMe7RIaK2Pv9TwNTTKbOu7MvVrWOyp9yZSSB
+        FHf13s4PAHKDy5kcUEt2kj5MIhWTkUEIufi5KJE=
+X-Google-Smtp-Source: AMsMyM4HaPFTYyqbzzKv3txtFPlOFrJvujo7yZLM5g7J+82xgcqYAaa0GwuURYqLebryCZXCDbeDjpakuVlb7Acp6LI=
+X-Received: by 2002:a2e:a274:0:b0:26c:39f6:7acf with SMTP id
+ k20-20020a2ea274000000b0026c39f67acfmr5386584ljm.291.1663598510171; Mon, 19
+ Sep 2022 07:41:50 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab3:7ad6:0:b0:1e7:20cb:db2e with HTTP; Mon, 19 Sep 2022
+ 07:41:49 -0700 (PDT)
+Reply-To: kl145177@gmail.com
+From:   Ken Lawson <cazareehzohg892@gmail.com>
+Date:   Mon, 19 Sep 2022 14:41:49 +0000
+Message-ID: <CA+u1qxvsik6EW9-X45gg5Bew816u+SXVY4BUR4-wta0NDxksLA@mail.gmail.com>
+Subject: Did you receive the email I sent for you?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:235 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4605]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [cazareehzohg892[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [kl145177[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cazareehzohg892[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216497
 
-Jason M. (jason@montleon.com) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jason@montleon.com
-
---- Comment #6 from Jason M. (jason@montleon.com) ---
-I am seeing similar except my wireless is broken because the firmware can't
-load.
-https://bugzilla.redhat.com/show_bug.cgi?id=3D2127753
-
-Among the errors from my dmesg attached over there:
-Sep 18 14:28:02 kernel: DMAR: DRHD: handling fault status reg 2
-Sep 18 14:28:02 kernel: DMAR: [INTR-REMAP] Request device [01:00.0] fault i=
-ndex
-0x8080 [fault reason 0x25] Blocked a compatibility format interrupt request
-
-After running through a bisect reverting just
-9516acba29e322202674d18f4dc383879f7813a5 fixes it.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=
-=3Dlinux-5.19.y&id=3D9516acba29e322202674d18f4dc383879f7813a5
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
