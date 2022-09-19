@@ -2,121 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927515BD6B1
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 00:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC825BD805
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 01:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiISWAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Sep 2022 18:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S229578AbiISXRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Sep 2022 19:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiISWAT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 18:00:19 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062813F1F5
-        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 15:00:14 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id v4so602271pgi.10
-        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 15:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=95/m5BGPP8JYpHfpydKzQVCEG4c57A7mXTDcVh2ppNE=;
-        b=u/LdhXQjH7o5JF2wg9FhfHl6LJAMMIMNNcyOwvWBVIbXzLqhy2CrqV20Za/oJ8uoi5
-         tfi6StioCLaozC37RUCcqfx5IIU0A4ChfQQEDNBEfZS28rpYkmC7Vg6oiiJfjeHErX0l
-         mKSpb0sWy8bMBruZiYLOBj+o3FI1MRTymcakMlzcTwdQtqfCJKN/3b1LsHKJDljiUKFx
-         KnDdR6FFHEKs+CYYSmK+BnV20m5zp6mX/4klXjWzQMlExdg6HVhu6vNNXtqkMpIepXx1
-         PuOj1H9vp/QTa8wLL0tHhlVQ8iBJnAOqR3ByvHcyeEOKzQTIlV+y7R3dsvDHftfchd+T
-         SNAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=95/m5BGPP8JYpHfpydKzQVCEG4c57A7mXTDcVh2ppNE=;
-        b=gHqnRsKrAB/hvfEnBENen6LP0c/+CTArvUrJsdgR7CItnKYK5xNsUe/qVLoeLhnHvx
-         6NBvcLnd7EBRokmqDoxp1RENmzeCcgiMeivZd3E1FoQ7BZZQtUHGKKlJKYT0teHRdbDE
-         Eiagc9mDw4t92gu9zVL/3FkTgqIUCs5pB3wiZ3udurln+3CLeF9Y2cuTkwHUDi9eO6gN
-         zv3tP+US3ccVz1e/xiajj8sQZPkhC0h2TjeiXUQjL3I8YnokpzlbKtGzAdqQyv6uGEMw
-         RFQBg1Egql3/MbzxZSyDcdCOjlYoXEMaGehFTLhikOCqF68hdBGayxp9t2Kdnwa750tj
-         xMXQ==
-X-Gm-Message-State: ACrzQf2yDLQ1cNZgXBzO1BiLU9Hkt4ivQJeaH91XHpQ3Lb/t78CQ0fW4
-        UeghA21u4hnehFC9y72npDFm9Q==
-X-Google-Smtp-Source: AMsMyM7kRFFaKR6Z1lEjLZ69gbYTx9CSweklloxSQv6ziROLKqNidW65YvH6MyPLw69ISwozh4lUuA==
-X-Received: by 2002:a65:58c8:0:b0:438:aecf:5cc8 with SMTP id e8-20020a6558c8000000b00438aecf5cc8mr17423172pgu.18.1663624813409;
-        Mon, 19 Sep 2022 15:00:13 -0700 (PDT)
-Received: from desktop.hsd1.or.comcast.net ([2601:1c0:4c81:c480:feaa:14ff:fe3a:b225])
-        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b0017887d6aa1dsm6614270plx.146.2022.09.19.15.00.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 15:00:12 -0700 (PDT)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        "Dmitry Vyukov" <dvyukov@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        PaX Team <pageexec@freemail.hu>,
-        syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
-Subject: [PATCH v2] usb: mon: make mmapped memory read only
-Date:   Mon, 19 Sep 2022 14:59:57 -0700
-Message-Id: <20220919215957.205681-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
-References: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
+        with ESMTP id S229577AbiISXRf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 19:17:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B7E4B0F6;
+        Mon, 19 Sep 2022 16:17:31 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JNG8u0030755;
+        Mon, 19 Sep 2022 23:17:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=2JVuoeWw7OcLm2lHCaO6GKBrEbtYGJOJcDuzFLNOHOI=;
+ b=JEq9OzQybJYVo8WsUDh4f5LJRy68liFQUwO4O/bodsVJYqf+HGnj8Oi8tukT4q+N9RJ7
+ 7XY2pz3X4htvVagQV801v3J9gyZrH8DwWZGOiH2ksXveAUZa5qLqggNNaR1FmrFGlfB/
+ vxTQHRE/BGqZH7Mtn8WSzxu0bRrurhgo7TzCGynh/TcJPRXy2SR4GqszNpHJOJfj0lIH
+ kEzVNbEU6/LKet26m59daaINh2bTWHXZRDknSUOFmWeksIM4c/VOBDFsqHNevgNQwEWf
+ Y+a+n65KxCjaDAvEnHfutO5XNYP8jmVo2fE4PMLd23jnMkj1VTTKhzgw1tVK7bfzg42K uw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jpx508gm7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 23:17:27 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28JNCQvp031338
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 23:12:26 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 19 Sep 2022 16:12:26 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: dwc3: gadget: Do not clear ep delayed stop flag during ep disable
+Date:   Mon, 19 Sep 2022 16:12:13 -0700
+Message-ID: <20220919231213.21364-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TKZyqinj0kr9_UuYx6MTSuAk9_7OJHub
+X-Proofpoint-GUID: TKZyqinj0kr9_UuYx6MTSuAk9_7OJHub
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ adultscore=0 mlxlogscore=889 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209190155
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Syzbot found an issue in usbmon module, where the user space client
-can corrupt the monitor's internal memory, causing the usbmon module
-to crash the kernel with segfault, UAF, etc.
-The reproducer mmaps the /dev/usbmon memory to user space, and
-overwrites it with arbitrary data, which causes all kinds of issues.
-Return an -EPERM error from mon_bin_mmap() if the flag VM_WRTIE is set.
-Also clear VM_MAYWRITE to make it impossible to change it to writable
-later.
+DWC3_EP_DELAYED_STOP is utilized to defer issuing the end transfer command
+until the subsequent SETUP stage, in order to avoid end transfer timeouts.
+During cable disconnect scenarios, __dwc3_gadget_ep_disable() is
+responsible for ensuring endpoints have no active transfers pending.  Since
+dwc3_remove_request() can now exit early if the EP delayed stop is set,
+avoid clearing all DEP flags, otherwise the transition back into the SETUP
+stage won't issue an endxfer command.
 
-Cc: "Dmitry Vyukov" <dvyukov@google.com>
-Cc: <linux-usb@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
-Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
-
-For the VM_MAYWRITE part:
-Suggested-by: PaX Team <pageexec@freemail.hu>
-
-Link: https://syzkaller.appspot.com/bug?id=2eb1f35d6525fa4a74d75b4244971e5b1411c95a
-Reported-by: syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Fixes: 2b2da6574e77 ("usb: dwc3: Avoid unmapping USB requests if endxfer is not complete")
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
-v2:
-   Return an error instead of quietly clearing the flag,
-   when VM_WRTIE is set. Also clear VM_MAYWRITE.
----
- drivers/usb/mon/mon_bin.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/usb/dwc3/gadget.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-index f48a23adbc35..094e812e9e69 100644
---- a/drivers/usb/mon/mon_bin.c
-+++ b/drivers/usb/mon/mon_bin.c
-@@ -1268,6 +1268,11 @@ static int mon_bin_mmap(struct file *filp, struct vm_area_struct *vma)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index b75e1b8b3f05..3e2baf22824b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1011,6 +1011,7 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
  {
- 	/* don't do anything here: "fault" will set up page table entries */
- 	vma->vm_ops = &mon_bin_vm_ops;
-+
-+	if (vma->vm_flags & VM_WRITE)
-+		return -EPERM;
-+
-+	vma->vm_flags &= ~VM_MAYWRITE;
- 	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
- 	vma->vm_private_data = filp->private_data;
- 	mon_bin_vma_open(vma);
--- 
-2.37.3
+ 	struct dwc3		*dwc = dep->dwc;
+ 	u32			reg;
++	u32			mask;
+ 
+ 	trace_dwc3_gadget_ep_disable(dep);
+ 
+@@ -1032,7 +1033,15 @@ static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+ 
+ 	dep->stream_capable = false;
+ 	dep->type = 0;
+-	dep->flags &= DWC3_EP_TXFIFO_RESIZED;
++	mask = DWC3_EP_TXFIFO_RESIZED;
++	/*
++	 * dwc3_remove_requests() can exit early if DWC3 EP delayed stop is
++	 * set.  Do not clear DEP flags, so that the end transfer command will
++	 * be reattempted during the next SETUP stage.
++	 */
++	if (dep->flags & DWC3_EP_DELAY_STOP)
++		mask |= (DWC3_EP_DELAY_STOP | DWC3_EP_TRANSFER_STARTED);
++	dep->flags &= mask;
+ 
+ 	return 0;
+ }
