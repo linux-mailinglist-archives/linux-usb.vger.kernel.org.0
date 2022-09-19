@@ -2,119 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743935BD469
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 20:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927515BD6B1
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 00:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiISSGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Sep 2022 14:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
+        id S229568AbiISWAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Sep 2022 18:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiISSGl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 14:06:41 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD3B4599C;
-        Mon, 19 Sep 2022 11:06:40 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id c11so328994wrp.11;
-        Mon, 19 Sep 2022 11:06:40 -0700 (PDT)
+        with ESMTP id S229535AbiISWAT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 18:00:19 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062813F1F5
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 15:00:14 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id v4so602271pgi.10
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 15:00:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=6o/84kfK4xdwTkYBv2fG3jImlB7S6+cVbXt6vDjpfIE=;
-        b=ht7pYL30ye8ua9awvg3LxLGDnMjoWRRlRLaG9QDB35JVIB+1KFOI6iyZAvQ33J/Rvp
-         30V66POKe5nspYmO3dI64HnWRcOS9pm30RBhMKSxCLuePnvUfOJq8fR+YKil+mLtyogx
-         WrON9vmzBm9GPEIrhA52KDqtW1aMow/SinwKEiitQKnUdY987xoRN9lmPpALhKk73Jfm
-         5dHyd3V/NmAClp0I17NFX8X6nPMSpr3+wmurqUvo3/k2tQMQKgaXCLnFLFZzqBE9Q2hv
-         XFsIXdXRzntU914D7ek5CrWkO6uBxzLJIPQE6n5bW3RN6pgD+X/nTCXuIbYeRx+HU3RM
-         4/Jg==
+        bh=95/m5BGPP8JYpHfpydKzQVCEG4c57A7mXTDcVh2ppNE=;
+        b=u/LdhXQjH7o5JF2wg9FhfHl6LJAMMIMNNcyOwvWBVIbXzLqhy2CrqV20Za/oJ8uoi5
+         tfi6StioCLaozC37RUCcqfx5IIU0A4ChfQQEDNBEfZS28rpYkmC7Vg6oiiJfjeHErX0l
+         mKSpb0sWy8bMBruZiYLOBj+o3FI1MRTymcakMlzcTwdQtqfCJKN/3b1LsHKJDljiUKFx
+         KnDdR6FFHEKs+CYYSmK+BnV20m5zp6mX/4klXjWzQMlExdg6HVhu6vNNXtqkMpIepXx1
+         PuOj1H9vp/QTa8wLL0tHhlVQ8iBJnAOqR3ByvHcyeEOKzQTIlV+y7R3dsvDHftfchd+T
+         SNAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=6o/84kfK4xdwTkYBv2fG3jImlB7S6+cVbXt6vDjpfIE=;
-        b=5z0gFQHigqzJ4Xs+LhxCSDBWZnTno2iWRJYHXN0tgk+P6EdCXp0IPeDp8FfUzWaQh8
-         OryloKOtOz0huXW60R/S7luz7XdDu1C2ej9Mk8KkxVN4XCqqC5XPa56cdxUnoQzPc9LN
-         o3o5m7NTJIMnwfrD0+FC67wV9lvhutP/5UnMEX9llCksqOx0hE2IPoB1dkuxga8Iquc9
-         7DJ2TuKgGXlELBWk5dtmdESdfLzKKlS0dm81brBOdzkP5wwS+W7t3xj8jARHTmnB0vNW
-         tZXJDKCF7aQzSG5Fo1uOeveFQeHQlBU6+pdQBwOyn2yu1vA7uNi1Ie5268F+TOrFX3P4
-         XJuQ==
-X-Gm-Message-State: ACrzQf0//KxM/+IIEX3IltNBQVaqdEiKAzXMZaC0yaXe5X+5VzWRXFYu
-        wFGekebR6coKTERh5GjhxiU=
-X-Google-Smtp-Source: AMsMyM5bvWOJCqx4mOVN0KyIB0uluk5u/oMUo0Cbtapb6sfO+XCML06C1K8dg8xNAhtDw1AlgnVTHA==
-X-Received: by 2002:a5d:6245:0:b0:225:41ae:a930 with SMTP id m5-20020a5d6245000000b0022541aea930mr11723087wrv.342.1663610799015;
-        Mon, 19 Sep 2022 11:06:39 -0700 (PDT)
-Received: from localhost ([77.78.20.135])
-        by smtp.gmail.com with ESMTPSA id n6-20020a1c7206000000b003b4764442f0sm14192711wmc.11.2022.09.19.11.06.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 11:06:38 -0700 (PDT)
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/8] dt-bindings: usb: qcom,dwc3: Fix SM6115 clocks, irqs
-Date:   Mon, 19 Sep 2022 21:06:14 +0300
-Message-Id: <20220919180618.1840194-5-iskren.chernev@gmail.com>
+        bh=95/m5BGPP8JYpHfpydKzQVCEG4c57A7mXTDcVh2ppNE=;
+        b=gHqnRsKrAB/hvfEnBENen6LP0c/+CTArvUrJsdgR7CItnKYK5xNsUe/qVLoeLhnHvx
+         6NBvcLnd7EBRokmqDoxp1RENmzeCcgiMeivZd3E1FoQ7BZZQtUHGKKlJKYT0teHRdbDE
+         Eiagc9mDw4t92gu9zVL/3FkTgqIUCs5pB3wiZ3udurln+3CLeF9Y2cuTkwHUDi9eO6gN
+         zv3tP+US3ccVz1e/xiajj8sQZPkhC0h2TjeiXUQjL3I8YnokpzlbKtGzAdqQyv6uGEMw
+         RFQBg1Egql3/MbzxZSyDcdCOjlYoXEMaGehFTLhikOCqF68hdBGayxp9t2Kdnwa750tj
+         xMXQ==
+X-Gm-Message-State: ACrzQf2yDLQ1cNZgXBzO1BiLU9Hkt4ivQJeaH91XHpQ3Lb/t78CQ0fW4
+        UeghA21u4hnehFC9y72npDFm9Q==
+X-Google-Smtp-Source: AMsMyM7kRFFaKR6Z1lEjLZ69gbYTx9CSweklloxSQv6ziROLKqNidW65YvH6MyPLw69ISwozh4lUuA==
+X-Received: by 2002:a65:58c8:0:b0:438:aecf:5cc8 with SMTP id e8-20020a6558c8000000b00438aecf5cc8mr17423172pgu.18.1663624813409;
+        Mon, 19 Sep 2022 15:00:13 -0700 (PDT)
+Received: from desktop.hsd1.or.comcast.net ([2601:1c0:4c81:c480:feaa:14ff:fe3a:b225])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170902da8d00b0017887d6aa1dsm6614270plx.146.2022.09.19.15.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 15:00:12 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        "Dmitry Vyukov" <dvyukov@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        PaX Team <pageexec@freemail.hu>,
+        syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
+Subject: [PATCH v2] usb: mon: make mmapped memory read only
+Date:   Mon, 19 Sep 2022 14:59:57 -0700
+Message-Id: <20220919215957.205681-1-tadeusz.struk@linaro.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220919180618.1840194-1-iskren.chernev@gmail.com>
-References: <20220919180618.1840194-1-iskren.chernev@gmail.com>
+In-Reply-To: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
+References: <20220916224741.2269649-1-tadeusz.struk@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SM6115 has 6 clocks and 2 interrupts.
+Syzbot found an issue in usbmon module, where the user space client
+can corrupt the monitor's internal memory, causing the usbmon module
+to crash the kernel with segfault, UAF, etc.
+The reproducer mmaps the /dev/usbmon memory to user space, and
+overwrites it with arbitrary data, which causes all kinds of issues.
+Return an -EPERM error from mon_bin_mmap() if the flag VM_WRTIE is set.
+Also clear VM_MAYWRITE to make it impossible to change it to writable
+later.
 
-Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "Dmitry Vyukov" <dvyukov@google.com>
+Cc: <linux-usb@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
+
+For the VM_MAYWRITE part:
+Suggested-by: PaX Team <pageexec@freemail.hu>
+
+Link: https://syzkaller.appspot.com/bug?id=2eb1f35d6525fa4a74d75b4244971e5b1411c95a
+Reported-by: syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 ---
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v2:
+   Return an error instead of quietly clearing the flag,
+   when VM_WRTIE is set. Also clear VM_MAYWRITE.
+---
+ drivers/usb/mon/mon_bin.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index cd2f7cb6745a..4ca07c79819d 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -294,6 +294,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - qcom,sm6115-dwc3
-               - qcom,sm6125-dwc3
-               - qcom,sm8150-dwc3
-               - qcom,sm8250-dwc3
-@@ -348,7 +349,6 @@ allOf:
-               - qcom,sdx55-dwc3
-               - qcom,sdx65-dwc3
-               - qcom,sm4250-dwc3
--              - qcom,sm6115-dwc3
-               - qcom,sm6125-dwc3
-               - qcom,sm6350-dwc3
-               - qcom,sm8150-dwc3
-@@ -380,6 +380,7 @@ allOf:
-               - qcom,msm8953-dwc3
-               - qcom,msm8996-dwc3
-               - qcom,msm8998-dwc3
-+              - qcom,sm6115-dwc3
-     then:
-       properties:
-         interrupts:
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index f48a23adbc35..094e812e9e69 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1268,6 +1268,11 @@ static int mon_bin_mmap(struct file *filp, struct vm_area_struct *vma)
+ {
+ 	/* don't do anything here: "fault" will set up page table entries */
+ 	vma->vm_ops = &mon_bin_vm_ops;
++
++	if (vma->vm_flags & VM_WRITE)
++		return -EPERM;
++
++	vma->vm_flags &= ~VM_MAYWRITE;
+ 	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+ 	vma->vm_private_data = filp->private_data;
+ 	mon_bin_vma_open(vma);
 -- 
 2.37.3
-
