@@ -2,50 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777205BCD31
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 15:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E921D5BCE55
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 16:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiISN3f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Sep 2022 09:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S230039AbiISOQB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Sep 2022 10:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiISN3e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 09:29:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74F562D9
-        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 06:29:33 -0700 (PDT)
+        with ESMTP id S229607AbiISOP6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 10:15:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925D32ABB
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 07:15:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97270B81BDA
-        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 13:29:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8E2C433D6;
-        Mon, 19 Sep 2022 13:29:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D4C961D1A
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 14:15:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 79E88C43470
+        for <linux-usb@vger.kernel.org>; Mon, 19 Sep 2022 14:15:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663594171;
-        bh=lnW4/UF/39NaRDAt1go1GRpAjNwMdCNszzzlMdkeeXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FhMROE6V2UoOpl0PlqyPnRna71ioNNYmAR9qwJfWyQ8fZzLtHiAM+LDzMor+4MX3P
-         r3sAb+DjBJ64fj1FkUi2QMMYp2Vbgr4Qju9pMkKuvlsv+bgmx9gGNoPVwGvc2cB3AS
-         AMsHmbFXUswHIDo3SAFy/2wpTz+0Qv3MOo8Ke5CCKLzqpbTDLmifH3XuhmUX5hNIvc
-         E84lehDLfnIsN+j1bd26a20AGAf5tRP3+0vYtPDlzswzix1NE60EsAZzopfjyyawcm
-         J2AIyiR+pdItHjKWp8ps6/+LLEEc0ktmL0j6CrQrD/7N+whRAcDNU7U2+b+QyQVXoc
-         zWsV3FENOAR1w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oaGq8-0005VA-6l; Mon, 19 Sep 2022 15:29:36 +0200
-Date:   Mon, 19 Sep 2022 15:29:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Liang He <windhl@126.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: console: Move mutex_unlock() before
- usb_serial_put()
-Message-ID: <YyhuwODckx+y44A2@hovoldconsulting.com>
-References: <20220919104824.4104898-1-windhl@126.com>
+        s=k20201202; t=1663596954;
+        bh=bX1g8+BxMkssqj2UhVgwgVQFAhwWjWQmkuQn52thFj8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=KNV85hthlInH1G8RZYvcXfqWiZoKCVjTg+rW6x9hIZ78RLw31yzxwlyzLbYQbq1va
+         gNYkkk77EoujTVCAV9NCzA9CGMkJGouHSeu0GAYcYoBkRDmfG6RsGCVJ3Y21O2in+W
+         UKnUnqgVDJhnZlf3fUMIe46YvnEjV3stBd/EYD1OU8WORza4lXb/6s8pBUnS8fJ5ty
+         4D//uJycOofrT3d5U9xmBEwmIjK1RlssYqMQRTS5xz7S71XkZgCC1hOHIBCzBnD8wq
+         gZiL870jHyP6k5Gh6eUAgITJAsepvPh0W3gkm19J6wBS05MZ5shLBF9vFVgTdJ9h2G
+         ILWv8DRRHmZkQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 62754C05FD6; Mon, 19 Sep 2022 14:15:54 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216497] USB connections through thunderbolt dock broken
+Date:   Mon, 19 Sep 2022 14:15:54 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jason@montleon.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-216497-208809-e1azE5sRyA@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216497-208809@https.bugzilla.kernel.org/>
+References: <bug-216497-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919104824.4104898-1-windhl@126.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,15 +69,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 06:48:24PM +0800, Liang He wrote:
-> While in current version there is no use-after-free as USB serial
-> core holds another reference when the console is registered, we
-> should better unlock before dropping the reference in
-> usb_console_setup().
-> 
-> Fixes: 7bd032dc2793 ("USB serial: update the console driver")
-> Signed-off-by: Liang He <windhl@126.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216497
 
-Applied, thanks.
+Jason M. (jason@montleon.com) changed:
 
-Johan
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jason@montleon.com
+
+--- Comment #6 from Jason M. (jason@montleon.com) ---
+I am seeing similar except my wireless is broken because the firmware can't
+load.
+https://bugzilla.redhat.com/show_bug.cgi?id=3D2127753
+
+Among the errors from my dmesg attached over there:
+Sep 18 14:28:02 kernel: DMAR: DRHD: handling fault status reg 2
+Sep 18 14:28:02 kernel: DMAR: [INTR-REMAP] Request device [01:00.0] fault i=
+ndex
+0x8080 [fault reason 0x25] Blocked a compatibility format interrupt request
+
+After running through a bisect reverting just
+9516acba29e322202674d18f4dc383879f7813a5 fixes it.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=
+=3Dlinux-5.19.y&id=3D9516acba29e322202674d18f4dc383879f7813a5
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
