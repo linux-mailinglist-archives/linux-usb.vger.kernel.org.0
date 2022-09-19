@@ -2,168 +2,394 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217BF5BC050
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 00:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CC45BC127
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 03:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIRWLy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 18 Sep 2022 18:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S229711AbiISByh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 18 Sep 2022 21:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIRWLx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Sep 2022 18:11:53 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39FF17593;
-        Sun, 18 Sep 2022 15:11:50 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so4410234pjh.3;
-        Sun, 18 Sep 2022 15:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Sy4r0WjfjVrjcfEvaSP88S+n0l6KDV7pVO2qpx67ucY=;
-        b=dXnxJZlR1kRI0Y2QLs09BU+ofbs3tKjLtLatklxr5ZER1DQy4WK5hRSI+jUKH2YJB+
-         1daeCwnkGBtn4gH8l5R9ckUiuVPhO7SHlQF+cFB8bfJVFP97By+kvbH3iWqp2wbn1ju4
-         apWtUWZxZKKHqKfdIHJ6wjVlmLoL2hGfRoFIVLEsvzR7dXcJJMDaxvQbkIdIqQNEQQXn
-         ih/NkWAcZ+rKSDNVOw/kQ8yWzaZHvZPeuaEXistzQGCWgW+mN+nmM6sUsnHs3+KUg2Vx
-         9FUwx7Md6g9DynMqJfQeFxqZyBWNeatdrdHkke8ijKBWDYIAIu5QzmYv375FhOyOB/Ra
-         k2+Q==
+        with ESMTP id S229682AbiISByf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Sep 2022 21:54:35 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA54D89
+        for <linux-usb@vger.kernel.org>; Sun, 18 Sep 2022 18:54:31 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id r12-20020a92cd8c000000b002f32d0d9fceso18809122ilb.11
+        for <linux-usb@vger.kernel.org>; Sun, 18 Sep 2022 18:54:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=Sy4r0WjfjVrjcfEvaSP88S+n0l6KDV7pVO2qpx67ucY=;
-        b=7LaRl9G3xqyW44jqBM1TRdWH+luBQiedEcNh0cGlPwGZOKjY3GQUZvJIIMNkqjTsYY
-         MIjV+EsF0berdZ0H9pdFxqhCqu8b7wP93swJQ46xHI+xTQzngUD+y6otZ1+gZ2Wulxc9
-         pbMkh1vPtMQerfC/lcXU8rL7H8Q9hyzwX9ZwuAHWcAfYBVD3KlRodFeKZ4YU6NmDHMLE
-         2g8n8pcJEs6H5m7xn39TA0oSJpm6ysLBI7ZHyBc3rJ0OV1NxVo3esqr/28yw7+aVT+2J
-         6vw3szpxuAe2o6PqfbGVKzQA9x8kDzmJ95ZGq9pLQ1pzfSv/qV4SJR6KUhEOiXdaClEM
-         9P0w==
-X-Gm-Message-State: ACrzQf0LOOCpn8CvChgPiqyWSUksP84OglI5olhkD2MSneuN/npE8nvE
-        PaZlCYjke/9C760BgzQAShg=
-X-Google-Smtp-Source: AMsMyM79LEEV4jWCLdWZcyBi6StD5RQCoRM+1+cKc7E0nfnidwFL7hIDXBpgAEk9XfovAHzGbA8N9A==
-X-Received: by 2002:a17:902:8c81:b0:178:a33f:8b8f with SMTP id t1-20020a1709028c8100b00178a33f8b8fmr1017858plo.50.1663539110235;
-        Sun, 18 Sep 2022 15:11:50 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:4c3d:6f64:77e4:9b52? ([2600:8802:b00:4a48:4c3d:6f64:77e4:9b52])
-        by smtp.gmail.com with ESMTPSA id q7-20020a170902a3c700b0016f1319d2a7sm18750283plb.297.2022.09.18.15.11.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 15:11:49 -0700 (PDT)
-Message-ID: <adb2de4e-0ad0-a94a-93e6-572f58a2141b@gmail.com>
-Date:   Sun, 18 Sep 2022 15:11:47 -0700
+        bh=AHzgcS2X+/QGWeM29O6XDWtLRyz5Wh5W1xcwpVvlPvM=;
+        b=CONvKLb6WDD/3b0HT6kfR4aMb43zbmUktG2vwXEiABnlYlQ+1kAzTX5AyfWqrNmI0h
+         xFgY/tYzLG7+lM0hO53nWdHEeE1XM2g/RGwYeBoYeF6gF1tUYj1+2s+pMmhf8IWGRdJ/
+         yaS768w5YpD+KlfMO9g4mw6OokxUu4giJETaMHqUNnj4LwlrjTwIpYUcOxpjS6xaLEr3
+         TY2meRtpc+CmrCVchSlgcdK3rusB804TJ9xvN9i1MyYVgSoqoj1kJLaKWlgjYDReXnwP
+         aLu32fwMaT5BzPX9LeL1/LhyGAE3tgD9sl9M3cbEmxw9WJvoWv6yiFiYsOgcUYzahFlz
+         sonQ==
+X-Gm-Message-State: ACrzQf17Wag6frrgs6x0NL7B7sRJK6HeiyzJR6ii+55t8r8Sx3YJzM2I
+        rpXdLW43pExbDJuydFf9cuLRKcLsFnlpYKvWuuwJu0RmGVZb
+X-Google-Smtp-Source: AMsMyM7ZQqh9NzN3Y9R0Kia3MIp01A0IfVeCN73By221uH6MUBD+0Qv6Cwo0640uSSgvoI/8ZWuMGXGjfE0R5cJlUoakbOo8bTc6
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
- to PHY driver to avoid polling
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-References: <20220519190841.GA30869@wunner.de>
- <31baa38c-b2c7-10cd-e9cd-eee140f01788@samsung.com>
- <e598a232-6c78-782a-316f-77902644ad6c@samsung.com>
- <20220826071924.GA21264@wunner.de>
- <2b1a1588-505e-dff3-301d-bfc1fb14d685@samsung.com>
- <20220826075331.GA32117@wunner.de>
- <093730dd-2f2c-bd0b-bd13-b97f8a2898bd@samsung.com>
- <81c0f21f-f8f1-f7b3-c52f-c6a564c6a445@samsung.com>
- <20220918191333.GA2107@wunner.de>
- <d963b1a3-e18d-25d5-f07c-42d17d382174@gmail.com>
- <20220918205516.GA13914@wunner.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220918205516.GA13914@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:6918:0:b0:6a0:f9d7:8a0a with SMTP id
+ e24-20020a6b6918000000b006a0f9d78a0amr6106791ioc.183.1663552471132; Sun, 18
+ Sep 2022 18:54:31 -0700 (PDT)
+Date:   Sun, 18 Sep 2022 18:54:31 -0700
+In-Reply-To: <000000000000d893d805d0def1a0@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001b70f305e8fdfeba@google.com>
+Subject: Re: [syzbot] INFO: task hung in hub_port_init (2)
+From:   syzbot <syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com>
+To:     admindpt@BOC.com, brauner@kernel.org, broonie@kernel.org,
+        catalin.marinas@arm.com, ebiederm@xmission.com,
+        gregkh@linuxfoundation.org, hdanton@sina.com, johan@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, madvenka@linux.microsoft.com,
+        mark.rutland@arm.com, paskripkin@gmail.com, qiazbgvr@Amazon.co.jp,
+        scott@os.amperecomputing.com, stable@vger.kernel.org,
+        stern@rowland.harvard.edu, support@tokocrypto.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b7e0f8880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
+dashboard link: https://syzkaller.appspot.com/bug?extid=76629376e06e2c2ad626
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=111ff2d5080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11667887080000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/81b491dd5861/disk-a6b44374.raw.xz
+vmlinux: https://storage.googleapis.com/69c979cdc99a/vmlinux-a6b44374.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+76629376e06e2c2ad626@syzkaller.appspotmail.com
+
+INFO: task kworker/0:0:6 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:0     state:D stack:    0 pid:    6 ppid:     2 flags:0x00000008
+Workqueue: usb_hub_wq hub_event
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ usb_kill_urb+0xe0/0x1c8 drivers/usb/core/urb.c:726
+ usb_start_wait_urb+0xf8/0x1ec drivers/usb/core/message.c:64
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0xd8/0x17c drivers/usb/core/message.c:153
+ hub_port_init+0x534/0x1064 drivers/usb/core/hub.c:4825
+ hub_port_connect+0x528/0xe30 drivers/usb/core/hub.c:5282
+ hub_port_connect_change+0x3d8/0x70c drivers/usb/core/hub.c:5497
+ port_event+0x780/0x930 drivers/usb/core/hub.c:5653
+ hub_event+0x2f0/0x658 drivers/usb/core/hub.c:5735
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20
+INFO: task kworker/1:0:20 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:0     state:D stack:    0 pid:   20 ppid:     2 flags:0x00000008
+Workqueue: usb_hub_wq hub_event
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ usb_kill_urb+0xe0/0x1c8 drivers/usb/core/urb.c:726
+ usb_start_wait_urb+0xf8/0x1ec drivers/usb/core/message.c:64
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0xd8/0x17c drivers/usb/core/message.c:153
+ hub_port_init+0x534/0x1064 drivers/usb/core/hub.c:4825
+ hub_port_connect+0x528/0xe30 drivers/usb/core/hub.c:5282
+ hub_port_connect_change+0x3d8/0x70c drivers/usb/core/hub.c:5497
+ port_event+0x780/0x930 drivers/usb/core/hub.c:5653
+ hub_event+0x2f0/0x658 drivers/usb/core/hub.c:5735
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20
+INFO: task kworker/1:2:109 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:2     state:D stack:    0 pid:  109 ppid:     2 flags:0x00000008
+Workqueue: usb_hub_wq hub_event
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ usb_kill_urb+0xe0/0x1c8 drivers/usb/core/urb.c:726
+ usb_start_wait_urb+0xf8/0x1ec drivers/usb/core/message.c:64
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0xd8/0x17c drivers/usb/core/message.c:153
+ hub_port_init+0x534/0x1064 drivers/usb/core/hub.c:4825
+ hub_port_connect+0x528/0xe30 drivers/usb/core/hub.c:5282
+ hub_port_connect_change+0x3d8/0x70c drivers/usb/core/hub.c:5497
+ port_event+0x780/0x930 drivers/usb/core/hub.c:5653
+ hub_event+0x2f0/0x658 drivers/usb/core/hub.c:5735
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20
+INFO: task syz-executor535:3088 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor535 state:D stack:    0 pid: 3088 ppid:  3083 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
+ __mutex_lock_common+0x788/0xca8 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ device_lock include/linux/device.h:835 [inline]
+ usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+ __fput+0x198/0x3dc fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:353
+ task_work_run+0xc4/0x14c kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+INFO: task kworker/0:1:3090 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:1     state:D stack:    0 pid: 3090 ppid:     2 flags:0x00000008
+Workqueue: usb_hub_wq hub_event
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ usb_kill_urb+0xe0/0x1c8 drivers/usb/core/urb.c:726
+ usb_start_wait_urb+0xf8/0x1ec drivers/usb/core/message.c:64
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0xd8/0x17c drivers/usb/core/message.c:153
+ hub_port_init+0x534/0x1064 drivers/usb/core/hub.c:4825
+ hub_port_connect+0x528/0xe30 drivers/usb/core/hub.c:5282
+ hub_port_connect_change+0x3d8/0x70c drivers/usb/core/hub.c:5497
+ port_event+0x780/0x930 drivers/usb/core/hub.c:5653
+ hub_event+0x2f0/0x658 drivers/usb/core/hub.c:5735
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20
+INFO: task syz-executor535:3091 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor535 state:D stack:    0 pid: 3091 ppid:  3080 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
+ __mutex_lock_common+0x788/0xca8 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ device_lock include/linux/device.h:835 [inline]
+ usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+ __fput+0x198/0x3dc fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:353
+ task_work_run+0xc4/0x14c kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+INFO: task syz-executor535:3092 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor535 state:D stack:    0 pid: 3092 ppid:  3082 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
+ __mutex_lock_common+0x788/0xca8 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ device_lock include/linux/device.h:835 [inline]
+ usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+ __fput+0x198/0x3dc fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:353
+ task_work_run+0xc4/0x14c kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+INFO: task syz-executor535:3096 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor535 state:D stack:    0 pid: 3096 ppid:  3084 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
+ __mutex_lock_common+0x788/0xca8 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ device_lock include/linux/device.h:835 [inline]
+ usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+ __fput+0x198/0x3dc fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:353
+ task_work_run+0xc4/0x14c kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+INFO: task syz-executor535:3099 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor535 state:D stack:    0 pid: 3099 ppid:  3076 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
+ __mutex_lock_common+0x788/0xca8 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ device_lock include/linux/device.h:835 [inline]
+ usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+ __fput+0x198/0x3dc fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:353
+ task_work_run+0xc4/0x14c kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:625
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+INFO: task kworker/1:1:3101 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:1     state:D stack:    0 pid: 3101 ppid:     2 flags:0x00000008
+Workqueue: usb_hub_wq hub_event
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ usb_kill_urb+0xe0/0x1c8 drivers/usb/core/urb.c:726
+ usb_start_wait_urb+0xf8/0x1ec drivers/usb/core/message.c:64
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0xd8/0x17c drivers/usb/core/message.c:153
+ hub_port_init+0x534/0x1064 drivers/usb/core/hub.c:4825
+ hub_port_connect+0x528/0xe30 drivers/usb/core/hub.c:5282
+ hub_port_connect_change+0x3d8/0x70c drivers/usb/core/hub.c:5497
+ port_event+0x780/0x930 drivers/usb/core/hub.c:5653
+ hub_event+0x2f0/0x658 drivers/usb/core/hub.c:5735
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20
+
+Showing all locks held in the system:
+5 locks held by kworker/0:0/6:
+ #0: ffff0000c0c12138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x270/0x504 kernel/workqueue.c:2262
+ #1: ffff80000f21bd80 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x29c/0x504 kernel/workqueue.c:2264
+ #2: ffff0000c4a87990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff0000c4a87990 (&dev->mutex){....}-{3:3}, at: hub_event+0x8c/0x658 drivers/usb/core/hub.c:5681
+ #3: ffff0000c6299508 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3103 [inline]
+ #3: ffff0000c6299508 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect+0x33c/0xe30 drivers/usb/core/hub.c:5249
+ #4: ffff0000c66b8468 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect+0x348/0xe30 drivers/usb/core/hub.c:5250
+1 lock held by rcu_tasks_kthre/10:
+ #0: ffff80000d4634e8 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/11:
+ #0: ffff80000d463b38 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+5 locks held by kworker/1:0/20:
+ #0: ffff0000c0c12138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x270/0x504 kernel/workqueue.c:2262
+ #1: ffff80000f293d80 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x29c/0x504 kernel/workqueue.c:2264
+ #2: ffff0000c622f990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff0000c622f990 (&dev->mutex){....}-{3:3}, at: hub_event+0x8c/0x658 drivers/usb/core/hub.c:5681
+ #3: ffff0000c4bf1508 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3103 [inline]
+ #3: ffff0000c4bf1508 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect+0x33c/0xe30 drivers/usb/core/hub.c:5249
+ #4: ffff0000c64c9168 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect+0x348/0xe30 drivers/usb/core/hub.c:5250
+1 lock held by khungtaskd/26:
+ #0: ffff80000d4633c0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:279
+5 locks held by kworker/1:2/109:
+ #0: ffff0000c0c12138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x270/0x504 kernel/workqueue.c:2262
+ #1: ffff8000126ebd80 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x29c/0x504 kernel/workqueue.c:2264
+ #2: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: hub_event+0x8c/0x658 drivers/usb/core/hub.c:5681
+ #3: ffff0000c5285508 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3103 [inline]
+ #3: ffff0000c5285508 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect+0x33c/0xe30 drivers/usb/core/hub.c:5249
+ #4: ffff0000c64d2368 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect+0x348/0xe30 drivers/usb/core/hub.c:5250
+2 locks held by getty/2728:
+ #0: ffff0000c6f4d898 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
+ #1: ffff80000f63e2f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x89c drivers/tty/n_tty.c:2177
+1 lock held by syz-executor535/3088:
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+5 locks held by kworker/0:1/3090:
+ #0: ffff0000c0c12138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x270/0x504 kernel/workqueue.c:2262
+ #1: ffff8000127a3d80 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x29c/0x504 kernel/workqueue.c:2264
+ #2: ffff0000c6289990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff0000c6289990 (&dev->mutex){....}-{3:3}, at: hub_event+0x8c/0x658 drivers/usb/core/hub.c:5681
+ #3: ffff0000c628b508 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3103 [inline]
+ #3: ffff0000c628b508 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect+0x33c/0xe30 drivers/usb/core/hub.c:5249
+ #4: ffff0000c66b8f68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect+0x348/0xe30 drivers/usb/core/hub.c:5250
+1 lock held by syz-executor535/3091:
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+1 lock held by syz-executor535/3092:
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+1 lock held by syz-executor535/3096:
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+1 lock held by syz-executor535/3099:
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: usbdev_release+0x40/0x3b8 drivers/usb/core/devio.c:1087
+5 locks held by kworker/1:1/3101:
+ #0: ffff0000c0c12138 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x270/0x504 kernel/workqueue.c:2262
+ #1: ffff800012863d80 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x29c/0x504 kernel/workqueue.c:2264
+ #2: ffff0000c62c9190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #2: ffff0000c62c9190 (&dev->mutex){....}-{3:3}, at: hub_event+0x8c/0x658 drivers/usb/core/hub.c:5681
+ #3: ffff0000c62cb508 (&port_dev->status_lock){+.+.}-{3:3}, at: usb_lock_port drivers/usb/core/hub.c:3103 [inline]
+ #3: ffff0000c62cb508 (&port_dev->status_lock){+.+.}-{3:3}, at: hub_port_connect+0x33c/0xe30 drivers/usb/core/hub.c:5249
+ #4: ffff0000c64d2d68 (hcd->address0_mutex){+.+.}-{3:3}, at: hub_port_connect+0x348/0xe30 drivers/usb/core/hub.c:5250
+1 lock held by syz-executor535/3102:
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #0: ffff0000c5283990 (&dev->mutex){....}-{3:3}, at: usbdev_open+0xb0/0x370 drivers/usb/core/devio.c:1042
+
+=============================================
 
 
-On 9/18/2022 1:55 PM, Lukas Wunner wrote:
-> On Sun, Sep 18, 2022 at 01:41:13PM -0700, Florian Fainelli wrote:
->> On 9/18/2022 12:13 PM, Lukas Wunner wrote:
->>> On Mon, Aug 29, 2022 at 01:40:05PM +0200, Marek Szyprowski wrote:
->>>> I've finally traced what has happened. I've double checked and indeed
->>>> the 1758bde2e4aa commit fixed the issue on next-20220516 kernel and as
->>>> such it has been merged to linus tree. Then the commit 744d23c71af3
->>>> ("net: phy: Warn about incorrect mdio_bus_phy_resume() state") has been
->>>> merged to linus tree, which triggers a new warning during the
->>>> suspend/resume cycle with smsc95xx driver. Please note, that the
->>>> smsc95xx still works fine regardless that warning. However it look that
->>>> the commit 1758bde2e4aa only hide a real problem, which the commit
->>>> 744d23c71af3 warns about.
->>>>
->>>> Probably a proper fix for smsc95xx driver is to call phy_stop/start
->>>> during suspend/resume cycle, like in similar patches for other drivers:
->>>>
->>>> https://lore.kernel.org/all/20220825023951.3220-1-f.fainelli@gmail.com/
->>>
->>> No, smsc95xx.c relies on mdio_bus_phy_{suspend,resume}() and there's
->>> no need to call phy_{stop,start}() >
->>> 744d23c71af3 was flawed and 6dbe852c379f has already fixed a portion
->>> of the fallout.
->>>
->>> However the WARN() condition still seems too broad and causes false
->>> positives such as in your case.  In particular, mdio_bus_phy_suspend()
->>> may leave the device in PHY_UP state, so that's a legal state that
->>> needs to be exempted from the WARN().
->>
->> How is that a legal state when the PHY should be suspended? Even if we are
->> interrupt driven, the state machine should be stopped, does not mean that
->> Wake-on-LAN or other activity interrupts should be disabled.
-> 
-> mdio_bus_phy_suspend()
->    phy_stop_machine()
->      phydev->state = PHY_UP  #  if (phydev->state >= PHY_UP)
-> 
-> So apparently PHY_UP is a legal state for a suspended PHY.
-
-It is not clear to me why, however. Sure it does ensure that when we 
-resume we set needs_aneg = true but this feels like a hack in the sense 
-that we are setting the PHY in a provisional state in anticipation for 
-what might come next.
-
-> 
-> 
->>> Does the issue still appear even after 6dbe852c379f?
->>>
->>> If it does, could you test whether exempting PHY_UP silences the
->>> gratuitous WARN splat?  I.e.:
->>
->> If you allow PHY_UP, then the warning becomes effectively useless, so I
->> don't believe this is quite what you want to do here.
-> 
-> Hm, maybe the WARN() should be dropped altogether?
-
-And then be left with debugging similar problems that prompted me to 
-submit the patch in the first place, no thank you. I guess I would 
-rather accept that PHY_UP needs to be special cased then.
--- 
-Florian
