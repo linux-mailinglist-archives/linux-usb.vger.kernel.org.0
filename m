@@ -2,98 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B1B5BD37A
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 19:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743935BD469
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Sep 2022 20:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiISRQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Sep 2022 13:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S231378AbiISSGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Sep 2022 14:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiISRQ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 13:16:56 -0400
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32DA14083;
-        Mon, 19 Sep 2022 10:16:54 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id a3so36032577lfk.9;
-        Mon, 19 Sep 2022 10:16:54 -0700 (PDT)
+        with ESMTP id S230335AbiISSGl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Sep 2022 14:06:41 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD3B4599C;
+        Mon, 19 Sep 2022 11:06:40 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id c11so328994wrp.11;
+        Mon, 19 Sep 2022 11:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=6o/84kfK4xdwTkYBv2fG3jImlB7S6+cVbXt6vDjpfIE=;
+        b=ht7pYL30ye8ua9awvg3LxLGDnMjoWRRlRLaG9QDB35JVIB+1KFOI6iyZAvQ33J/Rvp
+         30V66POKe5nspYmO3dI64HnWRcOS9pm30RBhMKSxCLuePnvUfOJq8fR+YKil+mLtyogx
+         WrON9vmzBm9GPEIrhA52KDqtW1aMow/SinwKEiitQKnUdY987xoRN9lmPpALhKk73Jfm
+         5dHyd3V/NmAClp0I17NFX8X6nPMSpr3+wmurqUvo3/k2tQMQKgaXCLnFLFZzqBE9Q2hv
+         XFsIXdXRzntU914D7ek5CrWkO6uBxzLJIPQE6n5bW3RN6pgD+X/nTCXuIbYeRx+HU3RM
+         4/Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=qfmpocwGFcvxn/kfW/YixA1qZZ0ZnBfI95e5FNSla5w=;
-        b=6W9oSie1rr+YzUanoiae8R2/4bL3nOA1ujQouSTEiwv8fKy08xr5c7s2hg6fYYZGUl
-         eVkawaeU9m3PM6Y3/OqwyvFcaaF4H40WwErFDKPlglvOCM1w0hO6yhjz+1x5v+dBu4Qu
-         AmWxq1uRIc3l+wGZC26WGV4YOBkdbY4DAUdEyi/KaDOnYjj6mmYnw7l7j4JqhevTLPfk
-         rP5qjuMs1iOAgq4NHOp19Ee3JgB3rVbW/4lrrZdVkTkp0EqXULVpXz2SnEp6YR+ZrdqM
-         Q4K5a57GXq4evdAJPVwS+qlzU0f3A5LwsXWklvzgrxojUlj/Fop/azgFs3jwMI5KC1TE
-         E0Bg==
-X-Gm-Message-State: ACrzQf1yrgLBqyh+FQI8/ubahhsNzOeo9xb0d/BbAxbrFraVe4UasIkN
-        rJu2HUedjDLG0Fd2aLximLoCtrYkH48=
-X-Google-Smtp-Source: AMsMyM6e2vNq8a+W4zhW2FfI4fcJloJ1eCZNRlpVLQyDkjM94DR2+AAnmViqaXJa2P7NujmNrK4wXA==
-X-Received: by 2002:ac2:4c46:0:b0:49d:c0ff:b172 with SMTP id o6-20020ac24c46000000b0049dc0ffb172mr6350196lfk.19.1663607813182;
-        Mon, 19 Sep 2022 10:16:53 -0700 (PDT)
-Received: from localhost (88-112-11-246.elisa-laajakaista.fi. [88.112.11.246])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05651236d300b004994117b0fdsm5262323lfs.281.2022.09.19.10.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 10:16:52 -0700 (PDT)
-From:   Hannu Hartikainen <hannu@hrtk.in>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hannu Hartikainen <hannu@hrtk.in>
-Subject: [PATCH] USB: add RESET_RESUME quirk for NVIDIA Jetson devices in RCM
-Date:   Mon, 19 Sep 2022 20:16:10 +0300
-Message-Id: <20220919171610.30484-1-hannu@hrtk.in>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=6o/84kfK4xdwTkYBv2fG3jImlB7S6+cVbXt6vDjpfIE=;
+        b=5z0gFQHigqzJ4Xs+LhxCSDBWZnTno2iWRJYHXN0tgk+P6EdCXp0IPeDp8FfUzWaQh8
+         OryloKOtOz0huXW60R/S7luz7XdDu1C2ej9Mk8KkxVN4XCqqC5XPa56cdxUnoQzPc9LN
+         o3o5m7NTJIMnwfrD0+FC67wV9lvhutP/5UnMEX9llCksqOx0hE2IPoB1dkuxga8Iquc9
+         7DJ2TuKgGXlELBWk5dtmdESdfLzKKlS0dm81brBOdzkP5wwS+W7t3xj8jARHTmnB0vNW
+         tZXJDKCF7aQzSG5Fo1uOeveFQeHQlBU6+pdQBwOyn2yu1vA7uNi1Ie5268F+TOrFX3P4
+         XJuQ==
+X-Gm-Message-State: ACrzQf0//KxM/+IIEX3IltNBQVaqdEiKAzXMZaC0yaXe5X+5VzWRXFYu
+        wFGekebR6coKTERh5GjhxiU=
+X-Google-Smtp-Source: AMsMyM5bvWOJCqx4mOVN0KyIB0uluk5u/oMUo0Cbtapb6sfO+XCML06C1K8dg8xNAhtDw1AlgnVTHA==
+X-Received: by 2002:a5d:6245:0:b0:225:41ae:a930 with SMTP id m5-20020a5d6245000000b0022541aea930mr11723087wrv.342.1663610799015;
+        Mon, 19 Sep 2022 11:06:39 -0700 (PDT)
+Received: from localhost ([77.78.20.135])
+        by smtp.gmail.com with ESMTPSA id n6-20020a1c7206000000b003b4764442f0sm14192711wmc.11.2022.09.19.11.06.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 11:06:38 -0700 (PDT)
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 4/8] dt-bindings: usb: qcom,dwc3: Fix SM6115 clocks, irqs
+Date:   Mon, 19 Sep 2022 21:06:14 +0300
+Message-Id: <20220919180618.1840194-5-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220919180618.1840194-1-iskren.chernev@gmail.com>
+References: <20220919180618.1840194-1-iskren.chernev@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-NVIDIA Jetson devices in Force Recovery mode (RCM) do not support
-suspending, ie. flashing fails if the device has been suspended. The
-devices are still visible in lsusb and seem to work otherwise, making
-the issue hard to debug. This has been discovered in various forum
-posts, eg. [1].
+SM6115 has 6 clocks and 2 interrupts.
 
-The patch has been tested on NVIDIA Jetson AGX Xavier, but I'm adding
-all the Jetson models listed in [2] on the assumption that they all
-behave similarly.
-
-[1]: https://forums.developer.nvidia.com/t/flashing-not-working/72365
-[2]: https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3271/index.html#page/Tegra%20Linux%20Driver%20Package%20Development%20Guide/quick_start.html
-
-Signed-off-by: Hannu Hartikainen <hannu@hrtk.in>
+Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/usb/core/quirks.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index f99a65a64588..11b27953ccd0 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -388,6 +388,15 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* Kingston DataTraveler 3.0 */
- 	{ USB_DEVICE(0x0951, 0x1666), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* NVIDIA Jetson devices in Force Recovery mode */
-+	{ USB_DEVICE(0x0955, 0x7018), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7019), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7418), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7721), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7c18), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7e19), .driver_info = USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x0955, 0x7f21), .driver_info = USB_QUIRK_RESET_RESUME },
-+
- 	/* X-Rite/Gretag-Macbeth Eye-One Pro display colorimeter */
- 	{ USB_DEVICE(0x0971, 0x2000), .driver_info = USB_QUIRK_NO_SET_INTF },
- 
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index cd2f7cb6745a..4ca07c79819d 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -294,6 +294,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - qcom,sm6115-dwc3
+               - qcom,sm6125-dwc3
+               - qcom,sm8150-dwc3
+               - qcom,sm8250-dwc3
+@@ -348,7 +349,6 @@ allOf:
+               - qcom,sdx55-dwc3
+               - qcom,sdx65-dwc3
+               - qcom,sm4250-dwc3
+-              - qcom,sm6115-dwc3
+               - qcom,sm6125-dwc3
+               - qcom,sm6350-dwc3
+               - qcom,sm8150-dwc3
+@@ -380,6 +380,7 @@ allOf:
+               - qcom,msm8953-dwc3
+               - qcom,msm8996-dwc3
+               - qcom,msm8998-dwc3
++              - qcom,sm6115-dwc3
+     then:
+       properties:
+         interrupts:
 -- 
 2.37.3
 
