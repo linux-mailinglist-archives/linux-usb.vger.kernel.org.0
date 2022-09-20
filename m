@@ -2,77 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9824D5BDEC2
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 09:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9985BE03C
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 10:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiITHtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Sep 2022 03:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
+        id S229498AbiITIeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Sep 2022 04:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiITHsu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Sep 2022 03:48:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A552E61DA4;
-        Tue, 20 Sep 2022 00:48:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 646CEB82565;
-        Tue, 20 Sep 2022 07:47:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE1DC433C1;
-        Tue, 20 Sep 2022 07:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663660069;
-        bh=sF/ekF++TcP0EdKsQUTmJOSIuGh0DPHLXbPRTcGIJbE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PTY8p8PhZeAtZSW1M+vf67xJFDsPYFPQ/e5Mz9HMARCtZ6kjzGdcgwWG+2nCTz9W/
-         p5d6wPpNLH6MABboHJZ0hZ5Kf1ddr5pWLdEoMopL0vqnwQQCWPqtYp0OqJXUwNvnCC
-         oQbS4alP4dMvhPlzcCSlGDDCEX9RCErurfogtQlykOTzsREvL+7z8HwGjPmRy0+duE
-         upaKexSU1/0NLkWxW6byVwm4wSdKEmViu+KtKcf3RiiyIpkivGIW56R7f/yICcJfWS
-         OgJJZ9Snb1x1/YCeLESsOkFmFJY3hpN0+h7q0Jq47MMCNIdLoBYkIz8NV9GlNbKwbz
-         YSzYiAus5Y4FQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oaXyx-0001kJ-Rr; Tue, 20 Sep 2022 09:47:51 +0200
-Date:   Tue, 20 Sep 2022 09:47:51 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] USB: serial: ftdi_sio: misc clean ups
-Message-ID: <YylwJ4V2XE2J8wYN@hovoldconsulting.com>
-References: <20220919132456.20851-1-johan@kernel.org>
- <Yylrwo9nXL9mD0HE@kroah.com>
+        with ESMTP id S230218AbiITIdw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Sep 2022 04:33:52 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA05A65B1;
+        Tue, 20 Sep 2022 01:33:49 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 93B0A40008;
+        Tue, 20 Sep 2022 08:33:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1663662828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WdCBW02Fmd3bjrCh+OZZwzQ5M+jFgiJ3BIAxKxcGchY=;
+        b=Fkc2Mq4Ojmk6fA3bxJPKaJn0WLqyjQT/npMoIhSfZX76aXLoThMbC516XCfnOeiiBamxGC
+        ef/U8lKG8CzN7Q96xUd4LtMIeVblPti2tyyEKtMf32UNp7AfXZFnOGAg+k1ZQGwJQykmDA
+        fPkMuJPLuC8phFSfGeS17s7hENly3KI6ctjaChfKwb4CKjQrsUOoc0MDXBqqdVTbOhXDoh
+        3wV2R5IcM/BB7UthrsqKmOzknjS7VAp0uOkeJv2MDKwd/JfIjmk/eBV1Xgz128d0vrXrJ+
+        HCs5k8j2cnkQ3Ho73v081g4gSg/IgirZsYsb+6cipakSlYrU6szR8RzXypbq3Q==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?q?Krzysztof_Wilc?= =?utf-8?q?zy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 03/11] mtd: rawnand: stm32_fmc2: switch to using devm_fwnode_gpiod_get()
+Date:   Tue, 20 Sep 2022 10:33:42 +0200
+Message-Id: <20220920083342.601039-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To:  <20220903-gpiod_get_from_of_node-remove-v1-3-b29adfb27a6c@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yylrwo9nXL9mD0HE@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'130bd3cdb880c444005e173485124a7bbf3df9b2'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:29:06AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Sep 19, 2022 at 03:24:53PM +0200, Johan Hovold wrote:
-> > Here are some clean ups on top of the recent dev_groups attribute
-> > conversion.
-> > 
-> > Johan
-> > 
-> > Johan Hovold (3):
-> >   USB: serial: ftdi_sio: clean up attribute visibility logic
-> >   USB: serial: ftdi_sio: move driver structure
-> >   USB: serial: ftdi_sio: clean up driver prefix
-> > 
-> >  drivers/usb/serial/ftdi_sio.c | 144 +++++++++++++---------------------
-> >  1 file changed, 54 insertions(+), 90 deletions(-)
+On Mon, 2022-09-05 at 06:30:55 UTC, Dmitry Torokhov wrote:
+> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
+> so that gpiolib can be cleaned a bit, so let's switch to the generic
+> fwnode property API.
 > 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Thanks for reviewing. Now applied.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
-Johan
+Miquel
