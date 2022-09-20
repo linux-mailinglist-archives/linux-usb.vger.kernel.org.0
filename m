@@ -2,34 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97905BECA4
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 20:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555395BF060
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 00:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiITSQJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Sep 2022 14:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S229764AbiITWnc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Sep 2022 18:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiITSQH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Sep 2022 14:16:07 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1B1F644571
-        for <linux-usb@vger.kernel.org>; Tue, 20 Sep 2022 11:16:05 -0700 (PDT)
-Received: (qmail 191387 invoked by uid 1000); 20 Sep 2022 14:16:04 -0400
-Date:   Tue, 20 Sep 2022 14:16:04 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Rondreis <linhaoguo86@gmail.com>
-Cc:     balbi@kernel.org, andriy.shevchenko@linux.intel.com,
-        jakobkoschel@gmail.com, quic_wcheng@quicinc.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: kernel v5.19 warn in usb_ep_queue
-Message-ID: <YyoDZNZX2ggSuaFE@rowland.harvard.edu>
-References: <CAB7eexKe2YtpYHy0Ohyr-SXLAWUjErJGLSspSUCeEL=CWyZSKw@mail.gmail.com>
+        with ESMTP id S229471AbiITWna (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Sep 2022 18:43:30 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD8866A4B;
+        Tue, 20 Sep 2022 15:43:29 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id d8so3605463iof.11;
+        Tue, 20 Sep 2022 15:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=nFAUedsUxBlySo2MTS0W3FNkaJTiK1eOxhG9I/NOEvk=;
+        b=fYTPTuolkUTeEMR8/B4KqNuwol/Kp2cWBXJuZUP4aSGZENbHy8h/vro3DPJYoXuD0y
+         Xv0eWzfb//Jq8fPADfk7PFg6sgxpHrqvTkui7QAn6KgkH7K+nANLo9PDS4zoopS2hhkd
+         I0xXkatWsF4bayLRyeogGGGPWDVeOUuWiKf6cTEP4I5WLO1hAQYXOn1+NMN5GtE9FNGo
+         r4bjbHJuaXUCZKDFBO+5NVRt79nP+Un3bsI6VP03TYPxBMyUwT9hCuzDUP/XsL+tUfgb
+         ImOXjOezSafIm6mCBWVKb2o8JgnWjk/drYEHNoomBvAYGIweFzDvQHX0w18lP0CFKs2Y
+         KLvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=nFAUedsUxBlySo2MTS0W3FNkaJTiK1eOxhG9I/NOEvk=;
+        b=DHBC9pX3rc6urLTocz1najvD8KmWpP8c0eWy7yT5rdeIQxUxA6NCyAX/Nmvz4qU7pC
+         50zkc73/SZ+MvV0u8h9ZYmDoZh3eJUrZ+LAxssFvCQsUzljQGktGq0ws5oWdr7n44Psj
+         d+0ONauA0gtg44yK4WhVIFV4HZbfD4Ez3abuKeL+smgROYw5jY/5+QcIfDAMqB/opvx4
+         vsVzXhKaiZtU6vO9tR0p1R7FBIEhvgyuOAxpzTlzm6PhemAfFvg0vQaUsruaXPgbYviD
+         Y0nhmfW0jFa4je2XCKkU4pDQrELi9pZeFt7C7ArMDorjywW4aXO7cZrSkJPl7P0ES4tm
+         0AHQ==
+X-Gm-Message-State: ACrzQf2wtK0g5aHQMuU7yW6Xma5eKXiuevNfMY+lUG03GAyWiZuF4nuX
+        4rj+a6j0aeikNPRxE2LjDLm/q3QSVKY=
+X-Google-Smtp-Source: AMsMyM6QDkvI5JccVZkUC6pDooMsxg5WyMFda4zAZHddt7tf12r8xJtGk1JGb4kHikqRnKcSWlH1/w==
+X-Received: by 2002:a05:6638:1686:b0:35a:2566:6786 with SMTP id f6-20020a056638168600b0035a25666786mr11835273jat.180.1663713808345;
+        Tue, 20 Sep 2022 15:43:28 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00::a533])
+        by smtp.gmail.com with UTF8SMTPSA id c97-20020a02966a000000b0034d90222997sm392192jai.66.2022.09.20.15.43.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 15:43:27 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, Richard Acayan <mailingradian@gmail.com>
+Subject: [PATCH 0/3] SDM670 USB 2.0 support
+Date:   Tue, 20 Sep 2022 18:43:17 -0400
+Message-Id: <20220920224320.152127-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAB7eexKe2YtpYHy0Ohyr-SXLAWUjErJGLSspSUCeEL=CWyZSKw@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -37,149 +77,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 10:12:04AM +0800, Rondreis wrote:
-> Hello,
-> 
-> When fuzzing the Linux kernel driver 5.19.0-rc4-00208-g69cb6c6556ad,
-> the following crash was triggered.
-> 
-> HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f (HEAD, tag: v5.18)
-> git tree: upstream
-> 
-> kernel config: https://pastebin.com/KecL2gaG
-> C reproducer: https://pastebin.com/wLDJ9cnP
-> console output: https://pastebin.com/t0r8EwTw
-> 
-> Basically, in the c reproducer, we use the gadget module to emulate
-> the process of attaching a usb device (vendor id: 0xbaf, product id:
-> 0x121, with function: midi and ms_null).
-> To reproduce this crash, we utilize a third-party library to emulate
-> the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
-> Just clone this repository, make install it, and compile the c
-> reproducer with ``` gcc crash.c -lusbgx -o crash ``` will do the
-> trick.
-> 
-> It seems that an error state in struct usb_ep trigger such kernel warning.
-> 
-> The crash report is as follow:
-> 
-> ```
-> ------------[ cut here ]------------
-> ------------[ cut here ]------------
-> WARNING: CPU: 3 PID: 3442 at drivers/usb/gadget/udc/core.c:283
-> usb_ep_queue+0x16b/0x3b0 drivers/usb/gadget/udc/core.c:283
-> Modules linked in:
-> CPU: 3 PID: 3442 Comm: file-storage Not tainted
-> 5.19.0-rc4-00208-g69cb6c6556ad #1
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> RIP: 0010:usb_ep_queue+0x16b/0x3b0 drivers/usb/gadget/udc/core.c:283
-> Code: 46 05 0f 92 c3 31 ff 89 de e8 f1 e9 49 fd 84 db 0f 85 16 01 00
-> 00 e8 c4 e8 49 fd 44 89 e0 5b 5d 41 5c 41 5d c3 e8 b5 e8 49 fd <0f> 0b
-> 41 bc 94 ff ff ff e9 73 ff ff ff e8 a3 e8 49 fd 65 8b 1d cc
-> RSP: 0018:ffffc9000490fd00 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000002 RCX: ffff888110e0d580
-> RDX: 0000000000000000 RSI: ffff888110e0d580 RDI: 0000000000000002
-> RBP: ffff88810ae84158 R08: ffffffff83fb31eb R09: 0000000000000000
-> R10: 0000000000000001 R11: ffffed10221c1ab0 R12: 0000000000000cc0
-> R13: ffff888111843f10 R14: ffff888111843f10 R15: ffff88811084e000
-> FS: 0000000000000000(0000) GS:ffff88811a980000(0000) knlGS:0000000000000000
-> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f841985e020 CR3: 000000010d19a000 CR4: 0000000000350ee0
-> Call Trace:
-> <TASK>
-> start_transfer.isra.0+0x26/0x100
-> drivers/usb/gadget/function/f_mass_storage.c:527
-> start_out_transfer.isra.0+0xf0/0x1b0
-> drivers/usb/gadget/function/f_mass_storage.c:560
-> get_next_command drivers/usb/gadget/function/f_mass_storage.c:2249 [inline]
-> fsg_main_thread+0x377/0x6fc0 drivers/usb/gadget/function/f_mass_storage.c:2572
-> kthread+0x2ef/0x3a0 kernel/kthread.c:376
-> ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-> </TASK>
+This adds compatible strings for USB 2.0 on the Qualcomm Snapdragon 670. I
+have no way to test USB 3.0 because my SDM670 device doesn't have USB 3.
 
-Can you please try to recreate this bug after applying the diagnostic 
-patch below?  I'd like to see what output it produces in the kernel log.
+ Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 1 +
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml      | 1 +
+ drivers/usb/dwc3/dwc3-qcom.c                              | 1 +
+ 3 files changed, 3 insertions(+)
 
-Alan Stern
-
-
-Index: usb-devel/drivers/usb/gadget/function/f_mass_storage.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/function/f_mass_storage.c
-+++ usb-devel/drivers/usb/gadget/function/f_mass_storage.c
-@@ -415,6 +415,7 @@ static void bulk_in_complete(struct usb_
- 	struct fsg_common	*common = ep->driver_data;
- 	struct fsg_buffhd	*bh = req->context;
- 
-+	dev_info(&common->gadget->dev, "Bulk in complete %p\n", bh);
- 	if (req->status || req->actual != req->length)
- 		DBG(common, "%s --> %d, %u/%u\n", __func__,
- 		    req->status, req->actual, req->length);
-@@ -431,6 +432,7 @@ static void bulk_out_complete(struct usb
- 	struct fsg_common	*common = ep->driver_data;
- 	struct fsg_buffhd	*bh = req->context;
- 
-+	dev_info(&common->gadget->dev, "Bulk out complete %p\n", bh);
- 	dump_msg(common, "bulk-out", req->buf, req->actual);
- 	if (req->status || req->actual != bh->bulk_out_intended_length)
- 		DBG(common, "%s --> %d, %u/%u\n", __func__,
-@@ -547,6 +549,7 @@ static bool start_in_transfer(struct fsg
- 	if (!fsg_is_set(common))
- 		return false;
- 	bh->state = BUF_STATE_SENDING;
-+	dev_info(&common->gadget->dev, "Bulk in start %p\n", bh);
- 	if (start_transfer(common->fsg, common->fsg->bulk_in, bh->inreq))
- 		bh->state = BUF_STATE_EMPTY;
- 	return true;
-@@ -557,6 +560,7 @@ static bool start_out_transfer(struct fs
- 	if (!fsg_is_set(common))
- 		return false;
- 	bh->state = BUF_STATE_RECEIVING;
-+	dev_info(&common->gadget->dev, "Bulk out start %p\n", bh);
- 	if (start_transfer(common->fsg, common->fsg->bulk_out, bh->outreq))
- 		bh->state = BUF_STATE_FULL;
- 	return true;
-@@ -2310,10 +2314,12 @@ reset:
- 
- 		/* Disable the endpoints */
- 		if (fsg->bulk_in_enabled) {
-+			dev_info(&fsg->gadget->dev, "Disable bulk in A\n");
- 			usb_ep_disable(fsg->bulk_in);
- 			fsg->bulk_in_enabled = 0;
- 		}
- 		if (fsg->bulk_out_enabled) {
-+			dev_info(&fsg->gadget->dev, "Disable bulk out A\n");
- 			usb_ep_disable(fsg->bulk_out);
- 			fsg->bulk_out_enabled = 0;
- 		}
-@@ -2333,6 +2339,7 @@ reset:
- 	rc = config_ep_by_speed(common->gadget, &(fsg->function), fsg->bulk_in);
- 	if (rc)
- 		goto reset;
-+	dev_info(&fsg->gadget->dev, "Enable bulk in\n");
- 	rc = usb_ep_enable(fsg->bulk_in);
- 	if (rc)
- 		goto reset;
-@@ -2343,6 +2350,7 @@ reset:
- 				fsg->bulk_out);
- 	if (rc)
- 		goto reset;
-+	dev_info(&fsg->gadget->dev, "Enable bulk out\n");
- 	rc = usb_ep_enable(fsg->bulk_out);
- 	if (rc)
- 		goto reset;
-@@ -2392,10 +2400,12 @@ static void fsg_disable(struct usb_funct
- 
- 	/* Disable the endpoints */
- 	if (fsg->bulk_in_enabled) {
-+		dev_info(&fsg->gadget->dev, "Disable bulk in B\n");
- 		usb_ep_disable(fsg->bulk_in);
- 		fsg->bulk_in_enabled = 0;
- 	}
- 	if (fsg->bulk_out_enabled) {
-+		dev_info(&fsg->gadget->dev, "Disable bulk out B\n");
- 		usb_ep_disable(fsg->bulk_out);
- 		fsg->bulk_out_enabled = 0;
- 	}
 
