@@ -2,96 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9985BE03C
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 10:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15245BE0B2
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Sep 2022 10:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiITIeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Sep 2022 04:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S231501AbiITIsV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Sep 2022 04:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiITIdw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Sep 2022 04:33:52 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA05A65B1;
-        Tue, 20 Sep 2022 01:33:49 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 93B0A40008;
-        Tue, 20 Sep 2022 08:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663662828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WdCBW02Fmd3bjrCh+OZZwzQ5M+jFgiJ3BIAxKxcGchY=;
-        b=Fkc2Mq4Ojmk6fA3bxJPKaJn0WLqyjQT/npMoIhSfZX76aXLoThMbC516XCfnOeiiBamxGC
-        ef/U8lKG8CzN7Q96xUd4LtMIeVblPti2tyyEKtMf32UNp7AfXZFnOGAg+k1ZQGwJQykmDA
-        fPkMuJPLuC8phFSfGeS17s7hENly3KI6ctjaChfKwb4CKjQrsUOoc0MDXBqqdVTbOhXDoh
-        3wV2R5IcM/BB7UthrsqKmOzknjS7VAp0uOkeJv2MDKwd/JfIjmk/eBV1Xgz128d0vrXrJ+
-        HCs5k8j2cnkQ3Ho73v081g4gSg/IgirZsYsb+6cipakSlYrU6szR8RzXypbq3Q==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?q?Krzysztof_Wilc?= =?utf-8?q?zy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 03/11] mtd: rawnand: stm32_fmc2: switch to using devm_fwnode_gpiod_get()
-Date:   Tue, 20 Sep 2022 10:33:42 +0200
-Message-Id: <20220920083342.601039-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To:  <20220903-gpiod_get_from_of_node-remove-v1-3-b29adfb27a6c@gmail.com>
-References: 
+        with ESMTP id S231348AbiITIsJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Sep 2022 04:48:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9A02FFE3;
+        Tue, 20 Sep 2022 01:48:07 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWw705lpZzMn9l;
+        Tue, 20 Sep 2022 16:43:24 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 16:48:05 +0800
+Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
+ 2022 16:48:05 +0800
+From:   Ren Zhijie <renzhijie2@huawei.com>
+To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <xji@analogixsemi.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ren Zhijie <renzhijie2@huawei.com>
+Subject: [PATCH -next] usb: typec: anx7411: Fix build error without CONFIG_POWER_SUPPLY
+Date:   Tue, 20 Sep 2022 16:44:31 +0800
+Message-ID: <20220920084431.196258-1-renzhijie2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'130bd3cdb880c444005e173485124a7bbf3df9b2'
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.34]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2022-09-05 at 06:30:55 UTC, Dmitry Torokhov wrote:
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Building without CONFIG_POWER_SUPPLY will fail:
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+drivers/usb/typec/anx7411.o: In function `anx7411_detect_power_mode':
+anx7411.c:(.text+0x527): undefined reference to `power_supply_changed'
+drivers/usb/typec/anx7411.o: In function `anx7411_psy_set_prop':
+anx7411.c:(.text+0x90d): undefined reference to `power_supply_get_drvdata'
+anx7411.c:(.text+0x930): undefined reference to `power_supply_changed'
+drivers/usb/typec/anx7411.o: In function `anx7411_psy_get_prop':
+anx7411.c:(.text+0x94d): undefined reference to `power_supply_get_drvdata'
+drivers/usb/typec/anx7411.o: In function `anx7411_i2c_probe':
+anx7411.c:(.text+0x111d): undefined reference to
+`devm_power_supply_register'
+drivers/usb/typec/anx7411.o: In function `anx7411_work_func':
+anx7411.c:(.text+0x167c): undefined reference to `power_supply_changed'
+anx7411.c:(.text+0x1b55): undefined reference to `power_supply_changed'
 
-Miquel
+Add POWER_SUPPLY dependency to Kconfig.
+
+Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
+Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+---
+ drivers/usb/typec/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+index 5defdfead653..831e7049977d 100644
+--- a/drivers/usb/typec/Kconfig
++++ b/drivers/usb/typec/Kconfig
+@@ -56,6 +56,7 @@ config TYPEC_ANX7411
+ 	tristate "Analogix ANX7411 Type-C DRP Port controller driver"
+ 	depends on I2C
+ 	depends on USB_ROLE_SWITCH
++	depends on POWER_SUPPLY
+ 	help
+ 	  Say Y or M here if your system has Analogix ANX7411 Type-C DRP Port
+ 	  controller driver.
+-- 
+2.17.1
+
