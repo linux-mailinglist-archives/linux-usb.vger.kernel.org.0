@@ -2,107 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B767F5C0452
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 18:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B1B5E544D
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 22:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiIUQhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Sep 2022 12:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S230213AbiIUUO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Sep 2022 16:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiIUQgn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 12:36:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BAE8169B;
-        Wed, 21 Sep 2022 09:20:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S230415AbiIUUOy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 16:14:54 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7E53F31C;
+        Wed, 21 Sep 2022 13:14:54 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7DBCB8312B;
-        Wed, 21 Sep 2022 16:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B7CC433D6;
-        Wed, 21 Sep 2022 16:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663777207;
-        bh=Duj4kklWK0YcmYF/HuojDKc2O7J0ExDwCk56eToKF2I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KHE9SwBBT9b+t2i4TxSGAYeOR4V6dLQsGhCI0BGD9omLr9/7/9NjsQo1QwiF459l9
-         kF1s/nMqT/Ej8wGb6rGiLr5ArcwuQePBlyD7kgkctYVTJ/RXUCtwZlrAutAnWp+YV+
-         uonvd5o6r5v5ihCuPnYGMCBmELmbLqPyKiTDROnw=
-Date:   Wed, 21 Sep 2022 18:20:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rondreis <linhaoguo86@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        johan@kernel.org
-Subject: Re: KASAN: use-after-free Write in keyspan_close
-Message-ID: <Yys5tGHLo4AFcA3E@kroah.com>
-References: <CAB7eexKhQeqgpMaZoT=JD2EMwn=qTw4sWzF7hdU9XDFVsz3ooA@mail.gmail.com>
- <YynnT7/mnzJVn7iz@kroah.com>
- <CAB7eexKKeOxgZ6uh7WXJcui71_uOMeYr8+=Hfb0-Gi4h8JMmEw@mail.gmail.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id E65382B0;
+        Wed, 21 Sep 2022 20:14:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E65382B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1663791294; bh=LJoxcUrIoOXsXFf9d4eG77z611Cb3aWpfNjdJD6uwi8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=BfOpPLKizat2xa6o/WnOxxedjArACoxIXkPbyCfOzLrdh0JdyJ7wHQZEa8/ei3Mq7
+         e72RRlk02tJO3qdw58yUMCfUEnJ6yNaPSNb54RnugOGYlreFZVPXpQoSy40UOIru9Q
+         N9xiqBe+iwfET2WfF1BOjonKB3DEQT89SZuJFqCbTgl/8jEibYwUQ2YLT+VjsDfNGI
+         E0KhXDhT8TDHlKE4EV2WLDoeTWyDcFFAVvsvtV9fRkxA/wCfBZczOEgNKI/zayMB3F
+         MGYJS1lo3XMmeByE0/718H4ZGsxCGXEZkUKChVv4Z9qcPafD1DvxMdtt2BYuGiO+QB
+         xuDo+HfRWmCFQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: clarify Documentation/ABI text
+In-Reply-To: <20220827203217.7837-1-rdunlap@infradead.org>
+References: <20220827203217.7837-1-rdunlap@infradead.org>
+Date:   Wed, 21 Sep 2022 14:14:53 -0600
+Message-ID: <87v8pgtrgi.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB7eexKKeOxgZ6uh7WXJcui71_uOMeYr8+=Hfb0-Gi4h8JMmEw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 11:45:17PM +0800, Rondreis wrote:
-> Thank you for your reply!
-> 
-> This is a “fake” device. We emulated some functions with the built-in
-> gadget module as a virtual device side for fuzzing. It can pass through
-> the matching phase and, to some extent the probing phase.
-> As you said, the configuration options are correct.
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-But this fake device does not follow the protocol of the real device,
-right?  So how is any fake data sent/received by it to fuzz?
+> Fix grammar and improve readability of chipidea-usb2 text.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Peter Chen <peter.chen@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  Documentation/ABI/testing/sysfs-platform-chipidea-usb2 |    6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-> After a successful attachment, we extracted the file_operations
-> of the device files on both sides to find the corresponding system calls.
+Applied, thanks.
 
-open/read/write/close?  :)
-
-> Later, by fuzzing the dual-sided device with system calls, it is
-> equivalent to considering data threats from both peripheral and user space.
-
-So you are now treating this device as malicious.
-
-If so, wonderful, that means you now need to audit the driver and fix
-all of the assumptions that we made when it was written as it was a
-trusted device at that point in time.
-
-Not to say that this is a bad thing, just that you are testing something
-that the original code was never designed to even consider, so you will
-find problems.
-
-Any help you can in fixing them would be appreciated, and then we can
-move on to all of the others that we have as all of them were also
-written to assume that we trust the hardware, as that was the Linux
-security model at the time (also all other operating system's model, we
-are not unique here.)
-
-My point being, this is going to be a long slog if you wish to change
-the model that Linux was originally designed for.  Perhaps you should
-look into some way to "trace" the data paths to find where USB data is
-received and acted on before it can be "trusted".  Much like we
-currently do today for userspace memory pointers.
-
-That will be a much better solution overall, so that we can then use
-that model to fix all drivers, and prevent any future changes from also
-causing problems.
-
-Then you can turn that model to other busses, which for now we also
-consider trusted, but some people wish to change that.
-
-So don't focus on this one tiny driver, try working on the root issue
-here please.
-
-good luck!
-
-greg k-h
+jon
