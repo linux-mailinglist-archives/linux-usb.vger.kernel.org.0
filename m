@@ -2,106 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7274E5BFA00
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 11:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327905BFDF7
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 14:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiIUJB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Sep 2022 05:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
+        id S230057AbiIUMdp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Sep 2022 08:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiIUJBV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 05:01:21 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD877B7B6
-        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 02:01:18 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id l8so3951791wmi.2
-        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 02:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Ofpc/bAj5NYR7nbxp0NyiDou96P6k7GH4J1beyq4EpU=;
-        b=RkYhKElk7GjihHKB+uEeuDYCesGuBh+Bf+pzskBPKrgsTxU8DuGp0YGs+3jjh3KLvU
-         +lU1bEK9yRFSAbvnhY73IS4GXUtlBTmvXfIBx2ex5oG5OmT1EC+gwRYqowe0xaazB5aR
-         Z6tS54k6m3nseL3QOp37sO8iJLuyWmBcHkC51Kqbs3LI9thRRjDxc7PxHcSTzjoZA3NX
-         ay4vIloQoPrGb96lWEF8Ik4QK3n1b/zxjK3MPCU2Ew49Oigqts4dGSv+I1K0CYK8eU88
-         F+LYEm/zkL97YN0FbseEumn4kmJSmG7/pNBd46ZENMJJIB/UJhA89QQSAx601eQuH2lq
-         2uqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ofpc/bAj5NYR7nbxp0NyiDou96P6k7GH4J1beyq4EpU=;
-        b=psgwX03R9lz37PFFLx26zUnFGCqDTcDVtql+WLomWUXxZNXYeif9gDZIeKGN66MGc4
-         A5R3+D/VrD0tBOS6SjQAn6VGDm7N3lTk9ZL5ZN2oHBX5sjCk9lp3Ff5LeKRQHnlelODS
-         E9v46SSCL99IpLPiDIaeqx38EjOo6OuFH2l097h4pFnFJR8QeGGPbMzCgvep5x3Oqhew
-         n9muo6mInfGRDFTuTk6aTsLd7z05AfDECDFi5eneBBxGFH89vVNzJQsep63MDafyf3Aa
-         4D4IOQWSTrNqrUFaLguXbMiAPuej7c1iJMj2VTuDbCaTcUS/QfX656OPqIuX8nDsv2K6
-         yD+g==
-X-Gm-Message-State: ACrzQf3dgxY2b+W2WkrMVdcMXVmeOwurs1fVb7HyArnB2NWa9JZtcqbh
-        eU3zlxe/QQlKCUQa/quwNqUl3Q==
-X-Google-Smtp-Source: AMsMyM6CFjdEKrfXdSuVifj6YSuGcR0lpGO+AM0HsyXcWd4xI9DLCUQmJiX4Eke6fqCduXrCrkuiiQ==
-X-Received: by 2002:a05:600c:310b:b0:3b4:c618:180d with SMTP id g11-20020a05600c310b00b003b4c618180dmr5099090wmo.25.1663750876857;
-        Wed, 21 Sep 2022 02:01:16 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8ce3:ff4e:ae9b:55f3? ([2a01:e0a:982:cbb0:8ce3:ff4e:ae9b:55f3])
-        by smtp.gmail.com with ESMTPSA id j27-20020a05600c1c1b00b003a5c999cd1asm2736243wms.14.2022.09.21.02.01.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 02:01:16 -0700 (PDT)
-Message-ID: <9ab1a3c5-fa6c-be47-893a-259a67e7e234@linaro.org>
-Date:   Wed, 21 Sep 2022 11:01:15 +0200
+        with ESMTP id S229522AbiIUMdd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 08:33:33 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781FE97EDA
+        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 05:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663763612; x=1695299612;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rRgq1ym4AVKUFR3Dn/1RMbrX6jLKHKVdsnmdZGHinCg=;
+  b=cZpRScuDoQWiaDvPYivdupnfCEpPKks8ieiGtmYO59Y6SLeC/HwVzrQM
+   sOTa5vlvzcW6TcY94MjxCgX7xDRrhMY93OrXSb70dzwmeGTXU/6YJhJiM
+   eESmcXYx3QXEqHeZUJ+Hk2YUHNDtdiC2rfTw+p8Z4vJvjjNTxtFiFr3bo
+   AVEKBoJ89LjemMkO93Hik7ABa1oqGdZGHZSdNIwp3kMSKpqRsVg6C1eaq
+   G/RL8N2fA6u20bVP9U9ENi2n9Il+u+g3GpHZ8XSkAjw7YypvWn2YZprAC
+   w+qv+SFG9ZoiS+JwpNjjU788fZJj9gVwavhIaAFxpJTECgXMkU9lxAvuZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="363965088"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="363965088"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 05:33:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="708429443"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Sep 2022 05:33:30 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/6] xhci features and fixes for usb-next
+Date:   Wed, 21 Sep 2022 15:34:44 +0300
+Message-Id: <20220921123450.671459-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] usb: dwc3: qcom: drop unneeded compatibles
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220921084654.118230-1-krzysztof.kozlowski@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro
-In-Reply-To: <20220921084654.118230-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/09/2022 10:46, Krzysztof Kozlowski wrote:
-> All Qualcomm SoC DWC3 USB devices have a qcom,dwc3 fallback, thus there
-> is no need to keep the list of compatibles growing.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   drivers/usb/dwc3/dwc3-qcom.c | 4 ----
->   1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 9a94b1ab8f7a..7c40f3ffc054 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -1007,10 +1007,6 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
->   
->   static const struct of_device_id dwc3_qcom_of_match[] = {
->   	{ .compatible = "qcom,dwc3" },
-> -	{ .compatible = "qcom,msm8996-dwc3" },
-> -	{ .compatible = "qcom,msm8998-dwc3" },
-> -	{ .compatible = "qcom,sdm660-dwc3" },
-> -	{ .compatible = "qcom,sdm845-dwc3" },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
+Hi Greg
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Some xhci features and fixes for usb-next.
+Both fixing some possible memory leaks that are too late for usb-linus,
+and simple code cleanups for usb-next
+
+Thanks
+-Mathias
+
+Jianglei Nie (1):
+  usb: host: xhci: Fix potential memory leak in xhci_alloc_stream_info()
+
+Mario Limonciello (1):
+  xhci: Don't show warning for reinit on known broken suspend
+
+Mathias Nyman (3):
+  xhci: show fault reason for a failed enable slot command
+  xhci: remove unused command member from struct xhci_hcd struct
+  xhci: remove unused lpm_failed_dev member from struct xhci_hcd
+
+Rafael Mendonca (1):
+  xhci: dbc: Fix memory leak in xhci_alloc_dbc()
+
+ drivers/usb/host/xhci-dbgcap.c | 2 +-
+ drivers/usb/host/xhci-mem.c    | 7 ++++++-
+ drivers/usb/host/xhci.c        | 6 ++++--
+ drivers/usb/host/xhci.h        | 3 ---
+ 4 files changed, 11 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
+
