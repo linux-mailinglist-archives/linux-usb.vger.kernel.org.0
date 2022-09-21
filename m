@@ -2,50 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD205BFDF8
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 14:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171625BFDFC
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 14:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiIUMdt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Sep 2022 08:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S230034AbiIUMdw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Sep 2022 08:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiIUMdi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 08:33:38 -0400
+        with ESMTP id S230028AbiIUMdk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 08:33:40 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811C28B2CF
-        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 05:33:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F5995AEA
+        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 05:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663763617; x=1695299617;
+  t=1663763618; x=1695299618;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JmaK7Qgk+E+RDAwhbQUAVkfcXfPxIFxtoxbaYzf60RQ=;
-  b=O+YMbA6HudPv5R6PFuqfKFLtN9Zpoontpfc8UKf/Y5Qk1gxAwq/8o9wM
-   h/VPYvt+x4CL5s0APFOL9JdB66bba0iGMm1YtVpfqs6tRTJ3MFZ2JFiiU
-   DX9lr5NawF57WMdvU++IVlEX5xQUgLjR1UiS03LA7jOIeV4OLAzxB2vlM
-   rqMgkBH96wgaNenFfksDaB0OvB0tuDqjkXyAl7NQqs7AhAjGsK1polj9B
-   qpWsRXN6XoMzlJaeo6hwpDONf4pHxxBYPxh+LnU6Qi4JPnd0TzKpEL/zq
-   80Uu+fCk3kWINfrx487AP3Ix1MWqWXMHADdHqUB21fNT6aWbGwxajIRCL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="363965105"
+  bh=yTbRBo90pcB/fBqv5liREs7w64JtHDfBcp6r2nk6iBQ=;
+  b=gfD1w020dJtNqu6PhWQleEZx0N41dMj4kPTzGgsgewJL7f16mEQ97aC+
+   jhum+rh1Kdtbo+xictspyyOlnHiRSa/xVF4CdpTGmB9mG7JRNc57Djuo2
+   EbBkg2Xf9qvSpqLpufLTnp+6rpma9YYQQYkF5FikW49PzkshI8rW2OUME
+   CfXVLrMmKdrs8bdU979woiabAF/lbfwVViKE9ylcFb90Gd8q8OuISIxiI
+   G/G2wYonA8n1kqGb8F4c2+Cbj/dWYoxIN0ntXLEzXZ/e89OgMG2ZS9A8U
+   ubyYr6ybxwxxKyavKaH1sJaYgM78VCeR6BYLTX5PrdB/e10pTFAFs+RBa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="363965111"
 X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="363965105"
+   d="scan'208";a="363965111"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 05:33:37 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 05:33:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="708429464"
+   d="scan'208";a="708429477"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Sep 2022 05:33:35 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Sep 2022 05:33:37 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Artem S . Tashkinov" <aros@gmx.com>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 3/6] xhci: Don't show warning for reinit on known broken suspend
-Date:   Wed, 21 Sep 2022 15:34:47 +0300
-Message-Id: <20220921123450.671459-4-mathias.nyman@linux.intel.com>
+Subject: [PATCH 4/6] xhci: show fault reason for a failed enable slot command
+Date:   Wed, 21 Sep 2022 15:34:48 +0300
+Message-Id: <20220921123450.671459-5-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220921123450.671459-1-mathias.nyman@linux.intel.com>
 References: <20220921123450.671459-1-mathias.nyman@linux.intel.com>
@@ -60,41 +58,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+Show the completion code of a unsuccessful "enable slot" command.
+Add it in a human readable form to the existing error message.
 
-commit 8b328f8002bc ("xhci: re-initialize the HC during resume if HCE was
-set") introduced a new warning message when the host controller error
-was set and re-initializing.
-
-This is expected behavior on some designs which already set
-`xhci->broken_suspend` so the new warning is alarming to some users.
-
-Modify the code to only show the warning if this was a surprising behavior
-to the XHCI driver.
-
-Fixes: 8b328f8002bc ("xhci: re-initialize the HC during resume if HCE was set")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216470
-Reported-by: Artem S. Tashkinov <aros@gmx.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
  drivers/usb/host/xhci.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 38649284ff88..a7ef675f00fd 100644
+index a7ef675f00fd..17f5dda913be 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -1183,7 +1183,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 	/* re-initialize the HC on Restore Error, or Host Controller Error */
- 	if (temp & (STS_SRE | STS_HCE)) {
- 		reinit_xhc = true;
--		xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
-+		if (!xhci->broken_suspend)
-+			xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
- 	}
+@@ -4096,7 +4096,8 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 	slot_id = command->slot_id;
  
- 	if (reinit_xhc) {
+ 	if (!slot_id || command->status != COMP_SUCCESS) {
+-		xhci_err(xhci, "Error while assigning device slot ID\n");
++		xhci_err(xhci, "Error while assigning device slot ID: %s\n",
++			 xhci_trb_comp_code_string(command->status));
+ 		xhci_err(xhci, "Max number of devices this xHCI host supports is %u.\n",
+ 				HCS_MAX_SLOTS(
+ 					readl(&xhci->cap_regs->hcs_params1)));
 -- 
 2.25.1
 
