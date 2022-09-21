@@ -2,82 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73DF5BF7C7
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 09:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EED5BF9A9
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Sep 2022 10:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiIUHdt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Sep 2022 03:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S231433AbiIUIrb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Sep 2022 04:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiIUHds (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 03:33:48 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03B983BF6
-        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 00:33:46 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z25so7805928lfr.2
-        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 00:33:46 -0700 (PDT)
+        with ESMTP id S231438AbiIUIrA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 04:47:00 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B98189CD8
+        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 01:46:58 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a3so8005409lfk.9
+        for <linux-usb@vger.kernel.org>; Wed, 21 Sep 2022 01:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=aQe4EbEwH+Te0he6Q+LesKbwiVWeT2RRaLMZab1VYVc=;
-        b=ZGGRhdXjuUgKIURwXvZnh8kSkfpsyqxgt0sEy77zBa57gAtYN49R7qgpCn6MtAKspp
-         6mk27COPAeO7YEREqjiPzss317/5ubdKcPwY6YBwC/Vmp8piNwb9jvZxsxeFBNBlDzkd
-         6JlABHQuPDUm2sp/Srxxg88vUvbCxYJc+Q8BwjwbzUHL7O1wy0RpVa5rKy/vr94e5n2s
-         UvW6Bl7467JMwvoKM04o0x6LgYjUX+ieDXlj33qWsNwVZUKVMT6WzGgxYlREve3EGUws
-         r0bxocxCMvDDwXLRvkq9UYL3LMWPb5FrOzGSY3yT8vSF6Re/66KajnXpOuwE4f0k4C2e
-         8ncA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9XDmMSkErfJxFmN4ZvQmXQrGhNtHHsv05+YAnAlzpks=;
+        b=PC8yTTvPRBQpgdJ31Yt4NsBPePaj0m09Ho5t1UiVzsRsiwcI48Xxecb0a3C5O6DriO
+         LW4IsbyHiBfAifg6NDFeCswah8f1AlEgYVIf3ocXrYg8wN7gdSt7iRXt46PlnPehLsBP
+         Nf8RzciXCNmfoHUL0UMQA4G0Icg2m57DCnIi48wK9ZkFTjy8P+cw+XPhJFuiNZtfPjF5
+         HoQP+KFkTti1UwEuprNwo/dyhP3WklIR6a6YQB2GjpBUj7V3BzfEqshxdCorLdAB3Mkk
+         5fzA+XnFE3c3fPFj7tKnPcFct+VMlqOh7U6FcoOY6dpzIctojWTp1DY6dpLOnC+UjXDs
+         FWtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=aQe4EbEwH+Te0he6Q+LesKbwiVWeT2RRaLMZab1VYVc=;
-        b=A5eAEfMBllqMOPq8pwrKAjscDDysBSfZIpfgjpTlae5CbwX6N8T/LKgqfDeDYKyV1o
-         M5oijjw22lP8+cVXu5+u/XPurymr7HQyU++0E9aVjLIelaxMkhX8rqk/uo0AvMSjiFG9
-         rTzl/c92SAUBfVOljwkHaA9N+Ea1XdyHMtPTt18/soLbM3y1jd9Jv6V0/UBUkNBPwJAv
-         oqmP//e5miB+qIDCJb1ggbIlUF9kSTX2PPR5tJbnLEGOlLXqJXAG2X5gpusHYejNH8cv
-         9F+gk1+A/ibuAc7vK0JVb8vrxLTaWitdM4XYL9LtCwaIFRGnYtbie5SJpwXp5/S0WaHq
-         wzZw==
-X-Gm-Message-State: ACrzQf1V1O9Ey4GnKNeMyQnpHLCoOdz+i1a/EG4YWt/JVoM+1EI2hp9v
-        IvJZRe8QuINAvaTfaq1A3HGwK7vlksybXw==
-X-Google-Smtp-Source: AMsMyM4vSON1N8m0Ol1b19FpnmbrXqUNNqyWHu5KucxAN2jD4RDa4f61a5MrJj+hQMxzB3IxGQClqA==
-X-Received: by 2002:a19:5f4b:0:b0:49f:a4b7:3f1c with SMTP id a11-20020a195f4b000000b0049fa4b73f1cmr5126375lfj.333.1663745624970;
-        Wed, 21 Sep 2022 00:33:44 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x25-20020a19f619000000b004946b549a19sm324282lfe.45.2022.09.21.00.33.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 00:33:44 -0700 (PDT)
-Message-ID: <571f8852-0602-04ed-685d-cc972a897f10@linaro.org>
-Date:   Wed, 21 Sep 2022 09:33:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 3/3] usb: dwc3: qcom: add sdm670 compatible
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9XDmMSkErfJxFmN4ZvQmXQrGhNtHHsv05+YAnAlzpks=;
+        b=jrUG6IeygL9ge4foClQdYY6nz+jeZn4gzNDI4G9W4Zr5HWtRLSm6ux+1oZOBZAdVSP
+         kbdDSmbMGWRZAJWuWIVCFqjHwdgPfhxZLQIoFz0Yx7MLQ/tAIAVvgXs8VdWGtcdwUh6n
+         3ZLJ8+okNfu0lQ3eoGFTSDgxRDX/vsMH1UoupfTLHpjSjq2FrQimtV/Vd3PHG70ZBbFK
+         tHrfJvx3kwHEoycsJ5s6c0mf+3MuWKEP/FCIPLy/+j3b2jt2VhBSrO59jMPA+E7zUP7r
+         ZStORhg/Y+EY4N7C3RrEfst1g5Lg476T0OiRNMcSPXkGd3aBATnM5xj4XYVJbpjco2Em
+         9o7g==
+X-Gm-Message-State: ACrzQf1AB3PHPe3OD4s930yymR30ka0Wmf9cKEf+2bQBUt5b8TRX5ehq
+        1PrLQl3iPRX364kEcqbulcOnlw==
+X-Google-Smtp-Source: AMsMyM4RB9R3GoHhkgWd/q4jSX09mjpDoHUp6y2OzcGRbdSNR5ZNtu32JNMZN/EivKSvm50+5Vs+qQ==
+X-Received: by 2002:a05:6512:b17:b0:4a0:13c:9b3f with SMTP id w23-20020a0565120b1700b004a0013c9b3fmr375196lfu.91.1663750016500;
+        Wed, 21 Sep 2022 01:46:56 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o12-20020a056512052c00b00497a41b3a42sm344715lfc.88.2022.09.21.01.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 01:46:55 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20220920224320.152127-1-mailingradian@gmail.com>
- <20220920224320.152127-4-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220920224320.152127-4-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] usb: dwc3: qcom: drop unneeded compatibles
+Date:   Wed, 21 Sep 2022 10:46:54 +0200
+Message-Id: <20220921084654.118230-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,27 +71,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/09/2022 00:43, Richard Acayan wrote:
-> The Snapdragon 670 has DWC3 USB support. Add a compatible for device tree
-> semantics.
-> 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 9a94b1ab8f7a..34b70c3c2f70 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -1010,6 +1010,7 @@ static const struct of_device_id dwc3_qcom_of_match[] = {
->  	{ .compatible = "qcom,msm8996-dwc3" },
->  	{ .compatible = "qcom,msm8998-dwc3" },
->  	{ .compatible = "qcom,sdm660-dwc3" },
-> +	{ .compatible = "qcom,sdm670-dwc3" },
->  	{ .compatible = "qcom,sdm845-dwc3" },
+All Qualcomm SoC DWC3 USB devices have a qcom,dwc3 fallback, thus there
+is no need to keep the list of compatibles growing.
 
-No. This does not make sense. You already have fallback.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 9a94b1ab8f7a..7c40f3ffc054 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -1007,10 +1007,6 @@ static const struct dev_pm_ops dwc3_qcom_dev_pm_ops = {
+ 
+ static const struct of_device_id dwc3_qcom_of_match[] = {
+ 	{ .compatible = "qcom,dwc3" },
+-	{ .compatible = "qcom,msm8996-dwc3" },
+-	{ .compatible = "qcom,msm8998-dwc3" },
+-	{ .compatible = "qcom,sdm660-dwc3" },
+-	{ .compatible = "qcom,sdm845-dwc3" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
+-- 
+2.34.1
+
