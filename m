@@ -2,78 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969105E63DB
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4425E6436
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiIVNlR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 09:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S231472AbiIVNvh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 09:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiIVNlP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:41:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226BBB5A67
-        for <linux-usb@vger.kernel.org>; Thu, 22 Sep 2022 06:41:15 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MYGXx0Lqmz14Rbc;
-        Thu, 22 Sep 2022 21:37:05 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 21:41:13 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 21:41:12 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>
-Subject: [PATCH -next] usb: typec: fusb302: Switch to use dev_err_probe() helper
-Date:   Thu, 22 Sep 2022 21:48:06 +0800
-Message-ID: <20220922134806.2204579-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231182AbiIVNvg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:51:36 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB871DA4D;
+        Thu, 22 Sep 2022 06:51:17 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 28MDoPOU015858-28MDoPOX015858
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 22 Sep 2022 21:50:29 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: idmouse: fix an uninit-value in idmouse_open
+Date:   Thu, 22 Sep 2022 21:48:44 +0800
+Message-Id: <20220922134847.1101921-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the probe path, dev_err() can be replaced with dev_err_probe()
-which will check if error code is -EPROBE_DEFER and prints the
-error name. It also sets the defer probe reason which can be
-checked later through debugfs. It's more simple in error path.
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+In idmouse_create_image, if any ftip_command fails, it will
+go to the reset label. However, this leads to the data in
+bulk_in_buffer[HEADER..IMGSIZE] uninitialized. And the check
+for valid image incurs an uninitialized dereference.
+
+Fix this by moving the check before reset label since this
+check only be valid if the data after bulk_in_buffer[HEADER]
+has concrete data.
+
+Note that this is found by KMSAN, so only kernel compilation
+is tested.
+
+Reported-by: syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 ---
- drivers/usb/typec/tcpm/fusb302.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/usb/misc/idmouse.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index db83b377b2f6..721b2a548084 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1743,9 +1743,8 @@ static int fusb302_probe(struct i2c_client *client,
- 	chip->tcpm_port = tcpm_register_port(&client->dev, &chip->tcpc_dev);
- 	if (IS_ERR(chip->tcpm_port)) {
- 		fwnode_handle_put(chip->tcpc_dev.fwnode);
--		ret = PTR_ERR(chip->tcpm_port);
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "cannot register tcpm port, ret=%d", ret);
-+		ret = dev_err_probe(dev, PTR_ERR(chip->tcpm_port),
-+				    "cannot register tcpm port\n");
- 		goto destroy_workqueue;
+diff --git a/drivers/usb/misc/idmouse.c b/drivers/usb/misc/idmouse.c
+index e9437a176518..ea39243efee3 100644
+--- a/drivers/usb/misc/idmouse.c
++++ b/drivers/usb/misc/idmouse.c
+@@ -177,10 +177,6 @@ static int idmouse_create_image(struct usb_idmouse *dev)
+ 		bytes_read += bulk_read;
  	}
  
+-	/* reset the device */
+-reset:
+-	ftip_command(dev, FTIP_RELEASE, 0, 0);
+-
+ 	/* check for valid image */
+ 	/* right border should be black (0x00) */
+ 	for (bytes_read = sizeof(HEADER)-1 + WIDTH-1; bytes_read < IMGSIZE; bytes_read += WIDTH)
+@@ -192,6 +188,10 @@ static int idmouse_create_image(struct usb_idmouse *dev)
+ 		if (dev->bulk_in_buffer[bytes_read] != 0xFF)
+ 			return -EAGAIN;
+ 
++	/* reset the device */
++reset:
++	ftip_command(dev, FTIP_RELEASE, 0, 0);
++
+ 	/* should be IMGSIZE == 65040 */
+ 	dev_dbg(&dev->interface->dev, "read %d bytes fingerprint data\n",
+ 		bytes_read);
 -- 
 2.25.1
 
