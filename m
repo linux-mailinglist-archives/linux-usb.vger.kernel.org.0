@@ -2,89 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4425E6436
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774255E6444
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiIVNvh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 09:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S231735AbiIVNxE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 09:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiIVNvg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:51:36 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB871DA4D;
-        Thu, 22 Sep 2022 06:51:17 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 28MDoPOU015858-28MDoPOX015858
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 22 Sep 2022 21:50:29 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: idmouse: fix an uninit-value in idmouse_open
-Date:   Thu, 22 Sep 2022 21:48:44 +0800
-Message-Id: <20220922134847.1101921-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S231875AbiIVNw6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:52:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59766DE0D7;
+        Thu, 22 Sep 2022 06:52:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3D7B6349E;
+        Thu, 22 Sep 2022 13:52:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8740C433C1;
+        Thu, 22 Sep 2022 13:52:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663854771;
+        bh=EXFw8APFB2TGEMNzh7PpyOxkeuxYM6y1awGndA0jKP8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GrqYDwn26ZI/9m/tp82oC0VTPVCfxqf0wcZO8KwRdafBm7gFk1Suu+g++nKzufyOn
+         h5uYw32rVWerp8oUYXRV61MmQGwyvg0TnHI7SKzGDJb4tgPWZxXcUb4rVDhhaLcVvC
+         l+S88/t0QQInmE/rQoSM0C7dF7g4kz6UCTvPS2rA=
+Date:   Thu, 22 Sep 2022 15:52:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial updates for 6.1-rc1
+Message-ID: <YyxojRDiGg+ZAkwQ@kroah.com>
+References: <YyxnVZCqZekklv8V@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YyxnVZCqZekklv8V@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+On Thu, Sep 22, 2022 at 03:47:01PM +0200, Johan Hovold wrote:
+> Hi Greg,
+> 
+> As Stephen reported the other day, there's a trivial conflict with a change in
+> the TTY tree that made one of the set_termios parameters const:
+> 
+> 	https://lore.kernel.org/lkml/20220921151109.174cad24@canb.auug.org.au/
 
-In idmouse_create_image, if any ftip_command fails, it will
-go to the reset label. However, this leads to the data in
-bulk_in_buffer[HEADER..IMGSIZE] uninitialized. And the check
-for valid image incurs an uninitialized dereference.
+Yeah, I'll watch out for that, thanks.
 
-Fix this by moving the check before reset label since this
-check only be valid if the data after bulk_in_buffer[HEADER]
-has concrete data.
+now pulled and pushed out.
 
-Note that this is found by KMSAN, so only kernel compilation
-is tested.
-
-Reported-by: syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- drivers/usb/misc/idmouse.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/misc/idmouse.c b/drivers/usb/misc/idmouse.c
-index e9437a176518..ea39243efee3 100644
---- a/drivers/usb/misc/idmouse.c
-+++ b/drivers/usb/misc/idmouse.c
-@@ -177,10 +177,6 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		bytes_read += bulk_read;
- 	}
- 
--	/* reset the device */
--reset:
--	ftip_command(dev, FTIP_RELEASE, 0, 0);
--
- 	/* check for valid image */
- 	/* right border should be black (0x00) */
- 	for (bytes_read = sizeof(HEADER)-1 + WIDTH-1; bytes_read < IMGSIZE; bytes_read += WIDTH)
-@@ -192,6 +188,10 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		if (dev->bulk_in_buffer[bytes_read] != 0xFF)
- 			return -EAGAIN;
- 
-+	/* reset the device */
-+reset:
-+	ftip_command(dev, FTIP_RELEASE, 0, 0);
-+
- 	/* should be IMGSIZE == 65040 */
- 	dev_dbg(&dev->interface->dev, "read %d bytes fingerprint data\n",
- 		bytes_read);
--- 
-2.25.1
-
+greg k-h
