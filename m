@@ -2,56 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719225E6415
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969105E63DB
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbiIVNsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 09:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S229893AbiIVNlR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 09:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbiIVNr4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:47:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29ACF3933;
-        Thu, 22 Sep 2022 06:47:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 014E8B836EC;
-        Thu, 22 Sep 2022 13:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0624C433D6;
-        Thu, 22 Sep 2022 13:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1663854430;
-        bh=GHdswNwa2l6I7a9Y1aPqdGywYJbHnh4/1zLSt2sJKZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i+GJonRlXcgtZo99D8zxZCnqgRyctr7FVQfHZzpnKMgBzpoiZ2MRFrzxBRfn1ufhz
-         IWUdzwMAHWUO3Zty4tNp7/a5R3D0NDGp8DweWGpCZEuAw2A3SnZ0xZ0SPbkS4vv7Tp
-         F8TUNynX+wDwbK8QwfmSgKCJgM0BukGcs377BI1w=
-Date:   Thu, 22 Sep 2022 15:47:02 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: Re: [PATCH v2 4/4] arm64: dts: tqma8mpql: add support for 2nd
- USB (host) interface
-Message-ID: <YyxnVicN/W/M2/ir@kroah.com>
-References: <20220915062855.751881-1-alexander.stein@ew.tq-group.com>
- <20220915062855.751881-5-alexander.stein@ew.tq-group.com>
- <YyxgUtT1gtyMIHeY@kroah.com>
- <5606023.DvuYhMxLoT@steina-w>
+        with ESMTP id S229656AbiIVNlP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:41:15 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226BBB5A67
+        for <linux-usb@vger.kernel.org>; Thu, 22 Sep 2022 06:41:15 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MYGXx0Lqmz14Rbc;
+        Thu, 22 Sep 2022 21:37:05 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 21:41:13 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 21:41:12 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] usb: typec: fusb302: Switch to use dev_err_probe() helper
+Date:   Thu, 22 Sep 2022 21:48:06 +0800
+Message-ID: <20220922134806.2204579-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5606023.DvuYhMxLoT@steina-w>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,30 +48,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 03:39:01PM +0200, Alexander Stein wrote:
-> Hi Greg,
-> 
-> Am Donnerstag, 22. September 2022, 15:17:06 CEST schrieb Greg Kroah-Hartman:
-> > On Thu, Sep 15, 2022 at 08:28:55AM +0200, Alexander Stein wrote:
-> > > The on-board USB hub has a single reset line which needs to be enabled.
-> > > 
-> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > ---
-> > > 
-> > >  .../freescale/imx8mp-tqma8mpql-mba8mpxl.dts   | 41 +++++++++++++++++++
-> > >  1 file changed, 41 insertions(+)
-> > 
-> > This patch failed to apply, please rebase and resend.
-> 
-> If I rebase this one to usb-testing (or usb-next) this will conflict with 
-> additional patches for this file already in linux-next later on, especially 
-> fb4f0b69565e ("arm64: dts: tqma8mpql: add USB DR support"). So IMHO this might 
-> not the best idea.
-> How to proceed here? Maybe Shawn can take this one once the other 3 patches 
-> hit linux-next.
+In the probe path, dev_err() can be replaced with dev_err_probe()
+which will check if error code is -EPROBE_DEFER and prints the
+error name. It also sets the defer probe reason which can be
+checked later through debugfs. It's more simple in error path.
 
-Yeah, or just wait for 6.1-rc1 to come out?
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/typec/tcpm/fusb302.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Your call,
+diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+index db83b377b2f6..721b2a548084 100644
+--- a/drivers/usb/typec/tcpm/fusb302.c
++++ b/drivers/usb/typec/tcpm/fusb302.c
+@@ -1743,9 +1743,8 @@ static int fusb302_probe(struct i2c_client *client,
+ 	chip->tcpm_port = tcpm_register_port(&client->dev, &chip->tcpc_dev);
+ 	if (IS_ERR(chip->tcpm_port)) {
+ 		fwnode_handle_put(chip->tcpc_dev.fwnode);
+-		ret = PTR_ERR(chip->tcpm_port);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "cannot register tcpm port, ret=%d", ret);
++		ret = dev_err_probe(dev, PTR_ERR(chip->tcpm_port),
++				    "cannot register tcpm port\n");
+ 		goto destroy_workqueue;
+ 	}
+ 
+-- 
+2.25.1
 
-greg k-h
