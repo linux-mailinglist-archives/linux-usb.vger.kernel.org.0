@@ -2,71 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E1A5E58B7
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 04:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC3B5E58C6
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 04:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiIVCnE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Sep 2022 22:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
+        id S230249AbiIVCrE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Sep 2022 22:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIVCnC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 22:43:02 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B694FAC263;
-        Wed, 21 Sep 2022 19:43:00 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id v128so6639510ioe.12;
-        Wed, 21 Sep 2022 19:43:00 -0700 (PDT)
+        with ESMTP id S230197AbiIVCrE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Sep 2022 22:47:04 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A50185F8B;
+        Wed, 21 Sep 2022 19:47:03 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id y141so6676312iof.5;
+        Wed, 21 Sep 2022 19:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=xNcnn4jL4IZe3ZlqcZaLceLcSUnWIU8oO+Rv1oWAims=;
-        b=A6v5lroDUrohUlJAoDACvvzyGHEO3N+kOMGaq8GtJ27INc5OwVb6uc5GivNgS6oaSA
-         2Z7t6rJdDCeX7mvrmea6V9b+FaYig7sC2Nt3TFzVjSXq9IczWJxIdtY25Dk/idwWZheu
-         yHJcmBDyV1OMEH/yuH/r8ty4ZKrxKOaOrHG7w9bzLhMXXhc/+o7Y6BJtDAfHSEW3YmUq
-         MaTrGVXRLxIG5sM3DbfHpT3oSIw5r8QDjxhkpRB5rRyqKLC9BsdZGdPkNr+7br/cQeWC
-         0ZXvcmdOAqJBoZ53Ov1SPrxSfn4qfPLlZQR0yXprxt6S4UcuoLtOFH8mkK6ooEauUyxv
-         V2XQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=h1angYPs614TPXEI7kKlA5pZMOV1qeh0yN6lGNKuXZA=;
+        b=Lj5mw0VgCTWu8452v3MHJPjCGErBsrxpWmv7YLQum0zJLOBBpIwaOyqcRy34nQMCmq
+         x0a4Iqa5rjSZMc0nTX0As6n/a6u3w0lxrv/yNRWmCnP9J9YKkOjUSfagnXkXyrjEJT6V
+         Ge9V/sSV4By8hlnV4WQVPeDI9avKHF+PYuAu9ZKwexsyzIdHOAtYAmqKWXY/XzeEh37q
+         EsYmGQdGPDG2R3uVQ+co9lphYbOwfbn/AtrtQquZ+/plJEzIsCiBS9n8M8qbjd0AOlfP
+         SIVWkOdUJDckV/BXmI8Sd9aZgbAVWSlYxKYJY5HOquuzeWGsLtiiwUlXw9czPMoMUuqw
+         Htnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xNcnn4jL4IZe3ZlqcZaLceLcSUnWIU8oO+Rv1oWAims=;
-        b=sZeWWNJuiAtIlcDqTg0zx5q25OxP1UxlGkR8PS86ykvF6etqdM1a1DF0QWSYPpqZwo
-         /eM8ayjZGC4K6gKnAeKbmhGFogIFiesW3bIhMRQ2+Vp5H3LiZB8fa92M4+0n5oCghDSK
-         KeYGQhyhrjGg+Lr8u0sSpQH5d084wl0ukxVjRStPLBDI4Iu8WSdCe49NdHH38Mz0Z1kE
-         xQR1h1KR/go7BgFmPqcTK0AWignCZmTdaGkiqHDClegJkiiVVy/pq3ZswPJJ4vxAqiGA
-         usVEjy/iUXkNGJgvep3XcLLJ5tbCP/CjVFvucOgNiPv4Pav5q4xggcpP5x0r6wQ6zBGP
-         Qsqg==
-X-Gm-Message-State: ACrzQf0QzEX6ZsBYhP8hU0J0mDIkw8FW0soW+N/ihf+4I8ROciBqmfQ6
-        WKMaW4dxogAi1O/amVXd9L0=
-X-Google-Smtp-Source: AMsMyM4lTR9rAMGNjLP1fXBJL+OH2wTxgAeuSqnmEhhaHZP8SmjQdM60o71QJOzqMaivONZ3oEe0Sw==
-X-Received: by 2002:a05:6638:339c:b0:35a:28d4:2189 with SMTP id h28-20020a056638339c00b0035a28d42189mr704698jav.176.1663814579829;
-        Wed, 21 Sep 2022 19:42:59 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=h1angYPs614TPXEI7kKlA5pZMOV1qeh0yN6lGNKuXZA=;
+        b=07s6FID1SMYcpgFhUsI+nM7t7w+GYurreh9NBgtKbg9XcaGu4gJOttlDatsp1I0NaV
+         Z8G/cQkmuWu6PUXBxZiX9rDd3jrsIUmUcW4Up+DxCt0dW4jCONtrSBsPqcKtiOuE2x5L
+         yxB6uwkTF96o1rS77qDPpD/VCX0VdswZEuhIbUzO4kTrGzwI3EZy89dAnN3IY5nUDdYe
+         jzZT/hHTW++6IGupDwLAj8/eB4eZMpznrdQqsDmmC0AASZC/f9r/wdLr2+NVFA7Yt8C1
+         W7V3bHhSjS2brmb8UzlCkT6/jAgDslP5nCeQHAnaUbs3QnF5CIqb4wxM2kTSugVE/1Im
+         ZGHQ==
+X-Gm-Message-State: ACrzQf0Tgu30l6+GxwUPxkUtV0EdgFGrGIW8E7M3z7YF4HoFM2N1VZqG
+        u8lTlnzTXno+pvi3kQZ2RX9UikJHpCg=
+X-Google-Smtp-Source: AMsMyM4YflKoLYGiqMpOqd+yPzlN9/XCcePyq1JTPj4Zuu0zLFikCgTjfu5/f02I1wQPJV7YMtrWvg==
+X-Received: by 2002:a02:93c7:0:b0:35a:3271:1c83 with SMTP id z65-20020a0293c7000000b0035a32711c83mr737360jah.105.1663814822421;
+        Wed, 21 Sep 2022 19:47:02 -0700 (PDT)
 Received: from localhost ([2607:fea8:a2e2:2d00::61a4])
-        by smtp.gmail.com with UTF8SMTPSA id q14-20020a027b0e000000b0034c0db05629sm1691832jac.161.2022.09.21.19.42.58
+        by smtp.gmail.com with UTF8SMTPSA id p1-20020a02b001000000b0034edaddd1d7sm1707606jah.144.2022.09.21.19.47.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 19:42:59 -0700 (PDT)
+        Wed, 21 Sep 2022 19:47:02 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>,
         Wesley Cheng <quic_wcheng@quicinc.com>,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         linux-usb@vger.kernel.org, Richard Acayan <mailingradian@gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: usb: dwc3: add sdm670 compatible
-Date:   Wed, 21 Sep 2022 22:42:57 -0400
-Message-Id: <20220922024257.178428-1-mailingradian@gmail.com>
+Subject: [PATCH v2 0/2] SDM670 USB 2.0 support
+Date:   Wed, 21 Sep 2022 22:46:54 -0400
+Message-Id: <20220922024656.178529-1-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <adc622c8-d2b4-5867-60eb-49eaf10cf701@linaro.org>
-References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,18 +77,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On 21/09/2022 00:43, Richard Acayan wrote:
-> > The Snapdragon 670 has DWC3 USB support. Add a compatible to reflect
-> > that.
-> > 
-> > Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> > ---
-> 
-> Missing changes in allOf?
+Changes since v1:
+ - drop driver patch (some maintainers might be excluded from v3
+   recipients because of this)
+ - add entries in usb clocks and interrupts
 
-Oh, I didn't see that. Nice catch!
+This adds compatible strings for USB 2.0 on the Qualcomm Snapdragon 670. I
+have no way to test USB 3.0 because my SDM670 device doesn't have USB 3.
 
-> 
-> 
-> Best regards,
-> Krzysztof
+ Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 1 +
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml      | 3 +++
+ 2 files changed, 4 insertions(+)
+
+
