@@ -2,82 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3915E63A8
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7745E63D8
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiIVNe6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 09:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S231482AbiIVNjk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 09:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiIVNe4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:34:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F9481E7;
-        Thu, 22 Sep 2022 06:34:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231544AbiIVNjS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:39:18 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C670883D9;
+        Thu, 22 Sep 2022 06:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1663853946; x=1695389946;
+  h=subject:from:to:cc:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CvNGXgqzeE+QXCg49n3Dh9W15AC3+5BUxUFylLugfkY=;
+  b=RUAJLQ6ICVrEDsj1lXooZ8oeEld4ON+vhu522EmMsPp3nyUE/SLV0gK3
+   Azvq9u4uwnSLDeCmGwCsblaVpml/zqdfERDA9SqmX658OoQCRukX30FQr
+   CwT67fftb/5I5l8UEBEVITj4/aOQCIybKlzeyi3+lOVnXcBHwaGfEfkWI
+   +CNhNs0Iax+RJmGFCn8RabJ8bi1DJqUPr2V1Vm5aQmEcxFIuUMZsYeymU
+   U2t6Dy43TWZqdPH2DIUual3DrGnHdNvATzvm1gfyh7Y5iwR8lRqFr6MvA
+   aDUPg6HdMTS9wsiv347ikbSODGd+K+5uuFqnO9XMkL67GP67OHyM7Fe7m
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,335,1654552800"; 
+   d="scan'208";a="26339193"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 22 Sep 2022 15:39:04 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 22 Sep 2022 15:39:04 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 22 Sep 2022 15:39:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1663853944; x=1695389944;
+  h=from:to:cc:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:subject;
+  bh=CvNGXgqzeE+QXCg49n3Dh9W15AC3+5BUxUFylLugfkY=;
+  b=c7DZenHHYRGr2lVSyapJ4pLRCazWnuagwlY6sswvrVT56tX+qeuAt06e
+   LXUs9zT5qmjXUmp3HJfcgIxyHWFkyOv+fmfTFtT5dcv3Ce22Uvf3p42KT
+   tzJCgUxGST3vE2Fqvid9IshwKjFX3/KyMLM3sR8nVGv/NEXXMsNEGRB6R
+   oa7DUhkjl5BEEvILm5PoBedNq4BhFMx2visXdxl16qOne2FELsNTMQWiY
+   5WKQQQAUgO4ETHTZCkSPGfG5JsW10S00jNP5M+hEI8h3RjAuzl8QfzMHz
+   LCT5z4iSc7iyWLfUwOOrABDKbrAHIJewp1e1Vz69Tv0XBpPMWeXJD+up+
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,335,1654552800"; 
+   d="scan'208";a="26339192"
+Subject: Re: Re: [PATCH v2 4/4] arm64: dts: tqma8mpql: add support for 2nd USB (host)
+ interface
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 22 Sep 2022 15:39:04 +0200
+Received: from steina-w.localnet (unknown [10.123.49.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C618B836C9;
-        Thu, 22 Sep 2022 13:34:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E72BC433D6;
-        Thu, 22 Sep 2022 13:34:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663853691;
-        bh=+My+Fy2IEDmbNTy7T8HNxYYgJowz92MhqyGRMiqJV6o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DnbzjENuc3OsMdOKj1NBCvu0nD5yXopwHjgT1w9EoUFOXUvcliNFiRL0BeqRQ7etA
-         nqKcojqalTNfYbWYmVLnRCEIf0OUKGJtQZsLADdi7RD8JtILZ5nJCm4hVK1D2mFo6c
-         4tPgPnJepTYCQdE+OHIjfGYux8UmExUSBvYUOs6mDthRwr20HP2LQ7Peq/Vj7Bq8Sl
-         AsCgwYvq1TDwG0wm0bgv7zU0JivNl/jLSTZbXzjtXBnI/HjR3IKcn/6LVw8mnuZszH
-         CJ/nC4h9GzU0ptNhFWfDcaPiIP6xonarxL8foqEAsw+64Vk3fII2YB81p4EhD+ZKNp
-         vEP3aTZvNvo5A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1obMLw-0005Fb-PD; Thu, 22 Sep 2022 15:34:56 +0200
-Date:   Thu, 22 Sep 2022 15:34:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 6.0-rc7
-Message-ID: <YyxkgPNrbp7g/+w5@hovoldconsulting.com>
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D247B280056;
+        Thu, 22 Sep 2022 15:39:03 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Thu, 22 Sep 2022 15:39:01 +0200
+Message-ID: <5606023.DvuYhMxLoT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <YyxgUtT1gtyMIHeY@kroah.com>
+References: <20220915062855.751881-1-alexander.stein@ew.tq-group.com> <20220915062855.751881-5-alexander.stein@ew.tq-group.com> <YyxgUtT1gtyMIHeY@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
+Hi Greg,
 
-  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
+Am Donnerstag, 22. September 2022, 15:17:06 CEST schrieb Greg Kroah-Hartman:
+> On Thu, Sep 15, 2022 at 08:28:55AM +0200, Alexander Stein wrote:
+> > The on-board USB hub has a single reset line which needs to be enabled.
+> > 
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> > 
+> >  .../freescale/imx8mp-tqma8mpql-mba8mpxl.dts   | 41 +++++++++++++++++++
+> >  1 file changed, 41 insertions(+)
+> 
+> This patch failed to apply, please rebase and resend.
 
-are available in the Git repository at:
+If I rebase this one to usb-testing (or usb-next) this will conflict with 
+additional patches for this file already in linux-next later on, especially 
+fb4f0b69565e ("arm64: dts: tqma8mpql: add USB DR support"). So IMHO this might 
+not the best idea.
+How to proceed here? Maybe Shawn can take this one once the other 3 patches 
+hit linux-next.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.0-rc7
+Best regards,
+Alexander
 
-for you to fetch changes up to d640c4cb8f2f933c0ca896541f9de7fb1ae245f4:
 
-  USB: serial: option: add Quectel RM520N (2022-09-13 14:40:59 +0200)
 
-----------------------------------------------------------------
-USB-serial fixes for 6.0-rc7
-
-Here are some new modem device ids.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Carl Yin(殷张成) (1):
-      USB: serial: option: add Quectel BG95 0x0203 composition
-
-jerry meng (1):
-      USB: serial: option: add Quectel RM520N
-
- drivers/usb/serial/option.c | 6 ++++++
- 1 file changed, 6 insertions(+)
