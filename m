@@ -2,111 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FEF5E6398
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7F25E6388
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 15:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiIVN3V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 09:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S229830AbiIVN0r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 09:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiIVN3S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:29:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EE7D4DC0;
-        Thu, 22 Sep 2022 06:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663853357; x=1695389357;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tVGkqZN8/I2ZkWPaWKkB3VtQaTi/1qyFWSRkCXAmu1g=;
-  b=ehaBS3kmhZKjZuQ+Wzi5KSCZS7bVF+mxQ8NICanJOeVdhZdqiaBLpBin
-   YPo1h1zaGirM0Gi+pumBO8zWJ9IOXjLqfLYKykhAgMpkIVuMCey2sH2G4
-   OIyjcitqvnaMBqpnVUH4MN21iyulH/OrqP9j0pC4QIPkx17VJADCnI2EL
-   LKFOq7R+m2Z6vEwIaHhsi0dyb12M+/5oxL+7FOQoL0kmfkzZE8QCMsTXt
-   6UBaiy7AcMnLRUhU9RyFCXjlX3dQYS88dtRtAeefCkOlBjcE1q7oDv9Tg
-   zy6qSVnHqWSG4H6tXuP4owVJBIELaWOf6VaEGyu2ufgJmKMZCinfn0bzy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="280014094"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="280014094"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 06:29:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="762182614"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Sep 2022 06:29:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1obMGO-006198-0F;
-        Thu, 22 Sep 2022 16:29:12 +0300
-Date:   Thu, 22 Sep 2022 16:29:11 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Ferry Toth <fntoth@gmail.com>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon
- is present
-Message-ID: <YyxjJxnbhroflkH6@smile.fi.intel.com>
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+        with ESMTP id S229536AbiIVN0q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 09:26:46 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C987EDCCFE
+        for <linux-usb@vger.kernel.org>; Thu, 22 Sep 2022 06:26:43 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYGCW2Q3czMnr4;
+        Thu, 22 Sep 2022 21:21:59 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 21:26:41 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 21:26:41 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+Subject: [PATCH -next 1/2] usb: phy: generic: Switch to use dev_err_probe() helper
+Date:   Thu, 22 Sep 2022 21:33:22 +0800
+Message-ID: <20220922133323.2135494-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 12:23:04PM +0200, Ferry Toth wrote:
-> On 22-09-2022 12:08, Andy Shevchenko wrote:
-> > On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
-> > > If the extcon device exists, get the mode from the extcon device. If
-> > > the controller is DRD and the driver is unable to determine the mode,
-> > > only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
-> > According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
-> > share bisect log?
-> 
-> I can but not right now. But what I did was bisect between 5.18.0 (good) and
-> 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the
-> commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3:
-> Don't switch OTG -> peripheral if extcon is present" (bad) and commit before
-> that (good).
-> 
-> The effect of the patch is that on Merrifield (I tested with Intel Edison
-> Arduino board which has a HW switch to select between host and device mode)
-> device mode works but in host mode USB is completely not working.
-> 
-> Currently on host mode - when working - superfluous error messages from
-> tusb1210 appear. When host mode is not working there are no tusb1210
-> messages in the logs / on the console at all. Seemingly tusb1210 is not
-> probed, which points in the direction of a relation to extcon.
-> 
-> > Taking into account the late cycle, I would like to revert the change. And
-> > Ferry and I would help to test any other (non-regressive) approach).
+In the probe path, dev_err() can be replaced with dev_err_probe()
+which will check if error code is -EPROBE_DEFER and prints the
+error name. It also sets the defer probe reason which can be
+checked later through debugfs. It's more simple in error path.
 
-> I have not yet tested if a simple revert fixes the problem but will tonight.
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/phy/phy-generic.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-For clean revert you might need to revert the merge conflict fixes first:
-8bd6b8c4b100 ("USB: fixup for merge issue with "usb: dwc3: Don't switch
-OTG -> peripheral if extcon is present"").
-
-> I would be happy to test other approaches too.
-
+diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
+index 34b9f8140187..3dc5c04e7cbf 100644
+--- a/drivers/usb/phy/phy-generic.c
++++ b/drivers/usb/phy/phy-generic.c
+@@ -230,12 +230,9 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
+ 		err = PTR_ERR_OR_ZERO(nop->gpiod_vbus);
+ 	}
+ 
+-	if (err == -EPROBE_DEFER)
+-		return -EPROBE_DEFER;
+-	if (err) {
+-		dev_err(dev, "Error requesting RESET or VBUS GPIO\n");
+-		return err;
+-	}
++	if (err)
++		return dev_err_probe(dev, err,
++				     "Error requesting RESET or VBUS GPIO\n");
+ 	if (nop->gpiod_reset)
+ 		gpiod_direction_output(nop->gpiod_reset, 1);
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
