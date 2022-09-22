@@ -2,33 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E835E6027
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 12:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CB55E6023
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 12:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiIVKqR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 06:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S231473AbiIVKn4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 06:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiIVKqQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 06:46:16 -0400
-X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Sep 2022 03:46:14 PDT
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E5FCC8C5
-        for <linux-usb@vger.kernel.org>; Thu, 22 Sep 2022 03:46:14 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 0721E10005D; Thu, 22 Sep 2022 11:39:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-        t=1663843168; bh=m+4wL7uEqJjMFXhenPU4NaUfw4oTcWjXeS7H+3eHpDE=;
+        with ESMTP id S231395AbiIVKnr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 06:43:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C8FAA358;
+        Thu, 22 Sep 2022 03:43:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 316FE62C01;
+        Thu, 22 Sep 2022 10:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5215C433D6;
+        Thu, 22 Sep 2022 10:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663843422;
+        bh=hQve4RUpU6UvGleEcv5d/p34i3nmjflrXZmmiQ+EPQU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q953CckSEkYNz0GMFZ/kzWuNsYo8YVPnJLXRBsf5lvJMqp77P5mD2DLK4EM15UH+Q
-         wBl5QHu9lYgWmljwo/4i8OELILipjhxdMiZcI5wbgJ9Rz1kgaE99qE5ExzJb9c+H1S
-         oIC+fUCFUq4fZeao/WaHbVESED5es7WOpH/u8Vjj3blnsVvwhgsSRjP9GUrj97ozSt
-         +Y+FleJFQf3e7zmXZfYfUxnoF/5NFoumvhx3LVz9KbOjP0ixrdCD9GZdt3qPLvNCrQ
-         g4kt+Bqn0Jr/dnbkwpFL652e4j1wabHhmXFK31u5w5V+6abKZIVDGDLEBObv48xuQl
-         eRVfnPEGdcfKw==
-Date:   Thu, 22 Sep 2022 11:39:27 +0100
-From:   Sean Young <sean@mess.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        b=Ggw5XBcfAjEsF6klSZQhkI65IOZK2fTlkK/KIcDZLLIwXLgamy2U7WLUrXn8L5UDS
+         JSusgY/8NGa7KV53ZdmSJ1Y/lVlkRS6+j0V5uQPxFGhSABeSD6smaY9r0TErH33p+j
+         WKqOddkUUfWVIL3TgP6WK16FNZi0+vObXzW1qYpo=
+Date:   Thu, 22 Sep 2022 12:43:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sean Young <sean@mess.org>
 Cc:     Johan Hovold <johan@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -36,43 +38,49 @@ Cc:     Johan Hovold <johan@kernel.org>,
         linux-kernel@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
         stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>
 Subject: Re: [PATCH RESEND] media: flexcop-usb: fix endpoint type check
-Message-ID: <Yyw7X2KkabBpPvIo@gofer.mess.org>
+Message-ID: <Yyw8W8rnhHv9Aqgk@kroah.com>
 References: <20220822151027.27026-1-johan@kernel.org>
  <YymBM1wJLAsBDU4E@hovoldconsulting.com>
  <YywfxwBmdmvQ0i21@kroah.com>
  <Yyws4Pd4bAl3iq2e@hovoldconsulting.com>
  <Yyw1CJgv6nreCtB9@kroah.com>
+ <Yyw7X2KkabBpPvIo@gofer.mess.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yyw1CJgv6nreCtB9@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <Yyw7X2KkabBpPvIo@gofer.mess.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 12:12:24PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Sep 22, 2022 at 11:37:36AM +0200, Johan Hovold wrote:
-> > Thanks. These are the follow-up cleanups:
+On Thu, Sep 22, 2022 at 11:39:27AM +0100, Sean Young wrote:
+> On Thu, Sep 22, 2022 at 12:12:24PM +0200, Greg Kroah-Hartman wrote:
+> > On Thu, Sep 22, 2022 at 11:37:36AM +0200, Johan Hovold wrote:
+> > > Thanks. These are the follow-up cleanups:
+> > > 
+> > > 	https://lore.kernel.org/lkml/20220822151456.27178-1-johan@kernel.org/
 > > 
-> > 	https://lore.kernel.org/lkml/20220822151456.27178-1-johan@kernel.org/
+> > Thanks, I'll take them after the first one was merged into Linus's tree.
+> > 
+> > > Perhaps we should start taking USB related changes like this through the
+> > > USB tree by default. Posting patches to the media subsystem feels like
+> > > shooting patches at a black hole.
+> > 
+> > I agree, there's been a bunch of patches sent there (some with security
+> > fixes) that are not getting responded to :(
 > 
-> Thanks, I'll take them after the first one was merged into Linus's tree.
+> The patches were missed are all DVB related, which is Mauro's responsibility.
 > 
-> > Perhaps we should start taking USB related changes like this through the
-> > USB tree by default. Posting patches to the media subsystem feels like
-> > shooting patches at a black hole.
-> 
-> I agree, there's been a bunch of patches sent there (some with security
-> fixes) that are not getting responded to :(
+> As far as I can see, other parts of the media subsystem are well looked after.
 
-The patches were missed are all DVB related, which is Mauro's responsibility.
+That's good, it's hard to know who is responsible for which parts at
+times.
 
-As far as I can see, other parts of the media subsystem are well looked after.
+Hopefully Mauro comes back soon...
 
-
-Sean
+greg k-h
