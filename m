@@ -2,75 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BD95E6D17
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 22:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A135E6D7C
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 23:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiIVUf1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 16:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S230243AbiIVVAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 17:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiIVUfS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 16:35:18 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE178A3472;
-        Thu, 22 Sep 2022 13:35:16 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id e18so15292870edj.3;
-        Thu, 22 Sep 2022 13:35:16 -0700 (PDT)
+        with ESMTP id S230235AbiIVVAV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 17:00:21 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0C7B3B3E;
+        Thu, 22 Sep 2022 14:00:18 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id m22so1967442lfg.0;
+        Thu, 22 Sep 2022 14:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=HyErV8xzsYibE84V0H3iRbBpF8z8RVZNEiwzTBCN7y8=;
-        b=dR5kGZWPEu0mY1SwV2krcuJ29s6VMwWy2Fjz7MTSx3JiJXUbCr2djLhSfBQCKuPy1Z
-         Iz5K9E84fSg4kBed2amDxKbFM383ileuE0lf32qDeOp5GF62bezJUe5AoO/rs4pIORPS
-         TFwzdgegNF4ulHHfJGIOPBfwDXiQVQaRUP0Fj0GBbb72iPiXk6VGJqz02Hfndma8ldev
-         jvZBUxi91+v8V8BX66xzNcNAuKIsArtdxZGTmv6mlHyNMfkbB+YZd6o6flttJm+zKtIL
-         ZLV1zcghLU3kYZD65mS+73PtoeTf17cEvruPAF4b8kZEH7zkrPVxPzB9sYEKwTbuQ8VM
-         ih2A==
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date;
+        bh=y9ZryuHbz2n1RmlIcr6kYgVVPHmzSeh1TTQ2UPMCWZ8=;
+        b=dY2Oab+4GOPR7pWtxem4R5vYkh4AslUQFYkkJSZA9wYVABohYQsRfHaMSfOISC8HZV
+         3/U1psa699fCt+rPm8D5XobgDqNuVujopn75z+fGDEDtXEVX1mb5hkqWxqNFFkuj2ohY
+         mtO+UIlQdXHLPREJVqwW15YLN7lMoXZ8T9RGM9BmOm1ZeteJQKODGOI+hNYb8YbkkYR3
+         BXopDdfXSPvyZfT8PpFJb7uURdDnWpIdnqyIko8AYHaO7wfjC510ty85cjN/fDMUQ7w1
+         sZez98f3sNyX+ryRsSZJoAsDLOf8BjnE56+Qd5gGBY1babtvC0HdkzS0nU7Em9a3WaxJ
+         LO/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=HyErV8xzsYibE84V0H3iRbBpF8z8RVZNEiwzTBCN7y8=;
-        b=GSELlHqfFztH7fEjy67zfns0C63UFb/zOcJFovtWpMP9Ox48u483G7+vfX5v9ls3G4
-         gxXiL6RcnVKAi0koVriH9tnbqGiqOOndxf0rjZ6CJZePRO/RKzd4xbB8La3jN6kIsAd0
-         loC349z6f5vIHmipKc4hwR1ZGdkASOABcmUQr76dlG4ep/D0XiNPhUnCwZUDqgrJrOOa
-         AnOoVK2RcTqGekHrdm7ubG/UpbtQFyxzSKvxBschkj8ChzkGVTNxSVW9nrPTGFZgXwVw
-         gKnbsU7m14bdSqfBl7F1FJrUjtYG5RrCo0Ni3gvPBIwl/s25HNfPTtNWcFrZapyPOhNG
-         OU1Q==
-X-Gm-Message-State: ACrzQf1PAXTH3fAfush/YESq10LsSMCNhawsW4BG+H6UtjxfBg9aB/3Z
-        IepnLwO4vYaTGHNTckBHXPc=
-X-Google-Smtp-Source: AMsMyM7TCDplKaoppNc0fQRqs9Wvg+rXdawvxHSw7cwzvbEMrZuLVj0QUV528L+JVLxybOeU/mu1Tw==
-X-Received: by 2002:a05:6402:1704:b0:44e:b523:585d with SMTP id y4-20020a056402170400b0044eb523585dmr5200704edu.22.1663878915153;
-        Thu, 22 Sep 2022 13:35:15 -0700 (PDT)
-Received: from ?IPV6:2a02:a466:68ed:1:14be:21e4:7385:ae7b? (2a02-a466-68ed-1-14be-21e4-7385-ae7b.fixed6.kpn.net. [2a02:a466:68ed:1:14be:21e4:7385:ae7b])
-        by smtp.gmail.com with ESMTPSA id t22-20020a056402021600b00443d657d8a4sm4191694edv.61.2022.09.22.13.35.14
+        bh=y9ZryuHbz2n1RmlIcr6kYgVVPHmzSeh1TTQ2UPMCWZ8=;
+        b=qzzN6ft8JvRSZtOcN4vWFsXOOTkDuldQGq6dhMB2+2ycd4UEqkbS2nqDIZVedqYD/W
+         woqx83JjvMEbwH1jFgxLWPq7ozYEKGjt/7g/rCHel1JQY/yIQmVNCqdy0gP7UnjK9Z/F
+         GJie7EoR7Ear1P5wkcu9RRJpQK9JzcOjOau7bFV1LNuAhLsQhlPqNdncdS8WDL/Tbude
+         pAOh3U0oGMyPxWKFKKpBrfj6Pq1gW4jTEWPjHeBI+UsxRusbiN36qUgHahp6IrzTmkHH
+         oVh4NVXlex4HJqRTtX6v+Ml4LRXIE8JxzpIT+dtSYlgLQ+/9H5GHSQW2cHzF3M7y1uwe
+         1yDA==
+X-Gm-Message-State: ACrzQf1uQ3ZdkVz5P5yke2FDxTV9lrko24+GHCSVrkm8webdW2KKKUbZ
+        3DFt8eBWrEay0rKTUMNRb0k=
+X-Google-Smtp-Source: AMsMyM54g87IkTa0vToTSQ0FfSnK9InN+XNBh4lGnMLzJjCjQbR/uvSQhAkDZuZAYVi6kQeWZn5zmg==
+X-Received: by 2002:a05:6512:a86:b0:499:f794:5cc2 with SMTP id m6-20020a0565120a8600b00499f7945cc2mr1877553lfu.100.1663880416252;
+        Thu, 22 Sep 2022 14:00:16 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.79.119])
+        by smtp.gmail.com with ESMTPSA id h2-20020ac250c2000000b00497aa190523sm1095333lfm.248.2022.09.22.14.00.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 13:35:14 -0700 (PDT)
-Message-ID: <580eb9fe-db26-ddd4-6368-c763bb4ebdba@gmail.com>
-Date:   Thu, 22 Sep 2022 22:35:14 +0200
+        Thu, 22 Sep 2022 14:00:15 -0700 (PDT)
+Subject: Re: [PATCH] usb: gadget: rndis: Avoid dereference before NULL check
+To:     Greg KH <gregkh@linuxfoundation.org>, Jim Lin <jilin@nvidia.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Aniruddha TVS Rao <anrao@nvidia.com>
+References: <20220908175615.5095-1-jilin@nvidia.com>
+ <YxrRPxeh/iCeCW4R@kroah.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <7493474c-beba-5abd-1647-2690829e3d27@gmail.com>
+Date:   Fri, 23 Sep 2022 00:00:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is
- present
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <YyxjJxnbhroflkH6@smile.fi.intel.com>
+In-Reply-To: <YxrRPxeh/iCeCW4R@kroah.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <YyxjJxnbhroflkH6@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
@@ -82,88 +75,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello!
 
-Op 22-09-2022 om 15:29 schreef Andy Shevchenko:
-> On Thu, Sep 22, 2022 at 12:23:04PM +0200, Ferry Toth wrote:
->> On 22-09-2022 12:08, Andy Shevchenko wrote:
->>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
->>>> If the extcon device exists, get the mode from the extcon device. If
->>>> the controller is DRD and the driver is unable to determine the mode,
->>>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
->>> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
->>> share bisect log?
-git bisect start
-# bad: [3d7cb6b04c3f3115719235cc6866b10326de34cd] Linux 5.19
-git bisect bad 3d7cb6b04c3f3115719235cc6866b10326de34cd
-# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
-git bisect good 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-# good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 
-'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect good c011dd537ffe47462051930413fed07dbdc80313
-# good: [5d4af9c1f04ab0411ba5818baad9a68e87f33099] Merge branch 
-'mv88e6xxx-fixes-for-reading-serdes-state'
-git bisect good 5d4af9c1f04ab0411ba5818baad9a68e87f33099
-# bad: [7a68065eb9cd194cf03f135c9211eeb2d5c4c0a0] Merge tag 
-'gpio-fixes-for-v5.19-rc2' of 
-git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
-git bisect bad 7a68065eb9cd194cf03f135c9211eeb2d5c4c0a0
-# bad: [54c2cc79194c961a213c1d375fe3aa4165664cc4] Merge tag 
-'usb-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
-git bisect bad 54c2cc79194c961a213c1d375fe3aa4165664cc4
-# good: [6a31a95135da0bb2c5349e49e37d76e9909ab7ea] staging: r8188eu: 
-remove include/rtw_debug.h
-git bisect good 6a31a95135da0bb2c5349e49e37d76e9909ab7ea
-# good: [04d93b2b8bc7a68ec45a6a156f34a611ede5aa60] Merge tag 
-'spdx-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx
-git bisect good 04d93b2b8bc7a68ec45a6a156f34a611ede5aa60
-# good: [c069d2756c01ed36121fae6a42c14fdf1325c71d] serial: sifive: 
-Sanitize CSIZE and c_iflag
-git bisect good c069d2756c01ed36121fae6a42c14fdf1325c71d
-# bad: [3120aac6d0ecd9accf56894aeac0e265f74d3d5a] usb: dwc2: gadget: 
-don't reset gadget's driver->bus
-git bisect bad 3120aac6d0ecd9accf56894aeac0e265f74d3d5a
-# bad: [0f01017191384e3962fa31520a9fd9846c3d352f] usb: dwc3: Don't 
-switch OTG -> peripheral if extcon is present
-git bisect bad 0f01017191384e3962fa31520a9fd9846c3d352f
-# good: [b8a19881337678c02bb3d72ae821602e1a4c377d] usb: gadget: u_audio: 
-clean up some inconsistent indenting
-git bisect good b8a19881337678c02bb3d72ae821602e1a4c377d
-# good: [424bef51fa530389b0b9008c9e144e40c10e8458] usb: musb: Fix 
-missing of_node_put() in omap2430_probe
-git bisect good 424bef51fa530389b0b9008c9e144e40c10e8458
+On 9/9/22 8:38 AM, Greg KH wrote:
 
->>> I can but not right now. But what I did was bisect between 5.18.0 (good) and
->>> 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the
->>> commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3:
->>> Don't switch OTG -> peripheral if extcon is present" (bad) and commit before
->>> that (good).
-5c29e864999763baec9eedb9ea5bd557aa4cbd77
->>> The effect of the patch is that on Merrifield (I tested with Intel Edison
->>> Arduino board which has a HW switch to select between host and device mode)
->>> device mode works but in host mode USB is completely not working.
->>>
->>> Currently on host mode - when working - superfluous error messages from
->>> tusb1210 appear. When host mode is not working there are no tusb1210
->>> messages in the logs / on the console at all. Seemingly tusb1210 is not
->>> probed, which points in the direction of a relation to extcon.
->>>
->>> Taking into account the late cycle, I would like to revert the change. And
->>> Ferry and I would help to test any other (non-regressive) approach).
->> I have not yet tested if a simple revert fixes the problem but will tonight.
-> For clean revert you might need to revert the merge conflict fixes first:
-> 8bd6b8c4b100 ("USB: fixup for merge issue with "usb: dwc3: Don't switch
-> OTG -> peripheral if extcon is present"").
+>> NULL check is performed after params->dev is dereferenced in
+>> dev_get_stats.
+> 
+> I do not understand this statement.
+> 
+>> Fixed by adding a NULL check before dereferencing params->dev and
+>> removing subsequent NULL checks for it.
+>>
+>> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
+>> Signed-off-by: Jim Lin <jilin@nvidia.com>
+>> ---
+>>  drivers/usb/gadget/function/rndis.c | 37 ++++++++++++-----------------
+>>  1 file changed, 15 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+>> index 64de9f1b874c..d2f18f34c8e5 100644
+>> --- a/drivers/usb/gadget/function/rndis.c
+>> +++ b/drivers/usb/gadget/function/rndis.c
+>> @@ -198,6 +198,9 @@ static int gen_ndis_query_resp(struct rndis_params *params, u32 OID, u8 *buf,
+>>  	outbuf = (__le32 *)&resp[1];
+>>  	resp->InformationBufferOffset = cpu_to_le32(16);
+>>  
+>> +	if (!params->dev)
+>> +		return -ENODEV;
+>> +
+> 
+> As Sergey points out, this check is useless and the ones below should
+> also be removed.
 
-Tested successfully on Intel Merrifield with v6.0-rc6 with reverted:
+   Would you accept this patch modulo the above check then? If not,
+I'll just resolve the corresponding SVACE checker as "won't fix" here. :-)
 
-8bd6b8c4 ("USB: fixup for merge issue with "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"")
+> But, why make this check at all, how did you trigger a problem with the
+> current code?
 
-0f010171 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+   There's no problem, just the redundant NULL checks...
 
-I also tested on v5.19 which in addition requires a back port of
+> Are you using this driver?  If so, why?  It is totally broken (as per
+> the specification) and we really really need to just delete it from the
+> tree to prevent anyone else from ever using it.
 
-d4a0a189 ("phy: ti: tusb1210: Don't check for write errors when powering 
-on")
+   Well, delete it then... :-)
 
->> I would be happy to test other approaches too.
+> thanks,
+> 
+> greg k-h
+
+MBR, Sergey
