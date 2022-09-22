@@ -2,71 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A135E6D7C
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 23:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8965E703E
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 01:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiIVVAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 17:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S229667AbiIVXdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 19:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiIVVAV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 17:00:21 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0C7B3B3E;
-        Thu, 22 Sep 2022 14:00:18 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id m22so1967442lfg.0;
-        Thu, 22 Sep 2022 14:00:18 -0700 (PDT)
+        with ESMTP id S229499AbiIVXdK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 19:33:10 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39323B5E70;
+        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id z13so15683464edb.13;
+        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date;
-        bh=y9ZryuHbz2n1RmlIcr6kYgVVPHmzSeh1TTQ2UPMCWZ8=;
-        b=dY2Oab+4GOPR7pWtxem4R5vYkh4AslUQFYkkJSZA9wYVABohYQsRfHaMSfOISC8HZV
-         3/U1psa699fCt+rPm8D5XobgDqNuVujopn75z+fGDEDtXEVX1mb5hkqWxqNFFkuj2ohY
-         mtO+UIlQdXHLPREJVqwW15YLN7lMoXZ8T9RGM9BmOm1ZeteJQKODGOI+hNYb8YbkkYR3
-         BXopDdfXSPvyZfT8PpFJb7uURdDnWpIdnqyIko8AYHaO7wfjC510ty85cjN/fDMUQ7w1
-         sZez98f3sNyX+ryRsSZJoAsDLOf8BjnE56+Qd5gGBY1babtvC0HdkzS0nU7Em9a3WaxJ
-         LO/g==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
+        b=fqv/zq/AbEapAt+EgPEsbPLgCgTCKZ1NBLK27LsD6DzCubtAIgALh3KY6ZlKTbJ2o1
+         m3B2BDzf2agcYCMmME6LzPKdo4o4NNKlEks2Z+noR/HY72y/W8KAPKUuuhyTqh+LJdTF
+         ICzVzDLgoEegddS87mBSGb78ihj00VMB1q1fm27Mlx3PoLMMvhu25Ho2QnuS2o93fS+K
+         tdnQ5gBHb6Jwbj0t1EHvRzlu17tuQza+iEn9QIT30AdSuvJHZqZuYwTaUxUK17jggLGu
+         jwqPII8dCx+uqSjHq476mQ/x3YHqiRktPuPx79a6b0rHG7uiMMcjBchYwCtynqb4xAw2
+         IAJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=y9ZryuHbz2n1RmlIcr6kYgVVPHmzSeh1TTQ2UPMCWZ8=;
-        b=qzzN6ft8JvRSZtOcN4vWFsXOOTkDuldQGq6dhMB2+2ycd4UEqkbS2nqDIZVedqYD/W
-         woqx83JjvMEbwH1jFgxLWPq7ozYEKGjt/7g/rCHel1JQY/yIQmVNCqdy0gP7UnjK9Z/F
-         GJie7EoR7Ear1P5wkcu9RRJpQK9JzcOjOau7bFV1LNuAhLsQhlPqNdncdS8WDL/Tbude
-         pAOh3U0oGMyPxWKFKKpBrfj6Pq1gW4jTEWPjHeBI+UsxRusbiN36qUgHahp6IrzTmkHH
-         oVh4NVXlex4HJqRTtX6v+Ml4LRXIE8JxzpIT+dtSYlgLQ+/9H5GHSQW2cHzF3M7y1uwe
-         1yDA==
-X-Gm-Message-State: ACrzQf1uQ3ZdkVz5P5yke2FDxTV9lrko24+GHCSVrkm8webdW2KKKUbZ
-        3DFt8eBWrEay0rKTUMNRb0k=
-X-Google-Smtp-Source: AMsMyM54g87IkTa0vToTSQ0FfSnK9InN+XNBh4lGnMLzJjCjQbR/uvSQhAkDZuZAYVi6kQeWZn5zmg==
-X-Received: by 2002:a05:6512:a86:b0:499:f794:5cc2 with SMTP id m6-20020a0565120a8600b00499f7945cc2mr1877553lfu.100.1663880416252;
-        Thu, 22 Sep 2022 14:00:16 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.79.119])
-        by smtp.gmail.com with ESMTPSA id h2-20020ac250c2000000b00497aa190523sm1095333lfm.248.2022.09.22.14.00.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 14:00:15 -0700 (PDT)
-Subject: Re: [PATCH] usb: gadget: rndis: Avoid dereference before NULL check
-To:     Greg KH <gregkh@linuxfoundation.org>, Jim Lin <jilin@nvidia.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Aniruddha TVS Rao <anrao@nvidia.com>
-References: <20220908175615.5095-1-jilin@nvidia.com>
- <YxrRPxeh/iCeCW4R@kroah.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <7493474c-beba-5abd-1647-2690829e3d27@gmail.com>
-Date:   Fri, 23 Sep 2022 00:00:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
+        b=TPr5EqOk/oThaUoPCg6aDIDeM6Mx+WTtZwkP0p6Z9+DhtxboqQJpPf9jdRpOz1cN/u
+         oScNPhs0qNB6amYWixRAXVyLL6+NFCZfDt23aFacTryfAteuNvHbCwgNhKOUk2/yyljy
+         c8yBjEZHUacIt2HOpJWL6eyzNn/2tKqK7eI9oND557v733icZBcyjXRewXzBWtnrArTe
+         si53y8kikH7O7XYLQ49lJuWxBu52zF7IkKOtpp3hEQjlmIl3xa1Ik3tA7cFACj5eqGsZ
+         GI+oIF+XHJZU4Ko1Bnz67AUKA1KXL5C5HPcN8Jvi00Y/jdS5Al9ABKoC4WbRif0STbaJ
+         Q0zA==
+X-Gm-Message-State: ACrzQf10IpcDM5MtCo7SCJMWAVYyp/z+o4cw4TdQPJVtaWyFamaMJgrs
+        S8dea1f7tuxeRe6D8VZayvOixBcwktLnqY6SCG8=
+X-Google-Smtp-Source: AMsMyM5DiFBYbthi2FE2gsNbylvHS3uLjW2CJDgWIMSs+MGoMI7WxG6kvXEF3qzDcScXRg1BjFhd18LJR3IHxpCtG8E=
+X-Received: by 2002:a05:6402:901:b0:454:2b6d:c39 with SMTP id
+ g1-20020a056402090100b004542b6d0c39mr5581802edz.50.1663889587565; Thu, 22 Sep
+ 2022 16:33:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YxrRPxeh/iCeCW4R@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+In-Reply-To: <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Thu, 22 Sep 2022 16:32:55 -0700
+Message-ID: <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
+To:     Ferry Toth <fntoth@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,55 +72,92 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> Hi,
+>
+> On 22-09-2022 12:08, Andy Shevchenko wrote:
+>
+> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
+>
+> If the extcon device exists, get the mode from the extcon device. If
+> the controller is DRD and the driver is unable to determine the mode,
+> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+>
+> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, c=
+an you
+> share bisect log?
+>
+> I can but not right now. But what I did was bisect between 5.18.0 (good) =
+and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on =
+the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: d=
+wc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit =
+before that (good).
+>
+> The effect of the patch is that on Merrifield (I tested with Intel Edison=
+ Arduino board which has a HW switch to select between host and device mode=
+) device mode works but in host mode USB is completely not working.
+>
+> Currently on host mode - when working - superfluous error messages from t=
+usb1210 appear. When host mode is not working there are no tusb1210 message=
+s in the logs / on the console at all. Seemingly tusb1210 is not probed, wh=
+ich points in the direction of a relation to extcon.
+>
+> Taking into account the late cycle, I would like to revert the change. An=
+d
+> Ferry and I would help to test any other (non-regressive) approach).
+>
+> I have not yet tested if a simple revert fixes the problem but will tonig=
+ht.
+>
+>
+> I would be happy to test other approaches too.
 
-On 9/9/22 8:38 AM, Greg KH wrote:
 
->> NULL check is performed after params->dev is dereferenced in
->> dev_get_stats.
-> 
-> I do not understand this statement.
-> 
->> Fixed by adding a NULL check before dereferencing params->dev and
->> removing subsequent NULL checks for it.
->>
->> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
->> Signed-off-by: Jim Lin <jilin@nvidia.com>
->> ---
->>  drivers/usb/gadget/function/rndis.c | 37 ++++++++++++-----------------
->>  1 file changed, 15 insertions(+), 22 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
->> index 64de9f1b874c..d2f18f34c8e5 100644
->> --- a/drivers/usb/gadget/function/rndis.c
->> +++ b/drivers/usb/gadget/function/rndis.c
->> @@ -198,6 +198,9 @@ static int gen_ndis_query_resp(struct rndis_params *params, u32 OID, u8 *buf,
->>  	outbuf = (__le32 *)&resp[1];
->>  	resp->InformationBufferOffset = cpu_to_le32(16);
->>  
->> +	if (!params->dev)
->> +		return -ENODEV;
->> +
-> 
-> As Sergey points out, this check is useless and the ones below should
-> also be removed.
+It's a bit hard for me to suggest an alternative approach without
+knowing how things are breaking in this case. I'd love to order one of
+those boards to repro and fix this on my end, but it looks like this
+HW is EOLed and out of stock in most places. If you guys know how to
+get my hands on those boards I'm all ears.
 
-   Would you accept this patch modulo the above check then? If not,
-I'll just resolve the corresponding SVACE checker as "won't fix" here. :-)
+Barring that, Ferry can you dig more into this failure? E.g. is it this hun=
+k
 
-> But, why make this check at all, how did you trigger a problem with the
-> current code?
+@@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+                 * mode. If the controller supports DRD but the dr_mode is =
+not
+                 * specified or set to OTG, then set the mode to peripheral=
+.
+                 */
+-               if (mode =3D=3D USB_DR_MODE_OTG &&
++               if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
+                    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+                     !device_property_read_bool(dwc->dev, "usb-role-switch"=
+)) &&
+                    !DWC3_VER_IS_PRIOR(DWC3, 330A))
+@@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+        }
+ }
 
-   There's no problem, just the redundant NULL checks...
+that's problematic or moving
 
-> Are you using this driver?  If so, why?  It is totally broken (as per
-> the specification) and we really really need to just delete it from the
-> tree to prevent anyone else from ever using it.
+ static int dwc3_probe(struct platform_device *pdev)
+ {
+        struct device           *dev =3D &pdev->dev;
+@@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
+                goto err2;
+        }
 
-   Well, delete it then... :-)
++       dwc->edev =3D dwc3_get_extcon(dwc);
++       if (IS_ERR(dwc->edev)) {
++               ret =3D PTR_ERR(dwc->edev);
++               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
++               goto err3;
++       }
++
+        ret =3D dwc3_get_dr_mode(dwc);
+        if (ret)
+                goto err3;
 
-> thanks,
-> 
-> greg k-h
-
-MBR, Sergey
+to happen earlier? Does tracing the "mrfld_bcove_pwrsrc" driver (the
+excton provider in this case AFIACT) show anything interesting?
