@@ -2,185 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB7F5E65B0
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 16:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE75C5E65C6
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 16:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiIVOc7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 10:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S230449AbiIVOfg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 10:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiIVOck (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 10:32:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE219F50AD;
-        Thu, 22 Sep 2022 07:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663857157; x=1695393157;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OKjHW1dMKm5D2qAz3WSwiiU+cflw8eIq6V9TO1jHvJQ=;
-  b=Tj8cEzgf73yjS9oJQB3iJHZnhvuTB5OeuyLnEIua5E9uqB0Qd7CTnLxr
-   8bXgPkdyzs1SFmJbVaRJmC7c8NzfkaP7WytYtERM2JG5pJKaIvm5SnPb+
-   IfSntTy1w3ShsPH2U3jDrcaZXy7nmflksPJxZL7/qTfkK5zuZc8tBIk4T
-   U0g8OKE4atq38pS3lvhW1XOgSUtRkA19aoBfnkE9E9bt37pc3BnzvjdPL
-   iJi9ndC8+h35q0V9yiiJDgBmJr6s48VSV+NYdUYz3qMtj37VxjF7YNwMd
-   tqPHDP/BRkV9QgwvrKrfAkPGpTSzfs93NnFmsDEWFen/YAuIaw7ebLPrH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283364527"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="283364527"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 07:32:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="745401463"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 22 Sep 2022 07:32:33 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5BD21238; Thu, 22 Sep 2022 17:32:51 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Szuying Chen <Chloe_Chen@asmedia.com.tw>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: [PATCH v1 2/2] thunderbolt: Use dev_err_probe()
-Date:   Thu, 22 Sep 2022 17:32:40 +0300
-Message-Id: <20220922143240.36878-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220922143240.36878-1-andriy.shevchenko@linux.intel.com>
-References: <20220922143240.36878-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229893AbiIVOfW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 10:35:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D286FE4;
+        Thu, 22 Sep 2022 07:35:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38D7663591;
+        Thu, 22 Sep 2022 14:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE21C433C1;
+        Thu, 22 Sep 2022 14:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1663857320;
+        bh=eF+JNl4spW2fK1yzMCIR+YdM7auHuj5CbkJSu8uOlzg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VSvmDaTGn/afibcwsPi4ETCKdpQP7IZCdGb+fUNAzr5lDpF0oo3clFJk8y6Iu2POX
+         /ElbgE6TFcyAWA6nX/eC410UssKFawqxHNPACd/yVUQX1YTf6PXS3vJq0Np4CK2KiQ
+         G3QcySiWVdiHQ5f+AHfXV1T/jEVcuzVptH5Teq+0=
+Date:   Thu, 22 Sep 2022 16:35:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     eadavis@sina.com
+Cc:     balbi@kernel.org, john@metanate.com, linhaoguo86@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb/gadget: Annotate midi lock nesting
+Message-ID: <YyxypSDXxoz7OHuw@kroah.com>
+References: <YyxdbRhl7HGDDZZM@kroah.com>
+ <20220922142654.906073-1-eadavis@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922142654.906073-1-eadavis@sina.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Unify error message format by using dev_err_probe().
-While at it, use temporary variable for device in
-the rest of the messaging calls.
+On Thu, Sep 22, 2022 at 10:26:54PM +0800, eadavis@sina.com wrote:
+> From: Edward Adam Davis <eadavis@sina.com>
+> 
+> On Thu, 22 Sep 2022 15:04:45 +0200, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Sun, Sep 18, 2022 at 11:50:37AM +0800, eadavis@sina.com wrote:
+> > > From: Edward Adam Davis <eadavis@sina.com>
+> > > 
+> > > ============================================
+> > > WARNING: possible recursive locking detected
+> > > 6.0.0-rc4+ #20 Not tainted
+> > > --------------------------------------------
+> > > kworker/0:1H/9 is trying to acquire lock:
+> > > ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> > > f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> > > 
+> > > but task is already holding lock:
+> > > ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> > > f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> > > 
+> > > other info that might help us debug this:
+> > >  Possible unsafe locking scenario:
+> > > 
+> > >        CPU0
+> > >        ----
+> > >   lock(&midi->transmit_lock);
+> > >   lock(&midi->transmit_lock);
+> > > 
+> > >  *** DEADLOCK ***
+> > > 
+> > >  May be due to missing lock nesting notation
+> > > 
+> > > 3 locks held by kworker/0:1H/9:
+> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> > > arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> > > arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> > > atomic_long_set include/linux/atomic/atomic-instrumented.h:1280
+> > > [inline]
+> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> > > set_work_data kernel/workqueue.c:636 [inline]
+> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> > > set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+> > >  #0: ffff888011c65138 ((wq_completion)events_highpri){+.+.}-{0:0}, at:
+> > > process_one_work+0x8b0/0x1650 kernel/workqueue.c:2260
+> > >  #1: ffffc900003afdb0 ((work_completion)(&midi->work)){+.+.}-{0:0},
+> > > at: process_one_work+0x8e4/0x1650 kernel/workqueue.c:2264
+> > >  #2: ffff888057ed9228 (&midi->transmit_lock){....}-{2:2}, at:
+> > > f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> > > 
+> > > stack backtrace:
+> > > CPU: 0 PID: 9 Comm: kworker/0:1H Not tainted 6.0.0-rc4+ #20
+> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> > > 1.13.0-1ubuntu1.1 04/01/2014
+> > > Workqueue: events_highpri f_midi_in_work
+> > > Call Trace:
+> > >  <TASK>
+> > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > >  print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+> > >  check_deadlock kernel/locking/lockdep.c:3031 [inline]
+> > >  validate_chain kernel/locking/lockdep.c:3816 [inline]
+> > >  __lock_acquire.cold+0x152/0x3c3 kernel/locking/lockdep.c:5053
+> > >  lock_acquire kernel/locking/lockdep.c:5666 [inline]
+> > >  lock_acquire+0x1ab/0x580 kernel/locking/lockdep.c:5631
+> > >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+> > >  _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+> > >  f_midi_transmit+0x18c/0x1460 drivers/usb/gadget/function/f_midi.c:683
+> > >  f_midi_complete+0x1bb/0x480 drivers/usb/gadget/function/f_midi.c:285
+> > >  dummy_queue+0x84a/0xb20 drivers/usb/gadget/udc/dummy_hcd.c:736
+> > >  usb_ep_queue+0xe8/0x3b0 drivers/usb/gadget/udc/core.c:288
+> > >  f_midi_do_transmit drivers/usb/gadget/function/f_midi.c:658 [inline]
+> > >  f_midi_transmit+0x7e4/0x1460 drivers/usb/gadget/function/f_midi.c:686
+> > >  process_one_work+0x9c7/0x1650 kernel/workqueue.c:2289
+> > >  worker_thread+0x623/0x1070 kernel/workqueue.c:2436
+> > >  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+> > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> > >  </TASK>
+> > > Use nested notation for the spin_lock to avoid this warning.
+> > > 
+> > > Signed-off-by: Edward Adam Davis <eadavis@sina.com>
+> > > ---
+> > >  drivers/usb/gadget/function/f_midi.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+> > > index fddf539008a9..ad745fbd549e 100644
+> > > --- a/drivers/usb/gadget/function/f_midi.c
+> > > +++ b/drivers/usb/gadget/function/f_midi.c
+> > > @@ -680,7 +680,8 @@ static void f_midi_transmit(struct f_midi *midi)
+> > >  	if (!ep || !ep->enabled)
+> > >  		goto drop_out;
+> > >  
+> > > -	spin_lock_irqsave(&midi->transmit_lock, flags);
+> > > +	spin_lock_irqsave_nested(&midi->transmit_lock, flags, 
+> > > +			SINGLE_DEPTH_NESTING);
+> > 
+> > This feels wrong (and you added a checkpatch warning at the same time.)
+> > 
+> > If this is correct, please document this really really well why this is
+> > the correct solution and we just don't really have a lockdep issue here
+> > with the code itself.
+> I want to assume the following scenario,
+> 
+>      	CPU1
+>         ----
+> spin_lock_irqsave(&midi->transmit_lock, f);          <----- Task A
+> ...
+> ...                                                  <----- raise NMI and call Task B 
+>    spin_lock_irqsave(&midi->transmit_lock, f);       <----- Task B acquire same lock, OK?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/thunderbolt/nhi.c | 48 +++++++++++++++------------------------
- 1 file changed, 18 insertions(+), 30 deletions(-)
+Is that ok?  Can you nest a spin lock like this?  For some reason, I
+didn't think you could, but I can't find anything in the documentation
+about this, can you?
 
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index caca9f164beb..4dce2edd86ea 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -1184,6 +1184,7 @@ static void nhi_check_iommu(struct tb_nhi *nhi)
- static int nhi_init_msi(struct tb_nhi *nhi)
- {
- 	struct pci_dev *pdev = nhi->pdev;
-+	struct device *dev = &pdev->dev;
- 	int res, irq, nvec;
- 
- 	/* In case someone left them on. */
-@@ -1214,10 +1215,8 @@ static int nhi_init_msi(struct tb_nhi *nhi)
- 
- 		res = devm_request_irq(&pdev->dev, irq, nhi_msi,
- 				       IRQF_NO_SUSPEND, "thunderbolt", nhi);
--		if (res) {
--			dev_err(&pdev->dev, "request_irq failed, aborting\n");
--			return res;
--		}
-+		if (res)
-+			return dev_err_probe(dev, res, "request_irq failed, aborting\n");
- 	}
- 
- 	return 0;
-@@ -1258,26 +1257,21 @@ static struct tb *nhi_select_cm(struct tb_nhi *nhi)
- 
- static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
-+	struct device *dev = &pdev->dev;
- 	struct tb_nhi *nhi;
- 	struct tb *tb;
- 	int res;
- 
--	if (!nhi_imr_valid(pdev)) {
--		dev_warn(&pdev->dev, "firmware image not valid, aborting\n");
--		return -ENODEV;
--	}
-+	if (!nhi_imr_valid(pdev))
-+		return dev_err_probe(dev, -ENODEV, "firmware image not valid, aborting\n");
- 
- 	res = pcim_enable_device(pdev);
--	if (res) {
--		dev_err(&pdev->dev, "cannot enable PCI device, aborting\n");
--		return res;
--	}
-+	if (res)
-+		return dev_err_probe(dev, res, "cannot enable PCI device, aborting\n");
- 
- 	res = pcim_iomap_regions(pdev, 1 << 0, "thunderbolt");
--	if (res) {
--		dev_err(&pdev->dev, "cannot obtain PCI resources, aborting\n");
--		return res;
--	}
-+	if (res)
-+		return dev_err_probe(dev, res, "cannot obtain PCI resources, aborting\n");
- 
- 	nhi = devm_kzalloc(&pdev->dev, sizeof(*nhi), GFP_KERNEL);
- 	if (!nhi)
-@@ -1288,7 +1282,7 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	/* cannot fail - table is allocated in pcim_iomap_regions */
- 	nhi->iobase = pcim_iomap_table(pdev)[0];
- 	nhi->hop_count = ioread32(nhi->iobase + REG_HOP_COUNT) & 0x3ff;
--	dev_dbg(&pdev->dev, "total paths: %d\n", nhi->hop_count);
-+	dev_dbg(dev, "total paths: %d\n", nhi->hop_count);
- 
- 	nhi->tx_rings = devm_kcalloc(&pdev->dev, nhi->hop_count,
- 				     sizeof(*nhi->tx_rings), GFP_KERNEL);
-@@ -1301,18 +1295,14 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	nhi_check_iommu(nhi);
- 
- 	res = nhi_init_msi(nhi);
--	if (res) {
--		dev_err(&pdev->dev, "cannot enable MSI, aborting\n");
--		return res;
--	}
-+	if (res)
-+		return dev_err_probe(dev, res, "cannot enable MSI, aborting\n");
- 
- 	spin_lock_init(&nhi->lock);
- 
- 	res = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
--	if (res) {
--		dev_err(&pdev->dev, "failed to set DMA mask\n");
--		return res;
--	}
-+	if (res)
-+		return dev_err_probe(dev, res, "failed to set DMA mask\n");
- 
- 	pci_set_master(pdev);
- 
-@@ -1323,13 +1313,11 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	}
- 
- 	tb = nhi_select_cm(nhi);
--	if (!tb) {
--		dev_err(&nhi->pdev->dev,
-+	if (!tb)
-+		return dev_err_probe(dev, -ENODEV,
- 			"failed to determine connection manager, aborting\n");
--		return -ENODEV;
--	}
- 
--	dev_dbg(&nhi->pdev->dev, "NHI initialized, starting thunderbolt\n");
-+	dev_dbg(dev, "NHI initialized, starting thunderbolt\n");
- 
- 	res = tb_domain_add(tb);
- 	if (res) {
--- 
-2.35.1
+thanks,
 
+greg k-h
