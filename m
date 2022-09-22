@@ -2,39 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD23B5E6797
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 17:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398AB5E6813
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Sep 2022 18:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiIVPwO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 11:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S231703AbiIVQHq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 12:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiIVPwM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 11:52:12 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0AB82F6F66
-        for <linux-usb@vger.kernel.org>; Thu, 22 Sep 2022 08:52:06 -0700 (PDT)
-Received: (qmail 263288 invoked by uid 1000); 22 Sep 2022 11:52:06 -0400
-Date:   Thu, 22 Sep 2022 11:52:06 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Rondreis <linhaoguo86@gmail.com>, Felipe Balbi <balbi@kernel.org>,
-        Michal Nazarewicz <mina86@mina86.com>
-Cc:     andriy.shevchenko@linux.intel.com, jakobkoschel@gmail.com,
-        quic_wcheng@quicinc.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: kernel v5.19 warn in usb_ep_queue
-Message-ID: <YyyEpo5E+Tu10RKt@rowland.harvard.edu>
-References: <CAB7eexKe2YtpYHy0Ohyr-SXLAWUjErJGLSspSUCeEL=CWyZSKw@mail.gmail.com>
- <YyoDZNZX2ggSuaFE@rowland.harvard.edu>
- <CAB7eexKT341KugNjfEKKVzFNoDJcECh5Ni2mpKSTyp7MqYjAsA@mail.gmail.com>
- <Yys1UHJ/+XoKyR6Y@rowland.harvard.edu>
- <CAB7eexKF5tiUHtesX218XoWSHV0aCiYaW97fgEY91x8Q9JF23g@mail.gmail.com>
+        with ESMTP id S229482AbiIVQHn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 12:07:43 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A05DCCDB;
+        Thu, 22 Sep 2022 09:07:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SK4JwZJRPBJaze73ilxWTJGvSkYrBgoKK/AtFTBSKob1jkeVDwnhby36ZtfsxOe7qFA8o50yqS40VNoG0BAQWKoRbI+gYQng6ySipPXPG0D9sBvE7j7k4T8RZSyGAkDZjqRCUknMMJzDmvQPddDuoZMP7PEmg1qyz5tBGN4yIuMCaLVbQRg9UMiTMnLlTbgfXPKwBlfQIVnJPJ32h2972IGtKiL53w3UseUi9ahH2NCEUjHx2ELkS2jc4F3SlMG9lT9xvQCIgip+M1vO9sUOxLE9SVYc5KWPtj5I/8Hd94rsU32ZTryYHDO1cRSvkUo+NbjXrLYp6Dkt2P49egquDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=klRliMLEb28spxLVrJNh2jBaLNCJCWvRtCvU0dmulWM=;
+ b=SfLehKuZdPF5yxWw6JF3rjFHj6Bce0Dt36p62zBTwY/38Ck9wl3tIYYrH9RJm+o04vGqqlOL9gFUPmg0H2kmA8MnEIBTepi8NkiqQ7fvWdCnQnfYwXYvdDRvhfO6hGPiChrDMEfeeU4f+ERoXGtBcpS36Z9wuh15ENPyl2NJ347VKokQ6kctsKMcf9dJHayU3ATsRRnSlW4OzehbUlwb2HjDZUZFIwBK/uSVw3WFYU/VE11hc0ZzNm8y4rRI462bOUwnWF7WXVb+Pn2nVh/5MokfXdoOJS1WnsAxmQKDg/ozXqongFL3XqsrVDrvpXAyQPcah/rtokwG25Pisy4J7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=klRliMLEb28spxLVrJNh2jBaLNCJCWvRtCvU0dmulWM=;
+ b=zQKQH4OJq7d8XTXsJmZkNqdf5G5s8qlltBdRMQtBuWoXPdQUKuuOFmvejcaM0eR+F9hxVMKL1UkRENv1Wki+D70OSaoE2CASphFJFpeo9qaAe1wlEO+PCOl75SVUoAAwzLQEcx5k5oMlV6VIo9T0JpEYNnmSQyJ7/7rco2QEerM=
+Received: from DS7P222CA0018.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::33) by
+ DM4PR12MB6160.namprd12.prod.outlook.com (2603:10b6:8:a7::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.16; Thu, 22 Sep 2022 16:07:40 +0000
+Received: from DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2e:cafe::b3) by DS7P222CA0018.outlook.office365.com
+ (2603:10b6:8:2e::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17 via Frontend
+ Transport; Thu, 22 Sep 2022 16:07:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT040.mail.protection.outlook.com (10.13.173.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5654.14 via Frontend Transport; Thu, 22 Sep 2022 16:07:40 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 22 Sep
+ 2022 11:07:38 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+CC:     Mehta Sanju <Sanju.Mehta@amd.com>, <stable@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] thunderbolt: Explicitly enable lane adapter hotplug events at startup
+Date:   Thu, 22 Sep 2022 11:07:29 -0500
+Message-ID: <20220922160730.898-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAB7eexKF5tiUHtesX218XoWSHV0aCiYaW97fgEY91x8Q9JF23g@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT040:EE_|DM4PR12MB6160:EE_
+X-MS-Office365-Filtering-Correlation-Id: d20ffd9b-c083-4d4d-1428-08da9cb49316
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y9Cnn+3jyMaEZFNsLv+HfF68q1JzUQ1KxggFK+6vXziAMRnE/mIbZnrk924fUjZ87srJJzTIjfnjU/OyQ0dbGqIja+ukic2FUIFoYIVpj1AIUsSd2xvMypW2bXmPV7yESeDnr/IGJGa0icqRMYwl9V2DkMfSg2mR16buqs+By5XR0Ik3BX6bCjsRyq85jpPCsN1IoMFY9DupFU/yB1IlPqI7kDK6rVijquRUECQWMD+XVsz5a8gB2tWcTijj2fFzCCsBIV2A4I3D6vdVs/whU1FMnx7RYQAbTYZ9+1YLBbM6jR88xCMh4oMhRs+TfFEp4cC7j9qHTPalLhNFGg3odJ0IGvRBsY54BBOedF4isVUH6gSzMh4y5PdChK3etLMa6mzowkmHbsC42wcbbDNsy8RB7/dSBwDpj5mOkAHA1ssiDDNlTvaQ19wPFPQNZ+Ly9icbjFebuy8GnB2GJeCHGRkmfxZCdjWOOZK8xzrplLyOwdfcnocKgvy5r4T1Eh8lgebpogrfSlJigke07a2izVDysaBmc/8NXNr/IeA7cv7NSH3tJCb9iJ8Lje3WS/U60zEvV8vtxqMjmMzOzFevuY8OSn32UXk2ouQ/l0C8mfYn3Nd/hd/y6wi+INbXVY9kJnf2X8taNiLPSefsLMmtZsNOJTjBlLJJSE4+fmMzNZ2+2Yoa2bYbKq3Mn3P8+ZTSXh5eeF3jt3hbsAz4egYcjQyq8i6ha5qZEJLEyEjd6zF1BDcJDV1yx4WPyj7b2AUctZUNiKzDc9za8Ve/undeYRezaQ+7voGhN2nqV+mmL3i6NPFeaYr0pqWTXyOyGl8r
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199015)(46966006)(36840700001)(40470700004)(54906003)(316002)(110136005)(70586007)(478600001)(70206006)(5660300002)(41300700001)(6666004)(82740400003)(26005)(8936002)(336012)(2906002)(47076005)(426003)(2616005)(16526019)(36756003)(4326008)(7696005)(8676002)(1076003)(186003)(44832011)(83380400001)(36860700001)(81166007)(40460700003)(86362001)(40480700001)(356005)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2022 16:07:40.0996
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d20ffd9b-c083-4d4d-1428-08da9cb49316
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6160
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,120 +99,99 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Felipe and Michal, see below.
+Software that has run before the USB4 CM in Linux runs may have disabled
+hotplug events for a given lane adapter.
 
-On Thu, Sep 22, 2022 at 04:34:44PM +0800, Rondreis wrote:
-> I patched it again, and the output is:
-> 
-> 
-> [   54.721631][   T24] usb 2-1: new high-speed USB device number 2 using
-> dummy_hcd
-> [   55.131602][   T24] usb 2-1: Dual-Role OTG device on HNP port
-> [   55.151589][   T24] usb 2-1: New USB device found, idVendor=03f0,
-> idProduct=0107, bcdDevice= 2.00
-> [   55.151919][   T24] usb 2-1: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=3
-> [   55.152199][   T24] usb 2-1: Product: Gadget
-> [   55.152374][   T24] usb 2-1: Manufacturer: Foo Inc.
-> [   55.152557][   T24] usb 2-1: SerialNumber: 12345678
-> [   55.171998][    C1] configfs-gadget gadget.1: Raise exception 3
-> ffff88811b9ba000
-> [   55.172604][ T6539] configfs-gadget gadget.1: Enable bulk in
-> [   55.172884][ T6539] configfs-gadget gadget.1: Enable bulk out
-> [   55.173179][ T6539] configfs-gadget gadget.1: Bulk out start
-> ffff888115fd7c80
-> [   55.173506][ T6539] CPU: 0 PID: 6539 Comm: file-storage Not tainted
-> 5.19.0+ #16
-> [   55.173834][ T6539] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> 1996), BIOS Arch Linux 1.16.0-3-3 04/01/2014
-> [   55.174193][ T6539] Call Trace:
-> [   55.174316][ T6539]  <TASK>
-> [   55.174425][ T6539]  dump_stack_lvl+0xfc/0x174
-> [   55.174602][ T6539]  start_out_transfer.part.0+0x7c/0x142
-> [   55.174813][ T6539]  fsg_main_thread+0x375/0x1450
-> [   55.175004][ T6539]  ? __kthread_parkme+0xc4/0x210
-> [   55.175191][ T6539]  ? reacquire_held_locks+0x4b0/0x4b0
-> [   55.175392][ T6539]  ? do_set_interface.isra.0+0x530/0x530
-> [   55.175606][ T6539]  ? __kthread_parkme+0x14e/0x210
-> [   55.175797][ T6539]  ? do_set_interface.isra.0+0x530/0x530
-> [   55.176005][ T6539]  kthread+0x2e0/0x390
-> [   55.176156][ T6539]  ? kthread_complete_and_exit+0x40/0x40
-> [   55.176363][ T6539]  ret_from_fork+0x1f/0x30
-> [   55.176537][ T6539]  </TASK>
-> [   55.253779][   T24] cdc_eem 2-1:1.0 usb1: register 'cdc_eem' at
-> usb-dummy_hcd.1-1, CDC EEM Device, c2:07:46:1b:bf:4a
-> [   55.271856][   T24] usb-storage 2-1:1.1: USB Mass Storage device detected
-> [   55.278904][   T24] scsi host2: usb-storage 2-1:1.1
-> [   56.352122][ T6584] cdc_eem 2-1:1.0 usb1: unregister 'cdc_eem'
-> usb-dummy_hcd.1-1, CDC EEM Device
-> [   56.412714][ T6584] configfs-gadget gadget.1: Bulk out complete
-> ffff888115fd7c80
-> [   56.413545][ T6539] configfs-gadget gadget.1: Bulk out start
-> ffff888115fd7c80
-> [   56.413787][ T6584] configfs-gadget gadget.1: Disable bulk in B
-> [   56.413988][ T6539] CPU: 1 PID: 6539 Comm: file-storage Not tainted
-> 5.19.0+ #16
-> [   56.414336][ T6584] configfs-gadget gadget.1: Disable bulk out B
-> [   56.414647][ T6539] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> 1996), BIOS Arch Linux 1.16.0-3-3 04/01/2014
-> [   56.414908][ T6584] configfs-gadget gadget.1: Disable bulk out B finished
-> [   56.415348][ T6539] Call Trace:
-> [   56.415352][ T6539]  <TASK>
-> [   56.415827][ T6584] configfs-gadget gadget.1: Raise exception 3
-> 0000000000000000
-> [   56.415969][ T6539]  dump_stack_lvl+0xfc/0x174
-> [   56.416735][ T6539]  start_out_transfer.part.0+0x7c/0x142
-> [   56.416989][ T6539]  fsg_main_thread+0x375/0x1450
-> [   56.417256][ T6539]  ? __kthread_parkme+0xc4/0x210
-> [   56.417560][ T6539]  ? reacquire_held_locks+0x4b0/0x4b0
-> [   56.417885][ T6539]  ? do_set_interface.isra.0+0x530/0x530
-> [   56.418231][ T6539]  ? __kthread_parkme+0x14e/0x210
-> [   56.418576][ T6539]  ? do_set_interface.isra.0+0x530/0x530
-> [   56.418919][ T6539]  kthread+0x2e0/0x390
-> [   56.419172][ T6539]  ? kthread_complete_and_exit+0x40/0x40
-> [   56.419515][ T6539]  ret_from_fork+0x1f/0x30
-> [   56.419804][ T6539]  </TASK>
-> [   56.420255][ T6539] ------------[ cut here ]------------
-> [   56.420496][ T6539] WARNING: CPU: 1 PID: 6539 at
-> drivers/usb/gadget/udc/core.c:283 usb_ep_queue+0x9b/0x3b0
-> [   56.420923][ T6539] Modules linked in:
-> [   56.421102][ T6539] CPU: 1 PID: 6539 Comm: file-storage Not tainted
-> 5.19.0+ #16
-> [   56.421429][ T6539] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> 1996), BIOS Arch Linux 1.16.0-3-3 04/01/2014
-> [   56.431805][ T6539] RIP: 0010:usb_ep_queue+0x9b/0x3b0
+Other CMs such as that one distributed with Windows 11 will enable hotplug
+events. Do the same thing in the Linux CM which fixes hotplug events on
+"AMD Pink Sardine".
 
-Okay, thanks.  It's pretty clear what's going wrong.
+Cc: stable@vger.kernel.org
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v1->v2:
+ * Only send second patch as first was merged already
+ * s/usb4_enable_hotplug/usb4_port_hotplug_enable/
+ * Clarify intended users in documentation comment
+ * Only call for lane adapters
+ * Add stable tag
 
-f_mass_storage uses a kernel thread to do almost all of its work.  But
-the fsg_disable() callback routine runs in an atomic context, so it
-can't sleep.  And there is no find-grained synchronization between
-that routine and the kernel thread.
+ drivers/thunderbolt/switch.c  |  4 ++++
+ drivers/thunderbolt/tb.h      |  1 +
+ drivers/thunderbolt/tb_regs.h |  1 +
+ drivers/thunderbolt/usb4.c    | 20 ++++++++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-As a result, when fsg_disable() disables an endpoint, the kernel
-thread may still try to use it for a little while.  That's what happened
-here.
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 77d7f07ca075..3213239d12c8 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -778,6 +778,10 @@ static int tb_init_port(struct tb_port *port)
+ 
+ 			if (!tb_port_read(port, &hop, TB_CFG_HOPS, 0, 2))
+ 				port->ctl_credits = hop.initial_credits;
++
++			res = usb4_port_hotplug_enable(port);
++			if (res)
++				return res;
+ 		}
+ 		if (!port->ctl_credits)
+ 			port->ctl_credits = 2;
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 5db76de40cc1..332159f984fc 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1174,6 +1174,7 @@ int usb4_switch_add_ports(struct tb_switch *sw);
+ void usb4_switch_remove_ports(struct tb_switch *sw);
+ 
+ int usb4_port_unlock(struct tb_port *port);
++int usb4_port_hotplug_enable(struct tb_port *port);
+ int usb4_port_configure(struct tb_port *port);
+ void usb4_port_unconfigure(struct tb_port *port);
+ int usb4_port_configure_xdomain(struct tb_port *port);
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 166054110388..bbe38b2d9057 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -308,6 +308,7 @@ struct tb_regs_port_header {
+ #define ADP_CS_5				0x05
+ #define ADP_CS_5_LCA_MASK			GENMASK(28, 22)
+ #define ADP_CS_5_LCA_SHIFT			22
++#define ADP_CS_5_DHP				BIT(31)
+ 
+ /* TMU adapter registers */
+ #define TMU_ADP_CS_3				0x03
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 3a2e7126db9d..f0b5a8f1ed3a 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -1046,6 +1046,26 @@ int usb4_port_unlock(struct tb_port *port)
+ 	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_4, 1);
+ }
+ 
++/**
++ * usb4_port_hotplug_enable() - Enables hotplug for a port
++ * @port: USB4 port to operate on
++ *
++ * Enables hot plug events on a given port. This is only intended
++ * to be used on lane, DP-IN, and DP-OUT adapters.
++ */
++int usb4_port_hotplug_enable(struct tb_port *port)
++{
++	int ret;
++	u32 val;
++
++	ret = tb_port_read(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
++	if (ret)
++		return ret;
++
++	val &= ~ADP_CS_5_DHP;
++	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
++}
++
+ static int usb4_port_set_configured(struct tb_port *port, bool configured)
+ {
+ 	int ret;
+-- 
+2.34.1
 
-I can think of three ways to resolve this.  The first is to add
-fine-grained synchronization, in the form of a spinlock that has to be
-held whenever f_mass_storage uses an endpoint.  Kind of awkward.
-
-The second is to allow drivers to try to access endpoints even after
-the endpoints have been disabled.  This means removing the
-WARN_ON_ONCE() in usb_ep_queue().  I believe allowing this won't lead
-to any trouble, because we will still require drivers not to access
-the gadget at all after their ->unbind callback has returned -- but
-maybe I'm wrong.  In any case, it seems bad to use an atomic callback
-to tell drivers they have to give up a resource; resource removal
-should be allowed to sleep.
-
-The third way is to allow a function driver's ->disable callback not
-to disable its endpoints.  However, I don't know if this is compatible
-with the intended operation of the composite framework.  The
-documentation does not explain very clearly what .disable() in struct
-usb_function is supposed to do.
-
-I'm not sure which approach would be better.  Felipe and Michal, any
-suggestions?
-
-Alan Stern
