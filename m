@@ -2,116 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667015E724E
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 05:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D295E72CE
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 06:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiIWDEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 23:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S230229AbiIWEUq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Sep 2022 00:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiIWDDh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 23:03:37 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEA8E11CA
-        for <linux-usb@vger.kernel.org>; Thu, 22 Sep 2022 20:03:30 -0700 (PDT)
-X-UUID: 7fafa513122148f3bf8609e04f54a17d-20220923
-Message-ID: <1663902249837086.19.seg@mailgw>
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Spam-Reason: Heuristic_Spam_Fraud_546F022B
-X-Content-Feature: ica/max.line-size 82
-        audit/email.address 3
-        dict/contack 1
-        dict/transaction 1
-        meta/cnt.alert 1
-X-CPASD-INFO: a73363c32bcf4a7596fe5bbb62ba65cb@qodtU2NlkWNegqWyg6SCb1lnmJFVsaS
-        cVmKQkWJVuLSMbFJkYl1ZgYFqUWJnX2FZVXp4blJgYGJcWHh4lHKPVGBeYIJUdJOAo3FTY2Rj
-X-CLOUD-ID: a73363c32bcf4a7596fe5bbb62ba65cb
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:172.
-        0,ESV:0.0,ECOM:-5.0,ML:12.0,FD:0.0,CUTS:168.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-
-        5.0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:
-        -5,AUF:42,DUF:5470,ACD:88,DCD:88,SL:0,EISP:0,AG:0,CFC:0.476,CFSR:0.067,UAT:0,
-        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
-        ,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 7fafa513122148f3bf8609e04f54a17d-20220923
-X-CPASD-BLOCK: 12
-X-CPASD-STAGE: 1
-X-UUID: 7fafa513122148f3bf8609e04f54a17d-20220923
-X-User: zenghongling@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-        (envelope-from <zenghongling@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 837780238; Fri, 23 Sep 2022 10:46:58 +0800
-From:   Hongling Zeng <zenghongling@kylinos.cn>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        zhongling0719@126.com, Hongling Zeng <zenghongling@kylinos.cn>
-Subject: [PATCH v8 v8 3/3] uas: ignore UAS for Thinkplus chips
-Date:   Fri, 23 Sep 2022 10:46:35 +0800
-X-Mailer: git-send-email 2.1.0
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,MSGID_FROM_MTA_HEADER,RDNS_DYNAMIC,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229810AbiIWEUo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Sep 2022 00:20:44 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419C7F3100;
+        Thu, 22 Sep 2022 21:20:42 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 31C39280973F2;
+        Fri, 23 Sep 2022 06:20:37 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 1690F4EA97; Fri, 23 Sep 2022 06:20:37 +0200 (CEST)
+Date:   Fri, 23 Sep 2022 06:20:37 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
+        Andre Edich <andre.edich@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Gabriel Hojda <ghojda@yo2urs.ro>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Ferry Toth <fntoth@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 5/7] usbnet: smsc95xx: Forward PHY interrupts
+ to PHY driver to avoid polling
+Message-ID: <20220923042037.GA10101@wunner.de>
+References: <e598a232-6c78-782a-316f-77902644ad6c@samsung.com>
+ <20220826071924.GA21264@wunner.de>
+ <2b1a1588-505e-dff3-301d-bfc1fb14d685@samsung.com>
+ <20220826075331.GA32117@wunner.de>
+ <093730dd-2f2c-bd0b-bd13-b97f8a2898bd@samsung.com>
+ <81c0f21f-f8f1-f7b3-c52f-c6a564c6a445@samsung.com>
+ <20220918191333.GA2107@wunner.de>
+ <d963b1a3-e18d-25d5-f07c-42d17d382174@gmail.com>
+ <20220918205516.GA13914@wunner.de>
+ <adb2de4e-0ad0-a94a-93e6-572f58a2141b@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adb2de4e-0ad0-a94a-93e6-572f58a2141b@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The UAS mode of Thinkplus(0x17ef, 0x3899) is reported to influence 
-performance and trigger kernel panic on several platforms with the 
-following error message:
+On Sun, Sep 18, 2022 at 03:11:47PM -0700, Florian Fainelli wrote:
+> On 9/18/2022 1:55 PM, Lukas Wunner wrote:
+> > On Sun, Sep 18, 2022 at 01:41:13PM -0700, Florian Fainelli wrote:
+> > > On 9/18/2022 12:13 PM, Lukas Wunner wrote:
+> > > > On Mon, Aug 29, 2022 at 01:40:05PM +0200, Marek Szyprowski wrote:
+> > > > > I've finally traced what has happened. I've double checked and indeed
+> > > > > the 1758bde2e4aa commit fixed the issue on next-20220516 kernel and as
+> > > > > such it has been merged to linus tree. Then the commit 744d23c71af3
+> > > > > ("net: phy: Warn about incorrect mdio_bus_phy_resume() state") has been
+> > > > > merged to linus tree, which triggers a new warning during the
+> > > > > suspend/resume cycle with smsc95xx driver. Please note, that the
+> > > > > smsc95xx still works fine regardless that warning. However it look that
+> > > > > the commit 1758bde2e4aa only hide a real problem, which the commit
+> > > > > 744d23c71af3 warns about.
+> > > > > 
+> > > > > Probably a proper fix for smsc95xx driver is to call phy_stop/start
+> > > > > during suspend/resume cycle, like in similar patches for other drivers:
+> > > > > 
+> > > > > https://lore.kernel.org/all/20220825023951.3220-1-f.fainelli@gmail.com/
+> > > > 
+> > > > No, smsc95xx.c relies on mdio_bus_phy_{suspend,resume}() and there's
+> > > > no need to call phy_{stop,start}() >
+> > > > 744d23c71af3 was flawed and 6dbe852c379f has already fixed a portion
+> > > > of the fallout.
+> > > > 
+> > > > However the WARN() condition still seems too broad and causes false
+> > > > positives such as in your case.  In particular, mdio_bus_phy_suspend()
+> > > > may leave the device in PHY_UP state, so that's a legal state that
+> > > > needs to be exempted from the WARN().
+> > > 
+> > > How is that a legal state when the PHY should be suspended? Even if we are
+> > > interrupt driven, the state machine should be stopped, does not mean that
+> > > Wake-on-LAN or other activity interrupts should be disabled.
+> > 
+> > mdio_bus_phy_suspend()
+> >    phy_stop_machine()
+> >      phydev->state = PHY_UP  #  if (phydev->state >= PHY_UP)
+> > 
+> > So apparently PHY_UP is a legal state for a suspended PHY.
+> 
+> It is not clear to me why, however. Sure it does ensure that when we resume
+> we set needs_aneg = true but this feels like a hack in the sense that we are
+> setting the PHY in a provisional state in anticipation for what might come
+> next.
 
-[   39.702439] xhci_hcd 0000:0c:00.3: ERROR Transfer event for disabled
-               endpoint or incorrect stream ring
-[   39.702442] xhci_hcd 0000:0c:00.3: @000000026c61f810 00000000 00000000
-               1b000000 05038000
+I've just submitted a fix so that at least v6.0 doesn't get released
+with a false-positive WARN splat on resume:
 
-[  720.545894][13] Workqueue: usb_hub_wq hub_event
-[  720.550971][13]  ffff88026c143c38 0000000000016300 ffff8802755bb900 ffff880
-                    26cb80000
-[  720.559673][13]  ffff88026c144000 ffff88026ca88100 0000000000000000 ffff880
-                    26cb80000
-[  720.568374][13]  ffff88026cb80000 ffff88026c143c50 ffffffff8186ae25 ffff880
-                    26ca880f8
-[  720.577076][13] Call Trace:
-[  720.580201][13]  [<ffffffff8186ae25>] schedule+0x35/0x80
-[  720.586137][13]  [<ffffffff8186b0ce>] schedule_preempt_disabled+0xe/0x10
-[  720.593623][13]  [<ffffffff8186cb94>] __mutex_lock_slowpath+0x164/0x1e0
-[  720.601012][13]  [<ffffffff8186cc3f>] mutex_lock+0x2f/0x40
-[  720.607141][13]  [<ffffffff8162b8e9>] usb_disconnect+0x59/0x290
+https://lore.kernel.org/netdev/8128fdb51eeebc9efbf3776a4097363a1317aaf1.1663905575.git.lukas@wunner.de/
 
-Falling back to USB mass storage can solve this problem, so ignore UAS
-function of this chip.
+I guess we can look into making the state setting more logical in a
+separate step.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
----
-Change for v8
- -Add acked for patch 3/3 (thinkplus(0x17ef, 0x3899))
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 8a18d58..156e89c 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -198,6 +198,13 @@ UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_ATA_1X),
- 
-+/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
-+UNUSUAL_DEV(0x17ef, 0x3899, 0x0000, 0x9999,
-+		"Thinkplus",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
- UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
- 		"VIA",
--- 
-2.1.0
+> > > If you allow PHY_UP, then the warning becomes effectively useless, so I
+> > > don't believe this is quite what you want to do here.
+> > 
+> > Hm, maybe the WARN() should be dropped altogether?
+> 
+> And then be left with debugging similar problems that prompted me to submit
+> the patch in the first place, no thank you. I guess I would rather accept
+> that PHY_UP needs to be special cased then.
 
+I've interpreted that as an Acked-by for exempting PHY_UP.
+If that was not what you wanted, please speak up.
+
+Thanks,
+
+Lukas
