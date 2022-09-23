@@ -2,73 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBBD5E7FB2
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 18:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AD65E7FCF
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 18:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiIWQ0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Sep 2022 12:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
+        id S232950AbiIWQax (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Sep 2022 12:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiIWQ0A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Sep 2022 12:26:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F25121658;
-        Fri, 23 Sep 2022 09:25:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D5562866;
-        Fri, 23 Sep 2022 16:25:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 896B0C43140;
-        Fri, 23 Sep 2022 16:25:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663950358;
-        bh=SaVBN2wPZZvxs/uSX2EkysKMNjApJKgynrOmee8hp3I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tLfJEyCdpN9KRSLWfLzgHvcB3bA2wO7y1sUyts0kaCeIQhNnX+dCVisce81lF+UaS
-         5JJ6cUxz5BdmKOVM3KK0M+l/2+40XnBMQ3UDTux2GJhRKoZqkQYl8025sPO0tT1M99
-         Nt9z2qzCDEIY5TUgCzEp+tO9M96lA/aEmmzp6oASrgAoavtu0jgGw0jJFTo8TfAJgh
-         Wf326TqEdv75FmyyjXVLtCmg392hvcGyk6YDvRSKVJ0TqtrJSyoqplcADFqsJgyNaz
-         2UMGaWaLZNt/pYfFLmcGm1eyIKFXjJY9+vR0IHGI9wGAIfahsAM2o6Y8LebtVESn3m
-         V9Nz4D5Zxm83A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 76F15E4D03A;
-        Fri, 23 Sep 2022 16:25:58 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt driver fixes for 6.0-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yy3Msbnbxhs1OZLD@kroah.com>
-References: <Yy3Msbnbxhs1OZLD@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yy3Msbnbxhs1OZLD@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-rc7
-X-PR-Tracked-Commit-Id: 47af6c640ed82f111dbce0b3bf4083a91d61e324
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 33a4e37ebc8ccdfe2c51306b1a40d9e7d17b4691
-Message-Id: <166395035848.8411.1198487184286067191.pr-tracker-bot@kernel.org>
-Date:   Fri, 23 Sep 2022 16:25:58 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232864AbiIWQan (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Sep 2022 12:30:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23F71332EE;
+        Fri, 23 Sep 2022 09:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663950642; x=1695486642;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/RfVsnD7hy2PrDScTV1+ibJddNVHM8cRBSmvIOOou8A=;
+  b=kxYk9FwyCeWWJKKzYx3m13trKifpxF8fcsAg1LMsILMQCfAfVu91xn9F
+   mJQex/nDUEHAOoHTyuBMbRJRMrkjgB+9RY4JltVMvPsR41bja6kQlT7N4
+   gWLlD6hCmoD9oJSdJTOD/rAxPmWSHi/+4lU3mn1LLoadPtTQQstTl5frF
+   Q8gHUx2/wq0L9/68ir6RNMYNwRcKE/6dSC6JJNRIHHL/hdB2fF0kLB0xM
+   4wt3NYTBec/cOi+ioMfKlVc0djIBGKSUUuXBiQG/1Ku7BfI8raukEJHk8
+   dXNJh1Q2eKqUZ52BJSDNw+SZeEimKXxuIN3ZhCdIQj4q2CAVp5SUaF0Iq
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="287747433"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="287747433"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 09:30:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="745847526"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 23 Sep 2022 09:30:37 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A711CF7; Fri, 23 Sep 2022 19:30:55 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH v1 0/2] usb: dwc3: revert OTG changes for Intel Merrifield
+Date:   Fri, 23 Sep 2022 19:30:49 +0300
+Message-Id: <20220923163051.36288-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Fri, 23 Sep 2022 17:11:45 +0200:
+It's late in the cycle, that's why I send these reverts, so we will have a
+full new cycle for testing a better solution if any.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-rc7
+So this is just a proactive move if we have no solution in the nearest days.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/33a4e37ebc8ccdfe2c51306b1a40d9e7d17b4691
+Andy Shevchenko (2):
+  Revert "USB: fixup for merge issue with "usb: dwc3: Don't switch OTG
+    -> peripheral if extcon is present""
+  Revert "usb: dwc3: Don't switch OTG -> peripheral if extcon is
+    present"
 
-Thank you!
+ drivers/usb/dwc3/core.c | 50 +----------------------------------------
+ drivers/usb/dwc3/drd.c  | 50 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+), 49 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.35.1
+
