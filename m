@@ -2,162 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8965E703E
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 01:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C882E5E70B2
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 02:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiIVXdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Sep 2022 19:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S229819AbiIWAfw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Sep 2022 20:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIVXdK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 19:33:10 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39323B5E70;
-        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z13so15683464edb.13;
-        Thu, 22 Sep 2022 16:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
-        b=fqv/zq/AbEapAt+EgPEsbPLgCgTCKZ1NBLK27LsD6DzCubtAIgALh3KY6ZlKTbJ2o1
-         m3B2BDzf2agcYCMmME6LzPKdo4o4NNKlEks2Z+noR/HY72y/W8KAPKUuuhyTqh+LJdTF
-         ICzVzDLgoEegddS87mBSGb78ihj00VMB1q1fm27Mlx3PoLMMvhu25Ho2QnuS2o93fS+K
-         tdnQ5gBHb6Jwbj0t1EHvRzlu17tuQza+iEn9QIT30AdSuvJHZqZuYwTaUxUK17jggLGu
-         jwqPII8dCx+uqSjHq476mQ/x3YHqiRktPuPx79a6b0rHG7uiMMcjBchYwCtynqb4xAw2
-         IAJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1LXt/Xl96l/h02gNxY14SP+hwlW2CW/zPqjudi4txZc=;
-        b=TPr5EqOk/oThaUoPCg6aDIDeM6Mx+WTtZwkP0p6Z9+DhtxboqQJpPf9jdRpOz1cN/u
-         oScNPhs0qNB6amYWixRAXVyLL6+NFCZfDt23aFacTryfAteuNvHbCwgNhKOUk2/yyljy
-         c8yBjEZHUacIt2HOpJWL6eyzNn/2tKqK7eI9oND557v733icZBcyjXRewXzBWtnrArTe
-         si53y8kikH7O7XYLQ49lJuWxBu52zF7IkKOtpp3hEQjlmIl3xa1Ik3tA7cFACj5eqGsZ
-         GI+oIF+XHJZU4Ko1Bnz67AUKA1KXL5C5HPcN8Jvi00Y/jdS5Al9ABKoC4WbRif0STbaJ
-         Q0zA==
-X-Gm-Message-State: ACrzQf10IpcDM5MtCo7SCJMWAVYyp/z+o4cw4TdQPJVtaWyFamaMJgrs
-        S8dea1f7tuxeRe6D8VZayvOixBcwktLnqY6SCG8=
-X-Google-Smtp-Source: AMsMyM5DiFBYbthi2FE2gsNbylvHS3uLjW2CJDgWIMSs+MGoMI7WxG6kvXEF3qzDcScXRg1BjFhd18LJR3IHxpCtG8E=
-X-Received: by 2002:a05:6402:901:b0:454:2b6d:c39 with SMTP id
- g1-20020a056402090100b004542b6d0c39mr5581802edz.50.1663889587565; Thu, 22 Sep
- 2022 16:33:07 -0700 (PDT)
+        with ESMTP id S230342AbiIWAfv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Sep 2022 20:35:51 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2525100AAF
+        for <linux-usb@vger.kernel.org>; Thu, 22 Sep 2022 17:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663893350; x=1695429350;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m7dhrkSd9gP9vy1tRqPuALgl1n/9eH82iWrVw5Pd4po=;
+  b=j6RnKb+MdCUEpka/UilaZoPxtKNPeGoDyaahd+aZNddDETVjY3+0r0el
+   WlqnIuWhmBD86jV0n9+Qmjo9DaJx30R500fHyiRqPH/Evh1PmAILNd1Pk
+   JsIT48MZIAl7u/H6B3N8DlBzrg9A2Y9gj22TRMDikMseUFUYPqUxkSjN6
+   Qgx2Vrbf8E8VlPi4j0sW/ssbkY33iTtaEOF2Op1QT8Dk3XVnCC2Oxr8F7
+   t3Pb1vzNCPswGelrOfRmFAHLb1whSIAfYnsxSCx5HNxj/rlDSfmRpTqT8
+   7ODh1mUi6EFdqADSRrXZ0KvCDw0Js76lcBLIPk4Hj4P4f8HS/ni22CQFY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="364485059"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="364485059"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 17:35:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="620022724"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 Sep 2022 17:35:49 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1obWfU-00057o-1V;
+        Fri, 23 Sep 2022 00:35:48 +0000
+Date:   Fri, 23 Sep 2022 08:34:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:fixes] BUILD SUCCESS
+ 31f87f705b3c1635345d8e8a493697099b43e508
+Message-ID: <632cff2e.RMGiN734Mqjb8fHQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
-In-Reply-To: <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Thu, 22 Sep 2022 16:32:55 -0700
-Message-ID: <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-To:     Ferry Toth <fntoth@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
->
-> Hi,
->
-> On 22-09-2022 12:08, Andy Shevchenko wrote:
->
-> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
->
-> If the extcon device exists, get the mode from the extcon device. If
-> the controller is DRD and the driver is unable to determine the mode,
-> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
->
-> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, c=
-an you
-> share bisect log?
->
-> I can but not right now. But what I did was bisect between 5.18.0 (good) =
-and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on =
-the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: d=
-wc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit =
-before that (good).
->
-> The effect of the patch is that on Merrifield (I tested with Intel Edison=
- Arduino board which has a HW switch to select between host and device mode=
-) device mode works but in host mode USB is completely not working.
->
-> Currently on host mode - when working - superfluous error messages from t=
-usb1210 appear. When host mode is not working there are no tusb1210 message=
-s in the logs / on the console at all. Seemingly tusb1210 is not probed, wh=
-ich points in the direction of a relation to extcon.
->
-> Taking into account the late cycle, I would like to revert the change. An=
-d
-> Ferry and I would help to test any other (non-regressive) approach).
->
-> I have not yet tested if a simple revert fixes the problem but will tonig=
-ht.
->
->
-> I would be happy to test other approaches too.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git fixes
+branch HEAD: 31f87f705b3c1635345d8e8a493697099b43e508  thunderbolt: Explicitly reset plug events delay back to USB4 spec value
 
+elapsed time: 721m
 
-It's a bit hard for me to suggest an alternative approach without
-knowing how things are breaking in this case. I'd love to order one of
-those boards to repro and fix this on my end, but it looks like this
-HW is EOLed and out of stock in most places. If you guys know how to
-get my hands on those boards I'm all ears.
+configs tested: 73
+configs skipped: 2
 
-Barring that, Ferry can you dig more into this failure? E.g. is it this hun=
-k
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-@@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
-                 * mode. If the controller supports DRD but the dr_mode is =
-not
-                 * specified or set to OTG, then set the mode to peripheral=
-.
-                 */
--               if (mode =3D=3D USB_DR_MODE_OTG &&
-+               if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
-                    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
-                     !device_property_read_bool(dwc->dev, "usb-role-switch"=
-)) &&
-                    !DWC3_VER_IS_PRIOR(DWC3, 330A))
-@@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
-        }
- }
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+powerpc                           allnoconfig
+m68k                             allmodconfig
+alpha                               defconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arc                  randconfig-r043-20220922
+m68k                             allyesconfig
+x86_64                              defconfig
+i386                                defconfig
+sh                               allmodconfig
+x86_64                               rhel-8.3
+mips                             allyesconfig
+powerpc                          allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                           allyesconfig
+arm                                 defconfig
+s390                             allyesconfig
+x86_64                        randconfig-a015
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a005
+i386                          randconfig-a014
+x86_64                        randconfig-a006
+i386                          randconfig-a012
+arm                              allyesconfig
+i386                          randconfig-a016
+arm64                            allyesconfig
+alpha                             allnoconfig
+ia64                             allmodconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+arc                               allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+microblaze                          defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220922
+i386                          randconfig-c001
+sparc                               defconfig
+loongarch                        alldefconfig
+xtensa                       common_defconfig
+m68k                        stmark2_defconfig
 
-that's problematic or moving
+clang tested configs:
+hexagon              randconfig-r041-20220922
+riscv                randconfig-r042-20220922
+hexagon              randconfig-r045-20220922
+s390                 randconfig-r044-20220922
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+i386                          randconfig-a002
+x86_64                        randconfig-a001
+i386                          randconfig-a004
+x86_64                        randconfig-a003
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+i386                          randconfig-a006
+i386                          randconfig-a011
+i386                          randconfig-a015
+arm                         palmz72_defconfig
+powerpc                      obs600_defconfig
+powerpc                      walnut_defconfig
 
- static int dwc3_probe(struct platform_device *pdev)
- {
-        struct device           *dev =3D &pdev->dev;
-@@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
-                goto err2;
-        }
-
-+       dwc->edev =3D dwc3_get_extcon(dwc);
-+       if (IS_ERR(dwc->edev)) {
-+               ret =3D PTR_ERR(dwc->edev);
-+               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
-+               goto err3;
-+       }
-+
-        ret =3D dwc3_get_dr_mode(dwc);
-        if (ret)
-                goto err3;
-
-to happen earlier? Does tracing the "mrfld_bcove_pwrsrc" driver (the
-excton provider in this case AFIACT) show anything interesting?
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
