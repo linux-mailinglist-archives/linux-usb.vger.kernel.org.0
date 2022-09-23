@@ -2,206 +2,224 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045CC5E81DC
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 20:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4A05E8230
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 20:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbiIWSkH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Sep 2022 14:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
+        id S232240AbiIWSzI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Sep 2022 14:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiIWSkE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Sep 2022 14:40:04 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2052.outbound.protection.outlook.com [40.107.95.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D097D785;
-        Fri, 23 Sep 2022 11:40:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ADxF4esxPy0a0dlXSYxtmztDCD4maitMmCsI59N4VI5UwveUP+731GMK4hb7jWE155CZlv8CbNpAAKscHQlJ3E2AIlt0AFdB4mb9zMDhMZKBMB6IEp7BvdVrrDsscwu2GtJ4e0AYcIHEvxumB/7lBO8pVEH2tqPSwKA2RFamesTteP01KJo2dkw4NJ8cns+hKhzsCXgFfoRQA/E5v6ZiZ0Sdsi+wIoN39mgPsqTMtRt4xLcR87LDcYrNSfWd4FSMlMwVKP92VdW0yY+sgFfOL747XNJoZX2mCBVgE1TVWVudkPsrhaomBTVIsWL/OOP5hxZXACTJJJ+EO7Py5axzog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zrzjDGPwMygm1xH9Vs7CFuMAp8+zY8iudWhGS2zHtug=;
- b=ZE9VArVwbmt9+DpMsSnMVw5P1SAoEEiX9b8b2tCQ73/Cti1wiJT//J9ZESNum1IKju8DnHmgWS8s0lsr9MIn9A8wysfePotGXcILscaCdfY9xOwytA+DrE8re8ML2XfqogWvLrWhualoC6WfsMV0tgA2xck3zHaHGZ3fnr6QsXSbsjGDMLvV7vmhsuDiqMacOG7/0zHGzB5A3shvtbmvL+D2c7dSxxBWntTpPmlCdk/O/R8NJz/KCGx1+UHbgbWz5Na+nmjzPRUNDn71rrUHU9ipV8v8kVm070ASuIyC5WxWAg27wY4D5rns63YMcOpdJceHr+kbKeA5p0AsRPmaJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zrzjDGPwMygm1xH9Vs7CFuMAp8+zY8iudWhGS2zHtug=;
- b=f+nUbdtzzqhtS9YcI13bX/W1MRFSR5wsXoq2Ayyz7OHPTtsc9+aR9wVkiOZ2atTaPZalLTP0o53pzXvDiIP3MXMv9ZKKjHleuB+4gXWEPjLrPTKV5flXmfbQAbzuPqqNmj1v5/HuZMANLkNGtP4n8Nv0XxvbsCdXtFVuYKRhcJU=
-Received: from BN8PR04CA0025.namprd04.prod.outlook.com (2603:10b6:408:70::38)
- by IA0PR12MB7556.namprd12.prod.outlook.com (2603:10b6:208:43c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.14; Fri, 23 Sep
- 2022 18:39:59 +0000
-Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:70:cafe::67) by BN8PR04CA0025.outlook.office365.com
- (2603:10b6:408:70::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20 via Frontend
- Transport; Fri, 23 Sep 2022 18:39:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.14 via Frontend Transport; Fri, 23 Sep 2022 18:39:58 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 23 Sep
- 2022 13:39:57 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-CC:     Mehta Sanju <Sanju.Mehta@amd.com>, <stable@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] thunderbolt: Explicitly enable lane adapter hotplug events at startup
-Date:   Fri, 23 Sep 2022 13:39:44 -0500
-Message-ID: <20220923183944.10746-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232755AbiIWSyt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Sep 2022 14:54:49 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76D63719E;
+        Fri, 23 Sep 2022 11:54:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663959282; x=1695495282;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QjtqkxggCYEVL0YB/9OZMsexSYgKKgFGvQCG9MprRME=;
+  b=Gq1Dzlsxj1rS549hjlx6ziDfbiHIzfmeFz1PbWna8jakXno5UXwA4sd5
+   klahS0R4paDTGN3avs7ckvc1rSi83oaH0j8aR44g8l3LLtD6ZFQK1LqKh
+   neZZHE2i45bvHiQ2PO1OjFUyEZtj7iOrcHZd1w//9ynEhTJCN6Qfu6tE7
+   JBOK9+mZEf1nqP+GKTrV1apPwchdSiNFlWFRSKgaUPCltITbdIoIVEq2c
+   PQbGtWkJZWCNBAw9jE7xKGj73enNzIP7gdstPEze8avhR1r7u6Ai+AgoW
+   s6iukrg5kttZLsnvDjMv1dlJcPakW96FjLgTqnI55rdpSJvBg+xxySfNh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="300650059"
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="300650059"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 11:54:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
+   d="scan'208";a="795609695"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 23 Sep 2022 11:54:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1obnor-006cZQ-32;
+        Fri, 23 Sep 2022 21:54:37 +0300
+Date:   Fri, 23 Sep 2022 21:54:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon
+ is present
+Message-ID: <Yy4A7W9y4eeHOvco@smile.fi.intel.com>
+References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
+ <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
+ <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+ <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+ <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
+ <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT013:EE_|IA0PR12MB7556:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d717c54-6b55-49f0-9e03-08da9d930494
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FAy6dtnle9mEWr58YXLX0719MoNN1/nzTD9KgppIAqYzSjAA7v9Rt9AzFSCwR3k+l8HHLeG0cabMhdwNz03fVVrQd4hnyxBp5BUlv4IlMK4C54cKjA4i9q2QPrYvQrNQxrBtQbnMHJTf1fS3ggmwlNEmTwsL2PpBVG3kwcnCOnlk+hm0TFdxsr0aiD0N2t3igX6J5ltiMN5e0Ltw12zQtuD07tlLY59XB6VJQ1/8NC65AZ/bpqc0+C/5egwoCBhMiqEqHkBGkLi+bLIU9vqy4OtqObwj8m9o9VaknNR6Anpeh/JwfQEy/Hl7Iiy3WmsmLVrZFSvhjchUVMNIQ+9HOJbWzE8jZIY8XliDsSnQXydXP3OMqjOfd/2qVoZ6w8D0PjJuQZ5YfbOfeHb2PtU1FR2B5smBuAZXds+l2+1oFONd5Rm3mZjILDLR+hzkMd1xKnDF2WtcrWDM3hE1UUbJq+8w/TIr5/Tyr/ivXisFFtgXvCNmVFiYrecvotVZU0DGTvITdkW/geGqfqkveGXbdNcHm4OiZ7eYTqPOhqZz/oFk9C7GhKQWnY3rBxMwML5bEqInvUqQEsjGFNsaCK8gK39SBWkYA01x06CXLds4J/qDx3AU3A9SHe8/diiYT78jXJ/kbs+mBiVMlTFrIwvM+KTaON3yd3YTfkfxGFGV81JU2tGu9gy4ytfHZhKJ+jJ+Tz1ctMS+I5yfzGao32RC8BOPFW/SS7WCHMuSoOx90IHl8qRpaIBdeulv5amziATn3IsmiulWLGMEpJRQQNNMjrqJYXhHTKjUhgVA5d8xnrk7s2FoB80RgMQeXySQ+viT
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(346002)(136003)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(2906002)(5660300002)(8936002)(82310400005)(36756003)(70206006)(44832011)(4326008)(70586007)(426003)(41300700001)(8676002)(36860700001)(356005)(40460700003)(26005)(54906003)(7696005)(478600001)(86362001)(6666004)(81166007)(110136005)(316002)(2616005)(16526019)(40480700001)(83380400001)(47076005)(82740400003)(1076003)(336012)(186003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 18:39:58.8167
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d717c54-6b55-49f0-9e03-08da9d930494
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7556
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Software that has run before the USB4 CM in Linux runs may have disabled
-hotplug events for a given lane adapter.
+On Fri, Sep 23, 2022 at 11:23:23AM -0700, Andrey Smirnov wrote:
+> On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> > On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
+> > > On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
+> > > > On 22-09-2022 12:08, Andy Shevchenko wrote:
+> > > > On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
+> >
+> > FYI: For now I sent a revert, but if we got a solution quicker we always
+> > can choose the course of actions.
+> 
+> I think we have another problem. This patch happened in parallel to mine
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
+> 
+> so my changes didn't have that fix in mind and I think your revert
+> will not preserve that fix. Can you update your revert to take care of
+> that too, please?
+> 
+> I'm really confused how the above commit could be followed up by:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/dwc3/drd.c?h=v6.0-rc6&id=0f01017191384e3962fa31520a9fd9846c3d352f
+> 
+> the diffs in dwc3_drd_init seem contradictory
 
-Other CMs such as that one distributed with Windows 11 will enable hotplug
-events. Do the same thing in the Linux CM which fixes hotplug events on
-"AMD Pink Sardine".
+I'm not sure I follow. Your patch has been merged and after that some kind of
+merge conflict was resolved by an additional change. To revert your stuff
+cleanly we need to revert the merge update patch first. That's why revert is a
+series of patches and not a single one. I have no idea how above mentioned
+commit at all related to all this.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v2->v3:
- * Guard with tb_switch_is_icm to avoid risk to Intel FW CM case
-v1->v2:
- * s/usb4_enable_hotplug/usb4_port_hotplug_enable/
- * Clarify intended users in documentation comment
- * Only call for lane adapters
- * Add stable tag
+Can you elaborate more, please?
 
-Note: v2 it was suggested to move this to tb_switch_configure, but
-port->config is not yet read at that time.  This should be the right
-time to call it, so this version of the patch just guards against the
-code running on Intel's controllers that have a FW CM.
+> > > > If the extcon device exists, get the mode from the extcon device. If
+> > > > the controller is DRD and the driver is unable to determine the mode,
+> > > > only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
+> > > >
+> > > > According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
+> > > > share bisect log?
+> > > >
+> > > > I can but not right now. But what I did was bisect between 5.18.0 (good) and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit before that (good).
+> > > >
+> > > > The effect of the patch is that on Merrifield (I tested with Intel Edison Arduino board which has a HW switch to select between host and device mode) device mode works but in host mode USB is completely not working.
+> > > >
+> > > > Currently on host mode - when working - superfluous error messages from tusb1210 appear. When host mode is not working there are no tusb1210 messages in the logs / on the console at all. Seemingly tusb1210 is not probed, which points in the direction of a relation to extcon.
+> > > >
+> > > > Taking into account the late cycle, I would like to revert the change. And
+> > > > Ferry and I would help to test any other (non-regressive) approach).
+> > > >
+> > > > I have not yet tested if a simple revert fixes the problem but will tonight.
+> > > >
+> > > > I would be happy to test other approaches too.
+> > >
+> > > It's a bit hard for me to suggest an alternative approach without
+> > > knowing how things are breaking in this case. I'd love to order one of
+> > > those boards to repro and fix this on my end, but it looks like this
+> > > HW is EOLed and out of stock in most places. If you guys know how to
+> > > get my hands on those boards I'm all ears.
+> >
+> > There are still some second hand Intel Edison boards flying around
+> > (but maybe cost a bit more than expected) and there are also
+> > Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
+> > option though requires more actions in order something to be boot
+> > there.
+> 
+> OK, I'll check e-bay just in case.
+> 
+> > In any case, it's probably quicker to ask Ferry or me for testing.
+> > (Although currently I have no access to the board to test OTG, it's
+> >  remote device which I can only power on and off and it has always
+> >  be in host mode.)
+> >
+> > > Barring that, Ferry can you dig more into this failure? E.g. is it this hunk
+> > >
+> > > @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+> > >                  * mode. If the controller supports DRD but the dr_mode is not
+> > >                  * specified or set to OTG, then set the mode to peripheral.
+> > >                  */
+> > > -               if (mode == USB_DR_MODE_OTG &&
+> > > +               if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+> > >                     (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+> > >                      !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+> > >                     !DWC3_VER_IS_PRIOR(DWC3, 330A))
+> > > @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
+> > >         }
+> > >  }
+> > >
+> > > that's problematic or moving
+> >
+> > I think you wanted to revert only this line and test?
+> 
+> Yes.
 
- drivers/thunderbolt/switch.c  |  4 ++++
- drivers/thunderbolt/tb.h      |  1 +
- drivers/thunderbolt/tb_regs.h |  1 +
- drivers/thunderbolt/usb4.c    | 23 +++++++++++++++++++++++
- 4 files changed, 29 insertions(+)
+Ferry, can you try that (but I believe it won't help anyway, because I don't
+see how we handle deferred probe).
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 77d7f07ca075..3213239d12c8 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -778,6 +778,10 @@ static int tb_init_port(struct tb_port *port)
- 
- 			if (!tb_port_read(port, &hop, TB_CFG_HOPS, 0, 2))
- 				port->ctl_credits = hop.initial_credits;
-+
-+			res = usb4_port_hotplug_enable(port);
-+			if (res)
-+				return res;
- 		}
- 		if (!port->ctl_credits)
- 			port->ctl_credits = 2;
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 5db76de40cc1..332159f984fc 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1174,6 +1174,7 @@ int usb4_switch_add_ports(struct tb_switch *sw);
- void usb4_switch_remove_ports(struct tb_switch *sw);
- 
- int usb4_port_unlock(struct tb_port *port);
-+int usb4_port_hotplug_enable(struct tb_port *port);
- int usb4_port_configure(struct tb_port *port);
- void usb4_port_unconfigure(struct tb_port *port);
- int usb4_port_configure_xdomain(struct tb_port *port);
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 166054110388..bbe38b2d9057 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -308,6 +308,7 @@ struct tb_regs_port_header {
- #define ADP_CS_5				0x05
- #define ADP_CS_5_LCA_MASK			GENMASK(28, 22)
- #define ADP_CS_5_LCA_SHIFT			22
-+#define ADP_CS_5_DHP				BIT(31)
- 
- /* TMU adapter registers */
- #define TMU_ADP_CS_3				0x03
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 3a2e7126db9d..98f3afa03036 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -1046,6 +1046,29 @@ int usb4_port_unlock(struct tb_port *port)
- 	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_4, 1);
- }
- 
-+/**
-+ * usb4_port_hotplug_enable() - Enables hotplug for a port
-+ * @port: USB4 port to operate on
-+ *
-+ * Enables hot plug events on a given port. This is only intended
-+ * to be used on lane, DP-IN, and DP-OUT adapters.
-+ */
-+int usb4_port_hotplug_enable(struct tb_port *port)
-+{
-+	int ret;
-+	u32 val;
-+
-+	if (tb_switch_is_icm(port->sw))
-+		return 0;
-+
-+	ret = tb_port_read(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
-+	if (ret)
-+		return ret;
-+
-+	val &= ~ADP_CS_5_DHP;
-+	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
-+}
-+
- static int usb4_port_set_configured(struct tb_port *port, bool configured)
- {
- 	int ret;
+> > >  static int dwc3_probe(struct platform_device *pdev)
+> > >  {
+> > >         struct device           *dev = &pdev->dev;
+> > > @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
+> > >                 goto err2;
+> > >         }
+> > >
+> > > +       dwc->edev = dwc3_get_extcon(dwc);
+> > > +       if (IS_ERR(dwc->edev)) {
+> > > +               ret = PTR_ERR(dwc->edev);
+> > > +               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
+> > > +               goto err3;
+> > > +       }
+> > > +
+> > >         ret = dwc3_get_dr_mode(dwc);
+> > >         if (ret)
+> > >                 goto err3;
+> > >
+> > > to happen earlier?
+> >
+> > It is not always possible to have an extcon driver available, that's why in
+> > some cases the probe of it defers. I dunno how your patch supposed to work
+> > in that case.
+> 
+> I'm not sure I understand what you mean. AFAIU the logic is that if
+> the platform specifies the presence of extcon either via DT or, like
+> Merrifield, via and explicit "linux,extcon-name" device property in
+> the code then extcon is a mandatory component of the DRD stack and the
+> driver is expected to be present for the whole thing to work.
+
+> I don't
+> think I really changed that logic with my patch, even after the revert
+> dwc3_get_extcon() will be called as a part of a probing codepath,
+
+But it's not true as proved by the experiment. So with your patch it doesn't
+work anymore, so the logic _is_ changed.
+
+>	so
+> if the a missing driver is causing a probe deferral it should still be
+> happening, unless I missed something.
+
+The merge fix removes deferred probe by some reason.
+
+> > > Does tracing the "mrfld_bcove_pwrsrc" driver (the
+> > > excton provider in this case AFIACT) show anything interesting?
+> >
+> > I believe there is nothing interesting.
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
