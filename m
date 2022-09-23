@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C90A5E76C5
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 11:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01B65E76C8
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Sep 2022 11:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiIWJW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Sep 2022 05:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S231613AbiIWJWv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Sep 2022 05:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiIWJWY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Sep 2022 05:22:24 -0400
+        with ESMTP id S231281AbiIWJWs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Sep 2022 05:22:48 -0400
 Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8728CE109D
-        for <linux-usb@vger.kernel.org>; Fri, 23 Sep 2022 02:22:23 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a14so13944384ljj.8
-        for <linux-usb@vger.kernel.org>; Fri, 23 Sep 2022 02:22:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6044E1092
+        for <linux-usb@vger.kernel.org>; Fri, 23 Sep 2022 02:22:46 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id q17so13913519lji.11
+        for <linux-usb@vger.kernel.org>; Fri, 23 Sep 2022 02:22:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=tVjLFplbBUiEp5HH1xJDwTfmDuHqlB39r1xUDOtGabU=;
-        b=Y8san3QYDUvR9D+NQ6JCA9bmyy6Tbh8zbuZePV4pZUNzvFh2gO3ecCZUOMLrYzII5N
-         6b6IcLVkYgEE1GxmuvKeQtLQqrhnJUhMnBgwTWyPJJbgHClNh9uPljM+UbnBAipSM0IA
-         Jq3GVEuYjYPLz+CnIl1x8Eo9UuX4BkNbnPqFjrF4XY3un/JDuwpM+t2cpq+Lvz0B1UeO
-         FhtCnV0ChpXjcg59/SQYJ/mt8KL9QqKbj6cL5GLqnTpOVwNMfALG1qhtolcIZ9mXVQR1
-         MdUkq2ShxKItCvGPVDuw3aSwL3rMZX2n9r+/q9syQVFti2bBD0wxPAGwRWwc1y/3leaF
-         7t4w==
+        bh=O/2EAFUkfqdwXtO9Hs6dRCfXxow646ns38C+TL7yTok=;
+        b=dnXef/D8SvySIgEI8W0QDXiAHGYQ10twKtCe7aVTPK5iWiFEbp4wsJHzx308pqQ/O8
+         lrYo7I5jmandDjdKBRewap8rH06tYxIolYeiPFDGioA6/DoxlsoptXWmjpqPLq8aGXip
+         5U4LIGMF7psE6Vl4aiEpEiFvmWER659F94dKnMy4sUS8HckyMYxFAgz5HCjXg7DcTl2h
+         xrLNUJqcGR4v45MHYDgrUIvPsyLs5zqbXFO6hKPOfhy6vsQwRA0MTNWM0QEy99LxxM2X
+         n6AjzsiwYE0cEOpAZtUQArjQZ8v4M/uKDSajRbiHrijACIYj3pC+9vmDasZoxBqrCjQW
+         1X4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=tVjLFplbBUiEp5HH1xJDwTfmDuHqlB39r1xUDOtGabU=;
-        b=nMs4oJozMRNooyD2ppVsioEZ40FEHmd4pOStAM0v9tIw6YhJljZYcGXPivqBpseyNv
-         ilqqoQwkgmcLI2PCGCJ+RI7JhQUMbZSKIaYljWnuYNttBrdQAnj/veESZqqBHkxpYhEk
-         PNSh/mwmfMue15xzNLER97hmjHuaPWGAeUC46Ym1IlsUzTyAWeVWJd3Ub/GBDSWiF0Ji
-         fdkD/OOzA0e1kvVwYkpl6gWkI34GPdkx9ZnPB/am6Jwz6K0n1lcL4Y1NlBXSbb34fIXg
-         c0kjAomPH9JZ+QUxim7lNcJ0kC469utWjCIIVwkOyb1I7z54DCOR7auE4hxIwYURJsjD
-         Hhuw==
-X-Gm-Message-State: ACrzQf1DVrhFbODIkP1/AlHvXfXY43eaz68G+DAC2A2sPiC6h45AEpUL
-        HrFdI68JwaTUUf5GpOFW3jnxAA==
-X-Google-Smtp-Source: AMsMyM5HLwPGkCJxWrNQhy2JrlnzWp+jyVuXDaUzUX25l1BZcCTJtQJ6d59FKXlMOMBXV6Mx+FwOeg==
-X-Received: by 2002:a05:651c:555:b0:26c:6a30:770 with SMTP id q21-20020a05651c055500b0026c6a300770mr2637893ljp.376.1663924941888;
-        Fri, 23 Sep 2022 02:22:21 -0700 (PDT)
+        bh=O/2EAFUkfqdwXtO9Hs6dRCfXxow646ns38C+TL7yTok=;
+        b=d7vnukioLhLYS3A+7IgF+ebdmo/RzqRXH9jtu0HQ3sTqhI0LzzAX4SRk4bqqrSgI7j
+         CSCubTE3Kl5TfcUjyKLoEZi4vDbBdQRFW9vQQOpXhSb0j1OXR2LQXSpyyGyH2wntkmrL
+         b/EkC8JTQZGhA2ymfUR0UY0XmgcauOKDFJjC+TZz8X+wg9uBQPdnR/zrOHUq0sL/KhD4
+         d2nyklqD8fwkWynv9a6+i60DbTVz6dDdA5uSiY2kEKsPZ+8v85W4yUrkn0UHw/QoJbL4
+         v25/Gi+84XoVoUvqpjY6WkwJXIB+pp9VjopCiL7+hPR4nAUDQuyQ01ba187rWc0/DLOn
+         rdOw==
+X-Gm-Message-State: ACrzQf3vrruQaxrtFM2CHky4YrtMIZt1Bllo0KAOwtadPMTNrwd7duYn
+        GEMHhcKH18e5+n/181Z7X5a79Q==
+X-Google-Smtp-Source: AMsMyM5Od45aJ/qo93OLGtKA5x6ota51o2BSEgi/m/GNnX6yl/UAK1V22xLj1x8tqG5moMlCxWfyqw==
+X-Received: by 2002:a2e:a448:0:b0:262:f7c4:31ad with SMTP id v8-20020a2ea448000000b00262f7c431admr2452226ljn.283.1663924965112;
+        Fri, 23 Sep 2022 02:22:45 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v14-20020a2ea44e000000b0026c4374a2a4sm1287230ljn.139.2022.09.23.02.22.20
+        by smtp.gmail.com with ESMTPSA id n21-20020a05651203f500b00494a8fecacesm1355243lfq.192.2022.09.23.02.22.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 02:22:21 -0700 (PDT)
-Message-ID: <a127333d-cd25-4fa3-a12d-9c3cda05582f@linaro.org>
-Date:   Fri, 23 Sep 2022 11:22:20 +0200
+        Fri, 23 Sep 2022 02:22:44 -0700 (PDT)
+Message-ID: <9134eaa4-dab3-75ec-f0cc-8b77e5a95e6e@linaro.org>
+Date:   Fri, 23 Sep 2022 11:22:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH] dt-bindings: usb: dwc3: Add interrupt-names to include
- hibernation interrupt
+Subject: Re: Recall: [PATCH] dt-bindings: usb: dwc3: Add interrupt-names to
+ include hibernation interrupt
 Content-Language: en-US
 To:     "Mehta, Piyush" <piyush.mehta@amd.com>,
         "Simek, Michal" <michal.simek@amd.com>,
@@ -69,16 +69,9 @@ Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
         Manish Narani <manish.narani@xilinx.com>
-References: <20220912085730.390555-1-piyush.mehta@amd.com>
- <4cc7a6d2-64ef-c176-21ad-4c3e66f664f7@linaro.org>
- <MN2PR12MB43330B57F5CFBEC35105665188469@MN2PR12MB4333.namprd12.prod.outlook.com>
- <05ce5c7c-c7e2-cac1-341a-5461804f96ea@linaro.org>
- <46b9bb31-efb5-1e1f-9d01-3841661293dc@amd.com>
- <00368da8-bf24-da5a-15da-dbc1a6a716e8@linaro.org>
- <1824afba-c249-f5d1-e504-d71bf7d79979@amd.com>
- <MN2PR12MB4333EBFADEDD7DB623F4634188519@MN2PR12MB4333.namprd12.prod.outlook.com>
+References: <MN2PR12MB4333E69C6D63367FC24B1B1E88519@MN2PR12MB4333.namprd12.prod.outlook.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MN2PR12MB4333EBFADEDD7DB623F4634188519@MN2PR12MB4333.namprd12.prod.outlook.com>
+In-Reply-To: <MN2PR12MB4333E69C6D63367FC24B1B1E88519@MN2PR12MB4333.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,21 +84,10 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23/09/2022 06:38, Mehta, Piyush wrote:
->> Thanks,
->> Michal
-> 
-> Enabling wakeup in zynqMp we need to put the core into hibernation, as versal don't have hibernation concept, but we require interrupt for wakeup.
-> We have a versal platform where we are not using hibernation, but system wake up we need the interrupt. For this interrupt-name enum would be:
-> - enum [host, peripheral, otg, usb-wakeup]
-> 
-> zynqMp :
-> - enum [host, peripheral, otg, hiber]
-> 
-> Versal:
-> - enum [host, peripheral, otg, usb-wakeup]
+On 23/09/2022 06:36, Mehta, Piyush wrote:
+> Mehta, Piyush would like to recall the message, "[PATCH] dt-bindings: usb: dwc3: Add interrupt-names to include hibernation interrupt".
 
-That's a different name you use now...
+Sorry, this does not work in public discussions and public mailing lists. :)
 
 Best regards,
 Krzysztof
