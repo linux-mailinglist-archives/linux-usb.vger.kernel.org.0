@@ -2,63 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D555E88A8
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 08:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9969F5E88B8
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 08:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiIXGEB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Sep 2022 02:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        id S233235AbiIXGZB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Sep 2022 02:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiIXGD7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 02:03:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CE9116C14;
-        Fri, 23 Sep 2022 23:03:58 -0700 (PDT)
+        with ESMTP id S229479AbiIXGY7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 02:24:59 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791242EF1C;
+        Fri, 23 Sep 2022 23:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663999438; x=1695535438;
+  t=1664000698; x=1695536698;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=iHPeJI3uoBTGbE6747KK7GTSlL8DhnxDDSXkO1IxR08=;
-  b=nHPMbVXWk21ro7SAdznCZpB7ZNKRMMYROm1Y9JoJqrrecOaOMc+kVnA7
-   JfsUe7xcD8mf2nUPtfWbhgDRYjq2ejaUHM+cgfrnUPPfvBo2Vfz37XsRR
-   KiMKvE8L5JnboGgO1mSeYAjB9Zdrins5jDVnNN9QhzQRyA9Iv5BNO+EOh
-   DgIy7SUKIHPOCKVfC40boWS+AVAz+hRAzedMj4NgIZNTF1hqJ3HNu8ceS
-   +HjHq00GpE93OtbtYbPjrO9P55s9FwJ9/rjgchD6q7Vv+ahZ8hTknlqoO
-   EJNggSEIDM39i4MCqOb4AQIlDOniEB63cFXTgJkFzOawDMtX8y4SoJV6P
+  bh=ahk3qTCXfZXiFTcCidMdjrCVQMdNXV2fOISqcNWVFbQ=;
+  b=QDq0MpE2T3XDINS7P6ifBvZzKTz3FMKQZEsAgXsd6AiEJ64FghxTbO22
+   UXaL1nSBym6o6wzlm4f6ugLb7FGCiLGmn4X3laanQdYGpNbNT83dBFcL0
+   4jUhKTF1wTpXordNzA1ciyYyEYbwh706kpRjbrMT3KM5aJ7X8Izsf9o4M
+   64/bAM2xO150Y7HM1zNitNdkXUdl8l4jysJqmswOLz6tFOvFmqfZPzzoz
+   NN/FYHhnDakK6wiBLhRhkoyMFZu2DkS9NCGrMGbogA+gT4Wuj0dAHWrjp
+   SW/LDJWYnfekDatymUPyJfrPGeHgKeT9gkFmUd779KGqWCS8eTcNosZ3S
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="298347680"
+X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="299472942"
 X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="298347680"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 23:03:57 -0700
+   d="scan'208";a="299472942"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 23:24:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,341,1654585200"; 
-   d="scan'208";a="615858316"
+   d="scan'208";a="651214007"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 23 Sep 2022 23:03:54 -0700
+  by orsmga008.jf.intel.com with ESMTP; 23 Sep 2022 23:24:55 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 233CCF7; Sat, 24 Sep 2022 09:04:11 +0300 (EEST)
-Date:   Sat, 24 Sep 2022 09:04:11 +0300
+        id CDEB7F7; Sat, 24 Sep 2022 09:25:13 +0300 (EEST)
+Date:   Sat, 24 Sep 2022 09:25:13 +0300
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Szuying Chen <Chloe_Chen@asmedia.com.tw>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>, stable@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] thunderbolt: Explicitly enable lane adapter hotplug
- events at startup
-Message-ID: <Yy6d233SON9qonHa@black.fi.intel.com>
-References: <20220922160730.898-1-mario.limonciello@amd.com>
- <Yy15gKzHyMcitY/N@black.fi.intel.com>
- <7c0623f8-5274-c7ee-71a7-3e0fab918f97@amd.com>
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH v1 1/2] thunderbolt: Convert to use
+ sysfs_emit()/sysfs_emit_at() APIs
+Message-ID: <Yy6iyYWd5CGQMFit@black.fi.intel.com>
+References: <20220922143240.36878-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7c0623f8-5274-c7ee-71a7-3e0fab918f97@amd.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <20220922143240.36878-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,73 +64,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Fri, Sep 23, 2022 at 11:08:30AM -0500, Limonciello, Mario wrote:
-> On 9/23/2022 04:16, Mika Westerberg wrote:
-> > Hi Mario,
-> > 
-> > On Thu, Sep 22, 2022 at 11:07:29AM -0500, Mario Limonciello wrote:
-> > > Software that has run before the USB4 CM in Linux runs may have disabled
-> > > hotplug events for a given lane adapter.
-> > > 
-> > > Other CMs such as that one distributed with Windows 11 will enable hotplug
-> > > events. Do the same thing in the Linux CM which fixes hotplug events on
-> > > "AMD Pink Sardine".
-> > > 
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > > v1->v2:
-> > >   * Only send second patch as first was merged already
-> > >   * s/usb4_enable_hotplug/usb4_port_hotplug_enable/
-> > >   * Clarify intended users in documentation comment
-> > >   * Only call for lane adapters
-> > >   * Add stable tag
-> > > 
-> > >   drivers/thunderbolt/switch.c  |  4 ++++
-> > >   drivers/thunderbolt/tb.h      |  1 +
-> > >   drivers/thunderbolt/tb_regs.h |  1 +
-> > >   drivers/thunderbolt/usb4.c    | 20 ++++++++++++++++++++
-> > >   4 files changed, 26 insertions(+)
-> > > 
-> > > diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> > > index 77d7f07ca075..3213239d12c8 100644
-> > > --- a/drivers/thunderbolt/switch.c
-> > > +++ b/drivers/thunderbolt/switch.c
-> > > @@ -778,6 +778,10 @@ static int tb_init_port(struct tb_port *port)
-> > >   			if (!tb_port_read(port, &hop, TB_CFG_HOPS, 0, 2))
-> > >   				port->ctl_credits = hop.initial_credits;
-> > > +
-> > > +			res = usb4_port_hotplug_enable(port);
-> > > +			if (res)
-> > 
-> > I think this does not belong here in tb_init_port(). This is called from
-> > both FW and SW CM paths and we don't want to confuse the FW CM more than
-> > necessary ;-)
-> > 
-> > So instead I think this should be added to tb_plug_events_active().
-> > 
+On Thu, Sep 22, 2022 at 05:32:39PM +0300, Andy Shevchenko wrote:
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the value
+> to be returned to user space.
 > 
-> The problem with that location is that tb_plug_events_active() is called
-> from tb_switch_configure() which is before tb_switch_add() is called.
-> tb_switch_add() calls tb_init_port() which reads port->config for the first
-> time.
-
-Ah indeed, I missed that.
-
-> So if this is only to be called in tb_switch_configure() it means reading
-> port->config "earlier" too.
+> While at it, use Elvis operator in some cases.
 > 
-> So it definitely needs to be called in tb_init_port() or a later function
-> but before the device is announced to satisfy only running on the
-> appropriate port types.
-> 
-> tb_init_port() or tb_switch_add feels like the right place to me.  How about
-> leaving it where it is but guarding with a "if (!tb_switch_is_icm())" to
-> avoid the risk to the FW CM case?
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-What about adding a new function that does this and it called from
-tb_switch_add() before announcing devices to the world? tb_init_port()
-is pretty much reading stuff from adapters so I would not like to add
-there anything that does writing if possible.
+This and the following patch applied to thunderbolt.git/next. Thanks
+Andy!
