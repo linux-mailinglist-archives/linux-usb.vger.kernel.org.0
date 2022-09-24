@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783515E8B7A
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 12:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCF75E8B77
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 12:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiIXK30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Sep 2022 06:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S231860AbiIXK31 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Sep 2022 06:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiIXK3W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 06:29:22 -0400
+        with ESMTP id S231258AbiIXK3X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 06:29:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBF611ED73
-        for <linux-usb@vger.kernel.org>; Sat, 24 Sep 2022 03:29:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7154C11ED78
+        for <linux-usb@vger.kernel.org>; Sat, 24 Sep 2022 03:29:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A0756124D
-        for <linux-usb@vger.kernel.org>; Sat, 24 Sep 2022 10:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEAFDC433D6;
-        Sat, 24 Sep 2022 10:29:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D71B61257
+        for <linux-usb@vger.kernel.org>; Sat, 24 Sep 2022 10:29:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2061C433D6;
+        Sat, 24 Sep 2022 10:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664015360;
-        bh=yx+JktSN6PeLt2CX0HE+os/dGWubiRJ91H/3H1rKS68=;
+        s=k20201202; t=1664015361;
+        bh=XK45Cba0A/NiOAoBGRSJ+KfBFQBEjtp6JE9DIB4zrBU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BeaOXROCxdVFR6q9hElkT1aCu0xwpx89vQcyPJQETNoqmzOSjaNrg9s2Yqd7X7ouK
-         i5HcINUYwGIj2xnytVOQWKwocspUvIBRLJxZur6P4p8E7f+ClbuTlGfD1hovkh8TwJ
-         RG/fGmX8vl5QdD7AmR/DdyOZ1GRbFZ99Ys5yZgvpXMtSi1fruXuj+UyBlqos6zorZH
-         xVZf6JxKz4UPAgwmjjzXg0WdRFGR6Mhr9rpHCZaxhAS6SweLI9f213QJKJnfQD4jXu
-         Xmguz0u5bykzaXhXJ27PshriohfJPVRE102ySDdyofsx0LXQrKPxhaZN1K3zr+ayq8
-         zgoQBX7jFheNw==
+        b=P571yZbql/pvgOHEedQeWxdUkpLLGG5ZNm79//dloECAC4y1y3SAOv+redJXEL1lB
+         Ra61ogz3K+zlsqCxMbhE32OsKk8+DPbGDsukGWZuAlFjrgQ/k7Hc8NcQqfoRvy61qe
+         hycqLVL7LbwewKYrfw75hvdBQ4drcT7rVJDH7+gFmjuxQXZDNyYVsD6wKc+Y4ahAj/
+         DW4n/FkPhfkl5du671a2c3AEF+H5gApNEHYzVPzEN9kqdyBzd6KkeXKlgvNcTbTS++
+         oDN3DgeT7NCpvlbHQRtEBzXXKw/ENxqLxDg6Vi40FPVufaXBCPhsl+i72Uhrt3T8L4
+         zH4m17nnD6EbA==
 Received: by pali.im (Postfix)
-        id 78EFC8A2; Sat, 24 Sep 2022 12:29:20 +0200 (CEST)
+        id 6C5448A2; Sat, 24 Sep 2022 12:29:21 +0200 (CEST)
 From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH v3 5/7] USB: serial: ftdi_sio: Fix baud rate rounding for ASYNC_SPD_CUST
-Date:   Sat, 24 Sep 2022 12:27:16 +0200
-Message-Id: <20220924102718.2984-6-pali@kernel.org>
+Subject: [PATCH v3 6/7] USB: serial: ftdi_sio: Fix custom_divisor for TIOCGSERIAL and c_*speed for TCGETS2
+Date:   Sat, 24 Sep 2022 12:27:17 +0200
+Message-Id: <20220924102718.2984-7-pali@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220924102718.2984-1-pali@kernel.org>
 References: <20220924102718.2984-1-pali@kernel.org>
@@ -56,37 +56,78 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To compute more accurate baud rate when user uses ASYNC_SPD_CUST API,
-use DIV_ROUND_CLOSEST() instead of just rounding down.
+When ASYNC_SPD_CUST is used, update custom_divisor field for TIOCGSERIAL
+and c_*speed fields for TCGETS2 so that they correspond to the newly set
+baud rate value.
 
-Rationale:
-  Application uses old API, so it computes divisor D for baud rate B.
+So userspace TCGETS2 ioctls in new c_*speed fields will see the true baud
+rate that is being used.
 
-  The driver then tries to compute back the requested baud rate B, but
-  rounds down in the division.
-
-  Using rounding to closest value instead should increate accuracy here.
+This is needed for switching userspace applications to use TCGETS2 API as
+currently new c_*speed fields does not report correct values. Without this
+change userspace applications still have to use old deprecated TIOCGSERIAL
+to retrieve current baud rate.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 Tested-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/usb/serial/ftdi_sio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please note that if c_*speed fields of TCGETS2 are not going to be fixed
+then userspace application cannot be switched to use this new TCGETS2 API
+due to this issue.
+---
+ drivers/usb/serial/ftdi_sio.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 1ab6bf48516f..718c86db2900 100644
+index 718c86db2900..79b00912c81c 100644
 --- a/drivers/usb/serial/ftdi_sio.c
 +++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1333,7 +1333,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+@@ -1319,6 +1319,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ {
+ 	struct ftdi_private *priv = usb_get_serial_port_data(port);
+ 	struct device *dev = &port->dev;
++	int fix_custom_divisor = 0;
+ 	u32 div_value = 0;
+ 	int div_okay = 1;
+ 	int baud;
+@@ -1333,6 +1334,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
  	if (baud == 38400 &&
  	    ((priv->flags & ASYNC_SPD_MASK) == ASYNC_SPD_CUST) &&
  	     (priv->custom_divisor)) {
--		baud = priv->baud_base / priv->custom_divisor;
-+		baud = DIV_ROUND_CLOSEST(priv->baud_base, priv->custom_divisor);
++		fix_custom_divisor = 1;
+ 		baud = DIV_ROUND_CLOSEST(priv->baud_base, priv->custom_divisor);
  		dev_dbg(dev, "%s - custom divisor %d sets baud rate to %d\n",
  			__func__, priv->custom_divisor, baud);
+@@ -1426,7 +1428,19 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 			ftdi_chip_name[priv->chip_type]);
  	}
+ 
++	/* Fix deprecated async-compatible custom_divisor hack and update tty baud rate */
++	if (fix_custom_divisor) {
++		priv->custom_divisor = DIV_ROUND_CLOSEST(priv->baud_base, baud);
++		old_baud = baud;
++		baud = 38400;
++	}
++
+ 	tty_encode_baud_rate(tty, baud, baud);
++
++	/* For async-compatible custom_divisor store into TCGETS2 c_*speed fields real baud rate */
++	if (fix_custom_divisor)
++		tty->termios.c_ispeed = tty->termios.c_ospeed = old_baud;
++
+ 	return div_value;
+ }
+ 
+@@ -2699,6 +2713,8 @@ static void ftdi_set_termios(struct tty_struct *tty,
+ 		dev_dbg(ddev, "%s: forcing baud rate for this device\n", __func__);
+ 		tty_encode_baud_rate(tty, priv->force_baud,
+ 					priv->force_baud);
++		termios->c_ispeed = termios->c_ospeed =
++			DIV_ROUND_CLOSEST(priv->baud_base, priv->custom_divisor);
+ 	}
+ 
+ 	/* Force RTS-CTS if this device requires it. */
 -- 
 2.20.1
 
