@@ -2,81 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73365E88F4
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 09:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50FC5E8A0B
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 10:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbiIXHJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Sep 2022 03:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
+        id S233951AbiIXITF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Sep 2022 04:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbiIXHJY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 03:09:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD329132FC7;
-        Sat, 24 Sep 2022 00:09:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69FF5B80D5A;
-        Sat, 24 Sep 2022 07:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299F7C433D7;
-        Sat, 24 Sep 2022 07:09:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664003361;
-        bh=AJt4zk93LVa4vecHkex6IL/BxdunkkrtiUumB+OGOmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QeXCkrbT8j663DS9Fvd2Jl0nGwXEJLvAQJV2hjUF0rrmABKRVesPRssUN9xfFM4zY
-         cZXY/kzupnh/PmAh8Ip0g08lrCxtvGPzhWHvE8d6bW9B+3fBa6OEie0hK3n3MNjGnW
-         ZqosHgnEl6ZCeeeug9op1kQw2GPnfO7GXRX7rxX7tFAw0dA/fRy9hISYCrjy4aH1lH
-         voiSAIUOljzqxN3dE7nxADZIBWiPAoUAsaZMO+4bqCaK53upojuq8p/omnCQD0gtb3
-         gSvV1oy0UpRqBLzcwWjlHe5Nee7h5JWPaapl3aVR70eU+gg6ZwvOGSMhvemM9CvpUM
-         EC66dv0OMET+A==
-Date:   Sat, 24 Sep 2022 12:39:16 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Richard Acayan <mailingradian@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] SDM670 USB 2.0 support
-Message-ID: <Yy6tHE8VZ2v347Q9@matsya>
-References: <20220922024656.178529-1-mailingradian@gmail.com>
+        with ESMTP id S233949AbiIXISc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 04:18:32 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D07E220FC;
+        Sat, 24 Sep 2022 01:17:12 -0700 (PDT)
+Received: from [192.168.0.74] ([84.175.93.28]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MIbzB-1oWj0Z08jl-00EcnP; Sat, 24 Sep 2022 10:16:34 +0200
+From:   "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+To:     mathias.nyman@intel.com
+Subject: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96
+ controller
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 24 Sep 2022 08:16:34 +0000
+Message-Id: <em0b7a6682-2da4-4480-8801-1107ea9756dd@aea403bc.com>
+Reply-To: "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+User-Agent: eM_Client/9.1.2109.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922024656.178529-1-mailingradian@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA"
+X-Antivirus: Avast (VPS 220923-4, 23.9.2022), Outbound message
+X-Antivirus-Status: Clean
+X-Provags-ID: V03:K1:j/CgaF6gU18/AcFhUknKikKnBu+yAZ48N2wNrAkx2SvBu4RXOPC
+ irE21aSuxaAISjZ40nLpitJ7UXFcep/vcuPKm/CkPNP4WmC4v6sdcLMeB8w+Br/StOE/rFW
+ FS6MR71Fakfj8ww0yhh871FGILgkSbSd+VUIZK1e2T//z4sO0Koqmm9VrodM5B11+1x308l
+ 0evbaHvgLLV5WuKTt4nsw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kDHwy07K4eU=:bDS06RWxE4m6Bwlz5sA+v8
+ 9OOEu6bOOxz928GOog/RN1LDgd0aIsHIZyiaVgaAeM2/cSusyBX06pDu7vpxkqxIZZsnugDx+
+ otZmqDeX7kTcHuo5ojUJOiuRB7FYEZRUICGOieG34IjdC3b3ByNXUTD9W9BJ4zFs+DJ8XuXL4
+ HkpJMsSwPIoP5ipWItzBCzGdwMfenbfp5f+00hmPQx/CmAXepLVm76Oo4g9GM1VlOqG4WAlqH
+ ov+UoRl0ogpL/GYs+A42S74zH2MVb3iJI1gofzdpy1loEofN1WNQg3m/BmoVNyECmhDlx487t
+ bNIcvjdYQZcpR8CY16hTiojeDrTbjbFnt59+jqO1CwMtsXF0IXc/X5oOmC/28hOomYg4Pm3pl
+ gv30U6FMUU83eIG/PBXO2BVGl0WrWGYyId1XQOIHRg04IkyUH7UwiF70cHZ9iY7xeszCMiks5
+ 292YCN79GpZ83nPlvyk3ry0KG7r0gRV5A0PbAskmKKbSQxUaf8y7zBFHlHuEKo/u25VBQahR/
+ ru3m0jI6p/ptETvafDbfTqk67ajHDKZCSbmGg2FNoFRExQZlNEp8atLZWnZF7gziJIR7tIQYO
+ S6NZviNXjO3pPVxuQBClBcTpg3k+8MC4toLmgbfOTN+iN4Ur/AEd0vj3htT2jqcmd9Oec3Alf
+ 1TlT8kJ42f2P03zJ2l74afVLG1OLIHTJXPtMkqgNK/mFfKLzPUi9L3rq/nP/WR3zzRmKKcBlK
+ U8JULpJT2xbTGUVgMnadPVLs67T8eY7VZS0l+46n5k8/qmzLdsZT0zqZlwkm70lKLL9EEfTee
+ bnenRJ9uCYBpxA6ZCx1xNU3VWDslw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-09-22, 22:46, Richard Acayan wrote:
-> Changes since v1:
->  - drop driver patch (some maintainers might be excluded from v3
->    recipients because of this)
->  - add entries in usb clocks and interrupts
-> 
-> This adds compatible strings for USB 2.0 on the Qualcomm Snapdragon 670. I
-> have no way to test USB 3.0 because my SDM670 device doesn't have USB 3.
+--------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-No driver use for this?
+Hi there,
 
-> 
->  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 1 +
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml      | 3 +++
->  2 files changed, 4 insertions(+)
-> 
+second try at a patch which was an actual pain with my Lenovo T500 notebook=
+, augmented with an USB3 PCMCIA card that has an ASM1042 chip. Inspired by=
+ this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
 
--- 
-~Vinod
+ASM1042 identifies as a 0x96 XHCI host, brings spurious transfer event erro=
+rs with a r8152 (Realtek 8153a) USB3 enthernet adapter. Additionally settin=
+g quirk XHCI_SPURIOUS_SUCCESS seems to resolve this issue in this case.
+
+with best regards
+
+Jens Glathe
+
+---
+
+v1->v2
+
+intensive use of scripts/checkpatch.pl, reformatted the code
+reformatted the commit text for line wraps
+--------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA
+Content-Type: text/plain;
+ name=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch;
+ charset=iso-8859-1
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch
+
+RnJvbSBmZmIzYTcwYTQ4YjkxYjc5OTQzYTAxMzFkZGQ0NzBlNWYwOWMwZjQxIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBKZW5zIEdsYXRoZSA8amVucy5nbGF0aGVAb2xkc2Nob29sc29s
+dXRpb25zLmJpej4KRGF0ZTogU3VuLCAyOCBBdWcgMjAyMiAxNjoyMzo0MSArMDIwMApTdWJqZWN0
+OiBbUEFUQ0hdIGZpeDogYWRkIFhIQ0lfU1BVUklPVVNfU1VDQ0VTUyB0byBBU00xMDQyIGRlc3Bp
+dGUgYmVpbmcgYQogVjAuOTYgY29udHJvbGxlcgoKb25seSBpZiBpdCByZXBvcnRzIGFzIGEgVjAu
+OTYgWEhDSSBjb250cm9sbGVyLiBBcHBlYXJzIHRvIGZpeCB0aGUgZXJyb3JzCiJ4aGNpX2hjZCA8
+YWRkcmVzcz47IEVSUk9SIFRyYW5zZmVyIGV2ZW50IFRSQiBETUEgcHRyIG5vdCBwYXJ0IG9mCmN1
+cnJlbnQgVEQgZXBfaW5kZXggMiBjb21wX2NvZGUgMTMiIHRoYXQgYXBwZWFyIHNwdXJpb3VzbHkg
+KG9yIHByZXR0eQpvZnRlbikgd2hlbiB1c2luZyBhIHI4MTUyIFVTQjMgZXRoZXJuZXQgYWRhcHRl
+ciB3aXRoIGludGVncmF0ZWQgaHViLgoKU2lnbmVkLW9mZi1ieTogSmVucyBHbGF0aGUgPGplbnMu
+Z2xhdGhlQG9sZHNjaG9vbHNvbHV0aW9ucy5iaXo+Ci0tLQogZHJpdmVycy91c2IvaG9zdC94aGNp
+LXBjaS5jIHwgMTAgKysrKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwg
+MyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMg
+Yi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMKaW5kZXggZGNlNmMwZWM4ZDM0Li5mOGIzYjM0
+ZDI1N2UgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1wY2kuYworKysgYi9kcml2
+ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMKQEAgLTMwNSw5ICszMDUsMTMgQEAgc3RhdGljIHZvaWQg
+eGhjaV9wY2lfcXVpcmtzKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHhoY2lfaGNkICp4aGNp
+KQogCQl4aGNpLT5xdWlya3MgfD0gWEhDSV9FUF9DVFhfQlJPS0VOX0RDUzsKIAl9CiAKLQlpZiAo
+cGRldi0+dmVuZG9yID09IFBDSV9WRU5ET1JfSURfQVNNRURJQSAmJgotCQlwZGV2LT5kZXZpY2Ug
+PT0gUENJX0RFVklDRV9JRF9BU01FRElBXzEwNDJfWEhDSSkKLQkJeGhjaS0+cXVpcmtzIHw9IFhI
+Q0lfQlJPS0VOX1NUUkVBTVM7CisgIGlmIChwZGV2LT52ZW5kb3IgPT0gUENJX1ZFTkRPUl9JRF9B
+U01FRElBICYmCisgICAgICBwZGV2LT5kZXZpY2UgPT0gUENJX0RFVklDRV9JRF9BU01FRElBXzEw
+NDJfWEhDSSkgeworICAgIC8qIHRyeSB0byB0YW1lIHRoZSBBU01lZGlhIDEwNDIgY29udHJvbGxl
+ciB3aGljaCBpcyAwLjk2ICovCisgICAgaWYgKHhoY2ktPmhjaV92ZXJzaW9uID09IDB4OTYpCisg
+ICAgICB4aGNpLT5xdWlya3MgfD0gWEhDSV9TUFVSSU9VU19TVUNDRVNTOworICAgIHhoY2ktPnF1
+aXJrcyB8PSBYSENJX0JST0tFTl9TVFJFQU1TOworICB9CiAJaWYgKHBkZXYtPnZlbmRvciA9PSBQ
+Q0lfVkVORE9SX0lEX0FTTUVESUEgJiYKIAkJcGRldi0+ZGV2aWNlID09IFBDSV9ERVZJQ0VfSURf
+QVNNRURJQV8xMDQyQV9YSENJKSB7CiAJCXhoY2ktPnF1aXJrcyB8PSBYSENJX1RSVVNUX1RYX0xF
+TkdUSDsKLS0gCjIuMjUuMQoK
+--------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA--
+
