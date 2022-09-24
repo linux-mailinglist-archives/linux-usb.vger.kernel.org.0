@@ -2,121 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50FC5E8A0B
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 10:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134685E8A13
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 10:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbiIXITF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Sep 2022 04:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S233797AbiIXIUf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Sep 2022 04:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbiIXISc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 04:18:32 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D07E220FC;
-        Sat, 24 Sep 2022 01:17:12 -0700 (PDT)
-Received: from [192.168.0.74] ([84.175.93.28]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MIbzB-1oWj0Z08jl-00EcnP; Sat, 24 Sep 2022 10:16:34 +0200
-From:   "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
-To:     mathias.nyman@intel.com
-Subject: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96
- controller
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 24 Sep 2022 08:16:34 +0000
-Message-Id: <em0b7a6682-2da4-4480-8801-1107ea9756dd@aea403bc.com>
-Reply-To: "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
-User-Agent: eM_Client/9.1.2109.0
+        with ESMTP id S233960AbiIXIUM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 04:20:12 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED02264BB
+        for <linux-usb@vger.kernel.org>; Sat, 24 Sep 2022 01:19:07 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id s10so2337773ljp.5
+        for <linux-usb@vger.kernel.org>; Sat, 24 Sep 2022 01:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=IUE/+MWwacfn51Izxt1vXbrhqVbso0tR1cYYPVZ3iMA=;
+        b=I3Ij5QEe3r5mA60sGtqRyppkSrwLfz3i2E8+rvxRR5+WPA6GUO4CehAImiHrraJFvV
+         A0HVQ4eaw8RjLUF+v3CHMXUd7F1J/nC+/1EYh7/myyoMm1wSkKdyN9QUNnmhzNGf2EXi
+         r6jrZpaTE8tYmK89Rdh15VLh18bGKZwXHJpWZdJ2Ix7gkPJrWxV+sUYyCRs+ZfCo6FSs
+         B4qbik/a0k48wsmUqgyE6wBjJYp+GacfCXa6GTJyKCRDi7Hwz3q0LPRfPg4mBUBZ1vLO
+         LwhgNvRChC97cvexZKso2Kjb6IFBbZB03vPO4dEcXCATgWXKHljXXucWKZigzwURVNVh
+         UBMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=IUE/+MWwacfn51Izxt1vXbrhqVbso0tR1cYYPVZ3iMA=;
+        b=2W3vgp1sxN4+6sTx9w3nT2BdGX38BLLE6fymyuXvPutDlac5BMRqHft5XYLbbS9amI
+         EUpRtFThWj1WJhv4lr1glgrVHcX9mxcRVWF8Vy3bBF7tkpV5WNo5lUIAqFDZxWWMSH7y
+         DucfbgZHSvN7eTgmd8kxFpjON87Mgbuaujp4qFmpgCcAFcHBru2rQKAmeR5EswOse3TH
+         1YcrsUET6W0cubGYFfKKIzUVrfGL6/Yl2lW1pHEAsXxqZvQnRP7KiNYyQM5AvHELe96r
+         AFGHtI2dEivc5SW3WnBWFI/CWAeFjRzWt70svHewquaTTfnhP8DcDtLFDQkE4TVDpd5v
+         gL3w==
+X-Gm-Message-State: ACrzQf3IMdv/JzrKvFi0eaGRqkh8aaQyhRlAzUxXdidWiYIyS2hbYnQM
+        Thvc3Dbx4j7oErpyU6s8usElbQ==
+X-Google-Smtp-Source: AMsMyM7fjGjnK2ccg3RmkldGnW8jdo95AjKCJvG6bWcH9F5P6Vic+jXEG7u2dQjfMV7osqb+0nfuiA==
+X-Received: by 2002:a2e:958f:0:b0:26c:fd2:80b4 with SMTP id w15-20020a2e958f000000b0026c0fd280b4mr3901884ljh.147.1664007546068;
+        Sat, 24 Sep 2022 01:19:06 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 17-20020ac24851000000b0049496855494sm1823078lfy.104.2022.09.24.01.19.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Sep 2022 01:19:05 -0700 (PDT)
+Message-ID: <19bbb34d-0b6f-862b-3fb0-3b10821fa172@linaro.org>
+Date:   Sat, 24 Sep 2022 10:19:04 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA"
-X-Antivirus: Avast (VPS 220923-4, 23.9.2022), Outbound message
-X-Antivirus-Status: Clean
-X-Provags-ID: V03:K1:j/CgaF6gU18/AcFhUknKikKnBu+yAZ48N2wNrAkx2SvBu4RXOPC
- irE21aSuxaAISjZ40nLpitJ7UXFcep/vcuPKm/CkPNP4WmC4v6sdcLMeB8w+Br/StOE/rFW
- FS6MR71Fakfj8ww0yhh871FGILgkSbSd+VUIZK1e2T//z4sO0Koqmm9VrodM5B11+1x308l
- 0evbaHvgLLV5WuKTt4nsw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kDHwy07K4eU=:bDS06RWxE4m6Bwlz5sA+v8
- 9OOEu6bOOxz928GOog/RN1LDgd0aIsHIZyiaVgaAeM2/cSusyBX06pDu7vpxkqxIZZsnugDx+
- otZmqDeX7kTcHuo5ojUJOiuRB7FYEZRUICGOieG34IjdC3b3ByNXUTD9W9BJ4zFs+DJ8XuXL4
- HkpJMsSwPIoP5ipWItzBCzGdwMfenbfp5f+00hmPQx/CmAXepLVm76Oo4g9GM1VlOqG4WAlqH
- ov+UoRl0ogpL/GYs+A42S74zH2MVb3iJI1gofzdpy1loEofN1WNQg3m/BmoVNyECmhDlx487t
- bNIcvjdYQZcpR8CY16hTiojeDrTbjbFnt59+jqO1CwMtsXF0IXc/X5oOmC/28hOomYg4Pm3pl
- gv30U6FMUU83eIG/PBXO2BVGl0WrWGYyId1XQOIHRg04IkyUH7UwiF70cHZ9iY7xeszCMiks5
- 292YCN79GpZ83nPlvyk3ry0KG7r0gRV5A0PbAskmKKbSQxUaf8y7zBFHlHuEKo/u25VBQahR/
- ru3m0jI6p/ptETvafDbfTqk67ajHDKZCSbmGg2FNoFRExQZlNEp8atLZWnZF7gziJIR7tIQYO
- S6NZviNXjO3pPVxuQBClBcTpg3k+8MC4toLmgbfOTN+iN4Ur/AEd0vj3htT2jqcmd9Oec3Alf
- 1TlT8kJ42f2P03zJ2l74afVLG1OLIHTJXPtMkqgNK/mFfKLzPUi9L3rq/nP/WR3zzRmKKcBlK
- U8JULpJT2xbTGUVgMnadPVLs67T8eY7VZS0l+46n5k8/qmzLdsZT0zqZlwkm70lKLL9EEfTee
- bnenRJ9uCYBpxA6ZCx1xNU3VWDslw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 0/2] SDM670 USB 2.0 support
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>,
+        Richard Acayan <mailingradian@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20220922024656.178529-1-mailingradian@gmail.com>
+ <Yy6tHE8VZ2v347Q9@matsya>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yy6tHE8VZ2v347Q9@matsya>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+On 24/09/2022 09:09, Vinod Koul wrote:
+> On 21-09-22, 22:46, Richard Acayan wrote:
+>> Changes since v1:
+>>  - drop driver patch (some maintainers might be excluded from v3
+>>    recipients because of this)
+>>  - add entries in usb clocks and interrupts
+>>
+>> This adds compatible strings for USB 2.0 on the Qualcomm Snapdragon 670. I
+>> have no way to test USB 3.0 because my SDM670 device doesn't have USB 3.
+> 
+> No driver use for this?
 
-Hi there,
+Driver already supports it.
 
-second try at a patch which was an actual pain with my Lenovo T500 notebook=
-, augmented with an USB3 PCMCIA card that has an ASM1042 chip. Inspired by=
- this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
-
-ASM1042 identifies as a 0x96 XHCI host, brings spurious transfer event erro=
-rs with a r8152 (Realtek 8153a) USB3 enthernet adapter. Additionally settin=
-g quirk XHCI_SPURIOUS_SUCCESS seems to resolve this issue in this case.
-
-with best regards
-
-Jens Glathe
-
----
-
-v1->v2
-
-intensive use of scripts/checkpatch.pl, reformatted the code
-reformatted the commit text for line wraps
---------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA
-Content-Type: text/plain;
- name=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch;
- charset=iso-8859-1
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename=0001-fix-add-XHCI_SPURIOUS_SUCCESS-to-ASM1042-despite-bei.patch
-
-RnJvbSBmZmIzYTcwYTQ4YjkxYjc5OTQzYTAxMzFkZGQ0NzBlNWYwOWMwZjQxIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBKZW5zIEdsYXRoZSA8amVucy5nbGF0aGVAb2xkc2Nob29sc29s
-dXRpb25zLmJpej4KRGF0ZTogU3VuLCAyOCBBdWcgMjAyMiAxNjoyMzo0MSArMDIwMApTdWJqZWN0
-OiBbUEFUQ0hdIGZpeDogYWRkIFhIQ0lfU1BVUklPVVNfU1VDQ0VTUyB0byBBU00xMDQyIGRlc3Bp
-dGUgYmVpbmcgYQogVjAuOTYgY29udHJvbGxlcgoKb25seSBpZiBpdCByZXBvcnRzIGFzIGEgVjAu
-OTYgWEhDSSBjb250cm9sbGVyLiBBcHBlYXJzIHRvIGZpeCB0aGUgZXJyb3JzCiJ4aGNpX2hjZCA8
-YWRkcmVzcz47IEVSUk9SIFRyYW5zZmVyIGV2ZW50IFRSQiBETUEgcHRyIG5vdCBwYXJ0IG9mCmN1
-cnJlbnQgVEQgZXBfaW5kZXggMiBjb21wX2NvZGUgMTMiIHRoYXQgYXBwZWFyIHNwdXJpb3VzbHkg
-KG9yIHByZXR0eQpvZnRlbikgd2hlbiB1c2luZyBhIHI4MTUyIFVTQjMgZXRoZXJuZXQgYWRhcHRl
-ciB3aXRoIGludGVncmF0ZWQgaHViLgoKU2lnbmVkLW9mZi1ieTogSmVucyBHbGF0aGUgPGplbnMu
-Z2xhdGhlQG9sZHNjaG9vbHNvbHV0aW9ucy5iaXo+Ci0tLQogZHJpdmVycy91c2IvaG9zdC94aGNp
-LXBjaS5jIHwgMTAgKysrKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwg
-MyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMg
-Yi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMKaW5kZXggZGNlNmMwZWM4ZDM0Li5mOGIzYjM0
-ZDI1N2UgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1wY2kuYworKysgYi9kcml2
-ZXJzL3VzYi9ob3N0L3hoY2ktcGNpLmMKQEAgLTMwNSw5ICszMDUsMTMgQEAgc3RhdGljIHZvaWQg
-eGhjaV9wY2lfcXVpcmtzKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHhoY2lfaGNkICp4aGNp
-KQogCQl4aGNpLT5xdWlya3MgfD0gWEhDSV9FUF9DVFhfQlJPS0VOX0RDUzsKIAl9CiAKLQlpZiAo
-cGRldi0+dmVuZG9yID09IFBDSV9WRU5ET1JfSURfQVNNRURJQSAmJgotCQlwZGV2LT5kZXZpY2Ug
-PT0gUENJX0RFVklDRV9JRF9BU01FRElBXzEwNDJfWEhDSSkKLQkJeGhjaS0+cXVpcmtzIHw9IFhI
-Q0lfQlJPS0VOX1NUUkVBTVM7CisgIGlmIChwZGV2LT52ZW5kb3IgPT0gUENJX1ZFTkRPUl9JRF9B
-U01FRElBICYmCisgICAgICBwZGV2LT5kZXZpY2UgPT0gUENJX0RFVklDRV9JRF9BU01FRElBXzEw
-NDJfWEhDSSkgeworICAgIC8qIHRyeSB0byB0YW1lIHRoZSBBU01lZGlhIDEwNDIgY29udHJvbGxl
-ciB3aGljaCBpcyAwLjk2ICovCisgICAgaWYgKHhoY2ktPmhjaV92ZXJzaW9uID09IDB4OTYpCisg
-ICAgICB4aGNpLT5xdWlya3MgfD0gWEhDSV9TUFVSSU9VU19TVUNDRVNTOworICAgIHhoY2ktPnF1
-aXJrcyB8PSBYSENJX0JST0tFTl9TVFJFQU1TOworICB9CiAJaWYgKHBkZXYtPnZlbmRvciA9PSBQ
-Q0lfVkVORE9SX0lEX0FTTUVESUEgJiYKIAkJcGRldi0+ZGV2aWNlID09IFBDSV9ERVZJQ0VfSURf
-QVNNRURJQV8xMDQyQV9YSENJKSB7CiAJCXhoY2ktPnF1aXJrcyB8PSBYSENJX1RSVVNUX1RYX0xF
-TkdUSDsKLS0gCjIuMjUuMQoK
---------=_MB532E2D77-72CD-4502-83A0-2E7D4BF8CAEA--
+Best regards,
+Krzysztof
 
