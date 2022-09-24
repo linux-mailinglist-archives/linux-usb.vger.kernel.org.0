@@ -2,82 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B61B5E8E5A
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 18:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816D95E8F7F
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 21:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiIXQGK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Sep 2022 12:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S233870AbiIXTRy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Sep 2022 15:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIXQGJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 12:06:09 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CEF491E3;
-        Sat, 24 Sep 2022 09:06:07 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z13so3783297edb.13;
-        Sat, 24 Sep 2022 09:06:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=oIa/uQjVcFj+54eYY9is22hKyDuiFkRv25cGd97Fme0=;
-        b=T11fFsSVxeZDb0sX5zohleHJG82vShX6zsqip2nExai2Vf+/QFxyjzYR35qIOv/3bu
-         FTWkB+DBPZZ9eYdMAth3i7JSXppqTWhcPaFWgLctYZ6INV5W6AlMpdxRsQKxKKXToilW
-         mmdzejGUMtSGwqSVwJvpdYz2LBHtRo6OW1Ughme8vSv4kme2zFYxXC/q5vHmZf+Ay/kf
-         uq2Bvt2K99d+/DQEbRb0CM5m+oWCOC+5Kq4BYGwK87gLsdTNvSJaZlM438teZqmVglX+
-         mIG952W1NsDsKPWojppyXwFgxwRUHiTMc/vFUvcxaBrn+K900n4mTCjXSTpATaZVEn89
-         svDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=oIa/uQjVcFj+54eYY9is22hKyDuiFkRv25cGd97Fme0=;
-        b=COO3r9oy9Rn9GurQnB7jvA/1i4wsGnXtydo4XhpjnLlOmePmV4agDg7vTEdUG0q1hn
-         Yuo3Z6ST9Zsu22nK1LZxsIZveyLc5kMoB+JldK4PP3h6D704+iGFhsqNrPa/kQbnwpYB
-         y2G5je2NqOlFPVUH92P7zBJqYUsnYs4oQ+gtdrDX7LBLH63iw7+Z85HJfa3CLfURsxRp
-         qHQiNM3NMK57UjWBR8wyMZl5f5RGAVb7oM1PFkURWQUZlSzjmJTRKgMUWv7lufo/DodB
-         PTnzOb2qcme4f7827MmfFuPIUQpr/SVOusINopQRRxJEtYe2+yIBha6s0fqz2Socv6XM
-         inZg==
-X-Gm-Message-State: ACrzQf2kKS75Awbwk38IyCUS84iw2FDxBRzXnybKmbH6vrjDhRpDndUm
-        fBMNYsAPuJAvqo47sifQILQ=
-X-Google-Smtp-Source: AMsMyM42Mcl1myOBoVMGcH8Ay7tYpKpPvj5UfPZ8mE6yCXT4ZrcaneoFYiucVZjz/5Q6W3jaVvTlOA==
-X-Received: by 2002:aa7:d5c8:0:b0:44e:3eb1:a13f with SMTP id d8-20020aa7d5c8000000b0044e3eb1a13fmr14329704eds.220.1664035565809;
-        Sat, 24 Sep 2022 09:06:05 -0700 (PDT)
-Received: from ?IPV6:2a02:a466:68ed:1:e3aa:3811:305b:8a83? (2a02-a466-68ed-1-e3aa-3811-305b-8a83.fixed6.kpn.net. [2a02:a466:68ed:1:e3aa:3811:305b:8a83])
-        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b0078258a26667sm3741429ejg.52.2022.09.24.09.06.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 09:06:05 -0700 (PDT)
-Message-ID: <a911ac0c-561f-85ad-2bc7-c3ee54f8c7bc@gmail.com>
-Date:   Sat, 24 Sep 2022 18:06:04 +0200
+        with ESMTP id S231300AbiIXTRx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 15:17:53 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D5C5AC55
+        for <linux-usb@vger.kernel.org>; Sat, 24 Sep 2022 12:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664047072; x=1695583072;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=s5C+Dym0wOJlnno56UuTanB56b3aTbITl/kx2rGsKHs=;
+  b=H6FgLRO+zoroEKUxbfNPru96QGkApKfdCE+IF3QyzKEL5q894ufo61qG
+   1tOR6TksvhIG5UUb9d3A1qJ41eQpRn/yK9l+iLyftejlJavXboX5sYSOQ
+   Wl03XXeEu8dyQvBDJw7X5uWVuM8XR0XAAqwJqoyilH8cI5BADz+WJvxDq
+   iZD/vR9SZ+X9Z4UNsWxJc22JNYumpDAsPJAUEFZV0HGz8ounIOEYJnGig
+   0r1rhqmIhmW+BmTRut99K7yKytlHY81TuSbaSj3SriFwHbj1hh551c18T
+   PHsJpHtBJI9sGb1r3IkxsU5tCeMZPoEBll+BYrzhIB1LSBl44bRiaLac6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="387093615"
+X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
+   d="scan'208";a="387093615"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 12:17:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
+   d="scan'208";a="651341785"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 24 Sep 2022 12:17:51 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ocAes-0006uK-2L;
+        Sat, 24 Sep 2022 19:17:50 +0000
+Date:   Sun, 25 Sep 2022 03:16:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ 8d9dcfff7b1c6b5c4264d91b193336c6f6df9b53
+Message-ID: <632f57a3.IPADFPuUfJ4Ja1+7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is
- present
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
- <47a0249c-e129-7e98-503d-4254f216e485@gmail.com>
- <CAHQ1cqG7oL2sn=SRxp9se_h=rm+C6qYTkjp_DD1hPLBRPJpoGg@mail.gmail.com>
-Content-Language: en-US
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <CAHQ1cqG7oL2sn=SRxp9se_h=rm+C6qYTkjp_DD1hPLBRPJpoGg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        LONGWORDS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,173 +62,132 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: 8d9dcfff7b1c6b5c4264d91b193336c6f6df9b53  thunderbolt: Use dev_err_probe()
 
-Maybe some inspiration below.
+elapsed time: 720m
 
-Op 24-09-2022 om 03:34 schreef Andrey Smirnov:
-> On Fri, Sep 23, 2022 at 2:12 PM Ferry Toth <fntoth@gmail.com> wrote:
->> Hi,
->>
->> Op 23-09-2022 om 18:42 schreef Andy Shevchenko:
->>> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
->>>> On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
->>>>> On 22-09-2022 12:08, Andy Shevchenko wrote:
->>>>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
->>> FYI: For now I sent a revert, but if we got a solution quicker we always
->>> can choose the course of actions.
->>>
->>>>> If the extcon device exists, get the mode from the extcon device. If
->>>>> the controller is DRD and the driver is unable to determine the mode,
->>>>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
->>>>>
->>>>> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
->>>>> share bisect log?
->>>>>
->>>>> I can but not right now. But what I did was bisect between 5.18.0 (good) and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit before that (good).
->>>>>
->>>>> The effect of the patch is that on Merrifield (I tested with Intel Edison Arduino board which has a HW switch to select between host and device mode) device mode works but in host mode USB is completely not working.
->>>>>
->>>>> Currently on host mode - when working - superfluous error messages from tusb1210 appear. When host mode is not working there are no tusb1210 messages in the logs / on the console at all. Seemingly tusb1210 is not probed, which points in the direction of a relation to extcon.
->>>>>
->>>>> Taking into account the late cycle, I would like to revert the change. And
->>>>> Ferry and I would help to test any other (non-regressive) approach).
->>>>>
->>>>> I have not yet tested if a simple revert fixes the problem but will tonight.
->>>>>
->>>>>
->>>>> I would be happy to test other approaches too.
->>>> It's a bit hard for me to suggest an alternative approach without
->>>> knowing how things are breaking in this case. I'd love to order one of
->>>> those boards to repro and fix this on my end, but it looks like this
->>>> HW is EOLed and out of stock in most places. If you guys know how to
->>>> get my hands on those boards I'm all ears.
->>> There are still some second hand Intel Edison boards flying around
->>> (but maybe cost a bit more than expected) and there are also
->>> Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
->>> option though requires more actions in order something to be boot
->>> there.
->>>
->>> In any case, it's probably quicker to ask Ferry or me for testing.
->>> (Although currently I have no access to the board to test OTG, it's
->>>    remote device which I can only power on and off and it has always
->>>    be in host mode.)
->>>
->>>> Barring that, Ferry can you dig more into this failure? E.g. is it this hunk
->>>>
->>>> @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
->>>>                    * mode. If the controller supports DRD but the dr_mode is not
->>>>                    * specified or set to OTG, then set the mode to peripheral.
->>>>                    */
->>>> -               if (mode == USB_DR_MODE_OTG &&
->>>> +               if (mode == USB_DR_MODE_OTG && !dwc->edev &&
->>>>                       (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
->>>>                        !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
->>>>                       !DWC3_VER_IS_PRIOR(DWC3, 330A))
->>>> @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
->>>>           }
->>>>    }
->>>>
->>>> that's problematic or moving
->>> I think you wanted to revert only this line and test?
->> On v6.0-rc6 and reverting manually only this line
->>
->> - if (mode == USB_DR_MODE_OTG && !dwc->edev &&
->>
->> + if (mode == USB_DR_MODE_OTG &&
->>
->> host mode still does not work (no change visible).
-> Cool, thanks for checking that. Don't think I have any more
-> experiments off the top of my head to run. I'll have to go read that
-> code more. I'll reply in the thread if I have something new to
-> try/say.
+configs tested: 110
+configs skipped: 3
 
-It seems the problem is not extcon directly. When I switch to device 
-mode, usb gadgets are working fire. Also when I
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-# cat /sys/class/extcon/extcon0/state
-USB=0
-USB-HOST=1
-SDP=0
-CDP=0
-DCP=0
-ACA=0
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+i386                                defconfig
+arm                                 defconfig
+arc                  randconfig-r043-20220923
+powerpc                           allnoconfig
+s390                 randconfig-r044-20220923
+riscv                randconfig-r042-20220923
+arm64                            allyesconfig
+arm                              allyesconfig
+x86_64                              defconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+arc                                 defconfig
+x86_64                        randconfig-a004
+i386                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+x86_64                               rhel-8.3
+i386                          randconfig-a001
+i386                          randconfig-a003
+m68k                             allmodconfig
+i386                          randconfig-a005
+s390                             allyesconfig
+alpha                            allyesconfig
+sh                               allmodconfig
+arc                              allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+m68k                             allyesconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+x86_64                           allyesconfig
+i386                          randconfig-a014
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a016
+ia64                             allmodconfig
+powerpc                          allyesconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-c001
+um                               alldefconfig
+arm                         axm55xx_defconfig
+powerpc                 mpc8540_ads_defconfig
+xtensa                       common_defconfig
+ia64                            zx1_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+xtensa                              defconfig
+powerpc                     tqm8555_defconfig
+arc                      axs103_smp_defconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc                           allyesconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+riscv                randconfig-r042-20220925
+arc                  randconfig-r043-20220925
+s390                 randconfig-r044-20220925
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220924
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
 
-USB-HOST changes nicely to 0 and back when I flip the switch.
+clang tested configs:
+hexagon              randconfig-r041-20220923
+hexagon              randconfig-r045-20220923
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a013
+i386                          randconfig-a004
+i386                          randconfig-a015
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+i386                          randconfig-a011
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+arm                    vt8500_v6_v7_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                     pseries_defconfig
+mips                       lemote2f_defconfig
+powerpc                      katmai_defconfig
+powerpc                     ppa8548_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220923
+i386                          randconfig-c001
+s390                 randconfig-c005-20220923
+riscv                randconfig-c006-20220923
+mips                 randconfig-c004-20220923
+powerpc              randconfig-c003-20220923
 
-Also, in host mode I normally have (and now with host mode not working 
-it the same):
-
-root@yuna:~# dmesg | grep -i usb
-ACPI: bus type USB registered
-...
-usbcore: registered new interface driver usbhid
-usbhid: USB HID core driver
-xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
-xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
-xhci-hcd xhci-hcd.1.auto: Host supports USB 3.0 SuperSpeed
-usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, 
-bcdDevice= 6.00
-usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb1: Product: xHCI Host Controller
-usb usb1: Manufacturer: Linux 6.0.0-rc6-edison-acpi-standard xhci-hcd
-usb usb1: SerialNumber: xhci-hcd.1.auto
-hub 1-0:1.0: USB hub found
-usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
-usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, 
-bcdDevice= 6.00
-usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-usb usb2: Product: xHCI Host Controller
-usb usb2: Manufacturer: Linux 6.0.0-rc6-edison-acpi-standard xhci-hcd
-usb usb2: SerialNumber: xhci-hcd.1.auto
-hub 2-0:1.0: USB hub found
-
-So, extcon works, xhci host controller "works". The problem may be no 
-ulpi (tusb1210). Checking on 6.0-rc6 with host mode not working:
-
-root@yuna:~# cat /sys/bus/ulpi/devices/dwc3.0.auto.ulpi/uevent
-DEVTYPE=ulpi_device
-MODALIAS=ulpi:v0000p0000
-root@yuna:~# cat 
-/sys/bus/ulpi/devices/dwc3.0.auto.ulpi/waiting_for_supplier
-0
-And on 5.15 with host mode working:
-
-root@edison:~# cat /sys/bus/ulpi/devices/dwc3.0.auto.ulpi/uevent
-DEVTYPE=ulpi_device
-DRIVER=tusb1210
-MODALIAS=ulpi:v0451p1508
-root@edison:~#  cat 
-/sys/bus/ulpi/devices/dwc3.0.auto.ulpi/waiting_for_supplier
-cat: /sys/bus/ulpi/devices/dwc3.0.auto.ulpi/waiting_for_supplier: No 
-such file or directory
-
-Ulpi is there but is waiting for driver.
-
->>>>    static int dwc3_probe(struct platform_device *pdev)
->>>>    {
->>>>           struct device           *dev = &pdev->dev;
->>>> @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
->>>>                   goto err2;
->>>>           }
->>>>
->>>> +       dwc->edev = dwc3_get_extcon(dwc);
->>>> +       if (IS_ERR(dwc->edev)) {
->>>> +               ret = PTR_ERR(dwc->edev);
->>>> +               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
->>>> +               goto err3;
->>>> +       }
->>>> +
->>>>           ret = dwc3_get_dr_mode(dwc);
->>>>           if (ret)
->>>>                   goto err3;
->>>>
->>>> to happen earlier?
->>> It is not always possible to have an extcon driver available, that's why in
->>> some cases the probe of it defers. I dunno how your patch supposed to work
->>> in that case.
->>>
->>>> Does tracing the "mrfld_bcove_pwrsrc" driver (the
->>>> excton provider in this case AFIACT) show anything interesting?
->>> I believe there is nothing interesting.
->>>
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
