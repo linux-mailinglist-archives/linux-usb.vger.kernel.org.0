@@ -2,82 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916AD5E8FD6
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Sep 2022 23:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60BE5E918A
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Sep 2022 09:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiIXV3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Sep 2022 17:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S229592AbiIYHvB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 25 Sep 2022 03:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIXV3l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Sep 2022 17:29:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A412654C;
-        Sat, 24 Sep 2022 14:29:37 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a26so7090578ejc.4;
-        Sat, 24 Sep 2022 14:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=KAM39XvP6tZSZ6kxT/J7m6bidaUenRd/E9ncHmt6kU4=;
-        b=MrOtTqXPCFMCrAGBvKCfU+c2ii8k8t48SvjIM52XEmV4iRSu8AFXTp3+nVuDmLpIon
-         KGfP8e1PKHGAe5IP+zKzzGOV+EniEGYQJguAoDElFJlbaYACCSV+fvpw0TEd2bKZFlYS
-         53ZTZd6PEcLgj8k7lWN2pem4WXBKDvVIyH+zra58j98utXRPH/fl0wuHmutVwEf3ppoW
-         nmpRdNreHBGgq9ssjnsnsD43gu0ByOYHHvcop52fZXDEpJaZ/X8zUrBeR7LkT3ZTFai3
-         pn5K1kyqJtQet1eM5Q289+HsBRek3qVpCirXsqC2edad0GFAi0C0vxhmlZJh1lemXxhl
-         +88A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=KAM39XvP6tZSZ6kxT/J7m6bidaUenRd/E9ncHmt6kU4=;
-        b=hH0AiMToeqICvjMlARpZQ8ffCDDWy0Bs2VZZxOHZEPPssjkUBE7JXzxkrK5nuwjCbC
-         OGKTM7ryTClD65LA9/PyAx6rWYQ33z8umy/mg4GQktM1xPSGi2oFCUlYiqdcwjHK0m15
-         pnd0Fy7SCgoorU+5Dc6NfGSvKWV65m4K89Ifs+ywxoVmHezgOstoe5tNQuZqRP/Lj1BA
-         j9mrV6I201cvn5cjUkFMklUhG8uy9dYEkOWFj0H9uVJwcnzaSNwfojIFR32Ases3+dbt
-         7PJ2qgzCVnEsclb316FKoQQRKYP9+uOKgjOKTgRdzrV8GhbP02npwxktkZZlRNcFBsFU
-         LlXw==
-X-Gm-Message-State: ACrzQf2SjwuIQTti+AcA+eBVHeXK3y+Zixvy9TEz1xN2iskixQmBX12p
-        lCH2L960OvEUvV6lzE8/9r8=
-X-Google-Smtp-Source: AMsMyM55abEgEQ59MeolyJE6SYIYABOoUlaoOsx//vWTCtyoVzL9icQgikJ3tR6xRr5n3wSdWwJbCQ==
-X-Received: by 2002:a17:906:a4a:b0:782:686d:a1b6 with SMTP id x10-20020a1709060a4a00b00782686da1b6mr11210615ejf.232.1664054975236;
-        Sat, 24 Sep 2022 14:29:35 -0700 (PDT)
-Received: from ?IPV6:2a02:a466:68ed:1:1f9f:ea4c:223:d270? (2a02-a466-68ed-1-1f9f-ea4c-223-d270.fixed6.kpn.net. [2a02:a466:68ed:1:1f9f:ea4c:223:d270])
-        by smtp.gmail.com with ESMTPSA id en26-20020a056402529a00b0043ba7df7a42sm8280989edb.26.2022.09.24.14.29.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Sep 2022 14:29:34 -0700 (PDT)
-Message-ID: <966ef528-455c-5180-fc63-ea77cb933af1@gmail.com>
-Date:   Sat, 24 Sep 2022 23:29:34 +0200
+        with ESMTP id S229525AbiIYHu7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Sep 2022 03:50:59 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5148539121;
+        Sun, 25 Sep 2022 00:50:56 -0700 (PDT)
+Received: from [192.168.0.108] ([91.64.235.177]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M7sYM-1oYWvD334c-0053mu; Sun, 25 Sep 2022 09:50:49 +0200
+From:   "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Subject: Re[2]: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a
+ V0.96 controller
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 25 Sep 2022 07:50:48 +0000
+Message-Id: <em98cdb3f1-82c0-4fd3-92af-9c3d062b3d0c@35bdcead.com>
+In-Reply-To: <Yy7ENBX2Zo3vNgB1@kroah.com>
+References: <em0b7a6682-2da4-4480-8801-1107ea9756dd@aea403bc.com>
+ <Yy7ENBX2Zo3vNgB1@kroah.com>
+Reply-To: "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+User-Agent: eM_Client/9.1.2109.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is
- present
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sven Peter <sven@svenpeter.dev>
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
- <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
-Content-Language: en-US
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:52rf65inMBMmyrIZ+seb/zigRzsdSHf/6hANlgtHpAKAtAQfis8
+ IIn1uXix7qRGjSdFR8+tAnjr2d5Cxkdz+BhykgQkuJm/YYGmyHkuaLei+yPlf2lzAGldrXA
+ EF+c4KvJw88it43dI0fgTCozsoOYW7gta41bszCImEJtx1UwpH7BGiScIrhYtBPDgXbgOqX
+ pXa0AzE1JFDNmWYkyYXDg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RZLZFZIuoGE=:8JYpD2qzRGyZRHP9buRo3A
+ 44o0Ed3t0lRWehmwhhppJZOU023Men4FI/fpLtrKM32/jQUFtCaSmjL5cAP3EpTL0Ng4S/2mL
+ Af/2E97kww8XOaZ6lruSwDnibNLxU3Yj0SSTewVuCnMaJ50y6gczeydcX4eofG6MW0CBTBDNc
+ OsKT4n4o4Aq+G2LmHa12/LrVW39UMUsb6kAZuxiH8KN4FBGpCOslgpM94FJpEmFgUS0MVo4nH
+ mYdFrLRh6NhTAUbv+e7c43XLrKFEskTgzOMqMj/ql9Xv3WEJS2NLPYvBvPSgpz+vDWa3dBHvK
+ 3oyoSXGWQZd3SDABckw27WBEHqwF2Y+an1m2JIGMRcEmcVjOcpJeDdwIU9OHg+Pb0OcXL0xMA
+ 6m8xYHtAGkEGn8NrrPYD7w9lSAxwfZnRHqZHz9NrIjqSEwO14svIYC0oMg5xLXTZouSxBaATO
+ KSDwsxB5HzwkqEAbT1ZylS480uwtDDxnb0mQZ9FJ40UUF3zjU6jIEvJYmkxfWfNsl0/htxjdU
+ ObJKMrpP6449iZmHI8nQb+dhIzkMrxz/6x4uMOOchlokvKwvrgeYqDzqZbreTMZ29SxaZ1c6h
+ uv7MQtj4VrqTO0KbpoeGX5gknu9+tdq6PTHoDk7Lg9y6igP6m3+VYvXWiTAinPS9+av7LYOw6
+ aeM4KMWHmY4DRIMVgKZ4AhoTQ+5Z8iO21Xq/FpPjtEb/1SUs20omO/zC+7f+tHFxgYgEmSFBG
+ ufcyZ7YvDI9twqLM7l0gWzp9ImI/jNQEp0eRN6YVuA7FqE/WYieykIS2VYQR7VZiDozqATk4k
+ 2XffQ0ZflMF7c9KFLxThqJtrboNcA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,163 +59,138 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi there,
 
-One more test
+I'm a bit at a loss here. This is a three-line change, and I get loads 
+of warnings regarding "please, no spaces at beginning of lines". I also 
+got some about proper indentation... what now? Anyway. I have 
+reformatted the whole section that replaces the three lines, all tab 
+indents. Script/bot doesn't really like it, but looks proper to me as a 
+coder.
+Anyway, the issue at hand is a bit bigger. I installed mutt and git-mail 
+on the dev machine, and it actually works. But guess what, when I want 
+to mail out the patch to the maintainers, it gets rejected by the mailer 
+daemon (not on my machine, some MTA on the way) because 1und1 (my isp 
+where the email address I use is registered) has a low reputation and 
+gets blacklisted. So I go and use the eMClient on my Windows machine and 
+attach the patch file... I could do an uuencode and copy/paste the text, 
+maybe next time.
+Also, I happen to not understand this patch and patch resend business, 
+apparrently. I tried to fix all check errors of scripts/checkpatch.pl, 
+and amended my commit in my branch (apparrently this). So this is still 
+one commit... and the patch is one patch that should go into an upstream 
+commit... and that should be it.
+To conclude,
 
-Op 23-09-2022 om 20:23 schreef Andrey Smirnov:
-> On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
->> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
->>> On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrote:
->>>> On 22-09-2022 12:08, Andy Shevchenko wrote:
->>>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
->> FYI: For now I sent a revert, but if we got a solution quicker we always
->> can choose the course of actions.
+- I tried to fix the format
+- I can't fix the other MTA (and I won't go out and get employed at 
+intel or something to have a respectable email address)
+- I don't understand this resubmit business.
+
+Can you please help? In the meantime I will re-read "The canonical patch 
+format" for further insight.
+
+with best regards
+
+Jens Glathe
+
+
+------ Originalnachricht ------
+Von "Greg KH" <gregkh@linuxfoundation.org>
+An "Jens Glathe" <jens.glathe@oldschoolsolutions.biz>
+Cc mathias.nyman@intel.com; linux-usb@vger.kernel.org; 
+linux-kernel@vger.kernel.org
+Datum 24.09.2022 10:47:48
+Betreff Re: [PATCH v2] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite 
+being a V0.96 controller
+
+>On Sat, Sep 24, 2022 at 08:16:34AM +0000, Jens Glathe wrote:
+>>Hi there,
 >>
-> I think we have another problem. This patch happened in parallel to mine
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
->
-> so my changes didn't have that fix in mind and I think your revert
-> will not preserve that fix. Can you update your revert to take care of
-> that too, please?
->
-> I'm really confused how the above commit could be followed up by:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/dwc3/drd.c?h=v6.0-rc6&id=0f01017191384e3962fa31520a9fd9846c3d352f
->
-> the diffs in dwc3_drd_init seem contradictory
->
->>>> If the extcon device exists, get the mode from the extcon device. If
->>>> the controller is DRD and the driver is unable to determine the mode,
->>>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
->>>>
->>>> According to Ferry (Cc'ed) this broke Intel Merrifield platform. Ferry, can you
->>>> share bisect log?
->>>>
->>>> I can but not right now. But what I did was bisect between 5.18.0 (good) and 5.19.0 (bad) then when I got near the culprit (~20 remaining) based on the commit message I tried 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3: Don't switch OTG -> peripheral if extcon is present" (bad) and commit before that (good).
->>>>
->>>> The effect of the patch is that on Merrifield (I tested with Intel Edison Arduino board which has a HW switch to select between host and device mode) device mode works but in host mode USB is completely not working.
->>>>
->>>> Currently on host mode - when working - superfluous error messages from tusb1210 appear. When host mode is not working there are no tusb1210 messages in the logs / on the console at all. Seemingly tusb1210 is not probed, which points in the direction of a relation to extcon.
->>>>
->>>> Taking into account the late cycle, I would like to revert the change. And
->>>> Ferry and I would help to test any other (non-regressive) approach).
->>>>
->>>> I have not yet tested if a simple revert fixes the problem but will tonight.
->>>>
->>>>
->>>> I would be happy to test other approaches too.
->>>
->>> It's a bit hard for me to suggest an alternative approach without
->>> knowing how things are breaking in this case. I'd love to order one of
->>> those boards to repro and fix this on my end, but it looks like this
->>> HW is EOLed and out of stock in most places. If you guys know how to
->>> get my hands on those boards I'm all ears.
->> There are still some second hand Intel Edison boards flying around
->> (but maybe cost a bit more than expected) and there are also
->> Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
->> option though requires more actions in order something to be boot
->> there.
+>>second try at a patch which was an actual pain with my Lenovo T500 notebook, augmented with an USB3 PCMCIA card that has an ASM1042 chip. Inspired by this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
 >>
-> OK, I'll check e-bay just in case.
+>>ASM1042 identifies as a 0x96 XHCI host, brings spurious transfer event errors with a r8152 (Realtek 8153a) USB3 enthernet adapter. Additionally setting quirk XHCI_SPURIOUS_SUCCESS seems to resolve this issue in this case.
+>>
+>>with best regards
+>>
+>>Jens Glathe
+>>
+>>---
+>>
+>>v1->v2
+>>
+>>intensive use of scripts/checkpatch.pl, reformatted the code
+>>reformatted the commit text for line wraps
 >
->> In any case, it's probably quicker to ask Ferry or me for testing.
->> (Although currently I have no access to the board to test OTG, it's
->>   remote device which I can only power on and off and it has always
->>   be in host mode.)
+>>From ffb3a70a48b91b79943a0131ddd470e5f09c0f41 Mon Sep 17 00:00:00 2001
+>>From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+>>Date: Sun, 28 Aug 2022 16:23:41 +0200
+>>Subject: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a
+>>  V0.96 controller
 >>
->>> Barring that, Ferry can you dig more into this failure? E.g. is it this hunk
->>>
->>> @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
->>>                   * mode. If the controller supports DRD but the dr_mode is not
->>>                   * specified or set to OTG, then set the mode to peripheral.
->>>                   */
->>> -               if (mode == USB_DR_MODE_OTG &&
->>> +               if (mode == USB_DR_MODE_OTG && !dwc->edev &&
->>>                      (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
->>>                       !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
->>>                      !DWC3_VER_IS_PRIOR(DWC3, 330A))
->>> @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *dwc)
->>>          }
->>>   }
->>>
->>> that's problematic or moving
->> I think you wanted to revert only this line and test?
-> Yes.
+>>only if it reports as a V0.96 XHCI controller. Appears to fix the errors
+>>"xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
+>>current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
+>>often) when using a r8152 USB3 ethernet adapter with integrated hub.
+>>
+>>Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+>>---
+>>  drivers/usb/host/xhci-pci.c | 10 +++++++---
+>>  1 file changed, 7 insertions(+), 3 deletions(-)
+>>
+>>diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+>>index dce6c0ec8d34..f8b3b34d257e 100644
+>>--- a/drivers/usb/host/xhci-pci.c
+>>+++ b/drivers/usb/host/xhci-pci.c
+>>@@ -305,9 +305,13 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>>  		xhci->quirks |= XHCI_EP_CTX_BROKEN_DCS;
+>>  	}
+>>  -	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>>-		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
+>>-		xhci->quirks |= XHCI_BROKEN_STREAMS;
+>>+  if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>>+      pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
+>>+    /* try to tame the ASMedia 1042 controller which is 0.96 */
+>>+    if (xhci->hci_version == 0x96)
+>>+      xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+>>+    xhci->quirks |= XHCI_BROKEN_STREAMS;
+>>+  }
+>>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>>  		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
+>>  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+>>-- 2.25.1
+>>
 >
->>>   static int dwc3_probe(struct platform_device *pdev)
->>>   {
->>>          struct device           *dev = &pdev->dev;
->>> @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_device *pdev)
->>>                  goto err2;
->>>          }
->>>
->>> +       dwc->edev = dwc3_get_extcon(dwc);
->>> +       if (IS_ERR(dwc->edev)) {
->>> +               ret = PTR_ERR(dwc->edev);
->>> +               dev_err_probe(dwc->dev, ret, "failed to get extcon\n");
->>> +               goto err3;
->>> +       }
->>> +
->>>          ret = dwc3_get_dr_mode(dwc);
->>>          if (ret)
->>>                  goto err3;
->>>
->>> to happen earlier?
-
-I tried moving dwc3_get_extcon after dwc3_get_dr_mode like so::
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 8c8e32651473..3bf370def546 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1843,6 +1843,10 @@ static int dwc3_probe(struct platform_device *pdev)
-          goto err2;
-      }
-
-+    ret = dwc3_get_dr_mode(dwc);
-+    if (ret)
-+        goto err3;
-+
-      dwc->edev = dwc3_get_extcon(dwc);
-      if (IS_ERR(dwc->edev)) {
-          ret = PTR_ERR(dwc->edev);
-@@ -1850,10 +1854,6 @@ static int dwc3_probe(struct platform_device *pdev)
-          goto err3;
-      }
-
--    ret = dwc3_get_dr_mode(dwc);
--    if (ret)
--        goto err3;
--
-      ret = dwc3_alloc_scratch_buffers(dwc);
-      if (ret)
-          goto err3;
--- 
-
-host mode still does not work (no change visible).
-
->> It is not always possible to have an extcon driver available, that's why in
->> some cases the probe of it defers. I dunno how your patch supposed to work
->> in that case.
-> I'm not sure I understand what you mean. AFAIU the logic is that if
-> the platform specifies the presence of extcon either via DT or, like
-> Merrifield, via and explicit "linux,extcon-name" device property in
-> the code then extcon is a mandatory component of the DRD stack and the
-> driver is expected to be present for the whole thing to work. I don't
-> think I really changed that logic with my patch, even after the revert
-> dwc3_get_extcon() will be called as a part of a probing codepath, so
-> if the a missing driver is causing a probe deferral it should still be
-> happening, unless I missed something.
+>Hi,
 >
->>> Does tracing the "mrfld_bcove_pwrsrc" driver (the
->>> excton provider in this case AFIACT) show anything interesting?
->> I believe there is nothing interesting.
->>
->> --
->> With Best Regards,
->> Andy Shevchenko
->>
->>
+>This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+>a patch that has triggered this response.  He used to manually respond
+>to these common problems, but in order to save his sanity (he kept
+>writing the same thing over and over, yet to different people), I was
+>created.  Hopefully you will not take offence and will fix the problem
+>in your patch and resubmit it so that it can be accepted into the Linux
+>kernel tree.
+>
+>You are receiving this message because of the following common error(s)
+>as indicated below:
+>
+>- Your patch contains warnings and/or errors noticed by the
+>  scripts/checkpatch.pl tool.
+>
+>- Your patch was attached, please place it inline so that it can be
+>  applied directly from the email message itself.
+>
+>- This looks like a new version of a previously submitted patch, but you
+>  did not list below the --- line any changes from the previous version.
+>  Please read the section entitled "The canonical patch format" in the
+>  kernel file, Documentation/SubmittingPatches for what needs to be done
+>  here to properly describe this.
+>
+>If you wish to discuss this problem further, or you have questions about
+>how to resolve this issue, please feel free to respond to this email and
+>Greg will reply once he has dug out from the pending patches received
+>from other developers.
+>
+>thanks,
+>
+>greg k-h's patch email bot
