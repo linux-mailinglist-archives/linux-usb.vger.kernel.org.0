@@ -2,90 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3F85E9A0A
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 09:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D37F5E9B64
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 10:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbiIZHF4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Sep 2022 03:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S234037AbiIZIAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Sep 2022 04:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbiIZHFy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 03:05:54 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D4D20BF0;
-        Mon, 26 Sep 2022 00:05:51 -0700 (PDT)
-X-UUID: 453819600b4d4394b0bae28adba70ee6-20220926
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=y09of+4Ca7fIldBTzPfxeEaCyJ/Ci1lYdycpsFFRdpM=;
-        b=dUk2wHyDgSw8BUykyu2VxhHfBVKMKXYp+T41XEoGnGYJQLXGPuQN+PTPMYtyy54k1in2aswwo84b0K81GZKVQC7lRYfRslBjYllj4aho3n3rUviuyQU2vvkrXGfGkvYsi7MFTPqn0lZ5gygOSaGaTEWz2vhkyGqWwVRB0DhHB8o=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:99164de2-f91b-4e02-87fc-5679c1761b19,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:39a5ff1,CLOUDID:39260207-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 453819600b4d4394b0bae28adba70ee6-20220926
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1593890310; Mon, 26 Sep 2022 15:05:45 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 26 Sep 2022 15:05:44 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 26 Sep 2022 15:05:44 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <macpaul.lin@mediatek.com>
-CC:     <bear.wang@mediatek.com>, <devicetree@vger.kernel.org>,
-        <fparent@baylibre.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <macpaul@gmail.com>, <matthias.bgg@gmail.com>,
-        <miles.chen@mediatek.com>, <pablo.sun@mediatek.com>,
-        <robh+dt@kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8195-demo: fix the memory size of node secmon
-Date:   Mon, 26 Sep 2022 15:05:44 +0800
-Message-ID: <20220926070544.13257-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220922091648.2821-1-macpaul.lin@mediatek.com>
-References: <20220922091648.2821-1-macpaul.lin@mediatek.com>
+        with ESMTP id S234013AbiIZH7n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 03:59:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D85DFF1;
+        Mon, 26 Sep 2022 00:57:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664179027; x=1695715027;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=91OQkbf/d555l82Oyt8s1+1wuCP9eUN+PBdU79ijhAY=;
+  b=MbhgQgAwHhaDgEq/t3EqDG+10ce337DhYneR0IjtafnBYKk/b4p6M62c
+   0mJs6pQVeYCE0CMQMAdJluy72SmNEfrSZS5sJuSqtZEAeyxkTgfUIE76C
+   DZXAHfMXe7nFCD2dO4YwWUeTST0ODbLyD2INDOdntJEhggnLUbeI38GAh
+   rnQ2RP/p558oF56tUGHgtiwXWlz9uWtg74p24niTXhFZaleP/D02zw6OV
+   LGDRQd3LAvdp6NeWN783jv5ts+MWlet1L+omJG3g1+8f5g9bQw9Hls37s
+   9pZI2ML6pW/q0ozh4uv4Pq4ch8dyft3/l9+NjahJybAIRQyNq3I+DcHNU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="288105572"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="288105572"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 00:57:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10481"; a="683435575"
+X-IronPort-AV: E=Sophos;i="5.93,345,1654585200"; 
+   d="scan'208";a="683435575"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Sep 2022 00:56:54 -0700
+Message-ID: <8271d551-4034-71fe-5be4-e08e28b6dd6b@linux.intel.com>
+Date:   Mon, 26 Sep 2022 10:58:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     liulongfang <liulongfang@huawei.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yisen.zhuang@huawei.com
+References: <20220915011134.58400-1-liulongfang@huawei.com>
+ <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
+ <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] xhci: print warning when HCE was set
+In-Reply-To: <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Macpaul,
+On 24.9.2022 5.35, liulongfang wrote:
+> On 2022/9/22 21:01, Mathias Nyman Wrote:
+>> Hi
+>>
+>> On 15.9.2022 4.11, Longfang Liu wrote:
+>>> When HCE(Host Controller Error) is set, it means that the xhci hardware
+>>> controller has an error at this time, but the current xhci driver
+>>> software does not log this event.
+>>>
+>>> By adding an HCE event detection in the xhci interrupt processing
+>>> interface, a warning log is output to the system, which is convenient
+>>> for system device status tracking.
+>>>
+>>
+>> xHC should cease all activity when it sets HCE, and is probably not
+>> generating interrupts anymore.
+>>
+>> Would probably be more useful to check for HCE at timeouts than in the
+>> interrupt handler.
+>>
+> 
+> Which function of the driver code is this timeout in?
 
-> The size of device tree node secmon (bl31_secmon_reserved) was
-> incorrect. It should be increased to 2MiB (0x200000).
-
-192K should work when the patch(6147314aeedc) was accepted.
-Does the trusted-firmware-a get larger now, so we need to
-increase the size to 2MiB?
-
-thanks,
-Miles
+xhci_handle_command_timeout() will usually trigger at some point,
 
 > 
-> The origin setting will cause some abnormal behavior due to
-> trusted-firmware-a and related firmware didn't load correctly.
-> The incorrect behavior may vary because of different software stacks.
-> For example, it will cause build error in some Yocto project because
-> it will check if there was enough memory to load trusted-firmware-a
-> to the reserved memory.
+>> If this is something seen on actual hardware then it makes sense to add it.
+>>
 > 
-> Cc: stable@vger.kernel.org      # v5.19
-> Fixes: 6147314aeedc ("arm64: dts: mediatek: Add device-tree for MT8195 Demo board")
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> This HCE error is sure to report an interrupt on the chip we are using.
+
+Ok, then makes sense to add this patch.
+
+Thanks
+-Mathias
+
