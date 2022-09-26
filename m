@@ -2,147 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7634B5EAFF2
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 20:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293A85EB04A
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 20:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiIZScN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Sep 2022 14:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S230195AbiIZSm2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Sep 2022 14:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIZScM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 14:32:12 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4772AE3A;
-        Mon, 26 Sep 2022 11:32:11 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 30so10240154edw.5;
-        Mon, 26 Sep 2022 11:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=sX1lVvtuTDbzf0KBtVl22MP9Nea4UojNFqdTpI0Yf7A=;
-        b=QCuiDdZDG1I/RpEo7J0H77rWVtHCDFnHUPEWb1/GE0hbKPXfdM/Bgmx3fg1m+D/wiH
-         kNEyoarPneSGOyi8uK5LyEPXSzhxpROMYzWwL0P/vmxWGkCl8pDY9OUMjxO9NsUihq2y
-         XjV2Fe5b8TdzQVUeQ2gdbSKyRZMsdhuBvkceWW74D3Zox/ooPZfWd4o8h9zj/+XUr9f0
-         Vi8sX75OASWGKUFjfb4XeFUUN0O0FdQSMCYducnFOUE4A22OaqrR/bris4OcxhG76q8w
-         Dqr0jgD24zF9h/GLjtbbH+Hj+0wxlMKj8TlCPCFsbrqu2MQ5KtKfT+CWqgERaJV2KFJp
-         SimQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sX1lVvtuTDbzf0KBtVl22MP9Nea4UojNFqdTpI0Yf7A=;
-        b=fdr6qwBDSUmbQbJnYx3XWz4pi6xo6LlFdN0NTVIAyDrezCglEuNkPlUrxK6JNtVs5m
-         RaZBkev0QjmrCdwbZZJhZPiKSAEVXpqM2wk/ZBQxOcOdlWWjQXg3g9Swoy13gukXvTQ0
-         oB6i7AghpXmKZHRijnkkoj9N6a7aQ0qTofGFRJZGzVj/DQIGBtaThADkH6S3l65OgmMC
-         s43lYCqotLwcO+xgNmdYF2cpOmy1IcidFxL/ZyTmHSBD047cqdRDR6l5gYzKpPxsX5+l
-         faAwP0nKgfwuVzCCMSTLMR3E4NdGSq0f3MBC7d8fCiLQ9XpDnHUusK9YcEqi0Fjvfsxb
-         2s9Q==
-X-Gm-Message-State: ACrzQf2jxOuPZoNa7i7t/9ewi0QChT+o95MAZVK3NCcx/6i4sbgrJr9Z
-        W2hstHNaRcUTPV1zd/aT7QWa2qY9hI0mtLlv3kI=
-X-Google-Smtp-Source: AMsMyM63uEt1/wfHOiCUiYaOU5BS+ySvff5C66dgcPeg0tFAhT9teb73ogxvvMcSUeMtUojW3yaZ0GcHNDZCm/1d6uo=
-X-Received: by 2002:a05:6402:3786:b0:451:24da:f8c9 with SMTP id
- et6-20020a056402378600b0045124daf8c9mr24017924edb.250.1664217130041; Mon, 26
- Sep 2022 11:32:10 -0700 (PDT)
+        with ESMTP id S230130AbiIZSlj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 14:41:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57333AE48;
+        Mon, 26 Sep 2022 11:40:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D2D6B80D66;
+        Mon, 26 Sep 2022 18:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DAAD0C433D7;
+        Mon, 26 Sep 2022 18:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664217614;
+        bh=kvphuS7uCXH3SGjBR5lP51duYkMWgKELt0OtRVCHwyA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QZ99E4sEqaHLx9CCH1pqw4Jt4AHqJcxA04dMLpSLH7yxWRiM0iqo0NrPxUYMOj4do
+         Zd5tMYqj1De0EESgKzcdmS2chYYI2PjhJzddHvWeiqJitjZxHQIZJdXyGr/BsSofOK
+         SIrYfJ9gqODLK0JKN9i9Rls8/LE8o68KWpaZv0ML3ucoiEqcn5pZnBE7ivpM2qhTEJ
+         8GnFTXzph8R9GirpUUGxY2pU2kv1vLtW49KIcxuvTQwo8QLBomK2Sm18iGrHmpci0w
+         n4rxBOdWi/lxg6WwBTUpisHSa3+xA/i74xj7lSIS3ArhOb1DoMC/pmbBNbp9aayI+i
+         OM26UO/Pfu1VA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BDD8CC070C8;
+        Mon, 26 Sep 2022 18:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com> <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com> <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
- <966ef528-455c-5180-fc63-ea77cb933af1@gmail.com> <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
- <CAHQ1cqGrfTO9JLgD-k0Akg7+hXNT+WevfjH_YpsVi8wQt6_iBw@mail.gmail.com> <YzF8l7kiS7m496YE@smile.fi.intel.com>
-In-Reply-To: <YzF8l7kiS7m496YE@smile.fi.intel.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Mon, 26 Sep 2022 11:31:58 -0700
-Message-ID: <CAHQ1cqEVXwMiUxp+QGRkHMea-74DxS1Obvc2xwhy=ySwfxhu7w@mail.gmail.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Ferry Toth <fntoth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sven Peter <sven@svenpeter.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] usbnet: Fix memory leak in usbnet_disconnect()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166421761477.17810.9199629462308924051.git-patchwork-notify@kernel.org>
+Date:   Mon, 26 Sep 2022 18:40:14 +0000
+References: <20220923042551.2745-1-yepeilin.cs@gmail.com>
+In-Reply-To: <20220923042551.2745-1-yepeilin.cs@gmail.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     oneukum@suse.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, peilin.ye@bytedance.com,
+        gregkh@linuxfoundation.org, ming.lei@canonical.com,
+        cong.wang@bytedance.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 3:19 AM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
->
-> On Sun, Sep 25, 2022 at 10:43:07PM -0700, Andrey Smirnov wrote:
-> > On Sun, Sep 25, 2022 at 12:21 PM Ferry Toth <fntoth@gmail.com> wrote:
->
-> ...
->
-> > I think we'd want to figure out why the ordering is important if we
-> > want to justify the above fix.
->
-> At least we all on the same page (I hope) on justification for reverts.
+Hello:
 
-Yes, there's clearly a regression here (multiple ones, really).
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
->
-> ...
->
-> > IMHO instead of trying to rush something in it be prudent to revert my
-> > patch _and_ address the fact that above patch was lost during the
-> > merge (Andy's revert needs to be updated)
->
-> I'm not an expert in your fixes for DWC3, so please come up with
-> the solution sooner than later, otherwise I will try to get my
-> reverts into the final release, because they obviously fix the
-> regression.
+On Thu, 22 Sep 2022 21:25:51 -0700 you wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> Currently usbnet_disconnect() unanchors and frees all deferred URBs
+> using usb_scuttle_anchored_urbs(), which does not free urb->context,
+> causing a memory leak as reported by syzbot.
+> 
+> Use a usb_get_from_anchor() while loop instead, similar to what we did
+> in commit 19cfe912c37b ("Bluetooth: btusb: Fix memory leak in
+> play_deferred").  Also free urb->sg.
+> 
+> [...]
 
-You don't need to be an expert here. All that's required is that your
-revert get the code to look like it looks in
+Here is the summary with links:
+  - [net] usbnet: Fix memory leak in usbnet_disconnect()
+    https://git.kernel.org/netdev/net/c/a43206156263
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
-
-so the last hunk in your patch instead of looking like:
-
-@@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
- {
-        int ret, irq;
-
-+       dwc->edev = dwc3_get_extcon(dwc);
-+       if (IS_ERR(dwc->edev))
-+               return PTR_ERR(dwc->edev);
-+
-        if (ROLE_SWITCH &&
-            device_property_read_bool(dwc->dev, "usb-role-switch"))
-                return dwc3_setup_role_switch(dwc);
-
-should look like
-
-@@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
- {
-        int ret, irq;
-
-        if (ROLE_SWITCH &&
-            device_property_read_bool(dwc->dev, "usb-role-switch"))
-                return dwc3_setup_role_switch(dwc);
-
-+       dwc->edev = dwc3_get_extcon(dwc);
-+       if (IS_ERR(dwc->edev))
-+               return PTR_ERR(dwc->edev);
-+
-
-Can you update your series accordingly or do you need me to do that? I
-won't have the cycles until the end of the week (Sat).
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
