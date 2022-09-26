@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0EE05EAA89
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 17:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730E15EAA86
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 17:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236247AbiIZPWk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Sep 2022 11:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S236278AbiIZPWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Sep 2022 11:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236385AbiIZPVe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 11:21:34 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C8F855BF
-        for <linux-usb@vger.kernel.org>; Mon, 26 Sep 2022 07:08:32 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mbl0l6DjFzHpdP;
-        Mon, 26 Sep 2022 22:06:15 +0800 (CST)
+        with ESMTP id S236211AbiIZPVf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 11:21:35 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F83857EB
+        for <linux-usb@vger.kernel.org>; Mon, 26 Sep 2022 07:08:33 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mbkxs0txHzHtkH;
+        Mon, 26 Sep 2022 22:03:45 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 22:08:30 +0800
+ 15.1.2375.31; Mon, 26 Sep 2022 22:08:31 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 26 Sep
@@ -29,9 +29,9 @@ From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-usb@vger.kernel.org>
 CC:     <gregkh@linuxfoundation.org>, <b-liu@ti.com>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next resend 3/5] usb: musb: cppi41: Switch to use dev_err_probe() helper
-Date:   Mon, 26 Sep 2022 22:15:08 +0800
-Message-ID: <20220926141510.2265523-4-yangyingliang@huawei.com>
+Subject: [PATCH -next resend 4/5] usb: musb: jz4740: Switch to use dev_err_probe() helper
+Date:   Mon, 26 Sep 2022 22:15:09 +0800
+Message-ID: <20220926141510.2265523-5-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220926141510.2265523-1-yangyingliang@huawei.com>
 References: <20220926141510.2265523-1-yangyingliang@huawei.com>
@@ -57,26 +57,37 @@ checked later through debugfs. It's more simple in error path.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/usb/musb/musb_cppi41.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/usb/musb/jz4740.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/musb/musb_cppi41.c b/drivers/usb/musb/musb_cppi41.c
-index c963cb8565f2..9589243e8951 100644
---- a/drivers/usb/musb/musb_cppi41.c
-+++ b/drivers/usb/musb/musb_cppi41.c
-@@ -718,10 +718,8 @@ static int cppi41_dma_controller_start(struct cppi41_dma_controller *controller)
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index 417c30bff9ca..d1e4e0deb753 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -105,7 +105,6 @@ static int jz4740_musb_init(struct musb *musb)
+ 		.driver_data = glue,
+ 		.fwnode = dev_fwnode(dev),
+ 	};
+-	int err;
  
- 		dc = dma_request_chan(dev->parent, str);
- 		if (IS_ERR(dc)) {
--			ret = PTR_ERR(dc);
--			if (ret != -EPROBE_DEFER)
--				dev_err(dev, "Failed to request %s: %d.\n",
--					str, ret);
-+			ret = dev_err_probe(dev, PTR_ERR(dc),
-+					    "Failed to request %s.\n", str);
- 			goto err;
- 		}
+ 	glue->musb = musb;
  
+@@ -113,12 +112,9 @@ static int jz4740_musb_init(struct musb *musb)
+ 		musb->xceiv = devm_usb_get_phy_by_phandle(dev, "phys", 0);
+ 	else
+ 		musb->xceiv = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+-	if (IS_ERR(musb->xceiv)) {
+-		err = PTR_ERR(musb->xceiv);
+-		if (err != -EPROBE_DEFER)
+-			dev_err(dev, "No transceiver configured: %d\n", err);
+-		return err;
+-	}
++	if (IS_ERR(musb->xceiv))
++		return dev_err_probe(dev, PTR_ERR(musb->xceiv),
++				     "No transceiver configured\n");
+ 
+ 	glue->role_sw = usb_role_switch_register(dev, &role_sw_desc);
+ 	if (IS_ERR(glue->role_sw)) {
 -- 
 2.25.1
 
