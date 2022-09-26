@@ -2,96 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97715EA48F
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 13:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85E15EA4E2
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 13:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238810AbiIZLro (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Sep 2022 07:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S238326AbiIZL4G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Sep 2022 07:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238456AbiIZLpw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 07:45:52 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D43674BB0;
-        Mon, 26 Sep 2022 03:47:26 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 38A425C00EE;
-        Mon, 26 Sep 2022 06:46:21 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Mon, 26 Sep 2022 06:46:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664189181; x=
-        1664275581; bh=xG1RrAvxILnVKM/HGf/WpAaQQFDiliy1vQfp8uerkes=; b=c
-        Krrc6XCOduvSe0NiILOQo9COvzVPKyqin8iJpRyJIDV21yXv6kwY3HBeMCQNKTR3
-        KtjAm21aiUOhlZnN0LJCISeujQ+aVHc8Dcx1y5eGRtEADkpArB31AYpy1MKGPeo6
-        xlF7rocMh/XhYUuTakNtx8v+htQup7S0R9t0MuGPT+nVE9YE075TkSMXNwVMbvqy
-        QMYNhpgXCsE0fz5YqoHWvT727AY3BfHZxyUKJzOo0fOdbumCpNEUQPJH1UKsWhVA
-        JuLaRIkZXe7b3HulTnd71+NFHVEZl+WF3/197sbE2gvvNqPFkTc0xwvPBgjL9Fdj
-        AWHYak4VkBOpWbjHxqtjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664189181; x=
-        1664275581; bh=xG1RrAvxILnVKM/HGf/WpAaQQFDiliy1vQfp8uerkes=; b=V
-        3q3SQht4hnlAaN/LjuD/7JawNMAMo9N2vs2JcJi3TDiWCVH7KnjlS/YePc0+NIyW
-        +2lBmp8wluqDNESNhzC/ldt0rWwTLgFsjupW+uIU+K8tC4vlKbl39agV26aNNF2v
-        QPTvJAXDkRNmfFTIiesZRzl9Rr2JNBU2h8NfriBevUKDS/OVh+Pkt2GSxA2nt+8v
-        KIc9vAWWlNvxSs3vQdd8hHFzt+cvML+IJDKQTG+Qd7Zax0AP7Utlo8S7J6/6qe9L
-        fh0OGLRKPDENE/Ati4+4AoSAlIDIcczUi5j3wPsTfySYSqjs1LqnvIGZGIYxgBZu
-        xFc1gqX56O7QOKzhlr5Sg==
-X-ME-Sender: <xms:_IIxYzj4aOxzqBw6kkIH2DIk0OrByu_KVNsaiv1vOw_HkSgaqc87-g>
-    <xme:_IIxYwAcSqOmIdId2ar3V4SCoNgu0_luHvDjO0mwvDelk8RWPQYePlU8WF2eBhNlk
-    ahX931q8Y8JStoYoLs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegvddgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfu
-    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
-    frrghtthgvrhhnpeegffdtgfdtlefhhfdujeevheekgfdujeegudevteevudefleefjeel
-    tefhjeehleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghr
-    rdguvghv
-X-ME-Proxy: <xmx:_IIxYzFEFuN2yfR_g_eQEyHPkA3Ty6FQXzbPwIbdX7pOlZBTEEKTWw>
-    <xmx:_IIxYwR7zlEa6WIez3km9eW4oR04jt4P7C85SWfPJG-1nitLDvebjA>
-    <xmx:_IIxYwy9Y3OB3czY4YN8dqYkexEEEumvZ8kK4U5Ar69MxIm4s3k9_A>
-    <xmx:_YIxY3nbZP1tD-vQhDffl9_BW31y3rZho0m9_4OUBq0z35mjb3td-Q>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B56A5A6007C; Mon, 26 Sep 2022 06:46:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <5748396a-fe0b-413c-b8ac-d24d959091bc@app.fastmail.com>
-In-Reply-To: <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
-References: <20220403164907.662860-1-andrew.smirnov@gmail.com>
- <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
- <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
- <966ef528-455c-5180-fc63-ea77cb933af1@gmail.com>
- <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
-Date:   Mon, 26 Sep 2022 12:45:17 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Ferry Toth" <fntoth@gmail.com>,
-        "Andrey Smirnov" <andrew.smirnov@gmail.com>,
-        "Andy Shevchenko" <andriy.shevchenko@intel.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Thinh Nguyen" <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon is present
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S239286AbiIZLzE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 07:55:04 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2061c.outbound.protection.outlook.com [IPv6:2a01:111:f400:7d00::61c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AD178BD0;
+        Mon, 26 Sep 2022 03:50:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BNjPWgpFxjs5sBo2mGfX+YzkHt1PszxAgN5XNnqsv5O8TPd4GB9BBOq+FTXc6ALtNsX7NQLRXMSeFF75siaPywBmnogc6yervuPq5waYFiiorRSStXjTg3viDwUFpviRHl4HpqU+K1/nG1MCfGyc7f3N0XGrPe1AApkTe9KVWTcdNJilLxAhVriZ26DoN3G+59voCO6gmcf2dQV+fR+p8lh3W+4E/RbgQOeywaVETTn/PTYIezy55G/NWj51eiSlfmVwMxeFcB3ptKUVX/xaekUYW1ArcbQ8KhFrlCIpwPB/ze0q+5M8TZpvSdxga/D8Jm4cRKzxFjQiKWxJDOcnDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QxrVSNQhHHd8ZYqTUeRotBhttpRBrvnMjBnVuY2f7ag=;
+ b=lzhQG9l0/ej5kCCuBbrpHx/z1veEOOFxbDDPSWaBI2K76SBsDvlb53yg6E1pXmbyPIu2dAHd25lzNeijP5djcslhHuGSo84zW1b/2SmDff8j1l8AN81sLjOKIZNcYeiH3NtmGGplMQ/by4bKEUW7cHDkrTelOJ9IYLVsuv03FH+YbLDyX8OpXUANav4aNGv561mjhkpttr+64IenLLqgPjHLx6hUglu87uZAneQ86BNuWZy9AMds94b9DcWObEZBAwVMQA2b5hhkZpd1syw3tge0L6XEr7UZ3lvPegXfigSOSvL1L54rxki3CL9zFwXSC2q7T3ZFYSwZAG9A4gbSDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QxrVSNQhHHd8ZYqTUeRotBhttpRBrvnMjBnVuY2f7ag=;
+ b=DQ6kpJ5/lDubMDbn5EfoS/GL/ThbHvi9Lt26TUAjia6ogRNwKTuKcCJxLTGEjEC1ovor9G3nsgIpvHZGDIcpdrAplA9rmxCIUK4ICXyCZ1O0KPWfBlZQyTnKrQXjm0qp1/zj041lTDOcYOu5vlSFzuI4fEx3m92L+9hYYDvH711YTNZ7i/Z4BGa+Mx/mvFIejzz1LeHFzaAIV3NplEaSIMbRHN/19152xVijz7MMZ/Yo2K08YvB4J41fzV4/wFPIsd5zWGKhKIDLyTPnbAZo7p2xSgPsvPeqiDvBscYLjPgEDwJtjDSPgqFM7MXTBapwZL8bbSx0HPuoR12KPQuRFQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by PA4PR04MB7918.eurprd04.prod.outlook.com (2603:10a6:102:c7::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Mon, 26 Sep
+ 2022 10:47:45 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::584:c4ea:a4f7:af1b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::584:c4ea:a4f7:af1b%6]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
+ 10:47:45 +0000
+Message-ID: <d8224556-72cb-cb48-b530-05cffab2a6df@suse.com>
+Date:   Mon, 26 Sep 2022 12:47:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH net] usbnet: Fix memory leak in usbnet_disconnect()
+To:     Peilin Ye <yepeilin.cs@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ming Lei <ming.lei@canonical.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <0000000000004027ca05e8d2ac0a@google.com>
+ <20220923042551.2745-1-yepeilin.cs@gmail.com>
+Content-Language: en-US
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20220923042551.2745-1-yepeilin.cs@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0129.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::17) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PA4PR04MB7918:EE_
+X-MS-Office365-Filtering-Correlation-Id: 553ef41a-fa9d-47c4-8db8-08da9fac8b75
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9TYdiHmneHTOMIX5ZjtyQhB6BSGsV6x8Zcb3p0eYZQYc783GBb1jhq7CAfKRrL6hDNzDIBJyBJEUrUYdLriOYlq3MdDEZL6T1/39N8TfuImwS8sDtwxpOXwsfWiL+l3Xn/1q4mTVVSBXFfzTkLPp9p5fPK6GKYzmWCDJVw8b7lGZlMvyExHal2yVjPljwFeP9WnsiSQoTB57gVt+6qbQVDmDmaMVw++9hyv9wBWHLRnHEwdcReRz6uNVmqzXt3oJdOiJ2+4Uip1ljQO5cURh2uKFfYCRJqiqp7LrZKJXa1zxlypKI6qyVCSvMLO1J7Tasfe2CM4NIWwDo/0AmgcFNyM4T/hIi1mKzLkgu7GJVglbxauifzVn9inw0cGy8W3AK1K3wfz5rrNzJsAzFgvzha98HMzqnPAVAc/LieI67AQWrRndjss5DqpvoZnx5UBXl/2D0+rQp+p4sq4VPFspQets0t5xMPjeAbsnArpA92hm6re7WX71zZGvoRLIJlaCVuni3MBpK42QzKD1ZXfPz5zbLNkip+kPyS/43jVFIZERansYszbj2C/d6zjF6VZWvh3WtZhJNgfCuCdp5wHEts6xgqX0HXnuBVy0ALh3sNE6vZ3yl4HidPIHSAyHAZfYKDX6cMEixnzzWV2LXWeT6Yq/C3IG2l9W8n21/VuPRJHm2c35oUIM6+m+UwVIDL5YPX/bRVlMNB4imm1OUC0AsWwDHbYb83if+1pU4jIQFNuLxwbKHoNGRGi/TB9Liu/c+LhuNI5d64t+kneDE3k3V4xdJi0kXpf7z1S14p+okNI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(39850400004)(376002)(346002)(396003)(451199015)(31686004)(54906003)(110136005)(66946007)(66476007)(478600001)(66556008)(8676002)(6486002)(316002)(4326008)(31696002)(86362001)(6666004)(41300700001)(7416002)(6512007)(5660300002)(4744005)(8936002)(6506007)(53546011)(2906002)(38100700002)(2616005)(186003)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXNaQllRaU1rbUNRVzhSLzdBRGM5dVBaUnYxeU15bUMyTndPcHBDRC8yR1lt?=
+ =?utf-8?B?bTI3OTV2S0g0TWtKaWNZbkc0WGxQWjdtdkpUcUVYUkdKa3hTNUV5SGhWTWs3?=
+ =?utf-8?B?b3hHMGNIWTZRRzJvR2dpaDgwb2pORkw5bktzaDJFNWJVczFFT2tMNzlmREJZ?=
+ =?utf-8?B?K3VlMnhBUWtram1mdUJHS2ExVCt4Wk5GS3hIVk1aM2dnakp2VG94cG8rY3ZI?=
+ =?utf-8?B?WnU4UGdKVkVBZVJKMENPdTh4NmIySThOY1pPUlVLZ2I4RXVVWVI3UyswTzFx?=
+ =?utf-8?B?MlNka1B0QnVZUWptTnozeVExRU9uN0Z2WkVwcENZYVpmVVlWanJKVWNKeGlX?=
+ =?utf-8?B?RFZVYjl6UXZ0Rk9icjhjQ2lNeFY5T1g2V1p6TlRoZHlQenlVcmNRcnFMNHFs?=
+ =?utf-8?B?NFVFZzA0aTI4TVl1S3R2WU55SEtRczEreW5LN1RaVG85Q1BXK2NyL3VjWGxv?=
+ =?utf-8?B?aUJDYVJRTnJWanhBWmtHL2VIUCtnVDg4VVBPZzFjUVZjaDA5M3ZvTzc4c1JU?=
+ =?utf-8?B?c1NjOFI5YXdMaDYvN2lkcDBZK1ZiekVsYVAxS1o5NzNjUU00c2xNczlhYTBG?=
+ =?utf-8?B?V1BXRWFVeFEyNGVtdi9nK3JmcloxNEgvMzUvUUdTR1dtaHVGbjhmWkxNWkZ5?=
+ =?utf-8?B?ajR0NnJnM1F2M3drYjZhdi8za0ppYzgvbWhMRXZWTSs3YmdjaSsrUWNjaW9o?=
+ =?utf-8?B?QmVpbWMzQ2l6S3B3dWVXM09wYnYxTzVlOUZIZzhqN0hBbkxQRVVqM0dBOWpF?=
+ =?utf-8?B?dzhCRzhYZzVRVTdoODBtblBwNlJHMk5tcmR5R2RFbXlSVGdLS1BHbkxLZFl5?=
+ =?utf-8?B?bXRsUEl2ZWpWWG54aTh4U2I1RzR4YWJNQ09YbkxleStsRmVrSUoxTG9vcXBK?=
+ =?utf-8?B?T2xtQ0cwU3VCNG5xMXdrcUhyOTdzMVFNa2JmYzZUL2lpNHRncW5ZL0FWRDZH?=
+ =?utf-8?B?bHJ1YWlkVHhTRkpRYitiNHFYdm9tQmxvU0VnYThGa2xaRUEzRzBiZkNZaVNH?=
+ =?utf-8?B?NFBJV1BsNTZBNVZ5Q25xdmwrT1N6MXZTNk93WEhWNnlCTTlQY1pXZ3p4ZmhU?=
+ =?utf-8?B?R043NzFyYXlTS1pmTm56aXFMUU9LazE4RlprbmtpSmIyMFpaS1V0Qzd5bGRs?=
+ =?utf-8?B?OEhHNzhlSmhBVGdYL0VYL0FWRHBta0g0MnRidU5WUGdreVNoektXVnl4M2JL?=
+ =?utf-8?B?S09uUW5LRmFBNkxkOC9zTnpOMndpcjhTeTZQendBLzZoK0srTGxqc1duNGVN?=
+ =?utf-8?B?QmJUbW9LOVg0aks0UlFDcUJPMjMwUTJBb3M4SlVPNG1rOXNRb1c5bFE5YUNX?=
+ =?utf-8?B?bFU4K1BJZERPeHdaYW5lOFpZbFlCWGtmVytGaVpFeTcrYlpuUUlSeGk2VVl2?=
+ =?utf-8?B?YlY1V3h0cjFjai9JRDZvTFBHekRLN1ovTzBBZk9rWkUrZlY4SHduZzJKdElZ?=
+ =?utf-8?B?a3EzL2F5RUhBYVBoSkYvRnBJMlhEL1Zzcjhqbjk3R0Q0ckVyVmVMRjk3cENh?=
+ =?utf-8?B?Uy9ySFgyM1ZEYnBrbWFqbldNTElvc0hnQkx1T2RLeTh6V2hINndqSlpzZmhj?=
+ =?utf-8?B?NlgrREJJSEdoVnpoQjFYU0QxaXFWY3FVcUR1Qko1UDJuR1NLT2o3ekNvYU45?=
+ =?utf-8?B?YS9UZ3RFL1dyRnNDeWxGZ28wbE9jWVZVOEZsMjBnSWdMcE1NdUh1V3hML0l1?=
+ =?utf-8?B?ZU1CLzFmNDUxRHl4VkltVFcrN1VaVU9kNGNXcXBtNFpkcFlSWE44UzJqRlg4?=
+ =?utf-8?B?OWk3NEhobUlCTm9aSWxleFd5bnJBV2I4U1lCWjVQNW1Ic2JNTE11NlllR0xQ?=
+ =?utf-8?B?QlZoTzZ0Vk1MeUFQOTR3cVFRS1l6R0Y5YktIZ0NzeG9yNWpzcEdjcjRSY3F2?=
+ =?utf-8?B?SVhRN0h0Q25rMnJuWjZRejh4NXpVSUg0L2hYOTRQeHc1SlFJZHZWRW1EVjkr?=
+ =?utf-8?B?RjNTUGdUMmkrL2hta3lza3JpVjU2Mm5LNlM0Y1Vwc1cxeGZtdjBNb3ZvOWlJ?=
+ =?utf-8?B?VXRkWVcxRkFteUpaR2I5TjAzWXhINVBIZDdZeWUzUzBPbFdNMk5ISUh1dWdQ?=
+ =?utf-8?B?Q0ppVVZHT0Y2U0Vhekt0dnBFNkxobmsvZGNLTko4U0c0cDNjdWM2T3d6MlRI?=
+ =?utf-8?B?eEo5MmR1aUZBcy81MmtXdHdTRzRpRnZZRUNzbmFhYjF6RVNIYUliTjM4VnA3?=
+ =?utf-8?Q?krJIEE7S91cVKKAYPxLfV26axUGx2+sEtyd4FkVnN2c6?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 553ef41a-fa9d-47c4-8db8-08da9fac8b75
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 10:47:45.1305
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AIRFtAvM1OAtFNwted+w6DJBrlA2GOWX+zZsL7Pb8uoJCGOR2M7jpHZqd6PHHK/fLas+a8dK4eZdH/BnrZT5rw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7918
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,272 +135,18 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On Sun, Sep 25, 2022, at 21:21, Ferry Toth wrote:
-> Hi,
->
-> Promising results below.
->
-> Op 24-09-2022 om 23:29 schreef Ferry Toth:
->> Hi,
->>
->> One more test
->>
->> Op 23-09-2022 om 20:23 schreef Andrey Smirnov:
->>> On Fri, Sep 23, 2022 at 9:42 AM Andy Shevchenko
->>> <andriy.shevchenko@intel.com> wrote:
->>>> On Thu, Sep 22, 2022 at 04:32:55PM -0700, Andrey Smirnov wrote:
->>>>> On Thu, Sep 22, 2022 at 3:23 AM Ferry Toth <fntoth@gmail.com> wrot=
-e:
->>>>>> On 22-09-2022 12:08, Andy Shevchenko wrote:
->>>>>> On Sun, Apr 03, 2022 at 09:49:07AM -0700, Andrey Smirnov wrote:
->>>> FYI: For now I sent a revert, but if we got a solution quicker we=20
->>>> always
->>>> can choose the course of actions.
->>>>
->>> I think we have another problem. This patch happened in parallel to =
-mine
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/c=
-ommit/?h=3Dv6.0-rc6&id=3Dab7aa2866d295438dc60522f85c5421c6b4f1507=20
->>>
->>>
->>> so my changes didn't have that fix in mind and I think your revert
->>> will not preserve that fix. Can you update your revert to take care =
-of
->>> that too, please?
->>>
->>> I'm really confused how the above commit could be followed up by:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/c=
-ommit/drivers/usb/dwc3/drd.c?h=3Dv6.0-rc6&id=3D0f01017191384e3962fa31520=
-a9fd9846c3d352f=20
->>>
->>>
->>> the diffs in dwc3_drd_init seem contradictory
->>>
->>>>>> If the extcon device exists, get the mode from the extcon device.=
- If
->>>>>> the controller is DRD and the driver is unable to determine the m=
-ode,
->>>>>> only then default the dr_mode to USB_DR_MODE_PERIPHERAL.
->>>>>>
->>>>>> According to Ferry (Cc'ed) this broke Intel Merrifield platform.=20
->>>>>> Ferry, can you
->>>>>> share bisect log?
->>>>>>
->>>>>> I can but not right now. But what I did was bisect between 5.18.0=20
->>>>>> (good) and 5.19.0 (bad) then when I got near the culprit (~20=20
->>>>>> remaining) based on the commit message I tried=20
->>>>>> 0f01017191384e3962fa31520a9fd9846c3d352f "usb: dwc3: Don't switch=20
->>>>>> OTG -> peripheral if extcon is present" (bad) and commit before=20
->>>>>> that (good).
->>>>>>
->>>>>> The effect of the patch is that on Merrifield (I tested with Inte=
-l=20
->>>>>> Edison Arduino board which has a HW switch to select between host=20
->>>>>> and device mode) device mode works but in host mode USB is=20
->>>>>> completely not working.
->>>>>>
->>>>>> Currently on host mode - when working - superfluous error message=
-s=20
->>>>>> from tusb1210 appear. When host mode is not working there are no=20
->>>>>> tusb1210 messages in the logs / on the console at all. Seemingly=20
->>>>>> tusb1210 is not probed, which points in the direction of a=20
->>>>>> relation to extcon.
->>>>>>
->>>>>> Taking into account the late cycle, I would like to revert the=20
->>>>>> change. And
->>>>>> Ferry and I would help to test any other (non-regressive) approac=
-h).
->>>>>>
->>>>>> I have not yet tested if a simple revert fixes the problem but=20
->>>>>> will tonight.
->>>>>>
->>>>>>
->>>>>> I would be happy to test other approaches too.
->>>>>
->>>>> It's a bit hard for me to suggest an alternative approach without
->>>>> knowing how things are breaking in this case. I'd love to order on=
-e of
->>>>> those boards to repro and fix this on my end, but it looks like th=
-is
->>>>> HW is EOLed and out of stock in most places. If you guys know how =
-to
->>>>> get my hands on those boards I'm all ears.
->>>> There are still some second hand Intel Edison boards flying around
->>>> (but maybe cost a bit more than expected) and there are also
->>>> Dell Venue 7 3740 tablets based on the same platform/SoC. The latter
->>>> option though requires more actions in order something to be boot
->>>> there.
->>>>
->>> OK, I'll check e-bay just in case.
->>>
->>>> In any case, it's probably quicker to ask Ferry or me for testing.
->>>> (Although currently I have no access to the board to test OTG, it's
->>>> =C2=A0 remote device which I can only power on and off and it has a=
-lways
->>>> =C2=A0 be in host mode.)
->>>>
->>>>> Barring that, Ferry can you dig more into this failure? E.g. is it=20
->>>>> this hunk
->>>>>
->>>>> @@ -85,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * mode. If the controller supports =
-DRD but the=20
->>>>> dr_mode is not
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * specified or set to OTG, then set=
- the mode to=20
->>>>> peripheral.
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 if (mode =3D=3D USB_DR_MODE_OTG &&
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 if (mode =3D=3D USB_DR_MODE_OTG && !dwc->edev &&
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (!IS_ENABLED(CONF=
-IG_USB_ROLE_SWITCH) ||
->>>>> !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !DWC3_VER_IS_PRIO=
-R(DWC3, 330A))
->>>>> @@ -1632,6 +1633,51 @@ static void dwc3_check_params(struct dwc3 *=
-dwc)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>> =C2=A0 }
->>>>>
->>>>> that's problematic or moving
->>>> I think you wanted to revert only this line and test?
->>> Yes.
->>>
->>>>> =C2=A0 static int dwc3_probe(struct platform_device *pdev)
->>>>> =C2=A0 {
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct device=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *dev =3D &pdev->d=
-ev;
->>>>> @@ -1744,6 +1790,13 @@ static int dwc3_probe(struct platform_devic=
-e=20
->>>>> *pdev)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto err2;
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extco=
-n(dwc);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev);
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 dev_err_probe(dwc->dev, ret, "failed to get=20
->>>>> extcon\n");
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 goto err3;
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>> +
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_=
-dr_mode(dwc);
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto err3;
->>>>>
->>>>> to happen earlier?
->>
->> I tried moving dwc3_get_extcon after dwc3_get_dr_mode like so::
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 8c8e32651473..3bf370def546 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1843,6 +1843,10 @@ static int dwc3_probe(struct platform_device=20
->> *pdev)
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err2;
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->>
->> +=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_dr_mode(dwc);
->> +=C2=A0=C2=A0=C2=A0 if (ret)
->> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->> +
->> =C2=A0=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extcon(dwc);
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev=
-);
->> @@ -1850,10 +1854,6 @@ static int dwc3_probe(struct platform_device=20
->> *pdev)
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->>
->> -=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_dr_mode(dwc);
->> -=C2=A0=C2=A0=C2=A0 if (ret)
->> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->> -
->> =C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_alloc_scratch_buffers(dwc);
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
->
-> After trying to understand the code a bit, I successfully tested the=20
-> following move:
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 8c8e32651473..4a38cff8cb16 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1843,13 +1843,6 @@ static int dwc3_probe(struct platform_device *p=
-dev)
->  =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err2;
->  =C2=A0=C2=A0=C2=A0=C2=A0 }
->
-> -=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extcon(dwc);
-> -=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
-> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev);
-> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 dev_err_probe(dwc->dev, ret, "f=
-ailed to get extcon\n");
-> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
-> -=C2=A0=C2=A0=C2=A0 }
-> -
->  =C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_get_dr_mode(dwc);
->  =C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->  =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err3;
-> @@ -1867,6 +1860,13 @@ static int dwc3_probe(struct platform_device *p=
-dev)
->  =C2=A0=C2=A0=C2=A0=C2=A0 dwc3_check_params(dwc);
->  =C2=A0=C2=A0=C2=A0=C2=A0 dwc3_debugfs_init(dwc);
->
-> +=C2=A0=C2=A0=C2=A0 dwc->edev =3D dwc3_get_extcon(dwc);
-> +=C2=A0=C2=A0=C2=A0 if (IS_ERR(dwc->edev)) {
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 ret =3D PTR_ERR(dwc->edev);
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 dev_err_probe(dwc->dev, ret, "f=
-ailed to get extcon\n");
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err5;
-> +=C2=A0=C2=A0=C2=A0 }
-> +
->  =C2=A0=C2=A0=C2=A0=C2=A0 ret =3D dwc3_core_init_mode(dwc);
->  =C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
->  =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 goto err5;
->
-> This moves dwc3_get_extcon() until after dwc3_core_init() but just=20
-> before dwc3_core_init_mode(). AFAIU initially dwc3_get_extcon() was=20
-> called from within dwc3_core_init_mode() but only for case=20
-> USB_DR_MODE_OTG. So with this change order of events is more or less=20
-> unchanged.
->
-> Due to move I modified goto to err5, not sure if that is correct.
+On 23.09.22 06:25, Peilin Ye wrote:
+Hi,
 
-err5 is correct there, that failure path starts to clean up what dwc3_co=
-re_init did.
+> I think we may have similar issues at other usb_scuttle_anchored_urbs()
+> call sites.  Since urb->context is (void *), should we pass a "destructor"
+> callback to usb_scuttle_anchored_urbs(), or replace this function with
+> usb_get_from_anchor() loops like this patch does?
+> 
 
->
-> Thoughts? Can we get something like this in quick or should we revert =
-first?
+please introduce a new function with an additional parameter
+for that, so that we do not need to touch the correct usages.
 
-I don't know anything about that platform and following this thread is a=
- bit hard
-for me since I lack context so this is a total guess: dwc3_core_init bri=
-ngs up the
-PHYs and also soft resets the core. Could any of these two things intera=
-ct with your
-extcon and somehow break it?
+	Regards
+		Oliver
 
-
-Sven
