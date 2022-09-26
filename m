@@ -2,50 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1818F5E9B7F
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 10:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2BD5E9C2C
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 10:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234278AbiIZICo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Sep 2022 04:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S233689AbiIZIha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Sep 2022 04:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiIZICI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 04:02:08 -0400
-Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 763FA15A17;
-        Mon, 26 Sep 2022 00:59:29 -0700 (PDT)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app3 (Coremail) with SMTP id cC_KCgBHv6rKWzFj7OYYBw--.61426S2;
-        Mon, 26 Sep 2022 15:59:15 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     pawell@cadence.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH] usb: cdnsp: Fix wrong transmission direction of EP0
-Date:   Mon, 26 Sep 2022 15:59:02 +0800
-Message-Id: <20220926075902.7390-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229711AbiIZIh3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 04:37:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD1026100;
+        Mon, 26 Sep 2022 01:37:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6595660D30;
+        Mon, 26 Sep 2022 08:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742F4C433D6;
+        Mon, 26 Sep 2022 08:37:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664181447;
+        bh=zI8qHNaOY18LLbwfeFXaMcCgWpukAh0Af3TxvFFO574=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ub0qJLCe+iK1EBq9rcrKAP8gCoxRc6b9gcOJRvOAHfxVzwCqJPzgk2cuNlxhC5wv2
+         hXAQvV95edfqIWjtF0pn8K/Ffj1Qk3iQ9oUDSgEU2gZTleLphyP0Nz5Mg5mKrspLm5
+         XITnVC1V0/aGyfCPx4tMkP8jdgcw0MUauhxUVdvY=
+Date:   Mon, 26 Sep 2022 10:37:25 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fix: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being
+ a V0.96 controller
+Message-ID: <YzFkxTrymw0Jiuyd@kroah.com>
+References: <20220925172236.2288-1-jens.glathe@oldschoolsolutions.biz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cC_KCgBHv6rKWzFj7OYYBw--.61426S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uryrAFWfJw1DXr1xWFyUZFb_yoW8ury8pr
-        4UCFZIkrs3Jr43Ar92gF4DZa1akFs7CF17Jr1vk3ZxZrs3uw4vyFn8KFyjgF47CFWrAr4j
-        ga1DGFs7XF4jvFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBIb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCEVcI2
-        5VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxkIecxEwVAFwVW8CwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8MrW5UUUUU==
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQPBVNG3GzSjQAJs+
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220925172236.2288-1-jens.glathe@oldschoolsolutions.biz>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,61 +50,75 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+On Sun, Sep 25, 2022 at 07:22:37PM +0200, Jens Glathe wrote:
+> only if it reports as a V0.96 XHCI controller. Appears to fix the errors
+> "xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
+> current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
+> often) when using a r8152 USB3 ethernet adapter with integrated hub.
+> 
+> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> ---
+>  drivers/usb/host/xhci-pci.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index dce6c0ec8d34..d1b8e7148dd1 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -306,8 +306,12 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  	}
+>  
+>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+> -		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
+> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
+> +		/* try to tame the ASMedia 1042 controller which is 0.96 */
+> +		if (xhci->hci_version == 0x96)
+> +			xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
+> +	}
+>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>  		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI) {
+>  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+> -- 
+> 2.25.1
+> 
+> ---
+> Hi there, a "try again" with git send-email and the corrected patch. Hope this works now.
+> 
+> with best regards
+> 
+> Jens Glathe
 
-EP0 transfer is bi-directional, but in the cdnsp gadget, the
-transmission direction of EP0 is not changed after it is
-initialized to IN, so the OUT data from EP0 received by the host
-is invalid.
+Hi,
 
-The value of ep0_expect_in will change according to the value of
-bRequestType in the SETUP transaction of control transfer, so we
-can use it as the transmission direction of EP0.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
- drivers/usb/cdns3/cdnsp-gadget.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index c67715f6f756..526f80651d35 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -345,6 +345,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
- {
- 	struct cdnsp_device *pdev = pep->pdev;
- 	struct usb_request *request;
-+	u8 direction;
- 	int ret;
- 
- 	if (preq->epnum == 0 && !list_empty(&pep->pending_list)) {
-@@ -355,11 +356,14 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
- 	request = &preq->request;
- 	request->actual = 0;
- 	request->status = -EINPROGRESS;
--	preq->direction = pep->direction;
-+
-+	direction = usb_endpoint_xfer_control(pep->endpoint.desc) ?
-+		    pdev->ep0_expect_in : pep->direction;
-+	preq->direction = direction;
- 	preq->epnum = pep->number;
- 	preq->td.drbl = 0;
- 
--	ret = usb_gadget_map_request_by_dev(pdev->dev, request, pep->direction);
-+	ret = usb_gadget_map_request_by_dev(pdev->dev, request, direction);
- 	if (ret) {
- 		trace_cdnsp_request_enqueue_error(preq);
- 		return ret;
-@@ -387,8 +391,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
- 	return 0;
- 
- unmap:
--	usb_gadget_unmap_request_by_dev(pdev->dev, &preq->request,
--					pep->direction);
-+	usb_gadget_unmap_request_by_dev(pdev->dev, &preq->request, direction);
- 	list_del(&preq->list);
- 	trace_cdnsp_request_enqueue_error(preq);
- 
--- 
-2.34.1
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
 
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
