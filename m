@@ -2,39 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C0C5EA9FF
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 17:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA1C5EAA88
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Sep 2022 17:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236046AbiIZPPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Sep 2022 11:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
+        id S236477AbiIZPWi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Sep 2022 11:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236211AbiIZPOR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 11:14:17 -0400
+        with ESMTP id S236259AbiIZPVd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Sep 2022 11:21:33 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F822FC0
-        for <linux-usb@vger.kernel.org>; Mon, 26 Sep 2022 06:57:14 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MbkjQ6JdrzlXYd;
-        Mon, 26 Sep 2022 21:52:58 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED160857DC
+        for <linux-usb@vger.kernel.org>; Mon, 26 Sep 2022 07:08:31 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MbkyR6ClczlXXd;
+        Mon, 26 Sep 2022 22:04:15 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 21:57:12 +0800
+ 15.1.2375.31; Mon, 26 Sep 2022 22:08:29 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 26 Sep
- 2022 21:57:12 +0800
+ 2022 22:08:29 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-usb@vger.kernel.org>
 CC:     <gregkh@linuxfoundation.org>, <b-liu@ti.com>,
         <yangyingliang@huawei.com>
-Subject: [PATCH -next 5/5] usb: musb: sunxi: Switch to use dev_err_probe() helper
-Date:   Mon, 26 Sep 2022 22:03:48 +0800
-Message-ID: <20220926140348.2028052-6-yangyingliang@huawei.com>
+Subject: [PATCH -next resend 0/5] usb: musb: Switch to use dev_err_probe() helper
+Date:   Mon, 26 Sep 2022 22:15:05 +0800
+Message-ID: <20220926141510.2265523-1-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220926140348.2028052-1-yangyingliang@huawei.com>
-References: <20220926140348.2028052-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -50,61 +48,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the probe path, dev_err() can be replaced with dev_err_probe()
-which will check if error code is -EPROBE_DEFER and prints the
-error name. It also sets the defer probe reason which can be
-checked later through debugfs. It's more simple in error path.
+This patchset is trying to replace dev_err() with dev_err_probe() in
+the probe path.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/usb/musb/sunxi.c | 29 +++++++++--------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
+(Resend for adding my SoB in patch #1, #2)
 
-diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
-index 961c858fb349..7f9a999cd5ff 100644
---- a/drivers/usb/musb/sunxi.c
-+++ b/drivers/usb/musb/sunxi.c
-@@ -743,31 +743,20 @@ static int sunxi_musb_probe(struct platform_device *pdev)
- 
- 	if (test_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags)) {
- 		glue->rst = devm_reset_control_get(&pdev->dev, NULL);
--		if (IS_ERR(glue->rst)) {
--			if (PTR_ERR(glue->rst) == -EPROBE_DEFER)
--				return -EPROBE_DEFER;
--			dev_err(&pdev->dev, "Error getting reset %ld\n",
--				PTR_ERR(glue->rst));
--			return PTR_ERR(glue->rst);
--		}
-+		if (IS_ERR(glue->rst))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(glue->rst),
-+					     "Error getting reset\n");
- 	}
- 
- 	glue->extcon = extcon_get_edev_by_phandle(&pdev->dev, 0);
--	if (IS_ERR(glue->extcon)) {
--		if (PTR_ERR(glue->extcon) == -EPROBE_DEFER)
--			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "Invalid or missing extcon\n");
--		return PTR_ERR(glue->extcon);
--	}
-+	if (IS_ERR(glue->extcon))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(glue->extcon),
-+				     "Invalid or missing extcon\n");
- 
- 	glue->phy = devm_phy_get(&pdev->dev, "usb");
--	if (IS_ERR(glue->phy)) {
--		if (PTR_ERR(glue->phy) == -EPROBE_DEFER)
--			return -EPROBE_DEFER;
--		dev_err(&pdev->dev, "Error getting phy %ld\n",
--			PTR_ERR(glue->phy));
--		return PTR_ERR(glue->phy);
--	}
-+	if (IS_ERR(glue->phy))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(glue->phy),
-+				     "Error getting phy\n");
- 
- 	glue->usb_phy = usb_phy_generic_register();
- 	if (IS_ERR(glue->usb_phy)) {
+Yang Yingliang (5):
+  usb: musb: core: Switch to use dev_err_probe() helper
+  usb: musb: da8xx: Switch to use dev_err_probe() helper
+  usb: musb: cppi41: Switch to use dev_err_probe() helper
+  usb: musb: jz4740: Switch to use dev_err_probe() helper
+  usb: musb: sunxi: Switch to use dev_err_probe() helper
+
+ drivers/usb/musb/da8xx.c       |  8 +++-----
+ drivers/usb/musb/jz4740.c      | 10 +++-------
+ drivers/usb/musb/musb_core.c   |  5 ++---
+ drivers/usb/musb/musb_cppi41.c |  6 ++----
+ drivers/usb/musb/sunxi.c       | 29 +++++++++--------------------
+ 5 files changed, 19 insertions(+), 39 deletions(-)
+
 -- 
 2.25.1
 
