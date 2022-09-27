@@ -2,52 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6D15EC9CB
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 18:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6E05EC9EE
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 18:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbiI0QnH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 12:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S233119AbiI0QtS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 12:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbiI0Qmx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 12:42:53 -0400
+        with ESMTP id S231751AbiI0Qsw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 12:48:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7681C00C2;
-        Tue, 27 Sep 2022 09:42:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B37E33A12;
+        Tue, 27 Sep 2022 09:48:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C741760FBB;
-        Tue, 27 Sep 2022 16:42:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ADDC433C1;
-        Tue, 27 Sep 2022 16:42:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA72F6126D;
+        Tue, 27 Sep 2022 16:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C955BC433D6;
+        Tue, 27 Sep 2022 16:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664296971;
-        bh=ViNq6LYgdEbfo2489j+uRo51d1QTLEOg+E/Vq2a5SVY=;
+        s=korg; t=1664297324;
+        bh=IOZcbjA9Lg63FB6UEPbdUOWfb/1T2ALWEz6B3RQsLe4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gba3xc+YUCTWcb9XfurPU3KT+OOyhGv9uLAhDVcK7TAP3+0NeB5jcTOpmUOmKitbz
-         Gdksj3p7HOcJBI15S7Qeg8PHVPkjpX2eVZnfVpAWKjTWLcEjFNx+I3fWyfvBj8bwk8
-         1S69zK2NsYEFLW8cFHTMSfBhE4fKzkEBN3Ogio5s=
-Date:   Tue, 27 Sep 2022 18:42:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        stable@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: fix sg handling in error case
-Message-ID: <YzMoCMIh85XxWcdh@kroah.com>
-References: <20220926195307.110121-1-w36195@motorola.com>
- <20220926195307.110121-2-w36195@motorola.com>
- <YzK1Xry5KIrMr18F@kroah.com>
- <YzMbK0ZZ08WD8ql+@p1g3>
+        b=ObHVf+50D//o8xHkysOWtvykIZDiBU5zkzbdJHrNJAncaP9lJWia6AafdmwZVH8vQ
+         9VZRSQCd1wKHDv9w02lWOSp+ZDaJmUOlCXonLNm47RRLBVHgmTB8GJIyX9Mcr0itEJ
+         T3XFAr7ldvxWhyPmLuiq3hdhglnP8tMpRNYrJXmA=
+Date:   Tue, 27 Sep 2022 18:48:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rajat Khandelwal <rajat.khandelwal@intel.com>
+Cc:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Add wake on connect/disconnect on USB4 ports
+Message-ID: <YzMpaa1V492X52/J@kroah.com>
+References: <20220928130005.2048724-1-rajat.khandelwal@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzMbK0ZZ08WD8ql+@p1g3>
+In-Reply-To: <20220928130005.2048724-1-rajat.khandelwal@intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,93 +50,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 10:47:55AM -0500, Dan Vacura wrote:
-> Hi Greg,
+On Wed, Sep 28, 2022 at 06:30:05PM +0530, Rajat Khandelwal wrote:
+> Wake on connect/disconnect is only supported while runtime suspend
+> for now, which is obviously necessary. Its also not inherently
+> desired for the system to wakeup on thunderbolt hot events.
+> However, we can still make user in control of waking up the system
+> in the events of hot plug/unplug.
+> This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
+> attribute and only enables wakes on connect/disconnect to the
+> respective port when 'wakeup' is set to 'enabled'. The attribute
+> is set to 'disabled' by default.
 > 
-> On Tue, Sep 27, 2022 at 10:33:34AM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Sep 26, 2022 at 02:53:07PM -0500, Dan Vacura wrote:
-> > > If there is a transmission error the buffer will be returned too early,
-> > > causing a memory fault as subsequent requests for that buffer are still
-> > > queued up to be sent. Refactor the error handling to wait for the final
-> > > request to come in before reporting back the buffer to userspace for all
-> > > transfer types (bulk/isoc/isoc_sg) to ensure userspace knows if the
-> > > frame was successfully sent.
-> > > 
-> > > Fixes: e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support")
-> > > Cc: <stable@vger.kernel.org> # 859c675d84d4: usb: gadget: uvc: consistently use define for headerlen
-> > > Cc: <stable@vger.kernel.org> # f262ce66d40c: usb: gadget: uvc: use on returned header len in video_encode_isoc_sg
-> > > Cc: <stable@vger.kernel.org> # 61aa709ca58a: usb: gadget: uvc: rework uvcg_queue_next_buffer to uvcg_complete_buffer
-> > > Cc: <stable@vger.kernel.org> # 9b969f93bcef: usb: gadget: uvc: giveback vb2 buffer on req complete
-> > > Cc: <stable@vger.kernel.org> # aef11279888c: usb: gadget: uvc: improve sg exit condition
-> > 
-> > I don't understand, why we backport all of these commits to 5.15.y if
-> > the original problem isn't in 5.15.y?
-> > 
-> > Or is it?
-> > 
-> > I'm confused,
+> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+
+Including the issue pointed out below by my bot, Intel has a "special"
+requirement that you are not meeting here in order to send out patches
+for review on a public mailing list in a subsystem like this (i.e. one
+that I and others review patches on.)
+
+Please meet that requirement first before sending any future kernel
+patches out.
+
+> ---
 > 
-> It seems we have a regression in 5.15 with some recent, still in
-> development, features for the uvc gadget driver. Compared to the last
-> kernel I worked with, 5.10, I'm seeing stability and functional issues
-> in 5.15, explained in my summary here:
-> https://lore.kernel.org/all/20220926195307.110121-1-w36195@motorola.com/
+>  drivers/thunderbolt/tb_regs.h   |  2 ++
+>  drivers/thunderbolt/usb4.c      | 33 +++++++++++++++++++++++++--------
+>  drivers/thunderbolt/usb4_port.c |  3 +++
+>  3 files changed, 30 insertions(+), 8 deletions(-)
+
 > 
-> I think we have few approaches.
-> 1) Work through these issues and get the fixes into mainline and stable
-> versions, this patch starts that effort, but there's still more work to
-> be done.
-> 2) Revert the changes that are causing regressions in 5.15 (two changes
-> from what I can see).
-> 3) Add a configfs ability to allow sg isoc transfers and couple the
-> quarter interrupt logic to only sg xfers.
-> 
-> Approach 2 is my preference, as there are issues still present that need
-> to be figured out. However, I don't know how we can revert to just a
-> stable line. I'm basically looking for feedback and input for the next
-> steps, and if it's just me with these issues on 5.15.
+Hi,
 
-Worry about the latest kernel release first.  Once we get things fixed
-there, we can backport any needed changes to older stable/LTS kernels as
-needed.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-We can't go back in time and do new development on older kernels.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-For Android devices, you can always use the `android-mainline` AOSP
-kernel branch as it is up to date with Linus's tree at all times and is
-known to successfully boot and run at least one real device.
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-
-> > >  #define UVC_QUEUE_DISCONNECTED		(1 << 0)
-> > > -#define UVC_QUEUE_DROP_INCOMPLETE	(1 << 1)
-> > > +#define UVC_QUEUE_MISSED_XFER 		(1 << 1)
-> > 
-> > Why change the name of the error?
-> 
-> I thought MISSED_XFER was a more explicit name to what is going on,
-> instead of an action. I can change it back.
-
-That's fine, but you didn't document why you were doing this.
-
-Perhaps this needs to be a patch series, remember, each patch only
-should do 1 thing.
-
-> > > +	case -EXDEV:
-> > > +		uvcg_info(&video->uvc->func, "VS request missed xfer.\n");
-> > 
-> > Why are you spamming the kernel logs at the info level for a USB
-> > transmission problem?   That could get very noisy, please change this to
-> > be at the debug level.
-> 
-> Previously this would printout as a dev_warn in a725d0f6dfc5 ("usb:
-> gadget: uvc: call uvc uvcg_warn on completed status instead of
-> uvcg_info"), which I think might be too noisy. Info is helpful to
-> see what's going on if there is video corruption, but I can change to a
-> dbg as well.
-
-info is never a valid level for an error.  dbg is best if a user can not
-actually do something about the error.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
