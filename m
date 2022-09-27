@@ -2,48 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D125EBDCD
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 10:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8205EC17A
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 13:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiI0IwY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 04:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
+        id S231144AbiI0Ldz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 07:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiI0IwW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 04:52:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E66979F0
-        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 01:52:21 -0700 (PDT)
+        with ESMTP id S230495AbiI0Ldl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 07:33:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27732CF48A
+        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 04:33:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22014B81A61
-        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 08:52:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA17C433D6;
-        Tue, 27 Sep 2022 08:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664268738;
-        bh=6v0waooBKG5AchOZoK6v6pXzUInrDKAT3lBTZTTGYco=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ELksTJd/8025MAqPhqqr7C1xhGz0oPTZrih5FzWC+YxLBM2gtv96Kmkor34MivX7O
-         Kxjmq1q3wEk/InnI8nttxJF7vo/XrjslzwK/ZDX+cGwkrZhk2yUQXVFFUG6+vxf+F2
-         700rQVUOMyODtjotzHuLvqtsq/WamXOeWIBhsbgc=
-Date:   Tue, 27 Sep 2022 10:52:16 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] Thunderbolt/USB4 fix for v6.0 final
-Message-ID: <YzK5wNZJk2TIHBLd@kroah.com>
-References: <YzK21K7xBm0a2Vbo@black.fi.intel.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8AE14CE18F5
+        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 11:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ED4CFC43144
+        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 11:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664278415;
+        bh=8g2+tlF8/DZQ7EtOffO1dfA1OQiRSRK4+B+nJMJAbLI=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=uNCHVOVGXrjGqDSkEPiA/ska8rjSX8q4RNJr6GC3T/jElKQV1OMASwjMrCvGOw3sD
+         Hy8VfCkjpiBV5GmJx70p06Suhr6+nHo1OplRdbyaki1pR3F86gBcZ1yBQTE2UoBa2b
+         aOpDVbGKn0PunDPXcYqcsmrGpLh4UPX1AvStx6b45R0D43KKzB6W+lB9wfkGPfkns2
+         dj+bzYUrHyOhk5udQn99DskS5GZHCaw8ENu9dSW624uHY27ZHXaAvUioqP9YPUi/Z5
+         gqWTEMUHTICFqh3FXGmqbLbD1szUFY5UA9kdd8asu8C5XEGmF0jon5NLxa6R93OBsN
+         O2vc/Axn9bcPg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id DE8A0C433E7; Tue, 27 Sep 2022 11:33:34 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Tue, 27 Sep 2022 11:33:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bugzilla@hadess.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210425-208809-7wnHo7wCku@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzK21K7xBm0a2Vbo@black.fi.intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,17 +70,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 11:39:48AM +0300, Mika Westerberg wrote:
-> Hi Greg,
-> 
-> The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
-> 
->   Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.0
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-Pulled and pushed out, thanks.
+--- Comment #33 from Bastien Nocera (bugzilla@hadess.net) ---
+(In reply to Heikki Krogerus from comment #32)
+> Quick update. Bastien saw a WARNING that my patch causes.
 
-greg k-h
+I don't remember seeing anything, I don't even have the hardware to trigger
+this.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
