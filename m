@@ -2,138 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8495EC26F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 14:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4092D5EC285
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 14:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbiI0MUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 08:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S231993AbiI0MWa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 08:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiI0MUT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 08:20:19 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81FDDF3AE;
-        Tue, 27 Sep 2022 05:18:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aHkZpkGDAiKtsgecJTdxaHRSPL93QOe2Dr9jHvHRsMMUayfll6kmuY+Jvq25+SyI8PZ1ThyhU2nlSrdACn7npeE1OzsN7Dmb6jE1j/1kUu0QOATNh53v6ke5bXog2m9SwZEFjPgPhwz4mkZXNmbWGmU945mdNo5YRS2eS/hHi4e9DCPzogS+A9OEB7m/ddNX7xtfy3tMlDCmrOrp2hfvCzoxMna8haO+AF4KAqANQOmtmxlfXo5Xr1NDwpwDx3zeLAQ9dU7QQ1TeSqeIV/2UA5jsXsUWeQUx189VmNzFTnVoO6Y/vf7jcjFshsfaxM+JLPZ88TMahAArpHXblZPx8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ndweqxUWS4OT2TtA0ZtD5mooARzloUJrdcHqJX88l38=;
- b=AyZNdh/U4hco3CVW27t+pGRtKl7u13hDXsnakkF/+HYmaZd2D9qhL6pf2zifMApRNp+jtNQaeHXGrtTltJkBNGC0aHgMjHT2S6t1G2M3XKVhLEKQDVnw9xo1f6DUrY0wDRD+1tjLWiEmEOIXS4aqxnW4y8ULe2jGPmfL1epNM+BFjE5VOqYbZDh9GVq1EqYpInl6N1txb2hIyc+qwrj5CB/Jwi1Ruw5oudyJOIK0M2AzDIERdjEkMnzyhTVrUY0M5m8KnVy2Kx0fih+rGYYQ+FjQBZE5JfIPTV6In57EHI6/jc3xJu1xg0elN+grqfNi9AZWN6NNQvOpVfV3D5re9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ndweqxUWS4OT2TtA0ZtD5mooARzloUJrdcHqJX88l38=;
- b=jsGzvnSFq9wq7Iqh0dNCVZuOwcQrrOYjUe+PZs3gOpwE5qSoPPhCDaA1QeijaNIu7p7bd2gMxUns9FvQhsprq+2piL175tQthB2te9URZKFMRGpqvVLHQ64W7yVTRu/I5zid2Myx7sgmk1tgpF3+j8WK1Kx0gkgYDfX5i4DpKeLn/nHJQTFM7U7GqYMVmaenSqKeynmLhnnKVf08yMj0qimsQu54E+za0U9oh8duOI05u6OhCnYu5FtoXV02RRaoza5Nn1F5EVy9hnVX9SqrwrLQTnTcjbGSgo3XPu9k6rS+Frs5uSXBNYqfN+/gHSZZmAOt4I9IRm2YxSvFfdRppQ==
-Received: from BN9PR03CA0929.namprd03.prod.outlook.com (2603:10b6:408:107::34)
- by IA1PR12MB6435.namprd12.prod.outlook.com (2603:10b6:208:3ad::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 12:18:45 +0000
-Received: from BN8NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:107:cafe::37) by BN9PR03CA0929.outlook.office365.com
- (2603:10b6:408:107::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26 via Frontend
- Transport; Tue, 27 Sep 2022 12:18:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT014.mail.protection.outlook.com (10.13.177.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 12:18:45 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 27 Sep
- 2022 05:18:35 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
- 2022 05:18:35 -0700
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.129.68.6) with Microsoft SMTP Server id 15.2.986.29 via
- Frontend Transport; Tue, 27 Sep 2022 05:18:33 -0700
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <quic_linyyuan@quicinc.com>, <quic_jackp@quicinc.com>,
-        <saranya.gopal@intel.com>, <tiwai@suse.de>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <waynec@nvidia.com>, <stable@vger.kernel.org>
-Subject: [PATCH 1/1] usb: typec: ucsi: Don't warn on probe deferral
-Date:   Tue, 27 Sep 2022 20:18:07 +0800
-Message-ID: <20220927121807.2471422-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230307AbiI0MWG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 08:22:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8A85725A;
+        Tue, 27 Sep 2022 05:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664281310; x=1695817310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XpkDDEEchrcj3F5SD5RBgWCP709u3VmyVEynWHWmfZE=;
+  b=Ut1Blr3b8nJp5q9DiiV17rKU+3B1SphfJIahvWX4W5622+57RDgaRTQA
+   UCbRG7gv5oc0/XjhbxUyznya5HqMKQoq/kv5y39TtUfu5HyCIhxm6bA8g
+   vNlgB1LTIif45EDmptfaFzGJnACePMNTu+MB/kqg7cY1bBZ4y9NGMvKlB
+   F8VbWcYpZyStdZmrDgrJmpUrRlA1q9LO6E4QmwTjRID2FFwO6TSVYwzET
+   kEeEtbItNvGhmhxPZ7dERi8AID8dsL1wZUqKDdyi4+p9mgJWqPrTvR5mZ
+   8SNYrUXCbdgeWh1+ODzb1itimgUQ+qNMeLVEQwpb3aobDCm55wBX25rWt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="288452433"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="288452433"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:21:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="725492545"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="725492545"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 27 Sep 2022 05:21:47 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1od9ar-008RLy-1N;
+        Tue, 27 Sep 2022 15:21:45 +0300
+Date:   Tue, 27 Sep 2022 15:21:45 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon
+ is present
+Message-ID: <YzLq2WJD78sjiBZg@smile.fi.intel.com>
+References: <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
+ <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
+ <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
+ <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
+ <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
+ <966ef528-455c-5180-fc63-ea77cb933af1@gmail.com>
+ <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
+ <CAHQ1cqGrfTO9JLgD-k0Akg7+hXNT+WevfjH_YpsVi8wQt6_iBw@mail.gmail.com>
+ <YzF8l7kiS7m496YE@smile.fi.intel.com>
+ <CAHQ1cqEVXwMiUxp+QGRkHMea-74DxS1Obvc2xwhy=ySwfxhu7w@mail.gmail.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT014:EE_|IA1PR12MB6435:EE_
-X-MS-Office365-Filtering-Correlation-Id: 42230363-6695-4f73-c5cb-08daa0826c82
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gqtl7LrWU9ccgNnRMolnKqAc4MJ1C4g9hpEOqQMb8lk52mI582B0y06gO3MpCdR4aDlo/0kLLAsphVdJbv5EIlokkHGMh1c6kugYYM+p/yCFU8TmWPqHcP5XrIjbVaJQostQtGUZI5sde+7wnfkPoY8Gr95WtOy+wkC7jsAh24HZ88hTn8BHDlMSXz1DLlVsMqq8xSPwD6jmwqAAS6CYD9MfzjPeySawRrHRv24Eu6gccK10F5EAtKRRUVbzV9qjzLBHKq7k6zHJkbiwOwDDpFQPfst0RX588bIothutn1m7/Q85gokS95XI0lwM/ZC8oiaBf5gzhsAwomaGoTR1LATavHb/xA5r4hSuzxx1qoboocZXV4fppZUWt6DPhuffdeDfBuwT8GbkFYrj9W5nRaFxxlTNh3otEvEUCoIYXzxkx8nqvyyrh2aar78c6T/ikwS7NOymhZUXWWKsPzHse4b7omvDcq5f1D0gaXhRL+GmND+V9uBmF1KR03KTdbcKhuIipJOAfA9Jcrd1WB1/L+mEgO1Iik5XFMbxpSaEU3PkPqeE0xvvh9Yqij0mJxbVmi8lZX2iG3pUBMVEQvweouHG1ZphReNLIdeQ9que7EfJElt7dE4sFynH4v2wBWimG/Tm4Wvr+Aru93+kSXLS1pPM1LMfP82f+YTCT93X9QLIBwYcRL5GepMW9jlCwlVA9uEtZ2vI2+2Bidff8hLvRluYPuNZ2chPgJok1X9hoVVdhKTKnrJeN72jPrjlpFCSDTJ7oNqw+9DKwc6hrMFzAw==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(36756003)(478600001)(66899015)(83380400001)(36860700001)(5660300002)(47076005)(82740400003)(2616005)(426003)(1076003)(336012)(356005)(186003)(86362001)(7636003)(40480700001)(6666004)(7696005)(26005)(110136005)(316002)(8936002)(54906003)(40460700003)(41300700001)(8676002)(4326008)(70586007)(70206006)(2906002)(82310400005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 12:18:45.1017
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42230363-6695-4f73-c5cb-08daa0826c82
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6435
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHQ1cqEVXwMiUxp+QGRkHMea-74DxS1Obvc2xwhy=ySwfxhu7w@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Deferred probe is an expected return value for fwnode_usb_role_switch_get().
-Given that the driver deals with it properly, there's no need to output a
-warning that may potentially confuse users.
+On Mon, Sep 26, 2022 at 11:31:58AM -0700, Andrey Smirnov wrote:
+> On Mon, Sep 26, 2022 at 3:19 AM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> > On Sun, Sep 25, 2022 at 10:43:07PM -0700, Andrey Smirnov wrote:
+> > > On Sun, Sep 25, 2022 at 12:21 PM Ferry Toth <fntoth@gmail.com> wrote:
 
-Fixes: 3c162511530c ("usb: typec: ucsi: Wait for the USB role switches")
-Cc: stable@vger.kernel.org
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+...
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 7f2624f42724..45a4374e9baa 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1069,11 +1069,10 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 
- 	cap->fwnode = ucsi_find_fwnode(con);
- 	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
--	if (IS_ERR(con->usb_role_sw)) {
--		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
-+	if (IS_ERR(con->usb_role_sw))
-+		return dev_err_probe(ucsi->dev, PTR_ERR(con->usb_role_sw),
-+			"con%d: failed to get usb role switch\n",
- 			con->num);
--		return PTR_ERR(con->usb_role_sw);
--	}
- 
- 	/* Delay other interactions with the con until registration is complete */
- 	mutex_lock(&con->lock);
+> > > IMHO instead of trying to rush something in it be prudent to revert my
+> > > patch _and_ address the fact that above patch was lost during the
+> > > merge (Andy's revert needs to be updated)
+> >
+> > I'm not an expert in your fixes for DWC3, so please come up with
+> > the solution sooner than later, otherwise I will try to get my
+> > reverts into the final release, because they obviously fix the
+> > regression.
+> 
+> You don't need to be an expert here. All that's required is that your
+> revert get the code to look like it looks in
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
+> 
+> so the last hunk in your patch instead of looking like:
+> 
+> @@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>  {
+>         int ret, irq;
+> 
+> +       dwc->edev = dwc3_get_extcon(dwc);
+> +       if (IS_ERR(dwc->edev))
+> +               return PTR_ERR(dwc->edev);
+> +
+>         if (ROLE_SWITCH &&
+>             device_property_read_bool(dwc->dev, "usb-role-switch"))
+>                 return dwc3_setup_role_switch(dwc);
+> 
+> should look like
+> 
+> @@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>  {
+>         int ret, irq;
+> 
+>         if (ROLE_SWITCH &&
+>             device_property_read_bool(dwc->dev, "usb-role-switch"))
+>                 return dwc3_setup_role_switch(dwc);
+> 
+> +       dwc->edev = dwc3_get_extcon(dwc);
+> +       if (IS_ERR(dwc->edev))
+> +               return PTR_ERR(dwc->edev);
+> +
+> 
+> Can you update your series accordingly or do you need me to do that? I
+> won't have the cycles until the end of the week (Sat).
+
+Thanks for elaboration. I will do it (hopefully today).
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
