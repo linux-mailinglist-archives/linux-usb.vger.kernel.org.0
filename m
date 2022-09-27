@@ -2,88 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110A65EC6E8
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 16:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2FD5EC762
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 17:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiI0Ovo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 10:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S231167AbiI0PQA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 11:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbiI0OvL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 10:51:11 -0400
+        with ESMTP id S230159AbiI0PP6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 11:15:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295E55B077;
-        Tue, 27 Sep 2022 07:50:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF516F4C;
+        Tue, 27 Sep 2022 08:15:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6470561A05;
-        Tue, 27 Sep 2022 14:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BE671C433D6;
-        Tue, 27 Sep 2022 14:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664290215;
-        bh=axSkT7wopRkPF4+TxkNdX6InmludY04cLnPwzYvxWp8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GxUuVqGFSzk+7xviLu2t/xrxAexr9sDWvpOjgpAlrSPrXobFCPUCrPDE5HSo8/WmL
-         GV2onFYGXuLic5bEwqfkim0HaXkAGiqncM47TLkMy6wzkvb9YVnqhz/ErmV7Mo0rTM
-         OHHeMvljkadCsg8tGr3laaag0McodM16RGCFrApU7P6Zo+/6Za8t5YNBrGsUtqOfe3
-         H3ksUU4BPNmNerdOvI6f8vW+ADghpZu9wgocn7dl4oXr6ckxoJjKucjuGRfdK0VXCs
-         0eD1vRpfYov8lfP12AoXyHD8qclFyKDdpneQt+xQGBI3ZoorMbd4kizfymfkN/QCsP
-         PP0Foq2AnogwA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A12A9E21EC5;
-        Tue, 27 Sep 2022 14:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE0961A22;
+        Tue, 27 Sep 2022 15:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B89C433C1;
+        Tue, 27 Sep 2022 15:15:54 +0000 (UTC)
+References: <20220926124359.304770-1-patrice.chotard@foss.st.com>
+User-agent: mu4e 1.8.9; emacs 28.2
+From:   Felipe Balbi <felipe@balbi.sh>
+To:     patrice.chotard@foss.st.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jerome Audu <jerome.audu@st.com>
+Subject: Re: [PATCH] usb: dwc3: st: Fix node's child name
+Date:   Tue, 27 Sep 2022 18:15:18 +0300
+In-reply-to: <20220926124359.304770-1-patrice.chotard@foss.st.com>
+Message-ID: <87o7v0g860.fsf@balbi.sh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/2] Add Support for Dell 5811e with usb-id 0x413c:0x81c2
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166429021565.22749.13023746895326673030.git-patchwork-notify@kernel.org>
-Date:   Tue, 27 Sep 2022 14:50:15 +0000
-References: <20220926150740.6684-1-linux@fw-web.de>
-In-Reply-To: <20220926150740.6684-1-linux@fw-web.de>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-usb@vger.kernel.org, frank-w@public-files.de, bjorn@mork.no,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, johan@kernel.org, gregkh@linuxfoundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+<patrice.chotard@foss.st.com> writes:
 
-On Mon, 26 Sep 2022 17:07:38 +0200 you wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add new USB-id for dell branded EM7455 with this usb-id in qcserial and qmi
-> driver.
-> MBIM-mode works out of the box with 6.0-rc6.
-> 
-> Frank Wunderlich (2):
->   USB: serial: qcserial: add new usb-id for Dell branded EM7455
->   net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
-> 
-> [...]
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>
+> Update node's child name from "dwc3" to "usb", this fixes
+> the following issue:
+>
+> [3.773852] usb-st-dwc3 8f94000.dwc3: failed to find dwc3 core node
+>
+> Fixes: 3120910a099b ("ARM: dts: stih407-family: Harmonize DWC USB3 DT nodes name")
+>
+> Reported-by: Jerome Audu <jerome.audu@st.com>
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> ---
+>  drivers/usb/dwc3/dwc3-st.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+> index 166b5bde45cb..6c14a79279f9 100644
+> --- a/drivers/usb/dwc3/dwc3-st.c
+> +++ b/drivers/usb/dwc3/dwc3-st.c
+> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+>  	/* Manage SoftReset */
+>  	reset_control_deassert(dwc3_data->rstc_rst);
+>  
+> -	child = of_get_child_by_name(node, "dwc3");
+> +	child = of_get_child_by_name(node, "usb");
 
-Here is the summary with links:
-  - [1/2] USB: serial: qcserial: add new usb-id for Dell branded EM7455
-    (no matching commit)
-  - [2/2] net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
-    https://git.kernel.org/netdev/net/c/797666cd5af0
+there could be DTBs in the wild which have `dwc3' as the child name. It
+seems to me that you should try both names, instead.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+balbi
