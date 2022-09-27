@@ -2,209 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF755EBD5F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 10:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8085EBD97
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 10:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiI0IeF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 04:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S230354AbiI0Ijk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 04:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbiI0Ids (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 04:33:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDE6B4437;
-        Tue, 27 Sep 2022 01:33:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60AADB819DC;
-        Tue, 27 Sep 2022 08:33:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702C7C433D6;
-        Tue, 27 Sep 2022 08:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664267617;
-        bh=5GbFuRQK6NuGnXoajaKtdBAUELZ2+XVh6qsDB8ahhwA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r6KoptzrKXBdbpsin9laScLz/M4TNQQdIasAuYQNtK9hzoJ18HLEsYRUlmj3vMeo+
-         S3UTBS+i/LybDeSJbsdAUl2QEjAFMyiqazzQwTIxNS8nUDUZ0X2+BAX54d+heh42bx
-         7tP/H7YpsdZ2gH7YD+v60Hd8QCCBmPgTptx7cIdY=
-Date:   Tue, 27 Sep 2022 10:33:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        stable@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: fix sg handling in error case
-Message-ID: <YzK1Xry5KIrMr18F@kroah.com>
-References: <20220926195307.110121-1-w36195@motorola.com>
- <20220926195307.110121-2-w36195@motorola.com>
+        with ESMTP id S231278AbiI0Ijf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 04:39:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781272AFE
+        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 01:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664267972; x=1695803972;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fAyM5SsvFz9pwr7uaU7tf9X7Xa33VrF6xq+2ziCEjGk=;
+  b=nnqN22ZpF7xcOr+O4/U6AAV+TlnK+t//+LYkYAo1eQavAnfvf/VHrFtP
+   gE2oqzfrSpy0VvbuVRm19xb6iDQA2DLY4o8l6frJKvXqv1h5rlNmrP+l7
+   wteIxblafs7we1IRyfTxa0y3XcLsWpOXEdZRpe4mmZtnE3IZI+Mwejrds
+   ayJx8AoSU6w9E1O1o+hbaVWaoQ7wDRYCQC0HA75xCIJcx+1/pGUn8yF9x
+   /05fM7wLCffwofQODY4440vkYkYnCE5BixKHm/gTN4mUYbAfzfrUM3WRd
+   CZW5ToafvL8DblL49DAMbKnseO6HCqW8i7JCNp4ftK3sepuEMuyJvTDT/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302740117"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="302740117"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 01:39:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="866488541"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="866488541"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 27 Sep 2022 01:39:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 4FEE4F7; Tue, 27 Sep 2022 11:39:48 +0300 (EEST)
+Date:   Tue, 27 Sep 2022 11:39:48 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 fix for v6.0 final
+Message-ID: <YzK21K7xBm0a2Vbo@black.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926195307.110121-2-w36195@motorola.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 02:53:07PM -0500, Dan Vacura wrote:
-> If there is a transmission error the buffer will be returned too early,
-> causing a memory fault as subsequent requests for that buffer are still
-> queued up to be sent. Refactor the error handling to wait for the final
-> request to come in before reporting back the buffer to userspace for all
-> transfer types (bulk/isoc/isoc_sg) to ensure userspace knows if the
-> frame was successfully sent.
-> 
-> Fixes: e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support")
-> Cc: <stable@vger.kernel.org> # 859c675d84d4: usb: gadget: uvc: consistently use define for headerlen
-> Cc: <stable@vger.kernel.org> # f262ce66d40c: usb: gadget: uvc: use on returned header len in video_encode_isoc_sg
-> Cc: <stable@vger.kernel.org> # 61aa709ca58a: usb: gadget: uvc: rework uvcg_queue_next_buffer to uvcg_complete_buffer
-> Cc: <stable@vger.kernel.org> # 9b969f93bcef: usb: gadget: uvc: giveback vb2 buffer on req complete
-> Cc: <stable@vger.kernel.org> # aef11279888c: usb: gadget: uvc: improve sg exit condition
+Hi Greg,
 
-I don't understand, why we backport all of these commits to 5.15.y if
-the original problem isn't in 5.15.y?
+The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
 
-Or is it?
+  Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
 
-I'm confused,
+are available in the Git repository at:
 
-greg k-h
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.0
 
+for you to fetch changes up to 31f87f705b3c1635345d8e8a493697099b43e508:
 
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Dan Vacura <w36195@motorola.com>
-> 
-> ---
->  drivers/usb/gadget/function/uvc_queue.c |  8 +++++---
->  drivers/usb/gadget/function/uvc_queue.h |  2 +-
->  drivers/usb/gadget/function/uvc_video.c | 18 ++++++++++++++----
->  3 files changed, 20 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-> index ec500ee499ee..72e7ffd9a021 100644
-> --- a/drivers/usb/gadget/function/uvc_queue.c
-> +++ b/drivers/usb/gadget/function/uvc_queue.c
-> @@ -304,6 +304,7 @@ int uvcg_queue_enable(struct uvc_video_queue *queue, int enable)
->  
->  		queue->sequence = 0;
->  		queue->buf_used = 0;
-> +		queue->flags &= ~UVC_QUEUE_MISSED_XFER;
->  	} else {
->  		ret = vb2_streamoff(&queue->queue, queue->queue.type);
->  		if (ret < 0)
-> @@ -329,10 +330,11 @@ int uvcg_queue_enable(struct uvc_video_queue *queue, int enable)
->  void uvcg_complete_buffer(struct uvc_video_queue *queue,
->  					  struct uvc_buffer *buf)
->  {
-> -	if ((queue->flags & UVC_QUEUE_DROP_INCOMPLETE) &&
-> -	     buf->length != buf->bytesused) {
-> -		buf->state = UVC_BUF_STATE_QUEUED;
-> +	if ((queue->flags & UVC_QUEUE_MISSED_XFER)) {
-> +		queue->flags &= ~UVC_QUEUE_MISSED_XFER;
-> +		buf->state = UVC_BUF_STATE_ERROR;
->  		vb2_set_plane_payload(&buf->buf.vb2_buf, 0, 0);
-> +		vb2_buffer_done(&buf->buf.vb2_buf, VB2_BUF_STATE_ERROR);
->  		return;
->  	}
->  
-> diff --git a/drivers/usb/gadget/function/uvc_queue.h b/drivers/usb/gadget/function/uvc_queue.h
-> index 41f87b917f6b..741ec58ae9bb 100644
-> --- a/drivers/usb/gadget/function/uvc_queue.h
-> +++ b/drivers/usb/gadget/function/uvc_queue.h
-> @@ -42,7 +42,7 @@ struct uvc_buffer {
->  };
->  
->  #define UVC_QUEUE_DISCONNECTED		(1 << 0)
-> -#define UVC_QUEUE_DROP_INCOMPLETE	(1 << 1)
-> +#define UVC_QUEUE_MISSED_XFER 		(1 << 1)
+  thunderbolt: Explicitly reset plug events delay back to USB4 spec value (2022-09-22 14:32:16 +0300)
 
-Why change the name of the error?
+----------------------------------------------------------------
+thunderbolt: Fix for v6.0 final
 
->  
->  struct uvc_video_queue {
->  	struct vb2_queue queue;
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index bb037fcc90e6..e46591b067a8 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -88,6 +88,7 @@ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
->  		struct uvc_buffer *buf)
->  {
->  	void *mem = req->buf;
-> +	struct uvc_request *ureq = req->context;
->  	int len = video->req_size;
->  	int ret;
->  
-> @@ -113,13 +114,14 @@ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
->  		video->queue.buf_used = 0;
->  		buf->state = UVC_BUF_STATE_DONE;
->  		list_del(&buf->queue);
-> -		uvcg_complete_buffer(&video->queue, buf);
->  		video->fid ^= UVC_STREAM_FID;
-> +		ureq->last_buf = buf;
->  
->  		video->payload_size = 0;
->  	}
->  
->  	if (video->payload_size == video->max_payload_size ||
-> +	    video->queue.flags & UVC_QUEUE_MISSED_XFER ||
->  	    buf->bytesused == video->queue.buf_used)
->  		video->payload_size = 0;
->  }
-> @@ -180,7 +182,8 @@ uvc_video_encode_isoc_sg(struct usb_request *req, struct uvc_video *video,
->  	req->length -= len;
->  	video->queue.buf_used += req->length - header_len;
->  
-> -	if (buf->bytesused == video->queue.buf_used || !buf->sg) {
-> +	if (buf->bytesused == video->queue.buf_used || !buf->sg ||
-> +			video->queue.flags & UVC_QUEUE_MISSED_XFER) {
->  		video->queue.buf_used = 0;
->  		buf->state = UVC_BUF_STATE_DONE;
->  		buf->offset = 0;
-> @@ -195,6 +198,7 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->  		struct uvc_buffer *buf)
->  {
->  	void *mem = req->buf;
-> +	struct uvc_request *ureq = req->context;
->  	int len = video->req_size;
->  	int ret;
->  
-> @@ -209,12 +213,13 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->  
->  	req->length = video->req_size - len;
->  
-> -	if (buf->bytesused == video->queue.buf_used) {
-> +	if (buf->bytesused == video->queue.buf_used ||
-> +			video->queue.flags & UVC_QUEUE_MISSED_XFER) {
->  		video->queue.buf_used = 0;
->  		buf->state = UVC_BUF_STATE_DONE;
->  		list_del(&buf->queue);
-> -		uvcg_complete_buffer(&video->queue, buf);
->  		video->fid ^= UVC_STREAM_FID;
-> +		ureq->last_buf = buf;
->  	}
->  }
->  
-> @@ -255,6 +260,11 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->  	case 0:
->  		break;
->  
-> +	case -EXDEV:
-> +		uvcg_info(&video->uvc->func, "VS request missed xfer.\n");
+This includes a single fix from Mario that resets the plug event delay
+back to the USB4 spec value.
 
-Why are you spamming the kernel logs at the info level for a USB
-transmission problem?   That could get very noisy, please change this to
-be at the debug level.
+This has been in linux-next with no reported issues.
 
-thanks,
+----------------------------------------------------------------
+Mario Limonciello (1):
+      thunderbolt: Explicitly reset plug events delay back to USB4 spec value
 
-greg k-h
+ drivers/thunderbolt/switch.c | 1 +
+ 1 file changed, 1 insertion(+)
