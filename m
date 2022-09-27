@@ -2,113 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FB95EB90F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 06:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C50E5EBAA7
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 08:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiI0EAp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 00:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
+        id S229773AbiI0GbB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 02:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiI0EAl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 00:00:41 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81304491F4;
-        Mon, 26 Sep 2022 21:00:36 -0700 (PDT)
-X-UUID: d7636c1e3c094e3badf6b572f4aecd08-20220927
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=3ahXguKncQoP96BTrWTBp8+5vM5nwnwdJveXeSEIm9c=;
-        b=VPNODF5t4Ad3dBeM+YXSyMLxzcetbcDKcVFmO0VOS12C3TYRZkv2E3pLPWAmzA9szzy4D34N+ui5XM76adrYztg0qYPswsOjXd8rUYAx7ADFZa5OpZdCsVwqhLdwt37XH0jTmgz7UVqHRgulw4ezYb0yoLedmQ40O/szqTuk43w=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:762235ad-4de9-4145-9256-d3458c5415da,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.11,REQID:762235ad-4de9-4145-9256-d3458c5415da,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:39a5ff1,CLOUDID:813654e4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220926150559TV5JQC0T,BulkQuantity:69,Recheck:0,SF:28|17|19|48|823|82
-        4,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL
-        :0
-X-UUID: d7636c1e3c094e3badf6b572f4aecd08-20220927
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 113336129; Tue, 27 Sep 2022 12:00:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 27 Sep 2022 12:00:29 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 27 Sep 2022 12:00:29 +0800
-Message-ID: <664f3b7d-d629-5af1-cae4-cb5b638a5da1@mediatek.com>
-Date:   Tue, 27 Sep 2022 12:00:28 +0800
+        with ESMTP id S229567AbiI0Ga5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 02:30:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561778670A;
+        Mon, 26 Sep 2022 23:30:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A5A61604;
+        Tue, 27 Sep 2022 06:30:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6F0C433D6;
+        Tue, 27 Sep 2022 06:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664260255;
+        bh=YGDSP5vLuXAeAgX4Rz1u2FTBmaQowm/Pe9gP8nWeNdE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AdpgttYZfI8FZsZgXi1OHKUN56K+EB+ohwmfdOS6Vf+JrdQS9wj/I41PhZmtrm16E
+         hlx5xleiavKfW//6iijp71HVs5s6zCV5CzlV5Q3G/vR+3mhTlk2QhTv6MU44lPh2GG
+         1zYzKB1SezyEMw0WXRV1CAES/pvHJ3LyDHvoba6lrbjTaEngLROohVRd+L+/l9jHUS
+         PNAHFtII8LGQ/+RINhboAtj+qfQz0/mn4BZWFToLBrdReOluLCZEXI+aOHsILwruvO
+         qEBFRZxZHbd6qDjRYRLeNhnwxVptZbJCzRYcAjk/7jwBK5v059RsUR2nWJd3cOOi8W
+         Qipv8yGXPhJcw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1od47Q-0006Uq-UD; Tue, 27 Sep 2022 08:31:00 +0200
+Date:   Tue, 27 Sep 2022 08:31:00 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-usb@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] USB: serial: qcserial: add new usb-id for Dell
+ branded EM7455
+Message-ID: <YzKYpPFyZYMkVaxS@hovoldconsulting.com>
+References: <20220926150740.6684-1-linux@fw-web.de>
+ <20220926150740.6684-2-linux@fw-web.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8195-demo: fix the memory size of
- node secmon
-Content-Language: en-US
-To:     Miles Chen <miles.chen@mediatek.com>
-CC:     <bear.wang@mediatek.com>, <devicetree@vger.kernel.org>,
-        <fparent@baylibre.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <macpaul@gmail.com>, <matthias.bgg@gmail.com>,
-        <pablo.sun@mediatek.com>, <robh+dt@kernel.org>,
-        <stable@vger.kernel.org>
-References: <20220922091648.2821-1-macpaul.lin@mediatek.com>
- <20220926070544.13257-1-miles.chen@mediatek.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <20220926070544.13257-1-miles.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926150740.6684-2-linux@fw-web.de>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 9/26/22 15:05, Miles Chen wrote:
-> Hi Macpaul,
+On Mon, Sep 26, 2022 at 05:07:39PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
->> The size of device tree node secmon (bl31_secmon_reserved) was
->> incorrect. It should be increased to 2MiB (0x200000).
+> Add support for Dell 5811e (EM7455) with USB-id 0x413c:0x81c2.
 > 
-> 192K should work when the patch(6147314aeedc) was accepted.
-> Does the trusted-firmware-a get larger now, so we need to
-> increase the size to 2MiB?
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/usb/serial/qcserial.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> thanks,
-> Miles
+> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> index 586ef5551e76..7897609916a6 100644
+> --- a/drivers/usb/serial/qcserial.c
+> +++ b/drivers/usb/serial/qcserial.c
+> @@ -177,6 +177,7 @@ static const struct usb_device_id id_table[] = {
+>  	{DEVICE_SWI(0x413c, 0x81b3)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
+>  	{DEVICE_SWI(0x413c, 0x81b5)},	/* Dell Wireless 5811e QDL */
+>  	{DEVICE_SWI(0x413c, 0x81b6)},	/* Dell Wireless 5811e QDL */
+> +	{DEVICE_SWI(0x413c, 0x81c2)},	/* Dell Wireless 5811e QDL */
 
-When mt8195-demo.dts sent to the upstream, at that time the size of
-BL31 was small. Because supported functions and modules in BL31 are 
-basic sets when the board was under early development stage.
+I assume this is not just for QDL mode as the comment indicates.
 
-Now BL31 includes more firmwares of coprocessors and maturer functions
-so the size has grown bigger in real applications. According to the 
-value reported by customers, we think reserved 2MiB for BL31 might be 
-enough for maybe the following 2 or 3 years.
+Could you post the output of usb-devices for this device?
 
->>
->> The origin setting will cause some abnormal behavior due to
->> trusted-firmware-a and related firmware didn't load correctly.
->> The incorrect behavior may vary because of different software stacks.
->> For example, it will cause build error in some Yocto project because
->> it will check if there was enough memory to load trusted-firmware-a
->> to the reserved memory.
->>
->> Cc: stable@vger.kernel.org      # v5.19
->> Fixes: 6147314aeedc ("arm64: dts: mediatek: Add device-tree for MT8195 Demo board")
->> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+>  	{DEVICE_SWI(0x413c, 0x81cb)},	/* Dell Wireless 5816e QDL */
+>  	{DEVICE_SWI(0x413c, 0x81cc)},	/* Dell Wireless 5816e */
+>  	{DEVICE_SWI(0x413c, 0x81cf)},   /* Dell Wireless 5819 */
 
-Thanks
-Macpaul Lin
+Johan
