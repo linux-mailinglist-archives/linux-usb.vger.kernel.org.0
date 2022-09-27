@@ -2,57 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F085ECAA4
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 19:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F745ECAE2
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 19:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbiI0RTM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 13:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S232636AbiI0Rdd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 13:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbiI0RTK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 13:19:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EBB1CEDF7;
-        Tue, 27 Sep 2022 10:19:09 -0700 (PDT)
+        with ESMTP id S230256AbiI0Rdb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 13:33:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB11E1C770A;
+        Tue, 27 Sep 2022 10:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664299149; x=1695835149;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aMgoRaBq0TVWiNPoZWHgQ65c42ADW1s3CpwVh5+pSQM=;
-  b=Bf1V405jOYEon5Lcvlbq1PBerbHbboZH30Og1AA2Sme+XvseLY/ILCKY
-   M/2b9VsYoX4v2P4h3dbZXDNQ+Ub3E+6x8JC2Lr+Rx0zq3r2P9S04NxbRc
-   nN/tyXPXEDMItnBtP0U4Bmm9pquRHOFtXFzaIZf2uASOdJ72AJMft6Yog
-   tR+y3dd8fQVSuXpYjF5GVeuIl0w94SvL1kmNBid6Rkbp3EkGFLAlb75DX
-   86bcKxca9fu1AtlNH6DTXOAa3qEdvg9WjhvI4g29rUlwS4xln+67AWPoq
-   i1r9zC/gWleDv6+Sbzh8O0n1f4T5UPvFyIl+IpVNzx0Kg/2Y6rnPUeeoE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="301354942"
+  t=1664300010; x=1695836010;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qL2/gbkz5vC23h0UVMkPYeZziYcWA8mFsACtDw2q3ik=;
+  b=j8KSciNijSDMhaFXCM5vfwJNF2H8+C9cfZtUNIsEeckfHDrtmBfhYIYA
+   bj4N0MQT4u7kt1KDGVKKMaaXDtSdy3wqoQkLKTTpKe5VvrXv7cT+JYsyR
+   xmi+r4cXMwCLTGb6sMWeq+yZnaboX+w9qZchQxGmBuhf5HoIaoPKkDdaV
+   TLg8QbMkM3R15z0YWEzBS0qHWZ3p+9c8nz8X374mCdRInNI5ftw7dUArz
+   c0sKETfKxPgL191kJnXaJlsvycmP3+HIrDvNucQPUUUURvUZ3a6sqxjOl
+   ML/Je0QQTzHxReAyUM5hNVMA4toZqkAqXtioWTXBn4w1zkfbE3JZ/dDmW
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="298977385"
 X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="301354942"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 10:19:09 -0700
+   d="scan'208";a="298977385"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 10:33:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="690071539"
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="710645459"
 X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="690071539"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Sep 2022 10:19:07 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 421707C; Tue, 27 Sep 2022 20:19:25 +0300 (EEST)
+   d="scan'208";a="710645459"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Sep 2022 10:33:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1odEST-008Yte-3C;
+        Tue, 27 Sep 2022 20:33:25 +0300
+Date:   Tue, 27 Sep 2022 20:33:25 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+To:     kernel test robot <lkp@intel.com>
+Cc:     Prashant Malani <pmalani@chromium.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        kbuild-all@lists.01.org, Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] usb: typec: Replace custom implementation of device_match_fwnode()
-Date:   Tue, 27 Sep 2022 20:19:24 +0300
-Message-Id: <20220927171924.61908-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v1 2/5] device property: Constify fwnode connection match
+ APIs
+Message-ID: <YzMz5ZDkxE3TwGgl@smile.fi.intel.com>
+References: <20220927142822.4095-2-andriy.shevchenko@linux.intel.com>
+ <202209280013.P9rEfc5m-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202209280013.P9rEfc5m-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -62,49 +71,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replace custom implementation of the device_match_fwnode().
+On Wed, Sep 28, 2022 at 12:35:10AM +0800, kernel test robot wrote:
+> Hi Andy,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on driver-core/driver-core-testing]
+> [cannot apply to usb/usb-testing westeri-thunderbolt/next linus/master v6.0-rc7 next-20220923]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/device-property-Keep-dev_fwnode-and-dev_fwnode_const-separate/20220927-223109
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 1da40c2667388dd70306bfd3d4dcb49fd20b50a9
+> config: sh-allmodconfig
+> compiler: sh4-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/34401a778cc4e8ddd9610bf7f76d8b7e4fff142e
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Andy-Shevchenko/device-property-Keep-dev_fwnode-and-dev_fwnode_const-separate/20220927-223109
+>         git checkout 34401a778cc4e8ddd9610bf7f76d8b7e4fff142e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/usb/typec/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/typec/mux.c     | 4 ++--
- drivers/usb/typec/retimer.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks, fixed locally for v2.
 
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index f81ea26ab389..c7177ddd4f12 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -29,7 +29,7 @@ static int switch_fwnode_match(struct device *dev, const void *fwnode)
- 	if (!is_typec_switch_dev(dev))
- 		return 0;
- 
--	return dev_fwnode(dev) == fwnode;
-+	return device_match_fwnode(dev, fwnode);
- }
- 
- static void *typec_switch_match(const struct fwnode_handle *fwnode,
-@@ -259,7 +259,7 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
- 	if (!is_typec_mux_dev(dev))
- 		return 0;
- 
--	return dev_fwnode(dev) == fwnode;
-+	return device_match_fwnode(dev, fwnode);
- }
- 
- static void *typec_mux_match(const struct fwnode_handle *fwnode,
-diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
-index 8edfdc709a28..8e1055783fe2 100644
---- a/drivers/usb/typec/retimer.c
-+++ b/drivers/usb/typec/retimer.c
-@@ -31,7 +31,7 @@ static bool dev_name_ends_with(struct device *dev, const char *suffix)
- 
- static int retimer_fwnode_match(struct device *dev, const void *fwnode)
- {
--	return dev_fwnode(dev) == fwnode && dev_name_ends_with(dev, "-retimer");
-+	return device_match_fwnode(dev, fwnode) && dev_name_ends_with(dev, "-retimer");
- }
- 
- static void *typec_retimer_match(const struct fwnode_handle *fwnode, const char *id, void *data)
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
