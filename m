@@ -2,91 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AA05EE03B
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 17:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA585EE082
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 17:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbiI1PZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 11:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S233790AbiI1PcO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 11:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiI1PYg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 11:24:36 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F97CBADF;
-        Wed, 28 Sep 2022 08:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664378618; x=1695914618;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xo6XKYqI3oPo+JJpKrktAR7Ec7OSHFgLsMM1Nyu1Bpg=;
-  b=ekkimzVcJ4y1kFMT6KWeK7WuEnEFTKHvOH0vjx6/nNXPARahjqp/x5PA
-   aUnwwgGlg7FcFwjfzKXnJEuxct9TU1gO1BWlt+YTM/Xl18OAbGRrEHXHX
-   y//apaf0zQ53i71hmlpWz4kunjNdGD5oYIvFGaUoWBHlcQyutR3pCm1sU
-   hh51M3J3IlGmvgkgOhYUHn/lJsFt9UOncYOaBbFaCrLiJM+GefFxWLUcs
-   I43UgKZk4jjIQnTx7eOhuK62amPsvnsxvrY2wQ3SLc6otsWznHZrePIcU
-   +J6Xo9+mFnDxSxghk02SerCddpjXboUAzQt6Q+oXk+cAdBOBibg3GIr69
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="281346483"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="281346483"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:23:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573074617"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="573074617"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2022 08:23:33 -0700
-Message-ID: <c1d537ad-5a2d-24b1-bfc3-165deebbbfa7@linux.intel.com>
-Date:   Wed, 28 Sep 2022 18:24:57 +0300
+        with ESMTP id S233468AbiI1Pbz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 11:31:55 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AC849D12C7
+        for <linux-usb@vger.kernel.org>; Wed, 28 Sep 2022 08:30:28 -0700 (PDT)
+Received: (qmail 490088 invoked by uid 1000); 28 Sep 2022 11:30:05 -0400
+Date:   Wed, 28 Sep 2022 11:30:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage
+Message-ID: <YzRofTAx+3pPCbrL@rowland.harvard.edu>
+References: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3] usb: xhci: add XHCI_SPURIOUS_SUCCESS to ASM1042
- despite being a V0.96 controller
-Content-Language: en-US
-To:     Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-        mathias.nyman@intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stern@rowland.harvard.edu
-References: <20220926193140.607172-1-jens.glathe@oldschoolsolutions.biz>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20220926193140.607172-1-jens.glathe@oldschoolsolutions.biz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26.9.2022 22.31, Jens Glathe wrote:
-> This appears to fix the error:
-> "xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
-> current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
-> often) when using a r8152 USB3 ethernet adapter with integrated hub.
+On Wed, Sep 28, 2022 at 05:17:20PM +0800, Chunfeng Yun wrote:
+> It happens when enable uvc function, the flow as below:
+> the controller switch to data stage, then call
+>     -> foward_to_driver() -> composite_setup() -> uvc_function_setup(),
+> it send out an event to user layer to notify it call
+>     -> ioctl() -> uvc_send_response() -> usb_ep_queue(),
+> but before the user call ioctl to queue ep0's buffer, the host already send
+> out data, but the controller find that no buffer is queued to receive data,
+> it send out STALL handshake.
 > 
-> ASM1042 reports as a 0.96 controller, but appears to behave more like 1.0
-> 
-> Inspred by this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
-> 
-> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+> To fix the issue, don't send out ACK of setup stage to switch to out data
+> stage until the buffer is available.
 
-Adding this to queue
+You might find it is better to use the delayed_status routines already 
+present in the Gadget core.  Instead of delaying the response to the 
+Setup packet of the second control transfer, delay the status response 
+to the first control transfer.
 
-> ---
+This approach has the advantage of working even when the second transfer 
+is not control but something else, such as bulk.
 
-In the future, As Alan also pointed out, please list the changes since last version here.
+Also it agrees better with the way the USB spec intends control 
+transfers to work.  The UDC is not supposed to complete the status stage 
+of a control transfer until the gadget has fully processed the 
+transfer's information and is ready to go forward.
 
-Something like:
-
-changes since v2
-  - add subsystem to subject line
-  - removed host 0.96 version check
-
-Thanks
--Mathias
+Alan Stern
