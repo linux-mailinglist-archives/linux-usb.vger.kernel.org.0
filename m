@@ -2,150 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639865EE0CC
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 17:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09425EE1DE
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 18:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbiI1Prw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 11:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S234577AbiI1QaV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 12:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbiI1Pru (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 11:47:50 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2068.outbound.protection.outlook.com [40.107.95.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75477D74D6;
-        Wed, 28 Sep 2022 08:47:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M9x4X9S/1+dN6z8mXwLroTZemqNymNPoUnGaIuv4M+RbSBP79vXXQpRgrcsyhhUd7WrRSKthq4GjndEWwAMk++tPEA9bINaMpaxa/57Irxr/RBlEB/mvmkxLFtDBiOV9pPCOouPfP3QDouvX3PSt2uX47JF91xnnRLmfdqz+pCiPfOGDfjxrh3yEfECRAMxScWOCja7rohXd7FSdLS2l4Jfr+QXfQVfuA1UCT4dUlOIoooh/6OVRZgmHJFlAeeGECb+Qb18qXntAUCZEwet+zhT+kA8xa7gY94iD33ok5qZYBRtiQPI8EKNxPFik5Ypow+l6RqIKQNywlCEw/dzf8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hmytCIfU0q0HFZtdSw824ApWbs2IEYLxez4JZUy1rmg=;
- b=oJf6pud5sOX6m84xt3TKbqlLILVh/BXaHq+oyBAHvgNl4BwuSFNQyJU/cGhPm+bI32Vk6pyv8sIefvo/Q0WFQJ8pUX25YdFwfsAKumetsgbE0rkoxwQwjDl6/zT6c+DaYLBofwmy1oPnIm8PsjgwKGwePdILdVLfbndSUcHKF24hLhmLZWz0EhLBKpOPnobm6c9p1H9K3Bwfw/tjIybfLBvIVNdtcD4KOuRTBZSr1fxvmNcExD66KHTdlxnwlts1HNd9QabWJ7sl2Doy+mwDg1md8irLvbaMMysWBLrcXlJXyeCk8C4kLLQPcRWxczh4mS6gbMP65YohruCkHkYzBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hmytCIfU0q0HFZtdSw824ApWbs2IEYLxez4JZUy1rmg=;
- b=Cy4WS8F4IBUs8t3XExlRCXaSeVT0CNcg79+IQJbAmWcWox6udY+IfMGl5qB/Yvh0VkFbCmDzGSOZ2C8lgNVbUduE7HcRiskyKvZOcPKsITVCvjm6EcOuJHMDXj5WHduxnfus7H+UuaZqM+h3Fkn03PP6P6JVpl4y/w53olc6VwWICC17XJqr3ZyHjJ8e8vqYFLUHPYN0amjSOYhRzaCCSpcmeNZeF4JVchVqY2M/4mfc6x40Sj7e0D1+uB3zFMG5ry5lvKM/IwPu00Fpa3PFHDYg2lMnabsaH6NxTyOGSL/c0oNyHOsbUBDVDU5iPiCKRRUPECDvmTgIxbD7qk0ExA==
-Received: from MW4PR03CA0169.namprd03.prod.outlook.com (2603:10b6:303:8d::24)
- by CY5PR12MB6081.namprd12.prod.outlook.com (2603:10b6:930:2b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 15:47:48 +0000
-Received: from CO1NAM11FT070.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8d:cafe::7f) by MW4PR03CA0169.outlook.office365.com
- (2603:10b6:303:8d::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26 via Frontend
- Transport; Wed, 28 Sep 2022 15:47:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT070.mail.protection.outlook.com (10.13.175.20) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Wed, 28 Sep 2022 15:47:47 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 28 Sep
- 2022 08:47:37 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
- 2022 08:47:37 -0700
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.129.68.7) with Microsoft SMTP Server id 15.2.986.29 via
- Frontend Transport; Wed, 28 Sep 2022 08:47:36 -0700
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <waynec@nvidia.com>, <Sanket.Goswami@amd.com>,
-        <singhanc@nvidia.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/1] usb: typec: ucsi_ccg: Add OF support
-Date:   Wed, 28 Sep 2022 23:47:32 +0800
-Message-ID: <20220928154732.3806953-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S234486AbiI1QaC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 12:30:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F088F1E722;
+        Wed, 28 Sep 2022 09:29:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2D0AB82150;
+        Wed, 28 Sep 2022 16:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E2DC433D6;
+        Wed, 28 Sep 2022 16:29:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664382597;
+        bh=XeyD6GwfVncXVfYNyWO+FuF8P1JbvW1tgiUZc/k3E2s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mRwEo/8t/4+gDjRK82Lc+WFxc77zy+yErX5s2eHGgzVs4lAenQbFm10NS8pdgv/uD
+         5FHNbq6yg4I101zuyNpwBH9mAeeZmsC//XPMXWiNe4IO/TBj8TwrXWnaGalaiIi+lq
+         zFh9sXNJX9gPdaAEDIf9TcnqSGZd5BUhuEhjSNeiOyAi/C2qSLuSJ275feoE2EFNfE
+         BqtKUEw62k+hVXpvR9IFct2EKrgosuARv2w74jK64nFSPn8SS+u3V2RIRAffGLB83w
+         /ge357bLp9AaD52f2fjF4SXuqtxHBdDK5EhPKK8/eEkAG6Svek8MCZ9PdthidCkW1I
+         5fMHofnMOk8PQ==
+Date:   Wed, 28 Sep 2022 09:29:55 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, paul.elder@ideasonboard.com,
+        kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
+        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v4] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
+Message-ID: <YzR2gyyuU6luYRBP@dev-arch.thelio-3990X>
+References: <20220907215818.2670097-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-X-NVConfidentiality: public
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT070:EE_|CY5PR12MB6081:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a20745a-bf4b-4e6d-0164-08daa168caf4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YVJr4uhs58+MDOyJO6Iix3ACM0n1BaFNEGHlhP9fTTJsYqLIud2597tV+kNKH+agVmMnP/VXDqluPHzTMBDFKtwXgxei3n6J3qJohMB1uRPO935V2cguJm5NdSGlngpDBr36FpSAp5O6R648tSXZYg8K/OJsS6vwEt7uHBoh0XJYdHD/3kVzJx5rxIx+gvCU4k5MaTyLZZhSgxqMaL/p32f474mxNCVrUJ3ztSxKszVL4lM4YP2lPFzm0NYgWS1PeNCDNGMO8rMUuqH/s1SDX9gNexeURtwn8Q4i1WoLyDJ0+A8/qYKyhKA4s+kK2+jcMNqu7mMEdK3xWXqzJ76S6pUZrpAb4IYJbvRBAV9+YdYcfDQUBwlrmAhWEPmd3hotTGlNZT9pIcdD2dQC+0K55+BDZ975IUTTNP3sERLSNrcUj5aI0/4kUYJXtikGPcsyegv4prdby+7QqqPMMyd8xsRsxjbfNVqsXfEFTzlv6pQLqrh1WXOj5XxWiS3kX8J+N8qPBxXWJxXi3i4vIUKffMWPqYHtuXfO9x9D8Ie0+INCVgBSA+Ydpsuj3/bVNhII/yxWifDMfjRheTVaBI5M9H7dR+clGx6AXWKunnTzQNpNWe6ao82xQtIu79QJua3xOQxAqte/tH4UThosG2mtVPXfz80MzNfCjrIxzbYwa+cLpNAzU36kSi0JlNijzawTVW9JwVZd30UGKO2NP4VpUI7dDLcLzMvaVmIKjpRyWYYB1BIrYkVgYtlXeEzB84LMXQ3fSIqFb7oEqgmi5pUNFg==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199015)(36840700001)(46966006)(40470700004)(478600001)(6666004)(26005)(83380400001)(40460700003)(186003)(47076005)(336012)(426003)(1076003)(2616005)(7696005)(2906002)(8936002)(40480700001)(82310400005)(54906003)(110136005)(4326008)(8676002)(5660300002)(41300700001)(70586007)(70206006)(316002)(356005)(7636003)(82740400003)(86362001)(36860700001)(36756003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 15:47:47.8443
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a20745a-bf4b-4e6d-0164-08daa168caf4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT070.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6081
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220907215818.2670097-1-m.grzeschik@pengutronix.de>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The change enables the device tree infrastructure support on Cypress
-cypd4226.
+Hi Michael,
 
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
-V1 -> V2: updated the change with dev_fwnode instead of device node
- drivers/usb/typec/ucsi/ucsi_ccg.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+On Wed, Sep 07, 2022 at 11:58:18PM +0200, Michael Grzeschik wrote:
+> This patch is changing the simple workqueue in the gadget driver to be
+> allocated as async_wq with a higher priority. The pump worker, that is
+> filling the usb requests, will have a higher priority and will not be
+> scheduled away so often while the video stream is handled. This will
+> lead to fewer streaming underruns.
+> 
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 5c0bf48be766..7e034d765a0e 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -631,7 +631,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
- {
- 	unsigned long flags = IRQF_ONESHOT;
- 
--	if (!has_acpi_companion(uc->dev))
-+	if (!dev_fwnode(uc->dev))
- 		flags |= IRQF_TRIGGER_HIGH;
- 
- 	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
-@@ -1417,6 +1417,12 @@ static int ucsi_ccg_remove(struct i2c_client *client)
- 	return 0;
- }
- 
-+static const struct of_device_id ucsi_ccg_of_match_table[] = {
-+		{ .compatible = "cypress,cypd4226", },
-+		{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
-+
- static const struct i2c_device_id ucsi_ccg_device_id[] = {
- 	{"ccgx-ucsi", 0},
- 	{}
-@@ -1471,6 +1477,7 @@ static struct i2c_driver ucsi_ccg_driver = {
- 		.pm = &ucsi_ccg_pm,
- 		.dev_groups = ucsi_ccg_groups,
- 		.acpi_match_table = amd_i2c_ucsi_match,
-+		.of_match_table = ucsi_ccg_of_match_table,
- 	},
- 	.probe = ucsi_ccg_probe,
- 	.remove = ucsi_ccg_remove,
--- 
-2.25.1
+...
 
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> index 58e383afdd4406..1a31e6c6a5ffb8 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -88,6 +88,7 @@ struct uvc_video {
+>  	struct usb_ep *ep;
+>  
+>  	struct work_struct pump;
+> +	struct workqueue_struct *async_wq;
+>  
+>  	/* Frame parameters */
+>  	u8 bpp;
+
+I am commenting here because this is the most recent change but after
+this showed up in -next as commit 9b91a6523078 ("usb: gadget: uvc:
+increase worker prio to WQ_HIGHPRI"), I see the following warning/error
+when building s390 allmodconfig:
+
+  In file included from ../include/linux/string.h:253,
+                   from ../include/linux/bitmap.h:11,
+                   from ../include/linux/cpumask.h:12,
+                   from ../include/linux/smp.h:13,
+                   from ../include/linux/lockdep.h:14,
+                   from ../include/linux/rcupdate.h:29,
+                   from ../include/linux/rculist.h:11,
+                   from ../include/linux/pid.h:5,
+                   from ../include/linux/sched.h:14,
+                   from ../include/linux/ratelimit.h:6,
+                   from ../include/linux/dev_printk.h:16,
+                   from ../include/linux/device.h:15,
+                   from ../drivers/usb/gadget/function/f_uvc.c:9:
+  In function ‘fortify_memset_chk’,
+      inlined from ‘uvc_register_video’ at ../drivers/usb/gadget/function/f_uvc.c:424:2:
+  ../include/linux/fortify-string.h:301:25: error: call to ‘__write_overflow_field’ declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+    301 |                         __write_overflow_field(p_size_field, size);
+        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This commit did not directly cause this, it just made the issue more
+obvious. In commit e4ce9ed835bc ("usb: gadget: uvc: ensure the vdev is
+unset"), also authored by you, the size parameter appears to be wrong?
+It is using the size of 'struct uvc_video', instead of the size of
+'struct video_device'. It appears to be pure luck that everything worked
+up until this point, as those two types had the same size (1400 bytes)
+before this change but now 'struct uvc_video' is 1408 bytes, meaning
+there is now an overwrite. Any reason this is not the fix?
+
+Cheers,
+Nathan
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index e6948cf8def3..836601227155 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -421,7 +421,7 @@ uvc_register_video(struct uvc_device *uvc)
+ 	int ret;
+ 
+ 	/* TODO reference counting. */
+-	memset(&uvc->vdev, 0, sizeof(uvc->video));
++	memset(&uvc->vdev, 0, sizeof(uvc->vdev));
+ 	uvc->vdev.v4l2_dev = &uvc->v4l2_dev;
+ 	uvc->vdev.v4l2_dev->dev = &cdev->gadget->dev;
+ 	uvc->vdev.fops = &uvc_v4l2_fops;
