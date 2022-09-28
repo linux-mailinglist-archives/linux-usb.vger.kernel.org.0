@@ -2,125 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D482C5EDEC9
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 16:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445B55EDED8
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 16:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbiI1O30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 10:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S234299AbiI1Odn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 10:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbiI1O3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 10:29:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6F1ABD43;
-        Wed, 28 Sep 2022 07:29:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 557CD61EC2;
-        Wed, 28 Sep 2022 14:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E62EC433D6;
-        Wed, 28 Sep 2022 14:29:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664375362;
-        bh=8N85sFev7YCgQPdLgjEeuGjBZWjdzfA72EK7EuloGKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=12Muq1MrTtMNT6hg5zb6EYGWNtXsDKCGA32rk4Gi4kKpk8pEbbzcEpt3zzo8jl8jp
-         1oza4YrKqOrUAET2u6L3OcPn8ibjhcf+DKKx0CayeI6bZgiZzQNpQPtJf4vNXHcn7k
-         r6bTAQD+1tancR9FZsEYomD1PriI7eUoPkdBoSN8=
-Date:   Wed, 28 Sep 2022 16:29:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        with ESMTP id S234412AbiI1Odh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 10:33:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E8AACA1D;
+        Wed, 28 Sep 2022 07:33:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664375616; x=1695911616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fiZwldPbRJfb8aqO9HcM3UTZxeIOmGbY4Qs5nLykbIM=;
+  b=akrOH20mm8x4ru/nK1KN5Yi0j8Qf/3f15RERvGoCFuCSyjsopdi/lBDd
+   ieeXrEe9VgLfzC+DJ6Fih1c5ZaiA0xkMbdPBxZ/3manCJyBXHr1Mg0H/c
+   5xkCYGeXB75u7xr2FVwYTHY1TyWGzOB+ERRBqNKodaZmLy4e0yICDLyJV
+   QRHxG0NgfSNZzcxlykxESk45p4UbTYMLxKCCXmwv8ToRIchb+Cc5vS8Il
+   bypHcWnVUnZsnRLi+/P+AolcideHf//8RAqF8RS57jfmmMVHf7hOA28ya
+   hCjPk4+uNL+8IqiIcbtsItQKfHlxpLLrc/PtsmiS/GKbbB76V4DSB/MPU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="387898817"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="387898817"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 07:33:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="764308042"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="764308042"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 28 Sep 2022 07:33:27 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 28 Sep 2022 17:33:27 +0300
+Date:   Wed, 28 Sep 2022 17:33:27 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Wayne Chang <waynec@nvidia.com>
-Cc:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "Sanket.Goswami@amd.com" <Sanket.Goswami@amd.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] usb: typec: ucsi_ccg: Disable UCSI ALT support on
- Tegra
-Message-ID: <YzRaQEyByzqwt2y+@kroah.com>
-References: <20220928131615.3286936-1-waynec@nvidia.com>
- <YzRQBEeLorfC8KAL@kroah.com>
- <PH0PR12MB55004C29C12FA17B9767CE98AF549@PH0PR12MB5500.namprd12.prod.outlook.com>
+Cc:     gregkh@linuxfoundation.org, Sanket.Goswami@amd.com,
+        singhanc@nvidia.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: typec: ucsi_ccg: Add OF support
+Message-ID: <YzRbN5tS+epkOVfV@kuha.fi.intel.com>
+References: <20220928125227.3045703-1-waynec@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR12MB55004C29C12FA17B9767CE98AF549@PH0PR12MB5500.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220928125227.3045703-1-waynec@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 02:11:36PM +0000, Wayne Chang wrote:
-> Hi Greg,
-> 
-> Thanks for the review.
-> 
-> On 9/28/22 21:45, Greg KH wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Wed, Sep 28, 2022 at 09:16:15PM +0800, Wayne Chang wrote:
-> >> From: Sing-Han Chen <singhanc@nvidia.com>
-> >>
-> >> Firmware built for Tegra doesn't support UCSI ALT
-> >> command and has known issue of reporting wrong
-> >> capability info.
-> >>
-> >> This commit disables UCSI ALT support when reading
-> >> the capability on Tegra.
-> > 
-> > You have a full 72 columns to use, no need to make it shorter :)
-> Thanks. I'll update in the next patchset.
-> 
-> > 
-> >>
-> >> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> >> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> >> ---
-> >>   drivers/usb/typec/ucsi/ucsi_ccg.c | 16 ++++++++++++++--
-> >>   1 file changed, 14 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> index 5c0bf48be766..fde3da0605f5 100644
-> >> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> @@ -122,9 +122,14 @@ struct version_format {
-> >>    * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-> >>    * of missing interrupt when a device is connected for runtime resume
-> >>    */
-> >> -#define CCG_FW_BUILD_NVIDIA  (('n' << 8) | 'v')
-> >> +#define CCG_FW_BUILD_NVIDIA_RTX      (('n' << 8) | 'v')
-> > 
-> > Why change this here?  It's not needed, just add the new command
-> > instead.
-> 
-> The change here is to distinguish the FW built for NVIDIA RTX products 
-> and NVIDIA Tegra products.
-> 
-> #define CCG_FW_BUILD_NVIDIA_RTX      (('n' << 8) | 'v')
-> #define CCG_FW_BUILD_NVIDIA_TEGRA	(('g' << 8) | 'n')
-> 
-> I'll update the change if it is not needed to do so.
+Hi,
 
-No need to make this change here, right?  Do so in a later commit if you
-really need to.
+On Wed, Sep 28, 2022 at 08:52:27PM +0800, Wayne Chang wrote:
+> The change enables the device tree infrastructure support on Cypress
+> cypd4226.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 5c0bf48be766..36442508bc37 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -631,7 +631,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
+>  {
+>  	unsigned long flags = IRQF_ONESHOT;
+>  
+> -	if (!has_acpi_companion(uc->dev))
+> +	if (!has_acpi_companion(uc->dev) && !uc->dev->of_node)
 
-> > And what commit id does this fix?  Is it needed for stable kernels?  If
-> > so, how far back?
-> We are now enabling the NVIDIA Tegra products on upstream kernel.
-> The change is to add the Cypress cypd 4226 support for NVIDA Tegra 
-> products including Xavier AGX, Xavier Orin and the upcoming products.
-> The Cypress cypd4226 is not enabled in current kernel codebase.
-> And thus, we shall not need it for stable kernels and backporting, do we?
+You can use:
 
-Ok, that's fine, it was not obvious so you might want to say that in the
-changelog text.
+        if (!dev_fwnode(uc->dev))
+
+instead.
+
+>  		flags |= IRQF_TRIGGER_HIGH;
+>  
+>  	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
+> @@ -1417,6 +1417,12 @@ static int ucsi_ccg_remove(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> +static const struct of_device_id ucsi_ccg_of_match_table[] = {
+> +		{ .compatible = "cypress,cypd4226", },
+> +		{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
+> +
+>  static const struct i2c_device_id ucsi_ccg_device_id[] = {
+>  	{"ccgx-ucsi", 0},
+>  	{}
+> @@ -1471,6 +1477,7 @@ static struct i2c_driver ucsi_ccg_driver = {
+>  		.pm = &ucsi_ccg_pm,
+>  		.dev_groups = ucsi_ccg_groups,
+>  		.acpi_match_table = amd_i2c_ucsi_match,
+> +		.of_match_table = ucsi_ccg_of_match_table,
+>  	},
+>  	.probe = ucsi_ccg_probe,
+>  	.remove = ucsi_ccg_remove,
 
 thanks,
 
-greg k-h
+-- 
+heikki
