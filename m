@@ -2,98 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098AD5ED471
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 08:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9520B5ED47D
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 08:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbiI1GDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 02:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        id S232693AbiI1GIE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 02:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiI1GDK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 02:03:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC6B8A1E9;
-        Tue, 27 Sep 2022 23:03:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB44361D0F;
-        Wed, 28 Sep 2022 06:03:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C60C433C1;
-        Wed, 28 Sep 2022 06:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664344988;
-        bh=j4kB7olgilPfVNlMOTcYqlCkkxFG3t3S85ulNHUvZP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tn7ZWTGY7fOq6xb+VeCBijrCoFESpcFclyxcRUwLygW8gm9mVj2nXppPWFn2Exmbn
-         /pd8DOZIoxFFuNBYOZMcRZLwG0bRdKCE1JZfGppbUAneJ/Hl5VTJznT3G9j2Zw9FIL
-         hJZXEyABqtjCm5anV6lJwaTtyEawOosGxzs0DQk0=
-Date:   Wed, 28 Sep 2022 08:03:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+        with ESMTP id S229486AbiI1GIB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 02:08:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A343311E954;
+        Tue, 27 Sep 2022 23:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664345280; x=1695881280;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S0JP+LUSjEf9hakX8vnrL+5YHg+ADJr/BPGofrW28dc=;
+  b=kwZdjOkGcV8Yv3Zz6P17oqk6bCFmmMZTWCwbx0qyNsGtPx9stwtjZCqP
+   rtUJ8hFFksmi+u/KUJvRxGdnRl/zFDPpnJ9iDzLE18Ta40c9v4KSUDzbV
+   rf6/Pl/b0vGecJTSJcx9/6Cv5ae1zi2xUs8w6jMSi7bbDkQo7JSqixXgs
+   4XVzBS8UGDDij/BQfc0NbdbLFvPhr7yoLe/MsbGorozg0+E88hfq0Ju+s
+   2UwDBhxQ1q+WZ6/9+PssKMgKpWVxkLJkv2TNN7mrz0Cn6AkkqTpct7Qdu
+   552o7BIqJtwxq879pbmPSubSg9kWAN9YoVKEAZS2UbIrP+GVHB3KeEpMS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="288672221"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="288672221"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 23:08:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="572912632"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="572912632"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 27 Sep 2022 23:07:58 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id CA95DF7; Wed, 28 Sep 2022 09:08:16 +0300 (EEST)
+Date:   Wed, 28 Sep 2022 09:08:16 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Rajat Khandelwal <rajat.khandelwal@intel.com>,
         andreas.noever@gmail.com, michael.jamet@intel.com,
         YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] thunderbolt: Add wake on connect/disconnect on USB4 ports
-Message-ID: <YzPjvo8pkAmO2rra@kroah.com>
+Message-ID: <YzPk0IE3LmSy5lvZ@black.fi.intel.com>
 References: <20220928130005.2048724-1-rajat.khandelwal@intel.com>
  <YzMpaa1V492X52/J@kroah.com>
  <YzPVDzI4K4cbG7Mk@black.fi.intel.com>
+ <YzPjvo8pkAmO2rra@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzPVDzI4K4cbG7Mk@black.fi.intel.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzPjvo8pkAmO2rra@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 08:01:03AM +0300, Mika Westerberg wrote:
-> Hi Greg,
-> 
-> On Tue, Sep 27, 2022 at 06:48:41PM +0200, Greg KH wrote:
-> > On Wed, Sep 28, 2022 at 06:30:05PM +0530, Rajat Khandelwal wrote:
-> > > Wake on connect/disconnect is only supported while runtime suspend
-> > > for now, which is obviously necessary. Its also not inherently
-> > > desired for the system to wakeup on thunderbolt hot events.
-> > > However, we can still make user in control of waking up the system
-> > > in the events of hot plug/unplug.
-> > > This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
-> > > attribute and only enables wakes on connect/disconnect to the
-> > > respective port when 'wakeup' is set to 'enabled'. The attribute
-> > > is set to 'disabled' by default.
+On Wed, Sep 28, 2022 at 08:03:42AM +0200, Greg KH wrote:
+> On Wed, Sep 28, 2022 at 08:01:03AM +0300, Mika Westerberg wrote:
+> > Hi Greg,
+> > 
+> > On Tue, Sep 27, 2022 at 06:48:41PM +0200, Greg KH wrote:
+> > > On Wed, Sep 28, 2022 at 06:30:05PM +0530, Rajat Khandelwal wrote:
+> > > > Wake on connect/disconnect is only supported while runtime suspend
+> > > > for now, which is obviously necessary. Its also not inherently
+> > > > desired for the system to wakeup on thunderbolt hot events.
+> > > > However, we can still make user in control of waking up the system
+> > > > in the events of hot plug/unplug.
+> > > > This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
+> > > > attribute and only enables wakes on connect/disconnect to the
+> > > > respective port when 'wakeup' is set to 'enabled'. The attribute
+> > > > is set to 'disabled' by default.
+> > > > 
+> > > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
 > > > 
-> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+> > > Including the issue pointed out below by my bot, Intel has a "special"
+> > > requirement that you are not meeting here in order to send out patches
+> > > for review on a public mailing list in a subsystem like this (i.e. one
+> > > that I and others review patches on.)
+> > > 
+> > > Please meet that requirement first before sending any future kernel
+> > > patches out.
 > > 
-> > Including the issue pointed out below by my bot, Intel has a "special"
-> > requirement that you are not meeting here in order to send out patches
-> > for review on a public mailing list in a subsystem like this (i.e. one
-> > that I and others review patches on.)
-> > 
-> > Please meet that requirement first before sending any future kernel
-> > patches out.
+> > I asked Khandelwal to send this patch upstream after we did an internal
+> > review for it (I think I also asked him to send this out after v6.1-rc1
+> > is released but whatever).
 > 
-> I asked Khandelwal to send this patch upstream after we did an internal
-> review for it (I think I also asked him to send this out after v6.1-rc1
-> is released but whatever).
+> So the correct rules were not followed, please fix that :(
 
-So the correct rules were not followed, please fix that :(
-
-> I think the bot noticed the v4 he sent earlier that was the same we
-> reviewed internally.
-
-Again, yes, this was sent incorrectly.
-
-> I was planning to pick this up after the merge window closes if there
-> are no objections.
-
-I'm objecting :)
-
-thanks,
-
-greg k-h
+We will, sorry about this.
