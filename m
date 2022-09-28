@@ -2,172 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C0E5EDD8C
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 15:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AC25EDDFF
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 15:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbiI1NQn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 09:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S233963AbiI1NnS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 09:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233455AbiI1NQl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 09:16:41 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00D174365;
-        Wed, 28 Sep 2022 06:16:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T+EefYqjAY2QWwByU3Ye4PTjhY49zvEiuPQwJUhciUTJrssJkI9uWR1kzxaQ2SzCr5SSE5yqvsi7sJR7j1OW5eW8mMjzwPrrW9IENjRdHsvXp6lQ5SwPSvOrAk/Td5X4Y5l/DxC1J+iC2Kz9tRDWa55xg6ThwzXuqN6AHxcnxa2VLCOyBuKaTACZCvNUK+mVCu+5EqJanaz3Y5o9Lm19FEQRJnOX2AOD2aEv9yO6dwIMQkzVQyzLSHFZ4LM0Jr7foeWFTQbY0IK/I0wftCPYr2ClZ1WKXzF0DAV3VAMKRhE39JHLNTuNqXBnFYWueTzjohuqqFPsOiWghkBgOVeXwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/G6wgjvG8gvQaDoHfeHx+kQ39SIQ3gYHPCVAvaUXdNw=;
- b=R2YXwJ6BSIGvlCZmnQEPDROt01W9DQW4ZfJs7U9bjwiC8uRMK8A1wzbYJL/2K5P9BA/XBP2Jokfz8RHEzs2PSehOr0UG370c2a6OUsvtoeal4EqzmkQTGi0VEeMypAI8dsUVJFrHUIEvJA6pO7D9s/nDZAT3Adixef6sCXV2x+cNm34Oqrw7UzEMUBlZo2hxRvQwVWAtcLKo4LvC+ZFPOpCWrBS+iI+wDWvPsYCoDphpxXqLbbu/5h6tDFYmNh+v5G9MBCUOjmOsfow18NO+vJmj7N/b9cU3d5wRiLiUeQ7Gu0Y4BQwd+cvfCIry6uTPcgOQutGqceJfQS8RGKCuMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/G6wgjvG8gvQaDoHfeHx+kQ39SIQ3gYHPCVAvaUXdNw=;
- b=FNgOTDcVhJ5qlWZIg+353LeWXzm36vgxkkT0fc/rFuUziNNgCZMf0eubBZVCN1N7iKBZ5JXdDeapem6a+fWa0sAYrFhic0JIM1b3KjIb7PaxzkgQxbN1JAgAnQS+g6B8x9LgAo3910QjHOXAGsgF40Esk3f+dCWwfPcOYlLDB+lyGO4C8yAU+UW/wtvQmz1KpaSUrPo90T5lyatyWfGP1bxxTFaaYuFl1O7WXzb5TMeatfmbWyFi2TbmyfFBoPWDx6JHbs70kygQGmHmzQk08sTOtf0sWjaCiRVR6ZtNCCmIBSg1Q2k9gPpVzMCGlZL3Fo1uWrk9sbxHc3WTTtl9HA==
-Received: from BN9P221CA0022.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::14)
- by DM6PR12MB4578.namprd12.prod.outlook.com (2603:10b6:5:2a9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 13:16:39 +0000
-Received: from BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10a:cafe::cc) by BN9P221CA0022.outlook.office365.com
- (2603:10b6:408:10a::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
- Transport; Wed, 28 Sep 2022 13:16:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT040.mail.protection.outlook.com (10.13.177.166) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Wed, 28 Sep 2022 13:16:38 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 28 Sep
- 2022 06:16:23 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 28 Sep 2022 06:16:23 -0700
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.126.190.180) with Microsoft SMTP Server id 15.2.986.29
- via Frontend Transport; Wed, 28 Sep 2022 06:16:21 -0700
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <waynec@nvidia.com>, <Sanket.Goswami@amd.com>,
-        <singhanc@nvidia.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] usb: typec: ucsi_ccg: Disable UCSI ALT support on Tegra
-Date:   Wed, 28 Sep 2022 21:16:15 +0800
-Message-ID: <20220928131615.3286936-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233287AbiI1NnP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 09:43:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD6295ACF;
+        Wed, 28 Sep 2022 06:43:14 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7AEC86601FFC;
+        Wed, 28 Sep 2022 14:43:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664372593;
+        bh=Av/PH6kVhiIAtYUMsFAbHa4P+77I27U8HuG+9Mk9/bw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d9tOE73f5N7QYoN5O7LrOr8s52r3Xlx1RhKU80LLOuMfdeu8KhnI8UCrMBL4j7p3o
+         r50UPhG+kkdyKoHINKIplmXyqlOXi9bjgdBoR6N3EjdNjMRq4X3PuuM8D/IO36hyQ+
+         Rd9SmKPXBYK7KO4BJjafKztwOndX8j8fY8l6YEij1lOmrORxrYuS5Ffvd/Ovhn6N7L
+         ve1/nUgSYHNKIsEI9zFOrY/+s6/KJd+iqoADU4sg8PYO4c83swVIlnEInAb6VahFF8
+         9U/mtbW/FpK6uiUUDGosUF3cth3GsopyztXtkWySH1VfceclPI4R9BOK9t4Th4suyy
+         Nt0VgoGJiKcUA==
+Message-ID: <6d312360-55b7-ebd5-be86-14f6943e273f@collabora.com>
+Date:   Wed, 28 Sep 2022 15:43:09 +0200
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT040:EE_|DM6PR12MB4578:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5560da4f-0b91-4a9d-0e8c-08daa153ad36
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pXY6chWuMioVtLgNuY0IG7bH1+2kBaeBGI/OCH1YY6ydgoYRVNdqQFR3YpOJAoq7A/yrfQYgn6AL4r0SfYevXJVKWFqZXG/rWMSas0QJ7LwLD1wuInLSbFxIMSsMMKoQ2YsdGyakCWxsc6vejWkDxffEFL4Y/SlyKnluJB1w4p7RLL4L1J3cITAHVAnNWyGcNfs9d8c5CQp+hhJbL/fCBXj9HhFozt8Zm/eL/RqOsN7frsCZMohg/UbKqk2v/up8ZS2qPtNpvBzYSXlXQs830ZmtkyrFz/m9Togcc5fsDYiddKy4eLJUekhKNdKLqMTMT0mEbGWngK30QLD1303+WZ2+/M1zAyf7OdMz68XCyuH/XPs+iYuGrkSKiYdmizGW8klsDIfZ9XFHAXrN/XN/yPNX4T6za2PZXjcKYLb+ByUIoLB3UxNOWYqOO6h57tF4XgyNdd59SVlNq06DK88TqzdwNxIPrQVh57W07fzpD+bO+oq/cFKS7FXunWUHK7D3XDyNLrj8chVlmgqsBBob1dDUGYG0BlJC6ONSbDe4V5DL+DYh52jXc6wtHgiwCWwO2JizzcVIIpW79+ElvXU6ZdXx5FYUG8IqMu/LKsrkIttexbGomA9HKcFLJUcU3OHjqx9sfgWldAIOOEYIdVLozvLk/eLLNnb5b/+lkq7m2/sn8a7KD1be5/5qM0UtqydP0HOS8DI+dccAHKt4PbrSdCb7b/hAEN2CaTp5yhD4L8tOpaH2fS4MK8gIz/mo73NFMpgQyGgchhmF5YaAja1qPQ==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199015)(46966006)(40470700004)(36840700001)(2906002)(5660300002)(4326008)(40480700001)(36756003)(316002)(82740400003)(47076005)(8936002)(41300700001)(70206006)(70586007)(8676002)(110136005)(54906003)(7636003)(356005)(40460700003)(478600001)(426003)(2616005)(86362001)(82310400005)(7696005)(186003)(1076003)(26005)(36860700001)(83380400001)(336012)(6666004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 13:16:38.4673
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5560da4f-0b91-4a9d-0e8c-08daa153ad36
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT040.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4578
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Stable@vger.kernel.org
+References: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sing-Han Chen <singhanc@nvidia.com>
+Il 28/09/22 11:17, Chunfeng Yun ha scritto:
+> It happens when enable uvc function, the flow as below:
+> the controller switch to data stage, then call
+>      -> foward_to_driver() -> composite_setup() -> uvc_function_setup(),
+> it send out an event to user layer to notify it call
+>      -> ioctl() -> uvc_send_response() -> usb_ep_queue(),
+> but before the user call ioctl to queue ep0's buffer, the host already send
+> out data, but the controller find that no buffer is queued to receive data,
+> it send out STALL handshake.
+> 
+> To fix the issue, don't send out ACK of setup stage to switch to out data
+> stage until the buffer is available.
+> 
+> Cc: <Stable@vger.kernel.org>
+> Reported-by: Min Guo <min.guo@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>   drivers/usb/mtu3/mtu3.h            |  4 ++++
+>   drivers/usb/mtu3/mtu3_gadget_ep0.c | 22 +++++++++++++++++++---
+>   2 files changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+> index 2d7b57e07eee..6b64ad17724d 100644
+> --- a/drivers/usb/mtu3/mtu3.h
+> +++ b/drivers/usb/mtu3/mtu3.h
+> @@ -318,6 +318,9 @@ static inline struct ssusb_mtk *dev_to_ssusb(struct device *dev)
+>    *		for GET_STATUS and SET_SEL
+>    * @setup_buf: ep0 response buffer for GET_STATUS and SET_SEL requests
+>    * @u3_capable: is capable of supporting USB3
+> + * @delayed_setup: delay the setup stage to avoid STALL handshake in
+> + *		out data stage due to the class driver doesn't queue buffer
+> + *		before the host send out data
+>    */
+>   struct mtu3 {
+>   	spinlock_t lock;
+> @@ -360,6 +363,7 @@ struct mtu3 {
+>   	unsigned connected:1;
+>   	unsigned async_callbacks:1;
+>   	unsigned separate_fifo:1;
+> +	unsigned delayed_setup:1;
+>   
+>   	u8 address;
+>   	u8 test_mode_nr;
+> diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> index e4fd1bb14a55..f7a71cc83e15 100644
+> --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> @@ -162,6 +162,19 @@ static void ep0_do_status_stage(struct mtu3 *mtu)
+>   	mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY | EP0_DATAEND);
+>   }
+>   
+> +/* delay sending out ACK of setup stage to wait for OUT buffer queued */
+> +static void ep0_setup_stage_send_ack(struct mtu3 *mtu)
+> +{
+> +	void __iomem *mbase = mtu->mac_base;
+> +	u32 value;
+> +
+> +	if (mtu->delayed_setup) {
+> +		value = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
+> +		mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY);
+> +		mtu->delayed_setup = 0;
+> +	}
+> +}
+> +
+>   static int ep0_queue(struct mtu3_ep *mep0, struct mtu3_request *mreq);
+>   
+>   static void ep0_dummy_complete(struct usb_ep *ep, struct usb_request *req)
+> @@ -628,8 +641,9 @@ static void ep0_read_setup(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
+>   			csr | EP0_SETUPPKTRDY | EP0_DPHTX);
+>   		mtu->ep0_state = MU3D_EP0_STATE_TX;
+>   	} else {
+> -		mtu3_writel(mtu->mac_base, U3D_EP0CSR,
+> -			(csr | EP0_SETUPPKTRDY) & (~EP0_DPHTX));
+> +		mtu3_writel(mtu->mac_base, U3D_EP0CSR, csr & ~EP0_DPHTX);
+> +		/* send ACK when the buffer is queued */
+> +		mtu->delayed_setup = 1;
 
-Firmware built for Tegra doesn't support UCSI ALT
-command and has known issue of reporting wrong
-capability info.
+I don't think that you need this variable: you're calling the function
+ep0_setup_stage_send_ack() only when ep0_state == MU3D_EP0_STATE_RX in
+ep0_queue()...
 
-This commit disables UCSI ALT support when reading
-the capability on Tegra.
+..so you'll never get a call to ep0_setup_stage_send_ack() with delayed_setup == 0!
 
-Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
- drivers/usb/typec/ucsi/ucsi_ccg.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+Regards,
+Angelo
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 5c0bf48be766..fde3da0605f5 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -122,9 +122,14 @@ struct version_format {
-  * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-  * of missing interrupt when a device is connected for runtime resume
-  */
--#define CCG_FW_BUILD_NVIDIA	(('n' << 8) | 'v')
-+#define CCG_FW_BUILD_NVIDIA_RTX	(('n' << 8) | 'v')
- #define CCG_OLD_FW_VERSION	(CCG_VERSION(0x31) | CCG_VERSION_PATCH(10))
- 
-+/* Firmware for Tegra doesn't support UCSI ALT command, built
-+ * for NVIDIA has known issue of reporting wrong capability info
-+ */
-+#define CCG_FW_BUILD_NVIDIA_TEGRA	(('g' << 8) | 'n')
-+
- /* Altmode offset for NVIDIA Function Test Board (FTB) */
- #define NVIDIA_FTB_DP_OFFSET	(2)
- #define NVIDIA_FTB_DBG_OFFSET	(3)
-@@ -513,6 +518,7 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
- {
- 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
- 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
-+	struct ucsi_capability *cap;
- 	struct ucsi_altmode *alt;
- 	int ret;
- 
-@@ -536,6 +542,12 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
- 				ucsi_ccg_nvidia_altmode(uc, alt);
- 		}
- 		break;
-+	case UCSI_GET_CAPABILITY:
-+		if (uc->fw_build == CCG_FW_BUILD_NVIDIA_TEGRA) {
-+			cap = val;
-+			cap->features &= ~UCSI_CAP_ALT_MODE_DETAILS;
-+		}
-+		break;
- 	default:
- 		break;
- 	}
-@@ -1452,7 +1464,7 @@ static int ucsi_ccg_runtime_resume(struct device *dev)
- 	 * of missing interrupt when a device is connected for runtime resume.
- 	 * Schedule a work to call ISR as a workaround.
- 	 */
--	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
-+	if (uc->fw_build == CCG_FW_BUILD_NVIDIA_RTX &&
- 	    uc->fw_version <= CCG_OLD_FW_VERSION)
- 		schedule_work(&uc->pm_work);
- 
--- 
-2.25.1
+>   		mtu->ep0_state = MU3D_EP0_STATE_RX;
+>   	}
+>   }
+> @@ -804,9 +818,11 @@ static int ep0_queue(struct mtu3_ep *mep, struct mtu3_request *mreq)
+>   
+>   	switch (mtu->ep0_state) {
+>   	case MU3D_EP0_STATE_SETUP:
+> -	case MU3D_EP0_STATE_RX:	/* control-OUT data */
+>   	case MU3D_EP0_STATE_TX:	/* control-IN data */
+>   		break;
+> +	case MU3D_EP0_STATE_RX:	/* control-OUT data */
+> +		ep0_setup_stage_send_ack(mtu);
+> +		break;
+>   	default:
+>   		dev_err(mtu->dev, "%s, error in ep0 state %s\n", __func__,
+>   			decode_ep0_state(mtu));
+
+
 
