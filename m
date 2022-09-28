@@ -2,148 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091305EE69C
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 22:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534B95EE931
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 00:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbiI1U0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 16:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S234202AbiI1WLp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 18:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiI1U0K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 16:26:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827AC9F766;
-        Wed, 28 Sep 2022 13:26:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49FC9B821C0;
-        Wed, 28 Sep 2022 20:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6766FC433D6;
-        Wed, 28 Sep 2022 20:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664396767;
-        bh=Uf/RWfsJ4uG1flfMDOCujgroHWmzllXe1x8nZ+2cFEE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HlZxDtA1P4UdIeyz2nmLSVG78oo9Sf11JwRJ7rWgPiMSPvqW5LOwQQyd1QM1nKl5K
-         5QuLz7aOmGBE0WR0GtUFLEnUkc+FaSApUpWmbiuMXF4++f235KsPe3aimOdVR3Ymwi
-         q+64yIlSlgUxcdUQKvJdSTMePNIteklMv8Kmxtx2xC5JDAcJw65y4CN+KpQi7MdDMV
-         PPTD5ga8pUGU9EfEZdql1RtFuQg+HchYfIKx8BN6VG+mbslu3BoON/7jvvFvBDRnpL
-         kGY/vCDGW1bdx+24OoIzDcbOffetYPWA9LkT2fqrh1LBIRPeM/QIxzhT4mqph/RY+x
-         wiRkz7Nbd+itg==
-Date:   Wed, 28 Sep 2022 13:26:04 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, paul.elder@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, nicolas@ndufresne.ca,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v4] usb: gadget: uvc: increase worker prio to WQ_HIGHPRI
-Message-ID: <YzSt3HmbEXx3DmfM@dev-arch.thelio-3990X>
-References: <20220907215818.2670097-1-m.grzeschik@pengutronix.de>
- <YzR2gyyuU6luYRBP@dev-arch.thelio-3990X>
- <20220928194529.GA27265@pengutronix.de>
+        with ESMTP id S232439AbiI1WLn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 18:11:43 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC9273318;
+        Wed, 28 Sep 2022 15:11:42 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c192-20020a1c35c9000000b003b51339d350so2141118wma.3;
+        Wed, 28 Sep 2022 15:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=3t9tajyecZAesXGYXlNk9fq/Z63rAiLHPJf0z/1Mac8=;
+        b=PWj0WMxkP4SAN+IFXmhXiKyNt3iT2UawbueUF8ajecpTCKqtDQFRTAU2hCYpetKjm4
+         ot0kprojwommBAYpztZpoGju0B8414/PC5V+6e8qYWpAQwq2yLW28bvPjGJpLXjOY76d
+         Fe3AHPGa6y2/VLtN/wGBy+CO/ti+O089Q2w29UhnKx6e5jnDvln06bu/QOgmJror/PTF
+         PHC8/WEiRbi4VDuahgGGBFT2gj0szPJaAactMdSqz+nv2/sQVrEiWf9dnxoD88UhRbg4
+         Xsy/fL14YybGMOk6kxAWv6bgfeMwcVT3GtGfrT4X4y/6d0ypo4/YoSJXIqqqD3omKSzY
+         TmfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=3t9tajyecZAesXGYXlNk9fq/Z63rAiLHPJf0z/1Mac8=;
+        b=PdcVMnJJK2rNdSv3cnuaeWBdZDqxBob9wbSXMGROd9/gmkiYpDiTXCgJyGN7V3+OLn
+         AtzjIxvSmybJBjOWElkJIvL/K70NWnNltQ0kjFeO/DWoA9D+5kwP4WGqV/7bT0KIwJK/
+         GBRzilRcNJLDY66EjKJ+PF81yOPJFcdXRNftO/4o3ZIfQdEFKJWjFd3wo2V8Kp2e0Kl7
+         KTWMRL0oIBn67BZE3B3hkqL3TBzA/b7bBiCzU4OyvIsYM+1daI49N5gGCqFSIUh8gxqZ
+         WT/UK/yimB6MDIEqwl8uL0iY/RREp4FZG3gFcV3lqdLM1Sx0B7H/nLqYdSORoeRqDqmE
+         ueMg==
+X-Gm-Message-State: ACrzQf32JU68bIWqyfMYdPxK2wWzNamvPjr4XIfc8vgagd+Ev5V2fFOp
+        LH7++T/h8L51SdGmS8E9LnQjWCahbxhypA==
+X-Google-Smtp-Source: AMsMyM45tnkZlWypfiGLKdLiXrjfEYW0r4Z2KrjJcjr/1liVdub+7OAeNnP4v6c4zkZmGr90GHApNA==
+X-Received: by 2002:a05:600c:4f56:b0:3b4:b6b0:42d4 with SMTP id m22-20020a05600c4f5600b003b4b6b042d4mr87119wmq.143.1664403101523;
+        Wed, 28 Sep 2022 15:11:41 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g20-20020a05600c4ed400b003b4931eb435sm2987967wmq.26.2022.09.28.15.11.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 15:11:40 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: omap_udc: Fix spelling mistake: "tranceiver_ctrl" -> "transceiver_ctrl"
+Date:   Wed, 28 Sep 2022 23:11:40 +0100
+Message-Id: <20220928221140.67495-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220928194529.GA27265@pengutronix.de>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 09:45:29PM +0200, Michael Grzeschik wrote:
-> Hi Nathan!
-> 
-> On Wed, Sep 28, 2022 at 09:29:55AM -0700, Nathan Chancellor wrote:
-> > On Wed, Sep 07, 2022 at 11:58:18PM +0200, Michael Grzeschik wrote:
-> > > This patch is changing the simple workqueue in the gadget driver to be
-> > > allocated as async_wq with a higher priority. The pump worker, that is
-> > > filling the usb requests, will have a higher priority and will not be
-> > > scheduled away so often while the video stream is handled. This will
-> > > lead to fewer streaming underruns.
-> > > 
-> > > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> > 
-> > ...
-> > 
-> > > diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> > > index 58e383afdd4406..1a31e6c6a5ffb8 100644
-> > > --- a/drivers/usb/gadget/function/uvc.h
-> > > +++ b/drivers/usb/gadget/function/uvc.h
-> > > @@ -88,6 +88,7 @@ struct uvc_video {
-> > >  	struct usb_ep *ep;
-> > > 
-> > >  	struct work_struct pump;
-> > > +	struct workqueue_struct *async_wq;
-> > > 
-> > >  	/* Frame parameters */
-> > >  	u8 bpp;
-> > 
-> > I am commenting here because this is the most recent change but after
-> > this showed up in -next as commit 9b91a6523078 ("usb: gadget: uvc:
-> > increase worker prio to WQ_HIGHPRI"), I see the following warning/error
-> > when building s390 allmodconfig:
-> > 
-> >  In file included from ../include/linux/string.h:253,
-> >                   from ../include/linux/bitmap.h:11,
-> >                   from ../include/linux/cpumask.h:12,
-> >                   from ../include/linux/smp.h:13,
-> >                   from ../include/linux/lockdep.h:14,
-> >                   from ../include/linux/rcupdate.h:29,
-> >                   from ../include/linux/rculist.h:11,
-> >                   from ../include/linux/pid.h:5,
-> >                   from ../include/linux/sched.h:14,
-> >                   from ../include/linux/ratelimit.h:6,
-> >                   from ../include/linux/dev_printk.h:16,
-> >                   from ../include/linux/device.h:15,
-> >                   from ../drivers/usb/gadget/function/f_uvc.c:9:
-> >  In function ‘fortify_memset_chk’,
-> >      inlined from ‘uvc_register_video’ at ../drivers/usb/gadget/function/f_uvc.c:424:2:
-> >  ../include/linux/fortify-string.h:301:25: error: call to ‘__write_overflow_field’ declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-> >    301 |                         __write_overflow_field(p_size_field, size);
-> >        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > This commit did not directly cause this, it just made the issue more
-> > obvious. In commit e4ce9ed835bc ("usb: gadget: uvc: ensure the vdev is
-> > unset"), also authored by you, the size parameter appears to be wrong?
-> > It is using the size of 'struct uvc_video', instead of the size of
-> > 'struct video_device'. It appears to be pure luck that everything worked
-> > up until this point, as those two types had the same size (1400 bytes)
-> > before this change but now 'struct uvc_video' is 1408 bytes, meaning
-> > there is now an overwrite. Any reason this is not the fix?
-> > 
-> > Cheers,
-> > Nathan
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> > index e6948cf8def3..836601227155 100644
-> > --- a/drivers/usb/gadget/function/f_uvc.c
-> > +++ b/drivers/usb/gadget/function/f_uvc.c
-> > @@ -421,7 +421,7 @@ uvc_register_video(struct uvc_device *uvc)
-> > 	int ret;
-> > 
-> > 	/* TODO reference counting. */
-> > -	memset(&uvc->vdev, 0, sizeof(uvc->video));
-> > +	memset(&uvc->vdev, 0, sizeof(uvc->vdev));
-> > 	uvc->vdev.v4l2_dev = &uvc->v4l2_dev;
-> > 	uvc->vdev.v4l2_dev->dev = &cdev->gadget->dev;
-> > 	uvc->vdev.fops = &uvc_v4l2_fops;
-> > 
-> 
-> This sounds right. Do you send a proper patch?
+There is a spelling mistake in the control name. Fix it.
 
-Yup, I sent
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/gadget/udc/omap_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://lore.kernel.org/20220928201921.3152163-1-nathan@kernel.org/
+diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
+index b0567c63d754..bea346e362b2 100644
+--- a/drivers/usb/gadget/udc/omap_udc.c
++++ b/drivers/usb/gadget/udc/omap_udc.c
+@@ -2234,7 +2234,7 @@ static int proc_otg_show(struct seq_file *s)
+ 	char		*ctrl_name = "(UNKNOWN)";
+ 
+ 	tmp = omap_readl(OTG_REV);
+-	ctrl_name = "tranceiver_ctrl";
++	ctrl_name = "transceiver_ctrl";
+ 	trans = omap_readw(USB_TRANSCEIVER_CTRL);
+ 	seq_printf(s, "\nOTG rev %d.%d, %s %05x\n",
+ 		tmp >> 4, tmp & 0xf, ctrl_name, trans);
+-- 
+2.37.1
 
-which should be in your mailbox now :)
-
-Cheers,
-Nathan
