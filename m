@@ -2,237 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB035ED027
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 00:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566B75ED2C1
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 03:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiI0WUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 18:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S232625AbiI1BsE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 21:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbiI0WUc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 18:20:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5F5111DF6
-        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 15:20:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664317230;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B7hn20Zeqkcubja41/WChKWpPqLMVS3GAmGLnKHDhAU=;
-        b=Yx5IJqa2rX8UXQFrq7LE+D/drZkgo1Cin0jxNPbBwX6G0odGMRYuSaoCqtH/yRsK+iaDqr
-        N4p5dxCca/S+qk+NZfZba9fMWluSqUEgRp2HqrpcSeE2Hc1DEmjm4rbaO7jUZa0WONreaq
-        SOrvuTFdYjcRW26fPNJHDH3iLHiabJ0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-652-pukrS9UTOUOkeJg2JHg3TA-1; Tue, 27 Sep 2022 18:20:28 -0400
-X-MC-Unique: pukrS9UTOUOkeJg2JHg3TA-1
-Received: by mail-wm1-f71.google.com with SMTP id p36-20020a05600c1da400b003b4faefa2b9so6153149wms.6
-        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 15:20:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=B7hn20Zeqkcubja41/WChKWpPqLMVS3GAmGLnKHDhAU=;
-        b=ak+JBPaPQMT13hTV0yBSKdqNTwRO/qBvpKdOEKxAhAH1ek/vtBD6qPlKbfyGZ/cuU+
-         QQ4SSnjkMzEkEUkfqhmG+lcvsGJ3Q3PxDKkd0JesIBUXJHpVz9sjNQDskvLWrbaj/daL
-         BgIyPwVKt17BR8B+4CUEWB6b6IlDgITO0iFQxK1+laGJTGdCvWCutBUnoHmhc5iXrMTF
-         a0XvtrshusqLsHxDRnf7ipNZ4h+YBvdiJy9IndPl7uDQNGIknWT270y9vl5cixa3zYan
-         KaOo09/lFuMO12YsN5fWuHFmjTK7yR/bIr74nasyLAgIL/4LAjA0z83s6JD2WKGYXGmq
-         PBLQ==
-X-Gm-Message-State: ACrzQf1LU8BaMkZvM23jPlGBM8mD0stu7/tPWkCgRONkysMKfoSjspNg
-        IPWnTEW+1XtGbZrOjH9w6E8wlm+Rd2qYpWaKJC2HjgeikRJGLT6nf2sx7JtkGdmMBiH1dsx8ezH
-        Ax9noxptv0GYHw0KHShgn
-X-Received: by 2002:a05:6000:1d9d:b0:22a:745b:9f00 with SMTP id bk29-20020a0560001d9d00b0022a745b9f00mr18158793wrb.280.1664317226255;
-        Tue, 27 Sep 2022 15:20:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6oB7tbkGtVRI3gvZ8k+SQXcKmBMF8mKtNbT7iyUkMcWoAG8FRHgS74kE0f7DBUAGmZvRbnXA==
-X-Received: by 2002:a05:6000:1d9d:b0:22a:745b:9f00 with SMTP id bk29-20020a0560001d9d00b0022a745b9f00mr18158769wrb.280.1664317225999;
-        Tue, 27 Sep 2022 15:20:25 -0700 (PDT)
-Received: from redhat.com ([2.55.47.213])
-        by smtp.gmail.com with ESMTPSA id i1-20020a5d4381000000b002205cbc1c74sm2663721wrq.101.2022.09.27.15.20.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 15:20:25 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 18:20:21 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     syzbot <syzbot+0cb3309ee74d3c0c431c@syzkaller.appspotmail.com>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org, hch@lst.de
-Subject: Re: [syzbot] usb-testing boot error: BUG: unable to handle kernel
- paging request in virtnet_set_affinity
-Message-ID: <20220927181950-mutt-send-email-mst@kernel.org>
-References: <0000000000008d61ee05e6d9bb0a@google.com>
+        with ESMTP id S229771AbiI1BsD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 21:48:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07B8110EC9;
+        Tue, 27 Sep 2022 18:47:57 -0700 (PDT)
+X-UUID: 2798c900a05b4374ac9f07e832846b2e-20220928
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=A+qXPRA7ywTuXXDRS+dWtKCRO57wsD96NnkHKCFHm4w=;
+        b=EiKXtB0fDGaYwn+THx+6Mzrwx6ggIQwjZnKD4BXrTg4V+C6GFmPcyqv8WsCxgK40PZ1BHDQ5yXO67jebzMgTq3Jnf8+nWMlbFj5k3ZXgInWeBjC1PBHlYgfcrBsjUYsxVcDWhGjQm2qazVwmOKDliXIqfu/jl4v3I7Youc6eWPY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:98814aa8-e18f-4e2b-bbef-61184b346dae,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:c97c4aa3-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:-5,EDM:-3,IP:nil,
+        URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2798c900a05b4374ac9f07e832846b2e-20220928
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 362543260; Wed, 28 Sep 2022 09:47:52 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 28 Sep 2022 09:47:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 28 Sep 2022 09:47:50 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <macpaul.lin@mediatek.com>
+CC:     <bear.wang@mediatek.com>, <devicetree@vger.kernel.org>,
+        <fparent@baylibre.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <macpaul@gmail.com>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <pablo.sun@mediatek.com>,
+        <robh+dt@kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8195-demo: fix the memory size of
+Date:   Wed, 28 Sep 2022 09:47:50 +0800
+Message-ID: <20220928014750.17054-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <664f3b7d-d629-5af1-cae4-cb5b638a5da1@mediatek.com>
+References: <664f3b7d-d629-5af1-cae4-cb5b638a5da1@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000008d61ee05e6d9bb0a@google.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 12:48:32PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    ad57410d231d usb: gadget: rndis: use %u instead of %d to p..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17472b85080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=0cb3309ee74d3c0c431c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+0cb3309ee74d3c0c431c@syzkaller.appspotmail.com
-> 
-> PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
-> software IO TLB: mapped [mem 0x00000000bbffd000-0x00000000bfffd000] (64MB)
-> RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-> clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb6feccdd0, max_idle_ns: 440795259471 ns
-> clocksource: Switched to clocksource tsc
-> Initialise system trusted keyrings
-> workingset: timestamp_bits=40 max_order=21 bucket_order=0
-> NFS: Registering the id_resolver key type
-> Key type id_resolver registered
-> Key type id_legacy registered
-> 9p: Installing v9fs 9p2000 file system support
-> Key type asymmetric registered
-> Asymmetric key parser 'x509' registered
-> Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
-> io scheduler mq-deadline registered
-> io scheduler kyber registered
-> usbcore: registered new interface driver udlfb
-> usbcore: registered new interface driver smscufx
-> input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-> ACPI: button: Power Button [PWRF]
-> input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-> ACPI: button: Sleep Button [SLPF]
-> ACPI: \_SB_.LNKC: Enabled at IRQ 11
-> virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKD: Enabled at IRQ 10
-> virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKB: Enabled at IRQ 10
-> virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-> virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-> 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-> 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-> Non-volatile memory driver v1.3
-> Linux agpgart interface v0.103
-> ACPI: bus type drm_connector registered
-> usbcore: registered new interface driver udl
-> loop: module loaded
-> usbcore: registered new interface driver rtsx_usb
-> usbcore: registered new interface driver viperboard
-> usbcore: registered new interface driver dln2
-> usbcore: registered new interface driver pn533_usb
-> usbcore: registered new interface driver port100
-> usbcore: registered new interface driver nfcmrvl
-> scsi host0: Virtio SCSI HBA
-> scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-> sd 0:0:1:0: Attached scsi generic sg0 type 0
-> Rounding down aligned max_sectors from 4294967295 to 4294967288
-> db_root: cannot open: /etc/target
-> BUG: unable to handle page fault for address: ffffdc0000000000
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 100026067 P4D 100026067 PUD 0 
-> Oops: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-syzkaller-00005-gad57410d231d #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> RIP: 0010:virtnet_set_affinity+0x2e4/0x600 drivers/net/virtio_net.c:2303
-> Code: e8 03 42 80 3c 30 00 0f 85 de 02 00 00 48 8b 44 24 10 48 8d 1c 80 48 8b 44 24 18 48 c1 e3 08 48 03 58 20 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 0f 85 a9 02 00 00 4c 8b 23 49 8d 7c 24 20 48 89 f8
-> RSP: 0000:ffffc9000001f980 EFLAGS: 00010a06
-> RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000000
-> RDX: ffff8881002a8000 RSI: ffffffff82fd75e3 RDI: 0000000000000004
-> RBP: 0000000000000001 R08: 0000000000000004 R09: 0000000000000001
-> R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
-> R13: 0000000000000000 R14: dffffc0000000000 R15: ffffc9000001f9f8
-> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffdc0000000000 CR3: 0000000007825000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  init_vqs drivers/net/virtio_net.c:3611 [inline]
->  init_vqs drivers/net/virtio_net.c:3597 [inline]
->  virtnet_probe+0x11ed/0x30f0 drivers/net/virtio_net.c:3904
->  virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
->  call_driver_probe drivers/base/dd.c:530 [inline]
->  really_probe+0x249/0xb90 drivers/base/dd.c:609
->  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:748
->  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:778
->  __driver_attach+0x223/0x550 drivers/base/dd.c:1150
->  bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
->  bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
->  driver_register+0x220/0x3a0 drivers/base/driver.c:240
->  virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4108
->  do_one_initcall+0xfe/0x650 init/main.c:1296
->  do_initcall_level init/main.c:1369 [inline]
->  do_initcalls init/main.c:1385 [inline]
->  do_basic_setup init/main.c:1404 [inline]
->  kernel_init_freeable+0x6ac/0x735 init/main.c:1611
->  kernel_init+0x1a/0x1d0 init/main.c:1500
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
-> Modules linked in:
-> CR2: ffffdc0000000000
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:virtnet_set_affinity+0x2e4/0x600 drivers/net/virtio_net.c:2303
+>On 9/26/22 15:05, Miles Chen wrote:
+>> Hi Macpaul,
+>> 
+>>> The size of device tree node secmon (bl31_secmon_reserved) was
+>>> incorrect. It should be increased to 2MiB (0x200000).
+>> 
+>> 192K should work when the patch(6147314aeedc) was accepted.
+>> Does the trusted-firmware-a get larger now, so we need to
+>> increase the size to 2MiB?
+>> 
+>> thanks,
+>> Miles
+>
+>When mt8195-demo.dts sent to the upstream, at that time the size of
+>BL31 was small. Because supported functions and modules in BL31 are 
+>basic sets when the board was under early development stage.
+>
+>Now BL31 includes more firmwares of coprocessors and maturer functions
+>so the size has grown bigger in real applications. According to the 
+>value reported by customers, we think reserved 2MiB for BL31 might be 
+>enough for maybe the following 2 or 3 years.
 
+Thanks for your explanation,
+please add this to the commit message and submit next version.
 
-So this is not new it turns out.  Was on vacation and missed it.
+With that, feel free to add:
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
 
-> Code: e8 03 42 80 3c 30 00 0f 85 de 02 00 00 48 8b 44 24 10 48 8d 1c 80 48 8b 44 24 18 48 c1 e3 08 48 03 58 20 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 0f 85 a9 02 00 00 4c 8b 23 49 8d 7c 24 20 48 89 f8
-> RSP: 0000:ffffc9000001f980 EFLAGS: 00010a06
-> RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000000
-> RDX: ffff8881002a8000 RSI: ffffffff82fd75e3 RDI: 0000000000000004
-> RBP: 0000000000000001 R08: 0000000000000004 R09: 0000000000000001
-> R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
-> R13: 0000000000000000 R14: dffffc0000000000 R15: ffffc9000001f9f8
-> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffdc0000000000 CR3: 0000000007825000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:	e8 03 42 80 3c       	callq  0x3c804208
->    5:	30 00                	xor    %al,(%rax)
->    7:	0f 85 de 02 00 00    	jne    0x2eb
->    d:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
->   12:	48 8d 1c 80          	lea    (%rax,%rax,4),%rbx
->   16:	48 8b 44 24 18       	mov    0x18(%rsp),%rax
->   1b:	48 c1 e3 08          	shl    $0x8,%rbx
->   1f:	48 03 58 20          	add    0x20(%rax),%rbx
->   23:	48 89 d8             	mov    %rbx,%rax
->   26:	48 c1 e8 03          	shr    $0x3,%rax
-> * 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
->   2f:	0f 85 a9 02 00 00    	jne    0x2de
->   35:	4c 8b 23             	mov    (%rbx),%r12
->   38:	49 8d 7c 24 20       	lea    0x20(%r12),%rdi
->   3d:	48 89 f8             	mov    %rdi,%rax
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
+thanks,
+Miles
