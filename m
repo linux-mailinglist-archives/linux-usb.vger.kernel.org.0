@@ -2,94 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F285EDFEA
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 17:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AA05EE03B
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 17:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234629AbiI1PPh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 11:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S233676AbiI1PZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 11:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbiI1PPf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 11:15:35 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CFDBC45F4C
-        for <linux-usb@vger.kernel.org>; Wed, 28 Sep 2022 08:15:32 -0700 (PDT)
-Received: (qmail 489543 invoked by uid 1000); 28 Sep 2022 11:15:31 -0400
-Date:   Wed, 28 Sep 2022 11:15:31 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: host: ehci-exynos: switch to using gpiod API
-Message-ID: <YzRlE3u7cIBL8Y1k@rowland.harvard.edu>
-References: <20220927220504.3744878-1-dmitry.torokhov@gmail.com>
- <20220927220504.3744878-2-dmitry.torokhov@gmail.com>
+        with ESMTP id S234255AbiI1PYg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 11:24:36 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F97CBADF;
+        Wed, 28 Sep 2022 08:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664378618; x=1695914618;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xo6XKYqI3oPo+JJpKrktAR7Ec7OSHFgLsMM1Nyu1Bpg=;
+  b=ekkimzVcJ4y1kFMT6KWeK7WuEnEFTKHvOH0vjx6/nNXPARahjqp/x5PA
+   aUnwwgGlg7FcFwjfzKXnJEuxct9TU1gO1BWlt+YTM/Xl18OAbGRrEHXHX
+   y//apaf0zQ53i71hmlpWz4kunjNdGD5oYIvFGaUoWBHlcQyutR3pCm1sU
+   hh51M3J3IlGmvgkgOhYUHn/lJsFt9UOncYOaBbFaCrLiJM+GefFxWLUcs
+   I43UgKZk4jjIQnTx7eOhuK62amPsvnsxvrY2wQ3SLc6otsWznHZrePIcU
+   +J6Xo9+mFnDxSxghk02SerCddpjXboUAzQt6Q+oXk+cAdBOBibg3GIr69
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="281346483"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="281346483"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:23:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573074617"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="573074617"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2022 08:23:33 -0700
+Message-ID: <c1d537ad-5a2d-24b1-bfc3-165deebbbfa7@linux.intel.com>
+Date:   Wed, 28 Sep 2022 18:24:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927220504.3744878-2-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3] usb: xhci: add XHCI_SPURIOUS_SUCCESS to ASM1042
+ despite being a V0.96 controller
+Content-Language: en-US
+To:     Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+        mathias.nyman@intel.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stern@rowland.harvard.edu
+References: <20220926193140.607172-1-jens.glathe@oldschoolsolutions.biz>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20220926193140.607172-1-jens.glathe@oldschoolsolutions.biz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:05:04PM -0700, Dmitry Torokhov wrote:
-> This patch switches the driver from using legacy gpio API to the newer
-> gpiod API.
+On 26.9.2022 22.31, Jens Glathe wrote:
+> This appears to fix the error:
+> "xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
+> current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
+> often) when using a r8152 USB3 ethernet adapter with integrated hub.
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ASM1042 reports as a 0.96 controller, but appears to behave more like 1.0
+> 
+> Inspred by this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
+> 
+> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+
+Adding this to queue
+
 > ---
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+In the future, As Alan also pointed out, please list the changes since last version here.
 
->  drivers/usb/host/ehci-exynos.c | 17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-> index c8e152c2e0ce..a333231616f4 100644
-> --- a/drivers/usb/host/ehci-exynos.c
-> +++ b/drivers/usb/host/ehci-exynos.c
-> @@ -13,7 +13,7 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/usb.h>
-> @@ -131,20 +131,13 @@ static void exynos_ehci_phy_disable(struct device *dev)
->  
->  static void exynos_setup_vbus_gpio(struct device *dev)
->  {
-> +	struct gpio_desc *gpio;
->  	int err;
-> -	int gpio;
->  
-> -	if (!dev->of_node)
-> -		return;
-> -
-> -	gpio = of_get_named_gpio(dev->of_node, "samsung,vbus-gpio", 0);
-> -	if (!gpio_is_valid(gpio))
-> -		return;
-> -
-> -	err = devm_gpio_request_one(dev, gpio, GPIOF_OUT_INIT_HIGH,
-> -				    "ehci_vbus_gpio");
-> +	gpio = devm_gpiod_get_optional(dev, "samsung,vbus", GPIOD_OUT_HIGH);
-> +	err = PTR_ERR_OR_ZERO(gpio);
->  	if (err)
-> -		dev_err(dev, "can't request ehci vbus gpio %d", gpio);
-> +		dev_err(dev, "can't request ehci vbus gpio: %d\n", err);
->  }
->  
->  static int exynos_ehci_probe(struct platform_device *pdev)
-> -- 
-> 2.38.0.rc1.362.ged0d419d3c-goog
-> 
+Something like:
+
+changes since v2
+  - add subsystem to subject line
+  - removed host 0.96 version check
+
+Thanks
+-Mathias
