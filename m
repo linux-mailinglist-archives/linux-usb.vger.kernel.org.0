@@ -2,85 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8205EC17A
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 13:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F18E5EC1E0
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Sep 2022 13:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiI0Ldz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Sep 2022 07:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S231852AbiI0LxN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Sep 2022 07:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiI0Ldl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 07:33:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27732CF48A
-        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 04:33:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8AE14CE18F5
-        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 11:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ED4CFC43144
-        for <linux-usb@vger.kernel.org>; Tue, 27 Sep 2022 11:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664278415;
-        bh=8g2+tlF8/DZQ7EtOffO1dfA1OQiRSRK4+B+nJMJAbLI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=uNCHVOVGXrjGqDSkEPiA/ska8rjSX8q4RNJr6GC3T/jElKQV1OMASwjMrCvGOw3sD
-         Hy8VfCkjpiBV5GmJx70p06Suhr6+nHo1OplRdbyaki1pR3F86gBcZ1yBQTE2UoBa2b
-         aOpDVbGKn0PunDPXcYqcsmrGpLh4UPX1AvStx6b45R0D43KKzB6W+lB9wfkGPfkns2
-         dj+bzYUrHyOhk5udQn99DskS5GZHCaw8ENu9dSW624uHY27ZHXaAvUioqP9YPUi/Z5
-         gqWTEMUHTICFqh3FXGmqbLbD1szUFY5UA9kdd8asu8C5XEGmF0jon5NLxa6R93OBsN
-         O2vc/Axn9bcPg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id DE8A0C433E7; Tue, 27 Sep 2022 11:33:34 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Tue, 27 Sep 2022 11:33:34 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bugzilla@hadess.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-7wnHo7wCku@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231488AbiI0LxJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Sep 2022 07:53:09 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F236F193B;
+        Tue, 27 Sep 2022 04:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664279588; x=1695815588;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ODLmI427IsMzWM/AOdddr0PFtw8lwBYgEBUiC5uoEEc=;
+  b=BavZdWQEuXg/mx13qz/pGqHJOk+Qi8hYwgROyNZ0O8MQdTpq3LMmPJLu
+   cvvaGRvmK8B6K+3xj+NA6P0UYgMClJR4bYacMxSa9HxqSLNtne4vf6soM
+   9NscoG+vkkohp5xAwk+GFlUNV/n6so7JCstKCaSW7I6wgiZQtWNaWxCi9
+   H4N6MJjTym7qSRtftoiYle5KofXz0zTUAYLannWjP2C11EQC77+5UGhdB
+   pwThtVXfHt7ZMh7CBzveYXH9bUY3praKajI+XzLHtkPe/T6EUSTcMUEm+
+   LRpXOR05zthibmK9eQY4EzNE8eh0bxJOL04j8Ew+XDBEjmNlCOUeWgW4s
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="301273099"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="301273099"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:53:08 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="866542843"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="866542843"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:53:05 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@intel.com>
+To:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajat Khandelwal <rajat.khandelwal@intel.com>
+Subject: [PATCH v4] thunderbolt: Add wake on connect/disconnect on USB4 ports
+Date:   Wed, 28 Sep 2022 17:22:30 +0530
+Message-Id: <20220928115230.2031934-1-rajat.khandelwal@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+Wake on connect/disconnect is only supported while runtime suspend
+for now, which is obviously necessary. Its also not inherently
+desired for the system to wakeup on thunderbolt hot events.
+However, we can still make user in control of waking up the system
+in the events of hot plug/unplug.
+This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
+attribute and only enables wakes on connect/disconnect to the
+respective port when 'wakeup' is set to 'enabled'. The attribute
+is set to 'disabled' by default.
 
---- Comment #33 from Bastien Nocera (bugzilla@hadess.net) ---
-(In reply to Heikki Krogerus from comment #32)
-> Quick update. Bastien saw a WARNING that my patch causes.
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+---
 
-I don't remember seeing anything, I don't even have the hardware to trigger
-this.
+Significant changes and reasons:
+1. 'if (!port->cap_usb4)' is added under the loop in
+'usb4_switch_check_wakes' function since the checks later are
+explicitly targeted to the USB4 port configuration capability.
+'if (!tb_port_has_remote(port))' is removed because events now can
+be connection/disconnection along with USB4 events. Thus, a wake
+on connection can be triggered by user on the USB4 port (initially
+no remote).
+2. Verified runtime wakeup. It works absolutely fine.
+3. Wakeup count has to be increased in the 'wakeup_count' attribute
+under usb4_port/power, thus requiring another pm_wakeup_event.
 
---=20
-You may reply to this email to add a comment.
+Fixes in v4:
+1. I don't think device_init_wakeup(&usb4->dev, false) will suffice
+our purpose since it doesn't set the device wakeup capable. We need
+device wakeup capable but not wakeup enabled by default. However, I
+have shortened the two lines by using only one.
+2. Reverse christmas format - checked.
+3. Reformatting comments which are not to be included in commit.
+4. Multi-line comment terminated with full stop.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+ drivers/thunderbolt/tb_regs.h   |  2 ++
+ drivers/thunderbolt/usb4.c      | 33 +++++++++++++++++++++++++--------
+ drivers/thunderbolt/usb4_port.c |  3 +++
+ 3 files changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 166054110388..04733fc1130c 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -358,6 +358,8 @@ struct tb_regs_port_header {
+ #define PORT_CS_18_BE				BIT(8)
+ #define PORT_CS_18_TCM				BIT(9)
+ #define PORT_CS_18_CPS				BIT(10)
++#define PORT_CS_18_WOCS				BIT(16)
++#define PORT_CS_18_WODS				BIT(17)
+ #define PORT_CS_18_WOU4S			BIT(18)
+ #define PORT_CS_19				0x13
+ #define PORT_CS_19_PC				BIT(3)
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 3a2e7126db9d..0d5ff086814b 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -155,6 +155,8 @@ static inline int usb4_switch_op_data(struct tb_switch *sw, u16 opcode,
+ 
+ static void usb4_switch_check_wakes(struct tb_switch *sw)
+ {
++	bool wakeup_usb4 = false;
++	struct usb4_port *usb4;
+ 	struct tb_port *port;
+ 	bool wakeup = false;
+ 	u32 val;
+@@ -173,20 +175,31 @@ static void usb4_switch_check_wakes(struct tb_switch *sw)
+ 		wakeup = val & (ROUTER_CS_6_WOPS | ROUTER_CS_6_WOUS);
+ 	}
+ 
+-	/* Check for any connected downstream ports for USB4 wake */
++	/*
++	 * Check for any downstream ports for USB4 wake,
++	 * connection wake and disconnection wake.
++	 */
+ 	tb_switch_for_each_port(sw, port) {
+-		if (!tb_port_has_remote(port))
++		if (!port->cap_usb4)
+ 			continue;
+ 
+ 		if (tb_port_read(port, &val, TB_CFG_PORT,
+ 				 port->cap_usb4 + PORT_CS_18, 1))
+ 			break;
+ 
+-		tb_port_dbg(port, "USB4 wake: %s\n",
+-			    (val & PORT_CS_18_WOU4S) ? "yes" : "no");
++		tb_port_dbg(port, "USB4 wake: %s, connection wake: %s, disconnection wake: %s\n",
++			    (val & PORT_CS_18_WOU4S) ? "yes" : "no",
++			    (val & PORT_CS_18_WOCS) ? "yes" : "no",
++			    (val & PORT_CS_18_WODS) ? "yes" : "no");
++
++		wakeup_usb4 = val & (PORT_CS_18_WOU4S | PORT_CS_18_WOCS |
++				     PORT_CS_18_WODS);
++
++		usb4 = port->usb4;
++		if (device_may_wakeup(&usb4->dev) && wakeup_usb4)
++			pm_wakeup_event(&usb4->dev, 0);
+ 
+-		if (val & PORT_CS_18_WOU4S)
+-			wakeup = true;
++		wakeup |= wakeup_usb4;
+ 	}
+ 
+ 	if (wakeup)
+@@ -366,6 +379,7 @@ bool usb4_switch_lane_bonding_possible(struct tb_switch *sw)
+  */
+ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ {
++	struct usb4_port *usb4;
+ 	struct tb_port *port;
+ 	u64 route = tb_route(sw);
+ 	u32 val;
+@@ -395,10 +409,13 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ 			val |= PORT_CS_19_WOU4;
+ 		} else {
+ 			bool configured = val & PORT_CS_19_PC;
++			usb4 = port->usb4;
+ 
+-			if ((flags & TB_WAKE_ON_CONNECT) && !configured)
++			if (((flags & TB_WAKE_ON_CONNECT) |
++			      device_may_wakeup(&usb4->dev)) && !configured)
+ 				val |= PORT_CS_19_WOC;
+-			if ((flags & TB_WAKE_ON_DISCONNECT) && configured)
++			if (((flags & TB_WAKE_ON_DISCONNECT) |
++			      device_may_wakeup(&usb4->dev)) && configured)
+ 				val |= PORT_CS_19_WOD;
+ 			if ((flags & TB_WAKE_ON_USB4) && configured)
+ 				val |= PORT_CS_19_WOU4;
+diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
+index 6b02945624ee..442ed1152e59 100644
+--- a/drivers/thunderbolt/usb4_port.c
++++ b/drivers/thunderbolt/usb4_port.c
+@@ -282,6 +282,9 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port)
+ 		}
+ 	}
+ 
++	if (!tb_is_upstream_port(port))
++		device_set_wakeup_capable(&usb4->dev, true);
++
+ 	pm_runtime_no_callbacks(&usb4->dev);
+ 	pm_runtime_set_active(&usb4->dev);
+ 	pm_runtime_enable(&usb4->dev);
+-- 
+2.34.1
+
