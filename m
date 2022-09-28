@@ -2,111 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355FC5ED8B3
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 11:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF715ED9D4
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 12:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiI1JSU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 05:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
+        id S231642AbiI1KIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 06:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbiI1JR7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 05:17:59 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F49867C95;
-        Wed, 28 Sep 2022 02:17:33 -0700 (PDT)
-X-UUID: 93de8750d3b14c9d8fb13bc466da3c54-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=yPvQ+AXkrWKki4c5AVwC7iWwQ8GaDVJAZCtWTLTe5AM=;
-        b=q3uBbzFkFgg2o7n66yTqOkqpnArif/XskPadC5XCQo3vb6C3Xumth69INBdragjnEe2SuRGtj9P1/hV4opXCVciBzPJx9tcFEYyn77noJLffu7fMf97wPju+68DsVRxz3b0JysAoIOlG6vFla6m4T27kamXoZtfQKEfjpwKTajU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:163604b4-c895-493e-9067-e45aa2273ecb,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:39a5ff1,CLOUDID:7b975ba3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 93de8750d3b14c9d8fb13bc466da3c54-20220928
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 596203227; Wed, 28 Sep 2022 17:17:29 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 17:17:28 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Sep 2022 17:17:27 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+        with ESMTP id S233610AbiI1KIi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 06:08:38 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63888D5762
+        for <linux-usb@vger.kernel.org>; Wed, 28 Sep 2022 03:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664359716; x=1695895716;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nFCIRsR2syuFhjqPxfuFJin0ZyDmtLjdBuvxTUiHzw4=;
+  b=C052lggt85YsUM1Z4FZLCdpy/3e1Q2xKHliWBwqxyEQUOdqtrwnGoLwR
+   IPGhs+wXxNspZa3WWreztaPUE0sBVBKXveHUIxCYRW3pHvhe4Jt712tl2
+   vbr+1qlkkebxSCdC/EixGppiak/QwBdCiPX6+4Uv7P0j2No7QFWPI4qaD
+   061zodeVNQeVL8CeMGeJaku13+ktuslFP5Yyx+A30+I/swdB7+zsRejPa
+   b/hddr7QfW+57wa7bT9dr5gH6FmW2UxV5+/3sSL78fVRBgQ7xdxRsAkyR
+   MMD9vwx7n3aAHVfgUv/zq88tRPzsNSfSA1ikTEqJeJTRZoCTeLRPU3oHG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="299161954"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="299161954"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 03:08:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="764232245"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="764232245"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Sep 2022 03:08:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 1B9D686; Wed, 28 Sep 2022 13:08:52 +0300 (EEST)
+Date:   Wed, 28 Sep 2022 13:08:51 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>
-Subject: [PATCH 2/2] usb: mtu3: fix failed runtime suspend in host only mode
-Date:   Wed, 28 Sep 2022 17:17:21 +0800
-Message-ID: <20220928091721.26112-2-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
-References: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 changes for v6.1 merge window
+Message-ID: <YzQdM0/5yFGjBCgY@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the dr_mode is "host", after the host enter runtime suspend,
-the mtu3 can't do it, because the mtu3's device wakeup function is
-not enabled, instead it's enabled in gadget init function, to fix
-the issue, init wakeup early in mtu3's probe()
+Hi Greg,
 
-Fixes: 6b587394c65c ("usb: mtu3: support suspend/resume for dual-role mode")
-Reported-by: Tianping Fang <tianping.fang@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/mtu3/mtu3_core.c | 2 --
- drivers/usb/mtu3/mtu3_plat.c | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
-index 0ca173af87bb..a3a6282893d0 100644
---- a/drivers/usb/mtu3/mtu3_core.c
-+++ b/drivers/usb/mtu3/mtu3_core.c
-@@ -978,8 +978,6 @@ int ssusb_gadget_init(struct ssusb_mtk *ssusb)
- 		goto irq_err;
- 	}
- 
--	device_init_wakeup(dev, true);
--
- 	/* power down device IP for power saving by default */
- 	mtu3_stop(mtu);
- 
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index 4cb65346789d..d78ae52b4e26 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -356,6 +356,8 @@ static int mtu3_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
-+	device_init_wakeup(dev, true);
-+
- 	ret = ssusb_rscs_init(ssusb);
- 	if (ret)
- 		goto comm_init_err;
--- 
-2.18.0
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.1-rc1
+
+for you to fetch changes up to 5d2569cb4a65c373896ec0217febdf88739ed295:
+
+  thunderbolt: Explicitly enable lane adapter hotplug events at startup (2022-09-26 20:18:25 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Changes for v6.1 merge window
+
+This includes following Thunderbolt/USB4 changes for the v6.1 merge
+window:
+
+  - Support for Intel Meteor Lake integrated Thunderbolt/USB4 controller
+  - Support for ASMedia USB4 controller NVM firmware upgrade
+  - Receiver lane margining support
+  - Few fixes and cleanups.
+
+All these have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      thunderbolt: Convert to use sysfs_emit()/sysfs_emit_at() APIs
+      thunderbolt: Use dev_err_probe()
+
+Colin Ian King (2):
+      thunderbolt: debugfs: Fix spelling mistakes in seq_puts text
+      thunderbolt: Fix spelling mistake "simultaneusly" -> "simultaneously"
+
+Mario Limonciello (1):
+      thunderbolt: Explicitly enable lane adapter hotplug events at startup
+
+Mika Westerberg (8):
+      thunderbolt: Add comment where Thunderbolt 4 PCI IDs start
+      thunderbolt: Add support for Intel Meteor Lake
+      thunderbolt: Move tb_xdomain_parent() to tb.h
+      thunderbolt: Move port CL state functions into correct place in switch.c
+      thunderbolt: Pass CL state bitmask to tb_port_clx_supported()
+      thunderbolt: Add helper to check if CL states are enabled on port
+      thunderbolt: Add support for receiver lane margining
+      thunderbolt: Provide tb_retimer_nvm_read() analogous to tb_switch_nvm_read()
+
+Sanjay R Mehta (1):
+      thunderbolt: Add DP OUT resource when DP tunnel is discovered
+
+Szuying Chen (5):
+      thunderbolt: Allow NVM upgrade of USB4 host routers
+      thunderbolt: Extend NVM version fields to 32-bits
+      thunderbolt: Rename and make nvm_read() available for other files
+      thunderbolt: Move vendor specific NVM handling into nvm.c
+      thunderbolt: Add support for ASMedia NVM image format
+
+ Documentation/ABI/testing/sysfs-bus-thunderbolt |   4 +-
+ drivers/thunderbolt/Kconfig                     |  10 +
+ drivers/thunderbolt/debugfs.c                   | 836 ++++++++++++++++++++++++
+ drivers/thunderbolt/domain.c                    |  10 +-
+ drivers/thunderbolt/icm.c                       |   3 +
+ drivers/thunderbolt/nhi.c                       |  55 +-
+ drivers/thunderbolt/nhi.h                       |   3 +
+ drivers/thunderbolt/nvm.c                       | 385 ++++++++++-
+ drivers/thunderbolt/retimer.c                   | 113 ++--
+ drivers/thunderbolt/sb_regs.h                   |  58 ++
+ drivers/thunderbolt/switch.c                    | 449 +++++++------
+ drivers/thunderbolt/tb.c                        |  33 +-
+ drivers/thunderbolt/tb.h                        |  56 +-
+ drivers/thunderbolt/tb_regs.h                   |   3 +
+ drivers/thunderbolt/usb4.c                      | 140 ++++
+ drivers/thunderbolt/xdomain.c                   |  35 +-
+ 16 files changed, 1822 insertions(+), 371 deletions(-)
 
