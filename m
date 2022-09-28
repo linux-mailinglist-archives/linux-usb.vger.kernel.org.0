@@ -2,119 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D045ED550
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 08:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D0F5ED563
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Sep 2022 08:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbiI1Gsz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Sep 2022 02:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S233269AbiI1Gvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Sep 2022 02:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiI1GsA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 02:48:00 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E022CE21;
-        Tue, 27 Sep 2022 23:46:24 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28S16lQ6005109;
-        Wed, 28 Sep 2022 08:45:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=x2KOSmp7c+h6kDDP0gJFixqvBxl8YXw+GY/uBoC7bq0=;
- b=knKiSwyL5i1WME9cxxEqxBm8SVz+IwsaVqvFtzoMkd3F9DmxnonTvYt8FpyDwQwqXdPr
- ZZZeFXSxnv9WpYP1O9j9/7z3EhI7U2oWhs4yqyG3wFBfdl/5ry8v6KWZSgXYSQtIssyu
- eoQ6++JDWI9kqEph2V5+b8R4g1oON8UYv0phOQKbs8xH9EBu96p257UMwRFOzIhwQ3td
- 5ON6GpoZZqWKb/so1JMnJIKcefC6gPFI5boLh6nKpM1v4CO0t4u/v47ibv0zwqmbTd8p
- L+xZIPFMTOK6ybT3MQyzEEKIA8PNTHacu5uI+UoY1/Rfpx0e4fHOGhfjFp9ciaSc/z4U ow== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsrsjpyk0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 08:45:59 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6DA1F10002A;
-        Wed, 28 Sep 2022 08:45:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5A25E211F23;
-        Wed, 28 Sep 2022 08:45:55 +0200 (CEST)
-Received: from [10.201.21.72] (10.75.127.120) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Wed, 28 Sep
- 2022 08:45:54 +0200
-Message-ID: <552281f4-dc8c-7cd7-32af-fa48de5aa414@foss.st.com>
-Date:   Wed, 28 Sep 2022 08:45:54 +0200
+        with ESMTP id S233276AbiI1GvC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Sep 2022 02:51:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956A01F5A27;
+        Tue, 27 Sep 2022 23:49:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE9FE61C2C;
+        Wed, 28 Sep 2022 06:49:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85997C433D6;
+        Wed, 28 Sep 2022 06:49:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664347756;
+        bh=Nk3ynkusqGap+x1MJ8tX+7TIQxb2yUJieA0dMDPZhZ4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MpowEj9ilTx3o+TQ1A4iv3yMuus1l3BClYGalYJ95fNJkA/gOqcnPeg7lXTGNEQtT
+         /LC/q/QbSarTrSQQuTRBG6gxXRNe0dIfNadWf+6Vlb6MuyqBm5zy4ALIpfYotK4a4Z
+         RDNz3vOkKcGUSuzUaMLGQQmwGGYFXlYo+D3VeIwA2/OiDkxS4WJUSwHkl7kcoYDONj
+         cR6V82LEaFE/IRTNXYxFFuXYd4SCh5YEkAfmuQiEgfaCSzeYoi+3jEZAnrP9ghx6yD
+         27YdwS7z282avzIXwQGCXd3YFaY2tvBRrbX5IicI3PQcnPiJfSQcqM8L02bBP6g/3x
+         6vBFLMBK+1KkQ==
+Message-ID: <cd5455e9-b9ea-9376-1440-3dbf790d4c24@kernel.org>
+Date:   Wed, 28 Sep 2022 09:49:11 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] usb: dwc3: st: Fix node's child name
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: cdns3: remove dead code
 Content-Language: en-US
-To:     Felipe Balbi <felipe@balbi.sh>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jerome Audu <jerome.audu@st.com>
-References: <20220926124359.304770-1-patrice.chotard@foss.st.com>
- <87o7v0g860.fsf@balbi.sh>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <87o7v0g860.fsf@balbi.sh>
-Content-Type: text/plain; charset="UTF-8"
+To:     Pawel Laszczak <pawell@cadence.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Peter Chen <peter.chen@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220926135922.24541-1-dzm91@hust.edu.cn>
+ <BYAPR07MB5381FCC10ABD4F92E47CF6D9DD549@BYAPR07MB5381.namprd07.prod.outlook.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <BYAPR07MB5381FCC10ABD4F92E47CF6D9DD549@BYAPR07MB5381.namprd07.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.120]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_02,2022-09-27_01,2022-06-22_01
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe, Krzysztof
+Hello Pawel,
 
-On 9/27/22 17:15, Felipe Balbi wrote:
-> 
-> <patrice.chotard@foss.st.com> writes:
-> 
->> From: Patrice Chotard <patrice.chotard@foss.st.com>
+On 28/09/2022 09:40, Pawel Laszczak wrote:
 >>
->> Update node's child name from "dwc3" to "usb", this fixes
->> the following issue:
+>> From: Dongliang Mu <mudongliangabcd@gmail.com>
 >>
->> [3.773852] usb-st-dwc3 8f94000.dwc3: failed to find dwc3 core node
+>> Smatch reports the following error:
 >>
->> Fixes: 3120910a099b ("ARM: dts: stih407-family: Harmonize DWC USB3 DT nodes name")
+>> drivers/usb/cdns3/cdns3-plat.c:113 cdns3_plat_probe() warn:
+>> platform_get_irq() does not return zero
 >>
->> Reported-by: Jerome Audu <jerome.audu@st.com>
->> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>>From the document, platform_get_irq_byname_optional only returns
+>> non-zero value, and negative value on failure.
+>>
+>> Fix this by removing the zero value checking.
+>>
+>> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 >> ---
->>  drivers/usb/dwc3/dwc3-st.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> drivers/usb/cdns3/cdns3-plat.c | 2 --
+>> 1 file changed, 2 deletions(-)
 >>
->> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
->> index 166b5bde45cb..6c14a79279f9 100644
->> --- a/drivers/usb/dwc3/dwc3-st.c
->> +++ b/drivers/usb/dwc3/dwc3-st.c
->> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
->>  	/* Manage SoftReset */
->>  	reset_control_deassert(dwc3_data->rstc_rst);
->>  
->> -	child = of_get_child_by_name(node, "dwc3");
->> +	child = of_get_child_by_name(node, "usb");
+>> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+>> index dc068e940ed5..2bc5d094548b 100644
+>> --- a/drivers/usb/cdns3/cdns3-plat.c
+>> +++ b/drivers/usb/cdns3/cdns3-plat.c
+>> @@ -110,8 +110,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+>> 	cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+>> 	if (cdns->wakeup_irq == -EPROBE_DEFER)
+>> 		return cdns->wakeup_irq;
+>> -	else if (cdns->wakeup_irq == 0)
+>> -		return -EINVAL;
+>>
+> I think that here we should have:
+> 	else if (cdns->wakeup_irq == -ENXIO)
+> 		return -EINVAL;
+>  because of function: 
+> platform_get_irq_byname_optional -> __platform_get_irq_byname returns
+> irq number (>0),  -EPROBE_DEFFER or -ENXIO
+
+But this is changing functionality and should come as a new patch.
+
+The original patch is correct as it doesn't change existing code
+functionality.
+
 > 
-> there could be DTBs in the wild which have `dwc3' as the child name. It
-> seems to me that you should try both names, instead.
+> 
+> thanks
+> Pawel
+> 
+>> 	if (cdns->wakeup_irq < 0) {
+>> 		dev_dbg(dev, "couldn't get wakeup irq\n");
+>> --
+>> 2.35.1
 > 
 
-As this patch is already merged, i will submit an additional patch which will 
-rely on child's compatible string instead of child's node name, as done in other
-dwc3 driver.
-
-Thanks
-Patrice
+cheers,
+-roger
