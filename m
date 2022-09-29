@@ -2,119 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3CC5EEE02
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 08:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23175EEE3D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 09:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234822AbiI2GpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Sep 2022 02:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S235058AbiI2HBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Sep 2022 03:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbiI2GpN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 02:45:13 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE6CF685A;
-        Wed, 28 Sep 2022 23:45:07 -0700 (PDT)
-X-UUID: 63e46b5a5e7a4cab9d0696260ab5ad3a-20220929
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=kiOzCeiwrP7bYeA7Uexju07lk5sFmybh+kBdygu2puM=;
-        b=gFYZIi5gSUr7I3TvqK+rdxFEECKXO9U/kZqmHQgXSFh1U9p+N3reU1v08wPTm5wXz58/ufN5QSVEzwfgbax+tWOIkxs1dHO2cTy/vnknXUF2ArznwLmPi6Mwbp+kxUzTMmho8sJRHZDW0U3oIEtLelszXfOTWr7KFXL4CGcgCLQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:548059a0-99ec-414a-8711-106fbf4a5cbd,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.11,REQID:548059a0-99ec-414a-8711-106fbf4a5cbd,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:39a5ff1,CLOUDID:bbec9de4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220929144504UZ6G4XJO,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
-        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,
-        COL:0
-X-UUID: 63e46b5a5e7a4cab9d0696260ab5ad3a-20220929
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1720333671; Thu, 29 Sep 2022 14:45:03 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 29 Sep 2022 14:45:02 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 29 Sep 2022 14:45:01 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] usb: mtu3: fix failed runtime suspend in host only mode
-Date:   Thu, 29 Sep 2022 14:44:59 +0800
-Message-ID: <20220929064459.32522-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235037AbiI2HBZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 03:01:25 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CCE123D82
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 00:01:12 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id d42so920657lfv.0
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 00:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/IXLbjH5KQJTVAywyqeKJX3mELhE8CvWdqMVSTRdvVc=;
+        b=ulNv9ztLuwltm4KnY0u7qOVoQ4PAMVml3FifhKVcV+4Yyhny+3sq6cAuV3U01ktIvt
+         NN76w9jfTNbWEhlSUCMKp1f6APBkjyA0Bb98WtHkOs7mV16Rc9IP58+mWxIujwz5G7wU
+         wVYdHGXuPVEBfT9OtbNtAGKVuuN8UqtAaKYaikH/AupJm70k5TPBLdIpocGefGdzoQ5y
+         EnJH9mIO3GEMJ2i14W3HYcVcMvO1Up1U+gD3ZLdODl5HEF7Tu+UjYTMjdGmcuzq6Qiba
+         fcxnTZeed5Ynl/Gbp/RTfL/PFqxRSHylbMC12sAQBAx1LHsMi7BRtfMcXVqjIArVieHy
+         2bMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/IXLbjH5KQJTVAywyqeKJX3mELhE8CvWdqMVSTRdvVc=;
+        b=PnuAPtm1YeBUCMcJ/y47oCZWpJA7VbyGhMHZr9KFP8d9kaG1+grl8TVJR//E7CuoFd
+         CJgJ4MvWg0q8VRAclwfnd+/fyFTDhy8uSZEpuzEeulHiyWXiwlIJoHbYE6KWpxKTX4e+
+         UgNcFX7o8cMwFSGJgEZfE2HaBjEVhFVHjfOsBrxTIvFq5TCMVeuhS78ZEk0OIl4PNASG
+         RSSstkh4Ls3pRWE8x5ZS7IplFT8dpnpewr+b7HviQqjaFGK8sP1crONKPvYAYvu5iNQC
+         PqpgcR6tn7iSi3n3zDnTWoFtQjEuaVXmAve2CncF9zB6ZjThSSPQ9FeCa+7FBP/ZUF46
+         BpFA==
+X-Gm-Message-State: ACrzQf2BUlMZhxtQBiWSPMYFqnXZdPs2rpK/UNF+2HSkjMwMK7wocYhh
+        i3+ixruepJZ6tzeQkQBWrl3Qjg==
+X-Google-Smtp-Source: AMsMyM7iC2rj0wIw/XHeSNZGx3uJYvB4fvO0oao86ygIhhfvcid/LGD+visWqDZnceunDjjMcb0iKA==
+X-Received: by 2002:a05:6512:1283:b0:499:d0a3:3ca8 with SMTP id u3-20020a056512128300b00499d0a33ca8mr707348lfs.665.1664434870569;
+        Thu, 29 Sep 2022 00:01:10 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q12-20020a2e84cc000000b0026c41574790sm631066ljh.30.2022.09.29.00.01.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 00:01:10 -0700 (PDT)
+Message-ID: <efd42f94-1868-9189-d88e-f03b8c19f866@linaro.org>
+Date:   Thu, 29 Sep 2022 09:01:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/1] dt-bindings: usb: tegra-xudc: Add Tegra234 XUSB
+ controller support
+Content-Language: en-US
+To:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        krzysztof.kozlowski+dt@linaro.org, nkristam@nvidia.com,
+        jckuo@nvidia.com
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220929034221.3817058-1-waynec@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220929034221.3817058-1-waynec@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the dr_mode is "host", after the host enter runtime suspend,
-the mtu3 can't do it, because the mtu3's device wakeup function is
-not enabled, instead it's enabled in gadget init function, to fix
-the issue, init wakeup early in mtu3's probe()
+On 29/09/2022 05:42, Wayne Chang wrote:
+> Extend the Tegra XUSB controller device tree binding with Tegra234
+> support.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> index fd6e7c81426e..7e4eb379bcf4 100644
+> --- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> @@ -22,6 +22,7 @@ properties:
+>            - nvidia,tegra210-xudc # For Tegra210
+>            - nvidia,tegra186-xudc # For Tegra186
+>            - nvidia,tegra194-xudc # For Tegra194
+> +          - nvidia,tegra234-xudc # For Tegra194
 
-Fixes: 6b587394c65c ("usb: mtu3: support suspend/resume for dual-role mode")
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reported-by: Tianping Fang <tianping.fang@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: add Reviewed-by AngeloGioacchino
-    abandon another patch:
-       "[PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage"
----
- drivers/usb/mtu3/mtu3_core.c | 2 --
- drivers/usb/mtu3/mtu3_plat.c | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Where is the driver change? Where is DTS?
 
-diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
-index 0ca173af87bb..a3a6282893d0 100644
---- a/drivers/usb/mtu3/mtu3_core.c
-+++ b/drivers/usb/mtu3/mtu3_core.c
-@@ -978,8 +978,6 @@ int ssusb_gadget_init(struct ssusb_mtk *ssusb)
- 		goto irq_err;
- 	}
- 
--	device_init_wakeup(dev, true);
--
- 	/* power down device IP for power saving by default */
- 	mtu3_stop(mtu);
- 
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index 4cb65346789d..d78ae52b4e26 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -356,6 +356,8 @@ static int mtu3_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
-+	device_init_wakeup(dev, true);
-+
- 	ret = ssusb_rscs_init(ssusb);
- 	if (ret)
- 		goto comm_init_err;
--- 
-2.18.0
+Best regards,
+Krzysztof
 
