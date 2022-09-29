@@ -2,48 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E605EEFA5
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 09:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7115EF001
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 10:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235396AbiI2HtP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Sep 2022 03:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
+        id S235115AbiI2IHO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Sep 2022 04:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235430AbiI2HtK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 03:49:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CE513A96B
-        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 00:49:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E64861FA9
-        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 07:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14941C433D6;
-        Thu, 29 Sep 2022 07:49:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664437743;
-        bh=ceUFbXftao2QjWl3JLQng8G811gghnGwmbdZ5muzfBw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rj4lF+YlkHSm5TwevCpWMdhsVamHqCLsQRTakUoJySpxA5q2IazgZtg6ZC706ew44
-         Cmv5nnENXBQ7xJDIXLZy+9R3pf3OMrJ4eEWp+6Cy7YmKDLl3UUlZObjaeqWEizg263
-         WqLub4IMUzFRi+pr2npTfw0+a/F7+lthEZ3cDqaJTAPE0J6A8g79zcHu5ghHzk1JeS
-         t9Yc8ZVd22GQvTwzLED+F/AuoiDq6p1HHP9IiS+k2zLya9vfDdYYD8Ds3K098MGxgO
-         gsprmwOGcIZSEcYm+ws/G1Efzlha1tS4RQ8xekxOybq1TqWlZAOHXaGVJcqGuFDkmc
-         0YXmfWmvSZR9A==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Linux USB <linux-usb@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] MAINTAINERS: switch dwc3 to Thinh
-Date:   Thu, 29 Sep 2022 10:48:44 +0300
-Message-Id: <20220929074844.351938-1-balbi@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        with ESMTP id S235017AbiI2IHM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 04:07:12 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDEB7A517
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 01:07:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l12so448098pjh.2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 01:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=0Jfzl2sNnfhcmOJ2w1p67/kZD3Vw/dvkwuexZ9m31YM=;
+        b=P87hvSDDuEWClVP5xzHvYmmh4LTLu551xTpJzaPDMe4LieY8KERFX8Ujs8zWUvrz98
+         sKa5I87UXH+5n827rMS1kwkkgnMtwMX/RACxh9QuHtK3d4B6XF1aJXV+2XA1AmWLsvh/
+         S+WtRHcrRei+OaTUo91sWFJpZtpfNO/ld1FhU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=0Jfzl2sNnfhcmOJ2w1p67/kZD3Vw/dvkwuexZ9m31YM=;
+        b=XfTXSiXGAP12HVGZlXMgmUsMXIIpdTSnC1ztKul2D4i3VzPZvrnCOYppuTofGMELcZ
+         RzJYQP5aWG+9+0eiXUB3Ne4nRmQpZ5RpGVQId8xcWxXlkDNe7o60rwgAMawuGADWLrcQ
+         X41fFd6MjpQt33B2FtIjG+SLk4ZJRMoaU0Yju0A/BycpZfpHBZBHUrDUUkV45RhCbC6H
+         hC+AicB/W2TVrgUnZ7GUXzTp3/Lu2tttDoWGi5qCczVB9tAj1m6IXW4WRomVtDyNiU/Y
+         Rl+ZBBHCc6wEOV6rQPyNsJpEdoFVw0bRDWRsOsSAvrnHiZMaU9KjZ+PmdLGfDz+7BqRT
+         ha6A==
+X-Gm-Message-State: ACrzQf1ZFge+9EKblz+ZH3/jqwwNCtXGGaBer0s76hZ6KlFZfNzf8o+o
+        TyGXmGOPQO9ckJdboDj0QBuOeA==
+X-Google-Smtp-Source: AMsMyM4+Mj2J8XHAWgYmKThY6/GgJaz8N5uLUtVAjrhrE54ehACWk51RbxkUw262Lb+XCP8GD1+8FQ==
+X-Received: by 2002:a17:90b:4b09:b0:202:ad77:9ee1 with SMTP id lx9-20020a17090b4b0900b00202ad779ee1mr2469916pjb.10.1664438829765;
+        Thu, 29 Sep 2022 01:07:09 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b00176b84eb29asm5185479pln.301.2022.09.29.01.07.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 01:07:09 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 01:07:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: uvc: Fix argument to sizeof() in
+ uvc_register_video()
+Message-ID: <202209290106.E6EFD95D4@keescook>
+References: <20220928201921.3152163-1-nathan@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220928201921.3152163-1-nathan@kernel.org>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,30 +73,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thinh Nguyen has agreed to become the new dwc3 maintainer seeing that
-I haven't had time to dedicate to the mailing list.
+On Wed, Sep 28, 2022 at 01:19:21PM -0700, Nathan Chancellor wrote:
+> When building s390 allmodconfig after commit 9b91a6523078 ("usb: gadget:
+> uvc: increase worker prio to WQ_HIGHPRI"), the following error occurs:
+> 
+>   In file included from ../include/linux/string.h:253,
+>                    from ../include/linux/bitmap.h:11,
+>                    from ../include/linux/cpumask.h:12,
+>                    from ../include/linux/smp.h:13,
+>                    from ../include/linux/lockdep.h:14,
+>                    from ../include/linux/rcupdate.h:29,
+>                    from ../include/linux/rculist.h:11,
+>                    from ../include/linux/pid.h:5,
+>                    from ../include/linux/sched.h:14,
+>                    from ../include/linux/ratelimit.h:6,
+>                    from ../include/linux/dev_printk.h:16,
+>                    from ../include/linux/device.h:15,
+>                    from ../drivers/usb/gadget/function/f_uvc.c:9:
+>   In function ‘fortify_memset_chk’,
+>       inlined from ‘uvc_register_video’ at ../drivers/usb/gadget/function/f_uvc.c:424:2:
+>   ../include/linux/fortify-string.h:301:25: error: call to ‘__write_overflow_field’ declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+>     301 |                         __write_overflow_field(p_size_field, size);
+>         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> This points to the memset() in uvc_register_video(). It is clear that
+> the argument to sizeof() is incorrect, as uvc->vdev (a 'struct
+> video_device') is being zeroed out but the size of uvc->video (a 'struct
+> uvc_video') is being used as the third arugment to memset().
+> 
+> pahole shows that prior to commit 9b91a6523078 ("usb: gadget: uvc:
+> increase worker prio to WQ_HIGHPRI"), 'struct video_device' and
+> 'struct ucv_video' had the same size, meaning that the argument to
+> sizeof() is incorrect semantically but there is no visible issue:
+> 
+>   $ pahole -s build/drivers/usb/gadget/function/f_uvc.o | grep -E "(uvc_video|video_device)\s+"
+>   video_device    1400    4
+>   uvc_video       1400    3
+> 
+> After that change, uvc_video becomes slightly larger, meaning that the
+> memset() will overwrite by 8 bytes:
+> 
+>   $ pahole -s build/drivers/usb/gadget/function/f_uvc.o | grep -E "(uvc_video|video_device)\s+"
+>   video_device    1400    4
+>   uvc_video       1408    3
+> 
+> Fix the arugment to sizeof() so that there is no overwrite.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: e4ce9ed835bc ("usb: gadget: uvc: ensure the vdev is unset")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
----
- MAINTAINERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks for tracking that down!
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f5ca4aefd184..2cd29b4add81 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5898,10 +5898,9 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
- F:	drivers/usb/dwc2/
- 
- DESIGNWARE USB3 DRD IP DRIVER
--M:	Felipe Balbi <balbi@kernel.org>
-+M:	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
- F:	drivers/usb/dwc3/
- 
- DEVANTECH SRF ULTRASONIC RANGER IIO DRIVER
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
 -- 
-2.37.3
-
+Kees Cook
