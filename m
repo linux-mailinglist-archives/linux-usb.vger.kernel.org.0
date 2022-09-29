@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB685EF4EB
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C946D5EF4EE
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 14:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235484AbiI2MDZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Sep 2022 08:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S234255AbiI2MFd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Sep 2022 08:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiI2MDY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 08:03:24 -0400
+        with ESMTP id S230341AbiI2MFc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 08:05:32 -0400
 Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C591E9D50A
-        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:03:22 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id h9-20020a056e021b8900b002f19c2a1836so910924ili.23
-        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:03:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2F15A8B9
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:05:29 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id k6-20020a92c246000000b002f80993e780so926994ilo.13
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:05:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date;
         bh=Fz1z99bI0lkQe8D9Lo1ewYKMF1AYz9PpbOmzmYsq5gM=;
-        b=Si+fFvaITDEaSSS/lAzKBf+GXwaLYegWkv5NbAbcP+nUfIpItkiowTQWRPzJW8GR2G
-         /gFho+F9j5yTspMaqeDYoweJ5VemERqtRAT0obLn752/w3OFLUc7oCCwPdKlWG24M/We
-         u4cj2eTtlt6WxLZhSskwQWwOG78vdtIH39rl9LX4AffX2HHmg01b3ugE9qvXCZNenjVG
-         CeWhokm60kE2jHA/LRCuIgXL2Ljz1dWK8L7F7Rv9NPFSJ+anMygaKj4Wq91C5+QNgCQd
-         b5F3vNA4qlB0+Gb7NVDCdt+quu5SBj3jI15ouEKdoEcDYQEsA3V9oo5TWm0Uv823c/f6
-         j7Gg==
-X-Gm-Message-State: ACrzQf0p0Hu2cc2sbjMQReHDhvxtyAJClNNPps0Xo1XVJAPtjxBd57Ol
-        cuElB5xgEopaeXNsP5KkqodN4dM3VA3Bhfpq9YTZALEVFK7n
-X-Google-Smtp-Source: AMsMyM6pk+ZRAxY/jEJjupDCNposUSC+qQGaHbSX36x9t7DXiN6xkkErZhTgK5XEaNIjlR8Cak+5b3dUyJpll6VPfrBdjK0FIjSF
+        b=UAEyBt2eO6qF9pbCQPdOybVaOqScPfF9LgO/M7uDIRBr+egOJ3HJOEltnkjlTTEeLq
+         Ud2w2QdVlCnfye97blVM/HwhQ4LzLtzbNdZFwv2KR+yQDabOL0PrwRPC7mgs/hv+uoYd
+         C3SwH5mPqddNIMa8tTrJ3OXzyD9waNuaSRrX5kwHuT7BpJdtDN6+yWaqK9aWEh6v/sy/
+         kjM7WXTmg4cMAwPwriPRnW/0JGyU++kkHuqpzXnL487Vc9lF1w0l5I4CnlYm2gu6aTZZ
+         J/1Cvqt1Dsk/H+ExL4d2sowFGsKpnjsMBFlh0qdDMetVcPgZIfSjteA2kHMUF3OAD+I1
+         bjBA==
+X-Gm-Message-State: ACrzQf2N0sNhitdnhrthdXzHdO/VCH4F+nqZIX+1dlsI1/kzYb3LJdSA
+        ajkf1AZdfYnSdH6DD3gkXgFOc15mPE9AZqqsV3FkvWdhtKKu
+X-Google-Smtp-Source: AMsMyM4qIqwSmGthElfsy62Fv0K8QPWP157uw3Y/ph6NPYkWHlVIuG5SjyAd07fzZ6AhSoI5SumzJJ1zzf9j6eJEXzrQ4vX8tY1V
 MIME-Version: 1.0
-X-Received: by 2002:a02:a682:0:b0:34c:14fc:b490 with SMTP id
- j2-20020a02a682000000b0034c14fcb490mr1657223jam.196.1664453002172; Thu, 29
- Sep 2022 05:03:22 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 05:03:22 -0700
+X-Received: by 2002:a5e:cb02:0:b0:6a1:3aaf:ceea with SMTP id
+ p2-20020a5ecb02000000b006a13aafceeamr1281761iom.120.1664453128881; Thu, 29
+ Sep 2022 05:05:28 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 05:05:28 -0700
 In-Reply-To: <fe289e7f-dedc-a0bd-f79f-72c80dbd5028@suse.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f0a64c05e9cfa921@google.com>
+Message-ID: <0000000000007e0da805e9cfb183@google.com>
 Subject: Re: [syzbot] KMSAN: uninit-value in idmouse_open
 From:   syzbot <syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com>
 To:     glider@google.com, linux-usb@vger.kernel.org, oneukum@suse.com,
