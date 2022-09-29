@@ -2,174 +2,397 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64995EF487
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 13:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB685EF4EB
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 14:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235165AbiI2LnV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Sep 2022 07:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S235484AbiI2MDZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Sep 2022 08:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbiI2LnT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 07:43:19 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60057.outbound.protection.outlook.com [40.107.6.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5870E14F812
-        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 04:43:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mB62KsGAmKLXJgoEhK/w2uvDDnO5AmRLjAQNv2vVUULa3+BO0VnbxetNlRMbF2ed+ZoFlv6rB/o3jnYInVPdN9fTkro2dkR3rnAVO+r04Us1VjFiKQRJMKsMJVb9TXH7BwjPNtzYxrrRX2lkhV+5nBTRYP6GmEVE9nYNqvS6mkf+mz/eSTB6YdFNshUDInlL47Buv0iZH+Xxk0s0rtbPIgFzouY6JI7GuokuCrasvJ0ymUqdbOqDsN9ZkAw2lvtUYZn5GbAgrZuHbgI/5jNB9nPwoGeDt7ekg3vRj2I5X/nPQ23yBhsN2ju16AYc8nznNNAlrXiak7cziftyrfHstQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cbGSo7dUOsC2Z3qKt5OLpaPYujGt/ORZOePTZtCoDcw=;
- b=P5sia5P0zCuS3irOi9pdhA0GPU44t6wBQYCW6oVn4Fer4HdLYG6aViU4xfj09+3x2awsCJShyjOd6bTwL0qXJu0PVzanYP/roP/emtxQ/Q2liQjivQeR0Oti1wCPehBeFNYDkAgj4Xm1l6UR+zd9UOl9+4Kw2IpPWrwr/Y73hhgHnlZdFdZHOEV3Zt49byN35mzKgZhfRKV77Az4cnnuFsozRvQzyXWCsl2s0r5TuD0enNkW6pfSAHr2SK1QYkkRKxwc3m+sm6Hw8+ROcVmiZtV+CzRlwUJ5PB4ncux+qAEzsvfOIey+1bt+3+EKL8InrUTJ2eYe73vC80+nbwdN6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cbGSo7dUOsC2Z3qKt5OLpaPYujGt/ORZOePTZtCoDcw=;
- b=DoWkfuq68NvhEOQWLaVgWWhNz6Xv1fJdYjV2iOwO612JEZoPGRhJ8MmsIEDXX3Gh47lvbV7wTtMF9EhzTSlMAX06Wzou6cXde3tgS/Ks8qvaxJe/1R2w5xDbXPEKe7Jhke0+GvAjD/zqJzJWXpADyaFv1nPUEciQHXTFF72JRHgO8qcd7wtquzZnTtJV5OQxcMm/DN2jH1jhHMVJjohcocoiz798VfbKWCknLxkQd8/8Occd0cfJ+nx25y2cj/SA3j2As2ijj7B5TS9b0vy070top0qcZyBqDsmMZ3WOkTxB43WwBfiw1k1UkvXND84zaHYdWB647wzF8csvlg2FCQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DB8PR04MB7148.eurprd04.prod.outlook.com (2603:10a6:10:12d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 29 Sep
- 2022 11:43:16 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::584:c4ea:a4f7:af1b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::584:c4ea:a4f7:af1b%7]) with mapi id 15.20.5676.019; Thu, 29 Sep 2022
- 11:43:16 +0000
-Content-Type: multipart/mixed; boundary="------------m1UP05beoNohxMqZ5UmmGeeC"
-Message-ID: <fe289e7f-dedc-a0bd-f79f-72c80dbd5028@suse.com>
-Date:   Thu, 29 Sep 2022 13:43:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Oliver Neukum <oneukum@suse.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in idmouse_open
-To:     syzbot <syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com>,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <0000000000006f6f8f05e90366aa@google.com>
-Content-Language: en-US
-In-Reply-To: <0000000000006f6f8f05e90366aa@google.com>
-X-ClientProxiedBy: AS9PR04CA0124.eurprd04.prod.outlook.com
- (2603:10a6:20b:531::11) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S230341AbiI2MDY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 08:03:24 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C591E9D50A
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:03:22 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id h9-20020a056e021b8900b002f19c2a1836so910924ili.23
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:03:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Fz1z99bI0lkQe8D9Lo1ewYKMF1AYz9PpbOmzmYsq5gM=;
+        b=Si+fFvaITDEaSSS/lAzKBf+GXwaLYegWkv5NbAbcP+nUfIpItkiowTQWRPzJW8GR2G
+         /gFho+F9j5yTspMaqeDYoweJ5VemERqtRAT0obLn752/w3OFLUc7oCCwPdKlWG24M/We
+         u4cj2eTtlt6WxLZhSskwQWwOG78vdtIH39rl9LX4AffX2HHmg01b3ugE9qvXCZNenjVG
+         CeWhokm60kE2jHA/LRCuIgXL2Ljz1dWK8L7F7Rv9NPFSJ+anMygaKj4Wq91C5+QNgCQd
+         b5F3vNA4qlB0+Gb7NVDCdt+quu5SBj3jI15ouEKdoEcDYQEsA3V9oo5TWm0Uv823c/f6
+         j7Gg==
+X-Gm-Message-State: ACrzQf0p0Hu2cc2sbjMQReHDhvxtyAJClNNPps0Xo1XVJAPtjxBd57Ol
+        cuElB5xgEopaeXNsP5KkqodN4dM3VA3Bhfpq9YTZALEVFK7n
+X-Google-Smtp-Source: AMsMyM6pk+ZRAxY/jEJjupDCNposUSC+qQGaHbSX36x9t7DXiN6xkkErZhTgK5XEaNIjlR8Cak+5b3dUyJpll6VPfrBdjK0FIjSF
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DB8PR04MB7148:EE_
-X-MS-Office365-Filtering-Correlation-Id: cfbec2f9-f617-44a0-7ba7-08daa20fcc3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: P0d3cqMbBZ6mRDyKbcMt3wwCxwu6e/NKgH0fPg9Xp4S7sWuv5vV9Hm6EZ8d1BMJvSKOhU9U2/NrTQ33Br1QPyOCuTajtWgRuN/QZld4K52yub9t6wVGcYlRx11hi9KoNEgHeEKMADd8mPy/UCcmg8X775lEWyHELRExAsN2sMnl8ItUm6KUN7OlD1aV8AmyouYI68Xms4NKLI/teG8CMP4NChBF8QsLDJRUS8H1gw9ZPPTmRpiS+pkrbNeYSAVWI21qMhQidPT/cP26Y+2tWYCeM1UCxXgRr96X3vIW62AtdYpilVy6KDh1nK5tuk39SIRH+HRMUOcVUoCH4AgyJaDqbWyuyAU7kEUiIEBBbbFAtDjnPl19wrRXBERu+6QeRxA0j/+4ELvmxtG2ZT+nIGv3uoWSinBmcCY8ZHQsdn8AV8oOpKyLoASSwf4ohGO0AKZDwkrj47bZaq0bmztQ+HVsmpWdazFs5/Efs0X1W68NshpaOXdIRtxmgXa5MY6DlCaC/oO+tNM42DIePkYF/ErM5Gn9VhZaRh1aFlQfEamQ1dv2O/Br6yEAc0Wu5KeVk25WCNChA2A/Yax428Db835JfEZ+E5sFpNH502y48Tga9fgj4vPig3VQQjYIALXQ9hzm7jUIMPLdFr53pq1I+E/AL/VF6kN/vVnpAZkU0fFKB67TOQX/yZIgexY2dgICMXcZx8nriPEu44iKxDr/Ul7AeSB1onacOuIbuTeNGyc9Jdx9tgv6Ogi1zTPSXS+Mxe8Nb/mZdCNroTo9se8zI2ToqRbKBD/HRzv0QYT6Euv+OaYYOq7wF+sBkYlDUNgp3e+NiV0h127R0icsVOh2uc9OhsQo6W69LG4vhri0sIqwIFxr2/Kp37pCycWhufGw/Ci2IUUV9kqkKr8AAjPj6bA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(39860400002)(136003)(366004)(346002)(451199015)(53546011)(36756003)(316002)(86362001)(31696002)(31686004)(5660300002)(235185007)(6512007)(38100700002)(2616005)(186003)(33964004)(6506007)(6486002)(66946007)(66476007)(66556008)(966005)(8676002)(2906002)(41300700001)(8936002)(478600001)(99710200001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Nmt2UGVmYkt4Y0QvRDUvYmc3bWc3L2F0RHl2L09WMktVZmdTU2VJVC9YUG9i?=
- =?utf-8?B?eWh5T0U4SGZpbnhGOEZyQklKeml5TUV2aHVseUhCWHE4TUVOSC9mQkpRRVVk?=
- =?utf-8?B?MmFXV1lsVmlqQjVwOHppT2phaWJFMjRTRlZ2d0pMUDFXa1lBYTcwVlBPYSts?=
- =?utf-8?B?VE1mc3FnZ21PWFV0d3dTR0pmREIxcEFPOVlIV0l6dkFTWE41ckd0eFZ2SkNv?=
- =?utf-8?B?VHJUMWM1RHJFVmh2TDNvcUhNVUFVU0ZPWlFIVTEwQzlkd1NZYlRiemNRQU9X?=
- =?utf-8?B?UXljeStKQUsvMC9ZYzZ5dW5zWHpPNjkyZFh3RVY0NU1Rc3pab3hJVC9wOXg2?=
- =?utf-8?B?VTN6WGlnOTlzaEZ5K1BTUGMzWVVEY09FQXRKeW0yOTRNaVRaWTNCVWllOVYw?=
- =?utf-8?B?dUdMT3B6Z3RoaDRUM2ZPODN3a2ZpdGtTUjkwZUF4S2l1eWRPYzhOQXlIKzBM?=
- =?utf-8?B?clBxRHAzNWtITHhlZTFQUTB1V3BnWjBRb0dCRXY4SFJlZEc4WndTMFFuN3ZO?=
- =?utf-8?B?SjVlZE9LZjh1aWdRMEpQREYwVFRxQ0ZpeFNjYU5MeVROVGZjKzR2VUw5Sm5M?=
- =?utf-8?B?b1Z0MUV4WTFtZWRZbFF2STM4aTlZU0pYSVFUZkVSdWZsRXpaVXVueVZRYjBC?=
- =?utf-8?B?VDdPRnRQT3AxNFFUZUQ1MWtnU0N6YTE0aDlHOU1LcTFGU2MzQU1sUFY4ajhM?=
- =?utf-8?B?eFplUEI2L0p1TU1jNCtKTVpBVDlxbmttbm5BcXVpNUdZYlBINmdwamswOGhG?=
- =?utf-8?B?SXZQRXo5MTJQQ3NUSDRqUzY4WlkzTUlXTnc1Yk9sNitQWlNpdUlWcFFBdFpX?=
- =?utf-8?B?MDNya3poeksrcUdCYnZLYlpSb296VzlOWG1leEl3eTRYaTQxOEJmUERNbElP?=
- =?utf-8?B?QzJGd0dvcFFzb1VyS2N5VU9iT2hOU002OGh3VWJweGJUK0c2NjJFUlhkdHRP?=
- =?utf-8?B?ejh0UnZYYmd2OTBJT285Z3V2MjJUT0JzcGNxNUM0ZE9SSjhHc2YrWmUzZUZW?=
- =?utf-8?B?RjhOamNtVkhDWWdBVjZMQmxKVWJzWkNWbTVVZHV1VG4xNWQ3WnBwUEJzUkdw?=
- =?utf-8?B?MnM4NGplY0dBbHUzOW1LNSt0ZFlpWmxoQ3BtNzlnM1BZa1VkZlFPdkNrSHpk?=
- =?utf-8?B?STR4bkR5T0s5WVVCTkVSMG9DdmF5ME93TFhGVGMrQ0V2QzN2VXRTNWJrbDVE?=
- =?utf-8?B?YWFVdEM3ME1BcldRS2NMalhZbzZlR1dZYjczRTRtelNnZldRS2Z0a1ZYUlhJ?=
- =?utf-8?B?NFp3OTBSVDJYdGN4cWFVQmZtNHhQZ1RlR1U2Sm9IMVZ5blhHNDM0S3UzVUFx?=
- =?utf-8?B?UWR1bUl6NXdOaW4wTmxvYzRtV0JtNnZCbkNHTmM1MU9nYVRHQkNaSk51Tkk5?=
- =?utf-8?B?WmlQditHRlFNc0hpWnlZR0VWdXQ1NjE1aGE2RlhiWG5uOHBMd2Y3aHRqNzVN?=
- =?utf-8?B?MG40a2hBQzl1ZWdvc0N0SXJ5VlhuMkx6L09VVG45US92Tkxac2FLOXh4U1Z3?=
- =?utf-8?B?eUNobENPczBZK21hUFM0V2gwUHZpUUFraWNRWjR2Ylp3VDNkWE03NWIxM1pS?=
- =?utf-8?B?RXhMM0lTeFBZRitNWGk0Wmw1VUI3aHZ0c04zSU9XOXRMUHlscVY1R3c4R0hP?=
- =?utf-8?B?TTFQaFA3YjZqSVIydVNlTDJYYTBUdnA3WWN4YUlsc0t2VHZNdnIwOEd3Z2Yy?=
- =?utf-8?B?Z3F4eEhVMXNwSXRUMS9YcVlNVVBtOFpmMWM1RzJlSmpqdmFrWEU0YmVET0E5?=
- =?utf-8?B?TFRaMGdpaGh5YThjeUVtZ1B2eDZraTZjY0ppR2d2SnVxcDZGalp2VGROUjlx?=
- =?utf-8?B?ck44dkxUWDJsUnpRSTdORUtYeFNtbzA5N0NFWDloNDY4MjFBckFWTGpkODVQ?=
- =?utf-8?B?bUk3NFpUY0YyWnZST0lneU94ajlEZ0NjeUpCbTJOWmRydUtRRnE3VGFKeXlm?=
- =?utf-8?B?NDA1aXZhZ0JrcDZLM1J6OHBBcHRUSmI1OFN0SmNiSjJzNGduWDlidEkrWjNE?=
- =?utf-8?B?NWdpOTM1R2Vlc3dmMlZEVHdyY00ycDQvOVdCeU4yaTRESEFvV1VNdmFHZXNx?=
- =?utf-8?B?YzNyRGFCOGtkdlVlQ04xT3RHUHdwdWhyWDVUbVlSQ254Ty9SQ254Zzd1SDJx?=
- =?utf-8?B?dUswMEJHNzBuYkp6MXpOK2VIK3A3ejhRY2pKNTRESG1EMTUxdVh3UmMyUHFv?=
- =?utf-8?Q?HLZBjgS42FXi/EjGqcC9K5C4uQgkk252z9ycfu/oU9Mx?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfbec2f9-f617-44a0-7ba7-08daa20fcc3f
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 11:43:16.2205
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a0agptXmLIpcsfeYY8gZJ2WZZUyhkOEBitt0yQcMcbDM/v1wL66bVGRuYwScnoMc18Pv4aCnDqYerX39SMZ18Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7148
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:a682:0:b0:34c:14fc:b490 with SMTP id
+ j2-20020a02a682000000b0034c14fcb490mr1657223jam.196.1664453002172; Thu, 29
+ Sep 2022 05:03:22 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 05:03:22 -0700
+In-Reply-To: <fe289e7f-dedc-a0bd-f79f-72c80dbd5028@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f0a64c05e9cfa921@google.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in idmouse_open
+From:   syzbot <syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com>
+To:     glider@google.com, linux-usb@vger.kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---------------m1UP05beoNohxMqZ5UmmGeeC
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hello,
+
+syzbot tried to test the proposed patch but the build/boot failed:
+
+le included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from drivers/input/gameport/gameport.c:13:
+In file included from ./include/linux/module.h:13:
+In file included from ./include/linux/stat.h:19:
+In file included from ./include/linux/time.h:60:
+In file included from ./include/linux/time32.h:13:
+In file included from ./include/linux/timex.h:67:
+In file included from ./arch/x86/include/asm/timex.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+2 warnings generated.
+  CC      net/netlabel/netlabel_calipso.o
+  CC      net/ipv4/fib_rules.o
+In file included from drivers/firewire/core-transaction.c:9:
+In file included from ./include/linux/completion.h:12:
+In file included from ./include/linux/swait.h:7:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from drivers/firewire/core-transaction.c:9:
+In file included from ./include/linux/completion.h:12:
+In file included from ./include/linux/swait.h:7:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+  CC      net/rds/send.o
+In file included from net/netlabel/netlabel_calipso.c:18:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:9:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from   CC      drivers/block/aoe/aoecmd.o
+./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from net/netlabel/netlabel_calipso.c:18:
+In file included from ./include/linux/socket.h:8:
+In file included from ./include/linux/uio.h:9:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+In file included from drivers/block/aoe/aoecmd.c:7:
+In file included from ./include/linux/ata.h:17:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from drivers/block/aoe/aoecmd.c:7:
+In file included from ./include/linux/ata.h:17:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+2 warnings generated.
+In file included from net/rds/send.c:35:
+In file included from ./include/linux/gfp.h:7:
+In file included from ./include/linux/mmzone.h:8:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from net/rds/send.c:35:
+In file included from ./include/linux/gfp.h:7:
+In file included from ./include/linux/mmzone.h:8:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+In file included from net/ipv4/fib_rules.c:19:
+In file included from ./include/linux/netdevice.h:24:
+In file included from ./include/linux/timer.h:6:
+In file included from ./include/linux/ktime.h:24:
+In file included from ./include/linux/time.h:60:
+In file included from ./include/linux/time32.h:13:
+In file included from ./include/linux/timex.h:67:
+In file included from ./arch/x86/include/asm/timex.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from net/ipv4/fib_rules.c:19:
+In file included from ./include/linux/netdevice.h:24:
+In file included from ./include/linux/timer.h:6:
+In file included from ./include/linux/ktime.h:24:
+In file included from ./include/linux/time.h:60:
+In file included from ./include/linux/time32.h:13:
+In file included from ./include/linux/timex.h:67:
+In file included from ./arch/x86/include/asm/timex.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+2 warnings generated.
+2 warnings generated.
+2 warnings generated.
+In file included from net/wireless/scan.c:11:
+In file included from ./include/linux/slab.h:15:
+In file included from ./include/linux/gfp.h:7:
+In file included from ./include/linux/mmzone.h:8:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from net/wireless/scan.c:11:
+In file included from ./include/linux/slab.h:15:
+In file included from ./include/linux/gfp.h:7:
+In file included from ./include/linux/mmzone.h:8:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+22 warnings generated.
+ warnings generated.
+2 warnings generated.
+  CC      drivers/usb/common/debug.o
+  CC      fs/gfs2/meta_io.o
+2 warnings generated.
+2 warnings generated.
+2 warnings generated.
+2 warnings generated.
+  CC      drivers/block/aoe/aoedev.o
+2 warnings generated.
+2 warnings generated.
+  CC      drivers/target/target_core_tmr.o
+In file included from net/rds/recv.c:34:
+In file included from ./include/linux/slab.h:15:
+In file included from ./include/linux/gfp.h:7:
+In file included from ./include/linux/mmzone.h:8:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
+#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+        ^
+./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
+#define memcpy __msan_memcpy
+        ^
+In file included from net/rds/recv.c:34:
+In file included from ./include/linux/slab.h:15:
+In file included from ./include/linux/gfp.h:7:
+In file included from ./include/linux/mmzone.h:8:
+In file included from ./include/linux/spinlock.h:55:
+In file included from ./include/linux/preempt.h:78:
+In file included from ./arch/x86/include/asm/preempt.h:7:
+In file included from ./include/linux/thread_info.h:60:
+In file included from ./arch/x86/include/asm/thread_info.h:53:
+In file included from ./arch/x86/include/asm/cpufeature.h:5:
+In file included from ./arch/x86/include/asm/processor.h:22:
+In file included from ./arch/x86/include/asm/msr.h:11:
+In file included from ./arch/x86/include/asm/cpumask.h:5:
+In file included from ./include/linux/cpumask.h:12:
+In file included from ./include/linux/bitmap.h:11:
+In file included from ./include/linux/string.h:253:
+./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
+        ^
+./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
+#define memmove __msan_memmove
+        ^
+  CC      fs/gfs2/aops.o
+  CC      net/dccp/ackvec.o
+  CC      fs/gfs2/dentry.o
+In file included from drivers/usb/common/common.c:12:
+In file included from ./include/linux/module.h:13:
+In file included from ./include/linux/stat.h:19:
+In file included from ./include/linux/time.h:60:
+In file included from ./include/linux/time32.h:13:
+In file included from ./include/linux/timex.h:67:
+In file included from ./arch/
+
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=133848f4880000
 
 
+Tested on:
 
-On 19.09.22 10:21, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    ce8056d1f79e wip: changed copy_from_user where instrumented
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16a02941900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3afe005fb99591f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=79832d33eb89fb3cd092
-> compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165e850e900000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=123a8c96900000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com
+commit:         968c2729 x86: kmsan: fix comment in kmsan_shadow.c
+git tree:       https://github.com/google/kmsan.git master
+dashboard link: https://syzkaller.appspot.com/bug?extid=79832d33eb89fb3cd092
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=12a57360880000
 
-#syz test https://github.com/google/kmsan.git  master
---------------m1UP05beoNohxMqZ5UmmGeeC
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-usb-idmouse-fix-memory-leak.patch"
-Content-Disposition: attachment;
- filename="0001-usb-idmouse-fix-memory-leak.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSBmOTA3ODU5MWRhODU4NmQyMDMyMTJiNTcwNzljNGEwODY0MDM1ODBjIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUaHUsIDI5IFNlcCAyMDIyIDEwOjA4OjAwICswMjAwClN1YmplY3Q6IFtQQVRDSF0gdXNiOiBp
-ZG1vdXNlOiBmaXggbWVtb3J5IGxlYWsKClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9u
-ZXVrdW1Ac3VzZS5jb20+Ci0tLQogZHJpdmVycy91c2IvbWlzYy9pZG1vdXNlLmMgfCAyICstCiAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQg
-YS9kcml2ZXJzL3VzYi9taXNjL2lkbW91c2UuYyBiL2RyaXZlcnMvdXNiL21pc2MvaWRtb3VzZS5j
-CmluZGV4IGU5NDM3YTE3NjUxOC4uNmMxOWU1ZDJiNGQ4IDEwMDY0NAotLS0gYS9kcml2ZXJzL3Vz
-Yi9taXNjL2lkbW91c2UuYworKysgYi9kcml2ZXJzL3VzYi9taXNjL2lkbW91c2UuYwpAQCAtMzQ5
-LDcgKzM0OSw3IEBAIHN0YXRpYyBpbnQgaWRtb3VzZV9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFj
-ZSAqaW50ZXJmYWNlLAogCWRldi0+b3JpZ19iaV9zaXplID0gdXNiX2VuZHBvaW50X21heHAoZW5k
-cG9pbnQpOwogCWRldi0+YnVsa19pbl9zaXplID0gMHgyMDA7IC8qIHdvcmtzIF9tdWNoXyBmYXN0
-ZXIgKi8KIAlkZXYtPmJ1bGtfaW5fZW5kcG9pbnRBZGRyID0gZW5kcG9pbnQtPmJFbmRwb2ludEFk
-ZHJlc3M7Ci0JZGV2LT5idWxrX2luX2J1ZmZlciA9IGttYWxsb2MoSU1HU0laRSArIGRldi0+YnVs
-a19pbl9zaXplLCBHRlBfS0VSTkVMKTsKKwlkZXYtPmJ1bGtfaW5fYnVmZmVyID0ga3phbGxvYyhJ
-TUdTSVpFICsgZGV2LT5idWxrX2luX3NpemUsIEdGUF9LRVJORUwpOwogCWlmICghZGV2LT5idWxr
-X2luX2J1ZmZlcikgewogCQlpZG1vdXNlX2RlbGV0ZShkZXYpOwogCQlyZXR1cm4gLUVOT01FTTsK
-LS0gCjIuMzUuMwoK
-
---------------m1UP05beoNohxMqZ5UmmGeeC--
