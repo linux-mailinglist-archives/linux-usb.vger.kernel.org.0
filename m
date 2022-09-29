@@ -2,397 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C946D5EF4EE
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 14:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A345EF505
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Sep 2022 14:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiI2MFd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Sep 2022 08:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S235064AbiI2MNR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Sep 2022 08:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiI2MFc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 08:05:32 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2F15A8B9
-        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:05:29 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id k6-20020a92c246000000b002f80993e780so926994ilo.13
-        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:05:29 -0700 (PDT)
+        with ESMTP id S232380AbiI2MNO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Sep 2022 08:13:14 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793A0126B4B
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:13:11 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r6so1873436wru.8
+        for <linux-usb@vger.kernel.org>; Thu, 29 Sep 2022 05:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=c8K295D1A28WsLr3dxWmH2Z8IhtU9OIdh34R3Zthm1I=;
+        b=i35wmlXAHlGTIoaGQJz5d237r4iEQzsgvENIfIVmO2llFZHY7rO8wyPpS4qWJKeqGr
+         CMC3zzPHkeIFbweyvDspRI55jegnTaCik/JcQvOH36Qvyura+XO+3e2qLw+nhHliMuB7
+         J2GqkokTF89hDJp6DhvILYKQKFC50hNITaYGFiJgVOJqRJIxty22KHvGqIKiI00XTX92
+         ZUfCnnIRbFI+CRuR+06l4Gvfsicy4F8mzg82gJVNAq0m7aA1zRtvj2DrwLgchX7Q6F/S
+         PtnqhkkPmKW4xKq8fgVFc2ouyzlxL8J/SepU379jtsqjeuhWorLC1MSeN8xGOg5u3PBN
+         8UHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Fz1z99bI0lkQe8D9Lo1ewYKMF1AYz9PpbOmzmYsq5gM=;
-        b=UAEyBt2eO6qF9pbCQPdOybVaOqScPfF9LgO/M7uDIRBr+egOJ3HJOEltnkjlTTEeLq
-         Ud2w2QdVlCnfye97blVM/HwhQ4LzLtzbNdZFwv2KR+yQDabOL0PrwRPC7mgs/hv+uoYd
-         C3SwH5mPqddNIMa8tTrJ3OXzyD9waNuaSRrX5kwHuT7BpJdtDN6+yWaqK9aWEh6v/sy/
-         kjM7WXTmg4cMAwPwriPRnW/0JGyU++kkHuqpzXnL487Vc9lF1w0l5I4CnlYm2gu6aTZZ
-         J/1Cvqt1Dsk/H+ExL4d2sowFGsKpnjsMBFlh0qdDMetVcPgZIfSjteA2kHMUF3OAD+I1
-         bjBA==
-X-Gm-Message-State: ACrzQf2N0sNhitdnhrthdXzHdO/VCH4F+nqZIX+1dlsI1/kzYb3LJdSA
-        ajkf1AZdfYnSdH6DD3gkXgFOc15mPE9AZqqsV3FkvWdhtKKu
-X-Google-Smtp-Source: AMsMyM4qIqwSmGthElfsy62Fv0K8QPWP157uw3Y/ph6NPYkWHlVIuG5SjyAd07fzZ6AhSoI5SumzJJ1zzf9j6eJEXzrQ4vX8tY1V
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=c8K295D1A28WsLr3dxWmH2Z8IhtU9OIdh34R3Zthm1I=;
+        b=sPhp9qDWBs6gCn6oTt1BC/k/FHBm7KYjtAF7p6j9PpAKjH729kpneCKSVViEIEhnWE
+         Hg9cecvt04KVk8zm+DrZTzg4MTOm1lG5BhbYgKLoSs1CuvIP9GzFlyFJ7gUvLY22qH8+
+         6PdKPpdmSIJgBhk3CvajHmuR82saYL0vDEIQGOF0x29A/FG45fVWuEltE2aYOMSR3+pD
+         Az2zkmF4wL0HPlD47N/OXxX+diDJ6oaXMzcBreRA+cciT6xMrHqkfHo9l+xIbAwu1I0A
+         v8KMwDOBTf48hUTmNftv3o4TOihRTpoZk2r70U1dqHmxNYGMa4A5Pt+B2QjFYuOal2/X
+         YpYw==
+X-Gm-Message-State: ACrzQf2iBAsuzMoyxJz9OW8qIsIjr5UBJ0wBtcwTDt/YeOaErzmazCnI
+        q7fv1H413VqEbkw7kzHHQHcn/rRX56vzCrQAtn/oLGZvHMcbOA==
+X-Google-Smtp-Source: AMsMyM5J54QtVNw1UE4918cF978KdhZ7CAHWfewBoH2XTeNxCAOffk8WDlEzO5yLvQXMg7HpJQ+dt/XUlmWgqWBFr3s=
+X-Received: by 2002:a05:6000:178a:b0:22b:87b:c995 with SMTP id
+ e10-20020a056000178a00b0022b087bc995mr2110288wrg.715.1664453589836; Thu, 29
+ Sep 2022 05:13:09 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5e:cb02:0:b0:6a1:3aaf:ceea with SMTP id
- p2-20020a5ecb02000000b006a13aafceeamr1281761iom.120.1664453128881; Thu, 29
- Sep 2022 05:05:28 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 05:05:28 -0700
-In-Reply-To: <fe289e7f-dedc-a0bd-f79f-72c80dbd5028@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007e0da805e9cfb183@google.com>
+References: <fe289e7f-dedc-a0bd-f79f-72c80dbd5028@suse.com> <0000000000007e0da805e9cfb183@google.com>
+In-Reply-To: <0000000000007e0da805e9cfb183@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 29 Sep 2022 14:12:33 +0200
+Message-ID: <CAG_fn=WXcwFZ58ChAMkToG5FQe6sDTMGfs1TS8ZmW8BGUr2xfw@mail.gmail.com>
 Subject: Re: [syzbot] KMSAN: uninit-value in idmouse_open
-From:   syzbot <syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-usb@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     syzbot <syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: multipart/mixed; boundary="000000000000f8506805e9cfcc33"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+--000000000000f8506805e9cfcc33
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot tried to test the proposed patch but the build/boot failed:
+#syz test: https://github.com/google/kmsan.git master
 
-le included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from drivers/input/gameport/gameport.c:13:
-In file included from ./include/linux/module.h:13:
-In file included from ./include/linux/stat.h:19:
-In file included from ./include/linux/time.h:60:
-In file included from ./include/linux/time32.h:13:
-In file included from ./include/linux/timex.h:67:
-In file included from ./arch/x86/include/asm/timex.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-2 warnings generated.
-  CC      net/netlabel/netlabel_calipso.o
-  CC      net/ipv4/fib_rules.o
-In file included from drivers/firewire/core-transaction.c:9:
-In file included from ./include/linux/completion.h:12:
-In file included from ./include/linux/swait.h:7:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from drivers/firewire/core-transaction.c:9:
-In file included from ./include/linux/completion.h:12:
-In file included from ./include/linux/swait.h:7:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-  CC      net/rds/send.o
-In file included from net/netlabel/netlabel_calipso.c:18:
-In file included from ./include/linux/socket.h:8:
-In file included from ./include/linux/uio.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from   CC      drivers/block/aoe/aoecmd.o
-./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from net/netlabel/netlabel_calipso.c:18:
-In file included from ./include/linux/socket.h:8:
-In file included from ./include/linux/uio.h:9:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-In file included from drivers/block/aoe/aoecmd.c:7:
-In file included from ./include/linux/ata.h:17:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from drivers/block/aoe/aoecmd.c:7:
-In file included from ./include/linux/ata.h:17:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-2 warnings generated.
-In file included from net/rds/send.c:35:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from net/rds/send.c:35:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-In file included from net/ipv4/fib_rules.c:19:
-In file included from ./include/linux/netdevice.h:24:
-In file included from ./include/linux/timer.h:6:
-In file included from ./include/linux/ktime.h:24:
-In file included from ./include/linux/time.h:60:
-In file included from ./include/linux/time32.h:13:
-In file included from ./include/linux/timex.h:67:
-In file included from ./arch/x86/include/asm/timex.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from net/ipv4/fib_rules.c:19:
-In file included from ./include/linux/netdevice.h:24:
-In file included from ./include/linux/timer.h:6:
-In file included from ./include/linux/ktime.h:24:
-In file included from ./include/linux/time.h:60:
-In file included from ./include/linux/time32.h:13:
-In file included from ./include/linux/timex.h:67:
-In file included from ./arch/x86/include/asm/timex.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-2 warnings generated.
-2 warnings generated.
-2 warnings generated.
-In file included from net/wireless/scan.c:11:
-In file included from ./include/linux/slab.h:15:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from net/wireless/scan.c:11:
-In file included from ./include/linux/slab.h:15:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-22 warnings generated.
- warnings generated.
-2 warnings generated.
-  CC      drivers/usb/common/debug.o
-  CC      fs/gfs2/meta_io.o
-2 warnings generated.
-2 warnings generated.
-2 warnings generated.
-2 warnings generated.
-  CC      drivers/block/aoe/aoedev.o
-2 warnings generated.
-2 warnings generated.
-  CC      drivers/target/target_core_tmr.o
-In file included from net/rds/recv.c:34:
-In file included from ./include/linux/slab.h:15:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:387:9: warning: 'memcpy' macro redefined [-Wmacro-redefined]
-#define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-        ^
-./arch/x86/include/asm/string_64.h:17:9: note: previous definition is here
-#define memcpy __msan_memcpy
-        ^
-In file included from net/rds/recv.c:34:
-In file included from ./include/linux/slab.h:15:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:11:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:391:9: warning: 'memmove' macro redefined [-Wmacro-redefined]
-#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,                 \
-        ^
-./arch/x86/include/asm/string_64.h:73:9: note: previous definition is here
-#define memmove __msan_memmove
-        ^
-  CC      fs/gfs2/aops.o
-  CC      net/dccp/ackvec.o
-  CC      fs/gfs2/dentry.o
-In file included from drivers/usb/common/common.c:12:
-In file included from ./include/linux/module.h:13:
-In file included from ./include/linux/stat.h:19:
-In file included from ./include/linux/time.h:60:
-In file included from ./include/linux/time32.h:13:
-In file included from ./include/linux/timex.h:67:
-In file included from ./arch/
+--=20
+Alexander Potapenko
+Software Engineer
 
-Error text is too large and was truncated, full error text is at:
-https://syzkaller.appspot.com/x/error.txt?x=133848f4880000
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
 
-Tested on:
+--000000000000f8506805e9cfcc33
+Content-Type: text/x-patch; charset="US-ASCII"; name="0001-usb-idmouse-fix-memory-leak.patch"
+Content-Disposition: attachment; 
+	filename="0001-usb-idmouse-fix-memory-leak.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l8n0mv180>
+X-Attachment-Id: f_l8n0mv180
 
-commit:         968c2729 x86: kmsan: fix comment in kmsan_shadow.c
-git tree:       https://github.com/google/kmsan.git master
-dashboard link: https://syzkaller.appspot.com/bug?extid=79832d33eb89fb3cd092
-compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12a57360880000
-
+RnJvbSBmOTA3ODU5MWRhODU4NmQyMDMyMTJiNTcwNzljNGEwODY0MDM1ODBjIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBUaHUsIDI5IFNlcCAyMDIyIDEwOjA4OjAwICswMjAwClN1YmplY3Q6IFtQQVRDSF0gdXNiOiBp
+ZG1vdXNlOiBmaXggbWVtb3J5IGxlYWsKClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9u
+ZXVrdW1Ac3VzZS5jb20+Ci0tLQogZHJpdmVycy91c2IvbWlzYy9pZG1vdXNlLmMgfCAyICstCiAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQg
+YS9kcml2ZXJzL3VzYi9taXNjL2lkbW91c2UuYyBiL2RyaXZlcnMvdXNiL21pc2MvaWRtb3VzZS5j
+CmluZGV4IGU5NDM3YTE3NjUxOC4uNmMxOWU1ZDJiNGQ4IDEwMDY0NAotLS0gYS9kcml2ZXJzL3Vz
+Yi9taXNjL2lkbW91c2UuYworKysgYi9kcml2ZXJzL3VzYi9taXNjL2lkbW91c2UuYwpAQCAtMzQ5
+LDcgKzM0OSw3IEBAIHN0YXRpYyBpbnQgaWRtb3VzZV9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFj
+ZSAqaW50ZXJmYWNlLAogCWRldi0+b3JpZ19iaV9zaXplID0gdXNiX2VuZHBvaW50X21heHAoZW5k
+cG9pbnQpOwogCWRldi0+YnVsa19pbl9zaXplID0gMHgyMDA7IC8qIHdvcmtzIF9tdWNoXyBmYXN0
+ZXIgKi8KIAlkZXYtPmJ1bGtfaW5fZW5kcG9pbnRBZGRyID0gZW5kcG9pbnQtPmJFbmRwb2ludEFk
+ZHJlc3M7Ci0JZGV2LT5idWxrX2luX2J1ZmZlciA9IGttYWxsb2MoSU1HU0laRSArIGRldi0+YnVs
+a19pbl9zaXplLCBHRlBfS0VSTkVMKTsKKwlkZXYtPmJ1bGtfaW5fYnVmZmVyID0ga3phbGxvYyhJ
+TUdTSVpFICsgZGV2LT5idWxrX2luX3NpemUsIEdGUF9LRVJORUwpOwogCWlmICghZGV2LT5idWxr
+X2luX2J1ZmZlcikgewogCQlpZG1vdXNlX2RlbGV0ZShkZXYpOwogCQlyZXR1cm4gLUVOT01FTTsK
+LS0gCjIuMzUuMwoK
+--000000000000f8506805e9cfcc33--
