@@ -2,136 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71B35F0ED9
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Sep 2022 17:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3EE5F0FB5
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Sep 2022 18:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiI3PaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Sep 2022 11:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S231766AbiI3QRo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Sep 2022 12:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiI3P3w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Sep 2022 11:29:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230834DF3E
-        for <linux-usb@vger.kernel.org>; Fri, 30 Sep 2022 08:29:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 378FBB8294E
-        for <linux-usb@vger.kernel.org>; Fri, 30 Sep 2022 15:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9573EC433C1;
-        Fri, 30 Sep 2022 15:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664551786;
-        bh=E+y1Q+KEVtUrAHc1b7hJ9c6q9vPE4S+dq06YES5JmNg=;
+        with ESMTP id S231459AbiI3QRm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Sep 2022 12:17:42 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0904311F7DC;
+        Fri, 30 Sep 2022 09:17:41 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7216A47C;
+        Fri, 30 Sep 2022 18:17:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1664554659;
+        bh=2fok7GNXTJv1uiaMCNQaZgDLKMQ2ugaF86bN7hnadjg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RxbDG+Tb9yPwjI5K2o86sP+dxSY9eqLNXbB6eUa/MQL+VCuG1teof+oYD3GXxHkHZ
-         FaqOKZmiDs9tegYceyPBHPDAoJhPAsOqThX12v61p+GZHW7+QAaw6lspR36LvVU0l5
-         uoqq7w7qVsbYaLlF+xNXk8ujH4+sJq5FwHizurPw=
-Date:   Fri, 30 Sep 2022 17:29:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Davide Tronchin <davide.tronchin.94@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: the patch is meant to support
- LARA-R6 Cat 1 and LARA-L6 CAT 4 module family.
-Message-ID: <YzcLaF4uPcbBTjz4@kroah.com>
-References: <20220930152344.7877-1-davide.tronchin.94@gmail.com>
+        b=u8b+an6d9OMUQmLNPybTSkrn3+wJ3uE1GnoL5T/3IXQHDRikZTaE2OekOQzta8UTr
+         xVnNt7U4bmrse5b5ow9uqeVu5FfhZwo2h6iHylJq4C8ZGfT3MALQRhPTdqudSWf9/Y
+         th1ptgWI7/qZgHLDbMA95vocaHcvgKCDxdNxn6/Q=
+Date:   Fri, 30 Sep 2022 19:17:38 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, kernel@pengutronix.de,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH v2] usb: gadget: uvc: don't put item still in use
+Message-ID: <YzcWompDLd7iIip+@pendragon.ideasonboard.com>
+References: <YzbZ62gq3i4n7Vhx@kroah.com>
+ <20220930122839.1747279-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220930152344.7877-1-davide.tronchin.94@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220930122839.1747279-1-m.grzeschik@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 05:23:44PM +0200, Davide Tronchin wrote:
-> The LARA-R6 module has the following USB identifiers:
-> Vendor  ID: 0x05c6
-> Product ID: 0x908b
+Hi Michael,
+
+(Cc'ing Kieran and Dan)
+
+Thank you for the patch.
+
+On Fri, Sep 30, 2022 at 02:28:39PM +0200, Michael Grzeschik wrote:
+> With the patch "588b9e85609b (usb: gadget: uvc: add v4l2 enumeration api
+> calls)" the driver is keeping a list of configfs entries currently
+> configured. The list is used in uvc_v4l2 on runtime.
+
+s/on runtime/at runtime/
+
+> The driver now is giving back the list item just after it was referenced
+> with config_item_put. It also calls config_item_put on uvc_free, which
+> is the only and right place to give back the reference. This patch fixes
+> the issue by removing the extra config_item_put in uvc_alloc.
 > 
-> The USB composition exposes the following interfaces:
-> If 0: Diagnostic
-> If 1: AT parser
-> If 2: AT parser
-> If 3: AT parser/alternative functions
-> 
-> The LARA-L6 module can be configured in three different USB modes: 
-> * Default mode (Vendor  ID: 0x1546 Product ID: 0x1341) with 4 serial 
-> interfaces
-> * RmNet mode (Vendor  ID: 0x1546 Product ID: 0x1342) with 4 serial 
-> interfaces and 1 RmNet virtual network interface
-> * CDC-ECM mode (Vendor  ID: 0x1546 Product ID: 0x1343) with 4 serial 
-> interface and 1 CDC-ECM virtual network interface
-> 
-> 
-> In default mode LARA-L6 exposes the following interfaces:
-> If 0: Diagnostic
-> If 1: AT parser
-> If 2: AT parser
-> If 3: AT parser/alternative functions
-> 
-> In RmNet mode LARA-L6 exposes the following interfaces:
-> If 0: Diagnostic
-> If 1: AT parser
-> If 2: AT parser
-> If 3: AT parset/alternative functions
-> If 4: RMNET interface
-> 
-> In CDC-ECM mode LARA-L6 exposes the following interfaces:
-> If 0: Diagnostic
-> If 1: AT parser
-> If 2: AT parser
-> If 3: AT parset/alternative functions
-> If 4: CDC-ECM interface
-> 
-> Signed-off-by: Davide Tronchin  <davide.tronchin.94@gmail.com>
+> Fixes: 588b9e85609b (usb: gadget: uvc: add v4l2 enumeration api calls)
+
+I still don't like this much :-( As shown by this fix, the additional
+complexity that it incurs on the kernel side can cause bugs, and the
+gain for userspace is quite minimal in my opinion, as parsing configfs
+(or obtaining that information out-of-band through other means) will
+still be needed anyway to handle controls properly (I think we have
+agreed that userspace needs to handle the UVC requests in any case).
+
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 > ---
->  drivers/usb/serial/option.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
+> v1 -> v2: - fixed commitish to valid one from usb-next tree
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 697683e3f..fc0403891 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -240,7 +240,7 @@ static void option_instat_callback(struct urb *urb);
->  #define QUECTEL_PRODUCT_UC15			0x9090
->  /* These u-blox products use Qualcomm's vendor ID */
->  #define UBLOX_PRODUCT_R410M			0x90b2
-> -#define UBLOX_PRODUCT_R6XX			0x90fa
-> +#define UBLOX_PRODUCT_LARA_R6		0x908b
-
-That is not in sorted order :(
-
->  /* These Yuga products use Qualcomm's vendor ID */
->  #define YUGA_PRODUCT_CLM920_NC5			0x9625
+>  drivers/usb/gadget/function/f_uvc.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index e6948cf8def30b..8bc591431d153e 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -995,7 +995,6 @@ static struct usb_function *uvc_alloc(struct usb_function_instance *fi)
+>  		goto err_config;
 >  
-> @@ -581,6 +581,11 @@ static void option_instat_callback(struct urb *urb);
->  #define OPPO_VENDOR_ID				0x22d9
->  #define OPPO_PRODUCT_R11			0x276c
->  
-> +/* These u-blox products use u-blox's vendor ID */
-> +#define UBLOX_VENDOR_ID				0x1546
-> +#define UBLOX_PRODUCT_LARA_L6			0x1341
-> +#define UBLOX_PRODUCT_LARA_L6_RMNET		0x1342
-> +#define UBLOX_PRODUCT_LARA_L6_ECM		0x1343
->  
->  /* Device flags */
->  
-> @@ -1124,8 +1129,14 @@ static const struct usb_device_id option_ids[] = {
->  	/* u-blox products using Qualcomm vendor ID */
->  	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
->  	  .driver_info = RSVD(1) | RSVD(3) },
-> -	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R6XX),
-> -	  .driver_info = RSVD(3) },
+>  	uvc->header = to_uvcg_streaming_header(h);
+> -	config_item_put(h);
 
-Why did you delete this device from the driver and not mention it at all
-in the changelog text?
+Assuming we want to keep 588b9e85609b, the fix seems right.
 
-thanks,
+>  	if (!uvc->header->linked) {
+>  		mutex_unlock(&opts->lock);
+>  		kfree(uvc);
 
-greg k-h
+-- 
+Regards,
+
+Laurent Pinchart
