@@ -2,49 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A9E5F0B11
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Sep 2022 13:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD465F0B32
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Sep 2022 13:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbiI3Lwn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Sep 2022 07:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S231149AbiI3L6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Sep 2022 07:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiI3LwT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Sep 2022 07:52:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E844FAE3;
-        Fri, 30 Sep 2022 04:52:06 -0700 (PDT)
+        with ESMTP id S231552AbiI3L6l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Sep 2022 07:58:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF70C163B6A;
+        Fri, 30 Sep 2022 04:58:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CBBCB8279B;
-        Fri, 30 Sep 2022 11:52:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883F3C433D6;
-        Fri, 30 Sep 2022 11:52:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B93A6B82871;
+        Fri, 30 Sep 2022 11:58:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF73C433C1;
+        Fri, 30 Sep 2022 11:58:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664538723;
-        bh=9qg9NEDijFHKMEjh1dAItgKANrvXJtfxR8DxdB7QJGk=;
+        s=korg; t=1664539118;
+        bh=/JoIHc1ggg5bLCw9hLumwmcVr0lErgrgTgM1neJhgu8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lHGWSwtVMU97kR0kdkuHVwvLy4EYw3lTkbwQF8hg/9u+2ihaqpEQ3437yAhHaVegW
-         uPvyr8+oCXVhVaRqWuJfqFFYqAPx/jfXRUpUhnOZPICvSmGvSmUbDm3w7X6Y7X/8ZC
-         hfxztL+c7rxSdYz16rrZj5Q0as9mnT65olrtHwEc=
-Date:   Fri, 30 Sep 2022 13:52:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: host: ehci-exynos: switch to using gpiod API
-Message-ID: <YzbYYae9VYUXTj+P@kroah.com>
-References: <20220927220504.3744878-1-dmitry.torokhov@gmail.com>
- <20220927220504.3744878-2-dmitry.torokhov@gmail.com>
- <0a4c346f-52fc-1cde-e6d6-84b7bd0e1090@linaro.org>
+        b=1964jE1CS3t8aoi147COyGJP5FO/cajz4uYy0Xj71C2pVYIeMo38I21w+iwHDUIta
+         AICGqePRLGaQ4eP8V5Zb9dQLRIH9W5YgoMAj6ihDTSKUDSm9cQq+xUdwGIsflcriGj
+         +NIkeQUtaX85nTYKmsddJeRnVLdHpS2HU9gyB/WE=
+Date:   Fri, 30 Sep 2022 13:58:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] usb: gadget: uvc: don't put item still in use
+Message-ID: <YzbZ62gq3i4n7Vhx@kroah.com>
+References: <20220929144124.1365686-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a4c346f-52fc-1cde-e6d6-84b7bd0e1090@linaro.org>
+In-Reply-To: <20220929144124.1365686-1-m.grzeschik@pengutronix.de>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,19 +50,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 08:55:53AM +0200, Krzysztof Kozlowski wrote:
-> On 28/09/2022 00:05, Dmitry Torokhov wrote:
-> > This patch switches the driver from using legacy gpio API to the newer
-> > gpiod API.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
+On Thu, Sep 29, 2022 at 04:41:24PM +0200, Michael Grzeschik wrote:
+> With the patch "15a286a0bb08 (usb: gadget: uvc: add v4l2 enumeration api
+> calls)" the driver is keeping a list of configfs entries currently
+> configured. The list is used in uvc_v4l2 on runtime.
 > 
-> Greg,
-> I'll take the DTS change via Samsung SoC tree.
+> The driver now is giving back the list item just after it was referenced
+> with config_item_put. It also calls config_item_put on uvc_free, which
+> is the only and right place to give back the reference. This patch fixes
+> the issue by removing the extra config_item_put in uvc_alloc.
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Fixes: 15a286a0bb08 (usb: gadget: uvc: add v4l2 enumeration api calls)
 
-Ok, thanks!
+This is not a commit in any of my trees.  Are you sure it's a valid one?
+
+thanks,
 
 greg k-h
