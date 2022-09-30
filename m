@@ -2,47 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285A15F06D5
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Sep 2022 10:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CD15F06E8
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Sep 2022 10:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiI3Ise (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Sep 2022 04:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S231260AbiI3Ixj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Sep 2022 04:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiI3Is3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Sep 2022 04:48:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE8A1F0CF3;
-        Fri, 30 Sep 2022 01:48:28 -0700 (PDT)
+        with ESMTP id S230480AbiI3Ixh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Sep 2022 04:53:37 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8766A166F36
+        for <linux-usb@vger.kernel.org>; Fri, 30 Sep 2022 01:53:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9E17B82751;
-        Fri, 30 Sep 2022 08:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196A7C433C1;
-        Fri, 30 Sep 2022 08:48:25 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D4BAACE2474
+        for <linux-usb@vger.kernel.org>; Fri, 30 Sep 2022 08:53:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DADC433C1;
+        Fri, 30 Sep 2022 08:53:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664527706;
-        bh=Jo/cOYiiIovyfrw3RudkLfXtR/QEJeserdY5pJ19vek=;
+        s=korg; t=1664528011;
+        bh=UD5PXLj2rv1kSGjBOp+GMtpGLrvoukpy022/UGx3wsg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UqsjRZoYG8eZFpj6519V68tfD3hQbHVcOwNbtP2WHaHUgAe5bmr1gvSIw++2z9l/p
-         O8HeMelTtjuZZuict2IqGLRAQsEmDMo8XHqZ0Rf34qw8/Xkk3rXt1dVM4hbkCorsmu
-         +y3P6WPHAdkavMLGdw8F1LygEm89pUgPvAhFlKeA=
-Date:   Fri, 30 Sep 2022 10:48:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jerome Audu <jerome.audu@st.com>,
-        Felipe Balbi <felipe@balbi.sh>
-Subject: Re: [PATCH v2] usb: dwc3: st: Rely on child's compatible instead of
- name
-Message-ID: <YzatV6b5BRqR/bdW@kroah.com>
-References: <20220930072707.516270-1-patrice.chotard@foss.st.com>
+        b=0qEo2s4u3lUhQFICdNtAh93hpb6oAazz6tcan79PuFdfH6C6A4tegsOXKQ+ZHvCmy
+         JwLnJoxZuBaxh55EKjSpx48PMhJrJZhioOg4Am7P00kkkpJIOICZ6dTY7RE3pjqFlG
+         Xmb0umeIFlTR0lp2vBBTJl0Yh65+hpIC/XaP+rUo=
+Date:   Fri, 30 Sep 2022 10:53:28 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     bugzilla-daemon@kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 216543] New: kernel NULL pointer dereference
+ usb_hcd_alloc_bandwidth
+Message-ID: <YzauiJCbAL2FsHpU@kroah.com>
+References: <bug-216543-208809@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220930072707.516270-1-patrice.chotard@foss.st.com>
+In-Reply-To: <bug-216543-208809@https.bugzilla.kernel.org/>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,62 +49,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 09:27:07AM +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> To ensure that child node is found, don't rely on child's node name
-> which can take different value, but on child's compatible name.
-> 
-> Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
-> 
-> Cc: Jerome Audu <jerome.audu@st.com>
-> Reported-by: Felipe Balbi <felipe@balbi.sh>
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> ---
->  drivers/usb/dwc3/dwc3-st.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-> index 166b5bde45cb..fea5290de83f 100644
-> --- a/drivers/usb/dwc3/dwc3-st.c
-> +++ b/drivers/usb/dwc3/dwc3-st.c
-> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
->  	/* Manage SoftReset */
->  	reset_control_deassert(dwc3_data->rstc_rst);
->  
-> -	child = of_get_child_by_name(node, "dwc3");
-> +	child = of_get_compatible_child(node, "snps,dwc3");
->  	if (!child) {
->  		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
->  		ret = -ENODEV;
-> -- 
-> 2.25.1
-> 
+On Thu, Sep 29, 2022 at 06:53:46PM +0000, bugzilla-daemon@kernel.org wrote:
+> With a flaky USB 3.0 cable (3m extension + 2m cable + 90 degree adapter) and
+> Logitech BRIO webcam I got exactly the same null pointer dereference twice
+> already.
 
-Hi,
+That's really an unstable and unsupported system, sorry.  If you fix
+your cable it should work properly, right?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+> Here are two instances (from different boots):
+> [64977.148098] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [64977.148101] #PF: supervisor read access in kernel mode
+> [64977.148102] #PF: error_code(0x0000) - not-present page
+> [64977.148103] PGD 101370067 P4D 101370067 PUD 0
+> [64977.148105] Oops: 0000 [#1] SMP NOPTI
+> [64977.148107] CPU: 14 PID: 27951 Comm: VideoCapture Not tainted
+> 5.19.10-xanmod1-x64v2 #0~20220920.git017c598
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+What about any kernel log messages from right before this crashed?
+There should be some disconnect or other USB messages, right?  Specifics
+here would be good to see.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+> [64977.148109] Hardware name: Gigabyte Technology Co., Ltd. B550 VISION D/B550
+> VISION D, BIOS F15d 07/20/2022
+> [64977.148109] RIP: 0010:usb_ifnum_to_if+0x34/0x60
+> [64977.148113] Code: 74 33 0f b6 4a 04 84 c9 74 33 83 e9 01 48 8d 82 98 00 00
+> 00 48 8d bc ca a0 00 00 00 eb 09 48 83 c0 08 48 39 f8 74 16 48 8b 10 <48> 8b 0a
+> 0f b6 49 02 39 f1 75 e9 48 89 d0 c3 cc cc cc cc 31 d2 48
+> [64977.148114] RSP: 0018:ffffb20951407bb0 EFLAGS: 00010202
+> [64977.148115] RAX: ffff8cfbbc618098 RBX: ffff8ceb844cc800 RCX:
+> 0000000000000004
+> [64977.148116] RDX: 0000000000000000 RSI: 0000000000000001 RDI:
+> ffff8cfbbc6180c0
+> [64977.148117] RBP: 0000000000000000 R08: 0000000080000000 R09:
+> ffffffff8f590de8
+> [64977.148117] R10: 0000000000000001 R11: 0000000000000001 R12:
+> ffff8cf67c70f398
+> [64977.148118] R13: 0000000000000000 R14: ffff8cf67c70f208 R15:
+> ffff8ceb8123c000
+> [64977.148119] FS:  00007f5f51379640(0000) GS:ffff8d0a3ed80000(0000)
+> knlGS:0000000000000000
+> [64977.148120] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [64977.148120] CR2: 0000000000000000 CR3: 000000023b842000 CR4:
+> 0000000000750ee0
+> [64977.148121] PKRU: 55555554
+> [64977.148122] Call Trace:
+> [64977.148123]  <TASK>
+> [64977.148124]  usb_hcd_alloc_bandwidth+0x241/0x360
+> [64977.148127]  usb_set_interface+0x11d/0x340
+> [64977.148130]  uvc_video_start_transfer+0x17b/0x4b0 [uvcvideo]
+
+This isn't good, we shouldn't crash when a device is removed, but this
+might be an issue with some reference counting.  More log messages might
+help out here.
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
