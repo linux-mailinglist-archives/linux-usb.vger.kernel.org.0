@@ -2,42 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BE65F1DA1
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Oct 2022 18:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E415F1DAF
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Oct 2022 18:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiJAQa5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Oct 2022 12:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S229597AbiJAQhP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Oct 2022 12:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiJAQaz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Oct 2022 12:30:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04DB252A3;
-        Sat,  1 Oct 2022 09:30:54 -0700 (PDT)
+        with ESMTP id S229517AbiJAQhO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Oct 2022 12:37:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEBC1C13A;
+        Sat,  1 Oct 2022 09:37:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10A9B60C09;
-        Sat,  1 Oct 2022 16:30:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C24EC433C1;
-        Sat,  1 Oct 2022 16:30:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED90B80757;
+        Sat,  1 Oct 2022 16:37:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C7CC433C1;
+        Sat,  1 Oct 2022 16:37:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664641853;
-        bh=6f+csY7OZYNwM7fcRJBVOOgsLox7bEazXJNpl71dCO4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uLrMfrsEq1yQ/k6qqZtRydpBsFkpktOEiba9JJb0ukLH6A+Cz/r+dur+zVESOWExA
-         jtjmDLYJOa88FKH44FxAhjAPONyozP5e0KIgrV+H+UEeyZBSw28IoLuuC8TSiKuuzj
-         BWGJfwqCNviLZy2O6FGddnqxDJ9zpWsIePmcBf1Y=
-Date:   Sat, 1 Oct 2022 18:30:50 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB / Thunderbolt driver fixes for 6.0-final
-Message-ID: <YzhrOlp3MwJzVpCh@kroah.com>
+        s=korg; t=1664642231;
+        bh=+3DTme+sPlwf3zVCixT4SIB4MJY3EouGY8rzOjQN/Z8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y0YFtJS3ENtAdxKqTcKVauCr6w1pMdNSWnbFI5TZ/ZFZrC65Wakp8AvdBfj812swO
+         n5kDgLyXkTunT81gQvOqBTMq6MVgPQra3USNkNdP7vjA9BVyJM6AB9C+Ua3BFouDAQ
+         ekKHbqzV61Mx7EqY2mPqhOgSjWH4vO/cQzCikpZE=
+Date:   Sat, 1 Oct 2022 18:37:08 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 6.0-rc8
+Message-ID: <YzhstEub/m3VvxB9@kroah.com>
+References: <Yzf2H3iLp2g01Gsw@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Yzf2H3iLp2g01Gsw@hovoldconsulting.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -47,60 +48,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
+On Sat, Oct 01, 2022 at 10:11:11AM +0200, Johan Hovold wrote:
+> Hi Greg,
+> 
+> Here's one more modem device id for 6.0-final or, if you prefer, 6.1-rc1.
+> 
+> Johan
+> 
+> 
+> The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
+> 
+>   Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.0-rc8
 
-  Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
+I'll queue this up for 6.1-rc1, thanks.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-final
-
-for you to fetch changes up to 0fb9703a3eade0bb84c635705d9c795345e55053:
-
-  uas: ignore UAS for Thinkplus chips (2022-09-27 10:50:29 +0200)
-
-----------------------------------------------------------------
-USB/Thunderbolt fixes for 6.0-final
-
-Here are some tiny USB and Thunderbolt driver fixes and quirks, for
-6.0-final.
-
-Included in here are:
-	- 3 uas/usb-storage driver quirks to get the devices working
-	  properly due to broken firmware images in them (they can not
-	  run at high data rates, and are also throttled on other
-	  operating systems because of this.)
-	- thunderbolt bugfix for plug event delays
-	- typec runtime warning removal
-	- dwc3 st driver bugfix.  Note, a follow-on fix for this will
-	  end up coming in for 6.1-rc1 as the developers are still
-	  arguing over what the final solution will be, but this should
-	  be sufficient for now.
-
-All of these have been in linux-next with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Greg Kroah-Hartman (1):
-      Merge tag 'thunderbolt-for-v6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
-
-Heikki Krogerus (1):
-      usb: typec: ucsi: Remove incorrect warning
-
-Hongling Zeng (3):
-      uas: add no-uas quirk for Hiksemi usb_disk
-      usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
-      uas: ignore UAS for Thinkplus chips
-
-Mario Limonciello (1):
-      thunderbolt: Explicitly reset plug events delay back to USB4 spec value
-
-Patrice Chotard (1):
-      usb: dwc3: st: Fix node's child name
-
- drivers/thunderbolt/switch.c      |  1 +
- drivers/usb/dwc3/dwc3-st.c        |  2 +-
- drivers/usb/storage/unusual_uas.h | 21 +++++++++++++++++++++
- drivers/usb/typec/ucsi/ucsi.c     |  2 --
- 4 files changed, 23 insertions(+), 3 deletions(-)
+greg k-h
