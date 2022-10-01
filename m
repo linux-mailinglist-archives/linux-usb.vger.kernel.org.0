@@ -2,100 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF7F5F1CFC
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Oct 2022 16:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1895F1D22
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Oct 2022 17:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiJAO4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Oct 2022 10:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S229445AbiJAPEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Oct 2022 11:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJAO4j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Oct 2022 10:56:39 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0992498D31
-        for <linux-usb@vger.kernel.org>; Sat,  1 Oct 2022 07:56:37 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id u10so10779473wrq.2
-        for <linux-usb@vger.kernel.org>; Sat, 01 Oct 2022 07:56:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date;
-        bh=u76t+8U3Ggnf3x517yNjhvxFU5i+Z4R6OU2udZ42kxE=;
-        b=g/B0/wnV+K7l94yTP+62+Qjr3I6btZk9G7v6YVRA19cOwmBMhSUugj3bjMbAgDqGBz
-         JZRcy4MJoQbygJCeta+ivxLkDAagdfAc6QwAHjl+GX/qItIrsAsOhVqDAgD1oZjXlXhW
-         zzSPJTjSHRiOI0xMQ7xeVGOYsFW6s8vDYkt+89T5jwyZTXoStt9BkH0Sa9JqZAYZpBvy
-         zGOAcLVKKLWWtco7JlJ2iAu5NIbw0SNDtrSvInsz68ujSjqgWbj9+/Alex1+XH2T9Yj6
-         S7DtZ+Kv6gizMQhyTXH0kKKv7pdqsxvwXOjyzmmUi1fXeW71Me83EEweDvNbU2TPOnc6
-         rNpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=u76t+8U3Ggnf3x517yNjhvxFU5i+Z4R6OU2udZ42kxE=;
-        b=ybTWComHVGGSNZJROjI9CFiprwjcLQpy98W0rw2bSoRV6Ie70INgeY18qqJsmvOEyq
-         KWhkvMUnaUuIoxPu2ZYItiJByyl1HCi5d49acwOwk/Vy5Ks0++v6QqINPyLILSBXgv8X
-         ae7PRjkBZ4uk/BqU8P0OthlJxN4v2v0GE91KVKE/WoMYpjHYsXLvWnsrLmg56DDFEmYT
-         Wb8OxB48TDgc0N/BJ19BHgNcxB8hNqULgxYNz7WW+oZsEMs7hLhSqCHIS4HvxabWWeyg
-         HetN6wPXrmvaZAwh/shS7Gvw237oROToj7X/+WFAfxcLWGjjDUl3UHTRj3Kk+aHgv3Jh
-         BJdA==
-X-Gm-Message-State: ACrzQf1ZTyqsG4z93Z8GAlXCI+Ei4VD51Xzy1qMn1C3OqtC8uF0hJ1OQ
-        AwvGemw9Oi0vakycb+AA5g==
-X-Google-Smtp-Source: AMsMyM6GcETl6wcUSYkN+4Tvhyes1qV4LFcjlOqd8HcSdJb9DnLa6kdxgirz1CtiJDQH4KG/AwZr1w==
-X-Received: by 2002:a05:6000:78a:b0:22a:de8c:ff8d with SMTP id bu10-20020a056000078a00b0022ade8cff8dmr8279428wrb.559.1664636195236;
-        Sat, 01 Oct 2022 07:56:35 -0700 (PDT)
-Received: from octinomon ([2a00:23c8:2f02:3b01:3ea1:40:8650:189])
-        by smtp.gmail.com with ESMTPSA id bs11-20020a056000070b00b0022a2bacabbasm5420223wrb.31.2022.10.01.07.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 07:56:34 -0700 (PDT)
-From:   Jules Irenge <jbi.octave@gmail.com>
-X-Google-Original-From: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
-Date:   Sat, 1 Oct 2022 15:56:33 +0100
-To:     shuah@kernel.org
-Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usbip: vudc: Convert snprintf() to sysfs_emit()
-Message-ID: <YzhVIaNGdM33pcts@octinomon>
+        with ESMTP id S229464AbiJAPEk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Oct 2022 11:04:40 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3698E015
+        for <linux-usb@vger.kernel.org>; Sat,  1 Oct 2022 08:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664636677; x=1696172677;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3vrEfHRC2LKhy1HfoM/k0FBs15PqoOVdCu/egfesaIg=;
+  b=PItw4an7kmIqMZQWTzTd8r/0vGIB8LaRMt1Ghp4daT+BlqjB35+Y/uR9
+   hEhthPImncFOjVyWg+OkQw5Cq59zRW+vTwkj+rfeOXWchOvtH2MzEWkLT
+   IC4Vn+QolweQr0OYPSOZLONHK49SCVGIudNwUkJ+mjGXzq6KIeNUKyAFR
+   q5oRkvx1yCFX1vVUJsOtxj/o5tl//5MUZQq7yNfzYKqDMDIa30JB1Qyvu
+   pW3bPszKGBSL9uQbCWRWGTjgqCMdJ/wgQxY8LilnSA/y14ZILtDRwpPyL
+   srwx5R5vxwFJdCpB4Xbyp3MA4uQ3rJiVAGXVBWOSPNM2UwZ9xPYPpoJvx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10487"; a="282760851"
+X-IronPort-AV: E=Sophos;i="5.93,361,1654585200"; 
+   d="scan'208";a="282760851"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2022 08:04:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10487"; a="951881134"
+X-IronPort-AV: E=Sophos;i="5.93,361,1654585200"; 
+   d="scan'208";a="951881134"
+Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Oct 2022 08:04:36 -0700
+Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oee2d-0002N5-2V;
+        Sat, 01 Oct 2022 15:04:35 +0000
+Date:   Sat, 01 Oct 2022 23:03:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 3180d827c807d8d6e5d6ba4f2e08eed9efa083af
+Message-ID: <633856d2.GNSf1PCBK5bIDH4L%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Coccinnelle reports a warning
-Warning: Use scnprintf or sprintf
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 3180d827c807d8d6e5d6ba4f2e08eed9efa083af  usb: gadget: uvc: don't put item still in use
 
-Following the advice on kernel documentation
-https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
+elapsed time: 1540m
 
-For show(device *...) functions we should only use sysfs_emit() or sysfs_emit_at()
-especially when formatting the value to be returned to user space.
-Convert snprintf() to sysfs_emit()
+configs tested: 152
+configs skipped: 2
 
-Signed-off-by: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
----
- drivers/usb/usbip/vudc_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/usb/usbip/vudc_sysfs.c b/drivers/usb/usbip/vudc_sysfs.c
-index c95e6b2bfd32..907a43a00896 100644
---- a/drivers/usb/usbip/vudc_sysfs.c
-+++ b/drivers/usb/usbip/vudc_sysfs.c
-@@ -242,7 +242,7 @@ static ssize_t usbip_status_show(struct device *dev,
- 	status = udc->ud.status;
- 	spin_unlock_irq(&udc->ud.lock);
- 
--	return snprintf(out, PAGE_SIZE, "%d\n", status);
-+	return sysfs_emit(out, "%d\n", status);
- }
- static DEVICE_ATTR_RO(usbip_status);
- 
+gcc tested configs:
+i386                                defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+x86_64                          rhel-8.3-func
+i386                             allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a001-20220926
+x86_64                               rhel-8.3
+i386                 randconfig-a002-20220926
+powerpc                           allnoconfig
+mips                             allyesconfig
+i386                 randconfig-a003-20220926
+powerpc                          allmodconfig
+s390                                defconfig
+arm                                 defconfig
+s390                             allmodconfig
+m68k                             allyesconfig
+i386                 randconfig-a004-20220926
+x86_64                           allyesconfig
+m68k                             allmodconfig
+x86_64               randconfig-a002-20220926
+sh                               allmodconfig
+arc                              allyesconfig
+x86_64               randconfig-a001-20220926
+x86_64               randconfig-a003-20220926
+alpha                            allyesconfig
+i386                 randconfig-a005-20220926
+x86_64               randconfig-a005-20220926
+i386                 randconfig-a006-20220926
+x86_64               randconfig-a004-20220926
+x86_64               randconfig-a006-20220926
+arc                  randconfig-r043-20220925
+arm64                            allyesconfig
+s390                             allyesconfig
+arm                              allyesconfig
+riscv                randconfig-r042-20220925
+i386                          randconfig-a014
+i386                          randconfig-a012
+arc                  randconfig-r043-20220926
+i386                          randconfig-a016
+s390                 randconfig-r044-20220925
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+m68k                       m5249evb_defconfig
+riscv                               defconfig
+sh                   sh7770_generic_defconfig
+mips                           ip32_defconfig
+arm                             ezx_defconfig
+i386                          randconfig-c001
+powerpc                     ep8248e_defconfig
+powerpc                     taishan_defconfig
+arm                        shmobile_defconfig
+ia64                                defconfig
+xtensa                          iss_defconfig
+arm                            mps2_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+powerpc                        warp_defconfig
+parisc                           allyesconfig
+arc                      axs103_smp_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220925
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                           h5000_defconfig
+m68k                          atari_defconfig
+powerpc                      chrp32_defconfig
+sh                        edosk7705_defconfig
+arm                         lpc18xx_defconfig
+arm                       aspeed_g5_defconfig
+mips                  maltasmvp_eva_defconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+riscv                randconfig-r042-20220927
+arc                  randconfig-r043-20220927
+s390                 randconfig-r044-20220927
+powerpc                       ppc64_defconfig
+arm                           sunxi_defconfig
+powerpc                     rainier_defconfig
+sh                 kfr2r09-romimage_defconfig
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+riscv                randconfig-r042-20221001
+arc                  randconfig-r043-20221001
+s390                 randconfig-r044-20221001
+arm                          simpad_defconfig
+m68k                           sun3_defconfig
+sh                      rts7751r2d1_defconfig
+alpha                            alldefconfig
+m68k                        m5307c3_defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                        randconfig-a011
+arc                  randconfig-r043-20220928
+mips                           gcw0_defconfig
+ia64                             allmodconfig
+
+clang tested configs:
+x86_64               randconfig-a012-20220926
+x86_64               randconfig-a014-20220926
+x86_64               randconfig-a013-20220926
+hexagon              randconfig-r045-20220925
+x86_64               randconfig-a011-20220926
+i386                          randconfig-a013
+hexagon              randconfig-r041-20220926
+x86_64               randconfig-a015-20220926
+x86_64               randconfig-a016-20220926
+hexagon              randconfig-r045-20220926
+hexagon              randconfig-r041-20220925
+i386                          randconfig-a011
+riscv                randconfig-r042-20220926
+s390                 randconfig-r044-20220926
+i386                          randconfig-a015
+i386                 randconfig-a011-20220926
+i386                 randconfig-a015-20220926
+i386                 randconfig-a014-20220926
+i386                 randconfig-a012-20220926
+i386                 randconfig-a013-20220926
+i386                 randconfig-a016-20220926
+arm                          moxart_defconfig
+arm                         mv78xx0_defconfig
+x86_64                        randconfig-k001
+riscv                    nommu_virt_defconfig
+powerpc                        icon_defconfig
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+arm                          pxa168_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                          allyesconfig
+mips                     loongson1c_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+hexagon              randconfig-r045-20220928
+hexagon              randconfig-r041-20220928
+riscv                randconfig-r042-20220928
+s390                 randconfig-r044-20220928
+
 -- 
-2.37.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
