@@ -2,73 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7ED5F1DE6
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Oct 2022 18:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8995F2043
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Oct 2022 00:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJAQwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Oct 2022 12:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S229519AbiJAWNV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Oct 2022 18:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiJAQw2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Oct 2022 12:52:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B05432053;
-        Sat,  1 Oct 2022 09:52:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E953E60C62;
-        Sat,  1 Oct 2022 16:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 510B8C433C1;
-        Sat,  1 Oct 2022 16:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664643143;
-        bh=MNfcnDIilpKPdwgENeyhD9qZnXJhPKUACQmPG4fCtbo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MpRpxPvtXawjBJUsQ//Ns1hy/RcYpKdMTAWMfmUYrDzl5AYH9bx+nGOkjb896csOg
-         h4zFFw2s2VgwRS/Dse+r+QwC8nIdj+Ytt9WHYxfS/yUr4oWs/V4mfpUgU3hm8+I4YJ
-         p8qiaD2aePqJQcTbd9/eJy0bxAkjlqBrjzCYyVXP9Dd1G11L1HCK4KMfDxUHT54hNz
-         4nl1EbKEYLqREQ9q0/XGNf4pO5wHwfZ0dpdeSpEwK/znR9ep3XxR2idQEV1gTvtYf6
-         ulAEZz9hpuzcB0Z6Q3t+2uLc8WzHrBZ2U5RdkYY3xP51FpNVe55YYIuMV6StezAdEJ
-         +2xxknc36RlxA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 404BCE21EC6;
-        Sat,  1 Oct 2022 16:52:23 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt driver fixes for 6.0-final
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YzhrOlp3MwJzVpCh@kroah.com>
-References: <YzhrOlp3MwJzVpCh@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YzhrOlp3MwJzVpCh@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-final
-X-PR-Tracked-Commit-Id: 0fb9703a3eade0bb84c635705d9c795345e55053
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b357fd1c2afc1a3e1b73dc4574bb7ac0e3bd4193
-Message-Id: <166464314325.22904.13064782633505688323.pr-tracker-bot@kernel.org>
-Date:   Sat, 01 Oct 2022 16:52:23 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229488AbiJAWNU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Oct 2022 18:13:20 -0400
+X-Greylist: delayed 151 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Oct 2022 15:13:16 PDT
+Received: from resqmta-a1p-077720.sys.comcast.net (resqmta-a1p-077720.sys.comcast.net [IPv6:2001:558:fd01:2bb4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1080A5BC0D
+        for <linux-usb@vger.kernel.org>; Sat,  1 Oct 2022 15:13:15 -0700 (PDT)
+Received: from resomta-a1p-077050.sys.comcast.net ([96.103.145.228])
+        by resqmta-a1p-077720.sys.comcast.net with ESMTP
+        id ekUdo7vkiiDwGekh1oF8BF; Sat, 01 Oct 2022 22:10:43 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=comcastmailservice.net; s=20211018a; t=1664662243;
+        bh=qitxeJai/0oKwAT5WjsZgCU6W5xVlMSZp6Jn4FfIDN4=;
+        h=Received:Received:Received:Date:From:To:Subject:Message-ID:
+         MIME-Version:Content-Type;
+        b=OFSYZ/ifDdwcwD24ECMXFhPKhg7Mc563sL9cixzw5UqIVkLjqwcAzl7OejDkyK8ui
+         tUNY5ry+T/CFwEHPCgHR3anmXhRFlZe1PGKcJG9SvNfX9w6azB0Ldfj5PXVdEbxxcL
+         pjUIWP0kjD0Q0aVopBmMvoA5bGL7ZpzSSXn3QmxIdSLdE83evMuizuaxOyEDawgryN
+         vQUJ++uOgVuEiZCMsXu+NrTQ9XDC2D1s70pGMaxGZ4RskrFXi7Ny0lG0lD9t7ZdoZe
+         1WaSG4CB2HJp+dVHGF5/wzY4k/Jbmfv14/3kZHHkyaC82XdYELi/FxhXjUGd3iPfoT
+         JksnSjV/72srw==
+Received: from Outgoing.brak ([69.249.67.241])
+        by resomta-a1p-077050.sys.comcast.net with ESMTPSA
+        id ekgdoJCGsiaR9ekgeowl1o; Sat, 01 Oct 2022 22:10:21 +0000
+X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehiedgtdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedtudenucgfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfggtggusehttdertddttddvnecuhfhrohhmpefrrghulhcuffhinhhoucflohhnvghsuceophgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiieqnecuggftrfgrthhtvghrnhepvdfgfefhveejleevjeevueettdfgjeeggedtkeekvdejudeljeejhfduieehledunecukfhppeeiledrvdegledrieejrddvgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghlohepqfhuthhgohhinhhgrdgsrhgrkhdpihhnvghtpeeiledrvdegledrieejrddvgedupdhmrghilhhfrhhomhepphgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiidpnhgspghrtghpthhtohephedprhgtphhtthhopegrnhhsshhirdhhrghnnhhulhgrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhikhhosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihhnphhuthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorh
+ hg
+X-Xfinity-VMeta: sc=70.00;st=legit
+Received: from localhost.localdomain (Linksys01880.brak [172.18.18.227])
+        by Outgoing.brak (Postfix) with ESMTPSA id A2B59B31E8C0;
+        Sat,  1 Oct 2022 22:10:19 +0000 (UTC)
+Date:   Sat, 1 Oct 2022 22:16:57 +0000
+From:   Paul Dino Jones <paul@spacefreak18.xyz>
+To:     jikos@kernel.org, anssi.hannula@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usbhid: Interpret 0 length ff effects as infinite (0xffff)
+ length effects
+Message-ID: <20221001221657.gexisc2egjn3mpog@localhost.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Description: Set zero length ff effects to infinite 0xffff length
+Content-Disposition: inline
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FROM_SUSPICIOUS_NTLD,FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_PASS,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sat, 1 Oct 2022 18:30:50 +0200:
+Greetings,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.0-final
+I started using my Accuforce V2 sim wheel on Linux. I was getting no
+response from racing simulators through wine, while native linux test
+tools worked properly. It appears that many real-world applications will
+send 0 as the replay length, which was resulting in the behavior I was
+observing (nothing). The PID document does not explicitly state that 0
+length effects should be interpreted as infinite, but it does mention
+null effects being infinite effects.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b357fd1c2afc1a3e1b73dc4574bb7ac0e3bd4193
+This patch will interpret 0 length force feedback effects as 0xffff
+(infinite) length effects, leaving other values for replay length
+unchanged.
 
-Thank you!
+Signed-off-by: Paul Dino Jones <paul@spacefreak18.xyz>
+---
+ drivers/hid/usbhid/hid-pidff.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index 3b4ee21cd811..70653451c860 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -301,7 +301,7 @@ static void pidff_set_effect_report(struct pidff_device *pidff,
+ 		pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
+ 	pidff->set_effect_type->value[0] =
+ 		pidff->create_new_effect_type->value[0];
+-	pidff->set_effect[PID_DURATION].value[0] = effect->replay.length;
++	pidff->set_effect[PID_DURATION].value[0] = effect->replay.length == 0 ? 0xffff : effect->replay.length;
+ 	pidff->set_effect[PID_TRIGGER_BUTTON].value[0] = effect->trigger.button;
+ 	pidff->set_effect[PID_TRIGGER_REPEAT_INT].value[0] =
+ 		effect->trigger.interval;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.35.1
+
