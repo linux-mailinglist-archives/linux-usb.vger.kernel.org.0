@@ -2,95 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8995F2043
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Oct 2022 00:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957955F22E4
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Oct 2022 13:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJAWNV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Oct 2022 18:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S229884AbiJBLZZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Oct 2022 07:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiJAWNU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Oct 2022 18:13:20 -0400
-X-Greylist: delayed 151 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 01 Oct 2022 15:13:16 PDT
-Received: from resqmta-a1p-077720.sys.comcast.net (resqmta-a1p-077720.sys.comcast.net [IPv6:2001:558:fd01:2bb4::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1080A5BC0D
-        for <linux-usb@vger.kernel.org>; Sat,  1 Oct 2022 15:13:15 -0700 (PDT)
-Received: from resomta-a1p-077050.sys.comcast.net ([96.103.145.228])
-        by resqmta-a1p-077720.sys.comcast.net with ESMTP
-        id ekUdo7vkiiDwGekh1oF8BF; Sat, 01 Oct 2022 22:10:43 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=comcastmailservice.net; s=20211018a; t=1664662243;
-        bh=qitxeJai/0oKwAT5WjsZgCU6W5xVlMSZp6Jn4FfIDN4=;
-        h=Received:Received:Received:Date:From:To:Subject:Message-ID:
-         MIME-Version:Content-Type;
-        b=OFSYZ/ifDdwcwD24ECMXFhPKhg7Mc563sL9cixzw5UqIVkLjqwcAzl7OejDkyK8ui
-         tUNY5ry+T/CFwEHPCgHR3anmXhRFlZe1PGKcJG9SvNfX9w6azB0Ldfj5PXVdEbxxcL
-         pjUIWP0kjD0Q0aVopBmMvoA5bGL7ZpzSSXn3QmxIdSLdE83evMuizuaxOyEDawgryN
-         vQUJ++uOgVuEiZCMsXu+NrTQ9XDC2D1s70pGMaxGZ4RskrFXi7Ny0lG0lD9t7ZdoZe
-         1WaSG4CB2HJp+dVHGF5/wzY4k/Jbmfv14/3kZHHkyaC82XdYELi/FxhXjUGd3iPfoT
-         JksnSjV/72srw==
-Received: from Outgoing.brak ([69.249.67.241])
-        by resomta-a1p-077050.sys.comcast.net with ESMTPSA
-        id ekgdoJCGsiaR9ekgeowl1o; Sat, 01 Oct 2022 22:10:21 +0000
-X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehiedgtdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedtudenucgfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfggtggusehttdertddttddvnecuhfhrohhmpefrrghulhcuffhinhhoucflohhnvghsuceophgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiieqnecuggftrfgrthhtvghrnhepvdfgfefhveejleevjeevueettdfgjeeggedtkeekvdejudeljeejhfduieehledunecukfhppeeiledrvdegledrieejrddvgedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghlohepqfhuthhgohhinhhgrdgsrhgrkhdpihhnvghtpeeiledrvdegledrieejrddvgedupdhmrghilhhfrhhomhepphgruhhlsehsphgrtggvfhhrvggrkhdukedrgiihiidpnhgspghrtghpthhtohephedprhgtphhtthhopegrnhhsshhirdhhrghnnhhulhgrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhikhhosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihhnphhuthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorh
- hg
-X-Xfinity-VMeta: sc=70.00;st=legit
-Received: from localhost.localdomain (Linksys01880.brak [172.18.18.227])
-        by Outgoing.brak (Postfix) with ESMTPSA id A2B59B31E8C0;
-        Sat,  1 Oct 2022 22:10:19 +0000 (UTC)
-Date:   Sat, 1 Oct 2022 22:16:57 +0000
-From:   Paul Dino Jones <paul@spacefreak18.xyz>
-To:     jikos@kernel.org, anssi.hannula@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usbhid: Interpret 0 length ff effects as infinite (0xffff)
- length effects
-Message-ID: <20221001221657.gexisc2egjn3mpog@localhost.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Description: Set zero length ff effects to infinite 0xffff length
-Content-Disposition: inline
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FROM_SUSPICIOUS_NTLD,FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_PASS,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229871AbiJBLZY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Oct 2022 07:25:24 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23DE23BF3;
+        Sun,  2 Oct 2022 04:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=eznwDVhl+KXWZSTNUaz9cibBzlTZFO+DAevZ6ZHR6KQ=; b=dZ00+MA36o4tMKQMx0o+sSMNb+
+        t9FSy17UGXML44O5okiYVklEZS5Wl/T4FoXQ31xtPlsfN5dcN6QeOFGQ4T55+cR6eom9W6YLkWwcg
+        akOoU5Z86HQYel8+6SOJJnK8CspfzfMFoQberFcQZ7Mo1kLWRzfzY/xRQIy+boazkcPM7edDpFckR
+        JmlrXiM1OwzF7/Lm5Alcf3n1L0HDX1FqyiHq1KKQ+ScLJ7uyoWMo7gV+GhiSWKEpKMYX9mIf9VtNw
+        x0Ne/0mYtauwR6StOSvI/LaIlcs8e6iM85VWyh/6iFh2ETdMG2m0D61c0KBmyx9QBTrvzVJ9Uh76S
+        2/QSxBuA==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:54031 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1oex5y-000Uyq-C5;
+        Sun, 02 Oct 2022 07:25:18 -0400
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH 1/1] HID: usbhid: hid-pidff: Set Replay Length to Infinite
+ when set to 0
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
+Date:   Sun, 2 Oct 2022 07:25:15 -0400
+Cc:     jikos@kernel.org, anssi.hannula@gmail.com, linux-@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <94A49757-2F80-42B9-A853-2A891F6760AA@sladewatkins.net>
+References: <20220930225127.Horde.AdDRdase1XW5AUKNNLyXVo3@cloud.brak.space>
+To:     Paul Jones <paul@spacefreak18.xyz>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
+Hi,
 
-I started using my Accuforce V2 sim wheel on Linux. I was getting no
-response from racing simulators through wine, while native linux test
-tools worked properly. It appears that many real-world applications will
-send 0 as the replay length, which was resulting in the behavior I was
-observing (nothing). The PID document does not explicitly state that 0
-length effects should be interpreted as infinite, but it does mention
-null effects being infinite effects.
+> On Sep 30, 2022, at 6:51 PM, Paul Jones <paul@spacefreak18.xyz> wrote:
+>=20
+> Greetings,
+> =20
+> Started using my Accuforce v2 Sim wheel on Linux. I was getting no =
+response from racing simulators through Wine, but native linux test =
+tools worked fine. It seems that many real-world applications will send =
+0 as the replay length, which was resulting in the behavior I was =
+experiencing (nothing). It makes sense to interpret 0 as an infinite =
+effect and therefore set the replay length of the effect to 0xffff. =
+While the PID document does not explicitly state that 0 should be =
+infinite, it does hint toward null values being interpreted as infinite.
+> =20
+> ---
 
-This patch will interpret 0 length force feedback effects as 0xffff
-(infinite) length effects, leaving other values for replay length
-unchanged.
+No Signed-off-by?=20
 
-Signed-off-by: Paul Dino Jones <paul@spacefreak18.xyz>
----
- drivers/hid/usbhid/hid-pidff.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Also, the formatting is weird here.
 
-diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
-index 3b4ee21cd811..70653451c860 100644
---- a/drivers/hid/usbhid/hid-pidff.c
-+++ b/drivers/hid/usbhid/hid-pidff.c
-@@ -301,7 +301,7 @@ static void pidff_set_effect_report(struct pidff_device *pidff,
- 		pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
- 	pidff->set_effect_type->value[0] =
- 		pidff->create_new_effect_type->value[0];
--	pidff->set_effect[PID_DURATION].value[0] = effect->replay.length;
-+	pidff->set_effect[PID_DURATION].value[0] = effect->replay.length == 0 ? 0xffff : effect->replay.length;
- 	pidff->set_effect[PID_TRIGGER_BUTTON].value[0] = effect->trigger.button;
- 	pidff->set_effect[PID_TRIGGER_REPEAT_INT].value[0] =
- 		effect->trigger.interval;
--- 
-2.35.1
+-srw
 
