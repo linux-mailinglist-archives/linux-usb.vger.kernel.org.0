@@ -2,148 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA8F5F3271
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 17:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFC85F3340
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 18:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiJCP0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Oct 2022 11:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S229523AbiJCQRc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Oct 2022 12:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiJCP0d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 11:26:33 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0811F9FF
-        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 08:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1664810789; i=@motorola.com;
-        bh=ZqFxfIwY8c1+PMZfykFxP1zS8Mhas301iClgVP8mC0o=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=cXs6PShBQkcjvFMlcwlvfyA+HgXBEJrAzn+VircIU4Fpok4idRAGXIdZsXdMS6tj1
-         Sp30etYYkfijiqsSfeg2sPFmDGGYINfCryXQzIvP+8g9reK9w90mvI1b/1wQi6s+ya
-         MLJlpajw51dtqLY7aWieRaG0h+BRR4fkcLv1qPU2D7qsV9I89rxMecmUCyP3Ncgw+4
-         8Ch0zDaETSfcsFVKQk3NHQdV37M/XXaFaDp1qdPJ3CpO+WALyteq3eVvt1twOUCs/X
-         KhgHwewOMvx6vJsOjDAP+DoRdfWwxAjTfY5Y4wsibFvpMYuSsDxJ25dTs80ifyEzgo
-         kol0hrKRdwEhA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrEIsWRWlGSWpSXmKPExsWS8eKJqK7Kf6t
-  kg10brSyOtT1ht+hdtofNonnxejaLXTf72Cw6Jy5ht1i0rJXZ4sTkWAd2j9kdM1k9Nq3qZPNY
-  2dPO6LF/7hp2j/6/Bh6fN8kFsEWxZuYl5VcksGYsfnyZueCKYMXBhwdYGxjf8nUxcnEICUxnk
-  rjZsZkNwlnEJPF40gv2LkYODhYBFYkZX4y7GDk52ATUJBa8XsUMEhYR0Jf4uS0DpJxZYAGjxK
-  Tpj5lBaoQFwiQeTNjEAmLzCihLrNt6CswWEnCUOLP7NDNEXFDi5MwnYHFmAS2JG/9eMoHMZBa
-  Qllj+jwMkzCngJPHgy17WCYy8s5B0zELSMQuhYwEj8ypGy6SizPSMktzEzBxdQwMDXUNDE11D
-  XQtDvcQq3US90mLd1MTiEl0gt7xYL7W4WK+4Mjc5J0UvL7VkEyMwuFOKGAN3MM7o+al3iFGSg
-  0lJlPf+c6tkIb6k/JTKjMTijPii0pzU4kOMMhwcShK8qz8A5QSLUtNTK9Iyc4CRBpOW4OBREu
-  GteQKU5i0uSMwtzkyHSJ1i1OXo3N91gFmIJS8/L1VKnDfqL1CRAEhRRmke3AhY1F9ilJUS5mV
-  kYGAQ4ilILcrNLEGVf8UozsGoJMyr9gtoCk9mXgncpldARzABHdHxBuyIkkSElFQDU9TR6PLE
-  f/EXVtm3P1HgdpFQWhK322pNWt70fXVr7urz3cq0mRDlsYph62OH+69c9znPO35rE/faPWd83
-  z/53F/l2lj4MCV5y9ow/xny/uuff19zQMjWKquudxqXgpNd6uJ9vssdnBW3/Su3muig9fTOx8
-  dhyaLFUYuVY7Y7CEtOnrOvtmTfkcAGfl1+0Tbfg3W+Udd845Sa1La03m5ldNnuZ7iL7aTpecP
-  LzAeOvTFdXeFXufdWsqFjsvOL71nPZpTVrrslo/T02tGpS8JLI07V5F++w6zy4dyZmS9Lf1X3
-  yrxhzDhj5pEbfHGPx9RaxwO97y4v5/pTJrb1uFPVwk0GftmFM2fymZin+hbcU2Ipzkg01GIuK
-  k4EAO3h2D11AwAA
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-14.tower-706.messagelabs.com!1664810788!53463!1
-X-Originating-IP: [104.232.228.21]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 21138 invoked from network); 3 Oct 2022 15:26:28 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-14.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 3 Oct 2022 15:26:28 -0000
-Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Mh4S44yq2zf6mc;
-        Mon,  3 Oct 2022 15:26:28 +0000 (UTC)
-Received: from p1g3 (unknown [10.45.7.51])
+        with ESMTP id S229775AbiJCQRZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 12:17:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CB233E1C;
+        Mon,  3 Oct 2022 09:17:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Mh4S42tYLzf6f0;
-        Mon,  3 Oct 2022 15:26:28 +0000 (UTC)
-Date:   Mon, 3 Oct 2022 10:26:22 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        kieran@linuxembedded.co.uk, balbi@kernel.org,
-        gregkh@linuxfoundation.org, mgr@pengutronix.de
-Subject: Re: [PATCH] uvc: gadget: uvc: Defer uvcg_complete_buffer() until
- .complete()
-Message-ID: <Yzr/Htmws3eGa41v@p1g3>
-References: <20221003101627.144026-1-dan.scally@ideasonboard.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB696112D;
+        Mon,  3 Oct 2022 16:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BF8C433D6;
+        Mon,  3 Oct 2022 16:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664813840;
+        bh=s96hTsxFQJxWDg9Af3wR2mq5yoGoEwVzUCGwHfgUdF0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WoQWJ5UzYX1l9KUoj7lhjj/rI5K8zj8XaRUubxsvH2v/8l/+dxUfogI970NeNG58h
+         wU6kFDMtTLL9JyR11zVUWj6/9DAnz8XH1/fEr/zBrwmu4JInvWbjWQDxuuTYUPnd1O
+         CeOwJI9GfU5CllOVPKETnJRKK+x5tFPwXdOPkD/w=
+Date:   Mon, 3 Oct 2022 18:17:17 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
+ dev_fwnode_const() separate
+Message-ID: <YzsLDUhjDCCVRy2G@kroah.com>
+References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
+ <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
+ <YzQqcFZtJn90URrJ@kroah.com>
+ <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
+ <YzcAh/xtqQM1Qin4@kroah.com>
+ <YzrBO2m/b1MHuKny@paasikivi.fi.intel.com>
+ <Yzr6r5XtmPXCoQx7@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221003101627.144026-1-dan.scally@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yzr6r5XtmPXCoQx7@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
-
-Looks like I did a superset of your change here:
-https://lore.kernel.org/all/20220926195307.110121-2-w36195@motorola.com/
-
-I also included the uvc_video_encode_bulk() for consistency, even though
-it seems to be unused code.
-
-Out of curiosity, which setup did you test this on? I'm seeing issues on
-my devices with the dwc3 controller with some of the recent performance
-improvements (scatter/gather support and no_interrupt use). I've tried
-to include all relevant changes in my setup, but the issues are still
-present.
-
-Any input is appreciated,
-
-Dan
-
-
-On Mon, Oct 03, 2022 at 11:16:27AM +0100, Daniel Scally wrote:
-> Calling uvcg_complete_buffer() from uvc_video_encode_isoc() sometimes
-> causes the final isoc packet for a video frame to be delayed long
-> enough to cause the USB controller to drop it. The first isoc packet
-> of the next video frame is then received by the host, which interprets
-> the toggled FID bit correctly such that the stream continues without
-> interruption, but the first frame will be missing the last isoc
-> packet's worth of bytes.
+On Mon, Oct 03, 2022 at 05:07:27PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Oct 03, 2022 at 11:02:19AM +0000, Sakari Ailus wrote:
+> > Hi Greg,
+> > 
+> > On Fri, Sep 30, 2022 at 04:43:19PM +0200, Greg Kroah-Hartman wrote:
+> > > On Fri, Sep 30, 2022 at 02:30:53PM +0000, Sakari Ailus wrote:
+> > > > Hi Greg,
+> > > > 
+> > > > On Wed, Sep 28, 2022 at 01:05:20PM +0200, Greg Kroah-Hartman wrote:
+> > > > > On Wed, Sep 28, 2022 at 01:57:42PM +0300, Andy Shevchenko wrote:
+> > > > > > It's not fully correct to take a const parameter pointer to a struct
+> > > > > > and return a non-const pointer to a member of that struct.
+> > > > > > 
+> > > > > > Instead, introduce a const version of the dev_fwnode() API which takes
+> > > > > > and returns const pointers and use it where it's applicable.
+> > > > > > 
+> > > > > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
+> > > > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > > ---
+> > > > > >  drivers/base/property.c  | 11 +++++++++--
+> > > > > >  include/linux/property.h |  3 ++-
+> > > > > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > > > > > index 4d6278a84868..699f1b115e0a 100644
+> > > > > > --- a/drivers/base/property.c
+> > > > > > +++ b/drivers/base/property.c
+> > > > > > @@ -17,13 +17,20 @@
+> > > > > >  #include <linux/property.h>
+> > > > > >  #include <linux/phy.h>
+> > > > > >  
+> > > > > > -struct fwnode_handle *dev_fwnode(const struct device *dev)
+> > > > > > +struct fwnode_handle *dev_fwnode(struct device *dev)
+> > > > > >  {
+> > > > > >  	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > > >  		of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL_GPL(dev_fwnode);
+> > > > > >  
+> > > > > > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
+> > > > > > +{
+> > > > > > +	return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > > > +		of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > > > +}
+> > > > > > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
+> > > > > 
+> > > > > Ick, no, this is a mess.
+> > > > > 
+> > > > > Either always return a const pointer, or don't.  Ideally always return a
+> > > > > const pointer, so all we really need is:
+> > > > > 
+> > > > > const struct fwnode_handle *dev_fwnode(const struct device *dev);
+> > > > > 
+> > > > > right?
+> > > > > 
+> > > > > Yes, it will take some unwinding backwards to get there, but please do
+> > > > > that instead of having 2 different functions where the parameter type is
+> > > > > part of the function name.  This isn't the 1980's...
+> > > > 
+> > > > The problem with this approach is that sometimes non-const fwnode_handles
+> > > > are needed. On OF, for instance, anything that has something to do with
+> > > > refcounting requires this. Software nodes as well.
+> > > 
+> > > If they are writable, then yes, let's keep them writable, and not create
+> > > two function paths where we have to pick and choose.
+> > > 
+> > > > One option which I suggested earlier was to turn dev_fwnode() into a macro
+> > > > and use C11 _Generic() to check whether the device is const or not.
+> > > 
+> > > As much fun as that would be, I don't think it would work well.
+> > > 
+> > > Although, maybe it would, have an example of how that would look?
+> > 
+> > Similar to what container_of() could be, see below.
+> > 
+> > We could also partially revert aade55c86033bee868a93e4bf3843c9c99e84526
+> > which (also) made dev_fwnode() argument const (which is the source of the
+> > issue).
+> > 
+> > > 
+> > > I ask as I just went through a large refactoring of the kobject layer to
+> > > mark many things const * and I find it a bit "sad" that functions like
+> > > this:
+> > > 	static inline struct device *kobj_to_dev(const struct kobject *kobj)
+> > > 	{
+> > > 		return container_of(kobj, struct device, kobj);
+> > > 	}
+> > > have the ability to take a read-only pointer and spit out a writable one
+> > > thanks to the pointer math in container_of() with no one being the
+> > > wiser.
+> > 
+> > Yeah, container_of() is dangerous, especially in macros. It could of course
+> > be made safer. Something like this:
+> > 
+> > <URL:https://lore.kernel.org/linux-kernel/1495195570-5249-1-git-send-email-sakari.ailus@linux.intel.com/>
+> > 
+> > I can respin it, back in 2017 I got no replies.
 > 
-> To fix the issue delay the call to uvcg_complete_buffer() until the
-> usb_request's .complete() callback, as already happens when the data
-> is encoded via uvc_video_encode_isoc_sg().
+> I don't like how we loose the ability to do this in an inline C function
+> by being forced to do it in a macro (as it makes build errors harder to
+> understand), but I do like the intent here.
 > 
-> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> ---
->  drivers/usb/gadget/function/uvc_video.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index c00ce0e91f5d..041819a655ed 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -194,6 +194,7 @@ static void
->  uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->  		struct uvc_buffer *buf)
->  {
-> +	struct uvc_request *ureq = req->context;
->  	void *mem = req->buf;
->  	int len = video->req_size;
->  	int ret;
-> @@ -213,7 +214,7 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->  		video->queue.buf_used = 0;
->  		buf->state = UVC_BUF_STATE_DONE;
->  		list_del(&buf->queue);
-> -		uvcg_complete_buffer(&video->queue, buf);
-> +		ureq->last_buf = buf;
->  		video->fid ^= UVC_STREAM_FID;
->  	}
->  }
-> -- 
-> 2.34.1
-> 
+> Let me play around with this a bit on some "smaller" uses of
+> container_of() and see how that works...
+
+Odd, this doesn't work for me at all.
+
+I tried the following change:
+
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 424b55df0272..5575c87e6c3b 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -680,11 +680,21 @@ struct device_link {
+ 	bool supplier_preactivated; /* Owned by consumer probe. */
+ };
+ 
+-static inline struct device *kobj_to_dev(struct kobject *kobj)
++static inline struct device *__kobj_to_dev(struct kobject *kobj)
+ {
+ 	return container_of(kobj, struct device, kobj);
+ }
+ 
++static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
++{
++	return container_of(kobj, const struct device, kobj);
++}
++
++#define kobj_to_dev(kobj)						\
++	_Generic((kobj),						\
++		 const struct kobject *: __kobj_to_dev_const(kobj),	\
++		 struct kobject *: __kobj_to_dev(kobj))
++
+ /**
+  * device_iommu_mapped - Returns true when the device DMA is translated
+  *			 by an IOMMU
+
+
+which seems all is fine for normal kobject pointers passed in, but for
+the first 'const struct kobject *' the compiler hits, I get the
+following error:
+
+  CC      drivers/base/core.o
+In file included from ./include/linux/acpi.h:15,
+                 from drivers/base/core.c:11:
+drivers/base/core.c: In function ‘dev_attr_show’:
+drivers/base/core.c:2193:48: error: passing argument 1 of ‘__kobj_to_dev’ discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+ 2193 |         const struct device *dev = kobj_to_dev(kobj);
+      |                                                ^~~~
+./include/linux/device.h:696:50: note: in definition of macro ‘kobj_to_dev’
+  696 |                  struct kobject *: __kobj_to_dev(kobj))
+      |                                                  ^~~~
+./include/linux/device.h:683:60: note: expected ‘struct kobject *’ but argument is of type ‘const struct kobject *’
+  683 | static inline struct device *__kobj_to_dev(struct kobject *kobj)
+      |                                            ~~~~~~~~~~~~~~~~^~~~
+
+
+(note, I faked up a constant pointer just to trip the compiler)
+
+The selection of _Generic() seems not to be working here, any hints?  I tried
+playing around with 'default' and 'typeof' and the like, but all error out the
+same way.
+
+thanks,
+
+greg k-h
