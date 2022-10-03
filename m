@@ -2,94 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DA75F27E2
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 05:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609FF5F27E8
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 05:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiJCDnN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Oct 2022 23:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
+        id S229549AbiJCDxg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Oct 2022 23:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJCDnM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Oct 2022 23:43:12 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAE238680
-        for <linux-usb@vger.kernel.org>; Sun,  2 Oct 2022 20:43:10 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id f1so2028407ejw.7
-        for <linux-usb@vger.kernel.org>; Sun, 02 Oct 2022 20:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vxmJHnJAq9IIYHaZPP9CQadUjeHnEryHD+ffwmrX5Og=;
-        b=bHz5O+U44QAPBRjfjwiRypP1lO1VB7fQ8oK7ussO6V/CA9R2HKH1wr8oZY7Ck3koPZ
-         iNla3MRDfLJfSSzP46QQ7Q/r66T4GuQoAt89QiUAYDGrHQI87/F6LboYfnJbkzJdOcBJ
-         11rU0MUdgFxc6Gh8qw9BPfsorJtaGq+bLSW9k=
+        with ESMTP id S229482AbiJCDxd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Oct 2022 23:53:33 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FEA2714D
+        for <linux-usb@vger.kernel.org>; Sun,  2 Oct 2022 20:53:31 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id d24-20020a05660225d800b006a466ec7746so6165793iop.3
+        for <linux-usb@vger.kernel.org>; Sun, 02 Oct 2022 20:53:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vxmJHnJAq9IIYHaZPP9CQadUjeHnEryHD+ffwmrX5Og=;
-        b=LchZoYlcWAj2bCX3q45+YhOUcswUghRCaeTdvy198WUBqjrGpIfMjgHQDe6WmhrLTb
-         jH4ZEXVT7kzAFupHhlbfIf/AUpKN00LbXmaJV0BRqdf9fzApw7vkbatoLq2MR4h307EJ
-         eMFgWpbU6gymS89brurf/CQ59xzusBDD2wgEnNqd0w12eb6f4lrRQ+2kXHwTSrOks4sq
-         F9yb+0G/prLQt/o1S0DOwkPKOlCV2x1z0/pUlBaOCfT7rXQbtSCgQQUKjtIrR6jHdwcU
-         5F5otigEjbfv/TGXHejxBkjZigRUCY9tjex/BqwFYT86/fAGJIT9ll1jI2I9rbW+AoZz
-         WIZQ==
-X-Gm-Message-State: ACrzQf39nvt40kc3e4G49QwdHIhZMaAVIm2EYVulixQrln2MtEXFv1n+
-        ewi+qDRmfui/dlEPynXKEZNf9/Bg2HPInO6uz9Ve5g==
-X-Google-Smtp-Source: AMsMyM5e7oXbFwyMli2l1WgAzX10RmoihHcCINFCDNiZFCdxNiVryFa+fJ2V5M9PSSisWd31qf+rn+U5MI/YhrQRltk=
-X-Received: by 2002:a17:907:1ddb:b0:777:51ba:e58f with SMTP id
- og27-20020a1709071ddb00b0077751bae58fmr13327358ejc.695.1664768588519; Sun, 02
- Oct 2022 20:43:08 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5UX8UvFELFPf+hJe9Pw+hJuyDg2PnF+1lGkZkcSAJUE=;
+        b=NMu76TGiRSGmjz8RCdakBgQkHD/FvQWT+3MNRQvksaTB/7oA7yZJ/Q3bAxCYcbKsHl
+         fNALUGYjbW9Ti1wIZe1NSIQ4LpPqY5KfRaFORAncVUfElOB3i/7dvo0NZhgE0G+BtdFG
+         duf2xyE1OA1yjwMtibVOpIFJ6Mr0E0hgLxtSQs3QKraS7yQSVz84oB4EoF0wmwa2IuVQ
+         AJgzXtQa7EMoFTM4kKco8kHYboxudQWZbDtYtlN/VOvlgbrET3rJp2WKhvKypmO2IBSL
+         ZqwQbzqw4AsHDWB9RlcCoXA3WspzGDGHtaud5bJd1/fatZo/uAimUfGrbqDsB7Zt2II6
+         qJig==
+X-Gm-Message-State: ACrzQf2efZFn7CU0kq2zoAxKEjbRyntwQz8skF+4stR7RRRarrjUJ8gx
+        RA46lFjiBH04f3iCakPzWX/HXyKyOU9ziBYJtzA4WRUBRbAK
+X-Google-Smtp-Source: AMsMyM4tIse+vTF2vTGYf88YS+ZbvTLfYLud4mHfj6888dXkC8/x211A1QvMeXbgJeV5vxTyx6A1rFozzZLDb7cJk/Pxi6ZdLL+I
 MIME-Version: 1.0
-References: <CACeCKackdbDZrk5fk7qyMwSdTdzyTS=m1vHPFnQOj672W=2nOA@mail.gmail.com>
- <20220628182336.GA711518-robh@kernel.org> <CAEXTbpex9nxP-nyPWvSBchAW4j3C4MZfVHTb=5X0iSLY1bSAKg@mail.gmail.com>
- <CAEXTbpf_jxK-R5aA81FCbpAH4bChA2B9+8qExZUbA7Y+Ort=Gg@mail.gmail.com>
- <CAL_Jsq+C04RXLtm6Ac85Ru3EGwJbqV_UD3_dDWVrKvFSvdm7Ng@mail.gmail.com>
- <CAE-0n53ers881LOTCEmKDDxJQt+5vvXJSURs=o6TcOiR5m_EAw@mail.gmail.com>
- <CACeCKacJnnk4_dXEX7XiboOWrYpfAcE=ukP63agVAYUxWR9Vbg@mail.gmail.com>
- <CAE-0n50jm1ovUcBC0GCQJszk-4u+0vDQtAxHxsu9SLyn_CkQuQ@mail.gmail.com>
- <CACeCKadtmGZ5iuTHdMms6ZHGn-Uv=MbcdtqmUzqCb=5WHuPj2Q@mail.gmail.com>
- <20220712174551.GG1823936-robh@kernel.org> <YxGzk6DNAt0aCvIY@chromium.org> <CACeCKad9WtvTu_8_RfiCnkcFnagZvm+Rpx_Vrj8OORQ_=u2snQ@mail.gmail.com>
-In-Reply-To: <CACeCKad9WtvTu_8_RfiCnkcFnagZvm+Rpx_Vrj8OORQ_=u2snQ@mail.gmail.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Mon, 3 Oct 2022 11:42:57 +0800
-Message-ID: <CAEXTbpcisQ-rERr6hNQyZCCdzZCjxe=1wgPUMJ-43Ubis76WVA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Prashant Malani <pmalani@chromium.org>
+X-Received: by 2002:a6b:e714:0:b0:6a1:35af:82dc with SMTP id
+ b20-20020a6be714000000b006a135af82dcmr7585539ioh.205.1664769211197; Sun, 02
+ Oct 2022 20:53:31 -0700 (PDT)
+Date:   Sun, 02 Oct 2022 20:53:31 -0700
+In-Reply-To: <00000000000068e76205e2ec0e6b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000776f5005ea1949d8@google.com>
+Subject: Re: [syzbot] WARNING in match_held_lock
+From:   syzbot <syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com, boqun.feng@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        llvm@lists.linux.dev, longman@redhat.com, mingo@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
+        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, will@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,370 +58,77 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+syzbot has found a reproducer for the following issue on:
 
-Are there any thoughts or comments about this proposal?
+HEAD commit:    a962b54e162c Merge tag 'i2c-for-6.0-rc8' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11833a82880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=755695d26ad09807
+dashboard link: https://syzkaller.appspot.com/bug?extid=6c67d4224af196c99976
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b51e14880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b33c68880000
 
-On Sat, Sep 17, 2022 at 2:22 AM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Hi folks,
->
-> On Fri, Sep 2, 2022 at 12:41 AM Prashant Malani <pmalani@chromium.org> wrote:
-> >
-> > Hi Rob,
-> >
-> > On Jul 12 11:45, Rob Herring wrote:
-> > >
-> > > That's not the right interpretation. There should not be some Type-C
-> > > specific child mux/switch node because the device has no such h/w within
-> > > it. Assuming all the possibilities Stephen outlined are valid, it's
-> > > clear this lane selection has nothing to do with Type-C. It does have an
-> > > output port for its DP output already and using that to describe the
-> > > connection to DP connector(s) and/or Type-C connector(s) should be
-> > > handled.
-> > > Rob
-> >
-> > Below I've listed the proposal binding (for the Type-C connector) along
-> > with 2 sample hardware diagrams and corresponding DT.
->
-> Any thoughts about this proposal?
->
-> >
-> > The updated binding in usb-c-connector would be as follows:
-> >
-> > diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > index ae515651fc6b..a043b09cb8ec 100644
-> > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > @@ -183,6 +183,30 @@ properties:
-> >        port@1:
-> >          $ref: /schemas/graph.yaml#/properties/port
-> >          description: Super Speed (SS), present in SS capable connectors.
-> > +        properties:
-> > +          '#address-cells':
-> > +            const: 1
-> > +
-> > +          '#size-cells':
-> > +            const: 0
-> > +
-> > +        patternProperties:
-> > +          "^endpoint@[0-1]$":
-> > +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> > +            description:
-> > +              Endpoints for the two SS lanes. endpoint@0 refers to SSTRX1 (A2,A3,B10,B11)
-> > +              and endpoint@1 refers to SSTRX2 (B2,B3,A10,A11).
-> > +            additionalProperties: false
-> > +
-> > +              properties:
-> > +                reg:
-> > +                  maxItems: 1
-> > +
-> > +                remote-endpoint: true
-> > +
-> > +              required:
-> > +                - reg
-> > +                - remote-endpoint
-> >
-> >        port@2:
-> >          $ref: /schemas/graph.yaml#/properties/port
-> >
-> > Here are 2 examples of how that would look on some existing hardware:
-> >
-> > Example 1. 2 usb-c-connectors connecting to 1 drm bridge / DP switch:
-> >
-> > Here is the diagram we are using on the MTK platform:
-> >
-> >                  SOC
-> >         +---------------------+                                              C0
-> >         |                     |            +----------+       2 lane      +--------+
-> >         |                     |            |          +---------/---------+ SSTRX1 |
-> >         |                     |            |          |                   |        |
-> >         |    MIPI DPI         |            |          |  2 lane           |        |
-> >         |                     +------------+ ANX 7625 +---/-----+    +----+ SSTRX2 |
-> >         |                     |            |          |         |    |    +--------+
-> >         |                     |            +----------+         |    |
-> >         +---------------------+                                 |    |
-> >         |                     |            +----------+ 2 lane  |    |       C1
-> >         |                     |            |          +----/----C----+    +--------+
-> >         |    USB3 HC          |   2 lane   |          |         |         | SSTRX1 |
-> >         |                     +-----/------+ USB3 HUB |         +---------+        |
-> >         |  (host controller)  |            |          |       2 lane      |        |
-> >         |                     |            |          +---------/---------+ SSTRX2 |
-> >         +---------------------+            |          |                   |        |
-> >                                            +----------+                   +--------+
-> >
-> > Some platforms use it6505, so that can be swapped in for anx7625
-> > without any change to the rest of the hardware diagram.
-> >
-> > From the above, we can see that it is helpful to describe the
-> > Type-C SS lines as 2 endpoints:
-> > - 1 for SSTX1+SSRX1 (A2,A3 + B10,B11)
-> > - 1 for SSTX2+SSRX2 (B2,B3 + A10, A11)
-> >
-> > A device tree for this would look as follows:
-> >
-> > // Type-C port driver
-> > ec {
-> >     ...
-> >     cros_ec_typec {
-> >         ...
-> >         usb-c0 {
-> >             compatible = "usb-c-connector";
-> >             ports {
-> >                 hs : port@0 {
-> >                     ...
-> >                 };
-> >                 ss: port@1 {
-> >                     reg = <1>;
-> >                     c0_sstrx1: endpoint@0 {
-> >                         reg = <0>;
-> >                         remote-endpoint = <&anx7625_out0>;
-> >                     };
-> >                     c0_sstrx2: endpoint@0 {
-> >                         reg = <0>;
-> >                         remote-endpoint = <&usb3hub_out0>;
-> >                     };
-> >                 };
-> >                 sbu : port@2 {
-> >                     ...
-> >                 };
-> >             };
-> >         };
-> >         usb-c1 {
-> >             compatible = "usb-c-connector";
-> >             ports {
-> >                 hs : port@0 {
-> >                     ...
-> >                 };
-> >                 ss: port@1 {
-> >                     reg = <1>;
-> >                     c1_sstrx1: endpoint@0 {
-> >                         reg = <0>;
-> >                         remote-endpoint = <&anx7625_out1>;
-> >                     };
-> >                     c1_sstrx2: endpoint@0 {
-> >                         reg = <0>;
-> >                         remote-endpoint = <&usb3hub_out1>;
-> >                     };
-> >                 };
-> >                 sbu : port@2 {
-> >                     ...
-> >                 };
-> >             };
-> >         };
-> >     };
-> > };
-> >
-> > // DRM bridge / Type-C mode switch
-> > anx_bridge: anx7625@58 {
-> >     compatible = "analogix,anx7625";
-> >     reg = <0x58>;
-> >     ...
-> >     // Input from DP controller
-> >     port@0 {
-> >         reg = <0>;
-> >         ...
-> >     };
-> >
-> >     // Output to Type-C connector / DP panel
-> >     port@1 {
-> >         reg = <1>;
-> >
-> >         anx7625_out0: endpoint@0 {
-> >             reg = <0>;
-> >             mode-switch;
-> >             remote-endpoint = <&c0_sstrx1>;
-> >         };
-> >         anx7625_out1: endpoint@1 {
-> >             reg = <1>;
-> >             mode-switch;
-> >             remote-endpoint = <&c1_sstrx1>;
-> >         };
-> >     };
-> > };
-> >
-> > // USB3 hub
-> > usb3hub: foo_hub {
-> >     ...
-> >     ports@0 {
-> >          // End point connected to USB3 host controller on SOC.
-> >     };
-> >     port@1 {
-> >         reg = <1>;
-> >
-> >         foo_hub_out0: endpoint@0 {
-> >             reg = <0>;
-> >             mode-switch; ---> See c.) later
-> >             remote-endpoint = <&c0_sstrx2>;
-> >         };
-> >         foo_hub_out1: endpoint@1 {
-> >             reg = <1>;
-> >             mode-switch;
-> >             remote-endpoint = <&c1_sstrx2>;
-> >         };
-> >     };
-> > };
-> >
-> > Notes:
-> > - On the Chrome OS platform, the USB3 Hub is controlled by
-> > the EC, so we don't really need to describe that connection,
-> > but I've added a minimal one here just to show how the graph
-> > connection would work if the HUB was controlled by the SoC.
-> > - The above assumes that other hardware is controlling orientation.
-> > We can add "orientation-switch" drivers along the graph path
-> > if there is other hardware which controls orientation.
-> >
-> > Example 2: 1 USB-C connector connected to 1 drm-bridge/ mode-switch
-> >
-> > I've tried to use Bjorn's example [1], but I might have made
-> > some mistakes since I don't have access to the schematic.
-> >
-> >
-> >                   SoC
-> >   +------------------------------------------+
-> >   |                                          |
-> >   |  +---------------+                       |
-> >   |  |               |                       |
-> >   |  |  DP ctrllr    |       +---------+     |                 C0
-> >   |  |               +-------+         |     |   2 lane     +----------+
-> >   |  +---------------+       |  QMP    +-----+-----/--------+ SSTRX1   |
-> >   |                          |  PHY    |     |              |          |
-> >   |  +-------------+  2 lane |         |     |   2 lane     |          |
-> >   |  |             +----/----+         +-----+-----/--------+ SSTRX2   |
-> >   |  |    dwc3     |         +---------+     |              |          |
-> >   |  |             |                         |              |          |
-> >   |  |             |         +---------+     |              |          |
-> >   |  |             +---------+ HS PHY  |     |   HS lanes   |          |
-> >   |  +-------------+         |         +-----+----/---------+ D +/-    |
-> >   |                          |         |     |              +----------+
-> >   |                          +---------+     |
-> >   |                                          |
-> >   +------------------------------------------+
-> >
-> > The DT would look something like this (borrowing from Stephen's example [2]):
-> >
-> > qmp {
-> >     mode-switch; ----> See b.) later.
-> >     orientation-switch;
-> >     ports {
-> >         qmp_usb_in: port@0 {
-> >             reg = <0>;
-> >             remote-endpoint = <&usb3_phy_out>;
-> >         };
-> >         qmp_dp_in: port@1 {
-> >             reg = <1>;
-> >             remote-endpoint = <&dp_phy_out>;
-> >         };
-> >         port@2 {
-> >             reg = <2>;
-> >             qmp_usb_dp_out0: endpoint@0 {
-> >                 reg = <0>;
-> >                 remote-endpoint = <&c0_sstrx1>;
-> >             };
-> >             qmp_usb_dp_out1: endpoint@1 {
-> >                 reg = <1>;
-> >                 remote-endpoint = <&c0_sstrx2>;
-> >             };
-> >         };
-> > };
-> >
-> > dp-phy {
-> >     ports {
-> >         dp_phy_out: port {
-> >             remote-endpoint = <&qmp_dp_in>;
-> >         };
-> >     };
-> > };
-> >
-> > dwc3: usb-phy {
-> >     ports {
-> >         usb3_phy_out: port@0 {
-> >             reg = <0>;
-> >             remote-endpoint = <&qmp_usb_in>;
-> >         };
-> >     };
-> > };
-> >
-> > glink {
-> >     c0: usb-c-connector {
-> >         compatible = "usb-c-connector";
-> >         ports {
-> >             hs: port@0 {
-> >                 reg = <0>;
-> >                 endpoint@0 {
-> >                     reg = <0>;
-> >                     remote-endpoint = <&hs_phy_out>;
-> >                 };
-> >             };
-> >
-> >             ss: port@1 {
-> >                 reg = <1>;
-> >                 c0_sstrx1: endpoint@0 {
-> >                     reg = <0>;
-> >                     remote-endpoint = <&qmp_usb_dp_out0>;
-> >                 };
-> >                 c0_sstrx2: endpoint@1 {
-> >                     reg = <1>;
-> >                     remote-endpoint = <&qmp_usb_dp_out1>;
-> >                 };
-> >             };
-> >         };
-> >     };
-> > };
-> >
-> > Notes:
-> > a. This proposal doesn't deal with the DRM bridge HPD forwarding; I
-> > believe that is covered by Stephen's example/proposal in [2], and
-> > can be addressed separately. That said, this binding is compatible
-> > with the proposal in [2], that is, make the "mode-switch" driver a
-> > drm-bridge and forward the HPD info to the upstream DRM-bridge (DP controller).
-> > The driver implementing "mode-switch" will be able to do that, since
-> > it gets DP status/attention VDOS with HPD info from the Type-C port driver.
-> > b. If both SSTRX pairs from a connector are routed to the same
-> > hardware block (example 2) then the device would keep "mode-switch"
-> > as a top level property (and the fwnode associated with "mode-switch"
-> > is the drm-bridge device).
-> > c. If SSTRX pairs from 2 connectors are routed to the same
-> > hardware block (example 1), then each end-point which is connected to
-> > the USB-C connector will have a "mode-switch" property in its end-point.
-> > There will be 2 mode switches registered here, and the fwnode for each
-> > "mode-switch" is the end-point node.
-> >
-> > b.) and c.) can be handled by Type C mux registration and matching
-> > code. We already have 3 mux devs for each mux [3].
-> >
-> > For the single mode-switch case, mux_dev[1] will just refer to the top-level
-> > mode-switch registered by the DRM bridge / switch driver (example 1).
-> > For the 2 mode-switch case, typec_mux_dev[1] will have 2 child
-> > typec_mux_dev's, each of which represents the mode-switches
-> > registered by the DRM bridge / switch driver. Introducing this
-> > indirection means the port driver / alternate mode driver don't
-> > need to care about how the connectors are routed; the framework
-> > will just call the mux_set() function on the mux_dev() or its
-> > children if it has any.
-> >
-> > The benefit of this approach is existing bindings (which just
-> > assume 1 endpoint from usb-c-connector/port@1) should continue to
-> > work without any changes.
-> >
-> > Why don't we use data lanes for the usb-c-connector
-> > endpoints? I guess we could, but I am not a fan of adding the
-> > extra data-lane parsing logic to the Type-C framework (I
-> > don't think drivers need that level of detail from the connector
-> > binding). And even then, we will still need an extra end-point
-> > if the lanes of the USB-C connector are routed to different hardware blocks.
-> >
-> > The Type-C connector spec doesn't specify any alternate modes
-> > with < 1 SSTRX pair, so the most we can ever have (short of a
-> > major change to the spec) is 2 SSTRX end points for a
-> > connector each being routed to different hardware blocks.
-> > Codifying these as endpoint@0 and endpoint@1 in the usb-c-connector
-> > binding seems to line up nicely with this detail of the spec.
-> >
-> > Thanks,
-> >
-> > -Prashant
-> >
-> > [1] https://lore.kernel.org/linux-usb/Yv1y9Wjp16CstJvK@baldur/
-> > [2] https://lore.kernel.org/linux-usb/CAE-0n52-QVeUVCB1qZzPbYyrb1drrbJf6H2DEEW9bOE6mh7egw@mail.gmail.com/
-> > [3] https://elixir.bootlin.com/linux/v6.0-rc3/source/drivers/usb/typec/mux.c#L259
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c0d6002d7b4b/disk-a962b54e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cf0a29408406/vmlinux-a962b54e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com
+
+ntfs3: loop3: Different NTFS' sector size (1024) and media sector size (512)
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(!hlock->nest_lock)
+WARNING: CPU: 0 PID: 5565 at kernel/locking/lockdep.c:5135 match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
+Modules linked in:
+CPU: 0 PID: 5565 Comm: syz-executor151 Not tainted 6.0.0-rc7-syzkaller-00250-ga962b54e162c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
+Code: e8 b8 c4 7a fa 85 c0 74 e4 8b 05 26 e5 5e 04 85 c0 75 da 48 c7 c6 60 ac ec 89 48 c7 c7 e0 a8 ec 89 89 44 24 04 e8 45 e7 ba ff <0f> 0b 8b 44 24 04 eb bd 66 66 2e 0f 1f 84 00 00 00 00 00 41 57 41
+RSP: 0018:ffffc900058c79d8 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: ffff88807e390aa0 RCX: 0000000000000000
+RDX: ffff88807e390000 RSI: ffffffff8161f2a8 RDI: fffff52000b18f2d
+RBP: ffffffff8bf89640 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000002 R11: 0000000000000001 R12: ffff88807e390000
+R13: ffff88807e390a78 R14: 00000000ffffffff R15: ffff88807e390aa0
+FS:  0000555556d9c300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbbd6497056 CR3: 0000000016c2f000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ __lock_is_held kernel/locking/lockdep.c:5407 [inline]
+ lock_is_held_type+0xa7/0x140 kernel/locking/lockdep.c:5709
+ lock_is_held include/linux/lockdep.h:283 [inline]
+ rcu_read_lock_sched_held+0x3a/0x70 kernel/rcu/update.c:125
+ trace_lock_release include/trace/events/lock.h:69 [inline]
+ lock_release+0x560/0x780 kernel/locking/lockdep.c:5677
+ __raw_spin_unlock include/linux/spinlock_api_smp.h:141 [inline]
+ _raw_spin_unlock+0x12/0x40 kernel/locking/spinlock.c:186
+ spin_unlock include/linux/spinlock.h:389 [inline]
+ inode_sb_list_del fs/inode.c:505 [inline]
+ evict+0x2aa/0x6b0 fs/inode.c:654
+ iput_final fs/inode.c:1748 [inline]
+ iput.part.0+0x55d/0x810 fs/inode.c:1774
+ iput+0x58/0x70 fs/inode.c:1764
+ ntfs_fill_super+0x2e89/0x37f0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x440/0x760 fs/super.c:1323
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbbd6459e7a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 c8 03 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd6a35b568 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fbbd6459e7a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd6a35b580
+RBP: 00007ffd6a35b580 R08: 00007ffd6a35b5c0 R09: 00007ffd6a35b5c0
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
+R13: 00007ffd6a35b5c0 R14: 000000000000010e R15: 0000000020001b50
+ </TASK>
+
