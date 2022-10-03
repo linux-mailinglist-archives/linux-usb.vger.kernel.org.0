@@ -2,85 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFCA5F3015
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 14:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7415F3249
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 17:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJCMRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Oct 2022 08:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
+        id S230093AbiJCPFU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Oct 2022 11:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiJCMRf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 08:17:35 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3E8371A1
-        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 05:17:33 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id m3so14277442eda.12
-        for <linux-usb@vger.kernel.org>; Mon, 03 Oct 2022 05:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UhWZV/mad6F4RpZvlHXFs+zp/JmucbtO6Fa9rpbOMEk=;
-        b=xkyPQRCYvXGiLcBvY9yC5upyusGgl/Pv3MufgQUsf9USbnVo9raFRMfG6EjJJk/wFE
-         tl0tWn7rkOIQ/XiH2EerwSC6Ran7LO/QW30Neqa0vT/M+U1xgIow98QDUfjds+tlD5aO
-         k1nkisLaX+3JU5bE3FkIjA4DCew7aQHqgHSgKolrPgltlM6WFixfDW6kIJ8bXth0RZfs
-         hfrH/d4cPAbrNkCtpZI+XVv5qJxkuSw6GQls4cr+h2QmOJC/owme92Nc2NXktmGkA8f/
-         KEt4DmiiBxlloKnt3NBCr/Wbx4fP395aSDX5qSZiRPQw25Hd5o/tFNlGkauf/M+xOISZ
-         2+sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UhWZV/mad6F4RpZvlHXFs+zp/JmucbtO6Fa9rpbOMEk=;
-        b=ZiMMjkV8K1Hd9mxpM8T1cSYU3kcDRnznIs9gsZoOKep6R+p/LdFgHE/wtg/6r+YtO1
-         F/Em+HmEArmOxxlX45CrnbFRAwqPpHmxzJRckF0XeKmLaJETR9y8rW+ClRInBMZeQvcZ
-         LVAphMfrOwlCKSWy3BMzmUwqp0urDGnw5bLYUHXmuR0c1UpcEb5pdw7517C3R0EGz75h
-         RAt6Lea/RR9bl9jClFeiBYTw36DhF/5GAKzOp1z/NJVNmbrhXn7wJQyTowO3SpOw9HeH
-         8u+rEMmbSoUwZGuobqsiUhNy129YvBYmUi8poP1UtcPu6AzsyANjayHbcgQXFAlPKUFL
-         yzCA==
-X-Gm-Message-State: ACrzQf2LTnePISWOXNwS1vrEAFbGqSALV4FhP2o2t7wI3zTbU9rJkkJz
-        SxgHBepbipZuVV30543B2n/GRXSAESGLQNyYqu7LWQ==
-X-Google-Smtp-Source: AMsMyM5bXQWrSdbav4mhiBEbAe2E6/Y8TidOXR2A9WaFyx6N9CtVVV3NU2QBrVpCbj9WTvew7OeZfg88TE8PBCP3C/Y=
-X-Received: by 2002:a05:6402:2690:b0:452:3a85:8b28 with SMTP id
- w16-20020a056402269000b004523a858b28mr17987078edd.158.1664799452346; Mon, 03
- Oct 2022 05:17:32 -0700 (PDT)
+        with ESMTP id S230087AbiJCPFS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 11:05:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EB81400A;
+        Mon,  3 Oct 2022 08:05:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 330D661132;
+        Mon,  3 Oct 2022 15:05:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F02C433D6;
+        Mon,  3 Oct 2022 15:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664809513;
+        bh=kQRY7ykuDbE0o51P8UlIlK+aCXBweDG/nc36XgImZeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2Pp1KEoROdEhqllwvsisChE7fLM6legHZc2Gh55GhMc68DvAEwW6aijJkqREMA5Pi
+         FETIXJX5dZEP0im+US1hx67Hg7V2Hqi52BzwhzMVSNV8LcQIbi9YR2sqCRXrMJxd2J
+         R9S1y6oRRUuNnYQtO5rJJMNzZ99OvnTaXpWxANhQ=
+Date:   Mon, 3 Oct 2022 17:05:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>
+Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
+ dev_fwnode_const() separate
+Message-ID: <Yzr6JjXVQTpky6GM@kroah.com>
+References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
+ <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
+ <YzQqcFZtJn90URrJ@kroah.com>
+ <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
+ <YzcAh/xtqQM1Qin4@kroah.com>
+ <CAJZ5v0hHPjSN-369pagN3Mnxd1yvc6+4YGb0Kpx3=+aahV=AmQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220914034615.1240860-1-cuigaosheng1@huawei.com> <20220914034615.1240860-4-cuigaosheng1@huawei.com>
-In-Reply-To: <20220914034615.1240860-4-cuigaosheng1@huawei.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 3 Oct 2022 14:17:21 +0200
-Message-ID: <CACRpkdZPB9hm7kMUzpMdNu9RP94vgvxkrQ70OGb_Qm8k--2zsQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ARM: ftrace: remove unused ftrace_graph_caller_old() declaration
-To:     Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, linux@armlinux.org.uk,
-        tony@atomide.com, bcousson@baylibre.com, paul@pwsan.com,
-        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-        stefan@agner.ch, rmk+kernel@armlinux.org.uk, broonie@kernel.org,
-        sebastian.reichel@collabora.co.uk,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hHPjSN-369pagN3Mnxd1yvc6+4YGb0Kpx3=+aahV=AmQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 14, 2022 at 5:46 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
+On Mon, Oct 03, 2022 at 01:54:37PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Sep 30, 2022 at 4:43 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Sep 30, 2022 at 02:30:53PM +0000, Sakari Ailus wrote:
+> > > Hi Greg,
+> > >
+> > > On Wed, Sep 28, 2022 at 01:05:20PM +0200, Greg Kroah-Hartman wrote:
+> > > > On Wed, Sep 28, 2022 at 01:57:42PM +0300, Andy Shevchenko wrote:
+> > > > > It's not fully correct to take a const parameter pointer to a struct
+> > > > > and return a non-const pointer to a member of that struct.
+> > > > >
+> > > > > Instead, introduce a const version of the dev_fwnode() API which takes
+> > > > > and returns const pointers and use it where it's applicable.
+> > > > >
+> > > > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
+> > > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > ---
+> > > > >  drivers/base/property.c  | 11 +++++++++--
+> > > > >  include/linux/property.h |  3 ++-
+> > > > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > > > > index 4d6278a84868..699f1b115e0a 100644
+> > > > > --- a/drivers/base/property.c
+> > > > > +++ b/drivers/base/property.c
+> > > > > @@ -17,13 +17,20 @@
+> > > > >  #include <linux/property.h>
+> > > > >  #include <linux/phy.h>
+> > > > >
+> > > > > -struct fwnode_handle *dev_fwnode(const struct device *dev)
+> > > > > +struct fwnode_handle *dev_fwnode(struct device *dev)
+> > > > >  {
+> > > > >   return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > >           of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(dev_fwnode);
+> > > > >
+> > > > > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
+> > > > > +{
+> > > > > + return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > > +         of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
+> > > >
+> > > > Ick, no, this is a mess.
+> > > >
+> > > > Either always return a const pointer, or don't.  Ideally always return a
+> > > > const pointer, so all we really need is:
+> > > >
+> > > > const struct fwnode_handle *dev_fwnode(const struct device *dev);
+> > > >
+> > > > right?
+> > > >
+> > > > Yes, it will take some unwinding backwards to get there, but please do
+> > > > that instead of having 2 different functions where the parameter type is
+> > > > part of the function name.  This isn't the 1980's...
+> > >
+> > > The problem with this approach is that sometimes non-const fwnode_handles
+> > > are needed. On OF, for instance, anything that has something to do with
+> > > refcounting requires this. Software nodes as well.
+> >
+> > If they are writable, then yes, let's keep them writable, and not create
+> > two function paths where we have to pick and choose.
+> >
+> > > One option which I suggested earlier was to turn dev_fwnode() into a macro
+> > > and use C11 _Generic() to check whether the device is const or not.
+> >
+> > As much fun as that would be, I don't think it would work well.
+> >
+> > Although, maybe it would, have an example of how that would look?
+> >
+> > I ask as I just went through a large refactoring of the kobject layer to
+> > mark many things const * and I find it a bit "sad" that functions like
+> > this:
+> >         static inline struct device *kobj_to_dev(const struct kobject *kobj)
+> >         {
+> >                 return container_of(kobj, struct device, kobj);
+> >         }
+> > have the ability to take a read-only pointer and spit out a writable one
+> > thanks to the pointer math in container_of() with no one being the
+> > wiser.
+> 
+> Well, is this really a problem?
+> 
+> After all, if an immutable structure is embedded in another one, that
+> doesn't automatically imply that the containing structure has to be
+> immutable too.  Hence, a const pointer to the inner structure doesn't
+> automatically yield a const pointer to the outer one.
 
-> All uses of ftrace_graph_caller_old() were removed by
-> commit d3c61619568c ("ARM: 8788/1: ftrace: remove old
-> mcount support"), so remove the declaration, too.
->
-> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+That is true, but it's a _huge_ hint that we are throwing away here,
+sometimes without even really realizing it.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Ideally, if you have a const * passed into container_of() you would get
+a const * back, and then, if you _really_ know what you are doing with
+it, feel free to cast it away.  That cast would be a huge sign that
+"hey, something is happening here" and allow people to at least notice
+it, while today, we loose all of that.
 
-Please put this into Russell's patch tracker.
+Let me play around with this a bit.  In talking with the Rust Linux
+developers, a lot of "how do we know if this pointer is immutable or
+not" discussions happen.  With many of our apis, right now we don't know
+that, and perhaps that should change as it would make things not
+necessarily more "safe", but more "obvious" as to what both the intent
+is, and what is actually happening to pointers at times.
 
-Yours,
-Linus Walleij
+Especially in the mess that is kobjects and struct device where we cast
+pointers around with abandon :)
+
+thanks,
+
+greg k-h
