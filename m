@@ -2,134 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF415F2FCD
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 13:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116855F2FDE
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 13:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiJCLr7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Oct 2022 07:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S229770AbiJCLyz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Oct 2022 07:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiJCLr7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 07:47:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DFE33371
-        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 04:47:57 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ofJvP-0003qp-S8; Mon, 03 Oct 2022 13:47:55 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ofJvO-0004gu-9S; Mon, 03 Oct 2022 13:47:54 +0200
-Date:   Mon, 3 Oct 2022 13:47:54 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        kieran@linuxembedded.co.uk, balbi@kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH] uvc: gadget: uvc: Defer uvcg_complete_buffer() until
- .complete()
-Message-ID: <20221003114754.GA32650@pengutronix.de>
-References: <20221003101627.144026-1-dan.scally@ideasonboard.com>
+        with ESMTP id S229698AbiJCLyv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 07:54:51 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1338413DF5;
+        Mon,  3 Oct 2022 04:54:50 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id mg6so1449864qvb.10;
+        Mon, 03 Oct 2022 04:54:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1lkZFjQAri374KxB7zXDUvCKUxqNzBm83pCNxaD3+Rg=;
+        b=ewdLXwwaqREFoIQp5aUf52j5ZFe/t5gFNEhDrB0isigfW90zpDT7wgWgkOvkPiq1Mq
+         iYZp9iZj9vBNkRUvFinqU3Mus8PLoi84XdbYjHxGt7WugYujrxEvm7M95SiMwnMRWyha
+         bglLJyn/b28PV/z69I0dBioUxERx/LNyVyHiC5KgUbDli9FmVukuv3E876socrAIqwjq
+         tx2v1IsnmYDTuoG2eOSpMSVjg8G4FbSqbPQnRlBisz7Vkzq9N6frk35k8Gn+lJJZXHdX
+         y0wIY78lu/I3s7ZaLq/aCMnQKXPezq190x1pwQ/LCMDb97N9M3cXjN1JLm9g+lEks89N
+         MVyg==
+X-Gm-Message-State: ACrzQf3/+acmcBy/3B3iOKqYyFDs6YCL4iz31PqDDXvKfv1o+EpXVl1b
+        2MxEICKRFnlqa30ffRvIhYzLLwlXNc0dgw0Uulg=
+X-Google-Smtp-Source: AMsMyM7OsF5YlBA77p2Vey2B2ZDeKYFYlfHfTy13MIDE9YR22EJGB10E/7qRuxxGwywPFEQ740BEkbrflHD8xOWCM+o=
+X-Received: by 2002:ad4:5beb:0:b0:4af:96ab:21e5 with SMTP id
+ k11-20020ad45beb000000b004af96ab21e5mr15845072qvc.85.1664798088934; Mon, 03
+ Oct 2022 04:54:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bp/iNruPH9dso1Pn"
-Content-Disposition: inline
-In-Reply-To: <20221003101627.144026-1-dan.scally@ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
+ <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
+ <YzQqcFZtJn90URrJ@kroah.com> <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com> <YzcAh/xtqQM1Qin4@kroah.com>
+In-Reply-To: <YzcAh/xtqQM1Qin4@kroah.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 3 Oct 2022 13:54:37 +0200
+Message-ID: <CAJZ5v0hHPjSN-369pagN3Mnxd1yvc6+4YGb0Kpx3=+aahV=AmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
+ dev_fwnode_const() separate
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---bp/iNruPH9dso1Pn
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Oct 03, 2022 at 11:16:27AM +0100, Daniel Scally wrote:
->Calling uvcg_complete_buffer() from uvc_video_encode_isoc() sometimes
->causes the final isoc packet for a video frame to be delayed long
->enough to cause the USB controller to drop it. The first isoc packet
->of the next video frame is then received by the host, which interprets
->the toggled FID bit correctly such that the stream continues without
->interruption, but the first frame will be missing the last isoc
->packet's worth of bytes.
+On Fri, Sep 30, 2022 at 4:43 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
->To fix the issue delay the call to uvcg_complete_buffer() until the
->usb_request's .complete() callback, as already happens when the data
->is encoded via uvc_video_encode_isoc_sg().
+> On Fri, Sep 30, 2022 at 02:30:53PM +0000, Sakari Ailus wrote:
+> > Hi Greg,
+> >
+> > On Wed, Sep 28, 2022 at 01:05:20PM +0200, Greg Kroah-Hartman wrote:
+> > > On Wed, Sep 28, 2022 at 01:57:42PM +0300, Andy Shevchenko wrote:
+> > > > It's not fully correct to take a const parameter pointer to a struct
+> > > > and return a non-const pointer to a member of that struct.
+> > > >
+> > > > Instead, introduce a const version of the dev_fwnode() API which takes
+> > > > and returns const pointers and use it where it's applicable.
+> > > >
+> > > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > ---
+> > > >  drivers/base/property.c  | 11 +++++++++--
+> > > >  include/linux/property.h |  3 ++-
+> > > >  2 files changed, 11 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > > > index 4d6278a84868..699f1b115e0a 100644
+> > > > --- a/drivers/base/property.c
+> > > > +++ b/drivers/base/property.c
+> > > > @@ -17,13 +17,20 @@
+> > > >  #include <linux/property.h>
+> > > >  #include <linux/phy.h>
+> > > >
+> > > > -struct fwnode_handle *dev_fwnode(const struct device *dev)
+> > > > +struct fwnode_handle *dev_fwnode(struct device *dev)
+> > > >  {
+> > > >   return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > >           of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(dev_fwnode);
+> > > >
+> > > > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
+> > > > +{
+> > > > + return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > > > +         of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
+> > >
+> > > Ick, no, this is a mess.
+> > >
+> > > Either always return a const pointer, or don't.  Ideally always return a
+> > > const pointer, so all we really need is:
+> > >
+> > > const struct fwnode_handle *dev_fwnode(const struct device *dev);
+> > >
+> > > right?
+> > >
+> > > Yes, it will take some unwinding backwards to get there, but please do
+> > > that instead of having 2 different functions where the parameter type is
+> > > part of the function name.  This isn't the 1980's...
+> >
+> > The problem with this approach is that sometimes non-const fwnode_handles
+> > are needed. On OF, for instance, anything that has something to do with
+> > refcounting requires this. Software nodes as well.
 >
->Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->---
-> drivers/usb/gadget/function/uvc_video.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
+> If they are writable, then yes, let's keep them writable, and not create
+> two function paths where we have to pick and choose.
 >
->diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/=
-function/uvc_video.c
->index c00ce0e91f5d..041819a655ed 100644
->--- a/drivers/usb/gadget/function/uvc_video.c
->+++ b/drivers/usb/gadget/function/uvc_video.c
->@@ -194,6 +194,7 @@ static void
-> uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
-> 		struct uvc_buffer *buf)
-> {
->+	struct uvc_request *ureq =3D req->context;
-> 	void *mem =3D req->buf;
-> 	int len =3D video->req_size;
-> 	int ret;
->@@ -213,7 +214,7 @@ uvc_video_encode_isoc(struct usb_request *req, struct =
-uvc_video *video,
-> 		video->queue.buf_used =3D 0;
-> 		buf->state =3D UVC_BUF_STATE_DONE;
-> 		list_del(&buf->queue);
->-		uvcg_complete_buffer(&video->queue, buf);
->+		ureq->last_buf =3D buf;
-> 		video->fid ^=3D UVC_STREAM_FID;
-> 	}
-> }
->--=20
->2.34.1
+> > One option which I suggested earlier was to turn dev_fwnode() into a macro
+> > and use C11 _Generic() to check whether the device is const or not.
+>
+> As much fun as that would be, I don't think it would work well.
+>
+> Although, maybe it would, have an example of how that would look?
+>
+> I ask as I just went through a large refactoring of the kobject layer to
+> mark many things const * and I find it a bit "sad" that functions like
+> this:
+>         static inline struct device *kobj_to_dev(const struct kobject *kobj)
+>         {
+>                 return container_of(kobj, struct device, kobj);
+>         }
+> have the ability to take a read-only pointer and spit out a writable one
+> thanks to the pointer math in container_of() with no one being the
+> wiser.
 
-Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Well, is this really a problem?
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+After all, if an immutable structure is embedded in another one, that
+doesn't automatically imply that the containing structure has to be
+immutable too.  Hence, a const pointer to the inner structure doesn't
+automatically yield a const pointer to the outer one.
 
---bp/iNruPH9dso1Pn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmM6y+cACgkQC+njFXoe
-LGTnuA/6A8Kkdhq+RFFSJFVUS1DiV2sF2rHnO33NxvQ42GcV1JoMUHBI0KeDvo01
-do+4NmMQgPfqIcdQLVvHt7Zjat95nTMmX0uLA6Q2vL9ibEsRNwOgJK7Y/torOyyn
-J9QwkclypqjEJTRy1pQQdsttQ2BxzttieV1pLdoy1Tk36jNH6Q6RAtHJNdz9mLxY
-zVUqXmOEPyXsfTji+foHt0uNA2TxwYk3bAE0i+aMCRzWca70PYoIJKqbJlR2iLm2
-FTSBbH6lH3ElSGI5Jgzbjk3LkMTwC2sznxO8M2OFNU79Gh6ylZ9+H/bQ5lXgFRrC
-l1biRrVjSYWpIjprQienueYxMS2fOeMBhzpiw4hgyIqr3Tv5aLT0UIpLqRTU2llw
-6KuV1VNVZPo3DuMrtKMirueFHyPmBjceZNwpj09nqLPjxZZicl4XOmzt6lUFfU5h
-aNkVoUVFwWlS9Wvcv7ntgDqb9rDpxtqQE9DWceo468hySZYBXSFcn/F7zuOp63WY
-zL+v6nJyvW3CncN6lGNFWBUkjIq5e04rN1a4f9lkUWZlFhh56eBKFgBK7xygN6jZ
-Cx5uXmb5VukOlduthjHl9ug5URYt2UxEvIASvS9JfcA+RVLmb43daQTFkaby0V8q
-g5vvpXjXfwX15Js6DTwnmJ59YLwUj6/iG92ctwkiGGIWGm/kT2o=
-=JAQ+
------END PGP SIGNATURE-----
-
---bp/iNruPH9dso1Pn--
+> > Being able to turn struct device pointers const is certainly not worth
+> > violating constness properties.
+>
+> Agreed, but we can do better...
