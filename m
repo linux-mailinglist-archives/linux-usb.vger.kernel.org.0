@@ -2,54 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA895F2899
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 08:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E3C5F2BA3
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 10:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiJCGjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Oct 2022 02:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S229675AbiJCIXT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Oct 2022 04:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiJCGjX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 02:39:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853386460;
-        Sun,  2 Oct 2022 23:39:22 -0700 (PDT)
+        with ESMTP id S230134AbiJCIWu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 04:22:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4014B4E84D
+        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 00:57:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 205D560F5B;
-        Mon,  3 Oct 2022 06:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D81C433D6;
-        Mon,  3 Oct 2022 06:39:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED68D60FAC
+        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 07:56:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C23CC43144
+        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 07:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664779161;
-        bh=qabvN0z6GgbotKOKr/SpCJp2JvDb4dG+SOgVYMhWWzA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qcsyqg/BfM7r9ZEOvDoIP/MzjK4Fsx4XSquO5J2jDgbTXnBwUJDc3VXXbopqsnAH4
-         rrNVZVt0btu++ZB6q1Cp0/eyt4mlfqYLlI4jP5JPkY5Ew4coYI9FAbpLInCLZ651po
-         Ycp18LhJXYgLN9GIUPtYPAoNgmbbHV5X1uD4UtxAFj4fSilBM28osFsofgalzTPh/E
-         0MAM4PD4xSmTjYYFZgELvoTxm5sJF/8Cojrf3MTNP+qmkx04bQOFllH/LLaRYXouug
-         oCLWWndQw2PO/pYJo556kQ7kvMGdCEUi/+8I+SjMjQchUa/Oj3YsqSPYLZbQFagGzc
-         6R6zNULMnqIvg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ofF6o-0006gk-7m; Mon, 03 Oct 2022 08:39:22 +0200
-Date:   Mon, 3 Oct 2022 08:39:22 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        Juergen Stuber <starblue@users.sourceforge.net>
-Subject: Re: [PATCH] USB: make devnode() callback in usb_class_driver take a
- const *
-Message-ID: <YzqDmvohy9shngxy@hovoldconsulting.com>
-References: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
+        s=k20201202; t=1664783767;
+        bh=bxhbxqxnNwuY3lcAulqN23emeWqXUT8gD/RM78TzfMY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=piI6522HlUkABw3sLcauc7ym4d0wMOvepQTcNJEJ5ZJTyAnM4ClW9LiZDrQDNFJ0J
+         iMLJSW2axQ6mHJUtC3LeP8EHyGVbKKo6TQl1of46Fg61nDhcX5FD7QA8e+FpW2MrBO
+         PiMpiXsOyG/rKJ50XO/02xL5gJbvuFZvnLBWlG8vW/TaLEHRaCARzZhAq355PwCDeX
+         ov87ZB213NbGwS3ZifLu7PvbjC8WUYcR6Dn/qTdFgZQIEMNyj4SWyLHBSl2rU6jQIH
+         sNbtQq1jNDPuDgrpHc3wKTMxzuw48p4wXYWNuwNE2ZwOvIaCv1nJ1NG0EqmYeSZ/AD
+         yVQM3UersTnQA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 4CF1FC433E6; Mon,  3 Oct 2022 07:56:07 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 210425] Plugging in or unplugging power cord while system is
+ suspended does not trigger updates
+Date:   Mon, 03 Oct 2022 07:56:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: heikki.krogerus@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-210425-208809-YoTq7dRf6d@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
+References: <bug-210425-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,26 +70,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 06:51:28PM +0200, Greg Kroah-Hartman wrote:
-> With the changes to the driver core to make more pointers const, the USB
-> subsystem also needs to be modified to take a const * for the devnode
-> callback so that the driver core's constant pointer will also be
-> properly propagated.
-> 
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Cc: Pete Zaitcev <zaitcev@redhat.com>
-> Cc: Juergen Stuber <starblue@users.sourceforge.net>
-> Cc: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/hid/usbhid/hiddev.c     | 2 +-
->  drivers/usb/class/usblp.c       | 2 +-
->  drivers/usb/misc/iowarrior.c    | 2 +-
->  drivers/usb/misc/legousbtower.c | 2 +-
->  include/linux/usb.h             | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
 
-Looks correct and complete.
+--- Comment #38 from Heikki Krogerus (heikki.krogerus@linux.intel.com) ---
+Maybe... Okay, I'll resend the fix later this week.
+I'll test it one more time first.
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
