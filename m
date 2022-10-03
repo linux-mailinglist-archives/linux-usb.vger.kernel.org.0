@@ -2,101 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B8F5F2FFD
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 14:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFCA5F3015
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 14:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiJCMBJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Oct 2022 08:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S229505AbiJCMRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Oct 2022 08:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJCMBH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 08:01:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4BD1C12C;
-        Mon,  3 Oct 2022 05:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664798463; x=1696334463;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bi6E7TQrLt6qes/7MH/ji+3zlO4nhqdLIZUO3ybFEYA=;
-  b=d/FQ53DzcrsGj7YqJDnTralcUYV2EQiWgzg8c9sCV682X1QMBxFuoITL
-   cHokvPOrYqV+CZvE8LJ8oqoJojGoLQKzGDf2iU8t/Rj/VQBLyWanH8xeY
-   QxYfCIPITA48PDwBUAdzEP/5DwLLsbrb1OuBjqR2lKMDSLluMNn4FaGX+
-   r1Tf3UjrJdCZTZKcGqTZeDss0cHVAPwbXLsY4CbnTPZPTydrWQC1xnOV2
-   DM5e4pkzPm08lPFWVJuI01XvlpmuJyofgXxbx3Dhes1YjnPkCzFMq9ccD
-   Ji4NW3RcZ1ct0X3cgULpAHY3sjiNoi5lOyq1ri/t5NjR8MUVAhMPSI6jp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="302593831"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="302593831"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 05:01:02 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10488"; a="623506344"
-X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
-   d="scan'208";a="623506344"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 05:00:59 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 2AD742033F;
-        Mon,  3 Oct 2022 15:00:57 +0300 (EEST)
-Date:   Mon, 3 Oct 2022 12:00:57 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>
-Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
- dev_fwnode_const() separate
-Message-ID: <YzrO+ZNmpKetdIPU@paasikivi.fi.intel.com>
-References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
- <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
- <YzQqcFZtJn90URrJ@kroah.com>
- <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
- <YzcAh/xtqQM1Qin4@kroah.com>
- <CAJZ5v0hHPjSN-369pagN3Mnxd1yvc6+4YGb0Kpx3=+aahV=AmQ@mail.gmail.com>
+        with ESMTP id S229644AbiJCMRf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 08:17:35 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3E8371A1
+        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 05:17:33 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id m3so14277442eda.12
+        for <linux-usb@vger.kernel.org>; Mon, 03 Oct 2022 05:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=UhWZV/mad6F4RpZvlHXFs+zp/JmucbtO6Fa9rpbOMEk=;
+        b=xkyPQRCYvXGiLcBvY9yC5upyusGgl/Pv3MufgQUsf9USbnVo9raFRMfG6EjJJk/wFE
+         tl0tWn7rkOIQ/XiH2EerwSC6Ran7LO/QW30Neqa0vT/M+U1xgIow98QDUfjds+tlD5aO
+         k1nkisLaX+3JU5bE3FkIjA4DCew7aQHqgHSgKolrPgltlM6WFixfDW6kIJ8bXth0RZfs
+         hfrH/d4cPAbrNkCtpZI+XVv5qJxkuSw6GQls4cr+h2QmOJC/owme92Nc2NXktmGkA8f/
+         KEt4DmiiBxlloKnt3NBCr/Wbx4fP395aSDX5qSZiRPQw25Hd5o/tFNlGkauf/M+xOISZ
+         2+sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=UhWZV/mad6F4RpZvlHXFs+zp/JmucbtO6Fa9rpbOMEk=;
+        b=ZiMMjkV8K1Hd9mxpM8T1cSYU3kcDRnznIs9gsZoOKep6R+p/LdFgHE/wtg/6r+YtO1
+         F/Em+HmEArmOxxlX45CrnbFRAwqPpHmxzJRckF0XeKmLaJETR9y8rW+ClRInBMZeQvcZ
+         LVAphMfrOwlCKSWy3BMzmUwqp0urDGnw5bLYUHXmuR0c1UpcEb5pdw7517C3R0EGz75h
+         RAt6Lea/RR9bl9jClFeiBYTw36DhF/5GAKzOp1z/NJVNmbrhXn7wJQyTowO3SpOw9HeH
+         8u+rEMmbSoUwZGuobqsiUhNy129YvBYmUi8poP1UtcPu6AzsyANjayHbcgQXFAlPKUFL
+         yzCA==
+X-Gm-Message-State: ACrzQf2LTnePISWOXNwS1vrEAFbGqSALV4FhP2o2t7wI3zTbU9rJkkJz
+        SxgHBepbipZuVV30543B2n/GRXSAESGLQNyYqu7LWQ==
+X-Google-Smtp-Source: AMsMyM5bXQWrSdbav4mhiBEbAe2E6/Y8TidOXR2A9WaFyx6N9CtVVV3NU2QBrVpCbj9WTvew7OeZfg88TE8PBCP3C/Y=
+X-Received: by 2002:a05:6402:2690:b0:452:3a85:8b28 with SMTP id
+ w16-20020a056402269000b004523a858b28mr17987078edd.158.1664799452346; Mon, 03
+ Oct 2022 05:17:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hHPjSN-369pagN3Mnxd1yvc6+4YGb0Kpx3=+aahV=AmQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220914034615.1240860-1-cuigaosheng1@huawei.com> <20220914034615.1240860-4-cuigaosheng1@huawei.com>
+In-Reply-To: <20220914034615.1240860-4-cuigaosheng1@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 3 Oct 2022 14:17:21 +0200
+Message-ID: <CACRpkdZPB9hm7kMUzpMdNu9RP94vgvxkrQ70OGb_Qm8k--2zsQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] ARM: ftrace: remove unused ftrace_graph_caller_old() declaration
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, linux@armlinux.org.uk,
+        tony@atomide.com, bcousson@baylibre.com, paul@pwsan.com,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        stefan@agner.ch, rmk+kernel@armlinux.org.uk, broonie@kernel.org,
+        sebastian.reichel@collabora.co.uk,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rafael,
+On Wed, Sep 14, 2022 at 5:46 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
 
-On Mon, Oct 03, 2022 at 01:54:37PM +0200, Rafael J. Wysocki wrote:
-> > I ask as I just went through a large refactoring of the kobject layer to
-> > mark many things const * and I find it a bit "sad" that functions like
-> > this:
-> >         static inline struct device *kobj_to_dev(const struct kobject *kobj)
-> >         {
-> >                 return container_of(kobj, struct device, kobj);
-> >         }
-> > have the ability to take a read-only pointer and spit out a writable one
-> > thanks to the pointer math in container_of() with no one being the
-> > wiser.
-> 
-> Well, is this really a problem?
-> 
-> After all, if an immutable structure is embedded in another one, that
-> doesn't automatically imply that the containing structure has to be
-> immutable too.  Hence, a const pointer to the inner structure doesn't
-> automatically yield a const pointer to the outer one.
+> All uses of ftrace_graph_caller_old() were removed by
+> commit d3c61619568c ("ARM: 8788/1: ftrace: remove old
+> mcount support"), so remove the declaration, too.
+>
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 
-I think in that case it'd be better, to at least make an informed decision
-on that instead of just dropping the const qualifier.
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
--- 
-Regards,
+Please put this into Russell's patch tracker.
 
-Sakari Ailus
+Yours,
+Linus Walleij
