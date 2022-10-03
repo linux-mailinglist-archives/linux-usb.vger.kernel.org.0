@@ -2,133 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609FF5F27E8
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 05:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA895F2899
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Oct 2022 08:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiJCDxg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Oct 2022 23:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S229612AbiJCGjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Oct 2022 02:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJCDxd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Oct 2022 23:53:33 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FEA2714D
-        for <linux-usb@vger.kernel.org>; Sun,  2 Oct 2022 20:53:31 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id d24-20020a05660225d800b006a466ec7746so6165793iop.3
-        for <linux-usb@vger.kernel.org>; Sun, 02 Oct 2022 20:53:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5UX8UvFELFPf+hJe9Pw+hJuyDg2PnF+1lGkZkcSAJUE=;
-        b=NMu76TGiRSGmjz8RCdakBgQkHD/FvQWT+3MNRQvksaTB/7oA7yZJ/Q3bAxCYcbKsHl
-         fNALUGYjbW9Ti1wIZe1NSIQ4LpPqY5KfRaFORAncVUfElOB3i/7dvo0NZhgE0G+BtdFG
-         duf2xyE1OA1yjwMtibVOpIFJ6Mr0E0hgLxtSQs3QKraS7yQSVz84oB4EoF0wmwa2IuVQ
-         AJgzXtQa7EMoFTM4kKco8kHYboxudQWZbDtYtlN/VOvlgbrET3rJp2WKhvKypmO2IBSL
-         ZqwQbzqw4AsHDWB9RlcCoXA3WspzGDGHtaud5bJd1/fatZo/uAimUfGrbqDsB7Zt2II6
-         qJig==
-X-Gm-Message-State: ACrzQf2efZFn7CU0kq2zoAxKEjbRyntwQz8skF+4stR7RRRarrjUJ8gx
-        RA46lFjiBH04f3iCakPzWX/HXyKyOU9ziBYJtzA4WRUBRbAK
-X-Google-Smtp-Source: AMsMyM4tIse+vTF2vTGYf88YS+ZbvTLfYLud4mHfj6888dXkC8/x211A1QvMeXbgJeV5vxTyx6A1rFozzZLDb7cJk/Pxi6ZdLL+I
+        with ESMTP id S229521AbiJCGjX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 02:39:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853386460;
+        Sun,  2 Oct 2022 23:39:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 205D560F5B;
+        Mon,  3 Oct 2022 06:39:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D81C433D6;
+        Mon,  3 Oct 2022 06:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664779161;
+        bh=qabvN0z6GgbotKOKr/SpCJp2JvDb4dG+SOgVYMhWWzA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qcsyqg/BfM7r9ZEOvDoIP/MzjK4Fsx4XSquO5J2jDgbTXnBwUJDc3VXXbopqsnAH4
+         rrNVZVt0btu++ZB6q1Cp0/eyt4mlfqYLlI4jP5JPkY5Ew4coYI9FAbpLInCLZ651po
+         Ycp18LhJXYgLN9GIUPtYPAoNgmbbHV5X1uD4UtxAFj4fSilBM28osFsofgalzTPh/E
+         0MAM4PD4xSmTjYYFZgELvoTxm5sJF/8Cojrf3MTNP+qmkx04bQOFllH/LLaRYXouug
+         oCLWWndQw2PO/pYJo556kQ7kvMGdCEUi/+8I+SjMjQchUa/Oj3YsqSPYLZbQFagGzc
+         6R6zNULMnqIvg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ofF6o-0006gk-7m; Mon, 03 Oct 2022 08:39:22 +0200
+Date:   Mon, 3 Oct 2022 08:39:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Pete Zaitcev <zaitcev@redhat.com>,
+        Juergen Stuber <starblue@users.sourceforge.net>
+Subject: Re: [PATCH] USB: make devnode() callback in usb_class_driver take a
+ const *
+Message-ID: <YzqDmvohy9shngxy@hovoldconsulting.com>
+References: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e714:0:b0:6a1:35af:82dc with SMTP id
- b20-20020a6be714000000b006a135af82dcmr7585539ioh.205.1664769211197; Sun, 02
- Oct 2022 20:53:31 -0700 (PDT)
-Date:   Sun, 02 Oct 2022 20:53:31 -0700
-In-Reply-To: <00000000000068e76205e2ec0e6b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000776f5005ea1949d8@google.com>
-Subject: Re: [syzbot] WARNING in match_held_lock
-From:   syzbot <syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        llvm@lists.linux.dev, longman@redhat.com, mingo@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Sat, Oct 01, 2022 at 06:51:28PM +0200, Greg Kroah-Hartman wrote:
+> With the changes to the driver core to make more pointers const, the USB
+> subsystem also needs to be modified to take a const * for the devnode
+> callback so that the driver core's constant pointer will also be
+> properly propagated.
+> 
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: Pete Zaitcev <zaitcev@redhat.com>
+> Cc: Juergen Stuber <starblue@users.sourceforge.net>
+> Cc: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/hid/usbhid/hiddev.c     | 2 +-
+>  drivers/usb/class/usblp.c       | 2 +-
+>  drivers/usb/misc/iowarrior.c    | 2 +-
+>  drivers/usb/misc/legousbtower.c | 2 +-
+>  include/linux/usb.h             | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
 
-HEAD commit:    a962b54e162c Merge tag 'i2c-for-6.0-rc8' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11833a82880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=755695d26ad09807
-dashboard link: https://syzkaller.appspot.com/bug?extid=6c67d4224af196c99976
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b51e14880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b33c68880000
+Looks correct and complete.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c0d6002d7b4b/disk-a962b54e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/cf0a29408406/vmlinux-a962b54e.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com
-
-ntfs3: loop3: Different NTFS' sector size (1024) and media sector size (512)
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(!hlock->nest_lock)
-WARNING: CPU: 0 PID: 5565 at kernel/locking/lockdep.c:5135 match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
-Modules linked in:
-CPU: 0 PID: 5565 Comm: syz-executor151 Not tainted 6.0.0-rc7-syzkaller-00250-ga962b54e162c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
-Code: e8 b8 c4 7a fa 85 c0 74 e4 8b 05 26 e5 5e 04 85 c0 75 da 48 c7 c6 60 ac ec 89 48 c7 c7 e0 a8 ec 89 89 44 24 04 e8 45 e7 ba ff <0f> 0b 8b 44 24 04 eb bd 66 66 2e 0f 1f 84 00 00 00 00 00 41 57 41
-RSP: 0018:ffffc900058c79d8 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: ffff88807e390aa0 RCX: 0000000000000000
-RDX: ffff88807e390000 RSI: ffffffff8161f2a8 RDI: fffff52000b18f2d
-RBP: ffffffff8bf89640 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000002 R11: 0000000000000001 R12: ffff88807e390000
-R13: ffff88807e390a78 R14: 00000000ffffffff R15: ffff88807e390aa0
-FS:  0000555556d9c300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbbd6497056 CR3: 0000000016c2f000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- __lock_is_held kernel/locking/lockdep.c:5407 [inline]
- lock_is_held_type+0xa7/0x140 kernel/locking/lockdep.c:5709
- lock_is_held include/linux/lockdep.h:283 [inline]
- rcu_read_lock_sched_held+0x3a/0x70 kernel/rcu/update.c:125
- trace_lock_release include/trace/events/lock.h:69 [inline]
- lock_release+0x560/0x780 kernel/locking/lockdep.c:5677
- __raw_spin_unlock include/linux/spinlock_api_smp.h:141 [inline]
- _raw_spin_unlock+0x12/0x40 kernel/locking/spinlock.c:186
- spin_unlock include/linux/spinlock.h:389 [inline]
- inode_sb_list_del fs/inode.c:505 [inline]
- evict+0x2aa/0x6b0 fs/inode.c:654
- iput_final fs/inode.c:1748 [inline]
- iput.part.0+0x55d/0x810 fs/inode.c:1774
- iput+0x58/0x70 fs/inode.c:1764
- ntfs_fill_super+0x2e89/0x37f0 fs/ntfs3/super.c:1190
- get_tree_bdev+0x440/0x760 fs/super.c:1323
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbbd6459e7a
-Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 c8 03 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd6a35b568 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fbbd6459e7a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd6a35b580
-RBP: 00007ffd6a35b580 R08: 00007ffd6a35b5c0 R09: 00007ffd6a35b5c0
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
-R13: 00007ffd6a35b5c0 R14: 000000000000010e R15: 0000000020001b50
- </TASK>
-
+Reviewed-by: Johan Hovold <johan@kernel.org>
