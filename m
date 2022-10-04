@@ -2,68 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884D85F42BD
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Oct 2022 14:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EFE5F437F
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Oct 2022 14:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiJDMLV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Oct 2022 08:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
+        id S229942AbiJDMtq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Oct 2022 08:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJDMLU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Oct 2022 08:11:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BCC13DEA;
-        Tue,  4 Oct 2022 05:11:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 585EDB81916;
-        Tue,  4 Oct 2022 12:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 920CFC433C1;
-        Tue,  4 Oct 2022 12:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664885473;
-        bh=L1vVhLYxkuI6o2rsPTxLZh+dFFA3mvTMk+Ki9D8adDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=17keS7AUWaQyo1ujOTVulXTep5iOw7iqxe6KGDOUGGq39fUtr10b1owceTk+hcip+
-         1ZZYcO1VmEQwXVRkM+APzDQ7+GEkDHwaK2YqTw1m7zJJnDJAWx/yE2xMhyKU2bYK5A
-         ouwuKZsMltwgq30tVdtOUT7gPqhQJ0RDx02w8O1I=
-Date:   Tue, 4 Oct 2022 14:11:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3 0/5] device property: Consitify a few APIs and
-Message-ID: <Yzwi3tyAv4IoZdGR@kroah.com>
-References: <20221004092129.19412-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S230353AbiJDMs6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Oct 2022 08:48:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B0E28736;
+        Tue,  4 Oct 2022 05:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664887618; x=1696423618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1JT9ySOAxREkl5rVt755tp0Zdidwg6Ck2XOSD5c+gW8=;
+  b=X3ROUXABLpQZbISb63l0tm93QT7xodF7Ijn1RuOU7CPlOvzv0stD1bOr
+   6YKyZxHTunArMvK4Gki1SdZxKiOMOW7eBQCiD/JzBAASGH0j60BNywYlh
+   auMgbaysf6UuL3gVvRA/l70+VCIvf9lClKe5HvoznbqOgHidIAoxKO2Ka
+   r3DDGmHMztvuPUUz8qAQelefFUuWzMINxku0zj2GM7ZZp+Pd9X6BXwPLv
+   dtdAqKfByC4K6V/of7OuBK+ViWQdFInvaIi1laKR40hFGfwDIV7xRMEHA
+   ZV7ME+hI/SEVno9waz7890y5Nf3hXOH0cLgtD93vYNsoQoJf3O86ePker
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="283267142"
+X-IronPort-AV: E=Sophos;i="5.93,157,1654585200"; 
+   d="scan'208";a="283267142"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 05:46:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="575016238"
+X-IronPort-AV: E=Sophos;i="5.93,157,1654585200"; 
+   d="scan'208";a="575016238"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 04 Oct 2022 05:46:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 64E0317E; Tue,  4 Oct 2022 15:46:55 +0300 (EEST)
+Date:   Tue, 4 Oct 2022 15:46:55 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Sanju.Mehta@amd.com
+Subject: Re: [RFC 1/3] thunderbolt: Allow XHCI device links to enter runtime
+ pm
+Message-ID: <YzwrP7O/jTj/pyYI@black.fi.intel.com>
+References: <20221004041225.1462336-1-mario.limonciello@amd.com>
+ <20221004041225.1462336-2-mario.limonciello@amd.com>
+ <Yzu+yq07pIfpEbnG@black.fi.intel.com>
+ <d2e853fe-6e58-0056-ba3b-d04a2f97c6f1@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221004092129.19412-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d2e853fe-6e58-0056-ba3b-d04a2f97c6f1@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 12:21:24PM +0300, Andy Shevchenko wrote:
-> The property.h has inconsistency in how we annotate the parameters which
-> are not modified anyhow by the certain APIs. Also dev_fwnode() needs to
-> be rectified in sense of the handling const qualifier.
+On Tue, Oct 04, 2022 at 06:38:47AM -0500, Limonciello, Mario wrote:
+> On 10/4/2022 00:04, Mika Westerberg wrote:
+> > Hi Mario,
+> > 
+> > On Mon, Oct 03, 2022 at 11:12:23PM -0500, Mario Limonciello wrote:
+> > > Both on Intel's and AMD's USB4 designs it's important that the device
+> > > link to the XHCI controller used for tunneling is able to go into D3
+> > > for appropriate low power consumption features as well as for system
+> > > suspend states such as s0i3.
+> > > 
+> > > Historically this is accomplished by adding to a hardcoded list in the
+> > > XHCI driver, but this requires a change for every single platform.
+> > > 
+> > > We have a very good proxy that it's safe to do this since the firmware
+> > > has indicated the device link needs to be made.  So opt all XHCI
+> > > controllers with these device links into runtime PM.
+> > 
+> > This is good idea.
+> > 
+> > However, it misses the fact that we have FW CM as well in Intel
+> > integrated TBT platforms (ICL, TGL and ADL) and with those you don't
+> > have the device link (I think ADL has it for both, though) so we would
+> > still need to keep the list in xHCI.
 > 
-> This series improves the above with only a couple of APIs left for now
-> untouched (PHY, which I believe doesn't belong to property.h to begin
-> with).
+> Can you double check the firmware for ADL for me whether it has it for both?
+> I'll respin the series and drop at least the ICL and TGL reverts from patch
 
-Looks sane at first glance.  I'll look at it some more once 6.1-rc1 is
-out, thanks.
+Yes, ADL has it for both.
 
-greg k-h
+While doing that, I wonder if it would be easier to understand (and
+follow) if all this is done in the xHCI side? It can also look for the
+property and unblock runtime PM based on that.
