@@ -2,143 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E0B5F38FB
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Oct 2022 00:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653B75F3C03
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Oct 2022 06:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiJCW1E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Oct 2022 18:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S229713AbiJDEM7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Oct 2022 00:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiJCW0k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Oct 2022 18:26:40 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A5E5AC4C
-        for <linux-usb@vger.kernel.org>; Mon,  3 Oct 2022 15:23:15 -0700 (PDT)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D737E9DE;
-        Tue,  4 Oct 2022 00:23:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664835785;
-        bh=rueWrF+VXPQ+EmewABgIXqVOrRDoGnubcauJAWXztus=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=m/kAGPJivPmhgGyCSWQ5hEpGvGYuiR3NaUtxjATwGw/8rNO0xsBoeiTW72M3rsE9z
-         +pacb6cRfYFz1xwS7tFMWROtrn97PYhPSVkLcF74hk5ZuWsZnYur95slC6wG5eoXLr
-         BB2OyOOjdVIL0jIlEmKlxRoF0iBuDgLp8rmTVIeA=
-Message-ID: <0de496bf-fbc6-a2a1-a967-9a0580a7b1eb@ideasonboard.com>
-Date:   Mon, 3 Oct 2022 23:23:02 +0100
+        with ESMTP id S229623AbiJDEMz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Oct 2022 00:12:55 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8727026555;
+        Mon,  3 Oct 2022 21:12:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XmciiDgSgkDr7Uaum82RGzwAKITJ7zE7gzxOSBmK2KsGFsPPE6apKXTX2IgZY4JMR59t23paeE7neh5s48FXzciNX/gWLPWMJ375VbS9xnDjUezuoCf/ZtODEfBDUQ32+pLXl9uPrYsWWx51PHJ0+OnLBTzzpLd7/yq7xZQtUITXIc0aroenD+wNbEVL2UbMUrL9UaShfy6DOa4ZSzuwVuVy2ccDPtQje+ZUSEv9UDBIYXc6qomQ/rMYDlFHZoIhZjGZoIaGOgRXiEsu4rPFklF1IaoaorhvhlT3LvuV75MGEv526PiVLdh5hVg78JvroRZaNTXyrnNRrutVzWjo3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qi7i829oiHFBcyPE1g3ojmpjvAbPixBVfUWwMJ9Ic98=;
+ b=j20w9iQpgBRm0GtUQXsZKcLOfwKn3aw6lhPylt07DHd6vh5ik8aDhGoKukMZ3WKxhOA0dZExv8Ih7m1zujrVJcYOcOKM+NXTJjVTLR/TVlXd9Qb7HI7pMTOiQakkP8po811A3xFLy9Y7GIDTBhRpDx7O5TBA3zYCo+EJh8SHWwp/2bpFdLyiyo/5P6mDxnL/PLpHYCNuc96wk0LXSCL+G/34VMNNcp+i5BOcFAea03+1GHANFk1RftywBD7TexTZzcQGrQ3QYut2ltJD3/Wb+cGKyd0yjhk3pZn3yAnp580hePi5v7Lo928qKEI4vI7c4Rhxji5AkxAOiK+P5rMdyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qi7i829oiHFBcyPE1g3ojmpjvAbPixBVfUWwMJ9Ic98=;
+ b=SPEpqhOP6BFj6WoTXMhL8G22QCWLivFQgtKOhmTMud+fRtoasGZt4eEZb1UlV+5w31MuEylaLyHzSMGnp/Q1Jrqio4atUjHty4qAwARfpvCHqPbJSPw0lRyZ4/0AXt00i1bl7helN9Bi/Dkh2mrMhnFKpU2BgOIdz6HLTPEk53o=
+Received: from BN9PR03CA0140.namprd03.prod.outlook.com (2603:10b6:408:fe::25)
+ by PH7PR12MB7140.namprd12.prod.outlook.com (2603:10b6:510:200::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Tue, 4 Oct
+ 2022 04:12:45 +0000
+Received: from BN8NAM11FT080.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fe:cafe::74) by BN9PR03CA0140.outlook.office365.com
+ (2603:10b6:408:fe::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.30 via Frontend
+ Transport; Tue, 4 Oct 2022 04:12:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT080.mail.protection.outlook.com (10.13.176.82) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5676.17 via Frontend Transport; Tue, 4 Oct 2022 04:12:45 +0000
+Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 3 Oct
+ 2022 23:12:42 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <Sanju.Mehta@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [RFC 0/3] Enable runtime PM more broadly
+Date:   Mon, 3 Oct 2022 23:12:22 -0500
+Message-ID: <20221004041225.1462336-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        kieran@linuxembedded.co.uk, balbi@kernel.org,
-        gregkh@linuxfoundation.org, mgr@pengutronix.de
-References: <20221003101627.144026-1-dan.scally@ideasonboard.com>
- <Yzr/Htmws3eGa41v@p1g3>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH] uvc: gadget: uvc: Defer uvcg_complete_buffer() until
- .complete()
-In-Reply-To: <Yzr/Htmws3eGa41v@p1g3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT080:EE_|PH7PR12MB7140:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0511b7c1-5d63-4119-3b38-08daa5beb0f4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SVlqrUVKaFiIsMlTTAUzUd2XLv1N+OFLdpCp4wRpTUdyNt5Ks3HBaBKt4IH9djtCkPRl6s1gn/M2HMaP3urcuQY++KZ6rkK9znL6F5YgwlCbktWpEBaRymqTKXibGfmf4qM5aXiL9B9ko3cuwNwjLpg12c14IGsaKOuPOlnOEPb6XILd2CAx/s8yCSlKhPoS/a9PYceXpTw8HPMLc+FoAJyiO0r7PJBXCt7qTBIFsJpmiJ4NuMUZC1+yYVFC8/nnP8yxebEQ5k1UVVqeqQvkGyZYKeR3ZhlGrlk5yeiLK3Sr5lMQkfliKdt/xuo1mGwBWvXrKZHkq1ZoXO4UosmZ9FIemd97T7kGowRfTTJpjUgT2Dn796kH1s4+bxw1CU1LOFWNkP2p26l3v034BVtVwyPNT9IgocQB8J3sQLobrk5LhQPrpsmd0XaWZHyMvhJLUnRD2PlTohGSyPSd5v69P8Z1fWKQ7QDgyMPYL0t6tiAQaOS3l4e6LxxCtg9HYxfj1CbWFXIUfTsp5jqatUI3oZt/6cyHR7xgLfNj+IM+Qe/4Ojcm4H/450fdiem7n8fb16oxeMYaZPpwXf64A6qPMhWDCOAhj1N891aiIc7bC7mWN8wUouVyJCy2IhgM0/J+vpnOVyglhQYiqTRE1xfmmPs3xGZtp7ROTXyua6iH7q/5B1qsXjRRKgdXX03NwtW5SB8Zxfb5/9ZEznyEXRPcAucpnG8LSy29GYNN2WrS8Tb56LSDnEPKUyHqEl6TOd30/PsA1zqv5FS+IrWrcWFNm0ng/qo5uwmt6XOvpzKVqArsJ+O/czvpVi97nqL7ErO4
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199015)(36840700001)(40470700004)(46966006)(40460700003)(82740400003)(36860700001)(16526019)(81166007)(478600001)(36756003)(82310400005)(40480700001)(4326008)(41300700001)(8676002)(356005)(6666004)(26005)(186003)(5660300002)(70206006)(86362001)(54906003)(8936002)(83380400001)(70586007)(2616005)(316002)(1076003)(6916009)(44832011)(336012)(426003)(47076005)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 04:12:45.6730
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0511b7c1-5d63-4119-3b38-08daa5beb0f4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT080.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7140
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan
+Currently every time a vendor introduces a new USB4 controller changes
+need to be made in xhci-pci to add the PCI IDs representing the XHCI
+controller used for tunneling.
 
-On 03/10/2022 16:26, Dan Vacura wrote:
-> Hi Dan,
->
-> Looks like I did a superset of your change here:
-> https://lore.kernel.org/all/20220926195307.110121-2-w36195@motorola.com/
+Due to low power management needs every single integrated Intel and
+AMD controller have needed to be added.  As we already know which
+controller is used for tunneling by the device links specified in
+ACPI tables, this is a very good heuristic.
 
+This series uses that as a heuristic, pulls out all the IDs added to
+xhci-pci and then adds the new IDs for those *not* used for tunneling
+on AMD's Pink Sardine (those are covered by patch 1/3 in this RFC).
 
-Ah-ha nice, thanks for the heads up - I'll take a better look tomorrow, 
-but yours is definitely more comprehensive :)
+If 1/3 and 2/3 are not agreeable, then instead patch 3/3 can be re-spun
+to explicitly add the PCI IDs used for the XHCI controller used for
+tunneling on AMD's Pink Sardine.
 
->
-> I also included the uvc_video_encode_bulk() for consistency, even though
-> it seems to be unused code.
->
-> Out of curiosity, which setup did you test this on? I'm seeing issues on
-> my devices with the dwc3 controller with some of the recent performance
-> improvements (scatter/gather support and no_interrupt use). I've tried
-> to include all relevant changes in my setup, but the issues are still
-> present.
+Mario Limonciello (3):
+  thunderbolt: Allow XHCI device links to enter runtime pm
+  xhci-pci: Remove a number of controllers from the runtime PM allowlist
+  xhci-pci: Allow host runtime PM as default for AMD Pink Sardine
 
+ drivers/thunderbolt/acpi.c  |  3 +++
+ drivers/usb/host/xhci-pci.c | 26 +++++++-------------------
+ 2 files changed, 10 insertions(+), 19 deletions(-)
 
-I'm testing with an imx8mp evaluation kit and a debix model A board 
-(also with the imx8mp soc) as the gadget, both with a dwc3 controller. 
-We also experience issues when it's using the scatter/gather API, to the 
-extent that I added module parameters to set the support_sg variable 
-false and exclude it. When using the sg code either the host or gadget 
-would report a lot of missed isoc errors (manifesting on the host as 
-uvcvideo reporting "USB isochronous frame lost" or on the gadget side as 
-f_usb_uvc reporting "VS request completed with status -18") and no 
-complete streams made it through to the host - particularly with 
-streaming_maxpacket > 1024. Forcing the use of uvc_video_encode_isoc() 
-instead resolved the majority of those problems.
+-- 
+2.34.1
 
-
-I did also try an rpi4 (dwc2) as the gadget and didn't hit those 
-problems with that board.
-
-
-The problem this patch was solving was quite a bit different though, I 
-hadn't considered them to be related.
-
->
-> Any input is appreciated,
->
-> Dan
->
->
-> On Mon, Oct 03, 2022 at 11:16:27AM +0100, Daniel Scally wrote:
->> Calling uvcg_complete_buffer() from uvc_video_encode_isoc() sometimes
->> causes the final isoc packet for a video frame to be delayed long
->> enough to cause the USB controller to drop it. The first isoc packet
->> of the next video frame is then received by the host, which interprets
->> the toggled FID bit correctly such that the stream continues without
->> interruption, but the first frame will be missing the last isoc
->> packet's worth of bytes.
->>
->> To fix the issue delay the call to uvcg_complete_buffer() until the
->> usb_request's .complete() callback, as already happens when the data
->> is encoded via uvc_video_encode_isoc_sg().
->>
->> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
->> ---
->>   drivers/usb/gadget/function/uvc_video.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
->> index c00ce0e91f5d..041819a655ed 100644
->> --- a/drivers/usb/gadget/function/uvc_video.c
->> +++ b/drivers/usb/gadget/function/uvc_video.c
->> @@ -194,6 +194,7 @@ static void
->>   uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->>   		struct uvc_buffer *buf)
->>   {
->> +	struct uvc_request *ureq = req->context;
->>   	void *mem = req->buf;
->>   	int len = video->req_size;
->>   	int ret;
->> @@ -213,7 +214,7 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->>   		video->queue.buf_used = 0;
->>   		buf->state = UVC_BUF_STATE_DONE;
->>   		list_del(&buf->queue);
->> -		uvcg_complete_buffer(&video->queue, buf);
->> +		ureq->last_buf = buf;
->>   		video->fid ^= UVC_STREAM_FID;
->>   	}
->>   }
->> -- 
->> 2.34.1
->>
