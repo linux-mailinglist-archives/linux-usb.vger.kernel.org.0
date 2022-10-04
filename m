@@ -2,107 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B24F5F3E08
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Oct 2022 10:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C528A5F3E37
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Oct 2022 10:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiJDIRM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Oct 2022 04:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S230100AbiJDIYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Oct 2022 04:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiJDIQx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Oct 2022 04:16:53 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54279399DE;
-        Tue,  4 Oct 2022 01:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664871348; x=1696407348;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lb4bSlvedpaQjVg5odfIx4IN7U+kZA4eNgmQRJpfroI=;
-  b=P23mBDfO+uLz94rCQ0fCu5q7ZzpBPvqmJ26luZJPYx6BfayVrYFVPjcr
-   t+cTuRYA6XUj/NpLzc6YcGWNkYyrFBSgxbPpDlmVtSOubzvzVavsZnFmf
-   rX7/1qhS+LnO+hadgoc/mFiKSjlgwq5nRkcpHTb49zbT4u+AE+6ETptXc
-   smkn9bT0BGl2D/PyhA2yixZFmaYUPA2bgvkMEwzGOP4WtIJSiUOlKqz/A
-   1Fl+jT/+WgzC9M7GQV1UX2TpJ1o5/JnloKRYeEmMAsZCLtL+PtigdF3BY
-   X/fzmXeALrUtH9bmkjbY1eKBtXl3St6Ra1q8AXufOFXQEzemXwwp9dGjG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="364753558"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="364753558"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 01:14:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="692397954"
-X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="692397954"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Oct 2022 01:14:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ofd4A-001xvm-2X;
-        Tue, 04 Oct 2022 11:14:14 +0300
-Date:   Tue, 4 Oct 2022 11:14:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S230076AbiJDIYU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Oct 2022 04:24:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486631D0DF;
+        Tue,  4 Oct 2022 01:24:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0595B81919;
+        Tue,  4 Oct 2022 08:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EFCC433D7;
+        Tue,  4 Oct 2022 08:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664871856;
+        bh=uAjfpz0d0D6bezXkZgdZz4TG3ds1yQdpkwoZg3hhSz8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=gRYdcHsHXABZMzmrUoRUAyd6uhsYxwuNjLdcwvudRJUlIv+PeP7Tzq7f6M3VR+oh+
+         2HWo1BqMqVND/holL0f6PGL1AMXDK5Db0nUFEHYHOjM88RHMjvxCZx79e96HiqhRO0
+         eDdbj/1PeYLhswbi08kaebebC6UwqzRNJRyBCJYjtlKnE+0PfjwoiJ9IES8m7cXZir
+         BWvzKL1Cr36foZxngpIjTkuYxE8TwYeuco8Lo1xOPwlKx/RrJy1VEP10MPHuWhSfb5
+         BgsvQXoZVvm6x95RoT/Q+SjHd8w3VzWoo7StUSErtgAx/Ko5UqP7c8EhJtzouJryy5
+         uguqfkI/wBg1Q==
+Date:   Tue, 4 Oct 2022 10:24:05 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/5] device property: Keep dev_fwnode() and
- dev_fwnode_const() separate
-Message-ID: <YzvrVoJ3BBhZmaZT@smile.fi.intel.com>
-References: <20220928105746.51208-1-andriy.shevchenko@linux.intel.com>
- <20220928105746.51208-2-andriy.shevchenko@linux.intel.com>
- <YzQqcFZtJn90URrJ@kroah.com>
- <Yzb9nXSxvgJ+Mj6z@paasikivi.fi.intel.com>
- <YzcAh/xtqQM1Qin4@kroah.com>
- <YzrBO2m/b1MHuKny@paasikivi.fi.intel.com>
- <Yzr6r5XtmPXCoQx7@kroah.com>
- <YzsLDUhjDCCVRy2G@kroah.com>
- <YztBWlmdgylsntgM@paasikivi.fi.intel.com>
- <Yzvm6XF0Ar35XZvT@kroah.com>
+cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Pete Zaitcev <zaitcev@redhat.com>,
+        Juergen Stuber <starblue@users.sourceforge.net>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH] USB: make devnode() callback in usb_class_driver take
+ a const *
+In-Reply-To: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
+Message-ID: <nycvar.YFH.7.76.2210041023460.29912@cbobk.fhfr.pm>
+References: <20221001165128.2688526-1-gregkh@linuxfoundation.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yzvm6XF0Ar35XZvT@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 09:55:21AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Oct 03, 2022 at 08:08:58PM +0000, Sakari Ailus wrote:
-> > On Mon, Oct 03, 2022 at 06:17:17PM +0200, Greg Kroah-Hartman wrote:
+On Sat, 1 Oct 2022, Greg Kroah-Hartman wrote:
 
-...
-
-> > #define kobj_to_dev(kobj)						\
-> > 	(_Generic((kobj),						\
-> > 		  const struct kobject *: __kobj_to_dev_const,		\
-> > 		  struct kobject *: __kobj_to_dev)(kobj))
+> With the changes to the driver core to make more pointers const, the USB
+> subsystem also needs to be modified to take a const * for the devnode
+> callback so that the driver core's constant pointer will also be
+> properly propagated.
 > 
-> Ah, doh!  I had the (kobj) part in the wrong place, thanks for that
-> fix...
-> 
-> Ok, this looks better, let me see how well the build breaks with some of
-> these changes
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: Pete Zaitcev <zaitcev@redhat.com>
+> Cc: Juergen Stuber <starblue@users.sourceforge.net>
+> Cc: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/hid/usbhid/hiddev.c     | 2 +-
 
-I believe I can rewrite my patch like this and then it will be much nicer since
-we may constify all the rest without calling __dev_fwnode_const() directly.
+For hiddev.c:
 
-Are you agree?
+	Reviewed-by: Jiri Kosina <jkosina@suse.cz>
+
+Thanks,
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Jiri Kosina
+SUSE Labs
 
