@@ -2,74 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09DD5F557C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Oct 2022 15:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A064F5F5A71
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Oct 2022 21:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiJENdv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Oct 2022 09:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
+        id S230143AbiJETOp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Oct 2022 15:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiJENdo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Oct 2022 09:33:44 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BA47AC09;
-        Wed,  5 Oct 2022 06:33:42 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-131dda37dddso18909479fac.0;
-        Wed, 05 Oct 2022 06:33:42 -0700 (PDT)
+        with ESMTP id S231447AbiJETOJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Oct 2022 15:14:09 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916732BE14;
+        Wed,  5 Oct 2022 12:14:08 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id fb18so1087068qtb.12;
+        Wed, 05 Oct 2022 12:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=4u5zSFTTl6Tg6+Epgw/QLqRJlkHZ4tOE8mrGAtQf1eY=;
+        b=cpGj3Cza5JvNQBhL0EVzvVTrKhKEYvy+l7m+dr2otRPeMkyorX1Jw1ioNGiLPNu9/X
+         CDEvhAKzat7UAEipq9oWyJLcPDP3cvn6FZHTaW2h7QYYCG0cyyfhkxBlkwvUfyjjcycf
+         m/reUAf7f5gjK6286JekPFDFF2VLtFRgXh07EDHWBLmVnKyUXVb7nyTBLTH7L8o8ozW2
+         4BOIxk0OjQ58k1BiU2rZPDFhCb/tFbFwFXR3d3VQoAxF4UXvvZAPgZksVVHlAdNtNhcx
+         xseDDRWeDg3kVqClxPVdh4t5kCR511BlLHyTWzzSwjhZGbpPeu/LCri2NzOG5/NpiafS
+         Fujg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5RSZ7p39bPySRyp3ZYnc2GXn16T4gnRgZQLWCfApSP4=;
-        b=LJFPEiftJhK9x9nwDlLQcY3SzVc7sJXGDo+HyP3T04mFTiwRRbnn4HV+Z0atTPWkL4
-         Wm3e28kBK93X15qUJhjp1vwa5yDtPagBMOMwmZugbZYQAUqG/ru6CBnEELCpKR3tUxef
-         WJyfpBeWs6jC/htRIkuAHnA8z2We+dsULddRWw9EGiIDaIMvJEVJgtKcxZRYDIwz4QI9
-         LnGudFDriSB55+V1nyjFu8ilpb6PTjDfoDMc72P6lpz/+bz7QTYnXQWeQq7nD9o/3dkX
-         Z++Fr2119KT6CQm7Ki75IPRdZg7i7OxowDaRCEN4J2i41velmWkgSBcbd3MSiobYPoyI
-         9fww==
-X-Gm-Message-State: ACrzQf38fpUPDWRcn4x2L9lMeuhHUNbW5BDhLvt6euJROG9L60ZtGdFh
-        pOKRGbwTr1yeS3KGDu6OCg==
-X-Google-Smtp-Source: AMsMyM6Lx+7iK3Wg4TlEXDbgxTT5YLzZkj+D4Evf1BZk/JTedoOaRMJSXlKdXt+huTl/dKZ1Dg5W/g==
-X-Received: by 2002:a05:6870:9a1e:b0:132:411:9a with SMTP id fo30-20020a0568709a1e00b001320411009amr2708858oab.108.1664976822069;
-        Wed, 05 Oct 2022 06:33:42 -0700 (PDT)
-Received: from robh_at_kernel.org ([2607:fb90:5fee:ea3a:4239:ad4:650a:6e66])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056870428c00b0013191b00f72sm5050752oah.17.2022.10.05.06.33.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 06:33:41 -0700 (PDT)
-Received: (nullmailer pid 3278796 invoked by uid 1000);
-        Wed, 05 Oct 2022 13:33:41 -0000
-Date:   Wed, 5 Oct 2022 08:33:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: dwc2: Add some missing Lantiq variants
-Message-ID: <166497681636.3278671.14523867713458185039.robh@kernel.org>
-References: <20221005105555.2665485-1-linus.walleij@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005105555.2665485-1-linus.walleij@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=4u5zSFTTl6Tg6+Epgw/QLqRJlkHZ4tOE8mrGAtQf1eY=;
+        b=QiHGO8KaW73Ad8whProK/pYDXgR7VnLltSFWLfIJxczinrX1p+bAH3NCt8+o1DLXJG
+         Dj835Qm1gMhlLM0N761U2ndrBW5LaqrCtZlk+JzhQjTq2taKqno+CRST3JLE9MbmtSWQ
+         XlvpY1AlLBkJacC3FZlNoc5N6VMn3uC2pTjdz92s+dGhyMvvokO+BhQWpZt1VVZ9HrYs
+         kVIyIUiT5v1sugjp6ug7qq/EnITHatGhJ8ev+RP2KMrYn9mUxvSzhMKuGISZXk+EKbki
+         k8t5zpGw6IoDYa3O5i2y4U0dHmrmjTDIe7eVrP/LnOtw3Se7IRjyiE+TAMrnXF/VKfM+
+         weOA==
+X-Gm-Message-State: ACrzQf08O8Oo9LV/bUocj6XJCFmZd6MpD0irvpiFupOFTRbBC/4xW25W
+        WSZKWzOyM6uFQiZOl7BDJnQ=
+X-Google-Smtp-Source: AMsMyM6iK6DI8Fft0Ka/XQlSjKqUKGVFdRhEQ8KKAOASw/5M5QGL8JUwAOkbkYGMwwXsg8IYqT2gQg==
+X-Received: by 2002:ac8:5c4c:0:b0:35c:1373:5afc with SMTP id j12-20020ac85c4c000000b0035c13735afcmr873155qtj.86.1664997247536;
+        Wed, 05 Oct 2022 12:14:07 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id l20-20020ac81494000000b0035d27b254f3sm14436500qtj.40.2022.10.05.12.14.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Oct 2022 12:14:07 -0700 (PDT)
+From:   justinpopo6@gmail.com
+To:     alcooperx@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com,
+        f.fainelli@gmail.com, Justin Chen <justinpopo6@gmail.com>
+Subject: [PATCH] usb: bdc: change state when port disconnected
+Date:   Wed,  5 Oct 2022 12:13:55 -0700
+Message-Id: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 05 Oct 2022 12:55:55 +0200, Linus Walleij wrote:
-> These IP block variants appear in various vendor trees and
-> are distinct variants which needs to be handled.
-> 
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+From: Justin Chen <justinpopo6@gmail.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+When port is connected and then disconnected, the state stays as
+configured. Which is incorrect as the port is no longer configured,
+but in a not attached state.
+
+Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+---
+ drivers/usb/gadget/udc/bdc/bdc_udc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/gadget/udc/bdc/bdc_udc.c b/drivers/usb/gadget/udc/bdc/bdc_udc.c
+index 5ac0ef8..53ffaf4 100644
+--- a/drivers/usb/gadget/udc/bdc/bdc_udc.c
++++ b/drivers/usb/gadget/udc/bdc/bdc_udc.c
+@@ -151,6 +151,7 @@ static void bdc_uspc_disconnected(struct bdc *bdc, bool reinit)
+ 	bdc->delayed_status = false;
+ 	bdc->reinit = reinit;
+ 	bdc->test_mode = false;
++	usb_gadget_set_state(&bdc->gadget, USB_STATE_NOTATTACHED);
+ }
+ 
+ /* TNotify wkaeup timer */
+-- 
+2.7.4
+
