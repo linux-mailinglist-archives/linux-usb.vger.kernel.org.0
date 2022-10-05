@@ -2,88 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15AA5F5B0F
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Oct 2022 22:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D615F5BA8
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Oct 2022 23:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiJEUfw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Oct 2022 16:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        id S230413AbiJEVYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Oct 2022 17:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiJEUfu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Oct 2022 16:35:50 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F85D39BB9;
-        Wed,  5 Oct 2022 13:35:49 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id 27so2945596qkc.8;
-        Wed, 05 Oct 2022 13:35:49 -0700 (PDT)
+        with ESMTP id S230117AbiJEVYA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Oct 2022 17:24:00 -0400
+Received: from resdmta-c1p-023853.sys.comcast.net (resdmta-c1p-023853.sys.comcast.net [IPv6:2001:558:fd00:56::e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBC57E335
+        for <linux-usb@vger.kernel.org>; Wed,  5 Oct 2022 14:23:57 -0700 (PDT)
+Received: from resomta-c1p-023411.sys.comcast.net ([96.102.18.231])
+        by resdmta-c1p-023853.sys.comcast.net with ESMTP
+        id g62ko4qWaOa5xgBrxoyBA1; Wed, 05 Oct 2022 21:23:57 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c2sIbsiDjA2SMjGMWD+26Laqk16I6ZwxVSuTAC9N2/A=;
-        b=SAYe0EeTRn5ySNJLY9UgTUSOJ0t/cmdVcBr2P+xRdmkEDDPfVpLmgAwuTc95MdWDN7
-         /CU77OoiTEujAbW8ivDREtCmnUIE9Ibw0EbdTC2nR4j29NYcJ9bE+9M+hJVYnmahxx0k
-         UP+j3TvVS6H4rWhBfnim5Wr3hatctVRYdUigtJP0/0ue5RXj/1ungu0mL7HFACWRFM7s
-         Sm+ZkDbOoaLf5+0hJYojFXo9HsUJsy/05b+m2r5+Fbt7T2KLFPHflcl46XnN7xr97BTQ
-         Tm/cZExsV8/Ol92PaXx0no3QnYF20roCCtrNc0Bzc7l9bC5bqKr4VRU6Twkv4W3DioiJ
-         7+qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c2sIbsiDjA2SMjGMWD+26Laqk16I6ZwxVSuTAC9N2/A=;
-        b=bZsgkVXPlL0b+h+zkwQxyIEYy5S2Cl+q7VrNmKEqkWXWpfHDqDxFU3maDvGSBuNBah
-         fqArgtheNQVeumBFJ9nd4T2kRV2jpxdWJYkzzxjAFu0qCQ4UyGDVbW3rk4CD/LUbF+s7
-         O/+1i3GqswmduTs89/mH1WkZpx/2xKxCO0AciXNDrJ+3zUOWYR293gjt1f28dp3/pPcw
-         jMY1wOnyI5zCtLYdB06s71F2gAM61JeuqN9Q1ScQisKT9BUP68OV+Z3+KIgsTlXKLxDx
-         IH8l2j4QELu1vIFbaT+JfY5mFvhFMOVHT3T2mHew76D8Ocq0mRe/Ru3NwaYFXc1Bksp5
-         SzJQ==
-X-Gm-Message-State: ACrzQf16ntpmx9eYTU3v/wSFNHTGh0/RIkkGPX/x0d4ZfJTbayUPuCs9
-        46d2qD0tzoPhdwV6ah7+cio=
-X-Google-Smtp-Source: AMsMyM6CrC9+UVRmv8m9FFzFc/aplhzAFhIJWzXVFjGUi5tvtuzP5ttoNttmGvdGNAehNN8bcir2sg==
-X-Received: by 2002:a37:e116:0:b0:6cf:4dbd:18f1 with SMTP id c22-20020a37e116000000b006cf4dbd18f1mr994643qkm.120.1665002148299;
-        Wed, 05 Oct 2022 13:35:48 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id f1-20020ac81341000000b00339b8a5639csm14623547qtj.95.2022.10.05.13.35.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 13:35:47 -0700 (PDT)
-Message-ID: <33f5b1d2-7d31-de19-c47e-1fc53ce958e3@gmail.com>
-Date:   Wed, 5 Oct 2022 13:35:41 -0700
+        d=comcastmailservice.net; s=20211018a; t=1665005037;
+        bh=6nswR+3d/gnwoaF8K8U30+q9DQCaCZojzetu+lImvbk=;
+        h=Received:Received:Received:Date:From:To:Subject:Message-ID:
+         MIME-Version:Content-Type;
+        b=u3t1e2ZkK6TV8xdmCzC1ZIo4IWOPaf+njpZRsAPiKRqIjpvqikZ3MBuprv1fPaHQM
+         OHYBv04MfgQQjD9MCdWDYr/6/SdjdbrXn/F11jtX/hlON8kgx118qMyyHQIeYjmBW6
+         4lu7eWz+3UW05U4NqPCUXoX37lG96Enxj22NsZufQR8wFeb++huGpLFESEHkrfH40I
+         3LUgsQxd9xSK9MSk+h9azVCkkn5GRnyUvmhAWJrUJn8XiKOp7rSuiv+W8zjRoST0m6
+         mqWCG7iXz8rmOAErcB39Im2ri3YaGsvU4hFA9oeG3ui9Y+S0kVYXdMu5L5t+FKU1HY
+         WjsJ7rGIhdqbg==
+Received: from Outgoing.brak ([69.249.67.241])
+        by resomta-c1p-023411.sys.comcast.net with ESMTPSA
+        id gBrZoG0Iq563TgBrZo9LmJ; Wed, 05 Oct 2022 21:23:35 +0000
+X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeifedgudehlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucevohhmtggrshhtqdftvghsihdpqfgfvfdppffquffrtefokffrnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfghrlhcuvffnffculddvfedmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgruhhlucffihhnohculfhonhgvshcuoehprghulhesshhprggtvghfrhgvrghkudekrdighiiiqeenucggtffrrghtthgvrhhnpeffieeijedvffekteevtdehffeffeetvdehfeehkeehieevtedthfeuveeugefgveenucffohhmrghinhepghhithhhuhgsrdgtohhmpdifihhnvghhqhdrohhrghenucfkphepieelrddvgeelrdeijedrvdegudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopefquhhtghhoihhnghdrsghrrghkpdhinhgvthepieelrddvgeelrdeijedrvdeguddpmhgrihhlfhhrohhmpehprghulhesshhprggtvghfrhgvrghkudekrdighiiipdhnsggprhgtphhtthhopeehpdhrtghpthhtoheprghnshhsihdrhhgrnhhnuhhlrgesihhkihdrfhhipdhrtghpthhtohepjhhikhhosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihhnphhuthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnh
+ gvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Xfinity-VMeta: sc=-77.00;st=legit
+Received: from localhost.localdomain (unknown [172.18.18.119])
+        by Outgoing.brak (Postfix) with ESMTPSA id EE639B38E564;
+        Wed,  5 Oct 2022 21:23:32 +0000 (UTC)
+Date:   Wed, 5 Oct 2022 21:30:21 +0000
+From:   Paul Dino Jones <paul@spacefreak18.xyz>
+To:     Anssi Hannula <anssi.hannula@iki.fi>
+Cc:     jikos@kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usbhid: Interpret 0 length ff effects as infinite
+ (0xffff) length effects
+Message-ID: <20221005213021.adhxibb5ipbrjdnn@localhost.localdomain>
+References: <20221001221657.gexisc2egjn3mpog@localhost.localdomain>
+ <93f708f3f9ac8b5c94e6d0b86c1efaa3@iki.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] usb: bdc: change state when port disconnected
-Content-Language: en-US
-To:     justinpopo6@gmail.com, alcooperx@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com
-References: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93f708f3f9ac8b5c94e6d0b86c1efaa3@iki.fi>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FROM_SUSPICIOUS_NTLD,SPF_HELO_PASS,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/5/22 12:13, justinpopo6@gmail.com wrote:
-> From: Justin Chen <justinpopo6@gmail.com>
-> 
-> When port is connected and then disconnected, the state stays as
-> configured. Which is incorrect as the port is no longer configured,
-> but in a not attached state.
-> 
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+Hello, and thank you for considering this.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Yes, Wine 7 breaks a lot of stuff for me, and I've been using Wine 5.x
+and 6.x through Proton which isn't ideal when trying to isolate
+problems.
+
+It seems there is atleast some precedence in other force feedback
+drivers for using 0 as some sort of indicator for an infinite effect:
+
+https://github.com/gotzl/hid-fanatecff/blob/next/hid-ftecff.c#L724
+
+https://github.com/berarma/new-lg4ff/blob/master/hid-lg4ff.c#L762
+
+We also discussed this issue at this thread:
+
+https://github.com/berarma/ffbtools/issues/26
+
+I've also read some indication that the SimCube wheel works on Linux, so
+I'd be interested in how that is handling this situation.
+
+---
+Paul Dino Jones
+
+
+> Paul Dino Jones kirjoitti 2022-10-02 01:16:
+> > Greetings,
+> 
+> Hello, and thanks for looking into this!
+> 
+> > I started using my Accuforce V2 sim wheel on Linux. I was getting no
+> > response from racing simulators through wine, while native linux test
+> > tools worked properly. It appears that many real-world applications will
+> > send 0 as the replay length, which was resulting in the behavior I was
+> > observing (nothing). The PID document does not explicitly state that 0
+> > length effects should be interpreted as infinite, but it does mention
+> > null effects being infinite effects.
+> 
+> Actually, it is Wine that is translating 0xFFFF from the application to
+> 0x0000 for the Linux FF API:
+> https://gitlab.winehq.org/wine/wine/-/blob/master/dlls/winebus.sys/bus_udev.c#L1124
+> 
+> Unfortunately "infinite" duration is not actually specified at all in our
+> API currently.
+> input.h just says that the all durations are in msecs and values above
+> 0x7fff cause unspecified results.
+> 
+> We have three places where the duration is handled:
+> - ff-memless: Considers 0 as infinite (in ml_get_combo_effect() and
+> calculate_next_time()).
+> - iforce-ff: Just passes the duration to HW as-is - it is unknown what
+> counts as infinite, if any.
+> - pidff: Just passes the duration to HW as-is, so using the
+> unspecified-by-API 0xffff results in infinite duration (per USB HID PID
+> spec).
+> 
+> So we probably want to specify some value to work as infinite, likely either
+> 0 or 0xFFFF, and explicitly document that in input.h.
+> I suspect that ff-memless devices are currently the most popular, and e.g.
+> Wine already assumes 0 is infinite, and I can't think of a reason to have an
+> "actual" 0-duration effect, so I guess 0 would be the most sensible value.
+> 
+> Since iforce is an "ancestor" of HID PID of sorts, it may also support
+> 0xffff = infinite.
+> I'll try to get hold of one to test, though it may take a couple of weeks...
+> 
+> 
+> > This patch will interpret 0 length force feedback effects as 0xffff
+> > (infinite) length effects, leaving other values for replay length
+> > unchanged.
+> > 
+> > Signed-off-by: Paul Dino Jones <paul@spacefreak18.xyz>
+> > ---
+> >  drivers/hid/usbhid/hid-pidff.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/hid/usbhid/hid-pidff.c
+> > b/drivers/hid/usbhid/hid-pidff.c
+> > index 3b4ee21cd811..70653451c860 100644
+> > --- a/drivers/hid/usbhid/hid-pidff.c
+> > +++ b/drivers/hid/usbhid/hid-pidff.c
+> > @@ -301,7 +301,7 @@ static void pidff_set_effect_report(struct
+> > pidff_device *pidff,
+> >  		pidff->block_load[PID_EFFECT_BLOCK_INDEX].value[0];
+> >  	pidff->set_effect_type->value[0] =
+> >  		pidff->create_new_effect_type->value[0];
+> > -	pidff->set_effect[PID_DURATION].value[0] = effect->replay.length;
+> > +	pidff->set_effect[PID_DURATION].value[0] = effect->replay.length ==
+> > 0 ? 0xffff : effect->replay.length;
+> >  	pidff->set_effect[PID_TRIGGER_BUTTON].value[0] =
+> > effect->trigger.button;
+> >  	pidff->set_effect[PID_TRIGGER_REPEAT_INT].value[0] =
+> >  		effect->trigger.interval;
+> 
+> -- 
+> Anssi Hannula
+> 
