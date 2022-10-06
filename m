@@ -2,149 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777465F6082
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Oct 2022 07:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B840C5F6325
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Oct 2022 10:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiJFFQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Oct 2022 01:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S231271AbiJFI5I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Oct 2022 04:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJFFQL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Oct 2022 01:16:11 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E1887098;
-        Wed,  5 Oct 2022 22:16:09 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MjfmQ71xgz9srF;
-        Thu,  6 Oct 2022 07:16:06 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2AbJ7q4jLQJr; Thu,  6 Oct 2022 07:16:06 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MjfmQ5z72z9srD;
-        Thu,  6 Oct 2022 07:16:06 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B8C548B765;
-        Thu,  6 Oct 2022 07:16:06 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id raXtSJ_lA2DV; Thu,  6 Oct 2022 07:16:06 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.234])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 80ED38B763;
-        Thu,  6 Oct 2022 07:16:06 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2965FsiG209799
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 6 Oct 2022 07:15:54 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2965FrbT209785;
-        Thu, 6 Oct 2022 07:15:53 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] usb: Replace NO_IRQ by 0
-Date:   Thu,  6 Oct 2022 07:15:44 +0200
-Message-Id: <63f6d2e7ea17f6522f36abd6cf5e6a7f25f215c6.1665033267.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S230501AbiJFI5H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Oct 2022 04:57:07 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BED97D4D;
+        Thu,  6 Oct 2022 01:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665046626; x=1696582626;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=3/L+DOXlfRPicy2A9x/l+Scfuy0KkCrxy0UanPSXEM0=;
+  b=UqisyU2dqumXZi/wuqcZ4x8wWkJFxbx9pGdCb4AwjIGwmd/r+oBhnLVy
+   ig2V71Ktlp0teCj2yUuAopBq9tRG1GNxoZS2LowHiFENlmB1y/Z+CzlHq
+   W3NDOA5J8krCRJbtL0x3RI2/JQIWw6INvAxe1vlezUfEMz3ryZGLEQ9wP
+   B8+0IGlOetHNuKXDynFrqr5kIDa2SRytJhI2FULme/UAHQjkqiodGhllm
+   HpvgQQBZEwLx5Sz8YUoL5rPoHAkVwpe6X59y0QM4H1mR2zzJOs9/nbG/+
+   NevaGhYRzTOnR6rpAqzGhCsu9iGmEYw7Kt4N3cvgkeadUHo5R2s5iDxka
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="302107467"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="302107467"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 01:57:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="750081967"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="750081967"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 06 Oct 2022 01:57:03 -0700
+Message-ID: <e98151a1-eb1d-df41-ba78-1c810aadd540@linux.intel.com>
+Date:   Thu, 6 Oct 2022 11:58:29 +0300
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665033343; l=2964; s=20211009; h=from:subject:message-id; bh=uaw6wvWqL3qNP4TM3e5bijnIXPJZRnxRj//xsbB+f0k=; b=4QqaI6kRR3XrACI7AKO/dXaOfVrtdOBEuhVA5NmUboC6/5mCZFsYZhhxUwUF4GBqu7HBLizBbngY 6Ek7K0v/Ae1tUT30iDer1tcRLUPJF0xxQetMJPpKPuI0DeRUWT7p
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        mathias.nyman@intel.com, mika.westerberg@linux.intel.com,
+        linux-kernel@vger.kernel.org
+Cc:     Sanju.Mehta@amd.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+References: <20221005202353.1269-1-mario.limonciello@amd.com>
+ <20221005202353.1269-2-mario.limonciello@amd.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH 1/4] USB: ACPI: Look for `usb4-host-interface` property
+In-Reply-To: <20221005202353.1269-2-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-NO_IRQ is used to check the return of irq_of_parse_and_map().
+Hi
 
-On some architecture NO_IRQ is 0, on other architectures it is -1.
+On 5.10.2022 23.23, Mario Limonciello wrote:
+> For optimal power consumption of USB4 routers the XHCI PCIe endpoint
+> used for tunneling must be in D3.  Historically this is accomplished
+> by a long list of PCIe IDs that correspond to these endpoints.
+> 
+> The linux thunderbolt CM currently uses the `usb4-host-interface` ACPI
+> property to create a device link between the USB4 host router PCIe
+> endpoint and the XHCI PCIe endpoint.  The device link will move
+> the devices in out of D3 together.
+> 
+> To avoid having to maintain this never ending list of PCIe IDs, use
+> the existence of `usb4-host-interface` property on a USB port as a
+> proxy to allow runtime PM for these controllers.  The device links
+> will continue to be created when the CM initializes the USB4
+> host router and also discovers this property.
+> 
 
-irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
+Agree that maintaining this list isn't a long term solution.
 
-So use 0 instead of using NO_IRQ.
+> Link: https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/usb4-acpi-requirements#port-mapping-_dsd-for-usb-3x-and-pcie
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> RFC v1->PATCH v1
+>   * Move this detection from Thunderbolt CM into USB core
+> ---
+>   drivers/usb/core/usb-acpi.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
+> index 6d93428432f13..f91ab4fd84cf8 100644
+> --- a/drivers/usb/core/usb-acpi.c
+> +++ b/drivers/usb/core/usb-acpi.c
+> @@ -177,6 +177,15 @@ usb_acpi_find_companion_for_port(struct usb_port *port_dev)
+>   		port_dev->connect_type = usb_acpi_get_connect_type(handle, pld);
+>   		ACPI_FREE(pld);
+>   	}
+> +	if (!acpi_dev_get_property(adev, "usb4-host-interface",
+> +				   ACPI_TYPE_ANY, NULL)) {
+> +		struct device *dev = &port_dev->dev;
+> +
+> +		while (dev && !dev_is_pci(dev))
+> +			dev = dev->parent;
+> +		if (dev)
+> +			pm_runtime_allow(dev);
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/usb/host/ehci-grlib.c  | 2 +-
- drivers/usb/host/ehci-ppc-of.c | 2 +-
- drivers/usb/host/fhci-hcd.c    | 2 +-
- drivers/usb/host/ohci-ppc-of.c | 2 +-
- drivers/usb/host/uhci-grlib.c  | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+This would enable runtime pm for usb hosts during usb_acpi_bus acpi companion finding.
+I think host drivers should be the ones making this decision.
 
-diff --git a/drivers/usb/host/ehci-grlib.c b/drivers/usb/host/ehci-grlib.c
-index a2c3b4ec8a8b..0717f2ccf49d 100644
---- a/drivers/usb/host/ehci-grlib.c
-+++ b/drivers/usb/host/ehci-grlib.c
-@@ -99,7 +99,7 @@ static int ehci_hcd_grlib_probe(struct platform_device *op)
- 	hcd->rsrc_len = resource_size(&res);
- 
- 	irq = irq_of_parse_and_map(dn, 0);
--	if (irq == NO_IRQ) {
-+	if (!irq) {
- 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
- 			__FILE__);
- 		rv = -EBUSY;
-diff --git a/drivers/usb/host/ehci-ppc-of.c b/drivers/usb/host/ehci-ppc-of.c
-index 28a19693c19f..62a0a193798c 100644
---- a/drivers/usb/host/ehci-ppc-of.c
-+++ b/drivers/usb/host/ehci-ppc-of.c
-@@ -119,7 +119,7 @@ static int ehci_hcd_ppc_of_probe(struct platform_device *op)
- 	hcd->rsrc_len = resource_size(&res);
- 
- 	irq = irq_of_parse_and_map(dn, 0);
--	if (irq == NO_IRQ) {
-+	if (!irq) {
- 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
- 			__FILE__);
- 		rv = -EBUSY;
-diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
-index 2ba09c3fbc2f..6d3215a3ef81 100644
---- a/drivers/usb/host/fhci-hcd.c
-+++ b/drivers/usb/host/fhci-hcd.c
-@@ -693,7 +693,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
- 
- 	/* USB Host interrupt. */
- 	usb_irq = irq_of_parse_and_map(node, 0);
--	if (usb_irq == NO_IRQ) {
-+	if (!usb_irq) {
- 		dev_err(dev, "could not get usb irq\n");
- 		ret = -EINVAL;
- 		goto err_usb_irq;
-diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
-index 591f675cc930..f2f6c832ec98 100644
---- a/drivers/usb/host/ohci-ppc-of.c
-+++ b/drivers/usb/host/ohci-ppc-of.c
-@@ -120,7 +120,7 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
- 	}
- 
- 	irq = irq_of_parse_and_map(dn, 0);
--	if (irq == NO_IRQ) {
-+	if (!irq) {
- 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
- 			__FILE__);
- 		rv = -EBUSY;
-diff --git a/drivers/usb/host/uhci-grlib.c b/drivers/usb/host/uhci-grlib.c
-index 3ef6d52839e5..907d5f01edfd 100644
---- a/drivers/usb/host/uhci-grlib.c
-+++ b/drivers/usb/host/uhci-grlib.c
-@@ -116,7 +116,7 @@ static int uhci_hcd_grlib_probe(struct platform_device *op)
- 	hcd->rsrc_len = resource_size(&res);
- 
- 	irq = irq_of_parse_and_map(dn, 0);
--	if (irq == NO_IRQ) {
-+	if (!irq) {
- 		printk(KERN_ERR "%s: irq_of_parse_and_map failed\n", __FILE__);
- 		rv = -EBUSY;
- 		goto err_usb;
--- 
-2.37.1
+Maybe it's time to enable runtime pm as default for most new xHC controllers.
+How about we enable it for all AMD and Intel PCI xHC hosts with version 1.2 or later?
 
+If it causes un-fixable regression to some controller we can add it to a denylist.
+
+Thanks
+-Mathias
