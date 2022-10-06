@@ -2,103 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701115F683C
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Oct 2022 15:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9FD5F688E
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Oct 2022 15:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiJFNc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Oct 2022 09:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        id S231696AbiJFNvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Oct 2022 09:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiJFNcu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Oct 2022 09:32:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A505FC1;
-        Thu,  6 Oct 2022 06:32:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EBD619B3;
-        Thu,  6 Oct 2022 13:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D819C433C1;
-        Thu,  6 Oct 2022 13:31:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dCt1XlLR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665063067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=19y9yEzpIVCdXeybhvKA7dJEvUCmehig1gThjjfIZlg=;
-        b=dCt1XlLRhK46o65EhJYBSpRmYOT4n7MeVXGzqEAmpcGdWyuxeH5sPJp8L+8s50v59qatMG
-        Pop9Q+fWN3pqL5OpRxJVaBL/44G7A5DyWYXHpzYYf1aO4M481jtYlUZ2z2P2gTZK51QEX3
-        xI04TaxnmVtdtVX+upl/OVmNZ34Lghg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 07574342 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 6 Oct 2022 13:31:07 +0000 (UTC)
-Received: by mail-ua1-f49.google.com with SMTP id p89so623802uap.12;
-        Thu, 06 Oct 2022 06:31:05 -0700 (PDT)
-X-Gm-Message-State: ACrzQf39I0aG5QvIzUh/9qcHBEF1elKF+vF9hNH7v2anSGfBoAICV2EV
-        ngllvXKIEIB5FbGUv+zfb/ab2TbIsHShqQy6ySY=
-X-Google-Smtp-Source: AMsMyM5LOcwlCqLDJ8Sdf5AH9P6p8LW9hstCcin8XnWJVl2TEMHnjzVUue7OZJku+oxVakLrWA9vu3wGp+73FInbltY=
-X-Received: by 2002:ab0:70b9:0:b0:3d7:84d8:35ae with SMTP id
- q25-20020ab070b9000000b003d784d835aemr2699257ual.24.1665063063460; Thu, 06
- Oct 2022 06:31:03 -0700 (PDT)
+        with ESMTP id S231760AbiJFNuw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Oct 2022 09:50:52 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 902A231220
+        for <linux-usb@vger.kernel.org>; Thu,  6 Oct 2022 06:50:34 -0700 (PDT)
+Received: (qmail 785245 invoked by uid 1000); 6 Oct 2022 09:50:27 -0400
+Date:   Thu, 6 Oct 2022 09:50:27 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: Replace NO_IRQ by 0
+Message-ID: <Yz7dI5iTaguhn73K@rowland.harvard.edu>
+References: <63f6d2e7ea17f6522f36abd6cf5e6a7f25f215c6.1665033267.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-References: <20221006132510.23374-1-Jason@zx2c4.com>
-In-Reply-To: <20221006132510.23374-1-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 6 Oct 2022 07:30:52 -0600
-X-Gmail-Original-Message-ID: <CAHmME9pXuGKNsm3cCOMLSOMJoX2XJnHffpiF_rr32mW2ozShhw@mail.gmail.com>
-Message-ID: <CAHmME9pXuGKNsm3cCOMLSOMJoX2XJnHffpiF_rr32mW2ozShhw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] treewide cleanup of random integer usage
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
-        linux-rdma@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63f6d2e7ea17f6522f36abd6cf5e6a7f25f215c6.1665033267.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,14 +36,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 7:25 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> This is a five part treewide cleanup of random integer handling.
-> [...]
-> Please take a look!
+On Thu, Oct 06, 2022 at 07:15:44AM +0200, Christophe Leroy wrote:
+> NO_IRQ is used to check the return of irq_of_parse_and_map().
+> 
+> On some architecture NO_IRQ is 0, on other architectures it is -1.
+> 
+> irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
 
-I should add that this patchset probably appears bigger than it
-already is, due in part to that wall of motivational text. Keep in
-mind, though, that the whole thing is only "305 insertions(+), 342
-deletions(-)", so it should be conventionally reviewable.
+This isn't clear.  Does absence of an irq count as an error?  In other 
+words, will irq_of_parse_and_map() sometimes return 0 and other times 
+return NO_IRQ?  What about architectures on which 0 is a valid irq 
+number?
 
-Jason
+> So use 0 instead of using NO_IRQ.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  drivers/usb/host/ehci-grlib.c  | 2 +-
+>  drivers/usb/host/ehci-ppc-of.c | 2 +-
+>  drivers/usb/host/fhci-hcd.c    | 2 +-
+>  drivers/usb/host/ohci-ppc-of.c | 2 +-
+>  drivers/usb/host/uhci-grlib.c  | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-grlib.c b/drivers/usb/host/ehci-grlib.c
+> index a2c3b4ec8a8b..0717f2ccf49d 100644
+> --- a/drivers/usb/host/ehci-grlib.c
+> +++ b/drivers/usb/host/ehci-grlib.c
+> @@ -99,7 +99,7 @@ static int ehci_hcd_grlib_probe(struct platform_device *op)
+>  	hcd->rsrc_len = resource_size(&res);
+>  
+>  	irq = irq_of_parse_and_map(dn, 0);
+> -	if (irq == NO_IRQ) {
+> +	if (!irq) {
+>  		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+>  			__FILE__);
+>  		rv = -EBUSY;
+
+Since NO_IRQ is sometimes set to -1, shouldn't this test (and all the 
+other ones you changed) really be doing:
+
+	if (!irq || irq == NO_IRQ) { ...
+
+?
+
+Alan Stern
