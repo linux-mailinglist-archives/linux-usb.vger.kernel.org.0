@@ -2,143 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996785F79A3
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Oct 2022 16:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E895F799C
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Oct 2022 16:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiJGOVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Oct 2022 10:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        id S229638AbiJGOUo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Oct 2022 10:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiJGOVE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Oct 2022 10:21:04 -0400
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2171.outbound.protection.outlook.com [40.92.62.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985911217C3
-        for <linux-usb@vger.kernel.org>; Fri,  7 Oct 2022 07:21:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MfO2o57pW5eylJ+XsCNYDsdcrYHCxKk5TR8V5bZup3k2b/YZPp7ydlJIG9AjGk02bDrit2OzjI7mSzziZHJWof4nxKDNrkEXmI4SSkqkVaPgOui00rOIEqzcmk1JrjvXtIQY9+uCK9gjK8qIBD+dsZzqJLpoqG7YcypYsO+42m2H5leKL3kDisNyj0mh/MyBnRlladU4wuapowrOdTsdWBm6V8FRjjIVrSYIZQg7dbgNCVSIWnPBeAlK7kyl//rlZrseupseA2qRyTU7TdgOu0RvqDpc/41F9h1IaJba5ZG7l1IweGbLlEYSqECQGe+6CKyCnmA8A3uqTnOKQYrFyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rIdBAdu5ytZ67B9JZB/nneJXLg81xKaa0qhv+CktaRQ=;
- b=fMOiyvl6UE8wOe6L3aa3/BYHIe5okZa8cFPXRsOy17Tsg3r7iIsgmp9qo6GK9XBjk2SxxBYnLo0i25IPHIfE9sHhqMFj1a3kkXMqBbirj9E81PKXmWJc47b7UZnyF3O+Jdf8H+rFh7Zf+Obo6zlWArmdTAZ4Lsl8vVzVDNue+xSNfuh0ktuvSmi2MP1rW5UosoDjaPrRc1ymc/NegkfcHOV8w4JLOHLB9u1gKf+XY7TsNJ/wV2eOQKKFzcNrLaeyB7GUyvbXfOIb7V6I8L2DsEvrcpw5hZoz50snhUxcwZWmmjnFCuIn9RbS54KJD/a/j2dzGP62GRSqTMEK926MnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rIdBAdu5ytZ67B9JZB/nneJXLg81xKaa0qhv+CktaRQ=;
- b=CX/I3nKnCYLwc6guUv++XIgsUKYqLIPvzRWhMRff3DUumPWUv15KGRY06ZElcBRx4EgCDLAo5bjjtpHayqyGGDfB9CESnbS1qPMocih37n5MFmkAgXdV0RrXs+nXDXMMbEbejmMhbihcyNDzJRAZGdtCS77DO1SRFlDW2M20HIvBx6gw3ojV01EWWJlddCAIdTeUvwGhj0GBW9JGEHx4hUs4Yazn1OQ9R81xmTCdm9FqLZTVdNuKoWdK0nn0fq2MXAmuof9KsEu/e7UK0OjMXXVhZMTYbFl951X+j3z1wuifjf72epAQlh/SR84WP2L7cFjI0mh/fobn+Lor6aKqRA==
-Received: from ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:13c::13)
- by MEYP282MB3181.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:160::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Fri, 7 Oct
- 2022 14:20:54 +0000
-Received: from ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
- ([fe80::d403:bdaa:515:ae06]) by ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
- ([fe80::d403:bdaa:515:ae06%8]) with mapi id 15.20.5676.038; Fri, 7 Oct 2022
- 14:20:53 +0000
-From:   Chun-Chao Yen <nothingstopsme@hotmail.com>
-To:     davem@davemloft.net
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 3/3] net: usb: ax88179_178a: Allow live update of devices' mac address
-Date:   Fri,  7 Oct 2022 22:20:38 +0800
-Message-ID: <ME3P282MB2827F9C56A588D9794DC0750D15F9@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20221007142038.2814378-1-nothingstopsme@hotmail.com>
-References: <20221007142038.2814378-1-nothingstopsme@hotmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [KaqZ3Mpimn6qfqugNfaqMqF1WIHzKmmh]
-X-ClientProxiedBy: PUZP153CA0016.APCP153.PROD.OUTLOOK.COM
- (2603:1096:301:c2::18) To ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:220:13c::13)
-X-Microsoft-Original-Message-ID: <20221007142038.2814378-3-nothingstopsme@hotmail.com>
+        with ESMTP id S229616AbiJGOUm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Oct 2022 10:20:42 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E744CBBE33
+        for <linux-usb@vger.kernel.org>; Fri,  7 Oct 2022 07:20:39 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id j1-20020a056e02154100b002f9abf53769so3960951ilu.23
+        for <linux-usb@vger.kernel.org>; Fri, 07 Oct 2022 07:20:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rn00CJS7mE+YZ5wyQ2Dplu+9tG4WBX9Dh0zTaYBAe8Q=;
+        b=ApISnn1caEyN/sCrFVf251ManwskjsKp03kbwPDaxBty8zJZN1C4zFcp8hrAUd47ie
+         szDOVOVs7NrpN0Cme8l4v+UKi0OfzLiI7L32fXch4Hp6K5pETmrZFcngLzGW0LucVanX
+         QJh5Nhtn171lxqBjo5vEzfiy0rPjCOp0cIAI+Lwf7rW2HGwMhOdlaicuwq31YAVfgV68
+         l19aYFc675wNDfXSZEk1uCNVZDggxr1WFw/QxUHd13kPY1kmkEbaZNI4lxQTYddtj94T
+         AOxekKoUOQiQFmyvm5fBxiO3WCQhzZ5xdRamkEt0h1ALKspv1vS1de7SVoC5bRsE6L7i
+         tvpg==
+X-Gm-Message-State: ACrzQf0TN7atSWYxn1j2t4hfkLABD3c2jeAnZP5mjLzOPJv8vUswMyyp
+        98MC82d6IMAEUnQ4lF1Bs0yn6OHzNTmExTB+ffE1lc5fXeFZ
+X-Google-Smtp-Source: AMsMyM5MkJE1uAZFD5OaaIaujO18BwlaJ0OC20U1YkpGNwbdolpYzQpHYP3S2aNHfm8XC2eWtk5u4uKQJJYzwYiB+olPluIoDwQf
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ME3P282MB2827:EE_|MEYP282MB3181:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d209bfa-5b03-4f6a-155e-08daa86f24a8
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c0LDWWhHfkZQRcI72qCiQ+QVfdzRRshYkZhrFuHvEmlummBBkE/q71ff7QaTYVBMpkla8aM6yqslAMZSk5lB/VoRHdT08LKm2Ni9gantGiaMe7gRifMqnJ5pCe4f37iUrvV6yOPqU344izcssuVIqyxab7J5GVgptK0lQT1HWrks0kCoq6HVKPGY67FK9iieXEkex7P7ZWh3+s1LC8aXFJfq8CKLEs7z5agg+UvJb2bVGJLwac4rBjxl8HXmq/f1PhCpALOUdyiEKiqgkf5QPY2BWGVH6CNE3h843agfq0AhYyV+WQMOy0VmQYNGrj09Oyq2LipxKSW475hEDjBqzVxRwJLRMmUWwnwBgp6Vmy1ILEXR0wE8ahkeeqULhEyuAskkAtmtfB52cIfV/SlZnaQHxv71+aGeqFnxLT/lbgfJz1nUnzHkgH5psvmmxwC/hsa7i8fnR54Iqq1I8qrDOEMRqjuC5lTC5NcyVgu+KiG0gSwYWwvbpNsggyP7M5i4q5ozDitO6eQnPf+Vz8MrwGOv+4grzMmvGTHWj+A2cGo32qx0cxrSWWYoZRfLfEEKgeB7WoV0p4EHMqugrl4KcBZxBbf3NEhJbuUzQyKwb6jUn/wjQnM7KzcK7L+vypj/1jMISs+FhflsTTrARBODxw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VpBrNrakKWeKEuppXJtai6cJJ1ew0/pBVlZfxu2d1Du5D26/F2thHtifLWtj?=
- =?us-ascii?Q?mzMBBWZLeeFjMKkUlzyuEa/KYJ/0kSFa+/IL5kJNvkvNvORRD7TC3egJ0evq?=
- =?us-ascii?Q?a/eECAW4WVHwLpH+zwIMWAuVzpcYsqbpDDEpYgNe7EQO1P6nXntVsbaiDmq0?=
- =?us-ascii?Q?to2GoN533jdajoNmRk16cjl4qauAfx+N4EVOzGNQ2Qx5YlaR7ByVbaRIHMPz?=
- =?us-ascii?Q?V6cQuLjQhwo0Gk4pGo8orVeOhcdYIxOhCRxqar/yPeqlcNIpQL3qPopurP1V?=
- =?us-ascii?Q?rbNgRQHTRD2RnN+DLbNVX2/LM19nJMSZivjd84BJYJs9ajmjplOsSxDkvhzP?=
- =?us-ascii?Q?dZSC0ztRjIS8YQqYInVznAYiu8JcGO0PGyFgcDx3hKPYQLX9ujsXKCEaXKVP?=
- =?us-ascii?Q?aJ92yTkxng85ZaTbFnY+krHZZP/cCzZNCi1waLzLb/R08Lrk2K/Q+7tqTxMX?=
- =?us-ascii?Q?+HXnHy4nyVG9pOlcuZdE06O12nrUQ7LgA9g0wRigANEXMlzN/Q51fedRId8s?=
- =?us-ascii?Q?TVu3WmwqqLcZyRXK+r2vPheOBk1z+oOxwVxvsbsYu+bMWoPpTjpaAAYzHtCi?=
- =?us-ascii?Q?mWtzXrAzGVj1BDrlRVv4z6HMb1gsTisWQVAGclqCWx2jdEDVdafL+lY1M9OJ?=
- =?us-ascii?Q?lIdFwiavC72SdrLKD7WV7ueQY0/erHCDJ1Qa2jchnk/hUiQpVzrD2A/RLsi5?=
- =?us-ascii?Q?0hI2T+pCoIQdMaKKXArBnItTH9A+rJ8LCYy4+ZjI/oV4fAYko39rulhlGX9n?=
- =?us-ascii?Q?F/07lLW+HCvKUC54sILYgWvK7zSbt1Hz063vv5xNV3SFcTfZZukeQRvfodUx?=
- =?us-ascii?Q?Wl8mDsCC2Bk2PP8EF8tlFo6tESONWhmJcjWjByglJ6jUOcVIKnqs1uHnvOfD?=
- =?us-ascii?Q?aBgv3HS5JQBBj1LbuYZzaKSmv9fANzSpttZKc80OAM0N5PbDLxggsD3P5OG7?=
- =?us-ascii?Q?bGqb75Pswgr7zUieSwVp8PjcyYmTquIMO/bj7c6bKKgMm9BW5BAHDqbWMnDo?=
- =?us-ascii?Q?Z6RVhLlg0Nu5e2R4RoFCCsa7ST2rsnn0L5vuR7k4VtQT2LMbimNl/Iujb+Rm?=
- =?us-ascii?Q?wzdtykAyad3/ZsqcIwYTLYdn9X1SgyuF7ZmchSl1PU9q1/96dzHMvjke8BMM?=
- =?us-ascii?Q?4CAKvZBPaDap/l/zgYQxRQFpc5DXaeeHJtQ38RHwJ5pDh9UEUFO0BFLwY0Bb?=
- =?us-ascii?Q?FqwsXwQpti5aOujz+WiJ8flTTxZMo26koEDJlpacMbOnSUs8YCFxIf/nXVvb?=
- =?us-ascii?Q?gX9vDgNf/gVZBkrwqL0vUgYr5gGFswaf5v+LPzSmpfeNzvPqBR6NSvTmTWL7?=
- =?us-ascii?Q?m4Y=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d209bfa-5b03-4f6a-155e-08daa86f24a8
-X-MS-Exchange-CrossTenant-AuthSource: ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 14:20:53.9457
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEYP282MB3181
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:58f:b0:363:4772:d13d with SMTP id
+ a15-20020a056638058f00b003634772d13dmr2450082jar.25.1665152439119; Fri, 07
+ Oct 2022 07:20:39 -0700 (PDT)
+Date:   Fri, 07 Oct 2022 07:20:39 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a178f505ea72837a@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in dvb_devnode
+From:   syzbot <syzbot+4b677cfa21f5bd6295cd@syzkaller.appspotmail.com>
+To:     cai.huoqing@linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Problem Description:
-Live update of devices' mac address is currently blocked by this driver, as
-it requires the evaluation of netif_running() given the corresponding
-device being false. While appearing a harmless check, it can be disruptive
-in some networking configurations, such as "Link Aggregation" operated in
-active-backup mode with fail_over_mac=follow, where the mac address of a
-device will be updated dynamically even when it is already up and running.
+Hello,
 
-Solution:
-Remove the check of netif_running() in ax88179_set_mac_addr(), so that the
-update procedure can proceed irrespective of the boolean status returned by
-netif_running().
+syzbot found the following issue on:
 
-Verification:
-Only tested with this device:
-0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+HEAD commit:    00988f70a076 Merge tag 'usb-serial-6.0-rc8' of https://git..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=145efc82880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f64cd66daa10a81a
+dashboard link: https://syzkaller.appspot.com/bug?extid=4b677cfa21f5bd6295cd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Signed-off-by: Chun-Chao Yen <nothingstopsme@hotmail.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4b677cfa21f5bd6295cd@syzkaller.appspotmail.com
+
+BUG: KASAN: use-after-free in dvb_devnode+0x122/0x1b0 drivers/media/dvb-core/dvbdev.c:1025
+Read of size 4 at addr ffff888113a1d860 by task udevd/1179
+
+CPU: 0 PID: 1179 Comm: udevd Not tainted 6.0.0-rc7-syzkaller-00946-g00988f70a076 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ dvb_devnode+0x122/0x1b0 drivers/media/dvb-core/dvbdev.c:1025
+ device_get_devnode+0x154/0x2b0 drivers/base/core.c:3796
+ dev_uevent+0x40d/0x770 drivers/base/core.c:2404
+ uevent_show+0x1b8/0x380 drivers/base/core.c:2492
+ dev_attr_show+0x4b/0x90 drivers/base/core.c:2195
+ sysfs_kf_seq_show+0x219/0x3d0 fs/sysfs/file.c:59
+ kernfs_seq_show+0x169/0x1e0 fs/kernfs/file.c:217
+ seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
+ kernfs_fop_read_iter+0x523/0x710 fs/kernfs/file.c:299
+ call_read_iter include/linux/fs.h:2181 [inline]
+ new_sync_read fs/read_write.c:389 [inline]
+ vfs_read+0x67d/0x930 fs/read_write.c:470
+ ksys_read+0x127/0x250 fs/read_write.c:607
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f28d98228fe
+Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+RSP: 002b:00007ffcef6cb338 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 0000559cdeb69680 RCX: 00007f28d98228fe
+RDX: 0000000000001000 RSI: 0000559cdeb746f0 RDI: 000000000000000c
+RBP: 00007f28d98ef380 R08: 000000000000000c R09: 00007f28d98f2a60
+R10: 0000000000000008 R11: 0000000000000246 R12: 0000559cdeb69680
+R13: 0000000000000d68 R14: 00007f28d98ee780 R15: 0000000000000d68
+ </TASK>
+
+The buggy address belongs to the physical page:
+page:ffffea00044e8740 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x113a1d
+flags: 0x200000000000000(node=0|zone=2)
+raw: 0200000000000000 0000000000000000 ffffffff00000201 0000000000000000
+raw: 0000000000000000 0000000000110000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0x140dc0(GFP_USER|__GFP_COMP|__GFP_ZERO), pid 28063, tgid 28063 (kworker/0:5), ts 3378237051573, free_ts 3378714082458
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x11cc/0x2a20 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
+ alloc_pages+0x1a6/0x270 mm/mempolicy.c:2270
+ kmalloc_order+0x34/0xf0 mm/slab_common.c:933
+ kmalloc_order_trace+0x13/0x120 mm/slab_common.c:949
+ kmalloc_large include/linux/slab.h:529 [inline]
+ kmalloc include/linux/slab.h:593 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ dvb_usb_device_init+0x113/0x640 drivers/media/usb/dvb-usb/dvb-usb-init.c:279
+ usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x5d2/0xb80 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page+0x19/0x420 mm/page_alloc.c:3476
+ dvb_usb_device_init+0x50e/0x640 drivers/media/usb/dvb-usb/dvb-usb-init.c:322
+ usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __device_attach_driver+0x1d0/0x2e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:1008
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+
+Memory state around the buggy address:
+ ffff888113a1d700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff888113a1d780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff888113a1d800: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                                       ^
+ ffff888113a1d880: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff888113a1d900: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+
 ---
- drivers/net/usb/ax88179_178a.c | 2 --
- 1 file changed, 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 96ede3a131d4..84016e0567d4 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -958,8 +958,6 @@ static int ax88179_set_mac_addr(struct net_device *net, void *p)
- 	struct sockaddr *addr = p;
- 	int ret;
- 
--	if (netif_running(net))
--		return -EBUSY;
- 	if (!is_valid_ether_addr(addr->sa_data))
- 		return -EADDRNOTAVAIL;
- 
--- 
-2.32.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
