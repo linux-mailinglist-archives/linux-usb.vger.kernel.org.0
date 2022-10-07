@@ -2,111 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8618D5F7D1B
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Oct 2022 20:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238065F7D6C
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Oct 2022 20:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiJGSEL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Oct 2022 14:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S229731AbiJGSce (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Oct 2022 14:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiJGSDK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Oct 2022 14:03:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3D0D9962;
-        Fri,  7 Oct 2022 11:02:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE869614ED;
-        Fri,  7 Oct 2022 18:02:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A14C4347C;
-        Fri,  7 Oct 2022 18:02:12 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZNjDptlw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665165731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wugUkH0LlLzYfPgynaJ//AEyTMustLSmvE+oyYjIDcM=;
-        b=ZNjDptlwlMYkKhw0FDQ4C8wQnpdfM/SDLQk0M4umRY2L8YGB3Azu2CQDA4isKCN0VAEUs9
-        5EDfqSuPe+w2fGOv2rrx81ewduKLXLdJaxvCnnXTzCj8SabhP/TvMyPEvC1jg+J+JCOIVx
-        JuHnL8hFtoUa9nb/vH/2B3tuswcWENk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b5c9a69b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 7 Oct 2022 18:02:11 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v4 6/6] prandom: remove unused functions
-Date:   Fri,  7 Oct 2022 12:01:07 -0600
-Message-Id: <20221007180107.216067-7-Jason@zx2c4.com>
-In-Reply-To: <20221007180107.216067-1-Jason@zx2c4.com>
-References: <20221007180107.216067-1-Jason@zx2c4.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S229636AbiJGScd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Oct 2022 14:32:33 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F639D2CFC;
+        Fri,  7 Oct 2022 11:32:26 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id ay9so3339548qtb.0;
+        Fri, 07 Oct 2022 11:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e6P6g2j7gHc+dCGuLY9AwhSfRUocqi2EQUPgF4YKlwQ=;
+        b=lngHBD4edZIvv6F2ACdGicqNpGRJB4aeCT4vuZAsRE3IkFAgnj4PDIYnb3irLyT2Sl
+         Fj2RUza2HL0srflOAhqz9GATviziXISjpaXgi54XlCgAJHl3bA2A9yeUG78Hqi0Ui6Yu
+         vYEZ9K6dfYoxDixiKx2fcquVhetCVTJ+uYWDR9lht7bfa6PxwytD/1QE5B/R1LwqU8Fn
+         LAUi5mUqysAyn3n6T3b20By3p5LV6xS49hJaROF/aDXj+uJGwuH8wxkEaTC/t9wee8sp
+         dY8qdxqyhoTiZKgfsQmfs144GJrv9EPn1cj3lJAVPOQwaRGWLT4g6/MobqtnC4HIwWV1
+         UUpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e6P6g2j7gHc+dCGuLY9AwhSfRUocqi2EQUPgF4YKlwQ=;
+        b=A2SEr6eFFrK3ByWrIHAMwapqUXO5zWkCWAG2e8ioWRVsCtyTbGlZhc+jGHRII4fwHf
+         8qppMFJpZQ2xcFhfvxQRkTTCZJGGvk1FHbjW5a9F5SI0f/H7nnqyeN9QVnSr0zaaP3a9
+         ahrhoMP7e0SFBvbKRcMBOILBRAq9h9DZdlt4+HLopvFg2Ny3wxYY2Wq5hJKKlw6AW2uv
+         f5F98RycG4o2s5xZq6qoH5RP2njlAPenR/XU1z8ORGhqljaorIklq/PnEToBYhcqGJCt
+         rASHmyeFCNa5l2OFdYP5eLh8e1gKQRtmWr+XEkU4MiuZPj3LIYYWISt5SaiQ273UERGh
+         +9yg==
+X-Gm-Message-State: ACrzQf3VyZmSalpjKEeShtSa7EWrv9FheNV82/pmu+wCGlSQkcBC6uRE
+        rNaTKmdVtXeiG/gHq1WcpM8y8N4bs8sl8w==
+X-Google-Smtp-Source: AMsMyM6tQktkK1zI7/JKOQ34ne9zAhOXQAcYwGfyN1Kp7hclSGuJayjqeKdCR8SI+2zSrLcdCF6usA==
+X-Received: by 2002:a05:622a:50e:b0:35d:4f2c:f3df with SMTP id l14-20020a05622a050e00b0035d4f2cf3dfmr5303886qtx.521.1665167544641;
+        Fri, 07 Oct 2022 11:32:24 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id w20-20020ac86b14000000b0035cebb79aaesm2602229qts.18.2022.10.07.11.32.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Oct 2022 11:32:24 -0700 (PDT)
+From:   justinpopo6@gmail.com
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, vkoul@kernel.org, kishon@ti.com
+Cc:     f.fainelli@gmail.com, alcooperx@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com,
+        Justin Chen <justinpopo6@gmail.com>
+Subject: [PATCH v2] MAINTAINERS: Update maintainers for broadcom USB
+Date:   Fri,  7 Oct 2022 11:32:09 -0700
+Message-Id: <1665167529-9840-1-git-send-email-justinpopo6@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,97 +67,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With no callers left of prandom_u32() and prandom_bytes(), as well as
-get_random_int(), remove these deprecated wrappers, in favor of
-get_random_u32() and get_random_bytes().
+From: Justin Chen <justinpopo6@gmail.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Al Cooper is no longer the internal broadcom maintainer for broadcom
+USB. I will be taking his place as the internal maintainer and as an
+additional upstream maintainer.
+
+Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/char/random.c   | 11 +++++------
- include/linux/prandom.h | 12 ------------
- include/linux/random.h  |  5 -----
- 3 files changed, 5 insertions(+), 23 deletions(-)
+ MAINTAINERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 01acf235f263..2fe28eeb2f38 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -97,7 +97,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
-  * Returns whether or not the input pool has been seeded and thus guaranteed
-  * to supply cryptographically secure random numbers. This applies to: the
-  * /dev/urandom device, the get_random_bytes function, and the get_random_{u8,
-- * u16,u32,u64,int,long} family of functions.
-+ * u16,u32,u64,long} family of functions.
-  *
-  * Returns: true if the input pool has been seeded.
-  *          false if the input pool has not been seeded.
-@@ -161,15 +161,14 @@ EXPORT_SYMBOL(wait_for_random_bytes);
-  *	u16 get_random_u16()
-  *	u32 get_random_u32()
-  *	u64 get_random_u64()
-- *	unsigned int get_random_int()
-  *	unsigned long get_random_long()
-  *
-  * These interfaces will return the requested number of random bytes
-  * into the given buffer or as a return value. This is equivalent to
-- * a read from /dev/urandom. The u8, u16, u32, u64, int, and long
-- * family of functions may be higher performance for one-off random
-- * integers, because they do a bit of buffering and do not invoke
-- * reseeding until the buffer is emptied.
-+ * a read from /dev/urandom. The u8, u16, u32, u64, long family of
-+ * functions may be higher performance for one-off random integers,
-+ * because they do a bit of buffering and do not invoke reseeding
-+ * until the buffer is emptied.
-  *
-  *********************************************************************/
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8656ab7..3e8ecde2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4078,6 +4078,7 @@ N:	bcm7038
+ N:	bcm7120
  
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index 78db003bc290..e0a0759dd09c 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -12,18 +12,6 @@
- #include <linux/percpu.h>
- #include <linux/random.h>
+ BROADCOM BDC DRIVER
++M:	Justin Chen <justinpopo6@gmail.com>
+ M:	Al Cooper <alcooperx@gmail.com>
+ L:	linux-usb@vger.kernel.org
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+@@ -4184,6 +4185,7 @@ F:	Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml
+ F:	drivers/tty/serial/8250/8250_bcm7271.c
  
--/* Deprecated: use get_random_u32 instead. */
--static inline u32 prandom_u32(void)
--{
--	return get_random_u32();
--}
--
--/* Deprecated: use get_random_bytes instead. */
--static inline void prandom_bytes(void *buf, size_t nbytes)
--{
--	return get_random_bytes(buf, nbytes);
--}
--
- struct rnd_state {
- 	__u32 s1, s2, s3, s4;
- };
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 08322f700cdc..147a5e0d0b8e 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -42,10 +42,6 @@ u8 get_random_u8(void);
- u16 get_random_u16(void);
- u32 get_random_u32(void);
- u64 get_random_u64(void);
--static inline unsigned int get_random_int(void)
--{
--	return get_random_u32();
--}
- static inline unsigned long get_random_long(void)
- {
- #if BITS_PER_LONG == 64
-@@ -100,7 +96,6 @@ declare_get_random_var_wait(u8, u8)
- declare_get_random_var_wait(u16, u16)
- declare_get_random_var_wait(u32, u32)
- declare_get_random_var_wait(u64, u32)
--declare_get_random_var_wait(int, unsigned int)
- declare_get_random_var_wait(long, unsigned long)
- #undef declare_get_random_var
+ BROADCOM BRCMSTB USB EHCI DRIVER
++M:	Justin Chen <justinpopo6@gmail.com>
+ M:	Al Cooper <alcooperx@gmail.com>
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+ L:	linux-usb@vger.kernel.org
+@@ -4200,6 +4202,7 @@ F:	Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+ F:	drivers/usb/misc/brcmstb-usb-pinmap.c
  
+ BROADCOM BRCMSTB USB2 and USB3 PHY DRIVER
++M:	Justin Chen <justinpopo6@gmail.com>
+ M:	Al Cooper <alcooperx@gmail.com>
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+ L:	linux-kernel@vger.kernel.org
 -- 
-2.37.3
+2.7.4
 
