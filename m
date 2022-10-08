@@ -2,44 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EED95F85E6
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Oct 2022 17:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC9B5F85ED
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Oct 2022 17:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiJHPj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Oct 2022 11:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S229814AbiJHPnb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Oct 2022 11:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJHPj2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Oct 2022 11:39:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D2C4BD14;
-        Sat,  8 Oct 2022 08:39:26 -0700 (PDT)
+        with ESMTP id S229470AbiJHPn3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Oct 2022 11:43:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC154D271;
+        Sat,  8 Oct 2022 08:43:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B19AACE0AFF;
-        Sat,  8 Oct 2022 15:39:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89939C433C1;
-        Sat,  8 Oct 2022 15:39:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 889F3B80B8E;
+        Sat,  8 Oct 2022 15:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B039C433D6;
+        Sat,  8 Oct 2022 15:43:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665243562;
-        bh=mz2vCGCOEvfMyxm2IwhI2TPNWcuWcXnjlouOu3uMn3Y=;
+        s=korg; t=1665243806;
+        bh=sDbtbSBEwlPcqKBCDGmCUP5vci73/2jmERn/cTwYIVM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=awHIACMQzsGRgKAOjJH2e5yeNW0Y+wbsoTADVnHWhiUhB+7iyhDIeDdr+v3bfXvnN
-         w7DuLcqkly9OfVpjny7gO1OatnBu1899qHklv8iC+h1lO1STEuauuz9KYcXFleCYkp
-         2t0YTsqshSJYDEKfhQWkEfSxBy/c0W16DtAaQGqs=
-Date:   Sat, 8 Oct 2022 17:40:04 +0200
+        b=0iLdtjrPzaxRhvIhuQWhMsEnmR7QXzm4+YYyj0+e+8LGnxc/Q41CY0oRfsrkatqwt
+         fFiEfyJyVDNFuw8HTYQwve0vNKcFlO9t6AzdFSLQqC8xtyZ2VXXgYgXaVXH+hC6brt
+         hE5R2yBlSoSOjS1UWL5SdvZpx0AXj53AQHk9tSJU=
+Date:   Sat, 8 Oct 2022 17:44:07 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     3090101217@zju.edu.cn
-Cc:     pawell@cadence.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jing Leng <jleng@ambarella.com>
-Subject: Re: [PATCH] usb: cdnsp: Fix wrong transmission direction of EP0
-Message-ID: <Y0GZ1P0MBR6gi1hl@kroah.com>
-References: <20220926075902.7390-1-3090101217@zju.edu.cn>
+To:     justinpopo6@gmail.com
+Cc:     alcooperx@gmail.com, balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com,
+        f.fainelli@gmail.com
+Subject: Re: [PATCH] usb: bdc: change state when port disconnected
+Message-ID: <Y0Gax8SUoq59hdoF@kroah.com>
+References: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926075902.7390-1-3090101217@zju.edu.cn>
+In-Reply-To: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -49,25 +51,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 03:59:02PM +0800, 3090101217@zju.edu.cn wrote:
-> From: Jing Leng <jleng@ambarella.com>
+On Wed, Oct 05, 2022 at 12:13:55PM -0700, justinpopo6@gmail.com wrote:
+> From: Justin Chen <justinpopo6@gmail.com>
 > 
-> EP0 transfer is bi-directional, but in the cdnsp gadget, the
-> transmission direction of EP0 is not changed after it is
-> initialized to IN, so the OUT data from EP0 received by the host
-> is invalid.
+> When port is connected and then disconnected, the state stays as
+> configured. Which is incorrect as the port is no longer configured,
+> but in a not attached state.
 > 
-> The value of ep0_expect_in will change according to the value of
-> bRequestType in the SETUP transaction of control transfer, so we
-> can use it as the transmission direction of EP0.
-> 
-> Signed-off-by: Jing Leng <jleng@ambarella.com>
+> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+> ---
+>  drivers/usb/gadget/udc/bdc/bdc_udc.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-Your email does not match your From: line and the signature of it shows
-that it is invalid and does not pass authentication :(
-
-Please work with your university to get an email address that works
-properly.
+What commit id does this fix?  Should it go to older kernels?  If so,
+how far back?
 
 thanks,
 
