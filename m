@@ -2,74 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2A65F8684
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Oct 2022 20:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8505F8732
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Oct 2022 21:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiJHSQg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Oct 2022 14:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        id S229900AbiJHTou (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Oct 2022 15:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJHSQc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Oct 2022 14:16:32 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487403A177;
-        Sat,  8 Oct 2022 11:16:31 -0700 (PDT)
+        with ESMTP id S229928AbiJHTop (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Oct 2022 15:44:45 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7E2E0D3;
+        Sat,  8 Oct 2022 12:44:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665252991; x=1696788991;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q7YlJwn22ePcF+UsrTEOpg8IcVNJxX9fgtN3uSim9/E=;
-  b=Cy4RrU9t92ztTMzry6jaPaWlZaLIB+yMDteFQq7drWgDpR+tajmRMi64
-   ykD3t070bB43GQAQqvKyud+dBzKSeDr8V9s1IEBmkV0dAcLzqehFOyr7D
-   un7mKVNaVlaMrC5a6GwPw82JHRxcdMaLG+ubeZmMsq+l6ls5ltIZoYNjZ
-   53DwZoCUDNZvtTqD+V3ypiLvmlGZwi67J28TZLHt2ZD7uotZLAc3Az7tf
-   yDSD16lHUMpqwIRCGkVQz2qnC+0rEx1ZaMbO71IBwW04LXG1zegKMQoHN
-   5nZHsTBnhmJHREjKkJp2rp/DM/3J4jmEGia2mk3bRlY0E6RcO+5EIrz0B
+  t=1665258284; x=1696794284;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9lmz04rN+kLTMcQl6akRYapYbLeumDWgsbmmCsC6CtU=;
+  b=WwLoRxANyePd6/AGKdL1KfiF92b/LIthMsuLpQ0WJcc7DG7Fu4ni3sTl
+   sNETUMCieVwsPuUWdABqjin5uym3LOtv+Qi1bnmGhZUqKczh9NZnzvoGJ
+   mb/AzvfCaeNkZjXJadTTpeMtNErWvWkQpmCZXewFERUPqPse05hcaitb4
+   teRizaUltkxjnmv24RH8yFG/82CV3TEYKMjZ3+ocFp5a7MrQcs68ALe0y
+   ALh9SPjQdorLQyKr5jGDpiBPQyiRoLZ6icAjwBEdxazDlxC6U40T+foFS
+   JUb41YP4KtOWmT9hM+jVlXYO4atPSMUS+7MZUSsAu5Kh7UucoCaOdIW3k
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="390269218"
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="303961674"
 X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
-   d="scan'208";a="390269218"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 11:16:30 -0700
+   d="scan'208";a="303961674"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 12:44:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="750899918"
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="730041067"
 X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
-   d="scan'208";a="750899918"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 08 Oct 2022 11:16:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ohEN3-0048ft-0Q;
-        Sat, 08 Oct 2022 21:16:21 +0300
-Date:   Sat, 8 Oct 2022 21:16:20 +0300
+   d="scan'208";a="730041067"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Oct 2022 12:44:41 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1C797D0; Sat,  8 Oct 2022 22:45:02 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
-Message-ID: <Y0G+dP9uGaYHSa9y@smile.fi.intel.com>
-References: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] thunderbolt: Use str_enabled_disabled() helper
+Date:   Sat,  8 Oct 2022 22:45:01 +0300
+Message-Id: <20221008194501.38157-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,73 +62,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 08:50:43PM -0700, Kees Cook wrote:
-> On October 7, 2022 7:21:28 PM PDT, "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
-> >On Fri, Oct 07, 2022 at 03:47:44PM -0700, Kees Cook wrote:
-> >> On Fri, Oct 07, 2022 at 12:01:03PM -0600, Jason A. Donenfeld wrote:
+Use str_enabled_disabled() helper instead of open coding the same.
 
-...
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/thunderbolt/switch.c  | 5 +++--
+ drivers/thunderbolt/xdomain.c | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-> >> These are more fun, but Coccinelle can still do them with a little
-> >> Pythonic help:
-> >> 
-> >> // Find a potential literal
-> >> @literal_mask@
-> >> expression LITERAL;
-> >> identifier randfunc =~ "get_random_int|prandom_u32|get_random_u32";
-> >> position p;
-> >> @@
-> >> 
-> >>         (randfunc()@p & (LITERAL))
-> >> 
-> >> // Add one to the literal.
-> >> @script:python add_one@
-> >> literal << literal_mask.LITERAL;
-> >> RESULT;
-> >> @@
-> >> 
-> >> if literal.startswith('0x'):
-> >>         value = int(literal, 16) + 1
-> >>         coccinelle.RESULT = cocci.make_expr("0x%x" % (value))
-> >> elif literal[0] in '123456789':
-> >>         value = int(literal, 10) + 1
-> >>         coccinelle.RESULT = cocci.make_expr("%d" % (value))
-> >> else:
-> >>         print("I don't know how to handle: %s" % (literal))
-
-Wouldn't Python take care about (known) prefixes itself?
-
-	try:
-		x = int(literal)
-	except ValueError as ex:
-		print(..., ex.error)
-
-> >> // Replace the literal mask with the calculated result.
-> >> @plus_one@
-> >> expression literal_mask.LITERAL;
-> >> position literal_mask.p;
-> >> expression add_one.RESULT;
-> >> identifier FUNC;
-> >> @@
-> >> 
-> >> -       (FUNC()@p & (LITERAL))
-> >> +       prandom_u32_max(RESULT)
-> >
-> >Oh that's pretty cool. I can do the saturation check in python, since
-> >`value` holds the parsed result. Neat.
-> 
-> It is (at least how I have it here) just the string, so YMMV.
-
-...
-
-> >Thanks a bunch for the guidance.
-> 
-> Sure thing! I was pleased to figure out how to do the python bit.
-
-I believe it can be optimized
-
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 60da5c23ccaf..363d712aa364 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -8,12 +8,13 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/idr.h>
++#include <linux/module.h>
+ #include <linux/nvmem-provider.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/sched/signal.h>
+ #include <linux/sizes.h>
+ #include <linux/slab.h>
+-#include <linux/module.h>
++#include <linux/string_helpers.h>
+ 
+ #include "tb.h"
+ 
+@@ -644,7 +645,7 @@ static int __tb_port_enable(struct tb_port *port, bool enable)
+ 	if (ret)
+ 		return ret;
+ 
+-	tb_port_dbg(port, "lane %sabled\n", enable ? "en" : "dis");
++	tb_port_dbg(port, "lane %s\n", str_enabled_disabled(enable));
+ 	return 0;
+ }
+ 
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index f00b2f62d8e3..ddd8fd2d06f8 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -13,6 +13,7 @@
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/prandom.h>
++#include <linux/string_helpers.h>
+ #include <linux/utsname.h>
+ #include <linux/uuid.h>
+ #include <linux/workqueue.h>
+@@ -1344,7 +1345,7 @@ static int tb_xdomain_bond_lanes_uuid_high(struct tb_xdomain *xd)
+ 	tb_port_update_credits(port);
+ 	tb_xdomain_update_link_attributes(xd);
+ 
+-	dev_dbg(&xd->dev, "lane bonding %sabled\n", width == 2 ? "en" : "dis");
++	dev_dbg(&xd->dev, "lane bonding %s\n", str_enabled_disabled(width == 2));
+ 	return 0;
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
