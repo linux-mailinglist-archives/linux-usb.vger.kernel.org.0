@@ -2,105 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6C85F862B
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Oct 2022 19:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2A65F8684
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Oct 2022 20:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJHRL1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Oct 2022 13:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S231133AbiJHSQg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Oct 2022 14:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiJHRLY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Oct 2022 13:11:24 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE7E46215
-        for <linux-usb@vger.kernel.org>; Sat,  8 Oct 2022 10:11:23 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id w10so10826335edd.4
-        for <linux-usb@vger.kernel.org>; Sat, 08 Oct 2022 10:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b5FO62lWuXXjkWadjwalneNxwoveR/Ow6np6vHDk1vM=;
-        b=oWmrc0xeK3r0LS7Q41Ku+pVzay4ZN+XZH9XIUbYo2sYhFHyFSWj77seJdaRe1OyWXX
-         UozxQJIgbO26Mf+sbSZjoGAHdAXqsKAs5PbzfAX6lVn4SiieeyuSdzRNq01GA+O71E45
-         mc5v9n4H603c20glqu+DeAtTb0w9H6Q8bWylXo48TUKYPWuT+oebyrkCGeAyPjAj47Cs
-         338LFZLbsavKpsRJVX8vrZZgtTolj1AOtXXYcNOfpP9cvqFC33VQfoQL+8wmgUCXkcum
-         8l1r6OjMNQG6zw8EGkyCTbnXp65V/ZtVWesL8lk98h+pOvxF0t8JyTDq403Qa5BRcBld
-         lRZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b5FO62lWuXXjkWadjwalneNxwoveR/Ow6np6vHDk1vM=;
-        b=VFlD8WIF6yYTrohOpB3TbkpE5ACyy/L1Zo0dbm5AULK6nzSvLDa0A9OmKGNkkRM2Av
-         Uaa0D0jrd1jycFGQD/BKSFsjFDCAqZNLeNF72cbMtqoaAXUPSXV8PuITFj3wODLHPxJM
-         8mU2sk7BgWgCn08c97EotYuRjbCFMLiWy796h7e8ajLr/NXZtd51ey6bBD1LisfL6nsC
-         0S54EGRQqi7HFf8HnHrCrtEHgx49uYLSUENCyvzwlpEJm+3JRWov9sPBfO/+HC7tQbY+
-         MwWqiC5wLfhnxuxQ5zPRUtS6PxJNcc7Q3/4mdLBxHwqDt9K9AMNv3fTcC2vnN6wREAeK
-         YVmg==
-X-Gm-Message-State: ACrzQf1KQq0OWPSwVq7+tFWc1PqtH+qy3wmqW5Re60waQ3uGTOYQjZ4+
-        /+8jNFMMTfZAGVBBszB+hUh4RSYZE9OZbA0KuEA=
-X-Google-Smtp-Source: AMsMyM7O7x2niW6Ou65IfxEfKdq+oD3JSwWJvD1qNxlLTCyM+1NRgwPoi2IF2yIJVLOoNCJclVEd02DDz4rkuFdC6NM=
-X-Received: by 2002:a05:6402:430a:b0:459:a049:76da with SMTP id
- m10-20020a056402430a00b00459a04976damr9459254edc.272.1665249081668; Sat, 08
- Oct 2022 10:11:21 -0700 (PDT)
+        with ESMTP id S229916AbiJHSQc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Oct 2022 14:16:32 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487403A177;
+        Sat,  8 Oct 2022 11:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665252991; x=1696788991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q7YlJwn22ePcF+UsrTEOpg8IcVNJxX9fgtN3uSim9/E=;
+  b=Cy4RrU9t92ztTMzry6jaPaWlZaLIB+yMDteFQq7drWgDpR+tajmRMi64
+   ykD3t070bB43GQAQqvKyud+dBzKSeDr8V9s1IEBmkV0dAcLzqehFOyr7D
+   un7mKVNaVlaMrC5a6GwPw82JHRxcdMaLG+ubeZmMsq+l6ls5ltIZoYNjZ
+   53DwZoCUDNZvtTqD+V3ypiLvmlGZwi67J28TZLHt2ZD7uotZLAc3Az7tf
+   yDSD16lHUMpqwIRCGkVQz2qnC+0rEx1ZaMbO71IBwW04LXG1zegKMQoHN
+   5nZHsTBnhmJHREjKkJp2rp/DM/3J4jmEGia2mk3bRlY0E6RcO+5EIrz0B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="390269218"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="390269218"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 11:16:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="750899918"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="750899918"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 08 Oct 2022 11:16:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ohEN3-0048ft-0Q;
+        Sat, 08 Oct 2022 21:16:21 +0300
+Date:   Sat, 8 Oct 2022 21:16:20 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
+Message-ID: <Y0G+dP9uGaYHSa9y@smile.fi.intel.com>
+References: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
 MIME-Version: 1.0
-Sender: mohamadohamad60@gmail.com
-Received: by 2002:a17:906:7d4e:b0:781:83bc:483c with HTTP; Sat, 8 Oct 2022
- 10:11:20 -0700 (PDT)
-From:   Sawadogo Mahama <sawadogomahama801@gmail.com>
-Date:   Sat, 8 Oct 2022 18:11:20 +0100
-X-Google-Sender-Auth: C6ncKqifvA4M2aUfD-qjadbZIhk
-Message-ID: <CAOiY58UTAeY77=xgqv=m-fbbD1HecJUbOGrHTrNBhqBbE0x+eg@mail.gmail.com>
-Subject: YOUR URGENT RESPOND NEEDED
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DEAR_FRIEND,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:544 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5015]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mohamadohamad60[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mohamadohamad60[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Friend,
+On Fri, Oct 07, 2022 at 08:50:43PM -0700, Kees Cook wrote:
+> On October 7, 2022 7:21:28 PM PDT, "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+> >On Fri, Oct 07, 2022 at 03:47:44PM -0700, Kees Cook wrote:
+> >> On Fri, Oct 07, 2022 at 12:01:03PM -0600, Jason A. Donenfeld wrote:
 
-My Name is Mr.Sawadogo Mahama; I am a banker by profession. My reason
-forcontacting you is to transfer an abandoned $25.3 Million United States
-Dollars to your account.
+...
 
-Further details of the transaction shall be forwarded to you as soonas I
-receive your return mail indicating your interest.
+> >> These are more fun, but Coccinelle can still do them with a little
+> >> Pythonic help:
+> >> 
+> >> // Find a potential literal
+> >> @literal_mask@
+> >> expression LITERAL;
+> >> identifier randfunc =~ "get_random_int|prandom_u32|get_random_u32";
+> >> position p;
+> >> @@
+> >> 
+> >>         (randfunc()@p & (LITERAL))
+> >> 
+> >> // Add one to the literal.
+> >> @script:python add_one@
+> >> literal << literal_mask.LITERAL;
+> >> RESULT;
+> >> @@
+> >> 
+> >> if literal.startswith('0x'):
+> >>         value = int(literal, 16) + 1
+> >>         coccinelle.RESULT = cocci.make_expr("0x%x" % (value))
+> >> elif literal[0] in '123456789':
+> >>         value = int(literal, 10) + 1
+> >>         coccinelle.RESULT = cocci.make_expr("%d" % (value))
+> >> else:
+> >>         print("I don't know how to handle: %s" % (literal))
 
-Thanks and hoping to hear from you soon.
+Wouldn't Python take care about (known) prefixes itself?
 
-Mr.Sawadogo Mahama
+	try:
+		x = int(literal)
+	except ValueError as ex:
+		print(..., ex.error)
+
+> >> // Replace the literal mask with the calculated result.
+> >> @plus_one@
+> >> expression literal_mask.LITERAL;
+> >> position literal_mask.p;
+> >> expression add_one.RESULT;
+> >> identifier FUNC;
+> >> @@
+> >> 
+> >> -       (FUNC()@p & (LITERAL))
+> >> +       prandom_u32_max(RESULT)
+> >
+> >Oh that's pretty cool. I can do the saturation check in python, since
+> >`value` holds the parsed result. Neat.
+> 
+> It is (at least how I have it here) just the string, so YMMV.
+
+...
+
+> >Thanks a bunch for the guidance.
+> 
+> Sure thing! I was pleased to figure out how to do the python bit.
+
+I believe it can be optimized
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
