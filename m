@@ -2,50 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D525F92E5
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 00:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437FD5F9318
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 00:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbiJIWxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Oct 2022 18:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S233914AbiJIW4H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Oct 2022 18:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233721AbiJIWv5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Oct 2022 18:51:57 -0400
+        with ESMTP id S233797AbiJIWx0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Oct 2022 18:53:26 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F09848CB0;
-        Sun,  9 Oct 2022 15:27:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587F448EA9;
+        Sun,  9 Oct 2022 15:28:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99D12B80DC9;
-        Sun,  9 Oct 2022 22:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1A9C433C1;
-        Sun,  9 Oct 2022 22:27:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94758B80E00;
+        Sun,  9 Oct 2022 22:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA3F2C433D6;
+        Sun,  9 Oct 2022 22:27:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665354432;
-        bh=zsc+NPBNRssYvuCi2pIfNAVP01gepb+7Au+cEg+X6mA=;
+        s=k20201202; t=1665354481;
+        bh=/DR/Pm6olMKD07sZdtTxvKVfY++LskMxUDTIWs68pxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HrnFuICPXPb8psXsrJNuwkNiB318z8yx6WhE+frwFQOQU3pp2VJWVUZj5Qe7yxRTJ
-         WwyT82oZZ4aB1M02VA8pdcT94NeTzMaNtPkGDWgUj6W1FZThJp0UC67y/3N+AwASVb
-         WITjY3XwA4/N2cwJCR7xVhpjbvpkXUjyXKQNJGuMNPDjJlC3UlWO/ZIvOQWHfvByRx
-         JGyozdHgkl64Rsumti/z4zW+W9NOAskkbDr0f8fKROGuI6MWm9KW+/CA3/K32gCpAM
-         pVXg18m5suLuP4xj1LcjPCL98DG6eF/eaV60LCqBYMJgWg8pLN0LBH/JGKRf9kajwq
-         PqOSZBW3+gNdw==
+        b=F2rABrOgyZe531eUfWSTqeupEVRotVKyoORytRO3qEEU+yf8ugOx3ceWyAaGvOSsW
+         3hDbsO2T2hDUWoCSHGClLUMNwhs/oG/YkqXlCDqWKe34NipgVkxhiQ6UlW/XPuf+M6
+         W8Vdc4xTVRO+8QB8hpeNY8Db1+wOliY/JAJP80++kdsfE87zAGJtPqw8Zrv7h57VmU
+         Vpy2c7r82aoBIgBSc9Pm038NFra0IWPxseHZkwMwaaU1cL9H7fa1PSNSp+ekTrTKuu
+         wAOXCJADNpG6T2lMSiKaIHqR/a6qaef7AVkrFL4QEWayb2/mdKfDZiPeMEYOQuMI2A
+         c0XOfwxXQF2ZA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrew Gaul <gaul@gaul.org>, Andrew Gaul <gaul@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
         edumazet@google.com, pabeni@redhat.com, hayeswang@realtek.com,
-        jflf_kernel@gmx.com, aaron.ma@canonical.com,
-        chenhao288@hisilicon.com, dober6023@gmail.com, svenva@chromium.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 23/23] r8152: Rate limit overflow messages
-Date:   Sun,  9 Oct 2022 18:25:53 -0400
-Message-Id: <20221009222557.1219968-23-sashal@kernel.org>
+        aaron.ma@canonical.com, jflf_kernel@gmx.com, dober6023@gmail.com,
+        svenva@chromium.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 16/16] r8152: Rate limit overflow messages
+Date:   Sun,  9 Oct 2022 18:27:12 -0400
+Message-Id: <20221009222713.1220394-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009222557.1219968-1-sashal@kernel.org>
-References: <20221009222557.1219968-1-sashal@kernel.org>
+In-Reply-To: <20221009222713.1220394-1-sashal@kernel.org>
+References: <20221009222713.1220394-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index a5a4fef09b93..1ed358d0da84 100644
+index 96f6edcb0062..a354695a22a9 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -1382,7 +1382,9 @@ static void intr_callback(struct urb *urb)
+@@ -1282,7 +1282,9 @@ static void intr_callback(struct urb *urb)
  			   "Stop submitting intr, status %d\n", status);
  		return;
  	case -EOVERFLOW:
