@@ -2,76 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF735F89FE
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Oct 2022 09:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A175F8A03
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Oct 2022 09:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiJIHYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Oct 2022 03:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
+        id S229914AbiJIHeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Oct 2022 03:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJIHYX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Oct 2022 03:24:23 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1241F622;
-        Sun,  9 Oct 2022 00:24:22 -0700 (PDT)
-Received: from localhost.localdomain ([222.20.126.44])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 2997NQwF022725-2997NQwI022725
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Sun, 9 Oct 2022 15:23:31 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: cdns3: adjust the partial logic of cdnsp_pci_remove
-Date:   Sun,  9 Oct 2022 15:23:05 +0800
-Message-Id: <20221009072305.1593707-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229463AbiJIHeV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Oct 2022 03:34:21 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158573386C;
+        Sun,  9 Oct 2022 00:34:20 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bj12so19099217ejb.13;
+        Sun, 09 Oct 2022 00:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TcltXX1LdWoOAyefprBIZA4YErGm5XD+4QXIrmFx73U=;
+        b=Mf1Rn9gLGA6iv8vxQbOOODoJJCL/sBVy+ZOQflKcDqjO6kFJ2WeSvKrFRjqjhabGdl
+         55sETv4Dqd8VVhjwlxVCkhDL9qXAJTfSWUZL4c1VgBv67+ivy4RPiZc1DdyAiZoloq2V
+         cFLTAjcLWx6m2Ph0q5ZOnk5WEK7fMmPwUucrZHseo/7iRc2P2tZhoLAe/9/ezIzKnRXa
+         a73BN8lRoE5cXAEXY2jYVOAuMWOCDi3T1hTXTX2VCcRQzUyWeCFGBO0liAHAstQN4Ian
+         gi9lqdiFaLqfx9N7ZAvkkKf4pjBtjxpLV3AA9+3SBWt4kpINDyIZmR0cCg1RytRO9Cwb
+         pokQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TcltXX1LdWoOAyefprBIZA4YErGm5XD+4QXIrmFx73U=;
+        b=01lgSw0nXb+bY9I2+b2237UIFDk9U81o7Gbvl3sAdRB70GyMMtYGUvcguCjYH7zWpM
+         olOh//n8H21gr98u9lDg79to5+sUC7V333i3UEyR9d9scQH1NEbfApxGqXx/ZaSJr8tC
+         NSYQ26i2e/a2e7m8ZzDKJRP7bIuwmscqi3T05eRmE/Rm+gGuwdRha/x7qLqU66xKCRt+
+         qJGGtkT4QOb42V7Ky59S8O0u9Q7aAjG/565jXuL/oV7uQrGO2wI+Iiwhkft5TWm7dUT5
+         Lq6ukNrUBGt/FHMbIJpy2Ka+aw8ikSYMWN5odjAgoVQZo9EIqOdteRgP2z+MybbesScH
+         RV1Q==
+X-Gm-Message-State: ACrzQf2TdivI8DR4xIbRDzq2HpBg9nnuoFHfY3/boYoG/j0fRCbtCZke
+        Sj3AepKthnAf7FNSlDLAIhXVyw/uVJh7wGyE9jo=
+X-Google-Smtp-Source: AMsMyM5eel8bBb92o0PnLkdYxvua+NJAD7IPlPSX97TIlrOLGp4WigSjsxkTvYyQfCLwehPv8Hx5xRnt3ySPBTakMxE=
+X-Received: by 2002:a17:906:7310:b0:782:cfd4:9c07 with SMTP id
+ di16-20020a170906731000b00782cfd49c07mr10841307ejc.708.1665300858584; Sun, 09
+ Oct 2022 00:34:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221009053245.154922-1-dzm91@hust.edu.cn> <Y0Jv0zkDYM9nuPol@kroah.com>
+In-Reply-To: <Y0Jv0zkDYM9nuPol@kroah.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Sun, 9 Oct 2022 15:33:51 +0800
+Message-ID: <CAD-N9QW8jpdHv71eCQvRb6g1oZHBPH6y39V=5fuvcVPgtZJN-Q@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdns3: adjust the partial logic of cdnsp_pci_remove
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In cdnsp_pci_remove, if pci_is_enabled returns true, it will
-call cdns_remove; else it will call kfree. Then both control flow
-goes to pci_dev_put.
+On Sun, Oct 9, 2022 at 2:52 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Oct 09, 2022 at 01:32:45PM +0800, Dongliang Mu wrote:
+> > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >
+> > In cdnsp_pci_remove, if pci_is_enabled returns true, it will
+> > call cdns_remove; else it will call kfree. Then both control flow
+> > goes to pci_dev_put.
+> >
+> > Adjust this logic by modifying it to an if else.
+> >
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+>
+> Your email address does not match your From: address, and your From:
+> address is saying it is being spoofed and not correct :(
+>
+> Please work with your school to fix your email system and do not use
+> gmail to hide it.
 
-Adjust this logic by modifying it to an if else.
+My git config uses Gmail. I forget to change this after I joined the
+new school and changed sendmail configuration.
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- drivers/usb/cdns3/cdnsp-pci.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+I sent a new version several minutes ago.
 
-diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
-index fe8a114c586c..efd54ed918b9 100644
---- a/drivers/usb/cdns3/cdnsp-pci.c
-+++ b/drivers/usb/cdns3/cdnsp-pci.c
-@@ -192,14 +192,12 @@ static void cdnsp_pci_remove(struct pci_dev *pdev)
- 	if (pci_dev_run_wake(pdev))
- 		pm_runtime_get_noresume(&pdev->dev);
- 
--	if (!pci_is_enabled(func)) {
-+	if (pci_is_enabled(func)) {
-+		cdns_remove(cdnsp);
-+	} else {
- 		kfree(cdnsp);
--		goto pci_put;
- 	}
- 
--	cdns_remove(cdnsp);
--
--pci_put:
- 	pci_dev_put(func);
- }
- 
--- 
-2.25.1
-
+>
+> thanks,
+>
+> greg k-h
