@@ -2,178 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659A45F9F2D
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 15:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970F05F9F99
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 15:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiJJNMT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Oct 2022 09:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S229726AbiJJNoV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Oct 2022 09:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJJNMS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 09:12:18 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A182815718;
-        Mon, 10 Oct 2022 06:12:14 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id x188so3671489oig.5;
-        Mon, 10 Oct 2022 06:12:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=15TAcF8NS+8qj3HRwBKgB2ME6XMr5Q7+Ypj2Gz0CqG8=;
-        b=SFnIGjU6UaCpk6Uj74+pvKIXBPiDSqQ4kxqkbk7O8vJ9pLX0cbGmXaiUE12FZMfz4U
-         iFfQYSNcypgn1vMQPz+cEH/N4vfqimdi3Dt5oZLUBzTMk0PeP0KCSH836PE+ZJCTJO2Y
-         DPjVVbaKcZ9rLdXOV0w1vBoppyALAM9R4+STeV8lYqQovFX3QR3QHADlQvXBSmeKTEnq
-         4p25xhmIFUbOXC+QHtwpqnFsFYxbD8QH9zpTnhS+mezYxXrgVotsQTX934+5W4i0n1E5
-         TukOH/N1ZbysCLDGTkadFuYlAN0rlDiL43r6ts6A683ZeRzFKzEuhExrUSg7sFXbfQtD
-         b1ow==
-X-Gm-Message-State: ACrzQf02t7XibulzKIxPBY59mpkmJqdwUnrYKUNrPosuknn6eadHGU/l
-        mOeZWk+B8Ttg6U61SoW/JkHLyqZYlA==
-X-Google-Smtp-Source: AMsMyM7DJkA6/IcdCMCNjVQg06TdinHfCbleCPCXBUrEl1ZkMm3jMOJkRirkoSin/GpHh11KRUFp8Q==
-X-Received: by 2002:a05:6808:2387:b0:350:28c5:335 with SMTP id bp7-20020a056808238700b0035028c50335mr13639954oib.18.1665407532975;
-        Mon, 10 Oct 2022 06:12:12 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m26-20020a4ae3da000000b00476995b5f0fsm4129135oov.9.2022.10.10.06.12.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 06:12:12 -0700 (PDT)
-Received: (nullmailer pid 503584 invoked by uid 1000);
-        Mon, 10 Oct 2022 13:12:13 -0000
-Date:   Mon, 10 Oct 2022 08:12:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jun.li@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 4/6] dt-bindings: usb: usbmisc-imx: convert to yaml
-Message-ID: <20221010131213.GA498324-robh@kernel.org>
-References: <20221010101816.298334-1-peng.fan@oss.nxp.com>
- <20221010101816.298334-5-peng.fan@oss.nxp.com>
+        with ESMTP id S229657AbiJJNoU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 09:44:20 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338356DADD;
+        Mon, 10 Oct 2022 06:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665409459; x=1696945459;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=BywnrqOJACxc9IvuSLmMQKkKOaV89CWVOUKLR/DYNjE=;
+  b=WCUlmREao7ry8yaozT2hPokpElInSI7vmx+zw+mnn6D9khphe5jACv3t
+   sBt8F/MezsUiGc6TBBdmHn/kZlUXpK9K79or5zR5Nse7HnZHMJX52IRjU
+   +dD46Ei3NqdlSsO9xYhAWZNl8RNsyKWXQIucC3aCzLf01+FP7UaN+LD/o
+   Bqtkey7Vo/TNiNcZupN5SQIkIeDc92f27AxVlmFEc3YYEVVKtubQMcKSx
+   /5+8sGJuGCbwSO7SMKNpYWX/9osGtPUZgiDlJ1B6qITFXGTZJ+C5ai4HM
+   D2YaoHZyO4twiByzjJXzgtdB9C70HcW0SoH032XZa4GiQ1hQrKj1If3Fx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="302965752"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="302965752"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 06:44:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="656934172"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="656934172"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga008.jf.intel.com with ESMTP; 10 Oct 2022 06:44:16 -0700
+Message-ID: <5602aab5-17c9-67ba-9353-e3b14a5c2e54@linux.intel.com>
+Date:   Mon, 10 Oct 2022 16:45:43 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010101816.298334-5-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221006211529.1858-1-mario.limonciello@amd.com>
+ <20221006211529.1858-2-mario.limonciello@amd.com>
+ <Yz/3eeVjx8v6/MJe@black.fi.intel.com>
+ <MN0PR12MB61013B3B55D21A49C2450B1AE25F9@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] xhci-pci: Set runtime PM as default policy on all
+ xHC 1.2 or later devices
+In-Reply-To: <MN0PR12MB61013B3B55D21A49C2450B1AE25F9@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 06:18:14PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Convert usbmisc-imx to yaml format.
-
-s/yaml/DT schema/
-
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/usb/usbmisc-imx.txt   | 18 -------
->  .../devicetree/bindings/usb/usbmisc-imx.yaml  | 52 +++++++++++++++++++
->  2 files changed, 52 insertions(+), 18 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt b/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-> deleted file mode 100644
-> index b796836d2ce7..000000000000
-> --- a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
-> -* Freescale i.MX non-core registers
-> -
-> -Required properties:
-> -- #index-cells: Cells used to describe usb controller index. Should be <1>
-> -- compatible: Should be one of below:
-> -	"fsl,imx6q-usbmisc" for imx6q
-> -	"fsl,vf610-usbmisc" for Vybrid vf610
-> -	"fsl,imx6sx-usbmisc" for imx6sx
-> -	"fsl,imx7d-usbmisc" for imx7d
-> -	"fsl,imx7ulp-usbmisc" for imx7ulp
-> -- reg: Should contain registers location and length
-> -
-> -Examples:
-> -usbmisc@2184800 {
-> -	#index-cells = <1>;
-> -	compatible = "fsl,imx6q-usbmisc";
-> -	reg = <0x02184800 0x200>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-> new file mode 100644
-> index 000000000000..c0741ce9b523
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/usbmisc-imx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale i.MX non-core registers
-> +
-> +maintainers:
-> +  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-No, should be someone that knows this h/w, not who applies patches.
-
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - fsl,imx6q-usbmisc
-> +          - fsl,imx7ulp-usbmisc
-> +          - fsl,vf610-usbmisc
-> +      - items:
-> +          - enum:
-> +              - fsl,imx6ul-usbmisc
-> +              - fsl,imx6sx-usbmisc
-> +              - fsl,imx7d-usbmisc
-> +          - const: fsl,imx6q-usbmisc
-> +      - items:
-> +          - enum:
-> +              - fsl,imx7ulp-usbmisc
-> +          - const: fsl,imx7d-usbmisc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#index-cells':
-
-Humm, I doubt this got reviewed...
-
-> +    const: 1
-> +    description: Cells used to describe usb controller index. Should be <1>
-
-Drop 'Should be <1>'. The constraints already say that.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#index-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usbmisc@2184800 {
-> +        #index-cells = <1>;
-> +        compatible = "fsl,imx6q-usbmisc";
-> +        reg = <0x02184800 0x200>;
-> +    };
-> +
-> +...
-> -- 
-> 2.37.1
+On 7.10.2022 19.42, Limonciello, Mario wrote:
+> [Public]
 > 
 > 
+> 
+>> -----Original Message-----
+>> From: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Sent: Friday, October 7, 2022 04:55
+>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+>> Cc: Mathias Nyman <mathias.nyman@intel.com>; Mehta, Sanju
+>> <Sanju.Mehta@amd.com>; Mathias Nyman
+>> <mathias.nyman@linux.intel.com>; Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Subject: Re: [PATCH v2 1/2] xhci-pci: Set runtime PM as default policy on all
+>> xHC 1.2 or later devices
+>>
+>> On Thu, Oct 06, 2022 at 04:15:28PM -0500, Mario Limonciello wrote:
+>>> -	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
+>>> -	    (pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_1 ||
+>>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_2 ||
+>>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_3 ||
+>>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4 ||
+>>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5 ||
+>>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6 ||
+>>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_7 ||
+>>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_8))
+>>
+>> Can you add a comment here explaining why this is OK? I think it is
+>> easier that way to find out why this is here in the future instead of
+>> going through the git blame history.
+> 
+> Sure, no problem.
+> 
+> I'll hold off sending a v3 though until you and Mathias can double check
+> everything in patch 2/2 is OK to take out and agree with that secondary logic
+> change.
+
+Lets only enable it for xHCI 1.2 and controllers for now.
+Avoiding unnecessary regressions.
+
+So on Intel side the ALDER_LAKE*, RAPTOR_LAKE and METEOR_LAKE can be removed.
+I'll double check other Intel hosts before submitting it forward
+
+Thanks
+-Mathias
