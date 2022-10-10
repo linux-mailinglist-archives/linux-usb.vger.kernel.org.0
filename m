@@ -2,210 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF6A5F9D47
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 13:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED8C5F9E3F
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 14:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiJJLE6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Oct 2022 07:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S232371AbiJJMBC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Oct 2022 08:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiJJLE5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 07:04:57 -0400
-Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ECD51A042;
-        Mon, 10 Oct 2022 04:04:54 -0700 (PDT)
-Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
-        by radex-web.radex.nl (Postfix) with ESMTPS id 9AD542406A;
-        Mon, 10 Oct 2022 13:04:53 +0200 (CEST)
-Message-ID: <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com>
-Date:   Mon, 10 Oct 2022 13:04:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-Content-Language: en-US
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
- <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
- <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
- <YzvusOI89ju9e5+0@smile.fi.intel.com>
- <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
- <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
- <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
- <20221006021204.hz7iteao65dgsev6@synopsys.com>
- <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
- <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
- <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
- <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
-From:   Ferry Toth <fntoth@gmail.com>
-In-Reply-To: <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S232319AbiJJMA7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 08:00:59 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB1B422E1;
+        Mon, 10 Oct 2022 05:00:53 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1321a1e94b3so12228828fac.1;
+        Mon, 10 Oct 2022 05:00:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cvr1/y9Of9lpkIqcjV6G6ntkRJTdHb+csNczqS1QY0Y=;
+        b=a0lHkpgWoOGnGl0rGq+SGanzJp45Y+NbjugJ01P+TbmlUhls0YLMny8DJclbTuXRQ/
+         MV+NDx2CYa7hnLQxgyvpCSt2xsIZm03tgJAEAFGPYYC9aNGYHIvWRLNM7Lv5W02jlaX5
+         ODtGCqhvasunRbPb1A6regiJO4BzK4CKVeBSglbn38Sv9qgpcbAlPhWqKTA8dXCc0xFL
+         nvll7Ug+8QE/v3FT4sz4o0+3wh6kNVr0XzPveW0nN/rK9b2eYOLIvfCPWifKzqMTQB20
+         uN79xJYxtnY8eGHjpsaYeX7ebCuXUJuRZZh+fIxpmYjWyRREDHDMv5ATB5fvPwqnuNxh
+         h9Pg==
+X-Gm-Message-State: ACrzQf1lL4o+7Ia8f1nRd9SrxztGyVEhPgK3rHkKSMXI6ll5sFX4lXAs
+        UXSMDXzfedJZphZVLNyROQ==
+X-Google-Smtp-Source: AMsMyM6oqRBqHzumn9e+K1gFlq5Z/OR4uNPi3VN2ZTest9ElNqOUJS2cK92n+F5XlbQMAf0fzRMWgw==
+X-Received: by 2002:a05:6870:e88e:b0:132:411:99 with SMTP id q14-20020a056870e88e00b0013204110099mr14412955oan.226.1665403252857;
+        Mon, 10 Oct 2022 05:00:52 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y21-20020a4ae715000000b00425678b9c4bsm4100932oou.0.2022.10.10.05.00.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 05:00:52 -0700 (PDT)
+Received: (nullmailer pid 412149 invoked by uid 1000);
+        Mon, 10 Oct 2022 12:00:53 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     festevam@gmail.com, linux-arm-kernel@lists.infradead.org,
+        shawnguo@kernel.org, linux-usb@vger.kernel.org, jun.li@nxp.com,
+        linux-imx@nxp.com, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+In-Reply-To: <20221010101816.298334-2-peng.fan@oss.nxp.com>
+References: <20221010101816.298334-1-peng.fan@oss.nxp.com> <20221010101816.298334-2-peng.fan@oss.nxp.com>
+Message-Id: <166540304239.403876.13950596185888758085.robh@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: usb: ci-hdrc-usb2: convert to yaml
+Date:   Mon, 10 Oct 2022 07:00:53 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+On Mon, 10 Oct 2022 18:18:11 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Convert the binding to yaml format
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 158 ---------
+>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 306 ++++++++++++++++++
+>  2 files changed, 306 insertions(+), 158 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+> 
 
-On 10-10-2022 07:02, Andrey Smirnov wrote:
-> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
->>
->> On 07-10-2022 04:11, Thinh Nguyen wrote:
->>> On Thu, Oct 06, 2022, Ferry Toth wrote:
->>>> Hi
->>>>
->>>> On 06-10-2022 04:12, Thinh Nguyen wrote:
->>>>> On Wed, Oct 05, 2022, Ferry Toth wrote:
->>>>>> Hi,
->>>>>>
->>>>>>        Thanks!
->>>>>>
->>>>>>        Does the failure only happen the first time host is initialized? Or can
->>>>>>        it recover after switching to device then back to host mode?
->>>>>>
->>>>>> I can switch back and forth and device mode works each time, host mode remains
->>>>>> dead.
->>>>> Ok.
->>>>>
->>>>>>        Probably the failure happens if some step(s) in dwc3_core_init() hasn't
->>>>>>        completed.
->>>>>>
->>>>>>        tusb1210 is a phy driver right? The issue is probably because we didn't
->>>>>>        initialize the phy yet. So, I suspect placing dwc3_get_extcon() after
->>>>>>        initializing the phy will probably solve the dependency problem.
->>>>>>
->>>>>>        You can try something for yourself or I can provide something to test
->>>>>>        later if you don't mind (maybe next week if it's ok).
->>>>>>
->>>>>> Yes, the code move I mentioned above "moves dwc3_get_extcon() until after
->>>>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU initially
->>>>>> dwc3_get_extcon() was called from within dwc3_core_init_mode() but only for
->>>>>> case USB_DR_MODE_OTG. So with this change order of events is more or less
->>>>>> unchanged" solves the issue.
->>>>>>
->>>>> I saw the experiment you did from the link you provided. We want to also
->>>>> confirm exactly which step in dwc3_core_init() was needed.
->>>> Ok. I first tried the code move suggested by Andrey (didn't work). Then
->>>> after reading the actual code I moved a bit further.
->>>>
->>>> This move was on top of -rc6 without any reverts. I did not make additional
->>>> changes to dwc3_core_init()
->>>>
->>>> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
->>>> dwc3_core_init - .. - dwc3_core_init_mode (not working)
->>>>
->>>> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. - dwc3_core_init - ..
->>>> - dwc3_core_init_mode (no change)
->>>>
->>>> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. - dwc3_get_extcon -
->>>> dwc3_core_init_mode (works)
->>>>
->>>> .. are what I believe for this issue irrelevant calls to
->>>> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
->>>>
->>> Right. Thanks for narrowing it down. There are still many steps in
->>> dwc3_core_init(). We have some suspicion, but we still haven't confirmed
->>> the exact cause of the failure. We can write a proper patch once we know
->>> the reason.
->> If you would like me to test your suspicion, just tell me what to do :-)
->
-> OK, Ferry, I think I'm going to need clarification on specifics on
-> your test setup. Can you share your kernel config, maybe your
-> "/proc/config.gz", somewhere? When you say you are running vanilla
-> Linux, do you mean it or do you mean vanilla tree + some patch delta?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-For v6.0 I can get the exacts tonight. But earlier I had this for v5.17:
+yamllint warnings/errors:
 
-https://github.com/htot/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_5.17.bb
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.example.dtb: usb@f7ed0000: clocks: [[4294967295, 29]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.example.dtb: usb@2184400: clocks: [[4294967295, 162]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
 
-There are 2 patches referred in #67 and #68. One is related to the 
-infinite loop. The other is I believe also needed to get dwc3 to work.
+doc reference errors (make refcheckdocs):
 
-All the kernel config are applied as .cfg.
+See https://patchwork.ozlabs.org/patch/
 
-Patches and cfs's here:
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-https://github.com/htot/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-> The reason I'm asking is because I'm having a hard time reproducing
-> the problem on my end. In fact, when I build v6.0
-> (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
->
-> git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
->
-> I get an infinite loop of reprobing that looks something like (some
-> debug tracing, function name + line number, included):
->
-> [    6.160732] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
-> to reg 0x80
-> [    6.172299] XXXXXXXXXXX: dwc3_probe 1834
-> [    6.172426] XXXXXXXXXXX: dwc3_core_init_mode 1386
-> [    6.176391] XXXXXXXXXXX: dwc3_drd_init 593
-> [    6.181573] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
-> [    6.191886] platform dwc3.0.auto: Added to deferred list
-> [    6.197249] platform dwc3.0.auto: Retrying from deferred list
-> [    6.203057] bus: 'platform': __driver_probe_device: matched device
-> dwc3.0.auto with driver dwc3
-> [    6.211783] bus: 'platform': really_probe: probing driver dwc3 with
-> device dwc3.0.auto
-> [    6.219935] XXXXXXXXXXX: dwc3_probe 1822
-> [    6.219952] XXXXXXXXXXX: dwc3_core_init 1092
-> [    6.223903] XXXXXXXXXXX: dwc3_core_init 1095
-> [    6.234839] bus: 'ulpi': __driver_probe_device: matched device
-> dwc3.0.auto.ulpi with driver tusb1210
-> [    6.248335] bus: 'ulpi': really_probe: probing driver tusb1210 with
-> device dwc3.0.auto.ulpi
-> [    6.257039] driver: 'tusb1210': driver_bound: bound to device
-> 'dwc3.0.auto.ulpi'
-> [    6.264501] bus: 'ulpi': really_probe: bound device
-> dwc3.0.auto.ulpi to driver tusb1210
-> [    6.272553] debugfs: Directory 'dwc3.0.auto' with parent 'ulpi'
-> already present!
-> [    6.279978] XXXXXXXXXXX: dwc3_core_init 1099
-> [    6.279991] XXXXXXXXXXX: dwc3_core_init 1103
-> [    6.345769] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
-> to reg 0x80
-> [    6.357316] XXXXXXXXXXX: dwc3_probe 1834
-> [    6.357447] XXXXXXXXXXX: dwc3_core_init_mode 1386
-> [    6.361402] XXXXXXXXXXX: dwc3_drd_init 593
-> [    6.366589] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
-> [    6.376901] platform dwc3.0.auto: Added to deferred list
->
-> which renders the system completely unusable, but USB host is
-> definitely going to be broken too. Now, ironically, with my patch
-> in-place, an attempt to probe extcon that ends up deferring the probe
-> happens before the ULPI driver failure (which wasn't failing driver
-> probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
-> there no "driver binding" event that re-triggers deferred probe
-> causing the loop, so the system progresses to a point where extcon is
-> available and dwc3 driver eventually loads.
->
-> After that, and I don't know if I'm doing the same test, USB host
-> seems to work as expected. lsusb works, my USB stick enumerates as
-> expected. Switching the USB mux to micro-USB and back shuts the host
-> functionality down and brings it up as expected. Now I didn't try to
-> load any gadgets to make sure USB gadget works 100%, but since you
-> were saying it was USB host that was broken, I wasn't concerned with
-> that. Am I doing the right test?
->
-> For the reference what I test with is:
->   - vanilla kernel, no patch delta (sans minor debug tracing) + initrd
-> built with Buildroot 2022.08.1
->   - Initrd is using systemd (don't think that really matters, but who knows)
->   - U-Boot 2022.04 (built with Buildroot as well)
->   - kernel config is x86_64_defconfig + whatever I gathered from *.cfg
-> files in https://github.com/edison-fw/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
