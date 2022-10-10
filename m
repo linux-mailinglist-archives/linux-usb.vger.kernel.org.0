@@ -2,166 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428335F9C95
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 12:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF6A5F9D47
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 13:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbiJJKSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Oct 2022 06:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
+        id S231979AbiJJLE6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Oct 2022 07:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiJJKRp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 06:17:45 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2063.outbound.protection.outlook.com [40.107.20.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02536BCD0;
-        Mon, 10 Oct 2022 03:17:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MkDuT7tiW0yGUAyYA6gzXwkKPz3hWnVYCn4gZXxSKLUw/2Cu0W/9k7vfRjCjbXf0oW8pIIaBTx9CofsJgnMTH2N2xaeZEAP+IKWAQo51qwXC4HvxWCkQcYoWevIiSnC7+jFzj32GAreh2AQoYrU15kLuxcCO9KIRLc0iIXd1B8izxY9+y0zNOxK/+BY8YL//8KyVzi5wuHM9wxt/a+51Qn8Tr1ipMMgxG+CWW+KJkpnumgRl/RRx84IFrqfKyOjKYkRccjv6+cGj0Uvz/leGuBrzSjqNEE0lOes4D2tCGLFzTrHVX7Py9fYSJo8KarrzmD/HotSe1VExeLgYaxWvow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cM03IwIIyXrkQLaQFqB8tD18hWDcfZblnreNfgVND1s=;
- b=DyuoxmoYvokgAv3zCDvr8ADDVwAQ917lINUfrApiB8rvfeKlrvXtFg2DrcyN/vwdyBB1VM/MFItjb1RVDeYia1/orJQqPmtqChkBSU475QdLkyp15f4Jn3gGNXtqY5/JfFmqlRdJ1qSBomYwVXwOGLX6sbDXv79Bmdk/qvPUwGbLp7SbEoxF78sfQCMgLHhym9oz+MDzoI+sOBqTLx8B72MABQc747SXC+5kv1onfYSNXkckbqg6j41mcztWdw6CEXV7LFR4hXHrw/wvIWOjyTTbwZ74wceKEoKXSoBy8YfURpTybG93NnyzruX5EHVpAOaioDHx+o49UTey5spfZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cM03IwIIyXrkQLaQFqB8tD18hWDcfZblnreNfgVND1s=;
- b=NrwubEiLOMgQ6/2hpUVN8w5rnJuCziOU+vf3TJM+pHKtHgOCDDfAz6sSztIrEXMYQdCYRxvHAWY9pCyYAAruwNDeN88WiybnvSE7nBAczarD3E+4F+FXbbFWstx/FDgCyy1/fb8AtuTfBYyjkZQbWuUYH8dZz2siL2g215P8YkQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS8PR04MB7783.eurprd04.prod.outlook.com (2603:10a6:20b:2a4::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Mon, 10 Oct
- 2022 10:17:14 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::ba6:d7ae:a7c9:7a3a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::ba6:d7ae:a7c9:7a3a%4]) with mapi id 15.20.5676.028; Mon, 10 Oct 2022
- 10:17:14 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 6/6] dt-bindings: usb: usbmisc-imx: add more i.MX compatible
-Date:   Mon, 10 Oct 2022 18:18:16 +0800
-Message-Id: <20221010101816.298334-7-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221010101816.298334-1-peng.fan@oss.nxp.com>
-References: <20221010101816.298334-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0048.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::17)
- To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+        with ESMTP id S231966AbiJJLE5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 07:04:57 -0400
+Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ECD51A042;
+        Mon, 10 Oct 2022 04:04:54 -0700 (PDT)
+Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
+        by radex-web.radex.nl (Postfix) with ESMTPS id 9AD542406A;
+        Mon, 10 Oct 2022 13:04:53 +0200 (CEST)
+Message-ID: <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com>
+Date:   Mon, 10 Oct 2022 13:04:53 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS8PR04MB7783:EE_
-X-MS-Office365-Filtering-Correlation-Id: 354d7107-ac3c-4079-5cc6-08daaaa899d2
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GmG+ILzSaEszH3fU6oCEaPKsc8Bas5GOZ1YL77f87FjEwEgpagDBcuLEpTSsH2bsT4niLgXI7mtuDAIF88ypkA004S183kHgPwdDlT7vsob0LM0cpprbUPfjiyWxCtfH5aXjFD+hv7M25BPrG1F7ZNyYnJAWI82LVkgnkZ6Nh5DoIgdjsclqcL8ByWhlem9YoDQ5HmxHbu4bHLiK8yeMdtDH0+M3S8ogpLxVqmKexeP6OVGfwONQ31hqKH4oubO/p1tTrt+g+5+jxA1uG9HOusubfzkHXcnNfw4fzdsL9KWK1f+7FHMtyN+zoFtJEm8yIlitQotG7PRofqCuV/+zxdI8rqhNm/BX3VM2Y/c54NRYBrv3nLgHpcH9y0JlbDBgWQyG02TD8eJpn5pv9GIlDjLFLUscEQr4tzFgYPYmP7Wd7AfuMHqtE98qqUzF2IiV6mjEY3tEJE44QnqcBet+qQyMbz8F3c1hQD4B35heUPFVHrM867AJsvN+RWf+vwdzzP7w62raXiaNMgwHg2LIWcNdpLn2U+kqh0uKPQAvmllv5vS3B0/vLVN4pKVN73FG/eQPr0L6gqsrVQbbrs78gXgNrcIN0YCt/ZbKxXw/3NxvHt4e3L8UHTQG8o9aA6yT2mXqjVn9EVhv5Ybd4LamP9/nctBOmn3GWZxNkyukFIKHrXoCGJq/8Wb3R+MzlyRc48rg1fLRe0U/pNd5o2O+Yr4wUxiKq3zW0aBq0cjxouZwJ5xTeBGUBc5D7AzoJ9dUf0WDylJokCPjo4DTWwUuwA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(136003)(376002)(39860400002)(346002)(451199015)(316002)(7416002)(2906002)(6486002)(186003)(1076003)(2616005)(66476007)(41300700001)(66946007)(83380400001)(66556008)(478600001)(8936002)(8676002)(4326008)(5660300002)(26005)(6506007)(52116002)(86362001)(38100700002)(6512007)(38350700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MpC1MBL0ikzQIqwpW3ZW41ALDNYRAGSgrI4bJm+FIjIyAQ675VLyfFTIUkr4?=
- =?us-ascii?Q?3ycpn9/eGE0FOSL2odx/GzSglgYJWOJBrdveMHHzUzm/sfNSYiaE++rhNAnt?=
- =?us-ascii?Q?wogDqBPs5KoS7wKlT+U4VzXWiBZ6duZ+y85LSfOOc2dhOmfIEjHRtdkeJJ2u?=
- =?us-ascii?Q?zVYSP0CI1qHLnJA96L0KSvao/ItKukpfR2/NVjsg9KNSSRSCeh2rdjtUSrAy?=
- =?us-ascii?Q?e1zkmgTpI6PezttVWGgy/BsxgdXG9NoFzJjse+yBXzyAuqDutULk2Y4Vf+YN?=
- =?us-ascii?Q?PpygnZfvv22I4y2aTOKp8SJAaSuCmDKZFUyqa9F/uHCTd1K2yY7mbO0GfUJC?=
- =?us-ascii?Q?vNCQyfpDTFdPvc5BmXDGp4DJxPizwC/q+aBIEWFPweF1bAcOXAinOdLlzMdg?=
- =?us-ascii?Q?MR3y7l5dCfcgMzWkC43yxkzcYXUh5BVe/fCE+Xq1M47fhO/mLXUbeC8i35Qj?=
- =?us-ascii?Q?S5B/bnMRH7pcF9lkLYHLkvvk4CZmkfgJbY1d9XMzdT9zPyHxDoe64sVrqt12?=
- =?us-ascii?Q?Kfx2sXlRF8fPjDmkBz+b9ZsZjaFfhpuflmSStMbESb+imhJ4aSRd3GOUdGPE?=
- =?us-ascii?Q?xzyccm6G54EtAX03yM2R9oqozV7Vycb27U2UR+ldVhXckXHTMs/dCwmpgiMF?=
- =?us-ascii?Q?L6TTulXtNX5T7GMuhx3czI9p8gP0uaHzasxcGbjtqRmOl1XNFHsGHEZe5PvU?=
- =?us-ascii?Q?IleMX+EQhBkK/uCZdf3ZZ6+MX8qSfnLi5z7vdmxVbLCE5lsxK62ShiHp2kJd?=
- =?us-ascii?Q?+midZpVp6kXXVdtPIW1hziHHAlFwGmJyFoMNESuEc6BQROg+ZOs5d2sE8b6g?=
- =?us-ascii?Q?hPhp6bj4Wm1sNXcvbch9qN8QA1yG5/hspKo1ARI0W6WFLpzYhRxIlKF1dKEk?=
- =?us-ascii?Q?VUNcx81To31v73oz0RMi6nvIgYehj939gQFl8CUi/rKT2BhAe67y+gug6pY8?=
- =?us-ascii?Q?6V77+ATxod2MM2ouIIVF43oCm2+cbCtVR8mAimf3ModXN9NkwSHoEA3lSvCL?=
- =?us-ascii?Q?mdQ2JlszHzBAexCGf1oSy6zCebdvyCoMWhLZB/8gDIZxR/fnBYlcXzNzImwh?=
- =?us-ascii?Q?WPOuednwU4hDV0ccs+hec/Jyw4enzpgoOcZY8shyfaDoLF2yVKobRl6WJsHe?=
- =?us-ascii?Q?qecXJIQ+9qRRuDSgF5pNvdTXZfbDe4k7x8J85/679TR68+gr4NxgSntjv/k1?=
- =?us-ascii?Q?UKevd0aAt97oXJuKj4RZS2eDVw4BEBCSVN1OaZrQqSvhkRjFIE4G9svE9IrT?=
- =?us-ascii?Q?duWhVGHA54EIJZ1uYykuGIKvN5f8K42wfh1yjU4Aft7a7RlL0BbGOdQIAvfk?=
- =?us-ascii?Q?3rGyirDQ9G1Rls5f7jINZVVuGKZ72kzYEPlXwADJHrfXiPQMggojwOwYruyU?=
- =?us-ascii?Q?3uEAmwiTjq9BbjO/P7DV7hbTwcoxyEjmfvfswxGpnonzUVSIze5MnD283CpT?=
- =?us-ascii?Q?Vpe71AegpzwspXpKqp2ja9OhYUdoV/JHI+jVphdDju+A+bwFwsC+7d4+Xfdv?=
- =?us-ascii?Q?KLOQtUFweZJe1d1UEzT/Mx+ISh9hrGWbQ5HnlDUixwLWA+ZFg7QgEMJCoNtj?=
- =?us-ascii?Q?1KshJD8PnzhFxv0aOIq/J8mcbkb0QHpGTZOaLO+c?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 354d7107-ac3c-4079-5cc6-08daaaa899d2
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2022 10:17:14.0774
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qgt0njnHWLFavzdcCx47xQDBbshrTF78z6NKhdzUTZQlXnsXZ2dO2FvcuhvcJcSNYg+xO8XZqYcp/0QF6IJ2dQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7783
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Content-Language: en-US
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+ <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+Hi
 
-Add more i.MX chips support
+On 10-10-2022 07:02, Andrey Smirnov wrote:
+> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
+>>
+>> On 07-10-2022 04:11, Thinh Nguyen wrote:
+>>> On Thu, Oct 06, 2022, Ferry Toth wrote:
+>>>> Hi
+>>>>
+>>>> On 06-10-2022 04:12, Thinh Nguyen wrote:
+>>>>> On Wed, Oct 05, 2022, Ferry Toth wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>>        Thanks!
+>>>>>>
+>>>>>>        Does the failure only happen the first time host is initialized? Or can
+>>>>>>        it recover after switching to device then back to host mode?
+>>>>>>
+>>>>>> I can switch back and forth and device mode works each time, host mode remains
+>>>>>> dead.
+>>>>> Ok.
+>>>>>
+>>>>>>        Probably the failure happens if some step(s) in dwc3_core_init() hasn't
+>>>>>>        completed.
+>>>>>>
+>>>>>>        tusb1210 is a phy driver right? The issue is probably because we didn't
+>>>>>>        initialize the phy yet. So, I suspect placing dwc3_get_extcon() after
+>>>>>>        initializing the phy will probably solve the dependency problem.
+>>>>>>
+>>>>>>        You can try something for yourself or I can provide something to test
+>>>>>>        later if you don't mind (maybe next week if it's ok).
+>>>>>>
+>>>>>> Yes, the code move I mentioned above "moves dwc3_get_extcon() until after
+>>>>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU initially
+>>>>>> dwc3_get_extcon() was called from within dwc3_core_init_mode() but only for
+>>>>>> case USB_DR_MODE_OTG. So with this change order of events is more or less
+>>>>>> unchanged" solves the issue.
+>>>>>>
+>>>>> I saw the experiment you did from the link you provided. We want to also
+>>>>> confirm exactly which step in dwc3_core_init() was needed.
+>>>> Ok. I first tried the code move suggested by Andrey (didn't work). Then
+>>>> after reading the actual code I moved a bit further.
+>>>>
+>>>> This move was on top of -rc6 without any reverts. I did not make additional
+>>>> changes to dwc3_core_init()
+>>>>
+>>>> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
+>>>> dwc3_core_init - .. - dwc3_core_init_mode (not working)
+>>>>
+>>>> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. - dwc3_core_init - ..
+>>>> - dwc3_core_init_mode (no change)
+>>>>
+>>>> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. - dwc3_get_extcon -
+>>>> dwc3_core_init_mode (works)
+>>>>
+>>>> .. are what I believe for this issue irrelevant calls to
+>>>> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
+>>>>
+>>> Right. Thanks for narrowing it down. There are still many steps in
+>>> dwc3_core_init(). We have some suspicion, but we still haven't confirmed
+>>> the exact cause of the failure. We can write a proper patch once we know
+>>> the reason.
+>> If you would like me to test your suspicion, just tell me what to do :-)
+>
+> OK, Ferry, I think I'm going to need clarification on specifics on
+> your test setup. Can you share your kernel config, maybe your
+> "/proc/config.gz", somewhere? When you say you are running vanilla
+> Linux, do you mean it or do you mean vanilla tree + some patch delta?
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- .../devicetree/bindings/usb/usbmisc-imx.yaml         | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+For v6.0 I can get the exacts tonight. But earlier I had this for v5.17:
 
-diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-index bd2d3d95f5a6..943ccf6154da 100644
---- a/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-+++ b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
-@@ -13,19 +13,31 @@ properties:
-   compatible:
-     oneOf:
-       - enum:
-+          - fsl,imx25-usbmisc
-+          - fsl,imx27-usbmisc
-+          - fsl,imx35-usbmisc
-+          - fsl,imx51-usbmisc
-+          - fsl,imx53-usbmisc
-           - fsl,imx6q-usbmisc
-           - fsl,imx7ulp-usbmisc
-           - fsl,vf610-usbmisc
-       - items:
-           - enum:
-               - fsl,imx6ul-usbmisc
-+              - fsl,imx6sl-usbmisc
-               - fsl,imx6sx-usbmisc
-               - fsl,imx7d-usbmisc
-           - const: fsl,imx6q-usbmisc
-       - items:
-           - enum:
-               - fsl,imx7ulp-usbmisc
-+              - fsl,imx8mm-usbmisc
-+              - fsl,imx8mn-usbmisc
-           - const: fsl,imx7d-usbmisc
-+      - items:
-+          - const: fsl,imx6sll-usbmisc
-+          - const: fsl,imx6ul-usbmisc
-+          - const: fsl,imx6q-usbmisc
- 
-   clocks:
-     maxItems: 1
--- 
-2.37.1
+https://github.com/htot/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_5.17.bb
 
+There are 2 patches referred in #67 and #68. One is related to the 
+infinite loop. The other is I believe also needed to get dwc3 to work.
+
+All the kernel config are applied as .cfg.
+
+Patches and cfs's here:
+
+https://github.com/htot/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+
+> The reason I'm asking is because I'm having a hard time reproducing
+> the problem on my end. In fact, when I build v6.0
+> (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
+>
+> git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
+>
+> I get an infinite loop of reprobing that looks something like (some
+> debug tracing, function name + line number, included):
+>
+> [    6.160732] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
+> to reg 0x80
+> [    6.172299] XXXXXXXXXXX: dwc3_probe 1834
+> [    6.172426] XXXXXXXXXXX: dwc3_core_init_mode 1386
+> [    6.176391] XXXXXXXXXXX: dwc3_drd_init 593
+> [    6.181573] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
+> [    6.191886] platform dwc3.0.auto: Added to deferred list
+> [    6.197249] platform dwc3.0.auto: Retrying from deferred list
+> [    6.203057] bus: 'platform': __driver_probe_device: matched device
+> dwc3.0.auto with driver dwc3
+> [    6.211783] bus: 'platform': really_probe: probing driver dwc3 with
+> device dwc3.0.auto
+> [    6.219935] XXXXXXXXXXX: dwc3_probe 1822
+> [    6.219952] XXXXXXXXXXX: dwc3_core_init 1092
+> [    6.223903] XXXXXXXXXXX: dwc3_core_init 1095
+> [    6.234839] bus: 'ulpi': __driver_probe_device: matched device
+> dwc3.0.auto.ulpi with driver tusb1210
+> [    6.248335] bus: 'ulpi': really_probe: probing driver tusb1210 with
+> device dwc3.0.auto.ulpi
+> [    6.257039] driver: 'tusb1210': driver_bound: bound to device
+> 'dwc3.0.auto.ulpi'
+> [    6.264501] bus: 'ulpi': really_probe: bound device
+> dwc3.0.auto.ulpi to driver tusb1210
+> [    6.272553] debugfs: Directory 'dwc3.0.auto' with parent 'ulpi'
+> already present!
+> [    6.279978] XXXXXXXXXXX: dwc3_core_init 1099
+> [    6.279991] XXXXXXXXXXX: dwc3_core_init 1103
+> [    6.345769] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
+> to reg 0x80
+> [    6.357316] XXXXXXXXXXX: dwc3_probe 1834
+> [    6.357447] XXXXXXXXXXX: dwc3_core_init_mode 1386
+> [    6.361402] XXXXXXXXXXX: dwc3_drd_init 593
+> [    6.366589] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
+> [    6.376901] platform dwc3.0.auto: Added to deferred list
+>
+> which renders the system completely unusable, but USB host is
+> definitely going to be broken too. Now, ironically, with my patch
+> in-place, an attempt to probe extcon that ends up deferring the probe
+> happens before the ULPI driver failure (which wasn't failing driver
+> probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
+> there no "driver binding" event that re-triggers deferred probe
+> causing the loop, so the system progresses to a point where extcon is
+> available and dwc3 driver eventually loads.
+>
+> After that, and I don't know if I'm doing the same test, USB host
+> seems to work as expected. lsusb works, my USB stick enumerates as
+> expected. Switching the USB mux to micro-USB and back shuts the host
+> functionality down and brings it up as expected. Now I didn't try to
+> load any gadgets to make sure USB gadget works 100%, but since you
+> were saying it was USB host that was broken, I wasn't concerned with
+> that. Am I doing the right test?
+>
+> For the reference what I test with is:
+>   - vanilla kernel, no patch delta (sans minor debug tracing) + initrd
+> built with Buildroot 2022.08.1
+>   - Initrd is using systemd (don't think that really matters, but who knows)
+>   - U-Boot 2022.04 (built with Buildroot as well)
+>   - kernel config is x86_64_defconfig + whatever I gathered from *.cfg
+> files in https://github.com/edison-fw/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
