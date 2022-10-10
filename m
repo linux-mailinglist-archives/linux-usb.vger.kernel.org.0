@@ -2,122 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE355FA01E
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 16:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBD05FA065
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 16:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiJJOXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Oct 2022 10:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S229790AbiJJOrG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Oct 2022 10:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJJOXK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 10:23:10 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B157E73334;
-        Mon, 10 Oct 2022 07:23:08 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id bk15so17252513wrb.13;
-        Mon, 10 Oct 2022 07:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TahS+pInlUSQRZ8Rm+e9KVPB/oIUr10xMPSI7jd51lo=;
-        b=g/fB6ohtI5z5Ub/Iab9A1xL2IO2ox+7dEIL9uRQwQZWhuw98OuyqT8hOYC4z1DjDoz
-         wZbS1TXxBTL5Zl85t3WSkII5NtT7Eq5b5jLOuM4Y2OUDrz2CC4kMgk5a5UAXHlb+uCCl
-         QS4/K8ok2iajnUoRcHd6Ad6SG3RBS7Lqsjhsk+DrWEvppwtqTGOL7qiIN1B1TMIigjpd
-         bEiPZrO8/h8nzmGSPdsTATrSUzDDJD5vBzXqzMcxmOZ+grvT7aqzRdY2hSP9hir3Owfw
-         IpD/EsTSFDZP4LnDxeYrfG4H6faTw6XrLBkIJUy5CKCYJzTk6DVs1Ln7dbEOklzpwVCs
-         z1DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TahS+pInlUSQRZ8Rm+e9KVPB/oIUr10xMPSI7jd51lo=;
-        b=JYdcIHNUBGFT9wcKzkUEZEdQ2y0KjrTuF8b7sd6ueU8W4vkHtvXc1nd03/CM+T/mHP
-         I8J3WxDjPxdNOm8ayrJWwxZk5hxDMOIx10XtMTCiRtOQ28miR1UJhXUL43cUccb74i+1
-         MGQIN6hN6PL4QCesMqULoPnWwcu+H/AtexMdMlUqA7/UMyVoI8GMZJid6FFUfWN00i5w
-         J8muWJnMImeURepjte5TNR220deWnTdCWXkS9AmolIW7bRsOWkjRtm8mAHJI3mVm1V/0
-         +BluHf2fTSTNQbgbe053acBopBYI9wReWHlewVc6zldlvyIeOIr6EEFe4DKgkIM+iUWS
-         G1YQ==
-X-Gm-Message-State: ACrzQf3lS8xrPXz98j8dF3J6zcV3pYiSkLa3HGSAjbJ6FW1AlI0Pr5sc
-        qB+MtGRGGC3k4jDmdu0QZHUf1eog8NB4yDozK/X+GpoL
-X-Google-Smtp-Source: AMsMyM7+XyzfWxUOKvsoWLI8TNFb4gbgScfxqcUjkOer7pGXREtwJmb6W0h27PdSj2zVq1ZUlsNNWkhSvJJmpBljuDM=
-X-Received: by 2002:a05:6000:1562:b0:231:1b02:3dbb with SMTP id
- 2-20020a056000156200b002311b023dbbmr987314wrz.685.1665411787059; Mon, 10 Oct
- 2022 07:23:07 -0700 (PDT)
+        with ESMTP id S229717AbiJJOrF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 10:47:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D9961D40
+        for <linux-usb@vger.kernel.org>; Mon, 10 Oct 2022 07:47:04 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ohu3a-00045g-Ps; Mon, 10 Oct 2022 16:47:02 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1ohu3a-0007nS-6e; Mon, 10 Oct 2022 16:47:02 +0200
+Date:   Mon, 10 Oct 2022 16:47:02 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Greg KH <greg@kroah.com>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] usb: gadget: uvc: mark the ctrl request for the
+ streaming interface
+Message-ID: <20221010144702.GE27626@pengutronix.de>
+References: <20221009222000.1790385-1-m.grzeschik@pengutronix.de>
+ <Y0O8AYjki6DFZJZ7@kroah.com>
 MIME-Version: 1.0
-References: <CAMdYzYrUOoTmBL2c_+=xLBMXg38Pp4hANnzqxoe1cVDDrFvqTA@mail.gmail.com>
- <Y0QnFHqrX2r/7oUz@rowland.harvard.edu>
-In-Reply-To: <Y0QnFHqrX2r/7oUz@rowland.harvard.edu>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 10 Oct 2022 10:22:55 -0400
-Message-ID: <CAMdYzYodS7Y4bZ+fzzAXMSiCfQHwMkmV8-C=b3FVUXDExavXgA@mail.gmail.com>
-Subject: Re: [BUG] KVM USB passthrough did not claim interface before use
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     kvm@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RpqchZ26BWispMcB"
+Content-Disposition: inline
+In-Reply-To: <Y0O8AYjki6DFZJZ7@kroah.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:07 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, Oct 10, 2022 at 09:56:53AM -0400, Peter Geis wrote:
-> > Good Morning,
-> >
-> > I've run into a bug with a new usb device when attempting to pass
-> > through using qemu-kvm. Another device is passed through without
-> > issue, and qemu spice passthrough does not exhibit the issue. The usb
-> > device shows up in the KVM machine, but is unusable. I'm unsure if
-> > this is a usbfs bug, a qemu bug, or a bug in the device driver.
-> >
-> > usb 3-6.2: usbfs: process 365671 (CPU 2/KVM) did not claim interface 0
-> > before use
-> > usb 3-6.2: usbfs: process 365671 (CPU 2/KVM) did not claim interface 0
-> > before use
-> > usb 3-6.2: usbfs: process 365672 (CPU 3/KVM) did not claim interface 1
-> > before use
-> > usb 3-6.2: usbfs: process 365671 (CPU 2/KVM) did not claim interface 0
-> > before use
-> > usb 3-6.2: usbfs: process 365672 (CPU 3/KVM) did not claim interface 0
-> > before use
-> > usb 3-6.2: usbfs: process 365672 (CPU 3/KVM) did not claim interface 0
-> > before use
->
-> These are warnings, not bugs, although one could claim that the warnings
-> are caused by a bug in qemu-kvm.
 
-The bug is the device is unusable in passthrough, this is the only
-direction as to why. The question is which piece of software is
-causing it. I figure qemu is the most likely suspect, but they request
-bugs that are possibly in kvm start here. The cdc-acm driver is the
-least likely in my mind, as the other device that works also uses it.
-I just tested removing the other working device and only passing
-through the suspect device, and it still triggers the bug. So whatever
-the problem is, it's specific to this one device.
+--RpqchZ26BWispMcB
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Oct 10, 2022 at 08:30:25AM +0200, Greg KH wrote:
+>On Mon, Oct 10, 2022 at 12:20:00AM +0200, Michael Grzeschik wrote:
+>> For the userspace it is needed to distinguish between reqeuests for the
+>> control or streaming interace. The userspace would have to parse the
+>> configfs to know which interface index it has to compare the ctrl
+>> requests against, since the interface numbers are not fixed, e.g. for
+>> composite gadgets.
+>>
+>> The kernel has this information when handing over the ctrl request to
+>> the userspace. This patch adds a variable to indicate if the ctrl
+>> request was meant for the streaming interface.
+>>
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>> ---
+>>  drivers/usb/gadget/function/f_uvc.c | 6 ++++++
+>>  include/uapi/linux/usb/g_uvc.h      | 2 ++
+>>  2 files changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/fu=
+nction/f_uvc.c
+>> index 6e196e06181ecf..132d47798c0f13 100644
+>> --- a/drivers/usb/gadget/function/f_uvc.c
+>> +++ b/drivers/usb/gadget/function/f_uvc.c
+>> @@ -228,6 +228,7 @@ uvc_function_setup(struct usb_function *f, const str=
+uct usb_ctrlrequest *ctrl)
+>>  	struct uvc_device *uvc =3D to_uvc(f);
+>>  	struct v4l2_event v4l2_event;
+>>  	struct uvc_event *uvc_event =3D (void *)&v4l2_event.u.data;
+>> +	unsigned int interface =3D le16_to_cpu(ctrl->wIndex) & 0xff;
+>>
+>>  	if ((ctrl->bRequestType & USB_TYPE_MASK) !=3D USB_TYPE_CLASS) {
+>>  		uvcg_info(f, "invalid request type\n");
+>> @@ -246,6 +247,11 @@ uvc_function_setup(struct usb_function *f, const st=
+ruct usb_ctrlrequest *ctrl)
+>>  	uvc->event_length =3D le16_to_cpu(ctrl->wLength);
+>>
+>>  	memset(&v4l2_event, 0, sizeof(v4l2_event));
+>> +
+>> +	/* check for the interface number, so the userspace doesn't have to */
+>> +	if (interface =3D=3D uvc->streaming_intf)
+>> +		uvc_event->ctrlreq_streaming =3D 1;
+>> +
+>>  	v4l2_event.type =3D UVC_EVENT_SETUP;
+>>  	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
+>>  	v4l2_event_queue(&uvc->vdev, &v4l2_event);
+>> diff --git a/include/uapi/linux/usb/g_uvc.h b/include/uapi/linux/usb/g_u=
+vc.h
+>> index 652f169a019e7d..8711d706e5bfb0 100644
+>> --- a/include/uapi/linux/usb/g_uvc.h
+>> +++ b/include/uapi/linux/usb/g_uvc.h
+>> @@ -27,6 +27,8 @@ struct uvc_request_data {
+>>  };
+>>
+>>  struct uvc_event {
+>> +	/* indicate if the ctrl request is for the streaming interface */
+>> +	__u8 ctrlreq_streaming;
 >
-> > The host system is Ubuntu 22.04.
-> > The qemu version is as shipped: QEMU emulator version 6.2.0 (Debian
-> > 1:6.2+dfsg-2ubuntu6.3)
-> > The host kernel version is: 5.15.0-48-generic #54-Ubuntu SMP Fri Aug
-> > 26 13:26:29 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
-> >
-> > The VM is HomeAssistant, running kernel 5.15.67. Issue was also
-> > observed on kernel version 5.10.
->
-> Does the device work if your virtual machine has only one CPU?
+>How can you change a public api structure like this without breaking all
+>existing userspace code?
 
-Just tested, this doesn't make a difference.
-
->
-> Alan Stern
+Absolutely right, just skip that patch.
 
 Thanks,
-Peter
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--RpqchZ26BWispMcB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNEMGMACgkQC+njFXoe
+LGQjuBAArGAIkgYadBrlWHSWflqO2B2ePhgN5KZWS/5e5115sYYnuR8zKzfe2e7Z
+Xpi7MD6PmM/cUvZhbEQeoM37KDO1J40jLT/HvtzpZWBdy5sF+JHitZvSAL6HkTCl
+1n5TAKH3mE7HNVV0C5TCmrOlKM6HFzXKXLm3XcVTG8TImQBTOhdQjakxQvG504t1
+MoOvVY3w01WJ1WKyARrlav4r4wBDbY1BPnUPA1r9HUK1TqKCYyXN9h+3TEkpsmvH
+tF8sjVF/xJ4dQq3reogh8l36hhCAtFoPWu1KNAkiFx3zuMa9oobYWf0tfmO2xmYy
+G28lTXutAzzrnB1+zru4tJQImVMnevN9O0PyvHZsRi/GGR26q1SnuquPiBjPxAwO
+HzqGIGcrkAhnBxSxzzP+GTR+S/mVv9TKx+3zMqgxdxS9gOzo8Hbp0yLl2lXPzQce
+VtNOujSO9B2n3VqyP3XtuKhFUjdcJTnubcNefCM+eJj5CALbqrYZ3jm4Jn9t3nPh
+AmX295zPatyX91N2Ih+XBU4cJDEyE8JbvAtACG5m7G0c5T93+ZbTIVl9HV6W1YEN
+AhrOMlZU+jDu61mwr6tlTQWZ0wZexaseC4gZCdggG6BUrc7BkHN5+mhKXBe1NoTA
+7iiUd1PG8QokfPRDOKL3TsoEXM+6UnARD+miXH00hmrVp4wMMiw=
+=3yzy
+-----END PGP SIGNATURE-----
+
+--RpqchZ26BWispMcB--
