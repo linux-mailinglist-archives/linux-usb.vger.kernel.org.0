@@ -2,215 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5635F979B
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 07:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F5A5F9857
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Oct 2022 08:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiJJFCp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Oct 2022 01:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S231627AbiJJG3v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Oct 2022 02:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiJJFCl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 01:02:41 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8263646215;
-        Sun,  9 Oct 2022 22:02:39 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id l22so14324789edj.5;
-        Sun, 09 Oct 2022 22:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RfV1A5FbliAxtV5EyErKlwh4h1CaLc3axhskvRyDgT8=;
-        b=DdqczOFeZqbzbcQJO3IrNYmAqqUI1tZqZWu4MA+v0yOu6lBswJVnqgyfTQ7rneAShD
-         NdU34Eh4yH1KOyLM63A733zA/uTplMmzsWHZHTtIJ2a7Va+uVDUf6ssTqYPpcbgh1krQ
-         fXQYXKr7W2CFOL56pBMVq00Vvfb88vnx/DTx7p2ii301j9XEDaVUjroSvW5w8IhKNnx/
-         JyAwOqGFEXRJcn5BNfPU0mGcKBDjmSnl9dcmxcRBvKLVqNeIiqrkim80wlV6h8P9KC20
-         v06OhDYixLnHjjLRZHWqcnLTarR1ow7mYJysBM3k3T2joRkDeehxoz1fSKd2fcaRUr/h
-         KFzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RfV1A5FbliAxtV5EyErKlwh4h1CaLc3axhskvRyDgT8=;
-        b=frtHX4z5fhMqOYgNAvJElZfQE9CURfX4vjZBlaHDTNMR1oeduzXljUbU5SCZ2bl/L2
-         jRDZq1yy4lAII9XB+zT53R2y80iAVHtHo4Z9KOysfosyOktstG4nUmRxt/Em6HAisZgR
-         6PP10+kHLoPRoPi2KJMa8+2TBeCTDvkwyY9mzBOURguSLehJswsyXSGmWpUl8N3m5Acn
-         9LjQkgwp2wLj9F+xCqVvPaCIzChXRr5xJ+L1nJbGu+nsSUUoWpFvMdmc51qCv0cV6pZB
-         feNk877JD+0sfgS7N5plHG++M8W80gah8NZTTcQ9ZmCPSAKDj8dueDFAjWScutU3o5n0
-         S4lg==
-X-Gm-Message-State: ACrzQf0BZSJ7JesgCOZ6C5dijeICJRpizn313va1EQKrYSMRlxengsEA
-        QI6azGYS32+qEzMcekg6U8xrsVsimw0eIeNvNEw=
-X-Google-Smtp-Source: AMsMyM7k+ghtcK+fuakj1I9EMT42VpLsinCJ3ArbHx/0wlUl7k9Ae5FsoIrH6CEJza0EtTiUuK6m63a/2TalKbmCapY=
-X-Received: by 2002:a05:6402:27c9:b0:45c:3c77:8881 with SMTP id
- c9-20020a05640227c900b0045c3c778881mr605677ede.250.1665378157860; Sun, 09 Oct
- 2022 22:02:37 -0700 (PDT)
+        with ESMTP id S231376AbiJJG3u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Oct 2022 02:29:50 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240EC14D20;
+        Sun,  9 Oct 2022 23:29:46 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9A89C5C0003;
+        Mon, 10 Oct 2022 02:29:42 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 10 Oct 2022 02:29:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1665383382; x=1665469782; bh=/O4vE3Ayv7
+        Q1EXxMUzd/MBPiHS32XX5XqXkETZ0THKE=; b=exxhvE6AZ3PJnNKPk2iIzKYVx9
+        3Djg4vdradH1eDGxMRB5H8wsIU+olJZ6LRFP+mSmOEBB9o/Bob6ariZ8WLEZiAaU
+        quNEfaHcRlPtrzYEtJMO0Mhk1njHexuvvlsUSjpv1VNCnD6Yw7UrfB4dBsqkrvc1
+        Rqy9yQxzEZxN+08hgePE+FvzrRi5h9oSXmBIyG1SNShJrSbZiERABQhrzWfT//Ql
+        WfG8XFiLQdmg3c41tnSsilatfDdv5bKxEotWzFie9N64X0dhpBIZQvnI8VpWeUaI
+        W1eqFw/KyzCOHvsuqFRpz/V4nP/OqewJuHoBa0TULFVfMPfW7pwqNILo6trw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665383382; x=1665469782; bh=/O4vE3Ayv7Q1EXxMUzd/MBPiHS32
+        XX5XqXkETZ0THKE=; b=TD7vKgQgzvNLMc7JwLdTHnKheylQjqhixs0v81lwlcAN
+        J6i/McMCmLmA8ATD29ap4dAqoSO/W/5av1U8KSGKNBbaXMb0KMRKkaU75r+yt5pK
+        BP2/1FVfCJ5aBgDROHVCWZfpsW08aoKkIUHmeA/4HzGz2mK7KnOp3+vJxRah2saH
+        67Omue0HaaR65djaKbWjUIOkLo2o3eCfNrW4XHKHORdp0iClUgZaF3jPO2r5Am6Z
+        ibFVbjugwXg3tKDEk8ID04UoSRyESbZhI0Sm2HYaGgApcrVtXY3TEfAbTW4jYC9U
+        leQ6OFNYIzYn1KQSnmASaEp/gPp20KECRhOOWbSatA==
+X-ME-Sender: <xms:1rtDY_dVbJlQVF-8z78Ck6obhSDV8hel5E-A54aVDAlcrDTV7eBCMw>
+    <xme:1rtDY1OgBmJwZe0xrkxywRz_E3BuOLXsZrVkFk26Q5b08I_G015JcWplXqrkLj4eL
+    6utbXnZV2Jt6g>
+X-ME-Received: <xmr:1rtDY4gtwW5XDc3gst1ypVPt7TGopOz_hG6jhxdIBMvv6I3Mzl8eJpOr1VIe>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejvddguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:1rtDYw__a-XUcelr9l-_YuO8_ZTS8Mc3n8rD5zQhyDLrA_80iGK2SA>
+    <xmx:1rtDY7vXOhYx0XvbCK76DvnUYXD99WZjqhy3w7fp5auC2p3lRpHSbg>
+    <xmx:1rtDY_F4KuBPzoFcTE05QWjttYnzkze7nAn4th7xcyQkMy8py7GllA>
+    <xmx:1rtDY8nOwovdVZAiV-MOkRMqKhfTP2oeGOif87ApQoQZBVK8ZJI2kw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Oct 2022 02:29:41 -0400 (EDT)
+Date:   Mon, 10 Oct 2022 08:30:25 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] usb: gadget: uvc: mark the ctrl request for the
+ streaming interface
+Message-ID: <Y0O8AYjki6DFZJZ7@kroah.com>
+References: <20221009222000.1790385-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
- <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
- <20221003215734.7l3cnb2zy57nrxkk@synopsys.com> <YzvusOI89ju9e5+0@smile.fi.intel.com>
- <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
- <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com> <20221006021204.hz7iteao65dgsev6@synopsys.com>
- <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com> <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
- <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
-In-Reply-To: <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Sun, 9 Oct 2022 22:02:26 -0700
-Message-ID: <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-To:     Ferry Toth <fntoth@gmail.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221009222000.1790385-1-m.grzeschik@pengutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
->
->
-> On 07-10-2022 04:11, Thinh Nguyen wrote:
-> > On Thu, Oct 06, 2022, Ferry Toth wrote:
-> >> Hi
-> >>
-> >> On 06-10-2022 04:12, Thinh Nguyen wrote:
-> >>> On Wed, Oct 05, 2022, Ferry Toth wrote:
-> >>>> Hi,
-> >>>>
-> >>>>       Thanks!
-> >>>>
-> >>>>       Does the failure only happen the first time host is initialized? Or can
-> >>>>       it recover after switching to device then back to host mode?
-> >>>>
-> >>>> I can switch back and forth and device mode works each time, host mode remains
-> >>>> dead.
-> >>> Ok.
-> >>>
-> >>>>       Probably the failure happens if some step(s) in dwc3_core_init() hasn't
-> >>>>       completed.
-> >>>>
-> >>>>       tusb1210 is a phy driver right? The issue is probably because we didn't
-> >>>>       initialize the phy yet. So, I suspect placing dwc3_get_extcon() after
-> >>>>       initializing the phy will probably solve the dependency problem.
-> >>>>
-> >>>>       You can try something for yourself or I can provide something to test
-> >>>>       later if you don't mind (maybe next week if it's ok).
-> >>>>
-> >>>> Yes, the code move I mentioned above "moves dwc3_get_extcon() until after
-> >>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU initially
-> >>>> dwc3_get_extcon() was called from within dwc3_core_init_mode() but only for
-> >>>> case USB_DR_MODE_OTG. So with this change order of events is more or less
-> >>>> unchanged" solves the issue.
-> >>>>
-> >>> I saw the experiment you did from the link you provided. We want to also
-> >>> confirm exactly which step in dwc3_core_init() was needed.
-> >> Ok. I first tried the code move suggested by Andrey (didn't work). Then
-> >> after reading the actual code I moved a bit further.
-> >>
-> >> This move was on top of -rc6 without any reverts. I did not make additional
-> >> changes to dwc3_core_init()
-> >>
-> >> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
-> >> dwc3_core_init - .. - dwc3_core_init_mode (not working)
-> >>
-> >> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. - dwc3_core_init - ..
-> >> - dwc3_core_init_mode (no change)
-> >>
-> >> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. - dwc3_get_extcon -
-> >> dwc3_core_init_mode (works)
-> >>
-> >> .. are what I believe for this issue irrelevant calls to
-> >> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
-> >>
-> > Right. Thanks for narrowing it down. There are still many steps in
-> > dwc3_core_init(). We have some suspicion, but we still haven't confirmed
-> > the exact cause of the failure. We can write a proper patch once we know
-> > the reason.
-> If you would like me to test your suspicion, just tell me what to do :-)
+On Mon, Oct 10, 2022 at 12:20:00AM +0200, Michael Grzeschik wrote:
+> For the userspace it is needed to distinguish between reqeuests for the
+> control or streaming interace. The userspace would have to parse the
+> configfs to know which interface index it has to compare the ctrl
+> requests against, since the interface numbers are not fixed, e.g. for
+> composite gadgets.
+> 
+> The kernel has this information when handing over the ctrl request to
+> the userspace. This patch adds a variable to indicate if the ctrl
+> request was meant for the streaming interface.
+> 
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> ---
+>  drivers/usb/gadget/function/f_uvc.c | 6 ++++++
+>  include/uapi/linux/usb/g_uvc.h      | 2 ++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 6e196e06181ecf..132d47798c0f13 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -228,6 +228,7 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+>  	struct uvc_device *uvc = to_uvc(f);
+>  	struct v4l2_event v4l2_event;
+>  	struct uvc_event *uvc_event = (void *)&v4l2_event.u.data;
+> +	unsigned int interface = le16_to_cpu(ctrl->wIndex) & 0xff;
+>  
+>  	if ((ctrl->bRequestType & USB_TYPE_MASK) != USB_TYPE_CLASS) {
+>  		uvcg_info(f, "invalid request type\n");
+> @@ -246,6 +247,11 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+>  	uvc->event_length = le16_to_cpu(ctrl->wLength);
+>  
+>  	memset(&v4l2_event, 0, sizeof(v4l2_event));
+> +
+> +	/* check for the interface number, so the userspace doesn't have to */
+> +	if (interface == uvc->streaming_intf)
+> +		uvc_event->ctrlreq_streaming = 1;
+> +
+>  	v4l2_event.type = UVC_EVENT_SETUP;
+>  	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
+>  	v4l2_event_queue(&uvc->vdev, &v4l2_event);
+> diff --git a/include/uapi/linux/usb/g_uvc.h b/include/uapi/linux/usb/g_uvc.h
+> index 652f169a019e7d..8711d706e5bfb0 100644
+> --- a/include/uapi/linux/usb/g_uvc.h
+> +++ b/include/uapi/linux/usb/g_uvc.h
+> @@ -27,6 +27,8 @@ struct uvc_request_data {
+>  };
+>  
+>  struct uvc_event {
+> +	/* indicate if the ctrl request is for the streaming interface */
+> +	__u8 ctrlreq_streaming;
 
+How can you change a public api structure like this without breaking all
+existing userspace code?
 
-OK, Ferry, I think I'm going to need clarification on specifics on
-your test setup. Can you share your kernel config, maybe your
-"/proc/config.gz", somewhere? When you say you are running vanilla
-Linux, do you mean it or do you mean vanilla tree + some patch delta?
+thanks,
 
-The reason I'm asking is because I'm having a hard time reproducing
-the problem on my end. In fact, when I build v6.0
-(4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
-
-git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
-
-I get an infinite loop of reprobing that looks something like (some
-debug tracing, function name + line number, included):
-
-[    6.160732] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
-to reg 0x80
-[    6.172299] XXXXXXXXXXX: dwc3_probe 1834
-[    6.172426] XXXXXXXXXXX: dwc3_core_init_mode 1386
-[    6.176391] XXXXXXXXXXX: dwc3_drd_init 593
-[    6.181573] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
-[    6.191886] platform dwc3.0.auto: Added to deferred list
-[    6.197249] platform dwc3.0.auto: Retrying from deferred list
-[    6.203057] bus: 'platform': __driver_probe_device: matched device
-dwc3.0.auto with driver dwc3
-[    6.211783] bus: 'platform': really_probe: probing driver dwc3 with
-device dwc3.0.auto
-[    6.219935] XXXXXXXXXXX: dwc3_probe 1822
-[    6.219952] XXXXXXXXXXX: dwc3_core_init 1092
-[    6.223903] XXXXXXXXXXX: dwc3_core_init 1095
-[    6.234839] bus: 'ulpi': __driver_probe_device: matched device
-dwc3.0.auto.ulpi with driver tusb1210
-[    6.248335] bus: 'ulpi': really_probe: probing driver tusb1210 with
-device dwc3.0.auto.ulpi
-[    6.257039] driver: 'tusb1210': driver_bound: bound to device
-'dwc3.0.auto.ulpi'
-[    6.264501] bus: 'ulpi': really_probe: bound device
-dwc3.0.auto.ulpi to driver tusb1210
-[    6.272553] debugfs: Directory 'dwc3.0.auto' with parent 'ulpi'
-already present!
-[    6.279978] XXXXXXXXXXX: dwc3_core_init 1099
-[    6.279991] XXXXXXXXXXX: dwc3_core_init 1103
-[    6.345769] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
-to reg 0x80
-[    6.357316] XXXXXXXXXXX: dwc3_probe 1834
-[    6.357447] XXXXXXXXXXX: dwc3_core_init_mode 1386
-[    6.361402] XXXXXXXXXXX: dwc3_drd_init 593
-[    6.366589] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
-[    6.376901] platform dwc3.0.auto: Added to deferred list
-
-which renders the system completely unusable, but USB host is
-definitely going to be broken too. Now, ironically, with my patch
-in-place, an attempt to probe extcon that ends up deferring the probe
-happens before the ULPI driver failure (which wasn't failing driver
-probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
-there no "driver binding" event that re-triggers deferred probe
-causing the loop, so the system progresses to a point where extcon is
-available and dwc3 driver eventually loads.
-
-After that, and I don't know if I'm doing the same test, USB host
-seems to work as expected. lsusb works, my USB stick enumerates as
-expected. Switching the USB mux to micro-USB and back shuts the host
-functionality down and brings it up as expected. Now I didn't try to
-load any gadgets to make sure USB gadget works 100%, but since you
-were saying it was USB host that was broken, I wasn't concerned with
-that. Am I doing the right test?
-
-For the reference what I test with is:
- - vanilla kernel, no patch delta (sans minor debug tracing) + initrd
-built with Buildroot 2022.08.1
- - Initrd is using systemd (don't think that really matters, but who knows)
- - U-Boot 2022.04 (built with Buildroot as well)
- - kernel config is x86_64_defconfig + whatever I gathered from *.cfg
-files in https://github.com/edison-fw/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+greg k-h
