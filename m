@@ -2,42 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC8F5FADD7
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Oct 2022 09:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AD35FAE5F
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Oct 2022 10:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJKHyC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Oct 2022 03:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S229979AbiJKI3r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Oct 2022 04:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiJKHx5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Oct 2022 03:53:57 -0400
+        with ESMTP id S229682AbiJKI3n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Oct 2022 04:29:43 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5758A1EC
-        for <linux-usb@vger.kernel.org>; Tue, 11 Oct 2022 00:53:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052DCBDC
+        for <linux-usb@vger.kernel.org>; Tue, 11 Oct 2022 01:29:37 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oiA5H-0000DI-Mj; Tue, 11 Oct 2022 09:53:51 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oiAdl-0005Sq-73; Tue, 11 Oct 2022 10:29:29 +0200
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oiA5G-000qea-SZ; Tue, 11 Oct 2022 09:53:50 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1oiA5F-007V2A-Vn; Tue, 11 Oct 2022 09:53:49 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+        (envelope-from <sha@pengutronix.de>)
+        id 1oiAdj-000r71-77; Tue, 11 Oct 2022 10:29:27 +0200
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oiAdi-003iNb-AF; Tue, 11 Oct 2022 10:29:26 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
-Subject: [PATCH v3] usb: gadget: uvc: default the ctrl request interface offsets
-Date:   Tue, 11 Oct 2022 09:53:48 +0200
-Message-Id: <20221011075348.1786897-1-m.grzeschik@pengutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Peter Chen <peter.chen@kernel.org>,
+        Peng Fan <peng.fan@oss.nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH 0/6] usb: chipidea: Export more phy tuning parameters to device tree
+Date:   Tue, 11 Oct 2022 10:29:18 +0200
+Message-Id: <20221011082924.884123-1-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Mail-From: sha@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -48,84 +51,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For the userspace it is needed to distinguish between requests for the
-control or streaming interface. The userspace would have to parse the
-configfs to know which interface index it has to compare the ctrl
-requests against. Since the interface numbers are not fixed, e.g. for
-composite gadgets, the interface offset depends on the setup.
+This series exports more phy tuning settings to device tree. There are
+some values already exported and I follow that example in this series.
 
-The kernel has this information when handing over the ctrl request to
-the userspace. This patch removes the offset from the interface numbers
-and expose the default interface defines in the uapi g_uvc.h.
+Patches 1 and 2 contain two small bugfixes for issues I stumbled upon
+along the way. Patches 3 and 4 are cleanups. These patches could be
+applied without the remaining two patches.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+The binding patch is based on
+https://lore.kernel.org/linux-arm-kernel/20221010101816.298334-3-peng.fan@oss.nxp.com/t/,
+so this will need a rebase once this series settles.
 
----
-v1 - v2:
-- removed the extra variable in struct uvc_event
-- replacing the ctrl request interface bits in place
-- included the move of the default interface defines to g_uvc.h
-v1 - v3:
-- improced coding style
+Sascha
 
- drivers/usb/gadget/function/f_uvc.c | 15 ++++++++++++---
- include/uapi/linux/usb/g_uvc.h      |  3 +++
- 2 files changed, 15 insertions(+), 3 deletions(-)
+Sascha Hauer (6):
+  usb: chipidea: usbmisc_imx: Fix i.MX53 clock sel masks
+  usb: chipidea: usbmisc_imx: Fix setting i.MX6SX wakeup source
+  usb: chipidea: usbmisc_imx: Use GENMASK/FIELD_PREP for bitfields
+  usb: chipidea: usbmisc_imx: Add prefix to register defines
+  usb: chipidea: usbmisc_imx: Add device tree properties for i.MX7 phy
+    tuning
+  dt-bindings: usb: ci-hdrc-usb2: Add more phy tuning properties
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 6e196e06181ecf..6e131624011a5e 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -39,9 +39,6 @@ MODULE_PARM_DESC(trace, "Trace level bitmask");
- 
- /* string IDs are assigned dynamically */
- 
--#define UVC_STRING_CONTROL_IDX			0
--#define UVC_STRING_STREAMING_IDX		1
--
- static struct usb_string uvc_en_us_strings[] = {
- 	/* [UVC_STRING_CONTROL_IDX].s = DYNAMIC, */
- 	[UVC_STRING_STREAMING_IDX].s = "Video Streaming",
-@@ -228,6 +225,8 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 	struct uvc_device *uvc = to_uvc(f);
- 	struct v4l2_event v4l2_event;
- 	struct uvc_event *uvc_event = (void *)&v4l2_event.u.data;
-+	unsigned int interface = le16_to_cpu(ctrl->wIndex) & 0xff;
-+	struct usb_ctrlrequest *mctrl;
- 
- 	if ((ctrl->bRequestType & USB_TYPE_MASK) != USB_TYPE_CLASS) {
- 		uvcg_info(f, "invalid request type\n");
-@@ -248,6 +247,16 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 	memset(&v4l2_event, 0, sizeof(v4l2_event));
- 	v4l2_event.type = UVC_EVENT_SETUP;
- 	memcpy(&uvc_event->req, ctrl, sizeof(uvc_event->req));
-+
-+	/* check for the interface number, fixup the interface number in
-+	 * the ctrl request so the userspace doesn't have to bother with
-+	 * offset and configfs parsing
-+	 */
-+	mctrl = &uvc_event->req;
-+	mctrl->wIndex &= ~cpu_to_le16(0xff);
-+	if (interface == uvc->streaming_intf)
-+		mctrl->wIndex = cpu_to_le16(UVC_STRING_STREAMING_IDX);
-+
- 	v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 
- 	return 0;
-diff --git a/include/uapi/linux/usb/g_uvc.h b/include/uapi/linux/usb/g_uvc.h
-index 652f169a019e7d..8d7824dde1b2f9 100644
---- a/include/uapi/linux/usb/g_uvc.h
-+++ b/include/uapi/linux/usb/g_uvc.h
-@@ -21,6 +21,9 @@
- #define UVC_EVENT_DATA			(V4L2_EVENT_PRIVATE_START + 5)
- #define UVC_EVENT_LAST			(V4L2_EVENT_PRIVATE_START + 5)
- 
-+#define UVC_STRING_CONTROL_IDX			0
-+#define UVC_STRING_STREAMING_IDX		1
-+
- struct uvc_request_data {
- 	__s32 length;
- 	__u8 data[60];
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml |  79 ++++++++
+ drivers/usb/chipidea/ci_hdrc_imx.c            |  14 ++
+ drivers/usb/chipidea/ci_hdrc_imx.h            |   7 +
+ drivers/usb/chipidea/usbmisc_imx.c            | 186 ++++++++++++------
+ 4 files changed, 230 insertions(+), 56 deletions(-)
+
 -- 
 2.30.2
 
