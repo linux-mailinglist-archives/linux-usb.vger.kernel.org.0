@@ -2,89 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC695FBA7C
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Oct 2022 20:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228455FBA8B
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Oct 2022 20:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJKSfv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Oct 2022 14:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S229748AbiJKSjM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Oct 2022 14:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiJKSfm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Oct 2022 14:35:42 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F943F320;
-        Tue, 11 Oct 2022 11:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1665513337; i=@motorola.com;
-        bh=LMQ3jRf7rshL0FGfl/fvT+cEbHI2/1H3uWm3Rs9Dmwo=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Transfer-Encoding;
-        b=CumEUSJ1atqrLlgejs61kfXN6U7fOX1FuUZ974auivDrmUahpMU8ZyaLx6jVbNqZC
-         VHBtfO0iIWFaGfw/W5SuFD7CVEg8LPoQ56Qap6pD++7+nUfv/P6Mxh7F8tdFI+Ejj/
-         jW1VQRdJzwICkxk9Ih7kMahjBu5ARHn7H3nP4HBKeWhjkNh1IvqGb5GJcUTVAaNWDL
-         0w2t1PPpWE+P0lthRjJlE/KLlsD6bfF2kY0UCNJrdOC8K36/FMr04oKwayS/HoZL1W
-         zeezEhOinfJxs0RM0KyMsRtV9lviGN6THHYMvMvx+Ce/dapl3uOXRSfmj0oRDRlefb
-         Guxx+/el6cQuA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHIsWRWlGSWpSXmKPExsWS8eKJqG7Fdtd
-  kg6Y9EhbH2p6wWzw50M5o0btsD5tF8+L1bBadE5ewWyxsW8JicXnXHDaLRctamS22tF1hsvjx
-  p4/ZYsHGR4wWqxYcYHfg8ZjdMZPVY9OqTjaP/XPXsHss7pvM6tH/18Bjy/7PjB6fN8kFsEexZ
-  uYl5VcksGZcnnKHpeCSekXH7z0sDYy7lboYuTiEBKYySdydt4MdwlnLJHFwWTOQw8nBJqAmse
-  D1KmYQW0RAVuLwld/MIEXMAreZJSZdWMYGkhAW8JHYdfoamM0ioCrxc+VZJhCbV8BS4tr2PWB
-  xCQF5if0Hz4IN4hSwknh9thkozgG0zVLi2DU1iHJBiZMzn7CA2MxA5c1bZzNPYOSdhSQ1C0lq
-  ASPTKkbLpKLM9IyS3MTMHF1DAwNdQ0MTXRNdM1O9xCrdRL3SYt3UxOISXUO9xPJivdTiYr3iy
-  tzknBS9vNSSTYzASEgpYnHcwbik56feIUZJDiYlUV6VHtdkIb6k/JTKjMTijPii0pzU4kOMMh
-  wcShK8miuBcoJFqempFWmZOcCohElLcPAoifC+3wyU5i0uSMwtzkyHSJ1iNOaYOvvffmaOzv1
-  dB5iFWPLy81KlxHkLtgKVCoCUZpTmwQ2CJYtLjLJSwryMDAwMQjwFqUW5mSWo8q8YxTkYlYR5
-  2bYBTeHJzCuB2/cK6BQmoFNOXnUCOaUkESEl1cDEFfs+jvnYhhcpM8pMPB6v2zPRJfyt4KvkF
-  RvmGUqq3o5/mcD2qudn7vUG3n0xB52EU0peZf/cVhd65s7v642BLouW1b1s/ZJs3KEc35S3me
-  /TxM3N2te1BP/Oelq04/CjjvpZbcK/lR7mZch/jZT9xVkUXlw46dCX3Hvf+NslpobfWblK51R
-  30FtuVbdCx8VP5n+QXHxdefPdx5o/zoiX8D9JbVH6b/7Ie7rK5lj7FbwbXsyLnnr+VfNS1qu7
-  3m5d4p7wb1byrBPTTKR19ibxRFYUzPiW94q970vq87LURuE+G15d75syPnveH7Go1nbcbK0ss
-  +Dm5T0pW39e1PgVsZXjw91wuYwahaM6M+YFKrEUZyQaajEXFScCAAfLNBWRAwAA
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-3.tower-686.messagelabs.com!1665513336!15096!1
-X-Originating-IP: [104.232.228.21]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 4062 invoked from network); 11 Oct 2022 18:35:36 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-3.tower-686.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 11 Oct 2022 18:35:36 -0000
-Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4Mn4Gc0lxczf6md;
-        Tue, 11 Oct 2022 18:35:36 +0000 (UTC)
-Received: from p1g3.mot.com (unknown [100.64.172.121])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Mn4Gb6244zbvDd;
-        Tue, 11 Oct 2022 18:35:35 +0000 (UTC)
-From:   Dan Vacura <w36195@motorola.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Dan Vacura <w36195@motorola.com>, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v2 3/3] usb: gadget: uvc: add configfs option for sg support
-Date:   Tue, 11 Oct 2022 13:34:35 -0500
-Message-Id: <20221011183437.298437-4-w36195@motorola.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221011183437.298437-1-w36195@motorola.com>
-References: <20221011183437.298437-1-w36195@motorola.com>
+        with ESMTP id S229638AbiJKSjL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Oct 2022 14:39:11 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 11 Oct 2022 11:39:10 PDT
+Received: from mailfilter02-out41.webhostingserver.nl (mailfilter02-out41.webhostingserver.nl [141.138.168.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BF35A809
+        for <linux-usb@vger.kernel.org>; Tue, 11 Oct 2022 11:39:10 -0700 (PDT)
+X-Halon-ID: d82bad68-4993-11ed-be53-001a4a4cb922
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
+        id d82bad68-4993-11ed-be53-001a4a4cb922;
+        Tue, 11 Oct 2022 20:38:05 +0200 (CEST)
+Received: from 2a02-a466-68ed-1-d9fe-da5d-3465-7be0.fixed6.kpn.net ([2a02:a466:68ed:1:d9fe:da5d:3465:7be0])
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <fntoth@gmail.com>)
+        id 1oiK8j-004rfb-0w;
+        Tue, 11 Oct 2022 20:38:05 +0200
+Message-ID: <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com>
+Date:   Tue, 11 Oct 2022 20:38:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Content-Language: en-US
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+ <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com>
+ <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
+ <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,121 +71,151 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The scatter gather support doesn't appear to work well with some UDC hw.
-Add the ability to turn on the feature depending on the controller in
-use. Default the feature off since there are transmission problems with
-at least one controller, dwc3.
+Hi,
 
-Fixes: e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Dan Vacura <w36195@motorola.com>
----
-V1 -> V2:
-- no change, new patch in series
+Op 10-10-2022 om 23:35 schreef Andrey Smirnov:
+> On Mon, Oct 10, 2022 at 1:52 PM Ferry Toth <fntoth@gmail.com> wrote:
+>>
+>> Hi
+>>
+>> Op 10-10-2022 om 13:04 schreef Ferry Toth:
+>>> Hi
+>>>
+>>> On 10-10-2022 07:02, Andrey Smirnov wrote:
+>>>> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
+>>>>>
+>>>>> On 07-10-2022 04:11, Thinh Nguyen wrote:
+>>>>>> On Thu, Oct 06, 2022, Ferry Toth wrote:
+>>>>>>> Hi
+>>>>>>>
+>>>>>>> On 06-10-2022 04:12, Thinh Nguyen wrote:
+>>>>>>>> On Wed, Oct 05, 2022, Ferry Toth wrote:
+>>>>>>>>> Hi,
+>>>>>>>>>
+>>>>>>>>>         Thanks!
+>>>>>>>>>
+>>>>>>>>>         Does the failure only happen the first time host is
+>>>>>>>>> initialized? Or can
+>>>>>>>>>         it recover after switching to device then back to host mode?
+>>>>>>>>>
+>>>>>>>>> I can switch back and forth and device mode works each time,
+>>>>>>>>> host mode remains
+>>>>>>>>> dead.
+>>>>>>>> Ok.
+>>>>>>>>
+>>>>>>>>>         Probably the failure happens if some step(s) in
+>>>>>>>>> dwc3_core_init() hasn't
+>>>>>>>>>         completed.
+>>>>>>>>>
+>>>>>>>>>         tusb1210 is a phy driver right? The issue is probably
+>>>>>>>>> because we didn't
+>>>>>>>>>         initialize the phy yet. So, I suspect placing
+>>>>>>>>> dwc3_get_extcon() after
+>>>>>>>>>         initializing the phy will probably solve the dependency
+>>>>>>>>> problem.
+>>>>>>>>>
+>>>>>>>>>         You can try something for yourself or I can provide
+>>>>>>>>> something to test
+>>>>>>>>>         later if you don't mind (maybe next week if it's ok).
+>>>>>>>>>
+>>>>>>>>> Yes, the code move I mentioned above "moves dwc3_get_extcon()
+>>>>>>>>> until after
+>>>>>>>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU
+>>>>>>>>> initially
+>>>>>>>>> dwc3_get_extcon() was called from within dwc3_core_init_mode()
+>>>>>>>>> but only for
+>>>>>>>>> case USB_DR_MODE_OTG. So with this change order of events is
+>>>>>>>>> more or less
+>>>>>>>>> unchanged" solves the issue.
+>>>>>>>>>
+>>>>>>>> I saw the experiment you did from the link you provided. We want
+>>>>>>>> to also
+>>>>>>>> confirm exactly which step in dwc3_core_init() was needed.
+>>>>>>> Ok. I first tried the code move suggested by Andrey (didn't work).
+>>>>>>> Then
+>>>>>>> after reading the actual code I moved a bit further.
+>>>>>>>
+>>>>>>> This move was on top of -rc6 without any reverts. I did not make
+>>>>>>> additional
+>>>>>>> changes to dwc3_core_init()
+>>>>>>>
+>>>>>>> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
+>>>>>>> dwc3_core_init - .. - dwc3_core_init_mode (not working)
+>>>>>>>
+>>>>>>> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. -
+>>>>>>> dwc3_core_init - ..
+>>>>>>> - dwc3_core_init_mode (no change)
+>>>>>>>
+>>>>>>> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. -
+>>>>>>> dwc3_get_extcon -
+>>>>>>> dwc3_core_init_mode (works)
+>>>>>>>
+>>>>>>> .. are what I believe for this issue irrelevant calls to
+>>>>>>> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
+>>>>>>>
+>>>>>> Right. Thanks for narrowing it down. There are still many steps in
+>>>>>> dwc3_core_init(). We have some suspicion, but we still haven't
+>>>>>> confirmed
+>>>>>> the exact cause of the failure. We can write a proper patch once we
+>>>>>> know
+>>>>>> the reason.
+>>>>> If you would like me to test your suspicion, just tell me what to do
+>>>>> :-)
+>>>>
+>>>> OK, Ferry, I think I'm going to need clarification on specifics on
+>>>> your test setup. Can you share your kernel config, maybe your
+>>>> "/proc/config.gz", somewhere? When you say you are running vanilla
+>>>> Linux, do you mean it or do you mean vanilla tree + some patch delta?
+>>>
+>>> For v6.0 I can get the exacts tonight. But earlier I had this for v5.17:
+>>>
+>>> https://github.com/htot/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_5.17.bb
+>>>
+>>>
+>>> There are 2 patches referred in #67 and #68. One is related to the
+>>> infinite loop. The other is I believe also needed to get dwc3 to work.
+>>>
+>>> All the kernel config are applied as .cfg.
+>>>
+>>> Patches and cfs's here:
+>>>
+>>> https://github.com/htot/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+>>>
+>>
+>> Updated Yocto recipe for v6.0 here:
+>>
+>> https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb
+>>
+>> #75-#77 are the 2 reverts from Andy, + one SOF revert (not related to
+>> this thread).
+> 
+> Please drop all of this
+> https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb#L69-L77
+> and re do the testing. Assuming things are still broken, that's how
+> you want to do the bisecting.
 
- Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
- Documentation/usb/gadget-testing.rst              | 2 ++
- drivers/usb/gadget/function/f_uvc.c               | 2 ++
- drivers/usb/gadget/function/u_uvc.h               | 1 +
- drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
- drivers/usb/gadget/function/uvc_queue.c           | 4 ++--
- 6 files changed, 10 insertions(+), 2 deletions(-)
+I removed 4 patches:
+0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
+0044-REVERTME-usb-dwc3-gadget-skip-endpoints-ep-18-in-out.patch
+0001-Revert-USB-fixup-for-merge-issue-with-usb-dwc3-Don-t.patch
+0001-Revert-usb-dwc3-Don-t-switch-OTG-peripheral-if-extco.patch
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-index 5dfaa3f7f6a4..839a75fc28ee 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-@@ -9,6 +9,7 @@ Description:	UVC function directory
- 		streaming_interval	1..16
- 		function_name		string [32]
- 		req_int_skip_div	unsigned int
-+		sg_supported		0..1
- 		===================	=============================
- 
- What:		/config/usb-gadget/gadget/functions/uvc.name/control
-diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index f9b5a09be1f4..8e3072d6a590 100644
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -796,6 +796,8 @@ The uvc function provides these attributes in its function directory:
- 	function_name       name of the interface
- 	req_int_skip_div    divisor of total requests to aid in calculating
- 			    interrupt frequency, 0 indicates all interrupt
-+	sg_supported        allow for scatter gather to be used if the UDC
-+			    hw supports it
- 	=================== ================================================
- 
- There are also "control" and "streaming" subdirectories, each of which contain
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 75f524c83996..965cf5b48094 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -656,6 +656,7 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 			    (opts->streaming_maxburst + 1));
- 
- 	uvc->video.req_int_skip_div = opts->req_int_skip_div;
-+	uvc->video.queue.use_sg = opts->sg_supported;
- 
- 	/* Allocate endpoints. */
- 	ep = usb_ep_autoconfig(cdev->gadget, &uvc_control_ep);
-@@ -875,6 +876,7 @@ static struct usb_function_instance *uvc_alloc_inst(void)
- 	opts->streaming_interval = 1;
- 	opts->streaming_maxpacket = 1024;
- 	opts->req_int_skip_div = 0;
-+	opts->sg_supported = 0;
- 	snprintf(opts->function_name, sizeof(opts->function_name), "UVC Camera");
- 
- 	ret = uvcg_attach_configfs(opts);
-diff --git a/drivers/usb/gadget/function/u_uvc.h b/drivers/usb/gadget/function/u_uvc.h
-index 6f73bd5638ed..5ccced629925 100644
---- a/drivers/usb/gadget/function/u_uvc.h
-+++ b/drivers/usb/gadget/function/u_uvc.h
-@@ -25,6 +25,7 @@ struct f_uvc_opts {
- 	unsigned int					streaming_maxpacket;
- 	unsigned int					streaming_maxburst;
- 	unsigned int					req_int_skip_div;
-+	unsigned int					sg_supported;
- 
- 	unsigned int					control_interface;
- 	unsigned int					streaming_interface;
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 419e926ab57e..3784c0e02d01 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -2351,6 +2351,7 @@ UVCG_OPTS_ATTR(streaming_interval, streaming_interval, 16);
- UVCG_OPTS_ATTR(streaming_maxpacket, streaming_maxpacket, 3072);
- UVCG_OPTS_ATTR(streaming_maxburst, streaming_maxburst, 15);
- UVCG_OPTS_ATTR(req_int_skip_div, req_int_skip_div, UINT_MAX);
-+UVCG_OPTS_ATTR(sg_supported, sg_supported, 1);
- 
- #undef UVCG_OPTS_ATTR
- 
-@@ -2401,6 +2402,7 @@ static struct configfs_attribute *uvc_attrs[] = {
- 	&f_uvc_opts_attr_streaming_maxpacket,
- 	&f_uvc_opts_attr_streaming_maxburst,
- 	&f_uvc_opts_attr_req_int_skip_div,
-+	&f_uvc_opts_attr_sg_supported,
- 	&f_uvc_opts_string_attr_function_name,
- 	NULL,
- };
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index fc65f8e73732..b11b1e4cfed6 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -149,11 +149,11 @@ int uvcg_queue_init(struct uvc_video_queue *queue, struct device *dev, enum v4l2
- 	queue->queue.buf_struct_size = sizeof(struct uvc_buffer);
- 	queue->queue.ops = &uvc_queue_qops;
- 	queue->queue.lock = lock;
--	if (cdev->gadget->sg_supported) {
-+	if (queue->use_sg && cdev->gadget->sg_supported) {
- 		queue->queue.mem_ops = &vb2_dma_sg_memops;
--		queue->use_sg = 1;
- 	} else {
- 		queue->queue.mem_ops = &vb2_vmalloc_memops;
-+		queue->use_sg = false;
- 	}
- 
- 	queue->queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY
--- 
-2.34.1
+and indeed as you expect kernel boots (no infinite loop). However dwc3 
+host mode is not working as in your case, device mode works fine (Yocto 
+configures a set of gadgets for me).
+
+Just to be sure if I could have bisected without 0043a I added back the 
+2 0001-Revert* and indeed I run into the infinite loop with the console 
+spitting out continuous:
+debugfs: Directory 'dwc3.0.auto' with parent 'ulpi' already present!
+tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
+
+so yes it seems either 0043b or your patch "usb: dwc3: Don't switch OTG 
+-> peripheral if extcon is present" is needed to boot (break the 
+infinite loop). But your patch is in my case not sufficient to make host 
+mode work.
+
+As I understand it depends a bit on the timing, I might have a different 
+initrd (built by Yocto vs. Buildroot). F.i. I see I have 
+extcon-intel-mrfld in initrd and dwc3 / phy-tusb1210 built-in.
 
