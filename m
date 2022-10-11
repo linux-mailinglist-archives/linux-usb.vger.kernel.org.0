@@ -2,102 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FEE5FB0A6
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Oct 2022 12:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BE25FB308
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Oct 2022 15:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJKKoY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Oct 2022 06:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S230044AbiJKNPd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Oct 2022 09:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJKKoX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Oct 2022 06:44:23 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EB08C039;
-        Tue, 11 Oct 2022 03:44:20 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id t4so8326038wmj.5;
-        Tue, 11 Oct 2022 03:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAciK97rt6oCnZL2z3e7Ty/+ML2bZUrUvtiPEGHd6rE=;
-        b=aTXCkzCKfFNb9TavJAorvhjcNcIn6HAYkqR4K0JI6vM5TJUm25MPXUcS7OWeKyhHhd
-         Mvyxqv7q8mDn3IHQm9sQlebV5hI/9YxpqfSeg/Un/kBH8NG4FEiUB0mcyY/JCKSQMsjD
-         3T12kb3itiWuJk/FjGUXpw53AKvWLBMEHqeq6Yan+2ovPEFv8BvjIu1KMgyN0bPKHaxs
-         CxYMEUINP1Co1sYD6umCc96nirjoX91bEWaMtvN739MHsWhgtnctnOkDhdBU/oWhfBHK
-         0XO9e9kU+41ijSosETaUjcTIcOSIMJ5Tmo2qnf2/etbUlnMUtc6viENmGZvODslUMusn
-         Uhsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QAciK97rt6oCnZL2z3e7Ty/+ML2bZUrUvtiPEGHd6rE=;
-        b=tLqnUT3Lv5jagDfmG2EaAfQ5qZLmYAsIO/BXEcYDmpXdx8X4/EJPxgKOKP+DU/KInC
-         dYiiDT0wogPWe9CWAKyXjCG6ngeqo0xhtOvSPqBwFQrRhbTFLqOvUKWO1hSpIR0cWrfB
-         MVjmHtFUFuZgEM1USVqMpk7fcIPKZHXKqdpto1yPJG0HCTaWat80bMvjPjXO1JmuUqxC
-         7kpcOt6v/hVuGGXXWmA4qf6avPZAMjGgnWec5yOgnCSZeJG0S6stA9xyVU1gahqeBjYC
-         7OfWT1miqojjD2jfo4IwF2fcY/wPoyVg/hpmLkELADhC2xfaVy/DLx86QqTzRZtBCENI
-         d0Vw==
-X-Gm-Message-State: ACrzQf2iQ/MDQt4Zv4y6I23PIBzKrObXy9PUFnTiPQiaDgIYEmIZh/IN
-        0jYV5C/N0s3eJW1C2AB4Kbo=
-X-Google-Smtp-Source: AMsMyM4YGBzDEa/LxEz2jOVlhmvF5plZCSfFgUk1WZyAHi6DxH6YCLTRZzfSM3hvW4sn1dkScEiM9A==
-X-Received: by 2002:a05:600c:414b:b0:3b4:a655:720f with SMTP id h11-20020a05600c414b00b003b4a655720fmr22186501wmm.92.1665485058831;
-        Tue, 11 Oct 2022 03:44:18 -0700 (PDT)
-Received: from tp440p.steeds.sam ([41.215.150.62])
-        by smtp.gmail.com with ESMTPSA id u11-20020a5d6acb000000b0022afedf3c87sm11055624wrw.105.2022.10.11.03.44.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 03:44:18 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 12:44:11 +0200
-From:   Sicelo <absicsz@gmail.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        maemo-leste@lists.dyne.org, Felipe Balbi <balbi@kernel.org>,
-        phone-devel@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Rob Herring <robh@kernel.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: Re: [maemo-leste] USB PHY Initialization Fails on Nokia N900 Since
- 5.19
-Message-ID: <Y0VI+/XJs8nsazwE@tp440p.steeds.sam>
-References: <Y0PhEOl+MwlQ8HAD@tp440p.steeds.sam>
- <Y0UBindrJa1ptyR0@atomide.com>
+        with ESMTP id S230013AbiJKNPG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Oct 2022 09:15:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C75F178A8;
+        Tue, 11 Oct 2022 06:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665494102; x=1697030102;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UlEFJL5s7mZfjhc9gzE63zr6TUlk0oFMXJYz8eY7RIc=;
+  b=j/OGgobca2VqR+vQNtVWNoTtWYmcMb5EDQCFrJrENadqbDhuIg2N/d57
+   DnMsOPaGTL/e/o4Foq7EhylPJ/SmK8r5fUFER3sPPQQzBzEP9kMCOC1j9
+   Qxu4fSoLN3fMKgDBBbXTIsGpE1Ybxe6eJiMUA5d+tQzk+ovG3eyO+TmJi
+   9v3ghyGSLxJon1AwuoWkqcETJRBnkRALJiOvDr41aRzbDpLjIEgyheKe8
+   BORpQp4RQrGYXgcHc/WwASlFGWpxs4mqdDantdcbn46xlmN939Stda7bx
+   TZtAKJXBODDBL+eMgBlf+HSY8gr6C9k3RKh8yaA1qJWeDhP+zkxiUL/o4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="291814749"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="291814749"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 06:15:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="689230414"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="689230414"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Oct 2022 06:14:58 -0700
+Message-ID: <7c08c4c8-562d-553f-e513-c925080300a7@linux.intel.com>
+Date:   Tue, 11 Oct 2022 16:16:25 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0UBindrJa1ptyR0@atomide.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3] xhci-pci: Set runtime PM as default policy on all xHC
+ 1.2 or later devices
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221010160022.647-1-mario.limonciello@amd.com>
+ <Y0T68lC6bUY7dg7D@black.fi.intel.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <Y0T68lC6bUY7dg7D@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 08:39:22AM +0300, Tony Lindgren wrote:
-> To me it seems that we now somehow have a probe issue for musb depending
-> on how it gets probed depending on the following line:
+On 11.10.2022 8.11, Mika Westerberg wrote:
+> On Mon, Oct 10, 2022 at 11:00:21AM -0500, Mario Limonciello wrote:
+>> For optimal power consumption of USB4 routers the XHCI PCIe endpoint
+>> used for tunneling must be in D3.  Historically this is accomplished
+>> by a long list of PCIe IDs that correspond to these endpoints because
+>> the xhci_hcd driver will not default to allowing runtime PM for all
+>> devices.
+>>
+>> As both AMD and Intel have released new products with new XHCI controllers
+>> this list continues to grow. In reviewing the XHCI specification v1.2 on
+>> page 607 there is already a requirement that the PCI power management
+>> states D3hot and D3cold must be supported.
+>>
+>> In the quirk list, use this to indicate that runtime PM should be allowed
+>> on XHCI controllers. The following controllers are known to be xHC 1.2 and
+>> dropped explicitly:
+>> * AMD Yellow Carp
+>> * Intel Alder Lake
+>> * Intel Meteor Lake
+>> * Intel Raptor Lake
+>>
+>> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Link: https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> device_set_of_node_from_dev(&musb->dev, &pdev->dev);
-> 
-> I think commit 239071064732 ("partially Revert "usb: musb: Set the DT node
-> on the child device"") fixed the issue for omap3 that still uses hwmod
-> by removing the device_set_of_node_from_dev(). However, it somehow broke
-> SoCs using ti-sysc like omap4.
-> 
-> My guess is commit 239071064732 will fix the issue for you?
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Hi Tony
+Thanks, added to queue
 
-Thanks for the suggestion. However, 239071064732 does not fix it for me.
-With that in place, there is no trace created automatically, but dmesg
-shows:
-
-  [    1.389648] musb-hdrc musb-hdrc.0.auto: error -ENXIO: IRQ mc not found
-
-I wonder if there is something to update on the N900 dts perhaps, in
-connection with the recent musb changes?
-
-Regards
-
+-Mathias
