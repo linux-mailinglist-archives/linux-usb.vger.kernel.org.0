@@ -2,36 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509425FCCD7
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 23:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9875C5FCD09
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 23:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiJLVOH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 17:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S230150AbiJLVV5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 17:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiJLVOG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 17:14:06 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2028A115C3B
-        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 14:14:04 -0700 (PDT)
-Received: (qmail 1011241 invoked by uid 1000); 12 Oct 2022 17:14:04 -0400
-Date:   Wed, 12 Oct 2022 17:14:04 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [BUG] KVM USB passthrough did not claim interface before use
-Message-ID: <Y0cuHHWL3r7+mpcq@rowland.harvard.edu>
-References: <CAMdYzYrUOoTmBL2c_+=xLBMXg38Pp4hANnzqxoe1cVDDrFvqTA@mail.gmail.com>
- <Y0QnFHqrX2r/7oUz@rowland.harvard.edu>
- <CAMdYzYodS7Y4bZ+fzzAXMSiCfQHwMkmV8-C=b3FVUXDExavXgA@mail.gmail.com>
- <Y0QzrI92f9BL+91W@rowland.harvard.edu>
- <CAMdYzYpdLEKMSytGStvM2Gi+gkBY7GTUHZfoBt5X-2BEzLrfOw@mail.gmail.com>
+        with ESMTP id S230015AbiJLVVz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 17:21:55 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3FE8D0E6;
+        Wed, 12 Oct 2022 14:21:54 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m16so78762edc.4;
+        Wed, 12 Oct 2022 14:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QQfpRIt3DFuqO+zX1CeFTtSVeijb+PJxpHgqxCSADR0=;
+        b=al3lXHrUDVuQJuNML3yc9OTVp8mBm1fceF0wyeRVT7rVZewHTS45N+wEDJE03RPt86
+         whlP9ZfSGJADr+jLrP9hcsriMOhuem5pNu2pOAlJGKbIkvgU4vsvgsKImKxmYnPqvZ04
+         Gy0dYOkAtFViIUJWCib2vOru/oXpiU2R5sCA5tIc9DrsT7nZUBEfhbCav1Ts2VeHxZg1
+         3UPQI7BMu+saxhG/f9BQK7IpFypRaaRBR+D1hcpKxTgFSXFoUMQDXQQyxHYxn8zeyDbc
+         JihcfTeXH5CI+eDdEWIsUu1fJgdoFDJYMUGCYlO33DjjtXQR6WbTQO4WMHCbg/3j38Sx
+         57KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QQfpRIt3DFuqO+zX1CeFTtSVeijb+PJxpHgqxCSADR0=;
+        b=5jOwgoOUDNdSNnULoSwEv/sU328e+sWsVfU/neoCqTyoOWvsZGNsvSerU3A23AvmSw
+         4ZHKus6vjNCxXHiS32AK7/0I/8+ob9DRg/8K8h8LWV3dy33oXWFtYwylSEqBR65WMMZM
+         BtiwndG1bE80KHzs8du3RmYZiBeJEnOjaJpJeZKHUsdGBWTlBFLjyzJmEgKGpQB3frP1
+         huDyyKnXnujNbvIxW2rFEj2QYvfikscdwqpbWFgsr84VHy1zsIorDu0KKMkoA9bvW0bl
+         EAQsrCVjLU6mo04jxATIKp3hnQnvfujU/3LsjWxtQ8AwnOp08DdWACTWSAtimCvSBGBj
+         JcPg==
+X-Gm-Message-State: ACrzQf0Gtsp3RXJNNky2js7gwFwZDc1rwXhDgq9DE+Tlmjd4kN8sgf9x
+        6ujawiuh9LCumC1pB/CDVAWkN6Ruvz8W0Q==
+X-Google-Smtp-Source: AMsMyM7ztgB9rREL8AMYuGYCWQ376iRMzD7aUi2+lPvEwK2yjjBdeM84G3oYxHblooq1M66KBII06A==
+X-Received: by 2002:a50:fd16:0:b0:458:bf43:8dc7 with SMTP id i22-20020a50fd16000000b00458bf438dc7mr28513321eds.400.1665609712898;
+        Wed, 12 Oct 2022 14:21:52 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id a20-20020aa7cf14000000b00458dc7e8ecasm12009298edy.72.2022.10.12.14.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 14:21:52 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Icenowy Zheng <uwu@icenowy.me>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH v2 04/10] phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
+Date:   Wed, 12 Oct 2022 23:21:50 +0200
+Message-ID: <4218006.ejJDZkT8p0@kista>
+In-Reply-To: <20221012055602.1544944-5-uwu@icenowy.me>
+References: <20221012055602.1544944-1-uwu@icenowy.me> <20221012055602.1544944-5-uwu@icenowy.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYpdLEKMSytGStvM2Gi+gkBY7GTUHZfoBt5X-2BEzLrfOw@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,76 +79,67 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 02:49:09PM -0400, Peter Geis wrote:
-> On Mon, Oct 10, 2022 at 11:01 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+Hi Icenowy,
 
-> > > The bug is the device is unusable in passthrough, this is the only
-> > > direction as to why. The question is which piece of software is
-> > > causing it. I figure qemu is the most likely suspect, but they request
-> > > bugs that are possibly in kvm start here. The cdc-acm driver is the
-> > > least likely in my mind, as the other device that works also uses it.
-> > > I just tested removing the other working device and only passing
-> > > through the suspect device, and it still triggers the bug. So whatever
-> > > the problem is, it's specific to this one device.
-> >
-> > Does anything of interest about the device show up in the virtual
-> > machine's kernel log?
+Dne sreda, 12. oktober 2022 ob 07:55:56 CEST je Icenowy Zheng napisal(a):
+> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
 > 
-> Nothing in regards to this no. The device enumerates, but any attempt
-> to access it triggers the warning on the host only.
-
-That's odd.  I don't see anything in the usbmon trace corresponding to 
-the warning messages about interface 1.  In fact, I don't see anything 
-at all in the trace relating to interface 1.
-
-> > You can collect a usbmon trace on the host system to gather more
-> > information about what the virtual machine is trying to do.  Your
-> > previous post shows that the device is on bus 3, so before starting
-> > qemu-kvm you would do:
-> >
-> >         cat /sys/kernel/debug/usb/usbmon/3u >mon.txt
-> >
-> > in a separate window.  Kill the cat process when the test is over and
-> > post the output file.
-> >
-> > It'll help if you unplug the working device (and in fact as many devices
-> > on bus 3 as is practical) before running the test, so that the trace
-> > includes only traffic to the non-working device.
-> >
-> > For comparison, you could also acquire a usbmon trace of what happens
-> > when you try using the device on a real, non-virtual machine.  For this
-> > test you would start the trace before plugging in the device.
+> Add support for its USB PHY.
 > 
-> I've attached the requested file, but I have no idea how to read this.
-> The file consists of the host when the device is plugged in until
-> enumeration, left to idle for a few moments, then the guest is started
-> and permitted to claim it.
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
+> No changes since v1.
+> 
+>  drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
+> b/drivers/phy/allwinner/phy-sun4i-usb.c index 3a3831f6059a..2f94cb77637b
+> 100644
+> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+> @@ -109,6 +109,7 @@ enum sun4i_usb_phy_type {
+>  	sun8i_v3s_phy,
+>  	sun50i_a64_phy,
+>  	sun50i_h6_phy,
+> +	suniv_f1c100s_phy,
+>  };
+> 
+>  struct sun4i_usb_phy_cfg {
+> @@ -859,6 +860,14 @@ static int sun4i_usb_phy_probe(struct platform_device
+> *pdev) return 0;
+>  }
+> 
+> +static const struct sun4i_usb_phy_cfg suniv_f1c100s_cfg = {
+> +	.num_phys = 1,
+> +	.type = suniv_f1c100s_phy,
 
-Actually the device was plugged in and enumerated, and then about four 
-seconds later it spontaneously disconnected for a moment.  It was 
-enumerated again, and about three minutes after that it looks like the 
-virtual guest started up.  The guest reset the device and enumerated it, 
-but did nothing more.  In particular, the guest did not try to install 
-configuration 1, which is odd.  Or if it did try this, the attempt 
-wasn't visible in the usbmon trace.
+I think you should just use sun4i_a10_phy. It has no special handling. I don't 
+see a point adding new phy types if there is no special cases for it.
 
-I'm inclined to agree that the fault appears to lie in qemu-kvm.
+Best regards,
+Jernej
 
->  No other device is on the bus.
+> +	.disc_thresh = 3,
+> +	.phyctl_offset = REG_PHYCTL_A10,
+> +	.dedicated_clocks = true,
+> +};
+> +
+>  static const struct sun4i_usb_phy_cfg sun4i_a10_cfg = {
+>  	.num_phys = 3,
+>  	.type = sun4i_a10_phy,
+> @@ -988,6 +997,8 @@ static const struct of_device_id
+> sun4i_usb_phy_of_match[] = { { .compatible =
+> "allwinner,sun50i-a64-usb-phy",
+>  	  .data = &sun50i_a64_cfg},
+>  	{ .compatible = "allwinner,sun50i-h6-usb-phy", .data = 
+&sun50i_h6_cfg },
+> +	{ .compatible = "allwinner,suniv-f1c100s-usb-phy",
+> +	  .data = &suniv_f1c100s_cfg },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
+> --
+> 2.37.1
 
-In fact one other device was.  It identified itself with the strings
-"PbAcid" and "CPS", but I can't tell more than that.  A UPS device,
-perhaps?
 
-There's one other thing you might try, although I'm not sure that it
-will provide any useful new information.  Instead of collecting a
-usbmon trace, collect a usbfs snoop log.  Before starting qemu, do:
-
-	echo 1 >/sys/module/usbcore/parameters/usbfs_snoop
-
-This will cause the accesses performed via usbfs, including those 
-performed by the qemu process, to be printed in the kernel log.  (Not 
-all of the accesses, but the more important ones.)  Let's see what shows 
-up.
-
-Alan Stern
