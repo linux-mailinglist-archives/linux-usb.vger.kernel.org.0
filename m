@@ -2,209 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281825FC05A
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 07:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10C35FC07B
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 08:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiJLF6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 01:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        id S229617AbiJLGQh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 02:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiJLF6G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 01:58:06 -0400
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BD5ABF3B;
-        Tue, 11 Oct 2022 22:57:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1665554262; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=atvxzaSC6LFGcRfJpsJMIxtZIt352jx03gJSKk9uG2bkcg77Y15gkiUasLg3zDhLReHbGEjnx3tJ2gkVMUb3aK7fyFOk6f5pWP0PjglEZcMHnXpc8g3weSsl8It/gmsCOF/SoFoUsKAy8Jv6bkLp9jxZB+M2JOEP+t8kMvODrMk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1665554262; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=UaXtIwhiAd0KbivjBK2cgrEAbkI3s44C7vM8EyFF4v0=; 
-        b=L6Lud2AdEMM5tJTi0UUUFx1GxiYaGqtDGvSfxIof0tDU+nBc3J11SgE1BeFJWySk25dxe0Luhy/MpsioQaqeTtXrpAL/E3ejaLqzRvo5h2+DPe2maA9043VnkaIONCT7dS1Tx+DtxTco4HTvzqUBOlOwwxBp/PUYzefz1NItZug=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1665554262;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=UaXtIwhiAd0KbivjBK2cgrEAbkI3s44C7vM8EyFF4v0=;
-        b=hq5MQdXicXEsg+vm/uyU/1/Dn97R6FibHgNnj8zV92K4aKrpJK0iyObxJ+qLhApu
-        FtnxRSOc/uhim8UcT0Y3n078oC9JCn6qmecZx+NY0ivRckdEyTAFgMfoGoQmtXHEB1s
-        4X0J6n/Tr5Fgu4XjuDCktzCDKTT7RWyLWPbtfgTQ=
-Received: from edelgard.fodlan.icenowy.me (112.94.102.144 [112.94.102.144]) by mx.zohomail.com
-        with SMTPS id 1665554261224772.6070403474648; Tue, 11 Oct 2022 22:57:41 -0700 (PDT)
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
-Subject: [PATCH v2 10/10] ARM: dts: suniv: add device tree for PopStick v1.1
-Date:   Wed, 12 Oct 2022 13:56:02 +0800
-Message-Id: <20221012055602.1544944-11-uwu@icenowy.me>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221012055602.1544944-1-uwu@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me>
+        with ESMTP id S229546AbiJLGQg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 02:16:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB173286E0
+        for <linux-usb@vger.kernel.org>; Tue, 11 Oct 2022 23:16:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75332613FB
+        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 06:16:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0D1C433C1;
+        Wed, 12 Oct 2022 06:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665555393;
+        bh=v32LFlvhvYFoxrCUhDb44AIF0qg2ox67nh0BWaFGI/E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uDus0xxMcg5OTBnTQjR4Fc2dDsMRaFXsdGqmXrJ63J3n8IP8mZrEsoRh//jqcYt33
+         yve/7zJV3xpBSCuKY8DkWRXqj2Qu/G30XSfcDxO5Pj3fGlQsVd6pm9e4ILe6+TcF7Q
+         uPBXZ81MxeMiEydGlGiYZOzba1TqKQXQNvGcTBE5g6d6a/r2G8r8UZIKrRhl4bNPuv
+         H3tAv3RsjGxyzWbTkGhpXGeY5X3+tPvdoIfSwmNHJPgIwZGGZKxUBrPjCkIAJaDq1e
+         qKXckMb4RtwihFb0Soelnt4hievAWb4uTwp+FAj7Y4AMAY+zTerKiIBRghm5ZWnxIF
+         54o6B9llFYNPA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oiV2W-0005ra-Qi; Wed, 12 Oct 2022 08:16:24 +0200
+Date:   Wed, 12 Oct 2022 08:16:24 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Davide Tronchin <davide.tronchin.94@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] USB: serial: option: the patch is meant to support
+ LARA-R6 Cat 1 and LARA-L6 CAT 4 module family.
+Message-ID: <Y0ZbuMxNvZGvFo6+@hovoldconsulting.com>
+References: <20221011142008.3654-1-davide.tronchin.94@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011142008.3654-1-davide.tronchin.94@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
-wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
-an on-board CH340 USB-UART converted connected to F1C200s's UART0.
+On Tue, Oct 11, 2022 at 04:20:08PM +0200, Davide Tronchin wrote:
+> The LARA-R6 module old PID (defined as: UBLOX_PRODUCT_R6XX
+> 0x90fa) has been removed. The new LARA-R6 (00B) definition uses 0x908b PID
+> and the reservation of port 3 is not needed anymore.
+> 
+> LARA-R6 00B USB composition exposes the following interfaces:
+> If 0: Diagnostic
+> If 1: AT parser
+> If 2: AT parser
+> If 3: AT parser/alternative functions
 
-Add a device tree for it. As F1C200s is just F1C100s with a different
-DRAM chip co-packaged, directly use F1C100s DTSI here.
+> Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+> ---
+>  drivers/usb/serial/option.c | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 
-This commit covers the v1.1 version of this board, which is now shipped.
-v1.0 is some internal sample that have not been shipped at all.
+Greg already mentioned the missing changelog here.
 
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
----
-New patch introduced in v2.
+Also make sure to CC anyone that helps you with you review when
+resending (i.e. Lars in this case).
 
- arch/arm/boot/dts/Makefile                    |   3 +-
- .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 101 ++++++++++++++++++
- 2 files changed, 103 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+And do remember to CC the maintainer, that is, me.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc..0249c07bd8a6 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
- 	sun9i-a80-optimus.dtb \
- 	sun9i-a80-cubieboard4.dtb
- dtb-$(CONFIG_MACH_SUNIV) += \
--	suniv-f1c100s-licheepi-nano.dtb
-+	suniv-f1c100s-licheepi-nano.dtb \
-+	suniv-f1c200s-popstick-v1.1.dtb
- dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
- 	tegra20-acer-a500-picasso.dtb \
- 	tegra20-asus-tf101.dtb \
-diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-new file mode 100644
-index 000000000000..121dfc6f609d
---- /dev/null
-+++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-+ */
-+
-+/dts-v1/;
-+#include "suniv-f1c100s.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "Popcorn Computer PopStick v1.1";
-+	compatible = "sourceparts,popstick-v1.1", "sourceparts,popstick",
-+		     "allwinner,suniv-f1c200s", "allwinner,suniv-f1c100s";
-+
-+	aliases {
-+		mmc0 = &mmc0;
-+		serial0 = &uart0;
-+		spi0 = &spi0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	reg_vcc3v3: vcc3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+};
-+
-+&mmc0 {
-+	cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
-+	bus-width = <4>;
-+	disable-wp;
-+	status = "okay";
-+	vmmc-supply = <&reg_vcc3v3>;
-+};
-+
-+&spi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi0_pc_pins>;
-+	status = "okay";
-+
-+	flash@0 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "spi-nand";
-+		reg = <0>;
-+		spi-max-frequency = <40000000>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "u-boot-with-spl";
-+				reg = <0x0 0x100000>;
-+			};
-+
-+			ubi@100000 {
-+				label = "ubi";
-+				reg = <0x100000 0x7f00000>;
-+			};
-+		};
-+	};
-+};
-+
-+&otg_sram {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pe_pins>;
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	status = "okay";
-+};
--- 
-2.37.1
-
+Johan
