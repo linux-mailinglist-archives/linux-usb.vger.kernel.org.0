@@ -2,183 +2,249 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F595FC6EF
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 16:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A776E5FC778
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 16:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiJLODo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 10:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S229514AbiJLOgH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 10:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiJLODm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 10:03:42 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4E3C7076
-        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 07:03:40 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id h10-20020a056e021d8a00b002f99580de6cso13322414ila.5
-        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 07:03:40 -0700 (PDT)
+        with ESMTP id S229603AbiJLOgH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 10:36:07 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42167E03B
+        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 07:36:05 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso1351071wmb.5
+        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 07:36:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=D54Nl7CHWXEn6gvb8f5Rqi+gPtua1r3tUpmQaR9Tyug=;
+        b=q4qZ+vXd+Yaxl+oDMzus70uhXgKvB7rLnkdsHhj57UlZZ0DQGxooCq+Z3hbJKn1W4i
+         i2hgvJ7pMLh0en1QXa9HAKzy15cfV83vzx7cD64ccr7oQw6/kPT8hJjCQibCe3lSYZEK
+         deRIhlIh2I8KV44czwTTdvvg1iCHmdxgg4OL4LiWbtZtoqgo/zUESJYyzydPq/cK/N3R
+         nPf7WbkdJKCflSGqBf4bGwrq9llW+QtIiB8hofVZ9ewXW0uNaNSwh85B8ACb5yT6MgPh
+         HDBjIDPUIgmahsLgeIyA+cyUfMpkO9XbfmD935cj01kJxeSd3dRG1Nv/wNyB9vmT35yE
+         cBEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n0UBNFYp+vCcYR8ZR0zNcVKROtglGCtdOoaLUjeXgg4=;
-        b=wkGO2HsKZmxb7U32AgW8lZX0TTBEmrbK4g/te8zrcp4vihDAz2cSNsxQzx+xN8rHMi
-         MIncTm2Px5frFV8HyW/uRCEYJqqT3ppnCOqNLRd3TWxhSiv5+Kl1ZaCjqYfYQJFQvjnp
-         NmPHY68B0oHHDi2yT5X5ejnIE7ht/7hO37EB2e3FjPMcUXotGgHuq2PtId3rkhugFxuc
-         eLOkfGoGKvswrXXMkEZB/oR56CnmJizuVaJaPCJ4qtPIWlpchLjrL+foTiYxhxoJf85i
-         W/VH6CI/3aYConwxSKvPrS5Wq7DfIDxpKvazZ76xmQAMaYlgiYkBFxagN4OE3S0Zh7G/
-         JlOw==
-X-Gm-Message-State: ACrzQf2J+c09dRcIykarKfltvQevV+saPMLQW2WKh7zLPBtj1DUt9xog
-        BxfW+Sl6rCqq74I5sQsyE/YYvuswRtEuSZL5EeaemVblRC9y
-X-Google-Smtp-Source: AMsMyM4UlkI+7pX3jD5RdNYVHE8pjZo8aZaJ5yo3+4kquz2tNK3M6pNctuakarJ7htgkAX9eh6vchvwjuSKKTeJTe7m4F6ZktQMv
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D54Nl7CHWXEn6gvb8f5Rqi+gPtua1r3tUpmQaR9Tyug=;
+        b=BDN8SopXHptnVTySwI3NAmHvGkPQiPesoW7ybTocMrkb9i9qQaICRa/BE0AvAuBVB3
+         Dxc9y7h9d46obAJE9lOXKIvtkCCT35H1vp7rp8BZcMH8V/hMnXlhm4//sB8ARZLvcugG
+         2EtK/Bk/OvjFoTiOp7SQNKIjebGwg3F8uBbsl3yB8oiZVIJadt3GJEJ1ZvwiHKjm3pRa
+         1GluVvWmabmOzWidV0g7GyA6AS/O75zhbEGGZDhgekHDOxaFdfGWIEf+57KB+DcdDum+
+         0wTFcjesDYW0Dl/kpHxl55y2/Pqv2t6mljLTL3leLzb0+hp8Fnlas9r4dxoff0VTehad
+         6TDQ==
+X-Gm-Message-State: ACrzQf09FzWTweT440+Q9ZReMGNWHkyU3oCtSwrR4YmTU4a+DXaKB6ys
+        AtebYgVmIk4aTbHDb2SsA4IAMBv0HmkDZbYaGZqvs/+RAQ==
+X-Google-Smtp-Source: AMsMyM72Df5GO0eEQUEqWOCWvegy1tMb7/vYKBM6SmvZKytxTqBWQSO3QSj/0kODbznbLCND7Y1uAVPsO7REKmGYtVA=
+X-Received: by 2002:a05:600c:490f:b0:3c6:2c21:97f6 with SMTP id
+ f15-20020a05600c490f00b003c62c2197f6mr2975207wmp.177.1665585363248; Wed, 12
+ Oct 2022 07:36:03 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1919:b0:363:b88d:e02b with SMTP id
- p25-20020a056638191900b00363b88de02bmr8700074jal.154.1665583419621; Wed, 12
- Oct 2022 07:03:39 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 07:03:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001207f205ead6dc09@google.com>
-Subject: [syzbot] usb-testing boot error: WARNING in cpumask_next_wrap
-From:   syzbot <syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mst@redhat.com, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
+From:   =?UTF-8?B?VGhpbG8gUsO2cmln?= <thilo.roerig@googlemail.com>
+Date:   Wed, 12 Oct 2022 16:35:52 +0200
+Message-ID: <CAFfCzSuUce=W349CnvtOFs8mYnyevNdXjKJ61eyhE0jpvH8b8g@mail.gmail.com>
+Subject: Receiving report multiple times when changing cpu
+To:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Dear maintainer, dear community,
 
-syzbot found the following issue on:
+I'm new to looking into the linux kernel, but am hoping that this is the
+right spot to address my problem.
+Otherwise I would be very thankful, if you could point me in the right
+direction.
 
-HEAD commit:    49da07006239 Merge tag 'memblock-v6.1-rc1' of git://git.ke..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1361eb1a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8be1ac10ff2d4692
-dashboard link: https://syzkaller.appspot.com/bug?extid=28ec239d5c21a2d91f3d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I have a problem with a custom usb device on a raspberry pi running a
+buildroot 64bit linux with a v5.19.14 kernel.
+I ran into a problem reading data from a custom usb hid device using
+interrupt transfers. I'm using
+the python hidapi library (https://pypi.org/project/hidapi/) with the
+libusb backend. After sending
+a custom command to the device, the driver changes from usbhid to usbfs.
+The device starts sending
+reports of size 1023 bytes to endpoint 0x83. `usb-devices` yields the
+following output:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d41d7d5418ab/disk-49da0700.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ffb9548d913/vmlinux-49da0700.xz
+T:  Bus=3D3D01 Lev=3D3D03 Prnt=3D3D13 Port=3D3D00 Cnt=3D3D01 Dev#=3D3D 14 S=
+pd=3D3D480 MxC=3D
+h=3D3D 0
+D:  Ver=3D3D 2.00 Cls=3D3D00(>ifc ) Sub=3D3D00 Prot=3D3D00 MxPS=3D3D64 #Cfg=
+s=3D3D  1
+C:  #Ifs=3D3D 1 Cfg#=3D3D 1 Atr=3D3D80 MxPwr=3D3D500mA
+I:  If#=3D3D 0 Alt=3D3D 0 #EPs=3D3D 1 Cls=3D3D03(HID  ) Sub=3D3D00 Prot=3D3=
+D00 Driver=3D
+=3D3Dusbfs
+E:  Ad=3D3D83(I) Atr=3D3D03(Int.) MxPS=3D3D1024 Ivl=3D3D125us
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com
+The reports are numbered by an increasing report id and are available via
+interrupt transfer approx. every
+230 microseconds (1.85 microframes). The device does not retain any old
+reports.
 
-software IO TLB: mapped [mem 0x00000000bbffd000-0x00000000bfffd000] (64MB)
-RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb6feccdd0, max_idle_ns: 440795259471 ns
-clocksource: Switched to clocksource tsc
-Initialise system trusted keyrings
-workingset: timestamp_bits=40 max_order=21 bucket_order=0
-NFS: Registering the id_resolver key type
-Key type id_resolver registered
-Key type id_legacy registered
-9p: Installing v9fs 9p2000 file system support
-Key type asymmetric registered
-Asymmetric key parser 'x509' registered
-Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
-io scheduler mq-deadline registered
-io scheduler kyber registered
-usbcore: registered new interface driver udlfb
-usbcore: registered new interface driver smscufx
-input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-ACPI: button: Power Button [PWRF]
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-usbcore: registered new interface driver udl
-loop: module loaded
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-usbcore: registered new interface driver port100
-usbcore: registered new interface driver nfcmrvl
-scsi host0: Virtio SCSI HBA
-scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-sd 0:0:1:0: Attached scsi generic sg0 type 0
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
-WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
-WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
-Modules linked in:
-CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-11414-g49da07006239 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
-RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
-RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
-Code: df e8 6b 9e 80 fb 39 eb 77 64 e8 12 a2 80 fb 41 8d 6c 24 01 89 de 89 ef e8 54 9e 80 fb 39 dd 0f 82 54 ff ff ff e8 f7 a1 80 fb <0f> 0b e9 48 ff ff ff e8 eb a1 80 fb 48 c7 c2 80 dc e3 88 48 b8 00
-RSP: 0000:ffffc9000001f920 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: ffff8881002b0000 RSI: ffffffff85c61b89 RDI: 0000000000000004
-RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
-R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff88e3da90
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2303
- init_vqs drivers/net/virtio_net.c:3581 [inline]
- init_vqs drivers/net/virtio_net.c:3567 [inline]
- virtnet_probe+0x12ae/0x33a0 drivers/net/virtio_net.c:3884
- virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
- bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
- bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
- driver_register+0x220/0x3a0 drivers/base/driver.c:246
- virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4090
- do_one_initcall+0x13d/0x780 init/main.c:1303
- do_initcall_level init/main.c:1376 [inline]
- do_initcalls init/main.c:1392 [inline]
- do_basic_setup init/main.c:1411 [inline]
- kernel_init_freeable+0x6fa/0x783 init/main.c:1631
- kernel_init+0x1a/0x1d0 init/main.c:1519
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+Initially, I get all reports in the correct order, but after some time I
+start getting reports that I have already
+received previously. The report ids start to include a shift after a
+certain number of reports and
+schematically they look like the following:
 
+... 1,2,...,578,  238,239,...,816,  476,477,...,1054, and so on
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+So there is approximately the same number of consecutive "forward" reports
+followed by a jump "backwards"
+by approximately the same number of reports. I snooped the transferred data
+using the `usbcore.usbfs_snoop` kernel
+parameter but this slowed things down, so that I started missing reports
+and could not reproduce the problem.
+Then I traced the `xhci-hcd` events and observed that the pattern started
+to occur, when my python process was
+rescheduled from one cpu-core to another
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+...
+          python-22331   [000] ..... 174497.068723: xhci_urb_enqueue:
+ep3in-intr: urb 0000000070a812bc pipe 1073852544 slot 3 length 0/1024
+sgs 0/0 stream 0 flags 00010200
+          python-22331   [000] d.... 174497.068727: xhci_queue_trb:
+INTR: Buffer 00000004669c9800 length 1024 TD size 0 intr 0 type
+'Normal' flags b:i:I:c:s:I:e:c
+          python-22331   [000] d.... 174497.068728: xhci_inc_enq: INTR
+000000006122f915: enq 0x00000004526bf8f0(0x00000004526bf000) deq
+0x00000004526bf8e0(0x00000004526bf000) segs 2 stream 0 free_trbs 500
+bounce 1024 cycle 1
+          python-22331   [000] d.... 174497.068729:
+xhci_ring_ep_doorbell: Ring doorbell for Slot 3 ep3in
+          <idle>-0       [000] d.h.. 174497.068811: xhci_handle_event:
+EVENT: TRB 00000004526bf8e0 status 'Short Packet' len 1 slot 3 ep 7
+type 'Transfer Event' flags e:c
+          <idle>-0       [000] d.h.. 174497.068814:
+xhci_handle_transfer: INTR: Buffer 00000004669c9800 length 1024 TD
+size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
+          <idle>-0       [000] d.h.. 174497.068820: xhci_inc_deq: INTR
+000000006122f915: enq 0x00000004526bf8f0(0x00000004526bf000) deq
+0x00000004526bf8f0(0x00000004526bf000) segs 2 stream 0 free_trbs 501
+bounce 1024 cycle 1
+          <idle>-0       [000] d.h.. 174497.068822: xhci_urb_giveback:
+ep3in-intr: urb 0000000070a812bc pipe 1073852544 slot 3 length
+1023/1024 sgs 0/0 stream 0 flags 00010200
+          <idle>-0       [000] d.h.. 174497.068824: xhci_inc_deq:
+EVENT 000000002a1d7c0b: enq 0x0000000440f9c000(0x0000000440f9c000) deq
+0x0000000440f9f620(0x0000000440f9f000) segs 8 stream 0 free_trbs 2039
+bounce 0 cycle 0
+          python-22331   [000] ..... 174497.068894: xhci_urb_enqueue:
+ep3in-intr: urb 0000000070a812bc pipe 1073852544 slot 3 length 0/1024
+sgs 0/0 stream 0 flags 00010200
+          python-22331   [000] d.... 174497.068899: xhci_queue_trb:
+INTR: Buffer 00000004669c9800 length 1024 TD size 0 intr 0 type
+'Normal' flags b:i:I:c:s:I:e:c
+          python-22331   [000] d.... 174497.068900: xhci_inc_enq: INTR
+000000006122f915: enq 0x00000004526bf900(0x00000004526bf000) deq
+0x00000004526bf8f0(0x00000004526bf000) segs 2 stream 0 free_trbs 500
+bounce 1024 cycle 1
+          python-22331   [000] d.... 174497.068901:
+xhci_ring_ep_doorbell: Ring doorbell for Slot 3 ep3in
+          <idle>-0       [000] d.h.. 174497.069954: xhci_handle_event:
+EVENT: TRB 00000004526bf8f0 status 'Short Packet' len 1 slot 3 ep 7
+type 'Transfer Event' flags e:c
+          <idle>-0       [000] d.h.. 174497.069957:
+xhci_handle_transfer: INTR: Buffer 00000004669c9800 length 1024 TD
+size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
+          <idle>-0       [000] d.h.. 174497.069959: xhci_inc_deq: INTR
+000000006122f915: enq 0x00000004526bf900(0x00000004526bf000) deq
+0x00000004526bf900(0x00000004526bf000) segs 2 stream 0 free_trbs 501
+bounce 1024 cycle 1
+          <idle>-0       [000] d.h.. 174497.069961: xhci_urb_giveback:
+ep3in-intr: urb 0000000070a812bc pipe 1073852544 slot 3 length
+1023/1024 sgs 0/0 stream 0 flags 00010200
+          <idle>-0       [000] d.h.. 174497.069962: xhci_inc_deq:
+EVENT 000000002a1d7c0b: enq 0x0000000440f9c000(0x0000000440f9c000) deq
+0x0000000440f9f630(0x0000000440f9f000) segs 8 stream 0 free_trbs 2039
+bounce 0 cycle 0
+          python-22331   [003] ..... 174497.070160: xhci_urb_enqueue:
+ep3in-intr: urb 00000000a553f707 pipe 1073852544 slot 3 length 0/1024
+sgs 0/0 stream 0 flags 00010200
+          python-22331   [003] d.... 174497.070171: xhci_queue_trb:
+INTR: Buffer 00000004799b0000 length 1024 TD size 0 intr 0 type
+'Normal' flags b:i:I:c:s:I:e:c
+          python-22331   [003] d.... 174497.070172: xhci_inc_enq: INTR
+000000006122f915: enq 0x00000004526bf910(0x00000004526bf000) deq
+0x00000004526bf900(0x00000004526bf000) segs 2 stream 0 free_trbs 500
+bounce 1024 cycle 1
+          python-22331   [003] d.... 174497.070174:
+xhci_ring_ep_doorbell: Ring doorbell for Slot 3 ep3in
+          <idle>-0       [000] d.h.. 174497.071201: xhci_handle_event:
+EVENT: TRB 00000004526bf900 status 'Short Packet' len 1 slot 3 ep 7
+type 'Transfer Event' flags e:c
+          <idle>-0       [000] d.h.. 174497.071204:
+xhci_handle_transfer: INTR: Buffer 00000004799b0000 length 1024 TD
+size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
+          <idle>-0       [000] d.h.. 174497.071206: xhci_inc_deq: INTR
+000000006122f915: enq 0x00000004526bf910(0x00000004526bf000) deq
+0x00000004526bf910(0x00000004526bf000) segs 2 stream 0 free_trbs 501
+bounce 1024 cycle 1
+          <idle>-0       [000] d.h.. 174497.071208: xhci_urb_giveback:
+ep3in-intr: urb 00000000a553f707 pipe 1073852544 slot 3 length
+1023/1024 sgs 0/0 stream 0 flags 00010200
+          <idle>-0       [000] d.h.. 174497.071210: xhci_inc_deq:
+EVENT 000000002a1d7c0b: enq 0x0000000440f9c000(0x0000000440f9c000) deq
+0x0000000440f9f640(0x0000000440f9f000) segs 8 stream 0 free_trbs 2039
+bounce 0 cycle 0
+          python-22331   [003] ..... 174497.071269: xhci_urb_enqueue:
+ep3in-intr: urb 00000000a553f707 pipe 1073852544 slot 3 length 0/1024
+sgs 0/0 stream 0 flags 00010200
+          python-22331   [003] d.... 174497.071272: xhci_queue_trb:
+INTR: Buffer 00000004799b0000 length 1024 TD size 0 intr 0 type
+'Normal' flags b:i:I:c:s:I:e:c
+          python-22331   [003] d.... 174497.071273: xhci_inc_enq: INTR
+000000006122f915: enq 0x00000004526bf920(0x00000004526bf000) deq
+0x00000004526bf910(0x00000004526bf000) segs 2 stream 0 free_trbs 500
+bounce 1024 cycle 1
+          python-22331   [003] d.... 174497.071274:
+xhci_ring_ep_doorbell: Ring doorbell for Slot 3 ep3in
+          <idle>-0       [000] d.h.. 174497.072330: xhci_handle_event:
+EVENT: TRB 00000004526bf910 status 'Short Packet' len 1 slot 3 ep 7
+type 'Transfer Event' flags e:c
+          <idle>-0       [000] d.h.. 174497.072331:
+xhci_handle_transfer: INTR: Buffer 00000004799b0000 length 1024 TD
+size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
+          <idle>-0       [000] d.h.. 174497.072332: xhci_inc_deq: INTR
+000000006122f915: enq 0x00000004526bf920(0x00000004526bf000) deq
+0x00000004526bf920(0x00000004526bf000) segs 2 stream 0 free_trbs 501
+bounce 1024 cycle 1
+          <idle>-0       [000] d.h.. 174497.072334: xhci_urb_giveback:
+ep3in-intr: urb 00000000a553f707 pipe 1073852544 slot 3 length
+1023/1024 sgs 0/0 stream 0 flags 00010200
+          <idle>-0       [000] d.h.. 174497.072334: xhci_inc_deq:
+EVENT 000000002a1d7c0b: enq 0x0000000440f9c000(0x0000000440f9c000) deq
+0x0000000440f9f650(0x0000000440f9f000) segs 8 stream 0 free_trbs 2039
+bounce 0 cycle 0
+...
+
+Unfortunately, I do not understand the details of the linux usb stack in
+depth and the details of
+this log enough to know where to look any further. I am hoping to get some
+help or pointers to
+how to attack my problem. I have tried using different libraries (hidapi C,
+libusb), linux systems
+(raspberry pi OS, ubuntu), but the problem persisted.
+
+Thank you very much for taking the time for reading about my problem and
+thank you in advance
+for any advice.
+
+Best
+Thilo R=C3=B6rig
