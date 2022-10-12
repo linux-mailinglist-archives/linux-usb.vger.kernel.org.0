@@ -2,77 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CB85FC65D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 15:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFB85FC665
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 15:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJLNZH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 09:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S229739AbiJLN2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 09:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJLNZF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 09:25:05 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BD222B0
-        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 06:25:04 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id g9so10844106qvo.12
-        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 06:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1qzXiCku8zb8Ae0eQNcYFjLoMgqZQvEYwUb7HkYQzic=;
-        b=KhuH8AjUFEIjD5MHbT8PW7Jap6hZTlcC4NC9wKNSLthBZU3ojyTpu3/GYv0f9GK0jC
-         oboue92JE1IYV98IFp1bzjl3MWsJUUJO+IUVA8nwVIDEFGB0ZMs5ncXVpD2ify5bkZIy
-         MZZ3G8N78k72rBDHEc3NnlaSPxQGgifi8ugnBXebsl28xQg9fPtgZ+zXzMcNOuDTC50J
-         nUuLX/RUyTFzPaDPT+cl9335B8SG6tnyLIZECYWqvimP7u0SU0uL+zZRXJ58TfYHAzOb
-         qqjxjozBmM9MeIwXDCv19Npp+X84rpxrW4ZQdRltQvcDmbhL3Dqrbd6ZdOD5kWptP9QZ
-         hLng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1qzXiCku8zb8Ae0eQNcYFjLoMgqZQvEYwUb7HkYQzic=;
-        b=iy4nxq09yxzp3MWx8WcCEMeIuO/eyknwLYHeAh6Pf4alwt6309m/gFiEdtx8jR3zQs
-         Ivz3+uf48eWWgA3MsmXMacdRBpMve89sW98pkHjs0TIp180sSuhvyWnCj/luLCOWmX8G
-         cRp8qxtUGM/wjLrbdW5xuPeVsI3gg8umH4rwnUHOp22fW1Iu6Wqpz37UIjc6tvLqm3c+
-         O1Nhg0vBETSmjfAe+SK1uqic8C3YGAGCSiTvpvIvF6O6+lYpFpwDf5+kpPHB4gcIcdn4
-         pOz2kU6np0qrVkTMz2x+DfYsNeupFrljTMXaleIMkpGfffniJWBYA6XosPrgrR/Bu6o4
-         rzow==
-X-Gm-Message-State: ACrzQf34NBucnsQp4Z1exNjrUnyM0TBu4mGNKunnLt/dREAxA90njHz1
-        1xK/flZONDwwvHOCgo3BXvMVRA==
-X-Google-Smtp-Source: AMsMyM6tOpEdzutnSl3YgJpiD4RaB0LVmGTjq+pe7xdWHP3fzktHlKw3QVtkYhzr5Nt9d7Jg1G0zpg==
-X-Received: by 2002:a05:6214:765:b0:4b1:d285:3411 with SMTP id f5-20020a056214076500b004b1d2853411mr22538824qvz.18.1665581103484;
-        Wed, 12 Oct 2022 06:25:03 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id de14-20020a05620a370e00b006e07228ed53sm12147605qkb.18.2022.10.12.06.25.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 06:25:02 -0700 (PDT)
-Message-ID: <fc867cc5-9df7-3e18-ef0c-19f1c569c571@linaro.org>
-Date:   Wed, 12 Oct 2022 09:25:01 -0400
+        with ESMTP id S229653AbiJLN2F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 09:28:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBADDA2AA0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 06:28:03 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oibmD-0000J9-Jg; Wed, 12 Oct 2022 15:28:01 +0200
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oibmC-0016Pw-T1; Wed, 12 Oct 2022 15:28:00 +0200
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oibmB-001EoB-Ps; Wed, 12 Oct 2022 15:27:59 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        kernel@pengutronix.de, Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH] usb: phy: generic: make vcc regulator optional
+Date:   Wed, 12 Oct 2022 15:27:54 +0200
+Message-Id: <20221012132754.292151-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 2/6] dt-bindings: usb: ci-hdrc-usb2: add i.MX53/6SLL/UL
- compatible
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-References: <20221010101816.298334-1-peng.fan@oss.nxp.com>
- <20221010101816.298334-3-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221010101816.298334-3-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,49 +49,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/10/2022 06:18, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add i.MX53, i.MX6SLL, i.MX6UL compatible
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> index 1c10691c45f2..575084ccd6b8 100644
-> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> @@ -25,15 +25,23 @@ properties:
->                - fsl,imx23-usb
->                - fsl,imx25-usb
->                - fsl,imx28-usb
-> +              - fsl,imx50-usb
-> +              - fsl,imx51-usb
-> +              - fsl,imx53-usb
->                - fsl,imx6q-usb
->                - fsl,imx6sl-usb
->                - fsl,imx6sx-usb
->                - fsl,imx6ul-usb
->                - fsl,imx7d-usb
-> +              - fsl,vf610-usb
->            - const: fsl,imx27-usb
->        - items:
->            - const: fsl,imx7ulp-usb
->            - const: fsl,imx6ul-usb
-> +      - items:
-> +          - const: fsl,imx6sll-usb
-> +          - const: fsl,imx6ul-usb
-> +          - const: fsl,imx27-usb
+phy-generic uses the existance of the property "vcc-supply" to see if a
+regulator is optional or not. Use devm_regulator_get_optional() instead
+which exists for this purpose. Using devm_regulator_get_optional()
+avoids "supply vcc not found, using dummy regulator" messages.
 
-Order entries by last compatible, so this goes before the section
-"fsl,imx6ul-usb"
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
+ drivers/usb/phy/phy-generic.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
->        - items:
->            - const: lsi,zevio-usb
->        - items:
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
+index 34b9f81401871..92d3e067067c6 100644
+--- a/drivers/usb/phy/phy-generic.c
++++ b/drivers/usb/phy/phy-generic.c
+@@ -209,7 +209,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
+ 	int err = 0;
+ 
+ 	u32 clk_rate = 0;
+-	bool needs_vcc = false, needs_clk = false;
++	bool needs_clk = false;
+ 
+ 	if (dev->of_node) {
+ 		struct device_node *node = dev->of_node;
+@@ -217,7 +217,6 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
+ 		if (of_property_read_u32(node, "clock-frequency", &clk_rate))
+ 			clk_rate = 0;
+ 
+-		needs_vcc = of_property_read_bool(node, "vcc-supply");
+ 		needs_clk = of_property_read_bool(node, "clocks");
+ 	}
+ 	nop->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
+@@ -260,13 +259,10 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
+ 		}
+ 	}
+ 
+-	nop->vcc = devm_regulator_get(dev, "vcc");
+-	if (IS_ERR(nop->vcc)) {
+-		dev_dbg(dev, "Error getting vcc regulator: %ld\n",
+-					PTR_ERR(nop->vcc));
+-		if (needs_vcc)
+-			return -EPROBE_DEFER;
+-	}
++	nop->vcc = devm_regulator_get_optional(dev, "vcc");
++	if (IS_ERR(nop->vcc) && PTR_ERR(nop->vcc) != -ENODEV)
++		return dev_err_probe(dev, PTR_ERR(nop->vcc),
++				     "could not get vcc regulator\n");
+ 
+ 	nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
+ 	if (PTR_ERR(nop->vbus_draw) == -ENODEV)
+-- 
+2.30.2
 
