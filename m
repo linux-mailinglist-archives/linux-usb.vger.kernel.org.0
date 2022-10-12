@@ -2,226 +2,341 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A845FC322
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 11:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BA05FC330
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 11:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiJLJeS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 05:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S229673AbiJLJky (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 05:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJLJeR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 05:34:17 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2750BE51B;
-        Wed, 12 Oct 2022 02:34:16 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id m16so597738edc.4;
-        Wed, 12 Oct 2022 02:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5hwOC37cPRVT+Lgt6Q6oTRESj5g4dMDJkms4UxcNz6o=;
-        b=gOWYd7cgiPSqMjcd2my2MAjZEF7vcSQs4HKRsvLSimpo/ry33sb15M2wKdnw5mprZf
-         wyCAKHyDGHBg6aRI0Z4ASWUB2qKF+CVeEAGnKxQZ/EPSwgQgDcVhXZ6ufR/DSMalG3h/
-         zdC5ggB3s9GDURjFRSohw+//Bys+Chny2WD0uRMCLATGn49f8YSkd/yNgOswbV8DH2lv
-         fXwOHd4Fw8Kim8LQyRAaXNuLHyNurQ+ysnFyK9xGWAosMx/iU5oGMCu6wkgzexqr1I+p
-         4iNVSgeThfrUSL55uW885yBO9c6DC2BpDHdYIPW6NDd1t+3/hebys9Eif5WNCEVuyXaG
-         leOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5hwOC37cPRVT+Lgt6Q6oTRESj5g4dMDJkms4UxcNz6o=;
-        b=r/ZxG9LHhn/39sS+0oJ5WtSLZSektKrfbzF9Z6DOjGLs1m7WgxyApFq0Xl7gDjcoyp
-         ONLI7otW5CWWDMbaFbSyJ4TJ85V6X5ouDQlIKGTuBlTIDDdIW6MT0mddGvF06nsafEaM
-         Le//uQnLG6/VOYV7/t/u3aynXGf/tjXqfygvLA8DLqhSWujvWBG+XA1D532TgYC5VmDh
-         gh5LZ6NBdg0TJNmZHvc+zq4mQqkm3pK49HpZPwADuhxrVOQ0NjuN8Nf6jTM4+LE2Ck7D
-         l9o0TYUyaufy7vGISx13JgdgKWsfxdZIjwKZYu5Wp9wZ3FT+Jr0clyEGz+tsL1ZZri2O
-         REMg==
-X-Gm-Message-State: ACrzQf1+39IpxbFV8rjIAzFMU8ZayRHu/YyoYTrrQWyrw4wG2CFT4ACR
-        Qd/tQepE4IqOpDecJBoIVPPMCbOB9/YJGarIVmE=
-X-Google-Smtp-Source: AMsMyM7np7gDeepsDAM0PBQ0jBNtCsz3pC/4X0bx7r4wpvQb4BioUS97iasxlET2qoc9ejtvGFICpqJzcRu6OHtLSE0=
-X-Received: by 2002:a05:6402:46:b0:45c:bd68:6ab0 with SMTP id
- f6-20020a056402004600b0045cbd686ab0mr924498edu.16.1665567255027; Wed, 12 Oct
- 2022 02:34:15 -0700 (PDT)
+        with ESMTP id S229560AbiJLJkw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 05:40:52 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2040.outbound.protection.outlook.com [40.107.220.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6E6357C9;
+        Wed, 12 Oct 2022 02:40:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NntxNO8TIe+5VQYAE9JoZk4elUYET/HkZNB4f+1IDhVEeT5+tGfsyjRvnZybgSaANLi6VSZhEeR2Xg2Uw0zjs0ePomA4ELkAOWDFanF8IScgbyn0ezmumHMaWEgLu7QFIhh54pLWl4iUhg/96BX2WLtY966kWP8QuyfDAJP/5SFbqBJJrpAB91hk22Sg4qRLztrU6oBytBcHi+3Gx+OYZ9aYOBUPpLCR41ksDcxVgEzIIlbq4eFc9xpliiSnrrXyNGKJfNE99txEOU29KrPtjqOXxt8q9kFONlP1Cb6x5x8nLwUpJO1UPTnpCskS1ZphkRcWJHKWD42/zPKqAGEIqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IO3APibJx7aaA7a+/xRxMwOT+8HRO4lY0I4goHPpLcE=;
+ b=KTiH+cJEOCme2v3eJ/mPfeK1u3UIXY1z4W8fGZmp+zUeZBRyWjn/06CoSNQROK7fxqZUk4sEAcvwTIk7cYZmiAxIzKE1ItthqqOdgi8adXC9yrSIjkPmsDqsXIhZAizzUTINd/z6DYrbKm2ysKg5CUWKhQXIElh3Tp6XI6fftpBU3QD4GZZMC6yi9ChWZk0ZVF6hcK+crSuEVxqSdLg8HsmMhmFUaFtGf/tIYk+jEmuXJlqo1fSXvZWFeatUqhaX5wsBK5MhOrrSQpZ4pM+xPbPvyF03I2nhrnTICsuJ2KE/OrFNW76hFyvq7Cs2+Kfiywrbo5xqtAYP4LMLxrazCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IO3APibJx7aaA7a+/xRxMwOT+8HRO4lY0I4goHPpLcE=;
+ b=SCnyujzfc8GZD5kS8U+7qix2eDSVNjyajnzuia7Gpd2WpHhWC3BKW5n3NgDr1BgK6c3R1AnL4z7ksLzET9F2PlrJqz7SuyKy/C9SOAMs4j5y/98VK1rl63eYJ+8oPfVA7FndBT/Ma2m6NIXYQVOjL4uliZGxC7fAGUrwYKaSotQrsLM0e4DZJbTrE/noWILyoKcRHwammfU7aIf/y7OrOEUsvUtWqkkKiZY0RMpwLRbE+sG48gKTKJHjyu0pNLyHgN/ozglAMABC/HM1l8aztqgZ1oWtdRgMINM5xCRJyFlZU6I8h0WRTumTAGsgEkE1hV2aL2xdyWG88/gyRUL2aA==
+Received: from BN0PR04CA0139.namprd04.prod.outlook.com (2603:10b6:408:ed::24)
+ by CH2PR12MB5018.namprd12.prod.outlook.com (2603:10b6:610:6e::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Wed, 12 Oct
+ 2022 09:40:47 +0000
+Received: from BN8NAM11FT015.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ed:cafe::5f) by BN0PR04CA0139.outlook.office365.com
+ (2603:10b6:408:ed::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.22 via Frontend
+ Transport; Wed, 12 Oct 2022 09:40:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT015.mail.protection.outlook.com (10.13.176.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Wed, 12 Oct 2022 09:40:47 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 12 Oct
+ 2022 02:40:33 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 12 Oct
+ 2022 02:40:32 -0700
+Received: from jilin-desktop.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Wed, 12 Oct 2022 02:40:31 -0700
+From:   Jim Lin <jilin@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>
+CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jilin@nvidia.com>
+Subject: [PATCH v2] xhci: tegra: USB2 pad power controls
+Date:   Wed, 12 Oct 2022 17:40:20 +0800
+Message-ID: <20221012094020.2442-1-jilin@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20221012055602.1544944-1-uwu@icenowy.me> <20221012055602.1544944-11-uwu@icenowy.me>
-In-Reply-To: <20221012055602.1544944-11-uwu@icenowy.me>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Wed, 12 Oct 2022 11:34:03 +0200
-Message-ID: <CAJiuCcfSPaX_boxUjLUVdUKf7eENbOjX96aw=fTOUPEe=4cSwg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] ARM: dts: suniv: add device tree for PopStick v1.1
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andre Przywara <andre.przywara@arm.com>, soc@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT015:EE_|CH2PR12MB5018:EE_
+X-MS-Office365-Filtering-Correlation-Id: de533379-8a77-4f5c-4f19-08daac35d767
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i+wJhEBhlTMas6G+NIxK4WmX2d813pLOLC3KB12FHYTZZnLyNbrIZd81TS+YvJdkGcL9UxJI1RHwOSdpMb0Wzp7yjsmrV2IpvGcHadOa7KlTj/iTHfgtXCjfFLt75ml9+Kokk6TXLbZ8a4Oqt2OgdugiEKIIhqdoYj5RCtnB87Fc2nFkPccxTjy8G3RNLncA/yt8aOF7ruOIwfeitRdDSVlf/uR/vf7bYfm22WjOfcgqb7bWplbZQFMkVw9u7h8ODmKAaKNTT6PO/yUluw/srkrPmNaH1aDJ5i9GbkAIk4VZtNGk8M0uiPNe83iRKt6vBnLJNtibonPWgpx8LPgiXF4/hnUbqg3MLgt0OComX6QTsVkgVmf/Xdoac/rzyILvgaYJZOXTJ3kES3xfNkBOh/IP89xjAKhbb6QbMnsbLs6saePauIVEnQM794kbxBi2xH3Dy3fKAQ9KMPI275H0++tfPaQ7nLjS4TWJvmTJAK0QuPvMsnlnnSlIzdHHQjO7Jzf1avtqCFzYvduvrt+JQhyVZGPXOA8wm6hxgekR+li6gWdbY+CXHH1bq+x5O3EjXLQJnw8J/yYUzL6n2OInfq+F6WL+E6Ej+MmVGOPTZSt3OLWEehosolmapbDEkhGF82ytJGvXpsEwd3mBHgw1JkDx7vOsgi2pQ1fA/hte5iqvshXQttYyB1WQsFCrgqH6bFRYz+dBSc///nW2jIjcUzRKQQhREcnsGb+r+wieE0NvCqSWw3nbeos9LNCrJYU0LugN0UJtuyANf8M+ximzmw==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(396003)(376002)(451199015)(40470700004)(46966006)(36840700001)(47076005)(356005)(41300700001)(186003)(7636003)(82740400003)(86362001)(82310400005)(36860700001)(426003)(4326008)(8936002)(8676002)(6666004)(83380400001)(5660300002)(7696005)(40480700001)(54906003)(70586007)(26005)(478600001)(40460700003)(110136005)(336012)(107886003)(2616005)(316002)(70206006)(1076003)(2906002)(36756003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2022 09:40:47.1431
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: de533379-8a77-4f5c-4f19-08daac35d767
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5018
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Icenowy,
+Program USB2 pad PD controls during port connect/disconnect, port
+suspend/resume, and test mode, to reduce power consumption on
+disconnect or suspend.
 
-On Wed, 12 Oct 2022 at 07:57, Icenowy Zheng <uwu@icenowy.me> wrote:
->
-> PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
-> wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
-> an on-board CH340 USB-UART converted connected to F1C200s's UART0.
->
-> Add a device tree for it. As F1C200s is just F1C100s with a different
-> DRAM chip co-packaged, directly use F1C100s DTSI here.
->
-> This commit covers the v1.1 version of this board, which is now shipped.
-> v1.0 is some internal sample that have not been shipped at all.
->
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
-> New patch introduced in v2.
->
->  arch/arm/boot/dts/Makefile                    |   3 +-
->  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 101 ++++++++++++++++++
->  2 files changed, 103 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 6aa7dc4db2fc..0249c07bd8a6 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
->         sun9i-a80-optimus.dtb \
->         sun9i-a80-cubieboard4.dtb
->  dtb-$(CONFIG_MACH_SUNIV) += \
-> -       suniv-f1c100s-licheepi-nano.dtb
-> +       suniv-f1c100s-licheepi-nano.dtb \
-> +       suniv-f1c200s-popstick-v1.1.dtb
->  dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
->         tegra20-acer-a500-picasso.dtb \
->         tegra20-asus-tf101.dtb \
-> diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> new file mode 100644
-> index 000000000000..121dfc6f609d
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> @@ -0,0 +1,101 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-> + */
-> +
-> +/dts-v1/;
-> +#include "suniv-f1c100s.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +       model = "Popcorn Computer PopStick v1.1";
-> +       compatible = "sourceparts,popstick-v1.1", "sourceparts,popstick",
-> +                    "allwinner,suniv-f1c200s", "allwinner,suniv-f1c100s";
-> +
-> +       aliases {
-> +               mmc0 = &mmc0;
-> +               serial0 = &uart0;
-> +               spi0 = &spi0;
-> +       };
-> +
-> +       chosen {
-> +               stdout-path = "serial0:115200n8";
-> +       };
-> +
-> +       leds {
-> +               compatible = "gpio-leds";
-> +
-> +               led {
-> +                       function = LED_FUNCTION_STATUS;
-> +                       color = <LED_COLOR_ID_GREEN>;
-> +                       gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
-> +                       linux,default-trigger = "heartbeat";
-> +               };
-> +       };
-> +
-> +       reg_vcc3v3: vcc3v3 {
-> +               compatible = "regulator-fixed";
-> +               regulator-name = "vcc3v3";
-> +               regulator-min-microvolt = <3300000>;
-> +               regulator-max-microvolt = <3300000>;
-> +       };
-> +};
-> +
-> +&mmc0 {
-> +       cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
-> +       bus-width = <4>;
-> +       disable-wp;
-> +       status = "okay";
-> +       vmmc-supply = <&reg_vcc3v3>;
-> +};
-> +
-> +&spi0 {
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&spi0_pc_pins>;
-> +       status = "okay";
-> +
-> +       flash@0 {
-> +               #address-cells = <1>;
-> +               #size-cells = <1>;
-> +               compatible = "spi-nand";
-> +               reg = <0>;
-> +               spi-max-frequency = <40000000>;
-> +
-> +               partitions {
-> +                       compatible = "fixed-partitions";
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +
-> +                       partition@0 {
-> +                               label = "u-boot-with-spl";
-> +                               reg = <0x0 0x100000>;
-> +                       };
-> +
-> +                       ubi@100000 {
-> +                               label = "ubi";
-> +                               reg = <0x100000 0x7f00000>;
-> +                       };
-> +               };
-> +       };
-> +};
-> +
-> +&otg_sram {
+Signed-off-by: Jim Lin <jilin@nvidia.com>
+---
+v2: Fix issue that wrong tegra->phys[] may be accessed on tegra124
 
-Nitpick, but this should be alphabetically ordered no?
 
-> +       status = "okay";
-> +};
-> +
-> +&uart0 {
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&uart0_pe_pins>;
-> +       status = "okay";
-> +};
-> +
-> +&usb_otg {
-> +       dr_mode = "peripheral";
-> +       status = "okay";
-> +};
-> +
-> +&usbphy {
-> +       status = "okay";
-> +};
-> --
-> 2.37.1
->
->
+ drivers/usb/host/xhci-tegra.c | 141 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 139 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index c8af2cd2216d..316585068ab5 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -2,7 +2,7 @@
+ /*
+  * NVIDIA Tegra xHCI host controller driver
+  *
+- * Copyright (c) 2014-2020, NVIDIA CORPORATION. All rights reserved.
++ * Copyright (c) 2014-2022, NVIDIA CORPORATION. All rights reserved.
+  * Copyright (C) 2014 Google, Inc.
+  */
+ 
+@@ -189,6 +189,13 @@ struct tegra_xusb_context_soc {
+ 	} fpci;
+ };
+ 
++enum tegra_xhci_phy_type {
++	USB3_PHY,
++	USB2_PHY,
++	HSIC_PHY,
++	MAX_PHY_TYPES,
++};
++
+ struct tegra_xusb_soc {
+ 	const char *firmware;
+ 	const char * const *supply_names;
+@@ -274,9 +281,17 @@ struct tegra_xusb {
+ 
+ 	bool suspended;
+ 	struct tegra_xusb_context context;
++	u32 enable_utmi_pad_after_lp0_exit;
+ };
+ 
+ static struct hc_driver __read_mostly tegra_xhci_hc_driver;
++static int (*original_xhci_hub_control)(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 wIndex,
++	    char *buf, u16 wLength);
++
++static inline struct tegra_xusb *hcd_to_tegra_xusb(struct usb_hcd *hcd)
++{
++	return (struct tegra_xusb *) dev_get_drvdata(hcd->self.controller);
++}
+ 
+ static inline u32 fpci_readl(struct tegra_xusb *tegra, unsigned int offset)
+ {
+@@ -1949,12 +1964,30 @@ static void tegra_xhci_enable_phy_sleepwalk_wake(struct tegra_xusb *tegra)
+ static void tegra_xhci_disable_phy_wake(struct tegra_xusb *tegra)
+ {
+ 	struct tegra_xusb_padctl *padctl = tegra->padctl;
+-	unsigned int i;
++	unsigned int i, j;
+ 
+ 	for (i = 0; i < tegra->num_phys; i++) {
+ 		if (!tegra->phys[i])
+ 			continue;
++		if (tegra_xusb_padctl_remote_wake_detected(padctl, tegra->phys[i])) {
++			if (i < tegra->soc->phy_types[USB3_PHY].num) {
++				/* USB3 */
++				j = i;
++			} else if (i < (tegra->soc->phy_types[USB3_PHY].num +
++					tegra->soc->phy_types[USB2_PHY].num)) {
++				/* USB2 */
++				j = i - tegra->soc->phy_types[USB3_PHY].num;
++				tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++			} else {
++				/* HSIC */
++				j = i - (tegra->soc->phy_types[USB3_PHY].num +
++					 tegra->soc->phy_types[USB2_PHY].num);
++			}
++			dev_dbg(tegra->dev,
++				"%s port %u (0 based) remote wake detected\n",
++				dev_name(&tegra->phys[i]->dev), j);
+ 
++		}
+ 		tegra_xusb_padctl_disable_phy_wake(padctl, tegra->phys[i]);
+ 	}
+ }
+@@ -1972,6 +2005,23 @@ static void tegra_xhci_disable_phy_sleepwalk(struct tegra_xusb *tegra)
+ 	}
+ }
+ 
++static void tegra_xhci_program_utmi_power_lp0_exit(struct tegra_xusb *tegra)
++{
++	unsigned int i;
++
++	for (i = 0; i < tegra->soc->phy_types[USB2_PHY].num; i++) {
++		if (!is_host_mode_phy(tegra, USB2_PHY, i))
++			continue;
++		/* USB2 */
++		if (tegra->enable_utmi_pad_after_lp0_exit & BIT(i))
++			tegra_phy_xusb_utmi_pad_power_on(
++				tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++		else
++			tegra_phy_xusb_utmi_pad_power_down(
++				tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++	}
++}
++
+ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ {
+ 	struct xhci_hcd *xhci = hcd_to_xhci(tegra->hcd);
+@@ -1980,6 +2030,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ 	unsigned int i;
+ 	int err;
+ 	u32 usbcmd;
++	u32 portsc;
+ 
+ 	dev_dbg(dev, "entering ELPG\n");
+ 
+@@ -1993,6 +2044,15 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ 		goto out;
+ 	}
+ 
++	for (i = 0; i < tegra->soc->phy_types[USB2_PHY].num; i++) {
++		if (!xhci->usb2_rhub.ports[i])
++			continue;
++		portsc = readl(xhci->usb2_rhub.ports[i]->addr);
++		tegra->enable_utmi_pad_after_lp0_exit &= ~BIT(i);
++		if (((portsc & PORT_PLS_MASK) == XDEV_U3) || ((portsc & DEV_SPEED_MASK) == XDEV_FS))
++			tegra->enable_utmi_pad_after_lp0_exit |= BIT(i);
++	}
++
+ 	err = xhci_suspend(xhci, wakeup);
+ 	if (err < 0) {
+ 		dev_err(tegra->dev, "failed to suspend XHCI: %d\n", err);
+@@ -2066,6 +2126,8 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb *tegra, bool runtime)
+ 
+ 		phy_power_on(tegra->phys[i]);
+ 	}
++	if (tegra->suspended)
++		tegra_xhci_program_utmi_power_lp0_exit(tegra);
+ 
+ 	tegra_xusb_config(tegra);
+ 	tegra_xusb_restore_context(tegra);
+@@ -2437,6 +2499,79 @@ static int tegra_xhci_setup(struct usb_hcd *hcd)
+ 	return xhci_gen_setup(hcd, tegra_xhci_quirks);
+ }
+ 
++static int tegra_xhci_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
++				  char *buf, u16 length)
++{
++	struct tegra_xusb *tegra = hcd_to_tegra_xusb(hcd);
++	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
++	struct xhci_hub *rhub;
++	struct xhci_bus_state *bus_state;
++	int port = (index & 0xff) - 1;
++	int i;
++	struct xhci_port **ports;
++	u32 portsc;
++	int ret;
++
++	rhub = &xhci->usb2_rhub;
++	bus_state = &rhub->bus_state;
++	if (bus_state->resuming_ports && hcd->speed == HCD_USB2) {
++		ports = rhub->ports;
++		i = rhub->num_ports;
++		while (i--) {
++			if (!test_bit(i, &bus_state->resuming_ports))
++				continue;
++			portsc = readl(ports[i]->addr);
++			if ((portsc & PORT_PLS_MASK) == XDEV_RESUME)
++				tegra_phy_xusb_utmi_pad_power_on(
++					tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++		}
++	}
++
++	if (hcd->speed == HCD_USB2) {
++		i = tegra->soc->phy_types[USB3_PHY].num + port;
++		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_SUSPEND)) {
++			if (!index || index > rhub->num_ports)
++				return -EPIPE;
++			tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++		}
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_RESET)) {
++			if (!index || index > rhub->num_ports)
++				return -EPIPE;
++			ports = rhub->ports;
++			portsc = readl(ports[port]->addr);
++			if (portsc & PORT_CONNECT)
++				tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++		}
++	}
++
++	ret = (*original_xhci_hub_control)(hcd, type_req, value, index, buf, length);
++	if (ret < 0)
++		return ret;
++
++	if (hcd->speed == HCD_USB2) {
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_SUSPEND))
++			/* We don't suspend the PAD while HNP role swap happens on the OTG port */
++			if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
++				tegra_phy_xusb_utmi_pad_power_down(tegra->phys[i]);
++
++		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_C_CONNECTION)) {
++			ports = rhub->ports;
++			portsc = readl(ports[port]->addr);
++			if (!(portsc & PORT_CONNECT)) {
++				/* We don't suspend the PAD while HNP role swap happens on the OTG
++				 * port
++				 */
++				if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
++					tegra_phy_xusb_utmi_pad_power_down(tegra->phys[i]);
++			}
++		}
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_TEST))
++			tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++	}
++
++	return ret;
++}
++
+ static const struct xhci_driver_overrides tegra_xhci_overrides __initconst = {
+ 	.reset = tegra_xhci_setup,
+ };
+@@ -2444,6 +2579,8 @@ static const struct xhci_driver_overrides tegra_xhci_overrides __initconst = {
+ static int __init tegra_xusb_init(void)
+ {
+ 	xhci_init_driver(&tegra_xhci_hc_driver, &tegra_xhci_overrides);
++	original_xhci_hub_control = tegra_xhci_hc_driver.hub_control;
++	tegra_xhci_hc_driver.hub_control = tegra_xhci_hub_control;
+ 
+ 	return platform_driver_register(&tegra_xusb_driver);
+ }
+-- 
+2.17.1
+
