@@ -2,127 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9ABD5FC22E
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 10:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDDD5FC310
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Oct 2022 11:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiJLIom (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 04:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
+        id S229470AbiJLJ20 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 05:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiJLIoj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 04:44:39 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C751010;
-        Wed, 12 Oct 2022 01:44:38 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id D346A3200B1D;
-        Wed, 12 Oct 2022 04:44:36 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 12 Oct 2022 04:44:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1665564275; x=
-        1665650675; bh=0o82D+Vbr1Qqh8x9aEShWRywyoLoGwve0G5fih60HmI=; b=Z
-        XYDKeC5/DveUPpoOMVoz4/DdJeyl3m9weqgTrXfyQqwWvzYaAalORZR0wMUfauVm
-        USKsoTbCslmUlBAf5XKvoSkIhrqkHUKn9gKekULLRrxID3DBS5ccxKFFDBILr1et
-        dX5NHk+inqoJHJpifN0CzWqPwftdqF9THcmcBEFYYcBnl1S5cJZEO8NLlmtP1+lk
-        ZeYN5va3qjZCDyPWKhr21ftBm/DHvqFaoH2X/Rd/UrgduswGAGyUKAdJ0Vc+9qs1
-        kc+x2L+4b30Y/RPRDl5DlAjlLT7N0m77LIBehKY6hugHfbqONfqHtsJi2bwH47ey
-        KoPOeGtLHUPVqb+GfWezg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665564275; x=
-        1665650675; bh=0o82D+Vbr1Qqh8x9aEShWRywyoLoGwve0G5fih60HmI=; b=I
-        fd6FpfmZQJ/ksNwvJQyxRNn6SC59iUAGrEXcNKYMClJKz7W1Z+mxFscdTkhJjlFT
-        MF0MBsvtxu2XA4kTEI1px5oZKSKueQtGs6tQ1LyRrdaGm7uxuPfJbqinecpjy8WG
-        2enjQVu2xOxybglwpvpV5yIcnnUmIluzjctMSiofN1bH9pYoMfWQWYb3IcH6r6iM
-        5jSErtaiKUZAO6AiH7GLRAtrK3hyExTY5v5joHPfi2kekxejuZUY2d/P/25n6Qxz
-        UJwO/nNHaZRDd7o8XgWcLbmKEQ0pShU7Bz+n3Err89Sj3xMY/DRbC4ZcsyiVUAD4
-        xjNGrtQum+JtiemLcFvhQ==
-X-ME-Sender: <xms:cn5GYwiS-Lu3wZlU07-So25sNnbspw80O20Rpqhkwb-BUEKGjIWPhg>
-    <xme:cn5GY5B5XzOgMcTZoI-5Sf7PCFtaihj6jUBBILKZBPrNUhXzeEfnI-iH3CH61ldck
-    sselZSWuf-Mg303vF0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:cn5GY4F6_o7WHad7WyUmypGGKpD_vD0KkfNIBdvEFDLW02hBxmxJJw>
-    <xmx:cn5GYxR7OZYcUuleHSsy1KxWC8O2IELM0B8vwjg077WUkbEyySyKhQ>
-    <xmx:cn5GY9wjwaVU9py0PKfgtkocDW9kcvxaSGy4lQKfkVEB0mreU8mmVg>
-    <xmx:c35GYwrdS9nADqpBxus3AqE0rdPeKImSwUA7AKKztmYEwewsiQPD9Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E64ADB60086; Wed, 12 Oct 2022 04:44:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <970b59a5-9fcb-494c-a07e-1443bdd5072c@app.fastmail.com>
-In-Reply-To: <695a13341db63965a22799dd78698751ed95448c.camel@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me>
- <20221012055602.1544944-2-uwu@icenowy.me>
- <60a2cb70-bde4-4423-9a54-7abc1ba466f8@app.fastmail.com>
- <695a13341db63965a22799dd78698751ed95448c.camel@icenowy.me>
-Date:   Wed, 12 Oct 2022 10:44:14 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Icenowy Zheng" <uwu@icenowy.me>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Chen-Yu Tsai" <wens@csie.org>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Andre Przywara" <andre.przywara@arm.com>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] mailmap: update Icenowy Zheng's mail address
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229799AbiJLJ2Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 05:28:24 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B269B0B2D
+        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 02:28:23 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id jr1so1791899qtb.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Oct 2022 02:28:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fK/rDsfC9R18gaul5pzPGDBDFf8RfLZpXj5fFzrGc+4=;
+        b=f8FeCbiadspZ2MA50ytZyoyHfekF4W9y2LuH5n0tRt1lxpZpwa9EAs3cJCaE5VXq9m
+         jsy9sVg8zPs7sIjXrTnVAhOxVYFU2N0wIfY/813d5p+DZEWmPbrezxBFkqLNqWszqktj
+         GyvzeT27OQxwd3t5vm4AkQAT3NlSKQQBjNLdweUG/tGNlc9ZpGltdt6XigqW26C4j2hk
+         oNWl4IiIIA2hS1LVb1OLgRS7wLQta/YBqF5QQc2naR8KQ0p1c3ipXSlVsuDUjJgJswRP
+         6GNtKO1YcgPa2Rw3/7yIi2hMNFYfolc3UgXtAZZIMlOxZJCWTb2R1FJHoDhMXMloPH9s
+         3w2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fK/rDsfC9R18gaul5pzPGDBDFf8RfLZpXj5fFzrGc+4=;
+        b=obYRW3g2KhncmJzqrXvUPAtgBYN5XZNjK3k0iontphCcKWhPHn3lBqOIMAQ6QgTWKw
+         fDV1Fl4p0Y8kuTiqPT8BzHfCrJcdekFsQDX2PGwBwNABKv3fgNTIS5Qqdh9g4E+PUz25
+         N3wkJAG4otryVUabR5STYpMiJ/k6tEeJI5ox/R+nIyb/+7qnB4zYz31cLHfvYJqeeml0
+         dFpwCWwpC7JLTBivNKkPtmn4HLVLM2uTl3jAINl2Pz1fYBjgKk1nYqoD0GQ3dLu30tlZ
+         QseckJarATo6en4kHmHjXXRChPktghd5qBiiBBWswjf6HWlIhjehMdCY0bZNO4m0t5uo
+         EwQg==
+X-Gm-Message-State: ACrzQf1T71grLNSdI3i7GnGNneS/F4g6kryHWI8AGRv6TmKUuVCi9hIT
+        MN4x265Knum1lcuES1swI6Q=
+X-Google-Smtp-Source: AMsMyM6Wat86XQcwYpPBW8+htP0PfpghHKkOV+XRlky10O0Ysklql8ELnNT7tNRkOabYZ3Mff8BGkg==
+X-Received: by 2002:ac8:5e0a:0:b0:39a:2960:d4a6 with SMTP id h10-20020ac85e0a000000b0039a2960d4a6mr11746609qtx.448.1665566902146;
+        Wed, 12 Oct 2022 02:28:22 -0700 (PDT)
+Received: from testvm.ubxad.u-blox.com (mob-37-176-103-131.net.vodafone.it. [37.176.103.131])
+        by smtp.googlemail.com with ESMTPSA id d21-20020ac84e35000000b003431446588fsm7348304qtw.5.2022.10.12.02.28.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 02:28:21 -0700 (PDT)
+From:   Davide Tronchin <davide.tronchin.94@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, larsm17@gmail.com, johan@kernel.org,
+        marco.demarco@posteo.net,
+        Davide Tronchin <davide.tronchin.94@gmail.com>
+Subject: [PATCH v3] USB: serial: option: the patch is meant to support LARA-R6 Cat 1 and LARA-L6 CAT 4 module family.
+Date:   Wed, 12 Oct 2022 11:27:52 +0200
+Message-Id: <20221012092752.6033-1-davide.tronchin.94@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 12, 2022, at 10:35 AM, Icenowy Zheng wrote:
-> =E5=9C=A8 2022-10-12=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:31 +0200=EF=
-=BC=8CArnd Bergmann=E5=86=99=E9=81=93=EF=BC=9A
->> On Wed, Oct 12, 2022, at 7:55 AM, Icenowy Zheng wrote:
->>=20
->> I don't see a patch for updating the MAINTAINERS file here, if you
->> haven't already sent that another way, you should probably change
->> both at the same time.
->
-> Good point. If this patchset is going to have a v3, I will contain it
-> there; otherwise I will independently send it.
+The LARA-R6 module old PID (defined as: UBLOX_PRODUCT_R6XX
+0x90fa) has been removed since is not used anymore by the u-blox 
+LARA-R6 modules. The new LARA-R6 (00B) definition uses 0x908b PID
+and the reservation of port 3 is not needed anymore.
+LARA-R6 00B does not implement a QMI interface on port 4,
+the reservation (RSVD(4)) has been added to meet other
+companies that implement QMI on that interface.
 
-Ok. If you make a separate patch for the maintainers file, feel
-free to send this to me at soc@kernel.org, I can then put it into
-the fixes branch so it makes it into 6.1, otherwise I assume this
-gets picked up through the normal path along with the rest of the
-series.
+LARA-R6 00B USB composition exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parser/alternative functions
 
->> As a driver maintainer, you can also apply for a kernel.org account
->> [https://korg.docs.kernel.org/accounts.html] and use that for
->> sending patches and forwarding to another address.
->
-> Well I am in China now and not so easy to get my PGP key signed...
+LARA-L6 module can be configured in three different USB modes:
+* Default mode (Vendor  ID: 0x1546 Product ID: 0x1341) with 4 serial
+interfaces
+* RmNet mode (Vendor  ID: 0x1546 Product ID: 0x1342) with 4 serial
+interfaces and 1 RmNet virtual network interface
+* CDC-ECM mode (Vendor  ID: 0x1546 Product ID: 0x1343) with 4 serial
+interface and 1 CDC-ECM virtual network interface
 
-Right, that can be a problem. In an urgent case, you could probably
-do a video meeting with someone you've previously met that is already
-on the kernel keyring, but that is perhaps not worth the hassle
-if your current setup otherwise works fine.
+In default mode LARA-L6 exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parser/alternative functions
 
-     Arnd
+In RmNet mode LARA-L6 exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parset/alternative functions
+If 4: RMNET interface
+
+In CDC-ECM mode LARA-L6 exposes the following interfaces:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: AT parset/alternative functions
+If 4: CDC-ECM interface
+
+Signed-off-by: Davide Tronchin <davide.tronchin.94@gmail.com>
+---
+
+V2 -> V3: added this section to tracking changes with previous versions.
+Added some explanations about the RSVD(4) in the description session.
+Added reservation to port 4 of VID:PID 0x05C6:0x908B to meet other
+companies QMI net interface implementation.
+
+V1 -> V2: define UBLOX_PRODUCT_LARA_R6 0x908b has been deleted together
+with the previosly provided definition of USB_DEVICE since the PID 
+is used by another vendor.
+The LARA-L6 patch part is the same of the previosly provided one.
+
+ drivers/usb/serial/option.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 697683e3f..07915e661 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -240,7 +240,6 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_UC15			0x9090
+ /* These u-blox products use Qualcomm's vendor ID */
+ #define UBLOX_PRODUCT_R410M			0x90b2
+-#define UBLOX_PRODUCT_R6XX			0x90fa
+ /* These Yuga products use Qualcomm's vendor ID */
+ #define YUGA_PRODUCT_CLM920_NC5			0x9625
+ 
+@@ -581,6 +580,11 @@ static void option_instat_callback(struct urb *urb);
+ #define OPPO_VENDOR_ID				0x22d9
+ #define OPPO_PRODUCT_R11			0x276c
+ 
++/* These u-blox products use u-blox's vendor ID */
++#define UBLOX_VENDOR_ID				0x1546
++#define UBLOX_PRODUCT_LARA_L6			0x1341
++#define UBLOX_PRODUCT_LARA_L6_RMNET		0x1342
++#define UBLOX_PRODUCT_LARA_L6_ECM		0x1343
+ 
+ /* Device flags */
+ 
+@@ -1124,8 +1128,15 @@ static const struct usb_device_id option_ids[] = {
+ 	/* u-blox products using Qualcomm vendor ID */
+ 	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
+ 	  .driver_info = RSVD(1) | RSVD(3) },
+-	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R6XX),
+-	  .driver_info = RSVD(3) },
++	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x908b), /* u-blox LARA-R6 00B*/
++	  .driver_info = RSVD(4) },
++	/* u-blox products using u-blox vendor ID */
++	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6),
++	  .driver_info = RSVD(4) },
++	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6_RMNET),
++	  .driver_info = RSVD(4) },
++	{ USB_DEVICE(UBLOX_VENDOR_ID, UBLOX_PRODUCT_LARA_L6_ECM),
++	  .driver_info = RSVD(4) },
+ 	/* Quectel products using Quectel vendor ID */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
+ 	  .driver_info = NUMEP2 },
+-- 
+2.34.1
+
