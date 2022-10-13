@@ -2,44 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2090F5FCFE2
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C385FCFFC
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbiJMAXQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 20:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S229947AbiJMAY1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 20:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiJMAWz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:22:55 -0400
+        with ESMTP id S230504AbiJMAXq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:23:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99278104D3F;
-        Wed, 12 Oct 2022 17:19:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7920E6F54;
+        Wed, 12 Oct 2022 17:21:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0636CB81CBD;
-        Thu, 13 Oct 2022 00:18:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DF6C433C1;
-        Thu, 13 Oct 2022 00:18:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C18BB81CC2;
+        Thu, 13 Oct 2022 00:18:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A62C433C1;
+        Thu, 13 Oct 2022 00:18:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620289;
-        bh=2ZxUg/1wAsgJI7Aj9gDfm/S13ITpUsPEtiIhR3IIIoc=;
+        s=k20201202; t=1665620308;
+        bh=pZTA8+b6t89yvqWaduEatUoC/Fpvy1u8fwa7q8EqwVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c+XSCEOgWzTfQmZ/usL4LHnz6sMHLQ45PLOY3i1rPKwLjWVtJlkQkGSQspyh5vSmd
-         dUc89/m6tfljnaLrHqI1HhieQulPvahXBefNN89xG6Ki9FxR9kgb7/kID+VDUQ2Pj/
-         ZnAQpKMegRsWkaBDsxUK6k5bS1tnIgbYUtTC7NCWgG0JVMns865KbMVPyw852ld9UC
-         RJkc3TbQgCx9jMqLozVOyqoZMEGYMzhqg2na26tOV2F4mvnT/YnCcJlr8c8Y2QhX3+
-         8WP0ytmdhQSiImXe5CswQF2DghVsGHIhQ2+BPQTf114RcMpLvl5fTEu7rQPaEOItPm
-         jv5ANp1GArDQQ==
+        b=r4amPdAvezJqLUY8cphf639KGbG/VLYk0w1QvIdqxL2lC1i+gSvsTV8a1UlXf/8bw
+         MfGx5wg9XfgR2VM2LINIRZKkIXljR/YsCi/RVgtQfp5hTyMlRTPWuev5KU9kLJUgLh
+         EhnK+b8WM6jMgrG+Yyx3p9YHuAM2zcoNM3VVaFcn+KZ2p3ZZvT4RAZ8ZC/FLBPB/kA
+         4C5hTb86hneJSSTxviWFDp0dzmhVgWNalg9JexEimvhWtujQ04nDC9t2dPcUbR6izc
+         PCwDiNACIahlQ+0su1dLmI/veA2mhGEE8/VfM78kQJRj+KZDzYeQE98QehWJ1mSIff
+         5tRdNQOS9Qfbg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com,
+Cc:     Wayne Chang <waynec@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 55/67] usb: idmouse: fix an uninit-value in idmouse_open
-Date:   Wed, 12 Oct 2022 20:15:36 -0400
-Message-Id: <20221013001554.1892206-55-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, quic_linyyuan@quicinc.com,
+        tiwai@suse.de, saranya.gopal@intel.com, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 65/67] usb: typec: ucsi: Don't warn on probe deferral
+Date:   Wed, 12 Oct 2022 20:15:46 -0400
+Message-Id: <20221013001554.1892206-65-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221013001554.1892206-1-sashal@kernel.org>
 References: <20221013001554.1892206-1-sashal@kernel.org>
@@ -56,57 +57,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Wayne Chang <waynec@nvidia.com>
 
-[ Upstream commit bce2b0539933e485d22d6f6f076c0fcd6f185c4c ]
+[ Upstream commit fce703a991b7e8c7e1371de95b9abaa832ecf9c3 ]
 
-In idmouse_create_image, if any ftip_command fails, it will
-go to the reset label. However, this leads to the data in
-bulk_in_buffer[HEADER..IMGSIZE] uninitialized. And the check
-for valid image incurs an uninitialized dereference.
+Deferred probe is an expected return value for fwnode_usb_role_switch_get().
+Given that the driver deals with it properly, there's no need to output a
+warning that may potentially confuse users.
 
-Fix this by moving the check before reset label since this
-check only be valid if the data after bulk_in_buffer[HEADER]
-has concrete data.
+--
+V2 -> V3: remove the Fixes and Cc
+V1 -> V2: adjust the coding style for better reading format.
+ drivers/usb/typec/ucsi/ucsi.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Note that this is found by KMSAN, so only kernel compilation
-is tested.
-
-Reported-by: syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Link: https://lore.kernel.org/r/20220922134847.1101921-1-dzm91@hust.edu.cn
+Signed-off-by: Wayne Chang <waynec@nvidia.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20220927134512.2651067-1-waynec@nvidia.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/misc/idmouse.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/typec/ucsi/ucsi.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/misc/idmouse.c b/drivers/usb/misc/idmouse.c
-index e9437a176518..ea39243efee3 100644
---- a/drivers/usb/misc/idmouse.c
-+++ b/drivers/usb/misc/idmouse.c
-@@ -177,10 +177,6 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		bytes_read += bulk_read;
- 	}
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 6364f0d467ea..74fb5a4c6f21 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1067,11 +1067,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
  
--	/* reset the device */
--reset:
--	ftip_command(dev, FTIP_RELEASE, 0, 0);
--
- 	/* check for valid image */
- 	/* right border should be black (0x00) */
- 	for (bytes_read = sizeof(HEADER)-1 + WIDTH-1; bytes_read < IMGSIZE; bytes_read += WIDTH)
-@@ -192,6 +188,10 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		if (dev->bulk_in_buffer[bytes_read] != 0xFF)
- 			return -EAGAIN;
+ 	cap->fwnode = ucsi_find_fwnode(con);
+ 	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
+-	if (IS_ERR(con->usb_role_sw)) {
+-		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
+-			con->num);
+-		return PTR_ERR(con->usb_role_sw);
+-	}
++	if (IS_ERR(con->usb_role_sw))
++		return dev_err_probe(ucsi->dev, PTR_ERR(con->usb_role_sw),
++			"con%d: failed to get usb role switch\n", con->num);
  
-+	/* reset the device */
-+reset:
-+	ftip_command(dev, FTIP_RELEASE, 0, 0);
-+
- 	/* should be IMGSIZE == 65040 */
- 	dev_dbg(&dev->interface->dev, "read %d bytes fingerprint data\n",
- 		bytes_read);
+ 	/* Delay other interactions with the con until registration is complete */
+ 	mutex_lock(&con->lock);
 -- 
 2.35.1
 
