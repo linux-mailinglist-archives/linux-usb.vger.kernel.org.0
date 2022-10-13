@@ -2,47 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062BA5FD153
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FB55FD186
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbiJMAgA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 20:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S232186AbiJMAiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 20:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiJMAeS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:34:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC0B57E24;
-        Wed, 12 Oct 2022 17:29:03 -0700 (PDT)
+        with ESMTP id S232093AbiJMAgi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:36:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9136F6C15;
+        Wed, 12 Oct 2022 17:31:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1B1C616E3;
-        Thu, 13 Oct 2022 00:27:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F6FEC433B5;
-        Thu, 13 Oct 2022 00:27:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 996D0B81D0B;
+        Thu, 13 Oct 2022 00:28:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8245DC43142;
+        Thu, 13 Oct 2022 00:28:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620877;
-        bh=GlxaIfTe2cbL0wzvJCYu/yb+Dzwdt/fPXLrbYdgTPUg=;
+        s=k20201202; t=1665620895;
+        bh=Xzjr1c31nVklNKmxLuRkYMncuBbqb1/Fpk/i6gX/Q0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g5Fo+El1DgFTu69eVXJn0JDW/9SYoh7GlSFZRDb6ZeoKl7FN5p05laPZUdIvrdCBX
-         ++TFga2yEt5YFksZjCiteljLShxFql3L2Bhzd022xAa9OCOgenseI7FxdOenHH0CPs
-         7HPqS61kuPI/egtOTJzwSCI+9bKBMkL+kXBf4On6dFXiIjiSGTasHlVqc12gRvozvD
-         mcHBMoL9x1rHWZeI2ws54SkkMOXfxNsNbFYRZwCKalRRRQx6PmV3yBh64LgDVVE6uJ
-         8q+E5GQ37n58g0OiIzO05XNMBOVtWg+dLXDcRPRe+v6TEeSvaui+LyMv2WxA83Xd0Q
-         1uhkn4RMxLY6A==
+        b=Nrnt+z+zSMtXEAmBte6u33deJpKYObdXC+zGLzz9VAuRAm7ppBzzFrmSLMg2JQW8S
+         zvtj83IHKOQDF5bucThJwjHX0b2g08Pn0Yb97YOf8k+7UnSmMPHm1VwW1tCcSPVw+o
+         Q87UiTGBfDK5NMFmfdLu5TxzVamvSmbU6sEuaVf93CMC+VIvbR5Ahziz1VhlrEAa/R
+         1XQstJJoYtdAfxWr/S/I3jS0AHGsLGk2bgk/hRk3jBOdzY7D58lYTeqqvW6dhG26tB
+         mrLpHk5jIViAAfm6LcIOS58Xk/qR589OeQlS6ogdfMqXwyyt6XdZ/YcDkdSFhdBjYz
+         n/7wVpI3pdOEg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com,
+Cc:     Jianglei Nie <niejianglei2021@163.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/13] usb: idmouse: fix an uninit-value in idmouse_open
-Date:   Wed, 12 Oct 2022 20:27:12 -0400
-Message-Id: <20221013002716.1895839-13-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 06/10] usb: host: xhci: Fix potential memory leak in xhci_alloc_stream_info()
+Date:   Wed, 12 Oct 2022 20:27:53 -0400
+Message-Id: <20221013002802.1896096-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013002716.1895839-1-sashal@kernel.org>
-References: <20221013002716.1895839-1-sashal@kernel.org>
+In-Reply-To: <20221013002802.1896096-1-sashal@kernel.org>
+References: <20221013002802.1896096-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,57 +57,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit bce2b0539933e485d22d6f6f076c0fcd6f185c4c ]
+[ Upstream commit 7e271f42a5cc3768cd2622b929ba66859ae21f97 ]
 
-In idmouse_create_image, if any ftip_command fails, it will
-go to the reset label. However, this leads to the data in
-bulk_in_buffer[HEADER..IMGSIZE] uninitialized. And the check
-for valid image incurs an uninitialized dereference.
+xhci_alloc_stream_info() allocates stream context array for stream_info
+->stream_ctx_array with xhci_alloc_stream_ctx(). When some error occurs,
+stream_info->stream_ctx_array is not released, which will lead to a
+memory leak.
 
-Fix this by moving the check before reset label since this
-check only be valid if the data after bulk_in_buffer[HEADER]
-has concrete data.
+We can fix it by releasing the stream_info->stream_ctx_array with
+xhci_free_stream_ctx() on the error path to avoid the potential memory
+leak.
 
-Note that this is found by KMSAN, so only kernel compilation
-is tested.
-
-Reported-by: syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Link: https://lore.kernel.org/r/20220922134847.1101921-1-dzm91@hust.edu.cn
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220921123450.671459-2-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/misc/idmouse.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/host/xhci-mem.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/misc/idmouse.c b/drivers/usb/misc/idmouse.c
-index 01ef2551be46..974b8d0621bd 100644
---- a/drivers/usb/misc/idmouse.c
-+++ b/drivers/usb/misc/idmouse.c
-@@ -182,10 +182,6 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		bytes_read += bulk_read;
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 9b30936904da..0850d587683a 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -703,7 +703,7 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
+ 			num_stream_ctxs, &stream_info->ctx_array_dma,
+ 			mem_flags);
+ 	if (!stream_info->stream_ctx_array)
+-		goto cleanup_ctx;
++		goto cleanup_ring_array;
+ 	memset(stream_info->stream_ctx_array, 0,
+ 			sizeof(struct xhci_stream_ctx)*num_stream_ctxs);
+ 
+@@ -764,6 +764,11 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
  	}
- 
--	/* reset the device */
--reset:
--	ftip_command(dev, FTIP_RELEASE, 0, 0);
--
- 	/* check for valid image */
- 	/* right border should be black (0x00) */
- 	for (bytes_read = sizeof(HEADER)-1 + WIDTH-1; bytes_read < IMGSIZE; bytes_read += WIDTH)
-@@ -197,6 +193,10 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		if (dev->bulk_in_buffer[bytes_read] != 0xFF)
- 			return -EAGAIN;
- 
-+	/* reset the device */
-+reset:
-+	ftip_command(dev, FTIP_RELEASE, 0, 0);
-+
- 	/* should be IMGSIZE == 65040 */
- 	dev_dbg(&dev->interface->dev, "read %d bytes fingerprint data\n",
- 		bytes_read);
+ 	xhci_free_command(xhci, stream_info->free_streams_command);
+ cleanup_ctx:
++	xhci_free_stream_ctx(xhci,
++		stream_info->num_stream_ctxs,
++		stream_info->stream_ctx_array,
++		stream_info->ctx_array_dma);
++cleanup_ring_array:
+ 	kfree(stream_info->stream_rings);
+ cleanup_info:
+ 	kfree(stream_info);
 -- 
 2.35.1
 
