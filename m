@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087025FD036
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545C95FD120
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiJMAZE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 20:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S231873AbiJMAdS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 20:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbiJMAYV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:24:21 -0400
+        with ESMTP id S231784AbiJMAbr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:31:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E17DAC497;
-        Wed, 12 Oct 2022 17:23:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463A9C7846;
+        Wed, 12 Oct 2022 17:28:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA29E616D7;
-        Thu, 13 Oct 2022 00:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8403DC43141;
-        Thu, 13 Oct 2022 00:23:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB97261700;
+        Thu, 13 Oct 2022 00:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724FAC433C1;
+        Thu, 13 Oct 2022 00:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620629;
-        bh=eeYR1pQLtcJDxO9LFF9+dLExakAoN06GkoHBkN1iWGI=;
+        s=k20201202; t=1665620667;
+        bh=Wnt1e56a265JEkQ4o4iV0N8uiQJ92I/u9tYnSpq0WhQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WAsrwgh3lD3BOfIGZ3a/mCcZJk4Olo87cWsilTTWlRHQMTeBGpDdwC6NrqEHUfCiT
-         rmxZ6bYBpUasETszJcO1oFNwpt5VGpk3hpsRgLuu0MinqaDCleZLxj4lxBVda67Ymz
-         j2UBIa4VLaHg5Sch+YyZZ5Gccq/UOJATfHoKhAmSq7Xq/mCDOKI3GweEJiDaPisfOX
-         bKZPTpXUUlk2Jlqr90hzOSdu6ieCMrupRfES6Qbr5XF6KX79m1c7eH1hROn9/XeEGO
-         36h4gMg/Atg9je9gOnacr2CxqCUz4U1MtZdoZjoX6HXYPNX5+mVq4vSOA6g7xB1ftV
-         5DnIC6ggZ4Rjg==
+        b=B55beO2CDiVal5l9rD8XN8Tb/Ekx9ToXl/SYVmPvSplZhNcudt4DFHudZh4H5IeMd
+         P/FYzYOzMiEW2pBGE5RiX0rVOCsdnLWhFIgI3tbDhjb1Y9tka/H239GHUVvBCAXYYg
+         6c1Cb5Z+KHXaHMI2VcSwt47/R9inQGvVa3OPiNv4x0R4xuJhW8BKwyRR46CQjZzYia
+         vAeFxNhobe967hur/UmcYs+vPBa8X3SJtswfsWtnm9irCgxz9pXG0UJy4/P3to7dHn
+         uxnapoor8QL5QnqnSFT6gh6DLYbcP+pl2fhhFH2ZwE80gGW8gv7qdN1NwWFNb4UJCh
+         70a0+obiLXX4Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Justin Chen <justinpopo6@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+Cc:     Jianglei Nie <niejianglei2021@163.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, mathias.nyman@intel.com,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 05/33] usb: host: xhci-plat: suspend/resume clks for brcm
-Date:   Wed, 12 Oct 2022 20:23:04 -0400
-Message-Id: <20221013002334.1894749-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 22/33] usb: host: xhci: Fix potential memory leak in xhci_alloc_stream_info()
+Date:   Wed, 12 Oct 2022 20:23:21 -0400
+Message-Id: <20221013002334.1894749-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221013002334.1894749-1-sashal@kernel.org>
 References: <20221013002334.1894749-1-sashal@kernel.org>
@@ -57,36 +57,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Justin Chen <justinpopo6@gmail.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit c69400b09e471a3f1167adead55a808f0da6534a ]
+[ Upstream commit 7e271f42a5cc3768cd2622b929ba66859ae21f97 ]
 
-The xhci_plat_brcm xhci block can enter suspend with clock disabled to save
-power and re-enable them on resume. Make use of the XHCI_SUSPEND_RESUME_CLKS
-quirk to do so.
+xhci_alloc_stream_info() allocates stream context array for stream_info
+->stream_ctx_array with xhci_alloc_stream_ctx(). When some error occurs,
+stream_info->stream_ctx_array is not released, which will lead to a
+memory leak.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-Link: https://lore.kernel.org/r/1660170455-15781-3-git-send-email-justinpopo6@gmail.com
+We can fix it by releasing the stream_info->stream_ctx_array with
+xhci_free_stream_ctx() on the error path to avoid the potential memory
+leak.
+
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220921123450.671459-2-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-plat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-mem.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 2687662f26b6..972a44b2a7f1 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -134,7 +134,7 @@ static const struct xhci_plat_priv xhci_plat_renesas_rcar_gen3 = {
- };
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 024e8911df34..1fba5605a88e 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -659,7 +659,7 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
+ 			num_stream_ctxs, &stream_info->ctx_array_dma,
+ 			mem_flags);
+ 	if (!stream_info->stream_ctx_array)
+-		goto cleanup_ctx;
++		goto cleanup_ring_array;
+ 	memset(stream_info->stream_ctx_array, 0,
+ 			sizeof(struct xhci_stream_ctx)*num_stream_ctxs);
  
- static const struct xhci_plat_priv xhci_plat_brcm = {
--	.quirks = XHCI_RESET_ON_RESUME,
-+	.quirks = XHCI_RESET_ON_RESUME | XHCI_SUSPEND_RESUME_CLKS,
- };
- 
- static const struct of_device_id usb_xhci_of_match[] = {
+@@ -720,6 +720,11 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
+ 	}
+ 	xhci_free_command(xhci, stream_info->free_streams_command);
+ cleanup_ctx:
++	xhci_free_stream_ctx(xhci,
++		stream_info->num_stream_ctxs,
++		stream_info->stream_ctx_array,
++		stream_info->ctx_array_dma);
++cleanup_ring_array:
+ 	kfree(stream_info->stream_rings);
+ cleanup_info:
+ 	kfree(stream_info);
 -- 
 2.35.1
 
