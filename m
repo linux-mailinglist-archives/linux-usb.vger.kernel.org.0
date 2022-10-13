@@ -2,75 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA785FE1E6
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 20:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D4D5FE2BE
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 21:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiJMSqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Oct 2022 14:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S229709AbiJMTfs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Oct 2022 15:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbiJMSqR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Oct 2022 14:46:17 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A376B191D49;
-        Thu, 13 Oct 2022 11:43:09 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id n12so4168212wrp.10;
-        Thu, 13 Oct 2022 11:43:08 -0700 (PDT)
+        with ESMTP id S229658AbiJMTfr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Oct 2022 15:35:47 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421AE11A94B;
+        Thu, 13 Oct 2022 12:35:45 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id s30so4051117eds.1;
+        Thu, 13 Oct 2022 12:35:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B5L/tN8Nk5G1hFHXmpnHlaxEzIusr004HXV2igjx6Dg=;
-        b=WaMkAHVPl8AWTlsWCOn5940xJ4n2+DGuI4BNxlNTPRVWDmpiouz4lLGIdgOc56G/S6
-         iSHRYRPLpu31hPIR2oj21xQEuSdwrLDTdg/IugpMzX8dl4YOSahc+Yqf4kLYlruz8JzY
-         64PxNCx8ufShrGobabHugKDumGeDPrBw9+AWABQqzAidTIT/coJDU4Tn5zSPLWr8sdEf
-         oNp8J+itnMQD5L8G24GuDwqs4kj/GWhSmrVNWx4UmvfjtfwYAlO3E248VRJATnUSBFyS
-         20aXm6B8tZUCaWd3U1V2l5NDledETwN6ROnHCmJiV5fH9PIprBjM0gH3bh3kAWQdj8xr
-         54IA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aO2wfG6mESBWLGmiEHQ/ZdlLgCSrGemWpKlaxBdIPR0=;
+        b=o5lciPHuBpfNXx8hNY1aLi0CZ+Abid9rsHTB9XFMYj89oqMFRO8p6XzrvS4TfNF12o
+         6UKFmCDbZltjXmxRtE49G+2TF8xVk0q9sKQfuzoITV9JnvL+V9MJ53PSJxDnRpR9uweR
+         BU+ibr/x67bZ9uUSH+B01Uf1J43sRE3VaViE4/2NPeqKTxz9HwHqvxu7Gpw5GadsLi5i
+         s+ccQXCF1CC5oifE+sVvEKgydkiKTHkcwsGfn6zLJSgvZsHPg1Ahz/BhPs07qQKIKBgp
+         M7qE/32g5jVvTOe7U9AQtEf4hmL0p6LIdNz8X+LesRVm6dpYBYOCx7Hypv8xWRcqGD/a
+         B2UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B5L/tN8Nk5G1hFHXmpnHlaxEzIusr004HXV2igjx6Dg=;
-        b=j6vz7WrqkhSvOisYXQ0MpTH7MYMrEAPwpjfdK3J7dK9vF09cbeGuIXpNA1ANqNaaMn
-         BX6WBxz7qvtqwNMP1NmVZpkKO6shPOE7ZI51PZnuZeOUgHLlrdjYh14Q3QeTDklQNcKc
-         6eKdHhGwJwDoa5x36MY4ttCxFRcrs5oEAx9gdv2YdycN0ssELlvDDLdaow6QBYoQ96A/
-         rviRLxkt8yBldofAjXLEnCguZjcEx6sOpgdEApvLh7jWkmsfEvpgitvXeOQ2J8uaxA20
-         D8bMffcsoVuWzZFYi/vTYVnFVSRGJAUzTBQ22sxta8cSy9/RTdzVwQHrEX2P4ZtNrbjT
-         /WLg==
-X-Gm-Message-State: ACrzQf3LvoP+o7B4IuTybBoGa9K8yu7+okLZaCyCW9xuY/nWylDgmGfZ
-        eygLMPr7DRWKWgAAboBtqtgB57EoAwXMFAR5
-X-Google-Smtp-Source: AMsMyM5D9VcyYdymrteUFP/uy7fZdMK47gw4RIDknOofM1/3bcKBsARkwBkRONaV/eI3T52TMYs+Xg==
-X-Received: by 2002:a17:907:75ed:b0:78d:97ed:2894 with SMTP id jz13-20020a17090775ed00b0078d97ed2894mr732203ejc.739.1665685520104;
-        Thu, 13 Oct 2022 11:25:20 -0700 (PDT)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id i24-20020a056402055800b004588ef795easm283249edx.34.2022.10.13.11.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 11:25:19 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Icenowy Zheng <uwu@icenowy.me>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: Re: [PATCH v2 04/10] phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
-Date:   Thu, 13 Oct 2022 20:25:18 +0200
-Message-ID: <3442772.V25eIC5XRa@kista>
-In-Reply-To: <439b685e3aada19021d94669f6f855f1fc81d08e.camel@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me> <4218006.ejJDZkT8p0@kista> <439b685e3aada19021d94669f6f855f1fc81d08e.camel@icenowy.me>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aO2wfG6mESBWLGmiEHQ/ZdlLgCSrGemWpKlaxBdIPR0=;
+        b=RsmEjNhTWMWUcHAuvL0rZ2KClkR/VT+7/fpcOyAR/oYDIjpSZczCJ07tQt9G/bpEO8
+         xf6OifhfNvH5fnCluAUkR6f2hWsks18ctFvkkbq8+2UImZ417WUl0zz2BspZnNuTso02
+         jwOPWyEN7oay3OQuOUZBiYJtg1lJKh2wJJYm2Syn0Oowy0wblzsVrbesDz/TNHZhgWUK
+         nXpUwPLNMu1JwHPg7U7multVrMYQu+4n/rzPad2YArU+SYZTL0n9f22p7fembA/QFvzR
+         kS2gAY0yM11tFzoCpnEd5i3tlfVxL4x8QoGTTeFMd5jMPjn2idWhFEG9ZNhj/Ry4uaBD
+         PjwA==
+X-Gm-Message-State: ACrzQf31dZ2Luvbe6SSMa/TzMglG9ArRbv5AU4GqCmOtWGNvZ9KmYV7F
+        7rfuvCIcbZNJRfC1Zjm4WVs=
+X-Google-Smtp-Source: AMsMyM65qyeNcU4PvNmavUCDHZm9SKmVc8HvmmyP2Gv5Ldhs3DrGZeVkMG/dIS1GKx7DX99zL079Pw==
+X-Received: by 2002:a05:6402:50cf:b0:45c:dfce:66ae with SMTP id h15-20020a05640250cf00b0045cdfce66aemr1118400edb.370.1665689743723;
+        Thu, 13 Oct 2022 12:35:43 -0700 (PDT)
+Received: from ?IPV6:2a02:a466:68ed:1:2509:9d4b:f4db:684d? (2a02-a466-68ed-1-2509-9d4b-f4db-684d.fixed6.kpn.net. [2a02:a466:68ed:1:2509:9d4b:f4db:684d])
+        by smtp.gmail.com with ESMTPSA id md9-20020a170906ae8900b0078defb88b0dsm316281ejb.73.2022.10.13.12.35.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 12:35:43 -0700 (PDT)
+Message-ID: <bec17559-286c-b006-476f-3c26ae38e70d@gmail.com>
+Date:   Thu, 13 Oct 2022 21:35:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Content-Language: en-US
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+ <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com>
+ <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
+ <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+ <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com>
+ <CAHQ1cqGSXoUTopwvrQtLww5M0Tf=6F505ziLn+wGHhW_8-JhFQ@mail.gmail.com>
+ <113fe314-0f5c-f53f-db78-c93bd4515260@gmail.com>
+ <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,86 +97,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne =C4=8Detrtek, 13. oktober 2022 ob 10:49:51 CEST je Icenowy Zheng napisa=
-l(a):
-> =E5=9C=A8 2022-10-12=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 23:21 +0200=EF=
-=BC=8CJernej =C5=A0krabec=E5=86=99=E9=81=93=EF=BC=9A
->=20
-> > Hi Icenowy,
-> >=20
-> > Dne sreda, 12. oktober 2022 ob 07:55:56 CEST je Icenowy Zheng
-> >=20
-> > napisal(a):
-> > > The F1C100s SoC has one USB OTG port connected to a MUSB
-> > > controller.
-> > >=20
-> > > Add support for its USB PHY.
-> > >=20
-> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > > ---
-> > > No changes since v1.
-> > >=20
-> > >  drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > >=20
-> > > diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
-> > > b/drivers/phy/allwinner/phy-sun4i-usb.c index
-> > > 3a3831f6059a..2f94cb77637b
-> > > 100644
-> > > --- a/drivers/phy/allwinner/phy-sun4i-usb.c
-> > > +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
-> > > @@ -109,6 +109,7 @@ enum sun4i_usb_phy_type {
-> > >         sun8i_v3s_phy,
-> > >         sun50i_a64_phy,
-> > >         sun50i_h6_phy,
-> > > +       suniv_f1c100s_phy,
-> > >  };
-> > >=20
-> > >  struct sun4i_usb_phy_cfg {
-> > > @@ -859,6 +860,14 @@ static int sun4i_usb_phy_probe(struct
-> > > platform_device
-> > > *pdev) return 0;
-> > >  }
-> > >=20
-> > > +static const struct sun4i_usb_phy_cfg suniv_f1c100s_cfg =3D {
-> > > +       .num_phys =3D 1,
-> > > +       .type =3D suniv_f1c100s_phy,
-> >=20
-> > I think you should just use sun4i_a10_phy. It has no special
-> > handling. I don't
-> > see a point adding new phy types if there is no special cases for it.
->=20
-> Sounds reasonable, although I think we should finally drop .type and
-> use only describing items.
-
-That would be even better. Will you do it?
-
->=20
-> > Best regards,
-> > Jernej
-> >=20
-> > > +       .disc_thresh =3D 3,
-> > > +       .phyctl_offset =3D REG_PHYCTL_A10,
-> > > +       .dedicated_clocks =3D true,
-> > > +};
-> > > +
-> > >  static const struct sun4i_usb_phy_cfg sun4i_a10_cfg =3D {
-> > >         .num_phys =3D 3,
-> > >         .type =3D sun4i_a10_phy,
-> > > @@ -988,6 +997,8 @@ static const struct of_device_id
-> > > sun4i_usb_phy_of_match[] =3D { { .compatible =3D
-> > > "allwinner,sun50i-a64-usb-phy",
-> > >           .data =3D &sun50i_a64_cfg},
-> > >         { .compatible =3D "allwinner,sun50i-h6-usb-phy", .data =3D
-> >=20
-> > &sun50i_h6_cfg },
-> >=20
-> > > +       { .compatible =3D "allwinner,suniv-f1c100s-usb-phy",
-> > > +         .data =3D &suniv_f1c100s_cfg },
-> > >         { },
-> > >  };
-> > >  MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
-> > > --
-> > > 2.37.1
+<SNIP>
+> My end goal here is to find a way to test vanilla v6.0 with the two
+> patches reverted on your end. I thought that during my testing I saw
+> tusb1210 print those timeout messages during its probe and that
+> disabling the driver worked to break the loop, but I went back to
+> double check and it doesn't work so scratch that idea. Configuring
+> extcon as a built-in breaks host functionality with or without patches
+> on my end, so I'm not sure it could be a path.
+>
+> I won't have time to try things with
+> 0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch until
+> the weekend, meanwhile can you give this diff a try with vanilla (no
+> reverts) v6.0:
+>
+> modified   drivers/phy/ti/phy-tusb1210.c
+> @@ -127,6 +127,7 @@ static int tusb1210_set_mode(struct phy *phy, enum
+> phy_mode mode, int submode)
+>    u8 reg;
+>
+>    ret = tusb1210_ulpi_read(tusb, ULPI_OTG_CTRL, &reg);
+> + WARN_ON(ret < 0);
+>    if (ret < 0)
+>    return ret;
+>
+> @@ -152,7 +153,10 @@ static int tusb1210_set_mode(struct phy *phy,
+> enum phy_mode mode, int submode)
+>    }
+>
+>    tusb->otg_ctrl = reg;
+> - return tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
+> + ret = tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
+> + WARN_ON(ret < 0);
+> + return ret;
+> +
+>   }
+>
+>   #ifdef CONFIG_POWER_SUPPLY
+>
+> ? I'm curious to see if there's masked errors on your end since dwc3
+> driver doesn't check for those.
+root@yuna:~# dmesg | grep -i -E 'warn|assert|error|tusb|dwc3'
+8250_mid: probe of 0000:00:04.0 failed with error -16
+platform regulatory.0: Direct firmware load for regulatory.db failed 
+with error -2
+brcmfmac mmc2:0001:1: Direct firmware load for 
+brcm/brcmfmac43340-sdio.Intel Corporation-Merrifield.bin failed with 
+error -2
+sof-audio-pci-intel-tng 0000:00:0d.0: error: I/O region is too small.
+sof-audio-pci-intel-tng 0000:00:0d.0: error: failed to probe DSP -19
 
 
+>> This is done through configfs only when the switch is set to device mode.
+> Sure, but can it be disabled? We are looking for unknown variables, so
+> excluding this would be a reasonable thing to do.
+It's not enabled until I flip the switch to device mode.
