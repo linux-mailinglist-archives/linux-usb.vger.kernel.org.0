@@ -2,95 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115775FD894
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 13:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628975FDC5F
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 16:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiJMLlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Oct 2022 07:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S229529AbiJMO07 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Oct 2022 10:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJMLkz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Oct 2022 07:40:55 -0400
-Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8E6ACA0C
-        for <linux-usb@vger.kernel.org>; Thu, 13 Oct 2022 04:40:54 -0700 (PDT)
-Received: (qmail 12515 invoked from network); 13 Oct 2022 11:40:25 -0000
-Received: from p200300cf070ada0076d435fffeb7be92.dip0.t-ipconnect.de ([2003:cf:70a:da00:76d4:35ff:feb7:be92]:49034 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
-        for <fw@strlen.de>; Thu, 13 Oct 2022 13:40:25 +0200
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Westphal <fw@strlen.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Graf <tgraf@suug.ch>, kasan-dev@googlegroups.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 5/7] treewide: use get_random_u32() when possible
-Date:   Thu, 13 Oct 2022 13:40:40 +0200
-Message-ID: <11986571.xaOnivgMc4@eto.sf-tec.de>
-In-Reply-To: <20221013101635.GB11818@breakpoint.cc>
-References: <20221010230613.1076905-1-Jason@zx2c4.com> <3026360.ZldQQBzMgz@eto.sf-tec.de> <20221013101635.GB11818@breakpoint.cc>
+        with ESMTP id S229459AbiJMO05 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Oct 2022 10:26:57 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2391ACA887
+        for <linux-usb@vger.kernel.org>; Thu, 13 Oct 2022 07:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1665671208;
+        bh=XuTnL4CiYuLHU3WpcIdjlp2AMjeMx89XJlHV1a3blFU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=KqIh7iEwq8I0AE+Nd7OUgtmGioWinpHwbyAkveIi+KHQtAZG2+5dmjCZGwBHDR6kl
+         gqlC7Ad2kbtxM6Os1PqWptkMBYNr1t0K9MlvbaNBdgcTJB+3pviB85lodDk0e8hh8/
+         LlpMwxCk6Ktc69NBZiHPJaFwuIizmfEm4bAlcakg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from pianobar.pianonet ([176.145.30.241]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mof9F-1pTaWP2RQH-00p1a1; Thu, 13
+ Oct 2022 16:26:48 +0200
+From:   =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>
+To:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>
+Subject: [PATCH] USB: serial: option: add Sierra Wireless EM9191
+Date:   Thu, 13 Oct 2022 16:26:48 +0200
+Message-Id: <fafbac7f1c5d85dc4e7049e72635a478a5aef67a.1665665539.git.benoit.monin@gmx.fr>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart22512332.f9tG50R4rC"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:uH6dsRMp1+u8ePZ9q2S31xxWwV9VPHaw1JMlBy3Duq76V1rEyLF
+ qATUzcwfwKbEDO1MM/6+p9iTXElFUaJvbGFhHB89cJuCrKZjq30uXTdaiAZubvZb9nvVz38
+ JWSQ6CFcoaRyqmeHvONcvTGlC0WQUuCSXle/rnfJFEZA32PhDUdY/RYHcWTzfptfp7Qxqvj
+ 4J8ClbUmVO2op8w0h4TkQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rzmOYhW4tIo=:3SV8Wriq+wpHm0Z0hm0/D4
+ dVnMoQNz3xToXf90gdYNcuRG9Hw1gYKhdmPgb/GsRdmkL7bHgPN5WcIQ6+53yl6nqi8C2lOA0
+ ivgi838Gkb0G/RAN55HHsB4XnNzh3tShq80804uC7+ixw1/QujiEOkXvbCJvm8EKX9bxKynGU
+ mswbmECH9ketGuOfDo5T5fPZ5pBYo8abdGWytsQAnC2Ab3m99eIcFOnHwwEpb1ma0BXtZ08Vs
+ 29sGytJuOJm6refg87tFUj3FpO7nw2XZvU8++6v7qqnZRvQB+mN2L12grKmyahUXdO4DjH1CB
+ aOrlpFwG1i2pSnq6YGVBe6wYvDQWjUV8lB7an+bVglVbPKzR+ovnfN9/AZCu8z+zY+SqwEhvW
+ 2hevHV+GjMo+2YIZcdJwe5u1DrItpiIJRLzdtrjn6rIxKQ6stgwtvhi75BHYhyPVgo6WqpjGP
+ 7f5GlxFGv4LK04M9+1S2DgXn3o6Bc6nOpUCRi+PDKI/seXusF6+Fi4MoD0gKTpw4XAGCdsXPB
+ ctkK39BktPv0dtsQE9+PTBRwsHEZEqGNDWbnGxoxbfHyGKEpku8Ceuu+Y9o03976zA3o3Amsy
+ irj9zPvGMBFKRebQ0YlmnUOLtIwsQ3m530yCnV/JXDUVe5rBBJEiB3I5V64mNi6sSVU4JQOMZ
+ FniRFukB0EyeC5y57wCU9uOo0VPP7szQ9qIysq0BNmp240gqIuH8A070N7eR9pUO0dJO5wEQ6
+ cS14WRvF5pWYCn9DzfSD2M77JMKmSny7i1wgHRY1tEPX1fGTM1ccy13G9SejB9n5IyQibYcDf
+ AqtKyS7YXzvied/X2pbc9wP9szA9k6yVjavT2oFiMwT9KXMEogohHmP7foAS0R4GbfOmq92UY
+ vq92YcZPqskzRFyKGp4CUnUHjpOG3QEJimo15kklYoi9E2Ax1UTnP5ze6c1PleXiqvXgcBAYY
+ u17t9Os0p7h7IsBkQcKEoGAEIwgo8qrysXULtAejkJuIM0cLoGgxzkBcvpOCsvEYKfE6kRhoT
+ ndms42mtojy+U6K3tpJK2BldTu+YP4sbsLjO0ag+kzzx8Kx6+nVOgfc+H/oA50X/YjEUsbWvc
+ F2ZdZcWvDQw/idrwl0GMzWXdIyJ9zA4bEriZPkboZfCw+InS7+8AaSztUrpJqpm1RqR+pkFEf
+ gtRdtQMFyMSccpvRXq0bKbW70vtAN+LYNtUZFDyIKBDIdzoMEbfcndRkQqB1Ki74BcvJq3qpJ
+ hqIBksAACCJGIXqiBy0eXRUpNYXGzDymT+qaktiT+/SNJEuHwJxbld+OuCzPJ+0xB8g+DoT5f
+ SCOeCKJoIAYJ2Oax+bMGvovFfjjV8iMcl3NZzl5LfytZ8uTeHo/uNvsNg+iP0foy2sZ7itr8S
+ VqyiI8lkqlNztR/D+nO7eZlgaP3LmAWEQ7jMplFiood6dOO3fp6ML2pfYgd17qL+y2R+7RgIS
+ h10PrhuGDxJHql/w4/XA19AlCvSuNZfD62cnMiwmyt4wItHuuLxWP5/P6b/wn8BT8Ctxn0LnH
+ plPk33TObjYUKs8UbQzyr/maY+BAjvMVqVnJJY9fqrGOG
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---nextPart22512332.f9tG50R4rC
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Rolf Eike Beer <eike-kernel@sf-tec.de>
-To: Florian Westphal <fw@strlen.de>
-Date: Thu, 13 Oct 2022 13:40:40 +0200
-Message-ID: <11986571.xaOnivgMc4@eto.sf-tec.de>
-In-Reply-To: <20221013101635.GB11818@breakpoint.cc>
-MIME-Version: 1.0
+Add support for the AT and diag ports, similar to other qualcomm SDX55
+modems. In QDL mode, the modem uses a different device ID and support
+is provided by qcserial in commit 11c52d250b34 ("USB: serial: qcserial:
+add EM9191 QDL support").
 
-Am Donnerstag, 13. Oktober 2022, 12:16:35 CEST schrieb Florian Westphal:
-> Rolf Eike Beer <eike-kernel@sf-tec.de> wrote:
-> > Florian, can you comment and maybe fix it?
-> 
-> Can't comment, do not remember -- this was 5 years ago.
-> 
-> > Or you wanted to move the variable before the loop and keep the random
-> > state between the loops and only reseed when all '1' bits have been
-> > consumed.
-> Probably.  No clue, best to NOT change it to not block Jasons series and
-> then just simplify this and remove all the useless shifts.
+T:  Bus=3D08 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D01 Dev#=3D  3 Spd=3D5000 M=
+xCh=3D 0
+D:  Ver=3D 3.20 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D 9 #Cfgs=3D  1
+P:  Vendor=3D1199 ProdID=3D90d3 Rev=3D00.06
+S:  Manufacturer=3DSierra Wireless, Incorporated
+S:  Product=3DSierra Wireless EM9191
+S:  SerialNumber=3Dxxxxxxxxxxxxxxxx
+C:  #Ifs=3D 4 Cfg#=3D 1 Atr=3Da0 MxPwr=3D896mA
+I:  If#=3D0x0 Alt=3D 0 #EPs=3D 1 Cls=3D02(commc) Sub=3D0e Prot=3D00 Driver=
+=3Dcdc_mbim
+I:  If#=3D0x1 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D02 Driver=
+=3Dcdc_mbim
+I:  If#=3D0x3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Driver=
+=3D(none)
+I:  If#=3D0x4 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
+=3D(none)
 
-Sure. Jason, just in case you are going to do a v7 this could move to u8 then.
+Signed-off-by: Beno=C3=AEt Monin <benoit.monin@gmx.fr>
+=2D--
+ drivers/usb/serial/option.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---nextPart22512332.f9tG50R4rC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index a5e8374a8d71..d41f7a5ced49 100644
+=2D-- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -580,6 +580,9 @@ static void option_instat_callback(struct urb *urb);
+ #define OPPO_VENDOR_ID				0x22d9
+ #define OPPO_PRODUCT_R11			0x276c
 
------BEGIN PGP SIGNATURE-----
++/* Sierra Wireless products */
++#define SIERRA_VENDOR_ID			0x1199
++#define SIERRA_PRODUCT_EM9191			0x90d3
 
-iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCY0f5OAAKCRBcpIk+abn8
-TncNAKCia3h4AG/9IzqybWbLcwE6uVgTqACfRr3dPUK8JMrKIqGzYOiL96isZhg=
-=zppL
------END PGP SIGNATURE-----
+ /* Device flags */
 
---nextPart22512332.f9tG50R4rC--
-
-
-
+@@ -2170,6 +2173,8 @@ static const struct usb_device_id option_ids[] =3D {
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500=
+ MBIM */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500=
+ ECM/NCM */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, =
+0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191,=
+ 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191,=
+ 0xff, 0, 0) },
+ 	{ } /* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, option_ids);
