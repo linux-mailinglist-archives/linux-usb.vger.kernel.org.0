@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C385FCFFC
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5603B5FD187
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 02:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiJMAY1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 20:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S231934AbiJMAiI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 20:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiJMAXq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:23:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7920E6F54;
-        Wed, 12 Oct 2022 17:21:38 -0700 (PDT)
+        with ESMTP id S232109AbiJMAgw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 20:36:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFA1D4A10;
+        Wed, 12 Oct 2022 17:31:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C18BB81CC2;
-        Thu, 13 Oct 2022 00:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A62C433C1;
-        Thu, 13 Oct 2022 00:18:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78DCE616C3;
+        Thu, 13 Oct 2022 00:19:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE66C433D7;
+        Thu, 13 Oct 2022 00:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620308;
-        bh=pZTA8+b6t89yvqWaduEatUoC/Fpvy1u8fwa7q8EqwVU=;
+        s=k20201202; t=1665620344;
+        bh=COvMImI5EhtK7DDUN4rrlXlj6Olbp9bHPrM5fbNPEo8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r4amPdAvezJqLUY8cphf639KGbG/VLYk0w1QvIdqxL2lC1i+gSvsTV8a1UlXf/8bw
-         MfGx5wg9XfgR2VM2LINIRZKkIXljR/YsCi/RVgtQfp5hTyMlRTPWuev5KU9kLJUgLh
-         EhnK+b8WM6jMgrG+Yyx3p9YHuAM2zcoNM3VVaFcn+KZ2p3ZZvT4RAZ8ZC/FLBPB/kA
-         4C5hTb86hneJSSTxviWFDp0dzmhVgWNalg9JexEimvhWtujQ04nDC9t2dPcUbR6izc
-         PCwDiNACIahlQ+0su1dLmI/veA2mhGEE8/VfM78kQJRj+KZDzYeQE98QehWJ1mSIff
-         5tRdNQOS9Qfbg==
+        b=BeNQJ8CL7YiEJmYxvlCZ8JbMZ3djTEhrfqcyWLJ03HrIApUQGr0LhF3l86EixeM1d
+         d/Tcxm8ANlxu9AKS46NRGXbhWrptrLF0kWDCPbTV9fSsPeYzuWz2wKjUr1zotPHB0j
+         IBNTSboATK8NAA1pqZvveZqTvakVthRKZNAKJbGWTWx2qbx1l6QAQ5RWv0bqprcPdo
+         Ev4R2GB0A6fNNilQKf5jgatzsROKA2HbnWrgJeb/1PKmQKfnSBDiXCqIwKnHwoLqTb
+         lG6BUWupUzu3C3kDokOjn+wz+5SWyR2pIoCEwPXCchCyZalaR55TyTjISr4tqMWTd1
+         jOJmSXu0jq/fQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wayne Chang <waynec@nvidia.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Cc:     Justin Chen <justinpopo6@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, quic_linyyuan@quicinc.com,
-        tiwai@suse.de, saranya.gopal@intel.com, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 65/67] usb: typec: ucsi: Don't warn on probe deferral
-Date:   Wed, 12 Oct 2022 20:15:46 -0400
-Message-Id: <20221013001554.1892206-65-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 07/63] usb: host: xhci-plat: suspend and resume clocks
+Date:   Wed, 12 Oct 2022 20:17:41 -0400
+Message-Id: <20221013001842.1893243-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013001554.1892206-1-sashal@kernel.org>
-References: <20221013001554.1892206-1-sashal@kernel.org>
+In-Reply-To: <20221013001842.1893243-1-sashal@kernel.org>
+References: <20221013001842.1893243-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,48 +57,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wayne Chang <waynec@nvidia.com>
+From: Justin Chen <justinpopo6@gmail.com>
 
-[ Upstream commit fce703a991b7e8c7e1371de95b9abaa832ecf9c3 ]
+[ Upstream commit 8bd954c56197caf5e3a804d989094bc3fe6329aa ]
 
-Deferred probe is an expected return value for fwnode_usb_role_switch_get().
-Given that the driver deals with it properly, there's no need to output a
-warning that may potentially confuse users.
+Introduce XHCI_SUSPEND_RESUME_CLKS quirk as a means to suspend and resume
+clocks if the hardware is capable of doing so. We assume that clocks will
+be needed if the device may wake.
 
---
-V2 -> V3: remove the Fixes and Cc
-V1 -> V2: adjust the coding style for better reading format.
- drivers/usb/typec/ucsi/ucsi.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20220927134512.2651067-1-waynec@nvidia.com
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+Link: https://lore.kernel.org/r/1660170455-15781-2-git-send-email-justinpopo6@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/usb/host/xhci-plat.c | 16 +++++++++++++++-
+ drivers/usb/host/xhci.h      |  1 +
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 6364f0d467ea..74fb5a4c6f21 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1067,11 +1067,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index a8641b6536ee..ef10982ad482 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -437,7 +437,16 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+ 	 * xhci_suspend() needs `do_wakeup` to know whether host is allowed
+ 	 * to do wakeup during suspend.
+ 	 */
+-	return xhci_suspend(xhci, device_may_wakeup(dev));
++	ret = xhci_suspend(xhci, device_may_wakeup(dev));
++	if (ret)
++		return ret;
++
++	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
++		clk_disable_unprepare(xhci->clk);
++		clk_disable_unprepare(xhci->reg_clk);
++	}
++
++	return 0;
+ }
  
- 	cap->fwnode = ucsi_find_fwnode(con);
- 	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
--	if (IS_ERR(con->usb_role_sw)) {
--		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
--			con->num);
--		return PTR_ERR(con->usb_role_sw);
--	}
-+	if (IS_ERR(con->usb_role_sw))
-+		return dev_err_probe(ucsi->dev, PTR_ERR(con->usb_role_sw),
-+			"con%d: failed to get usb role switch\n", con->num);
+ static int __maybe_unused xhci_plat_resume(struct device *dev)
+@@ -446,6 +455,11 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+ 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+ 	int ret;
  
- 	/* Delay other interactions with the con until registration is complete */
- 	mutex_lock(&con->lock);
++	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
++		clk_prepare_enable(xhci->clk);
++		clk_prepare_enable(xhci->reg_clk);
++	}
++
+ 	ret = xhci_priv_resume_quirk(hcd);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 7caa0db5e826..6dfbf73ee840 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1899,6 +1899,7 @@ struct xhci_hcd {
+ #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
+ #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
+ #define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
++#define XHCI_SUSPEND_RESUME_CLKS	BIT_ULL(43)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
 -- 
 2.35.1
 
