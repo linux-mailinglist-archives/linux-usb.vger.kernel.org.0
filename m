@@ -1,84 +1,69 @@
 Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E47A5FD7A8
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 12:14:30 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 809855FD7BC
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 12:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJMKO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Oct 2022 06:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S229764AbiJMKRG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Oct 2022 06:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiJMKOY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Oct 2022 06:14:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CABB42E6D
-        for <linux-usb@vger.kernel.org>; Thu, 13 Oct 2022 03:14:23 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oivEC-0004MS-Vg; Thu, 13 Oct 2022 12:14:12 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oivEC-0008EZ-EU; Thu, 13 Oct 2022 12:14:12 +0200
-Date:   Thu, 13 Oct 2022 12:14:12 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peter Chen <peter.chen@kernel.org>,
-        Peng Fan <peng.fan@oss.nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 6/6] dt-bindings: usb: ci-hdrc-usb2: Add more phy tuning
- properties
-Message-ID: <20221013101412.GI6702@pengutronix.de>
-References: <20221011082924.884123-1-s.hauer@pengutronix.de>
- <20221011082924.884123-7-s.hauer@pengutronix.de>
- <20221012160806.GA2189350-robh@kernel.org>
+        with ESMTP id S229618AbiJMKRD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Oct 2022 06:17:03 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED085F6C22;
+        Thu, 13 Oct 2022 03:17:00 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1oivGV-00028B-QF; Thu, 13 Oct 2022 12:16:35 +0200
+Date:   Thu, 13 Oct 2022 12:16:35 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Rolf Eike Beer <eike-kernel@sf-tec.de>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Westphal <fw@strlen.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Graf <tgraf@suug.ch>, kasan-dev@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 5/7] treewide: use get_random_u32() when possible
+Message-ID: <20221013101635.GB11818@breakpoint.cc>
+References: <20221010230613.1076905-1-Jason@zx2c4.com>
+ <20221010230613.1076905-6-Jason@zx2c4.com>
+ <3026360.ZldQQBzMgz@eto.sf-tec.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221012160806.GA2189350-robh@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
+In-Reply-To: <3026360.ZldQQBzMgz@eto.sf-tec.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:08:06AM -0500, Rob Herring wrote:
-> On Tue, Oct 11, 2022 at 10:29:24AM +0200, Sascha Hauer wrote:
-> > Following the example of samsung,picophy-dc-vol-level-adjust more
-> > phy tuning properties are added for configuring the remaining bitfields
-> > in the USBNC_n_PHY_CFG1 register.
-> 
-> All these properties really doesn't scale. These properties should go 
-> in the phy node as they are properties or the phy. There's no rule that 
-> you can only read properties from the driver's device node.
+Rolf Eike Beer <eike-kernel@sf-tec.de> wrote:
+> Florian, can you comment and maybe fix it?
 
-I understand and agree.
+Can't comment, do not remember -- this was 5 years ago.
 
-On i.MX8M we currently use the usb-nop-xceiv. I guess it's not an option
-to just add these properties there, so we'll need a phy node with a new
-compatible like fsl,imx8mm-usbphy. The driver would basically just
-register a usb-nop-xceiv and the node would be a container for the new
-property. Does this sound sane?
+> Or you wanted to move the variable before the loop and keep the random state
+> between the loops and only reseed when all '1' bits have been consumed.
 
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Probably.  No clue, best to NOT change it to not block Jasons series and
+then just simplify this and remove all the useless shifts.
