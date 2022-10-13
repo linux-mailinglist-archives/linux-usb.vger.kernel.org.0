@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EEC5FD29B
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 03:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BF85FD29E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Oct 2022 03:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiJMBc0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Oct 2022 21:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S229984AbiJMBc3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Oct 2022 21:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiJMBcY (ORCPT
+        with ESMTP id S229701AbiJMBcY (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Oct 2022 21:32:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC9234704;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AC365253;
         Wed, 12 Oct 2022 18:32:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56FA0615BE;
-        Thu, 13 Oct 2022 00:28:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF972C43142;
-        Thu, 13 Oct 2022 00:28:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B65B3616F5;
+        Thu, 13 Oct 2022 00:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63AEBC433D6;
+        Thu, 13 Oct 2022 00:28:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620897;
-        bh=X/cIJmrKiiqRqx/BcVynhDgyBSUjjuc0ViUWGM72QBM=;
+        s=k20201202; t=1665620907;
+        bh=Mj21hyBrDjmSdd2jWfMhrCp60Lexb3CWLmw3cQrt69Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ftspPhV9WjFaBvQTQgl+aYBa7S+OWtNIcQ33C5axRwvPRpSS/OxJFb4Pep3uUhnXR
-         uiSGv+wf8eliDhHUSFMEYpCT79ol1YoWOa3n94QJCfdozIhLuzyTh6UsqnZD9TtPoH
-         YXJGdNxvUlQReJv6eUV7cOaE9R1drsiFUGUSqwVLluiBsX5yIzqtOWcmvKJmWfo2hM
-         ZvaTA2rrg1gCQA6A/kkA5BsXQXdyGjQwThd8/vfCQ3AQqH25KHdjMTz8lEXlLqp8Ku
-         D9nLNaGt4Pu4Kihu/LZ6zKXmH5xmBLh5PCQpBmMVJgYC8M6zZ1aou3uCwaPU1/FUZ2
-         vQSaJwwocYHRA==
+        b=ppC6JmaSsfdfguN29Uc9sOn5AhViWhgxbqS4Vw54MkU4KsFKMQrPPkAn+K8drxe+D
+         S+8r/cWLHY92iLZ2S6gd7b8OsPQgePeQFshV9z8GBpG5ZSyIvynFjJ6ZSjcLHWA14O
+         x0KCJ+YmfUOSdYqOXLXh/AuPbCDKOsTo03fxeBK39c1ZDfODT0FzKM+3QjIs9Wlz+o
+         38BDDPb6E0lk3PWu8qq/xWxavYkpN/0HNj5vRGyt9Pj00B7jeCI1z3Kz/7FCtwqb6r
+         z3h5hl2WpHXTMURAS/p4TFPP3HkfGestQyAtWXJm900Sr6hq9FG9WkGgVTH1qoZbv0
+         k833wViwy/flg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     sunghwan jung <onenowy@gmail.com>,
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH AUTOSEL 4.9 08/10] Revert "usb: storage: Add quirk for Samsung Fit flash"
-Date:   Wed, 12 Oct 2022 20:27:55 -0400
-Message-Id: <20221013002802.1896096-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 10/10] usb: idmouse: fix an uninit-value in idmouse_open
+Date:   Wed, 12 Oct 2022 20:27:57 -0400
+Message-Id: <20221013002802.1896096-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221013002802.1896096-1-sashal@kernel.org>
 References: <20221013002802.1896096-1-sashal@kernel.org>
@@ -56,57 +56,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: sunghwan jung <onenowy@gmail.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit ad5dbfc123e6ffbbde194e2a4603323e09f741ee ]
+[ Upstream commit bce2b0539933e485d22d6f6f076c0fcd6f185c4c ]
 
-This reverts commit 86d92f5465958752481269348d474414dccb1552,
-which fix the timeout issue for "Samsung Fit Flash".
+In idmouse_create_image, if any ftip_command fails, it will
+go to the reset label. However, this leads to the data in
+bulk_in_buffer[HEADER..IMGSIZE] uninitialized. And the check
+for valid image incurs an uninitialized dereference.
 
-But the commit affects not only "Samsung Fit Flash" but also other usb
-storages that use the same controller and causes severe performance
-regression.
+Fix this by moving the check before reset label since this
+check only be valid if the data after bulk_in_buffer[HEADER]
+has concrete data.
 
- # hdparm -t /dev/sda (without the quirk)
- Timing buffered disk reads: 622 MB in  3.01 seconds = 206.66 MB/sec
+Note that this is found by KMSAN, so only kernel compilation
+is tested.
 
- # hdparm -t /dev/sda (with the quirk)
- Timing buffered disk reads: 220 MB in  3.00 seconds =  73.32 MB/sec
-
-The commit author mentioned that "Issue was reproduced after device has
-bad block", so this quirk should be applied when we have the timeout
-issue with a device that has bad blocks.
-
-We revert the commit so that we apply this quirk by adding kernel
-paramters using a bootloader or other ways when we really need it,
-without the performance regression with devices that don't have the
-issue.
-
-Signed-off-by: sunghwan jung <onenowy@gmail.com>
-Link: https://lore.kernel.org/r/20220913114913.3073-1-onenowy@gmail.com
+Reported-by: syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Link: https://lore.kernel.org/r/20220922134847.1101921-1-dzm91@hust.edu.cn
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/unusual_devs.h | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/usb/misc/idmouse.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index 5a6ca1460711..8c51bb66f16f 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -1294,12 +1294,6 @@ UNUSUAL_DEV( 0x090a, 0x1200, 0x0000, 0x9999,
- 		USB_SC_RBC, USB_PR_BULK, NULL,
- 		0 ),
+diff --git a/drivers/usb/misc/idmouse.c b/drivers/usb/misc/idmouse.c
+index 9cf8a9b16336..51f5cee880b2 100644
+--- a/drivers/usb/misc/idmouse.c
++++ b/drivers/usb/misc/idmouse.c
+@@ -183,10 +183,6 @@ static int idmouse_create_image(struct usb_idmouse *dev)
+ 		bytes_read += bulk_read;
+ 	}
  
--UNUSUAL_DEV(0x090c, 0x1000, 0x1100, 0x1100,
--		"Samsung",
--		"Flash Drive FIT",
--		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
--		US_FL_MAX_SECTORS_64),
+-	/* reset the device */
+-reset:
+-	ftip_command(dev, FTIP_RELEASE, 0, 0);
 -
- /* aeb */
- UNUSUAL_DEV( 0x090c, 0x1132, 0x0000, 0xffff,
- 		"Feiya",
+ 	/* check for valid image */
+ 	/* right border should be black (0x00) */
+ 	for (bytes_read = sizeof(HEADER)-1 + WIDTH-1; bytes_read < IMGSIZE; bytes_read += WIDTH)
+@@ -198,6 +194,10 @@ static int idmouse_create_image(struct usb_idmouse *dev)
+ 		if (dev->bulk_in_buffer[bytes_read] != 0xFF)
+ 			return -EAGAIN;
+ 
++	/* reset the device */
++reset:
++	ftip_command(dev, FTIP_RELEASE, 0, 0);
++
+ 	/* should be IMGSIZE == 65040 */
+ 	dev_dbg(&dev->interface->dev, "read %d bytes fingerprint data\n",
+ 		bytes_read);
 -- 
 2.35.1
 
