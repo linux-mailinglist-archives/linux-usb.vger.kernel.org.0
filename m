@@ -2,70 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32535FF232
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 18:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 661775FF28B
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 18:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiJNQWO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Oct 2022 12:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
+        id S231187AbiJNQud (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Oct 2022 12:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiJNQWN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 12:22:13 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688F71D299F
-        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 09:22:12 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id p16so4279665iod.6
-        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 09:22:12 -0700 (PDT)
+        with ESMTP id S229988AbiJNQu1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 12:50:27 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4FD5245E
+        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 09:50:22 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id i3so5404929pfk.9
+        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 09:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DQXWoKpRmTOgqqGrbzG/1Mzsebe1fiO8UA8Yjh42UqY=;
-        b=N2niElHU2mySrSo2SQ7DYpy3Govx2BMLSUpvxKimhBOj13Zgmd0UHNUZr1XJBzbUDh
-         AvgpSWaLp/p7QMAu6bWzoSiIybK5AuB70g4OMn2fU8NY8M6lvRy3kOALGSS9MlkEOu4c
-         KhL1dkan+hyRLL6JFsB2WsJ3WJbTsn/dKYRPw=
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RXs8pGXtGGZWzXsw4rZ+LS2EAkzqKLgAwtWpxGx92fU=;
+        b=fttFUz+vxtraLRPbXbj3FKm0IZ9ARAZnSS6vv/CpioswqaUGc2WlbiSpyUSk+1nU1/
+         luOh02QiD1Iflia0SkTTTUXHBeGh1ks5OEB9XPvZ2wZn5L7n1NVPCHbWcJho/5YCCojE
+         VdYKJgr0K5MJom5sx6sIUr18wcSJLP/VyQfP+ywSQD0C2sQuYSX+vPUK57XQ+jIm33hy
+         R9jNjgVzXuNGjF+KDbV2u2Re3Xn2Q2NcvBirDKBfqGmsN/AVwNIusT0ugCg7Ck16LrGX
+         n+4oSwQDJY+tbTLLExEj8WsBpPeejE1IG6rMbaZQuwoWvPFkA7XDNt47FDOAEMyv62X6
+         6QmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DQXWoKpRmTOgqqGrbzG/1Mzsebe1fiO8UA8Yjh42UqY=;
-        b=W/6VR7BEwLqNpgTywkGbbACnLMy6k1wzQa7pf2unReM4tYqTBUG9ikIcqGU9phw0mU
-         lsJBT4mbLtGaUkFPByeg5CMQXLAnuyKQr9bVorNQoK2mpd5uiyJy0DdRicjbPk5RX0j3
-         oTO5XamOA73YxlKDJYED7/JldelTjCXyd2Y/o82Lye+CzGY+eq/ufOFcEZ+XkTBSImTo
-         59IaoagyK2Rr6VhKJai2E5+s23LPp1o1JRof9r9kSznd8nTaDUY+qIFF46VceLkr6bxm
-         x0bKxY2YPlpqQseuBU+DkRYiu4o1LobrdYD53gVtCbcpSIxRpv0bi42zinYSrsldOv3p
-         h7pQ==
-X-Gm-Message-State: ACrzQf06rI/ACH74i6LwmM+uf+PyPr5MqcoPHeQktJRsOmEaiX7plyjy
-        3IdEP+fhgaA6Kbl5lpr/27iVLQ==
-X-Google-Smtp-Source: AMsMyM5jZZRrhNJ2UVldBVfhy7C4DuqwBvrNXBlnkGuPxQup4pIQyE18Bnf9fb2iQMypqnZqvgi2ew==
-X-Received: by 2002:a05:6638:2410:b0:363:ffb3:fc08 with SMTP id z16-20020a056638241000b00363ffb3fc08mr2985525jat.50.1665764531813;
-        Fri, 14 Oct 2022 09:22:11 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o18-20020a92dad2000000b002e97becb248sm996780ilq.29.2022.10.14.09.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 09:22:11 -0700 (PDT)
-Message-ID: <38bda8e2-0948-ed48-f2e2-670c15c38298@linuxfoundation.org>
-Date:   Fri, 14 Oct 2022 10:22:10 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] usbip: convert sysfs snprintf to sysfs_emit
-Content-Language: en-US
-To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>, valentina.manea.m@gmail.com,
-        shuah@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221014110606.599352-1-zhangxuezhi3@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221014110606.599352-1-zhangxuezhi3@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RXs8pGXtGGZWzXsw4rZ+LS2EAkzqKLgAwtWpxGx92fU=;
+        b=x1mZHZakq6X8aakwtky+WUHT6dMoJToeIPLu2mdrCpRj2lqixonH9AKWyFk4pmBY2P
+         GY15raJ5HxSYVQKCUjQtJ7xKAcFpJesuUd4vR/dvbShCBdRmMbhGMtgyPJm4BdKKicaW
+         jKac5AULm7IpkdBxsSXlAlrEjw+rl+mCzjf+WVCfCGionV0PJ3R/iFDpQRFu6vumf5cw
+         I+WWuhmqBzije6gzIH3Ca51jsvnVOP8ziJXB34XR5KR6Z/DDK0NNaDGupGUHT/P6U4xl
+         yGO3vdCQWPJZKsGAEfOsR/t/bu9ItVS55jDU45HR3copE3LSKcPzngPSyem24JseFk1Y
+         zYpQ==
+X-Gm-Message-State: ACrzQf3iX42jjS9mrwtKr5w5/BZBANWGTU8uFIVbkFMQIASy/phRuhxt
+        guolfhxJ0ET26LH0uhEAGgaOWA==
+X-Google-Smtp-Source: AMsMyM5S9FfuTscYk1rWNAgrhHrGOzoBMP/C/g49+m/RbzrY6zhImlSUl23Oz0HPujc59lXNjdSqzQ==
+X-Received: by 2002:aa7:8895:0:b0:565:e8b7:8494 with SMTP id z21-20020aa78895000000b00565e8b78494mr6131922pfe.82.1665766222208;
+        Fri, 14 Oct 2022 09:50:22 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id k24-20020a170902761800b001782aab6318sm1969958pll.68.2022.10.14.09.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 09:50:21 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 09:50:21 -0700 (PDT)
+X-Google-Original-Date: Fri, 14 Oct 2022 09:50:27 PDT (-0700)
+Subject:     Re: [PATCH] MAINTAINERS: git://github -> https://github.com for petkan
+In-Reply-To: <166573561445.14465.3335360255597249102.git-patchwork-notify@kernel.org>
+CC:     petkan@nucleusys.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     patchwork-bot+netdevbpf@kernel.org
+Message-ID: <mhng-f9587376-2d54-4ff5-ae71-0992b080ff1a@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,21 +71,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/14/22 05:06, Xuezhi Zhang wrote:
-> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> 
-> Follow the advice of the Documentation/filesystems/sysfs.rst
-> and show() should only use sysfs_emit() or sysfs_emit_at()
-> when formatting the value to be returned to user space.
-> 
-> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> ---
+On Fri, 14 Oct 2022 01:20:14 PDT (-0700), patchwork-bot+netdevbpf@kernel.org wrote:
+> Hello:
+>
+> This patch was applied to netdev/net.git (master)
+> by David S. Miller <davem@davemloft.net>:
+>
+> On Thu, 13 Oct 2022 14:46:36 -0700 you wrote:
+>> Github deprecated the git:// links about a year ago, so let's move to
+>> the https:// URLs instead.
+>>
+>> Reported-by: Conor Dooley <conor.dooley@microchip.com>
+>> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> [...]
+>
+> Here is the summary with links:
+>   - MAINTAINERS: git://github -> https://github.com for petkan
+>     https://git.kernel.org/netdev/net/c/9a9a5d80ec98
+>
+> You are awesome, thank you!
 
-Looks good to me.
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-Greg, Please pick this up.
-
-thanks,
--- Shuah
+I made a typo in the subject: "git://github -> https://github.com" 
+doesn't match.  No big deal, but I figured I'd point it out.
