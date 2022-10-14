@@ -2,62 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10255FEFB5
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 16:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDA05FF051
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 16:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiJNOEh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Oct 2022 10:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S229665AbiJNO2f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Oct 2022 10:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiJNOEF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 10:04:05 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EA5C7044;
-        Fri, 14 Oct 2022 07:03:44 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-354c7abf786so47427637b3.0;
-        Fri, 14 Oct 2022 07:03:43 -0700 (PDT)
+        with ESMTP id S229460AbiJNO2e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 10:28:34 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE261D73C2;
+        Fri, 14 Oct 2022 07:28:33 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id p127so4545890oih.9;
+        Fri, 14 Oct 2022 07:28:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LulQ4b6EYzzR11P5ktgOzKoV5nwOTxK6d04YojYKOgk=;
-        b=xNkrQk/vbYYozJBwZBtecBvxHXILUFS6dz4pUqv/X4W8IfM6kFQy/MGgdh66W/xGLI
-         6ARB5+PqsIsKZepqdoNbUzFQIIWBDt7BJ84d2yeSXeFNvei/nJquesoAPTv126go8Pl3
-         ILWrGPOYXedepd0/UIfzSy7F0ORTnKDKRUc/p8ODXmsQEL1rit+w19BNlcKMiRip2CHI
-         BexhwHQ0TrwJEkmguHQ44iTiybMMfTM20cpzo1/ZrIrMTobHtEZu/l9W3E6B8d2QwJaY
-         H9Es3WRXwRoG+LRjxISnLUJi8Rr5S559GzZX1cbUhWC4FR4s0HbdaWwtgOWCt+OwSric
-         nqmg==
-X-Gm-Message-State: ACrzQf2M+FgQbBOY65+uf1WXejuQxBnUT17D04qdVXYyPrLR6dRfQwIv
-        xejrsMLm06DnPbvkRfZ0c4HRgdoE9gkw
-X-Google-Smtp-Source: AMsMyM7p37tdevBF4/WTrTByF4/OPEd0W8IdJCtoS8ZtXkThuja6L9rn8gOsHStIqrf2YG5yxESM/w==
-X-Received: by 2002:a4a:ee0f:0:b0:47f:649d:52da with SMTP id bd15-20020a4aee0f000000b0047f649d52damr2015569oob.18.1665755692820;
-        Fri, 14 Oct 2022 06:54:52 -0700 (PDT)
+        bh=5azSmAhVpfXhoHFp/EKfGBGzs6h2o5psEm3ngYH1Rkw=;
+        b=xbToXr/3q4+KqwA6Pxy5Vso0rrcVWIJiwNb8/BoU4/ZOyJrOA/ppIfLNctbHCcJEeh
+         ypIKgHRpwDC0NODOrhOBubC4A8CxoaEWQc1rmLfVcVezlZLSYbALSsCoAjE21Awqofmu
+         ulNqVAKv7MUJbEcUvdWFc7x+aPS43fcr+cCrofNJHBjbbZ+U4pMljQPFC1tKn+qgBcfw
+         z5rZJx+tdJP8xHnjNHjI3OekglRgMmJDw1VwY95eBGSdXbu68Ku22JGtAdueloTq177S
+         /5OxGanMyMqDCp5LpFFwTIyph1jd7ohBjm33yWg+qpcXdAGqRiDr0kFpWwZNGBBhnWVC
+         2grw==
+X-Gm-Message-State: ACrzQf3VG0OoQJ0DIy2Ro67G92QGGTRdkTFe2O1rDvwDnvuoN0ab8KIq
+        GdlQ/id6tYMDFQCuHh9f6g==
+X-Google-Smtp-Source: AMsMyM5VsFmeFZ9tlZEa1NVJ9Lbs0WbJq7Y7wKFPobFslktD05Vh7fA1GM6IsKIMBTanYG5PiVMEpA==
+X-Received: by 2002:a05:6808:1a21:b0:355:2173:7975 with SMTP id bk33-20020a0568081a2100b0035521737975mr801259oib.116.1665757712215;
+        Fri, 14 Oct 2022 07:28:32 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id be36-20020a05687058a400b0012763819bcasm1264570oab.50.2022.10.14.06.54.51
+        by smtp.gmail.com with ESMTPSA id 186-20020aca06c3000000b003547a3401e6sm1170415oig.43.2022.10.14.07.28.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 06:54:52 -0700 (PDT)
-Received: (nullmailer pid 1807823 invoked by uid 1000);
-        Fri, 14 Oct 2022 13:54:53 -0000
-Date:   Fri, 14 Oct 2022 08:54:53 -0500
+        Fri, 14 Oct 2022 07:28:31 -0700 (PDT)
+Received: (nullmailer pid 1912436 invoked by uid 1000);
+        Fri, 14 Oct 2022 14:28:32 -0000
+Date:   Fri, 14 Oct 2022 09:28:32 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, xu.yang_2@nxp.com,
-        kernel@pengutronix.de, linux-imx@nxp.com, festevam@gmail.com,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        devicetree@vger.kernel.org, s.hauer@pengutronix.de, jun.li@nxp.com,
-        gregkh@linuxfoundation.org, shawnguo@kernel.org
-Subject: Re: [PATCH V2 6/6] dt-bindings: usb: ci-hdrc-usb2: add
- i.MX8DXL/M[M,N] support
-Message-ID: <20221014135453.GA1795623-robh@kernel.org>
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, xu.yang_2@nxp.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V2 4/6] dt-bindings: usb: ci-hdrc-usb2: convert to DT
+ schema format
+Message-ID: <20221014142832.GA1903421-robh@kernel.org>
 References: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
- <20221014095148.2063669-7-peng.fan@oss.nxp.com>
- <166575377663.1772749.3652358895113916104.robh@kernel.org>
+ <20221014095148.2063669-5-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <166575377663.1772749.3652358895113916104.robh@kernel.org>
+In-Reply-To: <20221014095148.2063669-5-peng.fan@oss.nxp.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,486 +67,410 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 08:33:51AM -0500, Rob Herring wrote:
-> On Fri, 14 Oct 2022 17:51:48 +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> > 
-> > Add i.MX8MM/N compatible strings, which are compatible with i.MX7D.
-> > Add i.MX8DXL compatible string, which is compatible with i.MX7ULP.
-> > 
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
+On Fri, Oct 14, 2022 at 05:51:46PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+> Convert the binding to DT schema format
 > 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 158 --------
+>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 341 ++++++++++++++++++
+>  2 files changed, 341 insertions(+), 158 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
 
-The list of warnings after the conversion should be what you intend 
-to fix in dts files. This looks like things in the schema need to be 
-fixed. Like referencing usb-drd.yaml for example.
+> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+> new file mode 100644
+> index 000000000000..ed03649f17a6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+> @@ -0,0 +1,341 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ci-hdrc-usb2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: USB2 ChipIdea USB controller for ci13xxx Binding
+> +
+> +maintainers:
+> +  - Xu Yang <xu.yang_2@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - chipidea,usb2
+> +          - lsi,zevio-usb
+> +          - nvidia,tegra20-udc
+> +          - nvidia,tegra30-udc
+> +          - nvidia,tegra114-udc
+> +          - nvidia,tegra124-udc
+> +          - qcom,ci-hdrc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx23-usb
+> +              - fsl,imx25-usb
+> +              - fsl,imx28-usb
+> +              - fsl,imx6q-usb
+> +              - fsl,imx6sl-usb
+> +              - fsl,imx6sx-usb
+> +              - fsl,imx6ul-usb
+> +              - fsl,imx7d-usb
+> +          - const: fsl,imx27-usb
+> +      - items:
+> +          - const: fsl,imx7ulp-usb
+> +          - const: fsl,imx6ul-usb
+> +      - items:
+> +          - const: xlnx,zynq-usb-2.20a
+> +          - const: chipidea,usb2
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  dr_mode: true
+> +
+> +  phy_type: true
+> +
+> +  itc-setting:
+> +    description:
+> +      interrupt threshold control register control, the setting should be
+> +      aligned with ITC bits at register USBCMD.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  ahb-burst-config:
+> +    description:
+> +      it is vendor dependent, the required value should be aligned with
+> +      AHBBRST at SBUSCFG, the range is from 0x0 to 0x7. This property is
+> +      used to change AHB burst configuration, check the chipidea spec for
+> +      meaning of each value. If this property is not existed, it will use
+> +      the reset value.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0x7
+> +
+> +  tx-burst-size-dword:
+> +    description:
+> +      it is vendor dependent, the tx burst size in dword (4 bytes), This
+> +      register represents the maximum length of a the burst in 32-bit
+> +      words while moving data from system memory to the USB bus, the value
+> +      of this property will only take effect if property "ahb-burst-config"
+> +      is set to 0, if this property is missing the reset default of the
+> +      hardware implementation will be used.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-> 
-> 
-> usb@10024000: 'clock-names' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024000: clocks: [[1, 75], [1, 62], [1, 15]] is too long
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024000: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024200: 'clock-names' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024200: clocks: [[1, 75], [1, 62], [1, 15]] is too long
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024200: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024400: 'clock-names' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024400: clocks: [[1, 75], [1, 62], [1, 15]] is too long
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@10024400: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/imx27-apf27dev.dtb
-> 	arch/arm/boot/dts/imx27-apf27.dtb
-> 	arch/arm/boot/dts/imx27-eukrea-mbimxsd27-baseboard.dtb
-> 	arch/arm/boot/dts/imx27-pdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycard-s-rdk.dtb
-> 	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
-> 
-> usb@12500000: reg: [[307232768, 512], [307233280, 512]] is too long
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> usb@12500000: '#reset-cells', 'clock-names', 'reset-names', 'resets', 'ulpi' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> usb@12520000: reg: [[307363840, 512], [307364352, 512]] is too long
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> usb@12520000: '#reset-cells', 'clock-names', 'reset-names', 'resets', 'ulpi' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> usb@12530000: reg: [[307429376, 512], [307429888, 512]] is too long
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> usb@12530000: '#reset-cells', 'clock-names', 'reset-names', 'resets', 'ulpi' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
-> 	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
-> 
-> usb@2184000: 'adp-disable', 'fsl,anatop', 'hnp-disable', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx6sll-evk.dtb
-> 	arch/arm/boot/dts/imx6sll-kobo-clarahd.dtb
-> 	arch/arm/boot/dts/imx6sll-kobo-librah2o.dtb
-> 	arch/arm/boot/dts/imx6ul-kontron-n6310-s-43.dtb
-> 	arch/arm/boot/dts/imx6ul-kontron-n6310-s.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-aster.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-iris.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dtb
-> 	arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dtb
-> 	arch/arm/boot/dts/imx6ull-tqma6ull2l-mba6ulx.dtb
-> 	arch/arm/boot/dts/imx6ull-tqma6ull2-mba6ulx.dtb
-> 	arch/arm/boot/dts/imx6ul-tqma6ul1-mba6ulx.dtb
-> 	arch/arm/boot/dts/imx6ul-tqma6ul2l-mba6ulx.dtb
-> 	arch/arm/boot/dts/imx6ul-tqma6ul2-mba6ulx.dtb
-> 	arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dtb
-> 
-> usb@2184000: 'adp-disable', 'hnp-disable', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx6dl-mba6a.dtb
-> 	arch/arm/boot/dts/imx6dl-mba6b.dtb
-> 	arch/arm/boot/dts/imx6dl-yapp4-draco.dtb
-> 	arch/arm/boot/dts/imx6dl-yapp4-hydra.dtb
-> 	arch/arm/boot/dts/imx6dl-yapp4-orion.dtb
-> 	arch/arm/boot/dts/imx6dl-yapp4-ursa.dtb
-> 	arch/arm/boot/dts/imx6q-bosch-acc.dtb
-> 	arch/arm/boot/dts/imx6q-mba6a.dtb
-> 	arch/arm/boot/dts/imx6q-mba6b.dtb
-> 	arch/arm/boot/dts/imx6q-pistachio.dtb
-> 	arch/arm/boot/dts/imx6qp-mba6b.dtb
-> 	arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dtb
-> 	arch/arm/boot/dts/imx6q-var-dt6customboard.dtb
-> 	arch/arm/boot/dts/imx6q-yapp4-crux.dtb
-> 	arch/arm/boot/dts/imx6sl-tolino-shine2hd.dtb
-> 	arch/arm/boot/dts/imx6sl-tolino-shine3.dtb
-> 	arch/arm/boot/dts/imx6sl-tolino-vision5.dtb
-> 
-> usb@2184000: 'fsl,anatop' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx6sx-nitrogen6sx.dtb
-> 	arch/arm/boot/dts/imx6sx-sabreauto.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb-mqs.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb-reva.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb-sai.dtb
-> 	arch/arm/boot/dts/imx6sx-softing-vining-2000.dtb
-> 	arch/arm/boot/dts/imx6sx-udoo-neo-basic.dtb
-> 	arch/arm/boot/dts/imx6sx-udoo-neo-extended.dtb
-> 	arch/arm/boot/dts/imx6sx-udoo-neo-full.dtb
-> 	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
-> 	arch/arm/boot/dts/imx6ul-ccimx6ulsbcexpress.dtb
-> 	arch/arm/boot/dts/imx6ul-ccimx6ulsbcpro.dtb
-> 	arch/arm/boot/dts/imx6ul-geam.dtb
-> 	arch/arm/boot/dts/imx6ul-isiot-emmc.dtb
-> 	arch/arm/boot/dts/imx6ul-isiot-nand.dtb
-> 	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
-> 	arch/arm/boot/dts/imx6ul-liteboard.dtb
-> 	arch/arm/boot/dts/imx6ull-jozacp.dtb
-> 	arch/arm/boot/dts/imx6ull-myir-mys-6ulx-eval.dtb
-> 	arch/arm/boot/dts/imx6ull-opos6uldev.dtb
-> 	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-emmc.dtb
-> 	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb
-> 	arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb
-> 	arch/arm/boot/dts/imx6ull-phytec-tauri-emmc.dtb
-> 	arch/arm/boot/dts/imx6ull-phytec-tauri-nand.dtb
-> 	arch/arm/boot/dts/imx6ul-opos6uldev.dtb
-> 	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-emmc.dtb
-> 	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb
-> 	arch/arm/boot/dts/imx6ul-pico-dwarf.dtb
-> 	arch/arm/boot/dts/imx6ul-pico-hobbit.dtb
-> 	arch/arm/boot/dts/imx6ul-pico-pi.dtb
-> 	arch/arm/boot/dts/imx6ul-prti6g.dtb
-> 	arch/arm/boot/dts/imx6ul-tx6ul-0010.dtb
-> 	arch/arm/boot/dts/imx6ul-tx6ul-0011.dtb
-> 	arch/arm/boot/dts/imx6ul-tx6ul-mainboard.dtb
-> 	arch/arm/boot/dts/imx6ulz-14x14-evk.dtb
-> 
-> usb@2184200: 'maximum-speed' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx6qp-zii-rdu2.dtb
-> 	arch/arm/boot/dts/imx6q-zii-rdu2.dtb
-> 
-> usb@2184200: 'reset-gpios' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx6q-b450v3.dtb
-> 	arch/arm/boot/dts/imx6q-b650v3.dtb
-> 	arch/arm/boot/dts/imx6q-b850v3.dtb
-> 	arch/arm/boot/dts/imx6q-dms-ba16.dtb
-> 	arch/arm/boot/dts/imx6sx-nitrogen6sx.dtb
-> 
-> usb@2184400: 'fsl,anatop' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx6sx-nitrogen6sx.dtb
-> 	arch/arm/boot/dts/imx6sx-sabreauto.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb-mqs.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb-reva.dtb
-> 	arch/arm/boot/dts/imx6sx-sdb-sai.dtb
-> 	arch/arm/boot/dts/imx6sx-softing-vining-2000.dtb
-> 	arch/arm/boot/dts/imx6sx-udoo-neo-basic.dtb
-> 	arch/arm/boot/dts/imx6sx-udoo-neo-extended.dtb
-> 	arch/arm/boot/dts/imx6sx-udoo-neo-full.dtb
-> 
-> usb@30b10000: 'adp-disable', 'hnp-disable', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx7d-mba7.dtb
-> 	arch/arm/boot/dts/imx7s-mba7.dtb
-> 
-> usb@30b20000: 'adp-disable', 'hnp-disable', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx7d-flex-concentrator.dtb
-> 	arch/arm/boot/dts/imx7d-flex-concentrator-mfg.dtb
-> 	arch/arm/boot/dts/imx7d-mba7.dtb
-> 
-> usb@30b20000: 'hnp-disable', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx7d-remarkable2.dtb
-> 
-> usb@32e40000: 'adp-disable', 'clock-names', 'hnp-disable', 'port', 'power-domains', 'srp-disable', 'usb-role-switch' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-ddr4-evk.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-evk.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-ddr3l-evk.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-evk.dtb
-> 
-> usb@32e40000: 'adp-disable', 'clock-names', 'hnp-disable', 'power-domains', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-mx8menlo.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dtb
-> 
-> usb@32e40000: 'adp-disable', 'clock-names', 'power-domains', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-rdk.dtb
-> 
-> usb@32e40000: 'clock-names', 'power-domains' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-emcon-avari.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch2.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-nitrogen-r2.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx-0x.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-tqma8mqnl-mba8mx.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dtb
-> 
-> usb@32e40000: 'clock-names', 'power-domains', 'usb-role-switch' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dtb
-> 
-> usb@32e50000: 'adp-disable', 'clock-names', 'hnp-disable', 'power-domains', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dtb
-> 
-> usb@32e50000: 'clock-names', 'power-domains' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-ddr4-evk.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-emcon-avari.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-evk.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch2.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-mx8menlo.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-nitrogen-r2.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-rdk.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx-0x.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dtb
-> 	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dtb
-> 
-> usb@32e50000: 'clock-names', 'power-domains', 'usb1@1' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dtb
-> 
-> usb@40330000: 'adp-disable', 'hnp-disable', 'srp-disable' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx7ulp-com.dtb
-> 	arch/arm/boot/dts/imx7ulp-evk.dtb
-> 
-> usb@53ff4000: 'clock-names' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-qvga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-svga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-vga.dtb
-> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
-> 	arch/arm/boot/dts/imx25-pdk.dtb
-> 	arch/arm/boot/dts/imx35-eukrea-mbimxsd35-baseboard.dtb
-> 	arch/arm/boot/dts/imx35-pdk.dtb
-> 
-> usb@53ff4000: clocks: [[2, 9], [2, 70], [2, 8]] is too long
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-qvga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-svga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-vga.dtb
-> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
-> 	arch/arm/boot/dts/imx25-pdk.dtb
-> 
-> usb@53ff4000: clocks: [[2, 9], [2, 73], [2, 28]] is too long
-> 	arch/arm/boot/dts/imx35-eukrea-mbimxsd35-baseboard.dtb
-> 	arch/arm/boot/dts/imx35-pdk.dtb
-> 
-> usb@53ff4000: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/imx35-eukrea-mbimxsd35-baseboard.dtb
-> 	arch/arm/boot/dts/imx35-pdk.dtb
-> 
-> usb@53ff4400: 'clock-names' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx35-eukrea-mbimxsd35-baseboard.dtb
-> 	arch/arm/boot/dts/imx35-pdk.dtb
-> 
-> usb@53ff4400: 'clock-names', 'maximum-speed' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-qvga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-svga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-vga.dtb
-> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
-> 	arch/arm/boot/dts/imx25-pdk.dtb
-> 
-> usb@53ff4400: clocks: [[2, 9], [2, 70], [2, 8]] is too long
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-qvga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-svga.dtb
-> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-vga.dtb
-> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
-> 	arch/arm/boot/dts/imx25-pdk.dtb
-> 
-> usb@53ff4400: clocks: [[2, 9], [2, 73], [2, 28]] is too long
-> 	arch/arm/boot/dts/imx35-eukrea-mbimxsd35-baseboard.dtb
-> 	arch/arm/boot/dts/imx35-pdk.dtb
-> 
-> usb@53ff4400: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/imx35-eukrea-mbimxsd35-baseboard.dtb
-> 	arch/arm/boot/dts/imx35-pdk.dtb
-> 
-> usb@73f80200: 'maximum-speed' does not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/imx51-zii-rdu1.dtb
-> 
-> usb@78d9000: interrupts: [[0, 134, 4], [0, 140, 4]] is too long
-> 	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
-> 	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
-> 	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
-> 
-> usb@78d9000: reg: [[126717952, 512], [126718464, 512]] is too long
-> 	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
-> 	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
-> 	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
-> 
-> usb@78d9000: '#reset-cells', 'adp-disable', 'clock-names', 'hnp-disable', 'reset-names', 'resets', 'srp-disable', 'ulpi' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm64/boot/dts/qcom/apq8016-sbc.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-mtp.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dtb
-> 	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dtb
-> 	arch/arm/boot/dts/qcom-apq8016-sbc.dtb
-> 	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dtb
-> 
-> usb@7d000000: 'nvidia,needs-double-reset', 'nvidia,phy', 'operating-points-v2', 'power-domains', 'reset-names', 'resets' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/tegra30-asus-nexus7-grouper-E1565.dtb
-> 	arch/arm/boot/dts/tegra30-asus-nexus7-grouper-PM269.dtb
-> 	arch/arm/boot/dts/tegra30-asus-nexus7-tilapia-E1565.dtb
-> 	arch/arm/boot/dts/tegra30-asus-tf201.dtb
-> 	arch/arm/boot/dts/tegra30-asus-tf300t.dtb
-> 	arch/arm/boot/dts/tegra30-asus-tf300tg.dtb
-> 	arch/arm/boot/dts/tegra30-asus-tf700t.dtb
-> 	arch/arm/boot/dts/tegra30-beaver.dtb
-> 	arch/arm/boot/dts/tegra30-ouya.dtb
-> 	arch/arm/boot/dts/tegra30-pegatron-chagall.dtb
-> 
-> usb@7d000000: 'nvidia,phy', 'reset-names', 'resets' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/tegra114-asus-tf701t.dtb
-> 	arch/arm/boot/dts/tegra114-dalmore.dtb
-> 	arch/arm/boot/dts/tegra124-jetson-tk1.dtb
-> 
-> usb@c5000000: 'nvidia,needs-double-reset', 'nvidia,phy', 'operating-points-v2', 'power-domains', 'reset-names', 'resets' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/tegra20-acer-a500-picasso.dtb
-> 	arch/arm/boot/dts/tegra20-asus-tf101.dtb
-> 	arch/arm/boot/dts/tegra20-paz00.dtb
-> 
-> usb@f9a55000: reg: [[4188360704, 512], [4188361216, 512]] is too long
-> 	arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dtb
-> 	arch/arm/boot/dts/qcom-apq8026-lg-lenok.dtb
-> 	arch/arm/boot/dts/qcom-apq8074-dragonboard.dtb
-> 	arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dtb
-> 	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
-> 	arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dtb
-> 	arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dtb
-> 	arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dtb
-> 	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dtb
-> 	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dtb
-> 
-> usb@f9a55000: '#reset-cells', 'adp-disable', 'clock-names', 'hnp-disable', 'phy-select', 'reset-names', 'resets', 'srp-disable', 'ulpi' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/qcom-apq8074-dragonboard.dtb
-> 	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dtb
-> 	arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dtb
-> 	arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dtb
-> 	arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dtb
-> 	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-amami.dtb
-> 	arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine-honami.dtb
-> 
-> usb@f9a55000: '#reset-cells', 'adp-disable', 'clock-names', 'hnp-disable', 'reset-names', 'resets', 'srp-disable', 'ulpi' do not match any of the regexes: 'ethernet@[0-9a-f]$'
-> 	arch/arm/boot/dts/qcom-apq8026-asus-sparrow.dtb
-> 	arch/arm/boot/dts/qcom-apq8026-lg-lenok.dtb
-> 	arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dtb
+Constraints? I assume 2^32 is not valid...
+
+> +
+> +  rx-burst-size-dword:
+> +    description:
+> +      it is vendor dependent, the rx burst size in dword (4 bytes), This
+> +      register represents the maximum length of a the burst in 32-bit words
+> +      while moving data from the USB bus to system memory, the value of
+> +      this property will only take effect if property "ahb-burst-config"
+> +      is set to 0, if this property is missing the reset default of the
+> +      hardware implementation will be used.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+Constraints?
+
+> +
+> +  extcon:
+> +    description: |
+> +      Phandles to external connector devices. First phandle should point
+> +      to external connector, which provide "USB" cable events, the second
+> +      should point to external connector device, which provide "USB-HOST"
+> +      cable events. If one of the external connector devices is not
+> +      required, empty <0> phandle should be specified.
+> +
+> +  phy-clkgate-delay-us:
+> +    description: |
+> +      The delay time (us) between putting the PHY into low power mode and
+> +      gating the PHY clock.
+> +
+> +  non-zero-ttctrl-ttha:
+> +    description: |
+> +      After setting this property, the value of register ttctrl.ttha
+> +      will be 0x7f; if not, the value will be 0x0, this is the default
+> +      value. It needs to be very carefully for setting this property, it
+> +      is recommended that consult with your IC engineer before setting
+> +      this value.  On the most of chipidea platforms, the "usage_tt" flag
+> +      at RTL is 0, so this property only affects siTD.
+> +
+> +      If this property is not set, the max packet size is 1023 bytes, and
+> +      if the total of packet size for pervious transactions are more than
+> +      256 bytes, it can't accept any transactions within this frame. The
+> +      use case is single transaction, but higher frame rate.
+> +
+> +      If this property is set, the max packet size is 188 bytes, it can
+> +      handle more transactions than above case, it can accept transactions
+> +      until it considers the left room size within frame is less than 188
+> +      bytes, software needs to make sure it does not send more than 90%
+> +      maximum_periodic_data_per_frame. The use case is multiple
+> +      transactions, but less frame rate.
+> +
+> +  mux-controls:
+> +    description: |
+> +      The mux control for toggling host/device output of this controller.
+> +      It's expected that a mux state of 0 indicates device mode and a mux
+> +      state of 1 indicates host mode.
+
+maxItems: 1
+
+> +
+> +  mux-control-names:
+> +    const: usb_switch
+> +
+> +  pinctrl-names:
+> +    description: |
+> +      Names for optional pin modes in "default", "host", "device".
+> +      In case of HSIC-mode, "idle" and "active" pin modes are mandatory.
+> +      In this case, the "idle" state needs to pull down the data and
+> +      strobe pin and the "active" state needs to pull up the strobe pin.
+
+The names need to be constraints, not freeform text.
+
+> +
+> +  pinctrl-0:
+> +    maxItems: 1
+> +
+> +  pinctrl-1:
+> +    maxItems: 1
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    const: usb-phy
+> +
+> +  vbus-supply:
+> +    description: reference to the VBUS regulator.
+> +
+> +  fsl,usbmisc:
+> +    description:
+> +      Phandler of non-core register device, with one argument that
+> +      indicate usb controller index
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+
+items:
+  - items:
+      - description: phandle to usbmisc node
+      - description: index of usb controller
+
+> +
+> +  disable-over-current:
+> +    description: disable over current detect
+
+type?
+
+> +
+> +  over-current-active-low:
+> +    description: over current signal polarity is active low
+
+type?
+
+> +
+> +  over-current-active-high:
+> +    description: |
+> +      Over current signal polarity is active high. It's recommended to
+> +      specify the over current polarity.
+
+type?
+
+> +
+> +  power-active-high:
+> +    description: power signal polarity is active high
+
+type?
+
+> +
+> +  external-vbus-divider:
+> +    description: enables off-chip resistor divider for Vbus
+
+type?
+
+> +
+> +  samsung,picophy-pre-emp-curr-control:
+> +    description: |
+> +      HS Transmitter Pre-Emphasis Current Control. This signal controls
+> +      the amount of current sourced to the USB_OTG*_DP and USB_OTG*_DN
+> +      pins after a J-to-K or K-to-J transition. The range is from 0x0 to
+> +      0x3, the default value is 0x1. Details can refer to TXPREEMPAMPTUNE0
+> +      bits of USBNC_n_PHY_CFG1.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0x3
+> +
+> +  samsung,picophy-dc-vol-level-adjust:
+> +    description: |
+> +      HS DC Voltage Level Adjustment. Adjust the high-speed transmitter DC
+> +      level voltage. The range is from 0x0 to 0xf, the default value is
+> +      0x3. Details can refer to TXVREFTUNE0 bits of USBNC_n_PHY_CFG1.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0x0
+> +    maximum: 0xf
+> +
+> +  usb-phy:
+> +    description: phandle for the PHY device. Use "phys" instead.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    deprecated: true
+> +
+> +  fsl,usbphy:
+> +    description: phandle of usb phy that connects to the port. Use "phys" instead.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    deprecated: true
+> +
+> +patternProperties:
+> +  "ethernet@[0-9a-f]$":
+
+This is board specific and shouldn't be part of the schema. But you do 
+need to define child nodes with a reference to common usb schemas.
+
+> +    description: The hard wired USB devices
+> +    type: object
+> +    $ref: /schemas/net/microchip,lan95xx.yaml
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +allOf:
+> +  - $ref: usb-hcd.yaml#
+> +  - $ref: usb-drd.yaml#
+> +  - if:
+> +      properties:
+> +        mux-controls:
+> +          true
+> +    then:
+> +      properties:
+> +        mux-control-names:
+> +          const: usb_switch
+> +  - if:
+> +      properties:
+> +        phy_type:
+> +          const: hsic
+> +
+> +      required:
+> +        - phy_type
+> +    then:
+> +      properties:
+> +        pinctrl-names:
+> +          items:
+> +            - const: idle
+> +            - const: active
+> +    else:
+> +      properties:
+> +        pinctrl-names:
+> +          oneOf:
+> +            - items:
+> +                - const: default
+> +                - enum:
+> +                    - host
+> +                    - device
+> +            - items:
+> +                - const: default
+
+'minItems: 1' in the 1st (oneOf) entry and drop the 2nd entry.
+
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - chipidea,usb2
+> +              - lsi,zevio-usb
+> +              - nvidia,tegra20-udc
+> +              - nvidia,tegra30-udc
+> +              - nvidia,tegra114-udc
+> +              - nvidia,tegra124-udc
+> +              - qcom,ci-hdrc
+> +              - xlnx,zynq-usb-2.20a
+> +    then:
+> +      properties:
+> +        fsl,usbmisc: false
+> +        disable-over-current: false
+> +        over-current-active-low: false
+> +        over-current-active-high: false
+> +        power-active-high: false
+> +        external-vbus-divider: false
+> +        samsung,picophy-pre-emp-curr-control: false
+> +        samsung,picophy-dc-vol-level-adjust: false
+> +
+> +additionalProperties: false
+
+unevaluatedProperties: false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/berlin2.h>
+> +
+> +    usb@f7ed0000 {
+> +        compatible = "chipidea,usb2";
+> +        reg = <0xf7ed0000 0x10000>;
+> +        interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&chip CLKID_USB0>;
+> +        phys = <&usb_phy0>;
+> +        phy-names = "usb-phy";
+> +        vbus-supply = <&reg_usb0_vbus>;
+> +        itc-setting = <0x4>; /* 4 micro-frames */
+> +         /* Incremental burst of unspecified length */
+> +        ahb-burst-config = <0x0>;
+> +        tx-burst-size-dword = <0x10>; /* 64 bytes */
+> +        rx-burst-size-dword = <0x10>;
+> +        extcon = <0>, <&usb_id>;
+> +        phy-clkgate-delay-us = <400>;
+> +        mux-controls = <&usb_switch>;
+> +        mux-control-names = "usb_switch";
+> +    };
+> +
+> +  # Example for HSIC:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/imx6qdl-clock.h>
+> +
+> +    usb@2184400 {
+> +        compatible = "fsl,imx6q-usb", "fsl,imx27-usb";
+> +        reg = <0x02184400 0x200>;
+> +        interrupts = <0 41 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clks IMX6QDL_CLK_USBOH3>;
+> +        fsl,usbphy = <&usbphynop1>;
+> +        fsl,usbmisc = <&usbmisc 2>;
+> +        phy_type = "hsic";
+> +        dr_mode = "host";
+> +        ahb-burst-config = <0x0>;
+> +        tx-burst-size-dword = <0x10>;
+> +        rx-burst-size-dword = <0x10>;
+> +        pinctrl-names = "idle", "active";
+> +        pinctrl-0 = <&pinctrl_usbh2_idle>;
+> +        pinctrl-1 = <&pinctrl_usbh2_active>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        usbnet: ethernet@1 {
+> +            compatible = "usb424,9730";
+> +            reg = <1>;
+> +        };
+> +    };
+> +
+> +...
+> -- 
+> 2.37.1
 > 
 > 
