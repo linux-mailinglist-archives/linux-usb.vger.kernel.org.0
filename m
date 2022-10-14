@@ -2,212 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3BB5FEBE2
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 11:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5855FEC10
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 11:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiJNJlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Oct 2022 05:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S229824AbiJNJu0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Oct 2022 05:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiJNJlg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 05:41:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D113D1C25C2
-        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 02:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665740491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wKlR+CcE/XKB9cJEzU9OvSSq3ilgCUyh56aB2R9hIbY=;
-        b=UEpgAIdOyUeVbLxvNzbTujVbhlJ7jxZTTjjOhApFJzOB6jImx/xwdcqpfEAtPm+RwWTEEf
-        UhIDtqloc7OHcNag8mmU/VT1RX0uJW+GeHq4mvZF51F6K+AarKkGYbs0dzQ07XDKxIbxPt
-        GDZwALfX+fyF7cZi1u3dhBKt5ZvFLpU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-149-nFd1sz8UPZOH4aj3Av52uA-1; Fri, 14 Oct 2022 05:41:30 -0400
-X-MC-Unique: nFd1sz8UPZOH4aj3Av52uA-1
-Received: by mail-wm1-f69.google.com with SMTP id n19-20020a7bcbd3000000b003c4a72334e7so1919113wmi.8
-        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 02:41:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wKlR+CcE/XKB9cJEzU9OvSSq3ilgCUyh56aB2R9hIbY=;
-        b=HJe+412W2o3uF9UQvg+Gp1CFHB7G2wyIwu2al6viRml4E13fzi9iV2gbxD1ZbzbK8m
-         7rDfaJgZeklC0QIZ80uMpfOBfIGaKN0t2QqeRWYMcLeKzEM98ZJ/h33DCI4/L2vtvO4d
-         LNJkQ+Hv+SWAjlvJbsNnSWmQh/MqCV5IAHuDX5kq9FD/RbIs0BQHIoCNRoRV5Qe5mGad
-         1kYS+dzKDxkK05+g8sE2uTTBpLbFzjXh0KIn4c2LWCm91s/FY3pbMx/+OaIhbWfpkabD
-         933sVs7EMI0YgO2I8ZX2zI7o+MWBvS4Hc3E4t63/wEdevzXF4X7WDBUF0R2irwzrV/vp
-         ECgg==
-X-Gm-Message-State: ACrzQf1ML8IKm7Z4fZpn1GBzY9qv16GLxkVZdbTNnimsBAlLWMYpqnT5
-        Y82xOQRvV40cfJcBshnnFCEQ1gKuMudmL3VnjBSvIHnNAhSPangcSvwh+XlFulFBaDQh11dvkCO
-        UT2n4UP6pyYu6CU/2PqBS
-X-Received: by 2002:a05:600c:358f:b0:3c6:da94:66f9 with SMTP id p15-20020a05600c358f00b003c6da9466f9mr2762396wmq.142.1665740488793;
-        Fri, 14 Oct 2022 02:41:28 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6w3cEiR6rQvgkTTtlNrYW5Q7DNktZGWlaya7vja/FrE/eQqGE4HHUEag6zb93Od1CS7LyiTg==
-X-Received: by 2002:a05:600c:358f:b0:3c6:da94:66f9 with SMTP id p15-20020a05600c358f00b003c6da9466f9mr2762380wmq.142.1665740488423;
-        Fri, 14 Oct 2022 02:41:28 -0700 (PDT)
-Received: from redhat.com ([2.54.162.123])
-        by smtp.gmail.com with ESMTPSA id d5-20020adfe845000000b0022b1d74dc56sm1510165wrn.79.2022.10.14.02.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 02:41:27 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 05:41:23 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     syzbot <syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [syzbot] usb-testing boot error: WARNING in cpumask_next_wrap
-Message-ID: <20221014054043-mutt-send-email-mst@kernel.org>
-References: <0000000000001207f205ead6dc09@google.com>
+        with ESMTP id S229625AbiJNJuZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 05:50:25 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2040.outbound.protection.outlook.com [40.107.105.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B1B83F19;
+        Fri, 14 Oct 2022 02:50:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JHK8WySjvz2wyeUlFNAZHglR/jaS5ife6ce5vT+Ag2Utgs2F4uYzHcDm9eO8RTK/CDZ9smJTNWMuPeQhXTgufj43d5R138iksSY5kVaVCAteYDaBUk6AYzi9IyCwjkB+92+YdMOcK9JsJS6KsExXNdsHue5+F2P9I3H8J2qRT4zNlKJyMZw2dk7DblHTWAkkfYdK77nkCWmcCC6JRees4YfTSLwsjiGClB04oGfj4aMH1xc5a7RBrJ7Ucm+qzL5reNCM23ZpLVTGxzR+iRW888mK/8gy03BmGEtVBoPVnAB7h0RPCBro94x0T0Co3dcPeVd1qT0Gd0rQzW8AhLw3kQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3tu+FNumpXaFfsKEQ6C4ezFOT5NMjchtu3oSrda66aE=;
+ b=IKYH4I+geas1C71XWrSSMsMGhiIR5RBcmjxH0mCIRwMbSWfq17RV6L3PxhyIvjNN53hHKrVUq/NnJ/O/iidJewlXh0xuxq4uE3RBhYTC9Tc2O5BX4q/Eku7MnGsZVjHfhKJOtlC36VE378850WGTlQI6sD5IxMY6XB8BpWOgKGlSJrptTBb/OwpL6L/GbA0dU3Mfx37zvpMpVQOZvOau7U2hU1ZHxLmM1tzHYU1kvaaYLyq9GBPIc447cDoCsMsHn+TD1kUki15dYEx/i8WlG9GSbhmUMtC/7WmPdGywponuAqNvNZQbDJMdETDKSbZyuEQhVSbOAioPakq6M8WVbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3tu+FNumpXaFfsKEQ6C4ezFOT5NMjchtu3oSrda66aE=;
+ b=byq9//fT6n3e7cRIAaapk+cmA5F+xBTJUbW04NcjLOy1tuRreJvWYILir94SvM8+P3RSE2HMhGoyzVz+6sjh/IYXHCWV8GndlwjbuAKo/MDeWMIZRttQWIposPO8oCDqQ/d78i9GKje4jFuwLyIQavYBGMeyUuCLTdy+9Hj+zUI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by PA4PR04MB9247.eurprd04.prod.outlook.com (2603:10a6:102:2a2::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 14 Oct
+ 2022 09:50:18 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::ba6:d7ae:a7c9:7a3a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::ba6:d7ae:a7c9:7a3a%4]) with mapi id 15.20.5676.028; Fri, 14 Oct 2022
+ 09:50:17 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2 0/6] dt-bindings: usb: covert ci-hdrc-usb2/usbmisc-imx to yaml
+Date:   Fri, 14 Oct 2022 17:51:42 +0800
+Message-Id: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0127.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::31) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000001207f205ead6dc09@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PA4PR04MB9247:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60f33e92-ef0e-4fdc-f0d7-08daadc97fb6
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bdFILy/IfGKOvs5Z7+3zDRMwivZzPWYvIdIXKVxewv8LFr9TEcFAjbQJjOJaycXjcZr5qraembvdJPAwW6D4RzxL9Lx+vHU0JAJ5sfoKKByjJ/6NqPnSD8+3yd+EMIXJJsbIMyfwPkTifjA4BRYyF5RawCrjL34X/2ER0lAfXOEVVOa9qNYwPl+wEIPaqGXxAzbhe6XoWd3ctEh4hAQTUt6OhN5kDdXomv/QMjaUFzEnojP6CF4yFR6BIColQ3u07g+zm9Vw7NiBlGXsL3daprPZu/O87iDIslZ/MzPoq39jVSNu5gP8umUoKy8Cvo1FucWIf+TBkig5zZ4CcpkG68Y3gGTp5pFVplFrA4O4QYqhtJIG33XRFU7qRyAod+4S5RRrdDdvj3IQlcKlXypY7mqLbGWQYKdutgFJKLX42Jem2mwUcX4mloifRUqcA099Fuuy/vgrTRJA9K+iiCT/E+y6cJhOsD5LkcQ45KzsS8Fm8ZtWtv5Ctm7zMeVoEIuqkkvM0PFCcdi7iI+I+X1RGsv9/pmb3D+wPIZ/wM4spGU9b6fhffjb7sUNPNB1hbb81U3sX2mk2ie7p/ZoqqU1swZs32iDWT7SGGFrRzsxXcHu6xZAuFOZbsa7Jnwk6ZYWFa1WODt6s1RIxHJMhEFMrWnR2jdNqJ1h2l0TH9EZf4auL3X+E6tZ+9Aygvl+cwqosmv/JdbkMyrqhj0vGVnZzEkpphJiEWKPMLXozU+qU0vv9SrtmKu6gKurdHxoD9uyR2r0lxfUvks6VEEvWIBAiQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199015)(478600001)(6486002)(38100700002)(38350700002)(316002)(4326008)(7416002)(83380400001)(6512007)(6666004)(8676002)(66556008)(66946007)(41300700001)(86362001)(26005)(8936002)(1076003)(66476007)(6506007)(5660300002)(186003)(2906002)(52116002)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YnF3gXn+rtxOVwKi4rCZL/TzEmxFSr+0/ecIB/SRhUhP6gThw/7OB/xhnNJA?=
+ =?us-ascii?Q?7TrnW9g/BuYPpRRTxHs1LLYnM+WBaT667gF362WPQ1azTNbcE/87HTjP1P7p?=
+ =?us-ascii?Q?9yAUpBNLrXOCjy10zEbUdDMgPxik71eFIeC+p4TTSGcwy4TtwHHdvtWSzPyT?=
+ =?us-ascii?Q?S5QJ2in04UpT4D/DvveFyVMWRokBQ0UkETuC17MByNRDiWW8gMk4HG237C1A?=
+ =?us-ascii?Q?vDHfsLXs5UYSr/RXqRQADBmHsjavg/OEjDaMdXeo0DJdrvnCuDs/7vmrNu13?=
+ =?us-ascii?Q?JjkQYuMNZtRHjAz62roo6i0pvExKPfTlNxEVltul6oIuIiDuJttA0/KsgJT9?=
+ =?us-ascii?Q?J8KnZQeWnpb7FS96V8C2xpvzZB87sZyFXRrRgr2cCZYClUZJuEMPN8qa+q9B?=
+ =?us-ascii?Q?7Sv87xBIw6Yxsxiem9iuUPwTKdERLpEIqIWC/rZWXja2TxIUDi97bp6yTHp5?=
+ =?us-ascii?Q?20m+/g9WpKNdSo2se122aUgiDTp1R7odPrvlIXLkV4p16TrAZVBkw9e8wTYT?=
+ =?us-ascii?Q?dMO1xB7/cunqCHZaguBtdGHwuEIYtSRmRIY/oWGouu4M/y5uPZp1A++cqHw2?=
+ =?us-ascii?Q?eD7wku61yYHyHLxfoHJ6zs+UhCwtAbnNcwETP8A2D4XmcLa+todgdJzDJvRs?=
+ =?us-ascii?Q?Zu8Sch3GvuA72yZkpINfp/IPjsSLtVpKwCKcors0vsqA2PqQUYXnG5PtFKqA?=
+ =?us-ascii?Q?1vb1vO8B5nJZMZ1MWNKZqu9UZi1ey4EhruXGoZMTojp+NBqC0DJhmJ+9KmCA?=
+ =?us-ascii?Q?Od7pDUto7YRv73AEfaTMSFfzGVPp/RAXM9Pi54OpJ3A8cZMbGFwPZMr5R666?=
+ =?us-ascii?Q?D9vymQnOFT5M3F2zD3lgQVHLP1Oa0jVBK57m+a8vKQbXqdbRlxg9uuyKat+2?=
+ =?us-ascii?Q?6MX4FUa0L8GMpzyBbZ6zbq1673/BL25w1OcUEGtHMHad9x8+5knrE6QT/Jm+?=
+ =?us-ascii?Q?Bv6lKY6hp+JTTMMUThuAqYLKHjEIkNVfXJPGHek24m9BClC9eIMRrvNrv35J?=
+ =?us-ascii?Q?4Zl0e5U9u1B8XlavB1sVGy4NqkDJltTqW93ZYWLhq3nB8BM3s8lO+l+TeyxH?=
+ =?us-ascii?Q?cGjwUBLB7mp5omNGw+BtJtdQLEiRK+5NPjP5R+ulVk8j+rmGReTJd+DfXZPr?=
+ =?us-ascii?Q?8LwHkGmocrROP9ChXbuyvhJkKp8wvMgBB5Qc4R2gghy6iRiXZbev6BJmpA+j?=
+ =?us-ascii?Q?qOA7LVYjzXsVIzvG2SwT9BhsDrOMjlGI9jPaYHM1PUppETEsIZOKwpZ/P+hO?=
+ =?us-ascii?Q?3sraWJaIkXzb9dTJ6b/B5GbsE69Xz4jJfja2VaWeFO6sywpFZGw6oLZ/b5Fg?=
+ =?us-ascii?Q?zATeFfoHNLvoMp/Fc8kmCXrSgW9Z6tN7Iv0gE+zGl4a+aKhjcUDPi3lMDpX/?=
+ =?us-ascii?Q?wNZHV54cW9tbNBFShxMIxT+N8SqDNT9gHOwbXTOCg7xSkAP5Q/3uOdoL+hwf?=
+ =?us-ascii?Q?G5NBlQ2slf9lhP2faf8ZgVpp62hPkf8egMdRlTTofxOfj7s8C3wYMfQaszet?=
+ =?us-ascii?Q?87SAqscmfYk7dqAt8AiAkdiMakmaH86kxEaUOJSKQJBUccN4Q6GFP6FtTlLS?=
+ =?us-ascii?Q?VJTELqxLz5Gq4QwBys8aS1//nOlPte+tE92PBRGL?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60f33e92-ef0e-4fdc-f0d7-08daadc97fb6
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 09:50:17.5166
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DzV7avjnAunW7olBhcNFkjHfuSU7Q/KuKPgw89zRQ/B3dhDWY9abvjMcFfJPhD2FVvgbneyNlWNeIwznXFIn3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9247
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 07:03:39AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    49da07006239 Merge tag 'memblock-v6.1-rc1' of git://git.ke..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1361eb1a880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8be1ac10ff2d4692
-> dashboard link: https://syzkaller.appspot.com/bug?extid=28ec239d5c21a2d91f3d
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/d41d7d5418ab/disk-49da0700.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/9ffb9548d913/vmlinux-49da0700.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com
+From: Peng Fan <peng.fan@nxp.com>
+
+v2:
+ patch order changed, usbmisc-imx moved to first
+ Add Xu Yang as maintainer
+ Typo fix
+ Not define properties within if/then/else
+ Set additionalProperties to false
+ Drop duplicated compatibles
+ Fix checkpatch issue
+ For pinctrl-names: I think there is restrictin in allOf, so not list items
+ Add fsl,usbmisc: ref
+ Define items for mux-control-names
+ Rename usbmisc-imx.yaml to fsl,usbmisc.yaml
+
+ Hope I not miss any comments
+
+ Note: there will still be dtbs_check failure if run with only a single patch,
+ with this patchset applied, there is no related dtbs_check failure.
 
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git b0d0538b9a8c47da2e3fb2ee44cd3dacc75509a6
+This patchset is to convert ci-hdrc-usb2 and usbmisc-imx to yaml format.
+There are compatible strings not landed in binding doc, but in device tree,
+so run dtbs_check on the single yaml convertion patch will report
+dtbs_check failure. If apply the whole patchset, there will be no failure.
 
+Peng Fan (6):
+  dt-bindings: usb: usbmisc-imx: convert to DT schema
+  dt-bindings: usb: usbmisc-imx: add clocks property
+  dt-bindings: usb: usbmisc-imx: add more i.MX compatible
+  dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format
+  dt-bindings: usb: ci-hdrc-usb2: add i.MX53/6SLL/UL compatible
+  dt-bindings: usb: ci-hdrc-usb2: add i.MX8DXL/M[M,N] support
 
-> software IO TLB: mapped [mem 0x00000000bbffd000-0x00000000bfffd000] (64MB)
-> RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-> clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb6feccdd0, max_idle_ns: 440795259471 ns
-> clocksource: Switched to clocksource tsc
-> Initialise system trusted keyrings
-> workingset: timestamp_bits=40 max_order=21 bucket_order=0
-> NFS: Registering the id_resolver key type
-> Key type id_resolver registered
-> Key type id_legacy registered
-> 9p: Installing v9fs 9p2000 file system support
-> Key type asymmetric registered
-> Asymmetric key parser 'x509' registered
-> Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
-> io scheduler mq-deadline registered
-> io scheduler kyber registered
-> usbcore: registered new interface driver udlfb
-> usbcore: registered new interface driver smscufx
-> input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-> ACPI: button: Power Button [PWRF]
-> input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-> ACPI: button: Sleep Button [SLPF]
-> ACPI: \_SB_.LNKC: Enabled at IRQ 11
-> virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKD: Enabled at IRQ 10
-> virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-> ACPI: \_SB_.LNKB: Enabled at IRQ 10
-> virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-> virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-> 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-> 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-> Non-volatile memory driver v1.3
-> Linux agpgart interface v0.103
-> ACPI: bus type drm_connector registered
-> usbcore: registered new interface driver udl
-> loop: module loaded
-> usbcore: registered new interface driver rtsx_usb
-> usbcore: registered new interface driver viperboard
-> usbcore: registered new interface driver dln2
-> usbcore: registered new interface driver pn533_usb
-> usbcore: registered new interface driver port100
-> usbcore: registered new interface driver nfcmrvl
-> scsi host0: Virtio SCSI HBA
-> scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-> sd 0:0:1:0: Attached scsi generic sg0 type 0
-> Rounding down aligned max_sectors from 4294967295 to 4294967288
-> db_root: cannot open: /etc/target
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
-> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
-> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
-> Modules linked in:
-> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-11414-g49da07006239 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-> RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
-> RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
-> RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
-> Code: df e8 6b 9e 80 fb 39 eb 77 64 e8 12 a2 80 fb 41 8d 6c 24 01 89 de 89 ef e8 54 9e 80 fb 39 dd 0f 82 54 ff ff ff e8 f7 a1 80 fb <0f> 0b e9 48 ff ff ff e8 eb a1 80 fb 48 c7 c2 80 dc e3 88 48 b8 00
-> RSP: 0000:ffffc9000001f920 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> RDX: ffff8881002b0000 RSI: ffffffff85c61b89 RDI: 0000000000000004
-> RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
-> R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
-> R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff88e3da90
-> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2303
->  init_vqs drivers/net/virtio_net.c:3581 [inline]
->  init_vqs drivers/net/virtio_net.c:3567 [inline]
->  virtnet_probe+0x12ae/0x33a0 drivers/net/virtio_net.c:3884
->  virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
->  call_driver_probe drivers/base/dd.c:560 [inline]
->  really_probe+0x249/0xb90 drivers/base/dd.c:639
->  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
->  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
->  __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
->  bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
->  bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
->  driver_register+0x220/0x3a0 drivers/base/driver.c:246
->  virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4090
->  do_one_initcall+0x13d/0x780 init/main.c:1303
->  do_initcall_level init/main.c:1376 [inline]
->  do_initcalls init/main.c:1392 [inline]
->  do_basic_setup init/main.c:1411 [inline]
->  kernel_init_freeable+0x6fa/0x783 init/main.c:1631
->  kernel_init+0x1a/0x1d0 init/main.c:1519
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 158 --------
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 357 ++++++++++++++++++
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  |  67 ++++
+ .../devicetree/bindings/usb/usbmisc-imx.txt   |  18 -
+ 4 files changed, 424 insertions(+), 176 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+
+-- 
+2.37.1
 
