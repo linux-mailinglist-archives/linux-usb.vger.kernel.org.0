@@ -2,144 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1035F5FEBDD
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 11:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3BB5FEBE2
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 11:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiJNJlT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Oct 2022 05:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S230177AbiJNJlj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Oct 2022 05:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiJNJlO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 05:41:14 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F044733CA;
-        Fri, 14 Oct 2022 02:41:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h00L1aaGjImnBsvk9thncHqFUahZW3Wq5nW7COMl8Rb/9oJpxdMKeJuoM+Q8d92FyXgPdMi0A9QgCuubQRg0vUDYNwbuxk3KD6az4iQB6OKyK6mQs3KXz5FWnDh63+P+a/3wKuD5XO5ryF7T5yB66cms+Zg3CInSfAOsOiiMt5tcTkoKcXlk52kZCG8YCdrmj17Qxe6abUfVX7zqjyDFSqFNfVF+ODvd9zL4gqaR39D9fO9Y6gjM92nrxaXCMjIlStp52PIfIAdKl6QhmkcMmTPx0YqOysv1s1e12JF6onLQjIi9CtN5s9eRCDzsvjlXxvJBCU+Q8pjiJBHFn8VeWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ufp9jRtEhQvyxwrWAc+CaoKldEerh2Olbx2k3muOkEg=;
- b=KEcnh6TvW/bn64B9G/92+7j4FtG3qTBgAUSgjKYk1pFL6K/yGEolN7Zpi0cLKCme9zQRpE+pXc/LPVjE+hUh6roUMNgOqsHAepkm84mUmgzF3R4d+j9W/tD9CVqrXjCHjCnwkYm7jQTB0HAUFk155LaVDKkiXjzcmGprrk+bdjnYe5cF/GcGgBAn8qw3DUFVwxBjBiITVGFTQ9xTPBuX0elHac13uQH4Uqkl4tlcOrFxGSjFA+o2UOAPyA8P/K0wdyliLXt4c0H7XfSCViA7uA7QvMLvVzbsJhclFoleNgl7BC+KSwWuSfFR61pblI+LE+QfwtcNO6YZemszYQAIWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ufp9jRtEhQvyxwrWAc+CaoKldEerh2Olbx2k3muOkEg=;
- b=h3nWtv8PbaZv5DbmUfnX8Cp0W8npDgj+6HheDOrCcTWVaNc3Kqv0qM0EMJd64pblNAZNUXopdVby/r2k+eCbKVieOpvycqhUELVMjAB7vDT4yj9s6XHdKe/7UQsHCeYDjejVyKbb0mXIDhs4W1WZ1pn+xBNTVUTOgTgPl5LyAaLy9lHPH/6Lnj+mWMYAz7/8piIkpsCBUoE404f/RZXMaz9MgLsH+4K8Jp/RJAxynhvJemRi6NHo3ULfl5EpDYwtQcADxiRgfN+m5cDGxAttjijNQUtv9bKyIO4OFYLf6Do1EloW/rz6S59Vk8CATLYs5v/x+RwJvjM8OVdfIUfKAQ==
-Received: from IA1PR12MB6603.namprd12.prod.outlook.com (2603:10b6:208:3a1::17)
- by SN7PR12MB6715.namprd12.prod.outlook.com (2603:10b6:806:271::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 14 Oct
- 2022 09:41:00 +0000
-Received: from IA1PR12MB6603.namprd12.prod.outlook.com
- ([fe80::d140:ead8:ffd1:76e3]) by IA1PR12MB6603.namprd12.prod.outlook.com
- ([fe80::d140:ead8:ffd1:76e3%7]) with mapi id 15.20.5709.021; Fri, 14 Oct 2022
- 09:41:00 +0000
-From:   Jim Lin <jilin@nvidia.com>
-To:     Jonathan Hunter <jonathanh@nvidia.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Subject: Re: [PATCH v3] xhci: tegra: USB2 pad power controls
-Thread-Topic: [PATCH v3] xhci: tegra: USB2 pad power controls
-Thread-Index: AQHY3iTzGqk+LW8EIUGun7Nw/Ps9r64KnHmAgAAG3wCAAwJ9gA==
-Date:   Fri, 14 Oct 2022 09:41:00 +0000
-Message-ID: <024da76e187a1043fcbe47a1ddc32283ab22c0d2.camel@nvidia.com>
-References: <20221012102511.3093-1-jilin@nvidia.com>
-         <Y0aikRq2Yi5kYW9j@kroah.com>
-         <d219eb55-ebea-091e-d9b0-3881bd4525bf@nvidia.com>
-In-Reply-To: <d219eb55-ebea-091e-d9b0-3881bd4525bf@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR12MB6603:EE_|SN7PR12MB6715:EE_
-x-ms-office365-filtering-correlation-id: 3f8b8324-be41-46c3-7edd-08daadc83426
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /tUVXsVR5PxLgVtL9ay76ZD8jNmmxmcLoX/hR/Dg/2Bc6efHSm7Ahp+/K2JsRLRqxXpCI/rLX/PDpfq3mXc2R/ggsS3tSnJXByOg5CtAYabGKGKqjC8+tuNg2pQYzNCxv6mV9VOrdLUCLAj8OVs4cwWt2Va1wzYq+RDZK99xXG4ILOHgNCV57wy49jnhts5NgASdVjPz+bCd/S65bU1syGv7OLnfFMh9uA3rhreqGi2AXRj67vTsWtbkvCRSyuFVDDs3tqHRRip3WkTv7C8lPHuXBZkEyWHFASkfW8aXZGcLrRPJJZPpXNYI1ELrUHKMopezncnTgCv2mPlacehyLCk0m0Q6nuL84Av1N48ULA+50SPF99K+IeAwtjiKtW/1+BrYwKHV9/f99YlXMf0cecEgzKSGEEhcwwQpGz/db32Z3GuGGR/qEnr11KwbuCHO9YHMJO/EJaAn5GIFdWQOnzyAe4h/ihLZqlPNPUGf2FVFJ3Ah4iUMdSWnq3rgZ/+MTS5CwMYubn5FgAgxF9nacXdBDAmdSyltubWUltJzwh03vvrISA9CZdwIV6uhWbdamA8iJxO5+Qb0jn7vQmnTC0eyDs6UVauwgSq3AXoJsa1xJisFGVACR08mMOyLqLZ9dWzaRPHvbfUncPc+qH0gqFxTq6THxL1dobahDsi4juVX9BQZHUkPUhCu/4fPlE5moOFDGWN/eHvVpDSGWc1ET1iclnXNthjv/4MzaEe4b6OtUxWTT7xHMik6aX9maQFNn8TJlKivzaaefh+imC7CU4RNfsrqyV9CWQa5CxLMxFM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6603.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(39860400002)(376002)(396003)(451199015)(2616005)(6512007)(26005)(4744005)(186003)(4001150100001)(2906002)(5660300002)(53546011)(6486002)(6506007)(110136005)(316002)(54906003)(71200400001)(76116006)(91956017)(66446008)(66476007)(8936002)(8676002)(4326008)(41300700001)(478600001)(66946007)(64756008)(66556008)(36756003)(86362001)(38070700005)(38100700002)(122000001)(99106002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmNrOTR1VWxiZmRsRGtjTmEyQUFzWlp1OWUrTDZRSFJpMlBscmRFb2s0KzlE?=
- =?utf-8?B?dmVQNHVWa2JYcnBua1lYajBBVzVDTldOMmZJK2o2RXF6ckIrNHRtdWc5TTh4?=
- =?utf-8?B?OUpkQVZ1ZEpQMFFKT0NzQ1Z5c2FJc0dqRWIyMVFiOW01RVBGM3Q4djVYNW91?=
- =?utf-8?B?OU9lR1VQeDExZWpXQ1pxcjFqWXphQVR6NERUSGtpM1FBWTU1UWZRcFgzODNn?=
- =?utf-8?B?Y2lvZ3AzSGpBdDdWSmx2TmRHUW5XL0xpYXhpUkFXcVQ2TFN6V0FNMEI5ZHpO?=
- =?utf-8?B?aHBmSmxkV3AwZGZxR0J6OGNrVUJNK2hHZEE4U05LWWZteTY2cURFeHB4N1BD?=
- =?utf-8?B?RWM1a1dmc0IzeWp6Sk9Qd2lMWGlsK1U4am0yNmxQcXFkWWdESUFWNlZwaWYr?=
- =?utf-8?B?YkVBN01pQjBxTUlpQjJ3RTlHUVBRRlhlR0h3MklsTUxQQmpoL1M1UGkvb3dF?=
- =?utf-8?B?Q1ZxTW1JaEdtOXhHUnF6K3hFenhGSjJ3MHlZZGVXL0EvZk1leGRsOVIvY2tk?=
- =?utf-8?B?U21LV0o0VDhpSU50ZlVWTFFaRVpkMkVLZ2lZQ0RtL3RsVzBpK1Y3RTNIRTRC?=
- =?utf-8?B?c1MyQjJ6QnNLcEJMaTU0UjlsNldna0ZzczFWaGV0bHI1WmFBTVZXK1Q4c2ZE?=
- =?utf-8?B?MGhSbnNiSHdRSGhpLzNrQzh2NEVHY0kvYStrQmVnWEduYUhzS3ZxaW0yaEZ0?=
- =?utf-8?B?a1ZEMDJqbkwyU0hGRW9xVkQ5dWdVcFVRdUIzMlFVYVFuRWxLQ3QzWTZmZk9p?=
- =?utf-8?B?OXdyUFg4RDAxTnJuNkdrSG14TUpBNWhSbXducC9Ock1GS3M1a0oyUzV2dlNU?=
- =?utf-8?B?VFVjaW1HOHRuYW50L25hcGpOSk5LMExVZlJ4dDhUa1duSU1NOFlxZXhZZG45?=
- =?utf-8?B?Q1d4ams0L1N3M2gvUDlsbnBHQXBjRjNzLzN6cCtpeU1OT2xpVUVzYXlyTTJx?=
- =?utf-8?B?YW9TcElYRFpsQTB3dXFoZlFtSFpyblZRRGJMaG1HSlVDcDlPQnErclZKQ3dt?=
- =?utf-8?B?bCt3RG5OVFJmZVQrbGNVbFU2TFQzKzZFTjc0K1I4cHJTK2cyTC9yMjYvZUdP?=
- =?utf-8?B?czFCbG9wMWtIa3ZuSGViek9FM29zS3ZvaEFBWURNZHQ4b1dKVGFHblMraEdu?=
- =?utf-8?B?L3lNQ2lvRWlPNzFGbVFicWdIWW9rb211RmpsYng3YlZjUnBkWDZ6dlVlYVUy?=
- =?utf-8?B?bnpRWm01MmJkbVlnN21zbXRQQ1hnL200OWp2MlJaZm5oZUkyenpSTTFMV3h6?=
- =?utf-8?B?OGVUWTJSRUtvRUFGM1h5SFlSd0JSbzJJRUlieWZGMFJFVlI5TWZjRWNkVmNP?=
- =?utf-8?B?V2F2L0pWcXcrR2QvRW5nUlVqbGt0SjgwZlpYaldmODhQTDMxYlMzNXg3NXE3?=
- =?utf-8?B?SjRkODJsZXRMNmdHVm9nY0FqRHdJYkFRV0V2L0wvVHQ5Qi83QWFEK0hHWUJl?=
- =?utf-8?B?bjA5S01zWkZzV0wydDlwQVRkVFFPRkFHZjQxU2NPZFJOODB6eVREd0lYSi9C?=
- =?utf-8?B?TFBpT1Fzbmd0RzJ1Z0RMWnRpUDQ0KzVERkZidjFiZ3ErY0tRTjRTRUNYc2pR?=
- =?utf-8?B?M25qVTM0ZFZSV25BeWU0MkpJOWVhcGFIU0NHSWlSMC9CYUNGWUlib2doZTVQ?=
- =?utf-8?B?UmhLdXRpY1lubnNtdUM1UVJrN3NXNldKbmxSa1ZXdk85TXZ4aGtxR2JZTWIx?=
- =?utf-8?B?em11dVRpc0Y4bDZwTUJaNWJTeHp0UEQ0WW55d3FsZGpEY2c5Z1JSM3JnV3Zv?=
- =?utf-8?B?MUw0WnE5TGw0MWsvNmpyTlVqZ2FIcUxwbUc5V0MxVGQ4Q3pBbzcwWWc5VC8w?=
- =?utf-8?B?T0RQbFBCTlhrYytEKytONDh2b2dkaEJEeHBzcnZiZDVhQmJIRmQvWTUrWG1Q?=
- =?utf-8?B?cWh3TEFxcWpzQzF1QzF5b1FPelZSYUFuVnFma3NKZkFEOFNOUE4xM3lya2tU?=
- =?utf-8?B?VFhTemlzT1dtbS8zNU4zYTNaRGNDMnZuR0RoWWE0Y29hRS9Ic0FYayt6SkN4?=
- =?utf-8?B?VjAxcmFVTHM5OU5UVlZqSWxSVmE2L3NJV09FdngwVC90dzlZditiekRRQ1lZ?=
- =?utf-8?B?bUhkWXAzUnhCaWswb2p3bzBUQzBWWXhPRTdSenVLWU5jTVQwWkNNZVFHaXh1?=
- =?utf-8?Q?xXF5xR3e+kqZzWxsqmRfyIKiA?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <16EA3FE6639CAF478646174442649DCB@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S230159AbiJNJlg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 05:41:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D113D1C25C2
+        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 02:41:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665740491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wKlR+CcE/XKB9cJEzU9OvSSq3ilgCUyh56aB2R9hIbY=;
+        b=UEpgAIdOyUeVbLxvNzbTujVbhlJ7jxZTTjjOhApFJzOB6jImx/xwdcqpfEAtPm+RwWTEEf
+        UhIDtqloc7OHcNag8mmU/VT1RX0uJW+GeHq4mvZF51F6K+AarKkGYbs0dzQ07XDKxIbxPt
+        GDZwALfX+fyF7cZi1u3dhBKt5ZvFLpU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-149-nFd1sz8UPZOH4aj3Av52uA-1; Fri, 14 Oct 2022 05:41:30 -0400
+X-MC-Unique: nFd1sz8UPZOH4aj3Av52uA-1
+Received: by mail-wm1-f69.google.com with SMTP id n19-20020a7bcbd3000000b003c4a72334e7so1919113wmi.8
+        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 02:41:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wKlR+CcE/XKB9cJEzU9OvSSq3ilgCUyh56aB2R9hIbY=;
+        b=HJe+412W2o3uF9UQvg+Gp1CFHB7G2wyIwu2al6viRml4E13fzi9iV2gbxD1ZbzbK8m
+         7rDfaJgZeklC0QIZ80uMpfOBfIGaKN0t2QqeRWYMcLeKzEM98ZJ/h33DCI4/L2vtvO4d
+         LNJkQ+Hv+SWAjlvJbsNnSWmQh/MqCV5IAHuDX5kq9FD/RbIs0BQHIoCNRoRV5Qe5mGad
+         1kYS+dzKDxkK05+g8sE2uTTBpLbFzjXh0KIn4c2LWCm91s/FY3pbMx/+OaIhbWfpkabD
+         933sVs7EMI0YgO2I8ZX2zI7o+MWBvS4Hc3E4t63/wEdevzXF4X7WDBUF0R2irwzrV/vp
+         ECgg==
+X-Gm-Message-State: ACrzQf1ML8IKm7Z4fZpn1GBzY9qv16GLxkVZdbTNnimsBAlLWMYpqnT5
+        Y82xOQRvV40cfJcBshnnFCEQ1gKuMudmL3VnjBSvIHnNAhSPangcSvwh+XlFulFBaDQh11dvkCO
+        UT2n4UP6pyYu6CU/2PqBS
+X-Received: by 2002:a05:600c:358f:b0:3c6:da94:66f9 with SMTP id p15-20020a05600c358f00b003c6da9466f9mr2762396wmq.142.1665740488793;
+        Fri, 14 Oct 2022 02:41:28 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6w3cEiR6rQvgkTTtlNrYW5Q7DNktZGWlaya7vja/FrE/eQqGE4HHUEag6zb93Od1CS7LyiTg==
+X-Received: by 2002:a05:600c:358f:b0:3c6:da94:66f9 with SMTP id p15-20020a05600c358f00b003c6da9466f9mr2762380wmq.142.1665740488423;
+        Fri, 14 Oct 2022 02:41:28 -0700 (PDT)
+Received: from redhat.com ([2.54.162.123])
+        by smtp.gmail.com with ESMTPSA id d5-20020adfe845000000b0022b1d74dc56sm1510165wrn.79.2022.10.14.02.41.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Oct 2022 02:41:27 -0700 (PDT)
+Date:   Fri, 14 Oct 2022 05:41:23 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     syzbot <syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com>
+Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [syzbot] usb-testing boot error: WARNING in cpumask_next_wrap
+Message-ID: <20221014054043-mutt-send-email-mst@kernel.org>
+References: <0000000000001207f205ead6dc09@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6603.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f8b8324-be41-46c3-7edd-08daadc83426
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Oct 2022 09:41:00.6036
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K8fNa11p2YAlUog5XsBRGG1ulxC78lCaca2oaxVuVFIRuMFl/hBDpUifCTjlsg2FwCCycOGKHVfNArek5hGwrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6715
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001207f205ead6dc09@google.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTEwLTEyIGF0IDEyOjQzICswMTAwLCBKb24gSHVudGVyIHdyb3RlOg0KPiBP
-biAxMi8xMC8yMDIyIDEyOjE4LCBHcmVnIEtIIHdyb3RlOg0KPiA+IE9uIFdlZCwgT2N0IDEyLCAy
-MDIyIGF0IDA2OjI1OjExUE0gKzA4MDAsIEppbSBMaW4gd3JvdGU6DQo+ID4gPiArc3RhdGljIGlu
-bGluZSBzdHJ1Y3QgdGVncmFfeHVzYiAqaGNkX3RvX3RlZ3JhX3h1c2Ioc3RydWN0DQo+ID4gPiB1
-c2JfaGNkICpoY2QpDQo+ID4gPiArew0KPiA+ID4gKwlyZXR1cm4gKHN0cnVjdCB0ZWdyYV94dXNi
-ICopIGRldl9nZXRfZHJ2ZGF0YShoY2QtDQo+ID4gPiA+c2VsZi5jb250cm9sbGVyKTsNCj4gPiAN
-Cj4gPiBObyBuZWVkIGZvciB0aGUgY2FzdCAoYW5kIGlmIHRoZXJlIHdhcywgbm8gbmVlZCBmb3Ig
-dGhlIGV4dHJhDQo+ID4gc3BhY2UpLg0KPiANCj4gTWF5IGJlIGJlc3QgdG8gZHJvcCB0aGlzIGlu
-bGluZSBmdW5jdGlvbiBjb21wbGV0ZWx5IGFuZCBjYWxsIA0KPiBkZXZfZ2V0X2RydmRhdGEoKSBk
-aXJlY3RseS4gSSBvbmx5IHNlZSBpdCB1c2VkIGluIG9uZSBwbGFjZS4NCj4gDQo+IEpvbg0KPiAN
-ClRoYW5rcywgd2lsbCBkby4NCg0KLS1udnB1YmxpYw0K
+On Wed, Oct 12, 2022 at 07:03:39AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    49da07006239 Merge tag 'memblock-v6.1-rc1' of git://git.ke..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1361eb1a880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8be1ac10ff2d4692
+> dashboard link: https://syzkaller.appspot.com/bug?extid=28ec239d5c21a2d91f3d
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/d41d7d5418ab/disk-49da0700.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/9ffb9548d913/vmlinux-49da0700.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+28ec239d5c21a2d91f3d@syzkaller.appspotmail.com
+
+
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git b0d0538b9a8c47da2e3fb2ee44cd3dacc75509a6
+
+
+> software IO TLB: mapped [mem 0x00000000bbffd000-0x00000000bfffd000] (64MB)
+> RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+> clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb6feccdd0, max_idle_ns: 440795259471 ns
+> clocksource: Switched to clocksource tsc
+> Initialise system trusted keyrings
+> workingset: timestamp_bits=40 max_order=21 bucket_order=0
+> NFS: Registering the id_resolver key type
+> Key type id_resolver registered
+> Key type id_legacy registered
+> 9p: Installing v9fs 9p2000 file system support
+> Key type asymmetric registered
+> Asymmetric key parser 'x509' registered
+> Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
+> io scheduler mq-deadline registered
+> io scheduler kyber registered
+> usbcore: registered new interface driver udlfb
+> usbcore: registered new interface driver smscufx
+> input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+> ACPI: button: Power Button [PWRF]
+> input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
+> ACPI: button: Sleep Button [SLPF]
+> ACPI: \_SB_.LNKC: Enabled at IRQ 11
+> virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+> ACPI: \_SB_.LNKD: Enabled at IRQ 10
+> virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+> ACPI: \_SB_.LNKB: Enabled at IRQ 10
+> virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+> virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+> 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+> 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+> 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+> 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+> Non-volatile memory driver v1.3
+> Linux agpgart interface v0.103
+> ACPI: bus type drm_connector registered
+> usbcore: registered new interface driver udl
+> loop: module loaded
+> usbcore: registered new interface driver rtsx_usb
+> usbcore: registered new interface driver viperboard
+> usbcore: registered new interface driver dln2
+> usbcore: registered new interface driver pn533_usb
+> usbcore: registered new interface driver port100
+> usbcore: registered new interface driver nfcmrvl
+> scsi host0: Virtio SCSI HBA
+> scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
+> sd 0:0:1:0: Attached scsi generic sg0 type 0
+> Rounding down aligned max_sectors from 4294967295 to 4294967288
+> db_root: cannot open: /etc/target
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
+> WARNING: CPU: 1 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+> Modules linked in:
+> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-syzkaller-11414-g49da07006239 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+> RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
+> RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
+> RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+> Code: df e8 6b 9e 80 fb 39 eb 77 64 e8 12 a2 80 fb 41 8d 6c 24 01 89 de 89 ef e8 54 9e 80 fb 39 dd 0f 82 54 ff ff ff e8 f7 a1 80 fb <0f> 0b e9 48 ff ff ff e8 eb a1 80 fb 48 c7 c2 80 dc e3 88 48 b8 00
+> RSP: 0000:ffffc9000001f920 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+> RDX: ffff8881002b0000 RSI: ffffffff85c61b89 RDI: 0000000000000004
+> RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
+> R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
+> R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff88e3da90
+> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000000 CR3: 0000000007825000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2303
+>  init_vqs drivers/net/virtio_net.c:3581 [inline]
+>  init_vqs drivers/net/virtio_net.c:3567 [inline]
+>  virtnet_probe+0x12ae/0x33a0 drivers/net/virtio_net.c:3884
+>  virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+>  call_driver_probe drivers/base/dd.c:560 [inline]
+>  really_probe+0x249/0xb90 drivers/base/dd.c:639
+>  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+>  __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+>  bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+>  bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+>  driver_register+0x220/0x3a0 drivers/base/driver.c:246
+>  virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4090
+>  do_one_initcall+0x13d/0x780 init/main.c:1303
+>  do_initcall_level init/main.c:1376 [inline]
+>  do_initcalls init/main.c:1392 [inline]
+>  do_basic_setup init/main.c:1411 [inline]
+>  kernel_init_freeable+0x6fa/0x783 init/main.c:1631
+>  kernel_init+0x1a/0x1d0 init/main.c:1519
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
