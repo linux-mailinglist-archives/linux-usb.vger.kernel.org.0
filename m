@@ -2,67 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A985FE9FE
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 10:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE7D5FEA5B
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 10:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiJNICX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Oct 2022 04:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S230053AbiJNIU0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Oct 2022 04:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiJNICQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 04:02:16 -0400
-Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689CA1BBEE7
-        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 01:02:09 -0700 (PDT)
-Received: by mail.fadrush.pl (Postfix, from userid 1002)
-        id 2A745236FC; Fri, 14 Oct 2022 08:01:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
-        t=1665734513; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
-        h=Date:From:To:Subject:From;
-        b=hjISbzf643gYwXeYexFp44qsLcjYtQjPbz8lCBifeOLGrrG5EV4az4lssxdX5UQuG
-         EQ3TSAdbBGFnPyL7kuPPvs8fiEWqjGEHBRAZbgHn98xECZZZ4Y4wlrBbB09tgMwY0S
-         U+pFMfHIro9Ehd8xFaq7fFtn+F+dgbIIOThZ5xIVMODZ4OoIwK1v9aFyEYrbLfIbqq
-         TAkgRNrT2cR81IsUxTDHeY5mRn/UwEJrkA1RdIbj9iKNXaU94Snsv6hMPj9k2Zm1DB
-         6u9/K+9ggPocaPhaDUnVxYw1cI/aMwd3J+XrI8yKq17IQVnUxYJyc4j8+q0HjFQTss
-         Wa86EsgpR0kSA==
-Received: by mail.fadrush.pl for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 08:00:54 GMT
-Message-ID: <20221014064500-0.1.28.m80v.0.h2dk433d94@fadrush.pl>
-Date:   Fri, 14 Oct 2022 08:00:54 GMT
-From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
-To:     <linux-usb@vger.kernel.org>
-Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
-X-Mailer: mail.fadrush.pl
+        with ESMTP id S229808AbiJNIUT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 04:20:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55AD97EC3;
+        Fri, 14 Oct 2022 01:20:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 289CF61A3E;
+        Fri, 14 Oct 2022 08:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DB24C433D6;
+        Fri, 14 Oct 2022 08:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665735614;
+        bh=+B4PXo4lORogkaXt0TnLgHHCs7kOLGm/s+fo7d9KVZ4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=P/0vuIp90SsI/nah7/waLUaQDVZ+KF+uXr8HamX0DzpK+kyoRnPKqeeac/i8qXIFf
+         8+Fl4hqUAsc8tnZl7h3o4w99977aL/VoKA73ZwS8M2dZWowsavJBcdjn9OerODJ7qR
+         RA4DfonkmCjy4xJezSEvPjHt3tgX7pO4xTDYlBnQTQ/9W4O9S00MzkXApAYZ+XbdvU
+         stEMfiG+D8Nv2p0ZkSeviMdOKlzWocgMEtI2fM6d9lm9rmPlGNPP1LLpkSrj2sxQGx
+         +N0fTn2UWRLlFozKM5yAhVRMxrFk+KTHPSOIAjAdKtSbs+mqrgDvuhwYfvkp6ewFgj
+         F69Tc8YLCijWA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6EEB2E4D00C;
+        Fri, 14 Oct 2022 08:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for petkan
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166573561445.14465.3335360255597249102.git-patchwork-notify@kernel.org>
+Date:   Fri, 14 Oct 2022 08:20:14 +0000
+References: <20221013214636.30741-1-palmer@rivosinc.com>
+In-Reply-To: <20221013214636.30741-1-palmer@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     petkan@nucleusys.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hello:
 
-kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
-proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
-stwa firmie stabilny rozw=C3=B3j.=20
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
-a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
-nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
-po rozwoju firmy.
+On Thu, 13 Oct 2022 14:46:36 -0700 you wrote:
+> Github deprecated the git:// links about a year ago, so let's move to
+> the https:// URLs instead.
+> 
+> Reported-by: Conor Dooley <conor.dooley@microchip.com>
+> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> [...]
 
-Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
-nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
-adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
-j=C4=85 je innym.
+Here is the summary with links:
+  - MAINTAINERS: git://github -> https://github.com for petkan
+    https://git.kernel.org/netdev/net/c/9a9a5d80ec98
 
-Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
-o=C5=9Bwiadczonego doradcy finansowego?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Pozdrawiam
-Jakub Olejniczak
