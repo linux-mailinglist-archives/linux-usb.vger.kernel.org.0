@@ -2,141 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3295FF425
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 21:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D394E5FF493
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Oct 2022 22:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiJNThj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Oct 2022 15:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S231432AbiJNUaP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Oct 2022 16:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiJNThi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 15:37:38 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74406193EDA
-        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 12:37:36 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id 75-20020a6b144e000000b006bbed69b669so3769815iou.21
-        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 12:37:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rX/AbI3L9evs+/oSuEXoC2wLpzx4WySJz83LC24vFuo=;
-        b=KRg5G48o1gfHpMHs+tp/mR7JwucPKowX0gmP5xXseC+C6LIxYBql8TpB2BTRJ4hdCZ
-         p0OBQZPJ/u2LOwX1is8YHzw5sOxDhce688BlfGwNqUs1uXhtliXyh/xShehN4H3FP6m/
-         yEVhgWmfxaFFrNPKfM4KLF3SuETZemn0EgnJkiH4jYXqPyzLm3PGzOhDHHUe9vI6+2L+
-         6B2ilkXfSQ97zYRjlGYsz2QCBTj/1RsMt04ENhpNNANaVfXPbKBpRjVVwIz1/0Ud66fb
-         lho+vRVpB763svP7hTPIisfoinky8c+69Bx1X1v7pM3UOmlC7gi7h+T/dEl+FP1YGD/E
-         OOtQ==
-X-Gm-Message-State: ACrzQf3mYlohzbr4CP3rTTNDEwGZdHbVOY7PG3oNMXlBHwfOaglbrvCN
-        ixcyYLMYKOFo6rXcYMM+vXE8vNURx+n1FwFgtiNR7AKSQbX9
-X-Google-Smtp-Source: AMsMyM5NoSc6CvLYIBk7FYOQdzxNu5HK3T8IwaQn9Lik5mN8eb54I6qQIsyC1XwBROSTqXdEBU/LteIrrdlOZpLXfglgPtiTXWba
+        with ESMTP id S231431AbiJNUaM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Oct 2022 16:30:12 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E35E32BB1
+        for <linux-usb@vger.kernel.org>; Fri, 14 Oct 2022 13:29:58 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id EE56B5C00F8;
+        Fri, 14 Oct 2022 16:29:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 14 Oct 2022 16:29:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665779381; x=
+        1665865781; bh=oWdiDV1qMkqt9iKqHFfgbiLOw2tpa3DOopfW26rGK/0=; b=F
+        Gkin683pzFex9F7HMqUaJG8/OHufXgXfvg2fWhSydhPmbYhzRGsr/VLQKXi9n9gN
+        YloDqa8/q3oxAmq/8L6/zCz2GHgAOSsP7GYJakHCpipqTtJSdvs1IFI+FFrY+T0j
+        lEkrngH/Xme9+3OGkxHmqTMAxSKLoAFwOUfgHi20hXHqnF+nDvCRumw8JCZ6sPMe
+        2ZSd4Xmwo4Cu/HvdAYyAdUIwn4YC9SXk3l0DrXkHOq2XLHqzvGyLsdS4J3rpDCRv
+        ZphlsCeTUvMc+7y+EoDsiQEF8pO0mBAzUTyKyy3ZclkkNHsQTey0hnzWwjUFpGv+
+        /j2css/vSxj4JuARArYOA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665779381; x=1665865781; bh=oWdiDV1qMkqt9iKqHFfgbiLOw2tp
+        a3DOopfW26rGK/0=; b=gFGzQsrq8814zFXuUyQbP6VHKDTH8kRU5FTKQa90+0PT
+        C/h7mwfhwBfmIfBuRALL1Z/TeLTuaU+P8wgWGoyUUsU6/CU9QI7GGOH002BbKCtO
+        N1aUJCh1dxWLGmeUo3wV/RjDOdmCyOHcUEa/apju8+O2hOu7Rn/AljkZZaTJ8/Lj
+        8yJU/laUBBQrmvKYuN+6VhgA0wfBuG+gk5+jn3WQrKK9wwZw9Wd0FbBJmgPN0yql
+        +UUR4/CD99bSiPrSa0bRq7USRLZBQeTFWqQG0ldHK/3mKD5jC8OC6KQhehLevHd+
+        KkQnwHOuwf5c+PnPi9D5yO/GKxplOC1jhG2W4O1xlQ==
+X-ME-Sender: <xms:tcZJYyAH807_AdyY86Phdfl95_-VeJeSJ36N26UFKiT5CgZGJzhEZA>
+    <xme:tcZJY8jkVo88mqraoZhGk3kzxL2EH-gwTElXOkuoZJaTahVxeJ9RL_k0MUlUCOe5s
+    d4JYv_hh0GBSA>
+X-ME-Received: <xmr:tcZJY1lxS2ngf1MCI46Jb4ijwX61svUQoSseXgfhDIo2-zhky-Ty6I6W8zM7aoR4kiYHdlXbSLdsxwtG44P6CJ_8ZVXp4iQUEaKX>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekvddgudehudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghr
+    vghkucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesih
+    hnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefg
+    udelteefvefhfeehieetleeihfejhfeludevteetkeevtedtvdegueetfeejudenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgv
+    khesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:tcZJYwyl5I3owE4j6aRtS2mixmRxuCIk5OErymEQyhRZtWE8lm9AJw>
+    <xmx:tcZJY3TS9qH1Kkt8KaISXEXcYVw5It6ami1z_jtyva7-9OqKQ52miA>
+    <xmx:tcZJY7ZvAtNQsjiO4pLkWtH3wq0z3GQiDfRwSqD5cCSaw7As-jqd7w>
+    <xmx:tcZJY6Po9ypjvrVrTbs7AXzRDErpD0AvESxt7OzKskW-0WxB8TQgVg>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Oct 2022 16:29:40 -0400 (EDT)
+Date:   Fri, 14 Oct 2022 22:29:36 +0200
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: list_del corruption (NULL pointer dereference) on xhci-pci unbind
+Message-ID: <Y0nGsKipsnl3gtrp@mail-itl>
+References: <Yw6r7FxMCCYSzfTk@mail-itl>
+ <Y0i5h9Tx/1mxvh9A@mail-itl>
+ <7eaf9861-5571-584f-b124-fa7076920090@linux.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9452:0:b0:6a3:4fab:d98e with SMTP id
- x18-20020a5d9452000000b006a34fabd98emr2950724ior.185.1665776255682; Fri, 14
- Oct 2022 12:37:35 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 12:37:35 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fecefc05eb03c144@google.com>
-Subject: [syzbot] WARNING: ODEBUG bug in ieee80211_led_exit
-From:   syzbot <syzbot+25842f13c5ac135060f4@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IQndFRygjsJAyDAP"
+Content-Disposition: inline
+In-Reply-To: <7eaf9861-5571-584f-b124-fa7076920090@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--IQndFRygjsJAyDAP
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 14 Oct 2022 22:29:36 +0200
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: list_del corruption (NULL pointer dereference) on xhci-pci unbind
 
-HEAD commit:    a6afa4199d3d Merge tag 'mailbox-v6.1' of git://git.linaro...
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=158ad462880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9e5376a2f09d6389
-dashboard link: https://syzkaller.appspot.com/bug?extid=25842f13c5ac135060f4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122c5d1a880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1154e478880000
+On Fri, Oct 14, 2022 at 07:02:13PM +0300, Mathias Nyman wrote:
+> This whole software bandwidth issue should only be visible in Intel
+> Panther Point PCH xHC (Ivy bridge)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ee555c567c15/disk-a6afa419.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2124bd57845b/vmlinux-a6afa419.xz
+It is indeed Ivy Bridge platform.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+25842f13c5ac135060f4@syzkaller.appspotmail.com
+> Endpoints should be deleted from bw_table list, and xhci_virt_devices
+> should be freed already before xhci_mem_cleanup() is called if all goes w=
+ell.
+>=20
+> Normally endpoints are deleted from bw_table list during usb_disconnect()
+>=20
+> usb_disconnect()
+>   ...
+>   usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
+>     hcd->driver->drop_endpoint()  // flags endpoint to be dropped
+>     hcd->driver->check_bandwidth()
+>     ->xhci_check_bandwidth()
+>       xhci_configure_endpoint()
+>         xhci_reserve_bandwidth()  // only for Panther Point
+>           xhci_drop_ep_from_interval_table()
+>=20
+> But to avoid queuing new commands to a host in XHCI_STATE_DYING or
+> XHCI_STATE_REMOVING state we return early, not calling xhci_reserve_bandw=
+idth().
 
-usb 2-1: USB disconnect, device number 13
-------------[ cut here ]------------
-ODEBUG: free active (active state 0) object type: timer_list hint: tpt_trig_timer+0x0/0x3c0 net/mac80211/led.c:145
-WARNING: CPU: 1 PID: 1297 at lib/debugobjects.c:502 debug_print_object+0x16e/0x250 lib/debugobjects.c:502
-Modules linked in:
-CPU: 1 PID: 1297 Comm: kworker/1:0 Not tainted 6.0.0-syzkaller-09039-ga6afa4199d3d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
-Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 80 dd 62 86 4c 89 ee 48 c7 c7 20 d1 62 86 e8 51 e1 af 03 <0f> 0b 83 05 c5 24 ca 06 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffffc90001457638 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff888108e8b900 RSI: ffffffff812c9988 RDI: fffff5200028aeb9
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffffffff8649fc20
-R13: ffffffff8662d640 R14: ffffffff81357820 R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a3505dc950 CR3: 000000010ed33000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __debug_check_no_obj_freed lib/debugobjects.c:989 [inline]
- debug_check_no_obj_freed+0x301/0x420 lib/debugobjects.c:1020
- slab_free_hook mm/slub.c:1734 [inline]
- slab_free_freelist_hook mm/slub.c:1785 [inline]
- slab_free mm/slub.c:3539 [inline]
- kfree+0x104/0x5c0 mm/slub.c:4567
- ieee80211_led_exit+0x15e/0x1b0 net/mac80211/led.c:210
- ieee80211_unregister_hw+0x192/0x1f0 net/mac80211/main.c:1491
- rt2x00lib_remove_hw drivers/net/wireless/ralink/rt2x00/rt2x00dev.c:1084 [inline]
- rt2x00lib_remove_dev+0x42b/0x600 drivers/net/wireless/ralink/rt2x00/rt2x00dev.c:1546
- rt2x00usb_disconnect+0x6d/0x240 drivers/net/wireless/ralink/rt2x00/rt2x00usb.c:874
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:550 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:542
- __device_release_driver drivers/base/dd.c:1249 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1275
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3704
- usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x1f86/0x45e0 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- process_scheduled_works kernel/workqueue.c:2352 [inline]
- worker_thread+0x854/0x1080 kernel/workqueue.c:2438
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+Indeed when I remove that early return in xhci_check_bandwidth(), the
+crash is gone. What's the proper solution?
 
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--IQndFRygjsJAyDAP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmNJxrAACgkQ24/THMrX
+1ywB6ggAltvG89scVW77fVJIUmoi28mJGR8Mh/ClPsrNamJONJq4SQzIIPeAFT4v
+LFyZDSR/kLoVUY6SPAckGZ4fZgwjOpni3+LCNW2e+pEC6LmE8VwIAE9JwwjDnqhc
+IMv5PmQ6BXHn4MkORZ/svrhLIK4jZ9lo5cOTRrCXvUw6USfmmMGfGDRJkdGa+gQ2
+zW37HaUWB0PFvm9PR6Lv5/puFoA052wzvy75K9xS3v7gd7EaVorkNUwkIq1HvSNb
+XbblaRecp4mYJyAIBEY49OSohRWeXp/XBp2OiaCog87tiCNaRjkFy0m4Fv6D6SxP
+SRf106VKUZElc+wRkFtGSV8M16J7Sg==
+=odQz
+-----END PGP SIGNATURE-----
+
+--IQndFRygjsJAyDAP--
