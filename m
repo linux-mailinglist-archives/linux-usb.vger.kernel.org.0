@@ -2,244 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABCD5FFAA1
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Oct 2022 16:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940415FFBD3
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Oct 2022 21:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJOO6z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 Oct 2022 10:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S229729AbiJOTyw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 Oct 2022 15:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJOO6y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 Oct 2022 10:58:54 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479E0520AF
-        for <linux-usb@vger.kernel.org>; Sat, 15 Oct 2022 07:58:53 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id mx8so5008737qvb.8
-        for <linux-usb@vger.kernel.org>; Sat, 15 Oct 2022 07:58:53 -0700 (PDT)
+        with ESMTP id S229683AbiJOTyv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 Oct 2022 15:54:51 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069D31ADA1;
+        Sat, 15 Oct 2022 12:54:49 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id k2so17100056ejr.2;
+        Sat, 15 Oct 2022 12:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=12sHb45PFDPMB554JjoKVtlsY6wkkvotvCzZ54WMtss=;
-        b=pZuZOlYf9IqhChxN/EimNMvtbPOP6iS5fbtfFoQD6/EM06jkG0NyI7z6blVRNGk9Q2
-         414/enrOZD8CcM1vHGUeXRKMKLGXEu8DkpFZcCI3vBTfbeUbT/Sk+vtoc0/+cOqV8/Hd
-         HXx4DwFDEl86zOvx6q7MsBLfqz2aP9Pz5DuOeFm5lHCom64KJE7BWuqj4s6pGsuFmw8l
-         C/UmiVBCKg0DWiuznTEmPs2UovuhN3uqXOi6yrE79gStkwJebQtLPAMbfJ9J2Iz1j5wu
-         mcJUAg+yf+OUOT+r9Y6qGqxNnlejYsRLsQPeCFYzbYXH3W1wlxFMpg26oz/70/3OTFV+
-         OPmQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=era+bHkgnU20D91HzKyZ/L95IhZJ+qsSoSw3gLGE9R4=;
+        b=drCl9hD7YVkMd6M51Ol46DL6F61BeXZ4v8L9yfn20swj04ygSwozu0raQsP+nMv93F
+         xzZ5lcBLjI+Vk0UtH24ocVfTQc0dOwh/sEc+MR9hfK0EItfY2hBAyDlQ2oODdK2Pfg7U
+         wN2r1zEGTcrNQtSGBhOD+ClMEC/pJbP7JIH6c+qG03nb5At8FCH/EJTpn+yYfeZPP7M+
+         F6ziCkBoISnH89fJFC09sJ858ZgPDVhc6KLGXQV1tgjuidKd9fQQ4JGtHf0ANhGJdR9R
+         1xj3IP7j5D1txIfKo7EBo0QBuEdADsf3KQs+uP2AEgPgFAQBv96xWoB6I98xF5Rpi5Ky
+         CeAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=12sHb45PFDPMB554JjoKVtlsY6wkkvotvCzZ54WMtss=;
-        b=qSEB0rZY4pz62bL1TiZVNtWVWP0ejgO+UZO4iTmqsh3u3yatxcqC+GU5D7Mrbxrmcf
-         s9Az1pDqH5ItZTP+lH1ak3vse+VfUqtgaDq/Y/d1uMvBPRL/jvHmHVlcthk0Amt/2/8Z
-         wLcdYqrdngsWdFrEfmswLG1Y89K8dtlslrNuHe7rPdZZTIgkjin1SkWKoz/oY7MKH2IE
-         DWrENY7JY/CZhgbbfy9ywXpzF5ZssstX8seRRyo0Z5xcgnnZQTyewG0irXylNL708G2i
-         j07xniYJag/4wZ56o6WmRV8eLopbyqhAENGpGzOw4JQgGId4jIS65FcWpk6pYiOlfSWV
-         vlJg==
-X-Gm-Message-State: ACrzQf2rbWxaWVoZnWFlR08j/ChfGugJYYwWBXbGj6hjG/E36EE2omhi
-        9kZEOJUBcEOEJWq80xup4i2b6g==
-X-Google-Smtp-Source: AMsMyM5I+tnt730qCojlCOHq9MNreYK60CXysj+3j54f2IxgW4S9LoHcFKhKC7JlZ+aFvJVUKV7r9A==
-X-Received: by 2002:ad4:4ee1:0:b0:4b1:25f6:b9b8 with SMTP id dv1-20020ad44ee1000000b004b125f6b9b8mr2281792qvb.48.1665845932378;
-        Sat, 15 Oct 2022 07:58:52 -0700 (PDT)
-Received: from ?IPV6:2601:42:0:3450:9477:c2f0:ddea:ea08? ([2601:42:0:3450:9477:c2f0:ddea:ea08])
-        by smtp.gmail.com with ESMTPSA id fb15-20020a05622a480f00b0039442ee69c5sm4045008qtb.91.2022.10.15.07.58.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Oct 2022 07:58:51 -0700 (PDT)
-Message-ID: <419bdedb-bcc0-e58c-d1f8-1d66cbc4edf9@linaro.org>
-Date:   Sat, 15 Oct 2022 10:58:49 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=era+bHkgnU20D91HzKyZ/L95IhZJ+qsSoSw3gLGE9R4=;
+        b=tVGabshBA2wRNUMuOTPbsL3mtD6Z3gsVaOcuD33Ci9+FRAsfraNt1O1HemBcizgmW1
+         JI3fRu7TJj1vJ6RnDzW5CgRUoVnm0UFNAmwz6/Wse1/a6dgcFeKxQEhbfY0qYvoKW9W8
+         Mv+AhXCggd40Rq2mRSZpzVtRNCDBDdVrdnjn8lUuW6HCYnXAd4/sjHXdk8PtAaST04+i
+         fszSdl1mzX/16j+CCScFohqC0qvi8ejsqerwvI1EeCPyijEBnelzkNPAqPKfS7359zQt
+         /oXnDh9W3g+izRf/vnmRzL/S/IFszmleUT6i0vKPYVyiLcZ8CiGpIdapiDZuqCPA8Qvz
+         RsUA==
+X-Gm-Message-State: ACrzQf3GErpseqv6D9dh2i13tKM9aoaEcT50uggpATWoStEuNwE5h+ah
+        aVlBYy13fpY0uM6RzXI+XPJ19uTIDbw8qcWJayI=
+X-Google-Smtp-Source: AMsMyM5OfF/s5QPiqq4B01Lz9hx1BoMDniQEyTmUkDWcS3k9DETJmigpEXIA+cKR/gNBTrCW+hVE33RhybuQJDaVMPA=
+X-Received: by 2002:a17:907:75f5:b0:78d:fc53:7d96 with SMTP id
+ jz21-20020a17090775f500b0078dfc537d96mr3053049ejc.718.1665863687321; Sat, 15
+ Oct 2022 12:54:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH V2 4/6] dt-bindings: usb: ci-hdrc-usb2: convert to DT
- schema format
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, xu.yang_2@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-References: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
- <20221014095148.2063669-5-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014095148.2063669-5-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com> <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com> <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com> <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com> <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com> <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
+ <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+ <644adb7b-0438-e37c-222c-71bf261369b0@gmail.com> <CAHQ1cqGSXoUTopwvrQtLww5M0Tf=6F505ziLn+wGHhW_8-JhFQ@mail.gmail.com>
+ <113fe314-0f5c-f53f-db78-c93bd4515260@gmail.com> <CAHQ1cqF_FvG0G2CAQooOVR3E442ApNFf8EKK8PpxcOrUoL5jDA@mail.gmail.com>
+ <bec17559-286c-b006-476f-3c26ae38e70d@gmail.com>
+In-Reply-To: <bec17559-286c-b006-476f-3c26ae38e70d@gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Sat, 15 Oct 2022 12:54:35 -0700
+Message-ID: <CAHQ1cqFqKv+J1=Qg5_sDUeKQ=64aSiGJq0pPH+OqEieZDM1Mfg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+To:     Ferry Toth <fntoth@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/10/2022 05:51, Peng Fan (OSS) wrote:
+On Thu, Oct 13, 2022 at 12:35 PM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> <SNIP>
+> > My end goal here is to find a way to test vanilla v6.0 with the two
+> > patches reverted on your end. I thought that during my testing I saw
+> > tusb1210 print those timeout messages during its probe and that
+> > disabling the driver worked to break the loop, but I went back to
+> > double check and it doesn't work so scratch that idea. Configuring
+> > extcon as a built-in breaks host functionality with or without patches
+> > on my end, so I'm not sure it could be a path.
+> >
+> > I won't have time to try things with
+> > 0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch until
+> > the weekend, meanwhile can you give this diff a try with vanilla (no
+> > reverts) v6.0:
+> >
 
+OK, got a chance to try things with that patch. Both v6.0 and v6.0
+with my patches reverted work the same, my Kingston DataTraveller USB
+stick enumerates and works as expected.
 
-> +
-> +  vbus-supply:
-> +    description: reference to the VBUS regulator.
-> +
-> +  fsl,usbmisc:
-> +    description:
-> +      Phandler of non-core register device, with one argument that
-> +      indicate usb controller index
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +
-> +  disable-over-current:
-> +    description: disable over current detect
-> +
-> +  over-current-active-low:
-> +    description: over current signal polarity is active low
+> > modified   drivers/phy/ti/phy-tusb1210.c
+> > @@ -127,6 +127,7 @@ static int tusb1210_set_mode(struct phy *phy, enum
+> > phy_mode mode, int submode)
+> >    u8 reg;
+> >
+> >    ret = tusb1210_ulpi_read(tusb, ULPI_OTG_CTRL, &reg);
+> > + WARN_ON(ret < 0);
+> >    if (ret < 0)
+> >    return ret;
+> >
+> > @@ -152,7 +153,10 @@ static int tusb1210_set_mode(struct phy *phy,
+> > enum phy_mode mode, int submode)
+> >    }
+> >
+> >    tusb->otg_ctrl = reg;
+> > - return tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
+> > + ret = tusb1210_ulpi_write(tusb, ULPI_OTG_CTRL, reg);
+> > + WARN_ON(ret < 0);
+> > + return ret;
+> > +
+> >   }
+> >
+> >   #ifdef CONFIG_POWER_SUPPLY
+> >
+> > ? I'm curious to see if there's masked errors on your end since dwc3
+> > driver doesn't check for those.
+> root@yuna:~# dmesg | grep -i -E 'warn|assert|error|tusb|dwc3'
+> 8250_mid: probe of 0000:00:04.0 failed with error -16
+> platform regulatory.0: Direct firmware load for regulatory.db failed
+> with error -2
+> brcmfmac mmc2:0001:1: Direct firmware load for
+> brcm/brcmfmac43340-sdio.Intel Corporation-Merrifield.bin failed with
+> error -2
+> sof-audio-pci-intel-tng 0000:00:0d.0: error: I/O region is too small.
+> sof-audio-pci-intel-tng 0000:00:0d.0: error: failed to probe DSP -19
+>
+>
+> >> This is done through configfs only when the switch is set to device mode.
+> > Sure, but can it be disabled? We are looking for unknown variables, so
+> > excluding this would be a reasonable thing to do.
+> It's not enabled until I flip the switch to device mode.
 
-This is a friendly reminder during the review process.
+OK to cut this back and forth short, I think it'd be easier to just
+ask you to run what I run. Here's vanilla v6.0 bzImage and initrd
+(built with your config + CONFIG_PHY_TUSB1210=y) I tested with
+https://drive.google.com/drive/folders/1H28AL1coPPZ2kLTYskDuDdWo-oE7DRPH?usp=sharing
+let's see how it behaves on your setup. There's also the U-Boot binary
+I use in that folder in case you want to give it a try.
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+Now on Merrifield dwc3_get_extcon() doesn't do anything but call
+extcon_get_extcon_dev() which doesn't touch any hardware or interact
+with other drivers, so assuming
 
-Thank you.
+> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
+> dwc3_core_init - .. - dwc3_core_init_mode (not working)
+>
+> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. - dwc3_core_init -
+> .. - dwc3_core_init_mode (no change)
+>
+> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. - dwc3_get_extcon -
+> dwc3_core_init_mode (works)
 
-> +
-> +  over-current-active-high:
-> +    description: |
-> +      Over current signal polarity is active high. It's recommended to
-> +      specify the over current polarity.
-> +
-> +  power-active-high:
-> +    description: power signal polarity is active high
-> +
-> +  external-vbus-divider:
-> +    description: enables off-chip resistor divider for Vbus
-> +
-> +  samsung,picophy-pre-emp-curr-control:
-> +    description: |
-> +      HS Transmitter Pre-Emphasis Current Control. This signal controls
-> +      the amount of current sourced to the USB_OTG*_DP and USB_OTG*_DN
-> +      pins after a J-to-K or K-to-J transition. The range is from 0x0 to
-> +      0x3, the default value is 0x1. Details can refer to TXPREEMPAMPTUNE0
-> +      bits of USBNC_n_PHY_CFG1.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0x0
-> +    maximum: 0x3
-> +
-> +  samsung,picophy-dc-vol-level-adjust:
-> +    description: |
-> +      HS DC Voltage Level Adjustment. Adjust the high-speed transmitter DC
-> +      level voltage. The range is from 0x0 to 0xf, the default value is
-> +      0x3. Details can refer to TXVREFTUNE0 bits of USBNC_n_PHY_CFG1.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0x0
-> +    maximum: 0xf
-> +
-> +  usb-phy:
-> +    description: phandle for the PHY device. Use "phys" instead.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    deprecated: true
-> +
-> +  fsl,usbphy:
-> +    description: phandle of usb phy that connects to the port. Use "phys" instead.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    deprecated: true
-> +
-> +patternProperties:
-> +  "ethernet@[0-9a-f]$":
-> +    description: The hard wired USB devices
-> +    type: object
-> +    $ref: /schemas/net/microchip,lan95xx.yaml
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +allOf:
-> +  - $ref: usb-hcd.yaml#
-> +  - $ref: usb-drd.yaml#
-> +  - if:
-> +      properties:
-> +        mux-controls:
-> +          true
-> +    then:
-> +      properties:
-> +        mux-control-names:
-> +          const: usb_switch
+still holds(did you double check that with vanilla v6.0?) the only
+difference that I can see is execution timings. It seems to me it's
+either an extra delay added by execution of  extcon_get_extcon_dev()
+(unlikely) or multiple partial probes that include dwc3_core_init()
+that change things. You can try to check the latter by adding an
+artificial probe deferral point after dwc3_core_init(). Something like
+(didn't test this):
 
-This is a friendly reminder during the review process.
+modified   drivers/usb/dwc3/core.c
+@@ -1860,6 +1860,10 @@ static int dwc3_probe(struct platform_device *pdev)
+  goto err3;
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-
-Additionally: Blank line
-
-> +  - if:
-> +      properties:
-> +        phy_type:
-> +          const: hsic
-> +
-> +      required:
-> +        - phy_type> +    then:
-> +      properties:
-> +        pinctrl-names:
-> +          items:
-> +            - const: idle
-> +            - const: active
-> +    else:
-> +      properties:
-> +        pinctrl-names:
-> +          oneOf:
-> +            - items:
-> +                - const: default
-> +                - enum:
-> +                    - host
-> +                    - device
-> +            - items:
-> +                - const: default
-
-No, just minItems: 1
-
-Additionally: blank line
-
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - chipidea,usb2
-> +              - lsi,zevio-usb
-> +              - nvidia,tegra20-udc
-> +              - nvidia,tegra30-udc
-> +              - nvidia,tegra114-udc
-> +              - nvidia,tegra124-udc
-> +              - qcom,ci-hdrc
-> +              - xlnx,zynq-usb-2.20a
-> +    then:
-> +      properties:
-> +        fsl,usbmisc: false
-> +        disable-over-current: false
-> +        over-current-active-low: false
-> +        over-current-active-high: false
-> +        power-active-high: false
-> +        external-vbus-divider: false
-> +        samsung,picophy-pre-emp-curr-control: false
-> +        samsung,picophy-dc-vol-level-adjust: false
-> +
-
-
-Best regards,
-Krzysztof
-
+  ret = dwc3_core_init(dwc);
++ static int deferral_counter = 0;
++ if (deferral_counter++ < 9) /* I counted 9 deferrals in my testing */
++ ret = -EPROBE_DEFER;
++
+  if (ret) {
+  dev_err_probe(dev, ret, "failed to initialize core\n");
+  goto err4;
