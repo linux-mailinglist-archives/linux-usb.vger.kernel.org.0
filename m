@@ -2,92 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE245FFEF9
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Oct 2022 13:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43BB5FFEF8
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Oct 2022 13:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJPLgv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Oct 2022 07:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S229735AbiJPLgx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Oct 2022 07:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJPLgu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Oct 2022 07:36:50 -0400
+        with ESMTP id S229726AbiJPLgv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Oct 2022 07:36:51 -0400
 Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2157.outbound.protection.outlook.com [40.92.63.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE36939BA1
-        for <linux-usb@vger.kernel.org>; Sun, 16 Oct 2022 04:36:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F74E39B99
+        for <linux-usb@vger.kernel.org>; Sun, 16 Oct 2022 04:36:50 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qxza6E6fVICpJ/JyINI6BLCxrbw5gDC2m7LCBjshKgLWiZ6H5uOXO4M/UGQy8urvm2Rc9rZq0E1GWB781XDVYIKZZkg+CYhwL6T6o0EMIBnHG4wwMq9OMEh0K8uF+7N4plDUd7LQHdn154BMt/jZWrenrGP1plnfvMCPIUARotJ9NoCfKyoxf3RDbHUmAeX+MXfmZzgH56FKQO0nEUmtEaK0s8tMG49GG/XTmIg+giL1jxW0rC2qKBLrNWzv0pd1cCPvGijrQA/ta0O/R27FksGdN2EivvWEkj7sVI/VPDjBjYiWEHLtgGJrsWY6CZ4MVME9/Kio3boEVkwIaYXWsA==
+ b=mvwj3mxtZf9K+u2jfuCtw76MHvsf8lZxFKx+dHW5EZ/nJjRaH5Tt4laevKFwEdtz+Pv4dDRg2wZSzZh8S/p5QewubKEOzTiYy3cu+UfVOW1pYU41AKlwFKtsa6e/5P6iqjaNDg41IibcWl1icBWF6uw9USPCxe/lH3hqGCPl10c9Da0LTg5TUogzTQIyxvRKgiOpTSlgZwTqbxbpI55Iz2TlkVff//76Q3VOU28Qk+RHv43roXRqZIjvtj+EKQg/NSZ/gKT6x+tXA5R/IX3cJjEQIopF8M9hIpNXhC2cqueE34Ury/3IGK9PW5oQRpwBQtinUUDgR2wonbldxWPwNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Omn5NIDMedQ0BB3et8V13wjnLYUbDdDCUMCMQjAYpKk=;
- b=FSOPLUckVCEVidKJuMCAKNyftT8WQ7GTLODUHKH/yxqBKy+LKv0HVPqin/YvYtekp4SdsX8cYjWrw5c6XGIU9AYgKH/HMbPC01E/rI4W0n9ktBF8ZHYdlcGegswJ4Ye4/r3EqL0hLoMAlSYeNK2rMmotpd/064tHUpN0BgOQqYmsAzqxDKW6dOqW+jEjvNLrbGiR6J6hU1MJPXLzhbL5DuMFxGifyqoBCLdTG0kMT0jcMec894CHwjWarWmh5xkNiZtb3nvTlY7jiPWBJvry/miWjKIlJ8Ar/dhVJ5cTKPP/gMo/T7EcaVl3MywNkEwmJd1IKuZQV+IgU5QFp2aMiw==
+ bh=rIdBAdu5ytZ67B9JZB/nneJXLg81xKaa0qhv+CktaRQ=;
+ b=AuZThStgOm7LkZ55NH/yfZuwWxBRKIWbUqfMHlaVkGIQddF55vGAvAKmrzYzRv16GUk71G00qVSYcsIPgbW6nPGRb6KwwIVodf+sgyeP1qYoett+j5yYNmhm2P5AIAOPLBw7Co1ulSz9XOrvzU7JR4omgwQqPGG6G3EVcLZD94UEPl0setYY5CAeG3RfufOtJVtwrvqEx5LiMrVhgG96oAvQStzOjCjwo1yqdN08guXgqPykuQNsHefMeMGD3SAqYO2SrFa+289Jnt1YCYKwPeJIMiY1bS4t/6nRJaZOJnxlgwp5A4OeNOe7JxLBHvHMNpltGEIuP+1+yiEW57RlfA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Omn5NIDMedQ0BB3et8V13wjnLYUbDdDCUMCMQjAYpKk=;
- b=AHbfMjTNM5Ov6E3XSD5n/2DFiKA2nxZ+1u26Bay2RZ7dslD9X/2xLsDLAq/1ld6jrm02dSS6lBwhdMGC5DCNra6WxyhNiIbAkhy/W0uBlcXAQhcx/W2WOCIXuvAQjmrU5dubni8womK9rLW5n8uRbku+mKZv3NllfQpcYPV3xNHgwwbFm4Xu4wpHpl1sOR63cV5vFU0cq5jcDDku7OHfPjzfJVOake6V/lSR4jhAb7JP14igtkqRCJnuUaGtrp6fKZXMeKDbFZe7+9ET8VXlC/49CFM2NG1D4uZrKX3G+jfEgcvc5qSGoGru8+3phF7psML9jdMShK5eBvH+1+j8zA==
+ bh=rIdBAdu5ytZ67B9JZB/nneJXLg81xKaa0qhv+CktaRQ=;
+ b=BEU8hO/RqpKFAHBB0yrz62irpKRHw9zlAMNrzRpn7w8zAo2ONUEyNhT5oAWCRK86yca4T7LQ8/WJzSn4yuhnlFUNhEC35laH45SRgjjGPWeghbjC6csW58n3hZThrliDvXf4ykZhpi0CybYOHgGKmdFsFc+nyfF2zuuUS2+ryYxxl9/gXHQdhSAYoPbAXdASCNsPutpyevteigaVU2Q5Zgbch+2QswXH3bxbel9WolN/X2BzahDVju6cKDm6RuLo3AzvqAJdJKXe1b3ahxR7NB1ECXohlvMnLVB4q570BZYoQdAqT7cMQqAgSIIcP3Lo5JlVhQY3OskooW8VWCLU9Q==
 Received: from ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:13c::13)
  by SY4P282MB2790.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:159::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Sun, 16 Oct
- 2022 11:36:40 +0000
+ 2022 11:36:41 +0000
 Received: from ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
  ([fe80::d403:bdaa:515:ae06]) by ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
  ([fe80::d403:bdaa:515:ae06%8]) with mapi id 15.20.5723.032; Sun, 16 Oct 2022
- 11:36:40 +0000
+ 11:36:41 +0000
 From:   Chun-Chao Yen <nothingstopsme@hotmail.com>
 To:     pabeni@redhat.com
 Cc:     davem@davemloft.net, linux-usb@vger.kernel.org
-Subject: [PATCH 2/3 (RESENT)] net: usb: ax88179_178a: Enable AX_RX_CTL_IPE only when NET_IP_ALIGN != 0
-Date:   Sun, 16 Oct 2022 19:36:26 +0800
-Message-ID: <ME3P282MB28271406007AB7DF67A406F9D1269@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
+Subject: [PATCH 3/3 (RESENT)] net: usb: ax88179_178a: Allow live update of devices' mac address
+Date:   Sun, 16 Oct 2022 19:36:27 +0800
+Message-ID: <ME3P282MB2827C318D21C36513DD66622D1269@ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20221016113628.4176189-1-nothingstopsme@hotmail.com>
 References: <20221016113628.4176189-1-nothingstopsme@hotmail.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [okkWM+/gY+KAe8EqFBR5usze8SbaXojo]
+X-TMN:  [GgnMbM79s8NNfomjuvcLKeHDzUEZG8dx]
 X-ClientProxiedBy: TYCP286CA0120.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:400:29c::20) To ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
  (2603:10c6:220:13c::13)
-X-Microsoft-Original-Message-ID: <20221016113628.4176189-2-nothingstopsme@hotmail.com>
+X-Microsoft-Original-Message-ID: <20221016113628.4176189-3-nothingstopsme@hotmail.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: ME3P282MB2827:EE_|SY4P282MB2790:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12602520-2533-42d8-f104-08daaf6ab144
+X-MS-Office365-Filtering-Correlation-Id: 37b29fa6-5be2-402d-dfa5-08daaf6ab20f
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U8X8TT00YMo4QnuWfSOpm3+yQjItVjMlEgxvDq+1WSXQPnCTHsq3n/yOW4jIdPWmkYTiHV+60O3R9GuPnuiFOWrHkPRG3So7v+b/ygVCB0GMrLc+628V4AKSqnsZfoa9La2J0qqdFWNbCYMXDKkZRjZDEg0raY3cS5FWH7Sb1a1RAl0mHwPorNy//viX7fu2TexNf9El0u/qByfHj46enbVWEf9RnPZl9vEGCYma6UA57bp+akoDx4TCThq1dw/IM7PkZf5et6vHZ0kU19bxyNlSTKfnkFFCDs+Vljp6oGSTBcN+bMhZMdtpe8f0xCy10f0iVKigiz7sAML/JFN1xRIt4M6/ixhTUb06r98Sg+svylaYQ4O+fmoa6H1xc5/BmOjbjMyO0PUYSafWzwB4xOxpnZKvw8S8XDqX29n8JpTymIvXrUI3lbA2LTgqSYDgV/oVYpLrBmf4UXYEHGWPtZrrjx3IX80jUIZrSDrP9bqMIc5UPeqdwUIk7Qy86kakmKWNDL5a3vodaL013FiKNUfdYzB5zZV7zCw8EKOhb6YUcuvRNewJYHJcgGCk/ADVeB/43zozJqGcRbET1pDjCN4HUlUdZRxcIRzZEV/PdEbIntgjaawGlkHa3jeS+utl
+X-Microsoft-Antispam-Message-Info: HXlxSmdrGUrlzT7mFPrBWM9PL1CLlymjz9XntQJsgDqV5wE676PjtXVoTcIpD8PJ6cocMtJ5jken5pXjhwwbqqm2rBizJBlFCi0e6g6FtQCSs6ylqlF2C1frPrX1df762mt9MwsiOyFqg8+KYUVk8RuLh9zjoiQrPKi8kPw0D9K1sUdgvG6CsSRGrOFgpItAKvyVJ3qKP6WefvCCBu6sLXqAQDY8L/D1ClSc3/Mt8h3HVTle4zz2hzIDnXk1Den7xhJ1SjvKTV80Dq/NmXhJE8WUBs3E1840J1935z9XwS2Qppf2d/uDSLGgorIOG7wQ+M6AAW98xMzJByTnweCbLOK956tK8P+V4qwddd4qSXuQcLH3EeRNx94iHCAtAPrd1rnyNXhiTpTPPkNGRw6gffX3M912dr/nOpz/NPMlnAPMlDjve9eMLemlzINqC32qFg4kuP0s7H00MQ/g2ko74NUIy4Xh2lGwuitW4Hv15ebOdep5WfOyKHe4+qfTmpdMaEdyusYoLrSPDG3HrtFk0Ep7Uxy1shpw7CfPtFw+xQFsv7KSrNbk/sv4JcxF6Pu5fe6IJ0YLVyUop949W9eVDRn1IvAwo2htRh84PLnUaItCZPqfIimeFP5070Sjha7X
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NbsbHfQNGgYUhO5RvFMMT7vKHDS15/tMsRHltjYKklk1UdYmzi8UATl1aGM9?=
- =?us-ascii?Q?LxGWF+Kio62ilMNw6LsPskkS+sVvnc6uN7Cam2tYpUjrmMpjRnLrX3dyNoLy?=
- =?us-ascii?Q?UDpX8Bp1FjBcpSmoJcg6WedWF6/KNbi1q390vLGAqLe3L9j5VxjHa4iC11dc?=
- =?us-ascii?Q?60+rZX11unSNP/osHu8Im7AOIcQ5WQCk/HFypVjKXnPuLQC3w9aQMGnlslW5?=
- =?us-ascii?Q?Lbi8HynKUa5PJcNl4Zp3uIaFjaBuOJys9mePEGQnPCop2CvSCT9ZGhASnwR+?=
- =?us-ascii?Q?F0/G6U6DAdPa+jG0uRrGxq19dGg9iw0ZezTHW3KBFb1lHpKkvFcMCxtYvCLr?=
- =?us-ascii?Q?xofe9F3QFaeKM+8phXbU+DGLzhkk55u4ic0ia9jfIluVoTiMHmMnfHDDc/vm?=
- =?us-ascii?Q?U5H1M70mvVu3/FXYoeKWXsXUiXTtkYiJaWo/ab63hOQPran+cXekK/2N0Fel?=
- =?us-ascii?Q?U+za2PCJP7QmPuyv6dghgcWaYxWPM3B+65QiSl33jYd+A5GG4Qi5hqzGoXCJ?=
- =?us-ascii?Q?tDaNdFBl4nSDUSolmvIvE/C/sGfxnu6ZAKYvWWjA39E0lzx4jDiiJKBb/hYk?=
- =?us-ascii?Q?i7bUWv8Dt2I9Gg6eTjXf4bxEeUP7/R3JRr8Bk+6dbiQeSPMVMPSuYBDHNI08?=
- =?us-ascii?Q?pN5pxnp/GQfVUWWh1O4F6F34+Z6hVyvYsCOUxtxyXv3bhVbZek8DwWz+umrR?=
- =?us-ascii?Q?lqOOi0thMUaUag0kSPg0wfoCWJF5WMTO3v+UXmlhgZifNAua2hcMcHSRKnqi?=
- =?us-ascii?Q?H+EfCr1uawEaDEfAVa/PZRCDdmxfkzHXUiD51mqGvTXocavF84s0js+Q5pap?=
- =?us-ascii?Q?zE5a/ci96Z+rWemZKO4trky7k1ACDtIqYexTKYLlbwn59eNNHPEMDmKQ6vG+?=
- =?us-ascii?Q?9DZk4JImjr7PvbOXyYjGagxSfyGOQl8/nrrGW2acJp9uX68AJlRNyYK6a67I?=
- =?us-ascii?Q?VflolJSD2gezjeB56775Z/piBT5mfoUh8yGLuikhdqzEyQk5+SIsbgaKULN9?=
- =?us-ascii?Q?lUOktJPW9oG3joxfFN5YVKU4voDxrx8v4nTAf1jahc7fxaGRmW3Fwd+qi1Jf?=
- =?us-ascii?Q?VGwtVnxscWSTG4lNveh+GnbuUb/wilhVnuNl1NKqhzW4dRPtfw6wdZpUbL7D?=
- =?us-ascii?Q?NneAc98F2WcbZci6BSID353Lh2p4HqGRad0yqCofwY/LZuRnL+uShLagA5+D?=
- =?us-ascii?Q?2P2Sy4BK/BjMsNICYCHiU6QAOLoA1sD8NixQtCU4YJndCedhGqArtOQNwMD6?=
- =?us-ascii?Q?A+J3Y7UfncJyiLgxx+pQKtS6Z2Kb6XbNlNC8Tw1qew=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gPckE/sMjvrMQoWIAsnyPepJ2C+MEQr0vqwcrRJZuX1Cdjg2KDEzE0YfZE4T?=
+ =?us-ascii?Q?3+p4drMJlA2dpTObJIezC/bfQQ6BqidHRUOAe4CpFiKcpW5We7mGKLdTSRM/?=
+ =?us-ascii?Q?v3IR57VLlQI8AwcDFn1oZwCdC3qcMEEiXvg5AkoMOtM96PTQB/KmXCBloCHd?=
+ =?us-ascii?Q?+TZqR/kn9tSNHhyJ0iZgFg+5i7kWNtNL1vKa/GroD9a1iRtVPCleczRW6uhU?=
+ =?us-ascii?Q?/KNyUtER7LCASvfxQ5o6yN0qYMJgxStEzqYKS7ooxh5/eL7HY64mGnW5FsCC?=
+ =?us-ascii?Q?Dr7Bgabt4rOUBbD2knVy1ZgAE44l5MrNheB0VlZppVC5P4TX8ObLhVcNMXv3?=
+ =?us-ascii?Q?g2qoWfCw6IZhJwg9moeQ7nq5THMoD4xhpj8rywRS1XOFk1djyIASe5zVPdAC?=
+ =?us-ascii?Q?/M5PXKxLC+1CcdzlVCoSdID2G5lUM2lhW2OmB4uSB7DshOHIwz+ymWaERBDe?=
+ =?us-ascii?Q?ZJEXZySYFm0Ar7k3BaJs1p2e2fjFBeWG44A3sYeCNmIYntvMZeuctBwJ49Ju?=
+ =?us-ascii?Q?VJoWQx+qFBIamU/njN1cnhCHp7C7TTQuuvImDziUg52b5cTXFWduoLpBlRrr?=
+ =?us-ascii?Q?pFTy/TWfUz00PbXz5lNZQlgAdvxPuDsya8sYOprXc3ty6Vr2XJ7SY7SGTfTW?=
+ =?us-ascii?Q?sH54VicUYOXBkSXwxHZXtOIE1L31HpiJH7NGJBUMAFUh80qFiB3cCWg89mmX?=
+ =?us-ascii?Q?QUG5VEDlOWhBV0TTCaBobasLMrxzaxH/r2zsLnqqciq8KRAXrTpTggVGZzpD?=
+ =?us-ascii?Q?uqxeBp5xs9vSZAyktnWuH284FXMTX2a9MBUzd1uNr+GM2og0qmXEv7ZB+iAG?=
+ =?us-ascii?Q?cPZf1Fhj5W13XEGe0dU9jriGs019shfK9w0t6GNxRzL4ZK92JTGoKzBCydzL?=
+ =?us-ascii?Q?T9Voa8cXURhiA0dtUw9P/aBkeivQrTd1h5geyT79RodS3bE+wcicWXzv3nlR?=
+ =?us-ascii?Q?9jf/jE6VGSlG4INGrcOEpTnd7/xTKMqvN7Dm8QdEKCMgvQzJnKbjH9GJvfKv?=
+ =?us-ascii?Q?1nrcKmlENtqRYRx9beXTcAJEd9u4eZyXfhyrplb7KQ2ofsRbvEl+vF9EdvXk?=
+ =?us-ascii?Q?d+GN5a4Zw0SZInUZmZQOFS7dz6hbsD1uBdE065jajnpj/QwQcE0DZEZvAl2r?=
+ =?us-ascii?Q?1DJRrt0Pk8sQpUQYQCoa3aX6LXGDytw9prL+bKinGotLplQ00xhAMm1h5XOU?=
+ =?us-ascii?Q?uSOz1ab615WgnvM7KHKc321Vz1OAe1bf/p3cxR5tBlDP5w18Vs8NwGQYWaI7?=
+ =?us-ascii?Q?5qLj8/UFZD5NkVwX26OaecFF2rRVv8dRnF33YRnTEA=3D=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12602520-2533-42d8-f104-08daaf6ab144
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37b29fa6-5be2-402d-dfa5-08daaf6ab20f
 X-MS-Exchange-CrossTenant-AuthSource: ME3P282MB2827.AUSP282.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2022 11:36:40.4495
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2022 11:36:41.8406
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -104,91 +104,40 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Problem Description:
-According to the comments in the hardware vendor's outdated source code
-[1], AX_RX_CTL_IPE signals the hardware to do 32-bit(4-byte) IP header
-alignment; such alignment is equivalent to the concept of NET_IP_ALIGN = 2
-(an extra 2-byte "pesudo header" at the beginning of each etherner frame),
-as described in skbuff.h.
-
-In the current implementation, however, AX_RX_CTL_IPE is always enabled
-regardless of the value of NET_IP_ALIGN; this can introduce waste in many
-aspects, such as
-1. hardware internal resource
-2. USB bandwidth
-3. host memory
-4. cpu cycles (for updating frame start pointers and frame size variables)
-when alignment is completely unnecessary, i.e. NET_IP_ALIGN = 0.
+Live update of devices' mac address is currently blocked by this driver, as
+it requires the evaluation of netif_running() given the corresponding
+device being false. While appearing a harmless check, it can be disruptive
+in some networking configurations, such as "Link Aggregation" operated in
+active-backup mode with fail_over_mac=follow, where the mac address of a
+device will be updated dynamically even when it is already up and running.
 
 Solution:
-Enable AX_RX_CTL_IPE and process pesudo headers only when NET_IP_ALIGN !=
-0.
+Remove the check of netif_running() in ax88179_set_mac_addr(), so that the
+update procedure can proceed irrespective of the boolean status returned by
+netif_running().
 
 Verification:
-Only tested on a platform where NET_IP_ALIGN = 0, with this device:
+Only tested with this device:
 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
-
-References:
-[1] https://www.asix.com.tw/en/support/download/file/120 (AX88179 USB3.0 to
-10/100/1000M Gigabit Ethernet Controller, version 1.20.0)
 
 Signed-off-by: Chun-Chao Yen <nothingstopsme@hotmail.com>
 ---
- drivers/net/usb/ax88179_178a.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ drivers/net/usb/ax88179_178a.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index b50748b3776c..96ede3a131d4 100644
+index 96ede3a131d4..84016e0567d4 100644
 --- a/drivers/net/usb/ax88179_178a.c
 +++ b/drivers/net/usb/ax88179_178a.c
-@@ -858,7 +858,10 @@ static void ax88179_set_multicast(struct net_device *net)
- 	struct ax88179_data *data = dev->driver_priv;
- 	u8 *m_filter = ((u8 *)dev->data);
+@@ -958,8 +958,6 @@ static int ax88179_set_mac_addr(struct net_device *net, void *p)
+ 	struct sockaddr *addr = p;
+ 	int ret;
  
--	data->rxctl = (AX_RX_CTL_START | AX_RX_CTL_AB | AX_RX_CTL_IPE);
-+	data->rxctl = (AX_RX_CTL_START | AX_RX_CTL_AB);
-+
-+	if (NET_IP_ALIGN)
-+		data->rxctl |= AX_RX_CTL_IPE;
+-	if (netif_running(net))
+-		return -EBUSY;
+ 	if (!is_valid_ether_addr(addr->sa_data))
+ 		return -EADDRNOTAVAIL;
  
- 	if (net->flags & IFF_PROMISC) {
- 		data->rxctl |= AX_RX_CTL_PRO;
-@@ -1424,7 +1427,7 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 
- 		/* Check CRC or runt packet */
- 		if ((*pkt_hdr & (AX_RXHDR_CRC_ERR | AX_RXHDR_DROP_ERR)) ||
--		    pkt_len < 2 + ETH_HLEN) {
-+		    pkt_len < (NET_IP_ALIGN ? 2 : 0) + ETH_HLEN) {
- 			dev->net->stats.rx_errors++;
- 			goto advance_data_ptr;
- 		}
-@@ -1438,8 +1441,13 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 		}
- 		skb_trim(ax_skb, pkt_len);
- 
--		/* Skip IP alignment pseudo header */
--		skb_pull(ax_skb, 2);
-+		if (NET_IP_ALIGN) {
-+			/* Skip the pseudo header, 2 bytes at the start of each
-+			 * ethernet frame, resulting from hardware 4-byte
-+			 * IP header alignment (triggered by AX_RX_CTL_IPE)
-+			 */
-+			skb_pull(ax_skb, 2);
-+		}
- 
- 		ax_skb->truesize = SKB_TRUESIZE(pkt_len);
- 		ax88179_rx_checksum(ax_skb, pkt_hdr);
-@@ -1609,8 +1617,10 @@ static int ax88179_reset(struct usbnet *dev)
- 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, tmp);
- 
- 	/* Configure RX control register => start operation */
--	*tmp16 = AX_RX_CTL_DROPCRCERR | AX_RX_CTL_IPE | AX_RX_CTL_START |
-+	*tmp16 = AX_RX_CTL_DROPCRCERR | AX_RX_CTL_START |
- 		 AX_RX_CTL_AP | AX_RX_CTL_AMALL | AX_RX_CTL_AB;
-+	if (NET_IP_ALIGN)
-+		*tmp16 |= AX_RX_CTL_IPE;
- 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2, tmp16);
- 
- 	*tmp = AX_MONITOR_MODE_PMETYPE | AX_MONITOR_MODE_PMEPOL |
 -- 
 2.32.0
 
