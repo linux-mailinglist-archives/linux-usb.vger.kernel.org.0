@@ -2,107 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BF85FFCE4
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Oct 2022 03:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051CE5FFEA9
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Oct 2022 12:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiJPBdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 Oct 2022 21:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S229681AbiJPKlQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Oct 2022 06:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiJPBdV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 Oct 2022 21:33:21 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C9A4541D23
-        for <linux-usb@vger.kernel.org>; Sat, 15 Oct 2022 18:33:19 -0700 (PDT)
-Received: (qmail 1125367 invoked by uid 1000); 15 Oct 2022 21:33:18 -0400
-Date:   Sat, 15 Oct 2022 21:33:18 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [BUG] KVM USB passthrough did not claim interface before use
-Message-ID: <Y0tfXv2U7Izx5boj@rowland.harvard.edu>
-References: <CAMdYzYrUOoTmBL2c_+=xLBMXg38Pp4hANnzqxoe1cVDDrFvqTA@mail.gmail.com>
- <Y0QnFHqrX2r/7oUz@rowland.harvard.edu>
- <CAMdYzYodS7Y4bZ+fzzAXMSiCfQHwMkmV8-C=b3FVUXDExavXgA@mail.gmail.com>
- <Y0QzrI92f9BL+91W@rowland.harvard.edu>
- <CAMdYzYpdLEKMSytGStvM2Gi+gkBY7GTUHZfoBt5X-2BEzLrfOw@mail.gmail.com>
- <Y0cuHHWL3r7+mpcq@rowland.harvard.edu>
- <CAMdYzYockLYigqgX+R28a_Xy=wGExGj-MXL79Jrc7Jv7B6Qh3w@mail.gmail.com>
+        with ESMTP id S229653AbiJPKlP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Oct 2022 06:41:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527B839BA7;
+        Sun, 16 Oct 2022 03:41:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB54F60B18;
+        Sun, 16 Oct 2022 10:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDA8C433C1;
+        Sun, 16 Oct 2022 10:41:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665916873;
+        bh=+QQ0hxm37qhkO10M29qkWeIY40wxMMYdhhcDwBRWzkI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Auj0BjgFpC4z55x1oUQx+lpTV44hSTzcJs56mPNM3+1ylvQGI1n35fah0ZRAlWKe2
+         LUUHtMGxM650LPR/Yfs6dzyRbL5Rm9/wdqjsNdi9BvOPpt+k2wAR7d+6l0D2BJd0gd
+         BMyJ2tVj1pRmOM/wLFsHc4/KrQalvpBHBPJfxCmA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] USB: allow some usb functions to take a const pointer.
+Date:   Sun, 16 Oct 2022 12:41:55 +0200
+Message-Id: <20221016104155.1260201-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYockLYigqgX+R28a_Xy=wGExGj-MXL79Jrc7Jv7B6Qh3w@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3295; i=gregkh@linuxfoundation.org; h=from:subject; bh=+QQ0hxm37qhkO10M29qkWeIY40wxMMYdhhcDwBRWzkI=; b=owGbwMvMwCRo6H6F97bub03G02pJDMne9z/n6n+vjpuyeZfqtCcr289bvNH09LKZE2oYyam4UP1Y hN3FjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZhIYyrDfM8zt/9OrWlKM5j4uP3uph k7Xu9Nq2FYsEnjAU8+X8mjXeE9ba9f+l94strWDAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 08:36:19PM -0400, Peter Geis wrote:
-> On Wed, Oct 12, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > There's one other thing you might try, although I'm not sure that it
-> > will provide any useful new information.  Instead of collecting a
-> > usbmon trace, collect a usbfs snoop log.  Before starting qemu, do:
-> >
-> >         echo 1 >/sys/module/usbcore/parameters/usbfs_snoop
-> >
-> > This will cause the accesses performed via usbfs, including those
-> > performed by the qemu process, to be printed in the kernel log.  (Not
-> > all of the accesses, but the more important ones.)  Let's see what shows
-> > up.
-> 
-> So I built and tested the newest version of QEMU, and it exhibits the
-> same issue. I've also captured the log as requested and attached it
-> here.
+The functions to_usb_interface(), to_usb_device, and
+interface_to_usbdev() sometimes would like to take a const * and return
+a const * back.  As we are doing pointer math, a call to container_of()
+loses the const-ness of a pointer, so use a _Generic() macro to pick the
+proper inline function to call instead.
 
-Here's what appears to be the relevant parts of the log.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/usb.h | 55 ++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 52 insertions(+), 3 deletions(-)
 
-> [93190.933026] usb 3-6.2: opened by process 149607: rpc-libvirtd
-> [93191.006429] usb 3-6.2: opened by process 149605: qemu-system-x86
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 9ff1ad4dfad1..3a55131e0ad4 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -258,7 +258,27 @@ struct usb_interface {
+ 	struct device *usb_dev;
+ 	struct work_struct reset_ws;	/* for resets in atomic context */
+ };
+-#define	to_usb_interface(d) container_of(d, struct usb_interface, dev)
++
++static inline struct usb_interface *__to_usb_interface(struct device *d)
++{
++	return container_of(d, struct usb_interface, dev);
++}
++
++static inline const struct usb_interface *__to_usb_interface_const(const struct device *d)
++{
++	return container_of(d, struct usb_interface, dev);
++}
++
++/*
++ * container_of() will happily take a const * and spit back a non-const * as it
++ * is just doing pointer math.  But we want to be a bit more careful in the USB
++ * driver code, so manually force any const * of a device to also be a const *
++ * to a usb_device.
++ */
++#define to_usb_interface(dev)						\
++	_Generic((dev),							\
++		 const struct device *: __to_usb_interface_const,	\
++		 struct device *: __to_usb_interface)(dev)
+ 
+ static inline void *usb_get_intfdata(struct usb_interface *intf)
+ {
+@@ -709,12 +729,41 @@ struct usb_device {
+ 	u16 hub_delay;
+ 	unsigned use_generic_driver:1;
+ };
+-#define	to_usb_device(d) container_of(d, struct usb_device, dev)
+ 
+-static inline struct usb_device *interface_to_usbdev(struct usb_interface *intf)
++static inline struct usb_device *__to_usb_device(struct device *d)
++{
++	return container_of(d, struct usb_device, dev);
++}
++
++static inline const struct usb_device *__to_usb_device_const(const struct device *d)
++{
++	return container_of(d, struct usb_device, dev);
++}
++
++/*
++ * container_of() will happily take a const * and spit back a non-const * as it
++ * is just doing pointer math.  But we want to be a bit more careful in the USB
++ * driver code, so manually force any const * of a device to also be a const *
++ * to a usb_device.
++ */
++#define to_usb_device(dev)					\
++	_Generic((dev),						\
++		 const struct device *: __to_usb_device_const,	\
++		 struct device *: __to_usb_device)(dev)
++
++static inline struct usb_device *__intf_to_usbdev(struct usb_interface *intf)
+ {
+ 	return to_usb_device(intf->dev.parent);
+ }
++static inline const struct usb_device *__intf_to_usbdev_const(const struct usb_interface *intf)
++{
++	return to_usb_device((const struct device *)intf->dev.parent);
++}
++
++#define interface_to_usbdev(intf)					\
++	_Generic((intf),						\
++		 const struct usb_interface *: __intf_to_usbdev_const,	\
++		 struct usb_interface *: __intf_to_usbdev)(intf)
+ 
+ extern struct usb_device *usb_get_dev(struct usb_device *dev);
+ extern void usb_put_dev(struct usb_device *dev);
+-- 
+2.38.0
 
-The device is opened by proces 194605, which is probably the main qemu
-process (or the main one in charge of USB I/O).  I assume this is the
-process which goes ahead with initialization and enumeration, because
-there are no indications of other processes opening the device.
-
-> [93195.712484] usb 3-6.2: usbdev_do_ioctl: RESET
-> [93195.892482] usb 3-6.2: reset full-speed USB device number 70 using xhci_hcd
-> [93196.095050] cdc_acm 3-6.2:1.0: ttyACM0: USB ACM device
-
-As part of initialization, qemu resets the device and its interfaces
-then get claimed by the cdc_acm driver on the host.  This may be the
-problem; there's no indication in the log that cdc_acm ever releases
-those interfaces.
-
-> [93196.482584] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
-> [93196.482589] usb 3-6.2: usbfs: process 149617 (CPU 3/KVM) did not claim interface 0 before use
-> [93209.729484] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
-> [93209.729489] usb 3-6.2: usbfs: process 149616 (CPU 2/KVM) did not claim interface 0 before use
-> [93209.729574] usb 3-6.2: usbdev_do_ioctl: CLEAR_HALT
-> [93209.729577] usb 3-6.2: usbfs: process 149617 (CPU 3/KVM) did not claim interface 1 before use
-> [93209.729632] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
-> [93209.729635] usb 3-6.2: usbfs: process 149614 (CPU 0/KVM) did not claim interface 0 before use
-
-Unforunately these warning messages don't indicate directly whether
-the attempts to use the interfaces were successful.  But it's clear
-that something went wrong with those URB submissions because the snoop
-log doesn't include the contents of the URBs or their results.
-
-My guess is that the attempts failed because the interfaces were
-already claimed by cdc_acm in the host.  I would expect qemu to unbind
-cdc_acm when it starts up, but apparently it doesn't.  And there are
-no CLAIM_PORT messages in the log.
-
-Perhaps it will help if you do the unbind by hand before starting
-qemu.  Try doing:
-
-	echo 3-6.2:1.0 >/sys/bus/usb/drivers/cdc_acm/unbind
-	echo 3-6.2:1.1 >/sys/bus/usb/drivers/cdc_acm/unbind
-
-Or better yet, blacklist the cdc_acm driver on the host if you can.
-
-Alan Stern
