@@ -2,72 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605B5600F5A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 14:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82713600F75
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 14:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiJQMn5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Oct 2022 08:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        id S230430AbiJQMq5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Oct 2022 08:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJQMn4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 08:43:56 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DC64C609;
-        Mon, 17 Oct 2022 05:43:55 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id q9so24742312ejd.0;
-        Mon, 17 Oct 2022 05:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sfWnhMTbmCubIiawz2PYbNchWCR8WEma7fr9AGcRi8M=;
-        b=GvsxfAIqs5Cnjr379cP3fbtTrY3DBl39wfIX7Ta6x3T/9fMtEErYIe/C4TrXl6mgR6
-         K+u7/YvozTD9E+Dnud83ZW14X6D/+e4auUedsV5DdpVySn+iQ8sKgrNU1vGaqsyxggRo
-         tsaEjhX6pa93TJJK2zglk5DSk6/tr3vYElC+swKdrkP8885NrO2SzCY0MM/H4hlIH6wM
-         5AFU/tdglzyUp7OgwuyIIUjvlMwmlyk+ykEUnV5x6eOgYSoheF2aQsKdSZOgOy7MuKq9
-         ku1lJvA0jZa9Ph3216ua2oXvd2BzOtpkBJyXsfgvfrRECnEWUH6Fd8T0R1xWETpXFqfs
-         SORg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sfWnhMTbmCubIiawz2PYbNchWCR8WEma7fr9AGcRi8M=;
-        b=i/LVwiD3igSVJ+zBtIfKFMvZYc7J+MetXhy4p5+CEG+DmfHmbgfIsYSKKPO/I5qL+n
-         NbCT9tkefqkSnUflas2DY+BWdurI2SvE4MQfHeCJlVOSYLqfmZPGN70LV0mw5GBKzmNT
-         Vf07bsumh9crQABSwSBmLqN8jM02EyR0TbkgR/0pHSeUnesu+4ndnYT0RlHI5N3r5cDK
-         j3C8bp/WKc4xVWu6vYKiZuzeleZg8+kIpffpUlqWOTno7AKq14rnYruPVQKD+yj03OFw
-         jGWZfRXgnpW1/SfGR5v/4lc84fEVE6S2jhHMxp4K2GkI4ss7w4XHECVDIYtRVVu31v9B
-         rH3w==
-X-Gm-Message-State: ACrzQf1qqw6lddRAi9ACQU6UwDGLQ1xY9guNKoazLR3sSXF8rFjFiD6y
-        FeGwI2FWJlef4YM+EcXcKvc=
-X-Google-Smtp-Source: AMsMyM5BauYTy7hmXTLnRFyd7yFVthBUWeAzHXpAbb6S7WKe2hlEYXfNdiv/g4+rcid4iiM33Bpfhg==
-X-Received: by 2002:a17:907:1c1a:b0:78d:426c:2828 with SMTP id nc26-20020a1709071c1a00b0078d426c2828mr8813780ejc.331.1666010634128;
-        Mon, 17 Oct 2022 05:43:54 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id hp11-20020a1709073e0b00b0078175601630sm5961279ejc.79.2022.10.17.05.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 05:43:52 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 14:43:51 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Jim Lin <jilin@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] xhci: tegra: USB2 pad power controls
-Message-ID: <Y01OBzmcwKxbw1yx@orome>
-References: <20221017122531.9923-1-jilin@nvidia.com>
+        with ESMTP id S230482AbiJQMqn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 08:46:43 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EE35D0F7;
+        Mon, 17 Oct 2022 05:46:35 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id A2D9C1C0016; Mon, 17 Oct 2022 14:46:32 +0200 (CEST)
+Date:   Mon, 17 Oct 2022 14:46:32 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        sunghwan jung <onenowy@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH AUTOSEL 4.9 08/10] Revert "usb: storage: Add quirk for
+ Samsung Fit flash"
+Message-ID: <20221017124632.GA13227@duo.ucw.cz>
+References: <20221013002802.1896096-1-sashal@kernel.org>
+ <20221013002802.1896096-8-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MMNKjU9lt98sVp2G"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="h31gzZEtNLTqOjlF"
 Content-Disposition: inline
-In-Reply-To: <20221017122531.9923-1-jilin@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221013002802.1896096-8-sashal@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,62 +44,83 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---MMNKjU9lt98sVp2G
+--h31gzZEtNLTqOjlF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 17, 2022 at 08:25:31PM +0800, Jim Lin wrote:
-> Program USB2 pad PD controls during port connect/disconnect, port
-> suspend/resume, and test mode, to reduce power consumption on
-> disconnect or suspend.
->=20
-> Signed-off-by: Jim Lin <jilin@nvidia.com>
-> ---
-> v2: Fix issue that wrong tegra->phys[] may be accessed on tegra124
-> v3: No change on copyright
-> v4: Remove hcd_to_tegra_xusb() function which is used only once.
->=20
->  drivers/usb/host/xhci-tegra.c | 134 +++++++++++++++++++++++++++++++++-
->  1 file changed, 133 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-[...]
-> @@ -2444,6 +2574,8 @@ static const struct xhci_driver_overrides tegra_xhc=
-i_overrides __initconst =3D {
->  static int __init tegra_xusb_init(void)
->  {
->  	xhci_init_driver(&tegra_xhci_hc_driver, &tegra_xhci_overrides);
-> +	original_xhci_hub_control =3D tegra_xhci_hc_driver.hub_control;
-> +	tegra_xhci_hc_driver.hub_control =3D tegra_xhci_hub_control;
+Hi!
 
-This whole business seems a bit exotic to me. Perhaps a better solution
-would be to EXPORT_SYMBOL_GPL(xhci_hub_control) and then call that
-directly where needed instead of this indirection? At the same time, it
-might be a good idea to add a new hub_control to xhci_driver_overrides
-so that this can be automatically set within xhci_init_driver() rather
-than having to be done explicitly.
+> From: sunghwan jung <onenowy@gmail.com>
+>=20
+> [ Upstream commit ad5dbfc123e6ffbbde194e2a4603323e09f741ee ]
+>=20
+> This reverts commit 86d92f5465958752481269348d474414dccb1552,
+> which fix the timeout issue for "Samsung Fit Flash".
+>=20
+> But the commit affects not only "Samsung Fit Flash" but also other usb
+> storages that use the same controller and causes severe performance
+> regression.
+>=20
+>  # hdparm -t /dev/sda (without the quirk)
+>  Timing buffered disk reads: 622 MB in  3.01 seconds =3D 206.66 MB/sec
+>=20
+>  # hdparm -t /dev/sda (with the quirk)
+>  Timing buffered disk reads: 220 MB in  3.00 seconds =3D  73.32 MB/sec
+>=20
+> The commit author mentioned that "Issue was reproduced after device has
+> bad block", so this quirk should be applied when we have the timeout
+> issue with a device that has bad blocks.
+>=20
+> We revert the commit so that we apply this quirk by adding kernel
+> paramters using a bootloader or other ways when we really need it,
+> without the performance regression with devices that don't have the
+> issue.
 
-Thierry
+Re-introducing timeouts for users in middle of stable series... may
+not be nice. Is there better fix in a follow up to this that was not
+backported?
 
---MMNKjU9lt98sVp2G
+I see that buffered reads got faster, but that may not really mean
+real performance gains...
+
+Best regards,
+								Pavel
+
+>  drivers/usb/storage/unusual_devs.h | 6 ------
+>  1 file changed, 6 deletions(-)
+>=20
+> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unu=
+sual_devs.h
+> index 5a6ca1460711..8c51bb66f16f 100644
+> --- a/drivers/usb/storage/unusual_devs.h
+> +++ b/drivers/usb/storage/unusual_devs.h
+> @@ -1294,12 +1294,6 @@ UNUSUAL_DEV( 0x090a, 0x1200, 0x0000, 0x9999,
+>  		USB_SC_RBC, USB_PR_BULK, NULL,
+>  		0 ),
+> =20
+> -UNUSUAL_DEV(0x090c, 0x1000, 0x1100, 0x1100,
+> -		"Samsung",
+> -		"Flash Drive FIT",
+> -		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> -		US_FL_MAX_SECTORS_64),
+> -
+>  /* aeb */
+>  UNUSUAL_DEV( 0x090c, 0x1132, 0x0000, 0xffff,
+>  		"Feiya",
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--h31gzZEtNLTqOjlF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNNTgQACgkQ3SOs138+
-s6EUAg//UzJ55QcDpK2hvjCeMUl6eBClOdEcBZ3uamfDa9kkHuljFuZpaN92rxrU
-S9enDWojwjmJWvli3tHdK52CO3C//oPjCtEw/ATyWOuOag9GJ7+fdQBGUM4vKJVw
-UGzsEBEgzUcq5vIbbBfrbV7Y6AgMSXuUSn9jYSamzj4Sx6XerQBiPYsLy8ZoKNsN
-17TC7PUbA59XSzky62v3beaHO+FhGTVA8veiFUq+BXsB3ENEpZzNffm1TPJBE3Uw
-TjEQhJ5I6E+9UEjBPuwKnWIxVEViDVrn1Hc2VJvJepp6XZVzQGjoj+fh6Cto3LD3
-ZTqwkF7xsiTPS53dTqXsJdaGBZm6TNFB7Bpw+ypPPmdXgfa+oeCUWWfnt9RUUdod
-HMgSFscMHvREpacDx73PiSYQLlTr5tkctRBBWU/Z7ajajtkBEcNLtgxpv9tpV/LG
-1R3h7urHhyYBdJ4p30fwn9eSlml7gK4vzYiPnIIL/jMStt/IsDSPjf1eYMevOSjv
-mFjxBpmt90tqcesZAfkyG4pPJd9mlZoxbhg3T9YLsRPKzm9Z5NJPyxxWtdKIGTT/
-qess4/Brn8QF9b47swSTR0hOFurt1jt1B5KJDkDcpOEXi+oLaNSyDMgN+8aSXAQo
-F1UmJ+y2kLJhGxPUx7EIRsoZrasVeA+pD9FRQKrqv1HgRQZuRW4=
-=UWv/
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY01OqAAKCRAw5/Bqldv6
+8pcCAJ0c9IcuHaP/6hN6sPtSamTzyA6odACePR1wC4yMzQfBwOcHkfbEcIlHVfo=
+=wr5P
 -----END PGP SIGNATURE-----
 
---MMNKjU9lt98sVp2G--
+--h31gzZEtNLTqOjlF--
