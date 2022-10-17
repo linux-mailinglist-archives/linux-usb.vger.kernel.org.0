@@ -2,115 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3650060126A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 17:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DC3601338
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 18:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiJQPIX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Oct 2022 11:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S230390AbiJQQNm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Oct 2022 12:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbiJQPIJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 11:08:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CC11CB29
-        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 08:07:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3938B611AD
-        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 15:01:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32150C433C1;
-        Mon, 17 Oct 2022 15:01:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666018891;
-        bh=lRedT7GTNvkgvG4IxutUJlPo4iQDn8kOOiFYrz1u3Hs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B/z5M9EC7rH4dJIMD13+mTbSyKA5CUR2chubOsWHU7cP+6vvzI7erwmtKhm7Svd2T
-         X4d7F1xNi0hrAmr+XdpO+Nzhqi05y/FVfIF3PG9hdbxQW/iHvQ3ctfM3S5sYumBrkK
-         kY+y7nMm5rNIylYrdq3PtfJjCUnNK4SDf1tkjYUk=
-Date:   Mon, 17 Oct 2022 17:01:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     James <bjlockie@lockie.ca>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: is usb.ids used anymore?
-Message-ID: <Y01uSKYMXBkZVgOJ@kroah.com>
-References: <8526b38d-64b2-05b0-48e5-a54936f6332f@lockie.ca>
- <Y0zheI+RSeLNulpx@kroah.com>
- <7cb0f51d-6ad1-488d-a989-08eb6727e9b7@lockie.ca>
+        with ESMTP id S231208AbiJQQNd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 12:13:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095986D568
+        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 09:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666023213; x=1697559213;
+  h=message-id:date:mime-version:to:cc:from:references:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=SLSxHWX/H3XYuCgqmcmwpNKC4MgfnOBKYpz7CE/2n1c=;
+  b=aLaE/YVPUSMBOIJmJN0V8+fmIE33/SLcSrhUbegUlAjSv4n42f8wAeqY
+   pVynZjQzo0iQFIRGbMubLB2EosAv07dx9GLYicQvubzJruGuet8xgZ5Wv
+   wzoq/navBuMTT0Hs7rE9pVZLd3AHKwtq6ZT18UVVojg2pxWtLsKM3oW5S
+   MV79mOJ/c9SfTekLRq6KWoRdnBVMPmcIxwdzIMjaBSs6U0/GWWyPsu7e/
+   83XacQdgEGxoetnQ3+KxXKLNVsU47EuOz0flCaj/0TmuyopVoW7+w9Cie
+   mg0VLg9/tFgHwAAZ5p7QoZI9XZm4XOVsKNk0AlvU5WGcskb7Oei+Ilk8g
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="285567152"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="285567152"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 09:11:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="733215534"
+X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
+   d="scan'208";a="733215534"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Oct 2022 09:11:07 -0700
+Message-ID: <e56eb603-56b0-373b-b52b-c0098d669b73@linux.intel.com>
+Date:   Mon, 17 Oct 2022 19:12:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Content-Language: en-US
+To:     =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>
+Cc:     linux-usb@vger.kernel.org
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+References: <Yw6r7FxMCCYSzfTk@mail-itl> <Y0i5h9Tx/1mxvh9A@mail-itl>
+ <7eaf9861-5571-584f-b124-fa7076920090@linux.intel.com>
+ <Y0nGsKipsnl3gtrp@mail-itl>
+Subject: Re: list_del corruption (NULL pointer dereference) on xhci-pci unbind
+In-Reply-To: <Y0nGsKipsnl3gtrp@mail-itl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7cb0f51d-6ad1-488d-a989-08eb6727e9b7@lockie.ca>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 02:36:55PM +0000, James wrote:
+On 14.10.2022 23.29, Marek Marczykowski-GÃ³recki wrote:
+> On Fri, Oct 14, 2022 at 07:02:13PM +0300, Mathias Nyman wrote:
+>> This whole software bandwidth issue should only be visible in Intel
+>> Panther Point PCH xHC (Ivy bridge)
 > 
-> >> but I didn't receive a confirmation to the email and the ids show up in the
-> >> web interface but there are no names associated.
-> >
-> > What do you mean by this?
+> It is indeed Ivy Bridge platform.
 > 
-> I tried to add:
-> 7961 MT7921AU 802.11a/b/g/n/ac/ax Wireless Adapter
+>> Endpoints should be deleted from bw_table list, and xhci_virt_devices
+>> should be freed already before xhci_mem_cleanup() is called if all goes well.
+>>
+>> Normally endpoints are deleted from bw_table list during usb_disconnect()
+>>
+>> usb_disconnect()
+>>    ...
+>>    usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
+>>      hcd->driver->drop_endpoint()  // flags endpoint to be dropped
+>>      hcd->driver->check_bandwidth()
+>>      ->xhci_check_bandwidth()
+>>        xhci_configure_endpoint()
+>>          xhci_reserve_bandwidth()  // only for Panther Point
+>>            xhci_drop_ep_from_interval_table()
+>>
+>> But to avoid queuing new commands to a host in XHCI_STATE_DYING or
+>> XHCI_STATE_REMOVING state we return early, not calling xhci_reserve_bandwidth().
 > 
-> 7961 shows up but the description/name is blank on:
-> https://usb-ids.gowdy.us/read/UD/0e8d
+> Indeed when I remove that early return in xhci_check_bandwidth(), the
+> crash is gone. What's the proper solution?
 > 
-> I also tried to add 0608  the 7921k USB Bluetooth portion of a pci card.
 
-I don't understand, how is a USB device part of a PCI device?
+We could probably just delete the endpoint from the bw list when freeing the device and
+endpoints. Currently we just print that "endpoint x not removed from BW list!" message
 
-What does 'lsusb' show for these devices?
+does the below help?
 
-> Someone else added 2870 but it doesn't show a name either.
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 9e56aa28efcd..2adc0c2b470c 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -894,10 +894,12 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, int slot_id)
+                  * We can't drop them anyway, because the udev might have gone
+                  * away by this point, and we can't tell what speed it was.
+                  */
+-               if (!list_empty(&dev->eps[i].bw_endpoint_list))
++               if (!list_empty(&dev->eps[i].bw_endpoint_list)) {
++                       list_del_init(&dev->eps[i].bw_endpoint_list);
+                         xhci_warn(xhci, "Slot %u endpoint %u "
+                                         "not removed from BW list!\n",
+                                         slot_id, i);
++               }
+         }
+         /* If this is a hub, free the TT(s) from the TT list */
+         xhci_free_tt_info(xhci, dev, slot_id);
 
-Is there a name in the device itself?  That's the best place for this
-information, and is why USB added strings to the configuration
-descriptors, so that no external tool should ever really be needed.
-
-> I expected to get an email back acknowledging my diff submission.
-> I did it on the website too.
-
-I do not think emails are sent back, but it's been a while since I last
-looked at it.
-
-> >> The link to the maintainer is no longer valid. :-(
-> >
-> > What link?
-> 
-> It says "This site maintained by Stephen J. Gowdy." and has a link to http://cern.ch/gowdy which is 404 not found.
-
-There might be an email address on the file itself if you really want to
-contact them.
-
-> >> Wouldn't it be easier to keep in a github if it is still used?
-> >
-> > Why is github easier?
-> 
-> It tracks the commits of who added what.
-> I guess it would be harder for people who haven't used git.
-> 
-> 
-> Should it say:
-> 802.11a/b/g/n/ac/ax Wireless
-> or should it say:
-> Wifi 6
-> ?
-
-I have no idea, what does the device itself say?
-
-Again, there is no real need to add new devices to this file, unless
-the strings in the device are somehow wrong and you want the userspace
-tools to display the updated version instead.
-
-thanks,
-
-greg k-h
+Thanks
+-Mathias
