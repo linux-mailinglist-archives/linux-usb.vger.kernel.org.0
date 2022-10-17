@@ -2,478 +2,329 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE136600E63
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 14:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1EA600F34
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 14:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJQMAG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Oct 2022 08:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S230147AbiJQM2y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Oct 2022 08:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiJQMAB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 08:00:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6396E1FCDC;
-        Mon, 17 Oct 2022 04:59:57 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mrb7T71GfzpW32;
-        Mon, 17 Oct 2022 19:56:37 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 19:59:34 +0800
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 19:59:31 +0800
-Subject: Re: [PATCH v6 0/7] treewide cleanup of random integer usage
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>
-CC:     Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Richard Weinberger" <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <kasan-dev@googlegroups.com>,
-        <kernel-janitors@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-block@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-mmc@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-nvme@lists.infradead.org>,
-        <linux-parisc@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-s390@vger.kernel.org>, <linux-um@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
-        <netdev@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <x86@kernel.org>
-References: <20221010230613.1076905-1-Jason@zx2c4.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <8dad6a2c-9ef6-086e-0fb0-cd9115d4faca@huawei.com>
-Date:   Mon, 17 Oct 2022 19:59:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        with ESMTP id S229848AbiJQM2x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 08:28:53 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2089.outbound.protection.outlook.com [40.107.102.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E833741A;
+        Mon, 17 Oct 2022 05:28:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rma27k4dWvnXU1ii1GQIYBL804V/kO/gxbE8eTBi5JszJrOl/Ew09mtUNxn87A1Ja26xU3l2wTZoqGcuwh3th+eHHW8iORQIt3N68D68TYVmlINjplO6zJv8quMWkNTtzOt/DCtBP8Jx5lrSrnsUmrG/HbMaroK6TIC9PQbOH2jgtHoF5SqF7FFTMo2HlGEgyj2e5ncnX+s73WAWxRTxFKO5u48faUEsWsborsTX/RDCiD43F0BkYbSd0RtTqduSDShFp9pbsvT0rixCAlAAUj2OC5frY89MjhrUVXnchW08PYF22xMIXBvkVMz2KcZ1kwVY/xpvyZ7QwowgWSuolA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UDFje+vXq10mBg3uriKC0vbeyUHdcQcx+LxgwuAU2lQ=;
+ b=M8QIDKjXWXHyesd18/7o/8leXnIua6cylHwuIiaabF6z8EDOiqFDM4zj5ANcru5s0edr8Oj1kF7NFqW6HnjUCgxY4DoPhhbTUEYEhEeFVZLdNG9aYWoHxk/j6qONbH4qqwxuCix0F6E9hoAhqvpsmAA+5mRgNZXXcFkmURjx09HnmPZl4ZeeOe4Qn9umfB62f/vZlc/CE5gSpKV7frC+pPXE0Tc7TYGxYrKp6bNP8pFO58P7rPqff6j+T8heKgfnZpv6ytH9kstZElMotEtLWZICaIHrUfJ4A4mkldLIG3Q1vjOEn6DPzVy0dlm8Fgky/wBLGoftyyg9Gs/wL9sxxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UDFje+vXq10mBg3uriKC0vbeyUHdcQcx+LxgwuAU2lQ=;
+ b=Dqfy7j9c+ZoLj0rSFBHfaF74aq4QoxIC2aYRqrBTkGFfOK8IqqvTbhLZshvy8gf1DJj7lo71w53SEVPMR+uTMVA5PC55M0fuYnqyXDIV4WYSbdZl8I2wyUvlKpdWc64l7LutTo4z+5LvIVLTNgTJjO5YxubkQkFlyw7PaC14zzP8DLmvumwLO2Zm8VEWm0mXjsdSOUTo/8BriHRNnQU+Fr7FjYgZ3b/h30BB16o3zm/yPpUbigc+xdhoiZW1SmdQw3L1yu6UPO2T7ix0If0Wql0sWGf87MbStCbG8wdG5+oRHULvz2jtMno5XiSunqQy3M2ikL61hxvyHe4W4YmOOA==
+Received: from MW4P220CA0011.NAMP220.PROD.OUTLOOK.COM (2603:10b6:303:115::16)
+ by DM6PR12MB4546.namprd12.prod.outlook.com (2603:10b6:5:2ae::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
+ 2022 12:28:50 +0000
+Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:115:cafe::12) by MW4P220CA0011.outlook.office365.com
+ (2603:10b6:303:115::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30 via Frontend
+ Transport; Mon, 17 Oct 2022 12:28:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.20 via Frontend Transport; Mon, 17 Oct 2022 12:28:50 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 17 Oct
+ 2022 05:28:49 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 17 Oct 2022 05:28:49 -0700
+Received: from jilin-desktop.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Mon, 17 Oct 2022 05:28:47 -0700
+From:   Jim Lin <jilin@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <jonathanh@nvidia.com>,
+        <thierry.reding@gmail.com>
+CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jilin@nvidia.com>
+Subject: [PATCH v4] xhci: tegra: USB2 pad power controls
+Date:   Mon, 17 Oct 2022 20:25:31 +0800
+Message-ID: <20221017122531.9923-1-jilin@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <20221010230613.1076905-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT031:EE_|DM6PR12MB4546:EE_
+X-MS-Office365-Filtering-Correlation-Id: c450ce88-eb33-4d34-91af-08dab03b25a2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mUOqJPEMSX5lPlK+cPdalLMnj2Hn6pWUsLuI2P5bjtXVwGiBGDIP6RWv2DEi4D7yoPbCvoTeBn2IuwGU8ThLaDEX7l5NHTVZgV54BRaIHqL5uonYTTMQCqvOyymMarq9h5J0X6T6FJvJpTbySMS9Q1wdl5z6yN8i7kSZihNETYQlg7N0mEqDuKCWJ85c0i4d59ckpXI/hXOFeVVLZ/OAtc76ywO4TlxZtTxxAcTiu8WwkitT0ytg7qcwLoPYjrqyfr28Vil548UT5AeL7jJjJ//cI5HJ9rnCmmFmTVa4Sj1O8zRQ0/OTIz/BR/iFinpJcb88VgANicBKuNprxKnQa7EqD67FhEY6Qr0ABuzDm2HM4XXtPqdxUJBjmUqBaoAtej5KMEy9IEL9eFFkAifc+P33FKBIPGO8UytpA+P54kAhSvv6NghyOKsWBrlPTjz4lhcyuBtI8SGC+m6B/3P04Sb83RsW52NCWWaGXr+NxU8duhyQ6Y0kSBJUQZO1yFKmEMiZvZ2IzNvFW5sGYC8STPnhXZri90VHiHce5kltgNKSouE2lAk8Cgi2ec19wbSdfwMVmtl0mIPyItkzMHvLc1nVr26UFgEO7VzkX9B0oKfSHA2YoFkCKo9Njbvm7yfL7eSLzN08SoKp2/kl7KhHIrAY5UDaTs2MQ+E9I/HCNCE1231U8SFL9V7RnORjK6nvi3+xCeKOTdTfV4MNQ3Cf0xXHP4OsGVhbQaCgCT6t8Ss8HjUYZ4B7JA5KDAZjrmp6R+UBM8ueHDX/Ho0K928JTg==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199015)(46966006)(40470700004)(36840700001)(110136005)(5660300002)(54906003)(8676002)(316002)(478600001)(7696005)(41300700001)(26005)(1076003)(186003)(2906002)(336012)(4326008)(2616005)(8936002)(82740400003)(36756003)(356005)(7636003)(82310400005)(426003)(47076005)(83380400001)(107886003)(36860700001)(6666004)(70206006)(70586007)(40460700003)(40480700001)(86362001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 12:28:50.6222
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c450ce88-eb33-4d34-91af-08dab03b25a2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4546
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2022/10/11 7:06, Jason A. Donenfeld Wrote:
-> Changes v5->v6:
-> - Added a few missing conversions that weren't in my older tree, so now
->   this should be ready to go, as well as a couple nits people had from
->   v5. Barring something large and unforeseen, this is the "final
->   version", as this is ready to ship. Thanks to everyone who reviewed
->   this.
-> 
-> Hi folks,
-> 
-> This is a five part treewide cleanup of random integer handling. The
-> rules for random integers are:
-> 
-> - If you want a secure or an insecure random u64, use get_random_u64().
-> - If you want a secure or an insecure random u32, use get_random_u32().
->   * The old function prandom_u32() has been deprecated for a while now
->     and is just a wrapper around get_random_u32(). Same for
->     get_random_int().
-> - If you want a secure or an insecure random u16, use get_random_u16().
-> - If you want a secure or an insecure random u8, use get_random_u8().
-> - If you want secure or insecure random bytes, use get_random_bytes().
->   * The old function prandom_bytes() has been deprecated for a while now
->     and has long been a wrapper around get_random_bytes().
-> - If you want a non-uniform random u32, u16, or u8 bounded by a certain
->   open interval maximum, use prandom_u32_max().
->   * I say "non-uniform", because it doesn't do any rejection sampling or
->     divisions. Hence, it stays within the prandom_* namespace.
-> 
-> These rules ought to be applied uniformly, so that we can clean up the
-> deprecated functions, and earn the benefits of using the modern
-> functions. In particular, in addition to the boring substitutions, this
-> patchset accomplishes a few nice effects:
-> 
-> - By using prandom_u32_max() with an upper-bound that the compiler can
->   prove at compile-time is ≤65536 or ≤256, internally get_random_u16()
->   or get_random_u8() is used, which wastes fewer batched random bytes,
->   and hence has higher throughput.
-> 
-> - By using prandom_u32_max() instead of %, when the upper-bound is not a
->   constant, division is still avoided, because prandom_u32_max() uses
->   a faster multiplication-based trick instead.
-> 
-> - By using get_random_u16() or get_random_u8() in cases where the return
->   value is intended to indeed be a u16 or a u8, we waste fewer batched
->   random bytes, and hence have higher throughput.
-> 
-> So, based on those rules and benefits from following them, this patchset
-> breaks down into the following five steps:
-> 
-> 1) Replace `prandom_u32() % max` and variants thereof with
->    prandom_u32_max(max).
-> 
->    * Part 1 is done with Coccinelle. Part 2 is done by hand.
-> 
-> 2) Replace `(type)get_random_u32()` and variants thereof with
->    get_random_u16() or get_random_u8(). I took the pains to actually
->    look and see what every lvalue type was across the entire tree.
-> 
->    * Part 1 is done with Coccinelle. Part 2 is done by hand.
-> 
-> 3) Replace remaining deprecated uses of prandom_u32() and
->    get_random_int() with get_random_u32(). 
-> 
->    * A boring search and replace operation.
-> 
-> 4) Replace remaining deprecated uses of prandom_bytes() with
->    get_random_bytes().
-> 
->    * A boring search and replace operation.
-> 
-> 5) Remove the deprecated and now-unused prandom_u32() and
->    prandom_bytes() inline wrapper functions.
-> 
->    * Just deleting code and updating comments.
-> 
-> I'll be sending this toward the end of the 6.1 merge window via the
-> random.git tree.
-> 
-> Please take a look! The number of lines touched is quite small, so this
-> should be reviewable, and as much as is possible has been pushed into
-> Coccinelle scripts.
-> 
-> Thanks,
-> Jason
-> 
-> Cc: Andreas Noever <andreas.noever@gmail.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Dave Airlie <airlied@redhat.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: David S. Miller <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Florian Westphal <fw@strlen.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-> Cc: H. Peter Anvin <hpa@zytor.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-> Cc: Jan Kara <jack@suse.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Thomas Graf <tgraf@suug.ch>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: WANG Xuerui <kernel@xen0n.name>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Yury Norov <yury.norov@gmail.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: kasan-dev@googlegroups.com
-> Cc: kernel-janitors@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-block@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-nvme@lists.infradead.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linux-rdma@vger.kernel.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-um@lists.infradead.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: loongarch@lists.linux.dev
-> Cc: netdev@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> Cc: x86@kernel.org
-> 
-> Jason A. Donenfeld (7):
->   treewide: use prandom_u32_max() when possible, part 1
->   treewide: use prandom_u32_max() when possible, part 2
->   treewide: use get_random_{u8,u16}() when possible, part 1
->   treewide: use get_random_{u8,u16}() when possible, part 2
->   treewide: use get_random_u32() when possible
->   treewide: use get_random_bytes() when possible
->   prandom: remove unused functions
-> 
->  Documentation/networking/filter.rst           |  2 +-
->  arch/arm/kernel/process.c                     |  2 +-
->  arch/arm/kernel/signal.c                      |  2 +-
->  arch/arm64/kernel/process.c                   |  2 +-
->  arch/arm64/kernel/syscall.c                   |  2 +-
->  arch/loongarch/kernel/process.c               |  2 +-
->  arch/loongarch/kernel/vdso.c                  |  2 +-
->  arch/mips/kernel/process.c                    |  2 +-
->  arch/mips/kernel/vdso.c                       |  2 +-
->  arch/parisc/kernel/process.c                  |  2 +-
->  arch/parisc/kernel/sys_parisc.c               |  4 +-
->  arch/parisc/kernel/vdso.c                     |  2 +-
->  arch/powerpc/crypto/crc-vpmsum_test.c         |  2 +-
->  arch/powerpc/kernel/process.c                 |  2 +-
->  arch/s390/kernel/process.c                    |  4 +-
->  arch/s390/kernel/vdso.c                       |  2 +-
->  arch/s390/mm/mmap.c                           |  2 +-
->  arch/sparc/vdso/vma.c                         |  2 +-
->  arch/um/kernel/process.c                      |  2 +-
->  arch/x86/entry/vdso/vma.c                     |  2 +-
->  arch/x86/kernel/cpu/amd.c                     |  2 +-
->  arch/x86/kernel/module.c                      |  2 +-
->  arch/x86/kernel/process.c                     |  2 +-
->  arch/x86/mm/pat/cpa-test.c                    |  4 +-
->  block/blk-crypto-fallback.c                   |  2 +-
->  crypto/async_tx/raid6test.c                   |  2 +-
->  crypto/testmgr.c                              | 94 +++++++++----------
->  drivers/block/drbd/drbd_receiver.c            |  4 +-
->  drivers/char/random.c                         | 11 +--
->  drivers/dma/dmatest.c                         |  2 +-
->  .../gpu/drm/i915/gem/i915_gem_execbuffer.c    |  2 +-
->  drivers/gpu/drm/i915/i915_gem_gtt.c           |  6 +-
->  .../gpu/drm/i915/selftests/i915_selftest.c    |  2 +-
->  drivers/gpu/drm/tests/drm_buddy_test.c        |  2 +-
->  drivers/gpu/drm/tests/drm_mm_test.c           |  2 +-
->  drivers/infiniband/core/cma.c                 |  2 +-
->  drivers/infiniband/hw/cxgb4/cm.c              |  4 +-
->  drivers/infiniband/hw/cxgb4/id_table.c        |  4 +-
->  drivers/infiniband/hw/hfi1/tid_rdma.c         |  2 +-
->  drivers/infiniband/hw/hns/hns_roce_ah.c       |  5 +-
->  drivers/infiniband/hw/mlx4/mad.c              |  2 +-
->  drivers/infiniband/ulp/ipoib/ipoib_cm.c       |  2 +-
->  drivers/infiniband/ulp/rtrs/rtrs-clt.c        |  3 +-
->  drivers/md/bcache/request.c                   |  2 +-
->  drivers/md/raid5-cache.c                      |  2 +-
->  drivers/media/common/v4l2-tpg/v4l2-tpg-core.c |  2 +-
->  .../media/test-drivers/vivid/vivid-radio-rx.c |  4 +-
->  .../test-drivers/vivid/vivid-touch-cap.c      |  6 +-
->  drivers/misc/habanalabs/gaudi2/gaudi2.c       |  2 +-
->  drivers/mmc/core/core.c                       |  4 +-
->  drivers/mmc/host/dw_mmc.c                     |  2 +-
->  drivers/mtd/nand/raw/nandsim.c                |  8 +-
->  drivers/mtd/tests/mtd_nandecctest.c           | 12 +--
->  drivers/mtd/tests/speedtest.c                 |  2 +-
->  drivers/mtd/tests/stresstest.c                | 19 +---
->  drivers/mtd/ubi/debug.c                       |  2 +-
->  drivers/mtd/ubi/debug.h                       |  6 +-
->  drivers/net/bonding/bond_main.c               |  2 +-
->  drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  2 +-
->  drivers/net/ethernet/broadcom/cnic.c          |  5 +-
->  .../chelsio/inline_crypto/chtls/chtls_cm.c    |  4 +-
->  .../chelsio/inline_crypto/chtls/chtls_io.c    |  4 +-
->  drivers/net/ethernet/rocker/rocker_main.c     |  8 +-
->  drivers/net/hamradio/baycom_epp.c             |  2 +-
->  drivers/net/hamradio/hdlcdrv.c                |  2 +-
->  drivers/net/hamradio/yam.c                    |  2 +-
->  drivers/net/phy/at803x.c                      |  2 +-
->  drivers/net/wireguard/selftest/allowedips.c   | 16 ++--
->  .../broadcom/brcm80211/brcmfmac/p2p.c         |  2 +-
->  .../broadcom/brcm80211/brcmfmac/pno.c         |  2 +-
->  .../net/wireless/intel/iwlwifi/mvm/mac-ctxt.c |  2 +-
->  .../net/wireless/marvell/mwifiex/cfg80211.c   |  4 +-
->  .../wireless/microchip/wilc1000/cfg80211.c    |  2 +-
->  .../net/wireless/quantenna/qtnfmac/cfg80211.c |  2 +-
->  drivers/net/wireless/st/cw1200/wsm.c          |  2 +-
->  drivers/net/wireless/ti/wlcore/main.c         |  2 +-
->  drivers/nvme/common/auth.c                    |  2 +-
->  drivers/scsi/cxgbi/cxgb4i/cxgb4i.c            |  4 +-
->  drivers/scsi/fcoe/fcoe_ctlr.c                 |  4 +-
->  drivers/scsi/lpfc/lpfc_hbadisc.c              |  6 +-
->  drivers/scsi/qedi/qedi_main.c                 |  2 +-
->  drivers/target/iscsi/cxgbit/cxgbit_cm.c       |  2 +-
->  drivers/thunderbolt/xdomain.c                 |  2 +-
->  drivers/video/fbdev/uvesafb.c                 |  2 +-
->  fs/ceph/inode.c                               |  2 +-
->  fs/ceph/mdsmap.c                              |  2 +-
->  fs/exfat/inode.c                              |  2 +-
->  fs/ext2/ialloc.c                              |  3 +-
->  fs/ext4/ialloc.c                              |  7 +-
->  fs/ext4/ioctl.c                               |  4 +-
->  fs/ext4/mmp.c                                 |  2 +-
->  fs/ext4/super.c                               |  7 +-
->  fs/f2fs/gc.c                                  |  2 +-
->  fs/f2fs/namei.c                               |  2 +-
->  fs/f2fs/segment.c                             |  8 +-
->  fs/fat/inode.c                                |  2 +-
->  fs/nfsd/nfs4state.c                           |  4 +-
->  fs/ntfs3/fslog.c                              |  6 +-
->  fs/ubifs/debug.c                              | 10 +-
->  fs/ubifs/journal.c                            |  2 +-
->  fs/ubifs/lpt_commit.c                         | 14 +--
->  fs/ubifs/tnc_commit.c                         |  2 +-
->  fs/xfs/libxfs/xfs_alloc.c                     |  2 +-
->  fs/xfs/libxfs/xfs_ialloc.c                    |  4 +-
->  fs/xfs/xfs_error.c                            |  2 +-
->  fs/xfs/xfs_icache.c                           |  2 +-
->  fs/xfs/xfs_log.c                              |  2 +-
->  include/linux/nodemask.h                      |  2 +-
->  include/linux/prandom.h                       | 12 ---
->  include/linux/random.h                        |  5 -
->  include/net/netfilter/nf_queue.h              |  2 +-
->  include/net/red.h                             |  2 +-
->  include/net/sock.h                            |  2 +-
->  kernel/bpf/bloom_filter.c                     |  2 +-
->  kernel/bpf/core.c                             |  6 +-
->  kernel/bpf/hashtab.c                          |  2 +-
->  kernel/bpf/verifier.c                         |  2 +-
->  kernel/kcsan/selftest.c                       |  4 +-
->  kernel/locking/test-ww_mutex.c                |  4 +-
->  kernel/time/clocksource.c                     |  2 +-
->  lib/cmdline_kunit.c                           |  4 +-
->  lib/fault-inject.c                            |  2 +-
->  lib/find_bit_benchmark.c                      |  4 +-
->  lib/kobject.c                                 |  2 +-
->  lib/random32.c                                |  4 +-
->  lib/reed_solomon/test_rslib.c                 | 12 +--
->  lib/sbitmap.c                                 |  4 +-
->  lib/test-string_helpers.c                     |  2 +-
->  lib/test_fprobe.c                             |  2 +-
->  lib/test_hexdump.c                            | 10 +-
->  lib/test_kasan.c                              |  6 +-
->  lib/test_kprobes.c                            |  2 +-
->  lib/test_list_sort.c                          |  2 +-
->  lib/test_min_heap.c                           |  6 +-
->  lib/test_objagg.c                             |  2 +-
->  lib/test_rhashtable.c                         |  6 +-
->  lib/test_vmalloc.c                            | 19 +---
->  lib/uuid.c                                    |  2 +-
->  mm/migrate.c                                  |  2 +-
->  mm/shmem.c                                    |  2 +-
->  mm/slab.c                                     |  2 +-
->  mm/slub.c                                     |  2 +-
->  net/802/garp.c                                |  2 +-
->  net/802/mrp.c                                 |  2 +-
->  net/ceph/mon_client.c                         |  2 +-
->  net/ceph/osd_client.c                         |  2 +-
->  net/core/neighbour.c                          |  2 +-
->  net/core/pktgen.c                             | 47 +++++-----
->  net/core/stream.c                             |  2 +-
->  net/dccp/ipv4.c                               |  4 +-
->  net/ipv4/datagram.c                           |  2 +-
->  net/ipv4/igmp.c                               |  6 +-
->  net/ipv4/inet_connection_sock.c               |  2 +-
->  net/ipv4/inet_hashtables.c                    |  2 +-
->  net/ipv4/ip_output.c                          |  2 +-
->  net/ipv4/route.c                              |  4 +-
->  net/ipv4/tcp_cdg.c                            |  2 +-
->  net/ipv4/tcp_ipv4.c                           |  4 +-
->  net/ipv4/udp.c                                |  2 +-
->  net/ipv6/addrconf.c                           |  8 +-
->  net/ipv6/ip6_flowlabel.c                      |  2 +-
->  net/ipv6/mcast.c                              | 10 +-
->  net/ipv6/output_core.c                        |  2 +-
->  net/mac80211/rc80211_minstrel_ht.c            |  2 +-
->  net/mac80211/scan.c                           |  2 +-
->  net/netfilter/ipvs/ip_vs_conn.c               |  2 +-
->  net/netfilter/ipvs/ip_vs_twos.c               |  4 +-
->  net/netfilter/nf_nat_core.c                   |  4 +-
->  net/netfilter/xt_statistic.c                  |  2 +-
->  net/openvswitch/actions.c                     |  2 +-
->  net/packet/af_packet.c                        |  2 +-
->  net/rds/bind.c                                |  2 +-
->  net/sched/act_gact.c                          |  2 +-
->  net/sched/act_sample.c                        |  2 +-
->  net/sched/sch_cake.c                          |  8 +-
->  net/sched/sch_netem.c                         | 22 ++---
->  net/sched/sch_pie.c                           |  2 +-
->  net/sched/sch_sfb.c                           |  2 +-
->  net/sctp/socket.c                             |  4 +-
->  net/sunrpc/auth_gss/gss_krb5_wrap.c           |  4 +-
->  net/sunrpc/cache.c                            |  2 +-
->  net/sunrpc/xprt.c                             |  2 +-
->  net/sunrpc/xprtsock.c                         |  2 +-
->  net/tipc/socket.c                             |  2 +-
->  net/unix/af_unix.c                            |  2 +-
->  net/xfrm/xfrm_state.c                         |  2 +-
->  186 files changed, 379 insertions(+), 422 deletions(-)
-> 
+Program USB2 pad PD controls during port connect/disconnect, port
+suspend/resume, and test mode, to reduce power consumption on
+disconnect or suspend.
 
-Hi, Jason:
+Signed-off-by: Jim Lin <jilin@nvidia.com>
+---
+v2: Fix issue that wrong tegra->phys[] may be accessed on tegra124
+v3: No change on copyright
+v4: Remove hcd_to_tegra_xusb() function which is used only once.
 
-There is a lot of code using "prandom_u32 % 4" in crypto's kernel self-test file testmgr.c,
-can you modify it together?
+ drivers/usb/host/xhci-tegra.c | 134 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 133 insertions(+), 1 deletion(-)
 
-Thanks,
-Longfang.
-
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index c8af2cd2216d..a47454503d9e 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -189,6 +189,13 @@ struct tegra_xusb_context_soc {
+ 	} fpci;
+ };
+ 
++enum tegra_xhci_phy_type {
++	USB3_PHY,
++	USB2_PHY,
++	HSIC_PHY,
++	MAX_PHY_TYPES,
++};
++
+ struct tegra_xusb_soc {
+ 	const char *firmware;
+ 	const char * const *supply_names;
+@@ -274,9 +281,12 @@ struct tegra_xusb {
+ 
+ 	bool suspended;
+ 	struct tegra_xusb_context context;
++	u32 enable_utmi_pad_after_lp0_exit;
+ };
+ 
+ static struct hc_driver __read_mostly tegra_xhci_hc_driver;
++static int (*original_xhci_hub_control)(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 wIndex,
++	    char *buf, u16 wLength);
+ 
+ static inline u32 fpci_readl(struct tegra_xusb *tegra, unsigned int offset)
+ {
+@@ -1949,12 +1959,30 @@ static void tegra_xhci_enable_phy_sleepwalk_wake(struct tegra_xusb *tegra)
+ static void tegra_xhci_disable_phy_wake(struct tegra_xusb *tegra)
+ {
+ 	struct tegra_xusb_padctl *padctl = tegra->padctl;
+-	unsigned int i;
++	unsigned int i, j;
+ 
+ 	for (i = 0; i < tegra->num_phys; i++) {
+ 		if (!tegra->phys[i])
+ 			continue;
++		if (tegra_xusb_padctl_remote_wake_detected(padctl, tegra->phys[i])) {
++			if (i < tegra->soc->phy_types[USB3_PHY].num) {
++				/* USB3 */
++				j = i;
++			} else if (i < (tegra->soc->phy_types[USB3_PHY].num +
++					tegra->soc->phy_types[USB2_PHY].num)) {
++				/* USB2 */
++				j = i - tegra->soc->phy_types[USB3_PHY].num;
++				tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++			} else {
++				/* HSIC */
++				j = i - (tegra->soc->phy_types[USB3_PHY].num +
++					 tegra->soc->phy_types[USB2_PHY].num);
++			}
++			dev_dbg(tegra->dev,
++				"%s port %u (0 based) remote wake detected\n",
++				dev_name(&tegra->phys[i]->dev), j);
+ 
++		}
+ 		tegra_xusb_padctl_disable_phy_wake(padctl, tegra->phys[i]);
+ 	}
+ }
+@@ -1972,6 +2000,23 @@ static void tegra_xhci_disable_phy_sleepwalk(struct tegra_xusb *tegra)
+ 	}
+ }
+ 
++static void tegra_xhci_program_utmi_power_lp0_exit(struct tegra_xusb *tegra)
++{
++	unsigned int i;
++
++	for (i = 0; i < tegra->soc->phy_types[USB2_PHY].num; i++) {
++		if (!is_host_mode_phy(tegra, USB2_PHY, i))
++			continue;
++		/* USB2 */
++		if (tegra->enable_utmi_pad_after_lp0_exit & BIT(i))
++			tegra_phy_xusb_utmi_pad_power_on(
++				tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++		else
++			tegra_phy_xusb_utmi_pad_power_down(
++				tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++	}
++}
++
+ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ {
+ 	struct xhci_hcd *xhci = hcd_to_xhci(tegra->hcd);
+@@ -1980,6 +2025,7 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ 	unsigned int i;
+ 	int err;
+ 	u32 usbcmd;
++	u32 portsc;
+ 
+ 	dev_dbg(dev, "entering ELPG\n");
+ 
+@@ -1993,6 +2039,15 @@ static int tegra_xusb_enter_elpg(struct tegra_xusb *tegra, bool runtime)
+ 		goto out;
+ 	}
+ 
++	for (i = 0; i < tegra->soc->phy_types[USB2_PHY].num; i++) {
++		if (!xhci->usb2_rhub.ports[i])
++			continue;
++		portsc = readl(xhci->usb2_rhub.ports[i]->addr);
++		tegra->enable_utmi_pad_after_lp0_exit &= ~BIT(i);
++		if (((portsc & PORT_PLS_MASK) == XDEV_U3) || ((portsc & DEV_SPEED_MASK) == XDEV_FS))
++			tegra->enable_utmi_pad_after_lp0_exit |= BIT(i);
++	}
++
+ 	err = xhci_suspend(xhci, wakeup);
+ 	if (err < 0) {
+ 		dev_err(tegra->dev, "failed to suspend XHCI: %d\n", err);
+@@ -2066,6 +2121,8 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb *tegra, bool runtime)
+ 
+ 		phy_power_on(tegra->phys[i]);
+ 	}
++	if (tegra->suspended)
++		tegra_xhci_program_utmi_power_lp0_exit(tegra);
+ 
+ 	tegra_xusb_config(tegra);
+ 	tegra_xusb_restore_context(tegra);
+@@ -2437,6 +2494,79 @@ static int tegra_xhci_setup(struct usb_hcd *hcd)
+ 	return xhci_gen_setup(hcd, tegra_xhci_quirks);
+ }
+ 
++static int tegra_xhci_hub_control(struct usb_hcd *hcd, u16 type_req, u16 value, u16 index,
++				  char *buf, u16 length)
++{
++	struct tegra_xusb *tegra = dev_get_drvdata(hcd->self.controller);
++	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
++	struct xhci_hub *rhub;
++	struct xhci_bus_state *bus_state;
++	int port = (index & 0xff) - 1;
++	int i;
++	struct xhci_port **ports;
++	u32 portsc;
++	int ret;
++
++	rhub = &xhci->usb2_rhub;
++	bus_state = &rhub->bus_state;
++	if (bus_state->resuming_ports && hcd->speed == HCD_USB2) {
++		ports = rhub->ports;
++		i = rhub->num_ports;
++		while (i--) {
++			if (!test_bit(i, &bus_state->resuming_ports))
++				continue;
++			portsc = readl(ports[i]->addr);
++			if ((portsc & PORT_PLS_MASK) == XDEV_RESUME)
++				tegra_phy_xusb_utmi_pad_power_on(
++					tegra->phys[tegra->soc->phy_types[USB3_PHY].num + i]);
++		}
++	}
++
++	if (hcd->speed == HCD_USB2) {
++		i = tegra->soc->phy_types[USB3_PHY].num + port;
++		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_SUSPEND)) {
++			if (!index || index > rhub->num_ports)
++				return -EPIPE;
++			tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++		}
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_RESET)) {
++			if (!index || index > rhub->num_ports)
++				return -EPIPE;
++			ports = rhub->ports;
++			portsc = readl(ports[port]->addr);
++			if (portsc & PORT_CONNECT)
++				tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++		}
++	}
++
++	ret = (*original_xhci_hub_control)(hcd, type_req, value, index, buf, length);
++	if (ret < 0)
++		return ret;
++
++	if (hcd->speed == HCD_USB2) {
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_SUSPEND))
++			/* We don't suspend the PAD while HNP role swap happens on the OTG port */
++			if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
++				tegra_phy_xusb_utmi_pad_power_down(tegra->phys[i]);
++
++		if ((type_req == ClearPortFeature) && (value == USB_PORT_FEAT_C_CONNECTION)) {
++			ports = rhub->ports;
++			portsc = readl(ports[port]->addr);
++			if (!(portsc & PORT_CONNECT)) {
++				/* We don't suspend the PAD while HNP role swap happens on the OTG
++				 * port
++				 */
++				if (!((hcd->self.otg_port == (port + 1)) && hcd->self.b_hnp_enable))
++					tegra_phy_xusb_utmi_pad_power_down(tegra->phys[i]);
++			}
++		}
++		if ((type_req == SetPortFeature) && (value == USB_PORT_FEAT_TEST))
++			tegra_phy_xusb_utmi_pad_power_on(tegra->phys[i]);
++	}
++
++	return ret;
++}
++
+ static const struct xhci_driver_overrides tegra_xhci_overrides __initconst = {
+ 	.reset = tegra_xhci_setup,
+ };
+@@ -2444,6 +2574,8 @@ static const struct xhci_driver_overrides tegra_xhci_overrides __initconst = {
+ static int __init tegra_xusb_init(void)
+ {
+ 	xhci_init_driver(&tegra_xhci_hc_driver, &tegra_xhci_overrides);
++	original_xhci_hub_control = tegra_xhci_hc_driver.hub_control;
++	tegra_xhci_hc_driver.hub_control = tegra_xhci_hub_control;
+ 
+ 	return platform_driver_register(&tegra_xusb_driver);
+ }
+-- 
+2.17.1
 
