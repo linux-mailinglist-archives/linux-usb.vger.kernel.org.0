@@ -2,83 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D131600496
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 02:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA3C600494
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 02:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJQAmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Oct 2022 20:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S229786AbiJQAmE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Oct 2022 20:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiJQAmR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Oct 2022 20:42:17 -0400
-X-Greylist: delayed 2345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Oct 2022 17:42:13 PDT
-Received: from titan5.planetwebservers.net (titan5.planetwebservers.net [51.222.33.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FDE36433
-        for <linux-usb@vger.kernel.org>; Sun, 16 Oct 2022 17:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
-        s=default; h=Content-Transfer-Encoding:Content-Type:To:Subject:From:
-        MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XUrdwwEzbzlmPtoZLbrjQVIJoBwkt7I8sD1fG+kzd48=; b=uxIhOEolJPfi4+pvnvJI+jh1P7
-        Pu3474KY5YAKkjDnAJe0eWL9jLye7f9xdL5jwp5/j0qtX9GdNr4kvDEniLGFdFS1uHGdIIxEMKCdb
-        jYyzrj74/nUuqt6llavKSjOhjEMQ7YMRfMSzkJC7lizDGm1q7UgcWyxIKNPES8Q5zSikWXioLe70k
-        JjKpQ2F8qDPS6hWSMPb7+BGp5yRSOoISJjmGVt0T/dl7cXUh5sxO7UOOdDpFIin7kyf7HNBJzTlT3
-        C+OOQaU9Oq8to7f/uIvvwrsSTybcqXenqUImJ7aLX8f3Zg3L2fdQ9zjvgKLcOnQFVJPTpddZN8EhE
-        lM8nXkXA==;
-Received: from [66.79.242.44] (port=39114 helo=[192.168.68.80])
-        by titan.planetwebservers.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <bjlockie@lockie.ca>)
-        id 1okDau-0003Np-CC
-        for linux-usb@vger.kernel.org;
-        Mon, 17 Oct 2022 11:03:07 +1100
-Message-ID: <8526b38d-64b2-05b0-48e5-a54936f6332f@lockie.ca>
-Date:   Sun, 16 Oct 2022 20:02:59 -0400
+        with ESMTP id S230023AbiJQAmA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Oct 2022 20:42:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE4C360B9;
+        Sun, 16 Oct 2022 17:42:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE3AB60EB0;
+        Mon, 17 Oct 2022 00:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB883C433C1;
+        Mon, 17 Oct 2022 00:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665967319;
+        bh=+6/iX7ck2Oohq9Zjb0OiVQciCXoiHsAIcWt5IlbTcY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R5Fxx1CuFWN2O2/LMRi+LN5bWu8nhXkqQzjWypQZgJUPQeJyR6hOnk7wJt5jvXev2
+         4Tn/C+OGDb4SyLYR2a1M2jDOOROcO4Dfd5uAsLe+zdbbuC/7lOP7ELeuzk8ZweAz8e
+         TE9Zz4wufl69OtWvdi7v87IzzboNOVCYV8GOq75zP+R0cwkMb8JdBIetqbgshxMLzs
+         KF0qzB9tTxpSpOqyloah575XJggksD4u2Op4rCnDywbZtLA/+uJwDSIMUKfpkl/yJm
+         X4Lyz5JFvH124203WQMnGJICefcwMrq8VMJl9kpBFjBFOK8emOXAH1n7nVc8pnw9bG
+         P5UQgqVC27dEg==
+Date:   Mon, 17 Oct 2022 08:41:53 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>, Xu Yang <xu.yang_2@nxp.com>,
+        Li Jun <jun.li@nxp.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Peng Fan <peng.fan@oss.nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/6] usb: chipidea: Export more phy tuning parameters to
+ device tree
+Message-ID: <20221017004153.GC12701@nchen-desktop>
+References: <20221011082924.884123-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-From:   James <bjlockie@lockie.ca>
-Subject: is usb.ids used anymore?
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - titan.planetwebservers.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lockie.ca
-X-Get-Message-Sender-Via: titan.planetwebservers.net: authenticated_id: bjlockie@lockie.ca
-X-Authenticated-Sender: titan.planetwebservers.net: bjlockie@lockie.ca
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011082924.884123-1-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I am trying to get usb.ids updated.
+On 22-10-11 10:29:18, Sascha Hauer wrote:
+> This series exports more phy tuning settings to device tree. There are
+> some values already exported and I follow that example in this series.
+> 
+> Patches 1 and 2 contain two small bugfixes for issues I stumbled upon
+> along the way. Patches 3 and 4 are cleanups. These patches could be
+> applied without the remaining two patches.
+> 
+> The binding patch is based on
+> https://lore.kernel.org/linux-arm-kernel/20221010101816.298334-3-peng.fan@oss.nxp.com/t/,
+> so this will need a rebase once this series settles.
 
-There is a link to here:
-http://www.linux-usb.org/usb-ids.html
+I have left NXP, maybe Jun Li or Yang Xu could have a review.
 
-It says the text file is updated daily but the last update was Version: 
-2022.05.20.
+Peter
+> 
+> Sascha
+> 
+> Sascha Hauer (6):
+>   usb: chipidea: usbmisc_imx: Fix i.MX53 clock sel masks
+>   usb: chipidea: usbmisc_imx: Fix setting i.MX6SX wakeup source
+>   usb: chipidea: usbmisc_imx: Use GENMASK/FIELD_PREP for bitfields
+>   usb: chipidea: usbmisc_imx: Add prefix to register defines
+>   usb: chipidea: usbmisc_imx: Add device tree properties for i.MX7 phy
+>     tuning
+>   dt-bindings: usb: ci-hdrc-usb2: Add more phy tuning properties
+> 
+>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml |  79 ++++++++
+>  drivers/usb/chipidea/ci_hdrc_imx.c            |  14 ++
+>  drivers/usb/chipidea/ci_hdrc_imx.h            |   7 +
+>  drivers/usb/chipidea/usbmisc_imx.c            | 186 ++++++++++++------
+>  4 files changed, 230 insertions(+), 56 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
 
-Is that file even used anymore?
+-- 
 
-I did the web update and I sent a diff -u to linux.usb.ids@gmail.com
-but I didn't receive a confirmation to the email and the ids show up in 
-the web interface but there are no names associated.
-The link to the maintainer is no longer valid. :-(
-
-Wouldn't it be easier to keep in a github if it is still used?
-
+Thanks,
+Peter Chen
