@@ -2,125 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82713600F75
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 14:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1DD6010DE
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 16:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbiJQMq5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Oct 2022 08:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S230268AbiJQOO0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Oct 2022 10:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiJQMqn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 08:46:43 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EE35D0F7;
-        Mon, 17 Oct 2022 05:46:35 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id A2D9C1C0016; Mon, 17 Oct 2022 14:46:32 +0200 (CEST)
-Date:   Mon, 17 Oct 2022 14:46:32 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        sunghwan jung <onenowy@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH AUTOSEL 4.9 08/10] Revert "usb: storage: Add quirk for
- Samsung Fit flash"
-Message-ID: <20221017124632.GA13227@duo.ucw.cz>
-References: <20221013002802.1896096-1-sashal@kernel.org>
- <20221013002802.1896096-8-sashal@kernel.org>
+        with ESMTP id S230262AbiJQOOY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 10:14:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E89B6A;
+        Mon, 17 Oct 2022 07:14:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57D60B81632;
+        Mon, 17 Oct 2022 14:14:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83438C433C1;
+        Mon, 17 Oct 2022 14:14:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666016058;
+        bh=W1OZR9rX5R0Jg1nEu7Pmdr4d7IiTgkSuQYWHCdiGUy0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hnhwEAM9f2tiXubb7wbIdvhJE+QFdOduFDtkrhYFxxiGpnPe90FTBgJZzHCNcmYlZ
+         HN9UcdT4yRlWZwhMhM/cz3kF9qiLURLroLyGz1s1HJ3iOTRBEQaQAmdrrvDLKS1s1d
+         vHOcM7ukfF+toajrKBJSi0iWVh0B7wshUDWH8fa8=
+Date:   Mon, 17 Oct 2022 16:14:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jim Lin <jilin@nvidia.com>
+Cc:     jonathanh@nvidia.com, thierry.reding@gmail.com,
+        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] xhci: tegra: USB2 pad power controls
+Message-ID: <Y01jNqAZrx0uA2xe@kroah.com>
+References: <20221017122531.9923-1-jilin@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="h31gzZEtNLTqOjlF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013002802.1896096-8-sashal@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221017122531.9923-1-jilin@nvidia.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 08:25:31PM +0800, Jim Lin wrote:
+> Program USB2 pad PD controls during port connect/disconnect, port
+> suspend/resume, and test mode, to reduce power consumption on
+> disconnect or suspend.
+> 
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
+> ---
+> v2: Fix issue that wrong tegra->phys[] may be accessed on tegra124
+> v3: No change on copyright
+> v4: Remove hcd_to_tegra_xusb() function which is used only once.
+> 
+>  drivers/usb/host/xhci-tegra.c | 134 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 133 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> index c8af2cd2216d..a47454503d9e 100644
+> --- a/drivers/usb/host/xhci-tegra.c
+> +++ b/drivers/usb/host/xhci-tegra.c
+> @@ -189,6 +189,13 @@ struct tegra_xusb_context_soc {
+>  	} fpci;
+>  };
+>  
+> +enum tegra_xhci_phy_type {
+> +	USB3_PHY,
+> +	USB2_PHY,
+> +	HSIC_PHY,
+> +	MAX_PHY_TYPES,
+> +};
+> +
+>  struct tegra_xusb_soc {
+>  	const char *firmware;
+>  	const char * const *supply_names;
+> @@ -274,9 +281,12 @@ struct tegra_xusb {
+>  
+>  	bool suspended;
+>  	struct tegra_xusb_context context;
+> +	u32 enable_utmi_pad_after_lp0_exit;
+>  };
+>  
+>  static struct hc_driver __read_mostly tegra_xhci_hc_driver;
+> +static int (*original_xhci_hub_control)(struct usb_hcd *hcd, u16 typeReq, u16 wValue, u16 wIndex,
+> +	    char *buf, u16 wLength);
 
---h31gzZEtNLTqOjlF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That does not work when you have multiple devices in the system, right?
+You should not have _any_ static data in a driver.
 
-Hi!
+thanks,
 
-> From: sunghwan jung <onenowy@gmail.com>
->=20
-> [ Upstream commit ad5dbfc123e6ffbbde194e2a4603323e09f741ee ]
->=20
-> This reverts commit 86d92f5465958752481269348d474414dccb1552,
-> which fix the timeout issue for "Samsung Fit Flash".
->=20
-> But the commit affects not only "Samsung Fit Flash" but also other usb
-> storages that use the same controller and causes severe performance
-> regression.
->=20
->  # hdparm -t /dev/sda (without the quirk)
->  Timing buffered disk reads: 622 MB in  3.01 seconds =3D 206.66 MB/sec
->=20
->  # hdparm -t /dev/sda (with the quirk)
->  Timing buffered disk reads: 220 MB in  3.00 seconds =3D  73.32 MB/sec
->=20
-> The commit author mentioned that "Issue was reproduced after device has
-> bad block", so this quirk should be applied when we have the timeout
-> issue with a device that has bad blocks.
->=20
-> We revert the commit so that we apply this quirk by adding kernel
-> paramters using a bootloader or other ways when we really need it,
-> without the performance regression with devices that don't have the
-> issue.
-
-Re-introducing timeouts for users in middle of stable series... may
-not be nice. Is there better fix in a follow up to this that was not
-backported?
-
-I see that buffered reads got faster, but that may not really mean
-real performance gains...
-
-Best regards,
-								Pavel
-
->  drivers/usb/storage/unusual_devs.h | 6 ------
->  1 file changed, 6 deletions(-)
->=20
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unu=
-sual_devs.h
-> index 5a6ca1460711..8c51bb66f16f 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -1294,12 +1294,6 @@ UNUSUAL_DEV( 0x090a, 0x1200, 0x0000, 0x9999,
->  		USB_SC_RBC, USB_PR_BULK, NULL,
->  		0 ),
-> =20
-> -UNUSUAL_DEV(0x090c, 0x1000, 0x1100, 0x1100,
-> -		"Samsung",
-> -		"Flash Drive FIT",
-> -		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> -		US_FL_MAX_SECTORS_64),
-> -
->  /* aeb */
->  UNUSUAL_DEV( 0x090c, 0x1132, 0x0000, 0xffff,
->  		"Feiya",
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---h31gzZEtNLTqOjlF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY01OqAAKCRAw5/Bqldv6
-8pcCAJ0c9IcuHaP/6hN6sPtSamTzyA6odACePR1wC4yMzQfBwOcHkfbEcIlHVfo=
-=wr5P
------END PGP SIGNATURE-----
-
---h31gzZEtNLTqOjlF--
+greg k-h
