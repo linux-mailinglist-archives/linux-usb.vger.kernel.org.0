@@ -2,181 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005B96007E4
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 09:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09E7600B02
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 11:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiJQHmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Oct 2022 03:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S231324AbiJQJhS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Oct 2022 05:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJQHmq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 03:42:46 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDCE2F668
-        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 00:42:44 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so6451234ioz.8
-        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 00:42:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=huVHFHzZCRegYjTiP+y/6HGGDXj2cO7o1fBi9AQtHVM=;
-        b=MXjbJib1yoqi/n6RK1s+WAPjjMuRbqOVWUkXtG+8JH7SMFJ0NKfTNUiwGjxzk3WWYr
-         DcFzJFzvN8YcIOstbQc7CcYZZCEFxKOlclUneAqzG7O0yxx9BEje+HfEKE5KuBtBzY4O
-         bZ/tFlsDHuSBCuq995m+wyLj/uF15uWr0Phdmzmtgh98tLqH7tenZxsAgdw4uifkbs7m
-         BcEa60kN+RCyehi4EpKd9PRBYhJgLftknpRcCABvHVcakgWpqGhdWJomMKqi8QIo6tXl
-         iN3pCbzgP8i33sdAiXLhN/UpN3BOLKdDTTsO32JiwBbk8H50lnchhqyr2pEydK5oK+a/
-         hkwA==
-X-Gm-Message-State: ACrzQf3/+0EiGkTUb0LHGN3jioNcR+ZCVtYzi3Ze5Ct1D0rhJZLpLk+K
-        DteL3AJvGyna8vrFj41iOlNvGuoSlOQwjTvSslXmgAGzEEmF
-X-Google-Smtp-Source: AMsMyM6E+4zfWIspeyjs8XHlWSoXPjmb8Z0vkRBP/4/2lyd2FrXZY+5e96ws0C0U0G7Er37n20f3mSG1u/dcgbqYClVF7oR+pZvD
+        with ESMTP id S230157AbiJQJhQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 05:37:16 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63AC578A0;
+        Mon, 17 Oct 2022 02:36:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VcTlTjRXQpLdUUxZnmHQTT6ZvoLLy/6H4j+IkxIc05cOi3lRlOf7y0BdznpRpFKZjW+8OF+O0X8XhrJHC5m2rnP4RdH6w3NpBxF/pvOvQ4R9qJHcmOZDTmWjahMQhKYRw/XpasdJm3/NQGugZvC1JLN/PV2x0lTiVsHrBEnPha23F2twkaqZsL7yE5mCar+smwei3XVvG98AbP/THeRAQVPQwnZsVDJ6O1zaQui0ZZmlX34bqdkwsb38F0LlnV+870JL9arpvhtaKOiJD1WrHejBUd94vQQxp4BBntqXWJRJwOglHfJulzu61WrFJRzBjNhkjqAzX6fz0iLsAH96pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pG5bGbOmQ/0aNw8TSfbCjVw5YZgrzKG78NZvrZrSv68=;
+ b=ZiFNDnWoHLm2YANbQRHDHUnuatp8IZG9vQqiMlzKF+xW2dvX0N5LLL/tLEGvxKoRbP2/BFiOq83MzQ7i5DIYNoiSF7QZyjr9XNtELgcKsfoTrICbglASXw4fWrA+ij8XHest4OtwubetWX8mE9/+lhGVg/rWRP4wkm3nB5k2g5CbiFe0Z+AcgZCN+Hpwa9PbjQgXoG3bhbL0K0TFmaHJXeiMOJIjGO9fomeQUF0BjfjqDJe8NYMS4gMpT8ccQA03Lo/B++JPLDXKTAGy39tJ+0wcs0yUYRNXXfrPGBAPmGJGRZyGUAXEhqllcRLXyRtuzrx/srO1BhiwdtJ3T6vJQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pG5bGbOmQ/0aNw8TSfbCjVw5YZgrzKG78NZvrZrSv68=;
+ b=geUg/MFUxsLGTGXKmGUyUnBGjVd9+CuRuGyj/Ooxk+JwyUS7r2kBbptOl7p/n5tO1YHnismgV6FXOzaMJ2nZGiSUfrbFpwgm4vIE5ULOnNVxlpp5lB57SM2RGXWwdS8qxmp7g2U7BLOfMShTEGPYgCTKD4Iq/StVWN7lWM48BS4aTUXo3F8Y7NWueq6A4IJBeFIPV8HXR7KKtKrNZqGDI12aJBe5uTR5lgOtVRGcm7VlbMQ0/Tr/IVP+XDE7fSxPXadWSF8sh9vpWidKOsZB/rF0jxDXgPgx4nLn+xHnXu8bZGAilWRS1lyEo12V9L54k0gxKkcBW5GfkR7oMmAYYg==
+Received: from IA1PR12MB6603.namprd12.prod.outlook.com (2603:10b6:208:3a1::17)
+ by CY8PR12MB7435.namprd12.prod.outlook.com (2603:10b6:930:51::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Mon, 17 Oct
+ 2022 09:36:39 +0000
+Received: from IA1PR12MB6603.namprd12.prod.outlook.com
+ ([fe80::d140:ead8:ffd1:76e3]) by IA1PR12MB6603.namprd12.prod.outlook.com
+ ([fe80::d140:ead8:ffd1:76e3%6]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
+ 09:36:39 +0000
+From:   Jim Lin <jilin@nvidia.com>
+To:     Jonathan Hunter <jonathanh@nvidia.com>
+CC:     "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3] xhci: tegra: USB2 pad power controls
+Thread-Topic: [PATCH v3] xhci: tegra: USB2 pad power controls
+Thread-Index: AQHY3iTzGqk+LW8EIUGun7Nw/Ps9r64Ko9kAgAe3xIA=
+Date:   Mon, 17 Oct 2022 09:36:39 +0000
+Message-ID: <cf9b9c605ed06e59edd3ae5deba914cfbfa55be3.camel@nvidia.com>
+References: <20221012102511.3093-1-jilin@nvidia.com>
+         <37b168f2-049c-c01f-9f60-c119fabf8606@nvidia.com>
+In-Reply-To: <37b168f2-049c-c01f-9f60-c119fabf8606@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR12MB6603:EE_|CY8PR12MB7435:EE_
+x-ms-office365-filtering-correlation-id: 3ddc4a1a-486b-410b-99a3-08dab02317b8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DnG9A0Uofvjnl5rs6s8/KnDyLNh/qbTHntZRYqoV+S6Vr5s7CyPzoaeuSv6H0lMnnjkE6/KndYdInEU+F0Lx3P15H70iG16T2Ie+v1hIhqLb4ehXYDhy4KF033J69lfC/cDjIkHH8NJdk1/PUbWv20qPLZYk4VaHRD4am4XJ1AHU+XZDccWfThq6kNQgz7ggCV5OqPJM/pdh5bvoHAKpn727RXA+XQRr6ydCJ15CZZNDWLA/BzbYFHBILOhrXNTIIbt1nixonKpsT2eCUyd1wgh2Qe8Wh3P1nIDXVYn3x4O+JI5UVfUGu0Lq84kSd+BC3xaUmboHIh23+7TYvV9UngOFWiu4Fi6ECGpaF6uHiwshSm9WfclsqN7D9XoYqHCzW6pgMEtyde1pVCHcf5qPridrnI/WCpMDlhxq14314ioCS9SGm/5Kry2xDUEHhmk2GHSm6Dg8HvjL2ftGnAjjIYnHu+9Q5x4Gdvzl1JYDJuGjsTK773rQbe3BYCHn/jv1yYYuOvcmhIGIWpJXhNo2zh4Q2GYa0v14NfcIRcFOCpGCKzJPbWATg4+nccR5lZ0Gz+YQWyvf9+Z1cedWc7B/naxevzTO6n3exXo5SMv2wJ/jW+OPmsi7Yrp1b3TU7t2jC/0wygb29jkYKTusDH36y1inW5CxdWyQ+MDNtyR8/D1ptzVZnbLfSPzr6i0ipDXyKBpEAJ2OtxKr81q4TVLx0ps77NyL6wQfjv3NCFrWmycny4EVT6enQZ4prtFwquJ1PfAcnye7Z0wPNWGTDV5SNgXm0wQAs7MWaRXOUMUTgYU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6603.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199015)(36756003)(38100700002)(8936002)(6862004)(5660300002)(122000001)(83380400001)(86362001)(38070700005)(26005)(6512007)(54906003)(37006003)(6636002)(186003)(2616005)(478600001)(71200400001)(6486002)(316002)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(53546011)(41300700001)(8676002)(91956017)(4326008)(6506007)(2906002)(4001150100001)(99106002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WHNoR0hwTGN3MlpiejIxYUFMWUJZQzgwNVBHbmRkWDE5QnZiY2xCTUpMVjJZ?=
+ =?utf-8?B?cXBIVFN0allYSyttYTJhYjNUeXdrN0g1TllNU0cyUkRiU3o0alhZNnFUNmQw?=
+ =?utf-8?B?ZWE3Z1YxWDV3TUxmVU5lNFQzdUtkZ0lNMjVkYUVVZXJsdm42dVJFWmU1WER3?=
+ =?utf-8?B?RTJ0eDhneGtUdnRYZG1vWVN4b1M2QTZnOFVKVVpSUW0yeCtQRkJLZXdlS0dr?=
+ =?utf-8?B?K1FNYUY0WFhndWt5RzlCVWRkYWRlcjMxWDZpdDlBWkVURFoza25UZFlhbG5l?=
+ =?utf-8?B?cUxXTHJkL042QVBra0srZ1VPb2dOem9IQlUrVXloN0UzREdJcVl2d0UzNERk?=
+ =?utf-8?B?UU1nVDZXdkRHU0V3Q2xmRGpVSzV3Ym5MM2RqS0RTSjJmbkpaa3lncS9vcHdQ?=
+ =?utf-8?B?bU9MYTdBOFBKMjlsOCthUGtIejBRRm1qMkNUMGJIcnZLYVpsOHpIYitscnFh?=
+ =?utf-8?B?NDNwVjVrZER4RXZkQVNwUmtuOWx2WFVkSHlJTVlRVHNpa29jT0xUMFo0aWJh?=
+ =?utf-8?B?by9rcXhYZEEyVWttd0VIQ215Q1JrYzhDWExwa016bHYrYzRQeHRGa0dQMVhv?=
+ =?utf-8?B?UHR2R1N6cFBNZnlpQk5rSURIeTEyVmgyWWhtTkhnV2NpM3gxRkwxMm85QkNv?=
+ =?utf-8?B?WEhjZkwzTVZKckJlSEhwaGZXNFpHOW5hWVllQnhVUHJXZVJPbC9FTFBiTndZ?=
+ =?utf-8?B?dzNoem04di81V2xiYVNUSHk0QXNFM1EyRVFzVzNKcUMyTWtXSG1wTzdiR1dt?=
+ =?utf-8?B?K2xqaTYrSjhwSmRDUE9tdGQ2a1d5c0tNanppS0lCYUdOQXJkbk8zNTF0TGdT?=
+ =?utf-8?B?cFJ3YnJNaFlkTEZIOHg0dUd2VGM2bW9oNFhlN1pHNzhGUWphaFdoM1BzR0Nu?=
+ =?utf-8?B?dDBxQk9zc3Q2VGtNUjNISUNIRVBiWitIWU1lYTlIV3JVakRIYkl4R282Q2dG?=
+ =?utf-8?B?T3ZMQStXNlZ3THRrODZrTzNiQVhrcTNOYzRka1kyN0JRUGx2WE5WQzZ5Z0Jz?=
+ =?utf-8?B?SnV2RHZnbmZaUnV1RWtOYVFmekhwVWVLZVlSQ3BzZXliWCswbzQ1a2JkNUtP?=
+ =?utf-8?B?aE04UmZJM2FMRjNlZkx2SHFxMk5pWFpZQTF5MHdjT3lxSjJMTm8xUTFwa0ZU?=
+ =?utf-8?B?Z2NZR1pNenZscGx6bjFEcFp3RTB0T2o5RldTd1JWNnVrQTNIMjNzTVdVbElW?=
+ =?utf-8?B?VnVwaVlaRDhPMlRLYnZ5Y1kzL2paaWJUeGNnTzJqbEV3aDU2bGprYzVOZnQ3?=
+ =?utf-8?B?dUQ0VGhvSWttTFNiTm9jWXlkTTBlT0padFFUMXgzZ2RyYUQ1bVpQMG1uM0RI?=
+ =?utf-8?B?dDR0ZTJzbFJlNVhYK0lkbUhSY1VhaWR1MmlZQ1lsYWgrSHhvVEJXRmJOZG00?=
+ =?utf-8?B?dXMzV0NGbEtoMHoxQkJCNmhBSi9wTmpVaFowRzVYQkhaR3Qva3QxSUEyQXFK?=
+ =?utf-8?B?VWllTTFUSkdrdVN5UHZxRmY0OXNpRlRJMDdZVnBvSEdYbkZmanBwUG12aVJt?=
+ =?utf-8?B?UWhGd2JZbzZERER6SUJrZmZ0elBmZUFWSWs3WXFJMHRKR2ovemQ2VXJFako2?=
+ =?utf-8?B?WUlBYmpYWGkrNytlM0c4K0lnRUlyVSs0ZTQ3YjdKMXhpaU5IemFXNm9XL1d6?=
+ =?utf-8?B?OEl6ekxuZFVzR2dZcGJKcGJHZ3hMS01pNVF4QU9TNmpvblgyZkd0dUVKa1FP?=
+ =?utf-8?B?ZnZGREFjTi80VHFGSUlCdGJHeW5MblY2cGFEak00QTdIa2hkaUxMUnkrNVZ0?=
+ =?utf-8?B?VjZqenNXSkJYcGtjai9XVElzS095THh6SnNmTzE1am5IcXpRVUltbFB0WWJX?=
+ =?utf-8?B?SG5na0lsZ3E4S3NQaXNGYSszQ0hBRmdHVlZEV2xoeW12WStLTzZKQmJrVVZn?=
+ =?utf-8?B?UTVsVTNJNktxRUdRU2xpc2J5L09VRkdCVVRDd0x2Y2lkOUNrTlZKd0hMaS83?=
+ =?utf-8?B?VS9vdmFuRkNBQ2t3NFoxT001T0J3b3I3VVM3QmRCd1VqT25XK3JsNnpyK3Ja?=
+ =?utf-8?B?UzhKbUdZWE5idzZoTVFLNUFWekMwL3hJa21Jd3VzY2pFVUtQVmRQb2pZVWc1?=
+ =?utf-8?B?eGFvU1BPQndrTHFOOHhETUhhYnBQbUlRRXZTYzF3ZFBYV0s4d2lIekhDYVJT?=
+ =?utf-8?Q?73ysCUTOut2kVU+Uy8uy4hCbz?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <ADD4D8957C4D0241A6C91C8A8FF09FE8@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3145:b0:6b3:d28a:2f4d with SMTP id
- m5-20020a056602314500b006b3d28a2f4dmr3959377ioy.49.1665992563884; Mon, 17 Oct
- 2022 00:42:43 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 00:42:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f80cbd05eb361e8e@google.com>
-Subject: [syzbot] usb-testing boot error: WARNING in __netif_set_xps_queue
-From:   syzbot <syzbot+a30f71cf20b71d5950e7@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
-        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mst@redhat.com, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6603.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ddc4a1a-486b-410b-99a3-08dab02317b8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2022 09:36:39.4351
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ogXyHStzOJ5k5/98bQ/qep8euAAN36qZ5f5oaTFgEft7+dtbkrNXeQDbL4DvsVKUPJzJ5JSHU7lELRm2KtwRGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7435
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    9abf2313adc1 Linux 6.1-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c16c3c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c62bac73287f46bf
-dashboard link: https://syzkaller.appspot.com/bug?extid=a30f71cf20b71d5950e7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1e5f3ebfe6d/disk-9abf2313.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a75cbc21a548/vmlinux-9abf2313.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a30f71cf20b71d5950e7@syzkaller.appspotmail.com
-
-software IO TLB: mapped [mem 0x00000000bbffd000-0x00000000bfffd000] (64MB)
-RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fb702bab20, max_idle_ns: 440795313305 ns
-clocksource: Switched to clocksource tsc
-Initialise system trusted keyrings
-workingset: timestamp_bits=40 max_order=21 bucket_order=0
-NFS: Registering the id_resolver key type
-Key type id_resolver registered
-Key type id_legacy registered
-9p: Installing v9fs 9p2000 file system support
-Key type asymmetric registered
-Asymmetric key parser 'x509' registered
-Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
-io scheduler mq-deadline registered
-io scheduler kyber registered
-usbcore: registered new interface driver udlfb
-usbcore: registered new interface driver smscufx
-input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-ACPI: button: Power Button [PWRF]
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-usbcore: registered new interface driver udl
-loop: module loaded
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-usbcore: registered new interface driver port100
-usbcore: registered new interface driver nfcmrvl
-scsi host0: Virtio SCSI HBA
-scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-sd 0:0:1:0: Attached scsi generic sg0 type 0
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 netif_attrmask_next_and include/linux/netdevice.h:3689 [inline]
-WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 __netif_set_xps_queue+0x8a1/0x1f50 net/core/dev.c:2592
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
-RIP: 0010:netif_attrmask_next_and include/linux/netdevice.h:3689 [inline]
-RIP: 0010:__netif_set_xps_queue+0x8a1/0x1f50 net/core/dev.c:2592
-Code: fc 48 c7 c2 60 24 f8 86 be 2e 0a 00 00 48 c7 c7 00 23 f8 86 c6 05 d6 8e f0 03 01 e8 14 7c e9 00 e9 ef fd ff ff e8 0f 5f 60 fc <0f> 0b e9 8e fa ff ff 8b 6c 24 38 e8 ff 5e 60 fc 49 8d 7c 24 04 48
-RSP: 0000:ffffc9000001f898 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: ffff8881002b0000 RSI: ffffffff84e66611 RDI: 0000000000000004
-RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
-R10: 0000000000000002 R11: 0000000000052041 R12: ffff88810e97bb00
-R13: 0000000000000003 R14: ffff88810e97bb18 R15: 0000000000000002
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- virtnet_set_affinity+0x4f0/0x750 drivers/net/virtio_net.c:2308
- init_vqs drivers/net/virtio_net.c:3581 [inline]
- init_vqs drivers/net/virtio_net.c:3567 [inline]
- virtnet_probe+0x12ae/0x33a0 drivers/net/virtio_net.c:3884
- virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
- call_driver_probe drivers/base/dd.c:560 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:639
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
- __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
- bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
- bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
- driver_register+0x220/0x3a0 drivers/base/driver.c:246
- virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4090
- do_one_initcall+0x13d/0x780 init/main.c:1303
- do_initcall_level init/main.c:1376 [inline]
- do_initcalls init/main.c:1392 [inline]
- do_basic_setup init/main.c:1411 [inline]
- kernel_init_freeable+0x6fa/0x783 init/main.c:1631
- kernel_init+0x1a/0x1d0 init/main.c:1519
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+T24gV2VkLCAyMDIyLTEwLTEyIGF0IDEyOjQ1ICswMTAwLCBKb24gSHVudGVyIHdyb3RlOg0KPiBP
+biAxMi8xMC8yMDIyIDExOjI1LCBKaW0gTGluIHdyb3RlOg0KPiA+IFByb2dyYW0gVVNCMiBwYWQg
+UEQgY29udHJvbHMgZHVyaW5nIHBvcnQgY29ubmVjdC9kaXNjb25uZWN0LCBwb3J0DQo+ID4gc3Vz
+cGVuZC9yZXN1bWUsIGFuZCB0ZXN0IG1vZGUsIHRvIHJlZHVjZSBwb3dlciBjb25zdW1wdGlvbiBv
+bg0KPiA+IGRpc2Nvbm5lY3Qgb3Igc3VzcGVuZC4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBK
+aW0gTGluIDxqaWxpbkBudmlkaWEuY29tPg0KPiA+IC0tLQ0KPiA+IHYyOiBGaXggaXNzdWUgdGhh
+dCB3cm9uZyB0ZWdyYS0+cGh5c1tdIG1heSBiZSBhY2Nlc3NlZCBvbiB0ZWdyYTEyNA0KPiA+IHYz
+OiBObyBjaGFuZ2Ugb24gY29weXJpZ2h0DQo+ID4gDQo+ID4gICBkcml2ZXJzL3VzYi9ob3N0L3ho
+Y2ktdGVncmEuYyB8IDEzOQ0KPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0N
+Cj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMzggaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0K
+PiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktdGVncmEuYyBiL2Ry
+aXZlcnMvdXNiL2hvc3QveGhjaS0NCj4gPiB0ZWdyYS5jDQo+ID4gaW5kZXggYzhhZjJjZDIyMTZk
+Li45OTYxODJhMTk1OWYgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLXRl
+Z3JhLmMNCj4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktdGVncmEuYw0KPiA+IEBAIC0x
+ODksNiArMTg5LDEzIEBAIHN0cnVjdCB0ZWdyYV94dXNiX2NvbnRleHRfc29jIHsNCj4gPiAgIAl9
+IGZwY2k7DQo+ID4gICB9Ow0KPiA+ICAgDQo+ID4gK2VudW0gdGVncmFfeGhjaV9waHlfdHlwZSB7
+DQo+ID4gKwlVU0IzX1BIWSwNCj4gPiArCVVTQjJfUEhZLA0KPiA+ICsJSFNJQ19QSFksDQo+ID4g
+KwlNQVhfUEhZX1RZUEVTLA0KPiA+ICt9Ow0KPiA+ICsNCj4gPiAgIHN0cnVjdCB0ZWdyYV94dXNi
+X3NvYyB7DQo+ID4gICAJY29uc3QgY2hhciAqZmlybXdhcmU7DQo+ID4gICAJY29uc3QgY2hhciAq
+IGNvbnN0ICpzdXBwbHlfbmFtZXM7DQo+ID4gQEAgLTI3NCw5ICsyODEsMTcgQEAgc3RydWN0IHRl
+Z3JhX3h1c2Igew0KPiA+ICAgDQo+ID4gICAJYm9vbCBzdXNwZW5kZWQ7DQo+ID4gICAJc3RydWN0
+IHRlZ3JhX3h1c2JfY29udGV4dCBjb250ZXh0Ow0KPiA+ICsJdTMyIGVuYWJsZV91dG1pX3BhZF9h
+ZnRlcl9scDBfZXhpdDsNCj4gPiAgIH07DQo+ID4gICANCj4gPiAgIHN0YXRpYyBzdHJ1Y3QgaGNf
+ZHJpdmVyIF9fcmVhZF9tb3N0bHkgdGVncmFfeGhjaV9oY19kcml2ZXI7DQo+ID4gK3N0YXRpYyBp
+bnQgKCpvcmlnaW5hbF94aGNpX2h1Yl9jb250cm9sKShzdHJ1Y3QgdXNiX2hjZCAqaGNkLCB1MTYN
+Cj4gPiB0eXBlUmVxLCB1MTYgd1ZhbHVlLCB1MTYgd0luZGV4LA0KPiA+ICsJICAgIGNoYXIgKmJ1
+ZiwgdTE2IHdMZW5ndGgpOw0KPiANCj4gSXMgaXQgYmV0dGVyIHRvIGFkZCB0aGlzIGZ1bmN0aW9u
+IHBvaW50ZXIgdG8gdGhlIHRlZ3JhX3h1c2INCj4gc3RydWN0dXJlPw0KPiANCj4gSm9uDQo+IA0K
+RG8geW91IG1lYW4gcmVtb3ZpbmcgdmFyaWFibGUgIm9yaWdpbmFsX3hoY2lfaHViX2NvbnRyb2wi
+IGFuZCBzYXZlDQpmdW5jdGlvbiBwb2ludGVyIHRvIHRoZSB0ZWdyYV94dXNiIHN0cnVjdHVyZSA/
+DQoNCkJ1dCB0aGF0IGRvZXNuJ3QgbG9vayBwb3NzaWJsZSBvdmVyIGhlcmUgdG8gcG9pbnQgdG8g
+dGVncmFfeHVzYg0Kc3RydWN0dXJlIGFuZCBzYXZlIHBvaW50ZXIgKHRvIHRlZ3JhX3hoY2lfaGNf
+ZHJpdmVyLmh1Yl9jb250cm9sKSBpbnRvDQppdC4NCg0KIg0Kc3RhdGljIGludCBfX2luaXQgdGVn
+cmFfeHVzYl9pbml0KHZvaWQpDQp7DQoJeGhjaV9pbml0X2RyaXZlcigmdGVncmFfeGhjaV9oY19k
+cml2ZXIsICZ0ZWdyYV94aGNpX292ZXJyaWRlcyk7DQoNCglyZXR1cm4gcGxhdGZvcm1fZHJpdmVy
+X3JlZ2lzdGVyKCZ0ZWdyYV94dXNiX2RyaXZlcik7DQp9DQptb2R1bGVfaW5pdCh0ZWdyYV94dXNi
+X2luaXQpOw0KIg0KDQotLW52cHVibGljDQo=
