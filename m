@@ -2,43 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86FF600617
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 07:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A38D600644
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 07:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiJQFAA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Oct 2022 01:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S229608AbiJQF2V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Oct 2022 01:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJQE76 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 00:59:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9772422BCE
-        for <linux-usb@vger.kernel.org>; Sun, 16 Oct 2022 21:59:56 -0700 (PDT)
+        with ESMTP id S229999AbiJQF2R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 01:28:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE9453A7B;
+        Sun, 16 Oct 2022 22:28:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E2AA60F1F
-        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 04:59:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F26C433B5;
-        Mon, 17 Oct 2022 04:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665982795;
-        bh=9n9BSafbtWdmvezewSUCvfFe4FZBE+gZsi7g8pEShi8=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 375ACB80EDF;
+        Mon, 17 Oct 2022 05:28:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5696AC433D6;
+        Mon, 17 Oct 2022 05:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665984493;
+        bh=Kk/vVQVO1n4Hl5d04Qf2mWV4W6hzzjjjmYLuEzxTK0A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UbSdFRNg6hg5z6YYB+jSEqJ7w6dEll/JRNeICXEGczfphFd4klT7uceka9w2efTjY
-         C44yxSezRhUKJYMFFZ+Ov0l5bsz8RlF6btedk5V/C3vV8LKigHATElm3RopZzaGnAY
-         SjzlXRq+F2SwxUXF7RSM0qIlWLBCqqHSUo1v9W2w=
-Date:   Mon, 17 Oct 2022 07:00:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     James <bjlockie@lockie.ca>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: is usb.ids used anymore?
-Message-ID: <Y0zheI+RSeLNulpx@kroah.com>
-References: <8526b38d-64b2-05b0-48e5-a54936f6332f@lockie.ca>
+        b=XQKyTfxIjqjhdL191PMHg1pyAvK5iFM5mPKrqZ2pqpU9b3of65GIEBqkr9X6yx2bz
+         k3AfUiUTt8HojL7flWmMsRhBjIKw9CcEY0nOUxv5/fwP6ZJ9gqt43DHKnRYDxnmskn
+         4BTu1277XImgtnEx4JVdbcQ3v3e8aNU0PTHnwAZv//q+Hb0pFoVw5mojUc2V6CZl9a
+         xNjtUSV8fIj+Og9RwOFAdz2Ow4ZbG3tv+nD5buej4zeHgNiTpMDCE9FXAUm3D83qRO
+         spFnnP5ofnx5tyr2hECDG0SUwe5hr6yeMM19oeJhNS9jCb9AgJlIihASoj4ZLc5aRm
+         AF1a10yGO1Epg==
+Date:   Mon, 17 Oct 2022 10:58:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, xu.yang_2@nxp.com,
+        kishon@ti.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, jun.li@nxp.com,
+        linux-phy@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] dt-bindings: phy: imx8mq-usb: add power-domains property
+Message-ID: <Y0zn6Rczb9relP+N@matsya>
+References: <20221014095550.2125018-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8526b38d-64b2-05b0-48e5-a54936f6332f@lockie.ca>
+In-Reply-To: <20221014095550.2125018-1-peng.fan@oss.nxp.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -48,39 +57,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 08:02:59PM -0400, James wrote:
-> I am trying to get usb.ids updated.
+On 14-10-22, 17:55, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> There is a link to here:
-> http://www.linux-usb.org/usb-ids.html
-> 
-> It says the text file is updated daily but the last update was Version:
-> 2022.05.20.
+> Add optional power-domains property for usb phy.
 
-Maybe that's just the last update that was needed.
+Applied, thanks
 
-> Is that file even used anymore?
-> 
-> I did the web update and I sent a diff -u to linux.usb.ids@gmail.com
-
-The web form should work, did you try that?
-
-> but I didn't receive a confirmation to the email and the ids show up in the
-> web interface but there are no names associated.
-
-What do you mean by this?
-
-> The link to the maintainer is no longer valid. :-(
-
-What link?
-
-> Wouldn't it be easier to keep in a github if it is still used?
-
-Why is github easier?
-
-And yes, it is still used, the hardware database ids in
-/lib/udev/hwdb.d/ on your system is based on it.
-
-thanks,
-
-greg k-h
+-- 
+~Vinod
