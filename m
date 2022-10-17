@@ -2,121 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C716015A5
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 19:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8DA6015D9
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Oct 2022 19:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJQRrp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Oct 2022 13:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S230451AbiJQR75 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Oct 2022 13:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiJQRro (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 13:47:44 -0400
-Received: from titan5.planetwebservers.net (titan5.planetwebservers.net [51.222.33.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AFF62934
-        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 10:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mrgiflU4myV4vq0PKMHVPRA9K4IPGIRxr7EmBZo9n0A=; b=s/okrabHjMVfxdYiw9lNArTDnh
-        nxQFy1iaybnGfwKgqGa3ZXAWBY1eOzWDt5/4IiYMnjenPVYxnNOovaLNljSzSJikIqh87TT5TTDVY
-        83qHx4+ApUsCqmLw+OQzfCBZO/EMiz73Qv4GmTlZRjj8FJXLnMN1JtfY8XZaFhELTfECbHj9mfMTb
-        LEyO0KGo18elZ3SH+qooKwwb5qtPQkkYUdeYTI7kP6zTVniYGd8i4mV+ptuSbTsYdIkaK/sCbglk6
-        etJ1885v3FzFrWvimO5DCd6eBdornyl/5xhZPWEidw8CPmbPH07MxoEzy6vfa1mS4moc8Wnu7iU7x
-        Oi5hAzWg==;
-Received: from [66.79.242.44] (port=35132 helo=[192.168.68.80])
-        by titan.planetwebservers.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <bjlockie@lockie.ca>)
-        id 1okUD7-0000UH-Sr;
-        Tue, 18 Oct 2022 04:47:41 +1100
-Message-ID: <2c81fb1b-8ec3-d652-4ee8-9354998a0c10@lockie.ca>
-Date:   Mon, 17 Oct 2022 13:47:33 -0400
+        with ESMTP id S230399AbiJQR7v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Oct 2022 13:59:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40102A95C
+        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 10:59:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D352611E8
+        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 17:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6218C433D6
+        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 17:59:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666029588;
+        bh=wPA+RdcP0HUl8YjHROlbbi2FIW1gxL5t1CHTvz0R1MQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=U08qsHNUBRbg2dfmoss4iTUsdsd42g/R7qQInO5zZHcaz2r+LlYYeKUfFUlHNYT3P
+         u2Y6O+WneRqK83m8ylGHZEwfJiZrYjB4PO7nsElXdVnBhVmz3vZoMye2h76KAgepLi
+         mumDsIH9fP1dlcfmJtlBuJVO57P07eL1RpxUjNs4ZMdOf62GWcRrhD1ENUuAbs8qZO
+         jX9eQJMYuMKXnaI/J3R50GK0UNNDEw+4IbK3YCZIYBMhgN0U2vH/LZSrLV3Bp6kSSM
+         hAgdUDW+HrFu9yJjXTNWWAXP1Vs3pMUkldwR8NZjK9hiu3pTIVBankbgsYFHLb6bsL
+         t4eJ9lmjmo7xw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 94B7AC433E4; Mon, 17 Oct 2022 17:59:48 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216543] kernel NULL pointer dereference usb_hcd_alloc_bandwidth
+Date:   Mon, 17 Oct 2022 17:59:48 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: nazar@mokrynskyi.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216543-208809@https.bugzilla.kernel.org/>
+References: <bug-216543-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: is usb.ids used anymore?
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-References: <8526b38d-64b2-05b0-48e5-a54936f6332f@lockie.ca>
- <Y0zheI+RSeLNulpx@kroah.com> <7cb0f51d-6ad1-488d-a989-08eb6727e9b7@lockie.ca>
- <Y01uSKYMXBkZVgOJ@kroah.com>
-Content-Language: en-US
-From:   James <bjlockie@lockie.ca>
-In-Reply-To: <Y01uSKYMXBkZVgOJ@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - titan.planetwebservers.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lockie.ca
-X-Get-Message-Sender-Via: titan.planetwebservers.net: authenticated_id: bjlockie@lockie.ca
-X-Authenticated-Sender: titan.planetwebservers.net: bjlockie@lockie.ca
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216543
 
->> I tried to add:
->> 7961 MT7921AU 802.11a/b/g/n/ac/ax Wireless Adapter
->>
->> 7961 shows up but the description/name is blank on:
->> https://usb-ids.gowdy.us/read/UD/0e8d
+--- Comment #7 from Nazar Mokrynskyi (nazar@mokrynskyi.com) ---
+Created attachment 303022
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D303022&action=3Dedit
+Kernel log with uvc-trace patch applied
 
-0e8d:7961 MediaTek Inc. Wireless_Device
->>
->> I also tried to add 0608  the 7921k USB Bluetooth portion of a pci card.
-> I don't understand, how is a USB device part of a PCI device?
-The PCI device is a wireless card that has a chipset that also supports 
-Bluetooth and the PCI device has a USB cable that connects to the 
-motherboard to support the Bluetooth part.
-The wireless radio is connected via PCI and the Bluetooth radio is 
-connected via USB.
->
-> What does 'lsusb' show for these devices?
-0e8d:0608 MediaTek Inc. Wireless_Device
->
->> Someone else added 2870 but it doesn't show a name either.
-> Is there a name in the device itself?  That's the best place for this
-> information, and is why USB added strings to the configuration
-> descriptors, so that no external tool should ever really be needed.
-Is the name in the device put there by the manufacturer of the device 
-(eg. Comfast/Netgear) or is the name stored in the chipset used (eg. 
-MediaTek)?
+I'm on 6.0.2 and seemingly get this even more frequently with good cable an=
+d no
+extra adapters. So I patched 6.0.2 with uvc-trace above and reproduced it
+within a few minutes.
 
-I have an Alfa Networks AWUS036ACM that shows in lsusb as:
-0e8d:7612 MediaTek Inc. MT7612U 802.11a/b/g/n/ac Wireless Adapter
-I was suspicious they (MediaTek) don't embed a detailed name in the 
-device (just "Wireless_Device") so
-I removed:
-usb:v0E8Dp7612*
-  ID_MODEL_FROM_DATABASE=MT7612U 802.11a/b/g/n/ac Wireless Adapter
-from:
-/lib/udev/hwdb.d/20-usb-vendor-model.hwdb
-and I also tried to override the name in /etc/udev/hwdb.d/
-Neither worked.
+USB seems to reset, often camera stops or freezes in the browser, but the l=
+ight
+on the camera itself remains on. Sometimes I can enable/disable/enable came=
+ra
+for it to reboot, but the last time I did that in the log I got null pointer
+de-reference again.
 
-I copied that directive to make one for 0E8D:7961 but that didn't work 
-either. :-(
-usb:v0E8Dp7961*
-  ID_MODEL_FROM_DATABASE=MT7612U 802.11a/b/g/n/ac/ax Wireless Adapter
+Please let me know if there is any other information I can provide and what
+could be the root cause of this annoying behavior.
 
->>>> The link to the maintainer is no longer valid. :-(
->>> What link?
->> It says "This site maintained by Stephen J. Gowdy." and has a link to http://cern.ch/gowdy which is 404 not found.
-> There might be an email address on the file itself if you really want to
-> contact them.
+--=20
+You may reply to this email to add a comment.
 
-Can you please just let him know about the broken link?
+You are receiving this mail because:
+You are watching the assignee of the bug.=
