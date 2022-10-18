@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4062C602DF3
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 16:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34BA602E05
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 16:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiJROJb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Oct 2022 10:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S231404AbiJROLM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Oct 2022 10:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJROJ3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 10:09:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5BC25EC;
-        Tue, 18 Oct 2022 07:09:21 -0700 (PDT)
+        with ESMTP id S231345AbiJROKz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 10:10:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B1F79EDE;
+        Tue, 18 Oct 2022 07:10:43 -0700 (PDT)
 Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FD688B9;
-        Tue, 18 Oct 2022 16:09:18 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8369A8B9;
+        Tue, 18 Oct 2022 16:10:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1666102159;
-        bh=XW3IWSkyTJNdMSanD5x08FhrrBKsT2/IbrHkChUSIec=;
+        s=mail; t=1666102242;
+        bh=ZInnVw1esZ4WL3hvzj5wLDi+UzH4wh1ON58NQxWJKd8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=o+6iX7VaRKS+pWv5oWVv7aPkYOoBztyd8AKZeKkfLw0o4dsVrr2nYNgRBnoTU4Fwt
-         AgtofK9FGAXJ66m16sig80+FsLYtfpFhqdLDJU37hFEbGZ0z88ZH9uCwDq9SojQN2Z
-         Z/ttSEf4YwL/yWITpVPB0IYobtXJc+geMZBO3lXE=
-Message-ID: <40def24c-6d03-e792-de27-864b41fa0ac7@ideasonboard.com>
-Date:   Tue, 18 Oct 2022 15:09:15 +0100
+        b=EGE6qbqx6Rt/BTernfkdZcVJS6qBbHUn8cfZrxhkCGl17OIcD85+MC/OD3F622zqq
+         uCJ51/rKFkVPIkxw9XYU6QMj/ij7SAqAxATUoAFKETUWb53tykVF0a1v3mmv5UNhdF
+         CIt7mmAvHCI1DujH1ML0h8mA66ye0kQYXxbADIFs=
+Message-ID: <7df3432a-c725-73f1-a5c7-914849e826e6@ideasonboard.com>
+Date:   Tue, 18 Oct 2022 15:10:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
@@ -59,7 +59,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael
+Hi Michael - again!
 
 On 18/10/2022 15:04, Michael Grzeschik wrote:
 > Hi Dan!
@@ -80,6 +80,11 @@ On 18/10/2022 15:04, Michael Grzeschik wrote:
 >> Nitpick: I would call it use_sg everywhere, but either way:
 >
 > Or even only "scatter_gather". How does that sound?
+
+
+I think I prefer use_sg actually, but I don't have a strong feeling 
+either way.
+
 >
 >>
 >> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
@@ -204,18 +209,6 @@ On 18/10/2022 15:04, Michael Grzeschik wrote:
 >>> +        queue->use_sg = false;
 >
 > I am unsure, but can you actually not always use vb2_dma_sg_memops.
-
-
-We have problems with this on the imx8mp EVK, because it doesn't account 
-for dma-range properties in device tree and so will attempt to allocate 
-memory outside the 4GB range that a DWC3 can access. The allocation 
-attempts to fall back on the swiotlb, but that's slow even if it 
-works...and it can fail and return -ENOMEM if the swiotlb is too small.
-
-
-Probably some future work needs to fix the vb2_dma_sg_memops to take 
-those dma constraints into account, but for now I wouldn't force its use.
-
 >
 > With my last patch we always set buf->mem to vb2_plane_vaddr(vb, 0);
 >
