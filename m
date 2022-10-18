@@ -2,38 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AACD602EBB
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 16:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB14602F0F
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 17:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiJROqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Oct 2022 10:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        id S230141AbiJRPAj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Oct 2022 11:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiJROqg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 10:46:36 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CAF67D73DD
-        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 07:46:34 -0700 (PDT)
-Received: (qmail 1214465 invoked by uid 1000); 18 Oct 2022 10:46:34 -0400
-Date:   Tue, 18 Oct 2022 10:46:34 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     inux@roeck-us.net, Nazar Mokrynskyi <nazar@mokrynskyi.com>,
+        with ESMTP id S229775AbiJRPAh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 11:00:37 -0400
+Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F381D80EB5;
+        Tue, 18 Oct 2022 08:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1666105234; i=@motorola.com;
+        bh=OQIR5JHt3RbsHgbFnrntOXnmw1XmfWgv1MaD2OIA/Vs=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:Content-Transfer-Encoding:In-Reply-To;
+        b=oW++jxUQNpdHpQa0DpwxforqJeCSdRRRO2T/wTvx9s/acY8YgLYAPelU3W7gbXUyf
+         0dpG9fkjZF+fV3l7JWoYj2hgfMXB1hqQ11IO9pvcC78xsKw9i88gEDzpleDvszXhUZ
+         shIqPhO6e1+5ZOwhAYxls4ttfOdJ6EnIHjZDZBDWfBM4bMe8yByEzEf7BXt00QRv/X
+         RulNUBYAHW5kkBn2B52mUrpoFHIUo5+wps+fuk0yKiKFos5wnkAKLVgAS76kR0Ljly
+         PiKG5UnS7gduedEYywE6Skx5OiXI0cDME+uqIL5+SUoZMJ67BUjh30EM1pAZLJUK8J
+         UP/xkoc3FPSBA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJKsWRWlGSWpSXmKPExsWS8eKJhO7E/X7
+  JBs/2CVgca3vCbvHkQDujRe+yPWwWzYvXs1l0TlzCbrGwbQmLxeVdc9gsFi1rZbY4MTnW4sef
+  PmaLVQsOsDtwe8zumMnqsWlVJ5vH/rlr2D0W901m9ej/a+CxZf9nRo/Pm+QC2KNYM/OS8isSW
+  DOWPpnHXrDevuLQoulsDYw/TLoYuTiEBKYzSXxsn8YO4SxjkjjbuYO1i5GTg0VAVeL0nhZ2EJ
+  tNQE1iwetVzCC2iICORPfNLYwgDcwCK5glXm5+zgSSEBYIlHj24CsjiM0roCyxYOciRoipTUw
+  S56asZ4FICEqcnPkEzGYGmrRz6x22LkYOIFtaYvk/DoiwvETz1tlgyzgFXCRufetjn8DINwtJ
+  9ywk3bMQumch6V7AyLKK0aw4tagstUjX0FIvqSgzPaMkNzEzRy+xSjdRr7RYNzWxuETXUC+xv
+  FgvtbhYr7gyNzknRS8vtWQTIzB+UoqYD+xgnL3sj94hRkkOJiVR3oqdfslCfEn5KZUZicUZ8U
+  WlOanFhxhlODiUJHjn7QXKCRalpqdWpGXmAGMZJi3BwaMkwvtlE1Cat7ggMbc4Mx0idYrRmGP
+  q7H/7mTk693cdYBZiycvPS5US5123GahUAKQ0ozQPbhAsxVxilJUS5mVkYGAQ4ilILcrNLEGV
+  f8UozsGoJMzbC3IPT2ZeCdy+V0CnMAGdYroF7JSSRISUVAOTrazo4R2ej6TLtTj2fPr/MdP/m
+  vUnI4VbLNf9ludcDnsle1agI27GtamdLzrOqxzcFvT4af6C0pLuhCfWzCH/POf+T1381yWv/O
+  nnnvRdc/bxZz247B/HnXgi8Pea2A2TOjz0XLS/z4ydnHn09K4d8W2lrTqp0x2rhI+WZ5lO+KP
+  fXlRw/uPf5KmvHzAfnc16i5Xb4Z1Y+sZZm48LskZmnf+8J1+L6Zyk/vrGhie1TY0PWRNPxy6a
+  wZO6cJPAhH89Z29a/8lz2BIowtvZu/R51JRl6x8ELUpmerD+unNl27wHIac2Ccy6dk10XfbCy
+  an/A4OitV/XMvS8V/LekmO2Kna3fUrnVi3br38T6qeKKrEUZyQaajEXFScCAH454nSsAwAA
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-11.tower-706.messagelabs.com!1666105233!718799!1
+X-Originating-IP: [104.232.228.24]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 10333 invoked from network); 18 Oct 2022 15:00:33 -0000
+Received: from unknown (HELO va32lpfpp04.lenovo.com) (104.232.228.24)
+  by server-11.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Oct 2022 15:00:33 -0000
+Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by va32lpfpp04.lenovo.com (Postfix) with ESMTPS id 4MsH9F00mTzgK7f;
+        Tue, 18 Oct 2022 15:00:33 +0000 (UTC)
+Received: from p1g3 (unknown [100.64.172.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4MsH9D55KVzf6WS;
+        Tue, 18 Oct 2022 15:00:32 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 10:00:06 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     Dan Scally <dan.scally@ideasonboard.com>
+Cc:     Michael Grzeschik <mgr@pengutronix.de>, linux-usb@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jeff Vanhoof <qjv001@motorola.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [Bug 216543] kernel NULL pointer dereference
- usb_hcd_alloc_bandwidth
-Message-ID: <Y068Sl/S1GJbBIPg@rowland.harvard.edu>
-References: <bug-216543-208809@https.bugzilla.kernel.org/>
- <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
- <Y03IXMGpZ2fCof2k@rowland.harvard.edu>
- <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
+        Felipe Balbi <balbi@kernel.org>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] usb: gadget: uvc: add configfs option for sg
+ support
+Message-ID: <Y06/dr1SWiwEdo9p@p1g3>
+References: <20221017205446.523796-1-w36195@motorola.com>
+ <20221017205446.523796-7-w36195@motorola.com>
+ <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
+ <20221018140432.GE5651@pengutronix.de>
+ <7df3432a-c725-73f1-a5c7-914849e826e6@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7df3432a-c725-73f1-a5c7-914849e826e6@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,149 +97,193 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:40:44PM +0900, Ricardo Ribalda wrote:
-> Hi
-> 
-> Guenter already provided some patches to fix this issue:
-> https://lore.kernel.org/lkml/20200917022547.198090-1-linux@roeck-us.net/
-> 
-> Until we have a solution on the core (or rewrite the kernel in rust
-> ;P) , I think we should merge them (or something similar).
-> 
-> I can prepare a patchset merging Guenter set and my "grannular PM"
-> https://lore.kernel.org/linux-media/20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org/
-> 
-> It can always be reverted when we reach consensus on how to do it for
-> every driver.
-> 
-> Regards!
+Hi Dan and Michael,
 
-I was going to say "Wow! Quick work, thank you!" until I noticed that
-the patch set was submitted over two years ago and still hasn't been
-merged.  :-(
-
-Well, Nazar, at least now you have an answer and a potential fix.
-
-Alan Stern
-
-> On Tue, 18 Oct 2022 at 06:46, Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > Moving this bug report from bugzilla to the mailing lists.
-> >
-> > The short description of the bug is that in uvcvideo, disconnect races
-> > with starting a video transfer.  The race shows up on Nazar's system
-> > because of a marginal USB cable which leads to a lot of spontaneous
-> > disconnections.
-> >
-> > On Mon, Oct 17, 2022 at 05:59:48PM +0000, bugzilla-daemon@kernel.org wrote:
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=216543
-> > >
-> > > --- Comment #7 from Nazar Mokrynskyi (nazar@mokrynskyi.com) ---
-> > > Created attachment 303022
-> > >   --> https://bugzilla.kernel.org/attachment.cgi?id=303022&action=edit
-> > > Kernel log with uvc-trace patch applied
-> >
-> > For everyone's information, here is the uvc-trace patch.  All it does is
-> > add messages to the kernel log when uvcvideo's probe and disconnect
-> > routines run, and just before uvc_video_start_transfer() calls
-> > usb_set_interface().
-> >
-> > --- usb-devel/drivers/media/usb/uvc/uvc_video.c
-> > +++ usb-devel/drivers/media/usb/uvc/uvc_video.c
-> > @@ -1965,6 +1965,7 @@ static int uvc_video_start_transfer(stru
-> >                         "Selecting alternate setting %u (%u B/frame bandwidth)\n",
-> >                         altsetting, best_psize);
-> >
-> > +               dev_info(&intf->dev, "uvc set alt\n");
-> >                 ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
-> >                 if (ret < 0)
-> >                         return ret;
-> > --- usb-devel/drivers/media/usb/uvc/uvc_driver.c
-> > +++ usb-devel/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -2374,6 +2374,8 @@ static int uvc_probe(struct usb_interfac
-> >         int function;
-> >         int ret;
-> >
-> > +       dev_info(&intf->dev, "uvc_probe start\n");
-> > +
-> >         /* Allocate memory for the device and initialize it. */
-> >         dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-> >         if (dev == NULL)
-> > @@ -2535,6 +2537,7 @@ static void uvc_disconnect(struct usb_in
-> >                 return;
-> >
-> >         uvc_unregister_video(dev);
-> > +       dev_info(&intf->dev, "uvc_disconnect done\n");
-> >         kref_put(&dev->ref, uvc_delete);
-> >  }
-> >
-> > The output in the kernel log below clearly shows that there is a bug in
-> > the uvcvideo driver.
-> >
-> > > I'm on 6.0.2 and seemingly get this even more frequently with good cable and no
-> > > extra adapters. So I patched 6.0.2 with uvc-trace above and reproduced it
-> > > within a few minutes.
-> > >
-> > > USB seems to reset, often camera stops or freezes in the browser, but the light
-> > > on the camera itself remains on. Sometimes I can enable/disable/enable camera
-> > > for it to reboot, but the last time I did that in the log I got null pointer
-> > > de-reference again.
-> >
-> > Here is the important part of the log:
-> >
-> > [  684.746848] usb 8-2.4.4: reset SuperSpeed USB device number 6 using xhci_hcd
-> > [  684.810979] uvcvideo 8-2.4.4:1.0: uvc_probe start
-> > [  684.811032] usb 8-2.4.4: Found UVC 1.00 device Logitech BRIO (046d:085e)
-> > [  684.843413] input: Logitech BRIO as /devices/pci0000:00/0000:00:08.1/0000:59:00.3/usb8/8-2/8-2.4/8-2.4.4/8-2.4.4:1.0/input/input43
-> > [  684.911255] usb 8-2.4.4: current rate 16000 is different from the runtime rate 24000
-> > ...
-> > [  743.800368] uvcvideo 8-2.4.4:1.1: uvc set alt
-> >
-> > This is where an ioctl calls uvc_video_start_transfer.
-> >
-> > [  748.654701] usb 8-2.4.4: USB disconnect, device number 6
-> > [  748.714355] uvcvideo 8-2.4.4:1.0: uvc_disconnect done
-> >
-> > This is where the disconnect starts and finishes
-> >
-> > [  748.898340] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> > [  748.898344] #PF: supervisor read access in kernel mode
-> > [  748.898346] #PF: error_code(0x0000) - not-present page
-> > [  748.898347] PGD 0 P4D 0
-> > [  748.898349] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> > [  748.898351] CPU: 16 PID: 11890 Comm: VideoCapture Not tainted 6.0.2-x64v2-uvc-trace-xanmod1 #1
-> > [  748.898353] Hardware name: Gigabyte Technology Co., Ltd. B550 VISION D/B550 VISION D, BIOS F15d 07/20/2022
-> > [  748.898354] RIP: 0010:usb_ifnum_to_if+0x35/0x60
-> > ...
-> > [  748.898368] Call Trace:
-> > [  748.898370]  <TASK>
-> > [  748.898370]  usb_hcd_alloc_bandwidth+0x240/0x370
-> > [  748.898375]  usb_set_interface+0x122/0x350
-> > [  748.898378]  uvc_video_start_transfer.cold+0xd8/0x2ae [uvcvideo]
-> > [  748.898383]  uvc_video_start_streaming+0x75/0xd0 [uvcvideo]
-> > [  748.898386]  uvc_start_streaming+0x25/0xe0 [uvcvideo]
-> > [  748.898390]  vb2_start_streaming+0x86/0x140 [videobuf2_common]
-> > [  748.898393]  vb2_core_streamon+0x57/0xc0 [videobuf2_common]
-> > [  748.898395]  uvc_queue_streamon+0x25/0x40 [uvcvideo]
-> > [  748.898398]  uvc_ioctl_streamon+0x35/0x60 [uvcvideo]
-> > [  748.898401]  __video_do_ioctl+0x19a/0x3f0 [videodev]
-> >
-> > And this proves that uvc_disconnect() returned before the driver was
-> > finished accessing the device.
-> >
-> > I don't know how the driver works or how it tries to prevent this sort
-> > of race from occurring, but apparently the strategy isn't working.
-> >
-> > > Please let me know if there is any other information I can provide and what
-> > > could be the root cause of this annoying behavior.
-> >
-> > At this point I will bow out of the discussion; it's up to the uvcvideo
-> > maintainers to investigate further.  Maybe they can provide a patch for
-> > you to test.
-> >
-> > Alan Stern
+On Tue, Oct 18, 2022 at 03:10:38PM +0100, Dan Scally wrote:
+> Hi Michael - again!
+> 
+> On 18/10/2022 15:04, Michael Grzeschik wrote:
+> > Hi Dan!
+> > Hi Dan!
+> > 
+> > On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
+> > > Hi Dan
+> > > 
+> > > On 17/10/2022 21:54, Dan Vacura wrote:
+> > > > The scatter gather support doesn't appear to work well with some
+> > > > UDC hw.
+> > > > Add the ability to turn on the feature depending on the controller in
+> > > > use.
+> > > > 
+> > > > Signed-off-by: Dan Vacura <w36195@motorola.com>
+> > > 
+> > > 
+> > > Nitpick: I would call it use_sg everywhere, but either way:
+> > 
+> > Or even only "scatter_gather". How does that sound?
 > 
 > 
+> I think I prefer use_sg actually, but I don't have a strong feeling either
+> way.
+
+I went with sg_supported since use_sg and scatter_gather may imply that
+the feature will be guaranteed to be used if set to 1. I thought that
+sg_supported conveyed that the driver supports sg ability and expressed
+that it'll be used if the UDC driver supports it. Also, that name is
+used in struct usb_gadget, with the similar wording: "true if we can
+handle scatter-gather".
+
 > 
-> -- 
-> Ricardo Ribalda
+> > 
+> > > 
+> > > Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+> > > 
+> > > Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
+> > > 
+> > > > ---
+> > > > V1 -> V2:
+> > > > - no change, new patch in serie
+> > > > V2 -> V3:
+> > > > - default on, same as baseline
+> > > > 
+> > > >  Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
+> > > >  Documentation/usb/gadget-testing.rst              | 2 ++
+> > > >  drivers/usb/gadget/function/f_uvc.c               | 2 ++
+> > > >  drivers/usb/gadget/function/u_uvc.h               | 1 +
+> > > >  drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
+> > > >  drivers/usb/gadget/function/uvc_queue.c           | 4 ++--
+> > > >  6 files changed, 10 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> > > > b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> > > > index 5dfaa3f7f6a4..839a75fc28ee 100644
+> > > > --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> > > > +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> > > > @@ -9,6 +9,7 @@ Description:    UVC function directory
+> > > >          streaming_interval    1..16
+> > > >          function_name        string [32]
+> > > >          req_int_skip_div    unsigned int
+> > > > +        sg_supported        0..1
+> > > >          ===================    =============================
+> > > >  What: /config/usb-gadget/gadget/functions/uvc.name/control
+> > > > diff --git a/Documentation/usb/gadget-testing.rst
+> > > > b/Documentation/usb/gadget-testing.rst
+> > > > index f9b5a09be1f4..8e3072d6a590 100644
+> > > > --- a/Documentation/usb/gadget-testing.rst
+> > > > +++ b/Documentation/usb/gadget-testing.rst
+> > > > @@ -796,6 +796,8 @@ The uvc function provides these attributes
+> > > > in its function directory:
+> > > >      function_name       name of the interface
+> > > >      req_int_skip_div    divisor of total requests to aid in
+> > > > calculating
+> > > >                  interrupt frequency, 0 indicates all interrupt
+> > > > +    sg_supported        allow for scatter gather to be used if the UDC
+> > > > +                hw supports it
+> > > >      ===================
+> > > > ================================================
+> > > >  There are also "control" and "streaming" subdirectories, each
+> > > > of which contain
+> > > > diff --git a/drivers/usb/gadget/function/f_uvc.c
+> > > > b/drivers/usb/gadget/function/f_uvc.c
+> > > > index e40ca26b9c55..d08ebe3ffeb2 100644
+> > > > --- a/drivers/usb/gadget/function/f_uvc.c
+> > > > +++ b/drivers/usb/gadget/function/f_uvc.c
+> > > > @@ -656,6 +656,7 @@ uvc_function_bind(struct usb_configuration
+> > > > *c, struct usb_function *f)
+> > > >                  (opts->streaming_maxburst + 1));
+> > > >      uvc->config_skip_int_div = opts->req_int_skip_div;
+> > > > +    uvc->video.queue.use_sg = opts->sg_supported;
+> > 
+> > Why do you set this here?
+
+This is set here to enable or disable the support. I wasn't aware of
+direct access to opts in uvcg_queue_init(). I'll update to use it
+directly as that'll be more clear.
+
+> > 
+> > > >      /* Allocate endpoints. */
+> > > >      ep = usb_ep_autoconfig(cdev->gadget, &uvc_control_ep);
+> > > > @@ -875,6 +876,7 @@ static struct usb_function_instance
+> > > > *uvc_alloc_inst(void)
+> > > >      opts->streaming_interval = 1;
+> > > >      opts->streaming_maxpacket = 1024;
+> > > >      opts->req_int_skip_div = 4;
+> > > > +    opts->sg_supported = 1;
+> > > >      snprintf(opts->function_name, sizeof(opts->function_name),
+> > > > "UVC Camera");
+> > > >      ret = uvcg_attach_configfs(opts);
+> > > > diff --git a/drivers/usb/gadget/function/u_uvc.h
+> > > > b/drivers/usb/gadget/function/u_uvc.h
+> > > > index 6f73bd5638ed..5ccced629925 100644
+> > > > --- a/drivers/usb/gadget/function/u_uvc.h
+> > > > +++ b/drivers/usb/gadget/function/u_uvc.h
+> > > > @@ -25,6 +25,7 @@ struct f_uvc_opts {
+> > > >      unsigned int                    streaming_maxpacket;
+> > > >      unsigned int                    streaming_maxburst;
+> > > >      unsigned int                    req_int_skip_div;
+> > > > +    unsigned int                    sg_supported;
+> > > >      unsigned int                    control_interface;
+> > > >      unsigned int                    streaming_interface;
+> > > > diff --git a/drivers/usb/gadget/function/uvc_configfs.c
+> > > > b/drivers/usb/gadget/function/uvc_configfs.c
+> > > > index 419e926ab57e..3784c0e02d01 100644
+> > > > --- a/drivers/usb/gadget/function/uvc_configfs.c
+> > > > +++ b/drivers/usb/gadget/function/uvc_configfs.c
+> > > > @@ -2351,6 +2351,7 @@ UVCG_OPTS_ATTR(streaming_interval,
+> > > > streaming_interval, 16);
+> > > >  UVCG_OPTS_ATTR(streaming_maxpacket, streaming_maxpacket, 3072);
+> > > >  UVCG_OPTS_ATTR(streaming_maxburst, streaming_maxburst, 15);
+> > > >  UVCG_OPTS_ATTR(req_int_skip_div, req_int_skip_div, UINT_MAX);
+> > > > +UVCG_OPTS_ATTR(sg_supported, sg_supported, 1);
+> > > >  #undef UVCG_OPTS_ATTR
+> > > > @@ -2401,6 +2402,7 @@ static struct configfs_attribute *uvc_attrs[] = {
+> > > >      &f_uvc_opts_attr_streaming_maxpacket,
+> > > >      &f_uvc_opts_attr_streaming_maxburst,
+> > > >      &f_uvc_opts_attr_req_int_skip_div,
+> > > > +    &f_uvc_opts_attr_sg_supported,
+> > > >      &f_uvc_opts_string_attr_function_name,
+> > > >      NULL,
+> > > >  };
+> > > > diff --git a/drivers/usb/gadget/function/uvc_queue.c
+> > > > b/drivers/usb/gadget/function/uvc_queue.c
+> > > > index 02559906a55a..3c7aa5c4bba2 100644
+> > > > --- a/drivers/usb/gadget/function/uvc_queue.c
+> > > > +++ b/drivers/usb/gadget/function/uvc_queue.c
+> > > > @@ -149,11 +149,11 @@ int uvcg_queue_init(struct uvc_video_queue
+> > > > *queue, struct device *dev, enum v4l2
+> > > >      queue->queue.buf_struct_size = sizeof(struct uvc_buffer);
+> > > >      queue->queue.ops = &uvc_queue_qops;
+> > > >      queue->queue.lock = lock;
+> > > > -    if (cdev->gadget->sg_supported) {
+> > > > +    if (queue->use_sg && cdev->gadget->sg_supported) {
+> > > >          queue->queue.mem_ops = &vb2_dma_sg_memops;
+> > > > -        queue->use_sg = 1;
+> > > >      } else {
+> > > >          queue->queue.mem_ops = &vb2_vmalloc_memops;
+> > > > +        queue->use_sg = false;
+> > 
+> > I am unsure, but can you actually not always use vb2_dma_sg_memops.
+> > 
+> > With my last patch we always set buf->mem to vb2_plane_vaddr(vb, 0);
+> > 
+> > https://lore.kernel.org/linux-usb/20221017221141.3134818-1-m.grzeschik@pengutronix.de/T/#u
+> > 
+> > 
+> > 
+> > The condition to decide if encode_isoc_sg or encode_isoc should then
+> > remain the last place to switch between sg or not. I would hook the
+> > userspace decision in here.
+> > 
+> > You can also directly get to opts->scatter_gather by using
+> > 
+> >     struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
+> > 
+> > in the function uvcg_video_enable.
+> > 
+> > > >      }
+> > > >      queue->queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY
+> > > 
+> > 
+> > Thanks,
+> > Michael
+> > 
