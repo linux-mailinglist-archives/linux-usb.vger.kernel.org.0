@@ -2,69 +2,22 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC706602F60
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 17:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59041602F97
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 17:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiJRPPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Oct 2022 11:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S230140AbiJRPXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Oct 2022 11:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiJRPPB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 11:15:01 -0400
-Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07CE62A88;
-        Tue, 18 Oct 2022 08:14:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1666106097; i=@motorola.com;
-        bh=0F8o+F4tnhQnHHGEaCv7rKARcrXRixnf8ejRwj2t2Xk=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=j6oKOVx64izCW0RXO0F6FrB5ZO7QggIsEkC7P643/PGnfEEGByh/1OKCvfrwLWnMx
-         DO/u8Mpfn7912TvfuLD30HJhdlQQEFU5aMWQ9EQ1AmsQXKF6+7wKDAhzgUY9wTu9aL
-         OwaH8OPvUAOHP3u+U8YQbNXn2mzs6ZrKGE/ZI8G396b0rtORDXhlVvUsXtAsN1Ehda
-         gqDiuwzFMlVnPgIhXWlIwTPoyFAi/oE6fqT5rljyS8N01+5Y28g9qus+VSGxQeJfCH
-         vhQGlQQUOkLY7KDuALvNK3Jcwwx1sX3WrfHHVi8Njsio0cYdLQ0JgWl7v0Vf5bED5m
-         JAjXla3Tpaf/g==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplleJIrShJLcpLzFFi42LJePFEVPfDIb9
-  kgxvrBS2OtT1ht3hyoJ3RonfZHjaL5sXr2Sw6Jy5ht1jYtoTF4vKuOWwWi5a1MltsabvCZPHj
-  Tx+zxYTfF9gsVi04wO7A4zG7Yyarx6ZVnWwe++euYfdY3DeZ1aP/r4HH7Ls/GD227P/M6PF5k
-  1wARxRrZl5SfkUCa8b8JveC37IV67fdY29gfCnexcjFISQwnUni6qxvjBDOMiaJi89fsHcxcn
-  KwCKhKnH68mxHEZhNQk1jwehUziC0ioCWxueklM0gDs8BtZomnv66zgCSEBQIlnj34CtbAK6A
-  sseLyVKipJxkllnxfwAKREJQ4OfMJmM0MNOnGv5dMXYwcQLa0xPJ/HCBhTgFjiUkrTjFNYOSd
-  haRjFpKOWQgdCxiZVzGaFacWlaUW6Roa6iUVZaZnlOQmZuboJVbpJuqVFuumJhaX6BrpJZYX6
-  6UWF+sVV+Ym56To5aWWbGIExkhKkfuBHYw/lv3RO8QoycGkJMpbsdMvWYgvKT+lMiOxOCO+qD
-  QntfgQowwHh5IE77/9QDnBotT01Iq0zBxgvMKkJTh4lER4v2wCSvMWFyTmFmemQ6ROMepyTJ3
-  9bz+zEEtefl6qlDivMDD6hQRAijJK8+BGwFLHJUZZKWFeRgYGBiGegtSi3MwSVPlXjOIcjErC
-  vDv3AU3hycwrgdv0CugIJqAjTLeAHVGSiJCSamDS/MjRl7TC2kaEre5G/K6N6xv9XB8rt4oUx
-  oQqay/Z+lHn4MsKj8TDv5Wl/13/K7XlF3+7/ezZ/y5ULosIOn2YY5vAyo/1PrvlE6ez1RR628
-  RZS5er56/cEf+kWtNl2uKGmpzvq2bPUHybfX9azL6c29OCzRQV3B9d9XVhTr+9Z9tPlXPnTL/
-  3Xb3McmDO52xVK2OV8yJ1IbWTN+Xu/KQS4PPxTRmjvurhGMeH9ecr5kT/+6pRtWrh8dUm6x6c
-  33FkzoMG6XJDDmcl+ZuavW+NzsSfj9zFOid6M/u1ZJOvlk+ju9Y/vmWeGJu302OZ21sjvudJJ
-  80ZXxT66UicYl4WfUvRdam452q5+h2nrx1WYinOSDTUYi4qTgQAAZjG7pgDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-10.tower-715.messagelabs.com!1666106095!24726!1
-X-Originating-IP: [104.232.228.21]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.100.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 17868 invoked from network); 18 Oct 2022 15:14:56 -0000
-Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
-  by server-10.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Oct 2022 15:14:56 -0000
-Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4MsHTq6YGbzf6md;
-        Tue, 18 Oct 2022 15:14:55 +0000 (UTC)
-Received: from p1g3 (unknown [100.64.172.121])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4MsHTq4qFzzf6WS;
-        Tue, 18 Oct 2022 15:14:55 +0000 (UTC)
-Date:   Tue, 18 Oct 2022 10:14:54 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
+        with ESMTP id S229875AbiJRPXu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 11:23:50 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2F29ECD5D2
+        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 08:23:49 -0700 (PDT)
+Received: (qmail 1216402 invoked by uid 1000); 18 Oct 2022 11:23:48 -0400
+Date:   Tue, 18 Oct 2022 11:23:48 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dan Vacura <w36195@motorola.com>
 Cc:     Dan Scally <dan.scally@ideasonboard.com>,
         linux-usb@vger.kernel.org,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -78,18 +31,18 @@ Cc:     Dan Scally <dan.scally@ideasonboard.com>,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 Subject: Re: [PATCH v3 6/6] usb: gadget: uvc: add configfs option for sg
  support
-Message-ID: <Y07C7hYKyByahNjL@p1g3>
+Message-ID: <Y07FBDIQKEysy+lF@rowland.harvard.edu>
 References: <20221017205446.523796-1-w36195@motorola.com>
  <20221017205446.523796-7-w36195@motorola.com>
  <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
  <Y065ASuFhM9bntvd@rowland.harvard.edu>
+ <Y07C7hYKyByahNjL@p1g3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y065ASuFhM9bntvd@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y07C7hYKyByahNjL@p1g3>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,88 +50,43 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
-
-On Tue, Oct 18, 2022 at 10:32:33AM -0400, Alan Stern wrote:
-> On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
-> > Hi Dan
-> > 
-> > On 17/10/2022 21:54, Dan Vacura wrote:
-> > > The scatter gather support doesn't appear to work well with some UDC hw.
-> > > Add the ability to turn on the feature depending on the controller in
-> > > use.
-> > > 
-> > > Signed-off-by: Dan Vacura <w36195@motorola.com>
-> > 
-> > 
-> > Nitpick: I would call it use_sg everywhere, but either way:
-> > 
-> > 
-> > Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-> > 
-> > Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
-> > 
-> > > ---
-> > > V1 -> V2:
-> > > - no change, new patch in serie
-> > > V2 -> V3:
-> > > - default on, same as baseline
-> > > 
-> > >   Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
-> > >   Documentation/usb/gadget-testing.rst              | 2 ++
-> > >   drivers/usb/gadget/function/f_uvc.c               | 2 ++
-> > >   drivers/usb/gadget/function/u_uvc.h               | 1 +
-> > >   drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
-> > >   drivers/usb/gadget/function/uvc_queue.c           | 4 ++--
-> > >   6 files changed, 10 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> > > index 5dfaa3f7f6a4..839a75fc28ee 100644
-> > > --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> > > +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> > > @@ -9,6 +9,7 @@ Description:	UVC function directory
-> > >   		streaming_interval	1..16
-> > >   		function_name		string [32]
-> > >   		req_int_skip_div	unsigned int
-> > > +		sg_supported		0..1
-> > >   		===================	=============================
-> > >   What:		/config/usb-gadget/gadget/functions/uvc.name/control
-> > > diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-> > > index f9b5a09be1f4..8e3072d6a590 100644
-> > > --- a/Documentation/usb/gadget-testing.rst
-> > > +++ b/Documentation/usb/gadget-testing.rst
-> > > @@ -796,6 +796,8 @@ The uvc function provides these attributes in its function directory:
-> > >   	function_name       name of the interface
-> > >   	req_int_skip_div    divisor of total requests to aid in calculating
-> > >   			    interrupt frequency, 0 indicates all interrupt
-> > > +	sg_supported        allow for scatter gather to be used if the UDC
-> > > +			    hw supports it
+On Tue, Oct 18, 2022 at 10:14:54AM -0500, Dan Vacura wrote:
+> Hi Alan,
 > 
-> Why is a configuration option needed for this?  Why not always use SG 
-> when the UDC supports it?  Or at least, make the decision automatically 
-> (say, based on the amount of data to be transferred) with no need for 
-> any user input?
+> On Tue, Oct 18, 2022 at 10:32:33AM -0400, Alan Stern wrote:
+> > On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
+> > > Hi Dan
 
-Patches for a fix and to select to use SG depending on amount of data
-are already submitted and under review. I agree, ideally we don't need
-this patch, but there have been several regressions uncovered with
-enabling this support and it takes time to root cause these issues.
+> > > > --- a/Documentation/usb/gadget-testing.rst
+> > > > +++ b/Documentation/usb/gadget-testing.rst
+> > > > @@ -796,6 +796,8 @@ The uvc function provides these attributes in its function directory:
+> > > >   	function_name       name of the interface
+> > > >   	req_int_skip_div    divisor of total requests to aid in calculating
+> > > >   			    interrupt frequency, 0 indicates all interrupt
+> > > > +	sg_supported        allow for scatter gather to be used if the UDC
+> > > > +			    hw supports it
+> > 
+> > Why is a configuration option needed for this?  Why not always use SG 
+> > when the UDC supports it?  Or at least, make the decision automatically 
+> > (say, based on the amount of data to be transferred) with no need for 
+> > any user input?
+> 
+> Patches for a fix and to select to use SG depending on amount of data
+> are already submitted and under review. I agree, ideally we don't need
+> this patch, but there have been several regressions uncovered with
+> enabling this support and it takes time to root cause these issues.
 
-In my specific environment, Android GKI 2.0, changes need to get
-upstreamed first here before they're pulled into Android device
-software. Having this logic in place gives us the ability to turn off
-this functionality without going through this process. A revert was also
-considered until all the bugs are resolved, but the code is quite
-entrenched now to take out, plus others seem to benefit from it being
-enabled. Thus the configurability.
+Please put this information into the patch description, and maybe also 
+into the documentation file.  For your readers' and reviewers' sake it's 
+important -- probably _more_ important -- to explain why you're making a 
+change than what that change is.
 
-> 
-> Is this because the SG support in some UDC drivers is buggy?  In that 
-> case the proper approach is to fix the UDC drivers, not add new options 
-> that users won't know when to use.
-> 
-> Or is it because the UDC hardware itself is buggy?  In that case the 
-> best approach is to fix the UDC drivers so that they don't advertise 
-> working SG support when the hardware is unable to handle it.
-> 
-> Alan Stern
+Alan Stern
+
+> In my specific environment, Android GKI 2.0, changes need to get
+> upstreamed first here before they're pulled into Android device
+> software. Having this logic in place gives us the ability to turn off
+> this functionality without going through this process. A revert was also
+> considered until all the bugs are resolved, but the code is quite
+> entrenched now to take out, plus others seem to benefit from it being
+> enabled. Thus the configurability.
