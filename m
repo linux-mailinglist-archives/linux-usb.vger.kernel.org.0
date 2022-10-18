@@ -2,42 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E176602E88
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 16:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B052C602E96
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 16:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiJROcm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Oct 2022 10:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S231314AbiJROfH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Oct 2022 10:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiJROci (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 10:32:38 -0400
+        with ESMTP id S231210AbiJROfG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 10:35:06 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF016B5FCA
-        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 07:32:34 -0700 (PDT)
-Received: (qmail 1213921 invoked by uid 1000); 18 Oct 2022 10:32:33 -0400
-Date:   Tue, 18 Oct 2022 10:32:33 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 017BB9E692
+        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 07:35:04 -0700 (PDT)
+Received: (qmail 1214035 invoked by uid 1000); 18 Oct 2022 10:35:03 -0400
+Date:   Tue, 18 Oct 2022 10:35:03 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dan Scally <dan.scally@ideasonboard.com>
-Cc:     Dan Vacura <w36195@motorola.com>, linux-usb@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jeff Vanhoof <qjv001@motorola.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] usb: gadget: uvc: add configfs option for sg
- support
-Message-ID: <Y065ASuFhM9bntvd@rowland.harvard.edu>
-References: <20221017205446.523796-1-w36195@motorola.com>
- <20221017205446.523796-7-w36195@motorola.com>
- <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
+To:     Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Elad Nachman <enachman@marvell.com>
+Subject: Re: [PATCH v2] usb: ehci-orion: Extend DMA mask to 64 bit for AC5
+ platform
+Message-ID: <Y065l3SCyY8Ixazf@rowland.harvard.edu>
+References: <20221018113401.32229-1-vadym.kochan@plvision.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
+In-Reply-To: <20221018113401.32229-1-vadym.kochan@plvision.eu>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -47,71 +38,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
-> Hi Dan
+On Tue, Oct 18, 2022 at 02:34:00PM +0300, Vadym Kochan wrote:
+> From: Elad Nachman <enachman@marvell.com>
 > 
-> On 17/10/2022 21:54, Dan Vacura wrote:
-> > The scatter gather support doesn't appear to work well with some UDC hw.
-> > Add the ability to turn on the feature depending on the controller in
-> > use.
-> > 
-> > Signed-off-by: Dan Vacura <w36195@motorola.com>
+> AC5 is a 64-bit platform so extend the dma mask accordingly.
 > 
+> Checked this mask on armv7 a38x SoC (which has this
+> USB controller) platform with simple fs ops on the storage device
+> but on older 4.14 Linux version.
 > 
-> Nitpick: I would call it use_sg everywhere, but either way:
+> Signed-off-by: Elad Nachman <enachman@marvell.com>
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> ---
+> v2:
+>    Add missing description.
 > 
+>  drivers/usb/host/ehci-orion.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-> 
-> Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
-> 
-> > ---
-> > V1 -> V2:
-> > - no change, new patch in serie
-> > V2 -> V3:
-> > - default on, same as baseline
-> > 
-> >   Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
-> >   Documentation/usb/gadget-testing.rst              | 2 ++
-> >   drivers/usb/gadget/function/f_uvc.c               | 2 ++
-> >   drivers/usb/gadget/function/u_uvc.h               | 1 +
-> >   drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
-> >   drivers/usb/gadget/function/uvc_queue.c           | 4 ++--
-> >   6 files changed, 10 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> > index 5dfaa3f7f6a4..839a75fc28ee 100644
-> > --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> > +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
-> > @@ -9,6 +9,7 @@ Description:	UVC function directory
-> >   		streaming_interval	1..16
-> >   		function_name		string [32]
-> >   		req_int_skip_div	unsigned int
-> > +		sg_supported		0..1
-> >   		===================	=============================
-> >   What:		/config/usb-gadget/gadget/functions/uvc.name/control
-> > diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-> > index f9b5a09be1f4..8e3072d6a590 100644
-> > --- a/Documentation/usb/gadget-testing.rst
-> > +++ b/Documentation/usb/gadget-testing.rst
-> > @@ -796,6 +796,8 @@ The uvc function provides these attributes in its function directory:
-> >   	function_name       name of the interface
-> >   	req_int_skip_div    divisor of total requests to aid in calculating
-> >   			    interrupt frequency, 0 indicates all interrupt
-> > +	sg_supported        allow for scatter gather to be used if the UDC
-> > +			    hw supports it
+> diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
+> index a3454a3ea4e0..c6205abebbdf 100644
+> --- a/drivers/usb/host/ehci-orion.c
+> +++ b/drivers/usb/host/ehci-orion.c
+> @@ -230,7 +230,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
+>  	 * set. Since shared usb code relies on it, set it here for
+>  	 * now. Once we have dma capability bindings this can go away.
+>  	 */
+> -	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> +	err = dma_coerce_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+>  	if (err)
+>  		goto err;
+>  
 
-Why is a configuration option needed for this?  Why not always use SG 
-when the UDC supports it?  Or at least, make the decision automatically 
-(say, based on the amount of data to be transferred) with no need for 
-any user input?
-
-Is this because the SG support in some UDC drivers is buggy?  In that 
-case the proper approach is to fix the UDC drivers, not add new options 
-that users won't know when to use.
-
-Or is it because the UDC hardware itself is buggy?  In that case the 
-best approach is to fix the UDC drivers so that they don't advertise 
-working SG support when the hardware is unable to handle it.
+NAK.  The description says this changes the DMA mask on AC5 platforms to 
+64 bits, but that isn't what the patch actually does.  It changes the 
+DMA mask on _all_ platforms using the orion hardware.
 
 Alan Stern
