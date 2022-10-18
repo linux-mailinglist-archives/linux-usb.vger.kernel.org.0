@@ -2,129 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC05C6023F2
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 07:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECBF6023F7
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 07:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiJRFmJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Oct 2022 01:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S230499AbiJRFnM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Oct 2022 01:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiJRFl6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 01:41:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEB1A484A
-        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 22:41:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA362B81620
-        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 05:41:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0D06C433C1
-        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 05:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666071697;
-        bh=0s+cz+O+9JHm7CTo7PAxjBWRUong2Zeu97oMT4LXi3I=;
-        h=From:To:Subject:Date:From;
-        b=PtD9SLUQjK53bs4szEcanL7zKlNUcx6M9Gx48KWG6S0WqcFc0nXRrTXKb4p2Pbu+M
-         UfpwNOqWg3xM+LtqJHOQrxjkNtmwGFe/FvSufHYxJXFek+9bu/GBDej8lUsuJFxwdC
-         DiGcvVbu1LyQJRWgOPndSEeKbOkv+GIzm7LdX4jbDVH8OyiNmwwJptVWCaiqSerw7S
-         KK3k/+g7p4U1J8W67jZUj0ENaw2DSiDbILMIAa2Gf+sjPgwnq0rtKlYGCwaBJ+BOTR
-         sN6AN79rygnZAjmFtSkE9Nd9M16Y85BSkhCzv/VjYIL441DidjiChDBJeRK5lJgdzH
-         4eE4tTRAPsvnA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 9473BC433E4; Tue, 18 Oct 2022 05:41:37 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216601] New: pci_pm_suspend(): hcd_pci_suspend+0x0/0x40 returns
- -16
-Date:   Tue, 18 Oct 2022 05:41:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: koba.ko@canonical.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-216601-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231130AbiJRFmz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 01:42:55 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B555A59BB
+        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 22:42:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id y14so29591375ejd.9
+        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 22:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X6qOYrUlZlRRrJxlMr6trXKQ6MWLRq1zEdmO6ssnZpw=;
+        b=AStZQ7VnhvJ9zwtWddmM9++OeRiW8yUgS8/vs7n+yWn7TKs7X8wnEAWFqNY26tgO/W
+         hDw7dU7MLf5nzyMDbOF9igwvx8RHdchyKg5dJNK/xjSxgHOGaOiRoN/dIP0Y0LLnWMlS
+         xEODWfMVwrWWn9EWlhLpUrT25pkuHBx3oaMFM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X6qOYrUlZlRRrJxlMr6trXKQ6MWLRq1zEdmO6ssnZpw=;
+        b=VPzd+qN8EjAPFVmXS7MhOpt45xiFkd3QC4Bb/7HuGevrIPYloviWtMiwqRsawx/HrM
+         XH3WwBsxb9xD5zM82RmBO2vgXsq4bbnqXZMX6th9xIPbnUhE6u+NlHqElKnne70wddwp
+         X/4JsixW8Pb0O3LI02n2dt9x5nfsiyIOYxP7Neb3Ut2x+/9jngDLx1DJn5XlMQ612Ucf
+         waPUD9eo7knvuRFommN3+PbFtAWvfONONbWqRQ0cINoYz0Y5WbpmMX0aHIsOnsUTki6o
+         2RHKK3/HeuoakNk538u1BWoiYSe50NZCJYgA/MykdwVjVE+Rz+K5GuNGIAps//wRtw7Y
+         5Wmw==
+X-Gm-Message-State: ACrzQf3BcVRv5RQMSSAvp6S64xraJX0p1VWWixFDDrqzSwxS1VTrY7aD
+        1j1d5xlMsEQq8mrDnHbNaC8eHuzyIerbuSXd
+X-Google-Smtp-Source: AMsMyM4DbfbHRW6ybITH2Jd4OXnT/1Lj+ANP9qTYZiqp77P2y6vAAJlCDktCgZepIa3wC+dG7C7fFQ==
+X-Received: by 2002:a17:907:3181:b0:787:d81c:a6ad with SMTP id xe1-20020a170907318100b00787d81ca6admr965053ejb.769.1666071751565;
+        Mon, 17 Oct 2022 22:42:31 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id fk26-20020a056402399a00b0044dbecdcd29sm8249760edb.12.2022.10.17.22.42.30
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 22:42:31 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id u21so18906096edi.9
+        for <linux-usb@vger.kernel.org>; Mon, 17 Oct 2022 22:42:30 -0700 (PDT)
+X-Received: by 2002:a05:6402:448b:b0:43b:5ec6:8863 with SMTP id
+ er11-20020a056402448b00b0043b5ec68863mr1038560edb.377.1666071750254; Mon, 17
+ Oct 2022 22:42:30 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <bug-216543-208809@https.bugzilla.kernel.org/> <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
+ <Y03IXMGpZ2fCof2k@rowland.harvard.edu> <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
+In-Reply-To: <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 18 Oct 2022 14:42:18 +0900
+X-Gmail-Original-Message-ID: <CANiDSCu4j6gcAcPnO8sGi9twTYBTzR=dGMYRnfNLd6Sy2haRUA@mail.gmail.com>
+Message-ID: <CANiDSCu4j6gcAcPnO8sGi9twTYBTzR=dGMYRnfNLd6Sy2haRUA@mail.gmail.com>
+Subject: Re: [Bug 216543] kernel NULL pointer dereference usb_hcd_alloc_bandwidth
+To:     Alan Stern <stern@rowland.harvard.edu>, linux@roeck-us.net
+Cc:     Nazar Mokrynskyi <nazar@mokrynskyi.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216601
+using proper Guenter email
 
-            Bug ID: 216601
-           Summary: pci_pm_suspend(): hcd_pci_suspend+0x0/0x40 returns -16
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: latest drmtip/pci_pm/usb next
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: koba.ko@canonical.com
-        Regression: No
+On Tue, 18 Oct 2022 at 14:40, Ricardo Ribalda <ribalda@chromium.org> wrote:
+>
+> Hi
+>
+> Guenter already provided some patches to fix this issue:
+> https://lore.kernel.org/lkml/20200917022547.198090-1-linux@roeck-us.net/
+>
+> Until we have a solution on the core (or rewrite the kernel in rust
+> ;P) , I think we should merge them (or something similar).
+>
+> I can prepare a patchset merging Guenter set and my "grannular PM"
+> https://lore.kernel.org/linux-media/20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org/
+>
+> It can always be reverted when we reach consensus on how to do it for
+> every driver.
+>
+> Regards!
+>
+>
+> On Tue, 18 Oct 2022 at 06:46, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > Moving this bug report from bugzilla to the mailing lists.
+> >
+> > The short description of the bug is that in uvcvideo, disconnect races
+> > with starting a video transfer.  The race shows up on Nazar's system
+> > because of a marginal USB cable which leads to a lot of spontaneous
+> > disconnections.
+> >
+> > On Mon, Oct 17, 2022 at 05:59:48PM +0000, bugzilla-daemon@kernel.org wrote:
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=216543
+> > >
+> > > --- Comment #7 from Nazar Mokrynskyi (nazar@mokrynskyi.com) ---
+> > > Created attachment 303022
+> > >   --> https://bugzilla.kernel.org/attachment.cgi?id=303022&action=edit
+> > > Kernel log with uvc-trace patch applied
+> >
+> > For everyone's information, here is the uvc-trace patch.  All it does is
+> > add messages to the kernel log when uvcvideo's probe and disconnect
+> > routines run, and just before uvc_video_start_transfer() calls
+> > usb_set_interface().
+> >
+> > --- usb-devel/drivers/media/usb/uvc/uvc_video.c
+> > +++ usb-devel/drivers/media/usb/uvc/uvc_video.c
+> > @@ -1965,6 +1965,7 @@ static int uvc_video_start_transfer(stru
+> >                         "Selecting alternate setting %u (%u B/frame bandwidth)\n",
+> >                         altsetting, best_psize);
+> >
+> > +               dev_info(&intf->dev, "uvc set alt\n");
+> >                 ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
+> >                 if (ret < 0)
+> >                         return ret;
+> > --- usb-devel/drivers/media/usb/uvc/uvc_driver.c
+> > +++ usb-devel/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -2374,6 +2374,8 @@ static int uvc_probe(struct usb_interfac
+> >         int function;
+> >         int ret;
+> >
+> > +       dev_info(&intf->dev, "uvc_probe start\n");
+> > +
+> >         /* Allocate memory for the device and initialize it. */
+> >         dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+> >         if (dev == NULL)
+> > @@ -2535,6 +2537,7 @@ static void uvc_disconnect(struct usb_in
+> >                 return;
+> >
+> >         uvc_unregister_video(dev);
+> > +       dev_info(&intf->dev, "uvc_disconnect done\n");
+> >         kref_put(&dev->ref, uvc_delete);
+> >  }
+> >
+> > The output in the kernel log below clearly shows that there is a bug in
+> > the uvcvideo driver.
+> >
+> > > I'm on 6.0.2 and seemingly get this even more frequently with good cable and no
+> > > extra adapters. So I patched 6.0.2 with uvc-trace above and reproduced it
+> > > within a few minutes.
+> > >
+> > > USB seems to reset, often camera stops or freezes in the browser, but the light
+> > > on the camera itself remains on. Sometimes I can enable/disable/enable camera
+> > > for it to reboot, but the last time I did that in the log I got null pointer
+> > > de-reference again.
+> >
+> > Here is the important part of the log:
+> >
+> > [  684.746848] usb 8-2.4.4: reset SuperSpeed USB device number 6 using xhci_hcd
+> > [  684.810979] uvcvideo 8-2.4.4:1.0: uvc_probe start
+> > [  684.811032] usb 8-2.4.4: Found UVC 1.00 device Logitech BRIO (046d:085e)
+> > [  684.843413] input: Logitech BRIO as /devices/pci0000:00/0000:00:08.1/0000:59:00.3/usb8/8-2/8-2.4/8-2.4.4/8-2.4.4:1.0/input/input43
+> > [  684.911255] usb 8-2.4.4: current rate 16000 is different from the runtime rate 24000
+> > ...
+> > [  743.800368] uvcvideo 8-2.4.4:1.1: uvc set alt
+> >
+> > This is where an ioctl calls uvc_video_start_transfer.
+> >
+> > [  748.654701] usb 8-2.4.4: USB disconnect, device number 6
+> > [  748.714355] uvcvideo 8-2.4.4:1.0: uvc_disconnect done
+> >
+> > This is where the disconnect starts and finishes
+> >
+> > [  748.898340] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> > [  748.898344] #PF: supervisor read access in kernel mode
+> > [  748.898346] #PF: error_code(0x0000) - not-present page
+> > [  748.898347] PGD 0 P4D 0
+> > [  748.898349] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > [  748.898351] CPU: 16 PID: 11890 Comm: VideoCapture Not tainted 6.0.2-x64v2-uvc-trace-xanmod1 #1
+> > [  748.898353] Hardware name: Gigabyte Technology Co., Ltd. B550 VISION D/B550 VISION D, BIOS F15d 07/20/2022
+> > [  748.898354] RIP: 0010:usb_ifnum_to_if+0x35/0x60
+> > ...
+> > [  748.898368] Call Trace:
+> > [  748.898370]  <TASK>
+> > [  748.898370]  usb_hcd_alloc_bandwidth+0x240/0x370
+> > [  748.898375]  usb_set_interface+0x122/0x350
+> > [  748.898378]  uvc_video_start_transfer.cold+0xd8/0x2ae [uvcvideo]
+> > [  748.898383]  uvc_video_start_streaming+0x75/0xd0 [uvcvideo]
+> > [  748.898386]  uvc_start_streaming+0x25/0xe0 [uvcvideo]
+> > [  748.898390]  vb2_start_streaming+0x86/0x140 [videobuf2_common]
+> > [  748.898393]  vb2_core_streamon+0x57/0xc0 [videobuf2_common]
+> > [  748.898395]  uvc_queue_streamon+0x25/0x40 [uvcvideo]
+> > [  748.898398]  uvc_ioctl_streamon+0x35/0x60 [uvcvideo]
+> > [  748.898401]  __video_do_ioctl+0x19a/0x3f0 [videodev]
+> >
+> > And this proves that uvc_disconnect() returned before the driver was
+> > finished accessing the device.
+> >
+> > I don't know how the driver works or how it tries to prevent this sort
+> > of race from occurring, but apparently the strategy isn't working.
+> >
+> > > Please let me know if there is any other information I can provide and what
+> > > could be the root cause of this annoying behavior.
+> >
+> > At this point I will bow out of the discussion; it's up to the uvcvideo
+> > maintainers to investigate further.  Maybe they can provide a patch for
+> > you to test.
+> >
+> > Alan Stern
+>
+>
+>
+> --
+> Ricardo Ribalda
 
-[Steps to reproduce]
-1. must cold-boot into OS
-2. checkbox-cli run
-com.canonical.certification::power-management/suspend-30-cycles-log-check-w=
-ith-reboots
-3. get the xhci error
-~~~
-Sep 27 19:48:10 ubuntu kernel: xhci_hcd 0000:00:14.0: PM: pci_pm_suspend():
-hcd_pci_suspend+0x0/0x40 returns -16
-Sep 27 19:48:10 ubuntu kernel: xhci_hcd 0000:00:14.0: PM: dpm_run_callback(=
-):
-pci_pm_suspend+0x0/0x190 returns -16
-Sep 27 19:48:10 ubuntu kernel: xhci_hcd 0000:00:14.0: PM: failed to suspend
-async: error -16
-Sep 27 19:48:10 ubuntu kernel: iwlmei
-0000:00:16.0-13280904-7792-4fcb-a1aa-5e70cbb1e865: Can't send a SAP message=
- if
-we're not connected
-Sep 27 19:48:10 ubuntu kernel: amdgpu 0000:03:00.0: amdgpu: free PSP TMR bu=
-ffer
-Sep 27 19:48:10 ubuntu kernel: PM: suspend of devices aborted after 465.967
-msecs
-Sep 27 19:48:10 ubuntu kernel: PM: start suspend of devices aborted after
-466.632 msecs
-Sep 27 19:48:10 ubuntu kernel: PM: Some devices failed to suspend, or early
-wake event detected
-~~~
 
-After disable xhci wakeup events, can't get this error since.
-Here's script to disable xhci's event.
-Ref. https://gist.github.com/kobataiwan/d22482e299c01825a9fe51910d6214ee
 
-There's existed open bug that have the same xhci issue,
-Ref. https://bugzilla.kernel.org/show_bug.cgi?id=3D116761
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Ricardo Ribalda
