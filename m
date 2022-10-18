@@ -2,199 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD489602F1A
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 17:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC706602F60
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Oct 2022 17:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiJRPC5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Oct 2022 11:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
+        id S229828AbiJRPPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Oct 2022 11:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJRPCz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 11:02:55 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFCFDBE63;
-        Tue, 18 Oct 2022 08:02:53 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BA34B8B9;
-        Tue, 18 Oct 2022 17:02:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1666105371;
-        bh=SxxFnC+VXfTQM93h3lf8Xya9KlFotjZNHzBf9IWVqWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a4OqbN8B4RLPeFsn75wbfVjZdlwhITv5G90JvphNWGCiXEKKraDrTTSeZnlgSPTl5
-         R5oZxOAw9t3AaancL7Nwq8Iv8lXjvOP2zYeEs9cslvGEyCxenDJCeCVix4ZkvMr/KD
-         tpKcnbK668MQOa2gWvwlOzql88Y+OCmAJN/qmIJI=
-Date:   Tue, 18 Oct 2022 18:02:26 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, inux@roeck-us.net,
-        Nazar Mokrynskyi <nazar@mokrynskyi.com>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [Bug 216543] kernel NULL pointer dereference
- usb_hcd_alloc_bandwidth
-Message-ID: <Y07AAmc2QnP5HiBg@pendragon.ideasonboard.com>
-References: <bug-216543-208809@https.bugzilla.kernel.org/>
- <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
- <Y03IXMGpZ2fCof2k@rowland.harvard.edu>
- <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
+        with ESMTP id S230182AbiJRPPB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 11:15:01 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07CE62A88;
+        Tue, 18 Oct 2022 08:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1666106097; i=@motorola.com;
+        bh=0F8o+F4tnhQnHHGEaCv7rKARcrXRixnf8ejRwj2t2Xk=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=j6oKOVx64izCW0RXO0F6FrB5ZO7QggIsEkC7P643/PGnfEEGByh/1OKCvfrwLWnMx
+         DO/u8Mpfn7912TvfuLD30HJhdlQQEFU5aMWQ9EQ1AmsQXKF6+7wKDAhzgUY9wTu9aL
+         OwaH8OPvUAOHP3u+U8YQbNXn2mzs6ZrKGE/ZI8G396b0rtORDXhlVvUsXtAsN1Ehda
+         gqDiuwzFMlVnPgIhXWlIwTPoyFAi/oE6fqT5rljyS8N01+5Y28g9qus+VSGxQeJfCH
+         vhQGlQQUOkLY7KDuALvNK3Jcwwx1sX3WrfHHVi8Njsio0cYdLQ0JgWl7v0Vf5bED5m
+         JAjXla3Tpaf/g==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplleJIrShJLcpLzFFi42LJePFEVPfDIb9
+  kgxvrBS2OtT1ht3hyoJ3RonfZHjaL5sXr2Sw6Jy5ht1jYtoTF4vKuOWwWi5a1MltsabvCZPHj
+  Tx+zxYTfF9gsVi04wO7A4zG7Yyarx6ZVnWwe++euYfdY3DeZ1aP/r4HH7Ls/GD227P/M6PF5k
+  1wARxRrZl5SfkUCa8b8JveC37IV67fdY29gfCnexcjFISQwnUni6qxvjBDOMiaJi89fsHcxcn
+  KwCKhKnH68mxHEZhNQk1jwehUziC0ioCWxueklM0gDs8BtZomnv66zgCSEBQIlnj34CtbAK6A
+  sseLyVKipJxkllnxfwAKREJQ4OfMJmM0MNOnGv5dMXYwcQLa0xPJ/HCBhTgFjiUkrTjFNYOSd
+  haRjFpKOWQgdCxiZVzGaFacWlaUW6Roa6iUVZaZnlOQmZuboJVbpJuqVFuumJhaX6BrpJZYX6
+  6UWF+sVV+Ym56To5aWWbGIExkhKkfuBHYw/lv3RO8QoycGkJMpbsdMvWYgvKT+lMiOxOCO+qD
+  QntfgQowwHh5IE77/9QDnBotT01Iq0zBxgvMKkJTh4lER4v2wCSvMWFyTmFmemQ6ROMepyTJ3
+  9bz+zEEtefl6qlDivMDD6hQRAijJK8+BGwFLHJUZZKWFeRgYGBiGegtSi3MwSVPlXjOIcjErC
+  vDv3AU3hycwrgdv0CugIJqAjTLeAHVGSiJCSamDS/MjRl7TC2kaEre5G/K6N6xv9XB8rt4oUx
+  oQqay/Z+lHn4MsKj8TDv5Wl/13/K7XlF3+7/ezZ/y5ULosIOn2YY5vAyo/1PrvlE6ez1RR628
+  RZS5er56/cEf+kWtNl2uKGmpzvq2bPUHybfX9azL6c29OCzRQV3B9d9XVhTr+9Z9tPlXPnTL/
+  3Xb3McmDO52xVK2OV8yJ1IbWTN+Xu/KQS4PPxTRmjvurhGMeH9ecr5kT/+6pRtWrh8dUm6x6c
+  33FkzoMG6XJDDmcl+ZuavW+NzsSfj9zFOid6M/u1ZJOvlk+ju9Y/vmWeGJu302OZ21sjvudJJ
+  80ZXxT66UicYl4WfUvRdam452q5+h2nrx1WYinOSDTUYi4qTgQAAZjG7pgDAAA=
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-10.tower-715.messagelabs.com!1666106095!24726!1
+X-Originating-IP: [104.232.228.21]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.100.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 17868 invoked from network); 18 Oct 2022 15:14:56 -0000
+Received: from unknown (HELO va32lpfpp01.lenovo.com) (104.232.228.21)
+  by server-10.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Oct 2022 15:14:56 -0000
+Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by va32lpfpp01.lenovo.com (Postfix) with ESMTPS id 4MsHTq6YGbzf6md;
+        Tue, 18 Oct 2022 15:14:55 +0000 (UTC)
+Received: from p1g3 (unknown [100.64.172.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4MsHTq4qFzzf6WS;
+        Tue, 18 Oct 2022 15:14:55 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 10:14:54 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Dan Scally <dan.scally@ideasonboard.com>,
+        linux-usb@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jeff Vanhoof <qjv001@motorola.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] usb: gadget: uvc: add configfs option for sg
+ support
+Message-ID: <Y07C7hYKyByahNjL@p1g3>
+References: <20221017205446.523796-1-w36195@motorola.com>
+ <20221017205446.523796-7-w36195@motorola.com>
+ <78c6403a-22d9-903d-f0cf-4205e17962d3@ideasonboard.com>
+ <Y065ASuFhM9bntvd@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
+In-Reply-To: <Y065ASuFhM9bntvd@rowland.harvard.edu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-hi Ricardo,
+Hi Alan,
 
-On Tue, Oct 18, 2022 at 02:40:44PM +0900, Ricardo Ribalda wrote:
-> Hi
+On Tue, Oct 18, 2022 at 10:32:33AM -0400, Alan Stern wrote:
+> On Tue, Oct 18, 2022 at 02:27:13PM +0100, Dan Scally wrote:
+> > Hi Dan
+> > 
+> > On 17/10/2022 21:54, Dan Vacura wrote:
+> > > The scatter gather support doesn't appear to work well with some UDC hw.
+> > > Add the ability to turn on the feature depending on the controller in
+> > > use.
+> > > 
+> > > Signed-off-by: Dan Vacura <w36195@motorola.com>
+> > 
+> > 
+> > Nitpick: I would call it use_sg everywhere, but either way:
+> > 
+> > 
+> > Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+> > 
+> > Tested-by: Daniel Scally <dan.scally@ideasonboard.com>
+> > 
+> > > ---
+> > > V1 -> V2:
+> > > - no change, new patch in serie
+> > > V2 -> V3:
+> > > - default on, same as baseline
+> > > 
+> > >   Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
+> > >   Documentation/usb/gadget-testing.rst              | 2 ++
+> > >   drivers/usb/gadget/function/f_uvc.c               | 2 ++
+> > >   drivers/usb/gadget/function/u_uvc.h               | 1 +
+> > >   drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
+> > >   drivers/usb/gadget/function/uvc_queue.c           | 4 ++--
+> > >   6 files changed, 10 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> > > index 5dfaa3f7f6a4..839a75fc28ee 100644
+> > > --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> > > +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> > > @@ -9,6 +9,7 @@ Description:	UVC function directory
+> > >   		streaming_interval	1..16
+> > >   		function_name		string [32]
+> > >   		req_int_skip_div	unsigned int
+> > > +		sg_supported		0..1
+> > >   		===================	=============================
+> > >   What:		/config/usb-gadget/gadget/functions/uvc.name/control
+> > > diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+> > > index f9b5a09be1f4..8e3072d6a590 100644
+> > > --- a/Documentation/usb/gadget-testing.rst
+> > > +++ b/Documentation/usb/gadget-testing.rst
+> > > @@ -796,6 +796,8 @@ The uvc function provides these attributes in its function directory:
+> > >   	function_name       name of the interface
+> > >   	req_int_skip_div    divisor of total requests to aid in calculating
+> > >   			    interrupt frequency, 0 indicates all interrupt
+> > > +	sg_supported        allow for scatter gather to be used if the UDC
+> > > +			    hw supports it
 > 
-> Guenter already provided some patches to fix this issue:
-> https://lore.kernel.org/lkml/20200917022547.198090-1-linux@roeck-us.net/
-> 
-> Until we have a solution on the core (or rewrite the kernel in rust
-> ;P) , I think we should merge them (or something similar).
-> 
-> I can prepare a patchset merging Guenter set and my "grannular PM"
-> https://lore.kernel.org/linux-media/20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org/
+> Why is a configuration option needed for this?  Why not always use SG 
+> when the UDC supports it?  Or at least, make the decision automatically 
+> (say, based on the amount of data to be transferred) with no need for 
+> any user input?
 
-How about working on a proper fix instead ? :-)
+Patches for a fix and to select to use SG depending on amount of data
+are already submitted and under review. I agree, ideally we don't need
+this patch, but there have been several regressions uncovered with
+enabling this support and it takes time to root cause these issues.
 
-> It can always be reverted when we reach consensus on how to do it for
-> every driver.
-> 
-> Regards!
-> 
-> 
-> On Tue, 18 Oct 2022 at 06:46, Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > Moving this bug report from bugzilla to the mailing lists.
-> >
-> > The short description of the bug is that in uvcvideo, disconnect races
-> > with starting a video transfer.  The race shows up on Nazar's system
-> > because of a marginal USB cable which leads to a lot of spontaneous
-> > disconnections.
-> >
-> > On Mon, Oct 17, 2022 at 05:59:48PM +0000, bugzilla-daemon@kernel.org wrote:
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=216543
-> > >
-> > > --- Comment #7 from Nazar Mokrynskyi (nazar@mokrynskyi.com) ---
-> > > Created attachment 303022
-> > >   --> https://bugzilla.kernel.org/attachment.cgi?id=303022&action=edit
-> > > Kernel log with uvc-trace patch applied
-> >
-> > For everyone's information, here is the uvc-trace patch.  All it does is
-> > add messages to the kernel log when uvcvideo's probe and disconnect
-> > routines run, and just before uvc_video_start_transfer() calls
-> > usb_set_interface().
-> >
-> > --- usb-devel/drivers/media/usb/uvc/uvc_video.c
-> > +++ usb-devel/drivers/media/usb/uvc/uvc_video.c
-> > @@ -1965,6 +1965,7 @@ static int uvc_video_start_transfer(stru
-> >                         "Selecting alternate setting %u (%u B/frame bandwidth)\n",
-> >                         altsetting, best_psize);
-> >
-> > +               dev_info(&intf->dev, "uvc set alt\n");
-> >                 ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
-> >                 if (ret < 0)
-> >                         return ret;
-> > --- usb-devel/drivers/media/usb/uvc/uvc_driver.c
-> > +++ usb-devel/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -2374,6 +2374,8 @@ static int uvc_probe(struct usb_interfac
-> >         int function;
-> >         int ret;
-> >
-> > +       dev_info(&intf->dev, "uvc_probe start\n");
-> > +
-> >         /* Allocate memory for the device and initialize it. */
-> >         dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-> >         if (dev == NULL)
-> > @@ -2535,6 +2537,7 @@ static void uvc_disconnect(struct usb_in
-> >                 return;
-> >
-> >         uvc_unregister_video(dev);
-> > +       dev_info(&intf->dev, "uvc_disconnect done\n");
-> >         kref_put(&dev->ref, uvc_delete);
-> >  }
-> >
-> > The output in the kernel log below clearly shows that there is a bug in
-> > the uvcvideo driver.
-> >
-> > > I'm on 6.0.2 and seemingly get this even more frequently with good cable and no
-> > > extra adapters. So I patched 6.0.2 with uvc-trace above and reproduced it
-> > > within a few minutes.
-> > >
-> > > USB seems to reset, often camera stops or freezes in the browser, but the light
-> > > on the camera itself remains on. Sometimes I can enable/disable/enable camera
-> > > for it to reboot, but the last time I did that in the log I got null pointer
-> > > de-reference again.
-> >
-> > Here is the important part of the log:
-> >
-> > [  684.746848] usb 8-2.4.4: reset SuperSpeed USB device number 6 using xhci_hcd
-> > [  684.810979] uvcvideo 8-2.4.4:1.0: uvc_probe start
-> > [  684.811032] usb 8-2.4.4: Found UVC 1.00 device Logitech BRIO (046d:085e)
-> > [  684.843413] input: Logitech BRIO as /devices/pci0000:00/0000:00:08.1/0000:59:00.3/usb8/8-2/8-2.4/8-2.4.4/8-2.4.4:1.0/input/input43
-> > [  684.911255] usb 8-2.4.4: current rate 16000 is different from the runtime rate 24000
-> > ...
-> > [  743.800368] uvcvideo 8-2.4.4:1.1: uvc set alt
-> >
-> > This is where an ioctl calls uvc_video_start_transfer.
-> >
-> > [  748.654701] usb 8-2.4.4: USB disconnect, device number 6
-> > [  748.714355] uvcvideo 8-2.4.4:1.0: uvc_disconnect done
-> >
-> > This is where the disconnect starts and finishes
-> >
-> > [  748.898340] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> > [  748.898344] #PF: supervisor read access in kernel mode
-> > [  748.898346] #PF: error_code(0x0000) - not-present page
-> > [  748.898347] PGD 0 P4D 0
-> > [  748.898349] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> > [  748.898351] CPU: 16 PID: 11890 Comm: VideoCapture Not tainted 6.0.2-x64v2-uvc-trace-xanmod1 #1
-> > [  748.898353] Hardware name: Gigabyte Technology Co., Ltd. B550 VISION D/B550 VISION D, BIOS F15d 07/20/2022
-> > [  748.898354] RIP: 0010:usb_ifnum_to_if+0x35/0x60
-> > ...
-> > [  748.898368] Call Trace:
-> > [  748.898370]  <TASK>
-> > [  748.898370]  usb_hcd_alloc_bandwidth+0x240/0x370
-> > [  748.898375]  usb_set_interface+0x122/0x350
-> > [  748.898378]  uvc_video_start_transfer.cold+0xd8/0x2ae [uvcvideo]
-> > [  748.898383]  uvc_video_start_streaming+0x75/0xd0 [uvcvideo]
-> > [  748.898386]  uvc_start_streaming+0x25/0xe0 [uvcvideo]
-> > [  748.898390]  vb2_start_streaming+0x86/0x140 [videobuf2_common]
-> > [  748.898393]  vb2_core_streamon+0x57/0xc0 [videobuf2_common]
-> > [  748.898395]  uvc_queue_streamon+0x25/0x40 [uvcvideo]
-> > [  748.898398]  uvc_ioctl_streamon+0x35/0x60 [uvcvideo]
-> > [  748.898401]  __video_do_ioctl+0x19a/0x3f0 [videodev]
-> >
-> > And this proves that uvc_disconnect() returned before the driver was
-> > finished accessing the device.
-> >
-> > I don't know how the driver works or how it tries to prevent this sort
-> > of race from occurring, but apparently the strategy isn't working.
-> >
-> > > Please let me know if there is any other information I can provide and what
-> > > could be the root cause of this annoying behavior.
-> >
-> > At this point I will bow out of the discussion; it's up to the uvcvideo
-> > maintainers to investigate further.  Maybe they can provide a patch for
-> > you to test.
-> >
-> > Alan Stern
-> 
-> 
-> 
-> -- 
-> Ricardo Ribalda
+In my specific environment, Android GKI 2.0, changes need to get
+upstreamed first here before they're pulled into Android device
+software. Having this logic in place gives us the ability to turn off
+this functionality without going through this process. A revert was also
+considered until all the bugs are resolved, but the code is quite
+entrenched now to take out, plus others seem to benefit from it being
+enabled. Thus the configurability.
 
--- 
-Regards,
-
-Laurent Pinchart
+> 
+> Is this because the SG support in some UDC drivers is buggy?  In that 
+> case the proper approach is to fix the UDC drivers, not add new options 
+> that users won't know when to use.
+> 
+> Or is it because the UDC hardware itself is buggy?  In that case the 
+> best approach is to fix the UDC drivers so that they don't advertise 
+> working SG support when the hardware is unable to handle it.
+> 
+> Alan Stern
