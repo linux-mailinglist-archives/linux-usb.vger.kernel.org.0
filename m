@@ -2,88 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B040B604A7C
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4470E604A45
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbiJSPFw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Oct 2022 11:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S231584AbiJSPCU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 11:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiJSPER (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:04:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6B413FDDA;
-        Wed, 19 Oct 2022 07:59:04 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666191372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ROOYEsR0MhxheCxKtRPcb2mfw4k8DWEDO6Xw87lE788=;
-        b=dj7K4xySpq7whNrvoUhtROBd4luyoKbpg6xTwFwhdIXZhbdt5NpgczLROroEXs3PgPR5nV
-        6HyH+7+1+Yrdno3e7XSvm+Rjun5P+yUigjsQD0kip44MepJ/Q022Y5oOoN2gaVaa8YRfl2
-        6KkfTfDFLG8D29GLh1KJj/8usWDl8staheqlg16yBFk55WoMgh3s8R3HdP3566EXWHdGH6
-        o7Jh2LwVPpRUpZwQ1KaXB7R3RaCUqh3kXswyT6GrZvNhezCCaXRsvfm77BMTZHoEQMPfxJ
-        d6S8ayitsuWXl06xJ3vmxP14O6b/Blx/0zYuHK1UiScgBw0QdiyNqqvsWRpJLA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666191372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ROOYEsR0MhxheCxKtRPcb2mfw4k8DWEDO6Xw87lE788=;
-        b=ryuSpo1BnIE5ZnNgWQJ91gufZbr2BMikTU+gIGl5WJJn0EfZEC0dlR7JSp8t5SfbRRzeKa
-        qe9zWCaaaGZeIqAA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH printk v2 18/38] usb: early: xhci-dbc: use console_is_enabled()
-Date:   Wed, 19 Oct 2022 17:01:40 +0206
-Message-Id: <20221019145600.1282823-19-john.ogness@linutronix.de>
-In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+        with ESMTP id S231376AbiJSPCF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:02:05 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465C31B8679
+        for <linux-usb@vger.kernel.org>; Wed, 19 Oct 2022 07:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666191382; x=1697727382;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SJbDBIeDgAEEIfDcDA+mqFqKBIRESFBYYvf/x7mE/IU=;
+  b=TMbxZCS8zbqc+FwIu4xSIKkwHNortYAWbcG26fFL+RuN+8aROPGq8oai
+   aGIVN7yQhT+eVOi19UpgphbAAddprDrewTbmtLl1vgPIwrs9Qgcn+HII4
+   XWM5rCoAqbIU/Nk1YRsLDVW8w11MyEFu/YPm9Sc6/hvWLdrf51Jg41+84
+   GT3r2Ef/RSz5eZfx6jxPLrP8dOGZZvavN0aIZio9G2YuYwdJc68uPwJPH
+   1j5r6yXz/TOlYGPQA9FrOrN7bmGCcXapbG5/P+hroDtNxy6xCPSXGt8B2
+   U2S8xz64DMcXYf8A7aEe0t2R9epla6fuc8AFfV3DWKI7SJa2FGpwSCZio
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="304048682"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="304048682"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 07:55:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="771822973"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="771822973"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Oct 2022 07:55:30 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Prashant Malani <pmalani@chromium.org>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: retimer: Use device type for matching
+Date:   Wed, 19 Oct 2022 17:55:52 +0300
+Message-Id: <20221019145552.32493-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
+Device name is not reliable so using the type instead in
+retimer_fwnode_match().
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
+This will also introduce is_typec_retimer() helper, and
+remove the static keyword from the retimer device type. That
+will make it accessible also in the main typec class.
+
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/early/xhci-dbc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/typec/retimer.c | 16 ++--------------
+ drivers/usb/typec/retimer.h |  4 ++++
+ 2 files changed, 6 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
-index bfb7e2b85299..b1a9c393160b 100644
---- a/drivers/usb/early/xhci-dbc.c
-+++ b/drivers/usb/early/xhci-dbc.c
-@@ -927,7 +927,7 @@ void __init early_xdbc_register_console(void)
+diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
+index ee94dbbe47453..3a4146ea6e7cf 100644
+--- a/drivers/usb/typec/retimer.c
++++ b/drivers/usb/typec/retimer.c
+@@ -17,21 +17,9 @@
+ #include "class.h"
+ #include "retimer.h"
  
- static void xdbc_unregister_console(void)
+-static bool dev_name_ends_with(struct device *dev, const char *suffix)
+-{
+-	const char *name = dev_name(dev);
+-	const int name_len = strlen(name);
+-	const int suffix_len = strlen(suffix);
+-
+-	if (suffix_len > name_len)
+-		return false;
+-
+-	return strcmp(name + (name_len - suffix_len), suffix) == 0;
+-}
+-
+ static int retimer_fwnode_match(struct device *dev, const void *fwnode)
  {
--	if (early_xdbc_console.flags & CON_ENABLED)
-+	if (console_is_enabled(&early_xdbc_console))
- 		unregister_console(&early_xdbc_console);
+-	return device_match_fwnode(dev, fwnode) && dev_name_ends_with(dev, "-retimer");
++	return is_typec_retimer(dev) && device_match_fwnode(dev, fwnode);
  }
  
+ static void *typec_retimer_match(struct fwnode_handle *fwnode, const char *id, void *data)
+@@ -97,7 +85,7 @@ static void typec_retimer_release(struct device *dev)
+ 	kfree(to_typec_retimer(dev));
+ }
+ 
+-static const struct device_type typec_retimer_dev_type = {
++const struct device_type typec_retimer_dev_type = {
+ 	.name = "typec_retimer",
+ 	.release = typec_retimer_release,
+ };
+diff --git a/drivers/usb/typec/retimer.h b/drivers/usb/typec/retimer.h
+index fa15951d48468..e34bd23323be5 100644
+--- a/drivers/usb/typec/retimer.h
++++ b/drivers/usb/typec/retimer.h
+@@ -12,4 +12,8 @@ struct typec_retimer {
+ 
+ #define to_typec_retimer(_dev_) container_of(_dev_, struct typec_retimer, dev)
+ 
++const struct device_type typec_retimer_dev_type;
++
++#define is_typec_retimer(dev) ((dev)->type == &typec_retimer_dev_type)
++
+ #endif /* __USB_TYPEC_RETIMER__ */
 -- 
-2.30.2
+2.35.1
 
