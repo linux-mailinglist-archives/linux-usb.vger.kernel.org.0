@@ -2,88 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CC7604BFC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3838D604C46
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiJSPqS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Oct 2022 11:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S232623AbiJSPxh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 11:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiJSPps (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:45:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7051CFF21;
-        Wed, 19 Oct 2022 08:40:37 -0700 (PDT)
+        with ESMTP id S232711AbiJSPxO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:53:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE4632B9C;
+        Wed, 19 Oct 2022 08:50:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D23EFB824B0;
-        Wed, 19 Oct 2022 15:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78462C433D6;
-        Wed, 19 Oct 2022 15:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666193975;
-        bh=R5mUdvcbU/2/tJ5ejtkz4jCaK/oLwR1v0C5V24F/6/k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zjb61FJnSBefpHHnl1oA1kqetSFgeFF//FrU7kAN9jPwJ8ucHxBbhv3DNoABZ7Xvr
-         7UEj06IcirGVTOiz+Beq5LEQGjoMaqygdMVoVt4J192L3atmvpTDsLINx3sdkT//Fl
-         WP1htq1Nev9xjix5Qh5Lwxntmow9dH5Zd7UvO886IrNjriWoqt+I8xc7Hwo29Xv5BI
-         yC58Nmz4w9y7E5MSTGAegHwpuOFF095SCKQ5XJFPMYccIvsjAI4cXrtydl2qJefsbn
-         I5HBje7WUSFQH3Z4CDN1Hn1fLHnxqL4j8adgWZqVY13ekYxs6qYcT6H5S2WBGbyg03
-         N0amDzKZZNaQQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1olBAK-0001Wd-VX;
-        Wed, 19 Oct 2022 16:39:33 +0100
-Date:   Wed, 19 Oct 2022 16:39:32 +0100
-Message-ID: <867d0vg6vf.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        David Lechner <david@lechnology.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 00/14] ARM: remove unused davinci board & drivers
-In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
-References: <20221019152947.3857217-1-arnd@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: arnd@kernel.org, nsekhar@ti.com, brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, khilman@baylibre.com, arnd@arndb.de, linux@armlinux.org.uk, mchehab@kernel.org, damien.lemoal@opensource.wdc.com, s.shtylyov@omp.ru, david@lechnology.com, mturquette@baylibre.com, sboyd@kernel.org, dmitry.torokhov@gmail.com, tglx@linutronix.de, prabhakar.csengg@gmail.com, lee@kernel.org, a.zummo@towertech.it, alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org, b-liu@ti.com, peter.ujfalusi@gmail.com, lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz, tiwai@suse.com, laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl, yangyingliang@huawei.com, linux-media@vger.kernel.org, linux-ide@vger.kernel.org, linux-clk@vger.kernel.org, linux-input@vger.kernel.org, linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFA61B824F3;
+        Wed, 19 Oct 2022 15:48:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A444C433C1;
+        Wed, 19 Oct 2022 15:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666194518;
+        bh=3Ruo5jB3xafvIKI2yCrU2v1/8ZFB6GkBfPPKWvQZBTI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jVtcxDVWZC3OicxMHdC71Xxb3H/q0VoNxCyri2oFM+761jEBhUMSlVSS4K8N8yidn
+         RIYrThULdf0vFT4jS+wjw1d936khsHUySUkNYWIb/rruad1QAqlW94xxH66NlqOndL
+         ct1OE7nLBOfjceBO1fnPhaoz1D2LaPkDKLHkgk0M=
+Date:   Wed, 19 Oct 2022 17:48:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Daniele Palmas <dnlplm@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2] net: usb: qmi_wwan implement tx packets
+ aggregation
+Message-ID: <Y1AcU0CH/j69uvwx@kroah.com>
+References: <20221019132503.6783-1-dnlplm@gmail.com>
+ <87lepbsvls.fsf@miraculix.mork.no>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87lepbsvls.fsf@miraculix.mork.no>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -93,33 +56,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 19 Oct 2022 16:29:26 +0100,
-Arnd Bergmann <arnd@kernel.org> wrote:
+On Wed, Oct 19, 2022 at 05:04:31PM +0200, Bjørn Mork wrote:
+> Daniele Palmas <dnlplm@gmail.com> writes:
+> > I'm aware that rmnet should be the preferred way for qmap, but I think there's
+> > still value in adding this feature to qmi_wwan qmap implementation since there
+> > are in the field many users of that.
+> >
+> > Moreover, having this in mainline could simplify backporting for those who are
+> > using qmi_wwan qmap feature but are stuck with old kernel versions.
+> >
+> > I'm also aware of the fact that sysfs files for configuration are not the
+> > preferred way, but it would feel odd changing the way for configuring the driver
+> > just for this feature, having it different from the previous knobs.
 > 
-> From: Arnd Bergmann <arnd@arndb.de>
+> It's not just that it's not the preferred way.. I believe I promised
+> that we wouldn't add anything more to this interface.  And then I broke
+> that promise, promising that it would never happen again.  So much for
+> my integrity.
 > 
-> As part of removing all board files that were previously marked as unused,
-> I looked through the davinci platform and recursively removed everything
-> that has now become unused.
+> This all looks very nice to me, and the results are great, and it's just
+> another knob...
 > 
-> In particular, this is for all dm3xx support, in addition to the dm64xx
-> support removed previously. The remaining support is now for da8xx using
-> devicetree only, which means a lot of the da8xx specific device support
-> can also go away.
-> 
-> As with the previous series, I can keep patches together in the
-> soc tree, or subsystem maintainers can pick them up individually
-> through their subsystems, whichever they prefer.
-> 
-> Arnd Bergmann (14):
 
-[...]
+Please no more sysfs files for stuff like this.  This turns into
+vendor-specific random files that no one knows how to change over time
+with no way to know what userspace tools are accessing them, or if even
+anyone is using them at all.
 
->   irqchip: remove davinci aintc driver
+Shouldn't there be standard ethtool apis for this?
 
-Acked-by: Marc Zyngier <maz@kernel.org>
+> But I don't think we can continue adding this stuff.  The QMAP handling
+> should be done in the rmnet driver. Unless there is some reason it can't
+> be there? Wouldn't the same code work there?
 
-	M.
+rmnet would be better, but again, no new sysfs files please,
 
--- 
-Without deviation from the norm, progress is not possible.
+thanks,
+
+greg k-h
