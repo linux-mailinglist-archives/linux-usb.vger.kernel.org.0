@@ -2,121 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C858760506E
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 21:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AD160509E
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 21:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiJSTbD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Oct 2022 15:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S229971AbiJSTke (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 15:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiJSTbC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 15:31:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C197689821;
-        Wed, 19 Oct 2022 12:31:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D94961846;
-        Wed, 19 Oct 2022 19:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29522C433C1;
-        Wed, 19 Oct 2022 19:30:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666207860;
-        bh=lxqUO53FTMvnN5iVWeV2mFzjN5pKJ/WSgIlyQR50yL0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sDfN20lFFoN3iMd2jYr9NaoAv8Ue1YUJhG0Mu3KYeqax98nUawQCjrhOrBUWFJo1T
-         sk2CDGFquDA1zYisqL/zhh53aa3atOCiiQjiUGvjdtt4Y0dqvEaTJWTJGFf2QOaQry
-         NnMfgBSymaXoxzI/c+HzRO2FqJPzhht5/IgcKD3UEx/uA4QBwBA4r+N10RvXSQOUjM
-         EscP3Iu9Yj7V3BRtQ94CzGSF9vOslMIHMFEW9uCzBgsNSZa+R+LKE9FadKQIyay2+O
-         e4IrH+zfa9FYKvoSQc/Z0hIdAJeSAj195yCaQfXaeCpunY+q8DJe2LsGbDsuocCRtH
-         79CVV8SlsbD5A==
-Date:   Wed, 19 Oct 2022 21:30:57 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-omap@vger.kernel.org,
-        Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
-Message-ID: <Y1BQcTerTBNXRBfu@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-omap@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-13-arnd@kernel.org>
+        with ESMTP id S230315AbiJSTkb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 15:40:31 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C927371B4;
+        Wed, 19 Oct 2022 12:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666208426;
+        bh=hK/WYgdBJ9DDoiv5VK5AkPFkbq2bs+zp695HMZjr2ik=;
+        h=X-UI-Sender-Class:References:In-Reply-To:From:Date:Subject:To:Cc;
+        b=GjWbN6ZXickaUb9VSo6DXHkN8q7zkCv4eILARW6EUK4PI8y5JTKoq+gGglblqsg8w
+         Jutx70UPgIg6bH1FQRPKyXNLRfDu5+iNB7zbBKzk3pMw3ha62ajElunz756lvtJDyY
+         3gxWHu0tvrLVoCOMeaYCXMdm1BjG+kqUOsU44b08=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from mail-ed1-f54.google.com ([209.85.208.54]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MO9z7-1oRdkB25YP-00ObD2; Wed, 19 Oct 2022 21:40:26 +0200
+Received: by mail-ed1-f54.google.com with SMTP id r14so26801511edc.7;
+        Wed, 19 Oct 2022 12:40:26 -0700 (PDT)
+X-Gm-Message-State: ACrzQf28zV4W6udvgvpV6rB6Jd4EoVpuPFnsgNoWOF+hTPu9jFHpCs2y
+        IfvyehBELoft0EdmET1DcCjT3BLHGz+XbdBjD98=
+X-Google-Smtp-Source: AMsMyM5OuA0l6x3iqaAD7ZXEr7Eq43dy294gZvwNqcl+PM07Q9C/kajAOSEJaLs4501pk3MgcLohyhky7klvopWUTLM=
+X-Received: by 2002:a05:6402:440f:b0:45d:297b:c70a with SMTP id
+ y15-20020a056402440f00b0045d297bc70amr9100037eda.187.1666208426153; Wed, 19
+ Oct 2022 12:40:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GlgBPxotGBFrEguU"
-Content-Disposition: inline
-In-Reply-To: <20221019150410.3851944-13-arnd@kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu> <b1309e015d07abc47a2cf987e229a87f533430b5.camel@hadess.net>
+In-Reply-To: <b1309e015d07abc47a2cf987e229a87f533430b5.camel@hadess.net>
+From:   Andreas Bergmeier <abergmeier@gmx.net>
+Date:   Wed, 19 Oct 2022 21:40:14 +0200
+X-Gmail-Original-Message-ID: <CABfF9mP90VyDk9BwCA8uZPDHCStwE18s+EM=EeQyKGhs_WNtxQ@mail.gmail.com>
+Message-ID: <CABfF9mP90VyDk9BwCA8uZPDHCStwE18s+EM=EeQyKGhs_WNtxQ@mail.gmail.com>
+Subject: Re: Litra Glow on Linux
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        linux-input@vger.kernel.org,
+        USB mailing list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:O/ZMyxIEfNnw+ryC7IJsbQiQUZQ0rHd71l9ucM0/nWt+gLrP2Nd
+ 7px7SwIlVIe6sFoRblR/A/MpDgQ25QMoST0Au2xxqSwdeg7dc9hM05su63qCa5ad9t2jDC+
+ EOLDSmG08CPb/kM+ORK4FfI9UxjPeYdjKRZCru7EnTuXx3XPmm8yEH2QMWmovXC9ROtNVl+
+ 9s6AAxZdXebPKOmCGueuQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:X8ncLm57Hxk=:Hf4vfUZNQ8DEZcM2ThuR6P
+ umFDtfcXl0dS8W+B5i7Lej/FAoQ4dl11/zR/REx8v3xN8ZlI6mxki92Mws9QCGELp+UZPPllf
+ 1EJHWx6LxDkgGxLi7W898KbH+ImRncd+wKiCk3teW/iiqG5Prf9J1PWHLPV7yozpsmhe6ZgKL
+ KForPktvi7TIwAOSifcd9+E6h9DTq15Lym/yzcWNxl5x7MiEydazbEZp8GE5kiYoRUkM4gM5P
+ o63xc6tesEIPn+LpA3QaiDYGeFZlGDo3qJbnLe7Hr+JebNGqfeILVLq2JJkv2QXpDbcY2cbJi
+ Vr72pzfEwWxQZ60XivTnUSS1Eqw+rBmsOxBJHJuEqDxe5vteZlm6BxZW4F98wFCVd0MHa6+7s
+ gSuL9hAMBzGwUuXTSopP9VaOXIBF4hS1fkoYJSHG1R4mwO6OE7WwbKkca4P+8TWV/NyLIFmm8
+ Miz/qHj0UnQnOzSLyDdBqrANY1s8+Fkv2XsodtqQVlLyLKRcT5Ep8OHZ4n9qEssKV/20pjIX2
+ /CYKgw6le2FH/dfF7LbqeTpWVhjHMfCphAyHa6SbSQUfc/g0ijsbfiS+X6JW0NOXeaGAJ26Ij
+ 843uF1iI9WNuGZfnPNsMRGVO5DGCOZZEeyhdgZj0/YkIfSphpWJ8X99st1pYeF3Mif42lDz6t
+ DB1T53c4q+o5kbGFghyKbrPog4uiLaAs+dL3FnRlqx13eA7LUchh52TaScWASbJIZRx2L3AZf
+ bTxGI/Wbs/K984MdOMbJ/7O/2aH1PXvJpRZqcbKXHXrSjNBBFmFSSCMpIqKlCLvegJq1A+l2K
+ QO3jiEjcjTgiJMzbxVgdyROQTUy0+Qg1pxQISkE6aCbuCmgxuPCUmpLiUJqqT244UL+6glJKu
+ DFndp+GVzCuMMFe9d/uxottjzFBfTEjPS8m/fu0GCiJabR8tBEG4BMQVbHO0wGy3x9MaeVOkM
+ t9gejhM8XMJksi7CqzJk3UzxXVJmE4JPPFDQQNt+OghNigz9z48fSR/TMfs8OQzIbpOiCRy2d
+ xakAhg0WnE1j9op8LQg75ClyN1pbhjoBPiW5+t+k9JIDSGxP46YNRnmCQ3oKFWVInGsvYkWwD
+ qNKFjVsQCdDhtrc4BHGzV9nFfvX8XAQz/EW55QIRgE+6+w9RvjFhld6JBbWzwkuVmloLucFp6
+ 7VKaC/CgZJwoA/7c0FvPGsyVWP1r7DKmcZZACAlCIUHiPmRYd6MlMsTuYFtu9WSFcPLRH9sBe
+ lr97jkD9f/VObdv7lV1zxhjGRzjjr98cj1uuwy3TE9UkbGuNR8f3VZwfyKyNSGHMrN1HO9uNd
+ iu38VPmJADDRl2yRjOVzf71cc5dbijfnkDYLeu4jzpKUVSOcWthqNGhQ7eyQFtCdmqU3gdOO0
+ +iuNMy5jNfioXWO5yDUiiSW3b17jxV1BsK7DRr6Q4ieiNZlwNahHKXml00Eemn2+ZK7h9lDfg
+ TL3NGIt+z8cInOrGqWGOvXaINjrwd0uywnLdgNlLgyKfIZapm09OdbEQPy59X2U3w4H5Dy1fM
+ NiikRAdGZNJKQ0ESFYg1wwAiy9AM9KP4X2zFdA3QPc8C1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, 19 Oct 2022 at 17:49, Bastien Nocera <hadess@hadess.net> wrote:
+>
+> On Wed, 2022-10-19 at 11:17 -0400, Alan Stern wrote:
+> > Via (hardware) buttons you can switch the device on, regulate the
+> > color temperature as well as the brightness.
+> > I know of no way to fully control the device from my computer and
+> > would like to change that.
+>
+> Anything that those libraries and tools can't do?
+>
+> https://github.com/search?q=litra+glow
 
---GlgBPxotGBFrEguU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Oct 19, 2022 at 05:03:35PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> All board support that was marked as 'unused' earlier can
-> now be removed, leaving the five machines that that still
-> had someone using them in 2022, or that are supported in
-> qemu.
->=20
-> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: linux-omap@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Acked-by: Wolfram Sang <wsa@kernel.org>
-
-
---GlgBPxotGBFrEguU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNQUHEACgkQFA3kzBSg
-KbbYdw//QXhm8BHTPd6JLEkbUsO6b7c71ADV97GkHPEhFYPDntiQuCq5RylfRwvD
-MzZAW2/386H1R2Ll4zYM5Zz15/SWt0AoCzQkXJyunIGBGnsWjBCuDPYbMEj+sMtW
-rdfbj10dmVHPqKmTPwl0sgawyvj7PxYF/pOUgCLIkYAhxcU+i0cm5aWa5hVZvTDt
-FhPnTRIKhhENOqJPFfZAg1VtCmc8QhjaqEGcoyZeEjOLqJL1boaLFLEC73oRWCMU
-6z4AFDeLksergb7wY9XxQnxgyeHS1jJadSQWuGgUfSi+OntWO7dGEywv878WwMAr
-c/XPgzqBIJX9P9lo/uJgcMUx5vPpLgSExfrqF9Pz8A5umWQCNnbK0dP8I6RNTS8j
-YwyTnitP3vmHVcW18VUS8Qyt90pBQix5f1nLBocsavLcCucgYXKZ0zeI3fBOVG4D
-Yr34Svz3RTKP/AZ8s1PMC3V00pdpzFEWwbTku3NT0nAChVcfseMzjYxBd6y4M/2t
-+gAkVlSK6zkCEwXZIXrWIub+3ubjPG539yItu/EmVIS52FrzokFo2i0bgQyPcfGn
-YBe6FZ/IuAz5hTKgctlBQ6RG/lbuZYcs6LwYIbQEIU8Mw0vayaYsrA6Hg/ePQSvD
-/jyH5WnL9WFH6LsbO40MQRmU/8NzRWt9lbUJqCs5/yTIlK2x99Y=
-=NdiZ
------END PGP SIGNATURE-----
-
---GlgBPxotGBFrEguU--
+From the code I have looked into it seems like some Mac libraries
+might be able to do all that. Why, I am not yet clear on.
+I have a _feeling_ that maybe Windows and macOS do a different HID
+mapping/processing than Linux.
