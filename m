@@ -2,134 +2,275 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730F7603828
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 04:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F8A6038D9
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 06:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiJSCjL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Oct 2022 22:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S229592AbiJSEXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 00:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJSCjK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Oct 2022 22:39:10 -0400
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3CCE4E5D;
-        Tue, 18 Oct 2022 19:39:10 -0700 (PDT)
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29INjnfi024169;
-        Tue, 18 Oct 2022 19:39:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
- from : subject : to : cc; s=pfptdkimsnps;
- bh=dj9mD1bvepHzuV6Pg+BqbGv5Ek2OIjw1CCfN+3OxF+4=;
- b=D6ZPZF5LmjcykVTeOt+KWj9P2PsaML9m6ApywPBah2q99lHS/ZrJUcb59L23cGtOZZYe
- wYY7eWIF3VCyt0xpBMOPEtz+eQb1iXHFEFViuMOJWp++resoH4ToDLSMpLy4Fa/A5Q0t
- fh9kfhelQKVqh5jSePQ9fvzd9ycU0BJNkrje3b9LgAZMk+Nlc6UuEOQsGz6LTYcf6uwr
- 5AWj7adZiDEvJd1SG9Ra6gd5N8PZvPidOB3CqMlxXl1tQ025x8Zh7eduYzLE/ZQqGO2W
- gHCYKu8UgFqHKK+IJhn2RTqyRvwwXgmVuJlCSxZ9GNJaVXU81cMoWRLCfl/dpRDh5SaF Kw== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3k7uvncyty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Oct 2022 19:39:04 -0700
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 60FA7C00FA;
-        Wed, 19 Oct 2022 02:39:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1666147143; bh=tNelLWL7QXJkCEyzfBCRTxhNyWwWhSpAzVYCk1jL6aI=;
-        h=Date:From:Subject:To:Cc:From;
-        b=Y3VjDiT6Ho5dA1OfYMGrYr4UotoSP/OlIzKpFhRSrq7+mEog8O++NlKtQ/BO/HTS6
-         kYjYFnv+FPdKnirlgzBaRBeeQUhS9H88B/ctiWg6MuwTNXhTsu9lqtMWL6xDoN+uXZ
-         PUc6xEDHqcVCvVadl8A6tLgurpr3l/shlLMWgUKnUBLcr2N9d4Lyd0Hd/XB8oUEHdH
-         uHxbIRb93dZTPzTbfqLE+QM8TKTguIDsEvrJ8jLnNzp9UvtKSBxY1pmoFNhdtC9Fmm
-         RY75ceUzJYKiqPPwXXNffijFR7brY1PvDFXtoC+JWNn8mDw3flI57GkSwmAvbFGTFu
-         /hbgsIiQS2aPw==
-Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 227CEA007F;
-        Wed, 19 Oct 2022 02:39:02 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Tue, 18 Oct 2022 19:39:01 -0700
-Date:   Tue, 18 Oct 2022 19:39:01 -0700
-Message-Id: <3f9f59e5d74efcbaee444cf4b30ef639cc7b124e.1666146954.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2] usb: dwc3: gadget: Don't delay End Transfer on delayed_status
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     John Youn <John.Youn@synopsys.com>, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-X-Proofpoint-ORIG-GUID: -XyR_I40rs6i-xJssBmBjdIY01ytCdmY
-X-Proofpoint-GUID: -XyR_I40rs6i-xJssBmBjdIY01ytCdmY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-18_10,2022-10-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- adultscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
- clxscore=1015 impostorscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- malwarescore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210190013
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229470AbiJSEXF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 00:23:05 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266467F0B1
+        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 21:23:04 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id q9so37150633ejd.0
+        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 21:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iYk3FkT8huhG9S3jKz/zBuYsS4ys6ERir9+pjyJd6V4=;
+        b=UJXhT9wyZ7K4QC8cwHU5LdrRkqiyPMtyPfFvRMGUO8VbMRfvbNEIjCBkywMdf97h2+
+         p/QFEzNaquwMlxVoDLXY2pDYHQoHuOXv+e5+mUn/T/NCLpe2w7r7RNLXC8xcNeTIUZfO
+         poEcImb0HQ1F3TCAA/Mlm/wp/W6GFQVXN/714=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iYk3FkT8huhG9S3jKz/zBuYsS4ys6ERir9+pjyJd6V4=;
+        b=ElK54oVaBX3xZgjD3cWzn1FEgMStHdAMEMxxU76xL1zt7BMW+ig74PxDqvB1l/j17G
+         O0P9qI/G7r7cbwaiSVZAyPCM8MFj/DuNAwVlHYf0fjMc5aVZo2kauxfNo3HHwxyAE3Jo
+         xEsOPHFuncOFGqFG7Mh3VzzjxJ9Xsn+1oyXAfE7PTbzc/9ggjrEbaEIXJP8gABKcNTor
+         Vd/2qh47qQ7ECQ35GJbF8zuiGTr/2TqXMU1akG7Xhmhl+3d3esJpevBtZP8oEi/z3eVl
+         6sZ67HoGelNlnxgpHpI7YA2mTs8VcYnDy0FrYZ1PFllpcZ6wvKfURS6BEWQZRTuSAvAf
+         vUNQ==
+X-Gm-Message-State: ACrzQf1BsC4Yp6GeU6MdxERab916XQ+Vv+OlPs82udtrjYwGLinS0Ja5
+        YftL8Cf7SPpI1bcP01zSbwX+TR+44FxuDqY+
+X-Google-Smtp-Source: AMsMyM6nxrnmZ+vTfgYUwlf7cJmIqjIuhm4qVpOzkia/tJPloJCOruYYoPyZ7Alzh9MKnSkNZ4Zrlw==
+X-Received: by 2002:a17:907:2bdb:b0:78d:cf5a:210e with SMTP id gv27-20020a1709072bdb00b0078dcf5a210emr5002168ejc.747.1666153382546;
+        Tue, 18 Oct 2022 21:23:02 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id f20-20020a17090631d400b0073de0506745sm8245060ejf.197.2022.10.18.21.23.00
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 21:23:01 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id d26so37077580ejc.8
+        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 21:23:00 -0700 (PDT)
+X-Received: by 2002:a17:906:9752:b0:78d:d2e1:d745 with SMTP id
+ o18-20020a170906975200b0078dd2e1d745mr4999540ejy.452.1666153380294; Tue, 18
+ Oct 2022 21:23:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <bug-216543-208809@https.bugzilla.kernel.org/> <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
+ <Y03IXMGpZ2fCof2k@rowland.harvard.edu> <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
+ <Y07AAmc2QnP5HiBg@pendragon.ideasonboard.com> <CANiDSCsSn=UJfCt6shy8htGXAPyeEceVzKva3eD+YxhC3YVmxA@mail.gmail.com>
+ <Y09WlZwb270lHPkv@pendragon.ideasonboard.com>
+In-Reply-To: <Y09WlZwb270lHPkv@pendragon.ideasonboard.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 19 Oct 2022 13:22:48 +0900
+X-Gmail-Original-Message-ID: <CANiDSCvnWpnw=+QHMfykdbocUyZ2JgN0Mpyvq+fu9u4XWoqwwA@mail.gmail.com>
+Message-ID: <CANiDSCvnWpnw=+QHMfykdbocUyZ2JgN0Mpyvq+fu9u4XWoqwwA@mail.gmail.com>
+Subject: Re: [Bug 216543] kernel NULL pointer dereference usb_hcd_alloc_bandwidth
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Nazar Mokrynskyi <nazar@mokrynskyi.com>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux@roeck-us.net, Tomasz Figa <tfiga@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The gadget driver may wait on the request completion when it sets the
-USB_GADGET_DELAYED_STATUS. Make sure that the End Transfer command can
-go through if the dwc->delayed_status is set so that the request can
-complete. When the delayed_status is set, the Setup packet is already
-processed, and the next phase should be either Data or Status. It's
-unlikely that the host would cancel the control transfer and send a new
-Setup packet during End Transfer command. But if that's the case, we can
-try again when ep0state returns to EP0_SETUP_PHASE.
+Hi Laurent
 
-Fixes: e1ee843488d5 ("usb: dwc3: gadget: Force sending delayed status during soft disconnect")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- Changes in v2:
- - Fix build issue due to cherry-picking...
+On Wed, 19 Oct 2022 at 10:45, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ricardo,
+>
+> On Wed, Oct 19, 2022 at 10:35:00AM +0900, Ricardo Ribalda wrote:
+> > On Wed, 19 Oct 2022 at 00:02, Laurent Pinchart wrote:
+> > > On Tue, Oct 18, 2022 at 02:40:44PM +0900, Ricardo Ribalda wrote:
+> > > > Hi
+> > > >
+> > > > Guenter already provided some patches to fix this issue:
+> > > > https://lore.kernel.org/lkml/20200917022547.198090-1-linux@roeck-us.net/
+> > > >
+> > > > Until we have a solution on the core (or rewrite the kernel in rust
+> > > > ;P) , I think we should merge them (or something similar).
+> > > >
+> > > > I can prepare a patchset merging Guenter set and my "grannular PM"
+> > > > https://lore.kernel.org/linux-media/20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org/
+> > >
+> > > How about working on a proper fix instead ? :-)
+> >
+> > We already have a fix that has been extensively tested ;P
+> >
+> > When put on top of granular PM it is a tiny patch:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/ribalda/linux.git/commit/?h=b4/resend-powersave&id=cf826010bedda38f8faf8d072f95a9ca69ed452d
+> > that can be cleanly reverted when/if we fix it in core.
+> >
+> > I would like to avoid that more and more people/distros have
+> > downstream patches on top of uvc to fix real issues just because we
+> > think that it is not the "perfect" solution.
+>
+> And I would like to avoid having to roll out manual changes to all
+> drivers when the problem can be fixed in the core, just because nobody
+> can be bothered to spend time to implement a good fix. We don't have to
+> aim for a solution at the cdev level if that takes too long, an
+> implementation in V4L2 would be enough to start with.
 
- drivers/usb/dwc3/gadget.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Do we know what a "good fix" would look like?. This is a race
+condition between cdev, v4l2, and usb_driver. The only entity that
+knows about the three of them is the driver.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 079cd333632e..dd8ecbe61bec 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1698,6 +1698,16 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
- 	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
- 	memset(&params, 0, sizeof(params));
- 	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
-+	/*
-+	 * If the End Transfer command was timed out while the device is
-+	 * not in SETUP phase, it's possible that an incoming Setup packet
-+	 * may prevent the command's completion. Let's retry when the
-+	 * ep0state returns to EP0_SETUP_PHASE.
-+	 */
-+	if (ret == -ETIMEDOUT && dep->dwc->ep0state != EP0_SETUP_PHASE) {
-+		dep->flags |= DWC3_EP_DELAY_STOP;
-+		return 0;
-+	}
- 	WARN_ON_ONCE(ret);
- 	dep->resource_index = 0;
- 
-@@ -3719,7 +3729,7 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 	 * timeout. Delay issuing the End Transfer command until the Setup TRB is
- 	 * prepared.
- 	 */
--	if (dwc->ep0state != EP0_SETUP_PHASE) {
-+	if (dwc->ep0state != EP0_SETUP_PHASE && !dwc->delayed_status) {
- 		dep->flags |= DWC3_EP_DELAY_STOP;
- 		return;
- 	}
+If we "fix" v4l2 to provide a callback to notify the framework about a
+"bus disconnect". It can prevent new syscalls, but it cannot interrupt
+the current ones.
 
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+So this is not something we can easily fix in O(months). Is there
+anyone working on it after your LPC presentation?
+
+Until then, landing a 10 lines patch that solves a real fix, that
+distros are backporting it already is not a bad compromise....
+
+>
+> I'm getting tired of having to reexplain this continuously with nobody
+> listening. This could have been solved a long time ago.
+
+People listen, but it is a change that goes across multiple boundaries
+
+>
+> > Would you please take a second look at the combined patchset?
+>
+> I will have a look. If I recall correctly, there were some patches in
+> Guenter's series that I had no issue with, I'll start with those.
+
+Thanks, I will post the combined series today.
+
+>
+> > > > It can always be reverted when we reach consensus on how to do it for
+> > > > every driver.
+> > > >
+> > > > Regards!
+> > > >
+> > > > On Tue, 18 Oct 2022 at 06:46, Alan Stern wrote:
+> > > > >
+> > > > > Moving this bug report from bugzilla to the mailing lists.
+> > > > >
+> > > > > The short description of the bug is that in uvcvideo, disconnect races
+> > > > > with starting a video transfer.  The race shows up on Nazar's system
+> > > > > because of a marginal USB cable which leads to a lot of spontaneous
+> > > > > disconnections.
+> > > > >
+> > > > > On Mon, Oct 17, 2022 at 05:59:48PM +0000, bugzilla-daemon@kernel.org wrote:
+> > > > > > https://bugzilla.kernel.org/show_bug.cgi?id=216543
+> > > > > >
+> > > > > > --- Comment #7 from Nazar Mokrynskyi (nazar@mokrynskyi.com) ---
+> > > > > > Created attachment 303022
+> > > > > >   --> https://bugzilla.kernel.org/attachment.cgi?id=303022&action=edit
+> > > > > > Kernel log with uvc-trace patch applied
+> > > > >
+> > > > > For everyone's information, here is the uvc-trace patch.  All it does is
+> > > > > add messages to the kernel log when uvcvideo's probe and disconnect
+> > > > > routines run, and just before uvc_video_start_transfer() calls
+> > > > > usb_set_interface().
+> > > > >
+> > > > > --- usb-devel/drivers/media/usb/uvc/uvc_video.c
+> > > > > +++ usb-devel/drivers/media/usb/uvc/uvc_video.c
+> > > > > @@ -1965,6 +1965,7 @@ static int uvc_video_start_transfer(stru
+> > > > >                         "Selecting alternate setting %u (%u B/frame bandwidth)\n",
+> > > > >                         altsetting, best_psize);
+> > > > >
+> > > > > +               dev_info(&intf->dev, "uvc set alt\n");
+> > > > >                 ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
+> > > > >                 if (ret < 0)
+> > > > >                         return ret;
+> > > > > --- usb-devel/drivers/media/usb/uvc/uvc_driver.c
+> > > > > +++ usb-devel/drivers/media/usb/uvc/uvc_driver.c
+> > > > > @@ -2374,6 +2374,8 @@ static int uvc_probe(struct usb_interfac
+> > > > >         int function;
+> > > > >         int ret;
+> > > > >
+> > > > > +       dev_info(&intf->dev, "uvc_probe start\n");
+> > > > > +
+> > > > >         /* Allocate memory for the device and initialize it. */
+> > > > >         dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+> > > > >         if (dev == NULL)
+> > > > > @@ -2535,6 +2537,7 @@ static void uvc_disconnect(struct usb_in
+> > > > >                 return;
+> > > > >
+> > > > >         uvc_unregister_video(dev);
+> > > > > +       dev_info(&intf->dev, "uvc_disconnect done\n");
+> > > > >         kref_put(&dev->ref, uvc_delete);
+> > > > >  }
+> > > > >
+> > > > > The output in the kernel log below clearly shows that there is a bug in
+> > > > > the uvcvideo driver.
+> > > > >
+> > > > > > I'm on 6.0.2 and seemingly get this even more frequently with good cable and no
+> > > > > > extra adapters. So I patched 6.0.2 with uvc-trace above and reproduced it
+> > > > > > within a few minutes.
+> > > > > >
+> > > > > > USB seems to reset, often camera stops or freezes in the browser, but the light
+> > > > > > on the camera itself remains on. Sometimes I can enable/disable/enable camera
+> > > > > > for it to reboot, but the last time I did that in the log I got null pointer
+> > > > > > de-reference again.
+> > > > >
+> > > > > Here is the important part of the log:
+> > > > >
+> > > > > [  684.746848] usb 8-2.4.4: reset SuperSpeed USB device number 6 using xhci_hcd
+> > > > > [  684.810979] uvcvideo 8-2.4.4:1.0: uvc_probe start
+> > > > > [  684.811032] usb 8-2.4.4: Found UVC 1.00 device Logitech BRIO (046d:085e)
+> > > > > [  684.843413] input: Logitech BRIO as /devices/pci0000:00/0000:00:08.1/0000:59:00.3/usb8/8-2/8-2.4/8-2.4.4/8-2.4.4:1.0/input/input43
+> > > > > [  684.911255] usb 8-2.4.4: current rate 16000 is different from the runtime rate 24000
+> > > > > ...
+> > > > > [  743.800368] uvcvideo 8-2.4.4:1.1: uvc set alt
+> > > > >
+> > > > > This is where an ioctl calls uvc_video_start_transfer.
+> > > > >
+> > > > > [  748.654701] usb 8-2.4.4: USB disconnect, device number 6
+> > > > > [  748.714355] uvcvideo 8-2.4.4:1.0: uvc_disconnect done
+> > > > >
+> > > > > This is where the disconnect starts and finishes
+> > > > >
+> > > > > [  748.898340] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> > > > > [  748.898344] #PF: supervisor read access in kernel mode
+> > > > > [  748.898346] #PF: error_code(0x0000) - not-present page
+> > > > > [  748.898347] PGD 0 P4D 0
+> > > > > [  748.898349] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > > > > [  748.898351] CPU: 16 PID: 11890 Comm: VideoCapture Not tainted 6.0.2-x64v2-uvc-trace-xanmod1 #1
+> > > > > [  748.898353] Hardware name: Gigabyte Technology Co., Ltd. B550 VISION D/B550 VISION D, BIOS F15d 07/20/2022
+> > > > > [  748.898354] RIP: 0010:usb_ifnum_to_if+0x35/0x60
+> > > > > ...
+> > > > > [  748.898368] Call Trace:
+> > > > > [  748.898370]  <TASK>
+> > > > > [  748.898370]  usb_hcd_alloc_bandwidth+0x240/0x370
+> > > > > [  748.898375]  usb_set_interface+0x122/0x350
+> > > > > [  748.898378]  uvc_video_start_transfer.cold+0xd8/0x2ae [uvcvideo]
+> > > > > [  748.898383]  uvc_video_start_streaming+0x75/0xd0 [uvcvideo]
+> > > > > [  748.898386]  uvc_start_streaming+0x25/0xe0 [uvcvideo]
+> > > > > [  748.898390]  vb2_start_streaming+0x86/0x140 [videobuf2_common]
+> > > > > [  748.898393]  vb2_core_streamon+0x57/0xc0 [videobuf2_common]
+> > > > > [  748.898395]  uvc_queue_streamon+0x25/0x40 [uvcvideo]
+> > > > > [  748.898398]  uvc_ioctl_streamon+0x35/0x60 [uvcvideo]
+> > > > > [  748.898401]  __video_do_ioctl+0x19a/0x3f0 [videodev]
+> > > > >
+> > > > > And this proves that uvc_disconnect() returned before the driver was
+> > > > > finished accessing the device.
+> > > > >
+> > > > > I don't know how the driver works or how it tries to prevent this sort
+> > > > > of race from occurring, but apparently the strategy isn't working.
+> > > > >
+> > > > > > Please let me know if there is any other information I can provide and what
+> > > > > > could be the root cause of this annoying behavior.
+> > > > >
+> > > > > At this point I will bow out of the discussion; it's up to the uvcvideo
+> > > > > maintainers to investigate further.  Maybe they can provide a patch for
+> > > > > you to test.
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
+
+
+
 -- 
-2.28.0
-
+Ricardo Ribalda
