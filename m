@@ -2,72 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273EC604BA8
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A331604BC8
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiJSPgn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Oct 2022 11:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S231263AbiJSPjz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 11:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiJSPgK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:36:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DAA10535D;
-        Wed, 19 Oct 2022 08:32:06 -0700 (PDT)
+        with ESMTP id S232691AbiJSPjT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:39:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF3E688B1;
+        Wed, 19 Oct 2022 08:35:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3435A61839;
-        Wed, 19 Oct 2022 15:30:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B23CC433C1;
-        Wed, 19 Oct 2022 15:29:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56A45B824B1;
+        Wed, 19 Oct 2022 15:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06E1C433C1;
+        Wed, 19 Oct 2022 15:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666193400;
-        bh=xzCE/ict48D7RLDZ+1922a0XNtUN1g7ugQy5IbJ7sSA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gnwNz9Ti3cWDaYwUr4mi3nyM+RLRpF9tjilb+e4d6UzRvZ8WLlgNx6/I9zgRWQ/6r
-         kVEFA3pwPkjfrqCeza7yJFYDABVJc7efEr05AyOke37cxSGUfjU4U19c6m+YxMUeoP
-         g02j5dMNDaJYbyqufJtbIi4Wpy4dewNXxiKOXGo+NnzgmgPaVcg1kv8nZP1qFcRcbj
-         1/wP/IsJ8PuLOwNzH+SuP7hyQSI0o4gMY747a7aw/BiRMkLkgSRnR2Wqty3k4hmRTT
-         TQkCtxv09OgdzgFwFUopzjUTBuSqy9sp6cBClaPY6yr96ehHMpPp6mhsN0xQ2DHhzQ
-         IgguWvjF/kBCw==
+        s=k20201202; t=1666193657;
+        bh=BcTDBTvCuk9m4EzuE9tXpgM3oYmODb3PJziurIRk17c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BGBWOBaiQBmj6ZY0ytXG8Jk24ua3DXT+XJwsvlpGgms0koQK3524kC1/0FcIvAIDI
+         iicneCKGRdkcAm9UCuIVlIISqXthvxy8TwW1k9IvCXwnxaBnyunfpTH9iloA1Jptcr
+         3JE9QOVTKD0sShNnj/ScxRDnjxhtVnd05x+BXcPiQYSkQ9mjtO1J8er8n4R4Jgxzxr
+         v397Yeapi0H3p+OXvH5FBzV6wpeiGqnpZfhoqcQF+aavB9sAtOF6kOY4ft67Ggbd1I
+         9feWCv+6cPqaAbMIY1r11pc7tWeYHYclUpgOZqTjgNTThryqONFY9YHolRJpaZ0G7d
+         1xkRF53cW2bkw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org
+        linux-arm-kernel@lists.infradead.org, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        David Lechner <david@lechnology.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 00/14] ARM: remove unused davinci board & drivers
-Date:   Wed, 19 Oct 2022 17:29:26 +0200
-Message-Id: <20221019152947.3857217-1-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org
+Subject: [PATCH 05/14] usb: musb: remove unused davinci support
+Date:   Wed, 19 Oct 2022 17:29:31 +0200
+Message-Id: <20221019152947.3857217-6-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
+References: <20221019152947.3857217-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -81,238 +56,2346 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-As part of removing all board files that were previously marked as unused,
-I looked through the davinci platform and recursively removed everything
-that has now become unused.
+The musb-davinci driver was only used on dm644x, which got removed
+in linux-6.0. The only remaining davinci machines are da8xx
+devicetree based and do not use this hardware.
 
-In particular, this is for all dm3xx support, in addition to the dm64xx
-support removed previously. The remaining support is now for da8xx using
-devicetree only, which means a lot of the da8xx specific device support
-can also go away.
-
-As with the previous series, I can keep patches together in the
-soc tree, or subsystem maintainers can pick them up individually
-through their subsystems, whichever they prefer.
-
-Arnd Bergmann (14):
-  ARM: davinci: remove unused board support
-  ARM: davinci: drop DAVINCI_DMxxx references
-  ARM: davinci: clean up platform support
-  clk: remove davinci dm3xx drivers
-  usb: musb: remove unused davinci support
-  mfd: remove dm355evm_msp driver
-  input: remove davinci keyboard driver
-  rtc: remove davinci rtc driver
-  ASoC: remove unused davinci support
-  mfd: remove davinci voicecodec driver
-  pata: remove palmchip bk3710 driver
-  irqchip: remove davinci aintc driver
-  staging: media: remove davinci vpfe_capture driver
-  media: davinci: remove vpbe support
-
-Cc: Sekhar Nori <nsekhar@ti.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: David Lechner <david@lechnology.com>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc: Lee Jones <lee@kernel.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Bin Liu <b-liu@ti.com>
-Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Yang Yingliang <yangyingliang@huawei.com>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-ide@vger.kernel.org
-Cc: linux-clk@vger.kernel.org
-Cc: linux-input@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-staging@lists.linux.dev
-Cc: linux-usb@vger.kernel.org
-Cc: alsa-devel@alsa-project.org
-
- .../admin-guide/media/davinci-vpbe.rst        |   65 -
- .../admin-guide/media/platform-cardlist.rst   |    1 -
- .../admin-guide/media/v4l-drivers.rst         |    1 -
- .../media/drivers/davinci-vpbe-devel.rst      |   39 -
- .../driver-api/media/drivers/index.rst        |    1 -
- MAINTAINERS                                   |    1 -
- arch/arm/Kconfig.debug                        |   16 +-
- arch/arm/mach-davinci/Kconfig                 |  142 --
- arch/arm/mach-davinci/Makefile                |   18 +-
- arch/arm/mach-davinci/board-da830-evm.c       |  690 ------
- arch/arm/mach-davinci/board-da850-evm.c       | 1550 --------------
- arch/arm/mach-davinci/board-dm355-evm.c       |  444 ----
- arch/arm/mach-davinci/board-dm355-leopard.c   |  278 ---
- arch/arm/mach-davinci/board-dm365-evm.c       |  855 --------
- arch/arm/mach-davinci/board-mityomapl138.c    |  638 ------
- arch/arm/mach-davinci/board-omapl138-hawk.c   |  451 ----
- arch/arm/mach-davinci/common.h                |    7 +-
- arch/arm/mach-davinci/cputype.h               |   53 -
- arch/arm/mach-davinci/da830.c                 |  274 ---
- arch/arm/mach-davinci/da850.c                 |  400 +---
- arch/arm/mach-davinci/da8xx.h                 |   95 +-
- arch/arm/mach-davinci/davinci.h               |  136 --
- arch/arm/mach-davinci/devices-da8xx.c         | 1094 ----------
- arch/arm/mach-davinci/devices.c               |  303 ---
- arch/arm/mach-davinci/dm355.c                 |  832 -------
- arch/arm/mach-davinci/dm365.c                 | 1094 ----------
- arch/arm/mach-davinci/mux.c                   |   15 -
- arch/arm/mach-davinci/serial.c                |   92 -
- arch/arm/mach-davinci/serial.h                |   15 -
- arch/arm/mach-davinci/usb-da8xx.c             |  146 --
- arch/arm/mach-davinci/usb.c                   |   87 -
- drivers/ata/Kconfig                           |   10 -
- drivers/ata/Makefile                          |    1 -
- drivers/ata/pata_bk3710.c                     |  380 ----
- drivers/clk/davinci/Makefile                  |    4 -
- drivers/clk/davinci/pll-dm355.c               |   77 -
- drivers/clk/davinci/pll-dm365.c               |  146 --
- drivers/clk/davinci/pll.c                     |    8 -
- drivers/clk/davinci/pll.h                     |    5 -
- drivers/clk/davinci/psc-dm355.c               |   89 -
- drivers/clk/davinci/psc-dm365.c               |  111 -
- drivers/clk/davinci/psc.c                     |    6 -
- drivers/clk/davinci/psc.h                     |    7 -
- drivers/input/keyboard/Kconfig                |   10 -
- drivers/input/keyboard/Makefile               |    1 -
- drivers/input/keyboard/davinci_keyscan.c      |  315 ---
- drivers/input/misc/Kconfig                    |   11 -
- drivers/input/misc/Makefile                   |    1 -
- drivers/input/misc/dm355evm_keys.c            |  238 ---
- drivers/irqchip/Kconfig                       |    5 -
- drivers/irqchip/Makefile                      |    1 -
- drivers/irqchip/irq-davinci-aintc.c           |  163 --
- drivers/media/platform/ti/davinci/Kconfig     |   16 -
- drivers/media/platform/ti/davinci/Makefile    |    3 -
- drivers/media/platform/ti/davinci/vpbe.c      |  840 --------
- .../media/platform/ti/davinci/vpbe_display.c  | 1510 -------------
- drivers/media/platform/ti/davinci/vpbe_osd.c  | 1582 --------------
- .../media/platform/ti/davinci/vpbe_osd_regs.h |  352 ---
- drivers/media/platform/ti/davinci/vpbe_venc.c |  676 ------
- .../platform/ti/davinci/vpbe_venc_regs.h      |  165 --
- drivers/media/platform/ti/davinci/vpss.c      |  529 -----
- drivers/mfd/Kconfig                           |   13 -
- drivers/mfd/Makefile                          |    3 -
- drivers/mfd/davinci_voicecodec.c              |  136 --
- drivers/mfd/dm355evm_msp.c                    |  454 ----
- drivers/rtc/Kconfig                           |   16 -
- drivers/rtc/Makefile                          |    2 -
- drivers/rtc/rtc-davinci.c                     |  512 -----
- drivers/rtc/rtc-dm355evm.c                    |  151 --
- drivers/staging/media/Kconfig                 |    1 -
- drivers/staging/media/Makefile                |    1 -
- .../media/deprecated/vpfe_capture/Kconfig     |   58 -
- .../media/deprecated/vpfe_capture/Makefile    |    4 -
- .../media/deprecated/vpfe_capture/TODO        |    7 -
- .../deprecated/vpfe_capture/ccdc_hw_device.h  |   80 -
- .../deprecated/vpfe_capture/dm355_ccdc.c      |  934 --------
- .../deprecated/vpfe_capture/dm355_ccdc.h      |  308 ---
- .../deprecated/vpfe_capture/dm355_ccdc_regs.h |  297 ---
- .../deprecated/vpfe_capture/dm644x_ccdc.c     |  879 --------
- .../deprecated/vpfe_capture/dm644x_ccdc.h     |  171 --
- .../vpfe_capture/dm644x_ccdc_regs.h           |  140 --
- .../media/deprecated/vpfe_capture/isif.c      | 1127 ----------
- .../media/deprecated/vpfe_capture/isif.h      |  518 -----
- .../media/deprecated/vpfe_capture/isif_regs.h |  256 ---
- .../deprecated/vpfe_capture/vpfe_capture.c    | 1902 -----------------
- drivers/usb/musb/Kconfig                      |   12 -
- drivers/usb/musb/Makefile                     |    2 -
- drivers/usb/musb/cppi_dma.c                   | 1547 --------------
- drivers/usb/musb/davinci.c                    |  606 ------
- drivers/usb/musb/davinci.h                    |  103 -
- include/linux/clk/davinci.h                   |    9 -
- include/linux/mfd/dm355evm_msp.h              |   79 -
- include/media/davinci/vpbe.h                  |  184 --
- include/media/davinci/vpbe_display.h          |  122 --
- include/media/davinci/vpbe_osd.h              |  382 ----
- include/media/davinci/vpbe_types.h            |   74 -
- include/media/davinci/vpbe_venc.h             |   37 -
- include/media/davinci/vpfe_capture.h          |  177 --
- include/media/davinci/vpss.h                  |  111 -
- sound/soc/ti/Kconfig                          |   40 -
- sound/soc/ti/Makefile                         |    2 -
- sound/soc/ti/davinci-evm.c                    |  267 +--
- sound/soc/ti/davinci-vcif.c                   |  247 ---
- 103 files changed, 17 insertions(+), 29049 deletions(-)
- delete mode 100644 Documentation/admin-guide/media/davinci-vpbe.rst
- delete mode 100644 Documentation/driver-api/media/drivers/davinci-vpbe-devel.rst
- delete mode 100644 arch/arm/mach-davinci/board-da830-evm.c
- delete mode 100644 arch/arm/mach-davinci/board-da850-evm.c
- delete mode 100644 arch/arm/mach-davinci/board-dm355-evm.c
- delete mode 100644 arch/arm/mach-davinci/board-dm355-leopard.c
- delete mode 100644 arch/arm/mach-davinci/board-dm365-evm.c
- delete mode 100644 arch/arm/mach-davinci/board-mityomapl138.c
- delete mode 100644 arch/arm/mach-davinci/board-omapl138-hawk.c
- delete mode 100644 arch/arm/mach-davinci/davinci.h
- delete mode 100644 arch/arm/mach-davinci/devices.c
- delete mode 100644 arch/arm/mach-davinci/dm355.c
- delete mode 100644 arch/arm/mach-davinci/dm365.c
- delete mode 100644 arch/arm/mach-davinci/serial.c
- delete mode 100644 arch/arm/mach-davinci/usb-da8xx.c
- delete mode 100644 arch/arm/mach-davinci/usb.c
- delete mode 100644 drivers/ata/pata_bk3710.c
- delete mode 100644 drivers/clk/davinci/pll-dm355.c
- delete mode 100644 drivers/clk/davinci/pll-dm365.c
- delete mode 100644 drivers/clk/davinci/psc-dm355.c
- delete mode 100644 drivers/clk/davinci/psc-dm365.c
- delete mode 100644 drivers/input/keyboard/davinci_keyscan.c
- delete mode 100644 drivers/input/misc/dm355evm_keys.c
- delete mode 100644 drivers/irqchip/irq-davinci-aintc.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_display.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_osd.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_osd_regs.h
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_venc.c
- delete mode 100644 drivers/media/platform/ti/davinci/vpbe_venc_regs.h
- delete mode 100644 drivers/media/platform/ti/davinci/vpss.c
- delete mode 100644 drivers/mfd/davinci_voicecodec.c
- delete mode 100644 drivers/mfd/dm355evm_msp.c
- delete mode 100644 drivers/rtc/rtc-davinci.c
- delete mode 100644 drivers/rtc/rtc-dm355evm.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/musb/Kconfig    |   12 -
+ drivers/usb/musb/Makefile   |    2 -
+ drivers/usb/musb/cppi_dma.c | 1547 -----------------------------------
+ drivers/usb/musb/davinci.c  |  606 --------------
+ drivers/usb/musb/davinci.h  |  103 ---
+ 5 files changed, 2270 deletions(-)
  delete mode 100644 drivers/usb/musb/cppi_dma.c
  delete mode 100644 drivers/usb/musb/davinci.c
  delete mode 100644 drivers/usb/musb/davinci.h
- delete mode 100644 include/linux/mfd/dm355evm_msp.h
- delete mode 100644 include/media/davinci/vpbe.h
- delete mode 100644 include/media/davinci/vpbe_display.h
- delete mode 100644 include/media/davinci/vpbe_osd.h
- delete mode 100644 include/media/davinci/vpbe_types.h
- delete mode 100644 include/media/davinci/vpbe_venc.h
- delete mode 100644 include/media/davinci/vpfe_capture.h
- delete mode 100644 include/media/davinci/vpss.h
- delete mode 100644 sound/soc/ti/davinci-vcif.c
 
+diff --git a/drivers/usb/musb/Kconfig b/drivers/usb/musb/Kconfig
+index 6c8f7763e75e..f9eec666103c 100644
+--- a/drivers/usb/musb/Kconfig
++++ b/drivers/usb/musb/Kconfig
+@@ -70,12 +70,6 @@ config USB_MUSB_SUNXI
+ 	select GENERIC_PHY
+ 	select SUNXI_SRAM
+ 
+-config USB_MUSB_DAVINCI
+-	tristate "DaVinci"
+-	depends on ARCH_DAVINCI_DMx
+-	depends on NOP_USB_XCEIV
+-	depends on BROKEN
+-
+ config USB_MUSB_DA8XX
+ 	tristate "DA8xx/OMAP-L1x"
+ 	depends on ARCH_DAVINCI_DA8XX
+@@ -161,12 +155,6 @@ config USB_INVENTRA_DMA
+ 	help
+ 	  Enable DMA transfers using Mentor's engine.
+ 
+-config USB_TI_CPPI_DMA
+-	bool 'TI CPPI (Davinci)'
+-	depends on USB_MUSB_DAVINCI
+-	help
+-	  Enable DMA transfers when TI CPPI DMA is available.
+-
+ config USB_TI_CPPI41_DMA
+ 	bool 'TI CPPI 4.1'
+ 	depends on (ARCH_OMAP || ARCH_DAVINCI_DA8XX) && DMADEVICES
+diff --git a/drivers/usb/musb/Makefile b/drivers/usb/musb/Makefile
+index 51dd54a8de49..44a9e27b2157 100644
+--- a/drivers/usb/musb/Makefile
++++ b/drivers/usb/musb/Makefile
+@@ -19,7 +19,6 @@ obj-$(CONFIG_USB_MUSB_OMAP2PLUS)		+= omap2430.o
+ obj-$(CONFIG_USB_MUSB_AM35X)			+= am35x.o
+ obj-$(CONFIG_USB_MUSB_DSPS)			+= musb_dsps.o
+ obj-$(CONFIG_USB_MUSB_TUSB6010)			+= tusb6010.o
+-obj-$(CONFIG_USB_MUSB_DAVINCI)			+= davinci.o
+ obj-$(CONFIG_USB_MUSB_DA8XX)			+= da8xx.o
+ obj-$(CONFIG_USB_MUSB_UX500)			+= ux500.o
+ obj-$(CONFIG_USB_MUSB_JZ4740)			+= jz4740.o
+@@ -33,7 +32,6 @@ obj-$(CONFIG_USB_MUSB_POLARFIRE_SOC)		+= mpfs.o
+ # though PIO is always there to back up DMA, and for ep0
+ 
+ musb_hdrc-$(CONFIG_USB_INVENTRA_DMA)		+= musbhsdma.o
+-musb_hdrc-$(CONFIG_USB_TI_CPPI_DMA)		+= cppi_dma.o
+ musb_hdrc-$(CONFIG_USB_TUSB_OMAP_DMA)		+= tusb6010_omap.o
+ musb_hdrc-$(CONFIG_USB_UX500_DMA)		+= ux500_dma.o
+ musb_hdrc-$(CONFIG_USB_TI_CPPI41_DMA)		+= musb_cppi41.o
+diff --git a/drivers/usb/musb/cppi_dma.c b/drivers/usb/musb/cppi_dma.c
+deleted file mode 100644
+index edb5b63d7063..000000000000
+--- a/drivers/usb/musb/cppi_dma.c
++++ /dev/null
+@@ -1,1547 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Copyright (C) 2005-2006 by Texas Instruments
+- *
+- * This file implements a DMA  interface using TI's CPPI DMA.
+- * For now it's DaVinci-only, but CPPI isn't specific to DaVinci or USB.
+- * The TUSB6020, using VLYNQ, has CPPI that looks much like DaVinci.
+- */
+-
+-#include <linux/module.h>
+-#include <linux/platform_device.h>
+-#include <linux/slab.h>
+-#include <linux/usb.h>
+-
+-#include "musb_core.h"
+-#include "musb_debug.h"
+-#include "cppi_dma.h"
+-#include "davinci.h"
+-
+-
+-/* CPPI DMA status 7-mar-2006:
+- *
+- * - See musb_{host,gadget}.c for more info
+- *
+- * - Correct RX DMA generally forces the engine into irq-per-packet mode,
+- *   which can easily saturate the CPU under non-mass-storage loads.
+- *
+- * NOTES 24-aug-2006 (2.6.18-rc4):
+- *
+- * - peripheral RXDMA wedged in a test with packets of length 512/512/1.
+- *   evidently after the 1 byte packet was received and acked, the queue
+- *   of BDs got garbaged so it wouldn't empty the fifo.  (rxcsr 0x2003,
+- *   and RX DMA0: 4 left, 80000000 8feff880, 8feff860 8feff860; 8f321401
+- *   004001ff 00000001 .. 8feff860)  Host was just getting NAKed on tx
+- *   of its next (512 byte) packet.  IRQ issues?
+- *
+- * REVISIT:  the "transfer DMA" glue between CPPI and USB fifos will
+- * evidently also directly update the RX and TX CSRs ... so audit all
+- * host and peripheral side DMA code to avoid CSR access after DMA has
+- * been started.
+- */
+-
+-/* REVISIT now we can avoid preallocating these descriptors; or
+- * more simply, switch to a global freelist not per-channel ones.
+- * Note: at full speed, 64 descriptors == 4K bulk data.
+- */
+-#define NUM_TXCHAN_BD       64
+-#define NUM_RXCHAN_BD       64
+-
+-static inline void cpu_drain_writebuffer(void)
+-{
+-	wmb();
+-#ifdef	CONFIG_CPU_ARM926T
+-	/* REVISIT this "should not be needed",
+-	 * but lack of it sure seemed to hurt ...
+-	 */
+-	asm("mcr p15, 0, r0, c7, c10, 4 @ drain write buffer\n");
+-#endif
+-}
+-
+-static inline struct cppi_descriptor *cppi_bd_alloc(struct cppi_channel *c)
+-{
+-	struct cppi_descriptor	*bd = c->freelist;
+-
+-	if (bd)
+-		c->freelist = bd->next;
+-	return bd;
+-}
+-
+-static inline void
+-cppi_bd_free(struct cppi_channel *c, struct cppi_descriptor *bd)
+-{
+-	if (!bd)
+-		return;
+-	bd->next = c->freelist;
+-	c->freelist = bd;
+-}
+-
+-/*
+- *  Start DMA controller
+- *
+- *  Initialize the DMA controller as necessary.
+- */
+-
+-/* zero out entire rx state RAM entry for the channel */
+-static void cppi_reset_rx(struct cppi_rx_stateram __iomem *rx)
+-{
+-	musb_writel(&rx->rx_skipbytes, 0, 0);
+-	musb_writel(&rx->rx_head, 0, 0);
+-	musb_writel(&rx->rx_sop, 0, 0);
+-	musb_writel(&rx->rx_current, 0, 0);
+-	musb_writel(&rx->rx_buf_current, 0, 0);
+-	musb_writel(&rx->rx_len_len, 0, 0);
+-	musb_writel(&rx->rx_cnt_cnt, 0, 0);
+-}
+-
+-/* zero out entire tx state RAM entry for the channel */
+-static void cppi_reset_tx(struct cppi_tx_stateram __iomem *tx, u32 ptr)
+-{
+-	musb_writel(&tx->tx_head, 0, 0);
+-	musb_writel(&tx->tx_buf, 0, 0);
+-	musb_writel(&tx->tx_current, 0, 0);
+-	musb_writel(&tx->tx_buf_current, 0, 0);
+-	musb_writel(&tx->tx_info, 0, 0);
+-	musb_writel(&tx->tx_rem_len, 0, 0);
+-	/* musb_writel(&tx->tx_dummy, 0, 0); */
+-	musb_writel(&tx->tx_complete, 0, ptr);
+-}
+-
+-static void cppi_pool_init(struct cppi *cppi, struct cppi_channel *c)
+-{
+-	int	j;
+-
+-	/* initialize channel fields */
+-	c->head = NULL;
+-	c->tail = NULL;
+-	c->last_processed = NULL;
+-	c->channel.status = MUSB_DMA_STATUS_UNKNOWN;
+-	c->controller = cppi;
+-	c->is_rndis = 0;
+-	c->freelist = NULL;
+-
+-	/* build the BD Free list for the channel */
+-	for (j = 0; j < NUM_TXCHAN_BD + 1; j++) {
+-		struct cppi_descriptor	*bd;
+-		dma_addr_t		dma;
+-
+-		bd = dma_pool_alloc(cppi->pool, GFP_KERNEL, &dma);
+-		bd->dma = dma;
+-		cppi_bd_free(c, bd);
+-	}
+-}
+-
+-static int cppi_channel_abort(struct dma_channel *);
+-
+-static void cppi_pool_free(struct cppi_channel *c)
+-{
+-	struct cppi		*cppi = c->controller;
+-	struct cppi_descriptor	*bd;
+-
+-	(void) cppi_channel_abort(&c->channel);
+-	c->channel.status = MUSB_DMA_STATUS_UNKNOWN;
+-	c->controller = NULL;
+-
+-	/* free all its bds */
+-	bd = c->last_processed;
+-	do {
+-		if (bd)
+-			dma_pool_free(cppi->pool, bd, bd->dma);
+-		bd = cppi_bd_alloc(c);
+-	} while (bd);
+-	c->last_processed = NULL;
+-}
+-
+-static void cppi_controller_start(struct cppi *controller)
+-{
+-	void __iomem	*tibase;
+-	int		i;
+-
+-	/* do whatever is necessary to start controller */
+-	for (i = 0; i < ARRAY_SIZE(controller->tx); i++) {
+-		controller->tx[i].transmit = true;
+-		controller->tx[i].index = i;
+-	}
+-	for (i = 0; i < ARRAY_SIZE(controller->rx); i++) {
+-		controller->rx[i].transmit = false;
+-		controller->rx[i].index = i;
+-	}
+-
+-	/* setup BD list on a per channel basis */
+-	for (i = 0; i < ARRAY_SIZE(controller->tx); i++)
+-		cppi_pool_init(controller, controller->tx + i);
+-	for (i = 0; i < ARRAY_SIZE(controller->rx); i++)
+-		cppi_pool_init(controller, controller->rx + i);
+-
+-	tibase =  controller->tibase;
+-	INIT_LIST_HEAD(&controller->tx_complete);
+-
+-	/* initialise tx/rx channel head pointers to zero */
+-	for (i = 0; i < ARRAY_SIZE(controller->tx); i++) {
+-		struct cppi_channel	*tx_ch = controller->tx + i;
+-		struct cppi_tx_stateram __iomem *tx;
+-
+-		INIT_LIST_HEAD(&tx_ch->tx_complete);
+-
+-		tx = tibase + DAVINCI_TXCPPI_STATERAM_OFFSET(i);
+-		tx_ch->state_ram = tx;
+-		cppi_reset_tx(tx, 0);
+-	}
+-	for (i = 0; i < ARRAY_SIZE(controller->rx); i++) {
+-		struct cppi_channel	*rx_ch = controller->rx + i;
+-		struct cppi_rx_stateram __iomem *rx;
+-
+-		INIT_LIST_HEAD(&rx_ch->tx_complete);
+-
+-		rx = tibase + DAVINCI_RXCPPI_STATERAM_OFFSET(i);
+-		rx_ch->state_ram = rx;
+-		cppi_reset_rx(rx);
+-	}
+-
+-	/* enable individual cppi channels */
+-	musb_writel(tibase, DAVINCI_TXCPPI_INTENAB_REG,
+-			DAVINCI_DMA_ALL_CHANNELS_ENABLE);
+-	musb_writel(tibase, DAVINCI_RXCPPI_INTENAB_REG,
+-			DAVINCI_DMA_ALL_CHANNELS_ENABLE);
+-
+-	/* enable tx/rx CPPI control */
+-	musb_writel(tibase, DAVINCI_TXCPPI_CTRL_REG, DAVINCI_DMA_CTRL_ENABLE);
+-	musb_writel(tibase, DAVINCI_RXCPPI_CTRL_REG, DAVINCI_DMA_CTRL_ENABLE);
+-
+-	/* disable RNDIS mode, also host rx RNDIS autorequest */
+-	musb_writel(tibase, DAVINCI_RNDIS_REG, 0);
+-	musb_writel(tibase, DAVINCI_AUTOREQ_REG, 0);
+-}
+-
+-/*
+- *  Stop DMA controller
+- *
+- *  De-Init the DMA controller as necessary.
+- */
+-
+-static void cppi_controller_stop(struct cppi *controller)
+-{
+-	void __iomem		*tibase;
+-	int			i;
+-	struct musb		*musb;
+-
+-	musb = controller->controller.musb;
+-
+-	tibase = controller->tibase;
+-	/* DISABLE INDIVIDUAL CHANNEL Interrupts */
+-	musb_writel(tibase, DAVINCI_TXCPPI_INTCLR_REG,
+-			DAVINCI_DMA_ALL_CHANNELS_ENABLE);
+-	musb_writel(tibase, DAVINCI_RXCPPI_INTCLR_REG,
+-			DAVINCI_DMA_ALL_CHANNELS_ENABLE);
+-
+-	musb_dbg(musb, "Tearing down RX and TX Channels");
+-	for (i = 0; i < ARRAY_SIZE(controller->tx); i++) {
+-		/* FIXME restructure of txdma to use bds like rxdma */
+-		controller->tx[i].last_processed = NULL;
+-		cppi_pool_free(controller->tx + i);
+-	}
+-	for (i = 0; i < ARRAY_SIZE(controller->rx); i++)
+-		cppi_pool_free(controller->rx + i);
+-
+-	/* in Tx Case proper teardown is supported. We resort to disabling
+-	 * Tx/Rx CPPI after cleanup of Tx channels. Before TX teardown is
+-	 * complete TX CPPI cannot be disabled.
+-	 */
+-	/*disable tx/rx cppi */
+-	musb_writel(tibase, DAVINCI_TXCPPI_CTRL_REG, DAVINCI_DMA_CTRL_DISABLE);
+-	musb_writel(tibase, DAVINCI_RXCPPI_CTRL_REG, DAVINCI_DMA_CTRL_DISABLE);
+-}
+-
+-/* While dma channel is allocated, we only want the core irqs active
+- * for fault reports, otherwise we'd get irqs that we don't care about.
+- * Except for TX irqs, where dma done != fifo empty and reusable ...
+- *
+- * NOTE: docs don't say either way, but irq masking **enables** irqs.
+- *
+- * REVISIT same issue applies to pure PIO usage too, and non-cppi dma...
+- */
+-static inline void core_rxirq_disable(void __iomem *tibase, unsigned epnum)
+-{
+-	musb_writel(tibase, DAVINCI_USB_INT_MASK_CLR_REG, 1 << (epnum + 8));
+-}
+-
+-static inline void core_rxirq_enable(void __iomem *tibase, unsigned epnum)
+-{
+-	musb_writel(tibase, DAVINCI_USB_INT_MASK_SET_REG, 1 << (epnum + 8));
+-}
+-
+-
+-/*
+- * Allocate a CPPI Channel for DMA.  With CPPI, channels are bound to
+- * each transfer direction of a non-control endpoint, so allocating
+- * (and deallocating) is mostly a way to notice bad housekeeping on
+- * the software side.  We assume the irqs are always active.
+- */
+-static struct dma_channel *
+-cppi_channel_allocate(struct dma_controller *c,
+-		struct musb_hw_ep *ep, u8 transmit)
+-{
+-	struct cppi		*controller;
+-	u8			index;
+-	struct cppi_channel	*cppi_ch;
+-	void __iomem		*tibase;
+-	struct musb		*musb;
+-
+-	controller = container_of(c, struct cppi, controller);
+-	tibase = controller->tibase;
+-	musb = c->musb;
+-
+-	/* ep0 doesn't use DMA; remember cppi indices are 0..N-1 */
+-	index = ep->epnum - 1;
+-
+-	/* return the corresponding CPPI Channel Handle, and
+-	 * probably disable the non-CPPI irq until we need it.
+-	 */
+-	if (transmit) {
+-		if (index >= ARRAY_SIZE(controller->tx)) {
+-			musb_dbg(musb, "no %cX%d CPPI channel", 'T', index);
+-			return NULL;
+-		}
+-		cppi_ch = controller->tx + index;
+-	} else {
+-		if (index >= ARRAY_SIZE(controller->rx)) {
+-			musb_dbg(musb, "no %cX%d CPPI channel", 'R', index);
+-			return NULL;
+-		}
+-		cppi_ch = controller->rx + index;
+-		core_rxirq_disable(tibase, ep->epnum);
+-	}
+-
+-	/* REVISIT make this an error later once the same driver code works
+-	 * with the other DMA engine too
+-	 */
+-	if (cppi_ch->hw_ep)
+-		musb_dbg(musb, "re-allocating DMA%d %cX channel %p",
+-				index, transmit ? 'T' : 'R', cppi_ch);
+-	cppi_ch->hw_ep = ep;
+-	cppi_ch->channel.status = MUSB_DMA_STATUS_FREE;
+-	cppi_ch->channel.max_len = 0x7fffffff;
+-
+-	musb_dbg(musb, "Allocate CPPI%d %cX", index, transmit ? 'T' : 'R');
+-	return &cppi_ch->channel;
+-}
+-
+-/* Release a CPPI Channel.  */
+-static void cppi_channel_release(struct dma_channel *channel)
+-{
+-	struct cppi_channel	*c;
+-	void __iomem		*tibase;
+-
+-	/* REVISIT:  for paranoia, check state and abort if needed... */
+-
+-	c = container_of(channel, struct cppi_channel, channel);
+-	tibase = c->controller->tibase;
+-	if (!c->hw_ep)
+-		musb_dbg(c->controller->controller.musb,
+-			"releasing idle DMA channel %p", c);
+-	else if (!c->transmit)
+-		core_rxirq_enable(tibase, c->index + 1);
+-
+-	/* for now, leave its cppi IRQ enabled (we won't trigger it) */
+-	c->hw_ep = NULL;
+-	channel->status = MUSB_DMA_STATUS_UNKNOWN;
+-}
+-
+-/* Context: controller irqlocked */
+-static void
+-cppi_dump_rx(int level, struct cppi_channel *c, const char *tag)
+-{
+-	void __iomem			*base = c->controller->mregs;
+-	struct cppi_rx_stateram __iomem	*rx = c->state_ram;
+-
+-	musb_ep_select(base, c->index + 1);
+-
+-	musb_dbg(c->controller->controller.musb,
+-		"RX DMA%d%s: %d left, csr %04x, "
+-		"%08x H%08x S%08x C%08x, "
+-		"B%08x L%08x %08x .. %08x",
+-		c->index, tag,
+-		musb_readl(c->controller->tibase,
+-			DAVINCI_RXCPPI_BUFCNT0_REG + 4 * c->index),
+-		musb_readw(c->hw_ep->regs, MUSB_RXCSR),
+-
+-		musb_readl(&rx->rx_skipbytes, 0),
+-		musb_readl(&rx->rx_head, 0),
+-		musb_readl(&rx->rx_sop, 0),
+-		musb_readl(&rx->rx_current, 0),
+-
+-		musb_readl(&rx->rx_buf_current, 0),
+-		musb_readl(&rx->rx_len_len, 0),
+-		musb_readl(&rx->rx_cnt_cnt, 0),
+-		musb_readl(&rx->rx_complete, 0)
+-		);
+-}
+-
+-/* Context: controller irqlocked */
+-static void
+-cppi_dump_tx(int level, struct cppi_channel *c, const char *tag)
+-{
+-	void __iomem			*base = c->controller->mregs;
+-	struct cppi_tx_stateram __iomem	*tx = c->state_ram;
+-
+-	musb_ep_select(base, c->index + 1);
+-
+-	musb_dbg(c->controller->controller.musb,
+-		"TX DMA%d%s: csr %04x, "
+-		"H%08x S%08x C%08x %08x, "
+-		"F%08x L%08x .. %08x",
+-		c->index, tag,
+-		musb_readw(c->hw_ep->regs, MUSB_TXCSR),
+-
+-		musb_readl(&tx->tx_head, 0),
+-		musb_readl(&tx->tx_buf, 0),
+-		musb_readl(&tx->tx_current, 0),
+-		musb_readl(&tx->tx_buf_current, 0),
+-
+-		musb_readl(&tx->tx_info, 0),
+-		musb_readl(&tx->tx_rem_len, 0),
+-		/* dummy/unused word 6 */
+-		musb_readl(&tx->tx_complete, 0)
+-		);
+-}
+-
+-/* Context: controller irqlocked */
+-static inline void
+-cppi_rndis_update(struct cppi_channel *c, int is_rx,
+-		void __iomem *tibase, int is_rndis)
+-{
+-	/* we may need to change the rndis flag for this cppi channel */
+-	if (c->is_rndis != is_rndis) {
+-		u32	value = musb_readl(tibase, DAVINCI_RNDIS_REG);
+-		u32	temp = 1 << (c->index);
+-
+-		if (is_rx)
+-			temp <<= 16;
+-		if (is_rndis)
+-			value |= temp;
+-		else
+-			value &= ~temp;
+-		musb_writel(tibase, DAVINCI_RNDIS_REG, value);
+-		c->is_rndis = is_rndis;
+-	}
+-}
+-
+-static void cppi_dump_rxbd(const char *tag, struct cppi_descriptor *bd)
+-{
+-	pr_debug("RXBD/%s %08x: "
+-			"nxt %08x buf %08x off.blen %08x opt.plen %08x\n",
+-			tag, bd->dma,
+-			bd->hw_next, bd->hw_bufp, bd->hw_off_len,
+-			bd->hw_options);
+-}
+-
+-static void cppi_dump_rxq(int level, const char *tag, struct cppi_channel *rx)
+-{
+-	struct cppi_descriptor	*bd;
+-
+-	cppi_dump_rx(level, rx, tag);
+-	if (rx->last_processed)
+-		cppi_dump_rxbd("last", rx->last_processed);
+-	for (bd = rx->head; bd; bd = bd->next)
+-		cppi_dump_rxbd("active", bd);
+-}
+-
+-
+-/* NOTE:  DaVinci autoreq is ignored except for host side "RNDIS" mode RX;
+- * so we won't ever use it (see "CPPI RX Woes" below).
+- */
+-static inline int cppi_autoreq_update(struct cppi_channel *rx,
+-		void __iomem *tibase, int onepacket, unsigned n_bds)
+-{
+-	u32	val;
+-
+-#ifdef	RNDIS_RX_IS_USABLE
+-	u32	tmp;
+-	/* assert(is_host_active(musb)) */
+-
+-	/* start from "AutoReq never" */
+-	tmp = musb_readl(tibase, DAVINCI_AUTOREQ_REG);
+-	val = tmp & ~((0x3) << (rx->index * 2));
+-
+-	/* HCD arranged reqpkt for packet #1.  we arrange int
+-	 * for all but the last one, maybe in two segments.
+-	 */
+-	if (!onepacket) {
+-#if 0
+-		/* use two segments, autoreq "all" then the last "never" */
+-		val |= ((0x3) << (rx->index * 2));
+-		n_bds--;
+-#else
+-		/* one segment, autoreq "all-but-last" */
+-		val |= ((0x1) << (rx->index * 2));
+-#endif
+-	}
+-
+-	if (val != tmp) {
+-		int n = 100;
+-
+-		/* make sure that autoreq is updated before continuing */
+-		musb_writel(tibase, DAVINCI_AUTOREQ_REG, val);
+-		do {
+-			tmp = musb_readl(tibase, DAVINCI_AUTOREQ_REG);
+-			if (tmp == val)
+-				break;
+-			cpu_relax();
+-		} while (n-- > 0);
+-	}
+-#endif
+-
+-	/* REQPKT is turned off after each segment */
+-	if (n_bds && rx->channel.actual_len) {
+-		void __iomem	*regs = rx->hw_ep->regs;
+-
+-		val = musb_readw(regs, MUSB_RXCSR);
+-		if (!(val & MUSB_RXCSR_H_REQPKT)) {
+-			val |= MUSB_RXCSR_H_REQPKT | MUSB_RXCSR_H_WZC_BITS;
+-			musb_writew(regs, MUSB_RXCSR, val);
+-			/* flush writebuffer */
+-			val = musb_readw(regs, MUSB_RXCSR);
+-		}
+-	}
+-	return n_bds;
+-}
+-
+-
+-/* Buffer enqueuing Logic:
+- *
+- *  - RX builds new queues each time, to help handle routine "early
+- *    termination" cases (faults, including errors and short reads)
+- *    more correctly.
+- *
+- *  - for now, TX reuses the same queue of BDs every time
+- *
+- * REVISIT long term, we want a normal dynamic model.
+- * ... the goal will be to append to the
+- * existing queue, processing completed "dma buffers" (segments) on the fly.
+- *
+- * Otherwise we force an IRQ latency between requests, which slows us a lot
+- * (especially in "transparent" dma).  Unfortunately that model seems to be
+- * inherent in the DMA model from the Mentor code, except in the rare case
+- * of transfers big enough (~128+ KB) that we could append "middle" segments
+- * in the TX paths.  (RX can't do this, see below.)
+- *
+- * That's true even in the CPPI- friendly iso case, where most urbs have
+- * several small segments provided in a group and where the "packet at a time"
+- * "transparent" DMA model is always correct, even on the RX side.
+- */
+-
+-/*
+- * CPPI TX:
+- * ========
+- * TX is a lot more reasonable than RX; it doesn't need to run in
+- * irq-per-packet mode very often.  RNDIS mode seems to behave too
+- * (except how it handles the exactly-N-packets case).  Building a
+- * txdma queue with multiple requests (urb or usb_request) looks
+- * like it would work ... but fault handling would need much testing.
+- *
+- * The main issue with TX mode RNDIS relates to transfer lengths that
+- * are an exact multiple of the packet length.  It appears that there's
+- * a hiccup in that case (maybe the DMA completes before the ZLP gets
+- * written?) boiling down to not being able to rely on CPPI writing any
+- * terminating zero length packet before the next transfer is written.
+- * So that's punted to PIO; better yet, gadget drivers can avoid it.
+- *
+- * Plus, there's allegedly an undocumented constraint that rndis transfer
+- * length be a multiple of 64 bytes ... but the chip doesn't act that
+- * way, and we really don't _want_ that behavior anyway.
+- *
+- * On TX, "transparent" mode works ... although experiments have shown
+- * problems trying to use the SOP/EOP bits in different USB packets.
+- *
+- * REVISIT try to handle terminating zero length packets using CPPI
+- * instead of doing it by PIO after an IRQ.  (Meanwhile, make Ethernet
+- * links avoid that issue by forcing them to avoid zlps.)
+- */
+-static void
+-cppi_next_tx_segment(struct musb *musb, struct cppi_channel *tx)
+-{
+-	unsigned		maxpacket = tx->maxpacket;
+-	dma_addr_t		addr = tx->buf_dma + tx->offset;
+-	size_t			length = tx->buf_len - tx->offset;
+-	struct cppi_descriptor	*bd;
+-	unsigned		n_bds;
+-	unsigned		i;
+-	struct cppi_tx_stateram	__iomem *tx_ram = tx->state_ram;
+-	int			rndis;
+-
+-	/* TX can use the CPPI "rndis" mode, where we can probably fit this
+-	 * transfer in one BD and one IRQ.  The only time we would NOT want
+-	 * to use it is when hardware constraints prevent it, or if we'd
+-	 * trigger the "send a ZLP?" confusion.
+-	 */
+-	rndis = (maxpacket & 0x3f) == 0
+-		&& length > maxpacket
+-		&& length < 0xffff
+-		&& (length % maxpacket) != 0;
+-
+-	if (rndis) {
+-		maxpacket = length;
+-		n_bds = 1;
+-	} else {
+-		if (length)
+-			n_bds = DIV_ROUND_UP(length, maxpacket);
+-		else
+-			n_bds = 1;
+-		n_bds = min(n_bds, (unsigned) NUM_TXCHAN_BD);
+-		length = min(n_bds * maxpacket, length);
+-	}
+-
+-	musb_dbg(musb, "TX DMA%d, pktSz %d %s bds %d dma 0x%llx len %u",
+-			tx->index,
+-			maxpacket,
+-			rndis ? "rndis" : "transparent",
+-			n_bds,
+-			(unsigned long long)addr, length);
+-
+-	cppi_rndis_update(tx, 0, musb->ctrl_base, rndis);
+-
+-	/* assuming here that channel_program is called during
+-	 * transfer initiation ... current code maintains state
+-	 * for one outstanding request only (no queues, not even
+-	 * the implicit ones of an iso urb).
+-	 */
+-
+-	bd = tx->freelist;
+-	tx->head = bd;
+-	tx->last_processed = NULL;
+-
+-	/* FIXME use BD pool like RX side does, and just queue
+-	 * the minimum number for this request.
+-	 */
+-
+-	/* Prepare queue of BDs first, then hand it to hardware.
+-	 * All BDs except maybe the last should be of full packet
+-	 * size; for RNDIS there _is_ only that last packet.
+-	 */
+-	for (i = 0; i < n_bds; ) {
+-		if (++i < n_bds && bd->next)
+-			bd->hw_next = bd->next->dma;
+-		else
+-			bd->hw_next = 0;
+-
+-		bd->hw_bufp = tx->buf_dma + tx->offset;
+-
+-		/* FIXME set EOP only on the last packet,
+-		 * SOP only on the first ... avoid IRQs
+-		 */
+-		if ((tx->offset + maxpacket) <= tx->buf_len) {
+-			tx->offset += maxpacket;
+-			bd->hw_off_len = maxpacket;
+-			bd->hw_options = CPPI_SOP_SET | CPPI_EOP_SET
+-				| CPPI_OWN_SET | maxpacket;
+-		} else {
+-			/* only this one may be a partial USB Packet */
+-			u32		partial_len;
+-
+-			partial_len = tx->buf_len - tx->offset;
+-			tx->offset = tx->buf_len;
+-			bd->hw_off_len = partial_len;
+-
+-			bd->hw_options = CPPI_SOP_SET | CPPI_EOP_SET
+-				| CPPI_OWN_SET | partial_len;
+-			if (partial_len == 0)
+-				bd->hw_options |= CPPI_ZERO_SET;
+-		}
+-
+-		musb_dbg(musb, "TXBD %p: nxt %08x buf %08x len %04x opt %08x",
+-				bd, bd->hw_next, bd->hw_bufp,
+-				bd->hw_off_len, bd->hw_options);
+-
+-		/* update the last BD enqueued to the list */
+-		tx->tail = bd;
+-		bd = bd->next;
+-	}
+-
+-	/* BDs live in DMA-coherent memory, but writes might be pending */
+-	cpu_drain_writebuffer();
+-
+-	/* Write to the HeadPtr in state RAM to trigger */
+-	musb_writel(&tx_ram->tx_head, 0, (u32)tx->freelist->dma);
+-
+-	cppi_dump_tx(5, tx, "/S");
+-}
+-
+-/*
+- * CPPI RX Woes:
+- * =============
+- * Consider a 1KB bulk RX buffer in two scenarios:  (a) it's fed two 300 byte
+- * packets back-to-back, and (b) it's fed two 512 byte packets back-to-back.
+- * (Full speed transfers have similar scenarios.)
+- *
+- * The correct behavior for Linux is that (a) fills the buffer with 300 bytes,
+- * and the next packet goes into a buffer that's queued later; while (b) fills
+- * the buffer with 1024 bytes.  How to do that with CPPI?
+- *
+- * - RX queues in "rndis" mode -- one single BD -- handle (a) correctly, but
+- *   (b) loses **BADLY** because nothing (!) happens when that second packet
+- *   fills the buffer, much less when a third one arrives.  (Which makes this
+- *   not a "true" RNDIS mode.  In the RNDIS protocol short-packet termination
+- *   is optional, and it's fine if peripherals -- not hosts! -- pad messages
+- *   out to end-of-buffer.  Standard PCI host controller DMA descriptors
+- *   implement that mode by default ... which is no accident.)
+- *
+- * - RX queues in "transparent" mode -- two BDs with 512 bytes each -- have
+- *   converse problems:  (b) is handled right, but (a) loses badly.  CPPI RX
+- *   ignores SOP/EOP markings and processes both of those BDs; so both packets
+- *   are loaded into the buffer (with a 212 byte gap between them), and the next
+- *   buffer queued will NOT get its 300 bytes of data. (It seems like SOP/EOP
+- *   are intended as outputs for RX queues, not inputs...)
+- *
+- * - A variant of "transparent" mode -- one BD at a time -- is the only way to
+- *   reliably make both cases work, with software handling both cases correctly
+- *   and at the significant penalty of needing an IRQ per packet.  (The lack of
+- *   I/O overlap can be slightly ameliorated by enabling double buffering.)
+- *
+- * So how to get rid of IRQ-per-packet?  The transparent multi-BD case could
+- * be used in special cases like mass storage, which sets URB_SHORT_NOT_OK
+- * (or maybe its peripheral side counterpart) to flag (a) scenarios as errors
+- * with guaranteed driver level fault recovery and scrubbing out what's left
+- * of that garbaged datastream.
+- *
+- * But there seems to be no way to identify the cases where CPPI RNDIS mode
+- * is appropriate -- which do NOT include RNDIS host drivers, but do include
+- * the CDC Ethernet driver! -- and the documentation is incomplete/wrong.
+- * So we can't _ever_ use RX RNDIS mode ... except by using a heuristic
+- * that applies best on the peripheral side (and which could fail rudely).
+- *
+- * Leaving only "transparent" mode; we avoid multi-bd modes in almost all
+- * cases other than mass storage class.  Otherwise we're correct but slow,
+- * since CPPI penalizes our need for a "true RNDIS" default mode.
+- */
+-
+-
+-/* Heuristic, intended to kick in for ethernet/rndis peripheral ONLY
+- *
+- * IFF
+- *  (a)	peripheral mode ... since rndis peripherals could pad their
+- *	writes to hosts, causing i/o failure; or we'd have to cope with
+- *	a largely unknowable variety of host side protocol variants
+- *  (b)	and short reads are NOT errors ... since full reads would
+- *	cause those same i/o failures
+- *  (c)	and read length is
+- *	- less than 64KB (max per cppi descriptor)
+- *	- not a multiple of 4096 (g_zero default, full reads typical)
+- *	- N (>1) packets long, ditto (full reads not EXPECTED)
+- * THEN
+- *   try rx rndis mode
+- *
+- * Cost of heuristic failing:  RXDMA wedges at the end of transfers that
+- * fill out the whole buffer.  Buggy host side usb network drivers could
+- * trigger that, but "in the field" such bugs seem to be all but unknown.
+- *
+- * So this module parameter lets the heuristic be disabled.  When using
+- * gadgetfs, the heuristic will probably need to be disabled.
+- */
+-static bool cppi_rx_rndis = 1;
+-
+-module_param(cppi_rx_rndis, bool, 0);
+-MODULE_PARM_DESC(cppi_rx_rndis, "enable/disable RX RNDIS heuristic");
+-
+-
+-/**
+- * cppi_next_rx_segment - dma read for the next chunk of a buffer
+- * @musb: the controller
+- * @rx: dma channel
+- * @onepacket: true unless caller treats short reads as errors, and
+- *	performs fault recovery above usbcore.
+- * Context: controller irqlocked
+- *
+- * See above notes about why we can't use multi-BD RX queues except in
+- * rare cases (mass storage class), and can never use the hardware "rndis"
+- * mode (since it's not a "true" RNDIS mode) with complete safety..
+- *
+- * It's ESSENTIAL that callers specify "onepacket" mode unless they kick in
+- * code to recover from corrupted datastreams after each short transfer.
+- */
+-static void
+-cppi_next_rx_segment(struct musb *musb, struct cppi_channel *rx, int onepacket)
+-{
+-	unsigned		maxpacket = rx->maxpacket;
+-	dma_addr_t		addr = rx->buf_dma + rx->offset;
+-	size_t			length = rx->buf_len - rx->offset;
+-	struct cppi_descriptor	*bd, *tail;
+-	unsigned		n_bds;
+-	unsigned		i;
+-	void __iomem		*tibase = musb->ctrl_base;
+-	int			is_rndis = 0;
+-	struct cppi_rx_stateram	__iomem *rx_ram = rx->state_ram;
+-	struct cppi_descriptor	*d;
+-
+-	if (onepacket) {
+-		/* almost every USB driver, host or peripheral side */
+-		n_bds = 1;
+-
+-		/* maybe apply the heuristic above */
+-		if (cppi_rx_rndis
+-				&& is_peripheral_active(musb)
+-				&& length > maxpacket
+-				&& (length & ~0xffff) == 0
+-				&& (length & 0x0fff) != 0
+-				&& (length & (maxpacket - 1)) == 0) {
+-			maxpacket = length;
+-			is_rndis = 1;
+-		}
+-	} else {
+-		/* virtually nothing except mass storage class */
+-		if (length > 0xffff) {
+-			n_bds = 0xffff / maxpacket;
+-			length = n_bds * maxpacket;
+-		} else {
+-			n_bds = DIV_ROUND_UP(length, maxpacket);
+-		}
+-		if (n_bds == 1)
+-			onepacket = 1;
+-		else
+-			n_bds = min(n_bds, (unsigned) NUM_RXCHAN_BD);
+-	}
+-
+-	/* In host mode, autorequest logic can generate some IN tokens; it's
+-	 * tricky since we can't leave REQPKT set in RXCSR after the transfer
+-	 * finishes. So:  multipacket transfers involve two or more segments.
+-	 * And always at least two IRQs ... RNDIS mode is not an option.
+-	 */
+-	if (is_host_active(musb))
+-		n_bds = cppi_autoreq_update(rx, tibase, onepacket, n_bds);
+-
+-	cppi_rndis_update(rx, 1, musb->ctrl_base, is_rndis);
+-
+-	length = min(n_bds * maxpacket, length);
+-
+-	musb_dbg(musb, "RX DMA%d seg, maxp %d %s bds %d (cnt %d) "
+-			"dma 0x%llx len %u %u/%u",
+-			rx->index, maxpacket,
+-			onepacket
+-				? (is_rndis ? "rndis" : "onepacket")
+-				: "multipacket",
+-			n_bds,
+-			musb_readl(tibase,
+-				DAVINCI_RXCPPI_BUFCNT0_REG + (rx->index * 4))
+-					& 0xffff,
+-			(unsigned long long)addr, length,
+-			rx->channel.actual_len, rx->buf_len);
+-
+-	/* only queue one segment at a time, since the hardware prevents
+-	 * correct queue shutdown after unexpected short packets
+-	 */
+-	bd = cppi_bd_alloc(rx);
+-	rx->head = bd;
+-
+-	/* Build BDs for all packets in this segment */
+-	for (i = 0, tail = NULL; bd && i < n_bds; i++, tail = bd) {
+-		u32	bd_len;
+-
+-		if (i) {
+-			bd = cppi_bd_alloc(rx);
+-			if (!bd)
+-				break;
+-			tail->next = bd;
+-			tail->hw_next = bd->dma;
+-		}
+-		bd->hw_next = 0;
+-
+-		/* all but the last packet will be maxpacket size */
+-		if (maxpacket < length)
+-			bd_len = maxpacket;
+-		else
+-			bd_len = length;
+-
+-		bd->hw_bufp = addr;
+-		addr += bd_len;
+-		rx->offset += bd_len;
+-
+-		bd->hw_off_len = (0 /*offset*/ << 16) + bd_len;
+-		bd->buflen = bd_len;
+-
+-		bd->hw_options = CPPI_OWN_SET | (i == 0 ? length : 0);
+-		length -= bd_len;
+-	}
+-
+-	/* we always expect at least one reusable BD! */
+-	if (!tail) {
+-		WARNING("rx dma%d -- no BDs? need %d\n", rx->index, n_bds);
+-		return;
+-	} else if (i < n_bds)
+-		WARNING("rx dma%d -- only %d of %d BDs\n", rx->index, i, n_bds);
+-
+-	tail->next = NULL;
+-	tail->hw_next = 0;
+-
+-	bd = rx->head;
+-	rx->tail = tail;
+-
+-	/* short reads and other faults should terminate this entire
+-	 * dma segment.  we want one "dma packet" per dma segment, not
+-	 * one per USB packet, terminating the whole queue at once...
+-	 * NOTE that current hardware seems to ignore SOP and EOP.
+-	 */
+-	bd->hw_options |= CPPI_SOP_SET;
+-	tail->hw_options |= CPPI_EOP_SET;
+-
+-	for (d = rx->head; d; d = d->next)
+-		cppi_dump_rxbd("S", d);
+-
+-	/* in case the preceding transfer left some state... */
+-	tail = rx->last_processed;
+-	if (tail) {
+-		tail->next = bd;
+-		tail->hw_next = bd->dma;
+-	}
+-
+-	core_rxirq_enable(tibase, rx->index + 1);
+-
+-	/* BDs live in DMA-coherent memory, but writes might be pending */
+-	cpu_drain_writebuffer();
+-
+-	/* REVISIT specs say to write this AFTER the BUFCNT register
+-	 * below ... but that loses badly.
+-	 */
+-	musb_writel(&rx_ram->rx_head, 0, bd->dma);
+-
+-	/* bufferCount must be at least 3, and zeroes on completion
+-	 * unless it underflows below zero, or stops at two, or keeps
+-	 * growing ... grr.
+-	 */
+-	i = musb_readl(tibase,
+-			DAVINCI_RXCPPI_BUFCNT0_REG + (rx->index * 4))
+-			& 0xffff;
+-
+-	if (!i)
+-		musb_writel(tibase,
+-			DAVINCI_RXCPPI_BUFCNT0_REG + (rx->index * 4),
+-			n_bds + 2);
+-	else if (n_bds > (i - 3))
+-		musb_writel(tibase,
+-			DAVINCI_RXCPPI_BUFCNT0_REG + (rx->index * 4),
+-			n_bds - (i - 3));
+-
+-	i = musb_readl(tibase,
+-			DAVINCI_RXCPPI_BUFCNT0_REG + (rx->index * 4))
+-			& 0xffff;
+-	if (i < (2 + n_bds)) {
+-		musb_dbg(musb, "bufcnt%d underrun - %d (for %d)",
+-					rx->index, i, n_bds);
+-		musb_writel(tibase,
+-			DAVINCI_RXCPPI_BUFCNT0_REG + (rx->index * 4),
+-			n_bds + 2);
+-	}
+-
+-	cppi_dump_rx(4, rx, "/S");
+-}
+-
+-/**
+- * cppi_channel_program - program channel for data transfer
+- * @ch: the channel
+- * @maxpacket: max packet size
+- * @mode: For RX, 1 unless the usb protocol driver promised to treat
+- *	all short reads as errors and kick in high level fault recovery.
+- *	For TX, ignored because of RNDIS mode races/glitches.
+- * @dma_addr: dma address of buffer
+- * @len: length of buffer
+- * Context: controller irqlocked
+- */
+-static int cppi_channel_program(struct dma_channel *ch,
+-		u16 maxpacket, u8 mode,
+-		dma_addr_t dma_addr, u32 len)
+-{
+-	struct cppi_channel	*cppi_ch;
+-	struct cppi		*controller;
+-	struct musb		*musb;
+-
+-	cppi_ch = container_of(ch, struct cppi_channel, channel);
+-	controller = cppi_ch->controller;
+-	musb = controller->controller.musb;
+-
+-	switch (ch->status) {
+-	case MUSB_DMA_STATUS_BUS_ABORT:
+-	case MUSB_DMA_STATUS_CORE_ABORT:
+-		/* fault irq handler should have handled cleanup */
+-		WARNING("%cX DMA%d not cleaned up after abort!\n",
+-				cppi_ch->transmit ? 'T' : 'R',
+-				cppi_ch->index);
+-		/* WARN_ON(1); */
+-		break;
+-	case MUSB_DMA_STATUS_BUSY:
+-		WARNING("program active channel?  %cX DMA%d\n",
+-				cppi_ch->transmit ? 'T' : 'R',
+-				cppi_ch->index);
+-		/* WARN_ON(1); */
+-		break;
+-	case MUSB_DMA_STATUS_UNKNOWN:
+-		musb_dbg(musb, "%cX DMA%d not allocated!",
+-				cppi_ch->transmit ? 'T' : 'R',
+-				cppi_ch->index);
+-		fallthrough;
+-	case MUSB_DMA_STATUS_FREE:
+-		break;
+-	}
+-
+-	ch->status = MUSB_DMA_STATUS_BUSY;
+-
+-	/* set transfer parameters, then queue up its first segment */
+-	cppi_ch->buf_dma = dma_addr;
+-	cppi_ch->offset = 0;
+-	cppi_ch->maxpacket = maxpacket;
+-	cppi_ch->buf_len = len;
+-	cppi_ch->channel.actual_len = 0;
+-
+-	/* TX channel? or RX? */
+-	if (cppi_ch->transmit)
+-		cppi_next_tx_segment(musb, cppi_ch);
+-	else
+-		cppi_next_rx_segment(musb, cppi_ch, mode);
+-
+-	return true;
+-}
+-
+-static bool cppi_rx_scan(struct cppi *cppi, unsigned ch)
+-{
+-	struct cppi_channel		*rx = &cppi->rx[ch];
+-	struct cppi_rx_stateram __iomem	*state = rx->state_ram;
+-	struct cppi_descriptor		*bd;
+-	struct cppi_descriptor		*last = rx->last_processed;
+-	bool				completed = false;
+-	bool				acked = false;
+-	int				i;
+-	dma_addr_t			safe2ack;
+-	void __iomem			*regs = rx->hw_ep->regs;
+-	struct musb			*musb = cppi->controller.musb;
+-
+-	cppi_dump_rx(6, rx, "/K");
+-
+-	bd = last ? last->next : rx->head;
+-	if (!bd)
+-		return false;
+-
+-	/* run through all completed BDs */
+-	for (i = 0, safe2ack = musb_readl(&state->rx_complete, 0);
+-			(safe2ack || completed) && bd && i < NUM_RXCHAN_BD;
+-			i++, bd = bd->next) {
+-		u16	len;
+-
+-		/* catch latest BD writes from CPPI */
+-		rmb();
+-		if (!completed && (bd->hw_options & CPPI_OWN_SET))
+-			break;
+-
+-		musb_dbg(musb, "C/RXBD %llx: nxt %08x buf %08x "
+-			"off.len %08x opt.len %08x (%d)",
+-			(unsigned long long)bd->dma, bd->hw_next, bd->hw_bufp,
+-			bd->hw_off_len, bd->hw_options,
+-			rx->channel.actual_len);
+-
+-		/* actual packet received length */
+-		if ((bd->hw_options & CPPI_SOP_SET) && !completed)
+-			len = bd->hw_off_len & CPPI_RECV_PKTLEN_MASK;
+-		else
+-			len = 0;
+-
+-		if (bd->hw_options & CPPI_EOQ_MASK)
+-			completed = true;
+-
+-		if (!completed && len < bd->buflen) {
+-			/* NOTE:  when we get a short packet, RXCSR_H_REQPKT
+-			 * must have been cleared, and no more DMA packets may
+-			 * active be in the queue... TI docs didn't say, but
+-			 * CPPI ignores those BDs even though OWN is still set.
+-			 */
+-			completed = true;
+-			musb_dbg(musb, "rx short %d/%d (%d)",
+-					len, bd->buflen,
+-					rx->channel.actual_len);
+-		}
+-
+-		/* If we got here, we expect to ack at least one BD; meanwhile
+-		 * CPPI may completing other BDs while we scan this list...
+-		 *
+-		 * RACE: we can notice OWN cleared before CPPI raises the
+-		 * matching irq by writing that BD as the completion pointer.
+-		 * In such cases, stop scanning and wait for the irq, avoiding
+-		 * lost acks and states where BD ownership is unclear.
+-		 */
+-		if (bd->dma == safe2ack) {
+-			musb_writel(&state->rx_complete, 0, safe2ack);
+-			safe2ack = musb_readl(&state->rx_complete, 0);
+-			acked = true;
+-			if (bd->dma == safe2ack)
+-				safe2ack = 0;
+-		}
+-
+-		rx->channel.actual_len += len;
+-
+-		cppi_bd_free(rx, last);
+-		last = bd;
+-
+-		/* stop scanning on end-of-segment */
+-		if (bd->hw_next == 0)
+-			completed = true;
+-	}
+-	rx->last_processed = last;
+-
+-	/* dma abort, lost ack, or ... */
+-	if (!acked && last) {
+-		int	csr;
+-
+-		if (safe2ack == 0 || safe2ack == rx->last_processed->dma)
+-			musb_writel(&state->rx_complete, 0, safe2ack);
+-		if (safe2ack == 0) {
+-			cppi_bd_free(rx, last);
+-			rx->last_processed = NULL;
+-
+-			/* if we land here on the host side, H_REQPKT will
+-			 * be clear and we need to restart the queue...
+-			 */
+-			WARN_ON(rx->head);
+-		}
+-		musb_ep_select(cppi->mregs, rx->index + 1);
+-		csr = musb_readw(regs, MUSB_RXCSR);
+-		if (csr & MUSB_RXCSR_DMAENAB) {
+-			musb_dbg(musb, "list%d %p/%p, last %llx%s, csr %04x",
+-				rx->index,
+-				rx->head, rx->tail,
+-				rx->last_processed
+-					? (unsigned long long)
+-						rx->last_processed->dma
+-					: 0,
+-				completed ? ", completed" : "",
+-				csr);
+-			cppi_dump_rxq(4, "/what?", rx);
+-		}
+-	}
+-	if (!completed) {
+-		int	csr;
+-
+-		rx->head = bd;
+-
+-		/* REVISIT seems like "autoreq all but EOP" doesn't...
+-		 * setting it here "should" be racey, but seems to work
+-		 */
+-		csr = musb_readw(rx->hw_ep->regs, MUSB_RXCSR);
+-		if (is_host_active(cppi->controller.musb)
+-				&& bd
+-				&& !(csr & MUSB_RXCSR_H_REQPKT)) {
+-			csr |= MUSB_RXCSR_H_REQPKT;
+-			musb_writew(regs, MUSB_RXCSR,
+-					MUSB_RXCSR_H_WZC_BITS | csr);
+-			csr = musb_readw(rx->hw_ep->regs, MUSB_RXCSR);
+-		}
+-	} else {
+-		rx->head = NULL;
+-		rx->tail = NULL;
+-	}
+-
+-	cppi_dump_rx(6, rx, completed ? "/completed" : "/cleaned");
+-	return completed;
+-}
+-
+-irqreturn_t cppi_interrupt(int irq, void *dev_id)
+-{
+-	struct musb		*musb = dev_id;
+-	struct cppi		*cppi;
+-	void __iomem		*tibase;
+-	struct musb_hw_ep	*hw_ep = NULL;
+-	u32			rx, tx;
+-	int			i, index;
+-	unsigned long		flags;
+-
+-	cppi = container_of(musb->dma_controller, struct cppi, controller);
+-	if (cppi->irq)
+-		spin_lock_irqsave(&musb->lock, flags);
+-
+-	tibase = musb->ctrl_base;
+-
+-	tx = musb_readl(tibase, DAVINCI_TXCPPI_MASKED_REG);
+-	rx = musb_readl(tibase, DAVINCI_RXCPPI_MASKED_REG);
+-
+-	if (!tx && !rx) {
+-		if (cppi->irq)
+-			spin_unlock_irqrestore(&musb->lock, flags);
+-		return IRQ_NONE;
+-	}
+-
+-	musb_dbg(musb, "CPPI IRQ Tx%x Rx%x", tx, rx);
+-
+-	/* process TX channels */
+-	for (index = 0; tx; tx = tx >> 1, index++) {
+-		struct cppi_channel		*tx_ch;
+-		struct cppi_tx_stateram __iomem	*tx_ram;
+-		bool				completed = false;
+-		struct cppi_descriptor		*bd;
+-
+-		if (!(tx & 1))
+-			continue;
+-
+-		tx_ch = cppi->tx + index;
+-		tx_ram = tx_ch->state_ram;
+-
+-		/* FIXME  need a cppi_tx_scan() routine, which
+-		 * can also be called from abort code
+-		 */
+-
+-		cppi_dump_tx(5, tx_ch, "/E");
+-
+-		bd = tx_ch->head;
+-
+-		/*
+-		 * If Head is null then this could mean that a abort interrupt
+-		 * that needs to be acknowledged.
+-		 */
+-		if (NULL == bd) {
+-			musb_dbg(musb, "null BD");
+-			musb_writel(&tx_ram->tx_complete, 0, 0);
+-			continue;
+-		}
+-
+-		/* run through all completed BDs */
+-		for (i = 0; !completed && bd && i < NUM_TXCHAN_BD;
+-				i++, bd = bd->next) {
+-			u16	len;
+-
+-			/* catch latest BD writes from CPPI */
+-			rmb();
+-			if (bd->hw_options & CPPI_OWN_SET)
+-				break;
+-
+-			musb_dbg(musb, "C/TXBD %p n %x b %x off %x opt %x",
+-					bd, bd->hw_next, bd->hw_bufp,
+-					bd->hw_off_len, bd->hw_options);
+-
+-			len = bd->hw_off_len & CPPI_BUFFER_LEN_MASK;
+-			tx_ch->channel.actual_len += len;
+-
+-			tx_ch->last_processed = bd;
+-
+-			/* write completion register to acknowledge
+-			 * processing of completed BDs, and possibly
+-			 * release the IRQ; EOQ might not be set ...
+-			 *
+-			 * REVISIT use the same ack strategy as rx
+-			 *
+-			 * REVISIT have observed bit 18 set; huh??
+-			 */
+-			/* if ((bd->hw_options & CPPI_EOQ_MASK)) */
+-				musb_writel(&tx_ram->tx_complete, 0, bd->dma);
+-
+-			/* stop scanning on end-of-segment */
+-			if (bd->hw_next == 0)
+-				completed = true;
+-		}
+-
+-		/* on end of segment, maybe go to next one */
+-		if (completed) {
+-			/* cppi_dump_tx(4, tx_ch, "/complete"); */
+-
+-			/* transfer more, or report completion */
+-			if (tx_ch->offset >= tx_ch->buf_len) {
+-				tx_ch->head = NULL;
+-				tx_ch->tail = NULL;
+-				tx_ch->channel.status = MUSB_DMA_STATUS_FREE;
+-
+-				hw_ep = tx_ch->hw_ep;
+-
+-				musb_dma_completion(musb, index + 1, 1);
+-
+-			} else {
+-				/* Bigger transfer than we could fit in
+-				 * that first batch of descriptors...
+-				 */
+-				cppi_next_tx_segment(musb, tx_ch);
+-			}
+-		} else
+-			tx_ch->head = bd;
+-	}
+-
+-	/* Start processing the RX block */
+-	for (index = 0; rx; rx = rx >> 1, index++) {
+-
+-		if (rx & 1) {
+-			struct cppi_channel		*rx_ch;
+-
+-			rx_ch = cppi->rx + index;
+-
+-			/* let incomplete dma segments finish */
+-			if (!cppi_rx_scan(cppi, index))
+-				continue;
+-
+-			/* start another dma segment if needed */
+-			if (rx_ch->channel.actual_len != rx_ch->buf_len
+-					&& rx_ch->channel.actual_len
+-						== rx_ch->offset) {
+-				cppi_next_rx_segment(musb, rx_ch, 1);
+-				continue;
+-			}
+-
+-			/* all segments completed! */
+-			rx_ch->channel.status = MUSB_DMA_STATUS_FREE;
+-
+-			hw_ep = rx_ch->hw_ep;
+-
+-			core_rxirq_disable(tibase, index + 1);
+-			musb_dma_completion(musb, index + 1, 0);
+-		}
+-	}
+-
+-	/* write to CPPI EOI register to re-enable interrupts */
+-	musb_writel(tibase, DAVINCI_CPPI_EOI_REG, 0);
+-
+-	if (cppi->irq)
+-		spin_unlock_irqrestore(&musb->lock, flags);
+-
+-	return IRQ_HANDLED;
+-}
+-EXPORT_SYMBOL_GPL(cppi_interrupt);
+-
+-/* Instantiate a software object representing a DMA controller. */
+-struct dma_controller *
+-cppi_dma_controller_create(struct musb *musb, void __iomem *mregs)
+-{
+-	struct cppi		*controller;
+-	struct device		*dev = musb->controller;
+-	struct platform_device	*pdev = to_platform_device(dev);
+-	int			irq = platform_get_irq_byname(pdev, "dma");
+-
+-	controller = kzalloc(sizeof *controller, GFP_KERNEL);
+-	if (!controller)
+-		return NULL;
+-
+-	controller->mregs = mregs;
+-	controller->tibase = mregs - DAVINCI_BASE_OFFSET;
+-
+-	controller->controller.musb = musb;
+-	controller->controller.channel_alloc = cppi_channel_allocate;
+-	controller->controller.channel_release = cppi_channel_release;
+-	controller->controller.channel_program = cppi_channel_program;
+-	controller->controller.channel_abort = cppi_channel_abort;
+-
+-	/* NOTE: allocating from on-chip SRAM would give the least
+-	 * contention for memory access, if that ever matters here.
+-	 */
+-
+-	/* setup BufferPool */
+-	controller->pool = dma_pool_create("cppi",
+-			controller->controller.musb->controller,
+-			sizeof(struct cppi_descriptor),
+-			CPPI_DESCRIPTOR_ALIGN, 0);
+-	if (!controller->pool) {
+-		kfree(controller);
+-		return NULL;
+-	}
+-
+-	if (irq > 0) {
+-		if (request_irq(irq, cppi_interrupt, 0, "cppi-dma", musb)) {
+-			dev_err(dev, "request_irq %d failed!\n", irq);
+-			musb_dma_controller_destroy(&controller->controller);
+-			return NULL;
+-		}
+-		controller->irq = irq;
+-	}
+-
+-	cppi_controller_start(controller);
+-	return &controller->controller;
+-}
+-EXPORT_SYMBOL_GPL(cppi_dma_controller_create);
+-
+-/*
+- *  Destroy a previously-instantiated DMA controller.
+- */
+-void cppi_dma_controller_destroy(struct dma_controller *c)
+-{
+-	struct cppi	*cppi;
+-
+-	cppi = container_of(c, struct cppi, controller);
+-
+-	cppi_controller_stop(cppi);
+-
+-	if (cppi->irq)
+-		free_irq(cppi->irq, cppi->controller.musb);
+-
+-	/* assert:  caller stopped the controller first */
+-	dma_pool_destroy(cppi->pool);
+-
+-	kfree(cppi);
+-}
+-EXPORT_SYMBOL_GPL(cppi_dma_controller_destroy);
+-
+-/*
+- * Context: controller irqlocked, endpoint selected
+- */
+-static int cppi_channel_abort(struct dma_channel *channel)
+-{
+-	struct cppi_channel	*cppi_ch;
+-	struct cppi		*controller;
+-	void __iomem		*mbase;
+-	void __iomem		*tibase;
+-	void __iomem		*regs;
+-	u32			value;
+-	struct cppi_descriptor	*queue;
+-
+-	cppi_ch = container_of(channel, struct cppi_channel, channel);
+-
+-	controller = cppi_ch->controller;
+-
+-	switch (channel->status) {
+-	case MUSB_DMA_STATUS_BUS_ABORT:
+-	case MUSB_DMA_STATUS_CORE_ABORT:
+-		/* from RX or TX fault irq handler */
+-	case MUSB_DMA_STATUS_BUSY:
+-		/* the hardware needs shutting down */
+-		regs = cppi_ch->hw_ep->regs;
+-		break;
+-	case MUSB_DMA_STATUS_UNKNOWN:
+-	case MUSB_DMA_STATUS_FREE:
+-		return 0;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	if (!cppi_ch->transmit && cppi_ch->head)
+-		cppi_dump_rxq(3, "/abort", cppi_ch);
+-
+-	mbase = controller->mregs;
+-	tibase = controller->tibase;
+-
+-	queue = cppi_ch->head;
+-	cppi_ch->head = NULL;
+-	cppi_ch->tail = NULL;
+-
+-	/* REVISIT should rely on caller having done this,
+-	 * and caller should rely on us not changing it.
+-	 * peripheral code is safe ... check host too.
+-	 */
+-	musb_ep_select(mbase, cppi_ch->index + 1);
+-
+-	if (cppi_ch->transmit) {
+-		struct cppi_tx_stateram __iomem *tx_ram;
+-		/* REVISIT put timeouts on these controller handshakes */
+-
+-		cppi_dump_tx(6, cppi_ch, " (teardown)");
+-
+-		/* teardown DMA engine then usb core */
+-		do {
+-			value = musb_readl(tibase, DAVINCI_TXCPPI_TEAR_REG);
+-		} while (!(value & CPPI_TEAR_READY));
+-		musb_writel(tibase, DAVINCI_TXCPPI_TEAR_REG, cppi_ch->index);
+-
+-		tx_ram = cppi_ch->state_ram;
+-		do {
+-			value = musb_readl(&tx_ram->tx_complete, 0);
+-		} while (0xFFFFFFFC != value);
+-
+-		/* FIXME clean up the transfer state ... here?
+-		 * the completion routine should get called with
+-		 * an appropriate status code.
+-		 */
+-
+-		value = musb_readw(regs, MUSB_TXCSR);
+-		value &= ~MUSB_TXCSR_DMAENAB;
+-		value |= MUSB_TXCSR_FLUSHFIFO;
+-		musb_writew(regs, MUSB_TXCSR, value);
+-		musb_writew(regs, MUSB_TXCSR, value);
+-
+-		/*
+-		 * 1. Write to completion Ptr value 0x1(bit 0 set)
+-		 *    (write back mode)
+-		 * 2. Wait for abort interrupt and then put the channel in
+-		 *    compare mode by writing 1 to the tx_complete register.
+-		 */
+-		cppi_reset_tx(tx_ram, 1);
+-		cppi_ch->head = NULL;
+-		musb_writel(&tx_ram->tx_complete, 0, 1);
+-		cppi_dump_tx(5, cppi_ch, " (done teardown)");
+-
+-		/* REVISIT tx side _should_ clean up the same way
+-		 * as the RX side ... this does no cleanup at all!
+-		 */
+-
+-	} else /* RX */ {
+-		u16			csr;
+-
+-		/* NOTE: docs don't guarantee any of this works ...  we
+-		 * expect that if the usb core stops telling the cppi core
+-		 * to pull more data from it, then it'll be safe to flush
+-		 * current RX DMA state iff any pending fifo transfer is done.
+-		 */
+-
+-		core_rxirq_disable(tibase, cppi_ch->index + 1);
+-
+-		/* for host, ensure ReqPkt is never set again */
+-		if (is_host_active(cppi_ch->controller->controller.musb)) {
+-			value = musb_readl(tibase, DAVINCI_AUTOREQ_REG);
+-			value &= ~((0x3) << (cppi_ch->index * 2));
+-			musb_writel(tibase, DAVINCI_AUTOREQ_REG, value);
+-		}
+-
+-		csr = musb_readw(regs, MUSB_RXCSR);
+-
+-		/* for host, clear (just) ReqPkt at end of current packet(s) */
+-		if (is_host_active(cppi_ch->controller->controller.musb)) {
+-			csr |= MUSB_RXCSR_H_WZC_BITS;
+-			csr &= ~MUSB_RXCSR_H_REQPKT;
+-		} else
+-			csr |= MUSB_RXCSR_P_WZC_BITS;
+-
+-		/* clear dma enable */
+-		csr &= ~(MUSB_RXCSR_DMAENAB);
+-		musb_writew(regs, MUSB_RXCSR, csr);
+-		csr = musb_readw(regs, MUSB_RXCSR);
+-
+-		/* Quiesce: wait for current dma to finish (if not cleanup).
+-		 * We can't use bit zero of stateram->rx_sop, since that
+-		 * refers to an entire "DMA packet" not just emptying the
+-		 * current fifo.  Most segments need multiple usb packets.
+-		 */
+-		if (channel->status == MUSB_DMA_STATUS_BUSY)
+-			udelay(50);
+-
+-		/* scan the current list, reporting any data that was
+-		 * transferred and acking any IRQ
+-		 */
+-		cppi_rx_scan(controller, cppi_ch->index);
+-
+-		/* clobber the existing state once it's idle
+-		 *
+-		 * NOTE:  arguably, we should also wait for all the other
+-		 * RX channels to quiesce (how??) and then temporarily
+-		 * disable RXCPPI_CTRL_REG ... but it seems that we can
+-		 * rely on the controller restarting from state ram, with
+-		 * only RXCPPI_BUFCNT state being bogus.  BUFCNT will
+-		 * correct itself after the next DMA transfer though.
+-		 *
+-		 * REVISIT does using rndis mode change that?
+-		 */
+-		cppi_reset_rx(cppi_ch->state_ram);
+-
+-		/* next DMA request _should_ load cppi head ptr */
+-
+-		/* ... we don't "free" that list, only mutate it in place.  */
+-		cppi_dump_rx(5, cppi_ch, " (done abort)");
+-
+-		/* clean up previously pending bds */
+-		cppi_bd_free(cppi_ch, cppi_ch->last_processed);
+-		cppi_ch->last_processed = NULL;
+-
+-		while (queue) {
+-			struct cppi_descriptor	*tmp = queue->next;
+-
+-			cppi_bd_free(cppi_ch, queue);
+-			queue = tmp;
+-		}
+-	}
+-
+-	channel->status = MUSB_DMA_STATUS_FREE;
+-	cppi_ch->buf_dma = 0;
+-	cppi_ch->offset = 0;
+-	cppi_ch->buf_len = 0;
+-	cppi_ch->maxpacket = 0;
+-	return 0;
+-}
+-
+-/* TBD Queries:
+- *
+- * Power Management ... probably turn off cppi during suspend, restart;
+- * check state ram?  Clocking is presumably shared with usb core.
+- */
+diff --git a/drivers/usb/musb/davinci.c b/drivers/usb/musb/davinci.c
+deleted file mode 100644
+index 704435526394..000000000000
+--- a/drivers/usb/musb/davinci.c
++++ /dev/null
+@@ -1,606 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Copyright (C) 2005-2006 by Texas Instruments
+- *
+- * This file is part of the Inventra Controller Driver for Linux.
+- */
+-
+-#include <linux/module.h>
+-#include <linux/kernel.h>
+-#include <linux/sched.h>
+-#include <linux/list.h>
+-#include <linux/delay.h>
+-#include <linux/clk.h>
+-#include <linux/err.h>
+-#include <linux/io.h>
+-#include <linux/gpio/consumer.h>
+-#include <linux/platform_device.h>
+-#include <linux/dma-mapping.h>
+-#include <linux/usb/usb_phy_generic.h>
+-
+-#include <mach/cputype.h>
+-#include <mach/hardware.h>
+-
+-#include <asm/mach-types.h>
+-
+-#include "musb_core.h"
+-
+-#include "davinci.h"
+-#include "cppi_dma.h"
+-
+-
+-#define USB_PHY_CTRL	IO_ADDRESS(USBPHY_CTL_PADDR)
+-#define DM355_DEEPSLEEP	IO_ADDRESS(DM355_DEEPSLEEP_PADDR)
+-
+-struct davinci_glue {
+-	struct device		*dev;
+-	struct platform_device	*musb;
+-	struct clk		*clk;
+-	bool			vbus_state;
+-	struct gpio_desc	*vbus;
+-	struct work_struct	vbus_work;
+-};
+-
+-/* REVISIT (PM) we should be able to keep the PHY in low power mode most
+- * of the time (24 MHZ oscillator and PLL off, etc) by setting POWER.D0
+- * and, when in host mode, autosuspending idle root ports... PHYPLLON
+- * (overriding SUSPENDM?) then likely needs to stay off.
+- */
+-
+-static inline void phy_on(void)
+-{
+-	u32	phy_ctrl = __raw_readl(USB_PHY_CTRL);
+-
+-	/* power everything up; start the on-chip PHY and its PLL */
+-	phy_ctrl &= ~(USBPHY_OSCPDWN | USBPHY_OTGPDWN | USBPHY_PHYPDWN);
+-	phy_ctrl |= USBPHY_SESNDEN | USBPHY_VBDTCTEN | USBPHY_PHYPLLON;
+-	__raw_writel(phy_ctrl, USB_PHY_CTRL);
+-
+-	/* wait for PLL to lock before proceeding */
+-	while ((__raw_readl(USB_PHY_CTRL) & USBPHY_PHYCLKGD) == 0)
+-		cpu_relax();
+-}
+-
+-static inline void phy_off(void)
+-{
+-	u32	phy_ctrl = __raw_readl(USB_PHY_CTRL);
+-
+-	/* powerdown the on-chip PHY, its PLL, and the OTG block */
+-	phy_ctrl &= ~(USBPHY_SESNDEN | USBPHY_VBDTCTEN | USBPHY_PHYPLLON);
+-	phy_ctrl |= USBPHY_OSCPDWN | USBPHY_OTGPDWN | USBPHY_PHYPDWN;
+-	__raw_writel(phy_ctrl, USB_PHY_CTRL);
+-}
+-
+-static int dma_off = 1;
+-
+-static void davinci_musb_enable(struct musb *musb)
+-{
+-	u32	tmp, old, val;
+-
+-	/* workaround:  setup irqs through both register sets */
+-	tmp = (musb->epmask & DAVINCI_USB_TX_ENDPTS_MASK)
+-			<< DAVINCI_USB_TXINT_SHIFT;
+-	musb_writel(musb->ctrl_base, DAVINCI_USB_INT_MASK_SET_REG, tmp);
+-	old = tmp;
+-	tmp = (musb->epmask & (0xfffe & DAVINCI_USB_RX_ENDPTS_MASK))
+-			<< DAVINCI_USB_RXINT_SHIFT;
+-	musb_writel(musb->ctrl_base, DAVINCI_USB_INT_MASK_SET_REG, tmp);
+-	tmp |= old;
+-
+-	val = ~MUSB_INTR_SOF;
+-	tmp |= ((val & 0x01ff) << DAVINCI_USB_USBINT_SHIFT);
+-	musb_writel(musb->ctrl_base, DAVINCI_USB_INT_MASK_SET_REG, tmp);
+-
+-	if (is_dma_capable() && !dma_off)
+-		printk(KERN_WARNING "%s %s: dma not reactivated\n",
+-				__FILE__, __func__);
+-	else
+-		dma_off = 0;
+-
+-	/* force a DRVVBUS irq so we can start polling for ID change */
+-	musb_writel(musb->ctrl_base, DAVINCI_USB_INT_SET_REG,
+-			DAVINCI_INTR_DRVVBUS << DAVINCI_USB_USBINT_SHIFT);
+-}
+-
+-/*
+- * Disable the HDRC and flush interrupts
+- */
+-static void davinci_musb_disable(struct musb *musb)
+-{
+-	/* because we don't set CTRLR.UINT, "important" to:
+-	 *  - not read/write INTRUSB/INTRUSBE
+-	 *  - (except during initial setup, as workaround)
+-	 *  - use INTSETR/INTCLRR instead
+-	 */
+-	musb_writel(musb->ctrl_base, DAVINCI_USB_INT_MASK_CLR_REG,
+-			  DAVINCI_USB_USBINT_MASK
+-			| DAVINCI_USB_TXINT_MASK
+-			| DAVINCI_USB_RXINT_MASK);
+-	musb_writel(musb->ctrl_base, DAVINCI_USB_EOI_REG, 0);
+-
+-	if (is_dma_capable() && !dma_off)
+-		WARNING("dma still active\n");
+-}
+-
+-
+-#define	portstate(stmt)		stmt
+-
+-/*
+- * VBUS SWITCHING IS BOARD-SPECIFIC ... at least for the DM6446 EVM,
+- * which doesn't wire DRVVBUS to the FET that switches it.  Unclear
+- * if that's a problem with the DM6446 chip or just with that board.
+- *
+- * In either case, the DM355 EVM automates DRVVBUS the normal way,
+- * when J10 is out, and TI documents it as handling OTG.
+- */
+-
+-/* I2C operations are always synchronous, and require a task context.
+- * With unloaded systems, using the shared workqueue seems to suffice
+- * to satisfy the 100msec A_WAIT_VRISE timeout...
+- */
+-static void evm_deferred_drvvbus(struct work_struct *work)
+-{
+-	struct davinci_glue *glue = container_of(work, struct davinci_glue,
+-						 vbus_work);
+-
+-	gpiod_set_value_cansleep(glue->vbus, glue->vbus_state);
+-	glue->vbus_state = !glue->vbus_state;
+-}
+-
+-static void davinci_musb_source_power(struct musb *musb, int is_on,
+-				      int immediate)
+-{
+-	struct davinci_glue *glue = dev_get_drvdata(musb->controller->parent);
+-
+-	/* This GPIO handling is entirely optional */
+-	if (!glue->vbus)
+-		return;
+-
+-	if (is_on)
+-		is_on = 1;
+-
+-	if (glue->vbus_state == is_on)
+-		return;
+-	/* 0/1 vs "-1 == unknown/init" */
+-	glue->vbus_state = !is_on;
+-
+-	if (machine_is_davinci_evm()) {
+-		if (immediate)
+-			gpiod_set_value_cansleep(glue->vbus, glue->vbus_state);
+-		else
+-			schedule_work(&glue->vbus_work);
+-	}
+-	if (immediate)
+-		glue->vbus_state = is_on;
+-}
+-
+-static void davinci_musb_set_vbus(struct musb *musb, int is_on)
+-{
+-	WARN_ON(is_on && is_peripheral_active(musb));
+-	davinci_musb_source_power(musb, is_on, 0);
+-}
+-
+-
+-#define	POLL_SECONDS	2
+-
+-static void otg_timer(struct timer_list *t)
+-{
+-	struct musb		*musb = from_timer(musb, t, dev_timer);
+-	void __iomem		*mregs = musb->mregs;
+-	u8			devctl;
+-	unsigned long		flags;
+-
+-	/* We poll because DaVinci's won't expose several OTG-critical
+-	* status change events (from the transceiver) otherwise.
+-	 */
+-	devctl = musb_readb(mregs, MUSB_DEVCTL);
+-	dev_dbg(musb->controller, "poll devctl %02x (%s)\n", devctl,
+-		usb_otg_state_string(musb->xceiv->otg->state));
+-
+-	spin_lock_irqsave(&musb->lock, flags);
+-	switch (musb->xceiv->otg->state) {
+-	case OTG_STATE_A_WAIT_VFALL:
+-		/* Wait till VBUS falls below SessionEnd (~0.2V); the 1.3 RTL
+-		 * seems to mis-handle session "start" otherwise (or in our
+-		 * case "recover"), in routine "VBUS was valid by the time
+-		 * VBUSERR got reported during enumeration" cases.
+-		 */
+-		if (devctl & MUSB_DEVCTL_VBUS) {
+-			mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
+-			break;
+-		}
+-		musb->xceiv->otg->state = OTG_STATE_A_WAIT_VRISE;
+-		musb_writel(musb->ctrl_base, DAVINCI_USB_INT_SET_REG,
+-			MUSB_INTR_VBUSERROR << DAVINCI_USB_USBINT_SHIFT);
+-		break;
+-	case OTG_STATE_B_IDLE:
+-		/*
+-		 * There's no ID-changed IRQ, so we have no good way to tell
+-		 * when to switch to the A-Default state machine (by setting
+-		 * the DEVCTL.SESSION flag).
+-		 *
+-		 * Workaround:  whenever we're in B_IDLE, try setting the
+-		 * session flag every few seconds.  If it works, ID was
+-		 * grounded and we're now in the A-Default state machine.
+-		 *
+-		 * NOTE setting the session flag is _supposed_ to trigger
+-		 * SRP, but clearly it doesn't.
+-		 */
+-		musb_writeb(mregs, MUSB_DEVCTL,
+-				devctl | MUSB_DEVCTL_SESSION);
+-		devctl = musb_readb(mregs, MUSB_DEVCTL);
+-		if (devctl & MUSB_DEVCTL_BDEVICE)
+-			mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
+-		else
+-			musb->xceiv->otg->state = OTG_STATE_A_IDLE;
+-		break;
+-	default:
+-		break;
+-	}
+-	spin_unlock_irqrestore(&musb->lock, flags);
+-}
+-
+-static irqreturn_t davinci_musb_interrupt(int irq, void *__hci)
+-{
+-	unsigned long	flags;
+-	irqreturn_t	retval = IRQ_NONE;
+-	struct musb	*musb = __hci;
+-	struct usb_otg	*otg = musb->xceiv->otg;
+-	void __iomem	*tibase = musb->ctrl_base;
+-	struct cppi	*cppi;
+-	u32		tmp;
+-
+-	spin_lock_irqsave(&musb->lock, flags);
+-
+-	/* NOTE: DaVinci shadows the Mentor IRQs.  Don't manage them through
+-	 * the Mentor registers (except for setup), use the TI ones and EOI.
+-	 *
+-	 * Docs describe irq "vector" registers associated with the CPPI and
+-	 * USB EOI registers.  These hold a bitmask corresponding to the
+-	 * current IRQ, not an irq handler address.  Would using those bits
+-	 * resolve some of the races observed in this dispatch code??
+-	 */
+-
+-	/* CPPI interrupts share the same IRQ line, but have their own
+-	 * mask, state, "vector", and EOI registers.
+-	 */
+-	cppi = container_of(musb->dma_controller, struct cppi, controller);
+-	if (is_cppi_enabled(musb) && musb->dma_controller && !cppi->irq)
+-		retval = cppi_interrupt(irq, __hci);
+-
+-	/* ack and handle non-CPPI interrupts */
+-	tmp = musb_readl(tibase, DAVINCI_USB_INT_SRC_MASKED_REG);
+-	musb_writel(tibase, DAVINCI_USB_INT_SRC_CLR_REG, tmp);
+-	dev_dbg(musb->controller, "IRQ %08x\n", tmp);
+-
+-	musb->int_rx = (tmp & DAVINCI_USB_RXINT_MASK)
+-			>> DAVINCI_USB_RXINT_SHIFT;
+-	musb->int_tx = (tmp & DAVINCI_USB_TXINT_MASK)
+-			>> DAVINCI_USB_TXINT_SHIFT;
+-	musb->int_usb = (tmp & DAVINCI_USB_USBINT_MASK)
+-			>> DAVINCI_USB_USBINT_SHIFT;
+-
+-	/* DRVVBUS irqs are the only proxy we have (a very poor one!) for
+-	 * DaVinci's missing ID change IRQ.  We need an ID change IRQ to
+-	 * switch appropriately between halves of the OTG state machine.
+-	 * Managing DEVCTL.SESSION per Mentor docs requires we know its
+-	 * value, but DEVCTL.BDEVICE is invalid without DEVCTL.SESSION set.
+-	 * Also, DRVVBUS pulses for SRP (but not at 5V) ...
+-	 */
+-	if (tmp & (DAVINCI_INTR_DRVVBUS << DAVINCI_USB_USBINT_SHIFT)) {
+-		int	drvvbus = musb_readl(tibase, DAVINCI_USB_STAT_REG);
+-		void __iomem *mregs = musb->mregs;
+-		u8	devctl = musb_readb(mregs, MUSB_DEVCTL);
+-		int	err = musb->int_usb & MUSB_INTR_VBUSERROR;
+-
+-		err = musb->int_usb & MUSB_INTR_VBUSERROR;
+-		if (err) {
+-			/* The Mentor core doesn't debounce VBUS as needed
+-			 * to cope with device connect current spikes. This
+-			 * means it's not uncommon for bus-powered devices
+-			 * to get VBUS errors during enumeration.
+-			 *
+-			 * This is a workaround, but newer RTL from Mentor
+-			 * seems to allow a better one: "re"starting sessions
+-			 * without waiting (on EVM, a **long** time) for VBUS
+-			 * to stop registering in devctl.
+-			 */
+-			musb->int_usb &= ~MUSB_INTR_VBUSERROR;
+-			musb->xceiv->otg->state = OTG_STATE_A_WAIT_VFALL;
+-			mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
+-			WARNING("VBUS error workaround (delay coming)\n");
+-		} else if (drvvbus) {
+-			MUSB_HST_MODE(musb);
+-			musb->xceiv->otg->state = OTG_STATE_A_WAIT_VRISE;
+-			portstate(musb->port1_status |= USB_PORT_STAT_POWER);
+-			del_timer(&musb->dev_timer);
+-		} else {
+-			musb->is_active = 0;
+-			MUSB_DEV_MODE(musb);
+-			musb->xceiv->otg->state = OTG_STATE_B_IDLE;
+-			portstate(musb->port1_status &= ~USB_PORT_STAT_POWER);
+-		}
+-
+-		/* NOTE:  this must complete poweron within 100 msec
+-		 * (OTG_TIME_A_WAIT_VRISE) but we don't check for that.
+-		 */
+-		davinci_musb_source_power(musb, drvvbus, 0);
+-		dev_dbg(musb->controller, "VBUS %s (%s)%s, devctl %02x\n",
+-				drvvbus ? "on" : "off",
+-				usb_otg_state_string(musb->xceiv->otg->state),
+-				err ? " ERROR" : "",
+-				devctl);
+-		retval = IRQ_HANDLED;
+-	}
+-
+-	if (musb->int_tx || musb->int_rx || musb->int_usb)
+-		retval |= musb_interrupt(musb);
+-
+-	/* irq stays asserted until EOI is written */
+-	musb_writel(tibase, DAVINCI_USB_EOI_REG, 0);
+-
+-	/* poll for ID change */
+-	if (musb->xceiv->otg->state == OTG_STATE_B_IDLE)
+-		mod_timer(&musb->dev_timer, jiffies + POLL_SECONDS * HZ);
+-
+-	spin_unlock_irqrestore(&musb->lock, flags);
+-
+-	return retval;
+-}
+-
+-static int davinci_musb_set_mode(struct musb *musb, u8 mode)
+-{
+-	/* EVM can't do this (right?) */
+-	return -EIO;
+-}
+-
+-static int davinci_musb_init(struct musb *musb)
+-{
+-	void __iomem	*tibase = musb->ctrl_base;
+-	u32		revision;
+-	int 		ret = -ENODEV;
+-
+-	musb->xceiv = usb_get_phy(USB_PHY_TYPE_USB2);
+-	if (IS_ERR_OR_NULL(musb->xceiv)) {
+-		ret = -EPROBE_DEFER;
+-		goto unregister;
+-	}
+-
+-	musb->mregs += DAVINCI_BASE_OFFSET;
+-
+-	/* returns zero if e.g. not clocked */
+-	revision = musb_readl(tibase, DAVINCI_USB_VERSION_REG);
+-	if (revision == 0)
+-		goto fail;
+-
+-	timer_setup(&musb->dev_timer, otg_timer, 0);
+-
+-	davinci_musb_source_power(musb, 0, 1);
+-
+-	/* dm355 EVM swaps D+/D- for signal integrity, and
+-	 * is clocked from the main 24 MHz crystal.
+-	 */
+-	if (machine_is_davinci_dm355_evm()) {
+-		u32	phy_ctrl = __raw_readl(USB_PHY_CTRL);
+-
+-		phy_ctrl &= ~(3 << 9);
+-		phy_ctrl |= USBPHY_DATAPOL;
+-		__raw_writel(phy_ctrl, USB_PHY_CTRL);
+-	}
+-
+-	/* On dm355, the default-A state machine needs DRVVBUS control.
+-	 * If we won't be a host, there's no need to turn it on.
+-	 */
+-	if (cpu_is_davinci_dm355()) {
+-		u32	deepsleep = __raw_readl(DM355_DEEPSLEEP);
+-
+-		deepsleep &= ~DRVVBUS_FORCE;
+-		__raw_writel(deepsleep, DM355_DEEPSLEEP);
+-	}
+-
+-	/* reset the controller */
+-	musb_writel(tibase, DAVINCI_USB_CTRL_REG, 0x1);
+-
+-	/* start the on-chip PHY and its PLL */
+-	phy_on();
+-
+-	msleep(5);
+-
+-	/* NOTE:  irqs are in mixed mode, not bypass to pure-musb */
+-	pr_debug("DaVinci OTG revision %08x phy %03x control %02x\n",
+-		revision, __raw_readl(USB_PHY_CTRL),
+-		musb_readb(tibase, DAVINCI_USB_CTRL_REG));
+-
+-	musb->isr = davinci_musb_interrupt;
+-	return 0;
+-
+-fail:
+-	usb_put_phy(musb->xceiv);
+-unregister:
+-	usb_phy_generic_unregister();
+-	return ret;
+-}
+-
+-static int davinci_musb_exit(struct musb *musb)
+-{
+-	int	maxdelay = 30;
+-	u8	devctl, warn = 0;
+-
+-	del_timer_sync(&musb->dev_timer);
+-
+-	/* force VBUS off */
+-	if (cpu_is_davinci_dm355()) {
+-		u32	deepsleep = __raw_readl(DM355_DEEPSLEEP);
+-
+-		deepsleep &= ~DRVVBUS_FORCE;
+-		deepsleep |= DRVVBUS_OVERRIDE;
+-		__raw_writel(deepsleep, DM355_DEEPSLEEP);
+-	}
+-
+-	davinci_musb_source_power(musb, 0 /*off*/, 1);
+-
+-	/*
+-	 * delay, to avoid problems with module reload.
+-	 * if there's no peripheral connected, this can take a
+-	 * long time to fall, especially on EVM with huge C133.
+-	 */
+-	do {
+-		devctl = musb_readb(musb->mregs, MUSB_DEVCTL);
+-		if (!(devctl & MUSB_DEVCTL_VBUS))
+-			break;
+-		if ((devctl & MUSB_DEVCTL_VBUS) != warn) {
+-			warn = devctl & MUSB_DEVCTL_VBUS;
+-			dev_dbg(musb->controller, "VBUS %d\n",
+-				warn >> MUSB_DEVCTL_VBUS_SHIFT);
+-		}
+-		msleep(1000);
+-		maxdelay--;
+-	} while (maxdelay > 0);
+-
+-	/* in OTG mode, another host might be connected */
+-	if (devctl & MUSB_DEVCTL_VBUS)
+-		dev_dbg(musb->controller, "VBUS off timeout (devctl %02x)\n", devctl);
+-
+-	phy_off();
+-
+-	usb_put_phy(musb->xceiv);
+-
+-	return 0;
+-}
+-
+-static const struct musb_platform_ops davinci_ops = {
+-	.quirks		= MUSB_DMA_CPPI,
+-	.init		= davinci_musb_init,
+-	.exit		= davinci_musb_exit,
+-
+-#ifdef CONFIG_USB_TI_CPPI_DMA
+-	.dma_init	= cppi_dma_controller_create,
+-	.dma_exit	= cppi_dma_controller_destroy,
+-#endif
+-	.enable		= davinci_musb_enable,
+-	.disable	= davinci_musb_disable,
+-
+-	.set_mode	= davinci_musb_set_mode,
+-
+-	.set_vbus	= davinci_musb_set_vbus,
+-};
+-
+-static const struct platform_device_info davinci_dev_info = {
+-	.name		= "musb-hdrc",
+-	.id		= PLATFORM_DEVID_AUTO,
+-	.dma_mask	= DMA_BIT_MASK(32),
+-};
+-
+-static int davinci_probe(struct platform_device *pdev)
+-{
+-	struct resource			musb_resources[3];
+-	struct musb_hdrc_platform_data	*pdata = dev_get_platdata(&pdev->dev);
+-	struct platform_device		*musb;
+-	struct davinci_glue		*glue;
+-	struct platform_device_info	pinfo;
+-	struct clk			*clk;
+-
+-	int				ret = -ENOMEM;
+-
+-	glue = devm_kzalloc(&pdev->dev, sizeof(*glue), GFP_KERNEL);
+-	if (!glue)
+-		goto err0;
+-
+-	clk = devm_clk_get(&pdev->dev, "usb");
+-	if (IS_ERR(clk)) {
+-		dev_err(&pdev->dev, "failed to get clock\n");
+-		ret = PTR_ERR(clk);
+-		goto err0;
+-	}
+-
+-	ret = clk_enable(clk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "failed to enable clock\n");
+-		goto err0;
+-	}
+-
+-	glue->dev			= &pdev->dev;
+-	glue->clk			= clk;
+-
+-	pdata->platform_ops		= &davinci_ops;
+-
+-	glue->vbus = devm_gpiod_get_optional(&pdev->dev, NULL, GPIOD_OUT_LOW);
+-	if (IS_ERR(glue->vbus)) {
+-		ret = PTR_ERR(glue->vbus);
+-		goto err0;
+-	} else {
+-		glue->vbus_state = -1;
+-		INIT_WORK(&glue->vbus_work, evm_deferred_drvvbus);
+-	}
+-
+-	usb_phy_generic_register();
+-	platform_set_drvdata(pdev, glue);
+-
+-	memset(musb_resources, 0x00, sizeof(*musb_resources) *
+-			ARRAY_SIZE(musb_resources));
+-
+-	musb_resources[0].name = pdev->resource[0].name;
+-	musb_resources[0].start = pdev->resource[0].start;
+-	musb_resources[0].end = pdev->resource[0].end;
+-	musb_resources[0].flags = pdev->resource[0].flags;
+-
+-	musb_resources[1].name = pdev->resource[1].name;
+-	musb_resources[1].start = pdev->resource[1].start;
+-	musb_resources[1].end = pdev->resource[1].end;
+-	musb_resources[1].flags = pdev->resource[1].flags;
+-
+-	/*
+-	 * For DM6467 3 resources are passed. A placeholder for the 3rd
+-	 * resource is always there, so it's safe to always copy it...
+-	 */
+-	musb_resources[2].name = pdev->resource[2].name;
+-	musb_resources[2].start = pdev->resource[2].start;
+-	musb_resources[2].end = pdev->resource[2].end;
+-	musb_resources[2].flags = pdev->resource[2].flags;
+-
+-	pinfo = davinci_dev_info;
+-	pinfo.parent = &pdev->dev;
+-	pinfo.res = musb_resources;
+-	pinfo.num_res = ARRAY_SIZE(musb_resources);
+-	pinfo.data = pdata;
+-	pinfo.size_data = sizeof(*pdata);
+-
+-	glue->musb = musb = platform_device_register_full(&pinfo);
+-	if (IS_ERR(musb)) {
+-		ret = PTR_ERR(musb);
+-		dev_err(&pdev->dev, "failed to register musb device: %d\n", ret);
+-		goto err1;
+-	}
+-
+-	return 0;
+-
+-err1:
+-	clk_disable(clk);
+-
+-err0:
+-	return ret;
+-}
+-
+-static int davinci_remove(struct platform_device *pdev)
+-{
+-	struct davinci_glue		*glue = platform_get_drvdata(pdev);
+-
+-	platform_device_unregister(glue->musb);
+-	usb_phy_generic_unregister();
+-	clk_disable(glue->clk);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver davinci_driver = {
+-	.probe		= davinci_probe,
+-	.remove		= davinci_remove,
+-	.driver		= {
+-		.name	= "musb-davinci",
+-	},
+-};
+-
+-MODULE_DESCRIPTION("DaVinci MUSB Glue Layer");
+-MODULE_AUTHOR("Felipe Balbi <balbi@ti.com>");
+-MODULE_LICENSE("GPL v2");
+-module_platform_driver(davinci_driver);
+diff --git a/drivers/usb/musb/davinci.h b/drivers/usb/musb/davinci.h
+deleted file mode 100644
+index c8e67d15b510..000000000000
+--- a/drivers/usb/musb/davinci.h
++++ /dev/null
+@@ -1,103 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Copyright (C) 2005-2006 by Texas Instruments
+- */
+-
+-#ifndef __MUSB_HDRDF_H__
+-#define __MUSB_HDRDF_H__
+-
+-/*
+- * DaVinci-specific definitions
+- */
+-
+-/* Integrated highspeed/otg PHY */
+-#define USBPHY_CTL_PADDR	0x01c40034
+-#define USBPHY_DATAPOL		BIT(11)	/* (dm355) switch D+/D- */
+-#define USBPHY_PHYCLKGD		BIT(8)
+-#define USBPHY_SESNDEN		BIT(7)	/* v(sess_end) comparator */
+-#define USBPHY_VBDTCTEN		BIT(6)	/* v(bus) comparator */
+-#define USBPHY_VBUSSENS		BIT(5)	/* (dm355,ro) is vbus > 0.5V */
+-#define USBPHY_PHYPLLON		BIT(4)	/* override pll suspend */
+-#define USBPHY_CLKO1SEL		BIT(3)
+-#define USBPHY_OSCPDWN		BIT(2)
+-#define USBPHY_OTGPDWN		BIT(1)
+-#define USBPHY_PHYPDWN		BIT(0)
+-
+-#define DM355_DEEPSLEEP_PADDR	0x01c40048
+-#define DRVVBUS_FORCE		BIT(2)
+-#define DRVVBUS_OVERRIDE	BIT(1)
+-
+-/* For now include usb OTG module registers here */
+-#define DAVINCI_USB_VERSION_REG		0x00
+-#define DAVINCI_USB_CTRL_REG		0x04
+-#define DAVINCI_USB_STAT_REG		0x08
+-#define DAVINCI_RNDIS_REG		0x10
+-#define DAVINCI_AUTOREQ_REG		0x14
+-#define DAVINCI_USB_INT_SOURCE_REG	0x20
+-#define DAVINCI_USB_INT_SET_REG		0x24
+-#define DAVINCI_USB_INT_SRC_CLR_REG	0x28
+-#define DAVINCI_USB_INT_MASK_REG	0x2c
+-#define DAVINCI_USB_INT_MASK_SET_REG	0x30
+-#define DAVINCI_USB_INT_MASK_CLR_REG	0x34
+-#define DAVINCI_USB_INT_SRC_MASKED_REG	0x38
+-#define DAVINCI_USB_EOI_REG		0x3c
+-#define DAVINCI_USB_EOI_INTVEC		0x40
+-
+-/* BEGIN CPPI-generic (?) */
+-
+-/* CPPI related registers */
+-#define DAVINCI_TXCPPI_CTRL_REG		0x80
+-#define DAVINCI_TXCPPI_TEAR_REG		0x84
+-#define DAVINCI_CPPI_EOI_REG		0x88
+-#define DAVINCI_CPPI_INTVEC_REG		0x8c
+-#define DAVINCI_TXCPPI_MASKED_REG	0x90
+-#define DAVINCI_TXCPPI_RAW_REG		0x94
+-#define DAVINCI_TXCPPI_INTENAB_REG	0x98
+-#define DAVINCI_TXCPPI_INTCLR_REG	0x9c
+-
+-#define DAVINCI_RXCPPI_CTRL_REG		0xC0
+-#define DAVINCI_RXCPPI_MASKED_REG	0xD0
+-#define DAVINCI_RXCPPI_RAW_REG		0xD4
+-#define DAVINCI_RXCPPI_INTENAB_REG	0xD8
+-#define DAVINCI_RXCPPI_INTCLR_REG	0xDC
+-
+-#define DAVINCI_RXCPPI_BUFCNT0_REG	0xE0
+-#define DAVINCI_RXCPPI_BUFCNT1_REG	0xE4
+-#define DAVINCI_RXCPPI_BUFCNT2_REG	0xE8
+-#define DAVINCI_RXCPPI_BUFCNT3_REG	0xEC
+-
+-/* CPPI state RAM entries */
+-#define DAVINCI_CPPI_STATERAM_BASE_OFFSET   0x100
+-
+-#define DAVINCI_TXCPPI_STATERAM_OFFSET(chnum) \
+-	(DAVINCI_CPPI_STATERAM_BASE_OFFSET +       ((chnum) * 0x40))
+-#define DAVINCI_RXCPPI_STATERAM_OFFSET(chnum) \
+-	(DAVINCI_CPPI_STATERAM_BASE_OFFSET + 0x20 + ((chnum) * 0x40))
+-
+-/* CPPI masks */
+-#define DAVINCI_DMA_CTRL_ENABLE		1
+-#define DAVINCI_DMA_CTRL_DISABLE	0
+-
+-#define DAVINCI_DMA_ALL_CHANNELS_ENABLE	0xF
+-#define DAVINCI_DMA_ALL_CHANNELS_DISABLE 0xF
+-
+-/* END CPPI-generic (?) */
+-
+-#define DAVINCI_USB_TX_ENDPTS_MASK	0x1f		/* ep0 + 4 tx */
+-#define DAVINCI_USB_RX_ENDPTS_MASK	0x1e		/* 4 rx */
+-
+-#define DAVINCI_USB_USBINT_SHIFT	16
+-#define DAVINCI_USB_TXINT_SHIFT		0
+-#define DAVINCI_USB_RXINT_SHIFT		8
+-
+-#define DAVINCI_INTR_DRVVBUS		0x0100
+-
+-#define DAVINCI_USB_USBINT_MASK		0x01ff0000	/* 8 Mentor, DRVVBUS */
+-#define DAVINCI_USB_TXINT_MASK \
+-	(DAVINCI_USB_TX_ENDPTS_MASK << DAVINCI_USB_TXINT_SHIFT)
+-#define DAVINCI_USB_RXINT_MASK \
+-	(DAVINCI_USB_RX_ENDPTS_MASK << DAVINCI_USB_RXINT_SHIFT)
+-
+-#define DAVINCI_BASE_OFFSET		0x400
+-
+-#endif	/* __MUSB_HDRDF_H__ */
 -- 
 2.29.2
 
