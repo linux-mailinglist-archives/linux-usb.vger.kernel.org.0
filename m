@@ -2,275 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F8A6038D9
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 06:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D15603992
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 08:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJSEXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Oct 2022 00:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S229990AbiJSGHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 02:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJSEXF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 00:23:05 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266467F0B1
-        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 21:23:04 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id q9so37150633ejd.0
-        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 21:23:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iYk3FkT8huhG9S3jKz/zBuYsS4ys6ERir9+pjyJd6V4=;
-        b=UJXhT9wyZ7K4QC8cwHU5LdrRkqiyPMtyPfFvRMGUO8VbMRfvbNEIjCBkywMdf97h2+
-         p/QFEzNaquwMlxVoDLXY2pDYHQoHuOXv+e5+mUn/T/NCLpe2w7r7RNLXC8xcNeTIUZfO
-         poEcImb0HQ1F3TCAA/Mlm/wp/W6GFQVXN/714=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iYk3FkT8huhG9S3jKz/zBuYsS4ys6ERir9+pjyJd6V4=;
-        b=ElK54oVaBX3xZgjD3cWzn1FEgMStHdAMEMxxU76xL1zt7BMW+ig74PxDqvB1l/j17G
-         O0P9qI/G7r7cbwaiSVZAyPCM8MFj/DuNAwVlHYf0fjMc5aVZo2kauxfNo3HHwxyAE3Jo
-         xEsOPHFuncOFGqFG7Mh3VzzjxJ9Xsn+1oyXAfE7PTbzc/9ggjrEbaEIXJP8gABKcNTor
-         Vd/2qh47qQ7ECQ35GJbF8zuiGTr/2TqXMU1akG7Xhmhl+3d3esJpevBtZP8oEi/z3eVl
-         6sZ67HoGelNlnxgpHpI7YA2mTs8VcYnDy0FrYZ1PFllpcZ6wvKfURS6BEWQZRTuSAvAf
-         vUNQ==
-X-Gm-Message-State: ACrzQf1BsC4Yp6GeU6MdxERab916XQ+Vv+OlPs82udtrjYwGLinS0Ja5
-        YftL8Cf7SPpI1bcP01zSbwX+TR+44FxuDqY+
-X-Google-Smtp-Source: AMsMyM6nxrnmZ+vTfgYUwlf7cJmIqjIuhm4qVpOzkia/tJPloJCOruYYoPyZ7Alzh9MKnSkNZ4Zrlw==
-X-Received: by 2002:a17:907:2bdb:b0:78d:cf5a:210e with SMTP id gv27-20020a1709072bdb00b0078dcf5a210emr5002168ejc.747.1666153382546;
-        Tue, 18 Oct 2022 21:23:02 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id f20-20020a17090631d400b0073de0506745sm8245060ejf.197.2022.10.18.21.23.00
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 21:23:01 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id d26so37077580ejc.8
-        for <linux-usb@vger.kernel.org>; Tue, 18 Oct 2022 21:23:00 -0700 (PDT)
-X-Received: by 2002:a17:906:9752:b0:78d:d2e1:d745 with SMTP id
- o18-20020a170906975200b0078dd2e1d745mr4999540ejy.452.1666153380294; Tue, 18
- Oct 2022 21:23:00 -0700 (PDT)
+        with ESMTP id S229981AbiJSGHq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 02:07:46 -0400
+Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA1667049;
+        Tue, 18 Oct 2022 23:07:43 -0700 (PDT)
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IMi8wZ000854;
+        Tue, 18 Oct 2022 23:07:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=s2ekU4f/QJNaEWAxUO2Ikff2uz+LVzXK0fqL3vVNnso=;
+ b=PpMaZHgSiabMI3QHyy1WGBmd+KBWTNx+C2RkeEZ3CtvO4kWbYqRBVogCBogiHcLpVU/Y
+ gu2A2gmIWrV6Zj5hPIH9ly3Ncc+PJ83aWJ3BBrQuqqBA7fC7XSmf/c+YWbWc2VxM/pht
+ RR6eoP9tXHXOfJuThXSas0xqpt4w+5/xn+DcKNlzmskbRPFTD5ltnoXKaY4Ot8P3wtgF
+ p4vpiqKrHyNxp565uRZadEORkvH6W/7P7z51MNue7XOs4C77n4WG/Ysi94X+iW28Ftxw
+ SexOSjflrBxwEPJzqscOEGzaSYzcR9/hYIydj7uyza7Mbf7XtHHKty4Tgw8Yp9ayseFW dg== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3k7rf1kqne-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Oct 2022 23:07:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QnOCL54uIcOJkqxzt2GeBkOdw4HtJzCgQSJKzt+A5WSSy67l7jjFD9Oi+knrNVRfTZ+ucOOCX44455puEXwr3DhEDPkiF3fYXOFMv0zvQt7laXmSOjHfcYPs6WjkuaMTVtl0Y5SKkK/EnQzODx0TPXduSlOjeUjL+XENlBFa4NHUJuwlAk4yPicxMwoa/uYsLI3c8s6zGEVJwZHxtBkmR/C2M4IuxbQTq9Ti1UqXNns4ykBaDp8E08GMzGdyuIymVSbYoyL6/ptkPPOp+r93JDiwm9flRgrTADsHLiUKRq7H2VgoeI0z7AlnOhrCcRtOCOCkNrVQzXvjTXVPiM98Vg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s2ekU4f/QJNaEWAxUO2Ikff2uz+LVzXK0fqL3vVNnso=;
+ b=CKvrieZo7gXERM9mIZTq2qufzXdeJUwXwlV6315lM0ixFtWngE7uwLTW00rBeJ3rU/6oSn9wcc2/1MDz8cY6Immr6UFSn3YAedZbOwQ+9zCCBeXbmIBif0os18A3Cg+I/VrN3Vy+gICz1BuqFqw3Et1C4EnAPGoUj+974M4RcbK0X+IYWd9pk4Cf6+JXIbn5IE+zFwmZHFOTHp+EubSV9wuzsIHylCN7D9RuxaLTSwEvbJy/dpaB9J3TWM20p+4+HEiO3X0DjuBe6RCapqJjJwcr8jVkwtebwCMKs54x++v3eF8iZqoMwx+HYUAbNka6WKPNgBBfnoT+ELVJzfxj3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 64.207.220.244) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s2ekU4f/QJNaEWAxUO2Ikff2uz+LVzXK0fqL3vVNnso=;
+ b=0m/DKSJk3xecTiIEUCDSzIYjhfd7PgYwRkrJ5QMnCg1ULuKqqxpUVT4y0U9pcSQjvyS0uabppB1y1J2gj9Q3n8KxaXWFGDmftZt/iItSetivl4mnUwvfXg4cPfHMnGB9yb0zuT6FYXHLqG6IRgPehanPGgGugGFXYPcC7qw7Avs=
+Received: from DM6PR05CA0039.namprd05.prod.outlook.com (2603:10b6:5:335::8) by
+ BN7PR07MB5091.namprd07.prod.outlook.com (2603:10b6:408:25::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.33; Wed, 19 Oct 2022 06:07:30 +0000
+Received: from DM6NAM12FT057.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:5:335:cafe::10) by DM6PR05CA0039.outlook.office365.com
+ (2603:10b6:5:335::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.11 via Frontend
+ Transport; Wed, 19 Oct 2022 06:07:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 64.207.220.244)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 64.207.220.244 as permitted sender) receiver=protection.outlook.com;
+ client-ip=64.207.220.244; helo=wcmailrelayl01.cadence.com; pr=C
+Received: from wcmailrelayl01.cadence.com (64.207.220.244) by
+ DM6NAM12FT057.mail.protection.outlook.com (10.13.178.73) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.11 via Frontend Transport; Wed, 19 Oct 2022 06:07:28 +0000
+Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
+        by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 29J67Qp5133987
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Tue, 18 Oct 2022 23:07:27 -0700
+Received: from maileu5.global.cadence.com (10.160.110.202) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 19 Oct 2022 08:07:25 +0200
+Received: from eu-cn01.cadence.com (10.160.89.184) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24 via Frontend Transport; Wed, 19 Oct 2022 08:07:25 +0200
+Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
+        by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 29J67Pxk161237;
+        Wed, 19 Oct 2022 02:07:25 -0400
+Received: (from pawell@localhost)
+        by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 29J67Oun161236;
+        Wed, 19 Oct 2022 02:07:24 -0400
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
+Date:   Wed, 19 Oct 2022 02:07:17 -0400
+Message-ID: <1666159637-161135-1-git-send-email-pawell@cadence.com>
+X-Mailer: git-send-email 2.4.5
 MIME-Version: 1.0
-References: <bug-216543-208809@https.bugzilla.kernel.org/> <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
- <Y03IXMGpZ2fCof2k@rowland.harvard.edu> <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
- <Y07AAmc2QnP5HiBg@pendragon.ideasonboard.com> <CANiDSCsSn=UJfCt6shy8htGXAPyeEceVzKva3eD+YxhC3YVmxA@mail.gmail.com>
- <Y09WlZwb270lHPkv@pendragon.ideasonboard.com>
-In-Reply-To: <Y09WlZwb270lHPkv@pendragon.ideasonboard.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 19 Oct 2022 13:22:48 +0900
-X-Gmail-Original-Message-ID: <CANiDSCvnWpnw=+QHMfykdbocUyZ2JgN0Mpyvq+fu9u4XWoqwwA@mail.gmail.com>
-Message-ID: <CANiDSCvnWpnw=+QHMfykdbocUyZ2JgN0Mpyvq+fu9u4XWoqwwA@mail.gmail.com>
-Subject: Re: [Bug 216543] kernel NULL pointer dereference usb_hcd_alloc_bandwidth
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Nazar Mokrynskyi <nazar@mokrynskyi.com>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux@roeck-us.net, Tomasz Figa <tfiga@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
+X-OrganizationHeadersPreserved: maileu5.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM12FT057:EE_|BN7PR07MB5091:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ed6c74c-dd65-48fa-572d-08dab1983396
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FKqLeH/38hFHBSBSiNj4yNdlp/q0UwmO1F7m1dJc7PedX0vjT2sBN2xd7vVIG3nGMZ+2cwKCWjMY9DxQN9x9TZSI4LpSSutYvzBb1w0cIId9oO2S5TlK5MV41vC3ijD5f++pCUZO4a2fPWHayEUZCfxr01iHhSgVvE7YuksnHxjQcLm/64rwdsUnvUj9GtC4Z+Q0UoTEXvZmJNfjYkla9R2ipg+7cS/TvvmXmwBhlah34Ooi2sEWJeGpNY4AsHOJ7g/tjnt7s00xTP7fadfeBvjBAnJklGFlKVmbL4dXJVO2II5oGZTaQSnof+V8w+hrjgsPZFw2pvdPvMoPj4mL6NTsqLz9flEcUsgCnP9odIqHhOzqWpAq1H9h7ZcqCPSqDP4nhSPO4hTSLnfYhvA3pblCZVs8XbrcsSjjchjKyvir7IV9XRsTTtX5XIQwTL7H32MTXmxYoaN7+GweYVS9KbIpXFl8O4UVDAKbeSOB3qR4atXIuK22hrP01ZlYgj9l1ZyVop/QZF7PEt82nSw6sfGpsHoqc93SFg2523Koow0rCyd+n2JtOhb0nGVHaWItBpsUre4/HP/8Nop9Z4bIkwW8mVh/5DlGu0IV/Q8TGNpnz+98Y6bzXmSLWGnTfUddS1RZL0pa7aXmIOkI/hONn8JgQNB0Nf8x+CS5qDrag3MM3p9JZm86ZiG0CH0uuOx28gUq5Z/MWXFv+X06/DI7X6bwC/NR16Kp8Vi8BTUkpNjKgXk9b0Ms6ND90/Vll+YIo8YK3wbPGWwT+YV7BRERrQ9HM4+xZ9KSxUNsZ/0f+quRU+/0bW6iqfCxDodvbtuh
+X-Forefront-Antispam-Report: CIP:64.207.220.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wcmailrelayl01.cadence.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(376002)(346002)(36092001)(451199015)(36840700001)(46966006)(40470700004)(5660300002)(2906002)(8676002)(4326008)(8936002)(336012)(2616005)(41300700001)(40460700003)(356005)(81166007)(86362001)(82740400003)(26005)(54906003)(6916009)(82310400005)(36756003)(6666004)(478600001)(36860700001)(47076005)(70586007)(70206006)(42186006)(316002)(186003)(40480700001)(426003)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 06:07:28.3888
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ed6c74c-dd65-48fa-572d-08dab1983396
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.244];Helo=[wcmailrelayl01.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT057.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR07MB5091
+X-Proofpoint-ORIG-GUID: L4dSBQesf5cjdNbPipFvKuYuTFVz6a_0
+X-Proofpoint-GUID: L4dSBQesf5cjdNbPipFvKuYuTFVz6a_0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_02,2022-10-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 impostorscore=0
+ adultscore=0 spamscore=0 bulkscore=0 clxscore=1011 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=426 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190033
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent
+Patch modifies the TD_SIZE in TRB before ZLP TRB.
+The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
+processing ZLP TRB by controller.
 
-On Wed, 19 Oct 2022 at 10:45, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> On Wed, Oct 19, 2022 at 10:35:00AM +0900, Ricardo Ribalda wrote:
-> > On Wed, 19 Oct 2022 at 00:02, Laurent Pinchart wrote:
-> > > On Tue, Oct 18, 2022 at 02:40:44PM +0900, Ricardo Ribalda wrote:
-> > > > Hi
-> > > >
-> > > > Guenter already provided some patches to fix this issue:
-> > > > https://lore.kernel.org/lkml/20200917022547.198090-1-linux@roeck-us.net/
-> > > >
-> > > > Until we have a solution on the core (or rewrite the kernel in rust
-> > > > ;P) , I think we should merge them (or something similar).
-> > > >
-> > > > I can prepare a patchset merging Guenter set and my "grannular PM"
-> > > > https://lore.kernel.org/linux-media/20220920-resend-powersave-v1-0-123aa2ba3836@chromium.org/
-> > >
-> > > How about working on a proper fix instead ? :-)
-> >
-> > We already have a fix that has been extensively tested ;P
-> >
-> > When put on top of granular PM it is a tiny patch:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/ribalda/linux.git/commit/?h=b4/resend-powersave&id=cf826010bedda38f8faf8d072f95a9ca69ed452d
-> > that can be cleanly reverted when/if we fix it in core.
-> >
-> > I would like to avoid that more and more people/distros have
-> > downstream patches on top of uvc to fix real issues just because we
-> > think that it is not the "perfect" solution.
->
-> And I would like to avoid having to roll out manual changes to all
-> drivers when the problem can be fixed in the core, just because nobody
-> can be bothered to spend time to implement a good fix. We don't have to
-> aim for a solution at the cdev level if that takes too long, an
-> implementation in V4L2 would be enough to start with.
+Cc: <stable@vger.kernel.org>
+Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+ drivers/usb/cdns3/cdnsp-ring.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-Do we know what a "good fix" would look like?. This is a race
-condition between cdev, v4l2, and usb_driver. The only entity that
-knows about the three of them is the driver.
-
-If we "fix" v4l2 to provide a callback to notify the framework about a
-"bus disconnect". It can prevent new syscalls, but it cannot interrupt
-the current ones.
-
-So this is not something we can easily fix in O(months). Is there
-anyone working on it after your LPC presentation?
-
-Until then, landing a 10 lines patch that solves a real fix, that
-distros are backporting it already is not a bad compromise....
-
->
-> I'm getting tired of having to reexplain this continuously with nobody
-> listening. This could have been solved a long time ago.
-
-People listen, but it is a change that goes across multiple boundaries
-
->
-> > Would you please take a second look at the combined patchset?
->
-> I will have a look. If I recall correctly, there were some patches in
-> Guenter's series that I had no issue with, I'll start with those.
-
-Thanks, I will post the combined series today.
-
->
-> > > > It can always be reverted when we reach consensus on how to do it for
-> > > > every driver.
-> > > >
-> > > > Regards!
-> > > >
-> > > > On Tue, 18 Oct 2022 at 06:46, Alan Stern wrote:
-> > > > >
-> > > > > Moving this bug report from bugzilla to the mailing lists.
-> > > > >
-> > > > > The short description of the bug is that in uvcvideo, disconnect races
-> > > > > with starting a video transfer.  The race shows up on Nazar's system
-> > > > > because of a marginal USB cable which leads to a lot of spontaneous
-> > > > > disconnections.
-> > > > >
-> > > > > On Mon, Oct 17, 2022 at 05:59:48PM +0000, bugzilla-daemon@kernel.org wrote:
-> > > > > > https://bugzilla.kernel.org/show_bug.cgi?id=216543
-> > > > > >
-> > > > > > --- Comment #7 from Nazar Mokrynskyi (nazar@mokrynskyi.com) ---
-> > > > > > Created attachment 303022
-> > > > > >   --> https://bugzilla.kernel.org/attachment.cgi?id=303022&action=edit
-> > > > > > Kernel log with uvc-trace patch applied
-> > > > >
-> > > > > For everyone's information, here is the uvc-trace patch.  All it does is
-> > > > > add messages to the kernel log when uvcvideo's probe and disconnect
-> > > > > routines run, and just before uvc_video_start_transfer() calls
-> > > > > usb_set_interface().
-> > > > >
-> > > > > --- usb-devel/drivers/media/usb/uvc/uvc_video.c
-> > > > > +++ usb-devel/drivers/media/usb/uvc/uvc_video.c
-> > > > > @@ -1965,6 +1965,7 @@ static int uvc_video_start_transfer(stru
-> > > > >                         "Selecting alternate setting %u (%u B/frame bandwidth)\n",
-> > > > >                         altsetting, best_psize);
-> > > > >
-> > > > > +               dev_info(&intf->dev, "uvc set alt\n");
-> > > > >                 ret = usb_set_interface(stream->dev->udev, intfnum, altsetting);
-> > > > >                 if (ret < 0)
-> > > > >                         return ret;
-> > > > > --- usb-devel/drivers/media/usb/uvc/uvc_driver.c
-> > > > > +++ usb-devel/drivers/media/usb/uvc/uvc_driver.c
-> > > > > @@ -2374,6 +2374,8 @@ static int uvc_probe(struct usb_interfac
-> > > > >         int function;
-> > > > >         int ret;
-> > > > >
-> > > > > +       dev_info(&intf->dev, "uvc_probe start\n");
-> > > > > +
-> > > > >         /* Allocate memory for the device and initialize it. */
-> > > > >         dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-> > > > >         if (dev == NULL)
-> > > > > @@ -2535,6 +2537,7 @@ static void uvc_disconnect(struct usb_in
-> > > > >                 return;
-> > > > >
-> > > > >         uvc_unregister_video(dev);
-> > > > > +       dev_info(&intf->dev, "uvc_disconnect done\n");
-> > > > >         kref_put(&dev->ref, uvc_delete);
-> > > > >  }
-> > > > >
-> > > > > The output in the kernel log below clearly shows that there is a bug in
-> > > > > the uvcvideo driver.
-> > > > >
-> > > > > > I'm on 6.0.2 and seemingly get this even more frequently with good cable and no
-> > > > > > extra adapters. So I patched 6.0.2 with uvc-trace above and reproduced it
-> > > > > > within a few minutes.
-> > > > > >
-> > > > > > USB seems to reset, often camera stops or freezes in the browser, but the light
-> > > > > > on the camera itself remains on. Sometimes I can enable/disable/enable camera
-> > > > > > for it to reboot, but the last time I did that in the log I got null pointer
-> > > > > > de-reference again.
-> > > > >
-> > > > > Here is the important part of the log:
-> > > > >
-> > > > > [  684.746848] usb 8-2.4.4: reset SuperSpeed USB device number 6 using xhci_hcd
-> > > > > [  684.810979] uvcvideo 8-2.4.4:1.0: uvc_probe start
-> > > > > [  684.811032] usb 8-2.4.4: Found UVC 1.00 device Logitech BRIO (046d:085e)
-> > > > > [  684.843413] input: Logitech BRIO as /devices/pci0000:00/0000:00:08.1/0000:59:00.3/usb8/8-2/8-2.4/8-2.4.4/8-2.4.4:1.0/input/input43
-> > > > > [  684.911255] usb 8-2.4.4: current rate 16000 is different from the runtime rate 24000
-> > > > > ...
-> > > > > [  743.800368] uvcvideo 8-2.4.4:1.1: uvc set alt
-> > > > >
-> > > > > This is where an ioctl calls uvc_video_start_transfer.
-> > > > >
-> > > > > [  748.654701] usb 8-2.4.4: USB disconnect, device number 6
-> > > > > [  748.714355] uvcvideo 8-2.4.4:1.0: uvc_disconnect done
-> > > > >
-> > > > > This is where the disconnect starts and finishes
-> > > > >
-> > > > > [  748.898340] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> > > > > [  748.898344] #PF: supervisor read access in kernel mode
-> > > > > [  748.898346] #PF: error_code(0x0000) - not-present page
-> > > > > [  748.898347] PGD 0 P4D 0
-> > > > > [  748.898349] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> > > > > [  748.898351] CPU: 16 PID: 11890 Comm: VideoCapture Not tainted 6.0.2-x64v2-uvc-trace-xanmod1 #1
-> > > > > [  748.898353] Hardware name: Gigabyte Technology Co., Ltd. B550 VISION D/B550 VISION D, BIOS F15d 07/20/2022
-> > > > > [  748.898354] RIP: 0010:usb_ifnum_to_if+0x35/0x60
-> > > > > ...
-> > > > > [  748.898368] Call Trace:
-> > > > > [  748.898370]  <TASK>
-> > > > > [  748.898370]  usb_hcd_alloc_bandwidth+0x240/0x370
-> > > > > [  748.898375]  usb_set_interface+0x122/0x350
-> > > > > [  748.898378]  uvc_video_start_transfer.cold+0xd8/0x2ae [uvcvideo]
-> > > > > [  748.898383]  uvc_video_start_streaming+0x75/0xd0 [uvcvideo]
-> > > > > [  748.898386]  uvc_start_streaming+0x25/0xe0 [uvcvideo]
-> > > > > [  748.898390]  vb2_start_streaming+0x86/0x140 [videobuf2_common]
-> > > > > [  748.898393]  vb2_core_streamon+0x57/0xc0 [videobuf2_common]
-> > > > > [  748.898395]  uvc_queue_streamon+0x25/0x40 [uvcvideo]
-> > > > > [  748.898398]  uvc_ioctl_streamon+0x35/0x60 [uvcvideo]
-> > > > > [  748.898401]  __video_do_ioctl+0x19a/0x3f0 [videodev]
-> > > > >
-> > > > > And this proves that uvc_disconnect() returned before the driver was
-> > > > > finished accessing the device.
-> > > > >
-> > > > > I don't know how the driver works or how it tries to prevent this sort
-> > > > > of race from occurring, but apparently the strategy isn't working.
-> > > > >
-> > > > > > Please let me know if there is any other information I can provide and what
-> > > > > > could be the root cause of this annoying behavior.
-> > > > >
-> > > > > At this point I will bow out of the discussion; it's up to the uvcvideo
-> > > > > maintainers to investigate further.  Maybe they can provide a patch for
-> > > > > you to test.
->
-> --
-> Regards,
->
-> Laurent Pinchart
-
-
-
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index 794e413800ae..4809d0e894bb 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -1765,18 +1765,19 @@ static u32 cdnsp_td_remainder(struct cdnsp_device *pdev,
+ 			      struct cdnsp_request *preq,
+ 			      bool more_trbs_coming)
+ {
+-	u32 maxp, total_packet_count;
+-
+-	/* One TRB with a zero-length data packet. */
+-	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
+-	    trb_buff_len == td_total_len)
+-		return 0;
++	u32 maxp, total_packet_count, remainder;
+ 
+ 	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
+ 	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
+ 
+ 	/* Queuing functions don't count the current TRB into transferred. */
+-	return (total_packet_count - ((transferred + trb_buff_len) / maxp));
++	remainder = (total_packet_count - ((transferred + trb_buff_len) / maxp));
++
++	/* Before ZLP driver needs set TD_SIZE=1. */
++	if (!remainder && more_trbs_coming)
++		remainder = 1;
++
++	return remainder;
+ }
+ 
+ static int cdnsp_align_td(struct cdnsp_device *pdev,
 -- 
-Ricardo Ribalda
+2.25.1
+
