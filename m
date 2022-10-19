@@ -2,193 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628816042A9
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 13:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A394D60463F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 15:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiJSLIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Oct 2022 07:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S231171AbiJSNDd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 09:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbiJSLH2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 07:07:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E1A1781EE
-        for <linux-usb@vger.kernel.org>; Wed, 19 Oct 2022 03:36:21 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ol6Q2-0005oG-9s; Wed, 19 Oct 2022 12:35:26 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ol6Q1-0006FV-Eo; Wed, 19 Oct 2022 12:35:25 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ol6Q0-00COQ6-KL; Wed, 19 Oct 2022 12:35:24 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+        with ESMTP id S230435AbiJSNDN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 09:03:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B9452E42
+        for <linux-usb@vger.kernel.org>; Wed, 19 Oct 2022 05:46:41 -0700 (PDT)
+Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 843A55A4;
+        Wed, 19 Oct 2022 14:45:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1666183553;
+        bh=nxwhu/v9pAWfd1rklhtIdD//swgauSxiKDEGujblnyw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h2FHC3yvGyfmDJ/maNKTlkIDUoOZGr5F9+ii+0Y18/NOlHQetZKllgHUammf+Ay3d
+         1g7UxyBuArmf2cQnyswBHwkNVUW4UTvi0X7GYwplTDccZnC8o061Wk38l4h7GfWsTr
+         0G8HMUke18jC5aYSizWscvis23krxSEbWzxi+3Ic=
+From:   Daniel Scally <dan.scally@ideasonboard.com>
 To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
-        laurent.pinchart@ideasonboard.com, kernel@pengutronix.de
-Subject: [PATCH v4 2/2] usb: gadget: uvc: add validate and fix function for uvc response
-Date:   Wed, 19 Oct 2022 12:35:22 +0200
-Message-Id: <20221019103522.2925375-3-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221019103522.2925375-1-m.grzeschik@pengutronix.de>
-References: <20221019103522.2925375-1-m.grzeschik@pengutronix.de>
+Cc:     laurent.pinchart@ideasonboard.com, kieran@linuxembedded.co.uk,
+        balbi@kernel.org, gregkh@linuxfoundation.org, mgr@pengutronix.de,
+        w36195@motorola.com, Daniel Scally <dan.scally@ideasonboard.com>
+Subject: [PATCH v2] uvc: gadget: uvc: Defer uvcg_complete_buffer() until .complete()
+Date:   Wed, 19 Oct 2022 13:45:35 +0100
+Message-Id: <20221019124535.2712902-1-dan.scally@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
-UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
-needs to be validated. Since the kernel also knows the limits for valid
-cases, it can fixup the values in case the userspace is setting invalid
-data.
+Calling uvcg_complete_buffer() from uvc_video_encode_isoc() sometimes
+causes the final isoc packet for a video frame to be delayed long
+enough to cause the USB controller to drop it. The first isoc packet
+of the next video frame is then received by the host, which interprets
+the toggled FID bit correctly such that the stream continues without
+interruption, but the first frame will be missing the last isoc
+packet's worth of bytes.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+To fix the issue delay the call to uvcg_complete_buffer() until the
+usb_request's .complete() callback, as already happens when the data
+is encoded via uvc_video_encode_isoc_sg(). For consistency's sake the
+same change is applied to uvc_video_encode_bulk().
 
+Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
-v1 -> v4:
-- new patch
 
- drivers/usb/gadget/function/f_uvc.c    |  4 +-
- drivers/usb/gadget/function/uvc.h      |  1 +
- drivers/usb/gadget/function/uvc_v4l2.c | 76 ++++++++++++++++++++++++++
- 3 files changed, 80 insertions(+), 1 deletion(-)
+Changes in v2:
 
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 6e131624011a5e..098bd3c4e3c0b3 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -254,8 +254,10 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
- 	 */
- 	mctrl = &uvc_event->req;
- 	mctrl->wIndex &= ~cpu_to_le16(0xff);
--	if (interface == uvc->streaming_intf)
-+	if (interface == uvc->streaming_intf) {
-+		uvc->streaming_request = ctrl->bRequest;
- 		mctrl->wIndex = cpu_to_le16(UVC_STRING_STREAMING_IDX);
-+	}
- 
- 	v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 40226b1f7e148a..1be4d5f24b46bf 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -151,6 +151,7 @@ struct uvc_device {
- 	void *control_buf;
- 
- 	unsigned int streaming_intf;
-+	unsigned char streaming_request;
- 
- 	/* Events */
- 	unsigned int event_length;
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index c4ed48d6b8a407..d67aef71f8afc3 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -178,6 +178,67 @@ static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
-  * Requests handling
-  */
- 
-+/* validate and fixup streaming ctrl request response data if possible */
-+static void
-+uvc_validate_streaming_ctrl(struct uvc_device *uvc,
-+			    struct uvc_streaming_control *ctrl)
-+{
-+	struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
-+	unsigned int iformat, iframe;
-+	struct uvcg_format *uformat;
-+	struct uvcg_frame *uframe;
-+	bool ival_found = false;
-+	int i;
-+
-+	iformat = ctrl->bFormatIndex;
-+	iframe = ctrl->bFrameIndex;
-+
-+	/* Restrict the iformat, iframe and dwFrameInterval to valid values.
-+	 * Negative values for iformat and iframe will result in the maximum
-+	 * valid value being selected
-+	 */
-+	iformat = clamp((unsigned int)iformat, 1U,
-+			(unsigned int)uvc->header->num_fmt);
-+	if (iformat != ctrl->bFormatIndex) {
-+		uvcg_info(&uvc->func,
-+			  "Userspace set invalid Format Index - fixup\n");
-+		ctrl->bFormatIndex = iformat;
-+	}
-+	uformat = find_format_by_index(uvc, iformat);
-+
-+	iframe = clamp((unsigned int)iframe, 1U,
-+		       (unsigned int)uformat->num_frames);
-+	if (iframe != ctrl->bFrameIndex) {
-+		uvcg_info(&uvc->func,
-+			  "Userspace set invalid Frame Index - fixup\n");
-+		ctrl->bFrameIndex = iframe;
-+	}
-+	uframe = find_frame_by_index(uvc, uformat, iframe);
-+
-+	if (ctrl->dwFrameInterval) {
-+		for (i = 0; i < uframe->frame.b_frame_interval_type; i++) {
-+			if (ctrl->dwFrameInterval ==
-+				 uframe->dw_frame_interval[i])
-+				ival_found = true;
-+		}
-+	}
-+	if (!ival_found) {
-+		uvcg_info(&uvc->func,
-+			  "Userspace set invalid Frame Inteval - fixup\n");
-+		ctrl->dwFrameInterval = uframe->frame.dw_default_frame_interval;
-+	}
-+
-+	if (!ctrl->dwMaxPayloadTransferSize ||
-+			ctrl->dwMaxPayloadTransferSize >
-+				opts->streaming_maxpacket)
-+		ctrl->dwMaxPayloadTransferSize = opts->streaming_maxpacket;
-+
-+	if (!ctrl->dwMaxVideoFrameSize ||
-+			ctrl->dwMaxVideoFrameSize >
-+				uframe->frame.dw_max_video_frame_buffer_size)
-+		ctrl->dwMaxVideoFrameSize = uvc_get_frame_size(uformat, uframe);
-+}
-+
- static int
- uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
+	- Applied the same change to uvc_video_encode_bulk() for consistency
+
+@Dan - In the end I thought this is probably worth separating from your "usb:
+gadget: uvc: fix sg handling in error case" patch, since it fixes a separate
+issue by itself. I _think_ they're separable but I wasn't experiencing the
+problem you were so I can't test that - let me know if I'm wrong.
+
+@Michael - I dropped your R-b since I made the change to uvc_video_encode_bulk()
+too, didn't want to jump the gun :)
+
+ drivers/usb/gadget/function/uvc_video.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index c00ce0e91f5d..42bd4dd1d4a9 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -87,6 +87,7 @@ static void
+ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
+ 		struct uvc_buffer *buf)
  {
-@@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
++	struct uvc_request *ureq = req->context;
+ 	void *mem = req->buf;
+ 	int len = video->req_size;
+ 	int ret;
+@@ -113,7 +114,7 @@ uvc_video_encode_bulk(struct usb_request *req, struct uvc_video *video,
+ 		video->queue.buf_used = 0;
+ 		buf->state = UVC_BUF_STATE_DONE;
+ 		list_del(&buf->queue);
+-		uvcg_complete_buffer(&video->queue, buf);
++		ureq->last_buf = buf;
+ 		video->fid ^= UVC_STREAM_FID;
  
- 	memcpy(req->buf, data->data, req->length);
- 
-+	/* validate the ctrl content and fixup */
-+	if (!uvc->event_setup_out) {
-+		struct uvc_streaming_control *ctrl = req->buf;
-+
-+		switch (uvc->streaming_request) {
-+		case UVC_GET_CUR:
-+		case UVC_GET_MIN:
-+		case UVC_GET_MAX:
-+		case UVC_GET_DEF:
-+			uvc_validate_streaming_ctrl(uvc, ctrl);
-+		default:
-+			break;
-+		}
-+	}
-+
- 	return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
+ 		video->payload_size = 0;
+@@ -194,6 +195,7 @@ static void
+ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
+ 		struct uvc_buffer *buf)
+ {
++	struct uvc_request *ureq = req->context;
+ 	void *mem = req->buf;
+ 	int len = video->req_size;
+ 	int ret;
+@@ -213,7 +215,7 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
+ 		video->queue.buf_used = 0;
+ 		buf->state = UVC_BUF_STATE_DONE;
+ 		list_del(&buf->queue);
+-		uvcg_complete_buffer(&video->queue, buf);
++		ureq->last_buf = buf;
+ 		video->fid ^= UVC_STREAM_FID;
+ 	}
  }
- 
 -- 
-2.30.2
+2.34.1
 
