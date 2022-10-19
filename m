@@ -2,41 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB230604B29
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06E8604B3F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Oct 2022 17:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiJSPXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Oct 2022 11:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S229494AbiJSP0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Oct 2022 11:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiJSPWs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:22:48 -0400
+        with ESMTP id S231178AbiJSPZJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Oct 2022 11:25:09 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7249B140E7F
-        for <linux-usb@vger.kernel.org>; Wed, 19 Oct 2022 08:16:10 -0700 (PDT)
-Received: (qmail 1252835 invoked by uid 1000); 19 Oct 2022 11:08:28 -0400
-Date:   Wed, 19 Oct 2022 11:08:28 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 88656148F68
+        for <linux-usb@vger.kernel.org>; Wed, 19 Oct 2022 08:18:33 -0700 (PDT)
+Received: (qmail 1253247 invoked by uid 1000); 19 Oct 2022 11:17:33 -0400
+Date:   Wed, 19 Oct 2022 11:17:33 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Nazar Mokrynskyi <nazar@mokrynskyi.com>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux@roeck-us.net, Tomasz Figa <tfiga@chromium.org>
-Subject: Re: [Bug 216543] kernel NULL pointer dereference
- usb_hcd_alloc_bandwidth
-Message-ID: <Y1AS7DzY+Vo8ovUx@rowland.harvard.edu>
-References: <bug-216543-208809@https.bugzilla.kernel.org/>
- <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
- <Y03IXMGpZ2fCof2k@rowland.harvard.edu>
- <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
- <Y07AAmc2QnP5HiBg@pendragon.ideasonboard.com>
- <CANiDSCsSn=UJfCt6shy8htGXAPyeEceVzKva3eD+YxhC3YVmxA@mail.gmail.com>
- <Y09WlZwb270lHPkv@pendragon.ideasonboard.com>
- <CANiDSCvnWpnw=+QHMfykdbocUyZ2JgN0Mpyvq+fu9u4XWoqwwA@mail.gmail.com>
+To:     linux-input@vger.kernel.org
+Cc:     Andreas Bergmeier <abergmeier@gmx.net>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Litra Glow on Linux
+Message-ID: <Y1AVDck5sQf8+QFX@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CANiDSCvnWpnw=+QHMfykdbocUyZ2JgN0Mpyvq+fu9u4XWoqwwA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -46,36 +35,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 01:22:48PM +0900, Ricardo Ribalda wrote:
-> Hi Laurent
-> 
-> On Wed, 19 Oct 2022 at 10:45, Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
-> > And I would like to avoid having to roll out manual changes to all
-> > drivers when the problem can be fixed in the core, just because nobody
-> > can be bothered to spend time to implement a good fix. We don't have to
-> > aim for a solution at the cdev level if that takes too long, an
-> > implementation in V4L2 would be enough to start with.
-> 
-> Do we know what a "good fix" would look like?. This is a race
-> condition between cdev, v4l2, and usb_driver. The only entity that
-> knows about the three of them is the driver.
-> 
-> If we "fix" v4l2 to provide a callback to notify the framework about a
-> "bus disconnect". It can prevent new syscalls, but it cannot interrupt
-> the current ones.
-
-It doesn't need to interrupt current syscalls.  It merely needs to wait 
-until the current ones complete (and help them to complete early by 
-making them aware of the disconnection) and to prevent new ones from 
-starting.
-
-I have no idea what facility (if any) the framework uses for this 
-already.  However, if it turns out that proper synchronization needs a 
-new approach, I suggest trying SRCU.  It can be viewed in some respects 
-as a kind of read-write mutex that is highly optimized for rapid 
-read-locks and -unlocks at the cost of very slow write-locks -- 
-appropriate here since every syscall would need a read-lock whereas 
-write-locking would be needed only when a disconnect occurs.
+Forwarding this message to the linux-input mailing list, since it 
+concerns the input layer and not the USB layer.
 
 Alan Stern
+
+PS: Note that problem 1 below is easily solved with a udev script.
+
+----- Forwarded message from Andreas Bergmeier <abergmeier@gmx.net> -----
+
+Date: Mon, 17 Oct 2022 18:45:30 +0200
+From: Andreas Bergmeier <abergmeier@gmx.net>
+To: linux-usb@vger.kernel.org
+Subject: Litra Glow on Linux
+
+On my Ubuntu machine i am running 5.15.0. Now when I plugin in my
+Logitech Litra Glow, it gets detected and the following shows up in my
+dmesg:
+
+```
+input: Logi Litra Glow Consumer Control as
+/devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4.2/3-4.2:1.0/0003:046D:C900.000B/input/input75
+hid-generic 0003:046D:C900.000B: input,hiddev0,hidraw2: USB HID v1.11
+Device [Logi Litra Glow] on usb-0000:00:14.0-4.2/input0
+```
+
+Via (hardware) buttons you can switch the device on, regulate the
+color temperature as well as the brightness.
+I know of no way to fully control the device from my computer and
+would like to change that.
+
+It seems to me like I need to solve 4 problems (in userspace and maybe
+kernelspace):
+1. Handle plugging in and off
+2. Listen to events (button pressed) from the device
+3. Get the current state of the device
+4. Send events to the device
+
+
+The device seems to provide a pretty bare HID Report interface with no
+alternate configurations:
+https://github.com/abergmeier/litra_glow_linux/blob/main/lsusb
+The HID seems to define 3 Reports:
+https://github.com/abergmeier/litra_glow_linux/blob/main/parsed_descriptor
+
+Ignoring 1. for now.
+
+Trying to solve 2. I wrote a basic HIDDEV application. Using `read` I
+only see events from Report 17 (0x11). For all my experimenting with
+the device I have never seen a Report 1 or 2.
+So I get events, but it seems like the provided
+`hiddev_usage_ref.value` is sometimes wrong (seems to be 0 and 1 for
+most of the time even if I adjust the brightness).
+Doing a recording (turning on, adjusting brightness, turning off) of
+the raw HID events seems like the "correct" events are sent from the
+device: https://github.com/abergmeier/litra_glow_linux/blob/main/hid-recorder.
+So it seems to me like maybe the values get mixed up somewhere in the HID code.
+Alternatively I did a `evtest` run on the /dev/input/event* for the
+`Logi Litra Glow Consumer Control`:
+https://github.com/abergmeier/litra_glow_linux/blob/main/evtest
+When pressing (hardware) buttons no events showed up in `evtest´.
+Probably not surprising since these would be from Report 1 and 2 IIUC.
+Now I am not sure whether the USB interface is sketchy or whether one
+needs to activate the _Consumer Control_ somehow.
+
+Trying to solve 3. from what I understand with HID there usually is no
+way of reading the current state of the device?
+
+Trying to solve 4. there are userspace libraries in Python and Go
+which send events to the device bypassing HID. So there may be some
+quirks handling necessary in HID but I would defer that until 2. is
+done.
+
+With all that I am pretty much at my wits end and would appreciate any
+input how to further analyze the device situation.
+
+Cheers
+
+----- End forwarded message -----
