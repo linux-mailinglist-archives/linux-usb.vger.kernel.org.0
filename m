@@ -2,108 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E48B605E7D
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 13:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF6D605EEF
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 13:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiJTLLs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Oct 2022 07:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S231163AbiJTLer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Oct 2022 07:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiJTLLr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 07:11:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469743054F;
-        Thu, 20 Oct 2022 04:11:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED930B82708;
-        Thu, 20 Oct 2022 11:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B94C433D6;
-        Thu, 20 Oct 2022 11:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666264303;
-        bh=fqppNzeCEo1NHzHf6cVOz8qZAjKWYPqQw/5w9Joza68=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GLnd7QnW7rjUEnIqOp/2/3h7dC8jkxN0JEK33g+5Kz8JjIeO9McVsGH2QRz7NDTaq
-         UbZnJpwvv4oKO3cF+LcDbUgMY8O1JOg8S3ha1Ad/TfDN/InH94SiDjG5NrzUET4vmZ
-         rZk9HtBogEblGTtmpixEL6l1FHFu1QA2DpcZEIdk=
-Date:   Thu, 20 Oct 2022 13:11:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     wangwenmei168@163.com
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gehao <gehao@kylinos.cn>
-Subject: Re: [RESEND PATCH] xhci: Fix Renesas PCIe controllers passthrough
- issue
-Message-ID: <Y1Es7JWPNtcK2Qsu@kroah.com>
-References: <20221020103914.262202-1-wangwenmei168@163.com>
+        with ESMTP id S231375AbiJTLem (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 07:34:42 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B9439BA6
+        for <linux-usb@vger.kernel.org>; Thu, 20 Oct 2022 04:34:35 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id i16so8774807uak.1
+        for <linux-usb@vger.kernel.org>; Thu, 20 Oct 2022 04:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LDhV67G3yIU5nmxmqmZ9xL0xYos7YPVrGgeDtE3Ev1w=;
+        b=Q6lOl205MId5F7DEZxzDQXACD6sCSMVIlVvrPoyEOMYDm/D+4a/soXq7ZCHCgVqEwc
+         2qmaM02wjy20BeHTrxSxmR9UOzU17VE9f8i4EwGjI7knyjbm6Ak056laTsVLXz4hL3/U
+         +iHaXsJZP5Sj7bWNHTUZN2j57ZYyZ06xTZILALdms6bFuUTj1hklxZGLo/oewrOQzvHJ
+         zcNJpjqUWQx1fcUy6o6ZWxot30vQ9DbVEg5Js3fxo1EnL4+dY7dDbZnzban4t/ifYacv
+         Q3h2QqHXkv7DaXq1fo1KwfG//R4nhBpztx+FQy12ZcwZjQQEG+5zR5G8t6h0VU78MdLN
+         L1vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LDhV67G3yIU5nmxmqmZ9xL0xYos7YPVrGgeDtE3Ev1w=;
+        b=1kaQt6t37WiafIK9Y4/ARrR/lCV/+MWwAMVlEX8C+HvYlwlRYunPvgFCnHscKxr5vx
+         OH3BUC19E+V+nKN9HB/Yq10WrePh0Rdxa+Iw6uG5+kKZajgIPhh2qArUmnudUJhVxmmX
+         /UhGYgUXetYC1X8A+MG3aZSsVfg3R0ThBLV6mz4hCRuWJeKLBerOAii6SV3J6gs40Yn8
+         DruQHuEedjfhvzm2jLaRC48w+bZtM4CyIK+j2+RH3BYALmKX62d+4WHv0Q0YFpG46zxO
+         s4Ljg+/uK2FMjsfD257mxytIebPzE4LaMgpcre0u6dN5E6CEgcVH/LnbdDUFatx88xqK
+         OCCw==
+X-Gm-Message-State: ACrzQf22biMH/O00guUkoJCEKi8o8+A5BqxXVmJYGH03dF2k9gQrt2/5
+        oMcvO0net1r6xxplbvVko/15FhbVJC9DwwRF3EO3Fg==
+X-Google-Smtp-Source: AMsMyM4WwYXAIJoDmrCGYZ9TonZSFrG5it0MdGqExwa7IuYZKAhf7DtBeFJHWXBmjhRTl8t2JCIj8GiQJ8f3LkG2ifc=
+X-Received: by 2002:a67:ab02:0:b0:3a9:9953:6471 with SMTP id
+ u2-20020a67ab02000000b003a999536471mr4334447vse.47.1666265674577; Thu, 20 Oct
+ 2022 04:34:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020103914.262202-1-wangwenmei168@163.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-6-arnd@kernel.org>
+In-Reply-To: <20221019152947.3857217-6-arnd@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Oct 2022 13:34:23 +0200
+Message-ID: <CAMRc=McmBvOh5OV9Z-7ohjfFixBJUW1AAXb2XxFc_u-N1rYHQw@mail.gmail.com>
+Subject: Re: [PATCH 05/14] usb: musb: remove unused davinci support
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, linux-arm-kernel@lists.infradead.org,
+        Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 06:39:14PM +0800, wangwenmei168@163.com wrote:
-> From: gehao <gehao@kylinos.cn>
-
-This does not match your from: line in the email at all, so we can't
-take this :(
-
-Please work with your company's email system to make it possible to send
-kernel patches if you wish to be able to contribute.
-
-> 
-> When we use uPD720201 USB 3.0 Host Controller passthrough to VM
-> guest os will report follow errors and it can not working.
-> 
-> xhci_hcd 0000:09:00.0: Host took too long to start, waited 16000
-> microseconds.
-> xhci_hcd 0000:09:00.0: startup error -19.
-> 
-> Because when we passthroug some device to our guest os,
-> dev->iommu_group =NULL,so it will return from this function,
-> Actually it still control by host os.
-> I think that this condition is not necessary.
-> 
-> For host os with IOMMU,it is safe.
-> For host os with noiommu,doing anything when there is no
-> iommu is definitely.
-> For guest os,the addresses we can access are restricted.
-> 
-> After add this path,they all work well.
-
-This line isn't needed in a changelog, right?
-
-> 
-> Signed-off-by: gehao <gehao@kylinos.cn>
+On Wed, Oct 19, 2022 at 5:34 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The musb-davinci driver was only used on dm644x, which got removed
+> in linux-6.0. The only remaining davinci machines are da8xx
+> devicetree based and do not use this hardware.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/usb/host/xhci.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 5176765c4013..e8f4c4ee3ea3 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -241,12 +241,8 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
->  	 * changing the programming leads to extra accesses even if the
->  	 * controller is supposed to be halted. The controller ends up with
->  	 * a fatal fault, and is then ripe for being properly reset.
-> -	 *
-> -	 * Special care is taken to only apply this if the device is behind
-> -	 * an iommu. Doing anything when there is no iommu is definitely
-> -	 * unsafe...
 
-How many different systems did you test this on to verify that this is
-now ok to do?
-
-thanks,
-
-greg k-h
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
