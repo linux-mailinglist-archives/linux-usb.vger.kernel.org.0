@@ -2,65 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF6D605EEF
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 13:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00656060F2
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 15:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiJTLer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Oct 2022 07:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        id S230260AbiJTNGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Oct 2022 09:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiJTLem (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 07:34:42 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B9439BA6
-        for <linux-usb@vger.kernel.org>; Thu, 20 Oct 2022 04:34:35 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id i16so8774807uak.1
-        for <linux-usb@vger.kernel.org>; Thu, 20 Oct 2022 04:34:35 -0700 (PDT)
+        with ESMTP id S229898AbiJTNGy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 09:06:54 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63CA15203A;
+        Thu, 20 Oct 2022 06:06:52 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v11so4869687wmd.1;
+        Thu, 20 Oct 2022 06:06:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LDhV67G3yIU5nmxmqmZ9xL0xYos7YPVrGgeDtE3Ev1w=;
-        b=Q6lOl205MId5F7DEZxzDQXACD6sCSMVIlVvrPoyEOMYDm/D+4a/soXq7ZCHCgVqEwc
-         2qmaM02wjy20BeHTrxSxmR9UOzU17VE9f8i4EwGjI7knyjbm6Ak056laTsVLXz4hL3/U
-         +iHaXsJZP5Sj7bWNHTUZN2j57ZYyZ06xTZILALdms6bFuUTj1hklxZGLo/oewrOQzvHJ
-         zcNJpjqUWQx1fcUy6o6ZWxot30vQ9DbVEg5Js3fxo1EnL4+dY7dDbZnzban4t/ifYacv
-         Q3h2QqHXkv7DaXq1fo1KwfG//R4nhBpztx+FQy12ZcwZjQQEG+5zR5G8t6h0VU78MdLN
-         L1vA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V16xoQI1tSvYN6IGg2SDhKuuEiPSYX/4oIZVHGpPsQk=;
+        b=XxJGPF6oWoNUx1PrHhLIitquoV5XTR+5mfEp8ZNQ96RoiboZJ0HQdPTHCS8mJKlhq3
+         dlHi0SVvYpeB83SCjONZYQhCvj4t1ifLdaHa2/p2gZs2tCiOtSww1MKKWCzBbBPncjO5
+         6ZKD2pekBBu/ISXZI99q63h943NNphej+86cRrSxrG/UVXVv5clpC5eCptFspOmbIyHD
+         Q19K/CR995gjFd6+v47YpKG/iedrfARYXaSbQHLAmAqUJw8KH5sOJsoKvuJbMZcBgBUd
+         lUrj6Ksq6Z9elLHDX0jBy2s/WI2UQ/dTso+AEqFu369DsJSk4v0NifTlX3eb0r2c44vW
+         CYhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LDhV67G3yIU5nmxmqmZ9xL0xYos7YPVrGgeDtE3Ev1w=;
-        b=1kaQt6t37WiafIK9Y4/ARrR/lCV/+MWwAMVlEX8C+HvYlwlRYunPvgFCnHscKxr5vx
-         OH3BUC19E+V+nKN9HB/Yq10WrePh0Rdxa+Iw6uG5+kKZajgIPhh2qArUmnudUJhVxmmX
-         /UhGYgUXetYC1X8A+MG3aZSsVfg3R0ThBLV6mz4hCRuWJeKLBerOAii6SV3J6gs40Yn8
-         DruQHuEedjfhvzm2jLaRC48w+bZtM4CyIK+j2+RH3BYALmKX62d+4WHv0Q0YFpG46zxO
-         s4Ljg+/uK2FMjsfD257mxytIebPzE4LaMgpcre0u6dN5E6CEgcVH/LnbdDUFatx88xqK
-         OCCw==
-X-Gm-Message-State: ACrzQf22biMH/O00guUkoJCEKi8o8+A5BqxXVmJYGH03dF2k9gQrt2/5
-        oMcvO0net1r6xxplbvVko/15FhbVJC9DwwRF3EO3Fg==
-X-Google-Smtp-Source: AMsMyM4WwYXAIJoDmrCGYZ9TonZSFrG5it0MdGqExwa7IuYZKAhf7DtBeFJHWXBmjhRTl8t2JCIj8GiQJ8f3LkG2ifc=
-X-Received: by 2002:a67:ab02:0:b0:3a9:9953:6471 with SMTP id
- u2-20020a67ab02000000b003a999536471mr4334447vse.47.1666265674577; Thu, 20 Oct
- 2022 04:34:34 -0700 (PDT)
+        bh=V16xoQI1tSvYN6IGg2SDhKuuEiPSYX/4oIZVHGpPsQk=;
+        b=OlTjwFbwzWUrIzWXj92jFuQoEQqdX6mcCRU5XLeRQD1aDqXJxCyAouQquUmjO4sphV
+         elJ5S13TsqafA3Oq0D3s+Bl15asDR4yxqmEkvNQ4R6vz4LjjBKOkxf0FOPLt0bqcxDl9
+         ojhwnMcR3/C5/qfwx6a70L9Exx6+hXINTHlLZ1CAWb+qrTr8lPtfI4b80YivihIOCjpH
+         duA++bZjnAPrmoCYdfyacsfE82aOTMRZTN+j6dBhdpaZWS5ymqsW97Z7CLx+sJz082nC
+         loTUIUNN9huG4XZZcBbBjquo0FfVlAvvkmXzhAMznxGAf+DKqAVpTICdIHFBKLvjPzKn
+         mJiA==
+X-Gm-Message-State: ACrzQf0iZNAebKt8XvttYInmr39AWi/SkIsB/9EJtZH93zhSNO3561qF
+        yl24ix2qPlO8kI0v6Z3MuJY=
+X-Google-Smtp-Source: AMsMyM7povvYGvKNerEps/8u/UNbrMtviHbs5BXU3wiXZLvxfGxznWrL3AsaVuIuopdqk+ZEVbNf1Q==
+X-Received: by 2002:a05:600c:4e50:b0:3c6:faaa:1e7d with SMTP id e16-20020a05600c4e5000b003c6faaa1e7dmr9595076wmq.9.1666271211158;
+        Thu, 20 Oct 2022 06:06:51 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id r1-20020adfdc81000000b0022e3538d305sm18741769wrj.117.2022.10.20.06.06.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 06:06:50 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wei Yongjun <weiyongjun1@huawei.com>, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: ftdi-elan: remove variable err_count
+Date:   Thu, 20 Oct 2022 14:06:49 +0100
+Message-Id: <20221020130649.1546112-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-6-arnd@kernel.org>
-In-Reply-To: <20221019152947.3857217-6-arnd@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 20 Oct 2022 13:34:23 +0200
-Message-ID: <CAMRc=McmBvOh5OV9Z-7ohjfFixBJUW1AAXb2XxFc_u-N1rYHQw@mail.gmail.com>
-Subject: Re: [PATCH 05/14] usb: musb: remove unused davinci support
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, linux-arm-kernel@lists.infradead.org,
-        Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,15 +70,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:34 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The musb-davinci driver was only used on dm644x, which got removed
-> in linux-6.0. The only remaining davinci machines are da8xx
-> devicetree based and do not use this hardware.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Variable err_count is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/misc/ftdi-elan.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
+index b2f980409d0b..33b35788bd0b 100644
+--- a/drivers/usb/misc/ftdi-elan.c
++++ b/drivers/usb/misc/ftdi-elan.c
+@@ -1956,7 +1956,6 @@ static int ftdi_elan_synchronize(struct usb_ftdi *ftdi)
+ 	int long_stop = 10;
+ 	int retry_on_timeout = 5;
+ 	int retry_on_empty = 10;
+-	int err_count = 0;
+ 	retval = ftdi_elan_flush_input_fifo(ftdi);
+ 	if (retval)
+ 		return retval;
+@@ -2051,7 +2050,6 @@ static int ftdi_elan_synchronize(struct usb_ftdi *ftdi)
+ 					continue;
+ 				}
+ 			} else {
+-				err_count += 1;
+ 				dev_err(&ftdi->udev->dev, "error = %d\n",
+ 					retval);
+ 				if (read_stop-- > 0) {
+-- 
+2.37.3
+
