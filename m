@@ -2,173 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2085660681F
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 20:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C496068FD
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 21:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJTSWW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Oct 2022 14:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S230000AbiJTTf0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Oct 2022 15:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJTSWU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 14:22:20 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7041A6536;
-        Thu, 20 Oct 2022 11:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666290137;
-        bh=GuX8PRrzPSQzHHWQXajvky7pB9OhUb0PNpYLFlgpVec=;
-        h=X-UI-Sender-Class:References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=c8v3oTe7TX423hc5z5sWE0LrgU3myaXPo4Zc5OtsRDTpjiYmO2b55+sM4S+MRQPHl
-         Tdn/BGlU0VV7yX8E49lll8WkXSNTWjFuxCY3RiQ7ChtUi2bWXgAqFMR3Q8EuHsQPn5
-         Cgmr9Yleo9LIKWd5B6H4pShQmQAjpYflHJuZG4Hw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from mail-ej1-f48.google.com ([209.85.218.48]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Mo6ux-1pRXm61u3f-00pZGz; Thu, 20 Oct 2022 20:22:17 +0200
-Received: by mail-ej1-f48.google.com with SMTP id bj12so1420770ejb.13;
-        Thu, 20 Oct 2022 11:22:17 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3dW76Nbv+7UyIr+Bj2nyv3+nF9nTs5WyC5xRPyjW9BfRd6t5dC
-        X7tBFE2IPFHYBnJaG1PP2sw3w8tvTnFg5HsjuWA=
-X-Google-Smtp-Source: AMsMyM5Ng2Wc3Lxpm48RV5DmHO9IHb+UxKxzzhgloStGIyxLRUtmbwox7Y70QMoBUw3P4qel7jAkoyRZbcFbpfp6sF0=
-X-Received: by 2002:a17:906:8b81:b0:78e:1cb:e411 with SMTP id
- nr1-20020a1709068b8100b0078e01cbe411mr11761561ejc.681.1666290137095; Thu, 20
- Oct 2022 11:22:17 -0700 (PDT)
+        with ESMTP id S229576AbiJTTfW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 15:35:22 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E610159D44;
+        Thu, 20 Oct 2022 12:35:21 -0700 (PDT)
+Received: from t60.musicnaut.iki.fi (85-76-8-144-nat.elisa-mobile.fi [85.76.8.144])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id CE44D1B001A3;
+        Thu, 20 Oct 2022 22:35:12 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1666294513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iDvU3Oc2f/QHiT2VDqeJIzu0pLTa7SFrJfK0tw4pkR4=;
+        b=CtXAPho/8wXRfk+qDJKIoC6KYH+1stwwfLzjVRMs0F+xM+grEwFCOEnyHRY+ycw0phLrqA
+        dmxyo/lUkHIoc+6F7XZdm8QtRdpHYiq7POVNvy1hDDl8kZiaVzMRDVzCEvk5FKlLNJxM5Z
+        mIuzt6KGgMCHzIT9QAism4yT1QbepNWk+y8d8m1PE8h++XvCco1QZhPAh8kq+Eo6ZTq5+d
+        cxUaNZ5CDcDg2Jy6l0M31unoiNvCZ5XNaWr90DnEvhNeNZt53FaJvXJjRNgRz6OkolDyPR
+        gBA5Yui/EzWoDAsho3j99NrX8ZZvV0QVIX9keqeXgnlPd9S1ycI/FSQDcseG6A==
+Date:   Thu, 20 Oct 2022 22:35:11 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
+Message-ID: <20221020193511.GB3019@t60.musicnaut.iki.fi>
+References: <20221019144119.3848027-1-arnd@kernel.org>
+ <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-13-arnd@kernel.org>
+ <20221019171541.GA41568@darkstar.musicnaut.iki.fi>
+ <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
 MIME-Version: 1.0
-References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu>
-In-Reply-To: <Y1AVDck5sQf8+QFX@rowland.harvard.edu>
-From:   Andreas Bergmeier <abergmeier@gmx.net>
-Date:   Thu, 20 Oct 2022 20:22:05 +0200
-X-Gmail-Original-Message-ID: <CABfF9mMsneu3dUbahDgjJ1rbfqyLArKXyDD-RAvh1SXLM6XWBw@mail.gmail.com>
-Message-ID: <CABfF9mMsneu3dUbahDgjJ1rbfqyLArKXyDD-RAvh1SXLM6XWBw@mail.gmail.com>
-Subject: Re: Litra Glow on Linux
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-input@vger.kernel.org,
-        USB mailing list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:uwEZeF8UFozm4zhpmdGOcN8FxJmQaa7BZ1iAAWZdsznylUzQaia
- cuoclt0S155LNKxD79mp7O0KaS7FkzmTt5AfYTwrbgh1CTPyA93Sj5OEGo8vqwtEwk3lgOu
- WF9wuaqMQDztG9+himnb2LzHnoxqu/n5xRuHw2LyQy2GUy0k0qEBQHZlEvNIS6PZWTL2b/2
- NR9l5RxZQ2Da6SxAuxNwA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:G7HVB5zKt44=:1uCaaRULh4ovS9kPGaUJCO
- dOntBkAMPchEZmO+IxyW7vmX6i2AIAnkZTim+fcy+DVEudZMzWJRxcvbQzPkSs5G6X1YJBcxy
- pGNqV9Rv7OkrrGvOeI+BbAKpa5GOGXklrizDvCdo4VBkmLQ20ylbz3JQzdj4Gr8FUoB/cy9XV
- Wy9ELBLw8+GQKmQjLx17WTdvVSo8JZjWHLW1ezm6mRUJS3ZSSxMfJOLWsJWK6hZ84B3OXGElh
- CFJJ4rCBNO/q4vpiRVio1IawlnOLj4qSE6RdWbinWmi92WIQ4bt22ouj0nIzQJS42awTyJKD6
- Uk94Yy/8NC3A/x0EXtB1mg9SKfqTlMOOgSsLojU9WgFb8ZpwVLj97GI01OPvD8IqEPWOMtxAh
- vUSnXs0jUBRj4Uhkox9BdlOif6cMMs/GL5a/kIdl4hBebvzJ/lru0rvQkqLrj4+EHLPLr32Cz
- NWnGDjL2imAdYHfPgIDvdJ6miC+peQpZyAZyfS7bCNBIVrm6AuiSHAXw7bxsqsl7btiwM4prw
- 30PRxsJkjzvoE6CnzSSsA9SCMil9YM6UcyUmz+vZDOYu5FcrQi31btnWbTZM+9fp/z1cwUH5E
- cUkxWoI9aiUoqV3BYYBogjVYH++OY+R3f3qlBBZvvUYzYyj7NFzL7MecgLsDXNQJbr3Fr8Jyi
- 6tnJuxdiqQeu697eXsayAgVruG9XH0+6jurUv8mGALV3yJ7TXFgqyAYz45dEGXSQEB8Zq9MUm
- cur1TZKugA6ZTX7GL+3FesFMlU2QwdXhuBDLkGFkrRSISm3BBiKBfFweoZuqpj+FvpVfm2uiD
- ebKGDHhx2WbPnZ5EuOh51QHgZEdRjbNdd+gncZFT2a9XEGxrY9/k2CQyBxib4Co5hY/c0xO7e
- 0d+tkfVLTet5ddbVRhrEhR63/QUH8qRKsPNdx9KKhZXnn12wdCHay7x1IsM8LlQ+42IzPVvpM
- UaiBGi9jytQiyXAx293M/pj+6THfx4OVCyR1ZyM/5XL7QxNalDfq7wAtXKJXn9h1ThIhQ+9kU
- K63xQZ6aedwJ1pwRgSy28ry/SCMnKTm0uLRam9fqOtPde93BrZ3/xHnkhhX+dE/2IPn1uEZpM
- 6hTqFH+f3sIaOBUTHM/nj7uO1GhqXLx+1PnU/PH3OFqdC7uH6x/uzU7AjxU3JK2GvR9eCG/lv
- ralO8A9HRt/xHkAvYV1Vxsx89lMCbqy3ZnS941SUN4th4oO0WALKZCeSXhlmZObNP9/e8jnlX
- OApZp5M91LHCj3ibZgU6PONEWV0a2Q/PaYMQplNsup5/RqRXBnomxm465BBgR393SP7fqmSi6
- qPUIGOGDbGjW53DdtgI0sKQIbrgneMCYwFudB1QOyekUmhkXlJHHIGyujbXNeYxL8sfls5hcq
- MJnJUfSjVJck0oIACJ1PXcBletA1SPcnXj25h+LIcKfjlabaJiXiBt6WrsD/uS6xsUhHEYTtg
- j0GeTFbGYbIABoLuwvQacMYk3wTe/vB8gDn7IBxK31XC20JCKNcYPwO3ul3Gileze/Z151GHK
- xrzd+b6wbR7Qql21ONrUFPdGCvU841/TnIJl2XQLpcNhx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1666294513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iDvU3Oc2f/QHiT2VDqeJIzu0pLTa7SFrJfK0tw4pkR4=;
+        b=rrXIBB6/cLwcvSTbEB1/WW+rnYGa9ozsO5IdoYj3F2Tc0TW94d0WCRxZw+oVInIGIuGmi/
+        Fn4crbmRrkd4rYxH/6t7yq6momM+CRZGi2uizH4Ur7IhP2jvLxH9tzSSU/1YRI21RewhwQ
+        aHMqhLrunMNefiRfte6YeX06eLw0mN7NJzgJQG/q7JdfNeSWW1EdkdYVm+QNayDOuaibS5
+        v7WxJeHeg7FweWu51kNUvacMvxxr3ieXXGjBqJSqhy0ebzHA4EaI8qVdJxzFimETZn2/7E
+        sm3qW1quOEJkBeo0d6IoFMMDJddWkChnaFOjuljaoPOeWchojPLOM/uZrLpgAA==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1666294513; a=rsa-sha256;
+        cv=none;
+        b=WUmMZDsubTKiseV7lrBxLDtKPP7bk5IK0PgUldYgmWXY9HIxdL6tqW3Z9paPz9wsGxxw/7
+        qiZq7tRSmcBLf1iSebg5+iozzfUSRLJJyBKYAC99IzxzRlCx007xRt2Gh+o2HxKEAuuK+0
+        c5vr7CRlti+oE9AvJOYIWhHO914VDrnfwuQZ3KsinukOg5gKGADyJD8nzLi3lwK+qqXCD/
+        wEi5VAbEF3fP8wtz7LdjIY8ps9E81YQ2gfzJUgwLWjpJsLuSqeRJRYYR8IAJcKtSSON30O
+        R7UGOfwvglPEdSBo1w8IgrWN3B20dElKAOe5hN5vH1XDL9eAOTRF/kJnZijzTw==
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reading through hid-input it seems like the custom Usage Page of
-Logitech gets explicity ignored.
-So for Brightness and/or Color Temperature controls I wonder whether
-it would be appropriate to map these to ABS_WHEEL.
+Hi,
 
-On Wed, 19 Oct 2022 at 17:17, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> Forwarding this message to the linux-input mailing list, since it
-> concerns the input layer and not the USB layer.
->
-> Alan Stern
->
-> PS: Note that problem 1 below is easily solved with a udev script.
->
-> ----- Forwarded message from Andreas Bergmeier <abergmeier@gmx.net> -----
->
-> Date: Mon, 17 Oct 2022 18:45:30 +0200
-> From: Andreas Bergmeier <abergmeier@gmx.net>
-> To: linux-usb@vger.kernel.org
-> Subject: Litra Glow on Linux
->
-> On my Ubuntu machine i am running 5.15.0. Now when I plugin in my
-> Logitech Litra Glow, it gets detected and the following shows up in my
-> dmesg:
->
-> ```
-> input: Logi Litra Glow Consumer Control as
-> /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4.2/3-4.2:1.0/0003:046D:C900.=
-000B/input/input75
-> hid-generic 0003:046D:C900.000B: input,hiddev0,hidraw2: USB HID v1.11
-> Device [Logi Litra Glow] on usb-0000:00:14.0-4.2/input0
-> ```
->
-> Via (hardware) buttons you can switch the device on, regulate the
-> color temperature as well as the brightness.
-> I know of no way to fully control the device from my computer and
-> would like to change that.
->
-> It seems to me like I need to solve 4 problems (in userspace and maybe
-> kernelspace):
-> 1. Handle plugging in and off
-> 2. Listen to events (button pressed) from the device
-> 3. Get the current state of the device
-> 4. Send events to the device
->
->
-> The device seems to provide a pretty bare HID Report interface with no
-> alternate configurations:
-> https://github.com/abergmeier/litra_glow_linux/blob/main/lsusb
-> The HID seems to define 3 Reports:
-> https://github.com/abergmeier/litra_glow_linux/blob/main/parsed_descripto=
-r
->
-> Ignoring 1. for now.
->
-> Trying to solve 2. I wrote a basic HIDDEV application. Using `read` I
-> only see events from Report 17 (0x11). For all my experimenting with
-> the device I have never seen a Report 1 or 2.
-> So I get events, but it seems like the provided
-> `hiddev_usage_ref.value` is sometimes wrong (seems to be 0 and 1 for
-> most of the time even if I adjust the brightness).
-> Doing a recording (turning on, adjusting brightness, turning off) of
-> the raw HID events seems like the "correct" events are sent from the
-> device: https://github.com/abergmeier/litra_glow_linux/blob/main/hid-reco=
-rder.
-> So it seems to me like maybe the values get mixed up somewhere in the HID=
- code.
-> Alternatively I did a `evtest` run on the /dev/input/event* for the
-> `Logi Litra Glow Consumer Control`:
-> https://github.com/abergmeier/litra_glow_linux/blob/main/evtest
-> When pressing (hardware) buttons no events showed up in `evtest=E0=B8=94.
-> Probably not surprising since these would be from Report 1 and 2 IIUC.
-> Now I am not sure whether the USB interface is sketchy or whether one
-> needs to activate the _Consumer Control_ somehow.
->
-> Trying to solve 3. from what I understand with HID there usually is no
-> way of reading the current state of the device?
->
-> Trying to solve 4. there are userspace libraries in Python and Go
-> which send events to the device bypassing HID. So there may be some
-> quirks handling necessary in HID but I would defer that until 2. is
-> done.
->
-> With all that I am pretty much at my wits end and would appreciate any
-> input how to further analyze the device situation.
->
-> Cheers
->
-> ----- End forwarded message -----
+On Thu, Oct 20, 2022 at 09:11:11AM +0200, Arnd Bergmann wrote:
+> On Wed, Oct 19, 2022, at 19:15, Aaro Koskinen wrote:
+> > On Wed, Oct 19, 2022 at 05:03:35PM +0200, Arnd Bergmann wrote:
+> >> All board support that was marked as 'unused' earlier can
+> >> now be removed, leaving the five machines that that still
+> >> had someone using them in 2022, or that are supported in
+> >> qemu.
+> > [...]
+> >>  config OMAP_OSK_MISTRAL
+> >>  	bool "Mistral QVGA board Support"
+> >>  	depends on MACH_OMAP_OSK
+> >> -	depends on UNUSED_BOARD_FILES
+> >>  	help
+> >>  	  The OSK supports an optional add-on board with a Quarter-VGA
+> >>  	  touchscreen, PDA-ish buttons, a resume button, bicolor LED,
+> >>  	  and camera connector.  Say Y here if you have this board.
+> >
+> > Shouldn't this go away as well?
+> 
+> No, this one was incorrectly annotated, it's not actually
+> a board but it's an option for the OSK board that is not
+> getting removed. I considered making a separate patch
+> for removing the dependency, but that didn't seem worth it.
+
+OK. For the record, I don't think anyone has this add-on board anymore,
+and it has probably never been tested with the mainline kernel, so
+it's likely in the "dead code" category... Maybe it could be changed to
+"BROKEN", then the related OSK LCD panel stuff could be deleted later
+on too.
+
+A.
