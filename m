@@ -2,111 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1F860616A
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 15:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEA76062EA
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Oct 2022 16:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiJTNU7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Oct 2022 09:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S230074AbiJTOZI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Oct 2022 10:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiJTNUy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 09:20:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D0F51A0B;
-        Thu, 20 Oct 2022 06:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27B74B82648;
-        Thu, 20 Oct 2022 13:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9CFC433D6;
-        Thu, 20 Oct 2022 13:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666272015;
-        bh=Rsn6bw20rlalxQ/SID97AXkpPfvVGG+5j06netqtMyk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j59LDTD/B7Zaiswj1/PchAfkOEHRbpLbB3ej8uTyuF4x8nxPjkCVDcpYZIGSe+WbC
-         tYZoUNuBOPEssrYxUaCuOKmEsUphZs/87kBa/sHjolGygCZ+BtGkjWrFJT2L68ZHQ5
-         z5mjihBA2IWYiWYFG4we8OU1ztD3lRT/1jWeAWzr+g+F9GtziARY1vSyRX/xu8Y/pk
-         JJDSjbW6Bkia95/dtwPsuYqpEgdHfrtLH160heyKobnAw4xrDAKbN4Sqm4mxMYVMNs
-         u9ly/5LBRY5g3MlZwIlKrsOeU+/QN00SV6C6AcRpDDhHVvP2JrCnxHaG1STuqvFgKu
-         wpTDeqEBA3Lyw==
-Date:   Thu, 20 Oct 2022 21:20:10 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Message-ID: <20221020132010.GA29690@nchen-desktop>
-References: <1666159637-161135-1-git-send-email-pawell@cadence.com>
+        with ESMTP id S229840AbiJTOZH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Oct 2022 10:25:07 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 26807A8799
+        for <linux-usb@vger.kernel.org>; Thu, 20 Oct 2022 07:25:02 -0700 (PDT)
+Received: (qmail 1285872 invoked by uid 1000); 20 Oct 2022 10:25:01 -0400
+Date:   Thu, 20 Oct 2022 10:25:01 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Nazar Mokrynskyi <nazar@mokrynskyi.com>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux@roeck-us.net, Tomasz Figa <tfiga@chromium.org>
+Subject: Re: [Bug 216543] kernel NULL pointer dereference
+ usb_hcd_alloc_bandwidth
+Message-ID: <Y1FaPdAF3qVYtkf6@rowland.harvard.edu>
+References: <bug-216543-208809@https.bugzilla.kernel.org/>
+ <bug-216543-208809-AR52CPrAl3@https.bugzilla.kernel.org/>
+ <Y03IXMGpZ2fCof2k@rowland.harvard.edu>
+ <CANiDSCuiYCNM+6F2+3efps2uR_Q+p-oBSu-gVmY6ygf4_1U49Q@mail.gmail.com>
+ <Y07AAmc2QnP5HiBg@pendragon.ideasonboard.com>
+ <CANiDSCsSn=UJfCt6shy8htGXAPyeEceVzKva3eD+YxhC3YVmxA@mail.gmail.com>
+ <Y09WlZwb270lHPkv@pendragon.ideasonboard.com>
+ <CANiDSCvnWpnw=+QHMfykdbocUyZ2JgN0Mpyvq+fu9u4XWoqwwA@mail.gmail.com>
+ <Y1AS7DzY+Vo8ovUx@rowland.harvard.edu>
+ <CANiDSCsLwJ3iFnXV+EURRe4-b2ei+g=30mkKAhydM7z731_q5w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1666159637-161135-1-git-send-email-pawell@cadence.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANiDSCsLwJ3iFnXV+EURRe4-b2ei+g=30mkKAhydM7z731_q5w@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-10-19 02:07:17, Pawel Laszczak wrote:
-> Patch modifies the TD_SIZE in TRB before ZLP TRB.
-> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
-> processing ZLP TRB by controller.
+On Thu, Oct 20, 2022 at 09:57:24AM +0900, Ricardo Ribalda wrote:
+> Hi Alan
 > 
-> Cc: <stable@vger.kernel.org>
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/cdns3/cdnsp-ring.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+> On Thu, 20 Oct 2022 at 00:08, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Wed, Oct 19, 2022 at 01:22:48PM +0900, Ricardo Ribalda wrote:
+> > > Hi Laurent
+> > >
+> > > On Wed, 19 Oct 2022 at 10:45, Laurent Pinchart
+> > > <laurent.pinchart@ideasonboard.com> wrote:
+> > > > And I would like to avoid having to roll out manual changes to all
+> > > > drivers when the problem can be fixed in the core, just because nobody
+> > > > can be bothered to spend time to implement a good fix. We don't have to
+> > > > aim for a solution at the cdev level if that takes too long, an
+> > > > implementation in V4L2 would be enough to start with.
+> > >
+> > > Do we know what a "good fix" would look like?. This is a race
+> > > condition between cdev, v4l2, and usb_driver. The only entity that
+> > > knows about the three of them is the driver.
+> > >
+> > > If we "fix" v4l2 to provide a callback to notify the framework about a
+> > > "bus disconnect". It can prevent new syscalls, but it cannot interrupt
+> > > the current ones.
+> >
+> > It doesn't need to interrupt current syscalls.  It merely needs to wait
+> > until the current ones complete (and help them to complete early by
+> > making them aware of the disconnection) and to prevent new ones from
+> > starting.
+> >
 > 
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 794e413800ae..4809d0e894bb 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -1765,18 +1765,19 @@ static u32 cdnsp_td_remainder(struct cdnsp_device *pdev,
->  			      struct cdnsp_request *preq,
->  			      bool more_trbs_coming)
->  {
-> -	u32 maxp, total_packet_count;
-> -
-> -	/* One TRB with a zero-length data packet. */
-> -	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
-> -	    trb_buff_len == td_total_len)
-> -		return 0;
-> +	u32 maxp, total_packet_count, remainder;
->  
->  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
->  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
->  
->  	/* Queuing functions don't count the current TRB into transferred. */
-> -	return (total_packet_count - ((transferred + trb_buff_len) / maxp));
-> +	remainder = (total_packet_count - ((transferred + trb_buff_len) / maxp));
-> +
-> +	/* Before ZLP driver needs set TD_SIZE=1. */
-> +	if (!remainder && more_trbs_coming)
-> +		remainder = 1;
+> The USB subsystem is not aware of the current syscalls running for that device,
+> it just triggers the callback disconnect() to notify the driver that
+> they are not allowed
+> anymore to access the hardware.
 
-Without ZLP, TD_SIZE = 0 for the last TRB.
-With ZLP, TD_SIZE = 1 for current TRB, and TD_SIZE = 0 for the next TRB
-(the last zero-length packet) right?
+Right.  The question is: At what level in the various video code paths 
+should the check for "device gone" then be made?
 
-Peter
+One possibility is to do all these checks at the USB driver level.  This 
+has the advantage of not requiring any changes to the V4L2 core or 
+elsewhere in the framework.  But it has the disadvantage of spreading 
+the checks all over the place, making it that much easier to forget one.  
+Furthermore it would help only the USB driver, not any of the other 
+video drivers.
 
-> +
-> +	return remainder;
->  }
->  
->  static int cdnsp_align_td(struct cdnsp_device *pdev,
+Another possibility is to do the checks at the framework level, or at 
+least, higher up than the driver level.  For example, upon syscall 
+entry, and for long-running commands, at suitable intermediate points.  
+This can be implemented by having the driver call a core function from 
+within its disconnect callback; that function would let the framework 
+know the device is gone and wouldn't return until all existing syscall 
+threads were aware of this fact and had stopped accessing the device.
+This approach has advantages and disadvantages complementary to the 
+first approach.
+
+I can't tell you which approach is better -- that's up to Laurent :-) -- 
+I just want to make sure you are aware of the possibilities and their 
+tradeoffs.
+
+> Even when/if we fix this for real, a "basic test" checking if the
+> device is disconnected is a
+> nice thing to have. I think of it as a protective programming :)
+> 
+> Something like:
+> 
+> if WARN_ON(is_connected)
+>    return -EIO;
+
+Sure, it wouldn't hurt to sprinkle things like that here and there.  But 
+obviously they won't fix the problem by themselves.
+
+Alan Stern
+
+> > I have no idea what facility (if any) the framework uses for this
+> > already.  However, if it turns out that proper synchronization needs a
+> > new approach, I suggest trying SRCU.  It can be viewed in some respects
+> > as a kind of read-write mutex that is highly optimized for rapid
+> > read-locks and -unlocks at the cost of very slow write-locks --
+> > appropriate here since every syscall would need a read-lock whereas
+> > write-locking would be needed only when a disconnect occurs.
+> 
+> 
+> Thanks for the pointer :)
+> 
+> >
+> > Alan Stern
+> 
+> 
+> 
 > -- 
-> 2.25.1
-> 
-
--- 
-
-Thanks,
-Peter Chen
+> Ricardo Ribalda
