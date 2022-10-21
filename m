@@ -2,134 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039BB6075D5
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Oct 2022 13:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B79760789A
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Oct 2022 15:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiJULM2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Oct 2022 07:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S230453AbiJUNiK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Oct 2022 09:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJULLh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Oct 2022 07:11:37 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999C224E3A7;
-        Fri, 21 Oct 2022 04:11:08 -0700 (PDT)
-Received: from t60.musicnaut.iki.fi (85-76-8-144-nat.elisa-mobile.fi [85.76.8.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 3BA3C200C0;
-        Fri, 21 Oct 2022 14:11:04 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1666350665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ghn1cZ/W+8YyMq9JLN3UV4/RYNLtGkauMvjwUQd5lkA=;
-        b=MYSnynaOPQWhKjzJY/F5CCK0xzBOsMmsqi15eCKlU00G5oPsmFdMjXbAc+lx5vndM5PZGE
-        yBJBR2fyUx+QMntI7Q/hVo9k8oN5qyZTynzdnZ21OTL4hM5u+y+rhX6uHaOeVgBakSjDxE
-        0Ckoc4AAJCjhttBWTJQLpjN4/S/Vy7w=
-Date:   Fri, 21 Oct 2022 14:11:01 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
-Message-ID: <20221021111101.GC3019@t60.musicnaut.iki.fi>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-13-arnd@kernel.org>
- <20221019171541.GA41568@darkstar.musicnaut.iki.fi>
- <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
- <20221020193511.GB3019@t60.musicnaut.iki.fi>
- <de36ec6b-2e7c-48eb-9682-f60d8e4011da@app.fastmail.com>
+        with ESMTP id S229961AbiJUNiI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Oct 2022 09:38:08 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721FB275198
+        for <linux-usb@vger.kernel.org>; Fri, 21 Oct 2022 06:38:06 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id b4so4940948wrs.1
+        for <linux-usb@vger.kernel.org>; Fri, 21 Oct 2022 06:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UbUGLzx95uGCyDlhKABUDk0TwFKBK1rRFm9Lq1bvWhQ=;
+        b=Cztud/XNPRfILkeYrDGH7fD8D/44agAxp7x2SuaOpkBbOzEm6vowqmYgkH9gRN8SqA
+         KXTP5EooRHITXkNczVUXmVGX0rB4DmcteoTH3TdIMK8RcY6G5bkyXWnMb7ADnVLkmeq8
+         N9XNz2l2tmiwNlyFHz1FFxVKOmYSTeMLrtGqs7TwTEchbAJ/rVmxqMqt1cU1PLrNx6rN
+         T3lM6BneGF/FoKJuZUXw5qP5M/o9Vj5O8xiT4NThcFernyw0cj5aha9bvCprmpFEslc3
+         61ye4j09ZLyS5AvzUaOqtFHAPWq8qMvP94x5xP8n/73306oLNumKYfgG64lbRXcUWSGZ
+         FkPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UbUGLzx95uGCyDlhKABUDk0TwFKBK1rRFm9Lq1bvWhQ=;
+        b=DiFaFFiETwCqs2XSa2kWD6DfYZgNyxwGp5mdeZVoiwf17fPYBCw5xpnRq5bQlj9YdV
+         rJFkIOVW5+5uDuglgGSRTT2yiWvjBEx8UoIZ46ontj7h20kFaHDB0Ls5v06bcB7jx425
+         a/UCBnWc2syuqJ7dXjtmZ5OTbmH5WL7LvxxI9ei5veA4U4b2vqXVljo9tBHBTe68ja7m
+         xW7bpV7uYsgqq10mAWb5gKZ/HIKE7YmHKoGoP5RWzMoPb6vuo+fft9KIQxpE00Dd1OYr
+         ehf7g6cNt1YJk5JyABe4h2JOhKYgnDk2BtFb8lG8EZlj4h2jOVbca+JycVI+tZgs7Rrn
+         qO3Q==
+X-Gm-Message-State: ACrzQf2xGqdVg/wzl7wPG0Kpg9fw/RqcXRBzxp1vPxH73Qo9cp89mTJo
+        DWcIV0QwTWJ6pQpKD/xAyXpv6A==
+X-Google-Smtp-Source: AMsMyM7qEGEFybZQ/s1vwsv5EnaCGOXvocUhKwgK8vrYIiDHjtFPPAIasFVplw2SF1mw3CbgefYa2w==
+X-Received: by 2002:a5d:42c7:0:b0:236:4ddd:3576 with SMTP id t7-20020a5d42c7000000b002364ddd3576mr4144203wrr.289.1666359485075;
+        Fri, 21 Oct 2022 06:38:05 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id l35-20020a05600c1d2300b003b477532e66sm10462313wms.2.2022.10.21.06.38.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 06:38:04 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        neil.armstrong@linaro.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH v2 0/2] usb: serial: add support for CH348
+Date:   Fri, 21 Oct 2022 13:37:56 +0000
+Message-Id: <20221021133758.1881904-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de36ec6b-2e7c-48eb-9682-f60d8e4011da@app.fastmail.com>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1666350665; a=rsa-sha256; cv=none;
-        b=EayeTNyaBCouCd1edDnJMcjHiUDy1kE8wu+YcwQvU1RKOyJYaBzAFkpdSxu4PrR3ohslPK
-        oLFr2XvYZRjeXccNS5tgY1a1JEGhSDSxitWRbcAHybFA6AzrhiLmiFy+Ouyn2IgB/ldXCb
-        4i4uVnkjnOOd+yBWVo025wf1wSsKHMM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1666350665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ghn1cZ/W+8YyMq9JLN3UV4/RYNLtGkauMvjwUQd5lkA=;
-        b=jIk2jXRQq0Tv0295JN0YBfyOFM6u/ngoRXnM13jyElPzXa7hOrvMHOL4npenvDGpUCgToE
-        kIsenKqt40L/HsenR+T45MZBvc9zIfrKDf65w/w0oFi7VCRbWRt/+GVlQiXtdlcJQVimla
-        udl/wd8rpqM7Q+BlFZlD/ViGt9VUFPM=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello
 
-On Fri, Oct 21, 2022 at 08:52:10AM +0200, Arnd Bergmann wrote:
-> On Thu, Oct 20, 2022, at 21:35, Aaro Koskinen wrote:
-> > On Thu, Oct 20, 2022 at 09:11:11AM +0200, Arnd Bergmann wrote:
-> >> On Wed, Oct 19, 2022, at 19:15, Aaro Koskinen wrote:
-> >> > On Wed, Oct 19, 2022 at 05:03:35PM +0200, Arnd Bergmann wrote:
-> >> >> All board support that was marked as 'unused' earlier can
-> >> >> now be removed, leaving the five machines that that still
-> >> >> had someone using them in 2022, or that are supported in
-> >> >> qemu.
-> >> > [...]
-> >> >>  config OMAP_OSK_MISTRAL
-> >> >>  	bool "Mistral QVGA board Support"
-> >> >>  	depends on MACH_OMAP_OSK
-> >> >> -	depends on UNUSED_BOARD_FILES
-> >> >>  	help
-> >> >>  	  The OSK supports an optional add-on board with a Quarter-VGA
-> >> >>  	  touchscreen, PDA-ish buttons, a resume button, bicolor LED,
-> >> >>  	  and camera connector.  Say Y here if you have this board.
-> >> >
-> >> > Shouldn't this go away as well?
-> >> 
-> >> No, this one was incorrectly annotated, it's not actually
-> >> a board but it's an option for the OSK board that is not
-> >> getting removed. I considered making a separate patch
-> >> for removing the dependency, but that didn't seem worth it.
-> >
-> > OK. For the record, I don't think anyone has this add-on board anymore,
-> > and it has probably never been tested with the mainline kernel, so
-> > it's likely in the "dead code" category... Maybe it could be changed to
-> > "BROKEN", then the related OSK LCD panel stuff could be deleted later
-> > on too.
-> 
-> Ok, good to know. I left it in place for now because Tony originally
-> listed it as a likely used machine along with NOKIA770 and
-> AMS_DELTA [1], but I don't have anyone listed specifically as a
-> user for it.
-> 
-> It's not too late to revisit this list if you think it helps to
-> get rid of it. I can see that drivers/mtd/tps65010.c and
-> drivers/pcmcia/omap_cf.c become orphaned without it and can
-> probably get removed as well then.
+The CH348 is an octo serial to USB adapter.
+The following patch adds a driver for supporting it.
+Since there is no public datasheet, unfortunatly it remains some magic values.
 
-I was only referring to this Mistral add-on board and related display
-drivers.
+It was tested with a large range of baud from 1200 to 1500000 and used with
+success in one of our kernel CI testlab.
 
-The main OSK board support is still needed and used.
+Regards
 
-A.
+Changes since v1:
+- use a data structure for encoding/decoding messages.
+- check if needed endpoints exists
+- fix URB leak in ch348_allocate_status_read error case
+- test for maximum baud rate as stated by datasheet
+
+Corentin Labbe (2):
+  usb: serial: add support for CH348
+  usb: serial: add myself as maintainer of CH348
+
+ MAINTAINERS                 |   5 +
+ drivers/usb/serial/Kconfig  |   9 +
+ drivers/usb/serial/Makefile |   1 +
+ drivers/usb/serial/ch348.c  | 738 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 753 insertions(+)
+ create mode 100644 drivers/usb/serial/ch348.c
+
+-- 
+2.37.4
+
