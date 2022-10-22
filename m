@@ -2,49 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EF3608C85
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 13:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EC5608CC9
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 13:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiJVLWx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Oct 2022 07:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S230111AbiJVLhz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Oct 2022 07:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiJVLWi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 07:22:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6926D31363;
-        Sat, 22 Oct 2022 03:52:16 -0700 (PDT)
+        with ESMTP id S230020AbiJVLhi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 07:37:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F30DF9;
+        Sat, 22 Oct 2022 04:24:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F62260BE9;
-        Sat, 22 Oct 2022 10:52:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C56C433C1;
-        Sat, 22 Oct 2022 10:52:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3920260D34;
+        Sat, 22 Oct 2022 11:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED202C433C1;
+        Sat, 22 Oct 2022 11:24:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666435934;
-        bh=LHcXHiycfeGH4pS60pzEWUHjeot59PdVoCs895HZv6o=;
+        s=korg; t=1666437854;
+        bh=QlHVwvQAZAIgvjk8abE10EkrdDUL7r/AigVC5ALYQK4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ls7hRvIuj1gQJ5ozqagr6o6ev7VC3u7cz3f0S50tw0XDM/DBSwtpi8mkPtLYjA38U
-         34YmD8QV33+pD69n3JsCx4F87PIfIg4U3DtGRfVzug0sggCw/kEN8hUaj4LrJZsYGV
-         yg/WsKNlPXZG7YalH21/M5QkNAv4gfI+UtqMc1JQ=
-Date:   Sat, 22 Oct 2022 12:52:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     justinpopo6@gmail.com, alcooperx@gmail.com, balbi@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com
-Subject: Re: [PATCH] usb: bdc: change state when port disconnected
-Message-ID: <Y1PLW2t7X9DHVd7I@kroah.com>
-References: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
- <Y0Gax8SUoq59hdoF@kroah.com>
- <f0706380-94f9-ed7d-1033-8da51aab6b01@gmail.com>
- <81528485-fa80-55ab-16ce-84de520f5262@gmail.com>
+        b=un1PldCoLSJ88cWZRYnjm5Oi1KiCHJHB0LueFTTYXn8D7fIAxS0vK6V48SeMy9VdW
+         ZuWEiHtsrYztxbCEB+Ntyz+QhjY7UYniFteggfYw/ntXKMozNoEsqsq66wk3rOhU3K
+         hzsEaBZQY3uGlKbG/0kkX3FnGtw/tJtrFvWLyT24=
+Date:   Sat, 22 Oct 2022 13:24:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+Message-ID: <Y1PS3A75mXIEb+MA@kroah.com>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-2-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <81528485-fa80-55ab-16ce-84de520f5262@gmail.com>
+In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,38 +78,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 02:05:42PM -0700, Florian Fainelli wrote:
-> On 10/10/22 07:58, Florian Fainelli wrote:
-> > 
-> > 
-> > On 10/8/2022 8:44 AM, Greg KH wrote:
-> > > On Wed, Oct 05, 2022 at 12:13:55PM -0700, justinpopo6@gmail.com wrote:
-> > > > From: Justin Chen <justinpopo6@gmail.com>
-> > > > 
-> > > > When port is connected and then disconnected, the state stays as
-> > > > configured. Which is incorrect as the port is no longer configured,
-> > > > but in a not attached state.
-> > > > 
-> > > > Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-> > > > ---
-> > > >   drivers/usb/gadget/udc/bdc/bdc_udc.c | 1 +
-> > > >   1 file changed, 1 insertion(+)
-> > > 
-> > > What commit id does this fix?  Should it go to older kernels?  If so,
-> > > how far back?
-> > 
-> > This would be:
-> > 
-> > Fixes: efed421a94e6 ("usb: gadget: Add UDC driver for Broadcom USB3.0
-> > device controller IP BDC")
-> > 
-> > that issue was present since the driver was included in Linux with the
-> > commit above, we did not really consider it to be a serious enough bug,
-> > but I suppose it would not hurt to affix the said Fixes tag.
+On Fri, Oct 21, 2022 at 10:27:35PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Greg, are you picking up the patch as-is, or do you need Justin to resusbmit
-> with the Fixes: tag added?
+> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
+> similar symbols that are no longer available with the platform gone,
+> though the drivers themselves are still used on newer platforms,
+> so remove these hacks.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Now merged, thanks.
-
-greg k-h
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
