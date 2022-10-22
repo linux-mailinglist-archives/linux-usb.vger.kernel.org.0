@@ -2,137 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907A7608D21
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 14:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF966608D25
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 14:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJVMN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Oct 2022 08:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S229833AbiJVMUr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Oct 2022 08:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJVMNz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 08:13:55 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987EE50F87
-        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 05:13:54 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id p8so9409842lfu.11
-        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 05:13:54 -0700 (PDT)
+        with ESMTP id S229719AbiJVMUq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 08:20:46 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA601D2CF3
+        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 05:20:44 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id b1so9476309lfs.7
+        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 05:20:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3YVf0JwT5dFglEkAzFYBOn94gjH1FcmeZUI6KevHi6M=;
-        b=kwJfBEDx3ZLIwFvyEUteKjBCRI4Zy9zlbipx30WTJU+ubezDGJ4a4VOAn+u07F+9C0
-         uexMg/xpiaVI0FOc0E33xh+OYNcQPBwjjlBS8MVh5bmQLCFvkj4+PY70T0Uu6DqhDiya
-         rNvnb5wwNd55yMCnJTuvtLMc7rZ1WUDuoPA6zQnwx0RyxoR9PGGJG/wNgjXO/4d3sVeB
-         LezaMpycVcAFsI/4ApeD5ig+a/LM4m0Ku7xJltWSvq3/CSgZwhTCdjWWaOPG9WucAE7o
-         7EzXltCleFpUittLKGYTRKWPf+DNdRMXS0yCYaXhhwMAhqMwKKjpq34ooCr+of+k17Hz
-         l2tA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+HzyxPEnOCL1DeclpAlrxibOCTRkMhfRpJWE6my73VE=;
+        b=WGQx9hxRx3A0uHQ21T03hr7lApZ4yyDxMRP4F9wLuurOZRIfXJLt5pNr/9bXJxQ+iY
+         LIwdvdS4A8fhFjeAgHTTRi4NHGqxknDk8/aOm6VhL4JXbhzIUvHuKF2KkFA0wF/ncdk+
+         N4GOSGXsbbXvT//7qfKHcz0yUHEHO9RAfpTVpBKFQYjGJGWtAxeaqNe6IVcsQCgHwYFV
+         435TA+FLOi3goPsZrAyWFdXrPH/jjAGA8LFWXcLJKBFk71/tF0BFnEdgk/7IVvTrVZFZ
+         +2d0q+jQRdLAF+LwODITQeG3HCHxci5ndYLUdXlJhBE9jTC1XCPgTWB5tt6fENP3UydT
+         z0yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3YVf0JwT5dFglEkAzFYBOn94gjH1FcmeZUI6KevHi6M=;
-        b=NgGJogzCSTH850RF8k4leXmuemEPvBmt9FB3tcgE9ypzVNOs0BW67EcIyjYKcAYNJL
-         F8sevJWPXF/X9T87ofS/R2aaR2J1tbIRi4Bnf06Fhy8srTDOWeQStDQvLWtXoDClOjGN
-         o71KsTEgdpX3qZhijmDY8HnM5bE1vorF1flgUyOMAlAnVBjqlxahnDtGR0KK0aHjtij0
-         CwVrFfkWHp38z7B5GbcTTvsQ5vdrNjt/ruPh7xB2B8I4TQVvPWOX/y1LCWbu7utGxw9s
-         qE3wv3skIBqrtGctfssLrvM1RUcXg+1K22Yz8bKe7MkV0rJZmsGzYAcrSAaJa3EUHRdE
-         VVHQ==
-X-Gm-Message-State: ACrzQf1Irw/8a3jyJ7kEyMHRkHLlVpDggqM27GmHr51sGU4av6Elw7qx
-        sBEGItWCi++9njMnA4lrc8BdYQ==
-X-Google-Smtp-Source: AMsMyM4AxJ+YkbcoF/+7t7oQ0WPbJmikhIZtVUUccnBwShFh9+5e5GmpHIwtkVxe93c8/j8z8Xp/TQ==
-X-Received: by 2002:ac2:5183:0:b0:4a1:e99d:e7b6 with SMTP id u3-20020ac25183000000b004a1e99de7b6mr8803895lfi.676.1666440832882;
-        Sat, 22 Oct 2022 05:13:52 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+HzyxPEnOCL1DeclpAlrxibOCTRkMhfRpJWE6my73VE=;
+        b=AME2k5bDzDdvdgK5s+f9Xvsxt/DAJ7z8Gpbws3WdjsneRAPRB+KRSKUJlC5VpvZkrf
+         AFMz07T1t9gSYyQwTSsVxB40C+2LzqNCAq6ZQlLZxyJtmC5BdvMZPaIU1kh7xLX1P7QF
+         JRuv1whbSwIQo22oEpwCzEUXzyF9/qgS4BRSd6MzsuDdGXg5mmjgc/thTmrnQRKsi4Yk
+         +qBpiwZAIBqy5weRFXguizoGquxKES0h1CHau0oU6Xr5BfG7xpraRvcWOgAZ8nA52IEL
+         99pf5FZbNKOxFN5UJf5CSDx74mFznj3G2iU0TF5v8aaf5j8UU6/APUaT9j4h0eFOmISG
+         7+AA==
+X-Gm-Message-State: ACrzQf0fDI5UoBC/f4sEb7YU1d1giZ3kX6ur4DdMgPE9BJcQCvLUiIqz
+        aTlfRA5MhbbXLHzlQ0YsMMKhpg==
+X-Google-Smtp-Source: AMsMyM7ENl5sTMh5GJXOWOoBLA3zqkPXRsqtGeB4FQCPgNprJmIrOHrhiaGYhBnNKb9Mvo16lxBqfw==
+X-Received: by 2002:a05:6512:3a4:b0:4a4:6db7:2d6b with SMTP id v4-20020a05651203a400b004a46db72d6bmr8070432lfp.403.1666441243206;
+        Sat, 22 Oct 2022 05:20:43 -0700 (PDT)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id q1-20020a2e2a01000000b0026dcfc2bf4csm3799013ljq.57.2022.10.22.05.13.52
+        by smtp.gmail.com with ESMTPSA id n13-20020ac2490d000000b0049b8c0571e5sm3556115lfi.113.2022.10.22.05.20.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 05:13:52 -0700 (PDT)
+        Sat, 22 Oct 2022 05:20:42 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH 1/2 v1] usb: phy: phy-gpio-vbus-usb: Add devicetree bindings
-Date:   Sat, 22 Oct 2022 14:11:48 +0200
-Message-Id: <20221022121149.3329641-1-linus.walleij@linaro.org>
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH 2/2 v1] usb: phy: phy-gpio-vbus-usb: Add device tree probing
+Date:   Sat, 22 Oct 2022 14:18:38 +0200
+Message-Id: <20221022121838.3330528-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221022121149.3329641-1-linus.walleij@linaro.org>
+References: <20221022121149.3329641-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This adds a simple device tree binding for a GPIO-based
-VBUS detection PHY.
+Make it possible to probe the GPIO VBUS detection driver
+from the device tree compatible.
 
 Cc: Felipe Balbi <balbi@kernel.org>
-Cc: devicetree@vger.kernel.org
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- .../bindings/phy/phy-usb-vbus-gpio.yaml       | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml
+ drivers/usb/phy/phy-gpio-vbus-usb.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml b/Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml
-new file mode 100644
-index 000000000000..4e10b58f8235
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/phy-usb-vbus-gpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/usb/phy/phy-gpio-vbus-usb.c b/drivers/usb/phy/phy-gpio-vbus-usb.c
+index f13f5530746c..a9e4355a1b65 100644
+--- a/drivers/usb/phy/phy-gpio-vbus-usb.c
++++ b/drivers/usb/phy/phy-gpio-vbus-usb.c
+@@ -366,12 +366,20 @@ static const struct dev_pm_ops gpio_vbus_dev_pm_ops = {
+ 
+ MODULE_ALIAS("platform:gpio-vbus");
+ 
++static const struct of_device_id gpio_vbus_of_match[] = {
++	{
++		.compatible = "phy-usb-vbus-gpio",
++	},
++	{},
++};
 +
-+title: GPIO-based VBUS detection USB PHY
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description: A VBUS event occurs when a USB plug is attached to
-+  a USB host and peripheral, the voltage (VBUS) is exposed from the
-+  host to the peripheral when the last of the two ends of the
-+  cable is plugged in. This can be either on the host side or on
-+  the peripheral side, whichever comes last. It is possible to
-+  provide a very simple USB VBUS detection mechanism by using a
-+  GPIO line that will trigger on an edge event on the VBUS
-+  pin.
-+
-+properties:
-+  compatible:
-+    const: phy-usb-vbus-gpio
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  vbus-gpios:
-+    maxItems: 1
-+    description: The GPIO line connected to VBUS
-+
-+required:
-+  - compatible
-+  - "#phy-cells"
-+  - vbus-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb1_phy: phy {
-+        compatible = "phy-usb-vbus-gpio";
-+        #phy-cells = <0>;
-+        vbus-gpios = <&gpio0 18 GPIO_ACTIVE_LOW>;
-+    };
+ static struct platform_driver gpio_vbus_driver = {
+ 	.driver = {
+ 		.name  = "gpio-vbus",
+ #ifdef CONFIG_PM
+ 		.pm = &gpio_vbus_dev_pm_ops,
+ #endif
++		.of_match_table = gpio_vbus_of_match,
+ 	},
+ 	.probe		= gpio_vbus_probe,
+ 	.remove		= gpio_vbus_remove,
 -- 
 2.37.3
 
