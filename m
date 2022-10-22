@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3A8608CD0
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 13:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607F3608CD7
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 13:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiJVLkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Oct 2022 07:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58000 "EHLO
+        id S230255AbiJVLkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Oct 2022 07:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiJVLjr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 07:39:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558A22D6550;
-        Sat, 22 Oct 2022 04:31:30 -0700 (PDT)
+        with ESMTP id S229777AbiJVLkE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 07:40:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54890422E3;
+        Sat, 22 Oct 2022 04:33:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C13AB82E91;
-        Sat, 22 Oct 2022 11:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F102C433C1;
-        Sat, 22 Oct 2022 11:31:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5627960CBB;
+        Sat, 22 Oct 2022 11:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3059EC433D6;
+        Sat, 22 Oct 2022 11:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666438287;
-        bh=gJM4FsXoaL46Ah5Eq5TPpdg9dGEJvgLo7J84Ore65Vc=;
+        s=korg; t=1666438378;
+        bh=1sICJHC0lJ2TpJ7b/Au1nHb08DMV/sOXgrux/tW2J0U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hMW8cZlGE2SdAA98MWMuLTxzvSbxWpx/2Qc+FsbJzfw9r3FmMTN5jwkXEEYSrPpj7
-         wGa7FpTen6dJTInpw4MZOY2EBMyXpS3c+926WZ/NUpoReqdxVHMI0xnBmEV+3J+dvg
-         Z7op0fvELJERW29oKSNyIv2Rf8WCKzX95TY721PI=
-Date:   Sat, 22 Oct 2022 13:31:24 +0200
+        b=UAvLXSGicJuQmibs/esBBZm5JSMxS9M1pjrOYL2WVieIKFenPaDoS99V5TCODB3a4
+         wOpe/eVdF5nkwYdJKt1Nm2ZUtVT4352h5ngBgTE6uw/YIVxJoJYcX/fvlrXctXpk6p
+         0VV8P3RyOfGPO53IKIHb/A8yuverttAcKr8B+b50=
+Date:   Sat, 22 Oct 2022 13:32:56 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Dan Vacura <w36195@motorola.com>
 Cc:     linux-usb@vger.kernel.org,
         Daniel Scally <dan.scally@ideasonboard.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jeff Vanhoof <qjv001@motorola.com>, stable@vger.kernel.org,
+        Jeff Vanhoof <qjv001@motorola.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Felipe Balbi <balbi@kernel.org>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Michael Grzeschik <m.grzeschik@pengutronix.de>,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 2/6] usb: dwc3: gadget: cancel requests instead of
- release after missed isoc
-Message-ID: <Y1PUjO99fcgaN0tc@kroah.com>
+Subject: Re: [PATCH v4 5/6] usb: gadget: uvc: make interrupt skip logic
+ configurable
+Message-ID: <Y1PU6K4Izr9n5tcs@kroah.com>
 References: <20221018215044.765044-1-w36195@motorola.com>
- <20221018215044.765044-3-w36195@motorola.com>
+ <20221018215044.765044-6-w36195@motorola.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221018215044.765044-3-w36195@motorola.com>
+In-Reply-To: <20221018215044.765044-6-w36195@motorola.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,30 +59,63 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 04:50:38PM -0500, Dan Vacura wrote:
-> From: Jeff Vanhoof <qjv001@motorola.com>
+On Tue, Oct 18, 2022 at 04:50:41PM -0500, Dan Vacura wrote:
+> Some UDC hw may not support skipping interrupts, but still support the
+> request. Allow the interrupt frequency to be configurable to the user.
 > 
-> arm-smmu related crashes seen after a Missed ISOC interrupt when
-> no_interrupt=1 is used. This can happen if the hardware is still using
-> the data associated with a TRB after the usb_request's ->complete call
-> has been made.  Instead of immediately releasing a request when a Missed
-> ISOC interrupt has occurred, this change will add logic to cancel the
-> request instead where it will eventually be released when the
-> END_TRANSFER command has completed. This logic is similar to some of the
-> cleanup done in dwc3_gadget_ep_dequeue.
-> 
-> Fixes: 6d8a019614f3 ("usb: dwc3: gadget: check for Missed Isoc from event status")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Jeff Vanhoof <qjv001@motorola.com>
-> Co-developed-by: Dan Vacura <w36195@motorola.com>
 > Signed-off-by: Dan Vacura <w36195@motorola.com>
 > ---
-> V1 -> V3:
+> V1 -> V2:
 > - no change, new patch in series
+> V2 -> V3:
+> - default to baseline value of 4, fix storing the initial value
 > V3 -> V4:
 > - no change
+> 
+>  Documentation/ABI/testing/configfs-usb-gadget-uvc | 1 +
+>  Documentation/usb/gadget-testing.rst              | 2 ++
 
-I need an ack from the dwc3 maintainer before I can take this one.
+Adding more tunable knobs always just adds complexity and fragility as
+things do not get tested.
+
+Can't we just make this dynamic and work properly on all systems?  What
+UDC hardware types do not allow skipping interrupts?  Why can't we just
+detect that and only do that if this is the case or not?
+
+>  drivers/usb/gadget/function/f_uvc.c               | 3 +++
+>  drivers/usb/gadget/function/u_uvc.h               | 1 +
+>  drivers/usb/gadget/function/uvc.h                 | 2 ++
+>  drivers/usb/gadget/function/uvc_configfs.c        | 2 ++
+>  drivers/usb/gadget/function/uvc_queue.c           | 6 ++++++
+>  drivers/usb/gadget/function/uvc_video.c           | 3 ++-
+>  8 files changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uvc b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> index 611b23e6488d..5dfaa3f7f6a4 100644
+> --- a/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> +++ b/Documentation/ABI/testing/configfs-usb-gadget-uvc
+> @@ -8,6 +8,7 @@ Description:	UVC function directory
+>  		streaming_maxpacket	1..1023 (fs), 1..3072 (hs/ss)
+>  		streaming_interval	1..16
+>  		function_name		string [32]
+> +		req_int_skip_div	unsigned int
+>  		===================	=============================
+>  
+>  What:		/config/usb-gadget/gadget/functions/uvc.name/control
+> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+> index 2278c9ffb74a..f9b5a09be1f4 100644
+> --- a/Documentation/usb/gadget-testing.rst
+> +++ b/Documentation/usb/gadget-testing.rst
+> @@ -794,6 +794,8 @@ The uvc function provides these attributes in its function directory:
+>  			    sending or receiving when this configuration is
+>  			    selected
+>  	function_name       name of the interface
+> +	req_int_skip_div    divisor of total requests to aid in calculating
+> +			    interrupt frequency, 0 indicates all interrupt
+
+This provides no information that would help to determine how to
+configure this at all.  I wouldn't know what to do with this, so that's
+a huge sign that this is not a good interface :(
 
 thanks,
 
