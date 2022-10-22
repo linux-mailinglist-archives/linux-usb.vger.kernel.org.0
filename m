@@ -2,129 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31433608D32
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 14:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F6E608D3C
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 14:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJVMnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Oct 2022 08:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
+        id S229619AbiJVMxA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Oct 2022 08:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJVMm6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 08:42:58 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40A629E58E;
-        Sat, 22 Oct 2022 05:42:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666442575;
-        bh=oR1BVjZrjjdJ0kRRSfE79Lzz81osWJFEDxWg+ZS/r5M=;
-        h=X-UI-Sender-Class:References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=D+/VL03LsJ1NrxZe9qpgjOPkZx/1A0PiV5NlMLcIxtLO6tKT441lZgLfqetjKVL8L
-         /VBp11ySCY0prYoR5C14JU1mXj8ENA2miaS27RbDOQyCUwkPprJK9Q1WUZYQmsVMdi
-         2hHZnc+gw07U9q6AcVC5EiLwfyzT+FyjDVDySv4c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from mail-ed1-f46.google.com ([209.85.208.46]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MPog5-1oPLdV3ouJ-00MwTn; Sat, 22 Oct 2022 14:42:54 +0200
-Received: by mail-ed1-f46.google.com with SMTP id t16so15279992edd.2;
-        Sat, 22 Oct 2022 05:42:54 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1PQ60W63kiD2oWeKoUYdpL7oEsr4GITmsIsfNMw9ehXs4xfUKN
-        VzfBmypCE6c5jOiPTWVx8lm0Y615tSDBh+Hes6s=
-X-Google-Smtp-Source: AMsMyM43q1O504LftU3KK+iV3+k7d/ocmdmXdwVvLyYQzyTXk2Ogr0SspKt3RrpCqfFx1X2xd/q2tV6+3+l6p6AunFk=
-X-Received: by 2002:a17:907:9707:b0:78d:45d1:487e with SMTP id
- jg7-20020a170907970700b0078d45d1487emr19555272ejc.566.1666442574460; Sat, 22
- Oct 2022 05:42:54 -0700 (PDT)
+        with ESMTP id S229571AbiJVMw7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 08:52:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0DC1A16DE;
+        Sat, 22 Oct 2022 05:52:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA3960DF8;
+        Sat, 22 Oct 2022 12:52:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C31C433C1;
+        Sat, 22 Oct 2022 12:52:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666443171;
+        bh=VSB8EcXrPsLSz+XAkVlMDc09zClTDzBubbNdSwrv1E4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bLW1njDtx56IU0peAgoBMqjw+VpDDwC1a+Xyyz2DybHNB+w1CdMxe6J78Yxen9Gsg
+         3BnIITsqbbHrYdBTC9E4tmSpBwendiv7PRHthf25/Y05bqsU8Le6kHudaYgUc0SCyZ
+         dQ2aUxjp3nCT8p1KbqAv7f3O8jpoFtWPA0mlw9aQ=
+Date:   Sat, 22 Oct 2022 14:52:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: gadget: f_hid: Conduct proper refcounting on
+ shared f_hidg pointer
+Message-ID: <Y1PnoMvDmZMqXScw@kroah.com>
+References: <20221017112737.230772-1-lee@kernel.org>
 MIME-Version: 1.0
-References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu>
-In-Reply-To: <Y1AVDck5sQf8+QFX@rowland.harvard.edu>
-From:   Andreas Bergmeier <abergmeier@gmx.net>
-Date:   Sat, 22 Oct 2022 14:42:43 +0200
-X-Gmail-Original-Message-ID: <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com>
-Message-ID: <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com>
-Subject: Re: Litra Glow on Linux
-To:     linux-input@vger.kernel.org,
-        USB mailing list <linux-usb@vger.kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:CFdm4qzk5tLMDSWN2vXH1+eThRJECmtM+q1qxY9Ax1C17bm3xmP
- 4fv7UBXBq81manYbnFWKILTBXcyLmUgTYxRCYMNFxMHi2ynntyzNQeG00prrMI51NbTVD+/
- rO9MGmB67CrpXqFtalRl6g+4D0JeOPDH01p9QGMWSE6Ub7q9KWEh/SecLLUk2ozXGC2GK2+
- QdJM+BtSeTjGOzTYZcPdw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:plI+JvnfLzk=:M6SBcoHdTL6i87nJHigv9v
- g/fCU7zlPhu4ar8A9nJBfq9IgZjH39ZyGnk8EtKRjF4Qg5AwgNMFTE3U0HAVOqHruVeA2iplO
- kQIrQl/XyDqzpwPoSi82LRnVspgEfZeDOYK+wNJ5FacyVoyhG8M9kVkqZvNUNStrVoz8xEzSt
- Gt1r41t6usmfXvpNP8kCxdP7WjsAjxrgt0KkqIBLywXAIBUwSXmMG0ydsGY7VjLJKsiD0Zr79
- fF2G5KANoL7a4NYOo+ypHB9KJ1+r83r5pPU4Ir+32lry59XCrjrQByCDxZJera3dAblT7B9Mf
- 3IPBTNh5PN3sRJAGBeJIgmWuRm1cJWeSnr3yTRkvKCav4nweb4c82KMtiZ7mtt/3h/u0GQWV9
- cm/2P5g1LwMXF7jmvqf/sYC+LmxQxFEBIPsROr5ltU9NmBJ4hukKcwOW5VgwRCpEyotHDUwo/
- BGvQ8X1XzZ0/2CrPGAVboM6ER1/q/kDas1zMRrelfvps/4ceUSXyYHxW1jGQjZ+1cEXZaKqiP
- YvFlHq9CGCoOtX0dYJj5R/yag4S98r9WMymY6MwFKMc2RleOBtQtQQi7Q1+64cJDJ4zQgZPIN
- yqyoZpNG0M3pGfCkUmwwuM7ARJgYiM4+SEW8HNldwyOIXccO09Xh9Ll/a3nXreOiYkNUqO0mO
- S8MXFLVyJFGgdfDOoWW+yh4mC6G/mmanWj2KMs4fCEkhoHw7UMLM54dfw/qwctdIE9lc3KLbB
- Vr68JDS+P9CC4mgEuEbO8teoS9xEfmU74wNfDmjKalEj+iPpB7z8K6fgqlgTK2Fsyk9Y7waxp
- vHxvrHOJpKNQt/1+a13RkrpFaUTIyaBo+Zj6R5SuOQAR/ZyMjWQ7uhOgcqqOs0peRJ5QSIGmm
- ZIU9FXT/ct0a+P/7YITvAqbnJQuFRK3PgWPLVla7vzLIwJUlCoUQGMEqkyeERg9MNqE/Ug6e/
- y++aEQw7KR0KWLt8+tHoQoDSetRvdJ9KFWGnBm+82J1sJa/yQYcMJ37tFYkWbfYttOHFqt1rB
- 4cE3MkcjcGykb8khHfYPVPnths+nH59LF3fN64Yr3zLlsR2F3eIUZ4JpQ0Hx1hlfuSs7YwQHD
- XISlDVB28myzX87FOUkLafDQTcFEvABeWlKeRkw9XxPgwXhyHzbhBWbGJ5tDcaWHZlmsdRNt4
- p6kB2BCWR/X3iTsMCmKJyN73ZoNqKjQFuvi5LUUR8SfTkKpRZLrgcGEHCDG4bQsv6nAWftESE
- VaCn6CVAOhCDD1d2sl3+HXHvODWTF+m1cbk5UABDdbcA8Mv5MbAw3kNFauXqRJ/UcX2NdqTE7
- 0/elRKPoxafadcaceXHju3SKaDu4b0VPrNRkvmKXGznTUjBxFYCbEBAbMnXocKtRrMoMR71yn
- ZEYz+9XPjfdbiYYRaA94bjNCJQl4oALgw5D5lkR992oo4x/Eej3xCLw9PbGuheyGgJTBzaEYN
- EtgEye9ZAwhFkatfajpHbcrQcceip5z77ptKi/SMhXBeghK1pdu+rV/JK+FKYLAzJaIR+dJY5
- 9bRJOCPT0APEVDDGaqeePDNjWcYXnl2OKBB9SkuPXEG2r
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017112737.230772-1-lee@kernel.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Date: Mon, 17 Oct 2022 18:45:30 +0200
-> From: Andreas Bergmeier <abergmeier@gmx.net>
-> To: linux-usb@vger.kernel.org
-> Subject: Litra Glow on Linux
->
-> On my Ubuntu machine i am running 5.15.0. Now when I plugin in my
-> Logitech Litra Glow, it gets detected and the following shows up in my
-> dmesg:
->
-> ```
-> input: Logi Litra Glow Consumer Control as
-> /devices/pci0000:00/0000:00:14.0/usb3/3-4/3-4.2/3-4.2:1.0/0003:046D:C900.000B/input/input75
-> hid-generic 0003:046D:C900.000B: input,hiddev0,hidraw2: USB HID v1.11
-> Device [Logi Litra Glow] on usb-0000:00:14.0-4.2/input0
-> ```
->
-> Via (hardware) buttons you can switch the device on, regulate the
-> color temperature as well as the brightness.
-So I looked into the sources of `hid-input` and `hig-lg` and I hope
-that I have a halfway decent
-understanding why the linux modules/dev nodes handle the way they do.
-What I do not yet understand is how to map the device to input "primitives".
-To recap there are 5 hardware buttons and 3 states:
-- State: "Color temperature in range [u, x]" Button: up
-- State: "Color temperature in range [u, x]" Button: down
-- State/Button On/Off
-- State "Brightness in range [y, z]" Button: up
-- State "Brightness in range [y, z]" Button: down
+On Mon, Oct 17, 2022 at 12:27:37PM +0100, Lee Jones wrote:
+> A pointer to the main HID gadget struct (*f_hidg) is shared with the
+> character device handing (read() and write(), etc support) on open().
+> However external references are presently not tracked.  This could
+> easily lead to some unsavoury behaviour if gadget support is disabled
+> / disconnected.  Keeping track of the refcount ensures that resources
+> are only freed *after* they are no longer in use.
+> 
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/usb/gadget/function/f_hid.c | 37 +++++++++++++++++++++--------
+>  1 file changed, 27 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index ca0a7d9eaa34e..79d4ee8a5647f 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/module.h>
+>  #include <linux/hid.h>
+>  #include <linux/idr.h>
+> +#include <linux/kref.h>
+>  #include <linux/cdev.h>
+>  #include <linux/mutex.h>
+>  #include <linux/poll.h>
+> @@ -77,6 +78,8 @@ struct f_hidg {
+>  
+>  	struct usb_ep			*in_ep;
+>  	struct usb_ep			*out_ep;
+> +
+> +	struct kref			refcount;
+>  };
 
-What would be a best practice to expose these correctly via HID (as
-e.g. ABS_WHEEL?)?
-Or at least - what are the canonical options?
+While at first glance, it seems that f_hidg is not reference counted, it
+really is, with the embedded "struct cdev" a few lines above this.
 
-Since the exposed Record interface seems "wrong" I assume I need to
-write code to fix the device handling.
-Now, is this better suited in `hid-input` or `hid-lg`?
-The former currently tries to handle the device (wrongly) and the
-latter yet ignores the device but seems to be
-the one stop to fix Logitech devices.
+That is the reference count that should control the lifecycle of this
+object, not another reference here in the "outer layer" structure.
 
+But, the cdev api is tricky and messy and not really set up to control
+the lifecycle of objects it is embedded in.  There have been attempts in
+the past to handle this with things like the cdev_device_del() function,
+but that's not going to work here for you as you don't have a real
+struct device in f_hidg (heck, there's no device pointer in there, which
+is a different issue...)
 
-> I know of no way to fully control the device from my computer and
-> would like to change that.
-By now I am confident that I will soon have the full device control figured out.
+But, you can just rip the cdev out, and make it a pointer to a cdev, and
+then you will have a better chance at getting the reference counting
+correct here.  Yes, that will be 3 different reference counted objects
+all interacting at once, but hopefully it's a bit more sane.  Try
+cleaning things up that way and allocate the cdev with a call to
+cdev_alloc() right before the cdev_init() call in this file, and then it
+might work better.
+
+Yeah, the cdev api is really messy, it's been on my todo list for 20+
+years now to clean it up :(
+
+Also, one other thing, semi-related to this change:
+
+> +static void hidg_free_resources(struct kref *ref)
+> +{
+> +	struct f_hidg *hidg = container_of(ref, struct f_hidg, refcount);
+> +	struct f_hid_opts *opts = container_of(hidg->func.fi, struct f_hid_opts, func_inst);
+> +
+> +	mutex_lock(&opts->lock);
+> +	kfree(hidg->report_desc);
+> +	kfree(hidg->set_report_buf);
+> +	kfree(hidg);
+> +	--opts->refcnt;
+
+That's not a real reference count :(
+
+Moving that to a kref would also be good.  Or it might just be able to
+be dropped entirely, I don't really understand what it's attempting to
+reference count at all here.
+
+thanks,
+
+greg k-h
