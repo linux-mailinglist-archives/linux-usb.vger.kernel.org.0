@@ -2,64 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B21E6083E8
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 05:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1956084B0
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 07:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJVDmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Oct 2022 23:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
+        id S229815AbiJVFpr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Oct 2022 01:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJVDl4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Oct 2022 23:41:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59D275BB4
-        for <linux-usb@vger.kernel.org>; Fri, 21 Oct 2022 20:41:50 -0700 (PDT)
+        with ESMTP id S229501AbiJVFpp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 01:45:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18BA15A8DD
+        for <linux-usb@vger.kernel.org>; Fri, 21 Oct 2022 22:45:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C6AA60EF9
-        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 03:41:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01CA7C4347C
-        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 03:41:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666410109;
-        bh=uW/J2sYl2QYLJhnIk4+CsQiUd9sV5AUVnpvbhuw6bvs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Cg2ejygDLkfBSZQ6kPuKUxj8iplK6FsxxWk9HlsZVmaY1E1x3ihwvPFDPePBvsryb
-         JTeSY6+8Ui/pQXrmmunyvMxAnmXVTLpws2AXQA7eBhpcNgsptfmM8M7NxDHqxQfyuY
-         Bndsx1eXpUE647lt72Xj0Ipo4ix15rZY042mKYrdJh/odjNb0NnsSW7eNSLmDszuPR
-         9qJEWpVimmggdQaznXWbzBc5l2OL8peUDVgfihoVEaR8cGr+kvWGQq5IjZPlESrkdb
-         FoaLKIQV3jwJ46loh3MobWzZ5dVO/sZi3IZiok3Vjsv2Nv5JPN0ofuVjnPAQ80b2uH
-         wYR6oOxd2LI6A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id E6188C433E4; Sat, 22 Oct 2022 03:41:48 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216588] RTL9210(B) falsely detected as rotational disk
-Date:   Sat, 22 Oct 2022 03:41:48 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: IO/Storage
-X-Bugzilla-Component: SCSI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mkp@mkp.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-216588-208809-JcHotynafa@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216588-208809@https.bugzilla.kernel.org/>
-References: <bug-216588-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F22360A72
+        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 05:45:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DC0FC433B5;
+        Sat, 22 Oct 2022 05:45:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666417543;
+        bh=DK+hmKix2Vp0vsc9CLmaRLC/tOV3zAqh2yhDu1pq5jA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WtVkSN8PWEdt78wk46yPANvvc/lyPadwJZfjb4I5TczrP4T/lpXsaAsn1TRjg6L89
+         flX1JfEnFPWsubWM/EJmO4Gx5A1OdwI9g1e7zzuWAUiHWqGcS3LC7xaUqwdUTzGiGA
+         D8oqVDR55fSmpPIskNc1KkP1fu1Q3QBJ8s8682Mg=
+Date:   Sat, 22 Oct 2022 07:46:33 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Chuck Evans <crtigermoth@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Hp A10 has broken [AMD] FCH USB XHCI controller, UAS errors,
+ please blacklist
+Message-ID: <Y1ODuVfQrqrzW0Qb@kroah.com>
+References: <CAGedn0=nwQwmzTJqY8KXVQ_AGCGE9Dm8vjgoX_7JAKyaoCUzdQ@mail.gmail.com>
+ <Y1IjByxvuX3Nx0Et@kroah.com>
+ <CAGedn0==W+NukFPPd5Ff-U-nMXjz-_wsQKcMNaA3ONJHE3zr6Q@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGedn0==W+NukFPPd5Ff-U-nMXjz-_wsQKcMNaA3ONJHE3zr6Q@mail.gmail.com>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,20 +51,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216588
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-Martin K. Petersen (mkp@mkp.net) changed:
+A: No.
+Q: Should I include quotations after my reply?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mkp@mkp.net
+http://daringfireball.net/2007/07/on_top
 
---- Comment #3 from Martin K. Petersen (mkp@mkp.net) ---
-I propose you create a udev rule to override what the device firmware
-erroneously reports.
+On Fri, Oct 21, 2022 at 03:47:53PM -0400, Chuck Evans wrote:
+> Lsusb gave nothing useful:
+> Linux foundation 3.0 root hub
 
---=20
-You may reply to this email to add a comment.
+That is not the storage device at all.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+And you only have 1 root hub in your system?
+
+> Uas driver takes no options.
+
+It takes lots of options, please see the usb-storage.quirks line in the
+Documentation/admin-guide/kernel-parameters.txt file.  Please try the
+quirks listed there.
+
+thanks,
+
+greg k-h
