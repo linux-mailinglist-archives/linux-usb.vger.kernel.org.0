@@ -2,117 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78518608D76
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 15:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705E1608D8E
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 16:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJVNn1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Oct 2022 09:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        id S229776AbiJVOCm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Oct 2022 10:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJVNn0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 09:43:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AF41D0E9;
-        Sat, 22 Oct 2022 06:43:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D140600A0;
-        Sat, 22 Oct 2022 13:43:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D11C433C1;
-        Sat, 22 Oct 2022 13:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666446204;
-        bh=23QxA+M5S6H4DcowzMHJG00jNE/2O8r9A640gDM5zu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jXyOk6gbU1Fzfuj8+1dyFfm2/PEN5YaPlKVloWqQkm1bSey+JZcTauOMh5hXBfXZQ
-         SDS7weCSdbOpVxCCEm/Hqjr8P1QiCG9ai/nBtCNxiJigEnIZKG/dHmVpj4IDZtDj6B
-         otsBPBdgHMW6VSHVQZdXi/qoNZpZz/ILlQWpQzG1ppDwMHM7b2ChZQ49vunhKyODwO
-         HnTL0U6gVwoehGJK/TEX4ieRHJ9wUv1mgpNvr9hD6OFhgyK6tqeT4O+vaE/jH7UAin
-         kuf01/WI4NNiZbCL2b+0Zc4PxlmlI3UUl9ug7NWXkSbs3ZoVlYwBrxzhFUz09s375P
-         rxwoVSfVjb0HQ==
-Date:   Sat, 22 Oct 2022 21:43:18 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Message-ID: <20221022134318.GA51416@nchen-desktop>
-References: <1666159637-161135-1-git-send-email-pawell@cadence.com>
- <20221020132010.GA29690@nchen-desktop>
- <BYAPR07MB5381E4649DFD2BD0C528AC0FDD2D9@BYAPR07MB5381.namprd07.prod.outlook.com>
+        with ESMTP id S229696AbiJVOCk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 10:02:40 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810AE173FC4
+        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 07:02:38 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id a5so2644784edb.11
+        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 07:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LNVXeM54MuUTzkxW4S+h/avYMDRiH1JNQoeYcnCHBhM=;
+        b=GjMO9bieaHDBelf7XPvp7Mm6+ECuPSqx2R6/8PrakF0zbhlcSTaFXUaHjvuZ2PA8oC
+         6WcjMZS86zeqIwyvNpGwuo6uT7FBWc0z/XIKRCqsdCIqfvsYU5jrdGwZO3AN/Ut8O2PU
+         dVwNs+ZCerEYbOg45w7UYYLixBM2CbHkBDvT80VOQZCglZoEQDqqFHhmGHexg7wLDjKH
+         dwidHE+9u/Qqc/ZjBKywjSP+b7eto8KN5KoUI5cL/eSVRiUi9+a4YNFvdbLp0UHLJ6sl
+         gO3VAnOCQ8U/s+ZJg38eYK/md92XTywwgTsnnIKU+jdNd8yLoqJqnpyW7AhFA1JN3Ctq
+         CMQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LNVXeM54MuUTzkxW4S+h/avYMDRiH1JNQoeYcnCHBhM=;
+        b=dghZhC+25PisufXeUFV/8x6U/ee4O9lK7laQahV3usbpApJ6ijMet7ZYGmUQB4j6DK
+         iC8zMXEcVkU6Y8kB2vVSd8wqMl70x3D4A5LvA8+gX9EbU5l2HO3asRTI3TfxIY5Gqm/I
+         hTjcC/l/XOxATrcxpWUeEcjsbTDOQWhR9NOZVssTo5OiZ50j9LUrI49v33K0881WVzyQ
+         SN9ceRcmyVudfUbGDRYX1O7T6TpSL4uuR06PEa7bJm1k8KvBXiagxWg/A00VWHHSci+V
+         ksc/EF7zbuoBe14+rx0YWxmRvFla09NFu7AiAhycee8cGbgcwoavjfLIriUMSSN+4IR2
+         AoMQ==
+X-Gm-Message-State: ACrzQf1Ku1pnIJOFgX9gxb0/cdm0faZN4yOEFGg7bjS6VZa29DrhUDHG
+        Tj6T5VqohamFRLrTx7oc2xPIRb9mvxO4WA9BtclQWA==
+X-Google-Smtp-Source: AMsMyM7E0Zchl09puiKKoBotMVhULOKYzE0S/e35EOJ4h3CGvH2Wc0rTF+zAD6m+BsOpLEKYent2ulN8cXV4ms8GFBg=
+X-Received: by 2002:a05:6402:1d55:b0:45f:c87f:c753 with SMTP id
+ dz21-20020a0564021d5500b0045fc87fc753mr14243568edb.32.1666447356997; Sat, 22
+ Oct 2022 07:02:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR07MB5381E4649DFD2BD0C528AC0FDD2D9@BYAPR07MB5381.namprd07.prod.outlook.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221021202254.4142411-1-arnd@kernel.org> <20221021203329.4143397-2-arnd@kernel.org>
+In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 22 Oct 2022 16:02:25 +0200
+Message-ID: <CACRpkdacViTuL_gmhWULNm7HCHQeGBXwkonDxQjubSM0=v8vgw@mail.gmail.com>
+Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22-10-21 05:03:25, Pawel Laszczak wrote:
-> >
-> >
-> >On 22-10-19 02:07:17, Pawel Laszczak wrote:
-> >> Patch modifies the TD_SIZE in TRB before ZLP TRB.
-> >> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force processing
-> >> ZLP TRB by controller.
-> >>
-> >> Cc: <stable@vger.kernel.org>
-> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
-> >> USBSSP DRD Driver")
-> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> >> ---
-> >>  drivers/usb/cdns3/cdnsp-ring.c | 15 ++++++++-------
-> >>  1 file changed, 8 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
-> >> b/drivers/usb/cdns3/cdnsp-ring.c index 794e413800ae..4809d0e894bb
-> >> 100644
-> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> >> @@ -1765,18 +1765,19 @@ static u32 cdnsp_td_remainder(struct
-> >cdnsp_device *pdev,
-> >>  			      struct cdnsp_request *preq,
-> >>  			      bool more_trbs_coming)
-> >>  {
-> >> -	u32 maxp, total_packet_count;
-> >> -
-> >> -	/* One TRB with a zero-length data packet. */
-> >> -	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
-> >> -	    trb_buff_len == td_total_len)
-> >> -		return 0;
-> >> +	u32 maxp, total_packet_count, remainder;
-> >>
-> >>  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
-> >>  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
-> >>
-> >>  	/* Queuing functions don't count the current TRB into transferred. */
-> >> -	return (total_packet_count - ((transferred + trb_buff_len) / maxp));
-> >> +	remainder = (total_packet_count - ((transferred + trb_buff_len) /
-> >> +maxp));
-> >> +
-> >> +	/* Before ZLP driver needs set TD_SIZE=1. */
-> >> +	if (!remainder && more_trbs_coming)
-> >> +		remainder = 1;
-> >
-> >Without ZLP, TD_SIZE = 0 for the last TRB.
-> >With ZLP, TD_SIZE = 1 for current TRB, and TD_SIZE = 0 for the next TRB (the
-> >last zero-length packet) right?
-> 
-> Yes, you have right.
-> 
+On Fri, Oct 21, 2022 at 10:37 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-Pawel, With your changes, the return value is 1 for function
-cdnsp_queue_ctrl_tx. Without your changes, it is 0, something wrong?
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
+> similar symbols that are no longer available with the platform gone,
+> though the drivers themselves are still used on newer platforms,
+> so remove these hacks.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
--- 
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thanks,
-Peter Chen
+Yours,
+Linus Walleij
