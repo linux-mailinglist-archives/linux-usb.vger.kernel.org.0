@@ -2,58 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80A9608C59
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 13:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE116608C63
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Oct 2022 13:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiJVLLe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Oct 2022 07:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S230364AbiJVLOo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Oct 2022 07:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiJVLLT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 07:11:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166541A2E12;
-        Sat, 22 Oct 2022 03:31:11 -0700 (PDT)
+        with ESMTP id S230313AbiJVLOX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Oct 2022 07:14:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A9617D2B2
+        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 03:36:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8BB1B81B14;
-        Sat, 22 Oct 2022 10:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1360C433C1;
-        Sat, 22 Oct 2022 10:31:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F58C60BC8
+        for <linux-usb@vger.kernel.org>; Sat, 22 Oct 2022 10:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60DCDC433C1;
+        Sat, 22 Oct 2022 10:36:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666434668;
-        bh=+5LYMc9G1t+vORW3sJXjTTgdrtDBL6soqXawA6zHpeM=;
+        s=korg; t=1666435001;
+        bh=a1K4lfceUJRrwHu7orqSLG2j27RvMee8Q1qJRc1BtGQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DDI97jjQHQ0d3rBWnQVJcP78xTV6jRZM+xQre1vGFQxtbVuyPWP3zr/gIwWAe++4o
-         RRepSOxHCDif7tqHWh/oDFA1psAqDVbjmlvHi3ufVnTch/VlKxKR+/Pr4UjlYvcxyP
-         9yXKaEvyJa/A31fsu91RbyrvoqkFLFrAPRdrRqSM=
-Date:   Sat, 22 Oct 2022 12:31:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lubomir Rintel <lkundrak@v3.sk>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Chubb <peter.chubb@unsw.edu.au>,
-        Stefan Eletzhofer <stefan.eletzhofer@eletztrick.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Helge Deller <deller@gmx.de>, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 02/11] ARM: sa1100: remove unused board files
-Message-ID: <Y1PGaT1AtdoCNCgc@kroah.com>
-References: <20221021155000.4108406-1-arnd@kernel.org>
- <20221021155000.4108406-3-arnd@kernel.org>
+        b=Or5Mny8f7ZdtHCy8u13o1QcQBUhfEGO+BroFngQrkmvjpQ2iz4dn4ARKOTzpwmuo+
+         76ew2WIF4V5reWrlk3dyufZtKcUonfY5g1aURpX8/U9C2a5ijr/qKQ6bKVa2ijOr+A
+         hlA8/4k0wDltOzOGrKS+jywyjVTvM90C9BBDt8Co=
+Date:   Sat, 22 Oct 2022 12:36:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, Peng Fan <peng.fan@oss.nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Xu Yang <xu.yang.nxp@gmail.com>, Xu Yang <xu.yang_2@nxp.com>
+Subject: Re: [PATCH v2 1/4] usb: chipidea: usbmisc_imx: Fix i.MX53 clock sel
+ masks
+Message-ID: <Y1PHtvVAT5/ND+Zs@kroah.com>
+References: <20221018103725.2580679-1-s.hauer@pengutronix.de>
+ <20221018103725.2580679-2-s.hauer@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221021155000.4108406-3-arnd@kernel.org>
+In-Reply-To: <20221018103725.2580679-2-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,20 +53,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 05:49:32PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Oct 18, 2022 at 12:37:22PM +0200, Sascha Hauer wrote:
+> According to the reference manual the masks for the
+> MX53_USB_CTRL_1_H*_XCVR_CLK_SEL bits are 0x3, not 0x11 (which were
+> probably meant as 0b11).
 > 
-> The Cerf, H3100, Badge4, Hackkit, LART, NanoEngine, PLEB, Shannon and
-> Simpad machines were all marked as unused as there are no known users
-> left. Remove all of these, along with references to them in defconfig
-> files and drivers.
-> 
-> Four machines remain now: Assabet, Collie (Zaurus SL5500), iPAQ H3600
-> and Jornada 720, each of which had one person still using them, with
-> Collie also being supported in Qemu.
-> 
-> Cc: Peter Chubb <peter.chubb@unsw.edu.au>
-> Cc: Stefan Eletzhofer <stefan.eletzhofer@eletztrick.de>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Reviewed-by: Xu Yang <xu.yang_2@nxp.com>
+> Link: https://lore.kernel.org/r/20221011082924.884123-2-s.hauer@pengutronix.de
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
+>  drivers/usb/chipidea/usbmisc_imx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+What commit id does this fix?
+
+Should it go to stable kernels?
+
+Same for all of the other patches in this series, please fix up with
+that information and resend.
+
+thanks,
+
+greg k-h
