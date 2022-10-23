@@ -2,78 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC74609184
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 08:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015EB6091D9
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 11:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiJWGwM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Oct 2022 02:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S229900AbiJWJKi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Oct 2022 05:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJWGwJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 02:52:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A37F76964;
-        Sat, 22 Oct 2022 23:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666507929; x=1698043929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ABkS0NhAjDi8ntSJ5iUziEw9CbuP9xXeeAUlShM0158=;
-  b=d7l7K8XglqPq/42axHqWjQTjxt7CswOp0iEM4uKMDSTJztDvpoIG8HQ8
-   fphV8P1gSJtaJRcFTB0nl4/J8/sx9vU7Q55Ow1+AGRf6H5jkGaQnupKlA
-   eS6HNSUFMoXcd1thIRHbPStRr1TE79YcpnLtdp7HAi9RxBDXhXrVr+l0W
-   pHUCqFWLFzSwo5c2LXGwKkvCW1o0IxBGK5m9idBOjISJtBWTno0CwVazN
-   YxO4QIV+BCmirOf7PLJm5Y0m952Ttsu8LdXBS2Ru05A1PgeZl9UFaqKB+
-   o21brek933AGAuEwzAkCd7InisodSkWm2MkiinRY+pSF9JLFGeCYqvnUU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="308332040"
-X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
-   d="scan'208";a="308332040"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 23:52:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="699804517"
-X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
-   d="scan'208";a="699804517"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Oct 2022 23:52:06 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id C01F4107; Sun, 23 Oct 2022 09:52:28 +0300 (EEST)
-Date:   Sun, 23 Oct 2022 09:52:28 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: remove redundant assignment to variable len
-Message-ID: <Y1TkrCZJVkQgXcAY@black.fi.intel.com>
-References: <20221019225709.1506515-1-colin.i.king@gmail.com>
+        with ESMTP id S229497AbiJWJKh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 05:10:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4A4647E3;
+        Sun, 23 Oct 2022 02:10:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 124F06068B;
+        Sun, 23 Oct 2022 09:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C67C433C1;
+        Sun, 23 Oct 2022 09:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666516234;
+        bh=GvMqPk97cFGJjjBdP0e4IXMC6+6X2R7gYyOBEmHAU7g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iUpzX4/VPqnzho3Vq4cBHLpFXOGcUWbnxEOPicJB/hEw4QYxNY34bleH5dOETO2Wl
+         vpqmgWIm3Zw9EcPO9UukGpkxXW8Sf4EgIUMkcbsF3SAb6aZ0FpkV325B471YIBigNC
+         5h7tIJ/YMi0g4EXVXv5pFFn0Qm94eRrmWm0Rp42/If0Mnt7luO/NGmuKd+hYJsl3LH
+         ux4XT3zAuEKhdblyeWaUeQKGmGxT2PeEpf9bNkDWeGXUqGdry8m5xJySEhIInPRNO0
+         EwUjxnqrIdkjyXE+2NgwJnDbxFQSqHhSM9Hvt3iQK4zQG6Obx2LoAD4Xgz6GAVMoen
+         cOya+2WZrC6rA==
+Date:   Sun, 23 Oct 2022 17:10:26 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 4/4] arm64: dts: tqma8mpql: add support for 2nd USB
+ (host) interface
+Message-ID: <20221023091026.GA125525@dragon>
+References: <20220915062855.751881-1-alexander.stein@ew.tq-group.com>
+ <20220915062855.751881-5-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221019225709.1506515-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220915062855.751881-5-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:57:09PM +0100, Colin Ian King wrote:
-> The variable len is assigned a value that is never read. It is re-assigned
-> a new value in the following do-while loop and never referenced after
-> the loop. The assignment is redundant and can be removed.
+On Thu, Sep 15, 2022 at 08:28:55AM +0200, Alexander Stein wrote:
+> The on-board USB hub has a single reset line which needs to be enabled.
 > 
-> Cleans up clang scan build warning:
-> drivers/thunderbolt/xdomain.c:344:2: warning: Value stored to 'len' is
-> never read [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-Applied to thunderbolt.git/next, thanks!
+Applied, thanks!
