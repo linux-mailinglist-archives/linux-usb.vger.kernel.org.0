@@ -2,152 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F9D609568
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 20:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3566095D8
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 21:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiJWSO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Oct 2022 14:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S230019AbiJWTkf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Oct 2022 15:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiJWSO4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 14:14:56 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A1F34DDA;
-        Sun, 23 Oct 2022 11:14:51 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso8573271wma.1;
-        Sun, 23 Oct 2022 11:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wAEKWPZJlrfpEZ9/vlN9/0riKPaUQS9d2i2iQCHtGrs=;
-        b=oGj3vCIqKxYUSyGgfQIy0qqJoLvOGIYBaCtm2nG7AbK6H84nW0R1PMrKKsWP4wStHe
-         H2JKr93RGfynWLzhnjTN4QB3iBFZFrzUgCRTZGsYSUEP//C9pTcY0iFiTlL1QP26Xl2e
-         k6U89yKlegoM2mfNoRvVxgHATfTUkd0GwC6W6hhZabVPeDJQ9n1q8W24rDu2baxUUHHe
-         rAQ6Tos5ReKCLo5M106/nXkUZ11Xv6q3auhKQmLrLhN3SeHrMbofYv1Zj+HvkSFQFqj5
-         gLMBsZ/AH3prgaVO9BezJWarnONhJi7DGFbLCrCS7PYYcTuh6fDAJ9QDqlLbXbYlf7H1
-         pm5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wAEKWPZJlrfpEZ9/vlN9/0riKPaUQS9d2i2iQCHtGrs=;
-        b=j1Dmv/AyZOV5Hh+ce5/AjcRX8U0H9X83DMbg+4nqoUIf2fX/Nzs89vy13kVl7NkTyr
-         bYrdhidRc5DqJ+teQlXyQ3zACXmgHUEv56AvMX8wYfMxYAqk501SOWbhLLXI4anxdSgW
-         zrCHr4ifRSJdtm09HQYrrMU/gBuP8CzjNNm1OL8XUiqyWS40F6EBc57Q82ZbpcCq2/vz
-         BAmYV1Rqj2q3GFDsN1gKT1RPRMwtmkF+0JMtEr9lkp3xLOWjGq8E+uV4WNaNQDTZLQZR
-         cn+NkYGL3lC+9D5VyMf6z1b4xba2Ax+nq5+snqXyp3WwJE3eVCVLeG4r+xaP/bhFfRIa
-         jCBQ==
-X-Gm-Message-State: ACrzQf0X7uSJwXdCMwcXZhWurMM2mhvADvx8/s+uCu5Agq4Px5wIyTEZ
-        LENSkrpdxXGgvus3Sm4xgZKFZhJR8twYaKwF0NbfqHC6
-X-Google-Smtp-Source: AMsMyM5Ffe6y2yTBG1r4UmOxy8f5kKj0k94BQpPomUD7JD6cCR2tb/Gu3OwwSntQ7NKOWOE4amDyflW1VfCXJ7f/Txc=
-X-Received: by 2002:a05:600c:502c:b0:3ce:794f:d664 with SMTP id
- n44-20020a05600c502c00b003ce794fd664mr1610329wmr.33.1666548889346; Sun, 23
- Oct 2022 11:14:49 -0700 (PDT)
+        with ESMTP id S229728AbiJWTkc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 15:40:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAEE61D5E
+        for <linux-usb@vger.kernel.org>; Sun, 23 Oct 2022 12:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666554029; x=1698090029;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hOXPKtOf/Ocf3onl4eIHJiw12bLu/GTObgeRk/HHZMY=;
+  b=Vfe0WsG5vANZ9SP39Ogzj3iE61EuzHLn9OudltBfZVqTTe2ZfJkV6oip
+   zfLLfwIgcjSEcg2FegfGrAT4OoKv38vl1wvwicuohZ2On+TLJdzsyxulD
+   4Y1My6Z/lw0Dyh3nxz9AfNWsBMy8H1s3+4fouJ7+lFUXOh0+sC/VNWKV/
+   D8ZCgwQf/KVuXODtsby6YN2VR38ghcjn3qT4mXn+jQd7hts8qUXsct+G2
+   pQvlMX1hgF3K9FDGN9tiVZyGbPafsLCecCrGkUyG9ZEl8AyHGGMRqVtur
+   VsT7+4ey8AJ8zCfQh5aKuZO5UtbMYf7YFGV3hK0L8W1vRpDf7fmPkkTbo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="369362504"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="369362504"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 12:40:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="662219155"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="662219155"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 23 Oct 2022 12:40:27 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1omgpf-0004c0-0i;
+        Sun, 23 Oct 2022 19:40:27 +0000
+Date:   Mon, 24 Oct 2022 03:39:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ b9589c417fedab6b963cf084ef305665166f5326
+Message-ID: <63559887.afcqJTUkqQb+hchL%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CAMdYzYrUOoTmBL2c_+=xLBMXg38Pp4hANnzqxoe1cVDDrFvqTA@mail.gmail.com>
- <Y0QnFHqrX2r/7oUz@rowland.harvard.edu> <CAMdYzYodS7Y4bZ+fzzAXMSiCfQHwMkmV8-C=b3FVUXDExavXgA@mail.gmail.com>
- <Y0QzrI92f9BL+91W@rowland.harvard.edu> <CAMdYzYpdLEKMSytGStvM2Gi+gkBY7GTUHZfoBt5X-2BEzLrfOw@mail.gmail.com>
- <Y0cuHHWL3r7+mpcq@rowland.harvard.edu> <CAMdYzYockLYigqgX+R28a_Xy=wGExGj-MXL79Jrc7Jv7B6Qh3w@mail.gmail.com>
- <Y0tfXv2U7Izx5boj@rowland.harvard.edu>
-In-Reply-To: <Y0tfXv2U7Izx5boj@rowland.harvard.edu>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Sun, 23 Oct 2022 14:14:37 -0400
-Message-ID: <CAMdYzYqDMFT2a499RDnuqak75Y4fD=ktcoCOu=8wfKbeecQhaA@mail.gmail.com>
-Subject: Re: [BUG] KVM USB passthrough did not claim interface before use
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     kvm@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 9:33 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Sat, Oct 15, 2022 at 08:36:19PM -0400, Peter Geis wrote:
-> > On Wed, Oct 12, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > There's one other thing you might try, although I'm not sure that it
-> > > will provide any useful new information.  Instead of collecting a
-> > > usbmon trace, collect a usbfs snoop log.  Before starting qemu, do:
-> > >
-> > >         echo 1 >/sys/module/usbcore/parameters/usbfs_snoop
-> > >
-> > > This will cause the accesses performed via usbfs, including those
-> > > performed by the qemu process, to be printed in the kernel log.  (Not
-> > > all of the accesses, but the more important ones.)  Let's see what shows
-> > > up.
-> >
-> > So I built and tested the newest version of QEMU, and it exhibits the
-> > same issue. I've also captured the log as requested and attached it
-> > here.
->
-> Here's what appears to be the relevant parts of the log.
->
-> > [93190.933026] usb 3-6.2: opened by process 149607: rpc-libvirtd
-> > [93191.006429] usb 3-6.2: opened by process 149605: qemu-system-x86
->
-> The device is opened by proces 194605, which is probably the main qemu
-> process (or the main one in charge of USB I/O).  I assume this is the
-> process which goes ahead with initialization and enumeration, because
-> there are no indications of other processes opening the device.
->
-> > [93195.712484] usb 3-6.2: usbdev_do_ioctl: RESET
-> > [93195.892482] usb 3-6.2: reset full-speed USB device number 70 using xhci_hcd
-> > [93196.095050] cdc_acm 3-6.2:1.0: ttyACM0: USB ACM device
->
-> As part of initialization, qemu resets the device and its interfaces
-> then get claimed by the cdc_acm driver on the host.  This may be the
-> problem; there's no indication in the log that cdc_acm ever releases
-> those interfaces.
->
-> > [93196.482584] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
-> > [93196.482589] usb 3-6.2: usbfs: process 149617 (CPU 3/KVM) did not claim interface 0 before use
-> > [93209.729484] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
-> > [93209.729489] usb 3-6.2: usbfs: process 149616 (CPU 2/KVM) did not claim interface 0 before use
-> > [93209.729574] usb 3-6.2: usbdev_do_ioctl: CLEAR_HALT
-> > [93209.729577] usb 3-6.2: usbfs: process 149617 (CPU 3/KVM) did not claim interface 1 before use
-> > [93209.729632] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
-> > [93209.729635] usb 3-6.2: usbfs: process 149614 (CPU 0/KVM) did not claim interface 0 before use
->
-> Unforunately these warning messages don't indicate directly whether
-> the attempts to use the interfaces were successful.  But it's clear
-> that something went wrong with those URB submissions because the snoop
-> log doesn't include the contents of the URBs or their results.
->
-> My guess is that the attempts failed because the interfaces were
-> already claimed by cdc_acm in the host.  I would expect qemu to unbind
-> cdc_acm when it starts up, but apparently it doesn't.  And there are
-> no CLAIM_PORT messages in the log.
->
-> Perhaps it will help if you do the unbind by hand before starting
-> qemu.  Try doing:
->
->         echo 3-6.2:1.0 >/sys/bus/usb/drivers/cdc_acm/unbind
->         echo 3-6.2:1.1 >/sys/bus/usb/drivers/cdc_acm/unbind
->
-> Or better yet, blacklist the cdc_acm driver on the host if you can.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: b9589c417fedab6b963cf084ef305665166f5326  thunderbolt: Remove redundant assignment to variable len
 
-Good Afternoon,
+elapsed time: 724m
 
-Thanks, blacklisting cdc_acm stopped usbfs from failing to claim it
-again. Unfortunately I ran into another issue, where KVM/QEMU doesn't
-claim the USB device again after the device resets. I've encountered
-this before with other devices and there doesn't seem to be a way to
-resolve it yet. It seems that my issue with this device was a
-different manifestation of the same problem, and there currently isn't
-a fix for that.
+configs tested: 120
+configs skipped: 3
 
-Thank you for your assistance.
-Very Respectfully,
-Peter
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->
-> Alan Stern
+gcc tested configs:
+m68k                             allmodconfig
+um                             i386_defconfig
+arc                              allyesconfig
+um                           x86_64_defconfig
+alpha                            allyesconfig
+arc                  randconfig-r043-20221023
+m68k                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a014
+x86_64                        randconfig-a006
+arc                                 defconfig
+i386                          randconfig-a012
+s390                             allmodconfig
+alpha                               defconfig
+s390                             allyesconfig
+i386                          randconfig-a016
+s390                                defconfig
+i386                          randconfig-a005
+arm                                 defconfig
+i386                                defconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-syz
+i386                             allyesconfig
+x86_64                        randconfig-a015
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+m68k                             alldefconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                     tqm8555_defconfig
+arm                          lpd270_defconfig
+arm                        clps711x_defconfig
+mips                       bmips_be_defconfig
+arm                            mps2_defconfig
+arc                     nsimosci_hs_defconfig
+i386                          randconfig-c001
+sh                          r7785rp_defconfig
+sh                          polaris_defconfig
+arm                            zeus_defconfig
+sh                           se7206_defconfig
+sh                          r7780mp_defconfig
+sparc64                          alldefconfig
+powerpc                    adder875_defconfig
+sparc64                             defconfig
+sh                   rts7751r2dplus_defconfig
+sh                         ap325rxa_defconfig
+arm                          exynos_defconfig
+powerpc                   currituck_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                      footbridge_defconfig
+csky                              allnoconfig
+sh                          urquell_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arm                        realview_defconfig
+powerpc                    sam440ep_defconfig
+ia64                      gensparse_defconfig
+m68k                           virt_defconfig
+arm                            hisi_defconfig
+mips                        bcm47xx_defconfig
+sparc                       sparc64_defconfig
+ia64                        generic_defconfig
+arc                          axs103_defconfig
+sh                          kfr2r09_defconfig
+sh                           sh2007_defconfig
+arm                            xcep_defconfig
+sh                            migor_defconfig
+arc                         haps_hs_defconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20221023
+hexagon              randconfig-r041-20221023
+i386                          randconfig-a013
+riscv                randconfig-r042-20221023
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+x86_64                        randconfig-a003
+s390                 randconfig-r044-20221023
+i386                          randconfig-a011
+i386                          randconfig-a004
+i386                          randconfig-a015
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon                          alldefconfig
+mips                           rs90_defconfig
+powerpc                     pseries_defconfig
+arm                        neponset_defconfig
+x86_64                        randconfig-k001
+mips                      malta_kvm_defconfig
+hexagon                             defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                      walnut_defconfig
+arm                            mmp2_defconfig
+mips                          ath79_defconfig
+arm                           spitz_defconfig
+arm                      pxa255-idp_defconfig
+arm                         socfpga_defconfig
+arm                             mxs_defconfig
+powerpc                  mpc885_ads_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
