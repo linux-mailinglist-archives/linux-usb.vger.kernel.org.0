@@ -2,43 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E62609493
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 18:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5007F6094D8
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 18:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiJWQEb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Oct 2022 12:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S230333AbiJWQqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Oct 2022 12:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiJWQEa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 12:04:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F3EB4BD;
-        Sun, 23 Oct 2022 09:04:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82747B80D4F;
-        Sun, 23 Oct 2022 16:04:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90271C433C1;
-        Sun, 23 Oct 2022 16:04:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666541066;
-        bh=hH28WnDvFDE2qfWdV6HVPtVEhC+usBQqGVk2hARPGUA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jP1bTPF1VXIqGUgmuH7MRHbmOyGLatP3s7xtbkaKandIC3ZjDqehXjVJHMGerF4LO
-         kNF2UoMxmtBeg0Flktjsb+B3OB8kufqYsBa95EoH/hWsXTPOFUDijEPdvkvHCZgTY7
-         fxDWCwaguqGmQAXEVhTXmAJD40BYJvdD05aMPqe4=
-Date:   Sun, 23 Oct 2022 18:04:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S230161AbiJWQqM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 12:46:12 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3146E4A805
+        for <linux-usb@vger.kernel.org>; Sun, 23 Oct 2022 09:46:10 -0700 (PDT)
+Received: (qmail 1382441 invoked by uid 1000); 23 Oct 2022 12:46:10 -0400
+Date:   Sun, 23 Oct 2022 12:46:10 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Felipe Balbi <balbi@kernel.org>,
         Jakob Koschel <jakobkoschel@gmail.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Ira Weiny <ira.weiny@intel.com>
 Subject: Re: [PATCH] USB: gadget: dummy_hcd: switch char * to u8 *
-Message-ID: <Y1VmBuVrkL7MSzjY@kroah.com>
+Message-ID: <Y1Vv0tJZoSeqX003@rowland.harvard.edu>
 References: <20221021064453.3341050-1-gregkh@linuxfoundation.org>
  <CAHk-=wggc19mf+WR=eg7h7MfVVNbE1c8b5vcOc6wmDASNTMddg@mail.gmail.com>
  <Y1Vjb9v2ggSjhRbc@kroah.com>
@@ -46,9 +33,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <Y1Vjb9v2ggSjhRbc@kroah.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,20 +67,26 @@ On Sun, Oct 23, 2022 at 05:53:19PM +0200, Greg Kroah-Hartman wrote:
 > properly we should also copy the upper 8 bits in to buf[1], eventhough
 > in reality it's only ever going to be 0x00 for now.
 
-Along these lines, do we really not have a predefined macro/inline
-function that does:
-	(value >> 8)
-to give you the "high byte" of a 16bit value?  I keep seeing people
-write their own macros for this in staging drivers, but I just
-attributed that to them not using the correct in-kernel macro, but I
-can't seem to find anything at the moment to do this (same with "give me
-just the lower 8 bits of a 16bit value").
+I count only 5 of the bits being used, not 7.  (See Figure 9-4 in 
+section 9.4.5 of the USB-3.1 spec.)  Maybe you're thinking of Feature 
+flags rather than Status bits?  They do have a lot of overlap.
 
-Am I just blind?
+Dave Brownell wrote that code initially, so we'll never know why he 
+included the cast.  My guess is the same as Linus's: It's there to alert 
+the reader that a 16-bit value is being shortened to squeeze into an 
+8-bit slot.
 
-It's not like it's complex or tricky stuff, I just thought we had
-something in bits.h or bitops.h or the like.  Oh well...
+> Although if we ever do get another 2 status bits defined, this code will
+> break so we probably should do that too.
+> 
+> I'll go do that for a v2 of this and properly comment it.
 
-thanks,
+Note that there's an out-of-date comment line just above this part of 
+the code:
 
-greg k-h
+		 * device: remote wakeup, selfpowered
+
+Thanks to USB-3 support, the device recipient now defines three more 
+bits in devstatus: LTM_ENABLED, U1_ENABLED, and U2_ENABLED.
+
+Alan Stern
