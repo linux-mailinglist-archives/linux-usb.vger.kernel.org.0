@@ -2,123 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063D060955D
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 20:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F9D609568
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Oct 2022 20:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiJWSJH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Oct 2022 14:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
+        id S230136AbiJWSO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Oct 2022 14:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiJWSJC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 14:09:02 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F78572878
-        for <linux-usb@vger.kernel.org>; Sun, 23 Oct 2022 11:09:00 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id l14-20020a05600c1d0e00b003c6ecc94285so5877513wms.1
-        for <linux-usb@vger.kernel.org>; Sun, 23 Oct 2022 11:09:00 -0700 (PDT)
+        with ESMTP id S230023AbiJWSO4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Oct 2022 14:14:56 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A1F34DDA;
+        Sun, 23 Oct 2022 11:14:51 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso8573271wma.1;
+        Sun, 23 Oct 2022 11:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SqFi2wmLGXsQfu/MZ0ShWytXRLk9pwr7X9yOqzu3XMM=;
-        b=xr1jMXVmN57HPedWjHBHw1rrR1I978R/fF6s6AJxl5r6la7lQvhSNZVE8+g2y0CLiO
-         sDalDXJWkgYjhjEW/tk2thpgvWl6aN/4cUoHucR/vgyQGfBHk/P8fVym9OLTYL9CaDNc
-         gW1/wghLPtZzxuOCGhEE5dyrYtYTJsZ7jphSDYrKqG+oJwnjxwiZMzhfPhUVrkSGT+zu
-         5VweFASmBJDlLQN+flFQth9QRLtbPOQNBbETZ75/uwAkj0tW+hrOnW5GnQhWc/dIW6xR
-         vnkUaLQLdc5GSXiDVFlRPo8TgQp1RGMp1/59R56exH01qg/nbJrdKRA5l0wPE4Qmy1c+
-         JkKA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wAEKWPZJlrfpEZ9/vlN9/0riKPaUQS9d2i2iQCHtGrs=;
+        b=oGj3vCIqKxYUSyGgfQIy0qqJoLvOGIYBaCtm2nG7AbK6H84nW0R1PMrKKsWP4wStHe
+         H2JKr93RGfynWLzhnjTN4QB3iBFZFrzUgCRTZGsYSUEP//C9pTcY0iFiTlL1QP26Xl2e
+         k6U89yKlegoM2mfNoRvVxgHATfTUkd0GwC6W6hhZabVPeDJQ9n1q8W24rDu2baxUUHHe
+         rAQ6Tos5ReKCLo5M106/nXkUZ11Xv6q3auhKQmLrLhN3SeHrMbofYv1Zj+HvkSFQFqj5
+         gLMBsZ/AH3prgaVO9BezJWarnONhJi7DGFbLCrCS7PYYcTuh6fDAJ9QDqlLbXbYlf7H1
+         pm5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SqFi2wmLGXsQfu/MZ0ShWytXRLk9pwr7X9yOqzu3XMM=;
-        b=4sDbXKPBDAFgilOVsyuY5uOccSff1qbUIeeyMOBOgz4X7RNVXY1Br3GQnQDzRpvTWY
-         YLVW0fzTzS2jzl90c5IOLAukQBOp9nlOfw61shjvpSd3On8Uh4XUkw/yKze7eUxVqdLl
-         XZVpq5fNAretL0U4fTfGM5JazR6C2wcQmafI4RGDXCDqI/zx1yZ1lbwuuvzH16MGankS
-         XAyF22YGSZLk2WYiHyD1N5G9L4Y6L4Uma+Se4a6ObvALdtGYdaTgU0Zl2fGT6KNknU97
-         HVT/rWPUWpRIHG6CRSzXJCEcwgsO9vhv4GYonbWqGv5r4O0MOXo8tqWhiRwNUkB+EWmV
-         yNFA==
-X-Gm-Message-State: ACrzQf0eZotF63uvrOPUiPJWqdFcP33E45fKSUIFZ/sg3W8A6F78Z9eg
-        cPA+aOQMR2O5zFoTDOpA8dDp4w==
-X-Google-Smtp-Source: AMsMyM72SUpT+H3YAHck0Mm/xenvuseMLAPPp2oOExNAh4/7iab4VjcAEYTBVCFws4DOL079RWUZ7Q==
-X-Received: by 2002:a05:600c:5104:b0:3c6:d8e0:bc2e with SMTP id o4-20020a05600c510400b003c6d8e0bc2emr19762303wms.156.1666548538775;
-        Sun, 23 Oct 2022 11:08:58 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:14a0:fbb0:c618:c972? ([2a05:6e02:1041:c10:14a0:fbb0:c618:c972])
-        by smtp.googlemail.com with ESMTPSA id g10-20020a5d554a000000b002364c77bcacsm8318216wrw.38.2022.10.23.11.08.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 11:08:58 -0700 (PDT)
-Message-ID: <b085d1ee-2924-47f5-a952-27040ae3eb1c@linaro.org>
-Date:   Sun, 23 Oct 2022 20:08:55 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wAEKWPZJlrfpEZ9/vlN9/0riKPaUQS9d2i2iQCHtGrs=;
+        b=j1Dmv/AyZOV5Hh+ce5/AjcRX8U0H9X83DMbg+4nqoUIf2fX/Nzs89vy13kVl7NkTyr
+         bYrdhidRc5DqJ+teQlXyQ3zACXmgHUEv56AvMX8wYfMxYAqk501SOWbhLLXI4anxdSgW
+         zrCHr4ifRSJdtm09HQYrrMU/gBuP8CzjNNm1OL8XUiqyWS40F6EBc57Q82ZbpcCq2/vz
+         BAmYV1Rqj2q3GFDsN1gKT1RPRMwtmkF+0JMtEr9lkp3xLOWjGq8E+uV4WNaNQDTZLQZR
+         cn+NkYGL3lC+9D5VyMf6z1b4xba2Ax+nq5+snqXyp3WwJE3eVCVLeG4r+xaP/bhFfRIa
+         jCBQ==
+X-Gm-Message-State: ACrzQf0X7uSJwXdCMwcXZhWurMM2mhvADvx8/s+uCu5Agq4Px5wIyTEZ
+        LENSkrpdxXGgvus3Sm4xgZKFZhJR8twYaKwF0NbfqHC6
+X-Google-Smtp-Source: AMsMyM5Ffe6y2yTBG1r4UmOxy8f5kKj0k94BQpPomUD7JD6cCR2tb/Gu3OwwSntQ7NKOWOE4amDyflW1VfCXJ7f/Txc=
+X-Received: by 2002:a05:600c:502c:b0:3ce:794f:d664 with SMTP id
+ n44-20020a05600c502c00b003ce794fd664mr1610329wmr.33.1666548889346; Sun, 23
+ Oct 2022 11:14:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-2-arnd@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <CAMdYzYrUOoTmBL2c_+=xLBMXg38Pp4hANnzqxoe1cVDDrFvqTA@mail.gmail.com>
+ <Y0QnFHqrX2r/7oUz@rowland.harvard.edu> <CAMdYzYodS7Y4bZ+fzzAXMSiCfQHwMkmV8-C=b3FVUXDExavXgA@mail.gmail.com>
+ <Y0QzrI92f9BL+91W@rowland.harvard.edu> <CAMdYzYpdLEKMSytGStvM2Gi+gkBY7GTUHZfoBt5X-2BEzLrfOw@mail.gmail.com>
+ <Y0cuHHWL3r7+mpcq@rowland.harvard.edu> <CAMdYzYockLYigqgX+R28a_Xy=wGExGj-MXL79Jrc7Jv7B6Qh3w@mail.gmail.com>
+ <Y0tfXv2U7Izx5boj@rowland.harvard.edu>
+In-Reply-To: <Y0tfXv2U7Izx5boj@rowland.harvard.edu>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sun, 23 Oct 2022 14:14:37 -0400
+Message-ID: <CAMdYzYqDMFT2a499RDnuqak75Y4fD=ktcoCOu=8wfKbeecQhaA@mail.gmail.com>
+Subject: Re: [BUG] KVM USB passthrough did not claim interface before use
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     kvm@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/10/2022 22:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
-> similar symbols that are no longer available with the platform gone,
-> though the drivers themselves are still used on newer platforms,
-> so remove these hacks.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Sat, Oct 15, 2022 at 9:33 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Sat, Oct 15, 2022 at 08:36:19PM -0400, Peter Geis wrote:
+> > On Wed, Oct 12, 2022 at 5:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > There's one other thing you might try, although I'm not sure that it
+> > > will provide any useful new information.  Instead of collecting a
+> > > usbmon trace, collect a usbfs snoop log.  Before starting qemu, do:
+> > >
+> > >         echo 1 >/sys/module/usbcore/parameters/usbfs_snoop
+> > >
+> > > This will cause the accesses performed via usbfs, including those
+> > > performed by the qemu process, to be printed in the kernel log.  (Not
+> > > all of the accesses, but the more important ones.)  Let's see what shows
+> > > up.
+> >
+> > So I built and tested the newest version of QEMU, and it exhibits the
+> > same issue. I've also captured the log as requested and attached it
+> > here.
+>
+> Here's what appears to be the relevant parts of the log.
+>
+> > [93190.933026] usb 3-6.2: opened by process 149607: rpc-libvirtd
+> > [93191.006429] usb 3-6.2: opened by process 149605: qemu-system-x86
+>
+> The device is opened by proces 194605, which is probably the main qemu
+> process (or the main one in charge of USB I/O).  I assume this is the
+> process which goes ahead with initialization and enumeration, because
+> there are no indications of other processes opening the device.
+>
+> > [93195.712484] usb 3-6.2: usbdev_do_ioctl: RESET
+> > [93195.892482] usb 3-6.2: reset full-speed USB device number 70 using xhci_hcd
+> > [93196.095050] cdc_acm 3-6.2:1.0: ttyACM0: USB ACM device
+>
+> As part of initialization, qemu resets the device and its interfaces
+> then get claimed by the cdc_acm driver on the host.  This may be the
+> problem; there's no indication in the log that cdc_acm ever releases
+> those interfaces.
+>
+> > [93196.482584] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
+> > [93196.482589] usb 3-6.2: usbfs: process 149617 (CPU 3/KVM) did not claim interface 0 before use
+> > [93209.729484] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
+> > [93209.729489] usb 3-6.2: usbfs: process 149616 (CPU 2/KVM) did not claim interface 0 before use
+> > [93209.729574] usb 3-6.2: usbdev_do_ioctl: CLEAR_HALT
+> > [93209.729577] usb 3-6.2: usbfs: process 149617 (CPU 3/KVM) did not claim interface 1 before use
+> > [93209.729632] usb 3-6.2: usbdev_do_ioctl: SUBMITURB
+> > [93209.729635] usb 3-6.2: usbfs: process 149614 (CPU 0/KVM) did not claim interface 0 before use
+>
+> Unforunately these warning messages don't indicate directly whether
+> the attempts to use the interfaces were successful.  But it's clear
+> that something went wrong with those URB submissions because the snoop
+> log doesn't include the contents of the URBs or their results.
+>
+> My guess is that the attempts failed because the interfaces were
+> already claimed by cdc_acm in the host.  I would expect qemu to unbind
+> cdc_acm when it starts up, but apparently it doesn't.  And there are
+> no CLAIM_PORT messages in the log.
+>
+> Perhaps it will help if you do the unbind by hand before starting
+> qemu.  Try doing:
+>
+>         echo 3-6.2:1.0 >/sys/bus/usb/drivers/cdc_acm/unbind
+>         echo 3-6.2:1.1 >/sys/bus/usb/drivers/cdc_acm/unbind
+>
+> Or better yet, blacklist the cdc_acm driver on the host if you can.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Good Afternoon,
 
+Thanks, blacklisting cdc_acm stopped usbfs from failing to claim it
+again. Unfortunately I ran into another issue, where KVM/QEMU doesn't
+claim the USB device again after the device resets. I've encountered
+this before with other devices and there doesn't seem to be a way to
+resolve it yet. It seems that my issue with this device was a
+different manifestation of the same problem, and there currently isn't
+a fix for that.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Thank you for your assistance.
+Very Respectfully,
+Peter
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>
+> Alan Stern
