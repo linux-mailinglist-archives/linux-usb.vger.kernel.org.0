@@ -2,40 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EB0609E39
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 11:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB1D609E2C
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 11:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiJXJqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 05:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S230177AbiJXJls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 05:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiJXJqU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 05:46:20 -0400
+        with ESMTP id S229729AbiJXJlr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 05:41:47 -0400
+X-Greylist: delayed 81 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 02:41:46 PDT
 Received: from mail.schwermer.no (mail.schwermer.no [49.12.228.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02037647D
-        for <linux-usb@vger.kernel.org>; Mon, 24 Oct 2022 02:45:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C58635FA
+        for <linux-usb@vger.kernel.org>; Mon, 24 Oct 2022 02:41:46 -0700 (PDT)
 X-Virus-Scanned: Yes
-Message-ID: <2aa47149-15a7-16f4-aa01-b5dca0af69ad@svenschwermer.de>
+Message-ID: <043d2572-afb3-0e41-c284-5cf0229867aa@svenschwermer.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=svenschwermer.de;
-        s=mail; t=1666604423;
+        s=mail; t=1666604504;
         bh=TNSgsgA8Ev/imkhyyzBHw6C3mnPIhJz3J9QZ/75EzgQ=;
-        h=To:Cc:From:Subject;
-        b=C8c6+LzjQo0bFOiRRyZIHz9IGVthOiZUs/2ZWBY7vJOjByKMGOgxrLa31qmarg8Sj
-         4t2frCK0La3yBemIIa+O/rvnZe9r+/9UBrFtstoDFsx42dkupoa/yi7aNxIxarEb2N
-         wDhQHOSFKz2yFe+xyZfV25T2yWeY8iJ8+GENzlS3brwDXkr2kkorajK8hqaAOkFljq
-         bTb5z3foYlkoeMUwXfbhESrdfYHAHi5CJ91TF1Ik1zP8FkgnEC1jwkSdRla1ZHXfx7
-         eHEvie5wJ+Hr72ocGEymGSGQviq7HpOINVdWz78o0hod8sQUXLtVZ61SqFHRLzXMhp
-         pvofdPk3OFhvQ==
-Date:   Mon, 24 Oct 2022 11:40:22 +0200
+        h=From:Subject:To:Cc;
+        b=Svg0usZDgJ/sRaqMA1QGtoOzVfMOb6qXTKxVxegfbjPtJN+sg3I3ZIZM46vXun7Rk
+         bznCTulyuKrY0LhvJT1ThXQtnJlQJ4SYRSIbldPreJ3vnpJKU17JOhsi39oxRIuyEM
+         +/JBSTFWanB2zLrshZybqe/WbUlwYz/12mG2rZvq6idRPrrj4t1C/tHC2Iup9wT6Yr
+         nWax6j+wZmtSA/zqFdjgt2lba8WCj/i7eKEQgpvudE5jcQaic/gY40gmDIUGuoTInZ
+         8kUtRr4InEloGaUjWF/pA8zgP2EnsIqpisrH03FIoLiYM6uF8hM2RUIxtz7J0Fbmrx
+         oAqRNbwZKAkww==
+Date:   Mon, 24 Oct 2022 11:41:44 +0200
 Mime-Version: 1.0
-Content-Language: en-US
-To:     linux-usb@vger.kernel.org
-Cc:     Peter.Chen@nxp.com
 From:   Sven Schwermer <sven@svenschwermer.de>
 Subject: How do disable VBUS
+To:     linux-usb@vger.kernel.org
+Cc:     Peter.Chen@nxp.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
