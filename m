@@ -2,126 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA4F60B507
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 20:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D79960B5E8
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 20:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbiJXSMA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 14:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S231252AbiJXSoU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 14:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiJXSLe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 14:11:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CC92681C8;
-        Mon, 24 Oct 2022 09:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666630384; x=1698166384;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ib3qb+K+OVQ9lpRpy2KLde05xSnKkYgU+kMBtNcI5ZY=;
-  b=AbNT4qBbFZrICFZGm/Pbu6W1zuSgBd3MNdSoCLpX4RTuQT2kuInswkQ3
-   RzzqFX+q6Be8K921Anb+ny3gqTd7li8Cb/NLngcMhODWpGoURmPhXbxPH
-   j1+nUUIsu09/Y/70uN8oy0o6cw6VAXqpfxSib73sZ+GkBeN1YvZ+Kk/i6
-   yiv1frEjaWNCreS0Q3MoKEnq31CpcfokBTHBqeCgSAlPxYFpzez+mw06L
-   nMOnimmHH6l0dGeypFIncsu2x5mIsQqKfcarXuBHbLj0Af2/zsNeCG1Us
-   dWQl3MRiUCl7ZFBYUaKY7EQTUzUG8RXp6+KK9KaRhMl3La+UMdpIba7ox
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="290732899"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="290732899"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 07:26:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="700177651"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="700177651"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Oct 2022 07:26:06 -0700
-From:   Mathias Nyman <mathias.nyman@intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: [PATCH 4/4] xhci: Remove device endpoints from bandwidth list when freeing the device
-Date:   Mon, 24 Oct 2022 17:27:20 +0300
-Message-Id: <20221024142720.4122053-5-mathias.nyman@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221024142720.4122053-1-mathias.nyman@intel.com>
-References: <20221024142720.4122053-1-mathias.nyman@intel.com>
+        with ESMTP id S232348AbiJXSnh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 14:43:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E02E6144089;
+        Mon, 24 Oct 2022 10:25:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBAC4D6E;
+        Mon, 24 Oct 2022 07:56:49 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B75B83F792;
+        Mon, 24 Oct 2022 07:56:41 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 15:56:39 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        soc@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 10/10] ARM: dts: suniv: add device tree for PopStick
+ v1.1
+Message-ID: <20221024155639.5e97d205@donnerap.cambridge.arm.com>
+In-Reply-To: <20221012055602.1544944-11-uwu@icenowy.me>
+References: <20221012055602.1544944-1-uwu@icenowy.me>
+        <20221012055602.1544944-11-uwu@icenowy.me>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+On Wed, 12 Oct 2022 13:56:02 +0800
+Icenowy Zheng <uwu@icenowy.me> wrote:
 
-Endpoints are normally deleted from the bandwidth list when they are
-dropped, before the virt device is freed.
+Hi,
 
-If xHC host is dying or being removed then the endpoints aren't dropped
-cleanly due to functions returning early to avoid interacting with a
-non-accessible host controller.
+> PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
+> wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
+> an on-board CH340 USB-UART converted connected to F1C200s's UART0.
+> 
+> Add a device tree for it. As F1C200s is just F1C100s with a different
+> DRAM chip co-packaged, directly use F1C100s DTSI here.
+> 
+> This commit covers the v1.1 version of this board, which is now shipped.
+> v1.0 is some internal sample that have not been shipped at all.
 
-So check and delete endpoints that are still on the bandwidth list when
-freeing the virt device.
+As mentioned in the other patch, if that is the case, I don't think we
+need to bother about the version number in the filename and compatible
+strings, especially if a v1.0 will never be upstreamed. If there are users
+of the internal version still, they can use an explicit "v1.0" in their
+downstream versions.
 
-Solves a list_del corruption kernel crash when unbinding xhci-pci,
-caused by xhci_mem_cleanup() when it later tried to delete already freed
-endpoints from the bandwidth list.
+So apart from what Krzysztof and Clement already mentioned, the DT itself
+looks fine to me otherwise. I also ran dt-validate on it, and used it as a
+base for another F1C200s board.
 
-This only affects hosts that use software bandwidth checking, which
-currenty is only the xHC in intel Panther Point PCH (Ivy Bridge)
+Cheers,
+Andre
 
-Cc: stable@vger.kernel.org
-Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-mem.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 9e56aa28efcd..81ca2bc1f0be 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -889,15 +889,19 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, int slot_id)
- 		if (dev->eps[i].stream_info)
- 			xhci_free_stream_info(xhci,
- 					dev->eps[i].stream_info);
--		/* Endpoints on the TT/root port lists should have been removed
--		 * when usb_disable_device() was called for the device.
--		 * We can't drop them anyway, because the udev might have gone
--		 * away by this point, and we can't tell what speed it was.
-+		/*
-+		 * Endpoints are normally deleted from the bandwidth list when
-+		 * endpoints are dropped, before device is freed.
-+		 * If host is dying or being removed then endpoints aren't
-+		 * dropped cleanly, so delete the endpoint from list here.
-+		 * Only applicable for hosts with software bandwidth checking.
- 		 */
--		if (!list_empty(&dev->eps[i].bw_endpoint_list))
--			xhci_warn(xhci, "Slot %u endpoint %u "
--					"not removed from BW list!\n",
--					slot_id, i);
-+
-+		if (!list_empty(&dev->eps[i].bw_endpoint_list)) {
-+			list_del_init(&dev->eps[i].bw_endpoint_list);
-+			xhci_dbg(xhci, "Slot %u endpoint %u not removed from BW list!\n",
-+				 slot_id, i);
-+		}
- 	}
- 	/* If this is a hub, free the TT(s) from the TT list */
- 	xhci_free_tt_info(xhci, dev, slot_id);
--- 
-2.25.1
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
+> New patch introduced in v2.
+> 
+>  arch/arm/boot/dts/Makefile                    |   3 +-
+>  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 101 ++++++++++++++++++
+>  2 files changed, 103 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 6aa7dc4db2fc..0249c07bd8a6 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
+>  	sun9i-a80-optimus.dtb \
+>  	sun9i-a80-cubieboard4.dtb
+>  dtb-$(CONFIG_MACH_SUNIV) += \
+> -	suniv-f1c100s-licheepi-nano.dtb
+> +	suniv-f1c100s-licheepi-nano.dtb \
+> +	suniv-f1c200s-popstick-v1.1.dtb
+>  dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
+>  	tegra20-acer-a500-picasso.dtb \
+>  	tegra20-asus-tf101.dtb \
+> diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+> new file mode 100644
+> index 000000000000..121dfc6f609d
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+> @@ -0,0 +1,101 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
+> + */
+> +
+> +/dts-v1/;
+> +#include "suniv-f1c100s.dtsi"
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +/ {
+> +	model = "Popcorn Computer PopStick v1.1";
+> +	compatible = "sourceparts,popstick-v1.1", "sourceparts,popstick",
+> +		     "allwinner,suniv-f1c200s", "allwinner,suniv-f1c100s";
+> +
+> +	aliases {
+> +		mmc0 = &mmc0;
+> +		serial0 = &uart0;
+> +		spi0 = &spi0;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led {
+> +			function = LED_FUNCTION_STATUS;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +	};
+> +
+> +	reg_vcc3v3: vcc3v3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc3v3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +};
+> +
+> +&mmc0 {
+> +	cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
+> +	bus-width = <4>;
+> +	disable-wp;
+> +	status = "okay";
+> +	vmmc-supply = <&reg_vcc3v3>;
+> +};
+> +
+> +&spi0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&spi0_pc_pins>;
+> +	status = "okay";
+> +
+> +	flash@0 {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		compatible = "spi-nand";
+> +		reg = <0>;
+> +		spi-max-frequency = <40000000>;
+> +
+> +		partitions {
+> +			compatible = "fixed-partitions";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +
+> +			partition@0 {
+> +				label = "u-boot-with-spl";
+> +				reg = <0x0 0x100000>;
+> +			};
+> +
+> +			ubi@100000 {
+> +				label = "ubi";
+> +				reg = <0x100000 0x7f00000>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&otg_sram {
+> +	status = "okay";
+> +};
+> +
+> +&uart0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&uart0_pe_pins>;
+> +	status = "okay";
+> +};
+> +
+> +&usb_otg {
+> +	dr_mode = "peripheral";
+> +	status = "okay";
+> +};
+> +
+> +&usbphy {
+> +	status = "okay";
+> +};
 
