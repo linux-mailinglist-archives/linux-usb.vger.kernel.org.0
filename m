@@ -2,131 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0436609A65
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 08:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C086B609B21
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 09:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJXGSQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 02:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S230443AbiJXHRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 03:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJXGSO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 02:18:14 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF58E1B;
-        Sun, 23 Oct 2022 23:18:12 -0700 (PDT)
-X-UUID: 451950a68d834db0b95e77b74606e3f3-20221024
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=4d4OABhk3db1wBMRWNegWhxHRdnBMljaS9nufvBF9VM=;
-        b=oTaOsrBZLxm3vaSkx/d71Z7fXU1K+yUYzjSVK/NadMfTBn15QTr0ycWC6Ozdsx7nbFGCQ6Rph3qcoPIECE9AW+YWO13ohbebXb5mXYc9TZ2+Re1yfU9DU1sVqPfu2N+DiYKqvim9ex1EfB2k1duWmJ4T42LIiv9R+L3w5l9/xHE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:3b92bf8f-6a31-4200-9dd7-623b427c7342,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:17d877c8-03ab-4171-989e-341ab5339257,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 451950a68d834db0b95e77b74606e3f3-20221024
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 19267619; Mon, 24 Oct 2022 14:18:08 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 24 Oct 2022 14:18:06 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 24 Oct 2022 14:18:06 +0800
-Message-ID: <da9f8b90-e4d1-5893-f656-1bb0221ea7f7@mediatek.com>
-Date:   Mon, 24 Oct 2022 14:18:05 +0800
+        with ESMTP id S230467AbiJXHRc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 03:17:32 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC0C52DD2;
+        Mon, 24 Oct 2022 00:17:23 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29NLeKsd010847;
+        Mon, 24 Oct 2022 09:16:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=RGsQrACxVaiQ/PqYuY2b2GnpiqpCXdRkFoPEvUnvhcw=;
+ b=zB9GoWQcvHm20Je2/l5foUJXJkxACJFDuypPhjL11OVGyW36PsI+qBMY57EHuEnJjIzq
+ qo4fW5FYlaVE4mGXjqny+4CM2bcBRfjx07DwSvKNCuZIOm5OUPoiAU5UyS4yIdNx3U5w
+ FijVzsUL+QZJw2/JzruM4+h447bLSRzkywiMQPIhG/EGwf1HkVfyIRUc4nSHHxvY9bXg
+ v07HlHbvGfkAANoBBm2WLms9trQx56j52JOXtAwC3V0HBE8g9hvsP72+2RXV/fnxB1Sv
+ QZez3mD2Hj4f97EYdYOc3M69F+NHYNIkazy9Wn+Gn9JKNeBAerFpDthaapYcWyCAfprU Ew== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kc7dk1cb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 09:16:55 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E7121100039;
+        Mon, 24 Oct 2022 09:16:48 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A89102132E7;
+        Mon, 24 Oct 2022 09:16:48 +0200 (CEST)
+Received: from [10.201.21.72] (10.201.21.72) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
+ 2022 09:16:48 +0200
+Message-ID: <ff2c969d-532e-8f18-041d-14c34e88eee9@foss.st.com>
+Date:   Mon, 24 Oct 2022 09:16:38 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] arm64: dts: mediatek: mt8195-demo: fix the memory size
- of node secmon
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        <devicetree@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3] usb: dwc3: st: Rely on child's compatible instead of
+ name
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Miles Chen <miles.chen@mediatek.com>,
-        Bear Wang <bear.wang@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>, <linux-usb@vger.kernel.org>,
-        <stable@vger.kernel.org>, Matthias Brugger <mbrugger@suse.com>
-References: <20220922091648.2821-1-macpaul.lin@mediatek.com>
- <20220929084714.15143-1-macpaul.lin@mediatek.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <20220929084714.15143-1-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jerome Audu <jerome.audu@st.com>,
+        Felipe Balbi <felipe@balbi.sh>
+References: <20220930142018.890535-1-patrice.chotard@foss.st.com>
+ <Y1PFaOEbPVDN7313@kroah.com>
+Content-Language: en-US
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <Y1PFaOEbPVDN7313@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.21.72]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_01,2022-10-21_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/29/22 16:47, Macpaul Lin wrote:
-> The size of device tree node secmon (bl31_secmon_reserved) was
-> incorrect. It should be increased to 2MiB (0x200000).
-> 
-> The origin setting will cause some abnormal behavior due to
-> trusted-firmware-a and related firmware didn't load correctly.
-> The incorrect behavior may vary because of different software stacks.
-> For example, it will cause build error in some Yocto project because
-> it will check if there was enough memory to load trusted-firmware-a
-> to the reserved memory.
-> 
-> When mt8195-demo.dts sent to the upstream, at that time the size of
-> BL31 was small. Because supported functions and modules in BL31 are
-> basic sets when the board was under early development stage.
-> 
-> Now BL31 includes more firmwares of coprocessors and maturer functions
-> so the size has grown bigger in real applications. According to the value
-> reported by customers, we think reserved 2MiB for BL31 might be enough
-> for maybe the following 2 or 3 years.
 
-Dear Matthias, sorry for a gentle reminder. MediaTek hope this simple 
-fix could be applied to 6.1-rc and be picked-up to current stable tree 
-after v5.19. Thanks a lot.
 
-> Cc: stable@vger.kernel.org      # v5.19
-> Fixes: 6147314aeedc ("arm64: dts: mediatek: Add device-tree for MT8195 Demo board")
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-> ---
-> Changes for v2
->   - Add more information about the size difference for BL31 in commit message.
->     Thanks for Miles's review.
+On 10/22/22 12:26, Greg Kroah-Hartman wrote:
+> On Fri, Sep 30, 2022 at 04:20:18PM +0200, patrice.chotard@foss.st.com wrote:
+>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>
+>> To ensure that child node is found, don't rely on child's node name
+>> which can take different value, but on child's compatible name.
+>>
+>> Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
+>> Cc: Jerome Audu <jerome.audu@st.com>
+>> Reported-by: Felipe Balbi <felipe@balbi.sh>
+>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>> ---
+>> v3: - rebase on correct branch
+>> v2: - add missing reported-by
+>>     - add Fixes
+>> ---
+>>  drivers/usb/dwc3/dwc3-st.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+>> index 6c14a79279f9..fea5290de83f 100644
+>> --- a/drivers/usb/dwc3/dwc3-st.c
+>> +++ b/drivers/usb/dwc3/dwc3-st.c
+>> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+>>  	/* Manage SoftReset */
+>>  	reset_control_deassert(dwc3_data->rstc_rst);
+>>  
+>> -	child = of_get_child_by_name(node, "usb");
+>> +	child = of_get_compatible_child(node, "snps,dwc3");
+>>  	if (!child) {
+>>  		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
+>>  		ret = -ENODEV;
+>> -- 
+>> 2.25.1
+>>
 > 
->   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> index 4fbd99eb496a..dec85d254838 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> @@ -56,10 +56,10 @@
->   		#size-cells = <2>;
->   		ranges;
->   
-> -		/* 192 KiB reserved for ARM Trusted Firmware (BL31) */
-> +		/* 2 MiB reserved for ARM Trusted Firmware (BL31) */
->   		bl31_secmon_reserved: secmon@54600000 {
->   			no-map;
-> -			reg = <0 0x54600000 0x0 0x30000>;
-> +			reg = <0 0x54600000 0x0 0x200000>;
->   		};
->   
->   		/* 12 MiB reserved for OP-TEE (BL32)
+> Is this still needed for 6.1-final?
 
-Regards,
-Macpaul Lin
+Yes, still needed for v6.1.
+
+Thanks
+Patrice
+
+> 
+> thanks,
+> 
+> greg k-h
