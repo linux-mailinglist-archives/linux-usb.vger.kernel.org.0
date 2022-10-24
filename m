@@ -2,87 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F67760B7D3
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 21:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B7160BB6E
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 23:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiJXTeu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 15:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S235053AbiJXU7v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 16:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbiJXTdt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 15:33:49 -0400
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E8B22B13
-        for <linux-usb@vger.kernel.org>; Mon, 24 Oct 2022 11:04:35 -0700 (PDT)
-Received: by mail-pl1-f171.google.com with SMTP id g24so4113074plq.3
-        for <linux-usb@vger.kernel.org>; Mon, 24 Oct 2022 11:04:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPf6G/73Hd0s0zh7PYg5rvhdRmvS3jQjXsc+lqFusyc=;
-        b=7dgkL+g4+97KDdP8HbLlhpskVi0nr/YRASo9eK8WVyCBB8RUFUwgo/Uqv1ipslx2Sm
-         hH/Vfzj5H4XHljL/CwK7sBMe4ZCJ3PSjnNGkzXpssGPoFoY26v+22tIGhKlknksIc539
-         2PCpYtjtT5S8f8v6mDlt1W3KQXfEIdEpXimrZhvoJqLZMeoERiAI3G512ZjO7HbenAqk
-         MtRkIa8lVXi6UY6plsGW4esekJyGHseKqTFbHnXJLO02IHGejqxioAHh3ghzPM+/3Iqf
-         rAiZtYWjDjxZYC4RTAD8TxqT0s+2JSqAjafgPMQkbqL9ySOqkecbL1ZHXi90EPhHNGS9
-         KVyg==
-X-Gm-Message-State: ACrzQf0vrf2+gMcr8Ef4jobqxApLCvG6UkKkvFGwmoENXNAp1UteQ7sH
-        0ljQd5PlgkJVvzulPL0tV7UL0w==
-X-Google-Smtp-Source: AMsMyM4Gm7Aig8YT5fRJeyMGddzfvxxYUrUEmpPq2PCQ/RGA1i1Qlql9jRoJlFidSVPdqq8RCQds4g==
-X-Received: by 2002:a17:90a:fe6:b0:212:bfc3:31f5 with SMTP id 93-20020a17090a0fe600b00212bfc331f5mr25482041pjz.215.1666634594766;
-        Mon, 24 Oct 2022 11:03:14 -0700 (PDT)
-Received: from localhost ([75.172.140.17])
-        by smtp.gmail.com with ESMTPSA id mj19-20020a17090b369300b002131a9f8dcbsm1291814pjb.46.2022.10.24.11.03.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:03:14 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Paul Walmsley <paul@pwsan.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-omap@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S235462AbiJXU7Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 16:59:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA7CD189805;
+        Mon, 24 Oct 2022 12:05:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FCA61515;
+        Mon, 24 Oct 2022 07:17:24 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D63D3F792;
+        Mon, 24 Oct 2022 07:17:16 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 15:17:14 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>, Bin Liu <b-liu@ti.com>,
-        Helge Deller <deller@gmx.de>, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 14/17] ARM: omap1: remove dead code
-In-Reply-To: <20221019150410.3851944-14-arnd@kernel.org>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-14-arnd@kernel.org>
-Date:   Mon, 24 Oct 2022 11:03:13 -0700
-Message-ID: <7hbkq1hzfi.fsf@baylibre.com>
+        soc@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 09/10] dt-binding: arm: sunxi: add compatible strings
+ for PopStick v1.1
+Message-ID: <20221024151714.59968916@donnerap.cambridge.arm.com>
+In-Reply-To: <20221012055602.1544944-10-uwu@icenowy.me>
+References: <20221012055602.1544944-1-uwu@icenowy.me>
+        <20221012055602.1544944-10-uwu@icenowy.me>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+On Wed, 12 Oct 2022 13:56:01 +0800
+Icenowy Zheng <uwu@icenowy.me> wrote:
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> After the removal of the unused board files, I went through the
-> omap1 code to look for code that no longer has any callers
-> and remove that.
->
-> In particular, support for the omap7xx/omap8xx family is now
-> completely unused, so I'm only leaving omap15xx/omap16xx/omap59xx.
+Hi Icenowy,
 
-Acked-by: Kevin Hilman <khilman@baylibre.com>
+> SourceParts PopStick is a F1C200s-based stick-shaped SBC.
+> 
+> Add a compatible string list for its v1.1 version (the first public
+> one).
 
-with a few tears shed since omap7xx/omap8xx was the first family I
-contributed to upstream. :(
+If v1.0 (or anything prior) never made it to the outside world, I don't
+think we need to mention that in the public bindings.
+In general Linux seems to discourage support for unreleased hardware, so I
+think you can just drop the "sourceparts,popstick-v1.1" name.
 
-Kevin
+Cheers,
+Andre
+
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
+> New patch introduced in v2.
+> 
+>  Documentation/devicetree/bindings/arm/sunxi.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
+> index 3ad1cd50e3fe..c6e0ad7f461d 100644
+> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
+> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+> @@ -807,6 +807,13 @@ properties:
+>            - const: sinlinx,sina33
+>            - const: allwinner,sun8i-a33
+>  
+> +      - description: SourceParts PopStick v1.1
+> +        items:
+> +          - const: sourceparts,popstick-v1.1
+> +          - const: sourceparts,popstick
+> +          - const: allwinner,suniv-f1c200s
+> +          - const: allwinner,suniv-f1c100s
+> +
+>        - description: SL631 Action Camera with IMX179
+>          items:
+>            - const: allwinner,sl631-imx179
+
