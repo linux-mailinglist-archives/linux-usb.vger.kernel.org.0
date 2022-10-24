@@ -2,93 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C783660B934
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 22:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DE860B97A
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 22:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiJXUG1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 16:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S231590AbiJXUNP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 16:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbiJXUFl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 16:05:41 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CB558076
-        for <linux-usb@vger.kernel.org>; Mon, 24 Oct 2022 11:26:30 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b185so3468314pfb.9
-        for <linux-usb@vger.kernel.org>; Mon, 24 Oct 2022 11:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4oIVzfpMgaAT0HX4FWTthc6xrrun7ylc9/g6rsWhf08=;
-        b=1O1ZHqYiBlXY2fwJNdkh+vQ/VNUVsNL1SE/FLAfOhoxD5MPiaq4El7Qm3wHo+8cgb3
-         gl9aeVRIggYlqbyizkSb3bBtxGG+NDi5jQPFLC5t5vcs2zVF6v3XXS2LwIAxKpdiwggC
-         n0PBC2uHZpCn05uEfUStTvJ1YOjR10a1WhlYwJ1EMZXodMLzQ2LjYg7xigqwXSPkiO03
-         194iUFBYOfLlARIf+xoEZo/W0V34QwVqxfhOTk30UjgjuOg0gjGBGTFOiN2O2yCX/CJd
-         B7mqvd4VripHn5nnSvfz8dNOkV/MSTcHE9+6t9xVPrjJY5DORvB26GRhxou4kxGlK326
-         FM1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4oIVzfpMgaAT0HX4FWTthc6xrrun7ylc9/g6rsWhf08=;
-        b=evyWd4TOgjUevyZM9RRGPdodAdTlxzhGPF8Sv3CiLiBFvDFtYqrgPAv753qPXdqREW
-         glikDt7NjYEhJfx+TxyMWAiKu8fQAnN4gUQDODSBn9a2iPQ78crYVLsbFqvHVg5AeLHZ
-         0dLHpvEAm2FYLM2bwUyFuMI8uIybnr8IzPqE1AaDRXDtGJBMILSaZcLudlfv2hW91Yc4
-         8BBg92oivKCsCVXvGdFEUwNBodyovhhmCQKl4Gqfcj/bAon+DKpjLw5pvPWcRESKzjdF
-         cgO85wJNiLtZXf/P/J7vk3RKmBtCF88uBeuIJOC+TGgEm+LwDNFWXvZNyW/fmI5+B8Lb
-         6mCg==
-X-Gm-Message-State: ACrzQf3FCCj7gIH+dh/qyVVRz8QGL44wi6rAX6liCdGO8t3xoFv5cHpk
-        F7bNC2P8KoWpZ7m33fLHjPuP7w==
-X-Google-Smtp-Source: AMsMyM5NJO1kEdsQTHB/8tQPhUzIwVroAro5GyKcBeo3+9Tpkq+lfovTaDaocHC24z3Nm955Wr4NWg==
-X-Received: by 2002:aa7:81cc:0:b0:563:4e53:c08b with SMTP id c12-20020aa781cc000000b005634e53c08bmr34743652pfn.19.1666635958991;
-        Mon, 24 Oct 2022 11:25:58 -0700 (PDT)
-Received: from localhost ([75.172.140.17])
-        by smtp.gmail.com with ESMTPSA id z11-20020a170903018b00b00177f4ef7970sm72911plg.11.2022.10.24.11.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:25:58 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Arnd Bergmann <arnd@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        David Lechner <david@lechnology.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 00/14] ARM: remove unused davinci board & drivers
-In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
-References: <20221019152947.3857217-1-arnd@kernel.org>
-Date:   Mon, 24 Oct 2022 11:25:57 -0700
-Message-ID: <7h7d0phydm.fsf@baylibre.com>
+        with ESMTP id S231607AbiJXUMn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 16:12:43 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271C1183DBE;
+        Mon, 24 Oct 2022 11:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666636167;
+        bh=icVbzJtZ9pqflJ14jNdNOlB/DYImZ+gyK6fC/SDHPeo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Kkvqf/+txMBi7sxfZs0V/5+nqVslh0tnBxX4/FfBbX4K5PxEYxT5PP/zpCOkVp7bv
+         AjdzA1IvFe+Vl83LXPdeQMLwEY5VuZuTJREUOnmXgB7DCslsdCKNZhD1ffx1GoVLqb
+         rKyNNUqFB0P2skYG5FNKeRZ8QSxQWKQjW3JNG1LI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.136.30]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIdiZ-1oqd7434DN-00EaCt; Mon, 24
+ Oct 2022 20:29:27 +0200
+Message-ID: <ec8edb92-a21b-6291-4275-d7cba97d7ad7@gmx.de>
+Date:   Mon, 24 Oct 2022 20:29:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] video: fbdev: sis: use explicitly signed char
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Winischhofer <thomas@winischhofer.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221024162901.535972-1-Jason@zx2c4.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221024162901.535972-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:fgln+OSb5Fs7l921QypIIY6GvbB8Dpo8NbcH6CX//FlDdIZKoPn
+ HTH8weoBRqVlYnQaJOUuVnLRopE3hTyC0rQ7NFop1qJoWADAuwh/gwd/DNyU80Z/nBkvvlj
+ xLpYb1wKKdGZeA8sSZnuNeBXV4k3vo2v4nRR1R3a5fNPt5ryrwPOPk8q//T+CrXTBvb8tGY
+ ylAA2rLff9VDqREvNVy4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YeTgNuQ6oBE=:x+MrTPIRv+ADg3bGSjOX2x
+ c8XbmCSjtFftDhFgoBgA63vaJowCwC+3di5UjTuwo1cjyBDugLxf99Ls4mxXN6KNNLDlOGAj3
+ Wl6mR0AP9W+8LUZDKcgR9x2KCpFAxB7TRmVgTZk88Hvdh10HEecFZtsnjASzNO8/2eG8/PskI
+ zCW1cPfDSUtI/WSbPa7xipFxEn0bVZTrkHYJEJucNxTHt47sb0MMTLPuKU305/eTDuJh2MnFy
+ N7dUAut84zTqvFUU4rVzQEaytLznUNTgQWuMw8iJhg0Y9r1gxdBobn/uS7A7UwpBfvcO95+la
+ ExXo7tBr/QBo2R1zZFQqkWyLFfgq3Ucb+aUoRrs8RCU5lp3A+epBw+c2uzINC6vK/bTysxH4u
+ 74VxveNrMEvEJeCuNwYfaQuCUZWS03JmRx0e8zzV08dapRsrcIyXp90UUGCB0ofpbwRdKa6z4
+ iVJS+44cs4OdFyrWLx+JvO3V2lW2Ha1db3TeAI9VZOZvaWPWtO6g3smWISdQxmx26grR9QzR8
+ lJ7/VCImckMTs7vQOJleMD4MEatVye+/uZlIWjiuxRpIOwD4mH23TQvkwYlVXhNnZB/5GsqLz
+ VUqAexb1W2LapEPynIWtHfq6YnO/C6tIguZH2VlDJctLyBTyY5Ldteibfif7AdyVT3wbM3fg2
+ n5zXbAYkC8SArLNKh7IcZp/j+BSvyWaVeWjbChcVR4rtPN+mKVI1BPOUYspQKnVDix+qvsoSE
+ uLcConOmvdqLBSSqMr/QhnSEN8rMQhQdcMJxiNm60kLCxDxmZPMBEQ/gcuWMJjIfQdxzCQzXx
+ XMUEoYR2xhoeI2ejsM8HtXUrRjSf1Apkwn2dlggGOeQrwU6mA+BQiIYmNFITAcbeVZxxG6x8O
+ 746n9OVaOt4FrW0BToKm4gwFWCF1UFE3c/CEWVbzDYx73EzfCMuD/Z/dtVcAYNxxwjhNnFDp5
+ 8utlguY9KCJgr07er4rwSu0GsC3jknq0TAIeME9v16xKSDcc2TIVpo976zBvonR0+MPybIcCM
+ h2H2g5OJOn9BrqbcG9Fk4omj8xfqBjsC2nI7ULK4ZNtwSNkL4RWX1lUChj6VQVFEHo5ptjBdt
+ UYRiyhO9rWcu/rgcBPXb83TqbyZiBMwK61+QvZcn0+DacPRzUpqe9iHCYEohp87oJsMkDWf7g
+ 5tWzTVkU2WEhcEoBQOaIM9TLnOhpui0xVHCt3i2ChLG+oBQnDCdeqVmhOuP3nugZ4AFSHjm5s
+ 1Vj1RWF2rhVPMK22jsLg7C4VPdecfyXbhtdJXGBCMdC5/PesfYAfQcVD1YpLkNrA9PuFXEDXh
+ RC9SkKW4N7S/kPU5B8dCwYXVWnbtCTZlsjLfNmRqDveBSnMo782+7qGudFzP/fPnD3AzOq2WG
+ C4txTHKBUgDkTOOgru1dp0fjnM5oXhkcvzC4mApzEc+DFHwaxpAHbIp2ScSj95wpB6eVqAIlb
+ sXZ20FkJ2MN+Mk7WiXrpUkwEEJdEn2cTKNP1vqFwpg4tR3vGSP7j4/hbYLpbli5f3N1phP2fq
+ r6dpFpstHxDSUm+0+SFiELW5DZ+6atWpEcW35DAGYFASa
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,19 +80,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
-
-> From: Arnd Bergmann <arnd@arndb.de>
+On 10/24/22 18:29, Jason A. Donenfeld wrote:
+> With char becoming unsigned by default, and with `char` alone being
+> ambiguous and based on architecture, signed chars need to be marked
+> explicitly as such. This fixes warnings like:
 >
-> As part of removing all board files that were previously marked as unused,
-> I looked through the davinci platform and recursively removed everything
-> that has now become unused.
+> drivers/video/fbdev/sis/init301.c:3549 SiS_GetCRT2Data301() warn: 'SiS_P=
+r->SiS_EModeIDTable[ModeIdIndex]->ROMMODEIDX661' is unsigned
 >
-> In particular, this is for all dm3xx support, in addition to the dm64xx
-> support removed previously. The remaining support is now for da8xx using
-> devicetree only, which means a lot of the da8xx specific device support
-> can also go away.
+> Cc: Thomas Winischhofer <thomas@winischhofer.net>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Acked-by: Kevin Hilman <khilman@baylibre.com>
+Applied to linux-fbdev git tree.
 
-Kevin
+Thanks,
+Helge
+
+
+> ---
+>   drivers/usb/misc/sisusbvga/sisusb_struct.h | 2 +-
+>   drivers/video/fbdev/sis/vstruct.h          | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/misc/sisusbvga/sisusb_struct.h b/drivers/usb/mi=
+sc/sisusbvga/sisusb_struct.h
+> index 3df64d2a9d43..a86032a26d36 100644
+> --- a/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> +++ b/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> @@ -91,7 +91,7 @@ struct SiS_Ext {
+>   	unsigned char VB_ExtTVYFilterIndex;
+>   	unsigned char VB_ExtTVYFilterIndexROM661;
+>   	unsigned char REFindex;
+> -	char ROMMODEIDX661;
+> +	signed char ROMMODEIDX661;
+>   };
+>
+>   struct SiS_Ext2 {
+> diff --git a/drivers/video/fbdev/sis/vstruct.h b/drivers/video/fbdev/sis=
+/vstruct.h
+> index ea94d214dcff..d7a14e63ba5a 100644
+> --- a/drivers/video/fbdev/sis/vstruct.h
+> +++ b/drivers/video/fbdev/sis/vstruct.h
+> @@ -148,7 +148,7 @@ struct SiS_Ext {
+>   	unsigned char  VB_ExtTVYFilterIndex;
+>   	unsigned char  VB_ExtTVYFilterIndexROM661;
+>   	unsigned char  REFindex;
+> -	char           ROMMODEIDX661;
+> +	signed char    ROMMODEIDX661;
+>   };
+>
+>   struct SiS_Ext2 {
+
