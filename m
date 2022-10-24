@@ -2,173 +2,332 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E9860B447
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 19:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F1D60B076
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 18:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbiJXRfO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 13:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S232885AbiJXQFh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 12:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233237AbiJXRex (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 13:34:53 -0400
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C1A4DF13;
-        Mon, 24 Oct 2022 09:09:52 -0700 (PDT)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OCu0pT011978;
-        Mon, 24 Oct 2022 07:04:57 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=/pk38fEZ9U0+nRNaqE9OQAzzGVgDKqaCIE5yNVgKWZU=;
- b=Gbt7rWGO+gU4SbmxkflEj+uVO8bmRjccs3rk0hkDaH8GORI/Rv3LjQ2Dpd55P6QToMRR
- d41el+UdBN9oRf+IZGPpjQmJeBfhpJ/TNU83WBi1toEzJ+7QMEXdjt8Dn4vfWsX6GM4X
- 2rK0Yknc6+HzD2O4lzoaIHZXHjLz+G86o3rck9PuFoWri3toHoru2qdRR91eFmDqo+Pz
- YZQ+TIKRhxEgboKpt6bpGSHQ+p0WaMEhH97T7oRoJ1W44NmjcmMhC0iuptiHqquqGJbV
- RZ2lNEkp97vrxRnWFG3koBgTcMvinWBB1rU/gx7wbexmbMtkB+I7myGOMBPxWqY2dqIm Og== 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2049.outbound.protection.outlook.com [104.47.74.49])
-        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3kcd30rex2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 07:04:57 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WlHDOm/tLup3L4hgHeUlBNMDV+4ySZ3hW/935urcMP61tBHKgjKcdnjIIEZZZXCpNz8FLt23+Fi3RAx/gNiO7uk8xe5Q4c9sAcYXIXaXICejPTCJu2aZ2pLcPaRNtm2bkLAadBA+zu7bXZyOPweq6arM9ttSK62pQ1kSxPLrroOVLbEkyThtmHSstaU61zPZvXc2FSfmskb0R//tqMNvyH7DRD+/rxbq+8oOs5FBEkDAvujSLYngAKX292mSlJe4suwRHzDdoDacRYKDLuxCCHwIb+X33F7sXU207/Qv5yYOiG/K7SVdSXja3oXi2zVgzD7Xe85c63IxTxDEYjUmsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/pk38fEZ9U0+nRNaqE9OQAzzGVgDKqaCIE5yNVgKWZU=;
- b=ksBvzV+/bfv5H+tEufqDiR+z3EgStM459rfPRYV8KKCHvYWB+cuLvLrXBEDGy1SojpgRzRyedBncjOXRer47zxPsTmEFN+hvqdl6RhigT8NimSRgc+r86d+fqnjVy7gTj4XL+o6x+aSpx5oalJJeypH//VnSIoqIVTExziFbm/Fdv5LoRhlZ+6ntuSNul7t1XxEZxjZZwu14d/32NTa0OAnt5oXgwRayvBBgI12pP9T1fq8/tpqSwrzCYC9H0plD5kXfGK1J2+k2Dve2enbf4AHV2jjR7SJSRZAHgNdOtnz6TDzaOYvb8I/lLPms4JntvL1gPB43NWdTbWixECxlbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/pk38fEZ9U0+nRNaqE9OQAzzGVgDKqaCIE5yNVgKWZU=;
- b=03Kw9fEZEBOyZYjM7x1+NnFSuC5ZaXB7xMoTs18WuOBN5VJWg8jApeOnG5bC1QN5uekFIbRCW3/qbl4r4zJtF1PkqHz4fzAiIrMrZOaUSEula65jTjORIU3zoV4YpoD5NUhWg2dwGql21qP9f8zNPGj6oZ6LvIchZ9K0I0X+dpg=
-Received: from MW4P221CA0007.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::12)
- by PH8PR07MB9582.namprd07.prod.outlook.com (2603:10b6:510:225::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 24 Oct
- 2022 14:04:53 +0000
-Received: from MW2NAM12FT010.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:8b:cafe::db) by MW4P221CA0007.outlook.office365.com
- (2603:10b6:303:8b::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26 via Frontend
- Transport; Mon, 24 Oct 2022 14:04:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
-Received: from sjmaillnx1.cadence.com (158.140.1.147) by
- MW2NAM12FT010.mail.protection.outlook.com (10.13.180.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.10 via Frontend Transport; Mon, 24 Oct 2022 14:04:52 +0000
-Received: from maileu4.global.cadence.com (eudvw-maileu4.cadence.com [10.160.110.201])
-        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 29OE4o46005187
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Oct 2022 07:04:51 -0700
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 24 Oct 2022 16:04:49 +0200
-Received: from eu-cn01.cadence.com (10.160.89.184) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Mon, 24 Oct 2022 16:04:49 +0200
-Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 29OE4naR139902;
-        Mon, 24 Oct 2022 10:04:49 -0400
-Received: (from pawell@localhost)
-        by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 29OE4nnV139899;
-        Mon, 24 Oct 2022 10:04:49 -0400
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Date:   Mon, 24 Oct 2022 10:04:35 -0400
-Message-ID: <1666620275-139704-1-git-send-email-pawell@cadence.com>
-X-Mailer: git-send-email 2.4.5
+        with ESMTP id S233907AbiJXQFK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 12:05:10 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC271357D1;
+        Mon, 24 Oct 2022 07:58:00 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1322d768ba7so12132578fac.5;
+        Mon, 24 Oct 2022 07:58:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gezVBAneqrs7XaH/fdMxwAK/2YWaqmP9HW9vTh1Ptis=;
+        b=5ck8jY3wn3g1GFZCemkmlqIbMU53/OmH2UaNVLjAoQJ0Vh/rqxGdpBRaHln4B0Ahap
+         CDMUmPHXHDEEhCbr8G3g8cRV6mw+YhC2gErSqQMkYy3EaqycwhqgaYBfBbujWB1zblg/
+         4ubADQdf0GL76Zzuo9+Ad+xF6AgG9LgH8Z1uaXF9ov0WKfpgTNvHoHOgdLxb6lZaHM7X
+         weMa0M7ts3sxzLCDMsSStJKPW2TQDUZx30zgueQ/r0roFF+6sgW9KBikuRn6JQHlux3K
+         4aEGo+dzttL2f9QR5BTgI0MFvaT05YHamKUVgeBXbDA0lFkC6UNFKC7UPdAti2TMNJiG
+         NACA==
+X-Gm-Message-State: ACrzQf3qeeFsSTuHCBKDIJVauoEU9xs1IgJnfEC92j04p5HqqijCCVYy
+        A1QKBAhSG+1SmAemKBN9qA==
+X-Google-Smtp-Source: AMsMyM42Jg3r8Ewtmh0Qc3jpN13ZbUDnPdjYyras8m0IwxfR0o9ZvqlFWkFA5v9EIKywV/cIiznewg==
+X-Received: by 2002:a05:6870:d389:b0:13b:a0cd:5fcd with SMTP id k9-20020a056870d38900b0013ba0cd5fcdmr3731915oag.260.1666623286325;
+        Mon, 24 Oct 2022 07:54:46 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t19-20020a056871055300b0013b1301ce42sm5474921oal.47.2022.10.24.07.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 07:54:45 -0700 (PDT)
+Received: (nullmailer pid 1774935 invoked by uid 1000);
+        Mon, 24 Oct 2022 14:54:46 -0000
+Date:   Mon, 24 Oct 2022 09:54:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 02/11] dt-bindings: usb: Add NVIDIA Tegra XUSB host
+ controller binding
+Message-ID: <20221024145446.GA1763588-robh@kernel.org>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-3-waynec@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu4.global.cadence.com
-X-OrganizationHeadersPreserved: maileu4.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2NAM12FT010:EE_|PH8PR07MB9582:EE_
-X-MS-Office365-Filtering-Correlation-Id: f13f8119-9b9d-481b-52aa-08dab5c8b916
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qWBGWRT2dlEd/SbxcXbSGdqZZMKdvTE3xmC3+4C8AVlpPv6jP0YlA2qWqrcci3RW3/fJ6qBaT8Zx1iEZ17MKSgI7X+B03MV0vx+wBOVO9EyHWJPjCSqfabszxKXCHnwbgbjUBvrf5T5EqwfCEx3TwRTmR1Icsl2j1u0Gmb3nkN9OECIU5msZC2pGam6ukKzSbOdDSiZ3n2qrmMtuY27visZEI5wKx8zlGlxLQfR7OoGfCWsRUvr5ClA0MwhWjG8izJbvuLezkixsK/r1OGcDvkIJScsNkdya69nJoALONYjCsiJiBbjTlVt6ouddv8J/bQ0kqesydqiIQKCxtWsqXD0gCiO6EeeiCD3hlzj25mZA8/r9ww8Kpab1huEXJQ8LQLJsivxSiuWDmUz36ioPjEBuVymLN7ZmKu/jktUMi7nxNFwLn5mKI0Liwj5coeG7wTRhne7Lo16dgPnagH1EmQ5/LXBe96lO583Z0vl+oksDUyfXRfuB5WPJmjCggh0KQfpLn+o9YkvcXgIHToCnTUuod3CGZ2PdHsjMD5lN+jAzr1T2+Z7dEKk65JC/i/hYUzeVfk+LvbiE6TCSDm2JOzd9QHY4wyWe5RbOA3DVXxJMSlvuvFFe5yuAUCmrhqJN6+KjZIpZzAdyhxhy4hAxJVCrwRMCjt/ftVQjAQg+iVIru76Nn1Rh/G69bnSxO6kRQyf5oH2Ek6iC2aH50aziXX11JugPwz5XN1WnpcCjb++qaKP6rWbfoBYvQUm5ykyJoL96h5KAaFsgZRSCAfdyhA==
-X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(39860400002)(376002)(36092001)(451199015)(40470700004)(46966006)(36840700001)(83380400001)(82310400005)(36756003)(2616005)(36860700001)(356005)(47076005)(54906003)(5660300002)(336012)(426003)(70206006)(7636003)(4326008)(186003)(6916009)(82740400003)(86362001)(70586007)(316002)(40480700001)(478600001)(40460700003)(42186006)(2906002)(41300700001)(8936002)(26005)(8676002)(6666004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 14:04:52.9212
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f13f8119-9b9d-481b-52aa-08dab5c8b916
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT010.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR07MB9582
-X-Proofpoint-GUID: RXyMBqr0p2137ijI-LzIFHmLtizwhBRq
-X-Proofpoint-ORIG-GUID: RXyMBqr0p2137ijI-LzIFHmLtizwhBRq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 malwarescore=0
- adultscore=0 suspectscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=488 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210240086
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024074128.1113554-3-waynec@nvidia.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Patch modifies the TD_SIZE in TRB before ZLP TRB.
-The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
-processing ZLP TRB by controller.
+On Mon, Oct 24, 2022 at 03:41:19PM +0800, Wayne Chang wrote:
+> Add device-tree binding documentation for the XUSB host controller present
+> on Tegra194 and Tegra234 SoC. This controller supports the USB 3.1
+> specification.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  .../bindings/usb/nvidia,tegra-xhci.yaml       | 213 ++++++++++++++++++
+>  1 file changed, 213 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml
+> new file mode 100644
+> index 000000000000..d261a419a04f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xhci.yaml
+> @@ -0,0 +1,213 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/nvidia,tegra-xhci.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Device tree binding for NVIDIA Tegra XUSB host controller
 
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Drop 'Device tree binding for '
 
----
-Changelog:
-v2:
-- returned value for last TRB must be 0
+> +
+> +description:
+> +  The Tegra XHCI controller supports both USB 2.0 HighSpeed/FullSpeed and
+> +  USB 3.1 SuperSpeed protocols.
+> +
+> +maintainers:
+> +  - Wayne Chang <waynec@nvidia.com>
+> +
 
- drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Ref to usb-xhci.yaml? Or usb-hcd.yaml.
 
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 04dfcaa08dc4..aa79bce89d8a 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct cdnsp_device *pdev,
- 
- 	/* One TRB with a zero-length data packet. */
- 	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
--	    trb_buff_len == td_total_len)
-+	    trb_buff_len == td_total_len) {
-+		/* Before ZLP driver needs set TD_SIZE=1. */
-+		if (more_trbs_coming)
-+			return 1;
-+
- 		return 0;
-+	}
- 
- 	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
- 	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
--- 
-2.25.1
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - nvidia,tegra194-xusb # For Tegra194
+> +          - nvidia,tegra234-xusb # For Tegra234
 
+The comment is kind of redundant.
+
+> +
+> +  reg:
+> +    minItems: 2
+> +    items:
+> +      - description: XUSB host controller registers
+> +      - description: XUSB host PCI Config registers
+> +      - description: XUSB host bar2 registers
+
+Drop 'XUSB host '
+
+> +
+> +  reg-names:
+> +    minItems: 2
+> +    items:
+> +      - const: hcd
+> +      - const: fpci
+> +      - const: bar2
+> +
+> +  interrupts:
+> +    items:
+> +      - description: Must contain the XUSB host interrupt.
+> +      - description: Must contain the XUSB mbox interrupt.
+
+Drop 'Must contain the '
+
+> +
+> +  clocks:
+> +    items:
+> +      - description: Clock to enable core XUSB host clock.
+> +      - description: Clock to enable XUSB falcon clock.
+> +      - description: Clock to enable XUSB super speed clock.
+> +      - description: Clock to enable XUSB super speed dev clock.
+> +      - description: Clock to enable XUSB high speed dev clock.
+> +      - description: Clock to enable XUSB full speed dev clock.
+> +      - description: Clock to enable XUSB UTMI PLL clock.
+> +      - description: Clock to enable core XUSB dev clock.
+> +      - description: Clock to enable XUSB PLLE clock.
+
+Drop 'Clock to enable '
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xusb_host
+> +      - const: xusb_falcon_src
+> +      - const: xusb_ss
+> +      - const: xusb_ss_src
+> +      - const: xusb_hs_src
+> +      - const: xusb_fs_src
+> +      - const: pll_u_480m
+> +      - const: clk_m
+> +      - const: pll_e
+> +
+> +  interconnects:
+> +    items:
+> +      - description: memory read client
+> +      - description: memory write client
+> +
+> +  interconnect-names:
+> +    items:
+> +      - const: dma-mem # read
+> +      - const: write
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    items:
+> +      - description: XUSBC(host) power-domain
+> +      - description: XUSBA(superspeed) power-domain
+> +
+> +  power-domain-names:
+> +    items:
+> +      - const: xusb_host
+> +      - const: xusb_ss
+
+Drop 'xusb_'.
+
+> +
+> +  nvidia,xusb-padctl:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to the XUSB pad controller that is used to configure the USB pads
+> +      used by the XUDC controller.
+> +
+> +  phys:
+> +    minItems: 1
+> +    maxItems: 8
+> +    description:
+> +      Must contain an entry for each entry in phy-names.
+> +      See ../phy/phy-bindings.txt for details.
+
+Drop description.
+
+> +
+> +  phy-names:
+> +    minItems: 1
+> +    maxItems: 8
+> +    items:
+> +      anyOf:
+> +        - const: usb2-0
+> +        - const: usb2-1
+> +        - const: usb2-2
+> +        - const: usb2-3
+> +        - const: usb3-0
+> +        - const: usb3-1
+> +        - const: usb3-2
+> +        - const: usb3-3
+> +
+> +  dma-coherent:
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +  - power-domain-names
+> +  - nvidia,xusb-padctl
+> +  - phys
+> +  - phy-names
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra194-xusb
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +        reg-names:
+> +          minItems: 2
+> +        clocks:
+> +          minItems: 9
+> +        clock-names:
+> +          minItems: 9
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nvidia,tegra234-xusb
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 3
+> +        reg-names:
+> +          minItems: 3
+> +        clocks:
+> +          minItems: 9
+> +        clock-names:
+> +          minItems: 9
+
+Same number of items, why are clocks in the if/then?
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/tegra234-gpio.h>
+> +    #include <dt-bindings/clock/tegra234-clock.h>
+> +    #include <dt-bindings/memory/tegra234-mc.h>
+> +    #include <dt-bindings/power/tegra234-powergate.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    usb@3610000 {
+> +      compatible = "nvidia,tegra234-xusb";
+> +      reg = <0x03610000 0x40000>,
+> +            <0x03600000 0x10000>,
+> +            <0x03650000 0x10000>;
+> +      reg-names = "hcd", "fpci", "bar2";
+> +
+> +      interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
+> +             <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +      clocks = <&bpmp TEGRA234_CLK_XUSB_CORE_HOST>,
+> +         <&bpmp TEGRA234_CLK_XUSB_FALCON>,
+> +         <&bpmp TEGRA234_CLK_XUSB_CORE_SS>,
+> +         <&bpmp TEGRA234_CLK_XUSB_SS>,
+> +         <&bpmp TEGRA234_CLK_CLK_M>,
+> +         <&bpmp TEGRA234_CLK_XUSB_FS>,
+> +         <&bpmp TEGRA234_CLK_UTMIP_PLL>,
+> +         <&bpmp TEGRA234_CLK_CLK_M>,
+> +         <&bpmp TEGRA234_CLK_PLLE>;
+> +      clock-names = "xusb_host", "xusb_falcon_src",
+> +              "xusb_ss", "xusb_ss_src", "xusb_hs_src",
+> +              "xusb_fs_src", "pll_u_480m", "clk_m",
+> +              "pll_e";
+> +      interconnects = <&mc TEGRA234_MEMORY_CLIENT_XUSB_HOSTR &emc>,
+> +          <&mc TEGRA234_MEMORY_CLIENT_XUSB_HOSTW &emc>;
+> +      interconnect-names = "dma-mem", "write";
+> +      iommus = <&smmu_niso1 TEGRA234_SID_XUSB_HOST>;
+> +
+> +      power-domains = <&bpmp TEGRA234_POWER_DOMAIN_XUSBC>,
+> +          <&bpmp TEGRA234_POWER_DOMAIN_XUSBA>;
+> +      power-domain-names = "xusb_host", "xusb_ss";
+> +
+> +      nvidia,xusb-padctl = <&xusb_padctl>;
+> +
+> +      phys =  <&pad_lanes_usb2_0>;
+> +      phy-names = "usb2-0";
+> +
+> +    };
+> -- 
+> 2.25.1
+> 
+> 
