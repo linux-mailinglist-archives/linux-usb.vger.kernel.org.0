@@ -2,137 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DE860B97A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 22:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4E860BBCF
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Oct 2022 23:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbiJXUNP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 16:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S232690AbiJXVN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 17:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiJXUMn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 16:12:43 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271C1183DBE;
-        Mon, 24 Oct 2022 11:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666636167;
-        bh=icVbzJtZ9pqflJ14jNdNOlB/DYImZ+gyK6fC/SDHPeo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Kkvqf/+txMBi7sxfZs0V/5+nqVslh0tnBxX4/FfBbX4K5PxEYxT5PP/zpCOkVp7bv
-         AjdzA1IvFe+Vl83LXPdeQMLwEY5VuZuTJREUOnmXgB7DCslsdCKNZhD1ffx1GoVLqb
-         rKyNNUqFB0P2skYG5FNKeRZ8QSxQWKQjW3JNG1LI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.136.30]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIdiZ-1oqd7434DN-00EaCt; Mon, 24
- Oct 2022 20:29:27 +0200
-Message-ID: <ec8edb92-a21b-6291-4275-d7cba97d7ad7@gmx.de>
-Date:   Mon, 24 Oct 2022 20:29:26 +0200
+        with ESMTP id S233870AbiJXVNa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 17:13:30 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3A99F34B;
+        Mon, 24 Oct 2022 12:19:08 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id n83so11832935oif.11;
+        Mon, 24 Oct 2022 12:19:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QIBzsXoRmDPCk+QGItVKsAnVTVNA5SJC3SeSu8UPZ0Q=;
+        b=mxQII/Jy11+yUIWhqP2PeP/Lr5BZnFAyoiWSsR67VgllbOqCaHbffVdgag7PditIqG
+         T3Yj8xynxS6yQkYDJQkTQSS8HcuG+KCC3qKsR0yIr207Fj43g9WgxVgWEU8lpAjWdmoc
+         6iLCrydLb2bIii1k6Rjkxy9/B+NhHDbeT320FBBRLnFhva8C3l8tHL2JopTXczJafejH
+         LQcmBzdFDRNXzHb+gBZRobEDhjQtczFcpHHAGKnFTdWQ5MABWWZ1iU7iNm7JPiNBH12L
+         4q0FP/5M4u0OGmjH1JbEzWFAUhpF00tQpHTWcQDfSeMLHlDdNXpedQ/UyETzFyiHPGAd
+         UQDg==
+X-Gm-Message-State: ACrzQf2tz6RR+gTPoOrmHhTioArP0XOk3sgav0UoPNkTiWTa44V34FZO
+        sb3vKL91t8/7pItXlJ2A3DVOWr2T+g==
+X-Google-Smtp-Source: AMsMyM4MB6WxE1PPXgNUticTmOt/0jgwpX4JDtNdVwFd2Y/nV7ZFEF/0yX9UhR/ug7Xqhywv3Aw1Dw==
+X-Received: by 2002:a05:6808:16a6:b0:351:7211:6192 with SMTP id bb38-20020a05680816a600b0035172116192mr17441079oib.251.1666638994336;
+        Mon, 24 Oct 2022 12:16:34 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x6-20020a05680801c600b0035173c2fddasm172201oic.51.2022.10.24.12.16.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 12:16:33 -0700 (PDT)
+Received: (nullmailer pid 2064239 invoked by uid 1000);
+        Mon, 24 Oct 2022 19:16:35 -0000
+Date:   Mon, 24 Oct 2022 14:16:35 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2 v1] usb: phy: phy-gpio-vbus-usb: Add devicetree
+ bindings
+Message-ID: <20221024191635.GA2060090-robh@kernel.org>
+References: <20221022121149.3329641-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] video: fbdev: sis: use explicitly signed char
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Winischhofer <thomas@winischhofer.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221024162901.535972-1-Jason@zx2c4.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20221024162901.535972-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:fgln+OSb5Fs7l921QypIIY6GvbB8Dpo8NbcH6CX//FlDdIZKoPn
- HTH8weoBRqVlYnQaJOUuVnLRopE3hTyC0rQ7NFop1qJoWADAuwh/gwd/DNyU80Z/nBkvvlj
- xLpYb1wKKdGZeA8sSZnuNeBXV4k3vo2v4nRR1R3a5fNPt5ryrwPOPk8q//T+CrXTBvb8tGY
- ylAA2rLff9VDqREvNVy4Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YeTgNuQ6oBE=:x+MrTPIRv+ADg3bGSjOX2x
- c8XbmCSjtFftDhFgoBgA63vaJowCwC+3di5UjTuwo1cjyBDugLxf99Ls4mxXN6KNNLDlOGAj3
- Wl6mR0AP9W+8LUZDKcgR9x2KCpFAxB7TRmVgTZk88Hvdh10HEecFZtsnjASzNO8/2eG8/PskI
- zCW1cPfDSUtI/WSbPa7xipFxEn0bVZTrkHYJEJucNxTHt47sb0MMTLPuKU305/eTDuJh2MnFy
- N7dUAut84zTqvFUU4rVzQEaytLznUNTgQWuMw8iJhg0Y9r1gxdBobn/uS7A7UwpBfvcO95+la
- ExXo7tBr/QBo2R1zZFQqkWyLFfgq3Ucb+aUoRrs8RCU5lp3A+epBw+c2uzINC6vK/bTysxH4u
- 74VxveNrMEvEJeCuNwYfaQuCUZWS03JmRx0e8zzV08dapRsrcIyXp90UUGCB0ofpbwRdKa6z4
- iVJS+44cs4OdFyrWLx+JvO3V2lW2Ha1db3TeAI9VZOZvaWPWtO6g3smWISdQxmx26grR9QzR8
- lJ7/VCImckMTs7vQOJleMD4MEatVye+/uZlIWjiuxRpIOwD4mH23TQvkwYlVXhNnZB/5GsqLz
- VUqAexb1W2LapEPynIWtHfq6YnO/C6tIguZH2VlDJctLyBTyY5Ldteibfif7AdyVT3wbM3fg2
- n5zXbAYkC8SArLNKh7IcZp/j+BSvyWaVeWjbChcVR4rtPN+mKVI1BPOUYspQKnVDix+qvsoSE
- uLcConOmvdqLBSSqMr/QhnSEN8rMQhQdcMJxiNm60kLCxDxmZPMBEQ/gcuWMJjIfQdxzCQzXx
- XMUEoYR2xhoeI2ejsM8HtXUrRjSf1Apkwn2dlggGOeQrwU6mA+BQiIYmNFITAcbeVZxxG6x8O
- 746n9OVaOt4FrW0BToKm4gwFWCF1UFE3c/CEWVbzDYx73EzfCMuD/Z/dtVcAYNxxwjhNnFDp5
- 8utlguY9KCJgr07er4rwSu0GsC3jknq0TAIeME9v16xKSDcc2TIVpo976zBvonR0+MPybIcCM
- h2H2g5OJOn9BrqbcG9Fk4omj8xfqBjsC2nI7ULK4ZNtwSNkL4RWX1lUChj6VQVFEHo5ptjBdt
- UYRiyhO9rWcu/rgcBPXb83TqbyZiBMwK61+QvZcn0+DacPRzUpqe9iHCYEohp87oJsMkDWf7g
- 5tWzTVkU2WEhcEoBQOaIM9TLnOhpui0xVHCt3i2ChLG+oBQnDCdeqVmhOuP3nugZ4AFSHjm5s
- 1Vj1RWF2rhVPMK22jsLg7C4VPdecfyXbhtdJXGBCMdC5/PesfYAfQcVD1YpLkNrA9PuFXEDXh
- RC9SkKW4N7S/kPU5B8dCwYXVWnbtCTZlsjLfNmRqDveBSnMo782+7qGudFzP/fPnD3AzOq2WG
- C4txTHKBUgDkTOOgru1dp0fjnM5oXhkcvzC4mApzEc+DFHwaxpAHbIp2ScSj95wpB6eVqAIlb
- sXZ20FkJ2MN+Mk7WiXrpUkwEEJdEn2cTKNP1vqFwpg4tR3vGSP7j4/hbYLpbli5f3N1phP2fq
- r6dpFpstHxDSUm+0+SFiELW5DZ+6atWpEcW35DAGYFASa
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221022121149.3329641-1-linus.walleij@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/24/22 18:29, Jason A. Donenfeld wrote:
-> With char becoming unsigned by default, and with `char` alone being
-> ambiguous and based on architecture, signed chars need to be marked
-> explicitly as such. This fixes warnings like:
->
-> drivers/video/fbdev/sis/init301.c:3549 SiS_GetCRT2Data301() warn: 'SiS_P=
-r->SiS_EModeIDTable[ModeIdIndex]->ROMMODEIDX661' is unsigned
->
-> Cc: Thomas Winischhofer <thomas@winischhofer.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-
-Applied to linux-fbdev git tree.
-
-Thanks,
-Helge
-
-
+On Sat, Oct 22, 2022 at 02:11:48PM +0200, Linus Walleij wrote:
+> This adds a simple device tree binding for a GPIO-based
+> VBUS detection PHY.
+> 
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
->   drivers/usb/misc/sisusbvga/sisusb_struct.h | 2 +-
->   drivers/video/fbdev/sis/vstruct.h          | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb_struct.h b/drivers/usb/mi=
-sc/sisusbvga/sisusb_struct.h
-> index 3df64d2a9d43..a86032a26d36 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb_struct.h
-> +++ b/drivers/usb/misc/sisusbvga/sisusb_struct.h
-> @@ -91,7 +91,7 @@ struct SiS_Ext {
->   	unsigned char VB_ExtTVYFilterIndex;
->   	unsigned char VB_ExtTVYFilterIndexROM661;
->   	unsigned char REFindex;
-> -	char ROMMODEIDX661;
-> +	signed char ROMMODEIDX661;
->   };
->
->   struct SiS_Ext2 {
-> diff --git a/drivers/video/fbdev/sis/vstruct.h b/drivers/video/fbdev/sis=
-/vstruct.h
-> index ea94d214dcff..d7a14e63ba5a 100644
-> --- a/drivers/video/fbdev/sis/vstruct.h
-> +++ b/drivers/video/fbdev/sis/vstruct.h
-> @@ -148,7 +148,7 @@ struct SiS_Ext {
->   	unsigned char  VB_ExtTVYFilterIndex;
->   	unsigned char  VB_ExtTVYFilterIndexROM661;
->   	unsigned char  REFindex;
-> -	char           ROMMODEIDX661;
-> +	signed char    ROMMODEIDX661;
->   };
->
->   struct SiS_Ext2 {
+>  .../bindings/phy/phy-usb-vbus-gpio.yaml       | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml b/Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml
+> new file mode 100644
+> index 000000000000..4e10b58f8235
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/phy-usb-vbus-gpio.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/phy-usb-vbus-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: GPIO-based VBUS detection USB PHY
+> +
+> +maintainers:
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +
+> +description: A VBUS event occurs when a USB plug is attached to
+> +  a USB host and peripheral, the voltage (VBUS) is exposed from the
+> +  host to the peripheral when the last of the two ends of the
+> +  cable is plugged in. This can be either on the host side or on
+> +  the peripheral side, whichever comes last. It is possible to
+> +  provide a very simple USB VBUS detection mechanism by using a
+> +  GPIO line that will trigger on an edge event on the VBUS
+> +  pin.
 
+We already have Vbus GPIOs in the USB connector binding and there is 
+also the usb-nop-transceiver. Surely one of those works for you? 
+Preferably the former.
+
+Rob
