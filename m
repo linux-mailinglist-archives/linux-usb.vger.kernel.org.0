@@ -2,117 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183C560D6D1
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 00:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886C860D70D
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 00:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiJYWKw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Oct 2022 18:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S232789AbiJYW1b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Oct 2022 18:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiJYWKa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 18:10:30 -0400
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0668C5246D;
-        Tue, 25 Oct 2022 15:10:26 -0700 (PDT)
-Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29PJs0Wx024247;
-        Tue, 25 Oct 2022 15:10:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
- in-reply-to : references : from : subject : to : cc; s=pfptdkimsnps;
- bh=9CxM6aupASiANSUzbXZW9Uqgerx2QRzkhLVc8bI/5LQ=;
- b=YDBvTLm2gfifXfoBY+Lq0FYMBLEziIo1snRCfdWwJ5wCWoPJ4be/4Zr7fEcfvdl/sWZ/
- vaBRIJ8+xqpz46gOQPVb/CfBXsLOsF9Vb0dZNKOOSe1uTcfpqWf7yrDTrtOfu5SGioBh
- MkQeT0s3WLQtU5NioWDVQtMGcbzZEypk3FSUJmJjlyYCez0xiQUDxhH3qrT42W5OVhhl
- v+ax+8M6SPEpOcB2KOCiEaTTGMoAAnWTey2y5tD9AZOPB1UUbu3dXZuKokjRNOBle//g
- HCVhwo7ZQsXOJmU030vXrL2wyN6j4eZfxKjax2LMKmM03OzlWoh3qPjZPt+uy3UsPX3y Jw== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3kcfs7hhs6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 15:10:22 -0700
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B7B32C0108;
-        Tue, 25 Oct 2022 22:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1666735821; bh=tLoqdZUGbh7sY7UVZKCMuJJOgURuE/GMoTIszsAyKFo=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=Oyhxm9PJpEG29s7XLJY1vLNgh97jaod/ukjypRq/+SDPP/sAm8I4MdCdisBh6UdwZ
-         46B9nSrej0l24somXfKmfWGbEMebRalFqvvv4ewiNVEF2XrO+7rrD70m/BYrFrZCNt
-         Ms1kQN/CWyqt77UnU2Y9ZbqlavLw3ZeUte2srv3aVHNWZHbuFEdeZUe+gTEju6Bmpb
-         dAMaNUPBCJeyrnaii/D9wszdYyM+HXtEBI6WJa75mK877g0yebV4JDOgxwHWgHsO1y
-         CRRWYj2RCqrLGCgIMUka1hdWe2odI9w4wN8l+50ijo4CeYpu2xuZwQLKuEQPENqgTC
-         vtouU2vQL6/4Q==
-Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 816DEA00B2;
-        Tue, 25 Oct 2022 22:10:20 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Tue, 25 Oct 2022 15:10:20 -0700
-Date:   Tue, 25 Oct 2022 15:10:20 -0700
-Message-Id: <ced336c84434571340c07994e3667a0ee284fefe.1666735451.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1666735451.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1666735451.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v3 2/2] usb: dwc3: gadget: Don't set IMI for no_interrupt
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
-X-Proofpoint-GUID: KfuK_iYSS4NJeIK0ylf0SzwvFwDcYB_F
-X-Proofpoint-ORIG-GUID: KfuK_iYSS4NJeIK0ylf0SzwvFwDcYB_F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-25_13,2022-10-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0
- adultscore=0 mlxlogscore=655 spamscore=0 clxscore=1015 suspectscore=0
- bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210250123
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232884AbiJYW1J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 18:27:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713626E2C1
+        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 15:27:01 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1onSNv-0005ne-Nz; Wed, 26 Oct 2022 00:26:59 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1onSNv-000OKo-Fo; Wed, 26 Oct 2022 00:26:58 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1onSNt-007u71-Vw; Wed, 26 Oct 2022 00:26:57 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
+        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@pengutronix.de
+Subject: [PATCH v5] usb: gadget: uvc: add validate and fix function for uvc response
+Date:   Wed, 26 Oct 2022 00:26:57 +0200
+Message-Id: <20221025222657.1883922-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The gadget driver may have a certain expectation of how the request
-completion flow should be from to its configuration. Make sure the
-controller driver respect that. That is, don't set IMI (Interrupt on
-Missed Isoc) when usb_request->no_interrupt is set. Also, the driver
-should only set IMI to the last TRB of a chain.
+When the userspace gets the setup requests for UVC_GET_CUR UVC_GET_MIN,
+UVC_GET_MAX, UVC_GET_DEF it will fill out the ctrl response. This data
+needs to be validated. Since the kernel also knows the limits for valid
+cases, it can fixup the values in case the userspace is setting invalid
+data.
 
-Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+
 ---
- Changes in v3:
- - Set IMI to only the last TRB of a chain
- Changes in v2:
- - None
+v1: -> v4:
+- new patch
+v4: -> v5:
+- changed uvcg_info to uvcg_dbg for fixups, updated info strings
 
- drivers/usb/dwc3/gadget.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/f_uvc.c    |  4 +-
+ drivers/usb/gadget/function/uvc.h      |  1 +
+ drivers/usb/gadget/function/uvc_v4l2.c | 76 ++++++++++++++++++++++++++
+ 3 files changed, 80 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 230b3c660054..5fe2d136dff5 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1292,8 +1292,8 @@ static void dwc3_prepare_one_trb(struct dwc3_ep *dep,
- 			trb->ctrl = DWC3_TRBCTL_ISOCHRONOUS;
- 		}
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 6e131624011a5e..098bd3c4e3c0b3 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -254,8 +254,10 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 	 */
+ 	mctrl = &uvc_event->req;
+ 	mctrl->wIndex &= ~cpu_to_le16(0xff);
+-	if (interface == uvc->streaming_intf)
++	if (interface == uvc->streaming_intf) {
++		uvc->streaming_request = ctrl->bRequest;
+ 		mctrl->wIndex = cpu_to_le16(UVC_STRING_STREAMING_IDX);
++	}
  
--		/* always enable Interrupt on Missed ISOC */
--		trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
-+		if (!no_interrupt && !chain)
-+			trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
- 		break;
+ 	v4l2_event_queue(&uvc->vdev, &v4l2_event);
  
- 	case USB_ENDPOINT_XFER_BULK:
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 40226b1f7e148a..1be4d5f24b46bf 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -151,6 +151,7 @@ struct uvc_device {
+ 	void *control_buf;
+ 
+ 	unsigned int streaming_intf;
++	unsigned char streaming_request;
+ 
+ 	/* Events */
+ 	unsigned int event_length;
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index c4ed48d6b8a407..d5bb3038626267 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -178,6 +178,67 @@ static struct uvcg_frame *find_closest_frame_by_size(struct uvc_device *uvc,
+  * Requests handling
+  */
+ 
++/* validate and fixup streaming ctrl request response data if possible */
++static void
++uvc_validate_streaming_ctrl(struct uvc_device *uvc,
++			    struct uvc_streaming_control *ctrl)
++{
++	struct f_uvc_opts *opts = fi_to_f_uvc_opts(uvc->func.fi);
++	unsigned int iformat, iframe;
++	struct uvcg_format *uformat;
++	struct uvcg_frame *uframe;
++	bool ival_found = false;
++	int i;
++
++	iformat = ctrl->bFormatIndex;
++	iframe = ctrl->bFrameIndex;
++
++	/* Restrict the iformat, iframe and dwFrameInterval to valid values.
++	 * Negative values for iformat and iframe will result in the maximum
++	 * valid value being selected
++	 */
++	iformat = clamp((unsigned int)iformat, 1U,
++			(unsigned int)uvc->header->num_fmt);
++	if (iformat != ctrl->bFormatIndex) {
++		uvcg_dbg(&uvc->func,
++			  "userspace set invalid format index - fixup\n");
++		ctrl->bFormatIndex = iformat;
++	}
++	uformat = find_format_by_index(uvc, iformat);
++
++	iframe = clamp((unsigned int)iframe, 1U,
++		       (unsigned int)uformat->num_frames);
++	if (iframe != ctrl->bFrameIndex) {
++		uvcg_dbg(&uvc->func,
++			  "userspace set invalid frame index - fixup\n");
++		ctrl->bFrameIndex = iframe;
++	}
++	uframe = find_frame_by_index(uvc, uformat, iframe);
++
++	if (ctrl->dwFrameInterval) {
++		for (i = 0; i < uframe->frame.b_frame_interval_type; i++) {
++			if (ctrl->dwFrameInterval ==
++				 uframe->dw_frame_interval[i])
++				ival_found = true;
++		}
++	}
++	if (!ival_found) {
++		uvcg_dbg(&uvc->func,
++			  "userspace set invalid frame interval - fixup\n");
++		ctrl->dwFrameInterval = uframe->frame.dw_default_frame_interval;
++	}
++
++	if (!ctrl->dwMaxPayloadTransferSize ||
++			ctrl->dwMaxPayloadTransferSize >
++				opts->streaming_maxpacket)
++		ctrl->dwMaxPayloadTransferSize = opts->streaming_maxpacket;
++
++	if (!ctrl->dwMaxVideoFrameSize ||
++			ctrl->dwMaxVideoFrameSize >
++				uframe->frame.dw_max_video_frame_buffer_size)
++		ctrl->dwMaxVideoFrameSize = uvc_get_frame_size(uformat, uframe);
++}
++
+ static int
+ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
+ {
+@@ -192,6 +253,21 @@ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
+ 
+ 	memcpy(req->buf, data->data, req->length);
+ 
++	/* validate the ctrl content and fixup */
++	if (!uvc->event_setup_out) {
++		struct uvc_streaming_control *ctrl = req->buf;
++
++		switch (uvc->streaming_request) {
++		case UVC_GET_CUR:
++		case UVC_GET_MIN:
++		case UVC_GET_MAX:
++		case UVC_GET_DEF:
++			uvc_validate_streaming_ctrl(uvc, ctrl);
++		default:
++			break;
++		}
++	}
++
+ 	return usb_ep_queue(cdev->gadget->ep0, req, GFP_KERNEL);
+ }
+ 
 -- 
-2.28.0
+2.30.2
 
