@@ -2,120 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B298D60D4A7
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 21:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA9760D539
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 22:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiJYTZs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Oct 2022 15:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S232767AbiJYUGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Oct 2022 16:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiJYTZk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 15:25:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AC5D18C7
-        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 12:25:39 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1onPYQ-0003UL-0e; Tue, 25 Oct 2022 21:25:38 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1onPYP-00045Y-MM; Tue, 25 Oct 2022 21:25:37 +0200
-Date:   Tue, 25 Oct 2022 21:25:37 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2] usb: gadget: uvc: limit isoc_sg to super speed gadgets
-Message-ID: <20221025192537.GA10842@pengutronix.de>
-References: <20221017221141.3134818-1-m.grzeschik@pengutronix.de>
- <Y1PVhIGlh1uMR2i/@kroah.com>
+        with ESMTP id S232827AbiJYUF7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 16:05:59 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B008E442;
+        Tue, 25 Oct 2022 13:05:32 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id y80so11469751iof.3;
+        Tue, 25 Oct 2022 13:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xNLZ8ELUxEq7F3U8ZFTdx4pak1mGMbUkw1ZaAEnhXdY=;
+        b=H9QeFnHxgR2T8g9u77O1DwVip9J1uKKUm1iGOaakveLOMVHkcwaQ+JUKVtzW7/ZOmM
+         9MyFxAMtPUyNsE1jGt6NELiZF25PfK/VoTDf6mzZyvnhMRYdt2nt7MIrZqj/W0poD1Zh
+         Bovp/w35aomW00Nf6rH24i8FJMh7lxvKmsMFDFseKrS3VTve/S85Ry3qzT0KhCF/fSzT
+         8P+2VJ1cOnC5Kt4eBKIuwSduzVpWi/hS0PdvwL79lFQK7IvwFPYzkpd8ct/1vJVFZXF2
+         dGJY/JGGIiTZ+xLHq36T9Qxwt8vrnzlsZGTQjdMuoCQucJxRKBiJu5rMFZbLhWeB5SIZ
+         c6Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xNLZ8ELUxEq7F3U8ZFTdx4pak1mGMbUkw1ZaAEnhXdY=;
+        b=0D/94zc8eVbdTXcbJAPVGjMnf0uj+6uVzhiqenfJynCNmw1g4hTvBPNLXkUNQOVVuc
+         Brn/k5NFod+KCHQ3LyeWHJKSijAtPc8W60D9z2NOmz8XWEBUeHGHRt4kKl+1bnY0EjYG
+         I/kT/lfseWA8qHw6Siaj5/Vt1BKQDXk5FGS6/5mJyB96EaRHVQUCGpdOVVWUK3L55Dyp
+         Tq80nYMDk3TOksCMqTzTwyUxvV1j5DLtTmUttXICn1dc/yF/LA+BvftqIgJzSupPLl0W
+         oH8A7D7RI2FZN92myNhzF6CVtJEnTQ6TpKLK1XnlN3AqxqJ/bAtZrL/4pHAFtQ9YBPMn
+         eS7w==
+X-Gm-Message-State: ACrzQf1FJccqJV6saZl0/livMz4ZxFGxQgW5NSjgbEc/n3wW/c6Qw247
+        Bm+ouYJnR3tYcUnGWJ9QJhI=
+X-Google-Smtp-Source: AMsMyM7Hfa8aC3dLNmmrbIAPrM8txNoMVN+0cnB2htagHjCstWHvGG6YtHfXeTtikDe2cNxpW+Xxyw==
+X-Received: by 2002:a05:6638:d0d:b0:374:60f4:52b5 with SMTP id q13-20020a0566380d0d00b0037460f452b5mr299890jaj.59.1666728332047;
+        Tue, 25 Oct 2022 13:05:32 -0700 (PDT)
+Received: from qjv001-XeonWs (c-67-167-199-249.hsd1.il.comcast.net. [67.167.199.249])
+        by smtp.gmail.com with ESMTPSA id h18-20020a056e021d9200b002f68a98e1c2sm1319465ila.50.2022.10.25.13.05.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 25 Oct 2022 13:05:31 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 15:05:29 -0500
+From:   Jeff Vanhoof <jdv1029@gmail.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
+        stable@vger.kernel.org, Dan Vacura <w36195@motorola.com>
+Subject: Re: [PATCH v2 2/2] usb: dwc3: gadget: Don't set IMI for no_interrupt
+Message-ID: <20221025200527.GA11641@qjv001-XeonWs>
+References: <cover.1666661013.git.Thinh.Nguyen@synopsys.com>
+ <453f4dc3189eb855e31768d5caa6bfc7f4bf5074.1666661013.git.Thinh.Nguyen@synopsys.com>
+ <20221025045148.GA15715@qjv001-XeonWs>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gKMricLos+KVdGMg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1PVhIGlh1uMR2i/@kroah.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221025045148.GA15715@qjv001-XeonWs>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Thinh,
 
---gKMricLos+KVdGMg
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 24, 2022 at 11:51:50PM -0500, Jeff Vanhoof wrote:
+> On Mon, Oct 24, 2022 at 06:28:04PM -0700, Thinh Nguyen wrote:
+> > The gadget driver may have a certain expectation of how the request
+> > completion flow should be from to its configuration. Make sure the
+> > controller driver respect that. That is, don't set IMI (Interrupt on
+> > Missed Isoc) when usb_request->no_interrupt is set.
+> > 
+> > Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > ---
+> >  Changes in v2:
+> >  - None
+> > 
+> >  drivers/usb/dwc3/gadget.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 230b3c660054..702bdf42ad2f 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -1292,8 +1292,8 @@ static void dwc3_prepare_one_trb(struct dwc3_ep *dep,
+> >  			trb->ctrl = DWC3_TRBCTL_ISOCHRONOUS;
+> >  		}
+> >  
+> > -		/* always enable Interrupt on Missed ISOC */
+> > -		trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
+> > +		if (!req->request.no_interrupt)
+> > +			trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
+> >  		break;
+> >  
+> >  	case USB_ENDPOINT_XFER_BULK:
+> > -- 
+> > 2.28.0
+> >
+> 
+<snip>
 
-Hi!
+For scatter gather, shouldn't the IMI bit be set only for the TRB associated
+to the last item in the sg list?  Do we need to do something similar to what
+that was done for IOC in this area?
 
-On Sat, Oct 22, 2022 at 01:35:32PM +0200, Greg KH wrote:
->On Tue, Oct 18, 2022 at 12:11:41AM +0200, Michael Grzeschik wrote:
->> The overhead of preparing sg data is high for transfers with limited
->> payload. When transferring isoc over high-speed usb the maximum payload
->> is rather small which is a good argument no to use sg. This patch is
->> changing the uvc_video_encode_isoc_sg encode function only to be used
->> for super speed gadgets.
->>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>
->> ---
->> v1 -> v2: - always setting mem and sg elements since now both is working=
- in runtime
->
->I'm guessing this is a "fix"?  If so, what commit id is this a fix for?
+For ex.:
++	if ((!req->request.no_interrupt && !chain) || must_interrupt)
++		trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
 
-This is not a fix but a feature. I am working to improve it
-also to work with dmabuf memory comming in as vaddr. This needs some
-extra mapping. Since you already took this patch, I will send fix for
-this one then.
-
->And any reason you aren't cc:ing me on these patches?
-
-This was not intentional. I have my scripts that I usually recycle.
-They probably need to be updatet.
+BTW, Dan indicated that this seems to help resolve the crash mentioned in
+[PATCH v2 1/2] of this chain.
 
 Thanks,
-Michael
+Jeff
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---gKMricLos+KVdGMg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNYOC8ACgkQC+njFXoe
-LGQ++Q//RCjJ89tZWPNGhuDWpfgDTHCLKrASrUIBJbrwkbOUKs69DBoLOL02YQ9y
-EJnT5Sij3p+3Czqf/K9t9gCz7pxaiL4778FRClwU4ab+LoBBPE94zaUVNsTKAsXf
-scQiD601XMPuS2AffbbwgNw1cZs7BodnIg7Jh4B/ekgB0Vp4hq/Rl5NDOR0oOLUW
-A6epq2TCPkKYLTZ6TZoZMETW230ySin+GfGfaX9zOSozdvBEN70uWDOxu+YFR1iE
-r6dp3NJ3bhLq93CPC43+cM7ojhO5FfvSFk9bDMWisH0c7pPY1H1Ziob5yU45uLno
-4+A9siocTzmCl7KZLvRa9CjBh2tAAhuqU1lQSGrnarDuzoWqgqRRDyn81eMM38KR
-G8mH6oEHOH6dYmq9ZBSLMncTLfxwBRBD0bab6zluCNcBxim+2HALdUKuBDgyKMXk
-bk/c7Lyk9zw6VLV7H5OU1y0EIl65B0VmldZsbXbEJ3NRFpmMJcqDxq8GAzeVQT3L
-7rBygtqq2lsec52Krf9PVGla7x5zfN4DRnOlOFHJnI+ZpUgsc+MTaQ1bOWrbpXKu
-WfrL3Qki/yLJc2if0nuss7MMn7zVwK4CbRbawLaeQ/NPalzFcKiP1Cz3V+VqNqQF
-JFPEcGv7HnSElkGnsh57dAKb3JrrBnUmzviXS94A9wdSppPDA5E=
-=Bh+Y
------END PGP SIGNATURE-----
-
---gKMricLos+KVdGMg--
