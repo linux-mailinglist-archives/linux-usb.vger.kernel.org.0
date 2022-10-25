@@ -2,117 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42DC60C148
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 03:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBDE60C181
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 04:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbiJYBoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 21:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S230077AbiJYCJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Oct 2022 22:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiJYBnv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 21:43:51 -0400
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD135A83B;
-        Mon, 24 Oct 2022 18:28:14 -0700 (PDT)
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OLNnHF020951;
-        Mon, 24 Oct 2022 18:28:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
- in-reply-to : references : from : subject : to : cc; s=pfptdkimsnps;
- bh=j8u7odBZ81mHIRZo/nAx2BOvHTuFJvY2SBxLiVE7XW8=;
- b=g2djoElJlr2d635rDaxqamCOxBkKnJGFu+eLVDCALgsXZDpqeYebIJTXgpgygQ5ct3lA
- UIMoC0ugzgJThANzZNhDRShdO5vUTYJNpo5rc4XlXkXzWrhWW+Mji7iYi0zzPo6VO5O3
- uiKVZP1DkBCq2Hqpl2LeUc/cm8/EK9sHaPqSeOBU/MYQ9z+tL8xt1J8K1QvVXbRKhVT/
- lX99fcU1zm9SUwW5EHhaPqgGTMDC9bfKRem2jKoTzUoZ4SUsG3WZKSaQdvpX9MAL+57F
- tE28VNuEVfem01f7DgEwH/9S/0ZSRh+TCQdfRZfyTnWR/6lQYa5ZmY2zccWy6yKlP8hW ig== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3kcfhp3nx9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 18:28:07 -0700
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1A1E24014E;
-        Tue, 25 Oct 2022 01:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1666661286; bh=7+buHRxrH15h1LLhl9qL95HI2i43zo5YDGWA6OAiTaw=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=HXITD/Jxu8NQ+daO8CGFXMgYzvy8C/QqSbQkjKw/FetR+uPnCNX7ydyvDE4AjWHDF
-         3bI4qBQLQruMLNRmaGvXUXYImD1L1RklDVNFlMKYaiZ9BMxVdExNqcpU2IPfkGHRNp
-         sNqSPM4RTap9nVp4meQyY1IJKSMrj2yAlU+aaXeWWVPM/H+zlTHDBXl8u7+Dyn+oi7
-         b5tlH1oC88X/H24YL4hhzmowAIOBKPBgF6GSfFc80Ofw+cUNpj5yC7kcIstlxQpemm
-         89nt1j3VfomsAq9lMbJGO73ul/maJHbX94ACpzUslJR8tqUvqGun+D9NyOQyZypyFz
-         Ow9+h3a22HXGA==
-Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id A0F2CA007F;
-        Tue, 25 Oct 2022 01:28:04 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Mon, 24 Oct 2022 18:28:04 -0700
-Date:   Mon, 24 Oct 2022 18:28:04 -0700
-Message-Id: <453f4dc3189eb855e31768d5caa6bfc7f4bf5074.1666661013.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1666661013.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1666661013.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 2/2] usb: dwc3: gadget: Don't set IMI for no_interrupt
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
-        Jeff Vanhoof <jdv1029@gmail.com>,
-        Dan Vacura <w36195@motorola.com>
-X-Proofpoint-GUID: vmE0e8uHF1a0MSEG2IkviMt6huOWc_kJ
-X-Proofpoint-ORIG-GUID: vmE0e8uHF1a0MSEG2IkviMt6huOWc_kJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_09,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- mlxlogscore=655 malwarescore=0 clxscore=1015 impostorscore=0 adultscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210250007
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230037AbiJYCJI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 22:09:08 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E03B31EEE;
+        Mon, 24 Oct 2022 19:09:06 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s196so10267859pgs.3;
+        Mon, 24 Oct 2022 19:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pm3uBTI2KyqfNFZG8zBDmAPLyP8aHcCfyyi7loUOwwU=;
+        b=LLBbz+nSU2WPxTx1LHdM1QUtJxdTj36sWunxs0/XsvfUJiXhf94YmGoHTpCCtdua0L
+         14huliCPBU8aR4E9FYCQ4VuD287NEl7HnTdYVhYWFKhd12eiLEao3wkdnC53STj5hsQV
+         wlBwSGGgzMCwgxZ5jGt6ZwYbSAd/LB7wFv4xSCSrjLWCLnCH1Tyw1kfgqHr7JAHNlQgk
+         WTv9l8kSyq4XCUhz+E0FMh9AnM2Qwjmk9clBSQOHCFiNd7P36XM8q4yOfi9q+Z2Ze9/4
+         WxNeGjGfpSbZTHT2XPns/gwnEdfaQjtsjBj8D0mHK0WWCHg5MH/jLL3SMnXB0l4YKVbF
+         O1kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pm3uBTI2KyqfNFZG8zBDmAPLyP8aHcCfyyi7loUOwwU=;
+        b=gEjpiDv3tOxOMC/y3sYcUnat1mhIPVv+QolbqtiKWoEUTECAm+cZKGXVmhfxPAHJUK
+         Q3DBOW7mhEHsRSszHFNod0yQCP66pAFCT9z3iirxokajXZfnQlelreK0QdL+tWDNqCpp
+         6u7Vw/5cUvuTPQi+QNaFTbejfAGE0juOC6GqclO2ajz1mkZMbGmn1wyq1rSFYY/4xorQ
+         jWHCq71iV2kxzDWpSJXlG8pOwwRRcWVwxQxgbPMDtV4Qo+LKi2UH77Q/xuEx8JaHPTkx
+         Uns4sC9XmGoAdy66lyyed/WAjtafF9y84ZN30Qg1aKBuL5BHR92/++ER4Ym5jo/5KL0l
+         Z7NQ==
+X-Gm-Message-State: ACrzQf1H7+Ou132HyCoc1jJNDB58dlGJoFb9b1NBNDTc/ZGNVtB8g/fZ
+        G5MGAjS3d7Jn2K9rmPCdtA62zPb3YSo=
+X-Google-Smtp-Source: AMsMyM6TvAu7HSzVk41KXIjjB1wvSO/fyRQDbFUp8OyaCscpgUP5cnmYDmpXvIG2fHp2dKUS+5w8Zw==
+X-Received: by 2002:a05:6a00:1309:b0:535:d421:1347 with SMTP id j9-20020a056a00130900b00535d4211347mr36764044pfu.5.1666663745665;
+        Mon, 24 Oct 2022 19:09:05 -0700 (PDT)
+Received: from voyager.lan ([45.124.203.18])
+        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0017f80305239sm338116plh.136.2022.10.24.19.09.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 19:09:04 -0700 (PDT)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Neal Liu <neal_liu@aspeedtech.com>, linux-aspeed@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Add Ben as a reviewer for ASPEED UCD
+Date:   Tue, 25 Oct 2022 12:38:56 +1030
+Message-Id: <20221025020856.744202-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The gadget driver may have a certain expectation of how the request
-completion flow should be from to its configuration. Make sure the
-controller driver respect that. That is, don't set IMI (Interrupt on
-Missed Isoc) when usb_request->no_interrupt is set.
+He wrote the vhub driver and would like to be cc'd on patches.
 
-Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- Changes in v2:
- - None
+ MAINTAINERS | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- drivers/usb/dwc3/gadget.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 230b3c660054..702bdf42ad2f 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1292,8 +1292,8 @@ static void dwc3_prepare_one_trb(struct dwc3_ep *dep,
- 			trb->ctrl = DWC3_TRBCTL_ISOCHRONOUS;
- 		}
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3bb30c0d1cb4..637beabc70f1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3232,12 +3232,15 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/aspeed-video.txt
+ F:	drivers/media/platform/aspeed/
  
--		/* always enable Interrupt on Missed ISOC */
--		trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
-+		if (!req->request.no_interrupt)
-+			trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
- 		break;
+-ASPEED USB UDC DRIVER
++ASPEED USB UDC DRIVERS
+ M:	Neal Liu <neal_liu@aspeedtech.com>
++R:	Benjamin Herrenschmidt <benh@kernel.crashing.org>
+ L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
+ F:	drivers/usb/gadget/udc/aspeed_udc.c
++F:	Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
++F: 	drivers/usb/gadget/udc/aspeed-vhub/
  
- 	case USB_ENDPOINT_XFER_BULK:
+ ASPEED CRYPTO DRIVER
+ M:	Neal Liu <neal_liu@aspeedtech.com>
 -- 
-2.28.0
+2.35.1
 
