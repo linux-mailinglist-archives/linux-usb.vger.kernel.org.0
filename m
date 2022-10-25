@@ -2,107 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC9760C816
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 11:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B7060C95E
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 12:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbiJYJaa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Oct 2022 05:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S231893AbiJYKGD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 25 Oct 2022 06:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiJYJaO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 05:30:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3906716590
-        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 02:28:28 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1onGEU-0001Aa-1O; Tue, 25 Oct 2022 11:28:26 +0200
-Message-ID: <a4732045-a8bf-cf81-6faa-0e99cabe2f4a@pengutronix.de>
-Date:   Tue, 25 Oct 2022 11:28:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [BUG] use-after-free after removing UDC with USB Ethernet gadget
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        with ESMTP id S231905AbiJYKFf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 06:05:35 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4358A17FD50
+        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 02:59:56 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-221-ubkgpKyWN-GZuVIw3Ovb-w-1; Tue, 25 Oct 2022 10:59:44 +0100
+X-MC-Unique: ubkgpKyWN-GZuVIw3Ovb-w-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Oct
+ 2022 10:59:16 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Tue, 25 Oct 2022 10:59:16 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Thomas Winischhofer <thomas@winischhofer.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, johannes.berg@intel.com,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>
-References: <fd36057a-e8d9-38a3-4116-db3f674ea5af@pengutronix.de>
- <Y1eahQ66OcpsECNf@kroah.com>
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: RE: [PATCH] video: fbdev: sis: use explicitly signed char
+Thread-Topic: [PATCH] video: fbdev: sis: use explicitly signed char
+Thread-Index: AQHY59GfTKHiiX1cE0qqKUXinyrVOK4e4PPg
+Date:   Tue, 25 Oct 2022 09:59:16 +0000
+Message-ID: <37a4d200e0b74c72854c018c02e18b50@AcuMS.aculab.com>
+References: <20221024162901.535972-1-Jason@zx2c4.com>
+In-Reply-To: <20221024162901.535972-1-Jason@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-In-Reply-To: <Y1eahQ66OcpsECNf@kroah.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Greg,
-
-On 25.10.22 10:12, Greg KH wrote:
-> On Tue, Oct 25, 2022 at 08:54:58AM +0200, Ahmad Fatoum wrote:
->> Hi everybody,
->>
->> I am running v6.0.2 and can reliably trigger a use-after-free by allocating
->> a USB gadget, binding it to the chipidea UDC and the removing the UDC.
+From: Jason A. Donenfeld
+> Sent: 24 October 2022 17:29
+> To: linux-kernel@vger.kernel.org
 > 
-> How do you remove the UDC?
-
-I originally saw this while doing reboot -f on the device. The imx_usb driver's
-shutdown handler is equivalent to the remove handler and that removes the UDC.
-
-It could also be triggered with:
-
-  echo ci_hdrc.0 > /sys/class/udc/ci_hdrc.0/device/driver/unbind
-
->> The network interface is not removed, but the chipidea SoC glue driver will
->> remove the platform_device it had allocated in the probe, which is apparently
->> the parent of the network device. When rtnl_fill_ifinfo runs, it will access the
->> device parent's name for IFLA_PARENT_DEV_NAME, which is now freed memory.
+> With char becoming unsigned by default, and with `char` alone being
+> ambiguous and based on architecture, signed chars need to be marked
+> explicitly as such. This fixes warnings like:
 > 
-> The gadget removal logic is almost non-existant for most of the function
-> code.  See Lee's patch to try to fix up the f_hid.c driver last week as
-> one example.  I imagine they all have this same issue as no one has ever
-> tried the "remove the gadget device from the running Linux system"
-> before as it was not an expected use case.
-
-I see.
-
-FTR: https://lore.kernel.org/all/20221017112737.230772-1-lee@kernel.org/
- 
-> Is this now an expected use case of the kernel?  If so, patches are
-> welcome to address this in all gadget drivers.
-
-I don't really care for unbinding via sysfs. I want to avoid the
-use-after-free on reboot/shutdown. See the last splat in my original mail.
-
-Cheers,
-Ahmad
-
-
+...
+> ---
+>  drivers/usb/misc/sisusbvga/sisusb_struct.h | 2 +-
+>  drivers/video/fbdev/sis/vstruct.h          | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> thanks,
-> 
-> greg k-h
-> 
+> diff --git a/drivers/usb/misc/sisusbvga/sisusb_struct.h b/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> index 3df64d2a9d43..a86032a26d36 100644
+> --- a/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> +++ b/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> @@ -91,7 +91,7 @@ struct SiS_Ext {
+>  	unsigned char VB_ExtTVYFilterIndex;
+>  	unsigned char VB_ExtTVYFilterIndexROM661;
+>  	unsigned char REFindex;
+> -	char ROMMODEIDX661;
+> +	signed char ROMMODEIDX661;
 
+Isn't the correct fix to use u8 and s8 ?
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
