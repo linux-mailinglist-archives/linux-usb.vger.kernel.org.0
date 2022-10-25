@@ -2,121 +2,241 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B518B60CDAD
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 15:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF07660CDD3
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 15:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbiJYNhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Oct 2022 09:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S230193AbiJYNra (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Oct 2022 09:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiJYNhM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 09:37:12 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72BF1956F4;
-        Tue, 25 Oct 2022 06:37:08 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id g130so14124612oia.13;
-        Tue, 25 Oct 2022 06:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5jYA4CRt7QwFxQ2WJSL+6qpHoqAMY4yfe7v64iFTEeg=;
-        b=KMv+Ujbtf9SE9T3fWLARgIMD8dbNUhfiDS39mJbUVKWDXSkcfY17IW89WFcRZi1/YC
-         fSSRRIbACOz6R3JKItclWb9tEY/GClRIlEFt4ybhrL4YZ5YaKsEmAwfyEobi8mI/yjZe
-         uHMejs5tRKWe1U1Ko2LFB60OSVUGL0RJKhbo9omuEYfIFy7SXMX6oRWri/hCZR2SRYlA
-         G5j+shdwHTAyzGGAcG5XPmIEhOD/iklVUHI7KVAZgnWkPpS7cNKTG8oWSyINMZkHivw3
-         iiQwEpj4SEmukIZiS9GdSYD3DtueSQT1jUQNd//LNQZ7xJ2l1GLSF0pYpJEcc+DQZZE0
-         fjWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5jYA4CRt7QwFxQ2WJSL+6qpHoqAMY4yfe7v64iFTEeg=;
-        b=kakDwEtAvJFpaG0h45HOyuoU/H68PkHpl8p8+J307tWc1FHhJVPpQJkBuEy/MBhiIU
-         Z2aIah0Oyukq4QFO3l8RNuIgioKGfau1bOmRg49/w12UFs15Bm0es5lxQsNrQRsNYv77
-         AjYfCf8mAxmc4IjMzrZoLyW8g6YpC/dgzUEFXVBcs+BQYSw8KAPe5bC1iD2OGlpP1XWC
-         e0lp5KqrAiEcutxId6qIjQonmZwLSbjQ5UG55/RKXxjlT4X36K2C0OMsFTZkALEtkZop
-         Kqqzl0m1jj+q0rDh+sjwiI8a/VpFINv42EDM6drxlOYPCFA88VtBP9xLL6g5q2Xp82Yj
-         EFBw==
-X-Gm-Message-State: ACrzQf3o19ONjFUdo37D25Bbr5iw7zxpC5e0eq6I8CFb2Zj1FazBRCtg
-        vs+n1atqg9oqE53fpwIGDmiXkozHG0k=
-X-Google-Smtp-Source: AMsMyM5WKNa9inG277X3WE+Hxvew5Iq1MaPP04sOO3fCVaaTKDsT4e9kpQ4vtyQvvbEj6fjBB87kGQ==
-X-Received: by 2002:a05:6870:d79b:b0:130:f29c:b54c with SMTP id bd27-20020a056870d79b00b00130f29cb54cmr22926276oab.125.1666705016366;
-        Tue, 25 Oct 2022 06:36:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i11-20020a54408b000000b00354b575424csm938403oii.29.2022.10.25.06.36.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 06:36:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5373483d-adde-2884-6017-75f3bd25d6bc@roeck-us.net>
-Date:   Tue, 25 Oct 2022 06:36:52 -0700
+        with ESMTP id S231429AbiJYNr2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 09:47:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDD3188101
+        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 06:47:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFB4C61962
+        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 13:47:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF666C433D6;
+        Tue, 25 Oct 2022 13:47:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666705647;
+        bh=KAujW5/kUa8lYhYhAqrTohXrDzQap/jEIgg5FM4qiVg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T23wQgDkoOBQu471gXA66dg8uzAYyhDL/zyYJvD9ZJoUls57Yu6TGsgX9nzIne6g0
+         Qx9SSTJeNxMZv1VhQbY7KYuURHh2Qsa4+hctR4IJF8+CTYHdKYh8jJ4kyw2aTtOGSN
+         e7elQ0OiUmOrlyOHS9Ji/zHEYarUgUmR55nNtcR7sC7XbpDyh2Z9Q1vomgn1XpPQ60
+         GbK7P9POBWzL21zfnrzC9t13Cvee8YHCIs8D+FGXFy9A7EtkZ+2hZ8yx5+5buIscgZ
+         JCDybgFITl2p8PrxxxcSmrO4rNCiU7Z5+aK+r8rOVCpAQbLuPoPgU4SLK5LPtYMvrl
+         oMDfqiKPxEW8g==
+Date:   Tue, 25 Oct 2022 14:47:22 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     peter.chen@kernel.org, jun.li@nxp.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v2 1/8] usb: chipidea: core: add controller resume
+ support when controller is powered off
+Message-ID: <Y1fo6v9Wm0HBdE67@spud>
+References: <20221013151442.3262951-1-xu.yang_2@nxp.com>
+ <20221013151442.3262951-2-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Christian Bach <christian.bach@scs.ch>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <ZR0P278MB0773545F02B32FAF648F968AEB319@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM>
- <ZR0P278MB0773072DD153BA902AFE635AEB319@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM>
- <Y1fYjmtQZa53dPfR@kroah.com>
- <ZR0P278MB077321F8565A4FF929B132A1EB319@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: AW: tcpci module in Kernel 5.15.74 with PTN5110 not working
- correctly
-In-Reply-To: <ZR0P278MB077321F8565A4FF929B132A1EB319@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013151442.3262951-2-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 10/25/22 05:48, Christian Bach wrote:
-> Thank you for answering. I did try a Kernel from 1 year ago (11. December 2020 - with the Hash b5206275b46c30a8236feb34a1dc247fa3683d83). But this Kernel had the exact same behavior.
-> I even wanted to go back further the when the tcpm module got it's own subdirectory (v4.20 - 20. September 2018 - Hash ae8a2ca8a2215c7e31e6d874f7303801bb15fbbc) to see if it still worked at that time but my build system was not able to build it.
+On Thu, Oct 13, 2022 at 11:14:35PM +0800, Xu Yang wrote:
+> For some SoCs, the controler's power will be off during the system
+> suspend, and it needs some recovery operation to let the system back
+> to workable. We add this support in this patch.
 > 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
+> ---
+> Changes since v1:
+> - add static modifer for ci_handle_power_lost().
+> ---
+>  drivers/usb/chipidea/core.c | 80 ++++++++++++++++++++++++++++---------
+>  drivers/usb/chipidea/otg.c  |  2 +-
+>  drivers/usb/chipidea/otg.h  |  1 +
+>  3 files changed, 63 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index ae90fee75a32..80267b973c26 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -637,6 +637,49 @@ static int ci_usb_role_switch_set(struct usb_role_switch *sw,
+>  	return 0;
+>  }
+>  
+> +static enum ci_role ci_get_role(struct ci_hdrc *ci)
+> +{
+> +	enum ci_role role;
+> +
+> +	if (ci->roles[CI_ROLE_HOST] && ci->roles[CI_ROLE_GADGET]) {
+> +		if (ci->is_otg) {
+> +			role = ci_otg_role(ci);
+> +			hw_write_otgsc(ci, OTGSC_IDIE, OTGSC_IDIE);
+> +		} else {
+> +			/*
+> +			 * If the controller is not OTG capable, but support
+> +			 * role switch, the defalt role is gadget, and the
+> +			 * user can switch it through debugfs.
+> +			 */
+> +			role = CI_ROLE_GADGET;
+> +		}
+> +	} else {
+> +		role = ci->roles[CI_ROLE_HOST] ? CI_ROLE_HOST
+> +					: CI_ROLE_GADGET;
+> +	}
+> +
+> +	return role;
+> +}
+> +
+> +static void ci_handle_power_lost(struct ci_hdrc *ci)
 
-Greg asked for you to test with a v5.4.y kernel. ae8a2ca8a221..b5206275b46c30a82
-is again a pretty large step with more than 100 commits in the drivers/usb/typec/tcpm/
-directory.
+Hey,
 
-Also, it might be useful to provide the respective kernel logs.
+This appears to have landed in -next and is breaking allmodconfig for
+RISC-V:
+../drivers/usb/chipidea/core.c:664:13: error: 'ci_handle_power_lost' defined but not used [-Werror=unused-function]
+  664 | static void ci_handle_power_lost(struct ci_hdrc *ci)
+      |             ^~~~~~~~~~~~~~~~~~~~
+  CC [M]  drivers/media/i2c/mt9t001.o
+  CC [M]  drivers/net/ethernet/davicom/dm9051.o
+  CC [M]  drivers/input/touchscreen/ti_am335x_tsc.o
+  CC [M]  drivers/watchdog/wdt_pci.o
+cc1: all warnings being treated as errors
+make[5]: *** [../scripts/Makefile.build:250: drivers/usb/chipidea/core.o] Error 1
+make[4]: *** [../scripts/Makefile.build:500: drivers/usb/chipidea] Error 2
+make[3]: *** [../scripts/Makefile.build:500: drivers/usb] Error 2
+make[3]: *** Waiting for unfinished jobs....
+
+The only user seems to be wrapped in an #ifdef CONFIG_PM_SLEEP, and
+while I haven't had the chance to investigate further yet that's
+probably where I'd start looking.
+Apologies if it's been reported, I had a quick look on lore but didn't
+see anything.
 
 Thanks,
-Guenter
+Conor.
 
-> -----Ursprüngliche Nachricht-----
-> Von: Greg KH <gregkh@linuxfoundation.org>
-> Gesendet: Dienstag, 25. Oktober 2022 14:38
-> An: Christian Bach <christian.bach@scs.ch>
-> Cc: stable@vger.kernel.org; regressions@lists.linux.dev; linux@roeck-us.net; linux-usb@vger.kernel.org
-> Betreff: Re: tcpci module in Kernel 5.15.74 with PTN5110 not working correctly
+> +{
+> +	enum ci_role role;
+> +
+> +	disable_irq_nosync(ci->irq);
+> +	if (!ci_otg_is_fsm_mode(ci)) {
+> +		role = ci_get_role(ci);
+> +
+> +		if (ci->role != role) {
+> +			ci_handle_id_switch(ci);
+> +		} else if (role == CI_ROLE_GADGET) {
+> +			if (ci->is_otg && hw_read_otgsc(ci, OTGSC_BSV))
+> +				usb_gadget_vbus_connect(&ci->gadget);
+> +		}
+> +	}
+> +
+> +	enable_irq(ci->irq);
+> +}
+> +
+>  static struct usb_role_switch_desc ci_role_switch = {
+>  	.set = ci_usb_role_switch_set,
+>  	.get = ci_usb_role_switch_get,
+> @@ -1134,25 +1177,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> -	if (ci->roles[CI_ROLE_HOST] && ci->roles[CI_ROLE_GADGET]) {
+> -		if (ci->is_otg) {
+> -			ci->role = ci_otg_role(ci);
+> -			/* Enable ID change irq */
+> -			hw_write_otgsc(ci, OTGSC_IDIE, OTGSC_IDIE);
+> -		} else {
+> -			/*
+> -			 * If the controller is not OTG capable, but support
+> -			 * role switch, the defalt role is gadget, and the
+> -			 * user can switch it through debugfs.
+> -			 */
+> -			ci->role = CI_ROLE_GADGET;
+> -		}
+> -	} else {
+> -		ci->role = ci->roles[CI_ROLE_HOST]
+> -			? CI_ROLE_HOST
+> -			: CI_ROLE_GADGET;
+> -	}
+> -
+> +	ci->role = ci_get_role(ci);
+>  	if (!ci_otg_is_fsm_mode(ci)) {
+>  		/* only update vbus status for peripheral */
+>  		if (ci->role == CI_ROLE_GADGET) {
+> @@ -1374,8 +1399,16 @@ static int ci_suspend(struct device *dev)
+>  static int ci_resume(struct device *dev)
+>  {
+>  	struct ci_hdrc *ci = dev_get_drvdata(dev);
+> +	bool power_lost;
+>  	int ret;
+>  
+> +	/* Since ASYNCLISTADDR (host mode) and ENDPTLISTADDR (device
+> +	 * mode) share the same register address. We can check if
+> +	 * controller resume from power lost based on this address
+> +	 * due to this register will be reset after power lost.
+> +	 */
+> +	power_lost = !hw_read(ci, OP_ENDPTLISTADDR, ~0);
+> +
+>  	if (device_may_wakeup(dev))
+>  		disable_irq_wake(ci->irq);
+>  
+> @@ -1383,6 +1416,15 @@ static int ci_resume(struct device *dev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (power_lost) {
+> +		/* shutdown and re-init for phy */
+> +		ci_usb_phy_exit(ci);
+> +		ci_usb_phy_init(ci);
+> +	}
+> +
+> +	if (power_lost)
+> +		ci_handle_power_lost(ci);
+> +
+>  	if (ci->supports_runtime_pm) {
+>  		pm_runtime_disable(dev);
+>  		pm_runtime_set_active(dev);
+> diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
+> index 7b53274ef966..622c3b68aa1e 100644
+> --- a/drivers/usb/chipidea/otg.c
+> +++ b/drivers/usb/chipidea/otg.c
+> @@ -165,7 +165,7 @@ static int hw_wait_vbus_lower_bsv(struct ci_hdrc *ci)
+>  	return 0;
+>  }
+>  
+> -static void ci_handle_id_switch(struct ci_hdrc *ci)
+> +void ci_handle_id_switch(struct ci_hdrc *ci)
+>  {
+>  	enum ci_role role = ci_otg_role(ci);
+>  
+> diff --git a/drivers/usb/chipidea/otg.h b/drivers/usb/chipidea/otg.h
+> index 5e7a6e571dd2..87629b81e03e 100644
+> --- a/drivers/usb/chipidea/otg.h
+> +++ b/drivers/usb/chipidea/otg.h
+> @@ -14,6 +14,7 @@ int ci_hdrc_otg_init(struct ci_hdrc *ci);
+>  void ci_hdrc_otg_destroy(struct ci_hdrc *ci);
+>  enum ci_role ci_otg_role(struct ci_hdrc *ci);
+>  void ci_handle_vbus_change(struct ci_hdrc *ci);
+> +void ci_handle_id_switch(struct ci_hdrc *ci);
+>  static inline void ci_otg_queue_work(struct ci_hdrc *ci)
+>  {
+>  	disable_irq_nosync(ci->irq);
+> -- 
+> 2.34.1
 > 
-> [You don't often get email from gregkh@linuxfoundation.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
 > 
-> On Tue, Oct 25, 2022 at 12:19:39PM +0000, Christian Bach wrote:
->> Hello
->>
->> For a few weeks now I am trying to make the PTN5110 chip work with the new Kernel 5.15.74. The same hardware setup was working with the 4.19.72 Kernel. The steps I took so far are as follows:
-> 
-> That is a huge jump.  Why not use 'git bisect'?
-> 
-> Or start with a smaller jump.  Why not go to 5.4.y first, that's only a year's worth of changes, instead of 4 years of changes.
-> 
-> thanks,
-> 
-> greg k-h
-
