@@ -2,101 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBDE60C181
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 04:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BCA60C2C0
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 06:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiJYCJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Oct 2022 22:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
+        id S229528AbiJYEp5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Oct 2022 00:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiJYCJI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Oct 2022 22:09:08 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E03B31EEE;
-        Mon, 24 Oct 2022 19:09:06 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s196so10267859pgs.3;
-        Mon, 24 Oct 2022 19:09:06 -0700 (PDT)
+        with ESMTP id S229482AbiJYEpz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 00:45:55 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B8F57566;
+        Mon, 24 Oct 2022 21:45:52 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id n73so9396943iod.13;
+        Mon, 24 Oct 2022 21:45:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pm3uBTI2KyqfNFZG8zBDmAPLyP8aHcCfyyi7loUOwwU=;
-        b=LLBbz+nSU2WPxTx1LHdM1QUtJxdTj36sWunxs0/XsvfUJiXhf94YmGoHTpCCtdua0L
-         14huliCPBU8aR4E9FYCQ4VuD287NEl7HnTdYVhYWFKhd12eiLEao3wkdnC53STj5hsQV
-         wlBwSGGgzMCwgxZ5jGt6ZwYbSAd/LB7wFv4xSCSrjLWCLnCH1Tyw1kfgqHr7JAHNlQgk
-         WTv9l8kSyq4XCUhz+E0FMh9AnM2Qwjmk9clBSQOHCFiNd7P36XM8q4yOfi9q+Z2Ze9/4
-         WxNeGjGfpSbZTHT2XPns/gwnEdfaQjtsjBj8D0mHK0WWCHg5MH/jLL3SMnXB0l4YKVbF
-         O1kw==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RLtHempB4jrBtCU0+LcnDz6mCrviXokD1rcmrihbunk=;
+        b=Zf3ScGf6y4EbHXmisbN8ycWBRYlnuQaNqVgLYRNdfd4utRAg4tXqB+aLwutOhVOZuT
+         zLLAt6FnfP2AVLVr6MpmGo4ZUgDEyuObwtUDH6QnNIPcoHhAhcVCiZiJDJEqvFZptdfl
+         RjxIwt1HlqqEArC7j3ptOplQcWCkWJKnrp1bmgySLgwYN8PIz6s1QIVq/DM9yrD/RI0A
+         bX5WWXjd/Yh3+alwmti9oGi3oDoyVrogbsv9M1tyebT+MNXGvxZClVBRv8Cq2PTvx4pY
+         qhCI1vfNFwZL4K60gCrFJKllE0NKupJ2+9hRS8qjOi8jj34946hxDDUybD+NOJw4AbRn
+         LTGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pm3uBTI2KyqfNFZG8zBDmAPLyP8aHcCfyyi7loUOwwU=;
-        b=gEjpiDv3tOxOMC/y3sYcUnat1mhIPVv+QolbqtiKWoEUTECAm+cZKGXVmhfxPAHJUK
-         Q3DBOW7mhEHsRSszHFNod0yQCP66pAFCT9z3iirxokajXZfnQlelreK0QdL+tWDNqCpp
-         6u7Vw/5cUvuTPQi+QNaFTbejfAGE0juOC6GqclO2ajz1mkZMbGmn1wyq1rSFYY/4xorQ
-         jWHCq71iV2kxzDWpSJXlG8pOwwRRcWVwxQxgbPMDtV4Qo+LKi2UH77Q/xuEx8JaHPTkx
-         Uns4sC9XmGoAdy66lyyed/WAjtafF9y84ZN30Qg1aKBuL5BHR92/++ER4Ym5jo/5KL0l
-         Z7NQ==
-X-Gm-Message-State: ACrzQf1H7+Ou132HyCoc1jJNDB58dlGJoFb9b1NBNDTc/ZGNVtB8g/fZ
-        G5MGAjS3d7Jn2K9rmPCdtA62zPb3YSo=
-X-Google-Smtp-Source: AMsMyM6TvAu7HSzVk41KXIjjB1wvSO/fyRQDbFUp8OyaCscpgUP5cnmYDmpXvIG2fHp2dKUS+5w8Zw==
-X-Received: by 2002:a05:6a00:1309:b0:535:d421:1347 with SMTP id j9-20020a056a00130900b00535d4211347mr36764044pfu.5.1666663745665;
-        Mon, 24 Oct 2022 19:09:05 -0700 (PDT)
-Received: from voyager.lan ([45.124.203.18])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0017f80305239sm338116plh.136.2022.10.24.19.09.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 19:09:04 -0700 (PDT)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     Neal Liu <neal_liu@aspeedtech.com>, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Add Ben as a reviewer for ASPEED UCD
-Date:   Tue, 25 Oct 2022 12:38:56 +1030
-Message-Id: <20221025020856.744202-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.35.1
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RLtHempB4jrBtCU0+LcnDz6mCrviXokD1rcmrihbunk=;
+        b=5JRDaHIj9hKv0BkRI3PtgZZrhomVrd+DlhbrcrZxj5JMqUZdM9IYNOy7A7Pcoza+cU
+         FI2ebYatMQuL92rQ14CfglG1iOAF9zTP0NgKP6WFn0nVcu786r3ZDusrE5nk5dx6Vc+i
+         DEAN26lqoIcNF/vYbOE7EhFAeDLYEUkpOh6aJfDtySMnnVd6C9jVI8pSRyk8gv23xLeh
+         3tkH9KjARu47fIPFci4OGTPtoA/INKOlOEVzRRTP5oRQ7Ed5haiWCxHqvf2bXKHNHG0R
+         iXoMtXAu3sc+z8h5ZC3qQHpDQztFnVnTR9MTDPNNouAX4RsO5Dd08jlXz1Lrpsebvs09
+         hmkQ==
+X-Gm-Message-State: ACrzQf279MhwWP7MOYOSDvi6oBClBZYDvPUVHJlEX3ULltwqS0FY2mS+
+        zU49sEqfGJKg6CiM1dVDkmJ17UtGbH/AslSk
+X-Google-Smtp-Source: AMsMyM5TVYMzWWgUA9pJP6fUVjDmOr7APib2RCIr07TPFjlGY/SEkD2aWOgplh4FFOwrmEaJYPknBg==
+X-Received: by 2002:a5d:9859:0:b0:6bb:4dff:8a8b with SMTP id p25-20020a5d9859000000b006bb4dff8a8bmr21317233ios.159.1666673151385;
+        Mon, 24 Oct 2022 21:45:51 -0700 (PDT)
+Received: from qjv001-XeonWs (c-67-167-199-249.hsd1.il.comcast.net. [67.167.199.249])
+        by smtp.gmail.com with ESMTPSA id d7-20020a026207000000b0037508cc0bc2sm181588jac.12.2022.10.24.21.45.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 24 Oct 2022 21:45:51 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 23:45:48 -0500
+From:   Jeff Vanhoof <jdv1029@gmail.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
+        stable@vger.kernel.org, Dan Vacura <w36195@motorola.com>
+Subject: Re: [PATCH v2 1/2] usb: dwc3: gadget: Stop processing more requests
+ on IMI
+Message-ID: <20221025044545.GA12741@qjv001-XeonWs>
+References: <cover.1666661013.git.Thinh.Nguyen@synopsys.com>
+ <699a342b618611be834b06d9d64abae7d01486cd.1666661013.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <699a342b618611be834b06d9d64abae7d01486cd.1666661013.git.Thinh.Nguyen@synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-He wrote the vhub driver and would like to be cc'd on patches.
+On Mon, Oct 24, 2022 at 06:27:57PM -0700, Thinh Nguyen wrote:
+> When servicing a transfer completion event, the dwc3 driver will reclaim
+> TRBs of started requests up to the request associated with the interrupt
+> event. Currently we don't check for interrupt due to missed isoc, and
+> the driver may attempt to reclaim TRBs beyond the associated event. This
+> causes invalid memory access when the hardware still owns the TRB. If
+> there's a missed isoc TRB with IMI (interrupt on missed isoc), make sure
+> to stop servicing further.
+> 
+> Note that only the last TRB of chained TRBs has its status updated with
+> missed isoc.
+> 
+> Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+> Cc: stable@vger.kernel.org
+> Reported-by: Jeff Vanhoof <jdv1029@gmail.com>
+> Reported-by: Dan Vacura <w36195@motorola.com>
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  Changes in v2:
+>  - No need to check for CHN=0 since only the last TRB has its status
+>    updated to missed isoc
+> 
+>  drivers/usb/dwc3/gadget.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index dd8ecbe61bec..230b3c660054 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -3248,6 +3248,10 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
+>  	if (event->status & DEPEVT_STATUS_SHORT && !chain)
+>  		return 1;
+>  
+> +	if ((trb->ctrl & DWC3_TRB_CTRL_ISP_IMI) &&
+> +	    DWC3_TRB_SIZE_TRBSTS(trb->size) == DWC3_TRBSTS_MISSED_ISOC)
+> +		return 1;
+> +
+>  	if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
+>  	    (trb->ctrl & DWC3_TRB_CTRL_LST))
+>  		return 1;
+> -- 
+> 2.28.0
+>
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- MAINTAINERS | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Testing shows that the changes appear to work to prevent the arm-smmu panic I
+was seeing after missed isoc errors. Also, changes to reclaim trbs only up to
+the associated interrupt event make sense.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3bb30c0d1cb4..637beabc70f1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3232,12 +3232,15 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/media/aspeed-video.txt
- F:	drivers/media/platform/aspeed/
+Reviewed-by: Jeff Vanhoof <jdv1029@gmail.com>
+Tested-by: Jeff Vanhoof <jdv1029@gmail.com>
+
+Regards,
+Jeff
  
--ASPEED USB UDC DRIVER
-+ASPEED USB UDC DRIVERS
- M:	Neal Liu <neal_liu@aspeedtech.com>
-+R:	Benjamin Herrenschmidt <benh@kernel.crashing.org>
- L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
- S:	Maintained
- F:	Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
- F:	drivers/usb/gadget/udc/aspeed_udc.c
-+F:	Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-+F: 	drivers/usb/gadget/udc/aspeed-vhub/
- 
- ASPEED CRYPTO DRIVER
- M:	Neal Liu <neal_liu@aspeedtech.com>
--- 
-2.35.1
-
