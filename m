@@ -2,74 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6C460C6EE
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 10:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC9760C816
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 11:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiJYIwC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Oct 2022 04:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S231948AbiJYJaa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Oct 2022 05:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiJYIvw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 04:51:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AC610B7B2;
-        Tue, 25 Oct 2022 01:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666687911; x=1698223911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hbhV4A15ndt/saOeMCmNJor1iFigW50w+1NuvMqFvSY=;
-  b=P2oMnF13xGVIMlzkZ/vPMXo34Au/KXwvSR1uxsNAHu9kmSS+IH1nQ0Lz
-   axFOu2QYnOncYnahdkqmntd/xSLHM6Cn6VapGgxB2IqLOEFQewLEHXzKG
-   yLvF+Ns96N4uCpH4eJnehLBhh2TSeqfov4qBYOJC3n33wq80u7QOIfZxl
-   OA3sFFBimjj6lvOtFnyOG2bk5ETgYkaLAYR3Py0g7z7CvYroXhPCVTX0V
-   FReWfSWcwv9b/9VDFUijQrKhK+Y53WmPhdS8viZo+U7IgyW5jtm8cT6Ff
-   cwuhUb7OQk9gHE4Zv+QeXtolM+oqGQFJyXLkAKjpte2cPKYXxnH363WRS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287344511"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="287344511"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 01:51:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="876732788"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="876732788"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Oct 2022 01:51:49 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id A7C94107; Tue, 25 Oct 2022 11:52:11 +0300 (EEST)
-Date:   Tue, 25 Oct 2022 11:52:11 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] thunderbolt: ACPI: Use the helper
- fwnode_find_reference()
-Message-ID: <Y1eju9YGutD9LsgB@black.fi.intel.com>
-References: <20221024074846.84805-1-heikki.krogerus@linux.intel.com>
+        with ESMTP id S231790AbiJYJaO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 05:30:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3906716590
+        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 02:28:28 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1onGEU-0001Aa-1O; Tue, 25 Oct 2022 11:28:26 +0200
+Message-ID: <a4732045-a8bf-cf81-6faa-0e99cabe2f4a@pengutronix.de>
+Date:   Tue, 25 Oct 2022 11:28:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024074846.84805-1-heikki.krogerus@linux.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [BUG] use-after-free after removing UDC with USB Ethernet gadget
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, johannes.berg@intel.com,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>
+References: <fd36057a-e8d9-38a3-4116-db3f674ea5af@pengutronix.de>
+ <Y1eahQ66OcpsECNf@kroah.com>
+Content-Language: en-US
+In-Reply-To: <Y1eahQ66OcpsECNf@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 10:48:46AM +0300, Heikki Krogerus wrote:
-> Replacing the direct fwnode_property_get_reference_args()
-> call will this wrapper function.
-> 
-> No functional changes intended.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Hello Greg,
 
-Applied to thunderbolt.git/next, thanks!
+On 25.10.22 10:12, Greg KH wrote:
+> On Tue, Oct 25, 2022 at 08:54:58AM +0200, Ahmad Fatoum wrote:
+>> Hi everybody,
+>>
+>> I am running v6.0.2 and can reliably trigger a use-after-free by allocating
+>> a USB gadget, binding it to the chipidea UDC and the removing the UDC.
+> 
+> How do you remove the UDC?
+
+I originally saw this while doing reboot -f on the device. The imx_usb driver's
+shutdown handler is equivalent to the remove handler and that removes the UDC.
+
+It could also be triggered with:
+
+  echo ci_hdrc.0 > /sys/class/udc/ci_hdrc.0/device/driver/unbind
+
+>> The network interface is not removed, but the chipidea SoC glue driver will
+>> remove the platform_device it had allocated in the probe, which is apparently
+>> the parent of the network device. When rtnl_fill_ifinfo runs, it will access the
+>> device parent's name for IFLA_PARENT_DEV_NAME, which is now freed memory.
+> 
+> The gadget removal logic is almost non-existant for most of the function
+> code.  See Lee's patch to try to fix up the f_hid.c driver last week as
+> one example.  I imagine they all have this same issue as no one has ever
+> tried the "remove the gadget device from the running Linux system"
+> before as it was not an expected use case.
+
+I see.
+
+FTR: https://lore.kernel.org/all/20221017112737.230772-1-lee@kernel.org/
+ 
+> Is this now an expected use case of the kernel?  If so, patches are
+> welcome to address this in all gadget drivers.
+
+I don't really care for unbinding via sysfs. I want to avoid the
+use-after-free on reboot/shutdown. See the last splat in my original mail.
+
+Cheers,
+Ahmad
+
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
