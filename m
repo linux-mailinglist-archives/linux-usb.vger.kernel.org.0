@@ -2,338 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE5760C45A
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 08:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16A860C513
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 09:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiJYG40 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Oct 2022 02:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S231731AbiJYH1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Oct 2022 03:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiJYG4H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 02:56:07 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A2273C08
-        for <linux-usb@vger.kernel.org>; Mon, 24 Oct 2022 23:55:04 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1onDq0-0002Uw-Vx; Tue, 25 Oct 2022 08:55:01 +0200
-Message-ID: <fd36057a-e8d9-38a3-4116-db3f674ea5af@pengutronix.de>
-Date:   Tue, 25 Oct 2022 08:54:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
+        with ESMTP id S231787AbiJYH0u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 03:26:50 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2084.outbound.protection.outlook.com [40.107.92.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF29D14EC52;
+        Tue, 25 Oct 2022 00:26:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ecrYiEFvyUxueikQk0o+Sm4LggGRpplx9VJ+ercswsNQ/i+Z+X2BLFf9aItvtYtj/QUL0AEv2egCr2ZjQZLT+DpVXH+sLODRVIL8BPLlJPHC//wEKBSxbpE6PjtWgtHSs5vPUPc/3wRpAW4ITtAZYTYQdaiOsTNQBxDcnqSdki/EicOvlTUxxXuDze4j9YUGbTJmKUcR66mk48Yia6PSEUoe4Wtvy7rNVkBx7X5ot5J/Ylf/SMR6TPPrx/oNID/e8U6UPN1XFGG08Muw4TCpbovJlQZhxQWVik7sFBu4Fy+UJLYDOK2E9kfAvKoEMsjKXWdZ9Oa7CTbMJ/+hMaZj0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oEJpvu6PxJJ9Jyi0WOYLzHM8EYqhpVjw+uYRV6xaTkc=;
+ b=k51shaguM74vyzc04mK942ojipK9wHz7q3/odvVzGo4lIIr4VbkXRPQhpfDhvtutB4nHxsPBwqe3PdZHUemCa1dO5chomTHovTTOBYgVvZktO8u8oDcyCBbbRXoBruFsmHoGg4wZvCMxEKwHhR8OemTb6v2lr2LaCPvkWJjhQZgN0rY7FjD80VKXXtBGr4yQ7F8fivcg377S0aXETjRsyAaJFpXU7iKiEaaOCYph1dehvW6Mb9OmS+A1x2J/8amkT+z6nGHEwWvKadq4EVF2v1AdzWxlglT5a6yFJoSMRSmIy+PFGxtP5dEjI7saL4RYlDMIx1wWnmwIuKSh7I4cUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oEJpvu6PxJJ9Jyi0WOYLzHM8EYqhpVjw+uYRV6xaTkc=;
+ b=XVLxs1Y7y70d2EuvVWwLetsaGFJ6MHzq2GjJrvr2rW8q0TT3JCd6zHWCnQdUc3znp4GLy3kZM8rEf5Gq0tCR49/1s7DdLv8G9AqTK3MQ+/1kBeiiYl+Rll8evUik9uBBVnQbQNvX8sIDb19HYHvPKEjv2jYInyQlQRYEtxIg4umzA/K1wUvhNr6rCfpoS17YkZz3Naks3NaTH/PN568+9225zOeFD3hsU842lcExhwbdNTzuFwilV9w6ya6FnhO+eD+/NqRsjIVyghDPufyWwc2iyMIXqUDorThQtGmhhHWfTHx5qQ9LrS7dQCS4GWt13yaDKVrJ9gFiUIbVC7HxKA==
+Received: from PH0PR12MB5500.namprd12.prod.outlook.com (2603:10b6:510:ef::8)
+ by PH0PR12MB5499.namprd12.prod.outlook.com (2603:10b6:510:d5::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Tue, 25 Oct
+ 2022 07:26:45 +0000
+Received: from PH0PR12MB5500.namprd12.prod.outlook.com
+ ([fe80::b482:3b7c:c503:9d11]) by PH0PR12MB5500.namprd12.prod.outlook.com
+ ([fe80::b482:3b7c:c503:9d11%7]) with mapi id 15.20.5746.026; Tue, 25 Oct 2022
+ 07:26:45 +0000
+From:   Wayne Chang <waynec@nvidia.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Ajay Gupta <ajayg@nvidia.com>, "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        Jui Chang Kuo <jckuo@nvidia.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 06/11] usb: typec: ucsi_ccg: Replace ccgx to well-known
+ regex
+Thread-Topic: [PATCH 06/11] usb: typec: ucsi_ccg: Replace ccgx to well-known
+ regex
+Thread-Index: AQHY53wgD8IboWOR1E+cH9zW1z3DA64dLr2AgAAHv4CAAAS4AIABfBcA
+Date:   Tue, 25 Oct 2022 07:26:45 +0000
+Message-ID: <0e00952e-fa54-bbca-7608-09fd08356513@nvidia.com>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-7-waynec@nvidia.com>
+ <Y1ZGZ2H0/ug3se6j@kuha.fi.intel.com> <87czaheiag.fsf@balbi.sh>
+ <Y1ZQ3NyR7Suxdltu@kuha.fi.intel.com>
+In-Reply-To: <Y1ZQ3NyR7Suxdltu@kuha.fi.intel.com>
+Accept-Language: en-US, zh-TW
 Content-Language: en-US
-To:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: [BUG] use-after-free after removing UDC with USB Ethernet gadget
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, johannes.berg@intel.com,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR12MB5500:EE_|PH0PR12MB5499:EE_
+x-ms-office365-filtering-correlation-id: c7dff19d-bb42-45fc-4070-08dab65a455c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RimNoRf87YSRv74h5siuexDZ/61VmfQnSd8yIZjhz3iOmC6AGyLLAFJv+xvssnE2kMSK9uXZDZY1OYHFQwKhbgOjLo+SMB5ts/M/bLJs8kLos3fg6o43eyU5AhzXyjVUd249JXq+QUnrO8bXSptqJP8Yj8AoOIi5tZDAchcYD8GXLDBP7/gytbx18LZGGPUVkgTQcxeamROuK/vGoSnqL150zIpGxJtsu0DL1I+fFsiqDjomW3fCotOgoqIlCwDLS0SR75AApEcIbMk3T0GE6MLERwXSzO5K46Co4R5JxBfWr5AO0ciPvNb6As5E86vzTohrp8MCXQqihM+b2l5hByeTosfbKGSK4ZaC4zhcGAa5156PZQ4psMkS+073A2aqLQ0OJc82kKCpj0Ome0rP2VnyobqOpceX0pSF1f/mPx1uoH0KOOBFeq+FafYK5gZ49q+wtZhZuQCxbFnDZ5VxZb0SO1xkrK6a8vK2YVPLJPN+nVPvZeZVLTXjZTaOuyvO0dO+MA3pHXwSpCRoPPsH5KimKvu+SL0uEUV+c3uUGHOTE89QGqnNRTaC8pQw0E7DTMOR/EAy4b6FQ3h+p+iMfTNZtL/X43Xy7AZTaNFYWVEjl85Fs7p1EPCY4X89IklZ2NtWDz8g1daANeR/kVirBZOrgKHbYKDQS02RS4ZBBAYx9fl9uhK1qtlPr5KREdBeRbOFS1+S9fLKzcTx8y4xu6x/ruN325CMInzcc+eLv1aXBRRRV4CTEIK9cKRkxCJSr4iIAZQoCCOjLNhCHTp2TA2CRGdhxWlvkZJ+QRu+xhAq69MH740aC4StbR+k2qyqy/lguLp7CUu0U0a5DrZWEw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5500.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199015)(6506007)(66946007)(76116006)(64756008)(66476007)(66446008)(4326008)(66556008)(8676002)(31686004)(53546011)(7416002)(71200400001)(478600001)(5660300002)(2616005)(26005)(54906003)(86362001)(122000001)(110136005)(6512007)(41300700001)(36756003)(38070700005)(8936002)(186003)(38100700002)(2906002)(6486002)(91956017)(316002)(83380400001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SkVLUnRmUU5sWXNka052TmhVRTQvNjd2MGxTZUxIZGd2NWUrZFFSQ0RmR2dp?=
+ =?utf-8?B?YmtNckp5UUlSY0k1RWhrejllMmxuRDQ3NTZVa1hvY01BcjJXQ2VBbUtMZnli?=
+ =?utf-8?B?Q0k1N2grSXo0d2RKWTVzZkJmRjRveExCdytjbUl3c3dmU0RMV2syWFFka21T?=
+ =?utf-8?B?eHAvSS9nMldkNEtzdDZsVGhyOVFUMU4vNlNuUU5uZVloaWN2WlJraWQ3ZCtw?=
+ =?utf-8?B?RVorYi9MQ3lmVzQrNVIwRzBoVnBUQVRzV0pEQVRnWm92K3FZOXNTZmwwbWJy?=
+ =?utf-8?B?WHpRVXRrMFFIOVFxMzRHSEJtU3RhQVhtSTk4VDh4MzBnYkZSSHArekRhbUE5?=
+ =?utf-8?B?OVhkUUpQdnFNb016by9OTnp2bHhNU25YeGhSV1JNSlJSMUttdEVSTGkrQW9m?=
+ =?utf-8?B?Szhsa3l1c3JxaDFVZkpwdVZ1ekVUVXJXU3BSQ0l4V1ZVT1kzakduZVpKa1Rq?=
+ =?utf-8?B?K3JLcUowYS92aEJ4NWVOeWNnRjhsdnVMWlVkY01mQjc1S1ViRFFSbGF1NWtK?=
+ =?utf-8?B?d1VHOEVsN2E5QVl0a2RDWFV5dWN5NkhuL016UytsUmlYc0NSRHJvS3M1QTV0?=
+ =?utf-8?B?Rmhtdk94czBJajhSd1M5U1dhSis3blN4RXZoL1p3Qk1UUmpVcmxUNlV6dGFO?=
+ =?utf-8?B?ZzVxSnYrNi9qdkx3TjcreHdsQXpZTW0zMzlUTE9OTUxBVUlmb0JKRWVjaHo5?=
+ =?utf-8?B?dW56eSs1dUlPOWJ2Q0JXQW14cThhbVhFZDFzeGtmVFJMenJ2TXdzelUrZ3c2?=
+ =?utf-8?B?bldSWjhtMXBKYTlHZmVBeS9QWVE5Yi9Ud0Y1UDlvZTNwLzdmUDNFdUk3Uy9h?=
+ =?utf-8?B?eENpblk5bGJuZlltU2xKb1ZOT2VzcXY5Z0JINTdaT3BuWnlXOEo3SUxtUito?=
+ =?utf-8?B?Wk1TME1vZm5KVVVrc1NiZjFtckcvUWxwdVV0eHVCbmJNRHRHTFFUVmNXekZp?=
+ =?utf-8?B?ZE5RUzljaWU2RUVUVmFoZUVEaXdPMnVMa0srN3UrczZ3QmNRSzNLRHpiZk9s?=
+ =?utf-8?B?Tm1jMkFibWZpT1JxbTRHOGczc3M2eldBV2l6T1NjYTY2eUYxdUtBVzBaV0Z1?=
+ =?utf-8?B?eXovMEFPaHBBSDJXakU2N013VlE3UDdxZVVRbS9JQk5YdHhULzZjN2RGcXZF?=
+ =?utf-8?B?U05tVGs3VkxsQkV4Q3R4a09xUnp1bElYMmRNWTE5eVRnREtRalUyN3Q1ZUVL?=
+ =?utf-8?B?M0ljS3JRT0dPdTVXWHk4RkJEc2Z2cE40emxIaGcrY2JqbzhnRmxtMW5qbnlv?=
+ =?utf-8?B?MkpseTRzclpJSjg3Wkl0aktVbDZSTlJWcDBrWkdwbHNHZHU2ajdEWGZ6bVN3?=
+ =?utf-8?B?NTRoRVlGZEN5OVpHNFlRS0huRlVwWmZsUGc2ZnoyaG1Ua0JLenpIUXREa3ZL?=
+ =?utf-8?B?YnVtcXhtU0c2anE3ZVFYTFRpbXo2WmlwSWFoN3ZLczAybjRNZTVmNWcrZHJJ?=
+ =?utf-8?B?bThObzMzdjJSUzBBZXlvcHpPMzRwL0VLNFloSFNpSG4wU1UzUXlXMlo3WXNr?=
+ =?utf-8?B?Yi9FbGx3NWFKOUJSOG5FbnFzNndlaEt3Nnk1NFB4VXVWd0lJR2FlMGJubmp2?=
+ =?utf-8?B?VlJiSDQ0cE1VblJ6SkNPMDU1SFN3T3JXQUNQR3BXYUJUcFMzaVFRcVZHWFJr?=
+ =?utf-8?B?NjltSTh6OFhBU0loWFhZRmV3LzlLVlRHYlprOEt1QUtGSEZwcmx5SnBNaEFC?=
+ =?utf-8?B?QzJjaHp1MzJMWVBkWW5DVUU1M3BVYnpDdzNnVDNhMEVST3lzdFZVK0xNT01p?=
+ =?utf-8?B?K2lkalAzR3hjUUJsclh1bXIyakwvUEJ2aFdRdUpmZUN6UUFxMGR2bE9pcjBM?=
+ =?utf-8?B?WWxDRVhTMzlRU0htQXZXckZwVnZoWUNYNTFwQWZLU1BxdTAxVkEySzZIdmMr?=
+ =?utf-8?B?TlVGSkZLTFhMVGNLTkI3VHVuc2V1bTU4WTlNS1ZFdTdpdG5wMnMrOUxDOGN5?=
+ =?utf-8?B?cEp1eGJ0OFFLQndvN2pTV0VubWhidDNxYStheHNLbWE1WlNONjMxak5jT0hQ?=
+ =?utf-8?B?TVo3bUNWcTh5clJVMHFhZzU1dXJrTnFmOFRFL1ZMSnNFWmNNZlIzaFFIYzQv?=
+ =?utf-8?B?b0pSc2wrcm5kRld3b21abmVaRlFvanRaQXpHbnpYcEo1dkdZRmxqU2FsSFF1?=
+ =?utf-8?Q?fGQIodrAtoffSetjH3Cqvyjva?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <70FC22EEB8123C4CA4AAC5677D5AEE78@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5500.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7dff19d-bb42-45fc-4070-08dab65a455c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 07:26:45.3019
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PH8d5zA5dsfFox3jv4JFv54sJDvvjmQsC3RjILoBeiK4s+hBKCu4XDUfyDU4+b68KCwOcJ2+N3svsJQ9yPw61A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5499
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi everybody,
-
-I am running v6.0.2 and can reliably trigger a use-after-free by allocating
-a USB gadget, binding it to the chipidea UDC and the removing the UDC.
-
-The network interface is not removed, but the chipidea SoC glue driver will
-remove the platform_device it had allocated in the probe, which is apparently
-the parent of the network device. When rtnl_fill_ifinfo runs, it will access the
-device parent's name for IFLA_PARENT_DEV_NAME, which is now freed memory.
-
-Steps to reproduce (on an i.MX8MM):
-
-  cd /sys/kernel/config/usb_gadget/
-  mkdir -p mygadget
-  cd mygadget
-
-  mkdir -p configs/c.1/strings/0x409
-  echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
-
-  mkdir -p functions/ecm.usb0
-  ln -s functions/ecm.usb0 configs/c.1/
-
-  echo "ci_hdrc.0" > UDC
-  echo ci_hdrc.0 > /sys/class/udc/ci_hdrc.0/device/driver/unbind
-
-  ip --details link show usb0
-
-This gives me following KASAN report (v6.0.2 line numbers):
-
-  [40645.265092] BUG: KASAN: use-after-free in rtnl_fill_ifinfo (./include/linux/device.h:704 ./net/core/rtnetlink.c:1859)
-  [40645.271855] Read of size 8 at addr ffff000007350550 by task systemd-udevd/348
-  [40645.279028]
-  [40645.280552] CPU: 2 PID: 348 Comm: systemd-udevd Not tainted 6.0.2-00001-g749cbdda068b #17
-  [40645.288761] Hardware name: InnoComm WB15-EVK (DT)
-  [40645.293510] Call trace:
-  [40645.295983] dump_backtrace (./arch/arm64/kernel/stacktrace.c:184)
-  [40645.299782] show_stack (./arch/arm64/kernel/stacktrace.c:191)
-  [40645.303109] dump_stack_lvl (./lib/dump_stack.c:107 (discriminator 1))
-  [40645.306789] print_report (./include/linux/mm.h:851 ./mm/kasan/report.c:214 ./mm/kasan/report.c:315 ./mm/kasan/report.c:433)
-  [40645.310463] kasan_report (./mm/kasan/report.c:497)
-  [40645.313962] __asan_report_load8_noabort (./mm/kasan/report_generic.c:307 (discriminator 4))
-  [40645.318764] rtnl_fill_ifinfo (./include/linux/device.h:704 ./net/core/rtnetlink.c:1859)
-  [40645.322956] rtnl_getlink (./net/core/rtnetlink.c:3695)
-  [40645.326624] rtnetlink_rcv_msg (./net/core/rtnetlink.c:6090)
-  [40645.330735] netlink_rcv_skb (./net/netlink/af_netlink.c:2501)
-  [40645.334670] rtnetlink_rcv (./net/core/rtnetlink.c:6109)
-  [40645.338255] netlink_unicast (./net/netlink/af_netlink.c:1320 ./net/netlink/af_netlink.c:1345)
-  [40645.342189] netlink_sendmsg (./net/netlink/af_netlink.c:1921)
-  [40645.346122] __sys_sendto (./net/socket.c:717 ./net/socket.c:734 ./net/socket.c:2117)
-  [40645.349797] __arm64_sys_sendto (./net/socket.c:2125)
-  [40645.353905] invoke_syscall (./arch/arm64/kernel/syscall.c:38 ./arch/arm64/kernel/syscall.c:52)
-  [40645.357671] el0_svc_common.constprop.0 (./arch/arm64/kernel/syscall.c:149)
-  [40645.362560] do_el0_svc (./arch/arm64/kernel/syscall.c:207)
-  [40645.365884] el0_svc (./arch/arm64/kernel/entry-common.c:133 ./arch/arm64/kernel/entry-common.c:142 ./arch/arm64/kernel/entry-common.c:625)
-  [40645.368952] el0t_64_sync_handler (./arch/arm64/kernel/entry-common.c:643)
-  [40645.373233] el0t_64_sync (./arch/arm64/kernel/entry.S:581)
-  [40645.376906]
-  [40645.378402] Allocated by task 9:
-  [40645.381637] kasan_save_stack (./mm/kasan/common.c:39)
-  [40645.385486] __kasan_kmalloc (./mm/kasan/common.c:45 ./mm/kasan/common.c:437 ./mm/kasan/common.c:516 ./mm/kasan/common.c:525)
-  [40645.389246] __kmalloc_node_track_caller (./include/linux/kasan.h:234 ./mm/slub.c:4969)
-  [40645.394221] devm_kmalloc (./drivers/base/devres.c:116 ./drivers/base/devres.c:823)
-  [40645.397810] ci_hdrc_probe (./include/linux/device.h:209 ./drivers/usb/chipidea/core.c:1021)
-  [40645.401574] platform_probe (./drivers/base/platform.c:1401)
-  [40645.405331] really_probe (./drivers/base/dd.c:560 ./drivers/base/dd.c:639)
-  [40645.409001] __driver_probe_device (./drivers/base/dd.c:778)
-  [40645.413451] driver_probe_device (./drivers/base/dd.c:808)
-  [40645.417644] __device_attach_driver (./drivers/base/dd.c:937)
-  [40645.422182] bus_for_each_drv (./drivers/base/bus.c:427)
-  [40645.426203] __device_attach (./drivers/base/dd.c:1010)
-  [40645.430132] device_initial_probe (./drivers/base/dd.c:1058)
-  [40645.434326] bus_probe_device (./drivers/base/bus.c:489)
-  [40645.438341] device_add (./drivers/base/core.c:3524)
-  [40645.441926] platform_device_add (./drivers/base/platform.c:717)
-  [40645.446205] ci_hdrc_add_device (./drivers/usb/chipidea/core.c:879 ./drivers/usb/chipidea/core.c:847)
-  [40645.450401] ci_hdrc_imx_probe (./drivers/usb/chipidea/ci_hdrc_imx.c:449)
-  [40645.454593] platform_probe (./drivers/base/platform.c:1401)
-  [40645.458349] really_probe (./drivers/base/dd.c:560 ./drivers/base/dd.c:639)
-  [40645.462017] __driver_probe_device (./drivers/base/dd.c:778)
-  [40645.466470] driver_probe_device (./drivers/base/dd.c:808)
-  [40645.470662] __device_attach_driver (./drivers/base/dd.c:937)
-  [40645.475201] bus_for_each_drv (./drivers/base/bus.c:427)
-  [40645.479220] __device_attach (./drivers/base/dd.c:1010)
-  [40645.483151] device_initial_probe (./drivers/base/dd.c:1058)
-  [40645.487343] bus_probe_device (./drivers/base/bus.c:489)
-  [40645.491359] deferred_probe_work_func (./drivers/base/dd.c:124)
-  [40645.496072] process_one_work (./arch/arm64/include/asm/jump_label.h:21 ./include/linux/jump_label.h:207 ./include/trace/events/workqueue.h:108 ./kernel/workqueue.c:2294)
-  [40645.500179] worker_thread (./include/linux/list.h:292 ./kernel/workqueue.c:2349 ./kernel/workqueue.c:2441)
-  [40645.503934] kthread (./kernel/kthread.c:376)
-  [40645.507173] ret_from_fork (./arch/arm64/kernel/entry.S:861)
-  [40645.510758]
-  [40645.512252] Freed by task 343:
-  [40645.515312] kasan_save_stack (./mm/kasan/common.c:39)
-  [40645.519158] kasan_set_track (./mm/kasan/common.c:45)
-  [40645.522917] kasan_set_free_info (./include/linux/kasan.h:59 ./mm/kasan/generic.c:372)
-  [40645.527024] ____kasan_slab_free (./mm/kasan/common.c:369 ./mm/kasan/common.c:329)
-  [40645.531306] __kasan_slab_free (./mm/kasan/common.c:376)
-  [40645.535237] slab_free_freelist_hook (./mm/slub.c:1785)
-  [40645.539778] kfree (./mm/slub.c:3539 (discriminator 4) ./mm/slub.c:4567 (discriminator 4))
-  [40645.542756] release_nodes (./drivers/base/devres.c:498)
-  [40645.546427] devres_release_all (./drivers/base/devres.c:531)
-  [40645.550621] device_unbind_cleanup (./drivers/base/dd.c:532)
-  [40645.554985] device_release_driver_internal (./drivers/base/dd.c:1257 ./drivers/base/dd.c:1275)
-  [40645.560221] device_driver_detach (./drivers/base/dd.c:1312)
-  [40645.564414] unbind_store (./drivers/base/bus.c:196)
-  [40645.568087] drv_attr_store (./drivers/base/bus.c:79)
-  [40645.571760] sysfs_kf_write (./fs/sysfs/file.c:137)
-  [40645.575520] kernfs_fop_write_iter (./fs/kernfs/file.c:354)
-  [40645.579973] vfs_write (./include/linux/fs.h:2187 ./fs/read_write.c:491 ./fs/read_write.c:584)
-  [40645.583385] ksys_write (./fs/read_write.c:637)
-  [40645.586796] __arm64_sys_write (./fs/read_write.c:646)
-  [40645.590730] invoke_syscall (./arch/arm64/kernel/syscall.c:38 ./arch/arm64/kernel/syscall.c:52)
-  [40645.594488] el0_svc_common.constprop.0 (./arch/arm64/include/asm/daifflags.h:28 ./arch/arm64/kernel/syscall.c:150)
-  [40645.599289] do_el0_svc (./arch/arm64/kernel/syscall.c:207)
-  [40645.602615] el0_svc (./arch/arm64/kernel/entry-common.c:133 ./arch/arm64/kernel/entry-common.c:142 ./arch/arm64/kernel/entry-common.c:625)
-  [40645.605678] el0t_64_sync_handler (./arch/arm64/kernel/entry-common.c:643)
-  [40645.609958] el0t_64_sync (./arch/arm64/kernel/entry.S:581)
-  [40645.613626]
-  [40645.615121] Last potentially related work creation:
-  [40645.620002] kasan_save_stack (./mm/kasan/common.c:39)
-  [40645.623848] __kasan_record_aux_stack (./mm/kasan/generic.c:348)
-  [40645.628388] kasan_record_aux_stack_noalloc (./mm/kasan/generic.c:359)
-  [40645.633448] insert_work (./include/asm-generic/bitops/generic-non-atomic.h:128 ./kernel/workqueue.c:635 ./kernel/workqueue.c:642 ./kernel/workqueue.c:1361)
-  [40645.636944] __queue_work (./kernel/workqueue.c:1520)
-  [40645.640614] queue_work_on (./kernel/workqueue.c:1546)
-  [40645.644197] usb_gadget_set_state (./drivers/usb/gadget/udc/core.c:1049)
-  [40645.648390] ci_hdrc_gadget_connect (./include/asm-generic/qspinlock.h:128 ./include/linux/spinlock.h:202 ./include/linux/spinlock_api_smp.h:158 ./include/linux/spinlock.h:399 ./drivers/usb/chipidea/udc.c:1684)
-  [40645.652931] ci_udc_start (./drivers/usb/chipidea/udc.c:1955)
-  [40645.656603] gadget_bind_driver (./drivers/usb/gadget/udc/core.c:1121 ./drivers/usb/gadget/udc/core.c:1499)
-  [40645.660794] really_probe (./drivers/base/dd.c:560 ./drivers/base/dd.c:639)
-  [40645.664463] __driver_probe_device (./drivers/base/dd.c:778)
-  [40645.668913] driver_probe_device (./drivers/base/dd.c:808)
-  [40645.673104] __driver_attach (./drivers/base/dd.c:1191)
-  [40645.677035] bus_for_each_dev (./drivers/base/bus.c:301)
-  [40645.681053] driver_attach (./drivers/base/dd.c:1208)
-  [40645.684637] bus_add_driver (./drivers/base/bus.c:618)
-  [40645.688481] driver_register (./drivers/base/driver.c:246)
-  [40645.692412] usb_gadget_register_driver_owner (./drivers/usb/gadget/udc/core.c:1560)
-  [40645.697732] gadget_dev_desc_UDC_store (./drivers/usb/gadget/configfs.c:287)
-  [40645.702535] configfs_write_iter (./fs/configfs/file.c:207 ./fs/configfs/file.c:229)
-  [40645.706815] vfs_write (./include/linux/fs.h:2187 ./fs/read_write.c:491 ./fs/read_write.c:584)
-  [40645.710226] ksys_write (./fs/read_write.c:637)
-  [40645.713636] __arm64_sys_write (./fs/read_write.c:646)
-  [40645.717567] invoke_syscall (./arch/arm64/kernel/syscall.c:38 ./arch/arm64/kernel/syscall.c:52)
-  [40645.721328] el0_svc_common.constprop.0 (./arch/arm64/include/asm/daifflags.h:28 ./arch/arm64/kernel/syscall.c:150)
-  [40645.726129] do_el0_svc (./arch/arm64/kernel/syscall.c:207)
-  [40645.729452] el0_svc (./arch/arm64/kernel/entry-common.c:133 ./arch/arm64/kernel/entry-common.c:142 ./arch/arm64/kernel/entry-common.c:625)
-  [40645.732514] el0t_64_sync_handler (./arch/arm64/kernel/entry-common.c:643)
-  [40645.736793] el0t_64_sync (./arch/arm64/kernel/entry.S:581)
-  [40645.740461]
-  [40645.741955] Second to last potentially related work creation:
-  [40645.747706] kasan_save_stack (./mm/kasan/common.c:39)
-  [40645.751552] __kasan_record_aux_stack (./mm/kasan/generic.c:348)
-  [40645.756089] kasan_record_aux_stack_noalloc (./mm/kasan/generic.c:359)
-  [40645.761151] insert_work (./include/asm-generic/bitops/generic-non-atomic.h:128 ./kernel/workqueue.c:635 ./kernel/workqueue.c:642 ./kernel/workqueue.c:1361)
-  [40645.764646] __queue_work (./kernel/workqueue.c:1520)
-  [40645.768317] queue_work_on (./kernel/workqueue.c:1546)
-  [40645.771900] usb_add_gadget (./drivers/usb/gadget/udc/core.c:1310)
-  [40645.775741] usb_add_gadget_udc (./drivers/usb/gadget/udc/core.c:1360 ./drivers/usb/gadget/udc/core.c:1407)
-  [40645.779934] ci_hdrc_gadget_init (./drivers/usb/chipidea/udc.c:2121 ./drivers/usb/chipidea/udc.c:2207)
-  [40645.784212] ci_hdrc_probe (./drivers/usb/chipidea/core.c:1121)
-  [40645.788061] platform_probe (./drivers/base/platform.c:1401)
-  [40645.791819] really_probe (./drivers/base/dd.c:560 ./drivers/base/dd.c:639)
-  [40645.795486] __driver_probe_device (./drivers/base/dd.c:778)
-  [40645.799939] driver_probe_device (./drivers/base/dd.c:808)
-  [40645.804129] __device_attach_driver (./drivers/base/dd.c:937)
-  [40645.808668] bus_for_each_drv (./drivers/base/bus.c:427)
-  [40645.812688] __device_attach (./drivers/base/dd.c:1010)
-  [40645.816618] device_initial_probe (./drivers/base/dd.c:1058)
-  [40645.820808] bus_probe_device (./drivers/base/bus.c:489)
-  [40645.824826] device_add (./drivers/base/core.c:3524)
-  [40645.828413] platform_device_add (./drivers/base/platform.c:717)
-  [40645.832690] ci_hdrc_add_device (./drivers/usb/chipidea/core.c:879 ./drivers/usb/chipidea/core.c:847)
-  [40645.836882] ci_hdrc_imx_probe (./drivers/usb/chipidea/ci_hdrc_imx.c:449)
-  [40645.841075] platform_probe (./drivers/base/platform.c:1401)
-  [40645.844835] really_probe (./drivers/base/dd.c:560 ./drivers/base/dd.c:639)
-  [40645.848504] __driver_probe_device (./drivers/base/dd.c:778)
-  [40645.852956] driver_probe_device (./drivers/base/dd.c:808)
-  [40645.857148] __device_attach_driver (./drivers/base/dd.c:937)
-  [40645.861687] bus_for_each_drv (./drivers/base/bus.c:427)
-  [40645.865705] __device_attach (./drivers/base/dd.c:1010)
-  [40645.869634] device_initial_probe (./drivers/base/dd.c:1058)
-  [40645.873825] bus_probe_device (./drivers/base/bus.c:489)
-  [40645.877843] deferred_probe_work_func (./drivers/base/dd.c:124)
-  [40645.882554] process_one_work (./arch/arm64/include/asm/jump_label.h:21 ./include/linux/jump_label.h:207 ./include/trace/events/workqueue.h:108 ./kernel/workqueue.c:2294)
-  [40645.886657] worker_thread (./include/linux/list.h:292 ./kernel/workqueue.c:2349 ./kernel/workqueue.c:2441)
-  [40645.890416] kthread (./kernel/kthread.c:376)
-  [40645.893652] ret_from_fork (./arch/arm64/kernel/entry.S:861)
-  [40645.897238]
-  [40645.898732] The buggy address belongs to the object at ffff000007350000
-  [40645.898732]  which belongs to the cache kmalloc-8k of size 8192
-  [40645.911255] The buggy address is located 1360 bytes inside of
-  [40645.911255]  8192-byte region [ffff000007350000, ffff000007352000)
-  [40645.923174]
-  [40645.924668] The buggy address belongs to the physical page:
-  [40645.930249] page:000000007de421b8 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x47350
-  [40645.939590] head:000000007de421b8 order:3 compound_mapcount:0 compound_pincount:0
-  [40645.947080] flags: 0x10200(slab|head|node=0|zone=0)
-  [40645.951980] raw: 0000000000010200 0000000000000000 dead000000000122 ffff000003c02c00
-  [40645.959728] raw: 0000000000000000 0000000080020002 00000001ffffffff 0000000000000000
-  [40645.967474] page dumped because: kasan: bad access detected
-  [40645.973049]
-  [40645.974541] Memory state around the buggy address:
-  [40645.979340]  ffff000007350400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  [40645.986568]  ffff000007350480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  [40645.993795] >ffff000007350500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  [40646.001021]                                                  ^
-  [40646.006860]  ffff000007350580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  [40646.014089]  ffff000007350600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  [40646.021315] ==================================================================
-  [40646.028664] Disabling lock debugging due to kernel taint
-
-
-I originally thought it to be a regression, because after going from
-v5.18.5 to v6.0.2, an oops started to appear on every reboot.
-With the script above I can reproduce this with v5.18.5 though too.
-Looks like the freed memory is now reused in my configuration, whereas before
-it wasn't. Nevertheless, here's the KASAN log during shutdown (line numbers
-are a bit off, because the system below is running v6.0.2 with PREEMPT_RT and
-a couple more patches):
-
-
-  [  538.506709] ==================================================================
-  [  538.514542] BUG: KASAN: use-after-free in rtnl_fill_ifinfo (./include/linux/device.h:704 (discriminator 1) ./net/core/rtnetlink.c:1859 (discriminator 1))
-  [  538.521316] Read of size 8 at addr ffff0000075ec568 by task mdnsd/908
-  [  538.527795]
-  [  538.529311] CPU: 1 PID: 908 Comm: mdnsd Tainted: G           O       6.0.2-20221018-2-rt9 #1
-  [  538.529328] Hardware name: Some i.MX8MM Innocomm WB15 based system (DT)
-  [  538.529339] Call trace:
-  [  538.529343] dump_backtrace (./arch/arm64/kernel/stacktrace.c:184)
-  [  538.529368] show_stack (./arch/arm64/kernel/stacktrace.c:191)
-  [  538.529382] dump_stack_lvl (./lib/dump_stack.c:107 (discriminator 1))
-  [  538.529405] print_report (./include/linux/mm.h:851 ./mm/kasan/report.c:214 ./mm/kasan/report.c:315 ./mm/kasan/report.c:433)
-  [  538.529422] kasan_report (./mm/kasan/report.c:162 ./mm/kasan/report.c:497)
-  [  538.529437] __asan_load8 (./mm/kasan/generic.c:256)
-  [  538.529451] rtnl_fill_ifinfo (./include/linux/device.h:704 (discriminator 1) ./net/core/rtnetlink.c:1859 (discriminator 1))
-  [  538.529474] rtnl_dump_ifinfo (./net/core/rtnetlink.c:2193)
-  [  538.529495] netlink_dump (./net/netlink/af_netlink.c:2275)
-  [  538.529515] netlink_recvmsg (./net/netlink/af_netlink.c:2002)
-  [  538.529533] ____sys_recvmsg (./net/socket.c:995 ./net/socket.c:1013 ./net/socket.c:2701)
-  [  538.529551] ___sys_recvmsg (./net/socket.c:2743)
-  [  538.529568] __sys_recvmsg (./include/linux/file.h:31 ./net/socket.c:2775)
-  [  538.529584] __arm64_sys_recvmsg (./net/socket.c:2780)
-  [  538.529602] invoke_syscall (./arch/arm64/kernel/syscall.c:38 ./arch/arm64/kernel/syscall.c:52)
-  [  538.529622] el0_svc_common.constprop.0 (./arch/arm64/include/asm/daifflags.h:28 ./arch/arm64/kernel/syscall.c:150)
-  [  538.529644] do_el0_svc (./arch/arm64/kernel/syscall.c:207)
-  [  538.529662] el0_svc (./arch/arm64/kernel/entry-common.c:133 ./arch/arm64/kernel/entry-common.c:142 ./arch/arm64/kernel/entry-common.c:625)
-  [  538.529679] el0t_64_sync_handler (./arch/arm64/kernel/entry-common.c:643)
-  [  538.529700] el0t_64_sync (./arch/arm64/kernel/entry.S:581)
-  [  538.529781]
-  [  538.623543] Allocated by task 0:
-  [  538.627558] (stack is not available)
-  [  538.631183]
-  [  538.634283] Freed by task 2480:
-  [  538.637460] kasan_save_stack (./mm/kasan/common.c:39)
-  [  538.641409] kasan_set_track (./mm/kasan/common.c:45)
-  [  538.645261] kasan_set_free_info (./include/linux/kasan.h:59 ./mm/kasan/generic.c:372)
-  [  538.649415] ____kasan_slab_free (./mm/kasan/common.c:369 ./mm/kasan/common.c:329)
-  [  538.654041] __kasan_slab_free (./mm/kasan/common.c:376)
-  [  538.658057] slab_free_freelist_hook (./mm/slub.c:1696)
-  [  538.662640] kfree (./mm/slub.c:3622 (discriminator 4) ./mm/slub.c:4648 (discriminator 4))
-  [  538.667522] release_nodes (./drivers/base/devres.c:498 (discriminator 3))
-  [  538.671171] devres_release_all (./drivers/base/devres.c:513)
-  [  538.675325] device_unbind_cleanup (./drivers/base/dd.c:532)
-  [  538.680658] device_release_driver_internal (./drivers/base/dd.c:1257 ./drivers/base/dd.c:1275)
-  [  538.687827] device_release_driver (./drivers/base/dd.c:1299)
-  [  538.692164] bus_remove_device (./drivers/base/bus.c:530)
-  [  538.696317] device_del (./drivers/base/core.c:3705)
-  [  538.700697] platform_device_del.part.0 (./drivers/base/platform.c:753)
-  [  538.705473] platform_device_unregister (./drivers/base/platform.c:551 ./drivers/base/platform.c:794)
-  [  538.710239] ci_hdrc_remove_device (./drivers/usb/chipidea/core.c:897)
-  [  538.714619] ci_hdrc_imx_remove (./drivers/usb/chipidea/ci_hdrc_imx.c:526)
-  [  538.718805] ci_hdrc_imx_shutdown (./drivers/usb/chipidea/ci_hdrc_imx.c:542)
-  [  538.723046] platform_shutdown (./drivers/base/platform.c:1439)
-  [  538.727565] device_shutdown (./include/linux/device.h:850 ./drivers/base/core.c:4668)
-  [  538.731561] kernel_restart (./kernel/reboot.c:258)
-  [  538.735277] __do_sys_reboot (./kernel/reboot.c:769)
-
-
-Any pointers as to which UDC does this correctly, so the chipidea driver can
-mimic it? Or is this something the network stack should've taken care of?
-
-Thanks,
-Ahmad
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+VGhhbmtzIGZvciB0aGUgcmV2aWV3Lg0KDQpPbiAxMC8yNC8yMiAxNjo0NiwgSGVpa2tpIEtyb2dl
+cnVzIHdyb3RlOg0KPiBFeHRlcm5hbCBlbWFpbDogVXNlIGNhdXRpb24gb3BlbmluZyBsaW5rcyBv
+ciBhdHRhY2htZW50cw0KPiANCj4gDQo+IE9uIE1vbiwgT2N0IDI0LCAyMDIyIGF0IDExOjI5OjI3
+QU0gKzAzMDAsIEZlbGlwZSBCYWxiaSB3cm90ZToNCj4+IEhlaWtraSBLcm9nZXJ1cyA8aGVpa2tp
+Lmtyb2dlcnVzQGxpbnV4LmludGVsLmNvbT4gd3JpdGVzOg0KPj4NCj4+PiBPbiBNb24sIE9jdCAy
+NCwgMjAyMiBhdCAwMzo0MToyM1BNICswODAwLCBXYXluZSBDaGFuZyB3cm90ZToNCj4+Pj4gY2Nn
+eCBpcyByZWZlciB0byB0aGUgY3lwcmVzcyBjeXBkNDIyNiB0eXBlYyBjb250cm9sbGVyLg0KPj4+
+PiBSZXBsYWNlIGNjZ3ggdG8gd2VsbC1rbm93biByZWdleCAiY3lwcmVzcyIuDQo+Pj4+DQo+Pj4+
+IFNpZ25lZC1vZmYtYnk6IFdheW5lIENoYW5nIDx3YXluZWNAbnZpZGlhLmNvbT4NCj4+Pj4gLS0t
+DQo+Pj4+ICAgZHJpdmVycy91c2IvdHlwZWMvdWNzaS91Y3NpX2NjZy5jIHwgMiArLQ0KPj4+PiAg
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPj4+Pg0KPj4+
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvdHlwZWMvdWNzaS91Y3NpX2NjZy5jIGIvZHJpdmVy
+cy91c2IvdHlwZWMvdWNzaS91Y3NpX2NjZy5jDQo+Pj4+IGluZGV4IDEzOTcwN2EyZjNkNi4uNWQz
+MDk5ZTZlYjc3IDEwMDY0NA0KPj4+PiAtLS0gYS9kcml2ZXJzL3VzYi90eXBlYy91Y3NpL3Vjc2lf
+Y2NnLmMNCj4+Pj4gKysrIGIvZHJpdmVycy91c2IvdHlwZWMvdWNzaS91Y3NpX2NjZy5jDQo+Pj4+
+IEBAIC0xMzU4LDcgKzEzNTgsNyBAQCBzdGF0aWMgaW50IHVjc2lfY2NnX3Byb2JlKHN0cnVjdCBp
+MmNfY2xpZW50ICpjbGllbnQsDQo+Pj4+ICAgICBJTklUX1dPUksoJnVjLT5wbV93b3JrLCBjY2df
+cG1fd29ya2Fyb3VuZF93b3JrKTsNCj4+Pj4NCj4+Pj4gICAgIC8qIE9ubHkgZmFpbCBGVyBmbGFz
+aGluZyB3aGVuIEZXIGJ1aWxkIGluZm9ybWF0aW9uIGlzIG5vdCBwcm92aWRlZCAqLw0KPj4+PiAt
+ICBzdGF0dXMgPSBkZXZpY2VfcHJvcGVydHlfcmVhZF91MTYoZGV2LCAiY2NneCxmaXJtd2FyZS1i
+dWlsZCIsDQo+Pj4+ICsgIHN0YXR1cyA9IGRldmljZV9wcm9wZXJ0eV9yZWFkX3UxNihkZXYsICJj
+eXByZXNzLGZpcm13YXJlLWJ1aWxkIiwNCj4+Pj4gICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAmdWMtPmZ3X2J1aWxkKTsNCj4+Pj4gICAgIGlmIChzdGF0dXMpDQo+Pj4+ICAg
+ICAgICAgICAgIGRldl9lcnIodWMtPmRldiwgImZhaWxlZCB0byBnZXQgRlcgYnVpbGQgaW5mb3Jt
+YXRpb25cbiIpOw0KPj4+DQo+Pj4gVGhpcyB3aWxsIGJyZWFrIGJpc2VjdGFiaWxpdHkuIFlvdSBu
+ZWVkIHRvIGZpcnN0IGFkZCB0aGF0DQo+Pj4gImN5cHByZXNzLGZpcm13YXJlLWJ1aWxkIiBpZGVu
+dGlmaWVyIHdpdGhvdXQgcmVtb3ZpbmcgdGhlIG9sZA0KPj4+ICJjY2d4LGZpcm13YXJlLWJ1aWxk
+IiBpZGVudGlmaWVyLCBhbmQgdGhlbiBpbnRyb2R1Y2UgYSBzZXBhcmF0ZQ0KPj4+IGNsZWFuLXVw
+IHBhdGNoIHdoZXJlIHlvdSByZW1vdmUgaXQgd2hlbiBpdCdzIHNhZmUgdG8gcmVtb3ZlOg0KPj4+
+DQo+Pj4gMS4gQWRkIG5ldyAtIFRoaXMgcGF0Y2guDQo+Pj4gMi4gTW9kaWZ5IHVzZXJzIC0gUEFU
+Q0ggNy8xMS4NCj4+PiAzLiBSZW1vdmUgb2xkIC0gKm1pc3NpbmcqLg0KPj4NCg0KdGhhbmtzIGZv
+ciB0aGUgZ3VpZGFuY2UuDQp3aWxsIHVwZGF0ZSB0aGUgY2hhbmdlcyBpbiB0aGUgbmV4dCBwYXRj
+aHNldC4NCg0KdGhhbmtzLA0KV2F5bmUuDQoNCj4+IHdpbGwgaXQgZXZlciBiZSBzYWZlIHRvIHJl
+bW92ZT8gV2hhdCBhYm91dCBwb3RlbnRpYWwgcHJvZHVjdHMgaW4gdGhlDQo+PiBtYXJrZXQgd2l0
+aCBsaXR0bGUgdG8gbm8gdXBncmFkZSBwYXRoPyBUaGVyZSBhcmUgbGlrZWx5IHRvIGJlIHByb2R1
+Y3RzDQo+PiB3aXRoIGEgRFRCIHRoYXQgd2lsbCBuZXZlciBiZSB1cGRhdGVkLCBubz8NCj4gDQo+
+IE5vdCB0aGUgY2FzZSBoZXJlLiBPRiBzdXBwb3J0IGlzIG9ubHkganVzdCBhZGRlZCB0byB0aGlz
+IGRyaXZlciBpbg0KPiB0aGlzIHNlcmllcy4gVGhhdCBvbGQgaWRlbnRpZmllciBoYXMgYmVlbiB1
+c2VkIGFzIGEgYnVpbGQtaW4gcHJvcGVydHkNCj4gb25seS4NCj4gDQo+IHRoYW5rcywNCj4gDQo+
+IC0tDQo+IGhlaWtraQ0KPiANCg0K
