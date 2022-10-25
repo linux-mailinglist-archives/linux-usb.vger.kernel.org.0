@@ -2,57 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B7060C95E
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 12:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC52460CA0F
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Oct 2022 12:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbiJYKGD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 25 Oct 2022 06:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S229971AbiJYK36 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Oct 2022 06:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiJYKFf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 06:05:35 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4358A17FD50
-        for <linux-usb@vger.kernel.org>; Tue, 25 Oct 2022 02:59:56 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-221-ubkgpKyWN-GZuVIw3Ovb-w-1; Tue, 25 Oct 2022 10:59:44 +0100
-X-MC-Unique: ubkgpKyWN-GZuVIw3Ovb-w-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Oct
- 2022 10:59:16 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Tue, 25 Oct 2022 10:59:16 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Thomas Winischhofer <thomas@winischhofer.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
+        with ESMTP id S229763AbiJYK33 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Oct 2022 06:29:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CB5617D;
+        Tue, 25 Oct 2022 03:28:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B1E2B819D9;
+        Tue, 25 Oct 2022 10:28:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42459C433D6;
+        Tue, 25 Oct 2022 10:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666693734;
+        bh=/h7tJQC1P3N2A377J7tlXkgUMlgfjf+DToChl+3GLAQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KgTpgUzP+TfsRSTr7OEns7Pe3354DLVlXelnMhZwO9YOeigtsfUqFWClPNtbXaVP7
+         DSykYJEKC6MPu60OYuVIHNFWCqw5GH1i0o7odslV2fNSXSqY7gU4T8poDX4Ba7qwVq
+         YtATxBgubhT+y6WdiP+KYszIx7QEfM/5gn2vWWnw=
+Date:   Tue, 25 Oct 2022 12:29:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: RE: [PATCH] video: fbdev: sis: use explicitly signed char
-Thread-Topic: [PATCH] video: fbdev: sis: use explicitly signed char
-Thread-Index: AQHY59GfTKHiiX1cE0qqKUXinyrVOK4e4PPg
-Date:   Tue, 25 Oct 2022 09:59:16 +0000
-Message-ID: <37a4d200e0b74c72854c018c02e18b50@AcuMS.aculab.com>
-References: <20221024162901.535972-1-Jason@zx2c4.com>
-In-Reply-To: <20221024162901.535972-1-Jason@zx2c4.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Peter Chen <peter.chen@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, johannes.berg@intel.com,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Subject: Re: [BUG] use-after-free after removing UDC with USB Ethernet gadget
+Message-ID: <Y1e6mvspXQZKtZYl@kroah.com>
+References: <fd36057a-e8d9-38a3-4116-db3f674ea5af@pengutronix.de>
+ <Y1eahQ66OcpsECNf@kroah.com>
+ <a4732045-a8bf-cf81-6faa-0e99cabe2f4a@pengutronix.de>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4732045-a8bf-cf81-6faa-0e99cabe2f4a@pengutronix.de>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,36 +56,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jason A. Donenfeld
-> Sent: 24 October 2022 17:29
-> To: linux-kernel@vger.kernel.org
+On Tue, Oct 25, 2022 at 11:28:24AM +0200, Ahmad Fatoum wrote:
+> Hello Greg,
 > 
-> With char becoming unsigned by default, and with `char` alone being
-> ambiguous and based on architecture, signed chars need to be marked
-> explicitly as such. This fixes warnings like:
+> On 25.10.22 10:12, Greg KH wrote:
+> > On Tue, Oct 25, 2022 at 08:54:58AM +0200, Ahmad Fatoum wrote:
+> >> Hi everybody,
+> >>
+> >> I am running v6.0.2 and can reliably trigger a use-after-free by allocating
+> >> a USB gadget, binding it to the chipidea UDC and the removing the UDC.
+> > 
+> > How do you remove the UDC?
 > 
-...
-> ---
->  drivers/usb/misc/sisusbvga/sisusb_struct.h | 2 +-
->  drivers/video/fbdev/sis/vstruct.h          | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> I originally saw this while doing reboot -f on the device. The imx_usb driver's
+> shutdown handler is equivalent to the remove handler and that removes the UDC.
+
+That's odd, why isn't the network device being shutdown first?  The tree
+of devices should be walked in child-first order and tear it down
+correctly.
+
+> It could also be triggered with:
 > 
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb_struct.h b/drivers/usb/misc/sisusbvga/sisusb_struct.h
-> index 3df64d2a9d43..a86032a26d36 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb_struct.h
-> +++ b/drivers/usb/misc/sisusbvga/sisusb_struct.h
-> @@ -91,7 +91,7 @@ struct SiS_Ext {
->  	unsigned char VB_ExtTVYFilterIndex;
->  	unsigned char VB_ExtTVYFilterIndexROM661;
->  	unsigned char REFindex;
-> -	char ROMMODEIDX661;
-> +	signed char ROMMODEIDX661;
+>   echo ci_hdrc.0 > /sys/class/udc/ci_hdrc.0/device/driver/unbind
 
-Isn't the correct fix to use u8 and s8 ?
+Yes, manual removal as root can cause problems as I said.  The code was
+never designed to handle this.
 
-	David
+> >> The network interface is not removed, but the chipidea SoC glue driver will
+> >> remove the platform_device it had allocated in the probe, which is apparently
+> >> the parent of the network device. When rtnl_fill_ifinfo runs, it will access the
+> >> device parent's name for IFLA_PARENT_DEV_NAME, which is now freed memory.
+> > 
+> > The gadget removal logic is almost non-existant for most of the function
+> > code.  See Lee's patch to try to fix up the f_hid.c driver last week as
+> > one example.  I imagine they all have this same issue as no one has ever
+> > tried the "remove the gadget device from the running Linux system"
+> > before as it was not an expected use case.
+> 
+> I see.
+> 
+> FTR: https://lore.kernel.org/all/20221017112737.230772-1-lee@kernel.org/
+>  
+> > Is this now an expected use case of the kernel?  If so, patches are
+> > welcome to address this in all gadget drivers.
+> 
+> I don't really care for unbinding via sysfs. I want to avoid the
+> use-after-free on reboot/shutdown. See the last splat in my original mail.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Maybe try to figure out what is tearing down the bus's devices in the
+incorrect order?
 
+thanks,
+
+greg k-h
