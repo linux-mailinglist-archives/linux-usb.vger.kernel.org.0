@@ -2,161 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B362560E71B
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 20:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB9960E727
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 20:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbiJZSWv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 14:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S233568AbiJZS1J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 14:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiJZSWu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 14:22:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C303AD25A7
-        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 11:22:49 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1onl3A-0002xx-4X; Wed, 26 Oct 2022 20:22:48 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1onl39-000YXp-14; Wed, 26 Oct 2022 20:22:46 +0200
-Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1onl37-001WSj-Bz; Wed, 26 Oct 2022 20:22:45 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: [PATCH] usb: gadget: uvc: also use try_format in set_format
-Date:   Wed, 26 Oct 2022 20:22:40 +0200
-Message-Id: <20221026182240.363055-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S234225AbiJZS1H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 14:27:07 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4475683204;
+        Wed, 26 Oct 2022 11:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666808824; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=6ZrvLSXvvv0uDdPE3lr/VF7GjcvkIC96qj205SXc2VE=;
+        b=jMcF1UB8949J3O4a8DVl4zkjAfc9KqPBxp1GDZdxK5/5CPiTTRyWy64PDStj0DZUSXZANm
+        w0Aty9OmKQ/VXCkoAmsZhKMaGrE60K2M0/3HPVbflmOARUaX4/+OUoMzaJ5JaGQJRUQhN0
+        AuZJQ0AW3A7VdDu3d/toHOz31MCf0i0=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mips@vger.kernel.org, od@opendingux.net,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 0/7] musb: Update to use generic PHY
+Date:   Wed, 26 Oct 2022 19:26:50 +0100
+Message-Id: <20221026182657.146630-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam: Yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since e219a712bc06 (usb: gadget: uvc: add v4l2 try_format api call) the
-try_format function is available. With this function includes checks for
-valid configurations programmed in the configfs. We use this function to
-ensure to return valid values on the set_format callback.
+Hi,
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+This patchset updates the musb core to add support for the generic PHY
+framework.
 
----
- drivers/usb/gadget/function/uvc_v4l2.c | 72 ++++++++------------------
- 1 file changed, 21 insertions(+), 51 deletions(-)
+It also updates the jz4740 driver to use the generic PHY driver
+(drivers/phy/ingenic/phy-ingenic-usb.c) instead of the USB PHY one
+(drivers/usb/phy/phy-jz4770.c) which is then removed.
 
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index d5bb3038626267..a12475d289167a 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -275,16 +275,6 @@ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
-  * V4L2 ioctls
-  */
- 
--struct uvc_format {
--	u8 bpp;
--	u32 fcc;
--};
--
--static struct uvc_format uvc_formats[] = {
--	{ 16, V4L2_PIX_FMT_YUYV  },
--	{ 0,  V4L2_PIX_FMT_MJPEG },
--};
--
- static int
- uvc_v4l2_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
- {
-@@ -318,47 +308,6 @@ uvc_v4l2_get_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	return 0;
- }
- 
--static int
--uvc_v4l2_set_format(struct file *file, void *fh, struct v4l2_format *fmt)
--{
--	struct video_device *vdev = video_devdata(file);
--	struct uvc_device *uvc = video_get_drvdata(vdev);
--	struct uvc_video *video = &uvc->video;
--	struct uvc_format *format;
--	unsigned int imagesize;
--	unsigned int bpl;
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(uvc_formats); ++i) {
--		format = &uvc_formats[i];
--		if (format->fcc == fmt->fmt.pix.pixelformat)
--			break;
--	}
--
--	if (i == ARRAY_SIZE(uvc_formats)) {
--		uvcg_info(&uvc->func, "Unsupported format 0x%08x.\n",
--			  fmt->fmt.pix.pixelformat);
--		return -EINVAL;
--	}
--
--	bpl = format->bpp * fmt->fmt.pix.width / 8;
--	imagesize = bpl ? bpl * fmt->fmt.pix.height : fmt->fmt.pix.sizeimage;
--
--	video->fcc = format->fcc;
--	video->bpp = format->bpp;
--	video->width = fmt->fmt.pix.width;
--	video->height = fmt->fmt.pix.height;
--	video->imagesize = imagesize;
--
--	fmt->fmt.pix.field = V4L2_FIELD_NONE;
--	fmt->fmt.pix.bytesperline = bpl;
--	fmt->fmt.pix.sizeimage = imagesize;
--	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
--	fmt->fmt.pix.priv = 0;
--
--	return 0;
--}
--
- static int
- uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- {
-@@ -399,6 +348,27 @@ uvc_v4l2_try_format(struct file *file, void *fh, struct v4l2_format *fmt)
- 	return 0;
- }
- 
-+static int
-+uvc_v4l2_set_format(struct file *file, void *fh, struct v4l2_format *fmt)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+	struct uvc_device *uvc = video_get_drvdata(vdev);
-+	struct uvc_video *video = &uvc->video;
-+	int ret;
-+
-+	ret = uvc_v4l2_try_format(file, fh, fmt);
-+	if (ret)
-+		return ret;
-+
-+	video->fcc = fmt->fmt.pix.pixelformat;
-+	video->bpp = fmt->fmt.pix.bytesperline * 8 / video->width;
-+	video->width = fmt->fmt.pix.width;
-+	video->height = fmt->fmt.pix.height;
-+	video->imagesize = fmt->fmt.pix.sizeimage;
-+
-+	return ret;
-+}
-+
- static int
- uvc_v4l2_enum_frameintervals(struct file *file, void *fh,
- 		struct v4l2_frmivalenum *fival)
+If you are looking for the V1, it was sent two years ago [1] and
+received zero feedback.
+
+Anyway, V1 had only patches 1-4 and if I'm not mistaken the V2 patches
+are exactly the same.
+
+Patches 5-7 are new, and update the jz4740 driver to support generic
+PHYs, and ultimately remove the old phy-jz4770 USB PHY driver which has
+been replaced.
+
+Cheers,
+-Paul
+
+[1]: https://lore.kernel.org/all/20201207130332.120681-1-paul@crapouillou.net/
+
+Paul Cercueil (7):
+  usb: musb: Add and use inline functions musb_{get,set}_state
+  usb: musb: Add and use inline function musb_otg_state_string
+  usb: musb: Allow running without CONFIG_USB_PHY
+  usb: musb: Support setting OTG mode using generic PHY
+  usb: musb: jz4740: Don't disable external hubs
+  usb: musb: jz4740: Support the generic PHY framework
+  usb: phy: jz4770: Remove driver
+
+ drivers/usb/musb/Kconfig        |   1 -
+ drivers/usb/musb/jz4740.c       |  62 +++++-
+ drivers/usb/musb/musb_core.c    | 107 +++++-----
+ drivers/usb/musb/musb_core.h    |  24 +++
+ drivers/usb/musb/musb_debugfs.c |   6 +-
+ drivers/usb/musb/musb_gadget.c  |  61 +++---
+ drivers/usb/musb/musb_host.c    |  18 +-
+ drivers/usb/musb/musb_virthub.c |  33 ++-
+ drivers/usb/phy/Kconfig         |   8 -
+ drivers/usb/phy/Makefile        |   1 -
+ drivers/usb/phy/phy-jz4770.c    | 353 --------------------------------
+ 11 files changed, 195 insertions(+), 479 deletions(-)
+ delete mode 100644 drivers/usb/phy/phy-jz4770.c
+
 -- 
-2.30.2
+2.35.1
 
