@@ -2,88 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D78B60E3F5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 17:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E1E60E401
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 17:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiJZPAo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 26 Oct 2022 11:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        id S234427AbiJZPCV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 11:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234332AbiJZPAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 11:00:43 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4946D4E41F;
-        Wed, 26 Oct 2022 08:00:41 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7415424000D;
-        Wed, 26 Oct 2022 15:00:36 +0000 (UTC)
-Message-ID: <48c37b1286e42eb5ee9308e74d7337950261ae7c.camel@hadess.net>
-Subject: Re: [PATCH 2/2] usb: Implement usb_revoke() BPF function
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-usb@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Date:   Wed, 26 Oct 2022 17:00:35 +0200
-In-Reply-To: <20220809094300.83116-3-hadess@hadess.net>
-References: <20220809094300.83116-1-hadess@hadess.net>
-         <20220809094300.83116-3-hadess@hadess.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.0 (3.46.0-2.fc37) 
+        with ESMTP id S234144AbiJZPCU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 11:02:20 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AEBF59F754
+        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 08:02:18 -0700 (PDT)
+Received: (qmail 1489809 invoked by uid 1000); 26 Oct 2022 11:02:17 -0400
+Date:   Wed, 26 Oct 2022 11:02:17 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        imv4bel@gmail.com
+Subject: Re: [PATCH] char: xillybus: Prevent use-after-free due to race
+ condition
+Message-ID: <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
+References: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hey,
-
-On Tue, 2022-08-09 at 11:43 +0200, Bastien Nocera wrote:
-> This functionality allows a sufficiently privileged user-space
-> process
-> to upload a BPF programme that will call to usb_revoke_device() as if
-> it were a kernel API.
+On Wed, Oct 26, 2022 at 11:52:40AM +0300, Eli Billauer wrote:
+> xillybus_find_inode() is called by xillybus_open() and xillyusb_open()
+> to translate the inode's major and minor into a pointer to a relevant
+> data structure and an index.
 > 
-> This functionality will be used by logind to revoke access to devices
-> on
-> fast user-switching to start with.
+> But with xillyusb_open(), the data structure can be freed by
+> xillyusb_disconnect() during an unintentional time gap between the
+> release of the mutex that is taken by xillybus_find_inode() and the
+> mutex that is subsequently taken by xillyusb_open().
 > 
-> logind, and other session management software, does not have access
-> to
-> the file descriptor used by the application so other identifiers
-> are used.
+> To fix this, xillybus_find_inode() supplies the pointer to the mutex that
+> it has locked (when returning success), so xillyusb_open() releases this
+> mutex only after obtaining the mutex that is specific to a device file.
+> This ensures that xillyusb_disconnect() won't release anything that is in
+> use.
 
-Locally, I have a newer version of the code that I've been able to test
-successfully on some hardware, but I haven't been able to cover all of
-its branches.
+The standard way of handling this problem is different from this.  The 
+driver defines a private mutex, and it ensures that any routine calling 
+*_find_inode() holds the mutex.  It also ensures that the mutex is held 
+while a new device is being registered and while a device is being 
+removed.
 
-So I've started writing some test application that would create devices
-with multiple interfaces using dummy_hcd, and client software that
-talks to those fake devices. I also have a version of the revoke tool.
+Even that won't fix all the synchronization problems.  A process can 
+open a device, and then after the device has been removed the process 
+can still try to access the device.  The driver needs to ensure that 
+such accesses are not allowed.
 
-My question is about all the dependencies that those test tools could
-use, and where to host it.
-
-- Can I use libusb?
-- Can I use libusbgx and raw-gadget?
-- Can I use the GLib versions of those libraries?
-- Do I need to have those tests as part of the kernel?
-- Does it need to integrate with the kernel's compilation?
-- Can I use a Makefile? meson?
-
-Ultimately, only the revoke tool might have a use as a general purpose
-debugging application, with the functionality being integrated in
-systemd and co.
-
-Opinions?
-
-
+Alan Stern
