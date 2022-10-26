@@ -2,203 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA8560DD96
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 10:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAB160DE4E
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 11:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiJZI44 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 04:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        id S233521AbiJZJiQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 05:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbiJZI4z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 04:56:55 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8DC9AFEA;
-        Wed, 26 Oct 2022 01:56:54 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id x2so13090902edd.2;
-        Wed, 26 Oct 2022 01:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1UBZ8NLkBDI2XVTa9V4vyCdw25d2Kk0os+ZjuC1ZrDI=;
-        b=oW8273P9wDNYNiOGTCIO9lDwzHl/P8l9uzEU9Ri4rzmadiEpJePX4UTqrq1X2PEIRN
-         e7hDzTeoTUckQZIfYYzVHuPmzWb8QLJazgZrJ9aKzadwhAKBYU49G2adJnHdNF/rYbAj
-         qnxLi2TKBPUbfg1/Hu0IgK5x2SJquwffTrURO1vZ4+dQVtBY3ThXoVuvLfxkHUxIWOf8
-         EKISI7EcTm79UaIEgrHZKPtKTl68B3Vly5D74t3AYWfYqnrOvrVJEDk8YnlfvmLVhmX6
-         aD0bcviLd0x/tzkiq+h1rXaeUggXH1ba56IRQaAsPcg9h2h4kmC/SewXc5QIyMyWDPse
-         TewQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1UBZ8NLkBDI2XVTa9V4vyCdw25d2Kk0os+ZjuC1ZrDI=;
-        b=rgNcj/UAJNQD4tPSeeQowtPMaKIJz3PFNJ6J4FcouqoX5fOzNrRMB95zMTkdGGb6Ae
-         YqEPxlf7/KWjlw/Mq5L1JnmQ9beYnvDZTMEhtd5Ut43BYntGOesRVCfGb5hees+Ozo0t
-         64d+muRTN0PYZhL75/NrenedEEmbyOfRX8KbGgzrt+2X9mpABXhTqSKBb6tmxHayHbMf
-         Xj9lc0/XdPtb7l4RxI27fh9It+JbVCjBqi7QqQQU/2nG+Pcsm/ajfCvS5OZhHE6rIa0A
-         12WOAcmXxGgmH/Fio3ahksGwIU6k/K2TlKaRlL56liJ5NyL8losGXworkMNDQZs2tEdq
-         268Q==
-X-Gm-Message-State: ACrzQf0OBPLUYlk9FktOewpEHv0zt4qkYKFmlwmEQuAjDaQPqxpHq5t+
-        PbZ7UyXE/Jddn8p9ZGqaPGyOW49ypcbg+A==
-X-Google-Smtp-Source: AMsMyM6Pg1bqz5Ig11BPL77vhPGN7MK4dtBet+gBOLkmng/wH7AF2djMsSylP1cjGeK69jhkYOiUCQ==
-X-Received: by 2002:a05:6402:496:b0:443:a5f5:d3b with SMTP id k22-20020a056402049600b00443a5f50d3bmr40993468edv.331.1666774612776;
-        Wed, 26 Oct 2022 01:56:52 -0700 (PDT)
-Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
-        by smtp.gmail.com with ESMTPSA id y21-20020aa7d515000000b00461aebb2fe2sm3085125edq.54.2022.10.26.01.56.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 01:56:52 -0700 (PDT)
-Message-ID: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
-Date:   Wed, 26 Oct 2022 11:52:40 +0300
+        with ESMTP id S233454AbiJZJiC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 05:38:02 -0400
+Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F91BEAF4;
+        Wed, 26 Oct 2022 02:37:31 -0700 (PDT)
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29Q0SG1Q002302;
+        Wed, 26 Oct 2022 02:37:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=proofpoint;
+ bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
+ b=ooO1vib10S2RKCRjVpTKOU4Owrc4x6lz0X/BwU0FVn+1tRXLw9fGPHOmpStDVcCSeZtK
+ b4aX9YI6BiqhbfyFaiIzxzX9+F7x6fQXArsIxKx5s0IyWfyf1osnZmO7Brwdq8gys1PN
+ nWNF6fxqYvGbh1G+DYAjW93naiAnTGpSyT3OrhnIg9EUte5Mwy1t0ttgCoXvEVGAKBtE
+ P3TSoQ8bnXy0jye+DgVhmWWx5FyUX9YxhKZNvsH9CA52VGXu3i5cdp9rBxhvU3X17aWO
+ ZTzaVO6QYsic16TdIZKHHmqsLBy0+jFLiUpSIO7NVyhU0v9DAeIP8SVj/HSz8XaDMfi9 mw== 
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2043.outbound.protection.outlook.com [104.47.51.43])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3kcc42js07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 02:37:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XoC7tH3ClLNXfSrWG98iJ0c9t4Qw/Fg923QJOoIYJnqxtmkWUKr38DLcakeTelRnYHs28ms4IGbEp68vdSNiXMucj1WRsguUfEoElYAqCWXKVukQsW8Z+YynP4rqiQqpzpW6sPx8InsQ1vmsF2bKuPrKArWTKfyewznmtqjxm2BP9+dPETJ5wAfpA3ayJYCegQpoebGwPdyDPLjqgjoeCQTH+15oJkS0K68Z28rjmrJHKRdz/pdFnD9zW9kmxead6hAAMCwshZjiP/UYNvnBX5uD1DilmBC8zMPiNtkWWhBbSA9bRsT+Pm3VbMpMD2/RG3mz9ds/ME/hZJlvhMQlxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
+ b=MZwySUER4/82cg8H1vmNqu56RdOUmj76Wt0I/Zx488rssPralXxUJWkb4S0FtGQ9n6FbkNmm1oZbhJ0J9YXrkN0zcQocfI/OpxTGADm95ASHRK0BBidTEa9XuhR0Hebw/078opIfmyUIPgB5Hs+8BmDcUO4wlj9DmS444T0Cu1U8GuJeUB5GAsaTa0If9IPEzCZVG8AmbjoXvqaHxZWnPA6LJxzdtR45rm67L4D8lJpaJBsX45CdNB98IQana0MW3cpd7QRj6YVIKHPWK00WuueLc0oTECCS2ghbUjsZ7CuFCNOKRquxLKrEKXL6dGSa4PFJW4z58Rvc4gASMnLrKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 158.140.1.148) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
+ b=MWiy0HAxE0hARL2u3MQXq39x4lkQ++SmNc/sKtYsFgIPDW3bplZOrHpLRN3id0FsZtkJ4xT8yilXAv/eX2gt7zHJfqm43w98vgGibg+0Bm/PdtLfwA/925rv8iXrPAU38bWwvdYplXWjX1V/DbGimxCI5vpG4BjS8nm78OUjNzc=
+Received: from DM6PR21CA0008.namprd21.prod.outlook.com (2603:10b6:5:174::18)
+ by MN2PR07MB5822.namprd07.prod.outlook.com (2603:10b6:208:106::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Wed, 26 Oct
+ 2022 09:37:18 +0000
+Received: from DM6NAM12FT073.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::46) by DM6PR21CA0008.outlook.office365.com
+ (2603:10b6:5:174::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.8 via Frontend
+ Transport; Wed, 26 Oct 2022 09:37:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com; pr=C
+Received: from sjmaillnx2.cadence.com (158.140.1.148) by
+ DM6NAM12FT073.mail.protection.outlook.com (10.13.179.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5769.12 via Frontend Transport; Wed, 26 Oct 2022 09:37:18 +0000
+Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
+        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 29Q9bGkY013561
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 02:37:17 -0700
+Received: from maileu5.global.cadence.com (10.160.110.202) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 26 Oct 2022 11:37:15 +0200
+Received: from eu-cn01.cadence.com (10.160.89.184) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24 via Frontend Transport; Wed, 26 Oct 2022 11:37:15 +0200
+Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
+        by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 29Q9bFPk449928;
+        Wed, 26 Oct 2022 05:37:15 -0400
+Received: (from pawell@localhost)
+        by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 29Q9bF9E449925;
+        Wed, 26 Oct 2022 05:37:15 -0400
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
+Date:   Wed, 26 Oct 2022 05:37:10 -0400
+Message-ID: <20221026093710.449809-1-pawell@cadence.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Eli Billauer <eli.billauer@gmail.com>
-Subject: [PATCH] char: xillybus: Prevent use-after-free due to race condition
-To:     gregkh@linuxfoundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, imv4bel@gmail.com,
-        Eli Billauer <eli.billauer@gmail.com>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
+X-OrganizationHeadersPreserved: maileu5.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM12FT073:EE_|MN2PR07MB5822:EE_
+X-MS-Office365-Filtering-Correlation-Id: 20cf906c-d901-418f-ed4b-08dab735ac99
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SEcT2/gPVZ0cbuI7oaMdDksWWcPDQ4wwj6Lz63oWELRLP8eqXnmnQJE9fAVjvYKSqXhkLBN0R+4NPiC3TVsu6beVnHfJwFVt7JtLrRgrm0/1tsnPi/d+N2voDpKwGUUVvPna5qqSmCtnu2YV8fJXY0t4AJMoakcDTNf8GwJe2noQRMZGMkPmWCr5E2QWcEeWOXJXfzCQIM88T7lbIELyxifLmbwbfhkF5M+L8AGaoePwBASXY1v+7C7d4TTec4lftdhCioQk9PbBLS9cOPtg3JpWn/Qjzzt7AGJDUBkn64lDIOoV5Pola/I5uXuJe1xDzPhCSyb6K14I12o8WAGg9NrcwFEqNMLz7UtYhPPJd0RGJ7ts/EOxDU8MbbKdeigCrBBZO2ACh0VxJX9Pdwa/aqNdk68OF1P21DBJUGE8Ztgh676e+it3kCkGQFkl9VcpqlbSP5fLki4jPeNZigQILV8D1TsBZXJwy+VSD5mix5sYLLwJN2LVugQT6P+YDbrh1DX6CJEUnvw+l/YDDWiL1cw1F9csVf81kvjU/nqpjSp5x3vUrgVkAWRBu+eaS9aN0OZC7oDo6aywkP71i3PuCIwE7Biy/hoV2Dg0AroPzrFC+BS2s7u0xZHGKmZOcNoLtTntlQ6LNMJJ5cI3jqwYs1ybzhT9lAeB2tNtdD3mhcJSxF0jodrbE2qBMe7H+DDsN9GXK79ZioeNz3btQw7X4GaQLnG0JYtQ2b8xHtF45zLK+1k9P4gjB6S1K5n3HcUf9wPAQoWLatjVshh4DugIkw==
+X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(39860400002)(346002)(36092001)(451199015)(40470700004)(46966006)(36840700001)(82740400003)(40460700003)(86362001)(7636003)(356005)(36756003)(316002)(54906003)(6916009)(42186006)(4326008)(70586007)(8676002)(70206006)(41300700001)(83380400001)(426003)(8936002)(5660300002)(478600001)(47076005)(2906002)(40480700001)(36860700001)(1076003)(186003)(6666004)(2616005)(336012)(26005)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 09:37:18.2171
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20cf906c-d901-418f-ed4b-08dab735ac99
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT073.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR07MB5822
+X-Proofpoint-ORIG-GUID: Z0ZBkRAp_AJOEs8BQfXHC4IUz5JnLv3s
+X-Proofpoint-GUID: Z0ZBkRAp_AJOEs8BQfXHC4IUz5JnLv3s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_05,2022-10-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1015
+ adultscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=470 mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210260053
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-xillybus_find_inode() is called by xillybus_open() and xillyusb_open()
-to translate the inode's major and minor into a pointer to a relevant
-data structure and an index.
+During handling Clear Halt Endpoint Feature request driver invokes
+Reset Endpoint command. Because this command has some issue with
+transition endpoint from Running to Idle state the driver must
+stop the endpoint by using Stop Endpoint command.
 
-But with xillyusb_open(), the data structure can be freed by
-xillyusb_disconnect() during an unintentional time gap between the
-release of the mutex that is taken by xillybus_find_inode() and the
-mutex that is subsequently taken by xillyusb_open().
-
-To fix this, xillybus_find_inode() supplies the pointer to the mutex that
-it has locked (when returning success), so xillyusb_open() releases this
-mutex only after obtaining the mutex that is specific to a device file.
-This ensures that xillyusb_disconnect() won't release anything that is in
-use.
-
-This manipulation of mutexes poses no risk for a deadlock, because in
-all usage scenarios, @unit_mutex (which is locked by xillybus_find_inode)
-is always taken when no other mutex is locked. Hence a consistent locking
-order is guaranteed.
-
-xillybus_open() unlocks this mutex immediately, as this driver doesn't
-support hot unplugging anyhow.
-
-Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
-Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+cc: <stable@vger.kernel.org>
+Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 ---
- drivers/char/xillybus/xillybus_class.c | 8 +++++---
- drivers/char/xillybus/xillybus_class.h | 2 ++
- drivers/char/xillybus/xillybus_core.c  | 6 +++++-
- drivers/char/xillybus/xillyusb.c       | 4 +++-
- 4 files changed, 15 insertions(+), 5 deletions(-)
+ drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
+ drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
-index 0f238648dcfe..c846dc3ed225 100644
---- a/drivers/char/xillybus/xillybus_class.c
-+++ b/drivers/char/xillybus/xillybus_class.c
-@@ -211,6 +211,7 @@ void xillybus_cleanup_chrdev(void *private_data,
- EXPORT_SYMBOL(xillybus_cleanup_chrdev);
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index e2e7d16f43f4..0576f9b0e4aa 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
  
- int xillybus_find_inode(struct inode *inode,
-+			struct mutex **to_unlock,
- 			void **private_data, int *index)
- {
- 	int minor = iminor(inode);
-@@ -227,13 +228,14 @@ int xillybus_find_inode(struct inode *inode,
- 			break;
- 		}
+ 	trace_cdnsp_ep_halt(value ? "Set" : "Clear");
  
--	mutex_unlock(&unit_mutex);
--
--	if (!unit)
-+	if (!unit) {
-+		mutex_unlock(&unit_mutex);
- 		return -ENODEV;
-+	}
+-	if (value) {
+-		ret = cdnsp_cmd_stop_ep(pdev, pep);
+-		if (ret)
+-			return ret;
++	ret = cdnsp_cmd_stop_ep(pdev, pep);
++	if (ret)
++		return ret;
  
- 	*private_data = unit->private_data;
- 	*index = minor - unit->lowest_minor;
-+	*to_unlock = &unit_mutex;
++	if (value) {
+ 		if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_STOPPED) {
+ 			cdnsp_queue_halt_endpoint(pdev, pep->idx);
+ 			cdnsp_ring_cmd_db(pdev);
+@@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
  
- 	return 0;
- }
-diff --git a/drivers/char/xillybus/xillybus_class.h b/drivers/char/xillybus/xillybus_class.h
-index 5dbfdfc95c65..7cf89ac8bb32 100644
---- a/drivers/char/xillybus/xillybus_class.h
-+++ b/drivers/char/xillybus/xillybus_class.h
-@@ -12,6 +12,7 @@
- #include <linux/device.h>
- #include <linux/fs.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
+ 		pep->ep_state |= EP_HALTED;
+ 	} else {
+-		/*
+-		 * In device mode driver can call reset endpoint command
+-		 * from any endpoint state.
+-		 */
+ 		cdnsp_queue_reset_ep(pdev, pep->idx);
+ 		cdnsp_ring_cmd_db(pdev);
+ 		ret = cdnsp_wait_for_cmd_compl(pdev);
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index 25e5e51cf5a2..aa79bce89d8a 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+ 	u32 ep_state = GET_EP_CTX_STATE(pep->out_ctx);
+ 	int ret = 0;
  
- int xillybus_init_chrdev(struct device *dev,
- 			 const struct file_operations *fops,
-@@ -25,6 +26,7 @@ void xillybus_cleanup_chrdev(void *private_data,
- 			     struct device *dev);
- 
- int xillybus_find_inode(struct inode *inode,
-+			struct mutex **to_unlock, /* Mutex to release */
- 			void **private_data, int *index);
- 
- #endif /* __XILLYBUS_CLASS_H */
-diff --git a/drivers/char/xillybus/xillybus_core.c b/drivers/char/xillybus/xillybus_core.c
-index 11b7c4749274..7fd35f055310 100644
---- a/drivers/char/xillybus/xillybus_core.c
-+++ b/drivers/char/xillybus/xillybus_core.c
-@@ -1431,11 +1431,15 @@ static int xillybus_open(struct inode *inode, struct file *filp)
- 	struct xilly_endpoint *endpoint;
- 	struct xilly_channel *channel;
- 	int index;
-+	struct mutex *to_unlock; /* Mutex locked by xillybus_find_inode() */
- 
--	rc = xillybus_find_inode(inode, (void **)&endpoint, &index);
-+	rc = xillybus_find_inode(inode, &to_unlock,
-+				 (void **)&endpoint, &index);
- 	if (rc)
- 		return rc;
- 
-+	mutex_unlock(to_unlock);
-+
- 	if (endpoint->fatal_error)
- 		return -EIO;
- 
-diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
-index 39bcbfd908b4..63e94d935067 100644
---- a/drivers/char/xillybus/xillyusb.c
-+++ b/drivers/char/xillybus/xillyusb.c
-@@ -1236,8 +1236,9 @@ static int xillyusb_open(struct inode *inode, struct file *filp)
- 	struct xillyusb_endpoint *out_ep = NULL;
- 	int rc;
- 	int index;
-+	struct mutex *to_unlock; /* Mutex locked by xillybus_find_inode() */
- 
--	rc = xillybus_find_inode(inode, (void **)&xdev, &index);
-+	rc = xillybus_find_inode(inode, &to_unlock, (void **)&xdev, &index);
- 	if (rc)
- 		return rc;
- 
-@@ -1245,6 +1246,7 @@ static int xillyusb_open(struct inode *inode, struct file *filp)
- 	filp->private_data = chan;
- 
- 	mutex_lock(&chan->lock);
-+	mutex_unlock(to_unlock);
- 
- 	rc = -ENODEV;
- 
+-	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED) {
++	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED ||
++	    ep_state == EP_STATE_HALTED) {
+ 		trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
+ 		goto ep_stopped;
+ 	}
 -- 
-2.17.1
+2.25.1
 
