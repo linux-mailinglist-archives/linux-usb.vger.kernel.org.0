@@ -2,73 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1875B60DD02
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 10:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA8560DD96
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 10:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233268AbiJZIZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 04:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S232995AbiJZI44 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 04:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbiJZIY6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 04:24:58 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDCD8C003;
-        Wed, 26 Oct 2022 01:24:57 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id n191so2814432iod.13;
-        Wed, 26 Oct 2022 01:24:57 -0700 (PDT)
+        with ESMTP id S232769AbiJZI4z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 04:56:55 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8DC9AFEA;
+        Wed, 26 Oct 2022 01:56:54 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x2so13090902edd.2;
+        Wed, 26 Oct 2022 01:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=buYFuFBeHW1yRmYT990PjExWcZsoxGaJftL7treaLbM=;
-        b=QyOdOS5egF/FD0qFXmZuWuKrFNoE3Q7FqTPPTUkIV458/sUYmvW8XjdQak8+Gv1QqI
-         Mtws8/gPfKbaEbrW1zjfPzY2+WW63f6Z4uBeIWlGxfpcKOEcY+eP5R7cZIu+Ou5cg8Z7
-         sMUXEhKcppD1JfXRLgFYmiq3xbbxgmA00KxDnj45anU6aCKgtwGai4sipc6i+Eoq+EHU
-         kFkuKI8nTNNYajkbcumPSehNqSoVSh9g8MFyd4foSYJSpVCTjqsZfHL1rAvKEe+JFV6N
-         v+XlcRgHAGvpIa+4ukj1XGXVTP1/nhATFx9IZmUe7ZbtEpSjeHsy7GLTKX0FDUiEhrBe
-         olEQ==
+        bh=1UBZ8NLkBDI2XVTa9V4vyCdw25d2Kk0os+ZjuC1ZrDI=;
+        b=oW8273P9wDNYNiOGTCIO9lDwzHl/P8l9uzEU9Ri4rzmadiEpJePX4UTqrq1X2PEIRN
+         e7hDzTeoTUckQZIfYYzVHuPmzWb8QLJazgZrJ9aKzadwhAKBYU49G2adJnHdNF/rYbAj
+         qnxLi2TKBPUbfg1/Hu0IgK5x2SJquwffTrURO1vZ4+dQVtBY3ThXoVuvLfxkHUxIWOf8
+         EKISI7EcTm79UaIEgrHZKPtKTl68B3Vly5D74t3AYWfYqnrOvrVJEDk8YnlfvmLVhmX6
+         aD0bcviLd0x/tzkiq+h1rXaeUggXH1ba56IRQaAsPcg9h2h4kmC/SewXc5QIyMyWDPse
+         TewQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=buYFuFBeHW1yRmYT990PjExWcZsoxGaJftL7treaLbM=;
-        b=ZWrML/63mTZPc8e3dZOle+6MpW7m8xaZM+ujOgIGlTuo2AANNvL5EGC1r5Y85k6NCA
-         vRHY89soMOLXzYE0oneLeY4KpJNyVUVzT9VV7MWQLbfp9wATUcRrrKwgl5e3PSqHKN3e
-         JjjIp7fijO1V7axToe3Eo3atm3t2MKr87Xtu6+boYEjFAl/oDDNs/XKjKNZFAuqPVv6c
-         jZSvh2Jf1+hRqAnu99eCIkEYPl/vLEBO8jKzqLVmBcqe5LALzuMQW2yAgNTANWtJmJb+
-         J4IeZONSAhDcsGfVvE0+mN5ZCcyjcn0oMILE3O7CxejiotfG3fTbVsYnZ47hnQIHvT80
-         L1EQ==
-X-Gm-Message-State: ACrzQf1ji7AvHZXErMLhNRmWRp73Vg7+xlOUwApOoCM4hauJkHRqZbAi
-        vW3zriWsLHpldI9HDVojcEo=
-X-Google-Smtp-Source: AMsMyM5Tw4bjkFWvB3C5F7PmdoZZuNVzRQR9pYikZI1KCclsUUj6rWu5PG30f0vG0GQS/gYOwsRksg==
-X-Received: by 2002:a02:8807:0:b0:363:937f:6 with SMTP id r7-20020a028807000000b00363937f0006mr28430442jai.136.1666772696858;
-        Wed, 26 Oct 2022 01:24:56 -0700 (PDT)
-Received: from qjv001-XeonWs (c-67-167-199-249.hsd1.il.comcast.net. [67.167.199.249])
-        by smtp.gmail.com with ESMTPSA id x23-20020a029717000000b0036e605a3e79sm1800087jai.17.2022.10.26.01.24.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 26 Oct 2022 01:24:56 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 03:24:54 -0500
-From:   Jeff Vanhoof <jdv1029@gmail.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
-        stable@vger.kernel.org, Dan Vacura <w36195@motorola.com>
-Subject: Re: [PATCH v3 1/2] usb: dwc3: gadget: Stop processing more requests
- on IMI
-Message-ID: <20221026082451.GA31359@qjv001-XeonWs>
-References: <cover.1666735451.git.Thinh.Nguyen@synopsys.com>
- <b29acbeab531b666095dfdafd8cb5c7654fbb3e1.1666735451.git.Thinh.Nguyen@synopsys.com>
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1UBZ8NLkBDI2XVTa9V4vyCdw25d2Kk0os+ZjuC1ZrDI=;
+        b=rgNcj/UAJNQD4tPSeeQowtPMaKIJz3PFNJ6J4FcouqoX5fOzNrRMB95zMTkdGGb6Ae
+         YqEPxlf7/KWjlw/Mq5L1JnmQ9beYnvDZTMEhtd5Ut43BYntGOesRVCfGb5hees+Ozo0t
+         64d+muRTN0PYZhL75/NrenedEEmbyOfRX8KbGgzrt+2X9mpABXhTqSKBb6tmxHayHbMf
+         Xj9lc0/XdPtb7l4RxI27fh9It+JbVCjBqi7QqQQU/2nG+Pcsm/ajfCvS5OZhHE6rIa0A
+         12WOAcmXxGgmH/Fio3ahksGwIU6k/K2TlKaRlL56liJ5NyL8losGXworkMNDQZs2tEdq
+         268Q==
+X-Gm-Message-State: ACrzQf0OBPLUYlk9FktOewpEHv0zt4qkYKFmlwmEQuAjDaQPqxpHq5t+
+        PbZ7UyXE/Jddn8p9ZGqaPGyOW49ypcbg+A==
+X-Google-Smtp-Source: AMsMyM6Pg1bqz5Ig11BPL77vhPGN7MK4dtBet+gBOLkmng/wH7AF2djMsSylP1cjGeK69jhkYOiUCQ==
+X-Received: by 2002:a05:6402:496:b0:443:a5f5:d3b with SMTP id k22-20020a056402049600b00443a5f50d3bmr40993468edv.331.1666774612776;
+        Wed, 26 Oct 2022 01:56:52 -0700 (PDT)
+Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
+        by smtp.gmail.com with ESMTPSA id y21-20020aa7d515000000b00461aebb2fe2sm3085125edq.54.2022.10.26.01.56.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 01:56:52 -0700 (PDT)
+Message-ID: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
+Date:   Wed, 26 Oct 2022 11:52:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b29acbeab531b666095dfdafd8cb5c7654fbb3e1.1666735451.git.Thinh.Nguyen@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+From:   Eli Billauer <eli.billauer@gmail.com>
+Subject: [PATCH] char: xillybus: Prevent use-after-free due to race condition
+To:     gregkh@linuxfoundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, imv4bel@gmail.com,
+        Eli Billauer <eli.billauer@gmail.com>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,58 +73,132 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 03:10:14PM -0700, Thinh Nguyen wrote:
-> When servicing a transfer completion event, the dwc3 driver will reclaim
-> TRBs of started requests up to the request associated with the interrupt
-> event. Currently we don't check for interrupt due to missed isoc, and
-> the driver may attempt to reclaim TRBs beyond the associated event. This
-> causes invalid memory access when the hardware still owns the TRB. If
-> there's a missed isoc TRB with IMI (interrupt on missed isoc), make sure
-> to stop servicing further.
-> 
-> Note that only the last TRB of chained TRBs has its status updated with
-> missed isoc.
-> 
-> Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-> Cc: stable@vger.kernel.org
-> Reported-by: Jeff Vanhoof <jdv1029@gmail.com>
-> Reported-by: Dan Vacura <w36195@motorola.com>
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
->  Changes in v3:
->  - None
->  Changes in v2:
->  - No need to check for CHN=0 since only the last TRB has its status
->  updated to missed isoc
-> 
-> 
->  drivers/usb/dwc3/gadget.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index dd8ecbe61bec..230b3c660054 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -3248,6 +3248,10 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
->  	if (event->status & DEPEVT_STATUS_SHORT && !chain)
->  		return 1;
->  
-> +	if ((trb->ctrl & DWC3_TRB_CTRL_ISP_IMI) &&
-> +	    DWC3_TRB_SIZE_TRBSTS(trb->size) == DWC3_TRBSTS_MISSED_ISOC)
-> +		return 1;
-> +
->  	if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
->  	    (trb->ctrl & DWC3_TRB_CTRL_LST))
->  		return 1;
-> -- 
-> 2.28.0
->
+xillybus_find_inode() is called by xillybus_open() and xillyusb_open()
+to translate the inode's major and minor into a pointer to a relevant
+data structure and an index.
 
-No new issues seen with these changes. Changes look good to me.
+But with xillyusb_open(), the data structure can be freed by
+xillyusb_disconnect() during an unintentional time gap between the
+release of the mutex that is taken by xillybus_find_inode() and the
+mutex that is subsequently taken by xillyusb_open().
 
-Reviewed-by: Jeff Vanhoof <jdv1029@gmail.com>
-Tested-by: Jeff Vanhoof <jdv1029@gmail.com> 
+To fix this, xillybus_find_inode() supplies the pointer to the mutex that
+it has locked (when returning success), so xillyusb_open() releases this
+mutex only after obtaining the mutex that is specific to a device file.
+This ensures that xillyusb_disconnect() won't release anything that is in
+use.
 
-Regards,
-Jeff
+This manipulation of mutexes poses no risk for a deadlock, because in
+all usage scenarios, @unit_mutex (which is locked by xillybus_find_inode)
+is always taken when no other mutex is locked. Hence a consistent locking
+order is guaranteed.
+
+xillybus_open() unlocks this mutex immediately, as this driver doesn't
+support hot unplugging anyhow.
+
+Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
+Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+---
+ drivers/char/xillybus/xillybus_class.c | 8 +++++---
+ drivers/char/xillybus/xillybus_class.h | 2 ++
+ drivers/char/xillybus/xillybus_core.c  | 6 +++++-
+ drivers/char/xillybus/xillyusb.c       | 4 +++-
+ 4 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
+index 0f238648dcfe..c846dc3ed225 100644
+--- a/drivers/char/xillybus/xillybus_class.c
++++ b/drivers/char/xillybus/xillybus_class.c
+@@ -211,6 +211,7 @@ void xillybus_cleanup_chrdev(void *private_data,
+ EXPORT_SYMBOL(xillybus_cleanup_chrdev);
  
+ int xillybus_find_inode(struct inode *inode,
++			struct mutex **to_unlock,
+ 			void **private_data, int *index)
+ {
+ 	int minor = iminor(inode);
+@@ -227,13 +228,14 @@ int xillybus_find_inode(struct inode *inode,
+ 			break;
+ 		}
+ 
+-	mutex_unlock(&unit_mutex);
+-
+-	if (!unit)
++	if (!unit) {
++		mutex_unlock(&unit_mutex);
+ 		return -ENODEV;
++	}
+ 
+ 	*private_data = unit->private_data;
+ 	*index = minor - unit->lowest_minor;
++	*to_unlock = &unit_mutex;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/xillybus/xillybus_class.h b/drivers/char/xillybus/xillybus_class.h
+index 5dbfdfc95c65..7cf89ac8bb32 100644
+--- a/drivers/char/xillybus/xillybus_class.h
++++ b/drivers/char/xillybus/xillybus_class.h
+@@ -12,6 +12,7 @@
+ #include <linux/device.h>
+ #include <linux/fs.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ 
+ int xillybus_init_chrdev(struct device *dev,
+ 			 const struct file_operations *fops,
+@@ -25,6 +26,7 @@ void xillybus_cleanup_chrdev(void *private_data,
+ 			     struct device *dev);
+ 
+ int xillybus_find_inode(struct inode *inode,
++			struct mutex **to_unlock, /* Mutex to release */
+ 			void **private_data, int *index);
+ 
+ #endif /* __XILLYBUS_CLASS_H */
+diff --git a/drivers/char/xillybus/xillybus_core.c b/drivers/char/xillybus/xillybus_core.c
+index 11b7c4749274..7fd35f055310 100644
+--- a/drivers/char/xillybus/xillybus_core.c
++++ b/drivers/char/xillybus/xillybus_core.c
+@@ -1431,11 +1431,15 @@ static int xillybus_open(struct inode *inode, struct file *filp)
+ 	struct xilly_endpoint *endpoint;
+ 	struct xilly_channel *channel;
+ 	int index;
++	struct mutex *to_unlock; /* Mutex locked by xillybus_find_inode() */
+ 
+-	rc = xillybus_find_inode(inode, (void **)&endpoint, &index);
++	rc = xillybus_find_inode(inode, &to_unlock,
++				 (void **)&endpoint, &index);
+ 	if (rc)
+ 		return rc;
+ 
++	mutex_unlock(to_unlock);
++
+ 	if (endpoint->fatal_error)
+ 		return -EIO;
+ 
+diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
+index 39bcbfd908b4..63e94d935067 100644
+--- a/drivers/char/xillybus/xillyusb.c
++++ b/drivers/char/xillybus/xillyusb.c
+@@ -1236,8 +1236,9 @@ static int xillyusb_open(struct inode *inode, struct file *filp)
+ 	struct xillyusb_endpoint *out_ep = NULL;
+ 	int rc;
+ 	int index;
++	struct mutex *to_unlock; /* Mutex locked by xillybus_find_inode() */
+ 
+-	rc = xillybus_find_inode(inode, (void **)&xdev, &index);
++	rc = xillybus_find_inode(inode, &to_unlock, (void **)&xdev, &index);
+ 	if (rc)
+ 		return rc;
+ 
+@@ -1245,6 +1246,7 @@ static int xillyusb_open(struct inode *inode, struct file *filp)
+ 	filp->private_data = chan;
+ 
+ 	mutex_lock(&chan->lock);
++	mutex_unlock(to_unlock);
+ 
+ 	rc = -ENODEV;
+ 
+-- 
+2.17.1
+
