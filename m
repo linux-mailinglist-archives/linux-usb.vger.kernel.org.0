@@ -2,110 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EF560E8B0
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 21:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9B060EA8F
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 22:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234990AbiJZTKt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 15:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S234612AbiJZUuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 16:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbiJZTJf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 15:09:35 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60052.outbound.protection.outlook.com [40.107.6.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFECB13226B;
-        Wed, 26 Oct 2022 12:08:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gr8dk5m87NMUFTKHqMAx4SnnPedTSCBpA/tv6bpUIB2mwb84TZTc1YjedfQdU61kipGJahSELKoobfgYUpSB/UGcqwge1Hunv/Uk8s9lnbyv7K/jgr80LzVqLr87ghtCB8eQ5tQHXbp9VzvEVV4TDvr0riwxBAfRV1PgN0F+1nRBkSCxSgsv4ir6G71fzCJgVZM7nnfRP4Jx0XiaXQ+p8g2+cxdHxQFKCF+JX1uoEeSqS1dRtdpdkpghO7qT/VkKf2VMWbH+GKRuyP5n7Xa6MbpGFsOmrtxSjVEnjEigFHGXONp1OhCM0O2iUMMIpTrae/kHQty2cq7utzl7Q65+xQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0PnyM+bNN2HZDUhcTiA4+/bUNHeU/hPn9nUbU41n8hM=;
- b=k3L/Uh1HGE3wCUZ9WXVUw5jsJ3iSVseB7s2RivKI+EQpzKw/jODf30RcEl1JN9Dpl4gDVCWN218JvFyNWfisg3Ml0QsUFb5gjIZbDbRKv5Rpo0ogDqAHKzE3ejl7ToUywlNl9J00Mmjv3elYvy1kSlxEv2qsPdkprepfhFD1gitb5f2JSULzoOvdwtNqURU1+JWM7rMdP+v+BT1TK5eP50BiRc/so406aHZR62QBMvkghjhJEHIRCdRuizYxeqVY0nhbf9xYqCdneth+PvDdNQVI7vXKT4KZmUiXucIe3lbgmzfyWMzfNqz26QJ5X1zR0qCA+fn0xIsAXrgkiG31yA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0PnyM+bNN2HZDUhcTiA4+/bUNHeU/hPn9nUbU41n8hM=;
- b=cQo4KWq0aBe8L2IwcbOSkF4vQYoK8PpU9qXQZkMF1I4GwXSDEND8AUz/tX99jiFt5rK72vTn/yFwLSJOvaNANlTk4bmduyyilncDgtmcwyKSw/g9XnumylRairE5PsemBhSAyC7YXSXaNBAw2LMGBqdOf+4C+7SD8qM6jZJ5FTU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by AS8PR04MB7925.eurprd04.prod.outlook.com (2603:10a6:20b:2a2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Wed, 26 Oct
- 2022 19:08:08 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::44bb:8387:8f4b:6a28]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::44bb:8387:8f4b:6a28%10]) with mapi id 15.20.5746.023; Wed, 26 Oct
- 2022 19:08:08 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     jun.li@nxp.com, frank.li@nxp.com
-Cc:     a-govindraju@ti.com, gregkh@linuxfoundation.org,
-        hzpeterchen@gmail.com, imx@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        pawell@cadence.com, peter.chen@kernel.org, rogerq@kernel.org,
-        stable@kernel.org
-Subject: [PATCH v2 1/1] usb: cdns3: host: fix endless superspeed hub port reset
-Date:   Wed, 26 Oct 2022 15:07:49 -0400
-Message-Id: <20221026190749.2280367-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0038.namprd05.prod.outlook.com
- (2603:10b6:a03:74::15) To HE1PR0401MB2331.eurprd04.prod.outlook.com
- (2603:10a6:3:24::22)
+        with ESMTP id S234604AbiJZUuH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 16:50:07 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8651DA58;
+        Wed, 26 Oct 2022 13:50:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1666817402; bh=vOFYLZfzisEKlTQN98kbPMj0id3+N70AzrG/XOCH0sU=;
+        h=X-UI-Sender-Class:References:In-Reply-To:From:Date:Subject:To:Cc;
+        b=DOgfRUW5uXUnwqyLbFbH4wmSuVhvMJlJaSr/3fdh6Auj+ibm81mKvbl2ZVzsHn5jF
+         Iz3OJWbiq4vm2g8Td3N7Ct+V1bmkTcmNVQCrzV1WpFNuw/U4hIkEXl0CmGB7xnU2S8
+         n3/l69dSk6JCxNxNde1xQpA6WPRh2fFVpP0brWWuz6IWywqk1gQwF93V2euQob8cwX
+         uN4aKdz8R6ZclWNxXN7t7Tmcj32YgnojGhAuXXm3Wch2pAEGpWFmS86VCqsMfDJMW2
+         5uTlFZROCr7vBuQGNFmO9UoS4ECzZUWOLi9/f0N5LXDLD4meeqM6Y8HWT3iiKeRiT1
+         uT3i/R7l56+1Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mail-ej1-f51.google.com ([209.85.218.51]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MiJZE-1pK5QS1BYs-00fQU5; Wed, 26 Oct 2022 22:50:02 +0200
+Received: by mail-ej1-f51.google.com with SMTP id bj12so24736555ejb.13;
+        Wed, 26 Oct 2022 13:50:02 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1rmzYRx/lYW7R4EaniI2G22fzL6hplyuGdwczsqRkzt9KmqVqB
+        pTXx9YpQulV4Zp6iB6kCXQvpqGEwo8pYnXYJVUI=
+X-Google-Smtp-Source: AMsMyM5IwzoryT0nNmT4ZY4yOVW3i1UvlgRJlCAMqq+SaEPMFuG/xMvuWY8uQE2CNGNvf1X1uOTZRS8kB34z0UnsfBE=
+X-Received: by 2002:a17:907:9707:b0:78d:45d1:487e with SMTP id
+ jg7-20020a170907970700b0078d45d1487emr38451575ejc.566.1666817401892; Wed, 26
+ Oct 2022 13:50:01 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0401MB2331:EE_|AS8PR04MB7925:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06321447-2993-496f-2d09-08dab7856b11
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D4YJoFjb0rTKXYnUusus5rQgh8YrbtyU10BKHWirXmx/X8pXiJrfKA54tLd90TcrAbvKci0Dazj1gkr5fkBVWRfX4FhIXK8fqgjC5g+EaoVQkg/0OE2+bkW1ubtKMLzIWK66sZTG/rFbDxyAzzt72EIYIz8EndPfecLEnLyikG+yGAc8U/XfgBfMM6xtaIV5PkEPPA+UL4Ea90L3c0m4+S2fUygEApPUb6SaVQ8xCQZgoPdwHXDkK6BzdjdbfIT+VBfZr6NXk/XmN3XvqJx7xZ2lKWYpdvYE5joAp3akEzFdD5l4Z/TOzcI7oeaCyBLRMhEkUJMabNRsKsFuB0Nugi87QgUMC6yDGHi58FXd2wk1ktWnw/ulNJD0XzwrbNCo7D0iTZmvScABHkoBIncyEb2bbLdDAjlFnGPUohcBfELUe1We2/xvPY8u9osshdb6xMBMhhn7RTSSs5cdXs7I1olkMAl24C1gjefkynqLNyavlhevvyKhTSZj0a6WM77YCEC0t2lTPbs0FwuubmrzP2rpJ9qNJB/lF1/qrd4EiRw3cCXInqEw8vbN9avSTQb7u87YhsKXTegW3Zh7MXUGFaJs8UP/KxpeH0COvSheNwi9coltV9odjwP78fEa/SK1RZzbTGyhCSJk4aHwaNtuWmHueh4FaUwLxYA8YPMMbWlmgBoR3KgvDE/HHbfCOpbpFZSg1DRAKGzcUs4mpAcdLykGX14nIrOyOnqGrfBdQ2IV284hFIB+cFn4kuidFY2+RdqEMQHeJEOExlZlcIrkRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(39860400002)(396003)(346002)(376002)(451199015)(2906002)(7416002)(83380400001)(86362001)(2616005)(8676002)(66946007)(66476007)(66556008)(36756003)(4326008)(6506007)(38350700002)(38100700002)(8936002)(1076003)(41300700001)(186003)(5660300002)(6486002)(478600001)(6512007)(26005)(316002)(52116002)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZWH82Tr573hqa1kIqyEmOd/2g0EgK8584Pwk3Jb7qC0dXzDejPloEYwcH08u?=
- =?us-ascii?Q?KX7oYoTJe2sKFHUu2eAupVON0XmTsc/0WXnlyr+7wDBH/1L/dpZccek60P+v?=
- =?us-ascii?Q?13ZcWF5NubMV02HjKP+/l/9iPubreW8U5ycy6kTFOvosTTOaZyMjvy7Gav0O?=
- =?us-ascii?Q?KKhLC+zYEaWIlVJFlYXbtoqLoRyYNM1iFKEIW/GnEderKykwXIlFRWaT3A+q?=
- =?us-ascii?Q?IVv8oAPwEmLIIQa1czMrvaGVnvCN8svNebIrKMDiTdLU/3ByZ/W+lgUd8K6d?=
- =?us-ascii?Q?LPioQF/UjNSfn4JNcrX7KOOEvNifo1RvMYDOznSh51edX1xgELouq5C5k2/o?=
- =?us-ascii?Q?jh/vCsdjU6AUqg9sAiBFJJHGFXG7FHsQE2UNoUwzmfEvWzrE7cNXJW3FXXjQ?=
- =?us-ascii?Q?f3JIcPi9TYvndYboguL76TofHXE/F7CsGGTpy50MRirtAwfENTUwK/BH6Q0a?=
- =?us-ascii?Q?JZvueTeO2eukJUM3iJT2rqw3eqznvprY4hYaKMuYfuo/bRk5XckJv6nNViu+?=
- =?us-ascii?Q?0u0I2GOebtgajDAj/eVuX6JvUT0b6rkjfMRldD+XFdHV+12YOranVKcvn2RX?=
- =?us-ascii?Q?96cLhHOS2DNewiq6emOk4deTglI4Jvx8bk+6lQk6ItRz9iRuRyN0R3QL9S87?=
- =?us-ascii?Q?NLrQh5VwKkZgyPqEQE9H0w+Wo/kAHQbPoXZj2q5AO/ZKzShjgd3uKTJRZgUi?=
- =?us-ascii?Q?smbQ4wHWarTuqpVfz7RyFjsIv7X9qzR84cbzX/BT6MocnoMndWvCCgln5Acn?=
- =?us-ascii?Q?HVFkv+7PX9COaXYJHRDnqAD7mBmHdl7pyjW6lYSEg70FY48d9sVncXDqzvVx?=
- =?us-ascii?Q?F9mwZAVDQIwFQ4CWpvmRImESrPQWwnO6s+tDucswDmZkOXBM0fpeBfSTQ7MM?=
- =?us-ascii?Q?KuoOzclH8oscH99GuBfKBnkPNr+Pkkbad2xBNh/QtcTh4F2/94r4di4peJLn?=
- =?us-ascii?Q?hYJi7XFuxqzSJqT1Pjq+4Ub2L8gL+AGUBbcao9puCturVDUHMM8zl9pWe4Jh?=
- =?us-ascii?Q?P0B+9Qessv1paut/miZdFIG+abZDUjzLjTXvrsEEdjGscJk0bqm550VCj9Iz?=
- =?us-ascii?Q?HleIZ7eB/4zV0kVF+uitheOTHHSmdSvdrs2OxFNJTKoOsRkpTQZNQ1+DqQWX?=
- =?us-ascii?Q?k8a5ClsSFzrjyet4peyFCTBEkARh/MIiE15yo7qP/8+xe1vFsJNYy5fLC1z6?=
- =?us-ascii?Q?nVJx56ixiG4HQ9UT+4rcxPX4qSBL6Mh1CTyePfrYLBTZyxs+DvpdVkAV1qSt?=
- =?us-ascii?Q?7uXA6CEhOHn8md6qg41pE91ia04pmCIF2ijvpGzwd0xTICs74lS6zq4UN2F+?=
- =?us-ascii?Q?YLvf+4gqY6gTbMDTIK0yoTwkej2RulVr45IgNzPFRfChr2o6UkzC3k2lkxuz?=
- =?us-ascii?Q?0pHkGsxYSJ99QygXAtC5QoXRzyXsY+WUPQuYEFT5KraKV8L9+q01I9rFR0Al?=
- =?us-ascii?Q?wRu1Y5hd67YfVghgRV6tSrjue8YEwE/QmrMNitvY7uC952AZQoQIl7M7JJk/?=
- =?us-ascii?Q?XRKsQ66yJUveA0yRxdfu98skPK5e8h5UJlv+ULuBBsG6KP1IhvACdcrZm2Y/?=
- =?us-ascii?Q?IAm+1eHN9VC/e02bc7qq9/OC5OSx/f12MwhkM4RQ?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06321447-2993-496f-2d09-08dab7856b11
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 19:08:08.2886
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ef8Ww19xJP4JP4R9s07ZaMzFjDQ7LGiZ5Jx8hs8XaEDdGy0DYYU4GGguZG0G+Vnfkl9a81DKZzGU8n+DooUSYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7925
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <Y1AVDck5sQf8+QFX@rowland.harvard.edu> <CABfF9mPU52OXTGcsbatJCG4nbP4zaPN3iJnttMg+xRyGY6dUEQ@mail.gmail.com>
+ <CAO-hwJJ7cF-4kd8Mi6bb5n-k5LuMrWbpdMqFs82y7iQOscr-7g@mail.gmail.com>
+In-Reply-To: <CAO-hwJJ7cF-4kd8Mi6bb5n-k5LuMrWbpdMqFs82y7iQOscr-7g@mail.gmail.com>
+From:   Andreas Bergmeier <abergmeier@gmx.net>
+Date:   Wed, 26 Oct 2022 22:49:50 +0200
+X-Gmail-Original-Message-ID: <CABfF9mNfU=swmpVXfVr7pYWs72jrd-HDY8+_NXyBDAKa4CWG5Q@mail.gmail.com>
+Message-ID: <CABfF9mNfU=swmpVXfVr7pYWs72jrd-HDY8+_NXyBDAKa4CWG5Q@mail.gmail.com>
+Subject: Re: Litra Glow on Linux
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org,
+        USB mailing list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jikos@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Ghht1X8accgY5A+G+DqeLsFpVuyaosotF3IZ/OkEFgUIcMQF6pe
+ DNPXJJ3j5nHAx5m6Ey/+0KBLDCxbfKB7CTsvf3Jz3YOAHRsossSh2PyZYP8URYkfQg/yuZq
+ NcBGVMlpSrlVuC1An83tcqCVQv5PyB/pS55Hiw53peSrXQqvUg7vZlzBkOPZ/Q7ws+Pa0HO
+ iOowW0zwVZ4yzbJoA7cHw==
+UI-OutboundReport: notjunk:1;M01:P0:BsYo1Tnbxg8=;u814shRmhcUPwcY+d+5ItVOKbFl
+ giampkEAMvAfFYtybXxGLutXTHfuQFrvTHWRBrvYVTXwjBan2VQSjw+RzvPql/1tyORgBsEHq
+ 2xHJmMjGPN/lf0aLPBqJmCbbNmF6qx0P8wosZLg6MoTB28/n8ovxcNqFv8Hc+18Oe4Nt8JlnT
+ YEWP9TFDt9kMdPLrXOWdq0nRpHmEhW8J9utCogEkB2DDgplai5vH8hGnxeiHM0PIKQwHa6MCy
+ lO59bA+qv1cfw2FkmTEAbzJVtmO/oOvc6V9oWUOia3BljrG8q6NLOyua30WyVRTitdRgXnAGU
+ pm/TFY0EAe3d6MJgBXKPXEEAH9EJ6R+dJlNYOsnstkwfkmM8DCYkMN+smo9Jle+/W4VzvhLy2
+ 0lGJ7mf6Np2SO1jdj9HIb2GkgylTp653JK0C6rXRFiBIbS4Yoir6uu5t85SEFXRBxzKUEAFDP
+ ouxHoA/e5gPLHz8JgeH7l1XNUhOwu8+k8Wx3oK0hVfs/yOnhILhkfSxVLAWvir/yrFJHgyyQd
+ ayZ+C59Akl9Qt5NjEIEOppmv+v0+h4QkaXtSKOJS33CF7Mb1wLbY+YxD9jvl7DJgAxxTymZoH
+ ECJNf8J/2VBkrv2yRxXIRKI1JA4YkrfIrATdgh3gRANvXhuAsXrLtGAqR3JDXu5CfnLbXn0Xr
+ 21fHP45gTa0ye0m0WGUUU1mfj7p6EMuyjBgaHtpsJQG6KYZR6b7QqkyQ/9dO8NqqV1T7jc4At
+ ZSge3SwJXyAUU4mc02rleTOLqO6kUkMDuHyjZg4QqzL70/ZRbIzsKMUeQf7CmQ93JY3tsW/Wf
+ szOry2jwanxn5fpVgszVyhH2BTqX/km9vTfY8snqM3t0SvPcGrzFuBNHRVEmBTJAv97uvmuo5
+ B02ZuUWm3bwUVXc6Mm0cehZbOxjZ2dN/9HbUSdUb0bV+uFy5zhnF+tX53iloWnxFB/TIovR9F
+ H5Qx/zCB4nSBkMSlvgkBrlkYp3M=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,133 +79,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+On Tue, 25 Oct 2022 at 09:46, Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+> Depending on how the device presents itself, we might have to use
+> hid-logitech-hidpp, not hid-lg FWIW.
+Ah, indeed it seems to be a hidpp device.
+I so far wrote code to interact with the device using hidraw and
+hiddev. What are the implications of a hidpp device?
+How is hidpp exposed to userspace?
+From a search it seems like there are very few userspace programs that
+handle hidpp on Linux.
 
-When usb 3.0 hub connect with one USB 2.0 device and NO USB 3.0 device,
-some usb hub reports endless port reset message.
+> And to answer the question "how to map the device to input
+> "primitives".", it all depends on how the device exports itself.
+All information that I have gathered so far is on
+https://github.com/abergmeier/litra_glow_linux.
 
-[  190.324169] usb 2-1: new SuperSpeed USB device number 88 using xhci-hcd
-[  190.352834] hub 2-1:1.0: USB hub found
-[  190.356995] hub 2-1:1.0: 4 ports detected
-[  190.700056] usb 2-1: USB disconnect, device number 88
-[  192.472139] usb 2-1: new SuperSpeed USB device number 89 using xhci-hcd
-[  192.500820] hub 2-1:1.0: USB hub found
-[  192.504977] hub 2-1:1.0: 4 ports detected
-[  192.852066] usb 2-1: USB disconnect, device number 89
+The output of `hidpp-list-features /dev/hidraw0` is:
+```
+Logi Litra Glow (046d:c900) is a HID++ 4.2 device
+Feature 0x01: [0x0001] Feature set
+Feature 0x02: [0x0003] Device FW version
+Feature 0x03: [0x0005] Device name
+Feature 0x04: [0x1990] ?
+Feature 0x05: [0x1eb0] ? (hidden)
+Feature 0x06: [0x00c2] DFUcontrol 3 (hidden)
+```
+Is it possible that Feature 0x04 is the protocol for sending changes
+to the device?
+All the payload that is sent to the device has a 0x04 directly in
+front of the instructions.
+As an example, for turning the light on you send raw bytes: [0x11,
+0xff, 0x04, 0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+0x10 seems to indicate setting the on state.
 
-The reason is the runtime pm state of USB2.0 port is active and
-USB 3.0 port is suspend, so parent device is active state.
+> > To recap there are 5 hardware buttons and 3 states:
+> > - State: "Color temperature in range [u, x]" Button: up
+> > - State: "Color temperature in range [u, x]" Button: down
+> > - State/Button On/Off
+> > - State "Brightness in range [y, z]" Button: up
+> > - State "Brightness in range [y, z]" Button: down
+>
+> FWIW, you should be able to use hid-recorder[0] (as root) to record
+> traces of the events, and to parse them on the fly. Also, if you
+> provide us the output, we can replay the traces locally as if we
+> virtually plugged in the device.
 
- cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/usb2/power/runtime_status
+See the GitHub repo - there are already initial recordings.
 
- suspended
+> FWIW, if the first byte you have to send to control the LED is 0x10,
+> 0x11 or 0x12 then this is a HID++ device that needs to go in
+> hid-logitech-hidpp and a lot of groundwork is already done in the
+> kernel for it.
+I am trying to get up to speed with hidpp - but I am not there yet.
+Do you have any hints on what code to read specifically since
+logitech-hidpp is a bit long...
 
- cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/usb1/power/runtime_status
-
- active
-
- cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/power/runtime_status
-
- active
-
- cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/power/runtime_status
-
- active
-
-So xhci_cdns3_suspend_quirk() have not called. U3 configure is not applied.
-
-move U3 configure into host start. Reinit again in resume function in case
-controller power lost during suspend.
-
-Cc: stable@vger.kernel.org 5.10
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-
-Change from V1 to V2. 
- - call xhci_cdns3_plat_start() in xhci_cdns3_resume_quirk
-in case power lost during suspend
-
- drivers/usb/cdns3/host.c | 56 ++++++++++++++++++++--------------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-index 9643b905e2d8..6164fc4c96a4 100644
---- a/drivers/usb/cdns3/host.c
-+++ b/drivers/usb/cdns3/host.c
-@@ -24,11 +24,37 @@
- #define CFG_RXDET_P3_EN		BIT(15)
- #define LPM_2_STB_SWITCH_EN	BIT(25)
- 
--static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd);
-+static void xhci_cdns3_plat_start(struct usb_hcd *hcd)
-+{
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	u32 value;
-+
-+	/* set usbcmd.EU3S */
-+	value = readl(&xhci->op_regs->command);
-+	value |= CMD_PM_INDEX;
-+	writel(value, &xhci->op_regs->command);
-+
-+	if (hcd->regs) {
-+		value = readl(hcd->regs + XECP_AUX_CTRL_REG1);
-+		value |= CFG_RXDET_P3_EN;
-+		writel(value, hcd->regs + XECP_AUX_CTRL_REG1);
-+
-+		value = readl(hcd->regs + XECP_PORT_CAP_REG);
-+		value |= LPM_2_STB_SWITCH_EN;
-+		writel(value, hcd->regs + XECP_PORT_CAP_REG);
-+	}
-+}
-+
-+static int xhci_cdns3_resume_quirk(struct usb_hcd *hcd)
-+{
-+	xhci_cdns3_plat_start(hcd);
-+	return 0;
-+}
- 
- static const struct xhci_plat_priv xhci_plat_cdns3_xhci = {
- 	.quirks = XHCI_SKIP_PHY_INIT | XHCI_AVOID_BEI,
--	.suspend_quirk = xhci_cdns3_suspend_quirk,
-+	.plat_start = xhci_cdns3_plat_start,
-+	.resume_quirk = xhci_cdns3_resume_quirk,
- };
- 
- static int __cdns_host_init(struct cdns *cdns)
-@@ -90,32 +116,6 @@ static int __cdns_host_init(struct cdns *cdns)
- 	return ret;
- }
- 
--static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
--{
--	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
--	u32 value;
--
--	if (pm_runtime_status_suspended(hcd->self.controller))
--		return 0;
--
--	/* set usbcmd.EU3S */
--	value = readl(&xhci->op_regs->command);
--	value |= CMD_PM_INDEX;
--	writel(value, &xhci->op_regs->command);
--
--	if (hcd->regs) {
--		value = readl(hcd->regs + XECP_AUX_CTRL_REG1);
--		value |= CFG_RXDET_P3_EN;
--		writel(value, hcd->regs + XECP_AUX_CTRL_REG1);
--
--		value = readl(hcd->regs + XECP_PORT_CAP_REG);
--		value |= LPM_2_STB_SWITCH_EN;
--		writel(value, hcd->regs + XECP_PORT_CAP_REG);
--	}
--
--	return 0;
--}
--
- static void cdns_host_exit(struct cdns *cdns)
- {
- 	kfree(cdns->xhci_plat_data);
--- 
-2.34.1
-
+Thanks for the feedback so far
