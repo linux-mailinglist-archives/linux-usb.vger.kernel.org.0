@@ -2,51 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2967460DBA4
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 08:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193A160DBBA
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 09:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbiJZG7R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 02:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S233083AbiJZHDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 03:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiJZG7Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 02:59:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A386975493;
-        Tue, 25 Oct 2022 23:59:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49AB8B82115;
-        Wed, 26 Oct 2022 06:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82A42C433D6;
-        Wed, 26 Oct 2022 06:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666767552;
-        bh=o3PteaupfkQia0zeAvo4ds5YtLe/oXcMoM1XiCUq12c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=atlTzHF8NAQoZWFpoaxe98PiZEf4+3vzFcvl8T6pqHuLU3AZa0t+TmWOTjPPXL0YX
-         NKD0I+pspYEUimuTX0A5dDm3U6JXcniY+1p9z7SGABg7sd278vNLa22+iZAO1BYkpc
-         uBVHr8DPpAO1zHc7ZC2aUpCTrllGWjodb+X+qJ5w=
-Date:   Wed, 26 Oct 2022 09:00:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Reka Norman <rekanorman@chromium.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/4] xhci: Add quirk to reset host back to default state
- at shutdown
-Message-ID: <Y1ja9cqkD32cEO0L@kroah.com>
-References: <20221024142720.4122053-1-mathias.nyman@intel.com>
- <20221024142720.4122053-3-mathias.nyman@intel.com>
- <CAEmPcwsBDwFoXOcXKXkx1aebnq3CV036Ygz_oXOobcyKoQQNnQ@mail.gmail.com>
+        with ESMTP id S232884AbiJZHDI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 03:03:08 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750DB3868D
+        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 00:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666767787; x=1698303787;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EzpykmBLTNdEtwt9sJohY7YcmJNUmktVzAIyilVMXOM=;
+  b=HV1iPuh9IeD7vCsXnK0rckQ2itQt3fY5SAZ/NGzPn7FQzy9InZMBsmpq
+   Bg3u8k2hquTTbt90aKbke/IW3ASrOV8KVeHspl6H3qumx/GTX9838bI6h
+   QtJA5GMSE6J38FOtBX3QLrBj2yRNnZwSD5YRkl5blQQ/G/fJ02ftOWF7u
+   A1r5K+OvRaiTlQEwpuTAhIj5d68EJr4aN8jcPEMRxLiXkfDiZHGbbU+CC
+   j97+xN1G0kbjRROjA82puvSeDBLBe9sgIrYrIpfrKlScq2DfgTD+43VGQ
+   SnXxcJKPMpZ6SP5lPJXA4QKKX1URuUrfJQ5rfUVU3auucg3e3S0pjnw+G
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="scan'208";a="180554014"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Oct 2022 00:03:06 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 26 Oct 2022 00:03:05 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 26 Oct 2022 00:03:04 -0700
+Date:   Wed, 26 Oct 2022 08:02:49 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Xu Yang <xu.yang_2@nxp.com>
+CC:     <gregkh@linuxfoundation.org>, <peter.chen@kernel.org>,
+        <jun.li@nxp.com>, <linux-usb@vger.kernel.org>, <linux-imx@nxp.com>
+Subject: Re: [PATCH] usb: chipidea: core: wrap ci_handle_power_lost() with
+ CONFIG_PM_SLEEP
+Message-ID: <Y1jbmacR2zyeQJGw@wendy>
+References: <20221026121157.1491302-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAEmPcwsBDwFoXOcXKXkx1aebnq3CV036Ygz_oXOobcyKoQQNnQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20221026121157.1491302-1-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,48 +62,87 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 05:40:10PM +1100, Reka Norman wrote:
-> On Wed, Oct 26, 2022 at 5:01 PM Mathias Nyman <mathias.nyman@intel.com> wrote:
-> >
-> > From: Mathias Nyman <mathias.nyman@linux.intel.com>
-> >
-> > Systems based on Alder Lake P see significant boot time delay if
-> > boot firmware tries to control usb ports in unexpected link states.
-> >
-> > This is seen with self-powered usb devices that survive in U3 link
-> > suspended state over S5.
-> >
-> > A more generic solution to power off ports at shutdown was attempted in
-> > commit 83810f84ecf1 ("xhci: turn off port power in shutdown")
-> > but it caused regression.
-> >
-> > Add host specific XHCI_RESET_TO_DEFAULT quirk which will reset host and
-> > ports back to default state in shutdown.
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > ---
-> >  drivers/usb/host/xhci-pci.c |  4 ++++
-> >  drivers/usb/host/xhci.c     | 10 ++++++++--
-> >  drivers/usb/host/xhci.h     |  1 +
-> >  3 files changed, 13 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> > index 6dd3102749b7..fbbd547ba12a 100644
-> > --- a/drivers/usb/host/xhci-pci.c
-> > +++ b/drivers/usb/host/xhci-pci.c
-> > @@ -257,6 +257,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
-> >              pdev->device == PCI_DEVICE_ID_INTEL_DNV_XHCI))
-> >                 xhci->quirks |= XHCI_MISSING_CAS;
-> >
-> > +       if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
-> > +           pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI)
+On Wed, Oct 26, 2022 at 08:11:57PM +0800, Xu Yang wrote:
+> If CONFIG_PM_SLEEP is not set, the following error will be shown up
+> when build kernel:
+>     error: 'ci_handle_power_lost' defined but not used.
 > 
-> We need this quirk for ADL-N too (device ID 0x54ed). Would you mind
-> updating the patch? Or I can send a separate patch if you prefer.
+> This will move ci_handle_power_lost() to an area wrapped by
+> CONFIG_PM_SLEEP.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> Fixes: 74494b33211d ("usb: chipidea: core: add controller resume support when controller is powered off")
 
-A separate patch is required, please submit it.
+Reported-by: Conor Dooley <conor.dooley@microchip.com>
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-thanks,
+Thanks for the quick fix. BTW, your mails show up timestamped in the
+future, maybe something's up with the TZ on your machine.
 
-greg k-h
+Thanks,
+Conor.
+
+> ---
+>  drivers/usb/chipidea/core.c | 38 ++++++++++++++++++-------------------
+>  1 file changed, 19 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 2b170b434d01..484b1cd23431 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -661,25 +661,6 @@ static enum ci_role ci_get_role(struct ci_hdrc *ci)
+>  	return role;
+>  }
+>  
+> -static void ci_handle_power_lost(struct ci_hdrc *ci)
+> -{
+> -	enum ci_role role;
+> -
+> -	disable_irq_nosync(ci->irq);
+> -	if (!ci_otg_is_fsm_mode(ci)) {
+> -		role = ci_get_role(ci);
+> -
+> -		if (ci->role != role) {
+> -			ci_handle_id_switch(ci);
+> -		} else if (role == CI_ROLE_GADGET) {
+> -			if (ci->is_otg && hw_read_otgsc(ci, OTGSC_BSV))
+> -				usb_gadget_vbus_connect(&ci->gadget);
+> -		}
+> -	}
+> -
+> -	enable_irq(ci->irq);
+> -}
+> -
+>  static struct usb_role_switch_desc ci_role_switch = {
+>  	.set = ci_usb_role_switch_set,
+>  	.get = ci_usb_role_switch_get,
+> @@ -1400,6 +1381,25 @@ static int ci_suspend(struct device *dev)
+>  	return 0;
+>  }
+>  
+> +static void ci_handle_power_lost(struct ci_hdrc *ci)
+> +{
+> +	enum ci_role role;
+> +
+> +	disable_irq_nosync(ci->irq);
+> +	if (!ci_otg_is_fsm_mode(ci)) {
+> +		role = ci_get_role(ci);
+> +
+> +		if (ci->role != role) {
+> +			ci_handle_id_switch(ci);
+> +		} else if (role == CI_ROLE_GADGET) {
+> +			if (ci->is_otg && hw_read_otgsc(ci, OTGSC_BSV))
+> +				usb_gadget_vbus_connect(&ci->gadget);
+> +		}
+> +	}
+> +
+> +	enable_irq(ci->irq);
+> +}
+> +
+>  static int ci_resume(struct device *dev)
+>  {
+>  	struct ci_hdrc *ci = dev_get_drvdata(dev);
+> -- 
+> 2.34.1
+> 
+> 
