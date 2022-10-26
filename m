@@ -2,216 +2,254 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C0C60DBE5
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 09:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B517E60DC62
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 09:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbiJZHOL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 03:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S233038AbiJZHoT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 03:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiJZHOK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 03:14:10 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2083.outbound.protection.outlook.com [40.107.92.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C000BA905;
-        Wed, 26 Oct 2022 00:14:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bFPBgZvdSlvPs5mK8dHZkTf6iJV5BX5Lqueu3bk9eBQv4IRZh2UZ/W3oajJP3mIWbvJmVpKK3mH/OCpddJLDCZzM2gx6jsiHN0gypbiA1CkXaHZPGcoZCZTnbL+wyB3FoqGovWAX7pdEX+SII4ckxHZf/9ocf6I1fONwqLMI7p+V7y0eYXbtDHDaOW+MS9MuExTYGrdSQ+oDuRvoNEsd+bXAd68Zqx38rHXO3cPPAC9N7mJj0+sHq8jEQXd8M4K7VGnKFAQb0JSs4RthpetOf0cDyrJ7bvtgq7rG0R+Ly1qaiyFEXc+LddWwq8JOMUJRAjWsVscqbX4I0Nrt9D1MMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3bsa0b4nmGbMAwx3eSieZ7+X92IHcXdetaIs3jsV1TM=;
- b=Em46svjgoZ+hPiqwnIFlzx/sO0Oup5J9D/MjYiqY9/buvqFANzpGWcQS5r9znxnC5yzxPhUNl5anq3UhuGfsliEE+vcMXyDHgBmqwkX3AMG2NVc/DpGSkRdzcss77AebfpG8OBCD9kSHBGoO89nKAogc5n2n79nMrWpPvgOYFCYzGClHiUoPo8MYW7mHr1SRIzYVYGe/gJc4PHibZXnDv7jfOaf2TgyE8JwQzJpj5qrWhu8a2EUZ/ZMvOu+nMiWv/H9RreiRbcEYuAw8mipn88RHBfS4CrgEiVGBzYKekOKnKZ2qS4EJjWWR6FlrVjX879hVYh6tgSVzCyDQ++rElg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3bsa0b4nmGbMAwx3eSieZ7+X92IHcXdetaIs3jsV1TM=;
- b=JbpdlpCMHtU5yS/UbVLqLh0qDFqUza2kExwjodcg/jdCHU4uloWBkqyGlW3/5Cjv5rhrxKK6rFyGO6q/7n0UvQMW+eFgGrsoUxaQezQ4W0ljsE+1lo1vu2Ky+l1rvydw61gYbWKNZ6hEmKtE25rigsYCbqGotvnQWglE1SzgKEAqpnYMW3s4f2KZwFnngsr/X0byZ89h7KdcPuu3sty6xm43ZmwW6aCKPSBhEXllu+91mbUy+uVOwOmzbv1igtBWNr5cjcoN+X7SFMWqquZPgAcNbncdFLvhMagi/Pb2ednpXJcKXUgToHqhuBjcoRoBCEszy2fVI/4oGj1EScmgKw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MW3PR12MB4393.namprd12.prod.outlook.com (2603:10b6:303:2c::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.28; Wed, 26 Oct 2022 07:14:05 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66%6]) with mapi id 15.20.5746.023; Wed, 26 Oct 2022
- 07:14:05 +0000
-Message-ID: <f8eeeebc-e635-9c97-b97b-46df38f06002@nvidia.com>
-Date:   Wed, 26 Oct 2022 08:13:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 03/11] dt-bindings: usb: Add binding for Cypress cypd4226
- I2C driver
-Content-Language: en-US
-To:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-4-waynec@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20221024074128.1113554-4-waynec@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0508.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:13b::15) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        with ESMTP id S231628AbiJZHoR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 03:44:17 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10FFC0994
+        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 00:44:15 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id l32so9628107wms.2
+        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 00:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QxYf73s3xgQHPjgaJYLNKSY52juiOV4Io/j3A3VHpOo=;
+        b=3zBDOL8ngYX81xMqmYHR2Y8U5YqvhX91VmGX/0Cc7C4k78kwO8H5DsPkwQ2cvlpPnR
+         VF3Be2kaJUfyOy+2S8jZUc0MiHFhRWvs2VPz35OKXL85wp6MNNuEdrWh/jBzBr8YBn9P
+         /wBY9fTlZoR3l3/yUbtIWdqB2HIHKB8pGbnqGedKTE6/wfVuaKF3a+DlUoHsY4b6L4rP
+         QnbmCGyEUxPg7gx9SV5Y7WX21OvP+SD8p9Du/HvZzfVS8bEcMn1OqLDUZsm/KSgD0dTk
+         h1HPn23et+PuYwbhnAbPIUdcABVpO/pPBd/PqXbBuwIN6pIJ/1z60urN9SNOBIA/nE9d
+         Q27A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QxYf73s3xgQHPjgaJYLNKSY52juiOV4Io/j3A3VHpOo=;
+        b=x3hyxBwUTkZ1+TfIfAzMVmd84m8cD89uv9BGcB2U/0leN3+YrlHszctz9+bPanfSKa
+         mG3a4RGS9kBaVaZcjRwjtGAiwc2SFyYrunnCm7Lk3ltia8jEe3gctUAML3eFhY18uvOm
+         iVJ1TJwVi9ZuCHUmonazdoQ4eAqYowzgkcs1Jw7Bslr7BmDLcUL5zQ3XTY09iZaHQC+v
+         AUlFRsSmf6T4OA6ufLdwm0dyZJ1Byx9xVkkO7aprF9BLj1/yYMarr45J1OXcFAohkcVT
+         zidn6nf3LJ00cjJEFdxVyhZ4w3hs/wMqTv7Ht1pBZxA2r9S8QGCt7JWjbZry5pDdf1W3
+         VUdg==
+X-Gm-Message-State: ACrzQf38u24dvmBNngZjLVMPEmF3jK7UIuihY9HDEA50nDlSMv0oT9q/
+        GkV/p0PFl6A9Uh8/NzTs/TmMlA==
+X-Google-Smtp-Source: AMsMyM7enZgJ7JHsGNavIYiIobSpf4ullddfFCTFv9Fn5InagRsjwMG3s6O2gxEA2IUmelma2CHAYQ==
+X-Received: by 2002:a05:600c:a47:b0:3a6:5848:4bde with SMTP id c7-20020a05600c0a4700b003a658484bdemr1397660wmq.189.1666770254441;
+        Wed, 26 Oct 2022 00:44:14 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
+        by smtp.googlemail.com with ESMTPSA id i7-20020a5d4387000000b002366e8eee11sm4500955wrq.101.2022.10.26.00.44.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 00:44:14 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 09:44:12 +0200
+From:   Corentin LABBE <clabbe@baylibre.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 1/2] usb: serial: add support for CH348
+Message-ID: <Y1jlTP7HuH1FQbpk@Red>
+References: <20221021133758.1881904-1-clabbe@baylibre.com>
+ <20221021133758.1881904-2-clabbe@baylibre.com>
+ <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|MW3PR12MB4393:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f1ca8b0-8c19-49d2-f96e-08dab721aad7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6xCnBtsYB51sACIlzwq7Oh1hsyVfuMuAdg971vKViVQdtdqf3EBa+vY7ETTXaFnsaoptoN3JaEs1/fwk23OIljhpVKKSezDHVeCAZ2rNNpLZnYxrWNCE5L8nrXy33BeJpLu4tHTF81A4Bg2YG8zLpK2MdDPjdwpOWp7u4NtTLK7moUbBFX6A9KT+dFAlC/Oyog920giDW5kDFRDXwnCMJc2afx2LOgNLasw6GGY50Z0Y+09ThL+VDO57ZKrSoiSx9mNgwURJoFbO2HU2fgo8gJyB8rnDv2hHS7yfus+ngGm5sLhbh1lWSDfNZ+iH/ngRYpMSbh7/qupx+FUGBARlD66vbyd33zhE2bZ5KW0XqEGWJEODSREdG8GEgh2IA0RUCLNWPLvi+gssrUcLGMDbH4Cc1jAKWkcyawkw/0PgAIA6tN/h0+gmIGSC9TqvQcO/5YY7a11EkTgW89h26SimlIdBzST+DHEf0M4b794/TvzMqRkLZW8NplpUXOWYXuPWyW+VWjpIioM1MkTM3V3AQRYqX1S9zCtyy/x48eV1ZK/ajS2ZsH0W3owC1ZDkmlVQq6z61ceJcIfV3EEXSCV03cX8XnzE8jisdrkovxXK61shxXcDENLGlkn3qwu2PFmVswZvAKN57ezgVx0X75DVKoYutVQxvGSheNZ2F9lgxaOHVyOAmk/MOOu32d3uiWrrlSLwfvPTMvHrZblAL+fF/+bcOMhEORHR95bbDYPkxYw6u5Zq/ILvMtqXXULLXSgso18c1DhXTXhe8jrplsG0/ZZq7gyE7j4pn4XQBQihqnigqNjC0/hWLHKaDop8VbdKvWHQ8kvpWAot6CcsLbmzah7XgQkZlnBhPE6SKO4HeIvuxprB2sGe0TsqiFB9TFmScvkht4eKIH3NejRkFl3kcQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199015)(6666004)(478600001)(966005)(6512007)(53546011)(36756003)(38100700002)(6506007)(8676002)(316002)(6636002)(86362001)(921005)(31696002)(83380400001)(2616005)(186003)(6486002)(41300700001)(31686004)(8936002)(2906002)(66899015)(4326008)(5660300002)(66556008)(66476007)(66946007)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N2VLNlBLWTE0d0JQSG5tbUpHQ05vVmpHYWNSUXA0aW5KZkpKVFVhOWhPaWpE?=
- =?utf-8?B?dDZvSEVHVERMM2RvY3hTdzI0cWFHaDhpTWdJdHY3SUNxOGpnVnBLZzhUak1J?=
- =?utf-8?B?a09jdTlFQmtEL3o1aGl1Yy9NT2s4TDFuNWcrMEJVenR5QzBlWlljTktEcllx?=
- =?utf-8?B?MitmbkhCZTRvenBXNHNqRlZGNksrSDM5bVFtMmJLc0xEYmkyOTFlSFVWQk5V?=
- =?utf-8?B?VnB2emkxRFRPZHJMYm5WWXg2NU5BWHBqV3dIVzhJTTljdS9oWG1QZzZPWkUx?=
- =?utf-8?B?RVkvbjdQRVJpWGlHaXFyMkVkbG04eXFTUzlGK1RNZlprZ2FkT2ZadVZSdVY4?=
- =?utf-8?B?WkxoVjNuV0hKSWc5aDYxTUNuV0Z0dVFnMk1aM2s3QWFRTXBZWnNJSGx3Z01S?=
- =?utf-8?B?RnNMdWF4eGVqb285L0F2TEVlRDMwd0RMWk10SExGb0l2NUhaRkM5YUtkQ0Za?=
- =?utf-8?B?OUVVZEJBVTNBazhOSTI2eEg0eFdER1RqWG1iY3psdmRVQWJvdzRZU3Z0b3RR?=
- =?utf-8?B?dytmNXNOL01qY3dMVjdwZWg2VmRyL3N3d2c4YnBBL3JTV1J6V1hhK0FWQThi?=
- =?utf-8?B?KzZJYWVKS2U0Sm10ekFKZS9aSXZvSmNSWVBEODdZOTVFQ1owL3ZNTGpLNDg5?=
- =?utf-8?B?RFo4aDBKTmYyMHVTdUpnZ2UvYXdLWFl4ajFWZzNOYkJ1YXBZRGtCT3lBZE51?=
- =?utf-8?B?SkNMYmVvaWdONUdVaGdaNVZCNWsxZFBrMXBKVUhSNEF5S2pxOEdrZG5TbGxk?=
- =?utf-8?B?YVFlNmFlaTlmS0o5WGRnZU8rTjBJdEN0RW1MeUxobjdvM0ovczRIQVcxRk1t?=
- =?utf-8?B?bFNYVk00eDFiQkRLL0dHeGlHajQrNkN1OGxzWkRHWC9KOXJzUWJjbGJwZ2M5?=
- =?utf-8?B?dUtzL09VZkRtRVd4T3c3dDlsYVNnSXQyMGlGekpUNmw0UTBwNHBsN2U3bkpK?=
- =?utf-8?B?TXVrUVpYeklrZTc0cXJsS09hSXE3NnhyYVZwQ09jRXBXUDU0Rm5wUVlKVzRI?=
- =?utf-8?B?Wmt1eDl1dWRHVFNKM0U3UEYrSTZDSk9aT0xEUVdnbmdaN2hzbm5YbGVjT1JH?=
- =?utf-8?B?dFlzRzFnMjFPVStWUFFkbWJ6WEUwUzZRTzFLdDhkUHlpbmFuZmlzejhmcnVS?=
- =?utf-8?B?b3FvT2ZldGx6aUdDSHUvM1JQNUxpNlVqM3U1aXBIeGxzN3UxZm93U2Nwam5q?=
- =?utf-8?B?bmk4ZFZ5VzNPQnJ4OFFLYVArSmZSalZJYVNtSXRYekZJZlB1ekMzU21sc1Fw?=
- =?utf-8?B?dkpsQzNmVTkvSGhDdTlzMDNicm1LdGJxVG50VkdSaEI5Y2JCVEFhbnpXT3d0?=
- =?utf-8?B?RjhxQkJ4SU1UR09uWUpiOGhnbndVSmRLNDlCNU9nWDRaaWVHbEkxTW5OcEo5?=
- =?utf-8?B?cWpJVEE0YlpzZEVDbCtGOXhEWmNad2RNWW1tanFibWJIaHFQTExibkszeVdj?=
- =?utf-8?B?d0NPM3BSVFZtMWVmdTlFMkJxYlJUMDhiWThwcS9wR1IvY2oyOXpWVDBmUnVB?=
- =?utf-8?B?L0daV1JINFBuSE1zRndCcm0wMzZTdU9KdklVd0gwdVhqMlplZjkvcEZlV1Y1?=
- =?utf-8?B?VWFtbEtEK0FscWYrb2V6dFR6QTVGcmxwZW54OFJZdU53c0dLcWphdEl3TU9v?=
- =?utf-8?B?S0U5VWowaVgvenpIaGk0dGxYN1NCdDlIOUhrcDVVL2w1Z3JxdTN4QitnQSt1?=
- =?utf-8?B?MG84bFMxOTZ5TVgwbVY0MlNpZ2xZcVFQaXVGK0FuSnZBL3ZTUWR2bC9QNjFR?=
- =?utf-8?B?cld6V3ViT3IxQlVVRkY0OFovK1JwN3lhUTUzWm9XNmptbnVQa0R3cGd6aXZ5?=
- =?utf-8?B?eHZ5dVlGZUlFK2tvaXIvRTFTb1lyMkF0SHF1Wi8ybkdKbzYwcUFtbzFnUjdK?=
- =?utf-8?B?NVJYMS9kUml3M29JLzBpd2VJcnozS0NHLzZBMzV4UDBGc1YvTXp1Q3RXVnAv?=
- =?utf-8?B?RzRLK29Nc1JjQTJJdU5WdjN1NzM0eWlZY1BkdXJXdHg2eEdSaWhqYWlsODgv?=
- =?utf-8?B?MHlNaENlRjNkaWtLUm5XclhNbktQVUlVYTEwSXNDZk1lZVM5clYvc1lKNlhy?=
- =?utf-8?B?Qkh6VlJDZ2pOM0YxQ3g3ZGZRR3VZWllFMlRFMGZpQmZaY2M1NENHVVF2Zkdi?=
- =?utf-8?B?N3RrVTFtdWVuYjZXRDhhamduczk4cWlBeWpKY0o0QmlIOHF5VTFUaWlkZHJR?=
- =?utf-8?Q?+6EE+7R6rHDv6QbiDBZS/6L5cp/q9v0pcvt8ldctrprM?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f1ca8b0-8c19-49d2-f96e-08dab721aad7
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 07:14:05.7424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UwbGT8N7Le+dP9x9z/LvodaE23WGvSbcUhvwVA7JzNPUdXZYgTteEEgSqqpTYHZQ54hlKuz+mD76/reKiOIwSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4393
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On 24/10/2022 08:41, Wayne Chang wrote:
-> add device-tree binding documentation for Cypress cypd4226 type-C
-> controller's I2C interface. It is a standard i2c slave with GPIO
-> input as IRQ interface.
+Le Mon, Oct 24, 2022 at 11:40:16AM +0200, Oliver Neukum a écrit :
 > 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
->   .../bindings/usb/cypress,cypd4226.yaml        | 86 +++++++++++++++++++
->   1 file changed, 86 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> new file mode 100644
-> index 000000000000..5ac28ab4e7a1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> @@ -0,0 +1,86 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/cypress,cypd4226.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cypress cypd4226 UCSI I2C Type-C Controller
-> +
-> +maintainers:
-> +  - Wayne Chang <waynec@nvidia.com>
-> +
-> +description: |
-> +  The Cypress cypd4226 UCSI I2C type-C controller is a I2C interface type-C
-> +  controller.
-> +
-> +properties:
-> +  compatible:
-> +    const: cypress,cypd4226
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  reg:
-> +    const: 0x08
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  cypress,firmware-build:
-> +    enum:
-> +      - nv
-> +      - gn
-> +    description: |
-> +      the name of the CCGx firmware built for product series.
-> +      should be set one of following:
-> +      - "nv" for the RTX product series
+> On 21.10.22 15:37, Corentin Labbe wrote:
+> > The CH348 is an USB octo port serial adapter.
+> > This patch adds support for it.
+> > 
+> 
+> Hi,
+> 
+> comments inline.
+> 
+> > +struct ch348_rxbuf {
+> > +	u8 port;
+> > +	u8 length;
+> > +	u8 data[];
+> > +} __packed;
+> > +
+> > +#define CH348_RX_PORT_CHUNK_LENGTH	32
+> > +#define CH348_RX_PORT_MAX_LENGTH	30
+> > +
+> > +struct ch348_txbuf {
+> > +	u8 port;
+> > +	__le16 length;
+> > +	u8 data[];
+> > +} __packed;
+> > +
+> 
+> You know how long data will be. Why leave it unspecified?
+> 
+> > +static void ch348_process_read_urb(struct urb *urb)
+> > +{
+> > +	struct usb_serial_port *port = urb->context;
+> > +	struct ch348 *ch348 = usb_get_serial_data(port->serial);
+> > +	u8 *buffer = urb->transfer_buffer, *end;
+> > +	unsigned int portnum, usblen;
+> > +	struct ch348_rxbuf *rxb;
+> > +
+> > +	if (!urb->actual_length) {
+> 
+> That check needs to be for < 2 or you can process garbage.
+> 
+> > +		dev_warn(&port->dev, "%s:%d empty rx buffer\n", __func__, __LINE__);
+> > +		return;
+> > +	}
+> > +
+> > +	end = buffer + urb->actual_length;
+> > +
+> > +	for (; buffer < end; buffer += CH348_RX_PORT_CHUNK_LENGTH) {
+> > +		rxb = (struct ch348_rxbuf *)buffer;
+> > +		portnum = rxb->port;
+> > +		if (portnum >= CH348_MAXPORT) {
+> > +			dev_warn(&port->dev, "%s:%d invalid port %d\n",
+> > +				 __func__, __LINE__, portnum);
+> > +			break;
+> > +		}
+> > +
+> > +		usblen = rxb->length;
+> > +		if (usblen > 30) {
+> 
+> You have defined a nummerical constant for that. Use it.
+> 
+> > +			dev_warn(&port->dev, "%s:%d invalid length %d for port %d\n",
+> > +				 __func__, __LINE__, usblen, portnum);
+> > +			break;
+> > +		}
+> > +
+> > +		port = ch348->ttyport[portnum].port;
+> > +		tty_insert_flip_string(&port->port, rxb->data, usblen);
+> > +		tty_flip_buffer_push(&port->port);
+> > +		port->icount.rx += usblen;
+> > +		usb_serial_debug_data(&port->dev, __func__, usblen, rxb->data);
+> > +	}
+> > +}
+> > +
+> > +static int ch348_prepare_write_buffer(struct usb_serial_port *port, void *dest, size_t size)
+> > +{
+> > +	struct ch348_txbuf *rxt = dest;
+> > +	const size_t txhdrsize = offsetof(struct ch348_txbuf, data);
+> 
+> What is that? This is a constant.
+> 
+> > +	int count;
+> > +
+> > +	count = kfifo_out_locked(&port->write_fifo, rxt->data,
+> > +				 size - txhdrsize, &port->lock);
+> > +
+> > +	rxt->port = port->port_number;
+> > +	rxt->length = cpu_to_le16(count);
+> > +
+> > +	return count + txhdrsize;
+> > +}
+> 
+> > +static void ch348_set_termios(struct tty_struct *tty, struct usb_serial_port *port,
+> > +			      const struct ktermios *termios_old)
+> > +{
+> > +	struct ch348 *ch348 = usb_get_serial_data(port->serial);
+> > +	int portnum = port->port_number;
+> > +	struct ktermios *termios = &tty->termios;
+> > +	int ret, sent;
+> > +	__le32	dwDTERate;
+> 
+> OK it is LE.
+> 
+> > +	u8	bCharFormat;
+> > +	struct ch348_initbuf *buffer;
+> > +
+> > +	if (termios_old && !tty_termios_hw_change(&tty->termios, termios_old))
+> > +		return;
+> > +
+> > +	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+> > +	if (!buffer) {
+> > +		if (termios_old)
+> > +			tty->termios = *termios_old;
+> > +		return;
+> > +	}
+> > +
+> > +	dwDTERate = tty_get_baud_rate(tty);
+> 
+> This is speed_t, in other words unsigned int without specified endianness.
+> 
+> > +	/* test show no success on low baud and datasheet said it is not supported */
+> > +	if (dwDTERate < 1200)
+> > +		dwDTERate = DEFAULT_BAUD_RATE;
+> > +	/* datasheet said it is not supported */
+> > +	if (dwDTERate > 6000000)
+> > +		dwDTERate = 6000000;
+> 
+> You are comparing to constants in native endianness.
+> 
+> > +
+> > +	bCharFormat = termios->c_cflag & CSTOPB ? 2 : 1;
+> > +
+> > +	buffer->bParityType = termios->c_cflag & PARENB ?
+> > +			     (termios->c_cflag & PARODD ? 1 : 2) +
+> > +			     (termios->c_cflag & CMSPAR ? 2 : 0) : 0;
+> > +
+> > +	switch (termios->c_cflag & CSIZE) {
+> > +	case CS5:
+> > +		buffer->bDataBits = 5;
+> > +		break;
+> > +	case CS6:
+> > +		buffer->bDataBits = 6;
+> > +		break;
+> > +	case CS7:
+> > +		buffer->bDataBits = 7;
+> > +		break;
+> > +	case CS8:
+> > +	default:
+> > +		buffer->bDataBits = 8;
+> > +		break;
+> > +	}
+> > +	buffer->cmd = CMD_WB_E | (portnum & 0x0F);
+> > +	buffer->reg = R_INIT;
+> > +	buffer->port = portnum;
+> > +	buffer->dwDTERate = cpu_to_be32(le32_to_cpu(dwDTERate));
+> 
+> So it is native, not LE?
+> 
 
-Please add 'NVIDIA' so that it is 'for the NVIDIA RTX product series'
+Hello
 
-> +      - "gn" for the Jetson product series
+Thanks for your review, I will fix them all.
 
-Same here please add 'NVIDIA' so that it is 'for the NVIDIA Jetson 
-product series'.
+> [..]
+> 
+> > +
+> > +static int ch348_fixup_port_bulk_in(struct ch348 *ch348, struct usb_serial_port *port)
+> > +{
+> > +	int i;
+> > +
+> > +	/* Already Initialized */
+> > +	if (port->bulk_in_size) {
+> 
+> BTW, shouldn't these be unsigned int?
 
-Rob, any concerns about this property in general? Unfortunately, ACPI 
-choose a 16-bit type for this and used 'nv' for the RTX product. I don't 
-find 'gn' for Jetson very descriptive but we need a way to differentiate 
-from RTX.
+I dont understand what you mean here.
 
-This is needed in the Cypress CCGX driver for the following ...
-
-https://lore.kernel.org/lkml/20220928150840.3804313-1-waynec@nvidia.com/
-
-Ideally, this should have been included in this series but was sent 
-before. We can always re-work/update the above patch even though it has 
-been queued up now.
-
-Jon
-
--- 
-nvpublic
+Regards
