@@ -2,71 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B517E60DC62
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 09:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684F860DCB1
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 10:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbiJZHoT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 03:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S233139AbiJZICj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 04:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiJZHoR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 03:44:17 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10FFC0994
-        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 00:44:15 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id l32so9628107wms.2
-        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 00:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QxYf73s3xgQHPjgaJYLNKSY52juiOV4Io/j3A3VHpOo=;
-        b=3zBDOL8ngYX81xMqmYHR2Y8U5YqvhX91VmGX/0Cc7C4k78kwO8H5DsPkwQ2cvlpPnR
-         VF3Be2kaJUfyOy+2S8jZUc0MiHFhRWvs2VPz35OKXL85wp6MNNuEdrWh/jBzBr8YBn9P
-         /wBY9fTlZoR3l3/yUbtIWdqB2HIHKB8pGbnqGedKTE6/wfVuaKF3a+DlUoHsY4b6L4rP
-         QnbmCGyEUxPg7gx9SV5Y7WX21OvP+SD8p9Du/HvZzfVS8bEcMn1OqLDUZsm/KSgD0dTk
-         h1HPn23et+PuYwbhnAbPIUdcABVpO/pPBd/PqXbBuwIN6pIJ/1z60urN9SNOBIA/nE9d
-         Q27A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QxYf73s3xgQHPjgaJYLNKSY52juiOV4Io/j3A3VHpOo=;
-        b=x3hyxBwUTkZ1+TfIfAzMVmd84m8cD89uv9BGcB2U/0leN3+YrlHszctz9+bPanfSKa
-         mG3a4RGS9kBaVaZcjRwjtGAiwc2SFyYrunnCm7Lk3ltia8jEe3gctUAML3eFhY18uvOm
-         iVJ1TJwVi9ZuCHUmonazdoQ4eAqYowzgkcs1Jw7Bslr7BmDLcUL5zQ3XTY09iZaHQC+v
-         AUlFRsSmf6T4OA6ufLdwm0dyZJ1Byx9xVkkO7aprF9BLj1/yYMarr45J1OXcFAohkcVT
-         zidn6nf3LJ00cjJEFdxVyhZ4w3hs/wMqTv7Ht1pBZxA2r9S8QGCt7JWjbZry5pDdf1W3
-         VUdg==
-X-Gm-Message-State: ACrzQf38u24dvmBNngZjLVMPEmF3jK7UIuihY9HDEA50nDlSMv0oT9q/
-        GkV/p0PFl6A9Uh8/NzTs/TmMlA==
-X-Google-Smtp-Source: AMsMyM7enZgJ7JHsGNavIYiIobSpf4ullddfFCTFv9Fn5InagRsjwMG3s6O2gxEA2IUmelma2CHAYQ==
-X-Received: by 2002:a05:600c:a47:b0:3a6:5848:4bde with SMTP id c7-20020a05600c0a4700b003a658484bdemr1397660wmq.189.1666770254441;
-        Wed, 26 Oct 2022 00:44:14 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
-        by smtp.googlemail.com with ESMTPSA id i7-20020a5d4387000000b002366e8eee11sm4500955wrq.101.2022.10.26.00.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 00:44:14 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 09:44:12 +0200
-From:   Corentin LABBE <clabbe@baylibre.com>
-To:     Oliver Neukum <oneukum@suse.com>
+        with ESMTP id S231649AbiJZICi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 04:02:38 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2056.outbound.protection.outlook.com [40.107.105.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A806E9AFC7;
+        Wed, 26 Oct 2022 01:02:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GPPXJp4RLkc+W46IWI1AcjyGTWVRGVikJ4eDmT2XK0lU1F9F3pg1v8wAzmwm/bo4MPb5Nv08rMBvOzmDOILrnIYN1k8UvLj3S8bNQ4ZDHMfZN6NfeI/mD+zQVKPoShcqcZEp0PHeKJylFph1N27BbbwYDyHPR3YOqlFshUMOnKcQev5ecQ4gME6SW0SaRS1KvOZFTcHmAeok9fUjGN9/uaAB/vMP9n5bvSG4i1Fn67+4aR0iHMUlDs4oaGPfJ450raDpMs/3GGYYbu4+ubfUUUQdw2hw2Hig1KeU8QTyXF+3cGmHUqHPbFBhflFeeFg8NseVdiyuXFm4qwWVk/mk8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bSrHMR0xerv6lsliqQVy48NZ2Q382O4KkH17e63OROw=;
+ b=b17QB5I93uS0zoVlaww3j8coFO5RMTzHDZl4zYnhdrT6YtoCnctR7uLUCGu04NhSLrBdJlqmKqfe7bMZPPbpyVnBn6AFEW4r/I4aH+0ZGMmKusE5Dx+AYqLh6DZ/yi9xp+JEJR3E77AZCT9XjQDzqwwv8HNCPPnyQdZRPacayqjbSZzBI2xFM9smzTHFzIkLM8sa1pEpQ+0mwr/nMqSnadBGadlH+9VC/nHpGZ48+Q81vjcRABLn9Y4krkCtf1hS0Yu8hMyJOHWJub85CYGDWcaI799CcDOWNoqS6g0JRJlu0s+GX4Zb8ac7QBlsnl/KUdrgIC1ARm1OzgbbLw+vpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bSrHMR0xerv6lsliqQVy48NZ2Q382O4KkH17e63OROw=;
+ b=4qKF+UswKesamqNii6ZZKZvcOQcvvoj7Nb91vd0W8yF5VIDhORmIl8Y99dJN7Pj8rMDc0iCyLu6M0W8QSmRpat3We0N02vRz5MX9aU/SOhWK7zZt1LGp+mV+vy2jVdHEUTf8vmfg1C3Tb6YNHBugV36tE0+6oUB4OSL3fB/DuQ0w8hyrd3nmi0UVh/fkdjYOm9t1T3gynVEXO9TGyLsCgyoc4KtujfKxpui4DuXRgfFlFEeGaf+Z9/Q9P+pcOHtk/3M1qt2fEx8XmtQZ0gFgF7NfT0sMa6HBMV/XaZQiFITCBdcovmgzpfbWsiXY8Xndj+U2ohVWlh7HX7pYZQjunQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by PAXPR04MB8846.eurprd04.prod.outlook.com (2603:10a6:102:20d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Wed, 26 Oct
+ 2022 08:02:35 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::1bf0:ae5a:ac96:5dea]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::1bf0:ae5a:ac96:5dea%3]) with mapi id 15.20.5746.023; Wed, 26 Oct 2022
+ 08:02:34 +0000
+Message-ID: <65ed2576-55a4-fbf1-010b-a51e92389062@suse.com>
+Date:   Wed, 26 Oct 2022 10:02:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/2] usb: serial: add support for CH348
+To:     Corentin LABBE <clabbe@baylibre.com>,
+        Oliver Neukum <oneukum@suse.com>
 Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 1/2] usb: serial: add support for CH348
-Message-ID: <Y1jlTP7HuH1FQbpk@Red>
 References: <20221021133758.1881904-1-clabbe@baylibre.com>
  <20221021133758.1881904-2-clabbe@baylibre.com>
- <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com>
+ <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com> <Y1jlTP7HuH1FQbpk@Red>
+Content-Language: en-US
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <Y1jlTP7HuH1FQbpk@Red>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0157.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::13) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PAXPR04MB8846:EE_
+X-MS-Office365-Filtering-Correlation-Id: a456b9fa-0998-4a64-643d-08dab72870cf
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rm33PhIQEdwXaoIIKdrapdNjX/lR9bo9hIEuPuBPSqpRTLcA+u+toxjbKNq9aJfkbmNy63asdWz6oInZsRXhuYQ9s6H5QP3QKYeAUnmmEIgAm6gZUHACe5FsLcUgW145WHKGBZGKJ4HPwb3wIY5Vllaxw3GJDgJwvgwidkO/0wmcugow45wW0Lzm2G+x3t+3tZYriLeulAZo66AzWovLI3yJY0XSXn/prpB/1H5ZRKL14MtQyAlYbS7m33TV9jrNj5mr6iE8b1PirHgBqa5cSQWgYjX4rHmS9PcRTxdrgs5UwXBDn8Rc6WWSLTr49/ajw/Jcnr69S+7C9+PyPJnEl1LujSNUs9xo7fkQ/xUa+SSbJn2aYd8WJY2jkrollVRG38noKmkwCg35vF4kBtkF9zgEKU/q6kh07KQiZlZ6zPUvqz/zwSqqGKbzvmEf9U3xQmmUaKNzB6XB8GzEqE4UpQdJC9RAnKr4CB8ISttgTFSC22JuSF9fx/v2lbLxl6o+3p7Y91JrtCJLZEZAWKeBKdtlMFW+HWTQ3hwwqH+X7jzSm2eaJzhj2lOSgN5EhliT9ZXQJlduIlXf7F7SuKtL4f5DcT0+Q/GjKkYJkw5C0Teb6eU414LrCgYJP9joC8f5lLtHb5eT1ox5AScEEgUje+dZYjONUjFCRqlMRxon1O2h2+drRt+CMJgYcJwkzE1fIQBwvmOKNYwEvW3HfuYGErNRq19+TpMBTPfKzchBOe1Z2/J71Zu03ZaEHt27nDMyMh/JtpZ16/jyhw4n1LJ5VU4oL3Q+zVSWkwJIXRHp+T4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(376002)(396003)(366004)(136003)(451199015)(186003)(38100700002)(31686004)(41300700001)(316002)(5660300002)(4744005)(66476007)(8676002)(4326008)(66946007)(6512007)(66556008)(8936002)(6506007)(53546011)(2906002)(86362001)(2616005)(110136005)(31696002)(478600001)(6486002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXdtUlNwRS9WZkdpOUlKNzBQVmdLL0o1dVR5a3RiN3dSajYwaHBDRGFCVnBP?=
+ =?utf-8?B?bXJuTzA0elNwZk1DMHZCdTdqckpVYU81blMxamxuYkl5OHpOR2c0alo3a3FH?=
+ =?utf-8?B?djhEUHFvOFludVJuOTZ1TGRIWkh0OGVadklQOFptc0NSbUpmVDRsdUYvZ2sy?=
+ =?utf-8?B?UGhmdHNtWDBvbFVIMitxVVQvSlpEVDNkbW8yZmE2ZTVUUTZGMEljcjBFUHI1?=
+ =?utf-8?B?amlkNnZ3bHc2L1ZqbC9YaTljS3ZUOUVaeEZrcmk3WXVjcGFsclN2ODdoOUdE?=
+ =?utf-8?B?SG5TbzMvRlNrMmkzd0RzTGc0VVpOUlJGc25wK0o3Tzg3ckNkWHZHZzloYzk3?=
+ =?utf-8?B?WStySUl2OEdZUjBiV05HRndGdTY2NFRJUmpITWFhNll1WmE1U0l1dkhFUzg0?=
+ =?utf-8?B?ekZBUXo2czFvWUxEWWJWdzZhTHhhbFRjZklLQlZXNHRyWjhLV2dyYUxqdjZO?=
+ =?utf-8?B?bE1DMW5ycTZBTVZvTXh5aDRaMDVmTE5wMVNJdXF5anB6RkE2NjFlNkQ4UHNT?=
+ =?utf-8?B?cThEdWplZDZyY2VpN3EzaHNsTkpZRFZ2R1NXZFZybCtXWFpaOElraG9uS3ZX?=
+ =?utf-8?B?OHdJV3QrcGhTa0J6UTUzSE4yRGtqWWQ5SHZhYjArOUh0aVRjcU9NbFpVNWFO?=
+ =?utf-8?B?MzFRU3R3dW5lY2hIbDNDRXZGdGlwY0tLSWpCd25MRHNqN3RSeUNYSGJSL3Jn?=
+ =?utf-8?B?VnhSaHlxM3pnT0RMVHgzVS9XL1dYNWhJUElsVzdjZUphZE13YzJEZjhNQzVI?=
+ =?utf-8?B?V0JnS0l6VDBzcVBIRGNrem5WcWd0NGdacGg2YlR3aE9wcktLTDNHZ1VEM3Az?=
+ =?utf-8?B?SG53d25rdFVxUXhpYkJ4cjFuQkpWY1hNTGg5L2ZMRGsxdGd6OWVNY3N0R3FM?=
+ =?utf-8?B?RmpKUmVDK096UGpHWmtWdW9OY1JTYWpYT1ZvNVN3UkQxaG5DMThtcHUwQnYy?=
+ =?utf-8?B?T004MXgwQmNXalJ5azlKRjZHMTZuM2R0QjRGc3VNMU5IY1BFQjNXWmhoRjZF?=
+ =?utf-8?B?eWs1c1g2OUZyaHN6eXNtZmdZMitvK3RDZDUrekdwQjZpMW4yU2J1R3k4bE9X?=
+ =?utf-8?B?WFp4Y2dDTXNaWXgxc09vaXR2WWNOQzFEdWZoL1hkbU1TcVphYUpDcWJhMHR1?=
+ =?utf-8?B?cU9leFJ2a2Z6WVczOGZUYmswZWZSblRCK0NLL2owOVpiMDZjSVZONWMrQ1dx?=
+ =?utf-8?B?ckkxL2NqRHUxYmVCM2l6R1k4NGhXdDJoUVNTd2tuVWl4dXpxOGJlcS9aY25V?=
+ =?utf-8?B?SjJqMUNid0dYNWRRNXFxT0lUNUlndTNnakp1N0treGU5VUZkZ3VySU9PNXY4?=
+ =?utf-8?B?Q21oc3FpdXVCWUh0OXJ3c2ZkTDJwNnZJRVFFK1JyMmxsZm9ydVk5VysvUzkx?=
+ =?utf-8?B?UU1PSFpBdmRGUTYrMXJpRkpTaHYwMkhjd2k5Tzk2OTJ4N1FVU3k0YW1tNlN2?=
+ =?utf-8?B?cFFlUzlVY2I1OXJIdG9YZkI4U2NRd3pHNWVGTlIxRnZvWHcvckJNVHQ3ZGFk?=
+ =?utf-8?B?TXFuZmF1bHZnbmZpSXJ1RUVRbkhUdE51UGlkSmR1NGp0UDVtTDM0dG9QaGhJ?=
+ =?utf-8?B?RXdXaEhyb0plYlo1TVBKUEdST2ZUUC9mazlrSTZrU080VmhWS09VRXZSSFhB?=
+ =?utf-8?B?QWtick5ZZkRqM0lpRk9DdFZaV2l4ZUsrM3BRb2ZNODVjczl3MWtvdVNmTDA0?=
+ =?utf-8?B?T25QSXk1RWNUQ28wZFM5UVJncXFFNmh2aHdUTk1vMTJ0bFkzZkhEaUxGRURH?=
+ =?utf-8?B?clJ6TmN1U2JabUtEUjlmVitaQXh0bHhLakZOWko2UEc2U0g4WWdrb21sNFg2?=
+ =?utf-8?B?SmgvR3k1YVNnY2F5YVlvK2lKL200dVByZS9PMmk0SHJFN2dLUk1jQkxDUjFw?=
+ =?utf-8?B?N3RyVUJYQ3JFQm56QjZJSmVTMmtRaEdCTE8zY2U3d0ZuczQ0ZFV2clJYS3dj?=
+ =?utf-8?B?SEpQcGdPUU9zd2hFOU5lWW9pVkNGczQxVmZxWkdKSGUzbDBnVitkcHN6QlVY?=
+ =?utf-8?B?dTRxcjQ2OUYrSS91UVBuRGJBQmJaNmlCRktDYUFDZUNLTVNHc1NoeWJ0L0Rx?=
+ =?utf-8?B?czZSYjZlMUx1S0R1STVlM3doR0tWaHJOd2ZEc0pZUy9VeC9HeWhibEZUa2pC?=
+ =?utf-8?B?Vld3bE1VK2FRMlRxMUJjY3BWdlhFTnMzZi9zb1ZGTURHcGxMSFpDMXNkbnRT?=
+ =?utf-8?Q?EVOtcyRW7O/k5JmtHiksx16yvSnaG+ficcaJlzbSZ7kP?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a456b9fa-0998-4a64-643d-08dab72870cf
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 08:02:34.6967
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yujjDh2ZMWHbR/oD3LJFY/O1/74uQ1xHXyuoL+hpyTye3BHW4aFToqQFDZEzdTYwBgJl0C6iXSKrwqrJ9Y6MAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8846
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,182 +129,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Le Mon, Oct 24, 2022 at 11:40:16AM +0200, Oliver Neukum a écrit :
-> 
-> 
-> On 21.10.22 15:37, Corentin Labbe wrote:
-> > The CH348 is an USB octo port serial adapter.
-> > This patch adds support for it.
-> > 
-> 
-> Hi,
-> 
-> comments inline.
-> 
-> > +struct ch348_rxbuf {
-> > +	u8 port;
-> > +	u8 length;
-> > +	u8 data[];
-> > +} __packed;
-> > +
-> > +#define CH348_RX_PORT_CHUNK_LENGTH	32
-> > +#define CH348_RX_PORT_MAX_LENGTH	30
-> > +
-> > +struct ch348_txbuf {
-> > +	u8 port;
-> > +	__le16 length;
-> > +	u8 data[];
-> > +} __packed;
-> > +
-> 
-> You know how long data will be. Why leave it unspecified?
-> 
-> > +static void ch348_process_read_urb(struct urb *urb)
-> > +{
-> > +	struct usb_serial_port *port = urb->context;
-> > +	struct ch348 *ch348 = usb_get_serial_data(port->serial);
-> > +	u8 *buffer = urb->transfer_buffer, *end;
-> > +	unsigned int portnum, usblen;
-> > +	struct ch348_rxbuf *rxb;
-> > +
-> > +	if (!urb->actual_length) {
-> 
-> That check needs to be for < 2 or you can process garbage.
-> 
-> > +		dev_warn(&port->dev, "%s:%d empty rx buffer\n", __func__, __LINE__);
-> > +		return;
-> > +	}
-> > +
-> > +	end = buffer + urb->actual_length;
-> > +
-> > +	for (; buffer < end; buffer += CH348_RX_PORT_CHUNK_LENGTH) {
-> > +		rxb = (struct ch348_rxbuf *)buffer;
-> > +		portnum = rxb->port;
-> > +		if (portnum >= CH348_MAXPORT) {
-> > +			dev_warn(&port->dev, "%s:%d invalid port %d\n",
-> > +				 __func__, __LINE__, portnum);
-> > +			break;
-> > +		}
-> > +
-> > +		usblen = rxb->length;
-> > +		if (usblen > 30) {
-> 
-> You have defined a nummerical constant for that. Use it.
-> 
-> > +			dev_warn(&port->dev, "%s:%d invalid length %d for port %d\n",
-> > +				 __func__, __LINE__, usblen, portnum);
-> > +			break;
-> > +		}
-> > +
-> > +		port = ch348->ttyport[portnum].port;
-> > +		tty_insert_flip_string(&port->port, rxb->data, usblen);
-> > +		tty_flip_buffer_push(&port->port);
-> > +		port->icount.rx += usblen;
-> > +		usb_serial_debug_data(&port->dev, __func__, usblen, rxb->data);
-> > +	}
-> > +}
-> > +
-> > +static int ch348_prepare_write_buffer(struct usb_serial_port *port, void *dest, size_t size)
-> > +{
-> > +	struct ch348_txbuf *rxt = dest;
-> > +	const size_t txhdrsize = offsetof(struct ch348_txbuf, data);
-> 
-> What is that? This is a constant.
-> 
-> > +	int count;
-> > +
-> > +	count = kfifo_out_locked(&port->write_fifo, rxt->data,
-> > +				 size - txhdrsize, &port->lock);
-> > +
-> > +	rxt->port = port->port_number;
-> > +	rxt->length = cpu_to_le16(count);
-> > +
-> > +	return count + txhdrsize;
-> > +}
-> 
-> > +static void ch348_set_termios(struct tty_struct *tty, struct usb_serial_port *port,
-> > +			      const struct ktermios *termios_old)
-> > +{
-> > +	struct ch348 *ch348 = usb_get_serial_data(port->serial);
-> > +	int portnum = port->port_number;
-> > +	struct ktermios *termios = &tty->termios;
-> > +	int ret, sent;
-> > +	__le32	dwDTERate;
-> 
-> OK it is LE.
-> 
-> > +	u8	bCharFormat;
-> > +	struct ch348_initbuf *buffer;
-> > +
-> > +	if (termios_old && !tty_termios_hw_change(&tty->termios, termios_old))
-> > +		return;
-> > +
-> > +	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-> > +	if (!buffer) {
-> > +		if (termios_old)
-> > +			tty->termios = *termios_old;
-> > +		return;
-> > +	}
-> > +
-> > +	dwDTERate = tty_get_baud_rate(tty);
-> 
-> This is speed_t, in other words unsigned int without specified endianness.
-> 
-> > +	/* test show no success on low baud and datasheet said it is not supported */
-> > +	if (dwDTERate < 1200)
-> > +		dwDTERate = DEFAULT_BAUD_RATE;
-> > +	/* datasheet said it is not supported */
-> > +	if (dwDTERate > 6000000)
-> > +		dwDTERate = 6000000;
-> 
-> You are comparing to constants in native endianness.
-> 
-> > +
-> > +	bCharFormat = termios->c_cflag & CSTOPB ? 2 : 1;
-> > +
-> > +	buffer->bParityType = termios->c_cflag & PARENB ?
-> > +			     (termios->c_cflag & PARODD ? 1 : 2) +
-> > +			     (termios->c_cflag & CMSPAR ? 2 : 0) : 0;
-> > +
-> > +	switch (termios->c_cflag & CSIZE) {
-> > +	case CS5:
-> > +		buffer->bDataBits = 5;
-> > +		break;
-> > +	case CS6:
-> > +		buffer->bDataBits = 6;
-> > +		break;
-> > +	case CS7:
-> > +		buffer->bDataBits = 7;
-> > +		break;
-> > +	case CS8:
-> > +	default:
-> > +		buffer->bDataBits = 8;
-> > +		break;
-> > +	}
-> > +	buffer->cmd = CMD_WB_E | (portnum & 0x0F);
-> > +	buffer->reg = R_INIT;
-> > +	buffer->port = portnum;
-> > +	buffer->dwDTERate = cpu_to_be32(le32_to_cpu(dwDTERate));
-> 
-> So it is native, not LE?
-> 
 
-Hello
 
-Thanks for your review, I will fix them all.
+On 26.10.22 09:44, Corentin LABBE wrote:
 
-> [..]
+Hi,
+
+
 > 
-> > +
-> > +static int ch348_fixup_port_bulk_in(struct ch348 *ch348, struct usb_serial_port *port)
-> > +{
-> > +	int i;
-> > +
-> > +	/* Already Initialized */
-> > +	if (port->bulk_in_size) {
+> Thanks for your review, I will fix them all.
+
+I am happy to point out issues.
+
+>> [..]
+>>
+>>> +
+>>> +static int ch348_fixup_port_bulk_in(struct ch348 *ch348, struct usb_serial_port *port)
+>>> +{
+>>> +	int i;
+>>> +
+>>> +	/* Already Initialized */
+>>> +	if (port->bulk_in_size) {
+>>
+>> BTW, shouldn't these be unsigned int?
 > 
-> BTW, shouldn't these be unsigned int?
+> I dont understand what you mean here.
 
-I dont understand what you mean here.
+bulk_in_size as a member of the structure is defined as int.
+As a size cannot meaningfully be negative and this takes no
+error reports, I was wondering whether it should be declared
+an unsigned integer for the sake of cleanliness.
 
-Regards
+	Regards
+		Oliver
