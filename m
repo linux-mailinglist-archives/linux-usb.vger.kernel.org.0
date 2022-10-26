@@ -2,108 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB23360DEB4
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 12:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC95F60E048
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Oct 2022 14:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbiJZKNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Oct 2022 06:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S233776AbiJZMHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Oct 2022 08:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiJZKN3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 06:13:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212CBCE2D
-        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 03:13:28 -0700 (PDT)
+        with ESMTP id S233732AbiJZMGz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Oct 2022 08:06:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6849B96A36;
+        Wed, 26 Oct 2022 05:06:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 867BBB82148
-        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 10:13:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38F5EC43143
-        for <linux-usb@vger.kernel.org>; Wed, 26 Oct 2022 10:13:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666779206;
-        bh=wgvPrS9LPH0HHqpE7HwcEaKoxjf4XwUyDoSXBkjKgOI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=tBMASAkS5dLoaSAeVwnQH9N54Tl+zCVo60DFQ4CElH9tkXNKpIqV2N9skZhherp5A
-         oLEVDyOiD1jAGsEIDw6+qio4aZL952a3G/TKMkSQaibh9qmhjjq+YPlCzBfY9xvi9s
-         69JjDOr2Tmfn7xOHFPgRCJGEGGSFAHpu1+I2pBbHY8FENs7Inu/fhDwVZbNTL2VS7q
-         79As5YxWUuIo1SM/3MVy+Fm7SDGPRZoWsWO80Qu/XhJNxKbjlhUqN9a5TDy1ASaYk9
-         rzQyegUKyUiLelbNlhLTD3wzXOIir8lRuhIb3IZE9yx9s2p05ySyqtlhhanXVHfesO
-         X+ytbYD41UEMg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 28817C433EA; Wed, 26 Oct 2022 10:13:26 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Wed, 26 Oct 2022 10:13:25 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: andrew.co@free.fr
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-210425-208809-CnEQWwfdqN@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E19FA61E65;
+        Wed, 26 Oct 2022 12:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE63AC43146;
+        Wed, 26 Oct 2022 12:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666786005;
+        bh=MvwPEECCTNdUVS8myaqJxMTSBLxFNIpScTXphITkRgo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dpW5Ebmud2wvkeprcyGE1f6yheeliW4MI+6tV1pFyTVFPRL53GAMHOk6kPnUIoLNa
+         UjlMXjGn+AXEplA6MVwWQ78OeAiquHxuhpGlr09SXsmJZg8jmuNCPsJ8reXGJNBagz
+         MhPurdBEWfqiQ7YnFsEw46QSRuteKSmrNSWp7TWI=
+Date:   Wed, 26 Oct 2022 14:07:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, imv4bel@gmail.com
+Subject: Re: [PATCH] char: xillybus: Prevent use-after-free due to race
+ condition
+Message-ID: <Y1kjCqUlOFJUgLqZ@kroah.com>
+References: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+On Wed, Oct 26, 2022 at 11:52:40AM +0300, Eli Billauer wrote:
+> xillybus_find_inode() is called by xillybus_open() and xillyusb_open()
+> to translate the inode's major and minor into a pointer to a relevant
+> data structure and an index.
+> 
+> But with xillyusb_open(), the data structure can be freed by
+> xillyusb_disconnect() during an unintentional time gap between the
+> release of the mutex that is taken by xillybus_find_inode() and the
+> mutex that is subsequently taken by xillyusb_open().
+> 
+> To fix this, xillybus_find_inode() supplies the pointer to the mutex that
+> it has locked (when returning success), so xillyusb_open() releases this
+> mutex only after obtaining the mutex that is specific to a device file.
+> This ensures that xillyusb_disconnect() won't release anything that is in
+> use.
 
---- Comment #41 from Adrien (andrew.co@free.fr) ---
-(In reply to Heikki Krogerus from comment #40)
-> (In reply to Adrien from comment #39)
-> > @heikki Today i have installed 5.19.17 kernel (btw it appears to be the
-> last
-> > 5.19.X kernel) I have saw that you made a fix regarding usci but the is=
-sue
-> > is still present on my machine. So I don't know if this fix was referri=
-ng
-> to
-> > this specific issue, please let me know :)
-> > thanks
->=20
-> The fix for this bug is not in v5.19.17. It's not even part of mainline y=
-et.
->=20
-> It's now waiting in Greg's tree (there are actually two patches, but you =
-can
-> just keep an eye on this one):
-> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=
-=3Dusb-
-> linus&id=3D99f6d43611135bd6f211dec9e88bb41e4167e304
->=20
-> Once it get's applied - presumable withing the next couple of weeks - I'm
-> expecting there to be a bot that reacts by changing the status of this bu=
-g.
-> We shall see.
+That's really odd, and not normal at all.  We don't pass around mutexes
+like this as how do you know if that's allowed?
 
-Thanks a lot for these information. I will keep an eye on status updates.
+> 
+> This manipulation of mutexes poses no risk for a deadlock, because in
+> all usage scenarios, @unit_mutex (which is locked by xillybus_find_inode)
+> is always taken when no other mutex is locked. Hence a consistent locking
+> order is guaranteed.
+> 
+> xillybus_open() unlocks this mutex immediately, as this driver doesn't
+> support hot unplugging anyhow.
+> 
+> Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
+> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+> ---
+> drivers/char/xillybus/xillybus_class.c | 8 +++++---
+> drivers/char/xillybus/xillybus_class.h | 2 ++
+> drivers/char/xillybus/xillybus_core.c  | 6 +++++-
+> drivers/char/xillybus/xillyusb.c       | 4 +++-
+> 4 files changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
+> index 0f238648dcfe..c846dc3ed225 100644
+> --- a/drivers/char/xillybus/xillybus_class.c
+> +++ b/drivers/char/xillybus/xillybus_class.c
+> @@ -211,6 +211,7 @@ void xillybus_cleanup_chrdev(void *private_data,
+> EXPORT_SYMBOL(xillybus_cleanup_chrdev);
+> 
+> int xillybus_find_inode(struct inode *inode,
+> +			struct mutex **to_unlock,
 
---=20
-You may reply to this email to add a comment.
+To unlock when?  Who unlocks it?  What is the lifespan here?
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Why can't it just be part of the structure?
+
+> 			void **private_data, int *index)
+> {
+> 	int minor = iminor(inode);
+> @@ -227,13 +228,14 @@ int xillybus_find_inode(struct inode *inode,
+> 			break;
+> 		}
+> 
+> -	mutex_unlock(&unit_mutex);
+> -
+> -	if (!unit)
+> +	if (!unit) {
+> +		mutex_unlock(&unit_mutex);
+> 		return -ENODEV;
+> +	}
+> 
+> 	*private_data = unit->private_data;
+> 	*index = minor - unit->lowest_minor;
+> +	*to_unlock = &unit_mutex;
+
+Why are you wanting the caller to unlock this?  It's a global mutex (for
+the whole file), this feels really odd.
+
+What is this function supposed to be doing?  You only return an int, and
+you have some odd opaque void pointer being set.  That feels wrong and
+is not a normal design at all.
+
+confused,
+
+greg k-h
