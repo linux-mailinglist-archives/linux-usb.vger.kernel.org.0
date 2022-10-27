@@ -2,225 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8705660F0E4
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 09:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C3460F117
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 09:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiJ0HGb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Oct 2022 03:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S233772AbiJ0HYc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Oct 2022 03:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiJ0HGa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 03:06:30 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8348613B50A;
-        Thu, 27 Oct 2022 00:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1666854388; x=1698390388;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xFg7oOrxF7HbyrIiZPByc/B+nSnIpdZwB6Bt5w3mD/s=;
-  b=bi4gXWRaTW3bW22xE3Upb36jPkWr5kxQynKsWQJi/JU0c00/ThC62w2+
-   MnYctB5Rhdg8H1N+I9d3hIf2ZOOTWWWOlIvJNqryQXEPoPyGKEbLIXROl
-   77xhJw0mmahkd1qHvpFbToWlBaP4mkoLoQGopSr69IMUZ2VxT2mqynOt/
-   KeYDmn6y5Z3D1ZfFb/kCKEgUgGe2368lpUSOXF/ZmUwzMI46DGR0f7buW
-   jmTilFslSTTUUjRAL6nbM2XX6PVBxaXexKX0+jmfjGONTOG9Pdc+G5v8/
-   Pp6HSj8R1/960AFEOpCFJyiFWfpcaz1mejVq5e53ftEwVcevMWahPSrhd
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,217,1661810400"; 
-   d="scan'208";a="27002168"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 27 Oct 2022 09:06:26 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 27 Oct 2022 09:06:26 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 27 Oct 2022 09:06:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1666854386; x=1698390386;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xFg7oOrxF7HbyrIiZPByc/B+nSnIpdZwB6Bt5w3mD/s=;
-  b=Z3Wo+iC5qYcDa6g3IdzCQe6GjipkxOkRZHMHVEKKwgoK2fP1xqCUwoDA
-   5mxrFf9ErDVO21qNExDrhXSzMndyyVd44imbnjKB0A0MRRgVIhMKbztUO
-   zdTq/uqlnaJ08jAG6sIqtzie1OWyBsgc4REW/rG0iKhLulL0lzp46q5QB
-   k5cEelUpwVJyc87a56qRyaE1B5oRogI9a+tcXh5JS+I7HguPpYMqNm+fO
-   paLJ/ZlMUa5Oxr/vgTCk086r4cJyjv6Mif2BFNYxQvmABiOpQRYLTkz8G
-   z5fceF8cdd6nsQm243pdMN+w554dgYvIjdyBibZQiyxnqzMCyjzhgrknX
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,217,1661810400"; 
-   d="scan'208";a="27002167"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 27 Oct 2022 09:06:26 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S233067AbiJ0HYa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 03:24:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0A126CD;
+        Thu, 27 Oct 2022 00:24:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 89ACC280056;
-        Thu, 27 Oct 2022 09:06:26 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     jun.li@nxp.com, frank.li@nxp.com, a-govindraju@ti.com,
-        gregkh@linuxfoundation.org, hzpeterchen@gmail.com,
-        imx@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pawell@cadence.com,
-        peter.chen@kernel.org, rogerq@kernel.org, stable@kernel.org
-Subject: Re: [PATCH v2 1/1] usb: cdns3: host: fix endless superspeed hub port reset
-Date:   Thu, 27 Oct 2022 09:06:22 +0200
-Message-ID: <5877757.lOV4Wx5bFT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20221026190749.2280367-1-Frank.Li@nxp.com>
-References: <20221026190749.2280367-1-Frank.Li@nxp.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58A28B824DB;
+        Thu, 27 Oct 2022 07:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122F5C433D7;
+        Thu, 27 Oct 2022 07:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666855466;
+        bh=XGWXjowETE8UBbAKGcfAlH1j6ZOErNggqJGyo/pFcTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZBIGnlc/c2M5XhG6r1qrm2ZjcX5yNMJfCI9opDqPrhDfKsF1pwiKvdo2cMJgqw6Oh
+         3p41ErALoZXRBk/uRWl8qNvdyD87LnYd4vcXsLriuEZU4TERSzK9ln4cSw1GQLXbsx
+         f+AauZU00Lnp4+Zhxjlq68UMUFgZvX5t0eQWK8KUFT94ss7PVuJEB1HERCmRJdyXWH
+         zpeWCZfikUghEqWPlx0kQVLvrIjWszLcWfdD8zP0kaf+bo5eiw1tf09acqyqqaVJAm
+         RjSkNt065lWKorxtbTk/xn8MnHJ4mctY7JWFUYSvo32nmWfe/Z52gAfYHuXvArPnWO
+         a5URXEBjoGKlg==
+Date:   Thu, 27 Oct 2022 15:24:21 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
+Message-ID: <20221027072421.GA75844@nchen-desktop>
+References: <1666620275-139704-1-git-send-email-pawell@cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1666620275-139704-1-git-send-email-pawell@cadence.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, 26. Oktober 2022, 21:07:49 CEST schrieb Frank Li:
-> From: Li Jun <jun.li@nxp.com>
+On 22-10-24 10:04:35, Pawel Laszczak wrote:
+> Patch modifies the TD_SIZE in TRB before ZLP TRB.
+> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
+> processing ZLP TRB by controller.
 > 
-> When usb 3.0 hub connect with one USB 2.0 device and NO USB 3.0 device,
-> some usb hub reports endless port reset message.
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 > 
-> [  190.324169] usb 2-1: new SuperSpeed USB device number 88 using xhci-hcd
-> [  190.352834] hub 2-1:1.0: USB hub found
-> [  190.356995] hub 2-1:1.0: 4 ports detected
-> [  190.700056] usb 2-1: USB disconnect, device number 88
-> [  192.472139] usb 2-1: new SuperSpeed USB device number 89 using xhci-hcd
-> [  192.500820] hub 2-1:1.0: USB hub found
-> [  192.504977] hub 2-1:1.0: 4 ports detected
-> [  192.852066] usb 2-1: USB disconnect, device number 89
-> 
-> The reason is the runtime pm state of USB2.0 port is active and
-> USB 3.0 port is suspend, so parent device is active state.
-> 
->  cat
-> /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/usb2/po
-> wer/runtime_status
-> 
->  suspended
-> 
->  cat
-> /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/usb1/po
-> wer/runtime_status
-> 
->  active
-> 
->  cat
-> /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/power/r
-> untime_status
-> 
->  active
-> 
->  cat
-> /sys/bus/platform/devices/5b110000.usb/5b130000.usb/power/runtime_status
-> 
->  active
-> 
-> So xhci_cdns3_suspend_quirk() have not called. U3 configure is not applied.
-> 
-> move U3 configure into host start. Reinit again in resume function in case
-> controller power lost during suspend.
-> 
-> Cc: stable@vger.kernel.org 5.10
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 > ---
+> Changelog:
+> v2:
+> - returned value for last TRB must be 0
 > 
-> Change from V1 to V2.
->  - call xhci_cdns3_plat_start() in xhci_cdns3_resume_quirk
-> in case power lost during suspend
+>  drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
->  drivers/usb/cdns3/host.c | 56 ++++++++++++++++++++--------------------
->  1 file changed, 28 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-> index 9643b905e2d8..6164fc4c96a4 100644
-> --- a/drivers/usb/cdns3/host.c
-> +++ b/drivers/usb/cdns3/host.c
-> @@ -24,11 +24,37 @@
->  #define CFG_RXDET_P3_EN		BIT(15)
->  #define LPM_2_STB_SWITCH_EN	BIT(25)
-> 
-> -static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd);
-> +static void xhci_cdns3_plat_start(struct usb_hcd *hcd)
-> +{
-> +	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-> +	u32 value;
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index 04dfcaa08dc4..aa79bce89d8a 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct cdnsp_device *pdev,
+>  
+>  	/* One TRB with a zero-length data packet. */
+>  	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
+> -	    trb_buff_len == td_total_len)
+> +	    trb_buff_len == td_total_len) {
+> +		/* Before ZLP driver needs set TD_SIZE=1. */
+> +		if (more_trbs_coming)
+> +			return 1;
 > +
-> +	/* set usbcmd.EU3S */
-> +	value = readl(&xhci->op_regs->command);
-> +	value |= CMD_PM_INDEX;
-> +	writel(value, &xhci->op_regs->command);
-> +
-> +	if (hcd->regs) {
-> +		value = readl(hcd->regs + XECP_AUX_CTRL_REG1);
-> +		value |= CFG_RXDET_P3_EN;
-> +		writel(value, hcd->regs + XECP_AUX_CTRL_REG1);
-> +
-> +		value = readl(hcd->regs + XECP_PORT_CAP_REG);
-> +		value |= LPM_2_STB_SWITCH_EN;
-> +		writel(value, hcd->regs + XECP_PORT_CAP_REG);
+>  		return 0;
 > +	}
-> +}
-> +
-> +static int xhci_cdns3_resume_quirk(struct usb_hcd *hcd)
-> +{
-> +	xhci_cdns3_plat_start(hcd);
-> +	return 0;
-> +}
+
+Does that fix the issue you want at bulk transfer, which has zero-length
+packet at the last packet? It seems not align with your previous fix.
+Would you mind explaining more?
+
+>  
+>  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
+>  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
+> -- 
+> 2.25.1
 > 
->  static const struct xhci_plat_priv xhci_plat_cdns3_xhci = {
->  	.quirks = XHCI_SKIP_PHY_INIT | XHCI_AVOID_BEI,
-> -	.suspend_quirk = xhci_cdns3_suspend_quirk,
-> +	.plat_start = xhci_cdns3_plat_start,
-> +	.resume_quirk = xhci_cdns3_resume_quirk,
->  };
-> 
->  static int __cdns_host_init(struct cdns *cdns)
-> @@ -90,32 +116,6 @@ static int __cdns_host_init(struct cdns *cdns)
->  	return ret;
->  }
-> 
-> -static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
-> -{
-> -	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> -	u32 value;
-> -
-> -	if (pm_runtime_status_suspended(hcd->self.controller))
-> -		return 0;
-> -
-> -	/* set usbcmd.EU3S */
-> -	value = readl(&xhci->op_regs->command);
-> -	value |= CMD_PM_INDEX;
-> -	writel(value, &xhci->op_regs->command);
-> -
-> -	if (hcd->regs) {
-> -		value = readl(hcd->regs + XECP_AUX_CTRL_REG1);
-> -		value |= CFG_RXDET_P3_EN;
-> -		writel(value, hcd->regs + XECP_AUX_CTRL_REG1);
-> -
-> -		value = readl(hcd->regs + XECP_PORT_CAP_REG);
-> -		value |= LPM_2_STB_SWITCH_EN;
-> -		writel(value, hcd->regs + XECP_PORT_CAP_REG);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  static void cdns_host_exit(struct cdns *cdns)
->  {
->  	kfree(cdns->xhci_plat_data);
 
-Although I could only test it on v5.15 downstream kernel
-Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+-- 
 
-
-
+Thanks,
+Peter Chen
