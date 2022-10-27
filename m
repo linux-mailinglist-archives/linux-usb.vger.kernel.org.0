@@ -2,53 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B16160FB67
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 17:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92B561020A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 21:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236375AbiJ0PKP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Oct 2022 11:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S236711AbiJ0TzH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Oct 2022 15:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236073AbiJ0PJR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 11:09:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71D418F90F;
-        Thu, 27 Oct 2022 08:09:14 -0700 (PDT)
+        with ESMTP id S235691AbiJ0TzG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 15:55:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AE722515;
+        Thu, 27 Oct 2022 12:55:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82469623A9;
-        Thu, 27 Oct 2022 15:09:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E98B0C433D6;
-        Thu, 27 Oct 2022 15:09:13 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oo4Vd-00Bvcm-0V;
-        Thu, 27 Oct 2022 11:09:29 -0400
-Message-ID: <20221027150928.983388020@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Thu, 27 Oct 2022 11:05:45 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7099A61F1F;
+        Thu, 27 Oct 2022 19:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093E6C433C1;
+        Thu, 27 Oct 2022 19:54:58 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 15:55:13 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org
-Subject: [RFC][PATCH v2 20/31] timers: usb: Use del_timer_shutdown() before freeing timer
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221027155513.60b211e2@gandalf.local.home>
+In-Reply-To: <20221027150928.780676863@goodmis.org>
 References: <20221027150525.753064657@goodmis.org>
+        <20221027150928.780676863@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -58,83 +65,114 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu, 27 Oct 2022 12:38:16 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Before a timer is freed, del_timer_shutdown() must be called.
+> On 10/27/22 12:27, Steven Rostedt wrote:
+> > On Thu, 27 Oct 2022 15:20:58 -0400
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> >   
+> >>> (many more of those)
+> >>> ...
+> >>> [   16.329989]  timer_fixup_free+0x40/0x54  
+> >>
+> >> Ah, I see the issue here. Looks like the timer_fixup_free() is calling
+> >> itself and crashing.
+> >>
+> >> Let me take a look into that. I didn't touch the fixup code, and there
+> >> could be an assumption there that it's behaving with the old approach.  
+> > 
+> > Can you add this and see if it makes this issue go away?
+> >   
+> 
+> Yes, that fixes the crash. However, it still reports
+> 
+> [   12.235054] ------------[ cut here ]------------
+> [   12.235240] ODEBUG: free active (active state 0) object type: timer_list hint: tcp_write_timer+0x0/0x190
+> [   12.237331] WARNING: CPU: 0 PID: 310 at lib/debugobjects.c:502 debug_print_object+0xb8/0x100
+> ...
+> [   12.255251] Call trace:
+> [   12.255305]  debug_print_object+0xb8/0x100
+> [   12.255385]  __debug_check_no_obj_freed+0x1d0/0x25c
+> [   12.255474]  debug_check_no_obj_freed+0x20/0x90
+> [   12.255555]  slab_free_freelist_hook.constprop.0+0xac/0x1b0
+> [   12.255650]  kmem_cache_free+0x1ac/0x500
+> [   12.255728]  __sk_destruct+0x140/0x2a0
+> [   12.255805]  sk_destruct+0x54/0x64
+> [   12.255877]  __sk_free+0x74/0x120
+> [   12.255944]  sk_free+0x64/0x8c
+> [   12.256009]  tcp_close+0x94/0xc0
+> [   12.256076]  inet_release+0x50/0xb0
+> [   12.256145]  __sock_release+0x44/0xbc
+> [   12.256219]  sock_close+0x18/0x30
+> [   12.256292]  __fput+0x84/0x270
+> [   12.256361]  ____fput+0x10/0x20
+> [   12.256426]  task_work_run+0x88/0xf0
+> [   12.256499]  do_exit+0x334/0xafc
+> [   12.256566]  do_group_exit+0x34/0x90
+> [   12.256634]  __arm64_sys_exit_group+0x18/0x20
+> [   12.256713]  invoke_syscall+0x48/0x114
+> [   12.256789]  el0_svc_common.constprop.0+0x60/0x11c
+> [   12.256874]  do_el0_svc+0x30/0xd0
+> [   12.256943]  el0_svc+0x48/0xc0
+> [   12.257008]  el0t_64_sync_handler+0xbc/0x13c
+> [   12.257086]  el0t_64_sync+0x18c/0x190
+> 
+> Is that a real problem or a false positive ? I didn't see that
+> without your patch series (which of course might be the whole point
+> of the series).
+> 
 
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+I think this is indeed an issue, and I'm replying to the net patch as it
+has the necessary folks Cc'd.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc: Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/usb/core/hub.c              | 3 +++
- drivers/usb/gadget/udc/m66592-udc.c | 2 +-
- drivers/usb/serial/garmin_gps.c     | 2 +-
- drivers/usb/serial/mos7840.c        | 2 +-
- 4 files changed, 6 insertions(+), 3 deletions(-)
+The ipv4 tcp code has:
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index bbab424b0d55..397f263ab7da 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1261,6 +1261,9 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
- 
- 		/* Don't do a long sleep inside a workqueue routine */
- 		if (type == HUB_INIT2) {
-+			/* Timers must be shutdown before they are re-initialized */
-+			if (hub->init_work.work.func)
-+				del_timer_shutdown(&hub->init_work.timer);
- 			INIT_DELAYED_WORK(&hub->init_work, hub_init_func3);
- 			queue_delayed_work(system_power_efficient_wq,
- 					&hub->init_work,
-diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-index 931e6362a13d..a6e2f8358adf 100644
---- a/drivers/usb/gadget/udc/m66592-udc.c
-+++ b/drivers/usb/gadget/udc/m66592-udc.c
-@@ -1519,7 +1519,7 @@ static int m66592_remove(struct platform_device *pdev)
- 
- 	usb_del_gadget_udc(&m66592->gadget);
- 
--	del_timer_sync(&m66592->timer);
-+	del_timer_shutdown(&m66592->timer);
- 	iounmap(m66592->reg);
- 	free_irq(platform_get_irq(pdev, 0), m66592);
- 	m66592_free_request(&m66592->ep[0].ep, m66592->ep0_req);
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index f1a8d8343623..2a53f26468bd 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -1405,7 +1405,7 @@ static void garmin_port_remove(struct usb_serial_port *port)
- 
- 	usb_kill_anchored_urbs(&garmin_data_p->write_urbs);
- 	usb_kill_urb(port->interrupt_in_urb);
--	del_timer_sync(&garmin_data_p->timer);
-+	del_timer_shutdown(&garmin_data_p->timer);
- 	kfree(garmin_data_p);
- }
- 
-diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-index 6b12bb4648b8..a90a706d27de 100644
---- a/drivers/usb/serial/mos7840.c
-+++ b/drivers/usb/serial/mos7840.c
-@@ -1726,7 +1726,7 @@ static void mos7840_port_remove(struct usb_serial_port *port)
- 		mos7840_set_led_sync(port, MODEM_CONTROL_REGISTER, 0x0300);
- 
- 		del_timer_sync(&mos7840_port->led_timer1);
--		del_timer_sync(&mos7840_port->led_timer2);
-+		del_timer_shutdown(&mos7840_port->led_timer2);
- 
- 		usb_kill_urb(mos7840_port->led_urb);
- 		usb_free_urb(mos7840_port->led_urb);
--- 
-2.35.1
+void tcp_init_xmit_timers(struct sock *sk)
+{
+	inet_csk_init_xmit_timers(sk, &tcp_write_timer, &tcp_delack_timer,
+				  &tcp_keepalive_timer);
+
+And from the above back trace:
+
+tcp_close() where I'm assuming that tcp_disconnect() or tcp_done() was
+called that both calls:
+
+  tcp_clear_xmit_timers(sk);
+
+That calls:
+
+	inet_csk_clear_xmit_timers(sk);
+
+That has:
+
+void inet_csk_clear_xmit_timers(struct sock *sk)
+{
+	struct inet_connection_sock *icsk = inet_csk(sk);
+
+	icsk->icsk_pending = icsk->icsk_ack.pending = 0;
+
+	sk_stop_timer(sk, &icsk->icsk_retransmit_timer);
+	sk_stop_timer(sk, &icsk->icsk_delack_timer);
+	sk_stop_timer(sk, &sk->sk_timer);
+}
+
+Where:
+
+void sk_stop_timer(struct sock *sk, struct timer_list* timer)
+{
+	if (del_timer(timer))
+		__sock_put(sk);
+}
+
+
+Hence, this is a case where we have timers that have been disabled with
+only del_timer() before the timers are freed.
+
+I think we need to update this code to squeeze in a del_timer_shutdown() to
+make sure that the timers are never restarted.
+
+There is a sk_stop_timer_sync() that I changed to use del_timer_shutdown()
+but that's only used in one file: net/mptcp/pm_netlink.c
+
+-- Steve
