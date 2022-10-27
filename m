@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246A560EFE7
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 08:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC50C60EFFB
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 08:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbiJ0GLp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Oct 2022 02:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S234468AbiJ0GSB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Oct 2022 02:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234230AbiJ0GLo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 02:11:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333D314EC5A;
-        Wed, 26 Oct 2022 23:11:43 -0700 (PDT)
+        with ESMTP id S233352AbiJ0GR7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 02:17:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADC0C5092;
+        Wed, 26 Oct 2022 23:17:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3F4A62027;
-        Thu, 27 Oct 2022 06:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B293DC433D6;
-        Thu, 27 Oct 2022 06:11:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB9FB824D5;
+        Thu, 27 Oct 2022 06:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5ECCC433D6;
+        Thu, 27 Oct 2022 06:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666851102;
-        bh=5cO6s6r/iuYynnAWAGW+ufQjRIVTuRpymCWiVvW2/r4=;
+        s=korg; t=1666851476;
+        bh=sdur/CX4mb9Hgnw8S+kcHybFTYA0yaE4f7pqknSjcVU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rZ6KSY93NneQEiiqvF5kb/cz8ZpLN2IQiOuXk+uQREWj648jLToZjD3oL9O0uO358
-         1Q1CGTrjnbAhuSzgZ79dNWNr0AZGrHXRYtAtD2eb0RQQqn2Dn9ZyZSOBpBavL39G3a
-         QuMB+gxKWaVV+F7Qh27rpcEEiUdyRqvIfZBbCLsM=
-Date:   Thu, 27 Oct 2022 08:12:35 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Reka Norman <rekanorman@chromium.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        b=O9PBINzAnwbvpX8DlpLpvOgYnewcNptI0M/Qpf6sL+TpOkKG6CSop9aMySD56Mmm+
+         SSFTNKNal8U1uqv3cwcd+Uu+8+fa4hx11+wNRdc9faD2nfnF1g+MboB36gpxUaT8Ap
+         gX/iwKnAEiDMgNfOx441sx7jsTeOAiRjl7BM5zfY=
+Date:   Thu, 27 Oct 2022 08:18:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Albert Wang <albertccwang@google.com>
+Cc:     mathias.nyman@intel.com, badhri@google.com, howardyen@google.com,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
-Message-ID: <Y1ohUyZJItFh3xDs@kroah.com>
-References: <20221027053407.421783-1-rekanorman@chromium.org>
+Subject: Re: [PATCH 0/3] add xhci hooks for USB offload
+Message-ID: <Y1oiyeTF9uywMUZx@kroah.com>
+References: <20221027004050.4192111-1-albertccwang@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027053407.421783-1-rekanorman@chromium.org>
+In-Reply-To: <20221027004050.4192111-1-albertccwang@google.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -49,17 +49,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 04:34:07PM +1100, Reka Norman wrote:
-> ADL-N systems have the same issue as ADL-P, where a large boot firmware
-> delay is seen if USB ports are left in U3 at shutdown. So apply the
-> XHCI_RESET_TO_DEFAULT quirk to ADL-N as well.
+On Thu, Oct 27, 2022 at 08:40:47AM +0800, Albert Wang wrote:
+> This patchset is to proviode the USB offload function which allows to
+> offload some xHCI operations on co-processor.
 > 
-> This patch depends on "xhci: Add quirk to reset host back to default
-> state at shutdown".
+> *** BLURB HERE ***
 
-What is the git commit id of that change?
+No blurb?
 
-And is this needed in stable kernels?  If so, how far back?
+And isn't this a v2 of this patchset?  What changed from the previous
+submission?
 
 thanks,
 
