@@ -2,120 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F5960F327
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 11:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABFC60F3AF
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 11:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbiJ0JDu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Oct 2022 05:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S234683AbiJ0J3R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Oct 2022 05:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiJ0JDt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 05:03:49 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85751B9CE
-        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 02:03:48 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id nc4-20020a1709071c0400b0078a5ceb571bso629765ejc.4
-        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 02:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iTr70DtRX5dCDfAbqlnnnZ499B2Ss7MujMAGG+uKbJ8=;
-        b=fh8RaZQmCnFN93SvEg9vAlawCR0caXXFB3UqU+vvhSxkUGYv4qsFIY5TKS3lmsYUpg
-         k5qzbsesTTx9X5M/Cx9Ev9Yf64YnOTFe3DUa5aGOCV8qfXyIBhmTZym8dorWimQlNfH1
-         4sDPm/MZZUPG4sKVyVt0AYZH7+fz5xNghtBAwYgRwSy3rBi7N6G/wbovVYrdNSMSMj10
-         VhjlPK1vEah1WeVoe9ZxdYDRoG57LB6zhnc95wC1WRLVk0gsh+DM5p2RZMWXHzRBTypf
-         Uy4IxlCQYoDTJAAnJD1mNpU1r4hJdBH/ayksv6jXselX3mTGL2MCWXif1O+Uci3Hvfxg
-         JqLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iTr70DtRX5dCDfAbqlnnnZ499B2Ss7MujMAGG+uKbJ8=;
-        b=gOoBukJeCnLVZ3dZ/dAeJOcFiTaLT/FQDmhZwPS9Yvp2yixcz5uFUMu6hjScGxJljl
-         ypj9o5urH/ly19Bbg/KW79kGt3u5QKyWNwcmFYsW9S5Oyd2qmVAVhWDrD7IcHqwuqA83
-         gqdw6gj0rSc4JOc/twufV9zUeFYrlOgZV1uNWrPxhlCTQm87BQqp1auhJcjXo4ntloYF
-         qw4obi9HoW5Pk9151Ks8AR70Ku74nTTdeu4JKkRlFx8R4CpQNAKC/AHO2TVTpBDqG03w
-         ooXbUaRL0giEo6+QgybZLyYuveUprLTis0qBx4m32IMZ5oxCRYtDR27VnMZPYi1Dku/P
-         mhWg==
-X-Gm-Message-State: ACrzQf04m0qLpvbjBApS9Gjo7dBqxQfFUh4vGqUxYataszok83O/hrlK
-        hdiFmKtBeQrcedGdm9OSORiM3t7QSyKQpg==
-X-Google-Smtp-Source: AMsMyM6/TQlrI8rBZTi+nkUz/grj7uWJdKC6mjGtvE1qiKHrwLI0etzOQ3hFekBjfLMd5qG3AU2vF2uXCRSF5Q==
-X-Received: from bistanclaque.zrh.corp.google.com ([2a00:79e0:42:204:34aa:3c10:4b35:5e84])
- (user=ndumazet job=sendgmr) by 2002:aa7:c302:0:b0:461:85d7:b82 with SMTP id
- l2-20020aa7c302000000b0046185d70b82mr24493592edq.354.1666861427143; Thu, 27
- Oct 2022 02:03:47 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 11:03:42 +0200
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221027090342.38928-1-ndumazet@google.com>
-Subject: [PATCH v2] usb: add NO_LPM quirk for Realforce 87U Keyboard
-From:   Nicolas Dumazet <ndumazet@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-Cc:     Petar Kostic <petar@kostic.dev>, Oliver Neukum <oneukum@suse.com>,
-        Ole Ernst <olebowle@gmx.com>,
-        Hannu Hartikainen <hannu@hrtk.in>,
-        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nicolas Dumazet <ndumazet@google.com>, stable@vger.kernel.org
+        with ESMTP id S235292AbiJ0J3D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 05:29:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC8F645C0
+        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 02:29:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C49CFCE255F
+        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 09:28:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CF047C433D6
+        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 09:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666862935;
+        bh=JliE8WAH2H3ys+fziGgU035zIJJBBsp5xWVJ66FPinc=;
+        h=From:To:Subject:Date:From;
+        b=GK216DFok0K2mH6l0O0Ojbqg3PLNghGdiNGXDtlCslOG9zMcXk+aZILusoW2aNgZF
+         WiUPNqaIeLk8GzTSlXOkSprj3RTrT/jpDlk4ORNA5PShAZcL8HybWhMX2oBQtgG/qx
+         auJagGDQImKA85KZkfSuUScchUsRquHcMzVaGgCQDMc/GjUbQbMTrhxbwEfZnlz53j
+         PZRZkQYyqSgMhKftbOw0xeKAAepyRePn88Ak3Xda9Rdmb6HVurRBVtQU1itLrBShwM
+         iPgOzs5YHaoo4P+hkvHoYIzaWJh4/GuZtYWN94Jula+qGnclud7HfnV3K94dNuOUdv
+         dI7SMPFGWvzXw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id B53A8C433E4; Thu, 27 Oct 2022 09:28:55 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 216630] New: config 1 has an invalid interface number: 2 but
+ max is 1
+Date:   Thu, 27 Oct 2022 09:28:55 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-216630-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Before adding this quirk, this (mechanical keyboard) device would not be
-recognized, logging:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216630
 
-  new full-speed USB device number 56 using xhci_hcd
-  unable to read config index 0 descriptor/start: -32
-  chopping to 0 config(s)
+            Bug ID: 216630
+           Summary: config 1 has an invalid interface number: 2 but max is
+                    1
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 6.0.5
+          Hardware: AMD
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: aros@gmx.com
+        Regression: No
 
-It would take dozens of plugging/unpuggling cycles for the keyboard to
-be recognized. Keyboard seems to simply work after applying this quirk.
+I'm getting these messages on boot and I wonder if they are superficial,
+there's a bug in the kernel or my HW is not working properly:
 
-This issue had been reported by users in two places already ([1], [2])
-but nobody tried upstreaming a patch yet. After testing I believe their
-suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
-little overkill. I assume this particular combination was tested because
-it had been previously suggested in [3], but only NO_LPM seems
-sufficient for this device.
+usb 3-6: config 1 has an invalid interface number: 2 but max is 1
+usb 3-6: config 1 has no interface number 1
 
-[1]: https://qiita.com/float168/items/fed43d540c8e2201b543
-[2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
-[3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
+lsusb -tv
 
----
-Changes in v2:
-  - add the entry to the right location (sorting entries by
-    vendor/device id).
+/:  Bus 03.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, 480M
+    ID 1d6b:0002 Linux Foundation 2.0 root hub
+    |__ Port 5: Dev 2, If 0, Class=3DWireless, Driver=3Dbtusb, 12M
+        ID 8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Adapter
+    |__ Port 5: Dev 2, If 1, Class=3DWireless, Driver=3Dbtusb, 12M
+        ID 8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Adapter
+    |__ Port 6: Dev 3, If 0, Class=3DVendor Specific Class, Driver=3D, 12M
+        ID 0b05:18f3 ASUSTek Computer, Inc.=20
+    |__ Port 6: Dev 3, If 2, Class=3DHuman Interface Device, Driver=3Dusbhi=
+d, 12M
+        ID 0b05:18f3 ASUSTek Computer, Inc.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 0722d2131305..079e183cf3bf 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -362,6 +362,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x0781, 0x5583), .driver_info = USB_QUIRK_NO_LPM },
- 	{ USB_DEVICE(0x0781, 0x5591), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* Realforce 87U Keyboard */
-+	{ USB_DEVICE(0x0853, 0x011b), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* M-Systems Flash Disk Pioneers */
- 	{ USB_DEVICE(0x08ec, 0x1000), .driver_info = USB_QUIRK_RESET_RESUME },
- 
--- 
-2.38.0.135.g90850a2211-goog
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
