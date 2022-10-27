@@ -2,74 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B305E60F1D1
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 10:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4771A60F22F
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Oct 2022 10:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiJ0IG0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Oct 2022 04:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S234850AbiJ0IWV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Oct 2022 04:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234877AbiJ0IGN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 04:06:13 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248C4ABD72;
-        Thu, 27 Oct 2022 01:06:12 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id y69so1381551ede.5;
-        Thu, 27 Oct 2022 01:06:11 -0700 (PDT)
+        with ESMTP id S234710AbiJ0IWR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Oct 2022 04:22:17 -0400
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A14E60EB8
+        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 01:22:16 -0700 (PDT)
+Received: by mail-wm1-x349.google.com with SMTP id f26-20020a7bcc1a000000b003c03db14864so263916wmh.6
+        for <linux-usb@vger.kernel.org>; Thu, 27 Oct 2022 01:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7ZnInTEdE6m53x3YlPmddOdHI+B78CP4lWnvW8zAy/0=;
-        b=ijWZqBV+oMnTpDEG9zR9caw+iwlaX7CYJw2Embia1jt1NznC/HIaMuLgihBh63YR8P
-         FduJhc5Du/rWyhH+BEO76Q0gLyyDvi1UMpTRrnc35G7zBKq7Ld+Ub0T3CTb9B2n7fiJs
-         8cmBHpZSHKGgeD86hRzLZIT1Io1Nl7i1AVRR5zAmfnNz8JNQo1lAKiYFuw7bUJv+7BuI
-         ynuwL9UP2+apZ+yumVbT7VHZIV+UIFwB4kgJ/xAR59IRrxhX3vLoG99cuGcA8dD949ZO
-         xZVQE6n4Wn8yLon3vDh6CkrhbO7QldJN2Uu2dBHxM95NhI7M5pYv4asW0bZhNxXgl1Da
-         c92Q==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ensG1aiR3XdykM/MMnZ7AX9t3z19jrp54YzAQQKGlWM=;
+        b=lnpIL7VslzlRJbzuderEmAOsPoRXbiibZv66kEBy6IhZrZnfE4fJZw1iR8b+G0q0jt
+         AN5Td/lm7nMnmKdkFYxxNEQIGYnRAw+CaR1K6iWLCLJ11S9wFfIr48yn39iAA4q0LYPp
+         61dufNxAmKmCd7RZs6WHICF2YKxtKYF7nMeJfzaynKa7lcj0shP4ywxSTVRlPReQ2ZKX
+         ft6PeNfB/TlQmw5nTgPmiCrBjAdG6uCiiHQOdd62K8Ii/XQGakNz/ego93Vcvl2KPXGh
+         gic4GRNaIDW+Qj70Xt9wRwvBbdmcFn2ulfg5icj+izOpf+lhPTVGsdue8UNsRn+cbLa3
+         hVbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ZnInTEdE6m53x3YlPmddOdHI+B78CP4lWnvW8zAy/0=;
-        b=G2VMBoPgX0FUcscM6IRzTGhqvrtOym7SH/rywvV9QvGcN3NudmpRjl9TeoOg/gPHbY
-         WttHTpde60CYfG8ioO1UTDjUtAJ/JUXcKVDrh5O108ohGyoVqHZX/AQykwkhIPiafKKH
-         cQ6H2mis04j2e0eiHunvZaLhn8w/5C1B8YEHyvuwKuvBauTFdNz8j3lmQHBW4aM27oDN
-         OvCilbdB4H8F7XhS8g+VCpH+e3LHC0Wm80jFLsqyTNVehpa+Pb6unb99C3jv/Xhq/YZh
-         le0RcnIDMD9VyWWiJK79TkHfm1DEmWefiRqe4gXHElliQNZekY+VYVCZTV8H4KWx6qUi
-         Sriw==
-X-Gm-Message-State: ACrzQf2MvwjnYZKguLEuj4sFZ9ZFXrBDHH2ITBOCk/Nxh36C1muKh/ut
-        H+vWB3UtPN3c40u2bdP0VY+86blQNnpEug==
-X-Google-Smtp-Source: AMsMyM4GNhYQ44BzzIvPmqQwZphjKeseK6QEYBIGacPvv2evfrqgADiS5B1uSs32fGLhIFLBWpMg/A==
-X-Received: by 2002:a17:907:9611:b0:78d:bb06:90a3 with SMTP id gb17-20020a170907961100b0078dbb0690a3mr41222667ejc.233.1666857959802;
-        Thu, 27 Oct 2022 01:05:59 -0700 (PDT)
-Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
-        by smtp.gmail.com with ESMTPSA id h3-20020a50ed83000000b00451319a43dasm570872edr.2.2022.10.27.01.05.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 01:05:59 -0700 (PDT)
-Message-ID: <ba308dcf-ed07-e0c6-4992-9b609e0d7626@gmail.com>
-Date:   Thu, 27 Oct 2022 11:05:21 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Eli Billauer <eli.billauer@gmail.com>
-Subject: Re: [PATCH] char: xillybus: Prevent use-after-free due to race
- condition
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        imv4bel@gmail.com
-References: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
- <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
-Content-Language: en-US
-In-Reply-To: <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ensG1aiR3XdykM/MMnZ7AX9t3z19jrp54YzAQQKGlWM=;
+        b=wEGjvz8MdccDNJqcSDiw43T4cE9w/LxTBgbQXhUfs7Tlw7obQRnMPFnGsHrcov3T5w
+         86zFASj2VS52B33aHOoKJ4arrPJFKZ7H5pfuLEW5Hzt8/NpQcFoFs73W59rrZXQ8JuYr
+         JanuMfhdnRI68U81mNwf9jqEupK2hN86nfIS4VTvV4//cHDyxnMtBlVwNevlFvChXZSG
+         ElG3YLSen7yUi8Wexh3NS1ApmdDzJS0GMPBF6ZQsOFTIy+n9NZAKdQopKBy+k+z9JZXp
+         g8VeMC2ibO9I7xgbT8KI8Y2VNXUx/gu/jB5EbTzOZwZCG7E5LPm6zuGFTJySEd20Q918
+         K0ng==
+X-Gm-Message-State: ACrzQf3hCzIYfCKoJ/BmqRopWXRbkFya1G/4ht+m+7IwuTALLWIyAPvz
+        m8Wzuo4uzGTmN2l5WNmpJu28PhGWH1fXNQ==
+X-Google-Smtp-Source: AMsMyM6YKAUi11plTcv/GZk/2qkkYniLriFmWr7/wVtq1DYO5u3t6JriCMQweQLE9Z/kpdkchOuHw4RmTqO0IQ==
+X-Received: from bistanclaque.zrh.corp.google.com ([2a00:79e0:42:204:34aa:3c10:4b35:5e84])
+ (user=ndumazet job=sendgmr) by 2002:a05:6000:1689:b0:22e:2c03:36e7 with SMTP
+ id y9-20020a056000168900b0022e2c0336e7mr32732679wrd.252.1666858934879; Thu,
+ 27 Oct 2022 01:22:14 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 10:22:08 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Message-ID: <20221027082208.25483-1-ndumazet@google.com>
+Subject: [PATCH] usb: add NO_LPM quirk for Realforce 87U Keyboard
+From:   Nicolas Dumazet <ndumazet@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+Cc:     Petar Kostic <petar@kostic.dev>, Oliver Neukum <oneukum@suse.com>,
+        Ole Ernst <olebowle@gmx.com>,
+        Hannu Hartikainen <hannu@hrtk.in>,
+        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nicolas Dumazet <ndumazet@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,36 +70,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Alan,
+Before adding this quirk, this (mechanical keyboard) device would not be
+recognized, logging:
 
-On 26/10/2022 18:02, Alan Stern wrote:
-> On Wed, Oct 26, 2022 at 11:52:40AM +0300, Eli Billauer wrote:
->> To fix this, xillybus_find_inode() supplies the pointer to the mutex that
->> it has locked (when returning success), so xillyusb_open() releases this
->> mutex only after obtaining the mutex that is specific to a device file.
->> This ensures that xillyusb_disconnect() won't release anything that is in
->> use.
-> 
-> The standard way of handling this problem is different from this.  The
-> driver defines a private mutex, and it ensures that any routine calling
-> *_find_inode() holds the mutex.  It also ensures that the mutex is held
-> while a new device is being registered and while a device is being
-> removed.
+  new full-speed USB device number 56 using xhci_hcd
+  unable to read config index 0 descriptor/start: -32
+  chopping to 0 config(s)
 
-Thanks, I'm going to follow that advice in my v2 patch.
+It would take dozens of plugging/unpuggling cycles for the keyboard to
+be recognized. Keyboard seems to simply work after applying this quirk.
 
-> 
-> Even that won't fix all the synchronization problems.  A process can
-> open a device, and then after the device has been removed the process
-> can still try to access the device.  The driver needs to ensure that
-> such accesses are not allowed.
+This issue had been reported by users in two places already ([1], [2])
+but nobody tried upstreaming a patch yet. After testing I believe their
+suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
+little overkill. I assume this particular combination was tested because
+it had been previously suggested in [3], but only NO_LPM seems
+sufficient for this device.
 
-Indeed. For that purpose, the relevant struct has a kref_counter, and an 
-error flag that indicates a removal among others, along with mutexes. 
-The problem is the time gap from the moment that the struct has been 
-found by xillybus_find_inode() until it has been secured with the kref.
+[1]: https://qiita.com/float168/items/fed43d540c8e2201b543
+[2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
+[3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
 
-A new mutex is going to solve that.
+Cc: stable@vger.kernel.org
+Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards,
-   Eli
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 0722d2131305..e775d1bbea4d 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -532,6 +532,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* INTEL VALUE SSD */
+ 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
++	/* Realforce 87U Keyboard */
++	{ USB_DEVICE(0x0853, 0x011b), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	{ }  /* terminating entry must be last */
+ };
+ 
+-- 
+2.38.0.135.g90850a2211-goog
+
